@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, HostBinding} from "@angular/core";
+import {environment} from "../environments/environment";
 
 @Component({
   selector: 'fin-root',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
+  @HostBinding('@.disabled') animationsDisabled = environment.disableAnimations;
+  @HostBinding('class.notransition') transitionDisabled = environment.disableAnimations;
+  title = 'fin-dfa';
 }

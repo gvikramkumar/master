@@ -1,5 +1,6 @@
 
 
+
 server
 develop(default) prod branches (drop master)
 confit json based config (with json schema validation)

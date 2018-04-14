@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Error</h1>
+<div mat-dialog-content>
+  <h4>{{error.message}}</h4>
+  <div *ngIf="error.data">
+    <pre>{{error.data|json}}</pre>
+  </div>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close="OK">OK</button>
+</div>

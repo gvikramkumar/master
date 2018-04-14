@@ -1,5 +1,14 @@
 
 
+problem:
+you need cors/apiurl for local/unit, but not for dev/qa/prod (grrr), worstcase scenario: need to update server and ui config files for this. Oh... you know it's env, maybe not get from ?? but can set it in config files if nothing else and check it from there. So... services look for env: dev/qa/prod and if so, don't put on prefix, just hit "api/graphql" instead? Need a poc on this, crud-be I suppose.
+
+
+pass:
+added contacts-fe modules, now need to take stuff out.
+with material and cui... still use an index BUT... only add things the app is using, so... they add to index only, and if not in app, won't be in index. This is bigger for cui as they have a million comps? No, they have a bunch of modules, but also comps as well?
+
+
 pass:
 you were adding cisco comps (painful) then did commit and push but bitbucket's down so can't push, BUT...
 YOU CAN'T PUSH ANYWAY RIGHT? I.e. push is turned off, need to allow push for this work, and use PRs for fin-dfa only until you get this starter together
