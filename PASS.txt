@@ -1,6 +1,13 @@
 
 ** check out @ngtools npm package. they have some kind of jsonschema thing going on in there
 
+pass:
+all done with initial frontend requirements, now check out that node process.env thing in dk-crud-be, then get onto server next, once done with server, bring over the girl's pages and make that work with mongo.
+then start on db script and then move into testing (next weekend), this week file upload, etc is priority.
+Focus on upgrading quickly. Add functionality to starter, then update dfa and make work with thier screens
+then make demo screens and demo data for starter, back and forth like that.
+
+
 
 pass:
 stop right here and poc on dk-crud-be for apiUrl, can you know to set it to empty string or so for prod?
