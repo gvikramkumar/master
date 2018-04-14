@@ -1,4 +1,16 @@
 
+
+pass:
+you were adding cisco comps (painful) then did commit and push but bitbucket's down so can't push, BUT...
+YOU CAN'T PUSH ANYWAY RIGHT? I.e. push is turned off, need to allow push for this work, and use PRs for fin-dfa only until you get this starter together
+
+Anyway fix the security on fin-starter, push, then put material on.
+you have special code in index.html already, so leave that alone. Bring in core/shared/store/routing etc and create a cisco comp index with all the comps like material? OR is that overkill?
+
+ditch the material typography right? Is that a separate file? ... doesnt' look like it, looks like you're cool if you just leave the class=mat-typography off the body tag
+
+
+
 adding packages:
 
 * material
