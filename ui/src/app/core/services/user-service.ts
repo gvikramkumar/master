@@ -40,15 +40,5 @@ export class UserService {
       .do(_user => this.usr.pubUser(_user));
   }
 
-  deleteLabel(user, label) {
-    user.labels.splice(_.findIndex(user.labels, {id: label.id}), 1);
-    return this.updateUser(user);
-
-  }
-
-  getLabelById(id) {
-    return _.find(this.usr.user.labels, {id: id});
-  }
-
 }
 

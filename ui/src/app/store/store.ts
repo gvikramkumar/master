@@ -1,17 +1,10 @@
-import {ApplicationRef, Injectable, NgZone} from '@angular/core';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {User} from './models/user';
-import {StoreBase} from './store-base';
-import {Subject} from 'rxjs/Subject';
-import {Messages} from './models/messages';
-import {Message} from './models/message';
-import {Contact} from './models/contact';
-import {Label} from './models/label';
-import {ObservableMedia} from '@angular/flex-layout';
-import {StoreUser} from './store-user';
-import {StoreContacts} from './store-contacts';
-import * as _ from 'lodash';
-import 'rxjs/add/operator/first';
+import {Injectable} from "@angular/core";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {StoreBase} from "./store-base";
+import {Subject} from "rxjs/Subject";
+import {ObservableMedia} from "@angular/flex-layout";
+import {StoreUser} from "./store-user";
+import "rxjs/add/operator/first";
 
 @Injectable()
 /**
@@ -25,13 +18,11 @@ export class Store extends StoreBase {
   store$ = new BehaviorSubject<Store>(this);
   sub = this.store$.subscribe.bind(this.store$);
   usr: StoreUser;
-  con: StoreContacts;
 
   authenticated = false;
   initialized = false;
   leftNavClosed = false;
   initialBreakpoint: string;
-  selectedLabel?: Label;
 
   // localized pub/sub to keep work related to specific changes. Could use subPath for this as well, but this is cleaner
   // note that some are subjects, these are akin to messages, in that we don't care about a current value
@@ -44,8 +35,6 @@ export class Store extends StoreBase {
   subAuthenticated = this.authenticated$.subscribe.bind(this.authenticated$);
   initialized$ = new BehaviorSubject<boolean>(this.initialized);
   subInitialized = this.initialized$.subscribe.bind(this.initialized$);
-  selectedLabelState$ = new BehaviorSubject<Label>(this.selectedLabel);
-  subSelectedLabel = this.selectedLabelState$.subscribe.bind(this.selectedLabelState$);
 
   constructor(private media: ObservableMedia) {
     super();
@@ -61,7 +50,6 @@ export class Store extends StoreBase {
   init() {
     this.store = this;
     this.usr = new StoreUser(this);
-    this.con = new StoreContacts(this);
 
     this.media.asObservable()
       .first()
@@ -89,12 +77,6 @@ export class Store extends StoreBase {
   pubInitialized(val) {
     this.initialized = val;
     this.initialized$.next(this.initialized);
-    this.pub();
-  }
-
-  pubSelectedLabel(val) {
-    this.selectedLabel = val;
-    this.selectedLabelState$.next(this.selectedLabel);
     this.pub();
   }
 
