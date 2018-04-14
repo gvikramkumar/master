@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import {CuiProgressbarModule} from "@cisco-ngx/cui-components";
 
 
 @NgModule({
@@ -10,7 +11,8 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    CuiProgressbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
