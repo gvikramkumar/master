@@ -1,4 +1,11 @@
 
+** check out @ngtools npm package. they have some kind of jsonschema thing going on in there
+
+
+pass:
+stop right here and poc on dk-crud-be for apiUrl, can you know to set it to empty string or so for prod?
+do your node module test that hits process.env as well. What does that ui see when you run it in diff envs? what is process.env then? Can't know the env with ng, but can set it in the env file, so know that way
+
 
 problem:
 you need cors/apiurl for local/unit, but not for dev/qa/prod (grrr), worstcase scenario: need to update server and ui config files for this. Oh... you know it's env, maybe not get from ?? but can set it in config files if nothing else and check it from there. So... services look for env: dev/qa/prod and if so, don't put on prefix, just hit "api/graphql" instead? Need a poc on this, crud-be I suppose.
