@@ -1,5 +1,32 @@
 
-** check out @ngtools npm package. they have some kind of jsonschema thing going on in there
+pass:
+Hey... drop node-base and just move its lib into server dir??
+how would that affect config if you still wanted env based config for that stuff (middleware say?)
+maybe a config.middleware section then... done
+
+you went with a nodeBase config drop, now just gonna do it in middleware so same for all envs. Makes things overly complicated. Can always put it back if you find a use case. You had env specific middleware in acx. Hmmm. say proxies or such that had different settings in diff envs. Thing is: acx was intense, this place is simple compared to them. Don't need it here, so stay simple. Add it if you do.
+
+next up:
+
+* simplify ui config to dev/unit/prod
+* move node-base into proj
+graphql and rest in project
+girls stuff in ui
+test
+
+
+
+
+
+pass:
+spending way too much time avoiding that server promise. Not a horrible thing to do. Where you are:
+
+readfileSync gets you config, then can push all express to another file and do:
+const app = require('setMiddleware')(config);
+then http/https.createServer(app)
+
+Hmmm. but you want app for test right? grrrr. oh, if unit then don't create server, and always export app?
+
 
 pass:
 all done with initial frontend requirements, now check out that node process.env thing in dk-crud-be, then get onto server next, once done with server, bring over the girl's pages and make that work with mongo.

@@ -1,0 +1,20 @@
+{
+  "name": "fin-starter",
+  "version": "1.0.0",
+  "description": "finance mean starter project",
+  "main": "server/server.js",
+  "dependencies": {
+    "normalize.css": "^8.0.0",
+    "hammerjs": "^2.0.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://dakahle@gitscm.cisco.com/scm/it-cvc-ciscocommerce-findfaapp/fin-starter.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
