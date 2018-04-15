@@ -1,19 +1,23 @@
 
 pass:
-Hey... drop node-base and just move its lib into server dir??
-how would that affect config if you still wanted env based config for that stuff (middleware say?)
-maybe a config.middleware section then... done
-
-you went with a nodeBase config drop, now just gonna do it in middleware so same for all envs. Makes things overly complicated. Can always put it back if you find a use case. You had env specific middleware in acx. Hmmm. say proxies or such that had different settings in diff envs. Thing is: acx was intense, this place is simple compared to them. Don't need it here, so stay simple. Add it if you do.
-
 next up:
 
-add eslint
-* simplify ui config to dev/unit/prod
-* move node-base into proj
 graphql and rest in project
-girls stuff in ui
-test
+* go through your common framework doc
+* add dk-crud-be database/rest/api >> make work
+
+clone to dk-mean-starter
+* drop cisco stuff
+* add material typography
+* change remote to dk-mean-starter
+
+remove fin-dfa
+clone to fin-dfa
+change remote to fin-dfa
+put girls stuff in ui
+
+next steps:
+* add testing
 
 
 

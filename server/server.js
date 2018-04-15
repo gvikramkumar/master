@@ -3,8 +3,7 @@ const config = require('./config/get-config'),
   path = require('path'),
   https = require('https'),
   http = require('http'),
-  fs = require('fs'),
-  setMiddleware = require('./lib/middleware/set-middleware');
+  fs = require('fs');
 
 // console.log(config);
 
