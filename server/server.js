@@ -1,50 +1,40 @@
-const config = require('./config/_get-config'),
+const config = require('./config/get-config'),
   process = require('process'),
   path = require('path'),
   https = require('https'),
   http = require('http'),
   fs = require('fs'),
-  setMiddleware = require('./middleware/set-middleware');
+  setMiddleware = require('./lib/middleware/set-middleware');
+
+// console.log(config);
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
   // application specific logging, throwing an error, or other logic here
 });
 
-const app = require('./middleware/set-middleware');
-module.exports = app; // for supertest
+const app = require('./lib/middleware/set-middleware');
 
-if (config.env !== 'unit') {
+let port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
 
-  let port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
-  console.log('server port', process.env.NODE_ENV, port);
-
-  let server = null;
-  if (config.ssl) {
-    const options = {
-      key: fs.readFileSync(path.join(__dirname, 'keys/key.pem')),
-      cert: fs.readFileSync(path.join(__dirname, 'keys/server.crt'))
-    };
-    server = https.createServer(options, app)
-      .listen(port, function (err) {
-        if (err) {
-          reject(err);
-        }
-        console.log(`https server listening on ${port}`);
-        resolve(server);
-      })
-  } else {
-    server = http.createServer(app)
-      .listen(port, function (err) {
-        if (err) {
-          reject(err);
-        }
-        console.log(`http server listening on ${port}`);
-        resolve(server);
-      });
-  }
-
+let server, protocol;
+if (config.ssl) {
+  protocol = 'https';
+  const options = {
+    key: fs.readFileSync(path.join(__dirname, `keys/${config.ssl.key}`)),
+    cert: fs.readFileSync(path.join(__dirname, `keys/${config.ssl.cert}`))
+  };
+  server = https.createServer(options, app);
+} else {
+  protocol = 'http';
+  server = http.createServer(app);
 }
+server.listen(port, function (err) {
+  if (err) {
+    throw(err);
+  }
+  console.log(`${protocol} server listening on ${port}`);
+})
 
-
+module.exports = server; // for supertest
 

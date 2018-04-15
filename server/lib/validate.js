@@ -1,7 +1,7 @@
 const tv4 = require('tv4'),
   formats = require('tv4-formats'),
   validator = tv4.freshApi(),
-  ExtendedError = require('../errors/extended-error');
+  ExtendedError = require('./errors/extended-error');
 
 validator.addFormat(formats);
 

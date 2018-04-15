@@ -8,6 +8,7 @@ you went with a nodeBase config drop, now just gonna do it in middleware so same
 
 next up:
 
+add eslint
 * simplify ui config to dev/unit/prod
 * move node-base into proj
 graphql and rest in project

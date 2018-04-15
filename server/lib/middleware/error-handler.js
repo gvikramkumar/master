@@ -12,8 +12,8 @@ const _ = require('lodash');
 
 module.exports = function(options) {
 
-  const defaults = {showStackWithErrors: false};
-  const config = _.merge(defaults, options)
+  const defaults = {showStack: false};
+  const opts = _.merge(defaults, options)
 
   return function (err, req, res, next) {
     const obj = Object.assign({}, err);
@@ -23,7 +23,7 @@ module.exports = function(options) {
     if (!err.statusCode) {
       obj.statusCode = errorCodes.server_prefix + errorCodes.server_unknown_error;
     }
-    if (err && err.stack && config.showStackWithErrors) {
+    if (err && err.stack && opts.showStack) {
       obj.stack = err.stack;
     }
     delete obj.statusCode;
