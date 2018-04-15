@@ -7,10 +7,10 @@ import 'rxjs/add/operator/map';
 import {Init1, Init2, Init3, Init4, Init5} from '../../core/services/init-service';
 import {merge} from 'rxjs/observable/merge';
 import {Store} from '../../store/store';
-import {UserService} from '../../core/services/user-service';
 import {Subject} from 'rxjs/Subject';
 import * as _ from 'lodash';
 import {BreakpointService} from "../../core/services/breakpoint.service";
+import {UserService} from "../../core/services/user.service";
 
 @Injectable()
 /**
@@ -22,7 +22,8 @@ export class InitializationGuard implements CanActivate {
 
   constructor(private store: Store,
               private route: ActivatedRoute,
-              private userService: UserService,
+              private userService: UserService
+              ,
               private breakpoints: BreakpointService,
               private init1: Init1,
               private init2: Init2,
@@ -43,6 +44,16 @@ export class InitializationGuard implements CanActivate {
   }
 
   handleCanActivate() {
+
+    if (this.store.initialized) {
+      return true;
+    } else {
+      this.init();
+      return this.response$;
+    }
+
+
+/*
     if (this.store.authenticated && this.store.initialized) {
       return true;
     } else {
@@ -54,11 +65,28 @@ export class InitializationGuard implements CanActivate {
       });
       return this.response$;
     }
+*/
   }
 
   init() {
     // console.log('initguard start');
 
+    Observable.forkJoin(this.userService.getAll({networkOnly: true}))
+      .map(x => {
+        // console.log('initguard done');
+        // this.store.pub({...this.store.state, initialized: true});
+        this.afterInit();
+        this.response$.next(true);
+        return true;
+      })
+      .catch(err => {
+        this.response$.next(false);
+        return Observable.throw(err);
+      })
+      .subscribe();
+
+
+/*
     // an example of a complex initialization flow with dependencies of dependencies
     Observable.forkJoin(this.init1.get(), this.init2.get())
       .mergeMap(arr => {
@@ -81,6 +109,7 @@ export class InitializationGuard implements CanActivate {
         return Observable.throw(err);
       })
       .subscribe(); // only need this cause we're not returning this function to canActivate
+*/
   }
 
   // initialization code that depends on the initial data loads

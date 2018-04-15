@@ -3,7 +3,17 @@ module.exports = {
         "es6": true,
         "node": true
     },
-    "extends": "eslint:recommended",
+  "overrides": [
+    {
+      "files": [ "server/**/*.js" ],
+      "excludedFiles": ["database/**/*.js"],
+      "rules": {
+        "quotes": [ 2, "single" ],
+        "no-console": "warn"
+      }
+    }
+  ],
+  "extends": "eslint:recommended",
     "rules": {
         "accessor-pairs": "error",
         "array-bracket-newline": "error",
@@ -127,7 +137,6 @@ module.exports = {
         "no-caller": "error",
         "no-catch-shadow": "error",
         "no-confusing-arrow": "error",
-        "no-console": "warn",
         "no-continue": "error",
         "no-div-regex": "error",
         "no-duplicate-imports": "error",

@@ -3,6 +3,19 @@
   "version": "1.0.0",
   "description": "finance mean starter project",
   "main": "server/server.js",
+  "scripts": {
+    "seed": "mongo database/seed.js",
+    "lint": "eslint server/**/*.js",
+    "start": "node server/server.js",
+    "watch": "nodemon server/server.js",
+    "unit": "echo \"Error: no test specified\" && exit 1",
+    "e2e": "echo \"Error: no test specified\" && exit 1",
+    "ui:lint": "cd ui && ng lint",
+    "ui:serve": "cd ui && ng serve %1 %2",
+    "ui:build": "cd ui && ng serve %1 %2",
+    "ui:unit": "cd ui && ng test %1 %2",
+    "ui:e2e": "cd ui && ng e2e %1 %2"
+  },
   "dependencies": {
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
@@ -10,6 +23,7 @@
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
+    "graphql-tag": "^2.8.0",
     "hammerjs": "^2.0.8",
     "lodash": "^4.17.5",
     "mongoose": "^5.0.14",
@@ -20,10 +34,8 @@
   },
   "devDependencies": {
     "eslint": "^4.19.1",
+    "nodemon": "^1.17.3",
     "supertest": "^3.0.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

@@ -3,13 +3,18 @@ const config = require('./config/get-config'),
   path = require('path'),
   https = require('https'),
   http = require('http'),
-  fs = require('fs');
-
-// console.log(config);
+  fs = require('fs'),
+  mongoose = require('mongoose');
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
   // application specific logging, throwing an error, or other logic here
+});
+
+const mongoUri = 'mongodb://localhost/dkcrud';
+mongoose.connect(mongoUri);
+mongoose.connection.on('error', () => {
+  throw new Error(`unable to connect to database: ${mongoUri}`);
 });
 
 const app = require('./lib/middleware/set-middleware');

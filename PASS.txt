@@ -3,7 +3,6 @@ pass:
 next up:
 
 graphql and rest in project
-* go through your common framework doc
 * add dk-crud-be database/rest/api >> make work
 
 clone to dk-mean-starter

@@ -9,15 +9,16 @@ import {ErrorInterceptor} from "./interceptors/error.interceptor";
 import {Init1, Init2, Init3, Init4, Init5} from "./services/init-service";
 import {ModifyRequestInterceptor} from "./interceptors/modify-request.interceptor";
 import {InitializationGuard} from "../routing/guards/initialization.guard";
-import {AuthGuard} from "../routing/guards/auth.guard";
 import {RouterModule} from "@angular/router";
 import {StoreModule} from "../store/store.module";
 import {BreakpointService} from "./services/breakpoint.service";
-import {Apollo} from "apollo-angular";
+import {Apollo, ApolloModule} from "apollo-angular";
 import {HttpLink} from "apollo-angular-link-http";
 import {environment} from "../../environments/environment";
 import {InMemoryCache} from "apollo-cache-inmemory";
 import {DefaultOptions} from "apollo-client/ApolloClient";
+import {UserServiceRest} from "./services/user-service-rest";
+import {UserService} from "./services/user.service";
 
 // working with the apollo cache is somewhat complicated and error prone. You require cache resolvers and
 // query updates on add/delete mutations to make it work. We don't have much to get so until the use
@@ -54,8 +55,8 @@ const defaultOptions: DefaultOptions = {
     {provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ModifyRequestInterceptor, multi: true},
-    BreakpointService,
-    InitializationGuard, AuthGuard
+    BreakpointService, UserServiceRest, UserService,
+    InitializationGuard
   ]
 })
 export class CoreModule {
