@@ -13,7 +13,7 @@ module.exports = function(options) {
     if (req.body) {
       msg = msg + ' body: ';
       if (opts.mode == 'long') {
-        msg = msg + req.body.query || req.body.mutation;
+        msg = msg + req.body.query.toString() || req.body.mutation.toString();
       }
       else if (opts.mode === 'short') {
         if (req.body && req.body.query) {
@@ -22,8 +22,11 @@ module.exports = function(options) {
         else if (req.body && req.body.mutatation) {
           msg = msg + req.body.mutation.substr(0, 30);
         }
-        else if (req.body) {
-          msg = msg + req.body.substr(0, 30);
+        else if (req.body && typeof req.body === 'object') {
+          try {
+            msg = msg + req.body.substr(0, 30);
+          } catch (e) {
+          }
         }
       }
       // we need all 4 of these replace('\n') calls for some odd reason
