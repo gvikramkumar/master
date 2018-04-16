@@ -1,15 +1,6 @@
 
 pass:
-next up:
+working on db scripts, done but need to change fields to lower case
 
-remove fin-dfa
-clone to fin-dfa
-change remote to fin-dfa
-add findfa server/ui content
-build database scripts for seed
-
-
-next steps:
-* add testing
 
 
