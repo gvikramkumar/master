@@ -4,7 +4,8 @@
   "description": "finance mean starter project",
   "main": "server/server.js",
   "scripts": {
-    "seed": "mongo database/seed.js",
+    "seedbat": "cd database && seed.bat",
+    "seedsh": "cd database && ./seed.sh",
     "lint": "eslint server/**/*.js",
     "start": "node server/server.js",
     "watch": "nodemon server/server.js",
