@@ -2,5 +2,7 @@
 pass:
 working on db scripts, done but need to change fields to lower case
 
+grab each header line and use play.js toLowerCase on it and put it back... done
+or lodash if needed, just need to honor the same underscores
 
 
