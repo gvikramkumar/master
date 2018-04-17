@@ -11,11 +11,9 @@ process.on('unhandledRejection', (reason, p) => {
   // application specific logging, throwing an error, or other logic here
 });
 
-const mongoUri = 'mongodb://localhost/dkcrud';
-mongoose.connect(mongoUri);
-mongoose.connection.on('error', () => {
-  throw new Error(`unable to connect to database: ${mongoUri}`);
-});
+mongoose.connect(config.mongoUri)
+  .then(() => console.log(`mongoose connected on: ${config.mongoUri}`),
+    err => console.log(`mongoose connection error: ${config.mongoUri}`, err));
 
 const app = require('./lib/middleware/set-middleware');
 

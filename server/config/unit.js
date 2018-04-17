@@ -1,6 +1,7 @@
 module.exports = {
   ssl: false,
   port: 3001,
-  database: "mongodb://localhost/unit",
-  corsOrigin: ["http://localhost:4201"]
+  mongoUri: 'mongodb://localhost/fin-dfa',
+  postgresUri: null,
+  corsOrigin: ['http://localhost:4201']
 }

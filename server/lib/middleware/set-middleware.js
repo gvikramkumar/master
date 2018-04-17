@@ -74,6 +74,6 @@ app.get('*', (req, res) => {
 });
 
 app.use(notFound());
-app.use(errorHandler({showStack: false}));
+app.use(errorHandler({showStack: config.showStack}));
 
 

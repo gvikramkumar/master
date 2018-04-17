@@ -1,13 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {CuiProgressbarModule} from "@cisco-ngx/cui-components";
+import {
+  CuiFooterModule,
+  CuiHeaderModule, CuiInputModule,
+  CuiProgressbarModule,
+  CuiSearchModule, CuiSelectModule,
+  CuiTableModule
+} from "@cisco-ngx/cui-components";
 
 @NgModule({
   imports: [
-    CuiProgressbarModule
+    CuiHeaderModule,
+    CuiFooterModule,
+    CuiSearchModule,
+    CuiInputModule,
+    CuiSelectModule,
+    CuiTableModule
   ],
   exports: [
-    CuiProgressbarModule
+    CuiHeaderModule,
+    CuiFooterModule,
+    CuiSearchModule,
+    CuiInputModule,
+    CuiSelectModule,
+    CuiTableModule
   ],
 })
 export class CuiIndexModule { }

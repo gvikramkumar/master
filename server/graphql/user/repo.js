@@ -1,5 +1,36 @@
-const _ = require('lodash'),
-  User = require('../../rest/user/model');
+const mg = require('mongoose');
+
+const userSchema = mg.Schema({
+  name: {type: String, required: true},
+  age: {type: Number}
+});
+
+// userSchema.virtual('id').get(() => this._id);
+userSchema.set('toObject', { virtuals: true });
+userSchema.virtual('id').get(function() {
+  return this._id.toString();
+});
+
+/*
+//this doesn't work, "this" here is just an empty object, not the model object
+userSchema.virtual('id').get(() => {
+  return this._id;
+});
+*/
+
+/*
+var virtual = userSchema.virtual('id');
+virtual.get(function () {
+  return this._id;
+});
+*/
+
+userSchema.statics.list = function (cb) {
+  this.find(cb);
+}
+
+const User = mg.model('User', userSchema);
+module.exports = User;
 
 exports.getAll = function ({skip, limit}) {
   const query = User.find();

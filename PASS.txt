@@ -1,7 +1,24 @@
 
-pass:
-working on db scripts, done but need to change fields to lower case
 
+TODO
+* dump the app comp routing event stuff
+* css >> scss
+* USE ME'S FIELD NAMES FROM NG CODE FOR DB
+* add: allocationInput shouldn't require createdBy/date, updatedby/date, that's the api's job to fill in for add
+* update: should have created by/date, but updated isn't required (htough might be there)
+
+
+pass:
+routing still messed up as she has "submeasure/upload", you don't put / in the path like that. maybe make it: submeasure-upload??
+should  be just about there.
+PULL THE PROF PREFIX ON ALL COMPS, UNDER PFT DIR NOW
+
+
+pass:
+going through the graphiql egs on server. down to updateRule and removeRule.
+then copy ng stuff over and see if you can get the page to work, then onto the submeasure. Is there lots of pages and only these two endpoints? can't remember, thought that was the case though. Lots of something in there.
+
+database
 grab each header line and use play.js toLowerCase on it and put it back... done
 or lodash if needed, just need to honor the same underscores
 

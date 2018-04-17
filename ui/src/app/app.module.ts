@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import {SharedModule} from "./shared/shared.module";
-import {UsersModule} from "./users/users.module";
+import {FinCommonModule} from './common/common.module';
+import {ProfitabilityModule} from './pft/profitability.module';
 
 
 @NgModule({
@@ -12,7 +13,9 @@ import {UsersModule} from "./users/users.module";
   imports: [
     BrowserModule,
     SharedModule,
-    UsersModule
+    FinCommonModule,
+    ProfitabilityModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

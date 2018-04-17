@@ -4,22 +4,21 @@ import {Store} from './store';
 import {StoreBase} from './store-base';
 
 export class StoreUser extends StoreBase {
-  usr$ = new BehaviorSubject<StoreUser>(this);
-  sub = this.usr$.subscribe.bind(this.usr$);
-  user: User;
-
-  user$ = new BehaviorSubject<User>(this.user);
-  subUser = this.user$.subscribe.bind(this.user$);
 
   constructor(public store: Store) {
     super(store);
   }
 
+  usr$ = new BehaviorSubject<StoreUser>(this);
+  sub = this.usr$.subscribe.bind(this.usr$);
   pub() {
     this.usr$.next(this);
     this.store.pub();
   }
 
+  user: User;
+  user$ = new BehaviorSubject<User>(this.user);
+  subUser = this.user$.subscribe.bind(this.user$);
   pubUser(user: User) {
     this.user = user;
     this.user$.next(this.user);

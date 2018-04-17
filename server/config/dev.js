@@ -1,5 +1,7 @@
 module.exports = {
   port: 3000,
-  database: "mongodb://localhost/dfa",
-  corsOrigin: ["http://localhost:4200"]
+  mongoUri: 'mongodb://localhost/fin-dfa',
+  postgresUri: null,
+  corsOrigin: ['http://localhost:4200'],
+  showStack: true
 }

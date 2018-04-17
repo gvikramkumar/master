@@ -1,0 +1,51 @@
+const gq = require('graphql');
+const AllocationRule = require('./allocation-rule');
+const AllocationRuleInput = require('./allocation-rule-input');
+const repo = require('./repo');
+
+module.exports = {
+
+  addRule: {
+    type: AllocationRule,
+    args: {
+      data: {
+        name: 'data',
+        type: new gq.GraphQLNonNull(AllocationRuleInput)
+      }
+    },
+    resolve (root, params) {
+      return repo.create(params);
+    }
+  },
+
+  updateRule: {
+    type: AllocationRule,
+    args: {
+      id: {
+        name: 'id',
+        type: new gq.GraphQLNonNull(gq.GraphQLID)
+      },
+      data: {
+        name: 'data',
+        type: AllocationRuleInput
+      }
+    },
+    resolve (root, params) {
+      return repo.update(params);
+    }
+  },
+
+  removeRule: {
+    type: AllocationRule,
+    args: {
+      id: {
+        name: 'id',
+        type: new gq.GraphQLNonNull(gq.GraphQLID)
+      }
+    },
+    resolve (root, params) {
+      return repo.remove(params);
+    }
+  }
+
+}

@@ -1,17 +1,18 @@
-const graphql = require('graphql');
-const GraphQLObjectType = graphql.GraphQLObjectType;
-const GraphQLSchema = graphql.GraphQLSchema;
+const gq = require('graphql');
+const allocationRuleQueries = require('./allocation-rule/queries');
+const allocationRuleMutations = require('./allocation-rule/mutations');
 
-const userQueries = require('./user/queries');
-const userMutations = require('./user/mutations');
-
-module.exports = new GraphQLSchema({
-  query: new GraphQLObjectType({
+module.exports = new gq.GraphQLSchema({
+  query: new gq.GraphQLObjectType({
     name: 'Query',
-    fields: {...userQueries}
+    fields: {
+      ...allocationRuleQueries
+    }
   }),
-  mutation: new GraphQLObjectType({
+  mutation: new gq.GraphQLObjectType({
     name: 'Mutation',
-    fields: {...userMutations}
+    fields: {
+      ...allocationRuleMutations
+    }
   })
 });

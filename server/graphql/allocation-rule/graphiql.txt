@@ -1,0 +1,161 @@
+
+// getAll
+query Rules {
+  rules {
+      id
+      RULE_NAME
+      PERIOD
+      DRIVER_NAME
+      SALES_MATCH
+      PRODUCT_MATCH
+      SCMS_MATCH
+      LEGAL_ENTITY_MATCH
+      BE_MATCH
+      SL1_SELECT
+      SCMS_SELECT
+      BE_SELECT
+      CREATED_BY
+      CREATE_DATE
+      UPDATED_BY
+      UPDATE_DATE
+  }
+}
+
+// getOne
+
+query Rule($id: ID!) {
+  rule(id: $id) {
+      id
+      RULE_NAME
+      PERIOD
+      DRIVER_NAME
+      SALES_MATCH
+      PRODUCT_MATCH
+      SCMS_MATCH
+      LEGAL_ENTITY_MATCH
+      BE_MATCH
+      SL1_SELECT
+      SCMS_SELECT
+      BE_SELECT
+      CREATED_BY
+      CREATE_DATE
+      UPDATED_BY
+      UPDATE_DATE
+  }
+}
+{
+  "id": "5ad4fa465181f4ba3bbefa2a"
+}
+
+// add
+mutation AddOne($data: RuleInput!) {
+  addRule(data: $data) {
+      id
+      RULE_NAME
+      PERIOD
+      DRIVER_NAME
+      SALES_MATCH
+      PRODUCT_MATCH
+      SCMS_MATCH
+      LEGAL_ENTITY_MATCH
+      BE_MATCH
+      SL1_SELECT
+      SCMS_SELECT
+      BE_SELECT
+      CREATED_BY
+      CREATE_DATE
+      UPDATED_BY
+      UPDATE_DATE
+  }
+}
+{
+  "data": {
+  	"RULE_NAME": "333REVPOS-SL2-NOWWDISTI-NOSCMS-ROLL3",
+    "PERIOD": "ROLL3",
+    "DRIVER_NAME": "REVPOS",
+    "SALES_MATCH": "SL2",
+    "PRODUCT_MATCH": "",
+    "SCMS_MATCH": "",
+    "LEGAL_ENTITY_MATCH": "",
+    "BE_MATCH": "",
+    "SL1_SELECT": "NOT IN ( 'WW Distribution' )",
+    "SCMS_SELECT": "NOT IN ( 'NOT REQUIRED','OTHER','UNKNOWN' )",
+    "BE_SELECT": "",
+    "CREATED_BY": "amalakar",
+    "CREATE_DATE": null,
+    "UPDATED_BY": "",
+    "UPDATE_DATE": null
+	}
+}
+
+// update
+
+mutation updateRule($id: ID!, $data: RuleInput) {
+    updateRule(id: $id, data: $data) {
+    id
+    RULE_NAME
+    PERIOD
+    DRIVER_NAME
+    SALES_MATCH
+    PRODUCT_MATCH
+    SCMS_MATCH
+    LEGAL_ENTITY_MATCH
+    BE_MATCH
+    SL1_SELECT
+    SCMS_SELECT
+    BE_SELECT
+    CREATED_BY
+    CREATE_DATE
+    UPDATED_BY
+    UPDATE_DATE
+    }
+}
+{
+  "id": "5ad6132064443322a4ba15b9",
+  "data": {
+  	"RULE_NAME": "4442REVPOS-SL2-NOWWDISTI-NOSCMS-ROLL3",
+    "PERIOD": "ROLL3",
+    "DRIVER_NAME": "REVPOS",
+    "SALES_MATCH": "SL2",
+    "PRODUCT_MATCH": "",
+    "SCMS_MATCH": "",
+    "LEGAL_ENTITY_MATCH": "",
+    "BE_MATCH": "",
+    "SL1_SELECT": "NOT IN ( 'WW Distribution' )",
+    "SCMS_SELECT": "NOT IN ( 'NOT REQUIRED','OTHER','UNKNOWN' )",
+    "BE_SELECT": "",
+    "CREATED_BY": "amalakar",
+    "CREATE_DATE": null,
+    "UPDATED_BY": "",
+    "UPDATE_DATE": null
+	}
+}
+
+
+// delete
+
+mutation removeRule($id: ID!) {
+    removeRule(id: $id) {
+      id
+      RULE_NAME
+      PERIOD
+      DRIVER_NAME
+      SALES_MATCH
+      PRODUCT_MATCH
+      SCMS_MATCH
+      LEGAL_ENTITY_MATCH
+      BE_MATCH
+      SL1_SELECT
+      SCMS_SELECT
+      BE_SELECT
+      CREATED_BY
+      CREATE_DATE
+      UPDATED_BY
+      UPDATE_DATE
+    }
+}
+{
+  "id": "5ad6132064443322a4ba15b9"
+}
+
+

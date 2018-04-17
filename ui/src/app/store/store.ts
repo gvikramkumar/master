@@ -5,6 +5,7 @@ import {Subject} from "rxjs/Subject";
 import {ObservableMedia} from "@angular/flex-layout";
 import {StoreUser} from "./store-user";
 import "rxjs/add/operator/first";
+import {StoreProfitability} from './store-profitability';
 
 @Injectable()
 /**
@@ -18,23 +19,23 @@ export class Store extends StoreBase {
   store$ = new BehaviorSubject<Store>(this);
   sub = this.store$.subscribe.bind(this.store$);
   usr: StoreUser;
+  pft: StoreProfitability;
+  pub() {
+    this.store$.next(this);
+    super.pub();
+  }
 
   authenticated = false;
   initialized = false;
   leftNavClosed = false;
   initialBreakpoint: string;
 
-  // localized pub/sub to keep work related to specific changes. Could use subPath for this as well, but this is cleaner
-  // note that some are subjects, these are akin to messages, in that we don't care about a current value
-  // we just want to know when an event happens
-  updateLabelCounts$ = new Subject();
-  subUpdateLabelCounts = this.updateLabelCounts$.subscribe.bind(this.updateLabelCounts$);
-  leftNavClosed$ = new BehaviorSubject<boolean>(false);
-  subLeftNavClosed = this.leftNavClosed$.subscribe.bind(this.leftNavClosed$);
   authenticated$ = new BehaviorSubject<boolean>(this.authenticated);
   subAuthenticated = this.authenticated$.subscribe.bind(this.authenticated$);
   initialized$ = new BehaviorSubject<boolean>(this.initialized);
   subInitialized = this.initialized$.subscribe.bind(this.initialized$);
+  leftNavClosed$ = new BehaviorSubject<boolean>(false);
+  subLeftNavClosed = this.leftNavClosed$.subscribe.bind(this.leftNavClosed$);
 
   constructor(private media: ObservableMedia) {
     super();
@@ -42,14 +43,10 @@ export class Store extends StoreBase {
     this.pub();
   }
 
-  pub() {
-    this.store$.next(this);
-    super.pub();
-  }
-
   init() {
     this.store = this;
     this.usr = new StoreUser(this);
+    this.pft = new StoreProfitability(this);
 
     this.media.asObservable()
       .first()
@@ -62,10 +59,6 @@ export class Store extends StoreBase {
     this.leftNavClosed = val;
     this.leftNavClosed$.next(this.leftNavClosed);
     this.pub();
-  }
-
-  pubUpdateLabelCounts() {
-    this.updateLabelCounts$.next();
   }
 
   pubAuthenticated(val) {

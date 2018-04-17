@@ -15,6 +15,7 @@ import {CuiIndexModule} from "./cui-index/cui-index.module";
 import {RoutingModule} from "../routing/routing.module";
 import {ApolloModule} from 'apollo-angular';
 import {HttpLinkModule} from 'apollo-angular-link-http';
+import {SidebarModule} from 'ng-sidebar';
 
 @NgModule({
   imports: [
@@ -25,15 +26,42 @@ import {HttpLinkModule} from 'apollo-angular-link-http';
     FormsModule,
     RoutingModule,
     ApolloModule,
-    HttpLinkModule
+    HttpLinkModule,
+    SidebarModule.forRoot(),
   ],
-  declarations: [PageNotFoundComponent, ForbiddenNameValidator, MinValidator, MaxValidator, ProgressComponent, ErrorModalComponent,
-    NotImplementedComponent, TrimInputValueAccessor],
   exports: [
-    MaterialIndexModule, CuiIndexModule, FlexLayoutModule, RoutingModule, FormsModule, ApolloModule, HttpLinkModule,
-    PageNotFoundComponent, ForbiddenNameValidator, MinValidator, MaxValidator, ProgressComponent, ErrorModalComponent,
-    NotImplementedComponent, TrimInputValueAccessor],
-  entryComponents: [ErrorModalComponent, NotImplementedComponent]
+    MaterialIndexModule,
+    CuiIndexModule,
+    FlexLayoutModule,
+    FormsModule,
+    RoutingModule,
+    ApolloModule,
+    HttpLinkModule,
+    SidebarModule,
+    PageNotFoundComponent,
+    ForbiddenNameValidator,
+    MinValidator,
+    MaxValidator,
+    ProgressComponent,
+    ErrorModalComponent,
+    NotImplementedComponent,
+    TrimInputValueAccessor
+  ],
+
+  declarations: [
+    PageNotFoundComponent,
+    ForbiddenNameValidator,
+    MinValidator,
+    MaxValidator,
+    ProgressComponent,
+    ErrorModalComponent,
+    NotImplementedComponent,
+    TrimInputValueAccessor
+  ],
+  entryComponents: [
+    ErrorModalComponent,
+    NotImplementedComponent
+  ]
 })
 export class SharedModule {
 }
