@@ -1,0 +1,57 @@
+<div class="hero hero--blue">
+    <div class="container">
+        <div class="hero__content">
+            <h1>Profitability: Rule Management</h1>
+            <p>Create and update rules for Profitability group.</p>
+        </div>
+    </div>
+  </div>
+
+<br>
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+</mat-form-field>
+<div class="example-container mat-elevation-z8">
+        
+          <mat-table [dataSource]="dataSource" matSort>
+        
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <ng-container matColumnDef="RULE_NAME">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Rule Name </mat-header-cell>
+              <mat-cell *matCellDef="let row" [routerLink]="['/dfa/rule_management/update', row.id]"> {{row.RULE_NAME}} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="PERIOD">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Period </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.PERIOD}} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="DRIVER_NAME">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Driver Name </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.DRIVER_NAME}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="UPDATED_BY">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.UPDATED_BY}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="UPDATE_DATE">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Update Date </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.UPDATE_DATE}} </mat-cell>
+                </ng-container>
+
+            <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+          </mat-table>
+        
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+  
+    <br><br>
+<a href="dfa/rule_management/create"><button mat-button>Create Rule</button></a>
+<br>
+<br>
+<br>
