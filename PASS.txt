@@ -1,6 +1,7 @@
 
 
 TODO
+* mongoose schemas don't recognize dates. Ok or not? Only a problem is you need to mess with a date in repo?
 * dump the app comp routing event stuff
 * css >> scss
 * USE ME'S FIELD NAMES FROM NG CODE FOR DB

@@ -19,7 +19,7 @@ import {MainComponent} from '../common/main/main.component';
 const routes: Routes = [
   { path: '', component:HomeComponent },
   {
-    path: '/pft',
+    path: 'pft',
     component:MainComponent,
     children: [
       {

@@ -23,15 +23,6 @@ const schema = new mg.Schema(
   {collection: 'dfa_allocation_rules'}
 );
 
-/*
-// todo: not needed? Needed this in dk-crud, why not here? no id in data, so how exactly does it show up without a virtual?
-userSchema.set('toObject', { virtuals: true });
-userSchema.virtual('id').get(function() {
-  return this._id.toString();
-});
-*/
-
-
 const Rule = mg.model('Rule', schema);
 
 function list(params) {

@@ -1,0 +1,11 @@
+
+
+// getAll
+
+query Modules {
+  modules {
+      id
+      name
+  }
+}
+

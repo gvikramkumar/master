@@ -8,10 +8,12 @@ import {SubmeasureUploadComponent} from './submeasure/submeasure-upload/submeasu
 import {RuleManagementAssignComponent} from './rule-management/rule-management-assign/rule-management-assign.component';
 import {RuleManagementUpdateComponent} from './rule-management/rule-management-update/rule-management-update.component';
 import {BusinessUploadComponent} from './business-upload/business-upload/business-upload.component';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    SharedModule
   ],
   declarations: [
     SubmeasureComponent,
