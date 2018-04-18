@@ -17,10 +17,14 @@ import {BusinessUploadComponent} from '../pft/business-upload/business-upload/bu
 import {MainComponent} from '../common/main/main.component';
 
 const routes: Routes = [
-  { path: '', component:HomeComponent },
+  {
+    path: '',
+    component:HomeComponent,
+    canActivate: [InitializationGuard] },
   {
     path: 'pft',
     component:MainComponent,
+    canActivate: [InitializationGuard],
     children: [
       {
         path: 'submeasure',

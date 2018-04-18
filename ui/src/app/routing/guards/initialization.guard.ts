@@ -11,6 +11,7 @@ import {Subject} from 'rxjs/Subject';
 import * as _ from 'lodash';
 import {BreakpointService} from "../../core/services/breakpoint.service";
 import {UserService} from "../../core/services/user.service";
+import {ModuleService} from '../../core/services/module.service';
 
 @Injectable()
 /**
@@ -22,9 +23,9 @@ export class InitializationGuard implements CanActivate {
 
   constructor(private store: Store,
               private route: ActivatedRoute,
-              private userService: UserService
-              ,
+              private userService: UserService,
               private breakpoints: BreakpointService,
+              private moduleService: ModuleService,
               private init1: Init1,
               private init2: Init2,
               private init3: Init3,
@@ -71,7 +72,9 @@ export class InitializationGuard implements CanActivate {
   init() {
     // console.log('initguard start');
 
-    Observable.forkJoin(this.userService.getAll({networkOnly: true}))
+    Observable.forkJoin(
+      // this.userService.getAll(),
+      this.moduleService.getAll())
       .map(x => {
         // console.log('initguard done');
         // this.store.pub({...this.store.state, initialized: true});
@@ -114,5 +117,7 @@ export class InitializationGuard implements CanActivate {
 
   // initialization code that depends on the initial data loads
   afterInit() {
+
+    console.log('initialization complete');
   }
 }

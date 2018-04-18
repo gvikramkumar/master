@@ -7,7 +7,7 @@ import {DeletePostInterface, RulesInterface} from './graphql/schema';
 import {RemoveRuleMutation} from './graphql/mutations';
 
 @Injectable()
-export class RulesService {
+export class RuleService {
     //private posts: ApolloQueryObservable<PostsInterface>;
     //private posts: QueryRef<RulesInterface>;
     private posts: Observable<any[]>;

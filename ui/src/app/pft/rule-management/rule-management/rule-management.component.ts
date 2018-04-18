@@ -3,7 +3,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 
-import { RulesService } from '../allocation-rules.service';
+import { RuleService } from '../rule.service';
 import { FormControl } from '@angular/forms';
 import { RulesInterface } from '../graphql/schema';
 import { Subject } from 'rxjs/Subject';
@@ -26,7 +26,7 @@ export class RuleManagementComponent implements OnInit {
   tableColumns = ['RULE_NAME', 'PERIOD', 'DRIVER_NAME', 'UPDATED_BY', 'UPDATE_DATE'];
   dataSource: MatTableDataSource<RuleData>;
 
-  constructor(private _ruleService: RulesService) { }
+  constructor(private _ruleService: RuleService) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

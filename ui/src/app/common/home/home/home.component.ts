@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {Subject} from 'rxjs/Subject';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
+import {ModuleService} from '../../../core/services/module.service';
+import {Store} from '../../../store/store';
 
 @Component({
   selector: 'app-home',
@@ -12,10 +13,11 @@ import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
 export class HomeComponent implements OnInit, AfterViewInit{
 
   //public modules: QueryRef<PostsInterface>;
-  public modules: Observable<any[]>;
+  public modules: any[];
   public listPostFilter: string;
   private nameFilter: Subject<string> = new Subject<string>();
   public postControl = new FormControl();
+  @ViewChild('myIdentifier') myIdentifier: ElementRef;
 
   headerOptions = new CuiHeaderOptions({
     "showBrandingLogo": true,
@@ -33,16 +35,13 @@ export class HomeComponent implements OnInit, AfterViewInit{
   });
 
 
-  constructor() {
+  constructor(private store: Store) {
    }
 
   ngOnInit() {
-
-    console.log("Modules are: " + this.modules);
+    this.modules = this.store.modules;
   }
 
-  @ViewChild('myIdentifier')
-  myIdentifier: ElementRef;
 
   ngAfterViewInit() {
     //console.log(this.myIdentifier.nativeElement.offsetWidth);

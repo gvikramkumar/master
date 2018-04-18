@@ -19,6 +19,7 @@ import {InMemoryCache} from "apollo-cache-inmemory";
 import {DefaultOptions} from "apollo-client/ApolloClient";
 import {UserServiceRest} from "./services/user-service-rest";
 import {UserService} from "./services/user.service";
+import {ModuleService} from './services/module.service';
 
 // working with the apollo cache is somewhat complicated and error prone. You require cache resolvers and
 // query updates on add/delete mutations to make it work. We don't have much to get so until the use
@@ -55,7 +56,7 @@ const defaultOptions: DefaultOptions = {
     {provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ModifyRequestInterceptor, multi: true},
-    BreakpointService, UserServiceRest, UserService,
+    BreakpointService, UserServiceRest, UserService, ModuleService,
     InitializationGuard
   ]
 })
