@@ -29,8 +29,6 @@ export class BusinessUploadComponent implements OnInit {
   constructor() { }
 
   changeMeasure() {
-    //Runs whenever new radio button is selected (new measure selected)
-    console.log("current value: " + this.selectedRadio);
   }
 
   ngOnInit() {

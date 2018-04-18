@@ -9,7 +9,7 @@ import {RuleManagementAssignComponent} from './rule-management/rule-management-a
 import {RuleManagementUpdateComponent} from './rule-management/rule-management-update/rule-management-update.component';
 import {BusinessUploadComponent} from './business-upload/business-upload/business-upload.component';
 import {SharedModule} from '../shared/shared.module';
-import {RuleService} from './rule-management/rule.service';
+import {RuleService} from '../core/services/pft/rule.service';
 import {SubmeasureService} from './submeasure/allocation-submeasure.service';
 
 @NgModule({

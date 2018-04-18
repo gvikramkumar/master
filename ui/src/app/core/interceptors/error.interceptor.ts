@@ -7,11 +7,11 @@ import {
   HttpResponse
 } from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import {ProgressService} from '../services/progress.service';
+import {ProgressService} from '../services/common/progress.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ErrorModalComponent} from '../../shared/dialogs/error-modal/error-modal.component';
 import {Router} from '@angular/router';
-import {errorCodes} from '../services/error-codes';
+import {errorCodes} from '../services/common/error-codes';
 import * as _ from 'lodash';
 import {environment} from '../../../environments/environment';
 

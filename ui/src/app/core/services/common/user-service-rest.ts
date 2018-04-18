@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {User} from '../../store/models/user';
+import {environment} from '../../../../environments/environment';
+import {User} from '../../../store/models/user';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import {Router} from '@angular/router';
-import {Store} from '../../store/store';
+import {Store} from '../../../store/store';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
-import {StoreUser} from '../../store/store-user';
+import {StoreUser} from '../../../store/store-user';
 
 
 @Injectable()

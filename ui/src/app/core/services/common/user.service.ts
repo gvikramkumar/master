@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {environment} from '../../../environments/environment';
-import {User} from '../../users/user';
+import {environment} from '../../../../environments/environment';
+import {User} from '../../../users/user';
 import gql from 'graphql-tag';
 import {Apollo} from 'apollo-angular';
 import {Observable} from 'rxjs/Observable';
-import '../../shared/observable-additions';
+import '../../../shared/observable-additions';
 import * as _ from 'lodash';
 
 @Injectable()

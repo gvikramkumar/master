@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import gql from 'graphql-tag';
 import {Apollo} from 'apollo-angular';
 import {Observable} from 'rxjs/Observable';
-import {Store} from '../../store/store';
+import {Store} from '../../../store/store';
 
 @Injectable()
 export class ModuleService {

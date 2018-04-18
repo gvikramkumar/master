@@ -19,11 +19,8 @@ export class AppComponent implements OnInit {
     //todo: make this work for all scenarios (currently hardcoded)
     router.events.forEach((event) => {
       if(event instanceof NavigationStart) {
-        //console.log('before url is: ' + router.url);
       }
       else if(event instanceof NavigationEnd) {
-        //console.log('after url is: ' + router.url);
-        console.log('INSIDE NAVIGATION END');
         if (router.url=="/dfa/submeasure") {
           this.headerOptions.breadcrumbs = [
             {

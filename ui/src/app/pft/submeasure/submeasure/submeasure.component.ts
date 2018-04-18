@@ -53,13 +53,11 @@ export class SubmeasureComponent implements OnInit {
 
   changeMeasure() {
     //Runs whenever new radio button is selected (new measure selected)
-    console.log("current value: " + this.selectedRadio);
   }
 
   onSearchTextUpdated() {
     //Runs when new search query.
     //todo: input validation for search queries
-    console.log("Search field updated");
   }
 
 
@@ -89,13 +87,7 @@ export class SubmeasureComponent implements OnInit {
     });
 
     this.submeasures.subscribe((_submeasures: any[]) => {
-
-      //debugging
-      console.log("first rule's name: " + _submeasures[0].SUB_MEASURE_KEY);
-      console.log("second rule's name: " + _submeasures[1].SUB_MEASURE_NAME);
-
       this.submeasuresCount = _submeasures.length;
-      console.log("count is: " + this.submeasuresCount); //debugging
       this.submeasuresArray = _submeasures;
       this.dataSource = new MatTableDataSource(this.submeasuresArray);
       this.dataSource.paginator = this.paginator;

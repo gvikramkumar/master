@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../user';
 import * as _ from 'lodash';
-import {UserService} from '../../core/services/user.service';
+import {UserService} from '../../core/services/common/user.service';
 import {Apollo} from 'apollo-angular';
 
 @Component({

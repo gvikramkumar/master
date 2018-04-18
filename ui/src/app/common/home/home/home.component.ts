@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
-import {ModuleService} from '../../../core/services/module.service';
+import {ModuleService} from '../../../core/services/pft/module.service';
 import {Store} from '../../../store/store';
 
 @Component({
@@ -44,7 +44,6 @@ export class HomeComponent implements OnInit, AfterViewInit{
 
 
   ngAfterViewInit() {
-    //console.log(this.myIdentifier.nativeElement.offsetWidth);
     this.sidebarHeight = this.myIdentifier.nativeElement.offsetHeight;
   }
 

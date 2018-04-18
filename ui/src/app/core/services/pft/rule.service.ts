@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {GetPostsQuery} from './graphql/queries';
+import {GetPostsQuery} from '../../../pft/rule-management/graphql/queries';
 import {Observable} from 'rxjs/Observable';
 //import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import {Apollo} from 'apollo-angular';
-import {DeletePostInterface, RulesInterface} from './graphql/schema';
-import {RemoveRuleMutation} from './graphql/mutations';
+import {DeletePostInterface, RulesInterface} from '../../../pft/rule-management/graphql/schema';
+import {RemoveRuleMutation} from '../../../pft/rule-management/graphql/mutations';
 
 @Injectable()
 export class RuleService {
@@ -41,7 +41,6 @@ export class RuleService {
                 .take(1)
                 .subscribe({
                     next: ({ data }) => {
-                        console.log('delete post', data.removePost);
                         // update data
                         resolve({
                             success: true,
@@ -49,7 +48,6 @@ export class RuleService {
                         });
                     },
                     error: (errors) => {
-                        console.log('there was an error sending the query', errors);
                         reject({
                             success: false,
                             message: errors

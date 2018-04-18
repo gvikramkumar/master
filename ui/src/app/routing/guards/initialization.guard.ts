@@ -4,14 +4,14 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
-import {Init1, Init2, Init3, Init4, Init5} from '../../core/services/init-service';
+import {Init1, Init2, Init3, Init4, Init5} from '../../core/services/common/init-service';
 import {merge} from 'rxjs/observable/merge';
 import {Store} from '../../store/store';
 import {Subject} from 'rxjs/Subject';
 import * as _ from 'lodash';
-import {BreakpointService} from "../../core/services/breakpoint.service";
-import {UserService} from "../../core/services/user.service";
-import {ModuleService} from '../../core/services/module.service';
+import {BreakpointService} from "../../core/services/common/breakpoint.service";
+import {UserService} from "../../core/services/common/user.service";
+import {ModuleService} from '../../core/services/pft/module.service';
 
 @Injectable()
 /**

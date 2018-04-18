@@ -1,25 +1,25 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {Store} from "../store/store";
-import {ProgressService} from "./services/progress.service";
+import {ProgressService} from "./services/common/progress.service";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {SpinnerInterceptor} from "./interceptors/spinner.interceptor";
 import {TimingInterceptor} from "./interceptors/timing.interceptor";
 import {ErrorInterceptor} from "./interceptors/error.interceptor";
-import {Init1, Init2, Init3, Init4, Init5} from "./services/init-service";
+import {Init1, Init2, Init3, Init4, Init5} from "./services/common/init-service";
 import {ModifyRequestInterceptor} from "./interceptors/modify-request.interceptor";
 import {InitializationGuard} from "../routing/guards/initialization.guard";
 import {RouterModule} from "@angular/router";
 import {StoreModule} from "../store/store.module";
-import {BreakpointService} from "./services/breakpoint.service";
+import {BreakpointService} from "./services/common/breakpoint.service";
 import {Apollo, ApolloModule} from "apollo-angular";
 import {HttpLink} from "apollo-angular-link-http";
 import {environment} from "../../environments/environment";
 import {InMemoryCache} from "apollo-cache-inmemory";
 import {DefaultOptions} from "apollo-client/ApolloClient";
-import {UserServiceRest} from "./services/user-service-rest";
-import {UserService} from "./services/user.service";
-import {ModuleService} from './services/module.service';
+import {UserServiceRest} from "./services/common/user-service-rest";
+import {UserService} from "./services/common/user.service";
+import {ModuleService} from './services/pft/module.service';
 
 // working with the apollo cache is somewhat complicated and error prone. You require cache resolvers and
 // query updates on add/delete mutations to make it work. We don't have much to get so until the use

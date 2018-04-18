@@ -147,8 +147,6 @@ export class RuleManagementUpdateComponent implements OnInit {
        this.beSelect = data.rule.BE_SELECT
 
        this.formChange();
-       //console.log("driver value is: " + this.driverNamesMap[data.rule.DRIVER_NAME]);
-       //console.log("driver name is: " + this.driverNames[this.driverNamesMap[data.rule.DRIVER_NAME]-1].name);
     });
 
   }
@@ -330,28 +328,6 @@ export class RuleManagementUpdateComponent implements OnInit {
   }
 
   public save() {
-
-    //debugging
-    console.log("Inside save() function");
-    console.log("params: ");
-    console.log(this.ruleName);
-    console.log(this.period);
-    console.log(this.driverNameAbbrev);
-    console.log(this.salesMatchAbbrev);
-    console.log(this.productMatchAbbrev);
-    console.log(this.scmsMatchAbbrev);
-    console.log(this.legalMatchAbbrev);
-    console.log(this.beMatchAbbrev);
-    console.log(this.sl1Select);
-    console.log(this.scmsSelect);
-    console.log(this.beSelect);
-    console.log(this.createdBy);
-    console.log(this.createDate);
-    console.log(this.updatedBy);
-    console.log(this.updateDate);
-
-
-
     // if (!this.form.valid)
     //   return;
     this.apollo.mutate({
@@ -387,11 +363,9 @@ export class RuleManagementUpdateComponent implements OnInit {
       .take(1)
       .subscribe({
         next: ({ data }) => {
-          console.log('edit rule', data);
           // get edit data
           this.router.navigate(['/dfa/rule_management']);
         }, error: (errors) => {
-          console.log('there was an error sending the query', errors);
         }
       });
   }

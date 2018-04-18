@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AppComponent} from '../../app.component';
-import {UserService} from '../../core/services/user.service';
+import {UserService} from '../../core/services/common/user.service';
 import * as _ from 'lodash';
 import {User} from '../user';
 import {ActivatedRoute} from '@angular/router';

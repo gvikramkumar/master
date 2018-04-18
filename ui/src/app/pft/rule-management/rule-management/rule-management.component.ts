@@ -3,7 +3,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 
-import { RuleService } from '../rule.service';
+import { RuleService } from '../../../core/services/pft/rule.service';
 import { FormControl } from '@angular/forms';
 import { RulesInterface } from '../graphql/schema';
 import { Subject } from 'rxjs/Subject';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'fin-rule-management',
   templateUrl: './rule-management.component.html',
-  styleUrls: ['./rule-management.component.css']
+  styleUrls: ['./rule-management.component.scss']
 })
 export class RuleManagementComponent implements OnInit {
 
@@ -39,12 +39,7 @@ export class RuleManagementComponent implements OnInit {
 
       this.rules.subscribe((_rules: any[]) => {
 
-        //debugging
-        console.log("first rule's name: " + _rules[0].RULE_NAME);
-        console.log("second rule's name: " + _rules[1].RULE_NAME);
-
         this.rulesCount = _rules.length;
-        console.log("count is: " + this.rulesCount); //debugging
         this.rulesArray = _rules;
         this.dataSource = new MatTableDataSource(this.rulesArray);
         this.dataSource.paginator = this.paginator;

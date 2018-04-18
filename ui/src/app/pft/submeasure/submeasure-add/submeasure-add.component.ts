@@ -82,7 +82,6 @@ export class SubmeasureAddComponent implements OnInit {
   }
 
   categoryTypeSelected() {
-    console.log("Category Type selected");
   }
 
   switch_ibe: boolean;

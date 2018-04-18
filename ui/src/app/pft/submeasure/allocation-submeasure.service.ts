@@ -44,15 +44,12 @@ export class SubmeasureService {
                 .take(1)
                 .subscribe({
                     next: ({ data }) => {
-                        console.log('delete post', data.removePost);
-                        // update data
                         resolve({
                             success: true,
                             message: `Post #${id} deleted successfully  `
                         });
                     },
                     error: (errors) => {
-                        console.log('there was an error sending the query', errors);
                         reject({
                             success: false,
                             message: errors
