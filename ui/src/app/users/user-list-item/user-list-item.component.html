@@ -4,7 +4,7 @@
   <div fxFlex="1 1 auto">{{user.age}}</div>
   <div fxFlex="1 1 auto">
     <a href="" [routerLink]="['/user/:id', {id: user.id}]">edit</a>
-    <a href="" (click)="deleteUser($event)">delete</a>
+    <a href="javascript:void(0)" (click)="deleteUser($event)">delete</a>
   </div>
 </div>
 

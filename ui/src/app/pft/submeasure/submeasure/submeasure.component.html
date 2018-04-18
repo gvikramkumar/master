@@ -21,19 +21,19 @@
     </ng-sidebar>
     <div ng-sidebar-content>
       <div class="example-selected-value"> {{selectedRadio}}</div>
-      <a href="dfa/submeasure/addnew" class="addUploadButton"><button mat-button>Add New</button></a>
-      <a href="dfa/submeasure/upload" class="addUploadButton"><button mat-button>Upload</button></a>
+      <a routerLink="addnew" class="addUploadButton"><button mat-button>Add New</button></a>
+      <a routerLink="upload" class="addUploadButton"><button mat-button>Upload</button></a>
       <br><br>
-      <cui-search (onUpdate)="onSearchTextUpdated()"></cui-search>      
+      <cui-search (onUpdate)="onSearchTextUpdated()"></cui-search>
       <!-- Table measure content goes here -->
       <div class="example-container mat-elevation-z8">
-          
+
             <mat-table [dataSource]="dataSource" matSort>
-          
+
               <!--- Dynamically populate with columns -->
-          
+
             <!-- Todo: column for radio button select -->
-            
+
 
               <!-- <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
                 <mat-header-cell *matHeaderCellDef>{{ column.header }}</mat-header-cell>
@@ -44,7 +44,7 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Key </mat-header-cell>
                 <mat-cell *matCellDef="let row"> {{row.SUB_MEASURE_KEY}} </mat-cell>
               </ng-container>
-          
+
               <ng-container matColumnDef="SUB_MEASURE_NAME">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
                 <mat-cell *matCellDef="let row"> {{row.SUB_MEASURE_NAME}} </mat-cell>
@@ -53,8 +53,8 @@
               <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
             </mat-table>
-            
-          
+
+
             <mat-paginator #paginator
                           [length]="submeasuresCount"
                           [pageIndex]="0"

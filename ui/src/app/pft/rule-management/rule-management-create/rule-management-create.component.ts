@@ -350,7 +350,7 @@ export class RuleManagementCreateComponent implements OnInit {
       .subscribe({
         next: ({ data }) => {
           // get edit data
-          this.router.navigate(['/dfa/rule_management']);
+          this.router.navigate(['/pft/rule_management']);
         }, error: (errors) => {
         }
       });

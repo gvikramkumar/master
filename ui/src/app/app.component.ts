@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
       if(event instanceof NavigationStart) {
       }
       else if(event instanceof NavigationEnd) {
-        if (router.url=="/dfa/submeasure") {
+        if (router.url=="/pft/submeasure") {
           this.headerOptions.breadcrumbs = [
             {
               "label": "Home",
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
               //"url": "submeasure"
             }];
         }
-        else if (router.url=="/dfa/rule_management") {
+        else if (router.url=="/pft/rule_management") {
           this.headerOptions.breadcrumbs = [
             {
               "label": "Home",
@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
               //"url": "rule_management"
             }];
         }
-        else if (router.url=="/dfa/submeasure/upload") {
+        else if (router.url=="/pft/submeasure/upload") {
           this.headerOptions.breadcrumbs = [
             {
               "label": "Home",
@@ -60,13 +60,13 @@ export class AppComponent implements OnInit {
             },
             {
               "label": "Sub-Measure",
-              "url": "dfa/submeasure"
+              "url": "pft/submeasure"
             },
             {
               "label": "Upload"
             }];
         }
-        else if (router.url=="/dfa/submeasure/addnew") {
+        else if (router.url=="/pft/submeasure/addnew") {
           this.headerOptions.breadcrumbs = [
             {
               "label": "Home",
@@ -77,13 +77,13 @@ export class AppComponent implements OnInit {
             },
             {
               "label": "Sub-Measure",
-              "url": "dfa/submeasure"
+              "url": "pft/submeasure"
             },
             {
               "label": "Add New"
             }];
         }
-        else if (router.url=="/dfa/rule_management/create") {
+        else if (router.url=="/pft/rule_management/create") {
           this.headerOptions.breadcrumbs = [
             {
               "label": "Home",
@@ -94,13 +94,13 @@ export class AppComponent implements OnInit {
             },
             {
               "label": "Rule Management",
-              "url": "dfa/rule_management"
+              "url": "pft/rule_management"
             },
             {
               "label": "Create"
             }];
         }
-        else if (router.url=="/dfa/rule_management/assign") {
+        else if (router.url=="/pft/rule_management/assign") {
           this.headerOptions.breadcrumbs = [
             {
               "label": "Home",
@@ -111,13 +111,13 @@ export class AppComponent implements OnInit {
             },
             {
               "label": "Rule Management",
-              "url": "dfa/rule-management"
+              "url": "pft/rule-management"
             },
             {
               "label": "Assign"
             }];
         }
-        else if (router.url=="/dfa/rule_management/update/:id") {
+        else if (router.url=="/pft/rule_management/update/:id") {
           this.headerOptions.breadcrumbs = [
             {
               "label": "Home",
@@ -128,7 +128,7 @@ export class AppComponent implements OnInit {
             },
             {
               "label": "Rule Management",
-              "url": "dfa/rule-management"
+              "url": "pft/rule-management"
             },
             {
               "label": "Update"

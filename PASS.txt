@@ -1,6 +1,10 @@
 
+me:
+* diff between href and href=javascript:void  and href=/pft/rule-management etc
 
 TODO
+* bring in your styles directory if appropriate
+* breakcrumb code to: data in routing with store observable and routing done handler that pubs to store with breadcrumb subing to that obs.
 * review cui comps to see where they get their css from. Internally (
 * mongoose schemas don't recognize dates. Ok or not? Only a problem is you need to mess with a date in repo?
 * dump the app comp routing event stuff
@@ -15,7 +19,9 @@ old line followed by new line with titlte line: allocation_rules, RULE_NAME >> n
 
 
 pass:
-SHE HAD THE CISCO-UI CSS STUFF IN ASSETS IN FINDFA
+you updates all links to routerLinks, want to test all out but can't get anywhere with that body issue. What the heck is that??
+looking at the body issue. Look at her css, was there some css in there you missed?
+
 
 pass:
 home page coming up with initialized data from store.
