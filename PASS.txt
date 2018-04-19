@@ -1,8 +1,22 @@
 
+
+pass:
+fda:
+what's been implemented:
+rule mgmt: list, create update
+submeasure list (but keep the other crud pages)
+
+fixed the page scroll issue, now go through the pages above and make sure they all work, then update db and make all work again with new fields. Then look at your todo list.
+
+
+//////////////////////////// info
+
 me:
 * diff between href and href=javascript:void  and href=/pft/rule-management etc
 
 TODO
+* ruleInput doesnt hahve any required fields
+* why is she doing the refetchQueries?? what is that again? graphql thing as it's hitting the server with it
 * lazy load modules
 * bring in your styles directory if appropriate
 * breakcrumb code to: data in routing with store observable and routing done handler that pubs to store with breadcrumb subing to that obs.
@@ -19,12 +33,4 @@ change csv file headers to what's in the code (camel case) and create a doc that
 old line followed by new line with titlte line: allocation_rules, RULE_NAME >> name
 
 
-pass:
-doc: need to bang out that doc and get to ram to get feedback.
-fda:
-what's been implemented:
-rule mgmt: list, create update
-submeasure list (but keep the other crud pages)
-
-fixed the page scroll issue, now go through the pages above and make sure they all work, then update db and make all work again with new fields. Then look at your todo list.
 

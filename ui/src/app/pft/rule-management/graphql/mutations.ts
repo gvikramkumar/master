@@ -34,6 +34,8 @@ export const UpdateRuleMutation = gql`
 
 export const AddRuleMutation = gql`
     mutation addRule($data: RuleInput!) {
-    addRule(data: $data)
+      addRule(data: $data) {
+        id
+      }
     }
 `;

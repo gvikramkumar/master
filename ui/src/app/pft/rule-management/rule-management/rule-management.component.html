@@ -8,9 +8,15 @@
 </div>
 
 <br>
-<mat-form-field>
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
-</mat-form-field>
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+  </mat-form-field>
+  <a routerLink="create"><button mat-button>Create Rule</button></a>
+</div>
+
+
+
 <div class="example-container mat-elevation-z8">
 
   <mat-table [dataSource]="dataSource" matSort>
@@ -51,10 +57,3 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
 
-<br><br>
-<a routerLink="create">
-  <button mat-button>Create Rule</button>
-</a>
-<br>
-<br>
-<br>
