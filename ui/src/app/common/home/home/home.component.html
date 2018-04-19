@@ -1,46 +1,47 @@
 
-<div fxLayout="column" fxLayoutAlign="space-between stretch" class="page-wrap-100">
+<div fxLayout="column" fxLayoutAlign="start stretch" style="height:100%">
+
   <cui-header [options]="headerOptions"></cui-header>
-  <!-- <ng-sidebar-container [(style.height.px)]="sidebarHeight"> -->
-  <ng-sidebar-container fxFlex="1 1 auto">
-    <br>
-    <ng-sidebar [(opened)]="_opened" [(mode)]="_mode">
-      <h3>Profitability</h3>
-      <p><a routerLink="pft/submeasure">Sub-Measure</a></p>
-      <p><a routerLink="pft/business_upload">Business Upload</a></p>
-      <p>Report</p>
-      <p>Approval</p>
-      <p>Admin</p>
-      <p><a routerLink="pft/rule_management">Rule Management</a></p>
-    </ng-sidebar>
-    <div ng-sidebar-content class="hero hero--loose hero--background-4">
-      <div class="container" #myIdentifier>
-        <div class="hero__content">
-          <!-- <h1>Next Generation Allocation Engine</h1> --><br><br>
-          <p>A scalable and foundational platform for Core Financial allocations featuring:</p>
-          <ul>
-            <li>Digitized business processes</li>
-            <li>Simplified user experience</li>
-            <li>Analytics that explore business profitability</li>
-          </ul>
-          <br><br>
-          <div class="scrollmenu">
-            <ng-container *ngFor="let module of modules">
-              <a><div class="icon" id="icon" (click)="_toggleSidebar()">
-                <img alt="{{ module.name }}"
-                     matTooltip="{{ module.desc }}"
-                     matTooltipPosition="above" src="assets/img/module-bg.png" width="200">
-                <div class="centered">{{ module.name }}</div>
-                <!-- <div class="centered" id="overlay">This capability performs allocations at the multiple dimensions/hierarchies such as Sales Theater Level and Product Family Level used for Company's Profit/Loss (P/L) reporting to drive profitable growth.</div> -->
-              </div></a>
-            </ng-container>
+  <div style="overflow:auto;" fxFlex="1 1 auto">
+    <ng-sidebar-container fxFlex="1 1 auto">
+      <br>
+      <ng-sidebar [(opened)]="_opened" [(mode)]="_mode">
+        <h3>Profitability</h3>
+        <p><a routerLink="pft/submeasure">Sub-Measure</a></p>
+        <p><a routerLink="pft/business_upload">Business Upload</a></p>
+        <p>Report</p>
+        <p>Approval</p>
+        <p>Admin</p>
+        <p><a routerLink="pft/rule_management">Rule Management</a></p>
+      </ng-sidebar>
+      <div ng-sidebar-content class="hero hero--loose hero--background-4">
+        <div class="container" #myIdentifier>
+          <div class="hero__content">
+            <!-- <h1>Next Generation Allocation Engine</h1> --><br><br>
+            <p>A scalable and foundational platform for Core Financial allocations featuring:</p>
+            <ul>
+              <li>Digitized business processes</li>
+              <li>Simplified user experience</li>
+              <li>Analytics that explore business profitability</li>
+            </ul>
+            <br><br>
+            <div class="scrollmenu">
+              <ng-container *ngFor="let module of modules">
+                <a><div class="icon" id="icon" (click)="_toggleSidebar()">
+                  <img alt="{{ module.name }}"
+                       matTooltip="{{ module.desc }}"
+                       matTooltipPosition="above" src="assets/img/module-bg.png" width="200">
+                  <div class="centered">{{ module.name }}</div>
+                  <!-- <div class="centered" id="overlay">This capability performs allocations at the multiple dimensions/hierarchies such as Sales Theater Level and Product Family Level used for Company's Profit/Loss (P/L) reporting to drive profitable growth.</div> -->
+                </div></a>
+              </ng-container>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-  </ng-sidebar-container>
-  <cui-footer></cui-footer>
+    </ng-sidebar-container>
+    <cui-footer></cui-footer>
+  </div>
+
 </div>
-
-
