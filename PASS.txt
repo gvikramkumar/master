@@ -1,5 +1,12 @@
 
 
+
+pass:
+rule management working with errors
+now do submeasure server gq, then submeasure list in UI and all working
+
+
+
 pass:
 fda:
 what's been implemented:

@@ -4,30 +4,17 @@ const APIError = require('../../lib/errors/api-error'),
 
 const schema = new mg.Schema(
   {
-    RULE_NAME: {type: String, required: true},
-    PERIOD: {type: String, required: true},
-    DRIVER_NAME: {type: String, required: true},
-    SALES_MATCH: {type: String},
-    PRODUCT_MATCH: {type: String},
-    SCMS_MATCH: {type: String},
-    LEGAL_ENTITY_MATCH: {type: String},
-    BE_MATCH: {type: String},
-    SL1_SELECT: {type: String},
-    SCMS_SELECT: {type: String},
-    BE_SELECT: {type: String},
-    CREATED_BY: {type: String},
-    CREATE_DATE: {type: String},
-    UPDATED_BY: {type: String},
-    UPDATE_DATE: {type: String}
+    SUB_MEASURE_KEY: {type: Number, required: true},
+    SUB_MEASURE_NAME: {type: String, required: true}
   },
-  {collection: 'dfa_allocation_rules'}
-);
+  {collection: 'dfa_submeasure_list'}
+  );
 
-const Rule = mg.model('Rule', schema);
+const Submeasure = mg.model('Submeasure', schema);
 
 function list(params) {
   const {limit = 1000, skip = 0} = params;
-  return Rule.find()
+  return Submeasure.find()
     .skip(+skip)
     .limit(+limit)
     .exec()
@@ -38,7 +25,7 @@ function list(params) {
 
 function load(params) {
 
-  return Rule.findById(params.id).exec()
+  return Submeasure.findById(params.id).exec()
     .then(rule => {
       if (rule) {
         return rule;
@@ -49,13 +36,13 @@ function load(params) {
 }
 
 function create(params) {
-  const rule = new Rule(params.data);
+  const rule = new Submeasure(params.data);
   return rule.save();
 }
 
 function update(params) {
   return load(params).then(rule => {
-      Object.assign(rule, params.data);
+    Object.assign(rule, params.data);
     return rule.save()
   });
 }

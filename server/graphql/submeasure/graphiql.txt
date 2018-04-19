@@ -1,0 +1,70 @@
+
+// getAll
+query Submeasures {
+  submeasures {
+      id
+      SUB_MEASURE_KEY,
+      SUB_MEASURE_NAME
+  }
+}
+
+// getOne
+
+query Submeasure($id: ID!) {
+  submeasure(id: $id) {
+      id
+      SUB_MEASURE_KEY,
+      SUB_MEASURE_NAME
+  }
+}
+{
+  "id": "5ad4fa485181f4ba3bbefa73"
+}
+
+// add
+mutation AddSubmeasure($data: SubmeasureInput!) {
+  addSubmeasure(data: $data) {
+      id
+      SUB_MEASURE_KEY,
+      SUB_MEASURE_NAME
+  }
+}
+{
+  "data": {
+  	"SUB_MEASURE_KEY": "666",
+    "SUB_MEASURE_NAME": "Sub name"
+	}
+}
+
+// update
+
+mutation updateSubmeasure($id: ID!, $data: SubmeasureInput) {
+    updateSubmeasure(id: $id, data: $data) {
+      id
+      SUB_MEASURE_KEY,
+      SUB_MEASURE_NAME
+    }
+}
+{
+  "id": "5ad9283745319742e0f9baba",
+  "data": {
+  	"SUB_MEASURE_KEY": "777",
+    "SUB_MEASURE_NAME": "Sub name2"
+	}
+}
+
+
+// delete
+
+mutation removeSubmeasure($id: ID!) {
+    removeSubmeasure(id: $id) {
+      id
+      SUB_MEASURE_KEY,
+      SUB_MEASURE_NAME
+    }
+}
+{
+  "id": "5ad9283745319742e0f9baba"
+}
+
+
