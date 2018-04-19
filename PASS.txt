@@ -3,6 +3,7 @@ me:
 * diff between href and href=javascript:void  and href=/pft/rule-management etc
 
 TODO
+* lazy load modules
 * bring in your styles directory if appropriate
 * breakcrumb code to: data in routing with store observable and routing done handler that pubs to store with breadcrumb subing to that obs.
 * review cui comps to see where they get their css from. Internally (
