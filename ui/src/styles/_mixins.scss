@@ -1,0 +1,11 @@
+
+@mixin outline {
+  outline: 1px solid;
+  outline-offset: -1px;
+}
+
+@mixin text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

@@ -1,0 +1,35 @@
+@import 'variables';
+@import 'mixins';
+
+/*
+html, body {
+  height: 100%;
+}
+
+body {
+  color: rgba(0,0,0,.87);
+  // material sets .mat-typography font to 14px/20px, but this forces you to set line-height every time you change font-size
+  // 14/20 is 1.42, so we'll override to 1.42 (same as boot3), then we can change font-size at will
+  &.more-specific {
+    //line-height: 1.42;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; // 1
+  //outline: none;
+}
+
+i {
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+  &:link, &:visited, &:hover, &:active {
+    color: $color-link !important;
+  }
+}
+*/

@@ -1,8 +1,8 @@
 
-<div class="my-content">
+<div fxLayout="column" fxLayoutAlign="space-between stretch" class="page-wrap-100">
   <cui-header [options]="headerOptions"></cui-header>
   <!-- <ng-sidebar-container [(style.height.px)]="sidebarHeight"> -->
-  <ng-sidebar-container>
+  <ng-sidebar-container fxFlex="1 1 auto">
     <br>
     <ng-sidebar [(opened)]="_opened" [(mode)]="_mode">
       <h3>Profitability</h3>

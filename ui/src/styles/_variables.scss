@@ -1,0 +1,25 @@
+
+// mat colors
+$mat-primary: rgb(103, 58, 183);
+$mat-accent: rgb(255, 215, 64);
+$mat-warn: rgb(244, 67, 54);
+$mat-toolbar: #2a56c6;
+$mat-toolbar-rgb: rgb(42,86,198);
+
+// custom breakpoints
+$breakpoint-sm: 900px;
+$breakpoint-md: 1020px;
+$breakpoint-lg: 1100px;
+$breakpoint-xlg: 1300px;
+
+
+// custom colors
+$bg-light-gray: #f5f5f5;
+$link-gray:  #616161;
+$link-active: #2a56c6;
+$color-link: lighten($link-active, 10%);
+$border-gray: rgba(0,0,0,0.12);
+$color-splash: rgba(42,86,198, .9);
+$color-default-text: rgba(0,0,0, .87);
+
+$leftnav-width: 259px;

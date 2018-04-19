@@ -1,3 +1,4 @@
+
 p {
   font-weight: 600;
 }
@@ -7,7 +8,7 @@ li {
 }
 
 ng-sidebar-container {
-  height: 71.5vh;
+  //height: 71.5vh;
   /* overflow: auto; */
   background-color: #2b5592;
 }
@@ -79,7 +80,7 @@ div.scrollmenu p {
   opacity:0;
   -webkit-transition: opacity .25s ease;} */
 
-#icon {  
+#icon {
 overflow:hidden;}
 
 #icon:hover #overlay {

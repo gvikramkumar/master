@@ -19,14 +19,11 @@ old line followed by new line with titlte line: allocation_rules, RULE_NAME >> n
 
 
 pass:
-you updates all links to routerLinks, want to test all out but can't get anywhere with that body issue. What the heck is that??
-looking at the body issue. Look at her css, was there some css in there you missed?
-
-
-pass:
-home page coming up with initialized data from store.
-rules list page comes up, tons of work to do.
-could get other pages to come up next? find out what's actually working on site.
+doc: need to bang out that doc and get to ram to get feedback.
+fda:
+what's been implemented:
 rule mgmt: list, create update
 submeasure list (but keep the other crud pages)
+
+fixed the page scroll issue, now go through the pages above and make sure they all work, then update db and make all work again with new fields. Then look at your todo list.
 

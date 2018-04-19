@@ -12,3 +12,7 @@
 //$cui-resource-path: "../node_modules/cisco-ui/dist";
 //@import "~cisco-ui/src/scss/cui-standard.scss";
 @import 'assets/cisco-ui/css/cui-standard.min.css';
+
+@import 'styles/elements';
+@import 'styles/classes';
+@import 'styles/material-mods';

@@ -1,0 +1,72 @@
+@import '_variables';
+@import '_mixins';
+
+.page-wrap-100 {
+  height: 100%;
+}
+
+.page-wrap-vscroll {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.page-wrap-scroll {
+  height: 100%;
+  overflow: auto;
+}
+
+.notransition * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
+}
+
+.ghost {
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+}
+
+.text-ellipsis {
+  @include text-ellipsis;
+}
+
+.text-ellipsis-inline {
+  display: inline-block;
+  @include text-ellipsis;
+}
+
+.text-ellipsis-block {
+  @include text-ellipsis;
+  display: block;
+}
+
+.text-ellipsis-inline {
+  display: inline-block;
+  @include text-ellipsis;
+}
+
+.error-text {
+  color: red;
+}
+
+.outline {
+  @include outline;
+}
+.outline-red {
+  @include outline;
+  outline-color: red;
+}
+
+.oo2 {
+  outline-offset: -2px;
+}
+
+.invisible {
+  visibility: hidden;
+}

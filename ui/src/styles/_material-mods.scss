@@ -1,0 +1,73 @@
+
+/*
+material is viewEncapsulation.none and all their css is global, so has to be dealt with at this level. If you
+try something like: mat-xx {...} in a component, we're viewEncapsulated:Emulated, which means that will get decorated with [_ngContentxxx] attribute rendering it useless if inside a mat component. If up here, won't get decorated, but then addresses all mat comps of that type ,but then you can decorate yours with a class and select it from here with that class: mat-xxx.myclass {...}
+ */
+
+
+/*
+.mat-toolbar {
+  align-items: center;
+}
+
+mat-expansion-panel.exp-panel-leftnav {
+  margin-top: -6px;
+
+  .mat-expansion-panel-body {
+    padding-left: 0;
+  }
+}
+
+// this changes all of them without the config panelClass=contactDetailCssHack to single it out
+.contactDetailCssHack .mat-dialog-container {
+  padding: 0;
+  overflow-y: unset;
+  overflow-x: unset;
+}
+
+.mat-dialog-content {
+  overflow: unset !important;
+}
+
+.mat-dialog-actions {
+  flex-direction: row-reverse;
+  margin-top: 14px;
+}
+
+.bg-modal-backdrop {
+  background-color: rgba(0,0,0,.1);
+  //background-color: transparent;
+}
+
+.mat-menu-content {
+  $color: #757575;
+  .separator {
+    margin: 7px 0;
+    border-top: 1px solid $color;
+  }
+  .label {
+    font-size: 12px;
+    margin-left: 16px;
+    color: $color;
+  }
+
+}
+*/
+
+/*
+.more-actions .mat-menu-item {
+  font-size: 14px;
+  padding-right: 30px;
+
+  i.left {
+    font-size: 20px;
+  }
+  i.right {
+    font-size: 26px;
+    position: absolute;
+    top: 10px;
+    right: 5px;
+  }
+}
+*/
+
