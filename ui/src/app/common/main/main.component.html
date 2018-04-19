@@ -1,3 +1,9 @@
-<div class="page-wrap-scroll">
-  <router-outlet></router-outlet>
+<div fxLayout="column" fxLayoutAlign="start stretch" style="height:100%">
+
+  <cui-header [options]="headerOptions"></cui-header>
+  <div style="overflow:auto;" fxFlex="1 1 auto">
+    <router-outlet></router-outlet>
+    <cui-footer></cui-footer>
+  </div>
+
 </div>
