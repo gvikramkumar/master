@@ -1,5 +1,10 @@
-const conn = new Mongo();
-const db = conn.getDB('fin-dfa');
+var conn;
+
+print('mongoUri: ' + mongoUri + ', mongoDatabase: ' + mongoDatabase);
+
+conn = new Mongo(mongoUri);
+var db = conn.getDB(mongoDatabase);
+
 
 const collections = [
   'dfa_allocation_rules',
@@ -15,8 +20,7 @@ collections.forEach(coll => {
 });
 
 // add indexes
-// todo: add indexes on all collections
+// todo: add appropriate indexes on all collections
 
-print('create collections complete');
-
+print('create-collections complete');
 

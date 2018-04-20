@@ -1,10 +1,19 @@
 
+* make seed take mongouri, then default to local but then arindam can pass in other mongouris
+* rul
+
+pass:
+db updated FOR RULE ONLY and graphiql updated and tested for rule, NOW DO SUBMEASUERE AND MODULE
+then once graphql working for those, come down to UI and fix code
+
 
 
 pass:
-rule management working with errors
-now do submeasure server gq, then submeasure list in UI and all working
+submeasure graphql done on server
+submeasure list running
 
+Now convert db but setup a doc or spreadsheet with the name mapping,
+then make the graphql and code work with these new fields. BUT FIRST... check out the code again and see how it maps the camelcase names to the upper snake in db.
 
 
 pass:
@@ -22,6 +31,11 @@ me:
 * diff between href and href=javascript:void  and href=/pft/rule-management etc
 
 TODO
+* rule create/edit should be same page
+* rule create/update needs to use rule object, not properties on comp
+* create graphql classes in ui
+* create graphql input classes in qi? Const can enforce required then
+* go with ruleAddInput, ruleUpdateInput, or look at their trick with the id on put, then add createdBy/Date to that list
 * ruleInput doesnt hahve any required fields
 * why is she doing the refetchQueries?? what is that again? graphql thing as it's hitting the server with it
 * lazy load modules

@@ -2,23 +2,24 @@ const APIError = require('../../lib/errors/api-error'),
   httpStatus = require('http-status'),
   mg = require('mongoose');
 
+
 const schema = new mg.Schema(
   {
-    RULE_NAME: {type: String, required: true},
-    PERIOD: {type: String, required: true},
-    DRIVER_NAME: {type: String, required: true},
-    SALES_MATCH: {type: String},
-    PRODUCT_MATCH: {type: String},
-    SCMS_MATCH: {type: String},
-    LEGAL_ENTITY_MATCH: {type: String},
-    BE_MATCH: {type: String},
-    SL1_SELECT: {type: String},
-    SCMS_SELECT: {type: String},
-    BE_SELECT: {type: String},
-    CREATED_BY: {type: String},
-    CREATE_DATE: {type: String},
-    UPDATED_BY: {type: String},
-    UPDATE_DATE: {type: String}
+    name: {type: String, required: true},
+    period: {type: String, required: true},
+    driverName: {type: String, required: true},
+    salesMatch: {type: String},
+    productMatch: {type: String},
+    scmsMatch: {type: String},
+    legalEntityMatch: {type: String},
+    beMatch: {type: String},
+    sl1Select: {type: String},
+    scmsSelect: {type: String},
+    beSelect: {type: String},
+    createdBy: {type: String},
+    createdDate: {type: String},
+    updatedBy: {type: String},
+    updatedDate: {type: String}
   },
   {collection: 'dfa_allocation_rules'}
 );

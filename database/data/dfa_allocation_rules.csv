@@ -1,4 +1,4 @@
-RULE_NAME,PERIOD,DRIVER_NAME,SALES_MATCH,PRODUCT_MATCH,SCMS_MATCH,LEGAL_ENTITY_MATCH,BE_MATCH,SL1_SELECT,SCMS_SELECT,BE_SELECT,CREATED_BY,CREAYED_DATE,UPDATED_BY,UPDATED_DATE
+ruleName,period,driverName,salesMatch,productMatch,scmsMatch,legalEntityMatch,beMatch,sl1Select,scmsSelect,beSelect,createdBy,createdDate,updatedBy,updatedDate
 REVPOS-SL2-NOWWDISTI-NOSCMS-ROLL3,ROLL3,REVPOS,SL2,,,,,NOT IN ( 'WW Distribution' ),"NOT IN ( 'NOT REQUIRED','OTHER','UNKNOWN' )",,amalakar,,,
 SHIP-SL2-NOWWDIST-MTD,MTD,SHIPMENT,SL2,,,,,NOT IN ( 'WW Distribution' ),,,amalakar,,,
 SHIPREV-SHIP-PL2-NOWWDIST-NOSCMS-ROLL3,ROLL3,SHIPREV,,,,,,NOT IN ( 'WW Distribution' ),"NOT IN ( 'NOT REQUIRED','OTHER','UNKNOWN' )",,,,moltman,

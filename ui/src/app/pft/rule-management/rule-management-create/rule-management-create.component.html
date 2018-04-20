@@ -8,7 +8,7 @@
       </div>
       <div class="add-form-container">
         <!-- <form [formGroup]="form" (ngSubmit)="save()"> -->
-          <cui-input type="text" [(ngModel)]="ruleName" label="Rule Name" required="true"></cui-input>
+          <cui-input type="text" [(ngModel)]="name" label="Rule Name" required="true"></cui-input>
           <cui-select [(ngModel)]="driverSelection" [items]="driverNames" empty="true" label="Driver" required="true" optionsKey="name" optionsValue="value"></cui-select>
           <cui-select [(ngModel)]="periodSelection" [items]="driverPeriods" label="Driver Period" empty="true" required="true" optionsKey="name" optionsValue="value"></cui-select>
           <br>
@@ -61,4 +61,3 @@
           <button mat-button (click)="save()">Submit</button><button mat-button>Reset</button>
         <!-- </form> -->
       </div>
-      

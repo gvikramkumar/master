@@ -58,7 +58,7 @@ export class RuleManagementCreateComponent implements OnInit {
 
   //values that bind to form components in HTML
   public rule: any; // use for id
-  public ruleName: String;
+  public name: String;
   //public period: String;
   //public driverName: String;
   public salesMatch: number;
@@ -116,7 +116,7 @@ export class RuleManagementCreateComponent implements OnInit {
     }).valueChanges.subscribe(({ data }) => {
       that.rule = data.rule;
        //this.form.setValue({title: data.post.title, content: data.post.content});
-       this.ruleName = data.rule.RULE_NAME;
+       this.name = data.rule.RULE_NAME;
        this.driverSelection = this.driverNamesMap[data.rule.DRIVER_NAME];
        //this.driverNames[this.driverNamesMap[data.rule.DRIVER_NAME]-1].selected = true;
        this.periodSelection = this.periodNamesMap[data.rule.PERIOD];
@@ -318,7 +318,7 @@ export class RuleManagementCreateComponent implements OnInit {
       variables: {
         //"id": this.rule.id,
         "data": {
-          "RULE_NAME": this.ruleName,
+          "RULE_NAME": this.name,
           // "PERIOD": this.driverPeriods[this.periodSelection-1].name,
           "PERIOD": this.period,
           // "DRIVER_NAME": this.driverNamesAbbrev[this.driverNamesMap[this.driverSelection]-1],

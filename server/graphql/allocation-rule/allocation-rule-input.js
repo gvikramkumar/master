@@ -3,20 +3,21 @@ const gq = require('graphql');
 module.exports = new gq.GraphQLInputObjectType({
   name: 'RuleInput',
   fields: () => ({
-    RULE_NAME: {type: gq.GraphQLString},
-    PERIOD: {type: gq.GraphQLString},
-    DRIVER_NAME: {type: gq.GraphQLString},
-    SALES_MATCH: {type: gq.GraphQLString},
-    PRODUCT_MATCH: {type: gq.GraphQLString},
-    SCMS_MATCH: {type: gq.GraphQLString},
-    LEGAL_ENTITY_MATCH: {type: gq.GraphQLString},
-    BE_MATCH: {type: gq.GraphQLString},
-    SL1_SELECT: {type: gq.GraphQLString},
-    SCMS_SELECT: {type: gq.GraphQLString},
-    BE_SELECT: {type: gq.GraphQLString},
-    CREATED_BY: {type: gq.GraphQLString},
-    CREATE_DATE: {type: gq.GraphQLString},
-    UPDATED_BY: {type: gq.GraphQLString},
-    UPDATE_DATE: {type: gq.GraphQLString},
+    name: {type: gq.GraphQLString},
+    period: {type: gq.GraphQLString},
+    driverName: {type: gq.GraphQLString},
+    salesMatch: {type: gq.GraphQLString},
+    productMatch: {type: gq.GraphQLString},
+    scmsMatch: {type: gq.GraphQLString},
+    legalEntityMatch: {type: gq.GraphQLString},
+    beMatch: {type: gq.GraphQLString},
+    sl1Select: {type: gq.GraphQLString},
+    scmsSelect: {type: gq.GraphQLString},
+    beSelect: {type: gq.GraphQLString},
+    createdBy: {type: gq.GraphQLString},
+    createdDate: {type: gq.GraphQLString},
+    updatedBy: {type: gq.GraphQLString},
+    updatedDate: {type: gq.GraphQLString}
   })
 });
+
