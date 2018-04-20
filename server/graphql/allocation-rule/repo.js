@@ -21,7 +21,7 @@ const schema = new mg.Schema(
     updatedBy: {type: String},
     updatedDate: {type: String}
   },
-  {collection: 'dfa_allocation_rules'}
+  {collection: 'allocation_rules'}
 );
 
 const Rule = mg.model('Rule', schema);

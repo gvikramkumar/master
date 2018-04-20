@@ -7,10 +7,10 @@ var db = conn.getDB(_db);
 
 
 const collections = [
-  'dfa_allocation_rules',
-  'dfa_modules',
-  'dfa_submeasure_list',
-  'dfa_submeasure_rule_map'
+  'allocation_rules',
+  'modules',
+  'submeasure_list',
+  'submeasure_rule_map'
 ];
 
 // drop/create collections

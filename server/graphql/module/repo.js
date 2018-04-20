@@ -4,7 +4,7 @@ const schema = new mg.Schema(
   {
     name: {type: String, required: true}
   },
-  {collection: 'dfa_modules'}
+  {collection: 'modules'}
 );
 
 const Module = mg.model('Module', schema);

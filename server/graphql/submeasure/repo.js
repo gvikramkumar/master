@@ -4,10 +4,10 @@ const APIError = require('../../lib/errors/api-error'),
 
 const schema = new mg.Schema(
   {
-    SUB_MEASURE_KEY: {type: Number, required: true},
-    SUB_MEASURE_NAME: {type: String, required: true}
+    key: {type: Number, required: true},
+    name: {type: String, required: true}
   },
-  {collection: 'dfa_submeasure_list'}
+  {collection: 'submeasure_list'}
   );
 
 const Submeasure = mg.model('Submeasure', schema);

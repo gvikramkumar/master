@@ -4,7 +4,7 @@ module.exports = new gq.GraphQLObjectType({
   name: 'Submeasure',
   fields: () => ({
     id: {type: gq.GraphQLID},
-    SUB_MEASURE_KEY: {type: gq.GraphQLInt},
-    SUB_MEASURE_NAME: {type: gq.GraphQLString}
+    key: {type: gq.GraphQLInt},
+    name: {type: gq.GraphQLString}
   })
 });
