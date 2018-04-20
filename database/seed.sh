@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# must be called with: host port database
+
 mongo --eval "var host='$1', port='$2', _db='$3'" create-collections.js
 
 mongoimport --host $1 --port $2 --db $3  --collection dfa_allocation_rules --type=csv --headerline --file data/dfa_allocation_rules.csv
