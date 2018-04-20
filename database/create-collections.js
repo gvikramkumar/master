@@ -1,9 +1,9 @@
 var conn;
 
-print('mongoUri: ' + mongoUri + ', mongoDatabase: ' + mongoDatabase);
+print('host: ' + host + ', port: ' + port + ', db: ' + _db);
 
-conn = new Mongo(mongoUri);
-var db = conn.getDB(mongoDatabase);
+conn = new Mongo(host + ':' + port);
+var db = conn.getDB(_db);
 
 
 const collections = [
