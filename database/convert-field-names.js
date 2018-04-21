@@ -21,7 +21,7 @@ key, name
 submeasure_rule_map
 SUB_MEASURE_NAME,RULE_NAME,SEQ_NUM,CREATED_BY,CREATED_DATE,UPDATED_BY,UPDATE_DATE
 >>
-subMeasureName,ruleName,seqNum,createdBy,createdDate,updatedBy,updateDate
+subMeasureName,ruleName,seqNum,createdBy,createdDate,updatedBy,updatedDate
 
 
 */
