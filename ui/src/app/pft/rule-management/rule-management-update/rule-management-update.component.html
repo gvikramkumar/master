@@ -1,4 +1,5 @@
-<div class="hero hero--blue">
+<!--
+<div class="hero hero&#45;&#45;blue">
   <div class="container">
       <div class="hero__content">
           <h1>Update Rule</h1>
@@ -7,12 +8,10 @@
   </div>
 </div>
 <div class="add-form-container">
-  <!-- <form [formGroup]="form" (ngSubmit)="save()"> -->
     <cui-input type="text" [(ngModel)]="name" label="Rule Name" required="true"></cui-input>
     <cui-select [(ngModel)]="driverSelection" [items]="driverNames" empty="true" label="Driver" required="true" optionsKey="name" optionsValue="value"></cui-select>
     <cui-select [(ngModel)]="periodSelection" [items]="driverPeriods" label="Driver Period" empty="true" required="true" optionsKey="name" optionsValue="value"></cui-select>
     <br>
-    <!-- Begin two column section -->
     <div class="input-filter-level">
               <div style="width: 100%; display: table;">
                   <div style="display: table-row">
@@ -56,8 +55,7 @@
               </div>
               <br>
           </div>
-    <!-- End two column section -->
     <br>
     <button mat-button (click)="save()">Submit</button><button mat-button>Reset</button>
-  <!-- </form> -->
 </div>
+-->

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { GetPostsQuery } from '../../rule-management/graphql/queries';
 import { AddRuleMutation } from '../../rule-management/graphql/mutations';
+import {AllocationRule} from '../../store/models/allocation-rule';
+import {RuleService} from '../../../core/services/pft/rule.service';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -21,13 +24,13 @@ export class RuleManagementCreateComponent implements OnInit {
     'SHIPREV':6,
     'VIP':7
   }
-  driverSelection: number;
+
   periodNamesMap: {[key: string]: any} = {
     'MTD':1,
     'ROLL6':2,
     'ROLL3':3
   }
-  periodSelection: number;
+
   salesLevelsMap: {[key: string]: any} = {
     'SL1':1,
     'SL2':2,
@@ -53,87 +56,32 @@ export class RuleManagementCreateComponent implements OnInit {
     'Sub BE':2
   }
 
-  //driverNamesMap[GLREVMIX] = 1;
-
-
-  //values that bind to form components in HTML
-  public rule: any; // use for id
-  public name: String;
-  //public period: String;
-  //public driverName: String;
-  public salesMatch: number;
-  public productMatch: number;
-  public scmsMatch: number;
-  public legalMatch: number;
-  public beMatch: number;
-  public sl1Select: String = "";
-  public productSelect: String = "";
-  public scmsSelect: String = "";
-  public legalSelect: String = "";
-  public beSelect: String = "";
-
-  //change when implement SSO auth
-  public createdBy: String = "";
-  public createDate: String = "";
-  public updatedBy: String = "moltman";
-  public updateDate: String = "";
-
-  //form values for submitting back to mongo in save()
-  // "PERIOD": this.driverPeriods[this.periodSelection-1].name,
-  // "DRIVER_NAME": this.driverNamesAbbrev[this.driverNamesMap[this.driverSelection]-1],
-  // "SALES_MATCH": this.salesLevels[this.salesMatch-1].name,
-  // "PRODUCT_MATCH": this.productLevels[this.productMatch-1].name,
-  // "SCMS_MATCH": this.scmsLevels[this.scmsMatch-1].name,
-  // "LEGAL_ENTITY_MATCH": this.legalEntityLevels[this.legalMatch-1].name,
-  // "BE_MATCH": this.ibeLevels[this.beMatch-1].name,
-  public period: String;
-  public driverNameAbbrev: String;
-  public salesMatchAbbrev: String = "";
-  public productMatchAbbrev: String = "";
-  public scmsMatchAbbrev: String = "";
-  public legalMatchAbbrev: String = "";
-  public beMatchAbbrev: String = "";
-
+  periodSelection: number;
+  driverSelection: number;
+  addMode = false;
+  rule: AllocationRule;
+  salesMatch: number;
+  productMatch: number;
+  scmsMatch: number;
+  legalMatch: number;
+  beMatch: number;
 
   constructor(
-    //formBuilder: FormBuilder,
-    //private route: ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private ruleService: RuleService
   ) {
-    this.apollo = apollo;
+    this.addMode = this.route.snapshot.data.mode === 'add';
   }
 
   public ngOnInit(): void {
-    //const that = this;
-    /* this.sub = this.route.params.subscribe(params => {
-      this.id = params['id'];
-    }); */
-    /* this.apollo.watchQuery<RuleByIdInterface>({
-      query: GetRuleDetailQuery,
-      variables: { "id": this.id }
-    //}).subscribe(({ data }) => {
-    }).valueChanges.subscribe(({ data }) => {
-      that.rule = data.rule;
-       //this.form.setValue({title: data.post.title, content: data.post.content});
-       this.name = data.rule.RULE_NAME;
-       this.driverSelection = this.driverNamesMap[data.rule.DRIVER_NAME];
-       //this.driverNames[this.driverNamesMap[data.rule.DRIVER_NAME]-1].selected = true;
-       this.periodSelection = this.periodNamesMap[data.rule.PERIOD];
-       this.salesMatch = this.salesLevelsMap[data.rule.SALES_MATCH];
-       this.productMatch = this.productLevelsMap[data.rule.PRODUCT_MATCH];
-       this.scmsMatch = this.scmsLevelsMap[data.rule.SCMS_MATCH];
-       this.legalMatch = this.legalLevelsMap[data.rule.LEGAL_ENTITY_MATCH];
-       this.beMatch = this.beLevelsMap[data.rule.BE_MATCH];
-       this.sl1Select = data.rule.SL1_SELECT,
-       this.scmsSelect = data.rule.SCMS_SELECT,
-       this.beSelect = data.rule.BE_SELECT
-
-       this.formChange();
-    }); */
-    this.formChange();
+    if (this.addMode) {
+      this.rule = <AllocationRule>{}
+    } else {
+      // load from routing params id
+    }
   }
-
 
   driverNames = [
     {
@@ -285,75 +233,43 @@ export class RuleManagementCreateComponent implements OnInit {
 
   formChange() {
     //logic here for form change
-    if(this.driverPeriods[this.periodSelection-1].name != null) {
-      this.period = this.driverPeriods[this.periodSelection-1].name;
+    if(this.periodSelection && this.driverPeriods[this.periodSelection-1].name != null) {
+      this.rule.period = this.driverPeriods[this.periodSelection-1].name;
     }
-    if(this.driverNamesAbbrev[this.driverSelection-1] != null) {
-      this.driverNameAbbrev = this.driverNamesAbbrev[this.driverSelection-1];
+    if(this.driverSelection && this.driverNamesAbbrev[this.driverSelection-1] != null) {
+      this.rule.driverName = this.driverNamesAbbrev[this.driverSelection-1];
     }
-    if(this.salesLevels[this.salesMatch-1].name != null) {
-      this.salesMatchAbbrev = this.salesLevels[this.salesMatch-1].name;
+    if(this.salesMatch && this.salesLevels[this.salesMatch-1].name != null) {
+      this.rule.salesMatch = this.salesLevels[this.salesMatch-1].name;
     }
-    if (this.productLevels[this.productMatch-1].name != null) {
-      this.productMatchAbbrev = this.productLevels[this.productMatch-1].name;
+    if (this.productMatch && this.productLevels[this.productMatch-1].name != null) {
+      this.rule.productMatch = this.productLevels[this.productMatch-1].name;
     }
-    if (this.scmsLevels[this.scmsMatch-1].name != null) {
-      this.scmsMatchAbbrev = this.scmsLevels[this.scmsMatch-1].name;
+    if (this.scmsMatch && this.scmsLevels[this.scmsMatch-1].name != null) {
+      this.rule.scmsMatch = this.scmsLevels[this.scmsMatch-1].name;
     }
-    if (this.legalEntityLevels[this.legalMatch-1].name != null) {
-      this.legalMatchAbbrev = this.legalEntityLevels[this.legalMatch-1].name;
+    if (this.legalMatch && this.legalEntityLevels[this.legalMatch-1].name != null) {
+      this.rule.legalEntityMatch = this.legalEntityLevels[this.legalMatch-1].name;
     }
-    if (this.beMatch != null) {
-      if (this.ibeLevels[this.beMatch-1].name != null) {
-        this.beMatchAbbrev = this.ibeLevels[this.beMatch-1].name;
-      }
+    if (this.beMatch && this.ibeLevels[this.beMatch-1].name != null) {
+      this.rule.beMatch = this.ibeLevels[this.beMatch-1].name;
     }
   }
 
   public save() {
-    // if (!this.form.valid)
+    // if (!this.form.valid) //todo: isn't this needed? where's the validation enforced?
     //   return;
-    this.apollo.mutate({
-      mutation: AddRuleMutation,
-      variables: {
-        //"id": this.rule.id,
-        "data": {
-          "RULE_NAME": this.name,
-          // "PERIOD": this.driverPeriods[this.periodSelection-1].name,
-          "PERIOD": this.period,
-          // "DRIVER_NAME": this.driverNamesAbbrev[this.driverNamesMap[this.driverSelection]-1],
-          "DRIVER_NAME": this.driverNameAbbrev,
-          // "SALES_MATCH": this.salesLevels[this.salesMatch-1].name,
-          "SALES_MATCH": this.salesMatchAbbrev,
-          // "PRODUCT_MATCH": this.productLevels[this.productMatch-1].name,
-          "PRODUCT_MATCH": this.productMatchAbbrev,
-          // "SCMS_MATCH": this.scmsLevels[this.scmsMatch-1].name,
-          "SCMS_MATCH": this.scmsMatchAbbrev,
-          // "LEGAL_ENTITY_MATCH": this.legalEntityLevels[this.legalMatch-1].name,
-          "LEGAL_ENTITY_MATCH": this.legalMatchAbbrev,
-          // "BE_MATCH": this.ibeLevels[this.beMatch-1].name,
-          "BE_MATCH": this.beMatchAbbrev,
-          "SL1_SELECT": this.sl1Select,
-          "SCMS_SELECT": this.scmsSelect,
-          "BE_SELECT": this.beSelect,
-          "CREATED_BY": this.createdBy,
-          "CREATE_DATE": this.createDate,
-          "UPDATED_BY": this.updatedBy,
-          "UPDATE_DATE": this.updateDate
-        },
-        refetchQueries: [{
-          query: GetPostsQuery,
-        }],
-      },
-    })
-      .take(1)
-      .subscribe({
-        next: ({ data }) => {
-          // get edit data
-          this.router.navigate(['/pft/rule_management']);
-        }, error: (errors) => {
-        }
-      });
+
+    let obs: Observable<AllocationRule>;
+    if (this.addMode) {
+      obs = this.ruleService.add(this.rule);
+    } else {
+      obs = this.ruleService.edit(this.rule)
+    }
+    obs.subscribe(rule => this.router.navigate(['/pft/rule_management']));
+
+
+
   }
 
 }

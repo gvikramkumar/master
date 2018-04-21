@@ -1,13 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
-
-import { RuleService } from '../../../core/services/pft/rule.service';
-import { FormControl } from '@angular/forms';
-import { RulesInterface } from '../graphql/schema';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {RuleService} from '../../../core/services/pft/rule.service';
+import {FormControl} from '@angular/forms';
+import {Subject} from 'rxjs/Subject';
+import {Subscription} from 'rxjs/Subscription';
+import {AllocationRule} from '../../store/models/allocation-rule';
 
 @Component({
   selector: 'fin-rule-management',
@@ -16,15 +13,14 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class RuleManagementComponent implements OnInit {
 
-  public rules: Observable<any[]>;
   public numRules: Number;
   public rulesArray: any[];
   public rulesCount: Number = 0;
   public currentRules: Subscription;
   public formControl = new FormControl();
   private nameFilter: Subject<string> = new Subject<string>();
-  tableColumns = ['RULE_NAME', 'PERIOD', 'DRIVER_NAME', 'UPDATED_BY', 'UPDATE_DATE'];
-  dataSource: MatTableDataSource<RuleData>;
+  tableColumns = ['name', 'period', 'driverName', 'updatedBy', 'updateDate'];
+  dataSource: MatTableDataSource<AllocationRule>;
 
   constructor(private _ruleService: RuleService) { }
 
@@ -32,13 +28,12 @@ export class RuleManagementComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
     ngOnInit() {
-      this.rules = this._ruleService.get();
       this.formControl.valueChanges.debounceTime(300).subscribe(name => {
         this.nameFilter.next(name);
       });
 
-      this.rules.subscribe((_rules: any[]) => {
-
+      this._ruleService.getAll()
+        .subscribe((_rules: any[]) => {
         this.rulesCount = _rules.length;
         this.rulesArray = _rules;
         this.dataSource = new MatTableDataSource(this.rulesArray);
@@ -62,22 +57,7 @@ export class RuleManagementComponent implements OnInit {
 
 }
 
-export interface RuleData {
-  //id: string | null;
-  RULE_NAME: string;
-  PERIOD: string;
-  DRIVER_NAME: string;
-  SALES_MATCH: string;
-  PRODUCT_MATCH: string;
-  SCMS_MATCH: string;
-  LEGAL_ENTITY_MATCH: string;
-  BE_MATCH: string;
-  SL1_SELECT: string;
-  SCMS_SELECT: string;
-  BE_SELECT: string;
-  CREATED_BY: string;
-  CREATE_DATE: string;
-  UPDATED_BY: string;
-  UPDATE_DATE: string;
-}
+
+
+
 

@@ -1,3 +1,13 @@
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'fin-prof-rule-management-update',
+  templateUrl: './rule-management-update.component.html',
+  styleUrls: ['./rule-management-update.component.scss']
+})
+export class RuleManagementUpdateComponent {}
+
+/*
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -293,11 +303,11 @@ export class RuleManagementUpdateComponent implements OnInit {
     }
   ]
 
-/*   salesSelectionCriteria: string = "";
+/!*   salesSelectionCriteria: string = "";
   productSelectionCriteria: string = "";
   scmsSelectionCriteria: string;
   legalSelectionCriteria: string;
-  internalSelectionCriteria: string; */
+  internalSelectionCriteria: string; *!/
 
 
   formChange() {
@@ -371,3 +381,4 @@ export class RuleManagementUpdateComponent implements OnInit {
   }
 
 }
+*/

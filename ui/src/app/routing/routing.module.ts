@@ -39,9 +39,12 @@ const routes: Routes = [
         path: 'rule_management',
         children: [
           {path: '', component: RuleManagementComponent},
-          { path: 'create', component:RuleManagementCreateComponent },
+          { path: 'add',
+            component:RuleManagementCreateComponent,
+            data: {mode: 'add'}
+          },
           { path: 'assign', component:RuleManagementAssignComponent },
-          { path: 'update/:id', component:RuleManagementUpdateComponent },
+          { path: 'edit/:id', component:RuleManagementCreateComponent },
         ],
       },
       { path: 'business_upload', component:BusinessUploadComponent },

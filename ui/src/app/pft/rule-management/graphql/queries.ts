@@ -23,22 +23,22 @@ export const GetPostsQuery = gql`
 export const GetRuleDetailQuery= gql`
      query GetPostDetailQuery($id: ID!) {
         rule(id: $id) {
-            id
-            RULE_NAME
-            PERIOD
-            DRIVER_NAME
-            SALES_MATCH
-            PRODUCT_MATCH
-            SCMS_MATCH
-            LEGAL_ENTITY_MATCH
-            BE_MATCH
-            SL1_SELECT
-            SCMS_SELECT
-            BE_SELECT
-            CREATED_BY
-            CREATE_DATE
-            UPDATED_BY
-            UPDATE_DATE
+          id
+          name
+          period
+          driverName
+          salesMatch
+          productMatch
+          scmsMatch
+          legalEntityMatch
+          beMatch
+          sl1Select
+          scmsSelect
+          beSelect
+          createdBy
+          createdDate
+          updatedBy
+          updatedDate
         }
     }
 `;
@@ -46,22 +46,22 @@ export const GetRuleDetailQuery= gql`
 export const GetPostsQuery = gql`
   query Rules {
     rules {
-        id
-        RULE_NAME
-        PERIOD
-        DRIVER_NAME
-        SALES_MATCH
-        PRODUCT_MATCH
-        SCMS_MATCH
-        LEGAL_ENTITY_MATCH
-        BE_MATCH
-        SL1_SELECT
-        SCMS_SELECT
-        BE_SELECT
-        CREATED_BY
-        CREATE_DATE
-        UPDATED_BY
-        UPDATE_DATE
+      id
+      name
+      period
+      driverName
+      salesMatch
+      productMatch
+      scmsMatch
+      legalEntityMatch
+      beMatch
+      sl1Select
+      scmsSelect
+      beSelect
+      createdBy
+      createdDate
+      updatedBy
+      updatedDate
     }
   }
 `;

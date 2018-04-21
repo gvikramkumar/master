@@ -24,30 +24,30 @@
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
 
-    <ng-container matColumnDef="RULE_NAME">
+    <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Rule Name</mat-header-cell>
-      <mat-cell *matCellDef="let row" [routerLink]="['update', row.id]"> {{row.RULE_NAME}}
+      <mat-cell *matCellDef="let row" [routerLink]="['update', row.id]"> {{row.name}}
       </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="PERIOD">
+    <ng-container matColumnDef="period">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Period</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.PERIOD}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.period}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="DRIVER_NAME">
+    <ng-container matColumnDef="driverName">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Driver Name</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.DRIVER_NAME}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.driverName}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="UPDATED_BY">
+    <ng-container matColumnDef="updatedBy">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.UPDATED_BY}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.updatedBy}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="UPDATE_DATE">
+    <ng-container matColumnDef="updateDate">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Update Date</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.UPDATE_DATE}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.updateDate}}</mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>

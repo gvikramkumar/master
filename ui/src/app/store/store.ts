@@ -5,7 +5,7 @@ import {Subject} from "rxjs/Subject";
 import {ObservableMedia} from "@angular/flex-layout";
 import {StoreUser} from "./store-user";
 import "rxjs/add/operator/first";
-import {StoreProfitability} from './store-profitability';
+import {StoreProfitability} from '../pft/store/store-profitability';
 
 @Injectable()
 /**

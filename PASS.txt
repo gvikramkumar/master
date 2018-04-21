@@ -1,29 +1,11 @@
 
-* make seed take mongouri, then default to local but then arindam can pass in other mongouris
-* rul
+* need a setup.md for the project to tell people how to get it up and running
 
 pass:
-db updated FOR RULE ONLY and graphiql updated and tested for rule, NOW DO SUBMEASUERE AND MODULE
-then once graphql working for those, come down to UI and fix code
+have rule list running, now working on create, but decided to refactor for reused for edit.
+should be pretty much done iwth the create, to the point of testing. You commented out edit page, once you have create done, then update ruleServie andd rest of code required for edit.
 
-
-
-pass:
-submeasure graphql done on server
-submeasure list running
-
-Now convert db but setup a doc or spreadsheet with the name mapping,
-then make the graphql and code work with these new fields. BUT FIRST... check out the code again and see how it maps the camelcase names to the upper snake in db.
-
-
-pass:
-fda:
-what's been implemented:
-rule mgmt: list, create update
-submeasure list (but keep the other crud pages)
-
-fixed the page scroll issue, now go through the pages above and make sure they all work, then update db and make all work again with new fields. Then look at your todo list.
-
+Then.. submeasure list and supposedly done with the database changes so can push.
 
 //////////////////////////// info
 
