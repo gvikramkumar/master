@@ -1,7 +1,7 @@
 
 // getAll
-query Submeasures {
-  submeasures {
+query getSubmeasures {
+  getSubmeasures {
       id
       key,
       name
@@ -10,8 +10,8 @@ query Submeasures {
 
 // getOne
 
-query Submeasure($id: ID!) {
-  submeasure(id: $id) {
+query getSubmeasure($id: ID!) {
+  getSubmeasure(id: $id) {
       id
       key,
       name
@@ -22,7 +22,7 @@ query Submeasure($id: ID!) {
 }
 
 // add
-mutation AddSubmeasure($data: SubmeasureInput!) {
+mutation addSubmeasure($data: SubmeasureInput!) {
   addSubmeasure(data: $data) {
       id
       key,
@@ -48,7 +48,7 @@ mutation updateSubmeasure($id: ID!, $data: SubmeasureInput) {
 {
   "id": "5ad9283745319742e0f9baba",
   "data": {
-  	"key": "777",
+  	"key": "6662",
     "name": "Sub name2"
 	}
 }
