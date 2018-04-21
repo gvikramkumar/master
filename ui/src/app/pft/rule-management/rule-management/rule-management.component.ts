@@ -22,7 +22,7 @@ export class RuleManagementComponent implements OnInit {
   tableColumns = ['name', 'period', 'driverName', 'updatedBy', 'updateDate'];
   dataSource: MatTableDataSource<AllocationRule>;
 
-  constructor(private _ruleService: RuleService) { }
+  constructor(private ruleService: RuleService) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -32,7 +32,7 @@ export class RuleManagementComponent implements OnInit {
         this.nameFilter.next(name);
       });
 
-      this._ruleService.getAll()
+      this.ruleService.getMany()
         .subscribe((_rules: any[]) => {
         this.rulesCount = _rules.length;
         this.rulesArray = _rules;

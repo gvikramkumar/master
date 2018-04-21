@@ -19,7 +19,7 @@ export class ModuleService {
 
   getModules = gql`
          query GetModules {
-          modules {
+          getModules {
             ...ModuleFragment
           }             
          }  

@@ -32,7 +32,7 @@ const routes: Routes = [
 
           { path: '', component:SubmeasureComponent },
           { path: 'upload', component:SubmeasureUploadComponent },
-          { path: 'addnew', component:SubmeasureAddComponent },
+          { path: 'add', component:SubmeasureAddComponent },
         ]
       },
       {

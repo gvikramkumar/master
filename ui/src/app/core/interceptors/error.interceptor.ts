@@ -44,6 +44,15 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (!resp.error.error.errorCode) {
             err.errorCode = errorCodes.server_prefix + errorCodes.server_unknown_error;
           }
+        } else if (resp.error.errors && resp.error.errors.length) {
+          if (resp.error.errors.length === 1) {
+            err = {message: resp.error.errors[0].message};
+          } else {
+            err = {
+              message: 'graphql errors',
+              data: resp.error.errors.map(err => err.message).join('\n')
+            }
+          }
         } else {
           err = {
             message: 'Unknown server error',
@@ -66,7 +75,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
         const config = <MatDialogConfig> {
           data: {error: err},
-          width: '500px',
+          width: '600px',
           backdropClass: 'bg-modal-backdrop'
         };
         this.dialog.open(ErrorModalComponent, config)

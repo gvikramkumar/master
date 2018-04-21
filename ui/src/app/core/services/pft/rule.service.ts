@@ -1,13 +1,8 @@
 import {Injectable} from '@angular/core';
-import {GetPostsQuery} from '../../../pft/rule-management/graphql/queries';
 import {Observable} from 'rxjs/Observable';
-//import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import {Apollo} from 'apollo-angular';
-import {DeletePostInterface, RulesInterface} from '../../../pft/rule-management/graphql/schema';
-import {AddRuleMutation, RemoveRuleMutation, UpdateRuleMutation} from '../../../pft/rule-management/graphql/mutations';
 import {AllocationRule} from '../../../pft/store/models/allocation-rule';
 import gql from 'graphql-tag';
-import {All} from 'tslint/lib/rules/completedDocsRule';
 
 @Injectable()
 export class RuleService {
@@ -17,7 +12,7 @@ export class RuleService {
   }
 
   ruleFragment = gql`
-    fragment RuleFragment on User {
+    fragment RuleFragment on Rule {
       id
       name
       period
@@ -37,7 +32,7 @@ export class RuleService {
   }
   `;
 
-  getAll(): Observable<AllocationRule[]> {
+  getMany(): Observable<AllocationRule[]> {
 
     const query = gql`
          query getRules {
@@ -49,7 +44,7 @@ export class RuleService {
       `;
 
     return this.apollo.query<any>({query})
-      .map(result => result.data.rules);
+      .map(result => result.data.getRules);
   }
 
   getOne(id: number): Observable<AllocationRule> {
@@ -64,10 +59,10 @@ export class RuleService {
     `;
 
     return this.apollo.query<any>({query, variables: {id}})
-      .map(result => result.data.rule);
+      .map(result => result.data.getRule);
   }
 
-  addOne(rule) {
+  add(rule) {
     const mutation = gql`
       mutation addRule($data: RuleInput!) {
         addRule(data: $data) {
@@ -81,7 +76,7 @@ export class RuleService {
       .map(result => result.data.addRule);
   }
 
-  updateOne(rule): Observable<AllocationRule> {
+  update(rule): Observable<AllocationRule> {
     const mutation = gql`
           mutation updateRule($id: ID!, $data: RuleInput) {
             updateRule(id: $id, data: $data) {
@@ -95,7 +90,7 @@ export class RuleService {
       .map(result => result.data.updateRule);
   }
 
-  deleteOne(id: number): Observable<AllocationRule> {
+  remove(id: number): Observable<AllocationRule> {
     const mutation = gql`
       mutation removeRule($id: ID!) {
           removeRule(id: $id) {

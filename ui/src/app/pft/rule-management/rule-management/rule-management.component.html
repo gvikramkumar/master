@@ -12,7 +12,7 @@
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
   </mat-form-field>
-  <a routerLink="create"><button mat-button>Create Rule</button></a>
+  <a routerLink="add"><button mat-button>Create Rule</button></a>
 </div>
 
 
@@ -26,7 +26,7 @@
 
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Rule Name</mat-header-cell>
-      <mat-cell *matCellDef="let row" [routerLink]="['update', row.id]"> {{row.name}}
+      <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"> {{row.name}}
       </mat-cell>
     </ng-container>
 

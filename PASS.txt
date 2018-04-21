@@ -1,5 +1,10 @@
 
 
+pass:
+standardized server gq/repo, now need to update ui, for new names and for update/remove updatedDate addition
+then back to rule update page.
+
+
 
 pass:
 have rule list running, now working on create, but decided to refactor for reused for edit.

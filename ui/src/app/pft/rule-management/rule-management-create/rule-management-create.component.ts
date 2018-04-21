@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import { GetPostsQuery } from '../../rule-management/graphql/queries';
-import { AddRuleMutation } from '../../rule-management/graphql/mutations';
 import {AllocationRule} from '../../store/models/allocation-rule';
 import {RuleService} from '../../../core/services/pft/rule.service';
 import {Observable} from 'rxjs/Observable';
@@ -13,6 +11,32 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./rule-management-create.component.scss']
 })
 export class RuleManagementCreateComponent implements OnInit {
+  rule: AllocationRule = <AllocationRule>{};
+  title: string;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private apollo: Apollo,
+    private ruleService: RuleService
+  ) {
+    this.addMode = this.route.snapshot.data.mode === 'add';
+  }
+
+  public ngOnInit(): void {
+    if (this.addMode) {
+      this.title = 'Create Rule';
+    } else {
+      this.title = 'Edit Rule';
+      this.ruleService.getOne(this.route.snapshot.params.id)
+        .subscribe(rule => {
+          this.rule = rule;
+          this.formChange();
+        });
+
+      // load from routing params id
+    }
+  }
 
   driverNamesAbbrev = ['GLREVMIX', 'MANUALMAP', 'REVPOS', 'SERVMAP', 'SHIPMENT', 'SHIPREV', 'VIP'];
   driverNamesMap: {[key: string]: any} = {
@@ -59,32 +83,11 @@ export class RuleManagementCreateComponent implements OnInit {
   periodSelection: number;
   driverSelection: number;
   addMode = false;
-  rule: AllocationRule;
   salesMatch: number;
   productMatch: number;
   scmsMatch: number;
   legalMatch: number;
   beMatch: number;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private apollo: Apollo,
-    private ruleService: RuleService
-  ) {
-    this.addMode = this.route.snapshot.data.mode === 'add';
-  }
-
-  public ngOnInit(): void {
-    if (this.addMode) {
-      this.rule = <AllocationRule>{}
-    } else {
-      this.ruleService.getOne(route.snapshot.params.id)
-        .subscribe(rule => this.rule = rule);
-
-      // load from routing params id
-    }
-  }
 
   driverNames = [
     {
@@ -267,7 +270,7 @@ export class RuleManagementCreateComponent implements OnInit {
     if (this.addMode) {
       obs = this.ruleService.add(this.rule);
     } else {
-      obs = this.ruleService.edit(this.rule)
+      obs = this.ruleService.update(this.rule)
     }
     obs.subscribe(rule => this.router.navigate(['/pft/rule_management']));
 
