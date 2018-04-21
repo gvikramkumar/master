@@ -127,15 +127,15 @@ mutation updateRule($id: ID!, $data: RuleInput) {
     "createdBy": "amalakar",
     "createdDate": null,
     "updatedBy": "",
-    "updatedDate": null
+    "updatedDate": ""
 	}
 }
 
 
 // remove
 
-mutation removeRule($id: ID!) {
-    removeRule(id: $id) {
+mutation removeRule($id: ID!, $updatedDate: String) {
+    removeRule(id: $id, updatedDate: $updatedDate) {
       id
       name
       period
@@ -155,7 +155,8 @@ mutation removeRule($id: ID!) {
     }
 }
 {
-  "id": "5ada144c62ee4442604ca26c"
+  "id": "5ada144c62ee4442604ca26c",
+  "updatedDate": ""
 }
 
 

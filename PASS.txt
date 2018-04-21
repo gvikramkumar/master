@@ -18,6 +18,7 @@ me:
 * diff between href and href=javascript:void  and href=/pft/rule-management etc
 
 TODO
+* concurrency: need a code for this so you can put up the right message when they try to delete something (that still exists) but has been updated. Anytime they delete or update and don't have the latest... they need to get a message: your data needs to be refreshed, not: item not found, as it's there and they're trying to delet it, just that the rule needs to be: if it's changed, then don't update or delete, make them look at the new version as someone else has been messing with it.
 * move rule add/update metadata to a modules.json data doc, i.e. in db, and don't add a schema for it, just have it as "string", so module: {id, name, metadata}, then we can update metadata on the fly, but need to wrap well in unit tests so if they change something that will break the ui, we catch it. Say they add one to one array, and it uses that to access another array they didnt' add to and that crashes the code. me's rule add/edit formChange is what needst to be tested well for breakage.
 * rule create/edit should be same page
 * rule create/update needs to use rule object, not properties on comp

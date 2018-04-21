@@ -19,7 +19,6 @@ module.exports = {
     type: AllocationRule,
     args: {
       id: {name: 'id', type: new gq.GraphQLNonNull(gq.GraphQLID)},
-      updatedDate: {name: 'id', type: gq.GraphQLString},
       data: {name: 'data', type: AllocationRuleInput}
     },
     resolve (root, params) {

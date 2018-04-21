@@ -47,8 +47,9 @@ function getOne(params) {
 
 function getOneWithUpdatedDate(params) {
   const query = {_id: params.id};
-  if (params.updatedDate) {
-    query.updatedDate = params.updatedDate
+  const updatedDate = params.data? params.data.updatedDate: params.updatedDate;// in data for update and params for remove
+  if (updatedDate) {
+    query.updatedDate = updatedDate
   }
   return Rule.findOne(query).exec()
     .then(rule => {
@@ -60,7 +61,7 @@ function getOneWithUpdatedDate(params) {
       2. no updatedDate sent up, but one in database, fail
       3. updatedDate sent, then used in search, doesn't exist, fail // someone else updated or deleted it
        */
-      if(!rule || (rule.updatedDate && !params.updatedDate)) {
+      if(!rule || (rule.updatedDate && !updatedDate)) {
         const err = new APIError('Item doesn\'t exist.', httpStatus.NOT_FOUND);
         return Promise.reject(err);
       }
