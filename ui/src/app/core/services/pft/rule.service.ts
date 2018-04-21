@@ -3,6 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {Apollo} from 'apollo-angular';
 import {AllocationRule} from '../../../pft/store/models/allocation-rule';
 import gql from 'graphql-tag';
+import * as _ from 'lodash';
 
 @Injectable()
 export class RuleService {
@@ -59,7 +60,7 @@ export class RuleService {
     `;
 
     return this.apollo.query<any>({query, variables: {id}})
-      .map(result => result.data.getRule);
+      .map(result => _.cloneDeep(result.data.getRule));
   }
 
   add(rule) {
@@ -85,8 +86,11 @@ export class RuleService {
       }
       ${this.ruleFragment}
     `;
-
-    return this.apollo.mutate({mutation, variables: {id: rule.id, data: rule}})
+    const id = rule.id;
+    delete rule.id; // RuleInput has no id property
+    return this.apollo.mutate({
+      mutation,
+      variables: {id: rule.id, updatedDate: rule.updatedDate, data: rule}})
       .map(result => result.data.updateRule);
   }
 

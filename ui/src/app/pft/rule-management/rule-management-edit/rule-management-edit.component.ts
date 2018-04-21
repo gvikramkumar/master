@@ -7,12 +7,20 @@ import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'fin-rule-management-create',
-  templateUrl: './rule-management-create.component.html',
-  styleUrls: ['./rule-management-create.component.scss']
+  templateUrl: './rule-management-edit.component.html',
+  styleUrls: ['./rule-management-edit.component.scss']
 })
-export class RuleManagementCreateComponent implements OnInit {
+export class RuleManagementEditComponent implements OnInit {
+  editMode = false;
   rule: AllocationRule = <AllocationRule>{};
   title: string;
+  periodSelection: number;
+  driverSelection: number;
+  salesMatch: number;
+  productMatch: number;
+  scmsMatch: number;
+  legalMatch: number;
+  beMatch: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -20,21 +28,29 @@ export class RuleManagementCreateComponent implements OnInit {
     private apollo: Apollo,
     private ruleService: RuleService
   ) {
-    this.addMode = this.route.snapshot.data.mode === 'add';
+    this.editMode = !!this.route.snapshot.params.id;
   }
 
   public ngOnInit(): void {
-    if (this.addMode) {
-      this.title = 'Create Rule';
-    } else {
+    if (this.editMode) {
       this.title = 'Edit Rule';
       this.ruleService.getOne(this.route.snapshot.params.id)
         .subscribe(rule => {
+          this.rule.period = 'one';
           this.rule = rule;
+          this.rule.period = 'two';
+
+          this.driverSelection = this.rule.driverName? this.driverNamesMap[this.rule.driverName]: '';
+          this.periodSelection = this.rule.period? this.periodNamesMap[this.rule.period]: '';
+          this.salesMatch = this.rule.salesMatch? this.salesLevelsMap[this.rule.salesMatch]: '';
+          this.productMatch = this.rule.productMatch? this.productLevelsMap[this.rule.productMatch]: '';
+          this.scmsMatch = this.rule.scmsMatch? this.scmsLevelsMap[this.rule.scmsMatch]: '';
+          this.legalMatch = this.rule.legalEntityMatch? this.legalLevelsMap[this.rule.legalEntityMatch]: '';
+          this.beMatch = this.rule.beMatch? this.beLevelsMap[this.rule.beMatch]: '';
           this.formChange();
         });
-
-      // load from routing params id
+    } else {
+      this.title = 'Create Rule';
     }
   }
 
@@ -80,14 +96,6 @@ export class RuleManagementCreateComponent implements OnInit {
     'Sub BE':2
   }
 
-  periodSelection: number;
-  driverSelection: number;
-  addMode = false;
-  salesMatch: number;
-  productMatch: number;
-  scmsMatch: number;
-  legalMatch: number;
-  beMatch: number;
 
   driverNames = [
     {
@@ -238,7 +246,6 @@ export class RuleManagementCreateComponent implements OnInit {
 
 
   formChange() {
-    //logic here for form change
     if(this.periodSelection && this.driverPeriods[this.periodSelection-1].name != null) {
       this.rule.period = this.driverPeriods[this.periodSelection-1].name;
     }
@@ -267,10 +274,10 @@ export class RuleManagementCreateComponent implements OnInit {
     //   return;
 
     let obs: Observable<AllocationRule>;
-    if (this.addMode) {
-      obs = this.ruleService.add(this.rule);
-    } else {
+    if (this.editMode) {
       obs = this.ruleService.update(this.rule)
+    } else {
+      obs = this.ruleService.add(this.rule);
     }
     obs.subscribe(rule => this.router.navigate(['/pft/rule_management']));
 

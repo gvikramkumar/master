@@ -10,7 +10,7 @@ import {SubmeasureComponent} from '../pft/submeasure/submeasure/submeasure.compo
 import {SubmeasureUploadComponent} from '../pft/submeasure/submeasure-upload/submeasure-upload.component';
 import {SubmeasureAddComponent} from '../pft/submeasure/submeasure-add/submeasure-add.component';
 import {RuleManagementComponent} from '../pft/rule-management/rule-management/rule-management.component';
-import {RuleManagementCreateComponent} from '../pft/rule-management/rule-management-create/rule-management-create.component';
+import {RuleManagementEditComponent} from '../pft/rule-management/rule-management-edit/rule-management-edit.component';
 import {RuleManagementAssignComponent} from '../pft/rule-management/rule-management-assign/rule-management-assign.component';
 import {RuleManagementUpdateComponent} from '../pft/rule-management/rule-management-update/rule-management-update.component';
 import {BusinessUploadComponent} from '../pft/business-upload/business-upload/business-upload.component';
@@ -39,12 +39,9 @@ const routes: Routes = [
         path: 'rule_management',
         children: [
           {path: '', component: RuleManagementComponent},
-          { path: 'add',
-            component:RuleManagementCreateComponent,
-            data: {mode: 'add'}
-          },
+          { path: 'add', component:RuleManagementEditComponent},
           { path: 'assign', component:RuleManagementAssignComponent },
-          { path: 'edit/:id', component:RuleManagementCreateComponent },
+          { path: 'edit/:id', component:RuleManagementEditComponent },
         ],
       },
       { path: 'business_upload', component:BusinessUploadComponent },

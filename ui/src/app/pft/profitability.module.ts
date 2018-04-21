@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {SubmeasureComponent} from './submeasure/submeasure/submeasure.component';
 import {SubmeasureAddComponent} from './submeasure/submeasure-add/submeasure-add.component';
 import {RuleManagementComponent} from './rule-management/rule-management/rule-management.component';
-import {RuleManagementCreateComponent} from './rule-management/rule-management-create/rule-management-create.component';
+import {RuleManagementEditComponent} from './rule-management/rule-management-edit/rule-management-edit.component';
 import {SubmeasureUploadComponent} from './submeasure/submeasure-upload/submeasure-upload.component';
 import {RuleManagementAssignComponent} from './rule-management/rule-management-assign/rule-management-assign.component';
 import {RuleManagementUpdateComponent} from './rule-management/rule-management-update/rule-management-update.component';
@@ -22,7 +22,7 @@ import {SubmeasureService} from './submeasure/allocation-submeasure.service';
     RuleManagementComponent,
     SubmeasureUploadComponent,
     SubmeasureAddComponent,
-    RuleManagementCreateComponent,
+    RuleManagementEditComponent,
     RuleManagementAssignComponent,
     RuleManagementUpdateComponent,
     BusinessUploadComponent
@@ -32,7 +32,7 @@ import {SubmeasureService} from './submeasure/allocation-submeasure.service';
     RuleManagementComponent,
     SubmeasureUploadComponent,
     SubmeasureAddComponent,
-    RuleManagementCreateComponent,
+    RuleManagementEditComponent,
     RuleManagementAssignComponent,
     RuleManagementUpdateComponent,
     BusinessUploadComponent
