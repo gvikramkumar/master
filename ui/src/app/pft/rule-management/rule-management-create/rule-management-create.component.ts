@@ -79,6 +79,9 @@ export class RuleManagementCreateComponent implements OnInit {
     if (this.addMode) {
       this.rule = <AllocationRule>{}
     } else {
+      this.ruleService.getOne(route.snapshot.params.id)
+        .subscribe(rule => this.rule = rule);
+
       // load from routing params id
     }
   }

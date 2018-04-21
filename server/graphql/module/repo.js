@@ -9,8 +9,8 @@ const schema = new mg.Schema(
 
 const Module = mg.model('Module', schema);
 
-function list() {
+function getMany() {
   return Module.find().exec();
 }
 
-module.exports = {list};
+module.exports = {getMany};

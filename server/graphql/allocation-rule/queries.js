@@ -4,33 +4,24 @@ const repo = require('./repo');
 
 module.exports = {
 
-  rules: {
+  getRules: {
     type: new gq.GraphQLList(AllocationRule),
     args: {
-      limit: {
-        name: 'limit',
-        type: gq.GraphQLInt
-      },
-      skip: {
-        name: 'skip',
-        type: gq.GraphQLInt
-      }
+      limit: {name: 'limit', type: gq.GraphQLInt},
+      skip: {name: 'skip', type: gq.GraphQLInt}
     },
     resolve (root, params) {
-      return repo.list(params)
+      return repo.getMany(params)
     }
   },
 
-  rule: {
+  getRule: {
     type: AllocationRule,
     args: {
-      id: {
-        name: 'id',
-        type: new gq.GraphQLNonNull(gq.GraphQLID)
-      },
+      id: {name: 'id', type: new gq.GraphQLNonNull(gq.GraphQLID)}
     },
     resolve (root, params) {
-      return repo.load(params)
+      return repo.getOne(params)
     }
   }
 

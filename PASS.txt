@@ -1,5 +1,5 @@
 
-* need a setup.md for the project to tell people how to get it up and running
+
 
 pass:
 have rule list running, now working on create, but decided to refactor for reused for edit.
@@ -13,6 +13,7 @@ me:
 * diff between href and href=javascript:void  and href=/pft/rule-management etc
 
 TODO
+* move rule add/update metadata to a modules.json data doc, i.e. in db, and don't add a schema for it, just have it as "string", so module: {id, name, metadata}, then we can update metadata on the fly, but need to wrap well in unit tests so if they change something that will break the ui, we catch it. Say they add one to one array, and it uses that to access another array they didnt' add to and that crashes the code. me's rule add/edit formChange is what needst to be tested well for breakage.
 * rule create/edit should be same page
 * rule create/update needs to use rule object, not properties on comp
 * create graphql classes in ui

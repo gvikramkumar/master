@@ -26,43 +26,62 @@ const schema = new mg.Schema(
 
 const Rule = mg.model('Rule', schema);
 
-function list(params) {
+function getMany(params) {
   const {limit = 1000, skip = 0} = params;
   return Rule.find()
-    .skip(+skip)
-    .limit(+limit)
+    .skip(Number(skip))
+    .limit(Number(limit))
     .exec()
-    .then(x => {
-      return x;
-    })
 }
 
-function load(params) {
-
+function getOne(params) {
   return Rule.findById(params.id).exec()
     .then(rule => {
-      if (rule) {
-        return rule;
+      if(!rule) {
+        const err = new APIError('Item doesn\'t exist.', httpStatus.NOT_FOUND);
+        return Promise.reject(err);
       }
-      const err = new APIError('Item doesn\'t exist.', httpStatus.NOT_FOUND);
-      return Promise.reject(err);
+      return rule;
     });
 }
 
-function create(params) {
+function getOneWithUpdatedDate(params) {
+  const query = {_id: params.id};
+  if (params.updatedDate) {
+    query.updatedDate = params.updatedDate
+  }
+  return Rule.findOne(query).exec()
+    .then(rule => {
+      //todo: wrap this concurrency check in a unit test
+      /*
+      this is our concurrency check for update/delete, the only ones which will send updateDate parameter
+      (if they have one)
+      1. no updatedDate sent up or in database, cool
+      2. no updatedDate sent up, but one in database, fail
+      3. updatedDate sent, then used in search, doesn't exist, fail // someone else updated or deleted it
+       */
+      if(!rule || (rule.updatedDate && !params.updatedDate)) {
+        const err = new APIError('Item doesn\'t exist.', httpStatus.NOT_FOUND);
+        return Promise.reject(err);
+      }
+      return rule;
+    });
+}
+
+function add(params) {
   const rule = new Rule(params.data);
   return rule.save();
 }
 
 function update(params) {
-  return load(params).then(rule => {
+  return getOneWithUpdatedDate(params).then(rule => {
       Object.assign(rule, params.data);
     return rule.save()
   });
 }
 
 function remove(params) {
-  return load(params).then(rule => rule.remove());
+  return getOneWithUpdatedDate(params).then(rule => rule.remove());
 }
 
-module.exports = {list, load, create, update, remove};
+module.exports = {getMany, getOne, add, update, remove};

@@ -39,15 +39,6 @@ export class UserService {
   // not do server hits that gets all the data all over again (when all you needed to do was add one to the list).
   getAll({watch = false, networkOnly = false} = {}): Observable<User[]> {
 
-    const query = gql`
-         query GetUsers {
-          users {
-            ...UserFragment
-          }             
-         }  
-         ${this.userFragment}
-      `;
-
     const fetchPolicy = networkOnly ? 'network-only' : 'cache-first';
     const obs =  this.apollo.watchQuery<any>({query: this.getAllQuery, fetchPolicy: fetchPolicy})
       .valueChanges

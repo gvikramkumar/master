@@ -4,7 +4,7 @@ const repo = require('./repo');
 
 module.exports = {
 
-  submeasures: {
+  getSubmeasures: {
     type: new gq.GraphQLList(Submeasure),
     args: {
       limit: {
@@ -17,11 +17,11 @@ module.exports = {
       }
     },
     resolve (root, params) {
-      return repo.list(params)
+      return repo.getMany(params)
     }
   },
 
-  submeasure: {
+  getSubmeasure: {
     type: Submeasure,
     args: {
       id: {
@@ -30,7 +30,7 @@ module.exports = {
       }
     },
     resolve (root, params) {
-      return repo.load(params)
+      return repo.getOne(params)
     }
   }
 

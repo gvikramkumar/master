@@ -2,8 +2,8 @@
 
 // getAll
 
-query Modules {
-  modules {
+query getModules {
+  getModules {
       id
       name
   }

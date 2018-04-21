@@ -1,7 +1,7 @@
 
 // getAll
-query Rules {
-  rules {
+query getRules {
+  getRules {
       id
       name
       period
@@ -23,8 +23,8 @@ query Rules {
 
 // getOne
 
-query Rule($id: ID!) {
-  rule(id: $id) {
+query getRule($id: ID!) {
+  getRule(id: $id) {
       id
       name
       period
@@ -48,7 +48,7 @@ query Rule($id: ID!) {
 }
 
 // add
-mutation AddOne($data: RuleInput!) {
+mutation addRule($data: RuleInput!) {
   addRule(data: $data) {
       id
       name
@@ -132,7 +132,7 @@ mutation updateRule($id: ID!, $data: RuleInput) {
 }
 
 
-// delete
+// remove
 
 mutation removeRule($id: ID!) {
     removeRule(id: $id) {

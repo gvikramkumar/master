@@ -4,10 +4,10 @@ const repo = require('./repo');
 
 module.exports = {
 
-  modules: {
+  getModules: {
     type: new gq.GraphQLList(Module),
     resolve (root, params) {
-      return repo.list(params)
+      return repo.getMany(params)
     }
   }
 

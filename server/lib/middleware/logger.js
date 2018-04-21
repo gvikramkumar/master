@@ -6,9 +6,9 @@ module.exports = function(options) {
     mode: 'short' // 'short' or 'long'
   }
   const opts = _.merge(defaults, options);
-
+  const substrLength = 100;
   return (req, res, next) => {
-    let msg = req.method + ' - ' + req.url;
+    let msg = req.method + ' - ' + req.url.substr(0, 40) + '  ';
 
     if (req.body) {
       msg = msg + ' body: ';
@@ -17,14 +17,14 @@ module.exports = function(options) {
       }
       else if (opts.mode === 'short') {
         if (req.body && req.body.query) {
-          msg = msg + req.body.query.substr(0, 30);
+          msg = msg + req.body.query.substr(0, substrLength);
         }
         else if (req.body && req.body.mutatation) {
-          msg = msg + req.body.mutation.substr(0, 30);
+          msg = msg + req.body.mutation.substr(0, substrLength);
         }
         else if (req.body && typeof req.body === 'object') {
           try {
-            msg = msg + req.body.substr(0, 30);
+            msg = msg + req.body.substr(0, substrLength);
           } catch (e) {
           }
         }

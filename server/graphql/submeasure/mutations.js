@@ -14,7 +14,7 @@ module.exports = {
       }
     },
     resolve (root, params) {
-      return repo.create(params);
+      return repo.add(params);
     }
   },
 

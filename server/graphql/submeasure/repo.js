@@ -12,7 +12,7 @@ const schema = new mg.Schema(
 
 const Submeasure = mg.model('Submeasure', schema);
 
-function list(params) {
+function getMany(params) {
   const {limit = 1000, skip = 0} = params;
   return Submeasure.find()
     .skip(+skip)
@@ -23,7 +23,7 @@ function list(params) {
     })
 }
 
-function load(params) {
+function getOne(params) {
 
   return Submeasure.findById(params.id).exec()
     .then(rule => {
@@ -35,20 +35,20 @@ function load(params) {
     });
 }
 
-function create(params) {
+function add(params) {
   const rule = new Submeasure(params.data);
   return rule.save();
 }
 
 function update(params) {
-  return load(params).then(rule => {
+  return getOne(params).then(rule => {
     Object.assign(rule, params.data);
     return rule.save()
   });
 }
 
 function remove(params) {
-  return load(params).then(rule => rule.remove());
+  return getOne(params).then(rule => rule.remove());
 }
 
-module.exports = {list, load, create, update, remove};
+module.exports = {getMany, getOne, add, update, remove};
