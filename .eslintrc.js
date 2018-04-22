@@ -14,7 +14,8 @@ module.exports = {
         "quotes": [2, "single"],
         "no-console": "warn",
         "no-trailing-spaces": "off",
-        "dot-location": "off"
+        "dot-location": "off",
+        "no-undefined": "off"
       }
     }
   ],

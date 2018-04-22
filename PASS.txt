@@ -1,32 +1,13 @@
 
-
-BUG:
-SEE HOW MEAN.IO HANDLES IT, MAYBE THERE'S S TRICK
-you're testing out the ui validation, which doesnt' exist, but noted that you weren't getting an api error
-even though the validation should have been bad:
-1. RuleInput doesn't have required properties, if it did... You'd get an error (verify this)
-2. repo.add >> model.save is failing, the mongoose schema validation is failing, BUT...
-gq.resolve isn't listening for that for some reason. That doesn't sound right at all. So you decided to throw
-an exception, but nobody is listening to that either. Need to next(err), but no middleware in sight in the repo...
-also... no middleware cause it's gq. try throwin an error in resolve... nope nothing, even though that's supposed to work. Hmmm. maybe it's the express-graphql middleware?? could be, look at their issues:
-https://codeburst.io/custom-errors-and-error-reporting-in-graphql-bbd398272aeb
-
-* you need those promise rejects from mongoose to cause gq errors
-* you need to update RuleInput to have required props
-
-
-
 pass:
-standardized server gq/repo, now need to update ui, for new names and for update/remove updatedDate addition
-then back to rule update page.
+pulling out graphql:
+have rules done, but need to postman it
+then do submeasure and modules
+
+then pull that crap out of UI and done with it.
 
 
 
-pass:
-have rule list running, now working on create, but decided to refactor for reused for edit.
-should be pretty much done iwth the create, to the point of testing. You commented out edit page, once you have create done, then update ruleServie andd rest of code required for edit.
-
-Then.. submeasure list and supposedly done with the database changes so can push.
 
 //////////////////////////// info
 

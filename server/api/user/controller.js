@@ -1,5 +1,5 @@
 const express = require('express'),
-  repo = require('../../graphql/user/repo');
+  repo = require('../common/user/repo');
 
 exports.getAll = function (req, res, next) {
   const params = {};

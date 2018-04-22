@@ -11,10 +11,7 @@ const config = require('../../config/get-config'),
   cors = require('cors'),
   notFound = require('./not-found'),
   errorHandler = require('./error-handler'),
-  logger = require('./logger'),
-  userRouter = require('../../rest/user/router'),
-  graphqlHTTP = require('express-graphql'),
-  schema = require('../../graphql');
+  logger = require('./logger');
 
 
 const app = express();
@@ -41,32 +38,9 @@ app.get('/crash-site', function (req, res) {
 
 // app.use(docsRouter);
 // app.use(authenticate());
-app.use('/api/users', userRouter);
-app.use('/api/graphql', graphqlHTTP({
-  schema: schema,
-  graphiql: true,
-  formatError: error => ({
-    message: error.message,
-    locations: error.locations,
-    stack: error.stack ? error.stack.split('\n') : [],
-    path: error.path
-  })
-}));
+// app.use('/api/users', userRouter);
 
 app.use(express.static(path.resolve(__dirname, '../ui/dist')));
-
-/*
-app.use('/api/graphql', graphqlHTTP({
-  schema: schema,
-  graphiql: true,
-  formatError: error => ({
-    message: error.message,
-    locations: error.locations,
-    stack: error.stack ? error.stack.split('\n') : [],
-    path: error.path
-  })
-}));
-*/
 
 app.get('*', (req, res) => {
   console.log('>>>>>> served index.html');
