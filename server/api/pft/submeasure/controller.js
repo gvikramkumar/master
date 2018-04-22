@@ -48,7 +48,10 @@ function update(req, res, next)
 {
   const data = req.body;
   if (!data.id) {
-    throw new ApiError('property missing: id', data, 400)
+    throw new ApiError('Property missing: id.', data, 400)
+  }
+  if (req.params.id !== data.id) {
+    throw new ApiError('Body id doesn\'t match url id.', data, 400)
   }
   const error = Validate.validateObject(data, jsonSchema);
   if (error) {

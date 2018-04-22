@@ -56,7 +56,7 @@ function getOneWithUpdatedDate(data) {
       3. updatedDate sent, then used in search, doesn't exist, fail // someone else updated or deleted it
        */
       if (!item || (item.updatedDate && !item.updatedDate)) {
-        const err = new ApiError('Concurrency error, please refresh your data', null, 404);
+        const err = new ApiError('Concurrency error, please refresh your data.', null, 404);
         return Promise.reject(err);
       }
       return item;

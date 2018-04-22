@@ -1,7 +1,6 @@
 
 
-**** HOW IS MONGOOSE GETING THE ID NOW? i.E. YOU'RE NOT STORING IT, IS THERE A GETTER?
-graphql was asking for it, but you're not right? is it comming back?? is it in the schema??
+????what should you do with id, i.e. you look for id in body, but then disregard id in url. Should there be a check??
 
 
 pass:
