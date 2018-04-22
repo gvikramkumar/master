@@ -1,5 +1,5 @@
 const _ = require('lodash'),
-  ExtendedError = require('../lib/errors/api-error');
+  ExtendedError = require('../lib/api-error');
 
 const node_env = process.env.NODE_ENV || 'development';
 let env = null;

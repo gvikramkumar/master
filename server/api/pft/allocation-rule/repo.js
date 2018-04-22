@@ -1,5 +1,6 @@
 const mg = require('mongoose'),
-  BasicError = require('../../../lib/errors/basic-error');
+  ApiError = require('../../../lib/api-error'),
+  _ = require('lodash');
 
 const schema = new mg.Schema(
   {
@@ -21,11 +22,15 @@ const schema = new mg.Schema(
   },
   {collection: 'allocation_rules'}
 );
+schema.set('toObject', { virtuals: true });
+schema.virtual('id').get(function() {
+  return this._id.toString();
+});
 
-const Rule = mg.model('Rule', schema);
+const Model = mg.model('Rule', schema);
 
 function getMany(limit, skip) {
-  const query = Rule.find();
+  const query = Model.find();
   if (limit && skip !== undefined) {
     query.skip(Number(skip)).limit(Number(limit))
   }
@@ -33,24 +38,25 @@ function getMany(limit, skip) {
 }
 
 function getOne(id) {
-  return Rule.findById(id).exec();
+  return Model.findById(id).exec()
+    .then(x => x);
 }
 
-function getOneWithUpdatedDate(item) {
-  const query = {_id: item.id};
-  if (item.updatedDate) {
-    query.updatedDate = item.updatedDate
+function getOneWithUpdatedDate(data) {
+  const query = {_id: data.id};
+  if (data.updatedDate) {
+    query.updatedDate = data.updatedDate
   }
-  return Rule.findOne(query).exec()
-    .then(_rule => {
+  return Model.findOne(query).exec()
+    .then(item => {
       /*
       this is our concurrency check for update only
       1. no updatedDate sent up or in database, cool
       2. no updatedDate sent up, but one in database, fail
       3. updatedDate sent, then used in search, doesn't exist, fail // someone else updated or deleted it
        */
-      if (!_rule || (_rule.updatedDate && !item.updatedDate)) {
-        const err = new BasicError('Item doesn\'t exist.');
+      if (!item || (item.updatedDate && !item.updatedDate)) {
+        const err = new ApiError('Concurrency error, please refresh your data', null, 404);
         return Promise.reject(err);
       }
       return item;
@@ -58,16 +64,18 @@ function getOneWithUpdatedDate(item) {
 }
 
 function add(data) {
-  const item = new Rule(data);
+  const item = new Model(data);
   return item.save();
 }
 
 function update(data) {
   return getOneWithUpdatedDate(data)
     .then(item => {
-    Object.assign(item, data);
-    return item.save()
-  });
+      _.merge(item, data);
+      delete item._id;
+      delete item.id;
+      return item.save()
+    });
 }
 
 function remove(id) {

@@ -1,4 +1,9 @@
 
+
+**** HOW IS MONGOOSE GETING THE ID NOW? i.E. YOU'RE NOT STORING IT, IS THERE A GETTER?
+graphql was asking for it, but you're not right? is it comming back?? is it in the schema??
+
+
 pass:
 pulling out graphql:
 have rules done, but need to postman it
@@ -15,6 +20,7 @@ me:
 * diff between href and href=javascript:void  and href=/pft/rule-management etc
 
 TODO
+* concurrency only works if updatedDate. Need to use a timestamp? sent and email to ram/arindam on it
 * need a back link for add/edit pages to get back to list
 * need a object dirty check and a warning dialog if they try to cancel or leave and the data has been changed
 * concurrency: need a code for this so you can put up the right message when they try to delete something (that still exists) but has been updated. Anytime they delete or update and don't have the latest... they need to get a message: your data needs to be refreshed, not: item not found, as it's there and they're trying to delet it, just that the rule needs to be: if it's changed, then don't update or delete, make them look at the new version as someone else has been messing with it.

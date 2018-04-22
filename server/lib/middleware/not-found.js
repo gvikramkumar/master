@@ -1,4 +1,4 @@
-const ApiError = require('../errors/api-error'),
+const ApiError = require('../api-error'),
   _ = require('lodash');
 
 module.exports = function() {
