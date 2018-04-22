@@ -1,6 +1,7 @@
 const APIError = require('../../lib/errors/api-error'),
   httpStatus = require('http-status'),
-  mg = require('mongoose');
+  mg = require('mongoose'),
+  ExtendedError = require('../../lib/errors/extended-error');
 
 
 const schema = new mg.Schema(

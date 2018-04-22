@@ -1,5 +1,21 @@
 
 
+BUG:
+SEE HOW MEAN.IO HANDLES IT, MAYBE THERE'S S TRICK
+you're testing out the ui validation, which doesnt' exist, but noted that you weren't getting an api error
+even though the validation should have been bad:
+1. RuleInput doesn't have required properties, if it did... You'd get an error (verify this)
+2. repo.add >> model.save is failing, the mongoose schema validation is failing, BUT...
+gq.resolve isn't listening for that for some reason. That doesn't sound right at all. So you decided to throw
+an exception, but nobody is listening to that either. Need to next(err), but no middleware in sight in the repo...
+also... no middleware cause it's gq. try throwin an error in resolve... nope nothing, even though that's supposed to work. Hmmm. maybe it's the express-graphql middleware?? could be, look at their issues:
+https://codeburst.io/custom-errors-and-error-reporting-in-graphql-bbd398272aeb
+
+* you need those promise rejects from mongoose to cause gq errors
+* you need to update RuleInput to have required props
+
+
+
 pass:
 standardized server gq/repo, now need to update ui, for new names and for update/remove updatedDate addition
 then back to rule update page.
@@ -18,6 +34,8 @@ me:
 * diff between href and href=javascript:void  and href=/pft/rule-management etc
 
 TODO
+* need a back link for add/edit pages to get back to list
+* need a object dirty check and a warning dialog if they try to cancel or leave and the data has been changed
 * concurrency: need a code for this so you can put up the right message when they try to delete something (that still exists) but has been updated. Anytime they delete or update and don't have the latest... they need to get a message: your data needs to be refreshed, not: item not found, as it's there and they're trying to delet it, just that the rule needs to be: if it's changed, then don't update or delete, make them look at the new version as someone else has been messing with it.
 * move rule add/update metadata to a modules.json data doc, i.e. in db, and don't add a schema for it, just have it as "string", so module: {id, name, metadata}, then we can update metadata on the fly, but need to wrap well in unit tests so if they change something that will break the ui, we catch it. Say they add one to one array, and it uses that to access another array they didnt' add to and that crashes the code. me's rule add/edit formChange is what needst to be tested well for breakage.
 * rule create/edit should be same page
