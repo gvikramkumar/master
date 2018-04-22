@@ -17,11 +17,9 @@ module.exports = function(options) {
 
   return function (err, req, res, next) {
     const obj = Object.assign({}, err);
+    // Error object message property is a symbol, have to do this
     if (err && err.message) {
       obj.message = err.message;
-    }
-    if (!err.statusCode) {
-      obj.statusCode = errorCodes.server_prefix + errorCodes.server_unknown_error;
     }
     if (err && err.stack && opts.showStack) {
       obj.stack = err.stack;

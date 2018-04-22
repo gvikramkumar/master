@@ -1,7 +1,7 @@
 const tv4 = require('tv4'),
   formats = require('tv4-formats'),
   validator = tv4.freshApi(),
-  ExtendedError = require('./errors/extended-error');
+  ApiError = require('./errors/api-error');
 
 validator.addFormat(formats);
 
@@ -33,13 +33,12 @@ class Validate {
    * message: "Validation errors" and data an array of the tv4 validateMultiple() messages: {dataPath, message}
    * @param val - value you want to validate
    * @param schema - json schema to validate against
-   * @param errorCode - errorCode of api section
    * @returns {undefined | ExtendedError}
    */
-  static validateObject(val, schema, errorCode) {
+  static validateObject(val, schema) {
     const results = validator.validateMultiple(val, schema);
     if (!results.valid) {
-      return new ExtendedError('Validation errors', extractErrors(results.errors), errorCode || '000-0021', 400);
+      return new ApiError('Validation errors', extractErrors(results.errors), 400);
     }
   }
 
