@@ -3,11 +3,13 @@
 mon:
 * file upload/download capbility
 
-
+project todo
+* only latest rule can be updated, but all rules should be visible?
 
 ///// framework TODO:
 
-* verify your class ts types enforce required props
+* controller/repo/service base class? these 3 are exactly the same over and over, could push that all to a base calss, the subclass could override for something special?
+* need a db update script that runs 'after' data load, so scrpt to create collections .. then load data, then add timestamps. Also, need to add rule fiscal mo/yr? or just use the updated date? i.e. how to separate the rules into mo/yr buckets? Virtual property in mongoose?, and need to duplicate rules under different mo/yr to test things out, do that in an update script too
 * concurrency only works if updatedDate. Need to use a timestamp? sent and email to ram/arindam on it
 * need a back link for add/edit pages to get back to list
 * need a object dirty check and a warning dialog if they try to cancel or leave and the data has been changed
