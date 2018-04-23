@@ -6,7 +6,6 @@ import {RuleManagementComponent} from './rule-management/rule-management/rule-ma
 import {RuleManagementEditComponent} from './rule-management/rule-management-edit/rule-management-edit.component';
 import {SubmeasureUploadComponent} from './submeasure/submeasure-upload/submeasure-upload.component';
 import {RuleManagementAssignComponent} from './rule-management/rule-management-assign/rule-management-assign.component';
-import {RuleManagementUpdateComponent} from './rule-management/rule-management-update/rule-management-update.component';
 import {BusinessUploadComponent} from './business-upload/business-upload/business-upload.component';
 import {SharedModule} from '../shared/shared.module';
 import {RuleService} from '../core/services/profitability/rule.service';
@@ -23,7 +22,6 @@ import {RuleService} from '../core/services/profitability/rule.service';
     SubmeasureAddComponent,
     RuleManagementEditComponent,
     RuleManagementAssignComponent,
-    RuleManagementUpdateComponent,
     BusinessUploadComponent
   ],
   exports: [
@@ -33,7 +31,6 @@ import {RuleService} from '../core/services/profitability/rule.service';
     SubmeasureAddComponent,
     RuleManagementEditComponent,
     RuleManagementAssignComponent,
-    RuleManagementUpdateComponent,
     BusinessUploadComponent
   ]
 })

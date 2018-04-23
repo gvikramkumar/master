@@ -11,7 +11,7 @@ import {Observable} from 'rxjs/Observable';
 })
 export class RuleManagementEditComponent implements OnInit {
   editMode = false;
-  rule: AllocationRule = <AllocationRule>{};
+  rule: AllocationRule = new AllocationRule();
   title: string;
   periodSelection: number;
   driverSelection: number;

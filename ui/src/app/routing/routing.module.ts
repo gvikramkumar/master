@@ -11,7 +11,6 @@ import {SubmeasureAddComponent} from '../profitability/submeasure/submeasure-add
 import {RuleManagementComponent} from '../profitability/rule-management/rule-management/rule-management.component';
 import {RuleManagementEditComponent} from '../profitability/rule-management/rule-management-edit/rule-management-edit.component';
 import {RuleManagementAssignComponent} from '../profitability/rule-management/rule-management-assign/rule-management-assign.component';
-import {RuleManagementUpdateComponent} from '../profitability/rule-management/rule-management-update/rule-management-update.component';
 import {BusinessUploadComponent} from '../profitability/business-upload/business-upload/business-upload.component';
 import {MainComponent} from '../common/main/main.component';
 
