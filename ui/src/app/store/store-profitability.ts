@@ -1,6 +1,6 @@
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {StoreBase} from '../../store/store-base';
-import {Store} from '../../store/store';
+import {StoreBase} from './store-base';
+import {Store} from './store';
 
 export class StoreProfitability extends StoreBase {
 

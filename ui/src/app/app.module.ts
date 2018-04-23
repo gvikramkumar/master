@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import {SharedModule} from "./shared/shared.module";
 import {FinCommonModule} from './common/common.module';
-import {ProfitabilityModule} from './pft/profitability.module';
+import {ProfitabilityModule} from './profitability/profitability.module';
 
 
 @NgModule({

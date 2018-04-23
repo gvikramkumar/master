@@ -9,8 +9,7 @@ import {RuleManagementAssignComponent} from './rule-management/rule-management-a
 import {RuleManagementUpdateComponent} from './rule-management/rule-management-update/rule-management-update.component';
 import {BusinessUploadComponent} from './business-upload/business-upload/business-upload.component';
 import {SharedModule} from '../shared/shared.module';
-import {RuleService} from '../core/services/pft/rule.service';
-import {SubmeasureService} from './submeasure/allocation-submeasure.service';
+import {RuleService} from '../core/services/profitability/rule.service';
 
 @NgModule({
   imports: [
@@ -36,7 +35,6 @@ import {SubmeasureService} from './submeasure/allocation-submeasure.service';
     RuleManagementAssignComponent,
     RuleManagementUpdateComponent,
     BusinessUploadComponent
-  ],
-  providers: [RuleService, SubmeasureService]
+  ]
 })
 export class ProfitabilityModule { }

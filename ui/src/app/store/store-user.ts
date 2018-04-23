@@ -1,4 +1,4 @@
-import {User} from './models/user';
+import {User} from './models/common/user';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Store} from './store';
 import {StoreBase} from './store-base';

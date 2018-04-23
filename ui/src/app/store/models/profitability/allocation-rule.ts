@@ -1,9 +1,9 @@
 
 export class AllocationRule {
   id?: string;
-  name?: string;
-  period?: string;
-  driverName?: string;
+  name: string;
+  period: string;
+  driverName: string;
   salesMatch?: string;
   productMatch?: string;
   scmsMatch?: string;

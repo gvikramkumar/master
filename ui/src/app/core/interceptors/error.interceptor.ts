@@ -69,9 +69,11 @@ export class ErrorInterceptor implements HttpInterceptor {
           return Observable.throw(err);
         }
 
+/*
         if (err.errorCode === errorCodes.server_prefix + errorCodes.user_not_authenticated) {
           this.router.navigateByUrl('/login');
         }
+*/
 
         const config = <MatDialogConfig> {
           data: {error: err},

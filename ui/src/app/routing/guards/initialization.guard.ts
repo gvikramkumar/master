@@ -1,17 +1,14 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 import {Init1, Init2, Init3, Init4, Init5} from '../../core/services/common/init-service';
-import {merge} from 'rxjs/observable/merge';
 import {Store} from '../../store/store';
 import {Subject} from 'rxjs/Subject';
-import * as _ from 'lodash';
 import {BreakpointService} from "../../core/services/common/breakpoint.service";
-import {UserService} from "../../core/services/common/user.service";
-import {ModuleService} from '../../core/services/pft/module.service';
+import {ModuleService} from '../../core/services/common/module.service';
 
 @Injectable()
 /**
@@ -23,7 +20,6 @@ export class InitializationGuard implements CanActivate {
 
   constructor(private store: Store,
               private route: ActivatedRoute,
-              private userService: UserService,
               private breakpoints: BreakpointService,
               private moduleService: ModuleService,
               private init1: Init1,
@@ -54,19 +50,19 @@ export class InitializationGuard implements CanActivate {
     }
 
 
-/*
-    if (this.store.authenticated && this.store.initialized) {
-      return true;
-    } else {
-      const subscription = this.store.subAuthenticated(authenticated => {
-        if (authenticated && !this.store.initialized) {
-          this.init();
-          subscription.unsubscribe();
+    /*
+        if (this.store.authenticated && this.store.initialized) {
+          return true;
+        } else {
+          const subscription = this.store.subAuthenticated(authenticated => {
+            if (authenticated && !this.store.initialized) {
+              this.init();
+              subscription.unsubscribe();
+            }
+          });
+          return this.response$;
         }
-      });
-      return this.response$;
-    }
-*/
+    */
   }
 
   init() {
@@ -74,7 +70,7 @@ export class InitializationGuard implements CanActivate {
 
     Observable.forkJoin(
       // this.userService.getAll(),
-      this.moduleService.getAll())
+      this.moduleService.getMany())
       .map(x => {
         // console.log('initguard done');
         // this.store.pub({...this.store.state, initialized: true});
@@ -89,30 +85,30 @@ export class InitializationGuard implements CanActivate {
       .subscribe();
 
 
-/*
-    // an example of a complex initialization flow with dependencies of dependencies
-    Observable.forkJoin(this.init1.get(), this.init2.get())
-      .mergeMap(arr => {
-        // arr has results of forkJoin calls in same order, this was easier with promises, this is
-        // essentially the same as Promise.all().then(arr => Promise.all().then(..., just with observables now
-        return Observable.forkJoin(this.init3.get(), this.init4.get());
-      })
-      .mergeMap(x => {
-        return Observable.forkJoin(this.init5.get());
-      })
-      .map(x => {
-        this.store.pubInitialized(true);
-        this.afterInit();
-        console.log('app initialized');
-        this.response$.next(true);
-        return true;
-      })
-      .catch(err => {
-        this.response$.next(false);
-        return Observable.throw(err);
-      })
-      .subscribe(); // only need this cause we're not returning this function to canActivate
-*/
+    /*
+        // an example of a complex initialization flow with dependencies of dependencies
+        Observable.forkJoin(this.init1.get(), this.init2.get())
+          .mergeMap(arr => {
+            // arr has results of forkJoin calls in same order, this was easier with promises, this is
+            // essentially the same as Promise.all().then(arr => Promise.all().then(..., just with observables now
+            return Observable.forkJoin(this.init3.get(), this.init4.get());
+          })
+          .mergeMap(x => {
+            return Observable.forkJoin(this.init5.get());
+          })
+          .map(x => {
+            this.store.pubInitialized(true);
+            this.afterInit();
+            console.log('app initialized');
+            this.response$.next(true);
+            return true;
+          })
+          .catch(err => {
+            this.response$.next(false);
+            return Observable.throw(err);
+          })
+          .subscribe(); // only need this cause we're not returning this function to canActivate
+    */
   }
 
   // initialization code that depends on the initial data loads

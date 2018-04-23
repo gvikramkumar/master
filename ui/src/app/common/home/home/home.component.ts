@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
-import {ModuleService} from '../../../core/services/pft/module.service';
+import {ModuleService} from '../../../core/services/common/module.service';
 import {Store} from '../../../store/store';
 
 @Component({

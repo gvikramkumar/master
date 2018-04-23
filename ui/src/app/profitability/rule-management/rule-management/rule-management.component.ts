@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {RuleService} from '../../../core/services/pft/rule.service';
+import {RuleService} from '../../../core/services/profitability/rule.service';
 import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
-import {AllocationRule} from '../../store/models/allocation-rule';
+import {AllocationRule} from '../../../store/models/profitability/allocation-rule';
 
 @Component({
   selector: 'fin-rule-management',
@@ -33,13 +33,12 @@ export class RuleManagementComponent implements OnInit {
       });
 
       this.ruleService.getMany()
-        .subscribe((_rules: any[]) => {
-        this.rulesCount = _rules.length;
-        this.rulesArray = _rules;
+        .subscribe(rules => {
+        this.rulesCount = rules.length;
+        this.rulesArray = rules;
         this.dataSource = new MatTableDataSource(this.rulesArray);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-
     });
 
   }

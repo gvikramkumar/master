@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import { Apollo } from 'apollo-angular';
-import {AllocationRule} from '../../store/models/allocation-rule';
-import {RuleService} from '../../../core/services/pft/rule.service';
+import {AllocationRule} from '../../../store/models/profitability/allocation-rule';
+import {RuleService} from '../../../core/services/profitability/rule.service';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
@@ -25,7 +24,6 @@ export class RuleManagementEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private apollo: Apollo,
     private ruleService: RuleService
   ) {
     this.editMode = !!this.route.snapshot.params.id;
@@ -36,10 +34,7 @@ export class RuleManagementEditComponent implements OnInit {
       this.title = 'Edit Rule';
       this.ruleService.getOne(this.route.snapshot.params.id)
         .subscribe(rule => {
-          this.rule.period = 'one';
           this.rule = rule;
-          this.rule.period = 'two';
-
           this.driverSelection = this.rule.driverName? this.driverNamesMap[this.rule.driverName]: '';
           this.periodSelection = this.rule.period? this.periodNamesMap[this.rule.period]: '';
           this.salesMatch = this.rule.salesMatch? this.salesLevelsMap[this.rule.salesMatch]: '';
@@ -270,6 +265,8 @@ export class RuleManagementEditComponent implements OnInit {
   }
 
   public save() {
+    this.formChange();
+
     // if (!this.form.valid) //todo: isn't this needed? where's the validation enforced?
     //   return;
 
@@ -279,7 +276,7 @@ export class RuleManagementEditComponent implements OnInit {
     } else {
       obs = this.ruleService.add(this.rule);
     }
-    obs.subscribe(rule => this.router.navigate(['/pft/rule_management']));
+    obs.subscribe(rule => this.router.navigateByUrl('/pft/rule-management'));
 
 
 

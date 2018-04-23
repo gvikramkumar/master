@@ -13,8 +13,6 @@ import { NotImplementedComponent } from './dialogs/not-implemented/not-implement
 import {TrimInputValueAccessor} from './accessors/trim-input-value.accessor';
 import {CuiIndexModule} from "./cui-index/cui-index.module";
 import {RoutingModule} from "../routing/routing.module";
-import {ApolloModule} from 'apollo-angular';
-import {HttpLinkModule} from 'apollo-angular-link-http';
 import {SidebarModule} from 'ng-sidebar';
 
 @NgModule({
@@ -25,8 +23,6 @@ import {SidebarModule} from 'ng-sidebar';
     FlexLayoutModule,
     FormsModule,
     RoutingModule,
-    ApolloModule,
-    HttpLinkModule,
     SidebarModule.forRoot(),
   ],
   exports: [
@@ -35,8 +31,6 @@ import {SidebarModule} from 'ng-sidebar';
     FlexLayoutModule,
     FormsModule,
     RoutingModule,
-    ApolloModule,
-    HttpLinkModule,
     SidebarModule,
     PageNotFoundComponent,
     ForbiddenNameValidator,
