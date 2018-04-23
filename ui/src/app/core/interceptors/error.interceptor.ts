@@ -40,7 +40,6 @@ export class ErrorInterceptor implements HttpInterceptor {
         let err;
         if (error && error.message) {
           err = resp.error;
-          err.data.url = `${resp.status} - ${resp.url}`;
         } else {
           err = {
             message: 'Unknown server error',

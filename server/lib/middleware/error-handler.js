@@ -37,7 +37,7 @@ module.exports = function(options) {
         obj.data = _.clone(obj);
       }
     }
-
+    obj.data.url = `${req.method} - ${statusCode}  ${req.url}`
     console.error(obj);
     res.status(statusCode).send(obj);
   };
