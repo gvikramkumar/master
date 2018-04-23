@@ -5,16 +5,8 @@ mon:
 
 
 
+///// framework TODO:
 
-
-
-//////////////////////////// info
-
-me:
-* diff between href and href=javascript:void  and href=/pft/rule-management etc
-
-TODO
-* need to test out error dialog again with no error codes
 * verify your class ts types enforce required props
 * concurrency only works if updatedDate. Need to use a timestamp? sent and email to ram/arindam on it
 * need a back link for add/edit pages to get back to list
