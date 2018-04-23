@@ -16,17 +16,30 @@ module.exports = function(options) {
   const opts = _.merge(defaults, options)
 
   return function (err, req, res, next) {
-    const obj = Object.assign({}, err);
-    // Error object message property is a symbol, have to do this
-    if (err && err.message) {
+    let obj = {}, statusCode;
+    // mongoose validation error
+    if (err.name === 'ValidationError' && err.errors) {
       obj.message = err.message;
+      obj.data = err.errors;
+      statusCode = 400;
+    } else {
+      Object.assign(obj, err);
+      statusCode = err.statusCode || 500;
+      delete obj.statusCode;
+      // Error object message and stack properties are symbols, need to do this to get them in obj then
+      if (err && err.message) {
+        obj.message = err.message;
+      }
+      if (err && err.stack && opts.showStack) {
+        obj.stack = err.stack;
+      }
+      if (!obj.data) {
+        obj.data = _.clone(obj);
+      }
     }
-    if (err && err.stack && opts.showStack) {
-      obj.stack = err.stack;
-    }
-    delete obj.statusCode;
+
     console.error(obj);
-    res.status(err.statusCode || 500).send(obj);
+    res.status(statusCode).send(obj);
   };
 
 }

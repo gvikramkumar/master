@@ -36,32 +36,15 @@ export class ErrorInterceptor implements HttpInterceptor {
       .catch(resp => {
         this.progressService.hideProgressBar();
 
+        const error = resp.error;
         let err;
-        if (resp.error && resp.error.errorCode) {
+        if (error && error.message) {
           err = resp.error;
-        } else if (resp.error && resp.error.error) {
-          err = resp.error.error;
-          if (!resp.error.error.errorCode) {
-            err.errorCode = errorCodes.server_prefix + errorCodes.server_unknown_error;
-          }
-        } else if (resp.error.errors && resp.error.errors.length) {
-          if (resp.error.errors.length === 1) {
-            err = {message: resp.error.errors[0].message};
-          } else {
-            err = {
-              message: 'graphql errors',
-              data: resp.error.errors.map(err => err.message).join('\n')
-            }
-          }
+          err.data.url = `${resp.status} - ${resp.url}`;
         } else {
           err = {
             message: 'Unknown server error',
-            data: {
-              message: resp.message,
-              url: resp.url,
-              status: resp.status
-            },
-            errorCode: errorCodes.server_prefix + errorCodes.server_unknown_error
+            data: error
           };
         }
 

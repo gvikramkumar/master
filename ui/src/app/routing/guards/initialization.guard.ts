@@ -9,6 +9,7 @@ import {Store} from '../../store/store';
 import {Subject} from 'rxjs/Subject';
 import {BreakpointService} from "../../core/services/common/breakpoint.service";
 import {ModuleService} from '../../core/services/common/module.service';
+import {TestService} from '../../core/services/common/test.service';
 
 @Injectable()
 /**
@@ -26,8 +27,8 @@ export class InitializationGuard implements CanActivate {
               private init2: Init2,
               private init3: Init3,
               private init4: Init4,
-              private init5: Init5) {
-
+              private init5: Init5,
+              private testService: TestService) {
   }
 
   canActivate(next: ActivatedRouteSnapshot,

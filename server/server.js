@@ -13,6 +13,7 @@ const config = require('./config/get-config'),
   // usersRouter = require('./api/users/_router'),
   // authenticate = require('./api/login/_authenticate'),
   cors = require('cors'),
+  ApiError = require('./lib/api-error'),
   notFound = require('./lib/middleware/not-found'),
   errorHandler = require('./lib/middleware/error-handler'),
   logger = require('./lib/middleware/logger'),
@@ -49,7 +50,11 @@ app.use(logger({mode: 'short'}));
 
 // test endpoints
 app.get('/cause-error', function (req, res) {
-  throw new Error('cause-error message');
+  // const err = new Error('basic error');
+  // const err = new ApiError('api error');
+  const err = new ApiError('api error with data', {some: 'thing'});
+  err.name = 'dank';
+  throw err;
 })
 app.get('/crash-site', function (req, res) {
   process.exit(666);

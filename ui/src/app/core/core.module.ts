@@ -15,6 +15,7 @@ import {BreakpointService} from "./services/common/breakpoint.service";
 import {ModuleService} from './services/common/module.service';
 import {RuleService} from './services/profitability/rule.service';
 import {SubmeasureService} from './services/profitability/submeasure.service';
+import {TestService} from './services/common/test.service';
 
 @NgModule({
   imports: [
@@ -29,8 +30,7 @@ import {SubmeasureService} from './services/profitability/submeasure.service';
     {provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ModifyRequestInterceptor, multi: true},
-    BreakpointService, ModuleService, RuleService, SubmeasureService
-
+    BreakpointService, ModuleService, RuleService, SubmeasureService, TestService
   ]
 })
 export class CoreModule {

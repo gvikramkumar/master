@@ -1,14 +1,9 @@
 
 
-????what should you do with id, i.e. you look for id in body, but then disregard id in url. Should there be a check??
+mon:
+* file upload/download capbility
 
 
-pass:
-pulling out graphql:
-have rules done, but need to postman it
-then do submeasure and modules
-
-then pull that crap out of UI and done with it.
 
 
 
