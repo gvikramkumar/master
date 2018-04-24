@@ -1,6 +1,11 @@
 
+route data:
+{ title, desc, breadcrumb}
+* put hero in maincomp, so routeroutlet can have padding instead of everytoine haveing to do it
 
-Rule validation failed: driverName: Path `driverName` is required
+
+
+
 
 
 mon:
@@ -10,6 +15,7 @@ project todo
 * only latest rule can be updated, but all rules should be visible?
 
 ///// framework TODO:
+* need a seqnum in module to line them up for home display, imageName too
 * database update strategy: version in db, load all files in sequence and run with mongo using childProcess or so, so a list of directories, then sort by number, then compare db version and run those over that number in sequence
 
 * need a back link for add/edit pages to get back to list

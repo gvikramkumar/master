@@ -1,8 +1,18 @@
 <div fxLayout="column" fxLayoutAlign="start stretch" style="height:100%">
 
   <cui-header [options]="headerOptions"></cui-header>
-  <div style="overflow:auto;" fxFlex="1 1 auto">
-    <router-outlet></router-outlet>
+  <div class="main-wrap" style="overflow:auto;" fxFlex="1 1 auto">
+    <div class="hero hero--blue">
+      <div class="container">
+        <div class="hero__content">
+          <h1>{{hero.title}}</h1>
+          <p>{{hero.desc}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <router-outlet></router-outlet>
+    </div>
     <cui-footer></cui-footer>
   </div>
 

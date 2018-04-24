@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
+import {Store} from '../../store/store';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'fin-main',
@@ -7,26 +9,21 @@ import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
+  hero: { title: string, desc: string } = {title: '', desc: ''};
+  headerOptions;
 
-  // todo: same as home page or different. If same, then share
-  headerOptions = new CuiHeaderOptions({
-    "showBrandingLogo": true,
-    "brandingLink": "https://cisco.com",
-    "brandingTitle": "",
-    "showMobileNav": true,
-    "title": "Digitized Financial Allocations",
-    "breadcrumbs": [
-      {
-        "label": "Home",
-        "url": "dfa"
-      }
-    ],
-    "username": "Maryellen Oltman",
-  });
-
-  constructor() { }
+  constructor(private store: Store, private router: Router) {
+    const i = 5;
+  }
 
   ngOnInit() {
+    this.headerOptions = this.store.headerOptions;
+
+    this.store.routeDataSub(data => {
+        console.log('data>>>>', data);
+        this.hero = data.hero;
+        this.headerOptions.breadcrumbs = data.breadcrumbs;
+      })
   }
 
 }

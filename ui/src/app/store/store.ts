@@ -6,6 +6,8 @@ import {ObservableMedia} from "@angular/flex-layout";
 import {StoreUser} from "./store-user";
 import "rxjs/add/operator/first";
 import {StoreProfitability} from './store-profitability';
+import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Injectable()
 /**
@@ -30,6 +32,10 @@ export class Store extends StoreBase {
   leftNavClosed = false;
   initialBreakpoint: string;
   modules = [];
+  user = {
+    displayName: 'John Doe',
+    userName: 'jodoe'
+  }
 
   authenticated$ = new BehaviorSubject<boolean>(this.authenticated);
   subAuthenticated = this.authenticated$.subscribe.bind(this.authenticated$);
@@ -37,8 +43,20 @@ export class Store extends StoreBase {
   subInitialized = this.initialized$.subscribe.bind(this.initialized$);
   leftNavClosed$ = new BehaviorSubject<boolean>(false);
   subLeftNavClosed = this.leftNavClosed$.subscribe.bind(this.leftNavClosed$);
+  routeData$ = new Subject();
+  routeDataSub = this.routeData$.asObservable().subscribe.bind(this.routeData$);
 
-  constructor(private media: ObservableMedia) {
+  headerOptions = new CuiHeaderOptions({
+    "showBrandingLogo": true,
+    "brandingLink": "https://cisco.com",
+    "brandingTitle": "",
+    "showMobileNav": true,
+    "title": "Digitized Financial Allocations",
+    "username": this.user.displayName,
+  });
+
+
+  constructor(private media: ObservableMedia, private router: Router) {
     super();
     this.init();
     this.pub();
@@ -54,6 +72,10 @@ export class Store extends StoreBase {
       .subscribe(change => {
         this.initialBreakpoint = change.mqAlias;
       });
+  }
+
+  routeDataPub(val) {
+    this.routeData$.next(val);
   }
 
   pubLeftNavClosed(val) {

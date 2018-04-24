@@ -1,11 +1,3 @@
-<div class="hero hero--blue">
-    <div class="container">
-        <div class="hero__content">
-            <h1>Profitability: Add a New Sub-Measure</h1>
-            <p>Add new sub-measure for Profitability group</p>
-        </div>
-    </div>
-  </div>
 <div class="add-form-container">
   <cui-select [items]="measureNames" label="Measure Name" empty="true" (selectChange)="measureNameSelected()" required="true"></cui-select>
   <img matTooltip="Naming convention: example here" matTooltipPosition="left" src="assets/tooltip.jpg" class="tooltip" width="18"> <cui-input id="subname" type="text" [(model)]="subMeasureName" label="Sub-Measure Name" required="true"></cui-input>

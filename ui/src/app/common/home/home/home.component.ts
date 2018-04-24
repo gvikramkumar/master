@@ -18,36 +18,19 @@ export class HomeComponent implements OnInit, AfterViewInit{
   private nameFilter: Subject<string> = new Subject<string>();
   public postControl = new FormControl();
   @ViewChild('myIdentifier') myIdentifier: ElementRef;
-
-  headerOptions = new CuiHeaderOptions({
-    "showBrandingLogo": true,
-    "brandingLink": "https://cisco.com",
-    "brandingTitle": "",
-    "showMobileNav": true,
-    "title": "Digitized Financial Allocations",
-    "breadcrumbs": [
-      {
-        "label": "Home",
-        "url": "dfa"
-      }
-    ],
-    "username": "Maryellen Oltman",
-  });
-
+  headerOptions;
 
   constructor(private store: Store) {
-   }
-
-  ngOnInit() {
-    this.modules = this.store.modules;
   }
 
+  ngOnInit() {
+    this.headerOptions = this.store.headerOptions;
+    this.modules = this.store.modules;
+  }
 
   ngAfterViewInit() {
     this.sidebarHeight = this.myIdentifier.nativeElement.offsetHeight;
   }
-
-
 
   public _opened: boolean = false;
   public _mode: string = 'push';
