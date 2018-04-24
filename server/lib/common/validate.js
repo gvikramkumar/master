@@ -38,7 +38,9 @@ class Validate {
   static validateObject(val, schema) {
     const results = validator.validateMultiple(val, schema);
     if (!results.valid) {
-      return new ApiError('Validation errors', extractErrors(results.errors), 400);
+      const err = new ApiError('Validation errors', extractErrors(results.errors), 400);
+      err.name = 'JsonSchemaValidationError';
+      throw err;
     }
   }
 

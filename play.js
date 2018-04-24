@@ -1,24 +1,29 @@
-const _ = require('lodash');
 
 
 
-const s = ' ';
-if (s) {
-  console.log('exist')
-} else {
-  console.log('no');
+
+class TestBase {
+  constructor(name) {
+    this.name = 'dank';
+  }
+
+  print() {
+    console.log('this.name:', this.name);
+  }
 }
 
-var object = {
-  'a': [{ 'b': 2 }, { 'd': 4 }],
-  arr: [1,2]
-};
+class Test extends TestBase {
+  constructor(name) {
+    super(name)
+  }
+}
 
-var other = {
-  'a': [{ 'c': 3 }, { 'e': 5 }],
-  arr: [3,4,5]
-};
+new Test().print();
 
-console.log(_.merge(object, other));
-console.log(_.assign(object, other));
-// => { 'a': [{ 'b': 2, 'c': 3 }, { 'd': 4, 'e': 5 }] }
+
+
+
+
+
+
+

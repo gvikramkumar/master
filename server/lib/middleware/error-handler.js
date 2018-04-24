@@ -19,6 +19,7 @@ module.exports = function(options) {
     let obj = {}, statusCode;
     // mongoose validation error
     if (err.name === 'ValidationError' && err.errors) {
+      obj.name = 'MongooseValidationError';
       obj.message = err.message;
       obj.data = err.errors;
       statusCode = 400;

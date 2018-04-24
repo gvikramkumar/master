@@ -13,13 +13,13 @@ const config = require('./config/get-config'),
   // usersRouter = require('./api/users/_router'),
   // authenticate = require('./api/login/_authenticate'),
   cors = require('cors'),
-  ApiError = require('./lib/api-error'),
+  ApiError = require('./lib/common/api-error'),
   notFound = require('./lib/middleware/not-found'),
   errorHandler = require('./lib/middleware/error-handler'),
   logger = require('./lib/middleware/logger'),
-  moduleRouter = require('./api/common/module/controller').router,
-  allocationRuleRouter = require('./api/pft/allocation-rule/controller').router,
-  submeasureRouter = require('./api/pft/submeasure/controller').router
+  moduleRouter = require('./api/common/module/router'),
+  allocationRuleRouter = require('./api/pft/allocation-rule/controller'),
+  submeasureRouter = require('./api/pft/submeasure/controller')
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -42,6 +42,11 @@ var corsOptions = {
   credentials: true
 }
 app.use(cors(corsOptions));
+app.use(function(req, res, next) {
+  //todo: placeholder for req.user.userName till security is in
+  req.user = {userName: 'dank'};
+  next();
+})
 app.use(bodyParser.json());
 app.use(cookieParser());
 

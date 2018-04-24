@@ -1,5 +1,7 @@
 
 
+TEST OUT THE JSON SCHEMA AND ITS ERRORS
+
 mon:
 * file upload/download capbility
 
