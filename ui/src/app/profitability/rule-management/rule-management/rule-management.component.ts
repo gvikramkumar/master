@@ -5,6 +5,7 @@ import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
 import {AllocationRule} from '../../../store/models/profitability/allocation-rule';
+import * as moment from 'moment';
 
 @Component({
   selector: 'fin-rule-management',
@@ -12,13 +13,13 @@ import {AllocationRule} from '../../../store/models/profitability/allocation-rul
   styleUrls: ['./rule-management.component.scss']
 })
 export class RuleManagementComponent implements OnInit {
-
-  public numRules: Number;
-  public rulesArray: any[];
-  public rulesCount: Number = 0;
-  public currentRules: Subscription;
-  public formControl = new FormControl();
-  private nameFilter: Subject<string> = new Subject<string>();
+  moment = moment;
+  numRules: Number;
+  rulesArray: any[];
+  rulesCount: Number = 0;
+  currentRules: Subscription;
+  formControl = new FormControl();
+  nameFilter: Subject<string> = new Subject<string>();
   tableColumns = ['name', 'period', 'driverName', 'updatedBy', 'updateDate'];
   dataSource: MatTableDataSource<AllocationRule>;
 

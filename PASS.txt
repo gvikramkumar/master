@@ -1,5 +1,6 @@
 
 
+NEED TO UPDATED UPDATEDdATE FOR RULES AND MAP in post load
 
 pass:
 done with server refactor to base class, now go to UI and refactor all services to a RestBaseClass,

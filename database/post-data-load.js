@@ -8,10 +8,24 @@ const collections = [
   'submeasure_rule_map'
 ];
 
+const collectionsWithCreatedUpdated = [
+  'allocation_rules',
+  'submeasure_rule_map'
+];
+
 // add timestamps
-const now = Date.now();
+const timestamp = Date.now();
 collections.forEach(coll => {
-  db.getCollection(coll).updateMany({}, {$set: {timestamp: NumberInt(now)}});
+  db.getCollection(coll).updateMany({}, {$set: {timestamp: NumberInt(timestamp)}});
+});
+// const isoDate = new Date().toISOString();
+collectionsWithCreatedUpdated.forEach(coll => {
+  db.getCollection(coll).updateMany({}, {$set: {
+      createdBy: '',
+      createdDate: '',
+      updatedBy: '',
+      updatedDate: ''
+  }});
 });
 
 print('post-data-load complete');
