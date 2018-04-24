@@ -1,5 +1,8 @@
 
 
+you're testing rule,s but failong in controller creation
+
+
 TEST OUT THE JSON SCHEMA AND ITS ERRORS
 
 mon:

@@ -3,9 +3,7 @@ const mg = require('mongoose'),
 
 const schema = new mg.Schema(
   {
-    name: {type: String, required: true},
-    age: {type: Number, required: true},
-    timestamp: {type: Number, required: true}
+    name: {type: String, required: true}
   },
   {collection: 'modules'}
 );

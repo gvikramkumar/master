@@ -10,7 +10,6 @@ const config = require('./config/get-config'),
   // morgan = require('morgan'),
   cookieParser = require('cookie-parser'),
   // docsRouter = require('./docs/_router'),
-  // usersRouter = require('./api/users/_router'),
   // authenticate = require('./api/login/_authenticate'),
   cors = require('cors'),
   ApiError = require('./lib/common/api-error'),
@@ -18,8 +17,8 @@ const config = require('./config/get-config'),
   errorHandler = require('./lib/middleware/error-handler'),
   logger = require('./lib/middleware/logger'),
   moduleRouter = require('./api/common/module/router'),
-  allocationRuleRouter = require('./api/pft/allocation-rule/controller'),
-  submeasureRouter = require('./api/pft/submeasure/controller')
+  allocationRuleRouter = require('./api/pft/allocation-rule/router'),
+  submeasureRouter = require('./api/pft/submeasure/router')
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

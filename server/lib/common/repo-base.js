@@ -5,6 +5,8 @@ const mg = require('mongoose'),
 module.exports = class RepoBase {
 
   constructor(schema, modelName) {
+    schema.add({timestamp: 'number'});
+    schema.path('timestamp').required(true);
     schema.set('toObject', {virtuals: true});
     schema.virtual('id').get(function() {
       return this._id.toString();
