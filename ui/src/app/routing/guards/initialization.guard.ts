@@ -29,6 +29,7 @@ export class InitializationGuard implements CanActivate {
               private init4: Init4,
               private init5: Init5,
               private testService: TestService) {
+    testService.causeError().subscribe();
   }
 
   canActivate(next: ActivatedRouteSnapshot,

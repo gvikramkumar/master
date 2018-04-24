@@ -1,11 +1,6 @@
 
 
-NEED TO UPDATED UPDATEDdATE FOR RULES AND MAP in post load
-
-pass:
-done with server refactor to base class, now go to UI and refactor all services to a RestBaseClass,
-so will hafe the same thing: empty subclass with resused code, but can override at will
-
+Rule validation failed: driverName: Path `driverName` is required
 
 
 mon:
@@ -15,7 +10,6 @@ project todo
 * only latest rule can be updated, but all rules should be visible?
 
 ///// framework TODO:
-* checkout a concurrency error in UI
 * database update strategy: version in db, load all files in sequence and run with mongo using childProcess or so, so a list of directories, then sort by number, then compare db version and run those over that number in sequence
 
 * controller/repo/service base class? these 3 are exactly the same over and over, could push that all to a base calss, the subclass could override for something special?

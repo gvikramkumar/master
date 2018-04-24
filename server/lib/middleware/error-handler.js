@@ -10,18 +10,26 @@ const _ = require('lodash');
  * @param next
  */
 
-module.exports = function(options) {
+module.exports = function (options) {
 
   const defaults = {showStack: false};
   const opts = _.merge(defaults, options)
+  const truncateLength = 66;
 
   return function (err, req, res, next) {
     let obj = {}, statusCode;
+    const urlInfo = `${req.method}  ${req.url}`;
     // mongoose validation error
     if (err.name === 'ValidationError' && err.errors) {
       obj.name = 'MongooseValidationError';
-      obj.message = err.message;
-      obj.data = err.errors;
+      if (err.message.length > truncateLength) {
+        obj.message = err.message.substr(0, truncateLength) + '...';// full message in data
+      }
+      const data = {
+        url: urlInfo,
+        message: err.message
+      }
+      obj.data = Object.assign(data, err.errors);
       statusCode = 400;
     } else {
       Object.assign(obj, err);
@@ -35,10 +43,20 @@ module.exports = function(options) {
         obj.stack = err.stack;
       }
       if (!obj.data) {
-        obj.data = _.clone(obj);
+        const data = {
+          url: urlInfo,
+          message: err.message
+        }
+        const rest = _.clone(obj);
+        delete rest.message;// getting url, message first
+        obj.data = Object.assign(data, rest);
+        if (obj.message.length > truncateLength) {
+          obj.message = obj.message.substr(0, truncateLength) + '...';// full message in data
+        }
+      } else {
+        obj.data = Object.assign({url: urlInfo}, obj.data);
       }
     }
-    obj.data.url = `${req.method} - ${statusCode}  ${req.url}`
     console.error(obj);
     res.status(statusCode).send(obj);
   };
