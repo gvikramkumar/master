@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
-import {Init1, Init2, Init3, Init4, Init5} from '../../core/services/common/init-service';
+import {Init1, Init2, Init3, Init4, Init5} from '../../core/services/common/test-init-service';
 import {Store} from '../../store/store';
 import {Subject} from 'rxjs/Subject';
 import {BreakpointService} from "../../core/services/common/breakpoint.service";

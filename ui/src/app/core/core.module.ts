@@ -6,7 +6,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {SpinnerInterceptor} from "./interceptors/spinner.interceptor";
 import {TimingInterceptor} from "./interceptors/timing.interceptor";
 import {ErrorInterceptor} from "./interceptors/error.interceptor";
-import {Init1, Init2, Init3, Init4, Init5} from "./services/common/init-service";
+import {Init1, Init2, Init3, Init4, Init5} from "./services/common/test-init-service";
 import {ModifyRequestInterceptor} from "./interceptors/modify-request.interceptor";
 import {InitializationGuard} from "../routing/guards/initialization.guard";
 import {RouterModule} from "@angular/router";

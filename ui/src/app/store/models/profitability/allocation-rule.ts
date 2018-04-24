@@ -1,6 +1,6 @@
+import {ModelBase} from '../common/model-base';
 
-export class AllocationRule {
-  id?: string;
+export class AllocationRule extends ModelBase {
   name: string;
   period: string;
   driverName: string;

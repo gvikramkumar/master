@@ -4,33 +4,20 @@ import {HttpClient} from '@angular/common/http';
 import {Module} from '../../../store/models/common/module';
 import {environment} from '../../../../environments/environment';
 import {Store} from '../../../store/store';
+import {RestBase} from './rest-base';
 
 const apiUrl = environment.apiUrl;
 
 @Injectable()
-export class ModuleService {
+export class ModuleService extends RestBase<Module> {
 
-  constructor(private store: Store, private httpClient: HttpClient) {
+  constructor(httpClient: HttpClient, private store: Store) {
+    super('module', httpClient)
   }
 
   getMany(): Observable<Module[]> {
-    return this.httpClient.get<Module[]>(apiUrl + '/api/module')
+    return super.getMany()
       .do(modules => this.store.modules = modules)
   }
 
-  getOne(id: number): Observable<Module> {
-    return this.httpClient.get<Module>(apiUrl + `/api/module/${id}`);
-  }
-
-  add(data) {
-    return this.httpClient.post<Module>(apiUrl + '/api/module', data);
-  }
-
-  update(id: number, data: Module): Observable<Module> {
-    return this.httpClient.put<Module>(apiUrl + `/api/module/${id}`, data);
-  }
-
-  remove(id: number): Observable<Module> {
-    return this.httpClient.delete<Module>(apiUrl + `/api/module/${id}`);
-  }
 }

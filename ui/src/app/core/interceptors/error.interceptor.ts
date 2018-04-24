@@ -11,7 +11,6 @@ import {ProgressService} from '../services/common/progress.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ErrorModalComponent} from '../../shared/dialogs/error-modal/error-modal.component';
 import {Router} from '@angular/router';
-import {errorCodes} from '../services/common/error-codes';
 import * as _ from 'lodash';
 import {environment} from '../../../environments/environment';
 

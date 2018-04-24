@@ -1,6 +1,6 @@
+import {ModelBase} from '../common/model-base';
 
-export class Submeasure {
-  id: string;
+export class Submeasure extends ModelBase {
   key: number;
   name: string;
 }
