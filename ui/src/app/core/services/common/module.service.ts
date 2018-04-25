@@ -5,6 +5,7 @@ import {Module} from '../../../store/models/common/module';
 import {environment} from '../../../../environments/environment';
 import {Store} from '../../../store/store';
 import {RestBase} from './rest-base';
+import * as _ from 'lodash';
 
 const apiUrl = environment.apiUrl;
 
@@ -17,7 +18,7 @@ export class ModuleService extends RestBase<Module> {
 
   getMany(): Observable<Module[]> {
     return super.getMany()
-      .do(modules => this.store.modules = modules)
+      .do(modules => this.store.modules = _.sortBy(modules, 'seqnum'));
   }
 
 }

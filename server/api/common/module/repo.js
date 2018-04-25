@@ -3,6 +3,7 @@ const mg = require('mongoose'),
 
 const schema = new mg.Schema(
   {
+    seqnum: {type: Number, required: true},
     name: {type: String, required: true}
   },
   {collection: 'modules'}

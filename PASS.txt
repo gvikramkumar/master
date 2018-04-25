@@ -11,6 +11,8 @@ mon:
 
 project todo
 * only latest rule can be updated, but all rules should be visible?
+* api only sends down latest version of rule, and rule uniqueness is name?
+* no validation on server or client for rule
 
 ///// framework TODO:
 * file upload/download/storage
