@@ -2,6 +2,7 @@ import {Component, HostBinding, OnInit} from "@angular/core";
 import {environment} from "../environments/environment";
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'fin-root',
@@ -13,132 +14,11 @@ export class AppComponent implements OnInit {
   @HostBinding('class.notransition') transitionDisabled = environment.disableAnimations;
   title = 'fin-dfa';
 
-
-  constructor(router: Router) {
-    //handle breadcrumbs (navigation labels)
-    //todo: make this work for all scenarios (currently hardcoded)
-    router.events.forEach((event) => {
-      if(event instanceof NavigationStart) {
-      }
-      else if(event instanceof NavigationEnd) {
-        if (router.url=="/profitability/submeasure") {
-          this.headerOptions.breadcrumbs = [
-            {
-              "label": "Home",
-              "url": "dfa"
-            },
-            {
-              "label": "Profitability",
-            },
-            {
-              "label": "Sub-Measure",
-              //"url": "submeasure"
-            }];
-        }
-        else if (router.url=="/profitability/rule_management") {
-          this.headerOptions.breadcrumbs = [
-            {
-              "label": "Home",
-              "url": "dfa"
-            },
-            {
-              "label": "Profitability",
-            },
-            {
-              "label": "Rule Management",
-              //"url": "rule_management"
-            }];
-        }
-        else if (router.url=="/profitability/submeasure/upload") {
-          this.headerOptions.breadcrumbs = [
-            {
-              "label": "Home",
-              "url": "dfa"
-            },
-            {
-              "label": "Profitability",
-            },
-            {
-              "label": "Sub-Measure",
-              "url": "profitability/submeasure"
-            },
-            {
-              "label": "Upload"
-            }];
-        }
-        else if (router.url=="/profitability/submeasure/addnew") {
-          this.headerOptions.breadcrumbs = [
-            {
-              "label": "Home",
-              "url": "dfa"
-            },
-            {
-              "label": "Profitability",
-            },
-            {
-              "label": "Sub-Measure",
-              "url": "profitability/submeasure"
-            },
-            {
-              "label": "Add New"
-            }];
-        }
-        else if (router.url=="/profitability/rule_management/create") {
-          this.headerOptions.breadcrumbs = [
-            {
-              "label": "Home",
-              "url": "/"
-            },
-            {
-              "label": "Profitability",
-            },
-            {
-              "label": "Rule Management",
-              "url": "profitability/rule_management"
-            },
-            {
-              "label": "Create"
-            }];
-        }
-        else if (router.url=="/profitability/rule_management/assign") {
-          this.headerOptions.breadcrumbs = [
-            {
-              "label": "Home",
-              "url": "dfa"
-            },
-            {
-              "label": "Profitability",
-            },
-            {
-              "label": "Rule Management",
-              "url": "profitability/rule-management"
-            },
-            {
-              "label": "Assign"
-            }];
-        }
-        else if (router.url=="/profitability/rule_management/update/:id") {
-          this.headerOptions.breadcrumbs = [
-            {
-              "label": "Home",
-              "url": "dfa"
-            },
-            {
-              "label": "Profitability",
-            },
-            {
-              "label": "Rule Management",
-              "url": "profitability/rule-management"
-            },
-            {
-              "label": "Update"
-            }];
-        }
-      }
-    });
+  constructor(private titleService: Title) {
   }
 
   public ngOnInit() {
+    this.titleService.setTitle('FIN-DFA')
   }
 
   headerOptions = new CuiHeaderOptions({

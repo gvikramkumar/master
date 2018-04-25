@@ -1,13 +1,9 @@
 
 
-
-working with base class, guess you use that, but sucks that you have to pass store/router to it, still...
-it has the activateroute, what can you do? Best way then.
-So... put rest of data in routes.. done. Didn't need appref.tick, although nice enough trick, turns out,
-just needed a behaviorSubject.
-
-
-
+pass:
+breadcrumb and hero routing data done.
+next??
+Looks like you're good for now, get on that file upload/download now
 
 
 mon:
@@ -17,34 +13,14 @@ project todo
 * only latest rule can be updated, but all rules should be visible?
 
 ///// framework TODO:
+* file upload/download/storage
 * need a seqnum in module to line them up for home display, imageName too
 * database update strategy: version in db, load all files in sequence and run with mongo using childProcess or so, so a list of directories, then sort by number, then compare db version and run those over that number in sequence
 
-* need a back link for add/edit pages to get back to list
 * need a object dirty check and a warning dialog if they try to cancel or leave and the data has been changed
-* concurrency: need a code for this so you can put up the right message when they try to delete something (that still exists) but has been updated. Anytime they delete or update and don't have the latest... they need to get a message: your data needs to be refreshed, not: item not found, as it's there and they're trying to delet it, just that the rule needs to be: if it's changed, then don't update or delete, make them look at the new version as someone else has been messing with it.
 * move rule add/update metadata to a modules.json data doc, i.e. in db, and don't add a schema for it, just have it as "string", so module: {id, name, metadata}, then we can update metadata on the fly, but need to wrap well in unit tests so if they change something that will break the ui, we catch it. Say they add one to one array, and it uses that to access another array they didnt' add to and that crashes the code. me's rule add/edit formChange is what needst to be tested well for breakage.
-* rule create/edit should be same page
-* rule create/update needs to use rule object, not properties on comp
-* create graphql classes in ui
-* create graphql input classes in qi? Const can enforce required then
-* go with ruleAddInput, ruleUpdateInput, or look at their trick with the id on put, then add createdBy/Date to that list
-* ruleInput doesnt hahve any required fields
-* why is she doing the refetchQueries?? what is that again? graphql thing as it's hitting the server with it
 * lazy load modules
-* bring in your styles directory if appropriate
-* breakcrumb code to: data in routing with store observable and routing done handler that pubs to store with breadcrumb subing to that obs.
-* review cui comps to see where they get their css from. Internally (
 * mongoose schemas don't recognize dates. Ok or not? Only a problem is you need to mess with a date in repo?
-* dump the app comp routing event stuff
-* css >> scss
-* USE ME'S FIELD NAMES FROM NG CODE FOR DB
-* add: allocationInput shouldn't require createdBy/date, updatedby/date, that's the api's job to fill in for add
-* update: should have created by/date, but updated isn't required (htough might be there)
-
-database
-change csv file headers to what's in the code (camel case) and create a doc that maps between the two:
-old line followed by new line with titlte line: allocation_rules, RULE_NAME >> name
 
 
 
