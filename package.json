@@ -17,6 +17,7 @@
     "uilint": "cd ui && ng lint",
     "uiserve": "cd ui && ng serve %1 %2",
     "uibuild": "cd ui && ng serve %1 %2",
+    "uibuildprod": "cd ui && ng build --prod",
     "uiunit": "cd ui && ng test -e=unit %1 %2",
     "uie2e": "cd ui && ng e2e -e=unit %1 %2"
   },
