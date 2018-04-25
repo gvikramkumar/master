@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import {RoutingComponentBase} from '../../../shared/routing-component-base';
+import {ActivatedRoute} from '@angular/router';
+import {Store} from '../../../store/store';
 
 @Component({
   selector: 'fin-rule-management-assign',
   templateUrl: './rule-management-assign.component.html',
   styleUrls: ['./rule-management-assign.component.scss']
 })
-export class RuleManagementAssignComponent implements OnInit {
+export class RuleManagementAssignComponent extends RoutingComponentBase implements OnInit {
 
-  constructor() { }
+  constructor(private store: Store, private route: ActivatedRoute) {
+    super(store, route);
+  }
 
   ngOnInit() {
   }

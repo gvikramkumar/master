@@ -1,8 +1,10 @@
 
-route data:
-{ title, desc, breadcrumb}
-* put hero in maincomp, so routeroutlet can have padding instead of everytoine haveing to do it
 
+
+working with base class, guess you use that, but sucks that you have to pass store/router to it, still...
+it has the activateroute, what can you do? Best way then.
+So... put rest of data in routes.. done. Didn't need appref.tick, although nice enough trick, turns out,
+just needed a behaviorSubject.
 
 
 

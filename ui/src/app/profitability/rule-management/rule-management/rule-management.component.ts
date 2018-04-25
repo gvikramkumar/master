@@ -6,13 +6,16 @@ import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
 import {AllocationRule} from '../../../store/models/profitability/allocation-rule';
 import * as moment from 'moment';
+import {ActivatedRoute} from '@angular/router';
+import {Store} from '../../../store/store';
+import {RoutingComponentBase} from '../../../shared/routing-component-base';
 
 @Component({
   selector: 'fin-rule-management',
   templateUrl: './rule-management.component.html',
   styleUrls: ['./rule-management.component.scss']
 })
-export class RuleManagementComponent implements OnInit {
+export class RuleManagementComponent extends RoutingComponentBase implements OnInit {
   moment = moment;
   numRules: Number;
   rulesArray: any[];
@@ -23,7 +26,14 @@ export class RuleManagementComponent implements OnInit {
   tableColumns = ['name', 'period', 'driverName', 'updatedBy', 'updateDate'];
   dataSource: MatTableDataSource<AllocationRule>;
 
-  constructor(private ruleService: RuleService) { }
+  constructor(
+    private ruleService: RuleService,
+    private store: Store,
+    private route: ActivatedRoute
+  ) {
+    super(store, route);
+
+  }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

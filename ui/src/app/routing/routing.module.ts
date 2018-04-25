@@ -30,46 +30,98 @@ const routes: Routes = [
       {
         path: 'submeasure',
         children: [
-          {path: '', component: SubmeasureComponent},
-          {path: 'add', component: SubmeasureAddComponent},
-          {path: 'upload', component: SubmeasureUploadComponent},
+          {
+            path: '', component: SubmeasureComponent,
+            data: {
+              hero: {
+                title: 'Profitability: Sub-Measures',
+                desc: 'Create and update sub-measures for profitability group'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure'}]
+            }
+
+          },
+          {
+            path: 'add', component: SubmeasureAddComponent,
+            data: {
+              hero: {
+                title: 'Profitability: Add a New Sub-Measure',
+                desc: 'Add new sub-measure for Profitability group'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/pft/submeasure'}, {label: 'Add New'}]
+            }
+          },
+          {
+            path: 'upload', component: SubmeasureUploadComponent,
+            data: {
+              hero: {
+                title: 'Profitability: Upload a New Sub-Measure',
+                desc: 'Upload new sub-measure for Profitability group'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/pft/submeasure'}, {label: 'Upload'}]
+            }
+          },
         ]
       },
       {
         path: 'rule-management',
         children: [
-          {path: '', component: RuleManagementComponent},
-          {path: 'add', component: RuleManagementEditComponent},
-          {path: 'edit/:id', component: RuleManagementEditComponent},
-          {path: 'assign', component: RuleManagementAssignComponent},
+          {
+            path: '', component: RuleManagementComponent,
+            data: {
+              hero: {
+                title: 'Profitability: Rule Management',
+                desc: 'Create and update rules for Profitability group'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management'}]
+            }
+          },
+          {
+            path: 'add', component: RuleManagementEditComponent,
+            data: {
+              hero: {
+                title: 'Profitability: Create New Rule',
+                desc: 'Create a new rule for Profitability group'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/pft/rule-management'}, {label: 'Create'}]
+            }
+          },
+          {
+            path: 'edit/:id', component: RuleManagementEditComponent,
+            data: {
+              hero: {
+                title: 'Profitability: Update Rule',
+                desc: 'Update the selected rule'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/pft/rule-management'}, {label: 'Update'}]
+            }
+          },
+          {
+            path: 'assign', component: RuleManagementAssignComponent,
+            data: {
+              hero: {
+                title: 'Profitability: Assign Rule',
+                desc: 'Assign rule for Profitability group'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/pft/rule-management'}, {label: 'Assign'}]
+            }
+          },
         ],
       },
-      {path: 'business-upload', component: BusinessUploadComponent},
+      {
+        path: 'business-upload', component: BusinessUploadComponent,
+        data: {
+          hero: {
+            title: 'Profitability: Business Uploads',
+            desc: 'Perform bulk uploads'
+          },
+          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Business Upload'}]
+        }
+      },
     ]
   },
   {path: '**', redirectTo: '/'}
 ];
-
-const routeData = [
-  {
-    url: /pft\/submeasure/,
-    hero: {title: 'Profitability: Sub-Measures', desc: 'Create and update sub-measures for profitability group.'},
-    breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Profitability'}, {label: 'Sub-Measure'}]
-  }
-]
-
-/*
-
-data: {
-  hero: {title: 'Profitability: Add a New Sub-Measure', desc: 'Add new sub-measure for Profitability group'},
-  breadcrumbs: [
-    {label: 'Home', routerUrl: '/'},
-    {label: 'Profitability'},
-    {label: 'Sub-Measure'},
-  ]
-}
-*/
-
 
 @NgModule({
   imports: [
@@ -93,12 +145,7 @@ export class RoutingModule {
   init() {
     this.router.events.filter(e => e instanceof NavigationEnd)
       .subscribe((event: NavigationEnd) => {
-        const arr = routeData.filter(x => x.url.test(event.url));
-        if (arr.length !== 1) {
-          throw new Error('No routeData for url: ' + event.url);
-        }
-        this.appRef.tick();
-        this.store.routeDataPub(arr[0]);
+        this.store.currentUrlPub(event.url);
       });
 
   }

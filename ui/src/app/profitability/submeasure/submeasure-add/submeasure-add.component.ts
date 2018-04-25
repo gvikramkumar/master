@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import {RoutingComponentBase} from '../../../shared/routing-component-base';
+import {ActivatedRoute} from '@angular/router';
+import {Store} from '../../../store/store';
 
 @Component({
   selector: 'fin-submeasure-add',
   templateUrl: './submeasure-add.component.html',
   styleUrls: ['./submeasure-add.component.scss']
 })
-export class SubmeasureAddComponent implements OnInit {
+export class SubmeasureAddComponent extends RoutingComponentBase implements OnInit {
 
-  constructor() { }
+  constructor(private store: Store, private route: ActivatedRoute) {
+    super(store, route);
+  }
 
   ngOnInit() {
   }

@@ -10,13 +10,16 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import {SubmeasureService} from '../../../core/services/profitability/submeasure.service';
 import {Submeasure} from '../../../store/models/profitability/submeasure';
+import {RoutingComponentBase} from '../../../shared/routing-component-base';
+import {ActivatedRoute} from '@angular/router';
+import {Store} from '../../../store/store';
 
 @Component({
   selector: 'fin-submeasure',
   templateUrl: './submeasure.component.html',
   styleUrls: ['./submeasure.component.scss']
 })
-export class SubmeasureComponent implements OnInit {
+export class SubmeasureComponent extends RoutingComponentBase implements OnInit {
 
   public _opened: boolean = true;
   public _mode: string = 'push';
@@ -42,7 +45,12 @@ export class SubmeasureComponent implements OnInit {
     'Warranty'
   ];
 
-  constructor(private submeasureService: SubmeasureService) {
+  constructor(
+    private submeasureService: SubmeasureService,
+    private store: Store,
+    private route: ActivatedRoute
+    ) {
+    super(store, route);
   }
 
 

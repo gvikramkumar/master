@@ -43,10 +43,12 @@ export class Store extends StoreBase {
   subInitialized = this.initialized$.subscribe.bind(this.initialized$);
   leftNavClosed$ = new BehaviorSubject<boolean>(false);
   subLeftNavClosed = this.leftNavClosed$.subscribe.bind(this.leftNavClosed$);
-  routeData$ = new Subject();
+  routeData$ = new BehaviorSubject({hero: {}, breadcrumbs:[]});
   routeDataSub = this.routeData$.asObservable().subscribe.bind(this.routeData$);
+  currentUrl$ = new BehaviorSubject('');
+  currentUrlSub = this.currentUrl$.asObservable().subscribe.bind(this.currentUrl$);
 
-  headerOptions = new CuiHeaderOptions({
+  headerOptionsBase = new CuiHeaderOptions({
     "showBrandingLogo": true,
     "brandingLink": "https://cisco.com",
     "brandingTitle": "",
@@ -72,6 +74,10 @@ export class Store extends StoreBase {
       .subscribe(change => {
         this.initialBreakpoint = change.mqAlias;
       });
+  }
+
+  currentUrlPub(val) {
+    this.currentUrl$.next(val);
   }
 
   routeDataPub(val) {

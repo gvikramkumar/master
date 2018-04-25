@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
 import {Store} from '../../store/store';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'fin-main',
@@ -17,10 +18,8 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.headerOptions = this.store.headerOptions;
-
+    this.headerOptions = _.clone(this.store.headerOptionsBase);
     this.store.routeDataSub(data => {
-        console.log('data>>>>', data);
         this.hero = data.hero;
         this.headerOptions.breadcrumbs = data.breadcrumbs;
       })

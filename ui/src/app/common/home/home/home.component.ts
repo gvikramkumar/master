@@ -4,6 +4,7 @@ import {Subject} from 'rxjs/Subject';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
 import {ModuleService} from '../../../core/services/common/module.service';
 import {Store} from '../../../store/store';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,7 @@ export class HomeComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit() {
-    this.headerOptions = this.store.headerOptions;
+    this.headerOptions = _.clone(this.store.headerOptionsBase);
     this.modules = this.store.modules;
   }
 

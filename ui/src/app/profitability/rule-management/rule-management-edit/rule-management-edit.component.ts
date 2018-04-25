@@ -3,13 +3,15 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AllocationRule} from '../../../store/models/profitability/allocation-rule';
 import {RuleService} from '../../../core/services/profitability/rule.service';
 import {Observable} from 'rxjs/Observable';
+import {RoutingComponentBase} from '../../../shared/routing-component-base';
+import {Store} from '../../../store/store';
 
 @Component({
   selector: 'fin-rule-management-create',
   templateUrl: './rule-management-edit.component.html',
   styleUrls: ['./rule-management-edit.component.scss']
 })
-export class RuleManagementEditComponent implements OnInit {
+export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
   editMode = false;
   rule: AllocationRule = new AllocationRule();
   title: string;
@@ -24,8 +26,10 @@ export class RuleManagementEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private ruleService: RuleService
+    private ruleService: RuleService,
+    private store: Store
   ) {
+    super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
   }
 
