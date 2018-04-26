@@ -41,6 +41,5 @@ import {ProfitabilityRoutingModule} from './profitability-routing.module';
 })
 export class ProfitabilityModule {
   constructor() {
-    console.log('created profitability module');
   }
 }

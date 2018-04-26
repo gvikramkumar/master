@@ -40,6 +40,9 @@ module.exports = class RepoBase {
   }
 
   add(data, userName) {
+    // if versioning items, our edits will actually be adds, so dump the ids in that case
+    delete data._id;
+    delete data.id;
     const item = new this.Model(data);
     item.createdBy = userName;
     item.createdDate = new Date().toISOString();
