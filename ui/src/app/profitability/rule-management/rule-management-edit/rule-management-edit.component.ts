@@ -271,19 +271,25 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   public save() {
     this.formChange();
 
-    // if (!this.form.valid) //todo: isn't this needed? where's the validation enforced?
-    //   return;
-
-    let obs: Observable<AllocationRule>;
-    if (this.editMode) {
-      obs = this.ruleService.update(this.rule)
-    } else {
-      obs = this.ruleService.add(this.rule);
-    }
-    obs.subscribe(rule => this.router.navigateByUrl('/pft/rule-management'));
-
-
-
+    this.validate()
+      .subscribe(valid => {
+        if (valid) {
+          this.ruleService.add(this.rule)
+            .subscribe(rule => this.router.navigateByUrl('/pft/rule-management'));
+        }
+      })
   }
 
+  validate(): Observable<boolean> {
+    //todo: need to search for rule name duplicity on add only
+    let obs: Observable<AllocationRule>;
+    if (this.editMode) {
+      return Observable.of(true);
+    } else {
+      //todo: validate name doesn't exist already. Could be done with an ngModel validator realtime if rules cached
+      // otherwise hit server here
+      // check for fule name existence in store (if cached rules) or hit the server (why it's observable)
+      return Observable.of(true);
+    }
+  }
 }

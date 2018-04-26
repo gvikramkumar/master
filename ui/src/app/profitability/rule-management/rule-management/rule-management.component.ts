@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '../../../store/store';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'fin-rule-management',
@@ -17,10 +18,7 @@ import {RoutingComponentBase} from '../../../shared/routing-component-base';
 })
 export class RuleManagementComponent extends RoutingComponentBase implements OnInit {
   moment = moment;
-  numRules: Number;
-  rulesArray: any[];
-  rulesCount: Number = 0;
-  currentRules: Subscription;
+  rules: AllocationRule[];
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
   tableColumns = ['name', 'period', 'driverName', 'updatedBy', 'updateDate'];
@@ -38,19 +36,18 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-    ngOnInit() {
-      this.formControl.valueChanges.debounceTime(300).subscribe(name => {
-        this.nameFilter.next(name);
-      });
+  ngOnInit() {
+    this.formControl.valueChanges.debounceTime(300).subscribe(name => {
+      this.nameFilter.next(name);
+    });
 
-      this.ruleService.getMany()
-        .subscribe(rules => {
-        this.rulesCount = rules.length;
-        this.rulesArray = rules;
-        this.dataSource = new MatTableDataSource(this.rulesArray);
+    this.ruleService.getMany()
+      .subscribe(rules => {
+        this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
+        this.dataSource = new MatTableDataSource(this.rules);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-    });
+      });
 
   }
 
