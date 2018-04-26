@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {RuleService} from '../../../core/services/profitability/rule.service';
+import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';

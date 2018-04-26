@@ -8,11 +8,16 @@ import {SubmeasureUploadComponent} from './submeasure/submeasure-upload/submeasu
 import {RuleManagementAssignComponent} from './rule-management/rule-management-assign/rule-management-assign.component';
 import {BusinessUploadComponent} from './business-upload/business-upload/business-upload.component';
 import {SharedModule} from '../shared/shared.module';
-import {RuleService} from '../core/services/profitability/rule.service';
+import {RuleService} from './services/rule.service';
+import {RouterModule, Routes} from '@angular/router';
+import {MainComponent} from '../shared/components/main/main.component';
+import {ProfitabilityRoutingModule} from './profitability-routing.module';
+
 
 @NgModule({
   imports: [
     CommonModule,
+    ProfitabilityRoutingModule,
     SharedModule
   ],
   declarations: [
@@ -34,4 +39,8 @@ import {RuleService} from '../core/services/profitability/rule.service';
     BusinessUploadComponent
   ]
 })
-export class ProfitabilityModule { }
+export class ProfitabilityModule {
+  constructor() {
+    console.log('created profitability module');
+  }
+}

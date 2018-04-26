@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AllocationRule} from '../../../store/models/profitability/allocation-rule';
-import {RuleService} from '../../../core/services/profitability/rule.service';
+import {RuleService} from '../../services/rule.service';
 import {Observable} from 'rxjs/Observable';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
 import {Store} from '../../../store/store';

@@ -1,6 +1,6 @@
-import {forwardRef, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 import {PageNotFoundComponent} from './components/page-not-found/page-not-found.component';
 import {ForbiddenNameValidator} from './validators/forbidden-name.validator';
 import {MinValidator} from './validators/min.validator';
@@ -9,28 +9,32 @@ import {MaterialIndexModule} from './material-index/material-index.module';
 import {ProgressComponent} from './components/progress/progress.component';
 import {ErrorModalComponent} from './dialogs/error-modal/error-modal.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import { NotImplementedComponent } from './dialogs/not-implemented/not-implemented.component';
+import {NotImplementedComponent} from './dialogs/not-implemented/not-implemented.component';
 import {TrimInputValueAccessor} from './accessors/trim-input-value.accessor';
 import {CuiIndexModule} from "./cui-index/cui-index.module";
-import {RoutingModule} from "../routing/routing.module";
 import {SidebarModule} from 'ng-sidebar';
+import {RouterModule} from '@angular/router';
+import {CoreModule} from '../core/core.module';
+import {HomeComponent} from './components/home';
+import {MainComponent} from './components/main/main.component';
 
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     MaterialIndexModule,
     CuiIndexModule,
     FlexLayoutModule,
     FormsModule,
-    RoutingModule,
     SidebarModule.forRoot(),
+    CoreModule
   ],
   exports: [
+    CoreModule,
     MaterialIndexModule,
     CuiIndexModule,
     FlexLayoutModule,
     FormsModule,
-    RoutingModule,
     SidebarModule,
     PageNotFoundComponent,
     ForbiddenNameValidator,
@@ -50,7 +54,9 @@ import {SidebarModule} from 'ng-sidebar';
     ProgressComponent,
     ErrorModalComponent,
     NotImplementedComponent,
-    TrimInputValueAccessor
+    TrimInputValueAccessor,
+    HomeComponent,
+    MainComponent
   ],
   entryComponents: [
     ErrorModalComponent,

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
-import {Store} from '../../store/store';
+import {Store} from '../../../store/store';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import * as _ from 'lodash';
 

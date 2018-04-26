@@ -1,9 +1,9 @@
 import {Injectable, Type} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
-import {Store} from '../../../store/store';
-import {ModelBase} from '../../../store/models/common/model-base';
+import {environment} from '../../../environments/environment';
+import {Store} from '../../store/store';
+import {ModelBase} from '../../store/models/common/model-base';
 
 const apiUrl = environment.apiUrl;
 

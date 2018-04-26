@@ -1,31 +1,19 @@
-import {ApplicationRef, NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {ActivatedRoute, NavigationEnd, Router, RouterModule, Routes} from "@angular/router";
-import {InitializationGuard} from "./guards/initialization.guard";
-import {StoreModule} from "../store/store.module";
-import {CoreModule} from "../core/core.module";
-import {HomeComponent} from '../common/home';
-import {SubmeasureComponent} from '../profitability/submeasure/submeasure/submeasure.component';
-import {SubmeasureUploadComponent} from '../profitability/submeasure/submeasure-upload/submeasure-upload.component';
-import {SubmeasureAddComponent} from '../profitability/submeasure/submeasure-add/submeasure-add.component';
-import {RuleManagementComponent} from '../profitability/rule-management/rule-management/rule-management.component';
-import {RuleManagementEditComponent} from '../profitability/rule-management/rule-management-edit/rule-management-edit.component';
-import {RuleManagementAssignComponent} from '../profitability/rule-management/rule-management-assign/rule-management-assign.component';
-import {BusinessUploadComponent} from '../profitability/business-upload/business-upload/business-upload.component';
-import {MainComponent} from '../common/main/main.component';
-import {Store} from '../store/store';
-import * as _ from 'lodash';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {SubmeasureComponent} from './submeasure/submeasure/submeasure.component';
+import {SubmeasureAddComponent} from './submeasure/submeasure-add/submeasure-add.component';
+import {SubmeasureUploadComponent} from './submeasure/submeasure-upload/submeasure-upload.component';
+import {RuleManagementComponent} from './rule-management/rule-management/rule-management.component';
+import {RouterModule, Routes} from '@angular/router';
+import {RuleManagementEditComponent} from './rule-management/rule-management-edit/rule-management-edit.component';
+import {BusinessUploadComponent} from './business-upload/business-upload/business-upload.component';
+import {MainComponent} from '../shared/components/main/main.component';
+import {RuleManagementAssignComponent} from './rule-management/rule-management-assign/rule-management-assign.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-    canActivate: [InitializationGuard]
-  },
-  {
-    path: 'pft',
     component: MainComponent,
-    canActivate: [InitializationGuard],
     children: [
       {
         path: 'submeasure',
@@ -119,34 +107,15 @@ const routes: Routes = [
         }
       },
     ]
-  },
-  {path: '**', redirectTo: '/'}
+  }
 ];
 
 @NgModule({
   imports: [
-    CommonModule,
-    StoreModule,
-    CoreModule,
-    RouterModule.forRoot(
-      routes,
-      {enableTracing: false} // <-- debugging purposes only
-    )
+    RouterModule.forChild(routes),
   ],
-  exports: [RouterModule],
-  providers: [InitializationGuard]
+  exports: [
+    RouterModule
+  ]
 })
-export class RoutingModule {
-
-  constructor(private store: Store, private router: Router, private appRef: ApplicationRef) {
-    this.init();
-  }
-
-  init() {
-    this.router.events.filter(e => e instanceof NavigationEnd)
-      .subscribe((event: NavigationEnd) => {
-        this.store.currentUrlPub(event.url);
-      });
-
-  }
-}
+export class ProfitabilityRoutingModule { }

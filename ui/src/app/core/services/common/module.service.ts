@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Module} from '../../../store/models/common/module';
 import {environment} from '../../../../environments/environment';
 import {Store} from '../../../store/store';
-import {RestBase} from './rest-base';
+import {RestBase} from '../../base-classes/rest-base';
 import * as _ from 'lodash';
 
 const apiUrl = environment.apiUrl;

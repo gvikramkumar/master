@@ -1,10 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
+import {BrowserModule} from '@angular/platform-browser';
+import {ApplicationRef, NgModule} from '@angular/core';
+import {AppComponent} from './app.component';
 import {SharedModule} from "./shared/shared.module";
-import {FinCommonModule} from './common/common.module';
-import {ProfitabilityModule} from './profitability/profitability.module';
-
+import {NavigationEnd, Router} from '@angular/router';
+import {Store} from './store/store';
+import {AppRoutingModule} from './app-routing.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -12,12 +13,25 @@ import {ProfitabilityModule} from './profitability/profitability.module';
   ],
   imports: [
     BrowserModule,
-    SharedModule,
-    FinCommonModule,
-    ProfitabilityModule,
-
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(private store: Store, private router: Router, private appRef: ApplicationRef) {
+    this.init();
+  }
+
+  init() {
+    this.router.events.filter(e => e instanceof NavigationEnd)
+      .subscribe((event: NavigationEnd) => {
+        this.store.currentUrlPub(event.url);
+      });
+
+  }
+
+}
