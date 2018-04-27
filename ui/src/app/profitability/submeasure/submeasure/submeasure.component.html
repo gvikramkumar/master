@@ -31,14 +31,14 @@
                 <mat-cell *matCellDef="let row">{{ column.cell(row) }}</mat-cell>
               </ng-container> -->
 
-              <ng-container matColumnDef="SUB_MEASURE_KEY">
+              <ng-container matColumnDef="key">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Key </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.SUB_MEASURE_KEY}} </mat-cell>
+                <mat-cell *matCellDef="let row"> {{row.key}} </mat-cell>
               </ng-container>
 
-              <ng-container matColumnDef="SUB_MEASURE_NAME">
+              <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.SUB_MEASURE_NAME}} </mat-cell>
+                <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
               </ng-container>
 
               <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>

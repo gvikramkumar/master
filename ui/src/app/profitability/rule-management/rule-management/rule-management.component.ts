@@ -19,6 +19,7 @@ import * as _ from 'lodash';
 export class RuleManagementComponent extends RoutingComponentBase implements OnInit {
   moment = moment;
   rules: AllocationRule[];
+  rulesCount: Number = 0;
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
   tableColumns = ['name', 'period', 'driverName', 'updatedBy', 'updateDate'];
@@ -44,6 +45,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     this.ruleService.getMany()
       .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
+        this.rulesCount = rules.length;
         this.dataSource = new MatTableDataSource(this.rules);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
