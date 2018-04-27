@@ -23,12 +23,11 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
 
   public _opened: boolean = true;
   public _mode: string = 'push';
-  public submeasures: Observable<Submeasure[]>;
   public submeasuresCount: Number = 0;
   //public currentSubmeasure: Subscription;
   public formControl = new FormControl();
   private nameFilter: Subject<string> = new Subject<string>();
-  tableColumns = ['SUB_MEASURE_KEY', 'SUB_MEASURE_NAME'];
+  tableColumns = ['key', 'name'];
   dataSource: MatTableDataSource<Submeasure>;
 
   //@Output() private changeTestEmitter: EventEmitter<MatRadioChange>;
