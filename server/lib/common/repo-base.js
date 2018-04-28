@@ -5,6 +5,7 @@ const mg = require('mongoose'),
 module.exports = class RepoBase {
 
   constructor(schema, modelName) {
+    this.schema = schema;
     schema.add({timestamp: 'number'});
     schema.path('timestamp').required(true);
     schema.set('toObject', {virtuals: true});
@@ -44,10 +45,14 @@ module.exports = class RepoBase {
     delete data._id;
     delete data.id;
     const item = new this.Model(data);
-    item.createdBy = userName;
-    item.createdDate = new Date().toISOString();
-    item.updatedBy = userName;
-    item.updatedDate = new Date().toISOString();
+    if (this.schema.path('createdBy')) {
+      item.createdBy = userName;
+      item.createdDate = new Date().toISOString();
+    }
+    if (this.schema.path('updatedBy')) {
+      item.updatedBy = userName;
+      item.updatedDate = new Date().toISOString();
+    }
     item.timestamp = Date.now();
     return item.save();
   }
@@ -58,8 +63,10 @@ module.exports = class RepoBase {
         _.merge(item, data);
         delete item._id;
         delete item.id;
-        item.updatedBy = userName;
-        item.updatedDate = new Date().toISOString();
+        if (this.schema.path('updatedBy')) {
+          item.updatedBy = userName;
+          item.updatedDate = new Date().toISOString();
+        }
         item.timestamp = Date.now();
         return item.save()
       });
