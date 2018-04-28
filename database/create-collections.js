@@ -7,10 +7,11 @@ var db = conn.getDB(_db);
 
 
 const collections = [
-  'allocation_rules',
-  'modules',
-  'submeasure_list',
-  'submeasure_rule_map'
+  'allocation_rule',
+  'module',
+  'submeasure',
+  'submeasure_rule',
+  'business_upload'
 ];
 
 // drop/create collections

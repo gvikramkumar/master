@@ -2,15 +2,15 @@ const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
 const collections = [
-  'allocation_rules',
-  'modules',
-  'submeasure_list',
-  'submeasure_rule_map'
+  'allocation_rule',
+  'module',
+  'submeasure',
+  'submeasure_rule'
 ];
 
 const collectionsWithCreatedUpdated = [
-  'allocation_rules',
-  'submeasure_rule_map'
+  'allocation_rule',
+  'submeasure_rule'
 ];
 
 // add timestamps
@@ -18,13 +18,13 @@ const timestamp = Date.now();
 collections.forEach(coll => {
   db.getCollection(coll).updateMany({}, {$set: {timestamp: NumberInt(timestamp)}});
 });
-// const isoDate = new Date().toISOString();
+const isoDate = new Date().toISOString();
 collectionsWithCreatedUpdated.forEach(coll => {
   db.getCollection(coll).updateMany({}, {$set: {
       createdBy: '',
-      createdDate: '',
+      createdDate: isoDate,
       updatedBy: '',
-      updatedDate: ''
+      updatedDate: isoDate
   }});
 });
 

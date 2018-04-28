@@ -1,5 +1,5 @@
 const mg = require('mongoose'),
-  ApiError = require('./api-error'),
+  ApiError = require('../common/api-error'),
   _ = require('lodash');
 
 module.exports = class RepoBase {
