@@ -10,8 +10,7 @@ const collections = [
   'allocation_rule',
   'module',
   'submeasure',
-  'submeasure_rule',
-  'business_upload'
+  'submeasure_rule'
 ];
 
 // drop/create collections
