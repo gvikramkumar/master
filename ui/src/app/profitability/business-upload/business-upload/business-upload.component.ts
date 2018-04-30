@@ -6,7 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Store} from '../../../store/store';
 import {FsFile} from '../../../store/models/fsfile';
 import {FsFileService} from '../../../core/services/common/fsfile.service';
-import {Directory} from '../../../store/models/enums';
+import {BusinessUploadFileType, Directory} from '../../store/models/enums';
 
 const directory = Directory.businessUpload;
 
@@ -52,7 +52,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
 
     const metadata = {
       directory: directory,
-      buFileType: 'upload', // upload/template
+      buFileType: BusinessUploadFileType.upload,
       buUploadType: this.selectedType.value
     }
 
