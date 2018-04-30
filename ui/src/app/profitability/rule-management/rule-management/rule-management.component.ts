@@ -4,7 +4,7 @@ import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
-import {AllocationRule} from '../../../store/models/profitability/allocation-rule';
+import {AllocationRule} from '../../store/models/allocation-rule';
 import * as moment from 'moment';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '../../../store/store';

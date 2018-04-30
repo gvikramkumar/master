@@ -26,6 +26,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "gridfs-stream": "git+https://gitscm.cisco.com/scm/it-cvc-ciscocommerce-findfaapp/gridfs-stream.git",
     "hammerjs": "^2.0.8",
     "http-status": "^1.0.1",
     "lodash": "^4.17.5",

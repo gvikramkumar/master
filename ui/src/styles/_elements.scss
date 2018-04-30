@@ -1,6 +1,14 @@
 @import 'variables';
 @import 'mixins';
 
+// our <input type=file> css hiding
+input[type="file"] {
+  display: none;
+}
+
+
+
+
 /*
 html, body {
   height: 100%;

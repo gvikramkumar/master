@@ -1,4 +1,4 @@
-import {ModelBase} from '../common/model-base';
+import {ModelBase} from '../../../store/models/model-base';
 
 export class AllocationRule extends ModelBase {
   name: string;
