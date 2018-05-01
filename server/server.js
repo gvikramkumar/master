@@ -3,8 +3,7 @@ const config = require('./config/get-config'),
   path = require('path'),
   https = require('https'),
   http = require('http'),
-  fs = require('fs'),
-  mongoose = require('mongoose');
+  fs = require('fs');
   // morgan = require('morgan'),
   // docsRouter = require('./docs/_router'),
   // authenticate = require('./api/login/_authenticate'),
@@ -14,11 +13,8 @@ process.on('unhandledRejection', (reason, p) => {
   // application specific logging, throwing an error, or other logic here
 });
 
-// config data sources
-mongoose.connect(config.mongoUri)
-  .then(() => console.log(`mongoose connected on: ${config.mongoUri}`),
-    err => console.log(`mongoose connection error: ${config.mongoUri}`, err));
-
+// connect mongoose
+require('./mongoose-conn');
 
 // config express and middleware
 const app = require('./express-setup');

@@ -1,14 +1,8 @@
 const config = require('./config/get-config'),
   process = require('process'),
   path = require('path'),
-  https = require('https'),
-  http = require('http'),
-  fs = require('fs'),
-  mongoose = require('mongoose'),
   express = require('express'),
   bodyParser = require('body-parser'),
-  multer  = require('multer'),
-  multerGridFsStorage = require('multer-gridfs-storage'),
   // morgan = require('morgan'),
   cookieParser = require('cookie-parser'),
   // docsRouter = require('./docs/_router'),
@@ -20,7 +14,8 @@ const config = require('./config/get-config'),
   logger = require('./lib/middleware/logger'),
   moduleRouter = require('./api/common/module/router'),
   allocationRuleRouter = require('./api/pft/allocation-rule/router'),
-  submeasureRouter = require('./api/pft/submeasure/router');
+  submeasureRouter = require('./api/pft/submeasure/router'),
+  fileRouter = require('./api/common/file/router');
 
 
 // start express
@@ -61,6 +56,7 @@ app.get('/crash-site', function (req, res) {
 app.use('/api/module', moduleRouter);
 app.use('/api/allocation-rule', allocationRuleRouter);
 app.use('/api/submeasure', submeasureRouter);
+app.use('/api/file', fileRouter);
 
 app.use(express.static(path.resolve(__dirname, '../ui/dist')));
 
