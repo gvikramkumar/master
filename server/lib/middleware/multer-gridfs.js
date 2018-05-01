@@ -16,6 +16,7 @@ const storage = multerGridFsStorage({
     return {metadata};
   }
 });
+//todo: test out the file size/count max values
 const upload = multer({
   storage, limits: {
     fileSize: config.fileSizeMax,
