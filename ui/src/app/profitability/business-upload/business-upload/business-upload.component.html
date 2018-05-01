@@ -17,13 +17,13 @@
         </mat-form-field> -->
         <div>
           <label class="custom-file-upload" tabindex="0">
-            <input #fileUpload type="file" placeholder="Upload file" accept=".csv,.xlsx" multiple (change)="$event"><br>
+            <input #fileInput type="file" placeholder="Upload file" accept=".csv,.xlsx" multiple (change)="$event"><br>
             Choose File
           </label>
         </div>
-        <div *ngIf="fileUpload.files.length">
-          <div *ngFor="let file of fileUpload.files">{{file.name}}</div>
-          <div><button (click)="uploadFile()">Upload File</button></div>
+        <div *ngIf="fileInput.files.length">
+          <div *ngFor="let file of fileInput.files">{{file.name}}</div>
+          <div><button (click)="uploadFile(fileInput)">Upload File</button></div>
         </div>
         <!--should use a toastr for thiss instead-->
         <div *ngIf="fileUploaded">File Uploaded...</div>

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '../../../store/store';
@@ -16,7 +16,6 @@ const directory = Directory.businessUpload;
 })
 export class BusinessUploadComponent extends RoutingComponentBase implements OnInit {
   files: FsFile[];
-  @ViewChild('fileUpload') fileUp;
   templates: FsFile[];
   fileUploaded = false;
   //todo: these need to have role-based access (likely stored in Mongo)
@@ -44,8 +43,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     }).subscribe(templates => this.templates = templates)
   }
 
-  uploadFile(event) {
-    const fileInput = this.fileUp.nativeElement;
+  uploadFile(fileInput) {
     if (!fileInput.files.length) {
       return;
     }
@@ -60,7 +58,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
       .subscribe(files => {
         fileInput.value = '';
         this.fileUploaded = true;
-        setTimeout(() => this.fileUploaded = false, 3000);
+        setTimeout(() => this.fileUploaded = false, 1000);
       });
 
   }
