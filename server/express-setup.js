@@ -60,7 +60,7 @@ app.use('/api/file', fileRouter);
 
 app.use(express.static(path.resolve(__dirname, '../ui/dist')));
 
-app.get('*', (req, res) => {
+app.get(['/', '/pft/*'], (req, res) => {
   console.log('>>>>>> served index.html');
   res.sendFile(path.resolve(__dirname, '../ui/dist') + '/index.html');
 });

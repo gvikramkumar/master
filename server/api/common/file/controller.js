@@ -1,8 +1,10 @@
 const ApiError = require('../../../lib/common/api-error'),
   Repo = require('./repo'),
   mg = require('mongoose'),
-  dbPromise = require('../../../mongoose-conn'),
-  Grid = require('gridfs-stream');
+  db = mg.connection.db,
+  mongo = mg.mongo,
+  GridFSBucket = mongo.GridFSBucket,
+  Q = require('q');
 
 module.exports = class FileController {
 
@@ -32,31 +34,19 @@ module.exports = class FileController {
   // file upload/download/remove
   // upload/download
   download(req, res, next) {
-    dbPromise.then(db => {
-      var gfs = Grid(db, mg.mongo);
-      gfs.findOne({_id: req.params.id}, function (err, file) {
-        if (err) {
-          next(new ApiError('GridFs Error', err, 400));
+    const id = req.params.id;
+    this.repo.getOne(id)
+      .then(fileInfo => {
+        if (!fileInfo) {
+          next(new ApiError('File not found.', null, 400))
           return;
         }
-        else if (!file) {
-          next(new ApiError('File not found', null, 404));
-          return;
-        }
-
-        res.set('Content-Type', file.contentType);
-        res.set('Content-Disposition', 'attachment; filename="' + file.metadata.fileName + '"');
-
-        var readstream = gfs.createReadStream({
-          _id: req.params.id
-        });
-
-        readstream.on("error", function (err) {
-          res.end();
-        });
-        readstream.pipe(res);
-      });
-    });
+        const gfs = new GridFSBucket(db);
+        const readStream = gfs.openDownloadStream(id);
+        readStream.on('error', next);
+        readStream.pipe(res);
+      })
+      .catch(next);
   }
 
   uploadMany(req, res, next) {
@@ -66,26 +56,25 @@ module.exports = class FileController {
   }
 
   // uploadMany does one and many so just use that to simply the endpoint to one
-/*
-  uploadOne(req, res, next) {
-    return this.repo.getOne(req.file.id)
-      .then(file => res.send(file))
-      .catch(next);
-  }
-*/
+  /*
+    uploadOne(req, res, next) {
+      return this.repo.getOne(req.file.id)
+        .then(file => res.send(file))
+        .catch(next);
+    }
+  */
 
   remove(req, res, next) {
-    this.repo.getOne(req.params.id)
+    const gfs = new GridFSBucket(db);
+    const id = req.params.id;
+    this.repo.getOne(id)
       .then(fileInfo => {
-        dbPromise.then(db => {
-          const gfs = Grid(db, mg.mongo);
-          gfs.remove({_id: req.params.id}, function (err, gridStore) {
-            if (err) {
-              throw (err);
-            }
-            res.send(fileInfo);
-          });
-        });
+        if (!fileInfo) {
+          next(new ApiError('File not found.', null, 400))
+          return;
+        }
+        return Q.ninvoke(gfs, 'delete', new mongo.ObjectID(id))
+          .then(() => res.send(fileInfo));
       })
       .catch(next);
   }

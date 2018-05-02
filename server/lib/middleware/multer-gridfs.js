@@ -1,12 +1,11 @@
 const config = require('../../config/get-config'),
   mg = require('mongoose'),
-  dbPromise = require('../../mongoose-conn'),
   multer = require('multer'),
   multerGridFsStorage = require('multer-gridfs-storage')
 
 
 const storage = multerGridFsStorage({
-  db: dbPromise,
+  db: mg.connection.db,
   file: (req, file) => {
     const metadata = {
       userId: req.user.userName,

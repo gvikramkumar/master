@@ -4,7 +4,7 @@ const config = require('./config/get-config'),
 const dbPromise = mg.connect(config.mongoUri)
   .then(() => {
       console.log(`mongoose connected on: ${config.mongoUri}`);
-      return mg.connection.db;
+      return {db: mg.connection.db, mongo: mg.mongo};
     },
     err => console.log(`mongoose connection error: ${config.mongoUri}`, err));
 
