@@ -18,6 +18,9 @@ collections.forEach(coll => {
   db.getCollection(coll).drop();
   db.createCollection(coll);
 });
+// drop the file system
+db.getCollection('fs.chuncks').drop();
+db.getCollection('fs.files').drop();
 
 // add indexes
 // todo: add appropriate indexes on all collections
