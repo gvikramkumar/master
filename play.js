@@ -1,16 +1,15 @@
+const _ = require('lodash');
+const arr = [
+  {addr: {street: 'lovell'}},
+  {addr: {street: 'pinecrest'}}
+];
+
+console.log(_.find(arr, item => _.get(item, 'addr.street') === 'lovell'))
 
 
-const p = new Promise((resolve, reject) => {
-  setTimeout(() => {
-    resolve(5);
-    console.log('resolved');
-  });
-})
 
-setTimeout(() => {
-  p.then(val => console.log(val));
-  console.log('after');
-},1000)
+
+
 
 
 

@@ -4,6 +4,7 @@ const config = require('../server/config/get-config'),
   {clone} = require('lodash');
 
 dbPromise.then(({db, mongo}) => {
+  console.log('loading files...');
 
   const gfs = new mongo.GridFSBucket(db);
   const dirPath = 'files/business-upload/';
@@ -16,6 +17,7 @@ dbPromise.then(({db, mongo}) => {
     const promises = [];
     files.forEach(file => {
       const metadata = clone(meta);
+      metadata.fileName = file;
       metadata.buUploadType = file.substring(file.lastIndexOf('-')+1, file.lastIndexOf('.'));
       // console.log(file, metadata);
       const promise = new Promise((resolve, reject) => {

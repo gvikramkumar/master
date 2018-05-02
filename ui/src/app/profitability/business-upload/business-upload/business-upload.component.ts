@@ -6,6 +6,7 @@ import {FsFile} from '../../../store/models/fsfile';
 import {FsFileService} from '../../../core/services/common/fsfile.service';
 import {BusinessUploadFileType, Directory} from '../../store/models/enums';
 import * as _ from 'lodash';
+import {environment} from '../../../../environments/environment';
 
 const directory = Directory.businessUpload;
 
@@ -26,11 +27,10 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     {value: 'mmspu', text: 'Manual Mapping Split Percentage Upload'},
     {value: 'pcu', text: 'Product Classification (SW/HW Mix) Upload'}
   ];
-  selectedType = this.uploadTypes[0].value;
+  uploadType = this.uploadTypes[0].value;
 
   constructor(private store: Store, private route: ActivatedRoute, private fsFileService: FsFileService) {
     super(store, route);
-    console.log(this.selectedType);
   }
 
   changeMeasure() {
@@ -51,7 +51,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     const metadata = {
       directory: directory,
       buFileType: BusinessUploadFileType.upload,
-      buUploadType: this.selectedType
+      buUploadType: this.uploadType
     }
 
     this.fsFileService.upload(fileInput.files, metadata)
@@ -63,9 +63,16 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
 
   }
 
-  getSelectedTypeText() {
-    return _.find(this.uploadTypes, {value: this.selectedType}).text;
+  getUploadTypeText() {
+    return _.find(this.uploadTypes, {value: this.uploadType}).text;
   }
 
+  getDownloadUri() {
+    if (!this.templates) {
+      return;
+    }
+    const template = _.find(this.templates, item => _.get(item, 'metadata.buUploadType') === this.uploadType);
+    return `${environment.apiUrl}/api/file/${template.id}`;
+  }
 
 }
