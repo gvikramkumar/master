@@ -5,7 +5,7 @@ import {Subject} from "rxjs/Subject";
 import {ObservableMedia} from "@angular/flex-layout";
 import {StoreUser} from "./store-user";
 import "rxjs/add/operator/first";
-import {StoreProfitability} from './store-profitability';
+import {StoreProfitability} from '../profitability/store/store-profitability';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
 import {NavigationEnd, Router} from '@angular/router';
 
@@ -21,7 +21,9 @@ export class Store extends StoreBase {
   store$ = new BehaviorSubject<Store>(this);
   sub = this.store$.subscribe.bind(this.store$);
   usr: StoreUser;
-  pft: StoreProfitability;
+  // pft: StoreProfitability; //todo: these substores will be isolated from main store??
+  // need to figure this out, these modules may or may not exist, they should have their own store
+  // but also use main store for inter-module communication
   pub() {
     this.store$.next(this);
     super.pub();
@@ -67,7 +69,7 @@ export class Store extends StoreBase {
   init() {
     this.store = this;
     this.usr = new StoreUser(this);
-    this.pft = new StoreProfitability(this);
+    // this.pft = new StoreProfitability(this);
 
     this.media.asObservable()
       .first()

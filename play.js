@@ -1,24 +1,14 @@
+const _ = require('lodash');
+const arr = [
+  {addr: {street: 'lovell'}},
+  {addr: {street: 'pinecrest'}}
+];
+
+console.log(_.find(arr, item => _.get(item, 'addr.street') === 'lovell'))
 
 
 
 
-class TestBase {
-  constructor(name) {
-    this.name = 'dank';
-  }
-
-  print() {
-    console.log('this.name:', this.name);
-  }
-}
-
-class Test extends TestBase {
-  constructor(name) {
-    super(name)
-  }
-}
-
-new Test().print();
 
 
 

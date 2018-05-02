@@ -1,12 +1,12 @@
 const mg = require('mongoose'),
-  RepoBase = require('../../../lib/common/repo-base');
+  RepoBase = require('../../../lib/base-classes/repo-base');
 
 const schema = new mg.Schema(
   {
     key: {type: Number, required: true},
     name: {type: String, required: true}
   },
-  {collection: 'submeasure_list'}
+  {collection: 'submeasure'}
 );
 
 module.exports = class SubmeasureRepo extends RepoBase {

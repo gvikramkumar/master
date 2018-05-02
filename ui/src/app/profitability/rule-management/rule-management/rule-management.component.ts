@@ -4,7 +4,7 @@ import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
-import {AllocationRule} from '../../../store/models/profitability/allocation-rule';
+import {AllocationRule} from '../../store/models/allocation-rule';
 import * as moment from 'moment';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '../../../store/store';
@@ -22,7 +22,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   rulesCount: Number = 0;
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
-  tableColumns = ['name', 'period', 'driverName', 'updatedBy', 'updateDate'];
+  tableColumns = ['name', 'period', 'driverName', 'updatedBy', 'updatedDate'];
   dataSource: MatTableDataSource<AllocationRule>;
 
   constructor(

@@ -1,25 +1,25 @@
 const mg = require('mongoose'),
-  RepoBase = require('../../../lib/common/repo-base');
+  RepoBase = require('../../../lib/base-classes/repo-base');
 
 const schema = new mg.Schema(
   {
     name: {type: String, required: true},
     period: {type: String, required: true},
     driverName: {type: String, required: true},
-    salesMatch: {type: String},
-    productMatch: {type: String},
-    scmsMatch: {type: String},
-    legalEntityMatch: {type: String},
-    beMatch: {type: String},
-    sl1Select: {type: String},
-    scmsSelect: {type: String},
-    beSelect: {type: String},
-    createdBy: {type: String},
-    createdDate: {type: String},
-    updatedBy: {type: String},
-    updatedDate: {type: String}
+    salesMatch: String,
+    productMatch: String,
+    scmsMatch: String,
+    legalEntityMatch: String,
+    beMatch: String,
+    sl1Select: String,
+    scmsSelect: String,
+    beSelect: String,
+    createdBy: String,
+    createdDate: String,
+    updatedBy: String,
+    updatedDate: String
   },
-  {collection: 'allocation_rules'}
+  {collection: 'allocation_rule'}
 );
 
 module.exports = class AllocationRuleRepo extends RepoBase {

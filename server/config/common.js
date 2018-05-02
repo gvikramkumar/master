@@ -3,7 +3,10 @@ module.exports = {
   mongoUri: null,
   postgresUri: null,
   corsOrigin: [],
-  showStack: false
+  showStack: false,
+  fileSizeMax: 50000000, // 50mb
+  fileCountMax: 100
+
   /*
   ssl: {
     key: 'key.pem',

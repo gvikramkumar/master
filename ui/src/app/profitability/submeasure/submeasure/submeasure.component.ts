@@ -9,7 +9,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import {SubmeasureService} from '../../services/submeasure.service';
-import {Submeasure} from '../../../store/models/profitability/submeasure';
+import {Submeasure} from '../../store/models/submeasure';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '../../../store/store';

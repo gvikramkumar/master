@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
 import {HttpClient} from '@angular/common/http';
-import {Submeasure} from '../../store/models/profitability/submeasure';
+import {Submeasure} from '../store/models/submeasure';
 import {environment} from '../../../environments/environment';
 import {RestBase} from '../../core/base-classes/rest-base';
 

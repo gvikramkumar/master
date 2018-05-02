@@ -37,7 +37,7 @@
       <mat-cell *matCellDef="let row"> {{row.updatedBy}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="updateDate">
+    <ng-container matColumnDef="updatedDate">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.updatedDate && moment(row.updatedDate).fromNow()}}</mat-cell>
     </ng-container>

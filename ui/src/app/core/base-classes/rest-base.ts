@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {Store} from '../../store/store';
-import {ModelBase} from '../../store/models/common/model-base';
+import {ModelBase} from '../../store/models/model-base';
 
 const apiUrl = environment.apiUrl;
 

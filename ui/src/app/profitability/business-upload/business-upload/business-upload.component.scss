@@ -1,46 +1,30 @@
-ng-sidebar-container {
-    height: 76vh;
-    /* overflow: auto; */
-    /* background-color: #2b5592; */
-}
 
-ng-sidebar {
-    display: inline-flex;
-}
+.leftnav {
+  min-width: 300px;
 
-ng-sidebar p {
-    padding-left: 14px;
-    padding-right: 14px;
-    /* color: white; */
-}
-
-ng-sidebar a {
-    /* color: white; */
-}
-
-ng-sidebar h3 {
-    padding-left: 14px;
-    padding-right: 14px;
-    padding-top: 14px;
-    /* color: white; */
-}
-
-button {
-    margin: 15px;
-}
-
-.example-radio-group {
+  .example-radio-group {
     display: inline-flex;
     flex-direction: column;
+  }
+
+  .example-radio-button {
+    margin: 15px;
+    font-weight: 400;
+  }
+
+  .example-selected-value {
+    margin: 15px;
+  }
+
 }
 
-    .example-radio-button {
+.file-upload {
+
+  .content {
+  }
+
+  button {
     margin: 15px;
-    font-weight:400;
+  }
 }
 
-    .example-selected-value {
-    margin: 15px;
-    /* padding-left: 15px;
-    padding-right: 15px; */
-}

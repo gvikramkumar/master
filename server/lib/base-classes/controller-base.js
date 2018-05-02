@@ -1,5 +1,5 @@
-const ApiError = require('./api-error'),
-  Validate = require('./validate');
+const ApiError = require('../common/api-error'),
+  Validate = require('../common/validate');
 
 module.exports = class ControllerBase {
 

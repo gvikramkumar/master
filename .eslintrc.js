@@ -15,7 +15,8 @@ module.exports = {
         "no-console": "warn",
         "no-trailing-spaces": "off",
         "dot-location": "off",
-        "no-undefined": "off"
+        "no-undefined": "off",
+        "linebreak-style": "off"
       }
     }
   ],
