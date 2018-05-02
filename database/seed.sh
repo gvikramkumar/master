@@ -13,3 +13,5 @@ mongoimport --host $1 --port $2 --db $3 --collection submeasure_rule --type=csv 
 echo database load complete
 
 mongo --eval "var host='$1', port='$2', _db='$3'" post-data-load.js
+
+node load-files.js

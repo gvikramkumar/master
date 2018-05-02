@@ -14,4 +14,3 @@ echo database load complete
 mongo --eval "var host='%1', port='%2', _db='%3'" post-data-load.js
 
 node load-files.js
-echo done loading files
