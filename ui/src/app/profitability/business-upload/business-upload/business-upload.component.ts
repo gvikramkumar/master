@@ -66,4 +66,6 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   getSelectedTypeText() {
     return _.find(this.uploadTypes, {value: this.selectedType}).text;
   }
+
+
 }

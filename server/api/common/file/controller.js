@@ -41,8 +41,10 @@ module.exports = class FileController {
           next(new ApiError('File not found.', null, 400))
           return;
         }
+        res.set('Content-Type', fileInfo.contentType);
+        res.set('Content-Disposition', 'attachment; filename="' + fileInfo.metadata.fileName + '"');
         const gfs = new GridFSBucket(db);
-        const readStream = gfs.openDownloadStream(id);
+        const readStream = gfs.openDownloadStream(new mongo.ObjectID(id));
         readStream.on('error', next);
         readStream.pipe(res);
       })
