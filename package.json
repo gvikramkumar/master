@@ -12,8 +12,8 @@
     "lint": "eslint server/**/*.js",
     "start": "node server/server.js",
     "watch": "nodemon server/server.js",
-    "unit": "echo \"Error: no test specified\" && exit 1",
-    "e2e": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine",
+    "e2e": "NODE_ENV=unit jasmine",
     "uilint": "cd ui && ng lint",
     "uiserve": "cd ui && ng serve %1 %2",
     "uibuild": "cd ui && ng serve %1 %2",
@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "eslint": "^4.19.1",
+    "jasmine": "^3.1.0",
     "nodemon": "^1.17.3",
     "supertest": "^3.0.0"
   },
