@@ -10,7 +10,7 @@ const apiUrl = environment.apiUrl;
 @Injectable()
 export class RestBase<T extends ModelBase> {
 
-  constructor(private endpointName: string, protected httpClient: HttpClient) {
+  constructor(protected endpointName: string, protected httpClient: HttpClient) {
   }
 
   getMany(): Observable<T[]> {

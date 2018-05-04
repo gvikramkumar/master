@@ -30,7 +30,7 @@ module.exports = class FileRepo {
   }
 
   getMany(params = {}) {
-    return this.  getManyQuery(params).exec();
+    return this.getManyQuery(params).exec();
   }
 
   getManyGroupLatest(params = {}, groupField) {

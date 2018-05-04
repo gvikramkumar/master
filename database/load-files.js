@@ -32,7 +32,10 @@ dbPromise.then(({db, mongo}) => {
       promises.push(promise);
     })
     Promise.all(promises)
-      .then(() => console.log('file upload complete'))
+      .then(() => {
+        console.log('file upload complete');
+        process.exit(0);
+      })
       .catch(err => console.error('file upload failure:', err));
   });
 

@@ -14,7 +14,11 @@ module.exports = class FileController {
     this.repo = new Repo();
   }
 
-  //
+  // 3 ways to go here:
+  // get all: just send in parms
+  // get latest one: getLatest=true query val (uses uploadDate)
+  // group, then get latest of each group: groupField=xxx query val, say groupField=buUploadType
+  // will group by buUploadType and then get latest version of each one
   getInfoMany(req, res, next) {
     if(util.checkParams(req.query, ['directory'], next)) {
       return;
