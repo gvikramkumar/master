@@ -4,7 +4,9 @@ const ApiError = require('../../../lib/common/api-error'),
   db = mg.connection.db,
   mongo = mg.mongo,
   GridFSBucket = mongo.GridFSBucket,
-  Q = require('q');
+  Q = require('q'),
+  util = require('../../../lib/common/util'),
+  _ = require('lodash');
 
 module.exports = class FileController {
 
@@ -12,11 +14,25 @@ module.exports = class FileController {
     this.repo = new Repo();
   }
 
-  // file info gets
+  //
   getInfoMany(req, res, next) {
-    this.repo.getMany(req.query)
-      .then(rules => res.send(rules))
-      .catch(next);
+    if(util.checkParams(req.query, ['directory'], next)) {
+      return;
+    }
+    const params = _.omit(req.query, ['groupField', 'getLatest']);
+    if (req.query.groupField) { // groups then gets latest of each group
+      this.repo.getManyGroupLatest(params, req.query.groupField)
+        .then(items => res.send(items))
+        .catch(next);
+    } else if (req.query.getLatest) {// gets latest "one" of results
+        this.repo.getOneLatest(params)
+          .then(items => res.send(items))
+          .catch(next);
+      } else {
+      this.repo.getMany(req.query)
+        .then(items => res.send(items))
+        .catch(next);
+    }
   }
 
   getInfoOne(req, res, next) {
@@ -52,7 +68,7 @@ module.exports = class FileController {
   }
 
   uploadMany(req, res, next) {
-    return this.repo.getManyIds(req.files.map(file => file.id), req.query)
+    return this.repo.getManyIds(req.files.map(file => file.id))
       .then(files => res.send(files))
       .catch(next);
   }

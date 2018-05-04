@@ -7,7 +7,7 @@ module.exports = function(options) {
   }
   const opts = _.merge(defaults, options);
   return (req, res, next) => {
-    let msg = req.method + ' - ' + req.url.substr(0, 40) + '  ';
+    let msg = req.method + ' - ' + req.url;
     console.log(msg);
     next();
   }}

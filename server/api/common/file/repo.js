@@ -1,6 +1,8 @@
 const mg = require('mongoose'),
   ApiError = require('../../../lib/common/api-error'),
-  _ = require('lodash');
+  _ = require('lodash'),
+  db = mg.connection.db,
+  mongo = mg.mongo;
 
 const schema = mg.Schema({
   length: Number,
@@ -21,29 +23,46 @@ module.exports = class FileRepo {
     this.Model = mg.model('Files', schema);
   }
 
-  // must have a directory, can also have type, limit, skip
-  getMany(params = {}) {
-    const obj = _.omit(params, ['skip', 'limit']);
+  getManyQuery(params) {
     const filter = {};
-    _.forEach(obj, (val, key) => filter['metadata.' + key] = val);
-    const query = this.Model.find(filter);
-    if (params.limit && params.skip !== undefined) {
-      query.skip(Number(params.skip)).limit(Number(params.limit))
-    }
-    return query.exec();
+    _.forEach(params, (val, key) => filter['metadata.' + key] = val);
+    return this.Model.find(filter);
   }
 
-  getManyIds(ids, rq) {
-    const query = this.Model.find({_id: {$in: ids}});
-    if (rq.limit && rq.skip !== undefined) {
-      query.skip(Number(rq.skip)).limit(Number(rq.limit))
-    }
-    return query.exec();
+  getMany(params = {}) {
+    return this.  getManyQuery(params).exec();
+  }
+
+  getManyGroupLatest(params = {}, groupField) {
+    const filter = {};
+    _.forEach(params, (val, key) => filter['metadata.' + key] = val);
+    const coll = db.collection('fs.files');
+    return coll.aggregate([
+      {$match: filter},
+      {$sort: {uploadDate: -1}},
+      {$group: {_id: '$metadata.' + groupField, id: {$first: '$_id'}}},
+      {$project: {_id: '$id'}}
+    ])
+      .toArray().then(arr => {
+        const ids = arr.map(obj => obj._id);
+      return coll.find({_id: {$in: ids}}).sort({[groupField]: 1}).toArray();
+    })
+  }
+
+  getManyIds(ids) {
+    return this.Model.find({_id: {$in: ids}}).exec();
   }
 
   getOne(id) {
     return this.Model.findById(id).exec()
       .then(x => x);
+  }
+
+  getOneLatest(params = {}) {
+    const query = this.getManyQuery(params)
+      .sort({uploadDate: -1})
+      .limit(1);
+    return query.exec();
   }
 
 }
