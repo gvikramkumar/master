@@ -1,5 +1,6 @@
 const {Duplex} = require('stream'),
-  {Buffer} = require('buffer');
+  {Buffer} = require('buffer'),
+  ApiError = require('./api-error');
 
 module.exports = {
   streamToBuffer,
@@ -23,7 +24,7 @@ function bufferToStream(buffer) {
   return stream;
 }
 
-function checkParams(obj, arrProps, message) {
+function checkParams(obj, arrProps, next) {
   const missing = [];
   arrProps.forEach(prop => {
     if (obj[prop] === undefined) {
@@ -31,7 +32,9 @@ function checkParams(obj, arrProps, message) {
     }
   });
   if (missing.length) {
-    return new ApiError(`Missing parameters: ${missing.join(', ')}` , obj, 400);
+    const err = new ApiError(`Missing parameters: ${missing.join(', ')}`, obj, 400);
+    next(err);
+    return true;
   }
-  return null;
+  return false;
 }

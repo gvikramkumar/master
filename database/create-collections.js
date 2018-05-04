@@ -7,6 +7,8 @@ var db = conn.getDB(_db);
 
 
 const collections = [
+  'fs.chuncks',
+  'fs.files',
   'allocation_rule',
   'module',
   'submeasure',
@@ -18,12 +20,11 @@ collections.forEach(coll => {
   db.getCollection(coll).drop();
   db.createCollection(coll);
 });
-// drop the file system
-db.getCollection('fs.chuncks').drop();
-db.getCollection('fs.files').drop();
 
 // add indexes
 // todo: add appropriate indexes on all collections
+db.getCollection('fs.files').createIndex('metadata.directory');
+
 
 print('create-collections complete');
 

@@ -10,7 +10,7 @@ module.exports = class ControllerBase {
 
   getMany(req, res, next) {
     this.repo.getMany(req.query.limit, req.query.skip)
-      .then(rules => res.send(rules))
+      .then(items => res.send(items))
       .catch(next);
   }
 
