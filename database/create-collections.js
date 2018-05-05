@@ -23,7 +23,7 @@ collections.forEach(coll => {
 
 // add indexes
 // todo: add appropriate indexes on all collections
-db.getCollection('fs.files').createIndex('metadata.directory');
+db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 
 
 print('create-collections complete');
