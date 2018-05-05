@@ -39,7 +39,8 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   ngOnInit() {
     this.fsFileService.getInfoMany({
       directory: Directory.businessUpload,
-      buFileType: 'template'
+      buFileType: 'template',
+      groupField: 'buUploadType'
     }).subscribe(templates => this.templates = templates)
   }
 
