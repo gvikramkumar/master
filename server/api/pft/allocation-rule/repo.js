@@ -29,20 +29,15 @@ module.exports = class AllocationRuleRepo extends RepoBase {
     super(schema, 'Rule');
   }
 
-  getManyLatest(limit, skip) {
-    const coll = db.collection('allocation_rule');
-    return coll.aggregate([
-      {$sort: {uploadDate: -1}},
+  getManyLatest() {
+    return this.Model.aggregate([
+      {$sort: {updatedDate: -1}},
       {$group: {_id: '$name', id: {$first: '$_id'}}},
       {$project: {_id: '$id'}}
     ])
-      .toArray().then(arr => {
+      .then(arr => {
         const ids = arr.map(obj => obj._id);
-        const cursor = coll.find({_id: {$in: ids}}).sort({name: 1});
-        if (limit && skip) {
-          cursor.skip(+skip).limit(+limit);
-        }
-        return cursor.toArray();
+        return this.Model.find({_id: {$in: ids}}).exec();
       });
   }
 }
