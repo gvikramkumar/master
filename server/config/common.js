@@ -4,8 +4,8 @@ module.exports = {
   postgresUri: null,
   corsOrigin: [],
   showStack: false,
-  fileSizeMax: 50000000, // 50mb
-  fileCountMax: 100
+  fileSizeMax: 10000000, // 10mb
+  fileCountMax: 1 // limit file count and size for dos attacks
 
   /*
   ssl: {

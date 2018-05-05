@@ -36,16 +36,14 @@ module.exports = class FileRepo {
   getManyGroupLatest(params = {}, groupField) {
     const filter = {};
     _.forEach(params, (val, key) => filter['metadata.' + key] = val);
-    const coll = db.collection('fs.files');
-    return coll.aggregate([
+    return this.Model.aggregate([
       {$match: filter},
       {$sort: {uploadDate: -1}},
       {$group: {_id: '$metadata.' + groupField, id: {$first: '$_id'}}},
       {$project: {_id: '$id'}}
-    ])
-      .toArray().then(arr => {
+    ]).then(arr => {
         const ids = arr.map(obj => obj._id);
-      return coll.find({_id: {$in: ids}}).sort({[groupField]: 1}).toArray();
+      return this.Model.find({_id: {$in: ids}}).sort({[groupField]: 1});
     })
   }
 

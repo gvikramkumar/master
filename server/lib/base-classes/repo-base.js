@@ -15,12 +15,8 @@ module.exports = class RepoBase {
     this.Model = mg.model(modelName, schema);
   }
 
-  getMany(limit, skip) {
-    const query = this.Model.find();
-    if (limit && skip !== undefined) {
-      query.skip(Number(skip)).limit(Number(limit))
-    }
-    return query.exec();
+  getMany() {
+    return this.Model.find().exec();
   }
 
   getOne(id) {
