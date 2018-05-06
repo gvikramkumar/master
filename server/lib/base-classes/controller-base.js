@@ -3,9 +3,8 @@ const ApiError = require('../common/api-error'),
 
 module.exports = class ControllerBase {
 
-  constructor(repo, schema) {
+  constructor(repo) {
     this.repo = repo;
-    this.schema = schema;
   }
 
   getMany(req, res, next) {
@@ -29,10 +28,6 @@ module.exports = class ControllerBase {
 
   add(req, res, next) {
     const data = req.body;
-    const error = Validate.validateObject(data, this.schema);
-    if (error) {
-      throw error;
-    }
     this.repo.add(data, req.user.userName)
       .then(item => res.send(item))
       .catch(next);
@@ -41,21 +36,10 @@ module.exports = class ControllerBase {
   update(req, res, next)
   {
     const data = req.body;
-    this.verifyProperties(data, ['id', 'timestamp']);
-    if (req.params.id !== data.id) {
-      throw new ApiError('Body id doesn\'t match url id.', data, 400)
-    }
-    const error = Validate.validateObject(data, this.schema);
-    if (error) {
-      throw error;
-    }
+    this.verifyProperties(data, ['id']);
     this.repo.update(data, req.user.userName)
       .then(item => {
-        if (item) {
           res.send(item);
-        } else {
-          res.sendStatus(404);
-        }
       })
       .catch(next)
   }

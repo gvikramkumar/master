@@ -5,7 +5,18 @@ const {Duplex} = require('stream'),
 module.exports = {
   streamToBuffer,
   bufferToStream,
-  checkParams
+  checkParams,
+  setSchemaAdditions
+}
+
+function setSchemaAdditions(schema) {
+  schema.set('toObject', {
+    getters: true,
+    transform: (doc, ret, options) => {
+      delete ret._id;
+      return ret;
+    }
+  });
 }
 
 function streamToBuffer(stream) {
@@ -38,3 +49,4 @@ function checkParams(obj, arrProps, next) {
   }
   return false;
 }
+

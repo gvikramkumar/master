@@ -1,17 +1,13 @@
 const mg = require('mongoose'),
   ApiError = require('../common/api-error'),
-  _ = require('lodash');
+  _ = require('lodash'),
+  util = require('../common/util');
 
 module.exports = class RepoBase {
 
   constructor(schema, modelName) {
     this.schema = schema;
-    schema.add({timestamp: 'number'});
-    schema.path('timestamp').required(true);
-    schema.set('toObject', {virtuals: true});
-    schema.virtual('id').get(function() {
-      return this._id.toString();
-    });
+    util.setSchemaAdditions(this.schema);
     this.Model = mg.model(modelName, schema);
   }
 
@@ -25,11 +21,19 @@ module.exports = class RepoBase {
   }
 
   getOneWithTimestamp(data) {
-    return this.Model.findOne({_id: data.id, timestamp: data.timestamp}).exec()
+    const query = this.Model.findOne({_id: data.id});
+    if (data.updatedDate) {
+      query.where({updatedDate: data.updatedDate});
+    }
+      return query.exec()
       .then(item => {
-        if (!item) {
+        if (!item && data.updatedDate) {
           const err = new ApiError('Concurrency error, please refresh your data.', null, 400);
           err.name = 'ConcurrencyError';
+          throw(err);
+        }
+        else if (!item) {
+          const err = new ApiError('Item not found, please refresh your data.', null, 400);
           throw(err);
         }
         return item;
@@ -43,13 +47,12 @@ module.exports = class RepoBase {
     const item = new this.Model(data);
     if (this.schema.path('createdBy')) {
       item.createdBy = userName;
-      item.createdDate = new Date().toISOString();
+      item.createdDate = new Date();
     }
     if (this.schema.path('updatedBy')) {
       item.updatedBy = userName;
-      item.updatedDate = new Date().toISOString();
+      item.updatedDate = new Date();
     }
-    item.timestamp = Date.now();
     return item.save();
   }
 
@@ -61,16 +64,30 @@ module.exports = class RepoBase {
         delete item.id;
         if (this.schema.path('updatedBy')) {
           item.updatedBy = userName;
-          item.updatedDate = new Date().toISOString();
+          item.updatedDate = new Date();
         }
-        item.timestamp = Date.now();
         return item.save()
       });
   }
 
   remove(id) {
     return this.getOne(id)
-      .then(item => item.remove());
+      .then(item => {
+      if (!item) {
+          const err = new ApiError('Item not found, please refresh your data.', null, 400);
+          throw(err);
+        }
+        return item.remove();
+      });
+  }
+
+  // a way to validate early from the controller. Say your controller updates 2 things in database
+  // and second one fails validation... could mess things up. In that case, validate both early in
+  // controller to know beforehand. Also, mongoose update doesn't call validate, only save(), in that case,
+  // you'll have to call it yourself.
+  validate(data) {
+    const item = new this.Model(data);
+    return item.validateSync(data); // if(repo.validate(data)) >>  then have an error
   }
 
 }
