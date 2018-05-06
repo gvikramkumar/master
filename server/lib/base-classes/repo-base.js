@@ -45,13 +45,14 @@ module.exports = class RepoBase {
     delete data._id;
     delete data.id;
     const item = new this.Model(data);
+    const date = new Date();
     if (this.schema.path('createdBy')) {
       item.createdBy = userName;
-      item.createdDate = new Date();
+      item.createdDate = date;
     }
     if (this.schema.path('updatedBy')) {
       item.updatedBy = userName;
-      item.updatedDate = new Date();
+      item.updatedDate = date;
     }
     return item.save();
   }

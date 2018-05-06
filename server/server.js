@@ -6,9 +6,6 @@ const config = require('./config/get-config'),
   fs = require('fs'),
   mg = require('mongoose'),
   dbPromise = require('./mongoose-conn');
-// morgan = require('morgan'),
-// docsRouter = require('./docs/_router'),
-// authenticate = require('./api/login/_authenticate'),
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
