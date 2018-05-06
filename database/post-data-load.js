@@ -13,18 +13,13 @@ const collectionsWithCreatedUpdated = [
   'submeasure_rule'
 ];
 
-// add timestamps
-const timestamp = Date.now();
-collections.forEach(coll => {
-  db.getCollection(coll).updateMany({}, {$set: {timestamp: NumberInt(timestamp)}});
-});
-const isoDate = new Date().toISOString();
+const date = new Date();
 collectionsWithCreatedUpdated.forEach(coll => {
   db.getCollection(coll).updateMany({}, {$set: {
       createdBy: '',
-      createdDate: isoDate,
+      createdDate: date,
       updatedBy: '',
-      updatedDate: isoDate
+      updatedDate: date
   }});
 });
 

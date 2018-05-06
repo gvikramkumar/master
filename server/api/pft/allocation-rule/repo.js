@@ -17,9 +17,9 @@ const schema = new mg.Schema(
     scmsSelect: String,
     beSelect: String,
     createdBy: String,
-    createdDate: String,
+    createdDate: Date,
     updatedBy: String,
-    updatedDate: String
+    updatedDate: Date
   },
   {collection: 'allocation_rule'}
 );

@@ -2,19 +2,17 @@ const mg = require('mongoose'),
   ApiError = require('../../../lib/common/api-error'),
   _ = require('lodash'),
   db = mg.connection.db,
-  mongo = mg.mongo;
+  mongo = mg.mongo,
+  util = require('../../../lib/common/util');
 
 const schema = mg.Schema({
   length: Number,
-  uploadDate: String,
+  uploadDate: Date,
   filename: String,
   contentType: String,
   metadata: Object
 }, {collection: 'fs.files'});
-schema.set('toObject', {virtuals: true});
-schema.virtual('id').get(function() {
-  return this._id.toString();
-});
+util.setSchemaAdditions(schema);
 
 // this is for fs.files only (file info gets)
 module.exports = class FileRepo {
