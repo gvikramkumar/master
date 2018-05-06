@@ -13,7 +13,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 // connect mongoose, wait for connection before running middleware
-dbPromise.then(({db, mongo}) => {
+dbPromise.then(() => {
 
     const app = require('./express-setup');
 
@@ -30,15 +30,26 @@ dbPromise.then(({db, mongo}) => {
       protocol = 'http';
       server = http.createServer(app);
     }
+
+    server.on('close', (e) => {
+      mg.connection.close();
+    });
+
     return server.listen(port, function (err) {
       if (err) {
+        console.error('server listen creation error:', err);
+        mg.connection.close();
         throw(err);
       }
       console.log(`${protocol} server listening on ${port}`);
     })
-  },
-  err => console.log(`mongoose connection error: ${config.mongoUri}`, err)
-);
+  }
+)
+  .catch(err => {
+    console.error('server creation error:', err);
+    mg.connection.close();
+    process.exit(0);
+  });
 
 
 

@@ -13,8 +13,11 @@ const dbPromise = mg.connect(config.mongoUri, options)
   .then(() => {
       console.log(`mongoose connected on: ${config.mongoUri}`);
       return {db: mg.connection.db, mongo: mg.mongo};
-    },
-    err => console.log(`mongoose connection error: ${config.mongoUri}`, err));
+    })
+  .catch(err => {
+    console.error(`mongoose connection error: ${config.mongoUri}`, err);
+    return Promise.reject(err);
+  });
 
 module.exports = dbPromise;
 
