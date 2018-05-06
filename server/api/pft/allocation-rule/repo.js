@@ -5,7 +5,7 @@ const mg = require('mongoose'),
 
 const schema = new mg.Schema(
   {
-    name: {type: String, required: true},
+    name: {type: String, required: true, trim: true},
     period: {type: String, required: true},
     driverName: {type: String, required: true},
     salesMatch: String,
