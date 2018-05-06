@@ -12,7 +12,7 @@ const options = {
 const dbPromise = mg.connect(config.mongoUri, options)
   .then(() => {
       console.log(`mongoose connected on: ${config.mongoUri}`);
-      return {db: mg.connection.db, mongo: mg.mongo};
+      mg.connection.on('disconnected', () => console.log('mongoose disconnected'));
     })
   .catch(err => {
     console.error(`mongoose connection error: ${config.mongoUri}`, err);
