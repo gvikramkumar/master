@@ -16,7 +16,7 @@ const caseInsensitiveCollections = [
 caseInsensitiveCollections.forEach(coll => {
   db.getCollection(coll).drop();
   // this collation makes our indexes and find() calls case insensitive, search for john and get John as well
-  db.createCollection(coll, {collation: {locale: 'en_US', strength: 1}});
+  db.createCollection(coll, {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});
 });
 
 const fileCollections = [
