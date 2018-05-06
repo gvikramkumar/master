@@ -3,10 +3,8 @@ const config = require('./config/get-config'),
   path = require('path'),
   express = require('express'),
   bodyParser = require('body-parser'),
-  // morgan = require('morgan'),
+  morgan = require('morgan'),
   cookieParser = require('cookie-parser'),
-  // docsRouter = require('./docs/_router'),
-  // authenticate = require('./api/login/_authenticate'),
   cors = require('cors'),
   ApiError = require('./lib/common/api-error'),
   notFound = require('./lib/middleware/not-found'),
@@ -35,9 +33,7 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use(logger({mode: 'short'}));
-// app.use(morgan('dev'));
-
+app.use(morgan('dev'));
 // test endpoints
 app.get('/cause-error', function (req, res) {
   // const err = new Error('basic error');
