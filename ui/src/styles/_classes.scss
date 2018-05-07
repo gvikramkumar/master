@@ -1,6 +1,9 @@
 @import '_variables';
 @import '_mixins';
 
+.fin-auth-hide {
+  display: none !important;
+}
 
 .custom-file-upload {
   border: 1px solid #ccc;
