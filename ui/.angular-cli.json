@@ -19,7 +19,8 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "fin",
       "styles": [
-        "styles.scss"
+        "styles.scss",
+        "assets/custom-theme.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
