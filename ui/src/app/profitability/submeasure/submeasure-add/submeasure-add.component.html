@@ -14,7 +14,7 @@
       </div>
       <div style="width: 100%; display: table;">
           <div style="display: table-row">
-              <div style="width: 600px; display: table-cell;"><cui-input class="switch" type="switch" [(model)]="switch_ibe" label="Internal Business Entity" (modelChange)="ibeChange()"></cui-input></div>
+              <div style="width: 600px; display: table-cell;"><cui-input class="switch" type="switch" [(model)]="switch_ibe" label="Internal Business Entity" (modelChange)="ibeChange()" [disabled]="true"></cui-input></div>
               <div style="display: table-cell;"><cui-select [hidden]="ibe_hidden" class= "option" [items]="ibe_items" label="Select an item" (modelChange)="test()"></cui-select></div>
           </div>
       </div>

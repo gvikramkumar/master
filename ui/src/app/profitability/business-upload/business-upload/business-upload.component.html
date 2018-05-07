@@ -7,7 +7,7 @@
     </mat-radio-group>
   </div>
 
-  <div class="file-upload" outline fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center start">
+  <div class="file-upload" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center start">
     <div class="content " fxFlex="1 1 60%">
       <div class="example-selected-value"> {{getUploadTypeText()}}</div>
       <br>
@@ -16,10 +16,10 @@
           <input matInput placeholder="Input">
         </mat-form-field> -->
         <div>
-          <label class="custom-file-upload" tabindex="0">
-            <input #fileInput type="file" placeholder="Upload file" accept=".csv,.xlsx" (change)="$event"><br>
-            Choose File
-          </label>
+          <button mat-raised-button color="accent">
+            <label for="file-input">Choose a File</label>
+          </button>
+          <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".csv,.xlsx" (change)="$event" class="ng-hide"><br>
         </div>
         <div *ngIf="fileInput.files.length">
           <div *ngFor="let file of fileInput.files">{{file.name}}</div>
@@ -28,7 +28,7 @@
         <!--should use a toastr for thiss instead-->
         <div *ngIf="fileUploaded">File Uploaded...</div>
         <br>
-        <a [href]="getDownloadUri()">download template</a>
+        <a [href]="getDownloadUri()">Download Template</a>
       </div>
     </div>
   </div>
