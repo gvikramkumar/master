@@ -40,31 +40,31 @@ module.exports = class RepoBase {
       });
   }
 
-  add(data, userName) {
+  add(data, userId) {
     // if versioning items, our edits will actually be adds, so dump the ids in that case
     delete data._id;
     delete data.id;
     const item = new this.Model(data);
     const date = new Date();
     if (this.schema.path('createdBy')) {
-      item.createdBy = userName;
+      item.createdBy = userId;
       item.createdDate = date;
     }
     if (this.schema.path('updatedBy')) {
-      item.updatedBy = userName;
+      item.updatedBy = userId;
       item.updatedDate = date;
     }
     return item.save();
   }
 
-  update(data, userName) {
+  update(data, userId) {
     return this.getOneWithTimestamp(data)
       .then(item => {
         _.merge(item, data);
         delete item._id;
         delete item.id;
         if (this.schema.path('updatedBy')) {
-          item.updatedBy = userName;
+          item.updatedBy = userId;
           item.updatedDate = new Date();
         }
         return item.save()
