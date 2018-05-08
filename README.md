@@ -2,21 +2,22 @@
 #### Digital Finance Allocations  
   
 ### setup
-0.1 unix: add to your .bashrc or .bash_profile: "export PATH=./node_modules/.bin:$PATH"  
+* unix: add to your .bashrc or .bash_profile: "export PATH=./node_modules/.bin:$PATH"  
 windows: add to your PATH variable: ".\node_modules\\.bin"  
 this makes your node_modules executables available to you if you're in the site root. Npm scripts will do that for you when you run them, say "npm run watch" will run nodemon, but if you tried running nodemon without npm at site route (without this change), it wouldn't find it.
-0.2 put mongodb on your machine (unless you're pointing elsewhere, if pointing elsewhere, then you'll have to update the appropriate environment config file in /server/config directory mongoUri property.
+* put mongodb on your machine (unless you're pointing elsewhere, if pointing elsewhere, then you'll have to update the appropriate environment config file in /server/config directory mongoUri property.
                                      
 assume site root unless specified otherwise
-1. git clone https://dakahle@gitscm.cisco.com/scm/it-cvc-ciscocommerce-findfaapp/fin-dfa.git
-2. creates a fin-dfa directory >> cd fin-dfa
-3. npm install
-4. cd ui
-5. npm install (separate install for ui)
-6. npm run seedbat for windows and seedsh for max/linux (creates the fin-dfa database locally) OR npm run seedbatdev/seedshdev for our shared dev database. I haven't tested mac or either dev versions. Windows version works
-7. npm start // starts server on http://localhost:3002 (configurable in server/config/dev.json)
-8. cd ui, ng serve // starts the ui on http://localhost:4200
-9. enter http://localhost:4200 in the browser to bring the landing page up
+1. git clone https://gitscm.cisco.com/scm/it-cvc-ciscocommerce-findfaapp/fin-dfa.git
+2. creates a fin-dfa directory >> cd fin-dfa  
+3. "npm set registry http://swtg-npm.cisco.com" // change npm registry to point to cisco internal npm registry
+4. npm install
+5. cd ui
+6. npm install (separate install for ui)
+7. npm run seedbat for windows and seedsh for max/linux (creates the fin-dfa database locally) OR npm run seedbatdev/seedshdev for our shared dev database. I haven't tested mac or either dev versions. Windows version works
+8. npm start // starts server on http://localhost:3002 (configurable in server/config/dev.json)
+9. cd ui, ng serve // starts the ui on http://localhost:4200
+10. enter http://localhost:4200 in the browser to bring the landing page up
 
 #### config
 **server config:**  
