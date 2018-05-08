@@ -29,7 +29,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   ];
   uploadType = this.uploadTypes[0].value;
 
-  constructor(private store: Store, private route: ActivatedRoute, private fsFileService: FsFileService) {
+  constructor(public store: Store, private route: ActivatedRoute, private fsFileService: FsFileService) {
     super(store, route);
   }
 

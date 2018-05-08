@@ -13,14 +13,18 @@ export class AuthorizationGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const roles = next.data.authorization;
-    // console.log('auth guard', `roles: ${roles}`, `path: ${next.pathFromRoot.map(x => x.url.toString())}`);
-/*
-    if (!roles || !roles.length) {
-      console.error(`No authorization roles for route: ${next.url}.`);
+    const path = `path: ${next.pathFromRoot.map(x => x.url.toString())}`;
+    // console.log('auth guard', `roles: ${roles}`, path);
+    if (!roles) {
+      console.error(`No authorization roles for route: ${path}`);
       return false;
     }
-*/
-    return this.store.user.isAuthorized(roles);
+    const authorized = this.store.user.isAuthorized(roles);
+    if (!authorized) {
+      console.error('User not authorized for path:', path);
+      return false;
+    }
+    return true;
   }
 
 }

@@ -1,4 +1,4 @@
-import { AuthDirective } from './auth-show.directive';
+import { AuthDirective } from './auth.directive';
 
 describe('AuthDirective', () => {
   it('should create an instance', () => {

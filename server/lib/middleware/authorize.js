@@ -6,7 +6,7 @@ module.exports = function(allowedRoles) {
       next();
     } else {
       const err = new ApiError('Not authorized', null, 401);
-      err.name = 'NotAuthorized';
+      err.name = 'AuthorizationError';
       next(err);
     }
   }

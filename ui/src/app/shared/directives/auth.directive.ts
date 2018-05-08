@@ -2,17 +2,18 @@ import {AfterViewInit, Directive, ElementRef, Input, OnChanges, OnInit} from '@a
 import {Store} from '../../store/store';
 
 @Directive({
-  selector: '[finAuthHide]'
+  selector: '[finAuth]'
 })
-export class AuthHideDirective implements OnInit  {
-@Input('finAuthHide') roles;
+export class AuthDirective implements OnInit  {
+@Input('finAuth') roles;
 
   constructor(private store: Store, private elem: ElementRef) {
   }
 
   ngOnInit() {
-    if (this.store.user.isAuthorized(this.roles)) {
+    if (!this.store.user.isAuthorized(this.roles)) {
       this.elem.nativeElement.classList.add('fin-auth-hide');
     }
   }
+
 }

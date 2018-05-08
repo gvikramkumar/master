@@ -1,12 +1,13 @@
 const express = require('express'),
   router = express.Router(),
-  SubmeasureController = require('./controller');
+  SubmeasureController = require('./controller'),
+  authorize = require('../../../lib/middleware/authorize');
 
 const ctrl = new SubmeasureController();
 
 module.exports = router
   .get('/', ctrl.getMany.bind(ctrl))
-  .post('/', ctrl.add.bind(ctrl))
+  .post('/', authorize('api:manage'), ctrl.add.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))
-  .put('/:id', ctrl.update.bind(ctrl))
-  .delete('/:id', ctrl.remove.bind(ctrl))
+  .put('/:id', authorize('api:manage'), ctrl.update.bind(ctrl))
+  .delete('/:id', authorize('api:manage'), ctrl.remove.bind(ctrl))

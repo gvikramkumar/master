@@ -13,7 +13,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     data: {
-      authorization: []
+      authorization: 'dfa:access'
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },
@@ -21,7 +21,7 @@ const routes: Routes = [
     path: 'pft',
     loadChildren: 'app/profitability/profitability.module#ProfitabilityModule',
     data: {
-      authorization: []
+      authorization: 'pft:access'
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },
