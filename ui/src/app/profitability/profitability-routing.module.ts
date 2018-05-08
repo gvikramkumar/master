@@ -23,7 +23,7 @@ const routes: Routes = [
             path: '', component: SubmeasureComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: [],
+              authorization: 'pft-sm:access',
               hero: {
                 title: 'Profitability: Sub-Measures',
                 desc: 'Create and update sub-measures for profitability group'
@@ -35,7 +35,7 @@ const routes: Routes = [
             path: 'add', component: SubmeasureAddComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: [],
+              authorization: 'pft-sm:manage',
               hero: {
                 title: 'Profitability: Add a New Sub-Measure',
                 desc: 'Add new sub-measure for Profitability group'
@@ -47,7 +47,7 @@ const routes: Routes = [
             path: 'upload', component: SubmeasureUploadComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: [],
+              authorization: 'pft-sm:manage',
               hero: {
                 title: 'Profitability: Upload a New Sub-Measure',
                 desc: 'Upload new sub-measure for Profitability group'
@@ -64,7 +64,7 @@ const routes: Routes = [
             path: '', component: RuleManagementComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: [],
+              authorization: 'pft-rm:access',
               hero: {
                 title: 'Profitability: Rule Management',
                 desc: 'Create and update rules for Profitability group'
@@ -76,7 +76,7 @@ const routes: Routes = [
             path: 'add', component: RuleManagementEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: [],
+              authorization: 'pft-rm:manage',
               hero: {
                 title: 'Profitability: Create New Rule',
                 desc: 'Create a new rule for Profitability group'
@@ -88,7 +88,7 @@ const routes: Routes = [
             path: 'edit/:id', component: RuleManagementEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: [],
+              authorization: 'pft-rm:manage',
               hero: {
                 title: 'Profitability: Update Rule',
                 desc: 'Update the selected rule'
@@ -100,7 +100,7 @@ const routes: Routes = [
             path: 'assign', component: RuleManagementAssignComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: [],
+              authorization: 'pft-rm:manage',
               hero: {
                 title: 'Profitability: Assign Rule',
                 desc: 'Assign rule for Profitability group'
@@ -114,7 +114,7 @@ const routes: Routes = [
         path: 'business-upload', component: BusinessUploadComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: [],
+          authorization: 'pft-bu:access',
           hero: {
             title: 'Profitability: Business Uploads',
             desc: 'Perform bulk uploads'

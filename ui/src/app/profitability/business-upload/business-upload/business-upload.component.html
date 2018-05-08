@@ -15,18 +15,23 @@
         <!-- <mat-form-field>
           <input matInput placeholder="Input">
         </mat-form-field> -->
-        <div>
-          <button mat-raised-button color="accent">
-            <label for="file-input">Choose a File</label>
-          </button>
-          <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".csv,.xlsx" (change)="$event" class="ng-hide"><br>
+        <div finAuth="pft-bu:upload">
+          <div>
+            <button mat-raised-button color="accent">
+              <label for="file-input">Choose a File</label>
+            </button>
+            <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".csv,.xlsx"
+                   (change)="$event" class="ng-hide"><br>
+          </div>
+          <div *ngIf="fileInput.files.length">
+            <div *ngFor="let file of fileInput.files">{{file.name}}</div>
+            <div>
+              <button (click)="uploadFile(fileInput)">Upload File</button>
+            </div>
+          </div>
+          <!--should use a toastr for thiss instead-->
+          <div *ngIf="fileUploaded">File Uploaded...</div>
         </div>
-        <div *ngIf="fileInput.files.length">
-          <div *ngFor="let file of fileInput.files">{{file.name}}</div>
-          <div><button (click)="uploadFile(fileInput)">Upload File</button></div>
-        </div>
-        <!--should use a toastr for thiss instead-->
-        <div *ngIf="fileUploaded">File Uploaded...</div>
         <br>
         <a [href]="getDownloadUri()">Download Template</a>
       </div>

@@ -2,7 +2,7 @@ import {AfterViewInit, Directive, ElementRef, Input, OnChanges, OnInit} from '@a
 import {Store} from '../../store/store';
 
 @Directive({
-  selector: '[finAuthShow]'
+  selector: '[finAuth]'
 })
 export class AuthDirective implements OnInit  {
 @Input('finAuth') roles;
