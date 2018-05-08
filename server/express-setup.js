@@ -13,7 +13,8 @@ const config = require('./config/get-config'),
   moduleRouter = require('./api/common/module/router'),
   allocationRuleRouter = require('./api/pft/allocation-rule/router'),
   submeasureRouter = require('./api/pft/submeasure/router'),
-  fileRouter = require('./api/common/file/router');
+  fileRouter = require('./api/common/file/router'),
+  User = require('./lib/models/user');
 
 
 // start express
@@ -26,8 +27,8 @@ var corsOptions = {
 }
 app.use(cors(corsOptions));
 app.use(function(req, res, next) {
-  //todo: placeholder for req.user.userName till security is in
-  req.user = {userName: 'dank'};
+  //todo: placeholder for req.user.id till security is in
+  req.user = new User('jodoe', 'John Doe', []);
   next();
 })
 app.use(bodyParser.json());

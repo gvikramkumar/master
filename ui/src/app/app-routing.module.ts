@@ -6,17 +6,24 @@ import {CoreModule} from "./core/core.module";
 import {HomeComponent} from './shared/components/home/index';
 import {Store} from './store/store';
 import {PageNotFoundComponent} from './shared/components/page-not-found/page-not-found.component';
+import {AuthorizationGuard} from './core/guards/authorization.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    canActivate: [InitializationGuard]
+    data: {
+      authorization: []
+    },
+    canActivate: [InitializationGuard, AuthorizationGuard]
   },
   {
     path: 'pft',
     loadChildren: 'app/profitability/profitability.module#ProfitabilityModule',
-    canActivate: [InitializationGuard]
+    data: {
+      authorization: []
+    },
+    canActivate: [InitializationGuard, AuthorizationGuard]
   },
   {path: '**', component: PageNotFoundComponent}
 ];

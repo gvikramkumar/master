@@ -10,6 +10,7 @@ import {Subject} from 'rxjs/Subject';
 import {BreakpointService} from "../services/common/breakpoint.service";
 import {ModuleService} from '../services/common/module.service';
 import {TestService} from '../services/common/test.service';
+import {User} from '../../store/models/user';
 
 @Injectable()
 /**
@@ -69,6 +70,8 @@ export class InitializationGuard implements CanActivate {
 
   init() {
     // console.log('initguard start');
+
+    this.store.user = new User('jodoe', "John Doe", []);
 
     Observable.forkJoin(
       // this.userService.getAll(),

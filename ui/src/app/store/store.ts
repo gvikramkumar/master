@@ -1,13 +1,11 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {StoreBase} from "./store-base";
-import {Subject} from "rxjs/Subject";
 import {ObservableMedia} from "@angular/flex-layout";
-import {StoreUser} from "./store-user";
 import "rxjs/add/operator/first";
-import {StoreProfitability} from '../profitability/store/store-profitability';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
-import {NavigationEnd, Router} from '@angular/router';
+import {Router} from '@angular/router';
+import {User} from './models/user';
 
 @Injectable()
 /**
@@ -20,7 +18,9 @@ import {NavigationEnd, Router} from '@angular/router';
 export class Store extends StoreBase {
   store$ = new BehaviorSubject<Store>(this);
   sub = this.store$.subscribe.bind(this.store$);
-  usr: StoreUser;
+  user = new User('jodoe', 'John Doe', []);
+
+
   // pft: StoreProfitability; //todo: these substores will be isolated from main store??
   // need to figure this out, these modules may or may not exist, they should have their own store
   // but also use main store for inter-module communication
@@ -34,10 +34,6 @@ export class Store extends StoreBase {
   leftNavClosed = false;
   initialBreakpoint: string;
   modules = [];
-  user = {
-    displayName: 'John Doe',
-    userName: 'jodoe'
-  }
 
   authenticated$ = new BehaviorSubject<boolean>(this.authenticated);
   subAuthenticated = this.authenticated$.subscribe.bind(this.authenticated$);
@@ -56,7 +52,7 @@ export class Store extends StoreBase {
     "brandingTitle": "",
     "showMobileNav": true,
     "title": "Digitized Financial Allocations",
-    "username": this.user.displayName,
+    "username": this.user.name,
   });
 
 
@@ -68,7 +64,6 @@ export class Store extends StoreBase {
 
   init() {
     this.store = this;
-    this.usr = new StoreUser(this);
     // this.pft = new StoreProfitability(this);
 
     this.media.asObservable()

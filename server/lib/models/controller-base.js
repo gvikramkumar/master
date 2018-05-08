@@ -28,7 +28,7 @@ module.exports = class ControllerBase {
 
   add(req, res, next) {
     const data = req.body;
-    this.repo.add(data, req.user.userName)
+    this.repo.add(data, req.user.id)
       .then(item => res.send(item))
       .catch(next);
   }
@@ -37,7 +37,7 @@ module.exports = class ControllerBase {
   {
     const data = req.body;
     this.verifyProperties(data, ['id']);
-    this.repo.update(data, req.user.userName)
+    this.repo.update(data, req.user.id)
       .then(item => {
           res.send(item);
       })

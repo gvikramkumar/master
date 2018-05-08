@@ -8,7 +8,7 @@ const storage = multerGridFsStorage({
   db: mg.connection.db,
   file: (req, file) => {
     const metadata = {
-      userId: req.user.userName,
+      userId: req.user.id,
       fileName: file.originalname
     }
     Object.assign(metadata, req.body || {});

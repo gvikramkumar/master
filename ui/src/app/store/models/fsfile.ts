@@ -1,7 +1,7 @@
 
 
 class MetaData {
-  userName: string;
+  userId: string;
   directory: string;
 }
 

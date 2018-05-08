@@ -1,5 +1,5 @@
 const mg = require('mongoose'),
-  RepoBase = require('../../../lib/base-classes/repo-base'),
+  RepoBase = require('../../../lib/models/repo-base'),
   db = mg.connection.db;
 
 
