@@ -15,7 +15,7 @@
         <!-- <mat-form-field>
           <input matInput placeholder="Input">
         </mat-form-field> -->
-        <div finAuth="pft-bu:upload">
+        <div finAuth="pft-bu:upload" *ngIf="store.user.isAuthorized('pft-bu:upload')">
           <div>
             <button mat-raised-button color="accent">
               <label for="file-input">Choose a File</label>
