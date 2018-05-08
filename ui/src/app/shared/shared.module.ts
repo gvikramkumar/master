@@ -17,8 +17,7 @@ import {RouterModule} from '@angular/router';
 import {CoreModule} from '../core/core.module';
 import {HomeComponent} from './components/home';
 import {MainComponent} from './components/main/main.component';
-import {AuthShowDirective} from './directives/auth-show.directive';
-import {AuthHideDirective} from './directives/auth-hide.directive';
+import {AuthDirective} from './directives/auth.directive';
 
 @NgModule({
   imports: [
@@ -46,8 +45,7 @@ import {AuthHideDirective} from './directives/auth-hide.directive';
     ErrorModalComponent,
     NotImplementedComponent,
     TrimInputValueAccessor,
-    AuthShowDirective,
-    AuthHideDirective
+    AuthDirective
   ],
 
   declarations: [
@@ -61,8 +59,7 @@ import {AuthHideDirective} from './directives/auth-hide.directive';
     TrimInputValueAccessor,
     HomeComponent,
     MainComponent,
-    AuthShowDirective,
-    AuthHideDirective
+    AuthDirective
   ],
   entryComponents: [
     ErrorModalComponent,

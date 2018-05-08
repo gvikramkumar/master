@@ -14,7 +14,9 @@ const config = require('./config/get-config'),
   allocationRuleRouter = require('./api/pft/allocation-rule/router'),
   submeasureRouter = require('./api/pft/submeasure/router'),
   fileRouter = require('./api/common/file/router'),
-  User = require('./lib/models/user');
+  User = require('./lib/models/user'),
+  authorize = require('./lib/middleware/authorize');
+
 
 
 // start express
@@ -35,21 +37,24 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(morgan('dev'));
-// test endpoints
-app.get('/cause-error', function (req, res) {
-  // const err = new Error('basic error');
-  // const err = new ApiError('api error');
-  const err = new ApiError('api error with data', {some: 'thing'});
-  err.name = 'dank';
-  throw err;
+app.get('/cause-error', function (req, res, next) {
+  if (process.env.NODE_ENV === 'unit') {
+    const err = new ApiError('api error with data', {some: 'thing'});
+    err.name = 'dank';
+    throw err;
+  } else {
+    next();
+  }
 })
-app.get('/crash-site', function (req, res) {
-  process.exit(666);
+app.get('/crash-site', function (req, res, next) {
+  if (process.env.NODE_ENV === 'unit') {
+    process.exit(666);
+  } else {
+    next();
+  }
 })
 
-// app.use(docsRouter);
-// app.use(authenticate());
-// app.use('/api/users', userRouter);
+app.use(authorize('api_access')); // authorize api access
 app.use('/api/module', moduleRouter);
 app.use('/api/allocation-rule', allocationRuleRouter);
 app.use('/api/submeasure', submeasureRouter);

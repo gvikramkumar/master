@@ -4,8 +4,8 @@ import {Store} from '../../store/store';
 @Directive({
   selector: '[finAuthShow]'
 })
-export class AuthShowDirective implements OnInit  {
-@Input('finAuthShow') roles;
+export class AuthDirective implements OnInit  {
+@Input('finAuth') roles;
 
   constructor(private store: Store, private elem: ElementRef) {
   }

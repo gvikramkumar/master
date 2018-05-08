@@ -3,6 +3,11 @@ import * as _ from 'lodash';
 export class User {
 
   constructor(public id: string, public name: string, public roles: string[]) {
+
+    this.roles = [
+      'pft:bu_upload',
+      'pft:bu_access',
+    ]
   }
 
   isAuthorized(_allowedRoles: string) {

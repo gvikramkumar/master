@@ -1,7 +1,9 @@
 const express = require('express'),
   fileRouter = express.Router(),
   FileController = require('./controller'),
-  upload = require('../../../lib/middleware/multer-gridfs');
+  upload = require('../../../lib/middleware/multer-gridfs'),
+  authorize = require('../../../lib/middleware/authorize');
+
 
 const ctrl = new FileController();
 
@@ -11,6 +13,6 @@ module.exports = fileRouter
   .get('/info/:id', ctrl.getInfoOne.bind(ctrl))
 
   // file handlers
-  .delete('/:id', ctrl.remove.bind(ctrl))
+  .delete('/:id', authorize('api_manage'), ctrl.remove.bind(ctrl))
   .get('/:id', ctrl.download.bind(ctrl))
-  .post('/', upload.array('fileUploadField'), ctrl.uploadMany.bind(ctrl))
+  .post('/', authorize('api_manage'), upload.array('fileUploadField'), ctrl.uploadMany.bind(ctrl))
