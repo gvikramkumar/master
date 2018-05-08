@@ -54,7 +54,7 @@ app.get('/crash-site', function (req, res, next) {
   }
 })
 
-app.use(authorize('api_access')); // authorize api access
+app.use(authorize('api:access')); // authorize api access
 app.use('/api/module', moduleRouter);
 app.use('/api/allocation-rule', allocationRuleRouter);
 app.use('/api/submeasure', submeasureRouter);

@@ -8,15 +8,13 @@ module.exports = class User {
     this.roles = roles;
 
     this.roles = [
-      'api_access',
-      'api_manage',
-      'api_admin'
+      'api:access',
+      'api:manage',
+      'api:admin'
     ]
   }
 
   isAuthorized(_allowedRoles) {
-        // we'll use lower case for all roles to avoid case issues: pft-bu:upload_file
-        // module-section:snake_case_role
         const allowedRoles = _allowedRoles.split(',').map(s => s.toLowerCase().trim());
         return _.intersection(allowedRoles, this.roles).length > 0;
   }
