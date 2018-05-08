@@ -1,5 +1,5 @@
 const ModuleRepo = require('./repo'),
-  ControllerBase = require('../../../lib/base-classes/controller-base');
+  ControllerBase = require('../../../lib/models/controller-base');
 
 const repo = new ModuleRepo();
 
