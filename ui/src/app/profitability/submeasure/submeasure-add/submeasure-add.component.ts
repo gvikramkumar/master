@@ -23,6 +23,7 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
   reportingLevel1: string;
   reportingLevel2: string;
 
+  measureName: string;
   measureNames = [
     {
       "name": "Indirect Revenue Adjustments",
@@ -269,6 +270,147 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
     //Logic for when timing is selected
   }
 
+  resetForm() {
+
+    console.log("RESETTING FORM");
+
+    this.subMeasureName = "";
+    this.description = "";
+    this.myModel = "";
+    this.reportingLevel1 = "";
+    this.reportingLevel2 = "";
+
+    this.measureName = null;
+    this.measureNames = [
+      {
+        "name": "Indirect Revenue Adjustments",
+        "value": 1,
+        "selected":false
+      },
+      {
+        "name": "Manufacturing Overhead",
+        "value": 2,
+        "selected":false
+      },
+      {
+        "name": "Manufacturing Supply Chain Expenses",
+        "value": 3,
+        "selected":false
+      },
+      {
+        "name": "Manufacturing V&O",
+        "value": 4,
+        "selected":false
+      },
+      {
+        "name": "Standard COGS Adjustments",
+        "value": 5,
+        "selected":false
+      },
+      {
+        "name": "Warranty",
+        "value": 6,
+        "selected":false
+      }
+    ]
+
+    this.switch_ibe = false;
+    this.ibe_items= [
+      {
+        "name": "Internal BE",
+        "value": 1,
+        "selected": null
+      },
+      {
+        "name": "Internal Sub BE",
+        "value": 2,
+        "selected": null
+      }
+    ]
+    this.switch_le = false;
+    this.le_items= [
+      {
+        "name": "BE",
+        "value": 1,
+        "selected": null
+      }
+    ]
+    this.switch_p = false;
+    this.p_items= [
+      {
+        "name": "TG",
+        "value": 1,
+        "selected": null
+      },
+      {
+        "name": "BU",
+        "value": 2,
+        "selected": null
+      },
+      {
+        "name": "PF",
+        "value": 3,
+        "selected": null
+      },
+      {
+        "name": "PID",
+        "value": 4,
+        "selected": null
+      }
+    ]
+    this.switch_s = false;
+    this.s_items= [
+      {
+        "name": "Level 1",
+        "value": 1,
+        "selected": null
+      },
+      {
+        "name": "Level 2",
+        "value": 2,
+        "selected": null
+      },
+      {
+        "name": "Level 3",
+        "value": 3,
+        "selected": null
+      },
+      {
+        "name": "Level 4",
+        "value": 4,
+        "selected": null
+      },
+      {
+        "name": "Level 5",
+        "value": 5,
+        "selected": null
+      },
+      {
+        "name": "Level 6",
+        "value": 6,
+        "selected": null
+      }
+    ]
+    this.switch_scms = false;
+    this.scms_items = [
+      {
+        "name": "SCMS",
+        "value": 1,
+        "selected": null
+      }
+    ]
+
+    this.ibe_hidden = true;
+    this.le_hidden = true;
+    this.p_hidden = true;
+    this.s_hidden = true;
+    this.scms_hidden = true;
+    this.ibe_br_hidden = false;
+    this.le_br_hidden = false;
+    this.p_br_hidden = false;
+    this.s_br_hidden = false;
+    this.scms_br_hidden = false;
+  }
 
 
 }
