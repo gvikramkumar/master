@@ -1,14 +1,26 @@
-const _ = require('lodash');
+const _ = require('lodash'),
+  Q = require('q');
 
-const a = {};
 
-a['prop1'] = 'you can\'t do that';
-a['prop2'] = 'you can\'t do that';
-console.log(JSON.stringify(a,null,2));
 
-const b = [];
-b.push({prop: 'some prop', error: 'some error'});
-b.push({prop: 'some prop', error: 'some error'});
-console.log(JSON.stringify(b,null,2));
+let chain = Promise.resolve('start');
+[500, 400, 300].forEach(time => {
+  chain = chain.then(val => {
+    return new Promise((res, rej) => {
+      console.log('start', time, val);
+      setTimeout(() => {
+        console.log('res', time);
+        res(val + time);
+      }, time)
+    })
+      .then(() => {
+        throw new Error('bad2');
+      })
+  })
+})
+
+chain
+  .then(x => console.log(x))
+  .catch(err => console.log('myerr', err))
 
 

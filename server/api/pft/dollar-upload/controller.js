@@ -19,7 +19,12 @@ module.exports = class DollarUploadController extends ControllerBase {
     this.rows = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
     debugger;
     this.validateSheet()
-      .then()
+      .then(() => {
+        // import data
+        // save file to db
+        //util.bufferToStream(req.file.buffer).pipe(gfsWriteStream);
+        return this.import();
+      })
       .catch(next)
 
     // validate and if cool, then do mongo.Grid???.createWriteStream()... and get id back hopefully
@@ -32,19 +37,19 @@ module.exports = class DollarUploadController extends ControllerBase {
   }
 
   validateSheet() {
-    let err;
-    _.forEach(this.rows, (row, idx) => {
-      const errors = validate(row);
-      if (errors.length) {
-        err = new NamedApiError('UploadValidationError', `Validation Errors in row: ${idx+1}`, errors, 400);
-        return false; // break out of loop
-      }
+    let chain = Promise.resolve();
+    this.rows.forEach((row, idx) => {
+      chain = chain.then(() => validate(row, idx + 1));
     });
-    return err;
+    chain.catch(({err, rowNum}) => {
+        return Promise.reject(new NamedApiError('UploadValidationError', `Validation Errors in row: ${rowNum}`, err, 400));
+    });
+    return chain;
   }
 
-  validate(row) {
+  validate(row, rowNum) {
     const errors = [];
+    errors.rowNum = rowNum;
     const temp = new DollarUploadImport(row);
 
     if (!temp.submeasureName) {
@@ -59,6 +64,10 @@ module.exports = class DollarUploadController extends ControllerBase {
       }
     }
 
+
+    // SOMEHOW WAIT FOR ALL THIS AND RETURN ERRORS. promise.all I'm thinking as you want all errors, but in reality... q.allSettled otherwise will stop
+    // on first error right?
+    // .catch(err => {err, rowNum}
   }
 
   userHasAccessToMeasure() {
