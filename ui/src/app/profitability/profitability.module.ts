@@ -12,6 +12,7 @@ import {RuleService} from './services/rule.service';
 import {RouterModule, Routes} from '@angular/router';
 import {MainComponent} from '../shared/components/main/main.component';
 import {ProfitabilityRoutingModule} from './profitability-routing.module';
+import {BusinessUploadService} from './services/business-upload.service';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {ProfitabilityRoutingModule} from './profitability-routing.module';
     RuleManagementEditComponent,
     RuleManagementAssignComponent,
     BusinessUploadComponent
-  ]
+  ],
+  providers: [BusinessUploadService]
 })
 export class ProfitabilityModule {
   constructor() {

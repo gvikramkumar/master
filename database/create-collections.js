@@ -6,14 +6,15 @@ conn = new Mongo(host + ':' + port);
 var db = conn.getDB(_db);
 
 
-const caseInsensitiveCollections = [
+const collections = [
   'allocation_rule',
   'module',
   'submeasure',
-  'submeasure_rule'
+  'submeasure_rule',
+  'dollar_upload'
 ];
 
-caseInsensitiveCollections.forEach(coll => {
+collections.forEach(coll => {
   db.getCollection(coll).drop();
   // this collation makes our indexes and find() calls case insensitive, search for john and get John as well
   db.createCollection(coll, {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});

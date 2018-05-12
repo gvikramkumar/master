@@ -3,8 +3,7 @@ const config = require('../../config/get-config'),
   multer = require('multer'),
   multerGridFsStorage = require('multer-gridfs-storage')
 
-
-const storage = multerGridFsStorage({
+const gfsStorage = multerGridFsStorage({
   db: mg.connection.db,
   file: (req, file) => {
     const metadata = {
@@ -15,9 +14,10 @@ const storage = multerGridFsStorage({
     return {metadata};
   }
 });
-//todo: test out the file size/count max values
+
 const upload = multer({
-  storage, limits: {
+  storage: gfsStorage,
+  limits: {
     fileSize: config.fileSizeMax,
     files: config.fileCountMax
   }

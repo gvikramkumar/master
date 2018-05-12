@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-let str = 'SUB_MEASURE_NAME,RULE_NAME,SEQ_NUM,CREATED_BY,CREATED_DATE,UPDATED_BY,UPDATE_DATE';
+let str = 'measure_name,sub_measure_name,input_product_value,input_product_hier_level_id,input_product_hier_level_name,input_entity_value,input_entity_hier_level_id,input_entity_hier_level_name,input_sales_value,input_sales_hier_level_id,input_sales_hier_level_name,scms_value,scms_hier_level_id,scms_hier_level_name,input_business_value,input_business_hier_level_id,input_business_hier_level_name,deal_id,gross_unbilled_accrued_rev_flg,revenue_classification,amount\n,CREATED_BY,CREATED_DATE,UPDATED_BY,UPDATE_DATE';
 
 const arr = str.split(',');
 const chg = arr.map(x => _.camelCase(x)).join(',');

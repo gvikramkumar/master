@@ -1,5 +1,5 @@
 const mg = require('mongoose'),
-  ApiError = require('../common/api-error'),
+  NamedApiError = require('../common/named-api-error'),
   _ = require('lodash'),
   util = require('../common/util');
 
@@ -28,8 +28,7 @@ module.exports = class RepoBase {
       return query.exec()
       .then(item => {
         if (!item && data.updatedDate) {
-          const err = new ApiError('Concurrency error, please refresh your data.', null, 400);
-          err.name = 'ConcurrencyError';
+          const err = new NamedApiError('ConcurrencyError', 'Concurrency error, please refresh your data.', null, 400);
           throw(err);
         }
         else if (!item) {

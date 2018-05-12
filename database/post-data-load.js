@@ -1,16 +1,11 @@
 const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
-const collections = [
-  'allocation_rule',
-  'module',
-  'submeasure',
-  'submeasure_rule'
-];
-
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
-  'submeasure_rule'
+  'submeasure',
+  'submeasure_rule',
+  'dollar_upload'
 ];
 
 const date = new Date();
