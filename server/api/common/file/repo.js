@@ -46,7 +46,7 @@ module.exports = class FileRepo {
     })
   }
 
-  getManyIds(ids) {
+  getManyByIds(ids) {
     return this.Model.find({_id: {$in: ids}}).exec();
   }
 

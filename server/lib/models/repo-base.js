@@ -15,25 +15,34 @@ module.exports = class RepoBase {
     return this.Model.find(filter).exec();
   }
 
+  getManyByIds(ids) {
+    return this.Model.find({_id: {$in: ids}}).exec();
+  }
+
+  getManyByGroupLatest(groupField) {
+    return this.Model.aggregate([
+      {$sort: {updatedDate: -1}},
+      {$group: {_id: '$'+groupField, id: {$first: '$_id'}}},
+      {$project: {_id: '$id'}}
+    ])
+      .then(arr => {
+        const ids = arr.map(obj => obj._id);
+        return this.Model.find({_id: {$in: ids}}).exec();
+      });
+  }
+
+
+  getOne(filter) {
+    return this.Model.findOne(filter);
+  }
+
   getOneById(id) {
     return this.Model.findById(id).exec()
       .then(x => x);
   }
 
-  getOneByFilter(filter) {
-    return this.Model.findOne(filter);
-  }
-
-  getOneByName(name) {
-    return this.getOneByFilter({name});
-  }
-
-  getOneByFilterLatest(filter) {
-    return this.Model.findOne(filter).sort({updatedDate: -1}).limit(1);
-  }
-
-  getOneByNameLatest(name) {
-    return this.getOneByFilterLatest({name})
+  getOneLatest(filter) {
+    return this.Model.find(filter).sort({updatedDate: -1}).limit(1);
   }
 
   getOneWithTimestamp(data) {

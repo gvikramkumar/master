@@ -72,7 +72,7 @@ module.exports = class FileController {
   }
 
   uploadMany(req, res, next) {
-    return this.repo.getManyIds(req.files.map(file => file.id))
+    return this.repo.getManyByIds(req.files.map(file => file.id))
       .then(files => res.send(files))
       .catch(next);
   }
