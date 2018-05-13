@@ -38,15 +38,4 @@ module.exports = class DollarUploadRepo extends RepoBase {
     super(schema, 'DollarUpload');
   }
 
-  getManyLatest() {
-    return this.Model.aggregate([
-      {$sort: {updatedDate: -1}},
-      {$group: {_id: '$name', id: {$first: '$_id'}}},
-      {$project: {_id: '$id'}}
-    ])
-      .then(arr => {
-        const ids = arr.map(obj => obj._id);
-        return this.Model.find({_id: {$in: ids}}).exec();
-      });
-  }
 }

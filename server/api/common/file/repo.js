@@ -57,7 +57,8 @@ module.exports = class FileRepo {
 
   getOneLatest(params = {}) {
     const filter = this.getMetadataFilter(params);
-    return this.Model.find(filter).sort({uploadDate: -1}).limit(1).exec();
+    return this.Model.find(filter).sort({uploadDate: -1}).limit(1).exec()
+      .then(arr => arr.length? arr[0]: null);
   }
 
 }

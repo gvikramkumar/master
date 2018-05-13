@@ -3,9 +3,25 @@ const DollarUploadRepo = require('./repo'),
   xlsx = require('node-xlsx'),
   DollarUploadImport = require('./template'),
   NamedApiError = require('../../../lib/common/named-api-error'),
-  submeasureRepo = require('../submeasure/repo');
+  SubmeasureRepo = require('../submeasure/repo'),
+  _ = require('lodash');
 
 const repo = new DollarUploadRepo();
+const submeasureRepo = new SubmeasureRepo();
+
+const PropNames = {
+  submeasureName: 'Sub Measure Name',
+  inputProductValue: 'Input Product value',
+  inputSalesValue: 'Input Sales Value',
+  grossUnbilledAccruedRevenueFlag: 'Gross Unbilled Accrued Revenue Flag',
+  inputLegalEntityValue: 'Input Legal Entity Value',
+  inputBusinessEntityValue: 'Input Business Entity Value',
+  ScmsSegment: 'SCMS Segment',
+  amount: 'Amount',
+  dealId: 'Deal ID',
+  revenueClassification: 'Revenue Classification'
+
+}
 
 module.exports = class DollarUploadController extends ControllerBase {
 
@@ -19,12 +35,12 @@ module.exports = class DollarUploadController extends ControllerBase {
     const sheets = xlsx.parse(req.file.buffer);
     this.rows = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
 
-    this.validateSheet()
+    this.validateRows()
       .then(() => {
-        // import data
-        // save file to db
-        //util.bufferToStream(req.file.buffer).pipe(gfsWriteStream);
-        return this.import();
+        return this.importRows()
+          .then(() => {
+            res.sendStatus(204);
+          })
       })
       .catch(next)
 
@@ -37,71 +53,164 @@ module.exports = class DollarUploadController extends ControllerBase {
 
   }
 
-  validateSheet() {
+  validateRows() {
     let chain = Promise.resolve();
     this.rows.forEach((row, idx) => {
-      chain = chain.then(() => validate(row, idx + 1));
+      chain = chain.then(() => this.validateRow(row, idx + 1));
     });
     return chain;
   }
 
-  validate(row, rowNum) {
+  importRows() {
+    console.log('import....');
+
+    // have this.rows, but lost this.temp (grrr) cause it's fixing some values right? Don't want you
+    // importing till all rows are deemed valid, no mixed state, all mkae it or none, otherwise you'll have
+    // to inform them which made it and which didn't (not gonna happen).
+    // probably a lot of work involved in taking 10 cols >> 20 cols insert into db, so do one at a time and
+    // put them together, then insert. Thing is: all can be done at same time. BUT... what about stuff like
+    // duplicate name or index constraint failures?? So need to show which row fails. With that knowledge and
+    // knowing they're done sequentially, they'll know what made it and what didn't. Only if you tell them though.
+    // Probably best to do sequentially again. Makes debugging easier as you know where things went bad, it's anyone's
+    // guess with promise.all.
+
+    let chain = Promise.resolve();
+    this.rows.forEach((row, idx) => {
+      chain = chain.then(() => this.importRow(row, idx + 1));
+    });
+    return chain;
+  }
+
+  importRow(row, rowNum) {
+    this.rowNum = rowNum;
+    this.temp = new DollarUploadImport(row);
+    this.submeasure = undefined;
+
+    return this.getSubmeasure()
+      .then(() => {
+        return Promise.all([])
+          .catch(err => Promise.reject(err));
+      })
+  }
+
+  addError(property, message) {
+    this.errors.push({property, error: message});
+  }
+
+  addErrorRequired(property) {
+    this.addError(property, 'Required')
+  }
+
+  validateRow(row, rowNum) {
     this.errors = [];
     this.rowNum = rowNum;
     this.temp = new DollarUploadImport(row);
+    this.submeasure = undefined;
 
-    return Promise.all(
-      this.validateSubmeasure(),
-      this.validateProductValue(),
-      this.validateSalesValue())
+    return this.getSubmeasure()
       .then(() => {
-        if (this.errors.length) {
-          return Promise.reject(new NamedApiError('UploadValidationError',
-            `Validation Errors in row: ${rowNum}`, this.errors, 400));
-        }
+        return Promise.all([
+          this.validateSubmeasureName(),
+          this.validateProductValue(),
+          this.validateSalesValue(),
+          this.validateGrossUnbilledAccruedRevenueFlag(),
+          this.validatLegalEntityValue(),
+          this.validateSCMSSegment(),
+          this.validateAmount(),
+          this.validateRevenueClassification()
+        ])
+          .then(() => {
+            if (this.errors.length) {
+              return Promise.reject(new NamedApiError('UploadValidationError',
+                `Validation Errors in row: ${rowNum}`, _.sortBy(this.errors, 'property'), 400));
+            }
+          })
+          .catch(err => Promise.reject(err));
       })
-      .catch(err => Promise.reject(err));
   }
 
-  validateSubmeasure() {
+  getSubmeasure() {
+    return submeasureRepo.getOneByNameLatest(this.temp.submeasureName)
+      .then(submeasure => this.submeasure = submeasure);
+  }
 
+  validateSubmeasureName() {
     if (!this.temp.submeasureName) {
-      this.errors.add({property: 'Sub Measure Name', error: 'Required'});
+      this.addErrorRequired(PropNames.submeasureName);
+      return Promise.resolve();
+    } else if (!this.submeasure) {
+      this.addError(PropNames.submeasureName, 'No Sub Measure exists by this name.');
       return Promise.resolve();
     } else {
-      return Promise.all(
-        this.userHasAccessToMeasure(),
-        this.verifySubmeasureNameExists());
+      return this.userHasAccessToMeasure();
     }
-
   }
 
   userHasAccessToMeasure() {
     // use this.req.user.userId and this.temp.submeasureName to get measure (from where?)
     // and then goto onramp table to see if they have access to measure
+    // this.addError(PropNames.submeasureName, `User doesn't have access to measure: ${'??'}`);
+    return Promise.resolve();
   }
 
-  verifySubmeasureNameExists() {
-    // use this.temp.submeasureName and verify a submeasure of that name exist
-    // can do this now right?
-    return submeasureRepo.getOneByName(temp.submeasureName)
-      .then(result => {
-        if (!result) {
-          this.errors.push({property: 'Sub Measure Name', error: 'No Sub Measure exists by this name.'})
-        }
-      })
+  validateProductValue() {
+    // user this.submeasure ?? to determine PL, BU, TU then hit pg to get acceptable values
+    // this.addError(PropNames.inputProductValue, 'Validate product value error');
+    return Promise.resolve();
   }
 
-
-  userHasAccessToMeasure() {
-    // look up measure associated with this submeasure and make sure they have access to it. This will be in
-    // the onramp data, these measures being a fixed thing. pg or mongo?
-    return false;
+  validateSalesValue() {
+    // same deal for all these, some submeasure prop to get acceptable values from somewhere
+    // this.addError(PropNames.inputSalesValue, 'validateSalesValue error');
+    return Promise.resolve();
   }
 
-  // same deal... all these db calls to get info associated with this row
-  import(row) {
+  convertGrossUnbilledAccruedRevenueFlag() {
+    let flag;
+    if (_.isNull(this.temp.grossUnbilledAccruedRevenueFlag)) {
+      flag = null;
+    } else if (typeof this.temp.grossUnbilledAccruedRevenueFlag === 'string') {
+      flag = this.temp.grossUnbilledAccruedRevenueFlag.toUpperCase();
+      if (flag === 'NULL') {
+        flag = null;
+      }
+    }
+    if (flag !== undefined) {
+      this.temp.grossUnbilledAccruedRevenueFlag = flag;
+    }
+  }
 
+  validateGrossUnbilledAccruedRevenueFlag() {
+    this.convertGrossUnbilledAccruedRevenueFlag();
+    const flag = this.temp.grossUnbilledAccruedRevenueFlag;
+    if (!_.includes([null, 'Y', 'N'], flag)) {
+      this.addError(PropNames.grossUnbilledAccruedRevenueFlag, 'Invalid value, must be: Y/N/NULL');
+    }
+    return Promise.resolve();
+  }
+
+  validatLegalEntityValue() {
+    return Promise.resolve();
+  }
+
+  validateSCMSSegment() {
+    return Promise.resolve();
+  }
+
+  validateAmount() {
+
+    if (this.temp.amount === undefined || '') {
+      this.addErrorRequired(PropNames.amount);
+    } else if (Number.isNaN(Number(this.temp.amount))) {
+      this.addError(PropNames.amount, 'Not a number');
+    } else {
+      this.temp.amount = Number(this.temp.amount);
+    }
+    return Promise.resolve();
+  }
+
+  validateRevenueClassification() {
+    return Promise.resolve();
   }
 
 

@@ -11,5 +11,14 @@ module.exports = class DollarUploadTemplate {
     this.amount = row[7];
     this.dealId = row[8];
     this.revenueClassification = row[9];
+    this.trimStrings();
+  }
+
+  trimStrings() {
+    Object.keys(this).forEach(key => {
+      if (typeof this[key] === 'string') {
+        this[key] = this[key].trim();
+      }
+    })
   }
 }

@@ -33,7 +33,7 @@ module.exports = class RepoBase {
 
 
   getOne(filter) {
-    return this.Model.findOne(filter);
+    return this.Model.findOne(filter).exec();
   }
 
   getOneById(id) {
@@ -42,7 +42,16 @@ module.exports = class RepoBase {
   }
 
   getOneLatest(filter) {
-    return this.Model.find(filter).sort({updatedDate: -1}).limit(1);
+    return this.Model.find(filter).sort({updatedDate: -1}).limit(1).exec()
+      .then(arr => arr.length? arr[0]: null);
+  }
+
+  getOneByName(name) {
+    return this.getOne({name});
+  }
+
+  getOneByNameLatest(name) {
+    return this.getOneLatest({name});
   }
 
   getOneWithTimestamp(data) {
