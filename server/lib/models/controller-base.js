@@ -15,7 +15,7 @@ module.exports = class ControllerBase {
 
   getOne(req, res, next)
   {
-    this.repo.getOne(req.params.id)
+    this.repo.getOneById(req.params.id)
       .then(item => {
         if (item) {
           res.send(item);

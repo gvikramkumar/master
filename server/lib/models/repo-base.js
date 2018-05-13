@@ -11,13 +11,29 @@ module.exports = class RepoBase {
     this.Model = mg.model(modelName, schema);
   }
 
-  getMany() {
-    return this.Model.find().exec();
+  getMany(filter = {}) {
+    return this.Model.find(filter).exec();
   }
 
-  getOne(id) {
+  getOneById(id) {
     return this.Model.findById(id).exec()
       .then(x => x);
+  }
+
+  getOneByFilter(filter) {
+    return this.Model.findOne(filter);
+  }
+
+  getOneByName(name) {
+    return this.getOneByFilter({name});
+  }
+
+  getOneByFilterLatest(filter) {
+    return this.Model.findOne(filter).sort({updatedDate: -1}).limit(1);
+  }
+
+  getOneByNameLatest(name) {
+    return this.getOneByFilterLatest({name})
   }
 
   getOneWithTimestamp(data) {
@@ -71,7 +87,7 @@ module.exports = class RepoBase {
   }
 
   remove(id) {
-    return this.getOne(id)
+    return this.getOneById(id)
       .then(item => {
       if (!item) {
           const err = new ApiError('Item not found, please refresh your data.', null, 400);

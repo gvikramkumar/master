@@ -14,10 +14,6 @@ module.exports = class SubmeasureRepo extends RepoBase {
     super(schema, 'Submeasure');
   }
 
-  getOneByName(name) {
-    return this.Model.findOne({name});
-  }
-
 
   // getOneLatest(field, val)
   //getOneByField(field, val)

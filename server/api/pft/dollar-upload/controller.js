@@ -1,7 +1,7 @@
 const DollarUploadRepo = require('./repo'),
   ControllerBase = require('../../../lib/models/controller-base'),
   xlsx = require('node-xlsx'),
-  DollarUploadImport = require('template'),
+  DollarUploadImport = require('./template'),
   NamedApiError = require('../../../lib/common/named-api-error'),
   submeasureRepo = require('../submeasure/repo');
 
@@ -31,7 +31,7 @@ module.exports = class DollarUploadController extends ControllerBase {
     // validate and if cool, then do mongo.Grid???.createWriteStream()... and get id back hopefully
     // if not fs.fileInfo, then use the id to get that and return.
 
-    // return this.repo.getOne(req.file.id))
+    // return this.repo.getOneById(.file.id))
     //   .then(files => res.send(files))
     //   .catch(next);
 
