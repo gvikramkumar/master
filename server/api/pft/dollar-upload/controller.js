@@ -96,11 +96,11 @@ module.exports = class DollarUploadController extends ControllerBase {
 
     return this.getSubmeasure()
       .then(() => {
-        return Promise.all([])
+        return Promise.all([])// the list of import operations to get all the data
           .catch(err => Promise.reject(err));
       })
       .then(() => {
-        repo.add(this.temp, this.req.user.id)
+        return repo.add(this.temp, this.req.user.id)
           .then(doc => this.imports.push(doc));
       })
   }
