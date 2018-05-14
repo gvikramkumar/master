@@ -21,14 +21,15 @@ module.exports = class FileRepo {
     this.Model = mg.model('Files', schema);
   }
 
-  getManyQuery(params) {
+  getMetadataFilter(params) {
     const filter = {};
     _.forEach(params, (val, key) => filter['metadata.' + key] = val);
-    return this.Model.find(filter);
+    return filter;
   }
 
-  getMany(params = {}) {
-    return this.getManyQuery(params).exec();
+  getMany(params) {
+    const filter = this.getMetadataFilter(params);
+    return this.Model.find(filter).exec();
   }
 
   getManyGroupLatest(params = {}, groupField) {
@@ -45,20 +46,19 @@ module.exports = class FileRepo {
     })
   }
 
-  getManyIds(ids) {
+  getManyByIds(ids) {
     return this.Model.find({_id: {$in: ids}}).exec();
   }
 
-  getOne(id) {
+  getOneById(id) {
     return this.Model.findById(id).exec()
       .then(x => x);
   }
 
   getOneLatest(params = {}) {
-    const query = this.getManyQuery(params)
-      .sort({uploadDate: -1})
-      .limit(1);
-    return query.exec();
+    const filter = this.getMetadataFilter(params);
+    return this.Model.find(filter).sort({uploadDate: -1}).limit(1).exec()
+      .then(arr => arr.length? arr[0]: null);
   }
 
 }

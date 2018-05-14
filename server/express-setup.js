@@ -6,17 +6,16 @@ const config = require('./config/get-config'),
   morgan = require('morgan'),
   cookieParser = require('cookie-parser'),
   cors = require('cors'),
-  ApiError = require('./lib/common/api-error'),
+  NamedApiError = require('./lib/common/named-api-error'),
   notFound = require('./lib/middleware/not-found'),
   errorHandler = require('./lib/middleware/error-handler'),
-  logger = require('./lib/middleware/logger'),
   moduleRouter = require('./api/common/module/router'),
   allocationRuleRouter = require('./api/pft/allocation-rule/router'),
   submeasureRouter = require('./api/pft/submeasure/router'),
   fileRouter = require('./api/common/file/router'),
   User = require('./lib/models/user'),
-  authorize = require('./lib/middleware/authorize');
-
+  authorize = require('./lib/middleware/authorize'),
+  dollarUploadRouter = require('./api/pft/dollar-upload/router');
 
 
 // start express
@@ -39,8 +38,7 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 app.get('/cause-error', function (req, res, next) {
   if (process.env.NODE_ENV === 'unit') {
-    const err = new ApiError('api error with data', {some: 'thing'});
-    err.name = 'dank';
+    const err = new NamedApiError('CauseError', 'api error with data', {some: 'thing'});
     throw err;
   } else {
     next();
@@ -59,6 +57,7 @@ app.use('/api/module', moduleRouter);
 app.use('/api/allocation-rule', allocationRuleRouter);
 app.use('/api/submeasure', submeasureRouter);
 app.use('/api/file', fileRouter);
+app.use('/api/dollar-upload', dollarUploadRouter);
 
 app.use(express.static(path.resolve(__dirname, '../ui/dist')));
 

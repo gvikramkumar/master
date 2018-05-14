@@ -7,6 +7,7 @@ import {FsFileService} from '../../../core/services/common/fsfile.service';
 import {BusinessUploadFileType, Directory} from '../../store/models/enums';
 import * as _ from 'lodash';
 import {environment} from '../../../../environments/environment';
+import {BusinessUploadService, BuUploadMetadata} from '../../services/business-upload.service';
 
 const directory = Directory.businessUpload;
 
@@ -34,7 +35,11 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   ];
   uploadType = this.uploadTypes[0].value;
 
-  constructor(public store: Store, private route: ActivatedRoute, private fsFileService: FsFileService) {
+  constructor(
+    public store: Store,
+    private route: ActivatedRoute,
+    private fsFileService: FsFileService,
+    private businessUploadService: BusinessUploadService) {
     super(store, route);
   }
 
@@ -54,14 +59,14 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
       return;
     }
 
-    const metadata = {
+    const metadata: BuUploadMetadata = {
       directory: directory,
       buFileType: BusinessUploadFileType.upload,
       buUploadType: this.uploadType
     }
 
-    this.fsFileService.upload(fileInput.files, metadata)
-      .subscribe(files => {
+    this.businessUploadService.upload(fileInput.files[0], metadata)
+      .subscribe(file => {
         fileInput.value = '';
         this.fileUploaded = true;
         setTimeout(() => this.fileUploaded = false, 1000);

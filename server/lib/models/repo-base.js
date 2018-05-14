@@ -1,5 +1,5 @@
 const mg = require('mongoose'),
-  ApiError = require('../common/api-error'),
+  NamedApiError = require('../common/named-api-error'),
   _ = require('lodash'),
   util = require('../common/util');
 
@@ -11,13 +11,47 @@ module.exports = class RepoBase {
     this.Model = mg.model(modelName, schema);
   }
 
-  getMany() {
-    return this.Model.find().exec();
+  getMany(filter = {}) {
+    return this.Model.find(filter).exec();
   }
 
-  getOne(id) {
+  getManyByIds(ids) {
+    return this.Model.find({_id: {$in: ids}}).exec();
+  }
+
+  getManyByGroupLatest(groupField) {
+    return this.Model.aggregate([
+      {$sort: {updatedDate: -1}},
+      {$group: {_id: '$'+groupField, id: {$first: '$_id'}}},
+      {$project: {_id: '$id'}}
+    ])
+      .then(arr => {
+        const ids = arr.map(obj => obj._id);
+        return this.Model.find({_id: {$in: ids}}).exec();
+      });
+  }
+
+
+  getOne(filter) {
+    return this.Model.findOne(filter).exec();
+  }
+
+  getOneById(id) {
     return this.Model.findById(id).exec()
       .then(x => x);
+  }
+
+  getOneLatest(filter) {
+    return this.Model.find(filter).sort({updatedDate: -1}).limit(1).exec()
+      .then(arr => arr.length? arr[0]: null);
+  }
+
+  getOneByName(name) {
+    return this.getOne({name});
+  }
+
+  getOneByNameLatest(name) {
+    return this.getOneLatest({name});
   }
 
   getOneWithTimestamp(data) {
@@ -28,8 +62,7 @@ module.exports = class RepoBase {
       return query.exec()
       .then(item => {
         if (!item && data.updatedDate) {
-          const err = new ApiError('Concurrency error, please refresh your data.', null, 400);
-          err.name = 'ConcurrencyError';
+          const err = new NamedApiError('ConcurrencyError', 'Concurrency error, please refresh your data.', null, 400);
           throw(err);
         }
         else if (!item) {
@@ -72,7 +105,7 @@ module.exports = class RepoBase {
   }
 
   remove(id) {
-    return this.getOne(id)
+    return this.getOneById(id)
       .then(item => {
       if (!item) {
           const err = new ApiError('Item not found, please refresh your data.', null, 400);

@@ -1,7 +1,7 @@
 const tv4 = require('tv4'),
   formats = require('tv4-formats'),
   validator = tv4.freshApi(),
-  ApiError = require('./api-error');
+  NamedApiError = require('./named-api-error');
 
 validator.addFormat(formats);
 
@@ -38,8 +38,7 @@ class Validate {
   static validateObject(val, schema) {
     const results = validator.validateMultiple(val, schema);
     if (!results.valid) {
-      const err = new ApiError('Validation errors', extractErrors(results.errors), 400);
-      err.name = 'JsonSchemaValidationError';
+      const err = new NamedApiError('JsonSchemaValidationError', 'Validation errors', extractErrors(results.errors), 400);
       throw err;
     }
   }

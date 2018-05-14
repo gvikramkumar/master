@@ -8,12 +8,9 @@ module.exports = class AllocationRuleController extends ControllerBase {
     super(repo);
   }
 
-  // 2 ways to go:
-  // get all
-  // getLatest query val >> groups by name and gets latest in each group
   getMany(req, res, next) {
     if (req.query.getLatest) {
-      this.repo.getManyLatest()
+      this.repo.getManyByGroupLatest('name')
         .then(items => res.send(items))
         .catch(next);
 

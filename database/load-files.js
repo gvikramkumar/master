@@ -1,43 +1,45 @@
 const config = require('../server/config/get-config'),
   fs = require('fs'),
-  dbPromise = require('../server/mongoose-conn'),
-  {clone} = require('lodash');
+  dbPromise = require('../server/mongoose-conn');
 
 dbPromise.then(({db, mongo}) => {
   console.log('loading files...');
 
   const gfs = new mongo.GridFSBucket(db);
   const dirPath = 'files/business-upload/';
-  fs.readdir(dirPath, (err, files) => {
-    if(err) {
-      console.error(err);
-      process.exit(1);
-    }
-    const meta = {directory: 'pft.bu', buFileType: 'template'};
-    const promises = [];
-    files.forEach(file => {
-      const metadata = clone(meta);
-      metadata.fileName = file;
-      metadata.buUploadType = file.substring(file.lastIndexOf('-')+1, file.lastIndexOf('.'));
-      // console.log(file, metadata);
-      const promise = new Promise((resolve, reject) => {
-        fs.createReadStream(dirPath + file).pipe(gfs.openUploadStream(file, {metadata}))
-          .on('error', function (err) {
-            reject(err);
-          })
-          .on('finish', function () {
+  const meta = {directory: 'pft.bu', buFileType: 'template'};
+  const promises = [];
+  const buTemplates = [
+    {fileName: 'dollar-upload.xlsx', buUploadType: 'adu'},
+    {fileName: 'iaspu-upload.xlsx', buUploadType: 'iaspu'},
+    {fileName: 'slspu-upload.xlsx', buUploadType: 'slspu'},
+    {fileName: 'mmspu-upload.xlsx', buUploadType: 'mmspu'},
+    {fileName: 'pcu-upload.xlsx', buUploadType: 'pcu'}
+  ]
+
+  buTemplates.forEach(template => {
+    const metadata = Object.assign({}, meta);
+    const fileName = template.fileName;
+    metadata.fileName = fileName;
+    metadata.buUploadType = template.buUploadType;
+    // console.log(fileName, metadata);
+    const promise = new Promise((resolve, reject) => {
+      fs.createReadStream(dirPath + fileName).pipe(gfs.openUploadStream(fileName, {metadata}))
+        .on('error', function (err) {
+          reject(err);
+        })
+        .on('finish', function () {
           resolve();
         });
-      });
-      promises.push(promise);
+    });
+    promises.push(promise);
+  })
+  Promise.all(promises)
+    .then(() => {
+      console.log('file upload complete');
+      process.exit(0);
     })
-    Promise.all(promises)
-      .then(() => {
-        console.log('file upload complete');
-        process.exit(0);
-      })
-      .catch(err => console.error('file upload failure:', err));
-  });
+    .catch(err => console.error('file upload failure:', err));
 
 
 })
