@@ -1,5 +1,5 @@
 <div class="add-form-container">
-  <cui-select [items]="measureNames" label="Measure Name" empty="true" (selectChange)="measureNameSelected()" required="true"></cui-select>
+  <cui-select [items]="measureNames" label="Measure Name" empty="true" [(ngModel)]="measureName" (selectChange)="measureNameSelected()" required="true"></cui-select>
   <img matTooltip="Naming convention: example here" matTooltipPosition="left" src="assets/tooltip.jpg" class="tooltip" width="18"> <cui-input id="subname" type="text" [(model)]="subMeasureName" label="Sub-Measure Name" required="true"></cui-input>
   <cui-select [hidden]="categoriesHidden" [items]="categoryTypes" label="Submeasure Category Type" empty="true" (selectChange)="categoryTypeSelected()"></cui-select>
   <cui-input type="textarea" [(model)]="description" label="Description"></cui-input>
@@ -60,6 +60,6 @@
   <br><br>
   <cui-input type="text" [(model)]="associatedRule" label="Rule Association"></cui-input>
   <br><br>
-  <button>Reset</button><a routerLink=".."><button>Cancel</button></a><button>Next</button>
+  <button (click)="resetForm()">Reset</button><a routerLink=".."><button>Cancel</button></a><button>Next</button>
   <br>
 </div>
