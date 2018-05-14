@@ -4,7 +4,8 @@ const mg = require('mongoose'),
 const schema = new mg.Schema(
   {
     key: {type: Number, required: true},
-    name: {type: String, required: true}
+    name: {type: String, required: true},
+    source: {type: String, enum: ['manual']}
   },
   {collection: 'submeasure'}
 );

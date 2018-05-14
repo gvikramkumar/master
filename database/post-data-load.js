@@ -18,5 +18,7 @@ collectionsWithCreatedUpdated.forEach(coll => {
   }});
 });
 
+db.getCollection('submeasure').updateMany({}, {$set: {source: 'manual'}});
+
 print('post-data-load complete');
 

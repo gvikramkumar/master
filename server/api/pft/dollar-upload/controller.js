@@ -4,10 +4,16 @@ const DollarUploadRepo = require('./repo'),
   DollarUploadImport = require('./template'),
   NamedApiError = require('../../../lib/common/named-api-error'),
   SubmeasureRepo = require('../submeasure/repo'),
-  _ = require('lodash');
+  _ = require('lodash'),
+  GridFSBucket = require('../../../lib/common/gridfs-bucket'),
+  enums = require('../../../lib/models/enums'),
+  FileRepo = require('../../common/file/repo'),
+  ApiError = require('../../../lib/common/api-error');
 
 const repo = new DollarUploadRepo();
 const submeasureRepo = new SubmeasureRepo();
+const fileRepo = new FileRepo();
+const gfs = new GridFSBucket();
 
 const PropNames = {
   submeasureName: 'Sub Measure Name',
@@ -31,6 +37,7 @@ module.exports = class DollarUploadController extends ControllerBase {
   }
 
   upload(req, res, next) {
+    this.req = req;
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
     this.rows = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
@@ -39,7 +46,7 @@ module.exports = class DollarUploadController extends ControllerBase {
       .then(() => {
         return this.importRows()
           .then(() => {
-            res.sendStatus(204);
+            res.send(this.imports);
           })
       })
       .catch(next)
@@ -62,7 +69,8 @@ module.exports = class DollarUploadController extends ControllerBase {
   }
 
   importRows() {
-    console.log('import....');
+    this.imports = [];
+
 
     // have this.rows, but lost this.temp (grrr) cause it's fixing some values right? Don't want you
     // importing till all rows are deemed valid, no mixed state, all mkae it or none, otherwise you'll have
@@ -91,6 +99,10 @@ module.exports = class DollarUploadController extends ControllerBase {
         return Promise.all([])
           .catch(err => Promise.reject(err));
       })
+      .then(() => {
+        repo.add(this.temp, this.req.user.id)
+          .then(doc => this.imports.push(doc));
+      })
   }
 
   addError(property, message) {
@@ -108,6 +120,9 @@ module.exports = class DollarUploadController extends ControllerBase {
     this.submeasure = undefined;
 
     return this.getSubmeasure()
+      .then(() => {
+        return this.validateSubmeasureCanManualUpload();
+      })
       .then(() => {
         return Promise.all([
           this.validateSubmeasureName(),
@@ -132,6 +147,13 @@ module.exports = class DollarUploadController extends ControllerBase {
   getSubmeasure() {
     return submeasureRepo.getOneByNameLatest(this.temp.submeasureName)
       .then(submeasure => this.submeasure = submeasure);
+  }
+
+  validateSubmeasureCanManualUpload() {
+    if (this.submeasure.source !== 'manual') {
+      return Promise.reject(new ApiError(`Sub Measure doesn't allow manual upload`));
+    }
+    return Promise.resolve();
   }
 
   validateSubmeasureName() {

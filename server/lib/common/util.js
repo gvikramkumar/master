@@ -1,12 +1,18 @@
 const {Duplex} = require('stream'),
   {Buffer} = require('buffer'),
-  ApiError = require('./api-error');
+  ApiError = require('./api-error'),
+  mg = require('mongoose');
 
 module.exports = {
+  getDbAndMongo,
   streamToBuffer,
   bufferToStream,
   checkParams,
   setSchemaAdditions
+}
+
+function getDbAndMongo() {
+  return {db: mg.connection.db, mongo: mg.mongo};
 }
 
 function setSchemaAdditions(schema) {
