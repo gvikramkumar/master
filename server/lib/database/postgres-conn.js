@@ -14,5 +14,8 @@ const rtn = {pgdb: client};
 module.exports = rtn;
 
 rtn.promise = client.connect()
-  .then(() => client);
+  .then(() => {
+    console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}`)
+    return client;
+  });
 

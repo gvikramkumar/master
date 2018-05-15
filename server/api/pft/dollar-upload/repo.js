@@ -5,7 +5,7 @@ const mg = require('mongoose'),
 const schema = new mg.Schema(
   {
     measureName: String,
-    subMeasureName: String,
+    submeasureName: String,
     inputProductValue: String,
     inputProductHierLevelId: Number,
     inputProductHierLevelName: String,
@@ -22,7 +22,7 @@ const schema = new mg.Schema(
     inputBusinessHierLevelId: Number,
     inputBusinessHierLevelName: String,
     dealId: Number,
-    grossUnbilledAccruedRevFlg: Boolean,
+    grossUnbilledAccruedRevFlg: String,
     revenueClassification: String,
     amount: Number,
     createdBy: String,
