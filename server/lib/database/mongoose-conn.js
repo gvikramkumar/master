@@ -1,4 +1,4 @@
-const config = require('./config/get-config'),
+const config = require('../../config/get-config'),
   mg = require('mongoose');
 
 const options = {
@@ -9,16 +9,19 @@ const options = {
   bufferMaxEntries: 0
 };
 
-const dbPromise = mg.connect(config.mongoUri, options)
+const rtn = {};
+module.exports = rtn;
+rtn.promise = mg.connect(config.mongoUri, options)
   .then(() => {
       console.log(`mongoose connected on: ${config.mongoUri}`);
       mg.connection.on('disconnected', () => console.log('mongoose disconnected'));
-      return {db: mg.connection.db, mongo: mg.mongo};
+      rtn.db = mg.connection.db;
+      rtn.mongo = mg.mongo;
+      return rtn;
     })
   .catch(err => {
     console.error(`mongoose connection error: ${config.mongoUri}`, err);
     return Promise.reject(err);
   });
 
-module.exports = dbPromise;
 
