@@ -5,7 +5,7 @@ import {
   CuiHeaderModule, CuiInputModule,
   CuiProgressbarModule,
   CuiSearchModule, CuiSelectModule,
-  CuiTableModule
+  CuiTableModule, CuiToastModule
 } from "@cisco-ngx/cui-components";
 
 @NgModule({
@@ -15,7 +15,8 @@ import {
     CuiSearchModule,
     CuiInputModule,
     CuiSelectModule,
-    CuiTableModule
+    CuiTableModule,
+    CuiToastModule
   ],
   exports: [
     CuiHeaderModule,
@@ -23,7 +24,8 @@ import {
     CuiSearchModule,
     CuiInputModule,
     CuiSelectModule,
-    CuiTableModule
+    CuiTableModule,
+    CuiToastModule
   ],
 })
 export class CuiIndexModule { }

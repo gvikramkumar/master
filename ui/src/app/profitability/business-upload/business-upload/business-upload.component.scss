@@ -23,7 +23,7 @@
   .content {
   }
 
-  button {
+  button.choose-file {
     label {
       display: block;
       margin: 0 -16px;
@@ -33,6 +33,10 @@
         cursor: pointer;
       }
     }
+  }
+
+  .file-list {
+    margin: 14px 0;
   }
 }
 

@@ -8,6 +8,7 @@ import {BusinessUploadFileType, Directory} from '../../store/models/enums';
 import * as _ from 'lodash';
 import {environment} from '../../../../environments/environment';
 import {BusinessUploadService, BuUploadMetadata} from '../../services/business-upload.service';
+import {ToastService} from '../../../core/services/common/toast.service';
 
 const directory = Directory.businessUpload;
 
@@ -19,7 +20,6 @@ const directory = Directory.businessUpload;
 export class BusinessUploadComponent extends RoutingComponentBase implements OnInit {
   files: FsFile[];
   templates: FsFile[];
-  fileUploaded = false;
   //todo: these need to have role-based access (likely stored in Mongo)
   uploadTypes = [
     // {value: 'adu', text: 'Adjustments - Dollar Upload'},
@@ -39,7 +39,8 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     public store: Store,
     private route: ActivatedRoute,
     private fsFileService: FsFileService,
-    private businessUploadService: BusinessUploadService) {
+    private businessUploadService: BusinessUploadService,
+    private toast: ToastService) {
     super(store, route);
   }
 
@@ -68,8 +69,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     this.businessUploadService.upload(fileInput.files[0], metadata)
       .subscribe(file => {
         fileInput.value = '';
-        this.fileUploaded = true;
-        setTimeout(() => this.fileUploaded = false, 1000);
+        this.toast.addToast('Business Upload', 'File upload success')
       });
 
   }
