@@ -1,6 +1,5 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {Store} from "../store/store";
 import {ProgressService} from "./services/common/progress.service";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {SpinnerInterceptor} from "./interceptors/spinner.interceptor";
@@ -10,7 +9,6 @@ import {Init1, Init2, Init3, Init4, Init5} from "./services/common/test-init-ser
 import {ModifyRequestInterceptor} from "./interceptors/modify-request.interceptor";
 import {InitializationGuard} from "./guards/initialization.guard";
 import {RouterModule} from "@angular/router";
-import {StoreModule} from "../store/store.module";
 import {BreakpointService} from "./services/common/breakpoint.service";
 import {ModuleService} from './services/common/module.service';
 import {RuleService} from '../profitability/services/rule.service';
@@ -18,17 +16,16 @@ import {SubmeasureService} from '../profitability/services/submeasure.service';
 import {TestService} from './services/common/test.service';
 import {FsFileService} from './services/common/fsfile.service';
 import {AuthorizationGuard} from './guards/authorization.guard';
+import {ToastService} from './services/common/toast.service';
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
-    RouterModule,
-    StoreModule
+    RouterModule
   ],
   exports: [
-    HttpClientModule,
-    StoreModule
+    HttpClientModule
   ],
   providers: [InitializationGuard, Init1, Init2, Init3, Init4, Init5, ProgressService,
     {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true},
@@ -36,7 +33,7 @@ import {AuthorizationGuard} from './guards/authorization.guard';
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ModifyRequestInterceptor, multi: true},
     BreakpointService, ModuleService, RuleService, SubmeasureService, TestService,
-    FsFileService, AuthorizationGuard
+    FsFileService, AuthorizationGuard, ToastService
   ]
 })
 export class CoreModule {
