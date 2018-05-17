@@ -6,6 +6,7 @@ import {NavigationEnd, Router} from '@angular/router';
 import {Store} from './store/store';
 import {AppRoutingModule} from './app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {StoreModule} from './store/store.module';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    StoreModule,
     AppRoutingModule,
     SharedModule
   ],
