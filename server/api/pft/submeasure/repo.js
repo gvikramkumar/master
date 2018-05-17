@@ -33,7 +33,6 @@ const schema = new mg.Schema(
       status: {type: String, enum: ['A']},
       manualmapping: {type: String, enum: ['Y', 'N']}
     },
-    revenueClassifications: [String],
     rules: [String]
   },
   {collection: 'submeasure'}
