@@ -87,7 +87,7 @@ module.exports = class DollarUploadController extends ControllerBase {
     return this.getSubmeasure()
       .then(() => {
         return this.validateSubmeasureName()
-          .then(() => this.lookForErrors())
+          .then(this.lookForErrors.bind(this))
           .then(() => {
             return Promise.all([
               this.validateMeasureAccess(),
@@ -95,7 +95,7 @@ module.exports = class DollarUploadController extends ControllerBase {
             ])
           });
       })
-      .then(() => this.lookForErrors())
+      .then(this.lookForErrors.bind(this))
       .then(() => {
         return Promise.all([
           this.validateProductValue(),
@@ -106,7 +106,7 @@ module.exports = class DollarUploadController extends ControllerBase {
           this.validateAmount(),
           this.validateRevenueClassification()
         ])
-          .then(() => this.lookForErrors())
+          .then(this.lookForErrors.bind(this))
           .catch(err => Promise.reject(err));
       })
       .catch(err => {
@@ -120,6 +120,10 @@ module.exports = class DollarUploadController extends ControllerBase {
 
   }
 
+  // look for errors and if any, reject the error to get out.
+  // this is also our "break out of validations" as some errors force us to stop checking now as later validations
+  // depend on former ones being successful. If we see errors at this point, the reject will discontinue
+  // validations for this record.
   lookForErrors() {
     if (this.errors.length) {
       return Promise.reject(new NamedApiError('UploadValidationError', null, _.sortBy(this.errors, 'property')));
@@ -181,7 +185,6 @@ module.exports = class DollarUploadController extends ControllerBase {
   }
 
   validateAmount() {
-
     if (this.temp.amount === undefined || '') {
       this.addErrorRequired(PropNames.amount);
     } else if (Number.isNaN(Number(this.temp.amount))) {
