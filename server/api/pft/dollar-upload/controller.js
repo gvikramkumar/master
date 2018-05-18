@@ -42,57 +42,32 @@ module.exports = class DollarUploadController extends ControllerBase {
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
     this.rows = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
+    this.totalErrors = {};
+    this.hasTotalErrors = false;
 
     this.validateRows()
+      .then(() => {
+        if (this.hasTotalErrors) {
+          return Promise.reject(new NamedApiError('UploadValidationError', 'There were validation errors in the upload. No records have been imported. An email was sent documenting the errors.', this.totalErrors, 400));
+        }
+      })
       .then(() => {
         return this.importRows()
           .then(() => {
             res.send(this.imports);
           })
       })
-      .catch(next)
-
-    // validate and if cool, then do mongo.Grid???.createWriteStream()... and get id back hopefully
-    // if not fs.fileInfo, then use the id to get that and return.
-
-    // return this.repo.getOneById(.file.id))
-    //   .then(files => res.send(files))
-    //   .catch(next);
+      .catch(next);
 
   }
 
   validateRows() {
     let chain = Promise.resolve();
+
     this.rows.forEach((row, idx) => {
       chain = chain.then(() => this.validateRow(row, idx + 1));
     });
     return chain;
-  }
-
-  importRows() {
-    this.imports = [];
-
-    let chain = Promise.resolve();
-    this.rows.forEach((row, idx) => {
-      chain = chain.then(() => this.importRow(row, idx + 1));
-    });
-    return chain;
-  }
-
-  importRow(row, rowNum) {
-    this.rowNum = rowNum;
-    this.import = new DollarUploadImport(row);
-    this.submeasure = undefined;
-
-    return this.getSubmeasure()
-      .then(() => {
-        return Promise.all([])// the list of import operations to get all the data
-          .catch(err => Promise.reject(err));
-      })
-      .then(() => {
-        return repo.add(this.import, this.req.user.id)
-          .then(doc => this.imports.push(doc));
-      })
   }
 
   addError(property, message) {
@@ -112,6 +87,7 @@ module.exports = class DollarUploadController extends ControllerBase {
     return this.getSubmeasure()
       .then(() => {
         return this.validateSubmeasureName()
+          .then(() => this.lookForErrors())
           .then(() => {
             return Promise.all([
               this.validateMeasureAccess(),
@@ -133,12 +109,20 @@ module.exports = class DollarUploadController extends ControllerBase {
           .then(() => this.lookForErrors())
           .catch(err => Promise.reject(err));
       })
+      .catch(err => {
+        if (err.name === 'UploadValidationError') {
+          this.totalErrors[this.rowNum] = err.data;
+          this.hasTotalErrors = true;
+        } else {
+          Promise.reject(err);
+        }
+      })
+
   }
 
   lookForErrors() {
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError('UploadValidationError',
-        `Validation Errors in row: ${this.rowNum}`, _.sortBy(this.errors, 'property'), 400));
+      return Promise.reject(new NamedApiError('UploadValidationError', null, _.sortBy(this.errors, 'property')));
     }
     return Promise.resolve();
   }
@@ -210,6 +194,32 @@ module.exports = class DollarUploadController extends ControllerBase {
 
   validateRevenueClassification() {
     return Promise.resolve();
+  }
+
+  importRows() {
+    this.imports = [];
+
+    let chain = Promise.resolve();
+    this.rows.forEach((row, idx) => {
+      chain = chain.then(() => this.importRow(row, idx + 1));
+    });
+    return chain;
+  }
+
+  importRow(row, rowNum) {
+    this.rowNum = rowNum;
+    this.import = new DollarUploadImport(row);
+    this.submeasure = undefined;
+
+    return this.getSubmeasure()
+      .then(() => {
+        return Promise.all([])// the list of import operations to get all the data
+          .catch(err => Promise.reject(err));
+      })
+      .then(() => {
+        return repo.add(this.import, this.req.user.id)
+          .then(doc => this.imports.push(doc));
+      })
   }
 
 
