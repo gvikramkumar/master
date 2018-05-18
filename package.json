@@ -1,5 +1,5 @@
 {
-  "name": "fin-starter",
+  "name": "fin-dfa",
   "version": "1.0.0",
   "description": "finance mean starter project",
   "main": "server/server.js",
@@ -16,7 +16,7 @@
     "e2e": "NODE_ENV=unit jasmine",
     "uilint": "cd ui && ng lint",
     "uiserve": "cd ui && ng serve %1 %2",
-    "uibuild": "cd ui && ng serve %1 %2",
+    "uibuild": "cd ui && ng build",
     "uibuildprod": "cd ui && ng build --prod",
     "uiunit": "cd ui && ng test -e=unit %1 %2",
     "uie2e": "cd ui && ng e2e -e=unit %1 %2"
