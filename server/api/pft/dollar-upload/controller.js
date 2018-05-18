@@ -6,15 +6,13 @@ const DollarUploadRepo = require('./repo'),
   NamedApiError = require('../../../lib/common/named-api-error'),
   SubmeasureRepo = require('../submeasure/repo'),
   _ = require('lodash'),
-  GridFSBucket = require('../../../lib/common/gridfs-bucket'),
-  enums = require('../../../lib/models/enums'),
-  FileRepo = require('../../common/file/repo'),
-  ApiError = require('../../../lib/common/api-error');
+  ApiError = require('../../../lib/common/api-error'),
+  userRoleRepo = require('../../../lib/database/user-role-repo');
+
 
 const repo = new DollarUploadRepo();
 const submeasureRepo = new SubmeasureRepo();
-const fileRepo = new FileRepo();
-const gfs = new GridFSBucket();
+const UploadValidationError = 'UploadValidationError';
 
 const PropNames = {
   submeasureName: 'Sub Measure Name',
@@ -48,7 +46,7 @@ module.exports = class DollarUploadController extends ControllerBase {
     this.validateRows()
       .then(() => {
         if (this.hasTotalErrors) {
-          return Promise.reject(new NamedApiError('UploadValidationError', 'There were validation errors in the upload. No records have been imported. An email was sent documenting the errors.', this.totalErrors, 400));
+          return Promise.reject(new NamedApiError(UploadValidationError, 'There were validation errors in the upload. No records have been imported. An email was sent documenting the errors.', this.totalErrors, 400));
         }
       })
       .then(() => {
@@ -110,7 +108,7 @@ module.exports = class DollarUploadController extends ControllerBase {
           .catch(err => Promise.reject(err));
       })
       .catch(err => {
-        if (err.name === 'UploadValidationError') {
+        if (err.name === UploadValidationError) {
           this.totalErrors[this.rowNum] = err.data;
           this.hasTotalErrors = true;
         } else {
@@ -126,14 +124,19 @@ module.exports = class DollarUploadController extends ControllerBase {
   // validations for this record.
   lookForErrors() {
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError('UploadValidationError', null, _.sortBy(this.errors, 'property')));
+      return Promise.reject(new NamedApiError(UploadValidationError, null, _.sortBy(this.errors, 'property')));
     }
     return Promise.resolve();
   }
 
   validateMeasureAccess() {
-    // todo: requires onramp table
-    return Promise.resolve();
+    // todo: requires onramp table, this is a temporary placeholder
+    return userRoleRepo.userHasRole(this.req.user.id, 'Indirect Revenue Adjustments')
+      .then(hasRole => {
+        if (!hasRole) {
+          this.addError('', 'Not authorized for this upload.');
+        }
+      })
   }
 
   getSubmeasure() {
@@ -143,7 +146,7 @@ module.exports = class DollarUploadController extends ControllerBase {
 
   validateSubmeasureCanManualUpload() {
     if (this.submeasure.source !== 'manual') {
-      return Promise.reject(new ApiError(`Sub Measure doesn't allow manual upload`));
+      this.addError('', `Sub Measure doesn't allow manual upload`);
     }
     return Promise.resolve();
   }

@@ -33,5 +33,10 @@ db.getCollection('submeasure').insert({
   indicators:{dollaruploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualmapping:"Y"},
   rules:["2TierPOSPID","2TierPOSBE"]})
 
+db.user_role.insert({
+  userId:"jodoe",
+  role:"Indirect Revenue Adjustments"
+})
+
 print('post-data-load complete');
 
