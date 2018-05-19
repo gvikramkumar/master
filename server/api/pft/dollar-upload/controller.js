@@ -239,13 +239,22 @@ module.exports = class DollarUploadController extends ControllerBase {
   }
 
   buildEmailBody() {
-    let body = `
-      <h4>Dollar Upload Validation Errors</h4>
-    `;
+    let first = true;
+    let body = '';
     _.forEach(this.totalErrors, (val, key) => {
-      body += '<br><br><div><b>' + key + ' Errors</b></div><table>';
+      if (first) {
+        first = false;
+        body += '<br>';
+      } else {
+        body += '<br><br>';
+      }
+      body += '<div style="font-size:18px;">' + key + ' Errors</div><hr><table>';
       val.forEach(err => {
-        body += `<tr><td style="margin-right: 30px">${err.property}</td><td>${err.error}</td></tr>`
+        if (err.property) {
+          body += `<tr><td style="margin-right: 30px">${err.property}:</td><td>${err.error}</td></tr>`
+        } else {
+          body += `<tr><td colspan="2">* ${err.error}</td></tr>`
+        }
       })
       body += '</table>'
     });
