@@ -1,19 +1,19 @@
 const DollarUploadRepo = require('./repo'),
   ControllerBase = require('../../../lib/models/controller-base'),
   xlsx = require('node-xlsx'),
-  DollarUploadImport = require('./template'),
+  DollarUploadTemplate = require('./template'),
+  DollarUploadImport = require('./import'),
   NamedApiError = require('../../../lib/common/named-api-error'),
   SubmeasureRepo = require('../submeasure/repo'),
   _ = require('lodash'),
-  GridFSBucket = require('../../../lib/common/gridfs-bucket'),
-  enums = require('../../../lib/models/enums'),
-  FileRepo = require('../../common/file/repo'),
-  ApiError = require('../../../lib/common/api-error');
+  ApiError = require('../../../lib/common/api-error'),
+  userRoleRepo = require('../../../lib/database/user-role-repo'),
+  mail = require('../../../lib/common/mail');
+
 
 const repo = new DollarUploadRepo();
 const submeasureRepo = new SubmeasureRepo();
-const fileRepo = new FileRepo();
-const gfs = new GridFSBucket();
+const UploadValidationError = 'UploadValidationError';
 
 const PropNames = {
   submeasureName: 'Sub Measure Name',
@@ -41,68 +41,41 @@ module.exports = class DollarUploadController extends ControllerBase {
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
     this.rows = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
+    this.totalErrors = {};
+    this.hasTotalErrors = false;
 
     this.validateRows()
+      .then(() => {
+        if (this.hasTotalErrors) {
+          return mail.send(
+            'dakahle@cisco.com',
+            'dakahle@cisco.com',
+            'Dollar upload validation errors',
+            null,
+            this.buildEmailBody())
+            // JSON.stringify(this.totalErrors, null, 2))
+            .then(() => {
+              return Promise.reject(new NamedApiError(UploadValidationError, 'There were validation errors in the upload. No records have been imported. An email was sent documenting the errors.', this.totalErrors, 400));
+            })
+        }
+      })
       .then(() => {
         return this.importRows()
           .then(() => {
             res.send(this.imports);
           })
       })
-      .catch(next)
-
-    // validate and if cool, then do mongo.Grid???.createWriteStream()... and get id back hopefully
-    // if not fs.fileInfo, then use the id to get that and return.
-
-    // return this.repo.getOneById(.file.id))
-    //   .then(files => res.send(files))
-    //   .catch(next);
+      .catch(next);
 
   }
 
   validateRows() {
     let chain = Promise.resolve();
+
     this.rows.forEach((row, idx) => {
       chain = chain.then(() => this.validateRow(row, idx + 1));
     });
     return chain;
-  }
-
-  importRows() {
-    this.imports = [];
-
-
-    // have this.rows, but lost this.temp (grrr) cause it's fixing some values right? Don't want you
-    // importing till all rows are deemed valid, no mixed state, all mkae it or none, otherwise you'll have
-    // to inform them which made it and which didn't (not gonna happen).
-    // probably a lot of work involved in taking 10 cols >> 20 cols insert into db, so do one at a time and
-    // put them together, then insert. Thing is: all can be done at same time. BUT... what about stuff like
-    // duplicate name or index constraint failures?? So need to show which row fails. With that knowledge and
-    // knowing they're done sequentially, they'll know what made it and what didn't. Only if you tell them though.
-    // Probably best to do sequentially again. Makes debugging easier as you know where things went bad, it's anyone's
-    // guess with promise.all.
-
-    let chain = Promise.resolve();
-    this.rows.forEach((row, idx) => {
-      chain = chain.then(() => this.importRow(row, idx + 1));
-    });
-    return chain;
-  }
-
-  importRow(row, rowNum) {
-    this.rowNum = rowNum;
-    this.temp = new DollarUploadImport(row);
-    this.submeasure = undefined;
-
-    return this.getSubmeasure()
-      .then(() => {
-        return Promise.all([])// the list of import operations to get all the data
-          .catch(err => Promise.reject(err));
-      })
-      .then(() => {
-        return repo.add(this.temp, this.req.user.id)
-          .then(doc => this.imports.push(doc));
-      })
   }
 
   addError(property, message) {
@@ -116,16 +89,23 @@ module.exports = class DollarUploadController extends ControllerBase {
   validateRow(row, rowNum) {
     this.errors = [];
     this.rowNum = rowNum;
-    this.temp = new DollarUploadImport(row);
+    this.temp = new DollarUploadTemplate(row);
     this.submeasure = undefined;
 
     return this.getSubmeasure()
       .then(() => {
-        return this.validateSubmeasureCanManualUpload();
+        return this.validateSubmeasureName()
+          .then(this.lookForErrors.bind(this))
+          .then(() => {
+            return Promise.all([
+              this.validateMeasureAccess(),
+              this.validateSubmeasureCanManualUpload()
+            ])
+          });
       })
+      .then(this.lookForErrors.bind(this))
       .then(() => {
         return Promise.all([
-          this.validateSubmeasureName(),
           this.validateProductValue(),
           this.validateSalesValue(),
           this.validateGrossUnbilledAccruedRevenueFlag(),
@@ -134,13 +114,38 @@ module.exports = class DollarUploadController extends ControllerBase {
           this.validateAmount(),
           this.validateRevenueClassification()
         ])
-          .then(() => {
-            if (this.errors.length) {
-              return Promise.reject(new NamedApiError('UploadValidationError',
-                `Validation Errors in row: ${rowNum}`, _.sortBy(this.errors, 'property'), 400));
-            }
-          })
+          .then(this.lookForErrors.bind(this))
           .catch(err => Promise.reject(err));
+      })
+      .catch(err => {
+        if (err.name === UploadValidationError) {
+          this.totalErrors['Row ' + this.rowNum] = err.data;
+          this.hasTotalErrors = true;
+        } else {
+          Promise.reject(err);
+        }
+      })
+
+  }
+
+  // look for errors and if any, reject the error to get out.
+  // this is also our "break out of validations" as some errors force us to stop checking now as later validations
+  // depend on former ones being successful. If we see errors at this point, the reject will discontinue
+  // validations for this record.
+  lookForErrors() {
+    if (this.errors.length) {
+      return Promise.reject(new NamedApiError(UploadValidationError, null, _.sortBy(this.errors, 'property')));
+    }
+    return Promise.resolve();
+  }
+
+  validateMeasureAccess() {
+    // todo: requires onramp table, this is a temporary placeholder
+    return userRoleRepo.userHasRole(this.req.user.id, 'Indirect Revenue Adjustments')
+      .then(hasRole => {
+        if (!hasRole) {
+          this.addError('', 'Not authorized for this upload.');
+        }
       })
   }
 
@@ -151,7 +156,7 @@ module.exports = class DollarUploadController extends ControllerBase {
 
   validateSubmeasureCanManualUpload() {
     if (this.submeasure.source !== 'manual') {
-      return Promise.reject(new ApiError(`Sub Measure doesn't allow manual upload`));
+      this.addError('', `Sub Measure doesn't allow manual upload`);
     }
     return Promise.resolve();
   }
@@ -159,19 +164,9 @@ module.exports = class DollarUploadController extends ControllerBase {
   validateSubmeasureName() {
     if (!this.temp.submeasureName) {
       this.addErrorRequired(PropNames.submeasureName);
-      return Promise.resolve();
     } else if (!this.submeasure) {
       this.addError(PropNames.submeasureName, 'No Sub Measure exists by this name.');
-      return Promise.resolve();
-    } else {
-      return this.userHasAccessToMeasure();
     }
-  }
-
-  userHasAccessToMeasure() {
-    // use this.req.user.userId and this.temp.submeasureName to get measure (from where?)
-    // and then goto onramp table to see if they have access to measure
-    // this.addError(PropNames.submeasureName, `User doesn't have access to measure: ${'??'}`);
     return Promise.resolve();
   }
 
@@ -187,25 +182,8 @@ module.exports = class DollarUploadController extends ControllerBase {
     return Promise.resolve();
   }
 
-  convertGrossUnbilledAccruedRevenueFlag() {
-    let flag;
-    if (_.isNull(this.temp.grossUnbilledAccruedRevenueFlag)) {
-      flag = null;
-    } else if (typeof this.temp.grossUnbilledAccruedRevenueFlag === 'string') {
-      flag = this.temp.grossUnbilledAccruedRevenueFlag.toUpperCase();
-      if (flag === 'NULL') {
-        flag = null;
-      }
-    }
-    if (flag !== undefined) {
-      this.temp.grossUnbilledAccruedRevenueFlag = flag;
-    }
-  }
-
   validateGrossUnbilledAccruedRevenueFlag() {
-    this.convertGrossUnbilledAccruedRevenueFlag();
-    const flag = this.temp.grossUnbilledAccruedRevenueFlag;
-    if (!_.includes([null, 'Y', 'N'], flag)) {
+    if (!_.includes([undefined, 'Y', 'N'], this.temp.grossUnbilledAccruedRevenueFlag)) {
       this.addError(PropNames.grossUnbilledAccruedRevenueFlag, 'Invalid value, must be: Y/N/NULL');
     }
     return Promise.resolve();
@@ -220,7 +198,6 @@ module.exports = class DollarUploadController extends ControllerBase {
   }
 
   validateAmount() {
-
     if (this.temp.amount === undefined || '') {
       this.addErrorRequired(PropNames.amount);
     } else if (Number.isNaN(Number(this.temp.amount))) {
@@ -235,6 +212,54 @@ module.exports = class DollarUploadController extends ControllerBase {
     return Promise.resolve();
   }
 
+  importRows() {
+    this.imports = [];
+
+    let chain = Promise.resolve();
+    this.rows.forEach((row, idx) => {
+      chain = chain.then(() => this.importRow(row, idx + 1));
+    });
+    return chain;
+  }
+
+  importRow(row, rowNum) {
+    this.rowNum = rowNum;
+    this.import = new DollarUploadImport(row);
+    this.submeasure = undefined;
+
+    return this.getSubmeasure()
+      .then(() => {
+        return Promise.all([])// the list of import operations to get all the data
+          .catch(err => Promise.reject(err));
+      })
+      .then(() => {
+        return repo.add(this.import, this.req.user.id)
+          .then(doc => this.imports.push(doc));
+      })
+  }
+
+  buildEmailBody() {
+    let first = true;
+    let body = '';
+    _.forEach(this.totalErrors, (val, key) => {
+      if (first) {
+        first = false;
+        body += '<br>';
+      } else {
+        body += '<br><br>';
+      }
+      body += '<div style="font-size:18px;">' + key + ' Errors</div><hr><table>';
+      val.forEach(err => {
+        if (err.property) {
+          body += `<tr><td style="margin-right: 30px">${err.property}:</td><td>${err.error}</td></tr>`
+        } else {
+          body += `<tr><td colspan="2">* ${err.error}</td></tr>`
+        }
+      })
+      body += '</table>'
+    });
+    return body;
+  }
 
 }
 

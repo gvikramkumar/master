@@ -1,5 +1,5 @@
 const util = require('./util'),
-  {db, mongo} = util.getDbAndMongo(),
+  {db, mongo} = require('../database/mongoose-conn'),
   ApiError = require('./api-error'),
   _ = require('lodash');
 

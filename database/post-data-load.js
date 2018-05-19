@@ -18,7 +18,7 @@ collectionsWithCreatedUpdated.forEach(coll => {
   }});
 });
 
-db.getCollection('submeasure').insert({
+db.submeasure.insertOne({
   name:"2 Tier Adjustment",
   description:"2 Tier Adjustment",
   source:"manual",
@@ -32,6 +32,23 @@ db.getCollection('submeasure').insert({
   reportingLevels:[],
   indicators:{dollaruploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualmapping:"Y"},
   rules:["2TierPOSPID","2TierPOSBE"]})
+
+db.user_role.insertOne({
+  userId:"jodoe",
+  role:"Indirect Revenue Adjustments"
+})
+
+db.dollar_upload.insertOne({
+  submeasureName:"2 Tier Adjustment",
+  product:"UCS",
+  sales:"Americas",
+  legalEntity:"Japan",
+  intbusinessEntity:"collaboration",
+  scms:"enterprise",
+  dealId:"",
+  grossUnbilledAccruedFlag:"N",
+  revenueClassification:"Non Recurring",
+  amount:450.57});
 
 print('post-data-load complete');
 

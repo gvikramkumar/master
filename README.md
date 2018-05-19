@@ -19,10 +19,11 @@ assume site root unless specified otherwise
 4. npm install
 5. cd ui
 6. npm install (separate install for ui)
-7. npm run seedbat for windows and seedsh for max/linux (creates the fin-dfa database locally) OR npm run seedbatdev/seedshdev for our shared dev database. I haven't tested mac or either dev versions. Windows version works
-8. npm start // starts server on http://localhost:3002 (configurable in server/config/dev.json)
-9. cd ui, ng serve // starts the ui on http://localhost:4200
-10. enter http://localhost:4200 in the browser to bring the landing page up
+7. "npm run uibuildprod" // if not running locally, builds ui to /ui/dist directory for api server to serve along with api
+8. npm run seedbat for windows and seedsh for max/linux (creates the fin-dfa database locally) OR npm run seedbatdev/seedshdev for our shared dev database.
+9. npm start // starts server on http://localhost:3002 (configurable in server/config/dev.json)
+10. cd ui, "ng serve" if running on your own box // starts the ui on http://localhost:4200  
+11. enter http://localhost:4200 in the browser to bring the landing page up
 
 #### config
 **server config:**  

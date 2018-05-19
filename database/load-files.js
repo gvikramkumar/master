@@ -1,8 +1,8 @@
 const config = require('../server/config/get-config'),
   fs = require('fs'),
-  dbPromise = require('../server/mongoose-conn');
+  mgConn = require('../server/lib/database/mongoose-conn');
 
-dbPromise.then(({db, mongo}) => {
+mgConn.promise.then(({db, mongo}) => {
   console.log('loading files...');
 
   const gfs = new mongo.GridFSBucket(db);

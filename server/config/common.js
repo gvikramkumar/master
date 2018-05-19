@@ -1,7 +1,13 @@
 module.exports = {
   port: 3000,
   mongoUri: null,
-  postgresUri: null,
+  postgres: {
+    host: 'finpg-dev-01',
+    port: 5432,
+    database: 'postgres',
+    user: 'postgres',
+    password: 'finit1'
+  },
   corsOrigin: [],
   showStack: false,
   fileSizeMax: 10000000, // 10mb

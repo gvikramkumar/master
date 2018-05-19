@@ -1,9 +1,0 @@
-measureName,submeasureName,inputProductValue,inputProductHierLevelId,inputProductHierLevelName,inputEntityValue,inputEntityHierLevelId,inputEntityHierLevelName,inputSalesValue,inputSalesHierLevelId,inputSalesHierLevelName,scmsValue,scmsHierLevelId,scmsHierLevelName,inputBusinessValue,inputBusinessHierLevelId,inputBusinessHierLevelName,dealId,grossUnbilledAccruedRevFlg,revenueClassification,amount
-Indirect Revenue Adjustments,LOCAL CHANNEL PROGRAMS,IPICS,3,PF,,,,US AND CANADA,1,LEVEL1,,,,,,,,,,-357.81
-Indirect Revenue Adjustments,LOCAL CHANNEL PROGRAMS,15454,3,PF,,,,US AND CANADA,1,LEVEL1,,,,,,,,,,-1313.98
-Indirect Revenue Adjustments,LOCAL CHANNEL PROGRAMS,ASR9000,3,PF,,,,US AND CANADA,1,LEVEL1,,,,,,,,,,-33503.12
-Indirect Revenue Adjustments,LOCAL CHANNEL PROGRAMS,AMPCONT,3,PF,,,,US AND CANADA,1,LEVEL1,,,,,,,,,,-2758.42
-Indirect Revenue Adjustments,LOCAL CHANNEL PROGRAMS,TAMCMID,3,PF,,,,US AND CANADA,1,LEVEL1,,,,,,,,,,-5557.82
-Indirect Revenue Adjustments,LOCAL CHANNEL PROGRAMS,NDSBU_ADJ_PF,3,PF,,,,US AND CANADA,1,LEVEL1,,,,,,,,,,-49.88
-Indirect Revenue Adjustments,LOCAL CHANNEL PROGRAMS,SFP25G,3,PF,,,,US AND CANADA,1,LEVEL1,,,,,,,,,,-192.20
-Indirect Revenue Adjustments,LOCAL CHANNEL PROGRAMS,QSFP100,3,PF,,,,US AND CANADA,1,LEVEL1,,,,,,,,,,-4136.03
