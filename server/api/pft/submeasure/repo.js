@@ -13,27 +13,27 @@ const schema = new mg.Schema(
     pnlnodeGrouping: String,
     inputfilterLevel: {
       productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
-        salesLevel: String,
-        scsmsLevel: String,
-        internalBELevel: String,
-        entityLevel: String
-      },
-      manualMapping: {
-        productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
-          salesLevel: String,
-          scsmsLevel: String,
-          internalBELevel: String,
-          entityLevel: String
-        },
-        reportingLevels: [String],
-        indicators: {
-          dollaruploadFlag: {type: String, enum: ['Y', 'N']},
-          discountFlag: {type: String, enum: ['Y', 'N']},
-          approveFlag: {type: String, enum: ['Y', 'N']},
-          status: {type: String, enum: ['A']},
-          manualmapping: {type: String, enum: ['Y', 'N']}
-        },
-        rules: [String]
+      salesLevel: String,
+      scsmsLevel: String,
+      internalBELevel: String,
+      entityLevel: String
+    },
+    manualMapping: {
+      productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
+      salesLevel: String,
+      scsmsLevel: String,
+      internalBELevel: String,
+      entityLevel: String
+    },
+    reportingLevels: [String],
+    indicators: {
+      dollaruploadFlag: {type: String, enum: ['Y', 'N']},
+      discountFlag: {type: String, enum: ['Y', 'N']},
+      approveFlag: {type: String, enum: ['Y', 'N']},
+      status: {type: String, enum: ['A']},
+      manualmapping: {type: String, enum: ['Y', 'N']}
+    },
+    rules: [String]
   },
   {collection: 'submeasure'}
 );
