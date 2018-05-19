@@ -7,7 +7,8 @@ const DollarUploadRepo = require('./repo'),
   SubmeasureRepo = require('../submeasure/repo'),
   _ = require('lodash'),
   ApiError = require('../../../lib/common/api-error'),
-  userRoleRepo = require('../../../lib/database/user-role-repo');
+  userRoleRepo = require('../../../lib/database/user-role-repo'),
+  mail = require('../../../lib/common/mail');
 
 
 const repo = new DollarUploadRepo();
@@ -46,7 +47,16 @@ module.exports = class DollarUploadController extends ControllerBase {
     this.validateRows()
       .then(() => {
         if (this.hasTotalErrors) {
-          return Promise.reject(new NamedApiError(UploadValidationError, 'There were validation errors in the upload. No records have been imported. An email was sent documenting the errors.', this.totalErrors, 400));
+          return mail.send(
+            'dakahle@cisco.com',
+            'dakahle@cisco.com',
+            'Dollar upload validation errors',
+            null,
+            this.buildEmailBody())
+            // JSON.stringify(this.totalErrors, null, 2))
+            .then(() => {
+              return Promise.reject(new NamedApiError(UploadValidationError, 'There were validation errors in the upload. No records have been imported. An email was sent documenting the errors.', this.totalErrors, 400));
+            })
         }
       })
       .then(() => {
@@ -109,7 +119,7 @@ module.exports = class DollarUploadController extends ControllerBase {
       })
       .catch(err => {
         if (err.name === UploadValidationError) {
-          this.totalErrors[this.rowNum] = err.data;
+          this.totalErrors['Row ' + this.rowNum] = err.data;
           this.hasTotalErrors = true;
         } else {
           Promise.reject(err);
@@ -228,6 +238,19 @@ module.exports = class DollarUploadController extends ControllerBase {
       })
   }
 
+  buildEmailBody() {
+    let body = `
+      <h4>Dollar Upload Validation Errors</h4>
+    `;
+    _.forEach(this.totalErrors, (val, key) => {
+      body += '<br><br><div><b>' + key + ' Errors</b></div><table>';
+      val.forEach(err => {
+        body += `<tr><td style="margin-right: 30px">${err.property}</td><td>${err.error}</td></tr>`
+      })
+      body += '</table>'
+    });
+    return body;
+  }
 
 }
 
