@@ -1,11 +1,10 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {BehaviorSubject} from "rxjs";
 import {StoreBase} from "./store-base";
 import {ObservableMedia} from "@angular/flex-layout";
-import "rxjs/add/operator/first";
-  import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
-import {Router} from '@angular/router';
+import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
 import {User} from './models/user';
+import {first} from 'rxjs/operators';
 
 @Injectable()
 /**
@@ -46,14 +45,14 @@ export class Store extends StoreBase {
   });
 
 
-  constructor(private media: ObservableMedia, private router: Router) {
+  constructor(private media: ObservableMedia) {
     super();
     this.init();
   }
 
   init() {
     this.media.asObservable()
-      .first()
+      .pipe(first())
       .subscribe(change => {
         this.initialBreakpoint = change.mqAlias;
       });

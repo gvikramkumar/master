@@ -25,15 +25,6 @@ import {StoreModule} from './store/store.module';
 export class AppModule {
 
   constructor(private store: Store, private router: Router, private appRef: ApplicationRef) {
-    this.init();
-  }
-
-  init() {
-    this.router.events.filter(e => e instanceof NavigationEnd)
-      .subscribe((event: NavigationEnd) => {
-        this.store.currentUrlPub(event.url);
-      });
-
   }
 
 }

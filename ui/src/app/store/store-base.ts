@@ -1,11 +1,5 @@
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {environment} from '../../environments/environment';
+import {BehaviorSubject, Observable} from 'rxjs';
 import * as _ from 'lodash';
-import {Message} from './models/message';
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/operator/filter';
-import {Observable} from 'rxjs/Observable';
-import {Store} from './store';
 
 export class StoreBase {
 

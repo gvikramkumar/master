@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import 'rxjs/add/operator/do';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {ProgressService} from '../services/common/progress.service';
+import {tap} from 'rxjs/operators';
 
 
 @Injectable()
@@ -17,11 +17,12 @@ export class SpinnerInterceptor implements HttpInterceptor {
     const nextReq = req.clone({params: req.params.delete('hideSpinner')});
 
     return next
-      .handle(nextReq)
-      .do(event => {
-        if (event instanceof HttpResponse) {
-          this.progressService.hideProgressBar();
-        }
-      });
+      .handle(nextReq).pipe(
+        tap(event => {
+          if (event instanceof HttpResponse) {
+            this.progressService.hideProgressBar();
+          }
+        })
+      )
   }
 }

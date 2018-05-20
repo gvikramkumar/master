@@ -2,12 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {DataSource} from '@angular/cdk/collections';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
+import {BehaviorSubject, Observable, Subject, merge} from 'rxjs';
+import {debounceTime, map} from 'rxjs/operators';
 import {SubmeasureService} from '../../services/submeasure.service';
 import {Submeasure} from '../../store/models/submeasure';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
@@ -48,7 +44,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     private submeasureService: SubmeasureService,
     private store: Store,
     private route: ActivatedRoute
-    ) {
+  ) {
     super(store, route);
   }
 
@@ -83,7 +79,8 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
 
   ngOnInit() {
     //this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator);
-    this.formControl.valueChanges.debounceTime(300).subscribe(name => {
+    this.formControl.valueChanges.pipe(debounceTime(300))
+      .subscribe(name => {
       this.nameFilter.next(name);
     });
 
@@ -175,13 +172,14 @@ export class ExampleDataSource extends DataSource<any> {
       this._paginator.page,
     ];
 
-    return Observable.merge(...displayDataChanges).map(() => {
-      const data = this._exampleDatabase.data.slice();
+    return merge(...displayDataChanges)
+      .pipe(map(() => {
+        const data = this._exampleDatabase.data.slice();
 
-      // Grab the page's slice of data.
-      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-      return data.splice(startIndex, this._paginator.pageSize);
-    });
+        // Grab the page's slice of data.
+        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+        return data.splice(startIndex, this._paginator.pageSize);
+      }));
   }
 
   disconnect() {

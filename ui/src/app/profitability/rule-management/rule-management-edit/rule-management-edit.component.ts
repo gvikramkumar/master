@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AllocationRule} from '../../store/models/allocation-rule';
 import {RuleService} from '../../services/rule.service';
-import {Observable} from 'rxjs/Observable';
+import {Observable, of} from 'rxjs';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
 import {Store} from '../../../store/store';
 
@@ -284,12 +284,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     //todo: need to search for rule name duplicity on add only
     let obs: Observable<AllocationRule>;
     if (this.editMode) {
-      return Observable.of(true);
+      return of(true);
     } else {
       //todo: validate name doesn't exist already. Could be done with an ngModel validator realtime if rules cached
       // otherwise hit server here
       // check for fule name existence in store (if cached rules) or hit the server (why it's observable)
-      return Observable.of(true);
+      return of(true);
     }
   }
 }

@@ -1,12 +1,10 @@
 import {Injectable} from '@angular/core';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+import {throwError, Observable} from 'rxjs';
+import {tap, catchError} from 'rxjs/operators';
 import {
   HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,
   HttpResponse
 } from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
 import {ProgressService} from '../services/common/progress.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ErrorModalComponent} from '../../shared/dialogs/error-modal/error-modal.component';
@@ -30,46 +28,47 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next
       .handle(req)
-      .do(event => {
-      })
-      .catch(resp => {
-        this.progressService.hideProgressBar();
+      .pipe(
+        tap(event => {
+        }),
+        catchError(resp => {
+          this.progressService.hideProgressBar();
 
-        const error = resp.error;
-        let err;
-        if (error && error.message) {
-          err = resp.error;
-        } else {
-          err = {
-            message: 'Unknown server error',
-            data: error
+          const error = resp.error;
+          let err;
+          if (error && error.message) {
+            err = resp.error;
+          } else {
+            err = {
+              message: 'Unknown server error',
+              data: error
+            };
+          }
+
+          if (this.whiteListed(resp, req.method)) {
+            return Observable.throw(err);
+          }
+
+          /*
+                  if (err.errorCode === errorCodes.server_prefix + errorCodes.user_not_authenticated) {
+                    this.router.navigateByUrl('/login');
+                  }
+          */
+
+          const config = <MatDialogConfig> {
+            data: {error: err},
+            width: '600px',
+            backdropClass: 'bg-modal-backdrop'
           };
-        }
-
-        if (this.whiteListed(resp, req.method)) {
-          return Observable.throw(err);
-        }
-
-/*
-        if (err.errorCode === errorCodes.server_prefix + errorCodes.user_not_authenticated) {
-          this.router.navigateByUrl('/login');
-        }
-*/
-
-        const config = <MatDialogConfig> {
-          data: {error: err},
-          width: '600px',
-          backdropClass: 'bg-modal-backdrop'
-        };
-        this.dialog.open(ErrorModalComponent, config)
-          .afterClosed()
-          .subscribe(result => {
-            // if (resp.error && resp.error.errorCode === 'xxx-xxxx') {
-            //   this.router.navigateByUrl('/');
-            // }
-          });
-        return Observable.throw(err);
-      });
+          this.dialog.open(ErrorModalComponent, config)
+            .afterClosed()
+            .subscribe(result => {
+              // if (resp.error && resp.error.errorCode === 'xxx-xxxx') {
+              //   this.router.navigateByUrl('/');
+              // }
+            });
+          return throwError(err);
+        }));
   }
 
   /**

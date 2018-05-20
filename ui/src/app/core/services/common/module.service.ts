@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {Module} from '../../../store/models/module';
 import {environment} from '../../../../environments/environment';
@@ -17,8 +18,9 @@ export class ModuleService extends RestBase<Module> {
   }
 
   getMany(): Observable<Module[]> {
-    return super.getMany()
-      .do(modules => this.store.modules = _.sortBy(modules, 'seqnum'));
+    return super.getMany().pipe(
+      tap(modules => this.store.modules = _.sortBy(modules, 'seqnum'))
+    )
   }
 
 }

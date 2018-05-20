@@ -2,14 +2,14 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
-import {Subject} from 'rxjs/Subject';
-import {Subscription} from 'rxjs/Subscription';
+import {Subject, Subscription} from 'rxjs';
 import {AllocationRule} from '../../store/models/allocation-rule';
 import * as moment from 'moment';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '../../../store/store';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
 import * as _ from 'lodash';
+import {debounceTime} from 'rxjs/operators';
 
 @Component({
   selector: 'fin-rule-management',
@@ -38,7 +38,8 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit() {
-    this.formControl.valueChanges.debounceTime(300).subscribe(name => {
+    this.formControl.valueChanges.pipe(debounceTime(300))
+      .subscribe(name => {
       this.nameFilter.next(name);
     });
 
