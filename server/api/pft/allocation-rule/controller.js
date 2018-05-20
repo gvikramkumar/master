@@ -10,7 +10,7 @@ module.exports = class AllocationRuleController extends ControllerBase {
 
   getMany(req, res, next) {
     if (req.query.getLatest) {
-      this.repo.getManyByGroupLatest('name')
+      this.repo.getManyByGroupLatest({}, 'name', req.query.yearmo, req.query.upperOnly)
         .then(items => res.send(items))
         .catch(next);
 

@@ -31,9 +31,22 @@ const PropNames = {
 
 module.exports = class DollarUploadController extends ControllerBase {
 
-
   constructor() {
     super(repo);
+  }
+
+  getMany(req, res, next) {
+    const filter = {};
+    if (req.query.submeasureName) {
+      filter.submeasureName = req.query.submeasureName;
+    }
+    if (req.query.yearmo) {
+      this.repo.getManyByDateRange(filter, req.query.yearmo)
+        .then(items => res.send(items))
+        .catch(next);
+    } else {
+      super.getMany(req, res, next);
+    }
   }
 
   upload(req, res, next) {
@@ -150,7 +163,7 @@ module.exports = class DollarUploadController extends ControllerBase {
   }
 
   getSubmeasure() {
-    return submeasureRepo.getOneByNameLatest(this.temp.submeasureName)
+    return submeasureRepo.getOneLatest({name: this.temp.submeasureName})
       .then(submeasure => this.submeasure = submeasure);
   }
 

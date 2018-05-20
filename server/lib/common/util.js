@@ -1,19 +1,31 @@
 const {Duplex} = require('stream'),
   {Buffer} = require('buffer'),
-  ApiError = require('./api-error'),
-  mg = require('mongoose');
+  ApiError = require('./api-error')
 
 module.exports = {
-  getDbAndMongo,
+  getDateRangeFromFiscalYearMo,
   streamToBuffer,
   bufferToStream,
   checkParams,
   setSchemaAdditions
 }
 
-function getDbAndMongo() {
-  return {db: mg.connection.db, mongo: mg.mongo};
+function getDateRangeFromFiscalYearMo(_yearmo) {
+  let yearmo = _yearmo;
+  if (typeof yearmo === 'number') {
+    yearmo = yearmo.toString();
+  }
+  const year = Number(yearmo.substr(0, 4));
+  const month = Number(yearmo.substr(4, 2));
+
+
+  let startDate = new Date(year, month - 1 + 7);
+  let endDate = new Date(year, month - 1 + 8);
+
+  return {startDate, endDate};
 }
+
+
 
 function setSchemaAdditions(schema) {
   schema.set('toObject', {

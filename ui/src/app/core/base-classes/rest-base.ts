@@ -17,7 +17,7 @@ export class RestBase<T extends ModelBase> {
     return this.httpClient.get<T[]>(`${apiUrl}/api/${this.endpointName}`);
   }
 
-  getOne(id: number): Observable<T> {
+  getOneById(id: number): Observable<T> {
     return this.httpClient.get<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
   }
 
