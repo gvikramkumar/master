@@ -42,6 +42,7 @@ module.exports = class ControllerBase {
   }
 
   // if queryPost querystring, then assume a getMany query with params in req.body
+  // inspired by graphql, maybe easier to make some queries using the body instead of querystring
   add(req, res, next) {
     const data = req.body;
     if (req.query.queryPost) {
