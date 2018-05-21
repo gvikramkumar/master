@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {FsFile} from '../../store/models/fsfile';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import * as _ from 'lodash';

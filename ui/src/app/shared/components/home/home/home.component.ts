@@ -1,8 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {Subject} from 'rxjs/Subject';
-import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
-import {ModuleService} from '../../../../core/services/common/module.service';
+import {Subject} from 'rxjs';
 import {Store} from '../../../../store/store';
 import * as _ from 'lodash';
 

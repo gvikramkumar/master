@@ -7,6 +7,7 @@ import {HomeComponent} from './shared/components/home/index';
 import {Store} from './store/store';
 import {PageNotFoundComponent} from './shared/components/page-not-found/page-not-found.component';
 import {AuthorizationGuard} from './core/guards/authorization.guard';
+import {filter} from 'rxjs/operators';
 
 const routes: Routes = [
   {
@@ -48,7 +49,7 @@ export class AppRoutingModule {
   }
 
   init() {
-    this.router.events.filter(e => e instanceof NavigationEnd)
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.store.currentUrlPub(event.url);
       });

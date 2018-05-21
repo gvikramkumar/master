@@ -1,8 +1,7 @@
 import {ObservableMedia} from '@angular/flex-layout';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {environment} from '../../../../environments/environment';
 
 export enum BreakpointDirection {
   initial = 1,

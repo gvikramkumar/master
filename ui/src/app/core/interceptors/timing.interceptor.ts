@@ -1,6 +1,6 @@
-import 'rxjs/add/operator/do';
+import {tap} from 'rxjs/operators';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 export class TimingInterceptor implements HttpInterceptor {
   constructor() {
@@ -10,11 +10,11 @@ export class TimingInterceptor implements HttpInterceptor {
     const started = Date.now();
     return next
       .handle(req)
-      .do(event => {
+      .pipe(tap(event => {
         if (event instanceof HttpResponse) {
           const elapsed = Date.now() - started;
           // console.log(`Request for ${req.urlWithParams} took ${elapsed} ms.`);
         }
-      });
+      }));
   }
 }

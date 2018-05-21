@@ -1,12 +1,9 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/map';
+import {Observable, Subject, forkJoin} from 'rxjs';
+import {mergeMap, map, catchError} from 'rxjs/operators';
 import {Init1, Init2, Init3, Init4, Init5} from '../services/common/test-init-service';
 import {Store} from '../../store/store';
-import {Subject} from 'rxjs/Subject';
 import {BreakpointService} from "../services/common/breakpoint.service";
 import {ModuleService} from '../services/common/module.service';
 import {TestService} from '../services/common/test.service';
@@ -73,22 +70,24 @@ export class InitializationGuard implements CanActivate {
 
     this.store.user = new User('jodoe', "John Doe", []);
 
-    Observable.forkJoin(
+    forkJoin(
       // this.userService.getAll(),
       this.moduleService.getMany())
-      .map(x => {
-        // console.log('initguard done');
-        // this.store.pub({...this.store.state, initialized: true});
-        this.afterInit();
-        this.store.initialized = true;
-        console.log('app initialized');
-        this.response$.next(true);
-        return true;
-      })
-      .catch(err => {
-        this.response$.next(false);
-        return Observable.throw(err);
-      })
+      .pipe(
+        map(x => {
+          // console.log('initguard done');
+          // this.store.pub({...this.store.state, initialized: true});
+          this.afterInit();
+          this.store.initialized = true;
+          console.log('app initialized');
+          this.response$.next(true);
+          return true;
+        }),
+        catchError(err => {
+          this.response$.next(false);
+          return Observable.throw(err);
+        })
+      )
       .subscribe();
 
 

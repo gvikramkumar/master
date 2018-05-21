@@ -1,61 +1,64 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/do';
+import {Observable, of} from 'rxjs';
+import {tap, delay} from 'rxjs/operators';
 
 @Injectable()
 export class Init1 {
   get() {
-    return Observable.of('one')
-      .do(() => {
+    return of('one').pipe(
+      tap(() => {
         // return console.log('init1');
-      })
-      .delay(0);
+      }),
+      delay(0)
+    )
   }
 }
 
 @Injectable()
 export class Init2 {
   get() {
-    return Observable.of('two')
-      .do(() => {
+    return of('two').pipe(
+      tap(() => {
         // return console.log('init2');
-      })
-      .delay(0);
+      }),
+      delay(0)
+    )
   }
 }
 
 @Injectable()
 export class Init3 {
   get() {
-    return Observable.of('three')
-      .do(() => {
+    return of('three').pipe(
+      tap(() => {
         // return console.log('init3');
-      })
-      .delay(0);
+      }),
+      delay(0)
+    )
   }
 }
 
 @Injectable()
 export class Init4 {
   get() {
-    return Observable.of('four')
-      .do(() => {
+    return of('four').pipe(
+      tap(() => {
         // return console.log('init4');
-      })
-      .delay(0);
+      }),
+      delay(0)
+    )
   }
 }
 
 @Injectable()
 export class Init5 {
   get() {
-    return Observable.of('five')
-      .do(() => {
+    return of('five').pipe(
+      tap(() => {
         // return console.log('init5');
-      })
-      .delay(0);
+      }),
+      delay(0)
+    )
   }
 }
 

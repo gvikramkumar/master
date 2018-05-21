@@ -1,6 +1,5 @@
-import 'rxjs/add/operator/do';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 export class ModifyRequestInterceptor implements HttpInterceptor {
   constructor() {

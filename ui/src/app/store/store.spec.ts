@@ -1,8 +1,5 @@
-import {StoreBase} from './store-base';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Store} from './store';
 import {FlexLayoutModule, ObservableMedia} from '@angular/flex-layout';
-import {Subscription} from 'rxjs/Subscription';
 import {TestBed} from '@angular/core/testing';
 import {StoreModule} from './store.module';
 import * as _ from 'lodash';
@@ -10,7 +7,7 @@ import * as _ from 'lodash';
 class MediaChange {
   constructor(public mqAlias: string) {}
 }
-
+/*
 describe('Store tests', () => {
   let store: Store;
   let observableMedia: ObservableMedia;
@@ -136,7 +133,7 @@ describe('Store tests', () => {
 
 
 })
-
+*/
 
 
 
