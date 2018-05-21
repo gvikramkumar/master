@@ -7,10 +7,13 @@ module.exports = class ControllerBase {
   }
 
   // if groupField, groups by groupField and gets Latest of each group
+  // else if getLatest, returns the lastest value
   getMany(req, res, next) {
     let promise;
     if (req.query.groupField) {
       promise = this.repo.getManyByGroupLatest(req.query)
+    } else if (req.query.getLatest) {
+      promise = this.repo.getOneLatest(req.query)
     } else {
       promise = this.repo.getMany(req.query);
     }
@@ -20,24 +23,15 @@ module.exports = class ControllerBase {
       .catch(next);
   }
 
-  // if id is getlatest, then req.query is filter and we get the latest value, if not there, 204 (instead of 404)
   getOne(req, res, next) {
-    const getLatest = req.params.id.toLowerCase() === 'getlatest';
-    let promise;
-    if (getLatest) {
-      promise = this.repo.getOneLatest(req.query);
-    } else {
-      promise = this.repo.getOneById(req.params.id);
-    }
-    promise.then(item => {
-      if (item) {
-        res.send(item);
-      } else if (getLatest) {
-        res.status(204).end();
-      } else {
-        res.status(404).end();
-      }
-    })
+    this.repo.getOneById(req.params.id)
+      .then(item => {
+        if (item) {
+          res.send(item);
+        } else {
+          res.status(404).end();
+        }
+      })
       .catch(next)
   }
 

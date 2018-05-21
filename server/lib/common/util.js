@@ -19,8 +19,8 @@ function getDateRangeFromFiscalYearMo(_yearmo) {
   const month = Number(yearmo.substr(4, 2));
 
 
-  let startDate = new Date(year, month - 1 + 7);
-  let endDate = new Date(year, month - 1 + 8);
+  let startDate = new Date(year - 1, month - 1 + 7);
+  let endDate = new Date(year - 1, month - 1 + 8);
 
   return {startDate, endDate};
 }
