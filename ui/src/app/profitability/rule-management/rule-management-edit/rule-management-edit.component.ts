@@ -36,7 +36,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   public ngOnInit(): void {
     if (this.editMode) {
       this.title = 'Edit Rule';
-      this.ruleService.getOne(this.route.snapshot.params.id)
+      this.ruleService.getOneById(this.route.snapshot.params.id)
         .subscribe(rule => {
           this.rule = rule;
           this.driverSelection = this.rule.driverName? this.driverNamesMap[this.rule.driverName]: '';
