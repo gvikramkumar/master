@@ -13,9 +13,18 @@ const client = new Client({
 const rtn = {pgdb: client};
 module.exports = rtn;
 
-rtn.promise = client.connect()
-  .then(() => {
-    console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}`)
-    return client;
-  });
+if (process.env.NO_POSTGRES) {
+  rtn.promise = Promise.resolve()
+    .then(() => {
+      console.log(`POSTGRES NOT CONNECTED, USING NO_POSTGRES NODE VAR`);
+      return client;
+    });
+} else {
+  rtn.promise = client.connect()
+    .then(() => {
+      console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}`)
+      return client;
+    });
+}
+
 
