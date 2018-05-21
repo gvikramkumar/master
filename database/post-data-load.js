@@ -33,13 +33,19 @@ db.dollar_upload.insertOne({
   revenueClassification:"Non Recurring",
   amount:450.57});
 
+db.measure.insertOne({
+  measureName:"Indirect Revenue Adjustments",
+  measureTypeCode:"revadj",
+  statusFlag:"Y"
+})
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
   'submeasure',
   'submeasure_rule',
-  'dollar_upload'
+  'dollar_upload',
+  'measure'
 ];
 
 const date = new Date();
