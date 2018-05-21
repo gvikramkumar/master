@@ -35,20 +35,6 @@ module.exports = class DollarUploadController extends ControllerBase {
     super(repo);
   }
 
-  getMany(req, res, next) {
-    const filter = {};
-    if (req.query.submeasureName) {
-      filter.submeasureName = req.query.submeasureName;
-    }
-    if (req.query.yearmo) {
-      this.repo.getManyByDateRange(filter, req.query.yearmo)
-        .then(items => res.send(items))
-        .catch(next);
-    } else {
-      super.getMany(req, res, next);
-    }
-  }
-
   upload(req, res, next) {
     this.req = req;
     this.userId = req.user.id;
