@@ -13,7 +13,11 @@ const schema = new mg.Schema(
     dealId: String,
     grossUnbilledAccruedFlag: String,
     revenueClassification: String,
-    amount: {type: Number, required: true}
+    amount: {type: Number, required: true},
+    createdBy: String,
+    createdDate: Date,
+    updatedBy: String,
+    updatedDate: Date
   },
   {collection: 'dollar_upload'}
 );

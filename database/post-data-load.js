@@ -1,23 +1,6 @@
 const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
-const collectionsWithCreatedUpdated = [
-  'allocation_rule',
-  'submeasure',
-  'submeasure_rule',
-  'dollar_upload'
-];
-
-const date = new Date();
-collectionsWithCreatedUpdated.forEach(coll => {
-  db.getCollection(coll).updateMany({}, {$set: {
-      createdBy: '',
-      createdDate: date,
-      updatedBy: '',
-      updatedDate: date
-  }});
-});
-
 db.submeasure.insertOne({
   name:"2 Tier Adjustment",
   description:"2 Tier Adjustment",
@@ -49,6 +32,25 @@ db.dollar_upload.insertOne({
   grossUnbilledAccruedFlag:"N",
   revenueClassification:"Non Recurring",
   amount:450.57});
+
+
+// MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
+const collectionsWithCreatedUpdated = [
+  'allocation_rule',
+  'submeasure',
+  'submeasure_rule',
+  'dollar_upload'
+];
+
+const date = new Date();
+collectionsWithCreatedUpdated.forEach(coll => {
+  db.getCollection(coll).updateMany({}, {$set: {
+      createdBy: '',
+      createdDate: date,
+      updatedBy: '',
+      updatedDate: date
+    }});
+});
 
 print('post-data-load complete');
 
