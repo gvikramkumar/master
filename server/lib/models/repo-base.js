@@ -11,7 +11,9 @@ module.exports = class RepoBase {
     this.Model = mg.model(modelName, schema);
   }
 
-  getMany(filter = {}) {
+  // get all that match filter, if yearmo/upperOnly exists, sets date constraints
+  getMany(_filter = {}) {
+    const filter = this.addDateRangeToFilter(_filter);
     return this.Model.find(filter).exec();
   }
 
@@ -19,8 +21,14 @@ module.exports = class RepoBase {
     return this.Model.find({_id: {$in: ids}}).exec();
   }
 
-  getManyByGroupLatest(groupField) {
+  // group by groupField and get latest of each group
+  getManyByGroupLatest(_filter) {
+    let filter = _filter;
+    const groupField = filter.groupField;
+    delete filter.groupField;
+    filter = this.addDateRangeToFilter(filter);
     return this.Model.aggregate([
+      {$match: filter},
       {$sort: {updatedDate: -1}},
       {$group: {_id: '$'+groupField, id: {$first: '$_id'}}},
       {$project: {_id: '$id'}}
@@ -31,27 +39,24 @@ module.exports = class RepoBase {
       });
   }
 
-
-  getOne(filter) {
-    return this.Model.findOne(filter).exec();
-  }
-
   getOneById(id) {
     return this.Model.findById(id).exec()
       .then(x => x);
   }
 
-  getOneLatest(filter) {
+  // returns the latest value
+  getOneLatest(_filter) {
+    let filter = _filter;
+    delete filter.getLatest;
+    filter = this.addDateRangeToFilter(filter);
     return this.Model.find(filter).sort({updatedDate: -1}).limit(1).exec()
       .then(arr => arr.length? arr[0]: null);
   }
 
-  getOneByName(name) {
-    return this.getOne({name});
-  }
-
-  getOneByNameLatest(name) {
-    return this.getOneLatest({name});
+  getOne(_filter) {
+    let filter = _filter;
+    filter = this.addDateRangeToFilter(filter);
+    return this.Model.findOne(filter).exec();
   }
 
   getOneWithTimestamp(data) {
@@ -122,6 +127,29 @@ module.exports = class RepoBase {
   validate(data) {
     const item = new this.Model(data);
     return item.validateSync(data); // if(repo.validate(data)) >>  then have an error
+  }
+
+  // adds a data range to the filter if yearmo param, if upperOnly=true then only uppper constraint
+  addDateRangeToFilter(_filter) {
+    let filter = _filter;
+    if (filter.yearmo) {
+      const dates = util.getDateRangeFromFiscalYearMo(filter.yearmo);
+      const dateRange = {
+        updatedDate: {
+          $gte: dates.startDate,
+          $lt: dates.endDate
+        }
+      }
+      if (filter.upperOnly) {
+        delete dateRange.updatedDate.$gte;
+        delete filter.upperOnly;
+      }
+
+      filter = Object.assign(filter, dateRange);
+      delete filter.yearmo;
+      delete filter.upperOnly;
+    }
+    return filter;
   }
 
 }

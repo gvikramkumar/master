@@ -31,7 +31,6 @@ const PropNames = {
 
 module.exports = class DollarUploadController extends ControllerBase {
 
-
   constructor() {
     super(repo);
   }
@@ -150,7 +149,7 @@ module.exports = class DollarUploadController extends ControllerBase {
   }
 
   getSubmeasure() {
-    return submeasureRepo.getOneByNameLatest(this.temp.submeasureName)
+    return submeasureRepo.getOneLatest({name: this.temp.submeasureName})
       .then(submeasure => this.submeasure = submeasure);
   }
 

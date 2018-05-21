@@ -1,6 +1,6 @@
-const util = require('./util'),
-  {db, mongo} = require('../database/mongoose-conn'),
-  ApiError = require('./api-error'),
+const util = require('../common/util'),
+  {db, mongo} = require('./mongoose-conn'),
+  ApiError = require('../common/api-error'),
   _ = require('lodash');
 
 // todo: needs testing. Only uploadFile has been tested so far
