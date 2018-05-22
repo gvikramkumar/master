@@ -35,8 +35,8 @@ db.dollar_upload.insertOne({
   amount:450.57});
 
 db.measure.insertOne({
-  measureName:"Indirect Revenue Adjustments",
-  measureTypeCode:"revadj",
+  name:"Indirect Revenue Adjustments",
+  typeCode:"revadj",
   statusFlag:"Y"
 })
 
