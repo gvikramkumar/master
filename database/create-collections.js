@@ -11,7 +11,9 @@ const collections = [
   'module',
   'submeasure',
   'submeasure_rule',
-  'dollar_upload'
+  'dollar_upload',
+  'measure',
+  'open_period'
 ];
 
 collections.forEach(coll => {
