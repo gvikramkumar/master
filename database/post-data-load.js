@@ -22,6 +22,7 @@ db.user_role.insertOne({
 })
 
 db.dollar_upload.insertOne({
+  fiscalMonth: 201809,
   submeasureName:"2 Tier Adjustment",
   product:"UCS",
   sales:"Americas",
@@ -39,13 +40,19 @@ db.measure.insertOne({
   statusFlag:"Y"
 })
 
+db.open_period.insert({
+  fiscalMonth:201809,
+  openFlag:"Y"
+})
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
   'submeasure',
   'submeasure_rule',
   'dollar_upload',
-  'measure'
+  'measure',
+  'open_period'
 ];
 
 const date = new Date();
