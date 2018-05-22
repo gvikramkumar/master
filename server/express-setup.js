@@ -15,7 +15,8 @@ const config = require('./config/get-config'),
   fileRouter = require('./api/common/file/router'),
   User = require('./lib/models/user'),
   authorize = require('./lib/middleware/authorize'),
-  dollarUploadRouter = require('./api/pft/dollar-upload/router');
+  dollarUploadRouter = require('./api/pft/dollar-upload/router'),
+  measureRouter = require('./api/pft/measure/router');
 
 
 // start express
@@ -58,6 +59,7 @@ app.use('/api/allocation-rule', allocationRuleRouter);
 app.use('/api/submeasure', submeasureRouter);
 app.use('/api/file', fileRouter);
 app.use('/api/dollar-upload', dollarUploadRouter);
+app.use('/api/measure', measureRouter);
 
 app.use(express.static(path.resolve(__dirname, '../ui/dist')));
 
