@@ -228,13 +228,18 @@ module.exports = class DollarUploadController extends ControllerBase {
 
     return this.getSubmeasure()
       .then(() => {
-        return Promise.all([])// the list of import operations to get all the data
+        return Promise.all([getFiscalMonth()])// the list of import operations to get all the data
           .catch(err => Promise.reject(err));
       })
       .then(() => {
         return repo.add(this.import, this.req.user.id)
           .then(doc => this.imports.push(doc));
       })
+  }
+
+  getFiscalMonth() {
+    // todo: hit arindam's open_period table.fiscalMonth, but MAKE SURE YOU DON'T HAVE TO HAVE open=Y first
+    return Promise.resolve(201809);
   }
 
   buildEmailBody() {
@@ -250,9 +255,10 @@ module.exports = class DollarUploadController extends ControllerBase {
       body += '<div style="font-size:18px;">' + key + ' Errors</div><hr><table>';
       val.forEach(err => {
         if (err.property) {
-          body += `<tr><td style="margin-right: 30px">${err.property}:</td><td>${err.error}</td></tr>`
+          body += `<tr><td style="width: 330px; margin-right: 30px">${err.property}:</td>
+                <td style="width: 330px;">${err.error}</td></tr>`
         } else {
-          body += `<tr><td colspan="2">* ${err.error}</td></tr>`
+          body += `<tr><td colspan="2" style="width:690px">* ${err.error}</td></tr>`
         }
       })
       body += '</table>'
