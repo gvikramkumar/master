@@ -7,13 +7,15 @@ const DollarUploadRepo = require('./repo'),
   SubmeasureRepo = require('../submeasure/repo'),
   _ = require('lodash'),
   ApiError = require('../../../lib/common/api-error'),
-  userRoleRepo = require('../../../lib/database/user-role-repo'),
-  mail = require('../../../lib/common/mail');
+  userRoleRepo = require('../../../lib/database/repos/user-role-repo'),
+  mail = require('../../../lib/common/mail'),
+  OpenPeriodRepo = require('../open-period/repo');
 
 
 const repo = new DollarUploadRepo();
 const submeasureRepo = new SubmeasureRepo();
 const UploadValidationError = 'UploadValidationError';
+const openPeriodRepo = new OpenPeriodRepo();
 
 const PropNames = {
   submeasureName: 'Sub Measure Name',
@@ -226,20 +228,18 @@ module.exports = class DollarUploadController extends ControllerBase {
     this.import = new DollarUploadImport(row);
     this.submeasure = undefined;
 
-    return this.getSubmeasure()
-      .then(() => {
-        return Promise.all([getFiscalMonth()])// the list of import operations to get all the data
-          .catch(err => Promise.reject(err));
-      })
+    return Promise.all([this.getFiscalMonth()])// the list of import operations to get all the data
       .then(() => {
         return repo.add(this.import, this.req.user.id)
           .then(doc => this.imports.push(doc));
       })
+      .catch(err => Promise.reject(err));
+
   }
 
   getFiscalMonth() {
-    // todo: hit arindam's open_period table.fiscalMonth, but MAKE SURE YOU DON'T HAVE TO HAVE open=Y first
-    return Promise.resolve(201809);
+    return openPeriodRepo.getOneLatest({})
+      .then(doc => this.import.fiscalMonth = doc.fiscalMonth);
   }
 
   buildEmailBody() {

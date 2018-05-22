@@ -1,5 +1,5 @@
 const mg = require('mongoose'),
-  RepoBase = require('../models/repo-base');
+  RepoBase = require('../../models/repo-base');
 
 
 const schema = new mg.Schema(
