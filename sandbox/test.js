@@ -1,28 +1,72 @@
 const _ = require('lodash'),
   Q = require('q');
 
+
+
+
+class Test {
+
+constructor() {
+  this.validators = [
+    [this.one.bind(this), this.two.bind(this)],
+    [this.three.bind(this), this.four.bind(this)]
+  ];
+  this.getValidatorChain()
+    .then(() => console.log('done'));
+
 /*
-let date = new Date(1978, 1);
-// date.setHours(date.getHours()-8);
-console.log(date, date.getHours(), date.getUTCHours())
-return;
+  Promise.resolve()
+    .then(() => Promise.resolve().then(() => this.one()).then(() => this.two()))
+  .then(() => Promise.resolve().then(() => this.three()).then(() => this.four()))
 */
 
-let val = 197801;
-console.log(test(val))
-
-
-function test(_yearmo) {
-  let yearmo = _yearmo;
-  if (typeof yearmo === 'number') {
-    yearmo = yearmo.toString();
-  }
-  const year = Number(yearmo.substr(0, 4));
-  const month = Number(yearmo.substr(4, 2));
-
-
-  let startDate = new Date(year, month - 1 + 7);
-  let endDate = new Date(year, month - 1 + 8);
-
-  return {startDate, endDate};
 }
+
+  one() {
+    console.log('one');
+    return Promise.resolve();
+  }
+
+  two() {
+    console.log('two');
+    return Promise.resolve();
+  }
+
+  three() {
+    console.log('three');
+    return Promise.resolve();
+  }
+
+  four() {
+    console.log('four');
+    return Promise.resolve();
+  }
+
+
+  getValidatorChain() {
+    let chainOuter = Promise.resolve();
+    this.validators.forEach(arr => {
+      let chainInner = Promise.resolve();
+      arr.forEach(validator => {
+        console.log('binding', validator.name);
+        chainInner = chainInner.then(() => validator());
+      });
+      chainInner = chainInner.then(() => this.lookForErrors());
+      chainOuter = chainOuter.then(() => chainInner);
+    });
+    return chainOuter;
+  }
+
+  lookForErrors() {
+    console.log('lookforerrors');
+    return Promise.resolve()
+  }
+
+
+
+}
+
+new Test();
+
+
+

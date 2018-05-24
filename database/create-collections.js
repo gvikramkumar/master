@@ -13,7 +13,8 @@ const collections = [
   'submeasure_rule',
   'dollar_upload',
   'measure',
-  'open_period'
+  'open_period',
+  'user_role'
 ];
 
 collections.forEach(coll => {

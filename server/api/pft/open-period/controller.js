@@ -1,5 +1,5 @@
 const OpenPeriodRepo = require('./repo'),
-  ControllerBase = require('../../../lib/models/controller-base');
+  ControllerBase = require('../../../lib/base-classes/controller-base');
 
 const repo = new OpenPeriodRepo();
 
