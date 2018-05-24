@@ -45,6 +45,16 @@ db.open_period.insert({
   openFlag:"Y"
 })
 
+db.mapping_upload.insert({
+  fiscalMonth: 201809,
+  submeasureName:"2 Tier Adjustment",
+  Product:"UCS",
+  Sales:"Americas",
+  legalEntity:"Japan",
+  intbusinessEntity:"collaboration",
+  Scms:"enterprise",
+  percentage:450.57})
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
@@ -52,7 +62,8 @@ const collectionsWithCreatedUpdated = [
   'submeasure_rule',
   'dollar_upload',
   'measure',
-  'open_period'
+  'open_period',
+  'mapping_upload'
 ];
 
 const date = new Date();
