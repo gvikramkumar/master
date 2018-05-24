@@ -67,7 +67,11 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   addErrorRequired(property) {
-    this.addError(property, 'Required')
+    this.addError(property, 'Required.')
+  }
+
+  addErrorInvalid(property) {
+    this.addError(property, 'Invalid value.')
   }
 
   validateRow(row, rowNum) {

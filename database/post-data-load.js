@@ -10,7 +10,7 @@ db.submeasure.insertOne({
   endFiscalMonth:204012,
   processingTime:"Monthly",
   pnlnodeGrouping:"Indirect Adjustments",
-  inputfilterLevel:{productLevel:"PF",salesLevel:"level1",scsmsLevel:"",internalBELevel:"",entityLevel:""},
+  inputFilterLevel:{productLevel:"PF",salesLevel:"level1",scsmsLevel:"",internalBELevel:"",entityLevel:""},
   manualMapping:{productLevel:"",salesLevel:"",scmsLevel:"",internalBELevel:"",entityLevel:""},
   reportingLevels:[],
   indicators:{dollaruploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualmapping:"Y"},

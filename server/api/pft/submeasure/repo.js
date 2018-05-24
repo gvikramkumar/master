@@ -11,7 +11,7 @@ const schema = new mg.Schema(
     endFiscalMonth: Number,
     processingTime: {type: String, enum: ['Monthly']},
     pnlnodeGrouping: String,
-    inputfilterLevel: {
+    inputFilterLevel: {
       productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
       salesLevel: String,
       scsmsLevel: String,

@@ -10,17 +10,19 @@ const DollarUploadRepo = require('./repo'),
   userRoleRepo = require('../../../lib/database/repos/user-role-repo'),
   mail = require('../../../lib/common/mail'),
   OpenPeriodRepo = require('../open-period/repo'),
-  UploadController = require('../../../lib/base-classes/upload-controller');
+  UploadController = require('../../../lib/base-classes/upload-controller'),
+  PostgresRepo = require('../../../lib/database/repos/postgres-repo');
 
 
 const repo = new DollarUploadRepo();
 const submeasureRepo = new SubmeasureRepo();
 const UploadValidationError = 'UploadValidationError';
 const openPeriodRepo = new OpenPeriodRepo();
+const pgRepo = new PostgresRepo();
 
 const PropNames = {
   submeasureName: 'Sub Measure Name',
-  inputProductValue: 'Input Product value',
+  inputProductValue: 'Input Product Value',
   inputSalesValue: 'Input Sales Value',
   grossUnbilledAccruedRevenueFlag: 'Gross Unbilled Accrued Revenue Flag',
   inputLegalEntityValue: 'Input Legal Entity Value',
@@ -110,9 +112,39 @@ module.exports = class DollarUploadController extends UploadController {
   }
 
   validateProductValue() {
-    // user this.submeasure ?? to determine PL, BU, TU then hit pg to get acceptable values
-    // this.addError(PropNames.inputProductValue, 'Validate product value error');
-    return Promise.resolve();
+    const productLevel = this.submeasure.inputFilterLevel.productLevel;
+    if (productLevel && !this.temp.inputProductValue) {
+      this.addError(PropNames.inputProductValue, `${PropNames.inputProductValue} is required for this submeasure.`);
+      return Promise.resolve();
+    } else if (!productLevel && this.temp.inputProductValue) {
+      this.addError(PropNames.inputProductValue, `${PropNames.inputProductValue} is not allowed for this submeasure.`);
+      return Promise.resolve();
+    } else {
+      // have value to check
+      if (productLevel === 'PF') {
+        return pgRepo.checkForExistence('vw_fds_products', 'product_family_id', this.temp.inputProductValue)
+          .then(exists => {
+            if (!exists) {
+              this.addErrorInvalid(PropNames.inputProductValue);
+            }
+          })
+      } else if (productLevel === 'BU') {
+        return pgRepo.checkForExistence('vw_fds_products', 'business_unit_id', this.temp.inputProductValue)
+          .then(exists => {
+            if (!exists) {
+              this.addErrorInvalid(PropNames.inputProductValue);
+            }
+          })
+      } else if (productLevel === 'TG') {
+        return pgRepo.checkForExistence('vw_fds_products', 'technology_group_id', this.temp.inputProductValue)
+          .then(exists => {
+            if (!exists) {
+              this.addErrorInvalid(PropNames.inputProductValue);
+            }
+          })
+      }
+    }
+
   }
 
   validateSalesValue() {
