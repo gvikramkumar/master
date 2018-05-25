@@ -31,7 +31,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 app.use(function(req, res, next) {
   //todo: placeholder for req.user.id till security is in
-  req.user = new User('jodoe', 'John Doe', []);
+  req.user = new User('jodoe', 'John Doe', 'dakahle@cisco.com', []);
   next();
 })
 app.use(bodyParser.json());

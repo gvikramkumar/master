@@ -22,15 +22,15 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   templates: FsFile[];
   //todo: these need to have role-based access (likely stored in Mongo)
   uploadTypes = [
-    // {value: 'adu', text: 'Adjustments - Dollar Upload'},
+    // {value: 'du', text: 'Adjustments - Dollar Upload'},
     // {value: 'iaspu', text: 'Indirect Adjustments Split Percentage Upload'},
     // {value: 'slspu', text: 'Sales Level Split Percentage Upload'},
-    // {value: 'mmspu', text: 'Manual Mapping Split Percentage Upload'},
+    // {value: 'mm  ', text: 'Manual Mapping Split Percentage Upload'},
     // {value: 'pcu', text: 'Product Classification (SW/HW Mix) Upload'}
-    {value: 'adu', text: 'Adjustments - Dollar Upload', disabled: false},
+    {value: 'du', text: 'Adjustments - Dollar Upload', disabled: false},
     {value: 'iaspu', text: 'Indirect Adjustments Split Percentage Upload', disabled: false},
     {value: 'slspu', text: 'Sales Level Split Percentage Upload', disabled: false},
-    {value: 'mmspu', text: 'Manual Mapping Split Percentage Upload', disabled: true},
+    {value: 'mm', text: 'Manual Mapping Split Percentage Upload', disabled: true},
     {value: 'pcu', text: 'Product Classification (SW/HW Mix) Upload', disabled: true}
   ];
   uploadType = this.uploadTypes[0].value;
@@ -69,7 +69,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     this.businessUploadService.upload(fileInput.files[0], metadata)
       .subscribe(file => {
         fileInput.value = '';
-        this.toast.addToast('Business Upload', 'File upload success')
+        this.toast.addToast('Business Upload', 'Upload initiated. Results will be emailed to you.')
       });
 
   }

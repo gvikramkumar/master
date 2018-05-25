@@ -37,5 +37,10 @@ fileCollections.forEach(coll => {
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 db.getCollection('allocation_rule').createIndex({name: 1, updatedDate: -1});
 
+// unique constraints
+db.submeasure.createIndex({name: 1}, {unique: true});
+db.measure.createIndex({name: 1}, {unique: true});
+
+
 print('create-collections complete');
 

@@ -28,28 +28,25 @@ module.exports = class UploadController extends ControllerBase {
     this.totalErrors = {};
     this.hasTotalErrors = false;
 
-    this.validateRows()
+    this.getValidationData()
+      .then(() => res.end())
+      .then(() => this.validateRows())
       .then(() => {
         if (this.hasTotalErrors) {
-          return mail.send(
-            'dakahle@cisco.com',
-            'dakahle@cisco.com',
-            this.emailTitle,
-            null,
-            this.buildEmailBody())
-            // JSON.stringify(this.totalErrors, null, 2))
-            .then(() => {
-              return Promise.reject(new NamedApiError(UploadValidationError, 'There were validation errors in the upload. No records have been imported. An email was sent documenting the errors.', this.totalErrors, 400));
-            })
+          this.sendValidationEmail();
         }
       })
       .then(() => {
-        return this.importRows()
-          .then(() => {
-            res.send(this.imports);
-          })
+        return this.importRows();
       })
-      .catch(next);
+      .then(() => {
+        if (!this.hasTotalErrors) {
+          this.sendSuccessEmail();
+        }
+      })
+      .catch(err => {
+        this.sendErrorEmail(err);
+      });
 
   }
 
@@ -62,18 +59,6 @@ module.exports = class UploadController extends ControllerBase {
     return chain;
   }
 
-  addError(property, message) {
-    this.errors.push({property, error: message});
-  }
-
-  addErrorRequired(property) {
-    this.addError(property, 'Required.')
-  }
-
-  addErrorInvalid(property) {
-    this.addError(property, 'Invalid value.')
-  }
-
   validateRow(row, rowNum) {
     this.errors = [];
     this.rowNum = rowNum;
@@ -84,7 +69,7 @@ module.exports = class UploadController extends ControllerBase {
           this.totalErrors['Row ' + this.rowNum] = err.data;
           this.hasTotalErrors = true;
         } else {
-          Promise.reject(err);
+          return Promise.reject(err);
         }
       })
   }
@@ -117,7 +102,45 @@ module.exports = class UploadController extends ControllerBase {
       .catch(err => Promise.reject(err));
   }
 
-  buildEmailBody() {
+  sendEmail(title, body) {
+    return mail.send(
+      this.req.user.email,
+      this.req.user.email,
+      title,
+      null,
+      body
+    );
+  }
+
+  sendErrorEmail(err) {
+    this.sendEmail(`${this.uploadName} Upload Error`, this.buildErrorEmailBody(err));
+  }
+
+  sendValidationEmail() {
+    this.sendEmail(`${this.uploadName} Validation Errors`, this.buildValidationEmailBody());
+  }
+
+  sendSuccessEmail() {
+    this.sendEmail(`${this.uploadName} Success`, this.buildSuccessEmailBody());
+  }
+
+  buildSuccessEmailBody() {
+    return `<div>${this.rows.length} records successfully uploaded.</div>`
+  }
+
+  buildErrorEmailBody(err) {
+    const obj = Object.assign({}, err);
+    if (err.message) {
+      obj.message = err.message;
+    }
+    return `
+    <div>An unexpected error occured during upload:</div>
+    <pre>
+      ${JSON.stringify(obj, null, 2)}
+    </pre>`
+  }
+
+  buildValidationEmailBody() {
     let first = true;
     let body = '';
     _.forEach(this.totalErrors, (val, key) => {
@@ -130,15 +153,52 @@ module.exports = class UploadController extends ControllerBase {
       body += '<div style="font-size:18px;">' + key + ' Errors</div><hr><table>';
       val.forEach(err => {
         if (err.property) {
-          body += `<tr><td style="width: 330px; margin-right: 30px">${err.property}:</td>
-                <td style="width: 330px;">${err.error}</td></tr>`
+          let append = `<tr><td style="width: 300px; margin-right: 30px">${err.property}:</td>
+                <td style="width: 300px; margin-right: 30px">${err.error}</td>`;
+          if (err.value) {
+            append += `<td style="width: 300px;">${err.value}</td>`
+          }
+          append += '</tr>';
+          body += append;
         } else {
-          body += `<tr><td colspan="2" style="width:690px">* ${err.error}</td></tr>`
+          body += `<tr><td colspan="2" style="width:630px">* ${err.error}</td></tr>`
         }
       })
       body += '</table>'
     });
     return body;
+  }
+
+  addError(property, message, value) {
+    const obj = {property, error: message};
+    if (value) {
+      obj.value = value;
+    }
+    this.errors.push(obj);
+  }
+
+  addErrorRequired(property) {
+    this.addError(property, 'Required.')
+  }
+
+  addErrorInvalid(property, value) {
+    this.addError(property, 'Invalid value.', value)
+  }
+
+  addErrorRequiredForItem(property, item) {
+    this.addError(property, `${property} is required for this ${item}.`)
+  }
+
+  addErrorRequiredForSubmeasure(property) {
+    this.addErrorRequiredForItem(property, 'submeasure');
+  }
+
+  addErrorNotAllowedForItem(property, item) {
+    this.addError(property, `${property} is not allowed for this ${item}.`)
+  }
+
+  addErrorNotAllowedForSubmeasure(property) {
+    this.addErrorNotAllowedForItem(property, 'submeasure');
   }
 
 }
