@@ -51,55 +51,39 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   validateRows() {
-    let chain = Promise.resolve();
-
     this.rows.forEach((row, idx) => {
-      chain = chain.then(() => this.validateRow(row, idx + 1));
+      this.validateRow(row, idx + 1);
     });
-    return chain;
+    return Promise.resolve();
   }
 
   validateRow(row, rowNum) {
     this.errors = [];
     this.rowNum = rowNum;
 
-    return this.getValidateChain(row)
-      .catch(err => {
-        if (err.name === UploadValidationError) {
-          this.totalErrors['Row ' + this.rowNum] = err.data;
-          this.hasTotalErrors = true;
-        } else {
-          return Promise.reject(err);
-        }
-      })
-  }
-
-  // break out promise chain if errors
-  lookForErrors() {
-    if (this.errors.length) {
-      return Promise.reject(new NamedApiError(UploadValidationError, null, _.sortBy(this.errors, 'property')));
+    try {
+      this.validate(row);
+      this.lookForErrors();
+    } catch (err) {
+      if (err.name === UploadValidationError) {
+        this.totalErrors['Row ' + this.rowNum] = err.data;
+        this.hasTotalErrors = true;
+      } else {
+        throw err;
+      }
     }
     return Promise.resolve();
   }
 
-  importRows() {
-    this.imports = [];
-
-    let chain = Promise.resolve();
-    this.rows.forEach((row, idx) => {
-      chain = chain.then(() => this.importRow(row, idx + 1));
-    });
-    return chain;
+  lookForErrors() {
+    if (this.errors.length) {
+      throw new NamedApiError(UploadValidationError, null, _.sortBy(this.errors, 'property'));
+    }
   }
 
-  importRow(row, rowNum) {
-    this.rowNum = rowNum;
-    return this.getImportChain(row)
-      .then(() => {
-        return this.repo.add(this.import, this.req.user.id)
-          .then(doc => this.imports.push(doc));
-      })
-      .catch(err => Promise.reject(err));
+  importRows() {
+    const imports = this.rows.map(row => this.getImportDoc(row));
+    return this.repo.addMany(imports);
   }
 
   sendEmail(title, body) {

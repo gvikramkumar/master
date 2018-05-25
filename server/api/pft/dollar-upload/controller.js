@@ -38,44 +38,41 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     }
   }
 
-  getValidateChain(row) {
+  getValidationAndImportData() {
+    Promise.all([
+      this.getInputFilterLevelValidationData(),
+      this.getImportData()
+    ])
+  }
+
+  validate(row) {
     this.temp = new DollarUploadTemplate(row);
-    this.submeasure = undefined;
-    return this.getSubmeasure()
-      .then(() => {
-        return this.validateSubmeasureName()
-          .then(this.lookForErrors.bind(this))
-          .then(() => {
-            return Promise.all([
-              this.validateMeasureAccess(),
-              this.validateSubmeasureCanManualUpload()
-            ])
-              .then(this.lookForErrors.bind(this))
-          })
-      })
-      .then(() => {
-        return Promise.all([
-          this.validateProductValue(),
-          this.validateSalesValue(),
-          this.validateGrossUnbilledAccruedRevenueFlag(),
-          this.validatLegalEntityValue(),
-          this.validateSCMSSegment(),
-          this.validateAmount(),
-          this.validateRevenueClassification()
-        ])
-          .then(this.lookForErrors.bind(this))
-      })
+    this.getSubmeasure();
+    this.validateSubmeasureName();
+    this.lookForErrors();// get out early as later validation depends on submeasure
+    this.validateMeasureAccess();
+    this.validateSubmeasureCanManualUpload()
+    this.lookForErrors();
+    this.validateProductValue();
+    this.validateSalesValue();
+    this.validateGrossUnbilledAccruedRevenueFlag();
+    this.validatLegalEntityValue();
+    this.validateSCMSSegment();
+    this.validateAmount();
+    this.validateRevenueClassification();
   }
 
-  getImportChain(row) {
-    this.import = new DollarUploadImport(row);
-    this.submeasure = undefined;
-    return Promise.all([
-      this.getFiscalMonth()
-    ]);
+  getImportData() {
+    openPeriodRepo.getOne()
+      .then(doc => this.fiscalMonth = doc.fiscalMonth);
   }
 
-  ////////////////////// validators
+  getImportDoc(row) {
+    const doc = new DollarUploadImport(row);
+    doc.fiscalMonth = this.fiscalMonth;
+    return doc;
+  }
+
   getSubmeasure() {
     this.submeasure = _.find(this.submeasures, {name: this.temp.submeasureName});
     return Promise.resolve();
@@ -107,8 +104,6 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     return Promise.resolve();
   }
 
-
-  /////////////////////  importers
   getFiscalMonth() {
     return openPeriodRepo.getOneLatest({})
       .then(doc => this.import.fiscalMonth = doc.fiscalMonth);

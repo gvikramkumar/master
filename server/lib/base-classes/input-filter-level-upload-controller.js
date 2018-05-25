@@ -15,7 +15,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
     this.getValidationData();
   }
 
-  getValidationData() {
+  getInputFilterLevelValidationData() {
     return Promise.all([
       userRoleRepo.getRolesByUserId(),
       submeasureRepo.getMany(),

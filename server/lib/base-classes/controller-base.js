@@ -1,4 +1,5 @@
-const ApiError = require('../common/api-error');
+const ApiError = require('../common/api-error'),
+  _ = require('lodash');
 
 module.exports = class ControllerBase {
 
@@ -35,15 +36,19 @@ module.exports = class ControllerBase {
       .catch(next)
   }
 
-  // if queryPost querystring, then assume a getMany query with params in req.body
-  // inspired by graphql, maybe easier to make some queries using the body instead of querystring
+  // if queryPost querystring: assume a getMany query with params in req.body
+  // insertMany querystring: insertMany
   add(req, res, next) {
     const data = req.body;
     if (req.query.queryPost) {
       req.query = req.body;
       this.getMany(req, res, next);
+    } else if (req.query.insertMany) {
+      this.repo.addMany(data, req.user.id)
+        .then(() => res.end())
+        .catch(next);
     } else {
-      this.repo.add(data, req.user.id)
+      this.repo.addOne(data, req.user.id)
         .then(item => res.send(item))
         .catch(next);
     }

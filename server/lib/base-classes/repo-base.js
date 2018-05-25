@@ -78,6 +78,28 @@ module.exports = class RepoBase {
       });
   }
 
+  addMany(docs, userId) {
+    let createdBy = updatedBy = false;
+    const date = new Date();
+    if (this.schema.path('createdBy')) {
+      createdBy = true;
+    }
+    if (this.schema.path('updatedBy')) {
+      updatedBy = true;
+    }
+    docs.map(doc => {
+      if (createdBy) {
+        doc.createdBy = userId;
+        doc.createdDate = date;
+      }
+      if (updatedBy) {
+        doc.updatedBy = userId;
+        doc.updatedDate = date;
+      }
+    });
+    return this.Model.insertMany(docs);
+  }
+
   add(data, userId) {
     // if versioning items, our edits will actually be adds, so dump the ids in that case
     delete data._id;
