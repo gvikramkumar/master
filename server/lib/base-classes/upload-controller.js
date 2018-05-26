@@ -187,5 +187,9 @@ module.exports = class UploadController extends ControllerBase {
     this.addErrorNotAllowedForItem(property, 'submeasure');
   }
 
+  notExists(values, value) {
+    return _.sortedIndexOf(values, value.toUpperCase()) === -1;
+  }
+
 }
 

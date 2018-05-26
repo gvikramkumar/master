@@ -1,4 +1,5 @@
-const mg = require('mongoose');
+const mg = require('mongoose'),
+  _ = require('lodash');
 
 const schema = new mg.Schema(
   {
@@ -16,6 +17,12 @@ module.exports = class LookupRepo {
   getValuesByType(type) {
     return this.Model.findOne({type}).exec()
       .then(doc => doc.values);
+  }
+
+  getTextValuesByTypeandSortedUpperCase(type) {
+    return this.getValuesByType(type)
+      .then(values => values.map(value => value.toUpperCase()))
+      .then(values => _.sortBy(values, _.identity));
   }
 
 }

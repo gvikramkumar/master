@@ -17,6 +17,11 @@ module.exports = class InputFilterLevelUploadController extends UploadController
     this.data = {};
   }
 
+  // IMPORTANT: we use a lodash binary search on these values, so all values need to be upper case and
+  // "sorted by lodash", i.e. can't rely on anyone else to sort as any disagreements
+  // (say sorting by postgres with orderby clause), will result in failures. Originally had been using postgres
+  // to sort, but after noticing failures... had to go with lodash to keep in sync, that or toss the binary search
+  // which probably speeds things up immensely.
   getInputFilterLevelValidationData() {
     return Promise.all([
       userRoleRepo.getRolesByUserId(),
@@ -30,10 +35,11 @@ module.exports = class InputFilterLevelUploadController extends UploadController
       pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'l4_sales_territory_name_code'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'l5_sales_territory_name_code'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'l6_sales_territory_name_code'),
-      Promise.resolve([]), //todo: this doesn't exits yet: pgRepo.getSortedUpperListFromColumn('business_entity', 'business_entity_name'),
+      //todo: fix this location:
+      Promise.resolve(['LEGAL ENTITY VALUE']), //todo: this doesn't exits yet: pgRepo.getSortedUpperListFromColumn('business_entity', 'business_entity_name'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_be_hierarchy', 'bk_business_entity_name'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_be_hierarchy', 'bk_sub_business_entity_name'),
-      lookupRepo.getValuesByType('revenue_classification'),
+      lookupRepo.getTextValuesByTypeandSortedUpperCase('revenue_classification'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'sales_coverage_code')
     ])
       .then(results => {
@@ -190,12 +196,10 @@ module.exports = class InputFilterLevelUploadController extends UploadController
   }
 
   validateRevenueClassification() {
-    if (this.temp.revenueClassification && this.notExists(this.data.legalEntities, this.temp.revenueClassification)) {
+    if (this.temp.revenueClassification &&
+      this.notExists(this.data.revClassifications, this.temp.revenueClassification)) {
       this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
   }
 
-  notExists(values, value) {
-    return _.sortedIndexOf(values, value.toUpperCase()) === -1;
-  }
 }

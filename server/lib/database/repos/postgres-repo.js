@@ -1,5 +1,6 @@
 const db = require('../postgres-conn').pgdb,
-  config = require('../../../config/get-config').postgres;
+  config = require('../../../config/get-config').postgres,
+  _ = require('lodash');
 
 module.exports = class PostgresRepo {
 
@@ -8,6 +9,8 @@ module.exports = class PostgresRepo {
       .then(results => results.rows[0].exists);
   }
 
+  // sorting by lodash as per binary search requirements in upload validation (_.sortedIndexOf)
+  // we'll leave the pg sort as probably speeds things up for lodash sort, hopefully has a index to use.
   getSortedUpperListFromColumn(table, column, whereClause) {
     let query = `select distinct upper(${column}) as col from ${config.schema}.${table}`;
     if (whereClause) {
@@ -16,7 +19,8 @@ module.exports = class PostgresRepo {
     query += ` order by upper(${column})`;
 
     return db.query(query)
-      .then(results => results.rows.map(obj => obj.col));
+      .then(results => results.rows.map(obj => obj.col))
+      .then(results => _.sortBy(results, _.identity));
   }
 
 }
