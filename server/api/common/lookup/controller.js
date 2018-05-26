@@ -4,9 +4,9 @@ const repo = new LookupRepo();
 
 module.exports = class LookupController {
 
-  getMany(req, res, next) {
-    repo.getOne({type: req.query.lookup})
-      .then(doc => res.send(doc.values))
+  getValues(req, res, next) {
+    repo.getValuesByType(req.query.lookup)
+      .then(values => res.send(values))
       .catch(next);
   }
 

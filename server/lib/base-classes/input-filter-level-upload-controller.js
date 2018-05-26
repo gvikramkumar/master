@@ -3,13 +3,13 @@ const UploadController = require('./upload-controller'),
   _ = require('lodash'),
   SubmeasureRepo = require('../../api/pft/submeasure/repo'),
   UserRoleRepo = require('../database/repos/user-role-repo'),
-  RevClassificationRepo = require('../../api/pft/rev-classification/repo');
+  LookupRepo = require('../../api/common/lookup/repo');
 
 
 const userRoleRepo = new UserRoleRepo();
 const pgRepo = new PostgresRepo();
 const submeasureRepo = new SubmeasureRepo();
-const revClassificationRepo = new RevClassificationRepo();
+const lookupRepo = new LookupRepo();
 
 module.exports = class InputFilterLevelUploadController extends UploadController {
   constructor(repo) {
@@ -33,7 +33,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
       Promise.resolve([]), //todo: this doesn't exits yet: pgRepo.getSortedUpperListFromColumn('business_entity', 'business_entity_name'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_be_hierarchy', 'bk_business_entity_name'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_be_hierarchy', 'bk_sub_business_entity_name'),
-      revClassificationRepo.getMany().then(docs => _.sortBy(docs, 'name').map(doc => doc.name)),
+      lookupRepo.getValuesByType('revenue_classification'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'sales_coverage_code')
     ])
       .then(results => {

@@ -13,8 +13,9 @@ module.exports = class LookupRepo {
     this.Model = mg.model('Lookup', schema);
   }
 
-  getOne(filter) {
-    return this.Model.findOne(filter).exec();
+  getValuesByType(type) {
+    return this.Model.findOne({type}).exec()
+      .then(doc => doc.values);
   }
 
 }
