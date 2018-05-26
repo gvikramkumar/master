@@ -55,11 +55,14 @@ db.mapping_upload.insert({
   Scms:"enterprise",
   percentage:450.57})
 
+db.lookup.insertMany([
+  {type: 'revenue_classification', values:  ["Recurring Deferred","Recurring Non Deferred","Recurring Other","Non Recurring"]},
+]);
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
   'submeasure',
-  'submeasure_rule',
   'dollar_upload',
   'measure',
   'open_period',
@@ -76,5 +79,5 @@ collectionsWithCreatedUpdated.forEach(coll => {
     }});
 });
 
-print('post-data-load complete');
+print('>>>>>>>>>> post-data-load complete');
 
