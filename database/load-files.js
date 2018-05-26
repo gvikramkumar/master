@@ -36,7 +36,7 @@ mgConn.promise.then(({db, mongo}) => {
   })
   Promise.all(promises)
     .then(() => {
-      console.log('file upload complete');
+      console.log('>>>>>>>>> file upload complete');
       process.exit(0);
     })
     .catch(err => console.error('file upload failure:', err));
