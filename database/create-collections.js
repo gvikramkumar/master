@@ -10,10 +10,10 @@ const collections = [
   'allocation_rule',
   'module',
   'submeasure',
-  'submeasure_rule',
   'dollar_upload',
   'measure',
-  'open_period'
+  'open_period',
+  'lookup'
 ];
 
 collections.forEach(coll => {
@@ -36,5 +36,7 @@ fileCollections.forEach(coll => {
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 db.getCollection('allocation_rule').createIndex({name: 1, updatedDate: -1});
 
-print('create-collections complete');
+db.lookup.createIndex({type: 1}, {unique: true});
+
+print('>>>>>>>>>>>> create-collections complete');
 
