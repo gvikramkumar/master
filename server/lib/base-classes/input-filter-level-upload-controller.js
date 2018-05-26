@@ -22,8 +22,9 @@ module.exports = class InputFilterLevelUploadController extends UploadController
   // (say sorting by postgres with orderby clause), will result in failures. Originally had been using postgres
   // to sort, but after noticing failures... had to go with lodash to keep in sync, that or toss the binary search
   // which probably speeds things up immensely.
-  getInputFilterLevelValidationData() {
+  getValidationAndImportData() {
     return Promise.all([
+      super.getValidationAndImportData(),
       userRoleRepo.getRolesByUserId(),
       submeasureRepo.getMany(),
       pgRepo.getSortedUpperListFromColumn('vw_fds_products', 'product_family_id'),
@@ -43,28 +44,28 @@ module.exports = class InputFilterLevelUploadController extends UploadController
       pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'sales_coverage_code')
     ])
       .then(results => {
-        this.data.userRoles = results[0];
-        this.data.submeasures = results[1];
+        this.data.userRoles = results[1];
+        this.data.submeasures = results[2];
         this.data.product = {
-          productFamilies: results[2],
-          businessUnits: results[3],
-          techGroups: results[4]
+          productFamilies: results[3],
+          businessUnits: results[4],
+          techGroups: results[5]
         };
         this.data.sales = {
-          level1s: results[5],
-          level2s: results[6],
-          level3s: results[7],
-          level4s: results[8],
-          level5s: results[9],
-          level6s: results[10]
+          level1s: results[6],
+          level2s: results[7],
+          level3s: results[8],
+          level4s: results[9],
+          level5s: results[10],
+          level6s: results[11]
         };
-        this.data.legalEntities = results[11];
+        this.data.legalEntities = results[12];
         this.data.businessEntity = {
-          internalBe: results[12],
-          internalSubBe: results[13]
+          internalBe: results[13],
+          internalSubBe: results[14]
         };
-        this.data.revClassifications = results[14];
-        this.data.scms = results[15];
+        this.data.revClassifications = results[15];
+        this.data.scms = results[16];
       })
   }
 

@@ -45,7 +45,7 @@ db.dollar_upload.insertOne({
   product:"UCS",
   sales:"Americas",
   legalEntity:"Japan",
-  intbusinessEntity:"collaboration",
+  intBusinessEntity:"collaboration",
   scms:"enterprise",
   dealId:"",
   grossUnbilledAccruedFlag:"N",
@@ -66,11 +66,11 @@ db.open_period.insert({
 db.mapping_upload.insert({
   fiscalMonth: 201809,
   submeasureName:"2 Tier Adjustment",
-  Product:"UCS",
-  Sales:"Americas",
+  product:"UCS",
+  sales:"Americas",
   legalEntity:"Japan",
-  intbusinessEntity:"collaboration",
-  Scms:"enterprise",
+  intBusinessEntity:"collaboration",
+  scms:"enterprise",
   percentage:450.57})
 
 db.lookup.insertMany([

@@ -30,8 +30,8 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     {value: 'du', text: 'Adjustments - Dollar Upload', disabled: false},
     {value: 'iaspu', text: 'Indirect Adjustments Split Percentage Upload', disabled: false},
     {value: 'slspu', text: 'Sales Level Split Percentage Upload', disabled: false},
-    {value: 'mm', text: 'Manual Mapping Split Percentage Upload', disabled: true},
-    {value: 'pcu', text: 'Product Classification (SW/HW Mix) Upload', disabled: true}
+    {value: 'mm', text: 'Manual Mapping Split Percentage Upload', disabled: false},
+    {value: 'pcu', text: 'Product Classification (SW/HW Mix) Upload', disabled: false}
   ];
   uploadType = this.uploadTypes[0].value;
 

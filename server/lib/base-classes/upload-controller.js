@@ -2,12 +2,13 @@ const ControllerBase = require('./controller-base'),
   xlsx = require('node-xlsx'),
   NamedApiError = require('../common/named-api-error'),
   _ = require('lodash'),
-  UserRoleRepo = require('../database/repos/user-role-repo'),
-  mail = require('../common/mail');
+  mail = require('../common/mail'),
+  OpenPeriodRepo = require('../../api/common/open-period/repo');
+
 
 
 const UploadValidationError = 'UploadValidationError';
-const userRoleRepo = new UserRoleRepo();
+const openPeriodRepo = new OpenPeriodRepo();
 
 module.exports = class UploadController extends ControllerBase {
 
@@ -79,6 +80,13 @@ module.exports = class UploadController extends ControllerBase {
   importRows() {
     const imports = this.rows.map(row => this.getImportDoc(row));
     return this.repo.addManyTransaction(imports);
+  }
+
+  getValidationAndImportData() {
+    return Promise.all([
+      openPeriodRepo.getOne()
+        .then(doc => this.fiscalMonth = doc.fiscalMonth)
+    ]);
   }
 
   sendEmail(title, body) {
