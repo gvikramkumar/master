@@ -75,33 +75,6 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     return doc;
   }
 
-  getSubmeasure() {
-    this.submeasure = _.find(this.data.submeasures, {name: this.temp.submeasureName});
-    return Promise.resolve();
-  }
-
-  validateSubmeasureName() {
-    if (!this.temp.submeasureName) {
-      this.addErrorRequired(this.PropNames.submeasureName);
-    } else if (!this.submeasure) {
-      this.addError(this.PropNames.submeasureName, 'No Sub Measure exists by this name');
-    }
-    return Promise.resolve();
-  }
-
-  validateMeasureAccess() {
-    // todo: requires onramp table, this is a temporary placeholder
-/*
-    return userRoleRepo.userHasRole(this.req.user.id, this.submeasure.measureName)
-      .then(hasRole => {
-        if (!hasRole) {
-          this.addError('', 'Not authorized for this upload.');
-        }
-      });
-*/
-    // need to check this with cached data
-  }
-
   validateSubmeasureCanManualUpload() {
     if (this.submeasure.source !== 'manual') {
       this.addError('', `Sub Measure doesn't allow manual upload`);

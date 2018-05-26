@@ -19,6 +19,8 @@ module.exports = class LookupRepo {
       .then(doc => doc.values);
   }
 
+  // this is for upload data validation for entries with just text values (not objects),
+  // we need them upper case and sorted by lodash
   getTextValuesByTypeandSortedUpperCase(type) {
     return this.getValuesByType(type)
       .then(values => values.map(value => value.toUpperCase()))
