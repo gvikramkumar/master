@@ -1,5 +1,4 @@
-const LookupRepo = require('./repo'),
-  ControllerBase = require('../../../lib/models/controller-base');
+const LookupRepo = require('./repo');
 
 const repo = new LookupRepo();
 
