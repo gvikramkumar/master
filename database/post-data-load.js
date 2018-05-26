@@ -55,6 +55,9 @@ db.mapping_upload.insert({
   Scms:"enterprise",
   percentage:450.57})
 
+db.revenue_classification.insertOne({
+  revenueClassification: ["Recurring Deferred","Recurring Non Deferred","Recurring Other","Non Recurring"]})
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
@@ -63,7 +66,8 @@ const collectionsWithCreatedUpdated = [
   'dollar_upload',
   'measure',
   'open_period',
-  'mapping_upload'
+  'mapping_upload',
+  'revenue_classification'
 ];
 
 const date = new Date();
