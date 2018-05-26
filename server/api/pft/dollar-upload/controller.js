@@ -108,6 +108,23 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     }
   }
 
+  validateAmount() {
+    if (this.temp.amount === undefined || '') {
+      this.addErrorRequired(this.PropNames.amount);
+    } else if (Number.isNaN(Number(this.temp.amount))) {
+      this.addError(this.PropNames.amount, 'Not a number');
+    } else {
+      this.temp.amount = Number(this.temp.amount);
+    }
+  }
+
+  validateRevenueClassification() {
+    if (this.temp.revenueClassification &&
+      this.notExists(this.data.revClassifications, this.temp.revenueClassification)) {
+      this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
+    }
+  }
+
   getFiscalMonth() {
     return openPeriodRepo.getOneLatest({})
       .then(doc => this.import.fiscalMonth = doc.fiscalMonth);
