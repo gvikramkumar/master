@@ -1,9 +1,9 @@
-const OpenPeriodRepo = require('./repo'),
+const RevClassificationRepo = require('./repo'),
   ControllerBase = require('../../../lib/base-classes/controller-base');
 
-const repo = new OpenPeriodRepo();
+const repo = new RevClassificationRepo();
 
-module.exports = class OpenPeriodController extends ControllerBase {
+module.exports = class RevClassificationController extends ControllerBase {
   constructor() {
     super(repo);
   }

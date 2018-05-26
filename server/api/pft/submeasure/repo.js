@@ -14,14 +14,14 @@ const schema = new mg.Schema(
     inputFilterLevel: {
       productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
       salesLevel: String,
-      scsmsLevel: String,
+      scmsLevel: String,
       internalBELevel: String,
       entityLevel: String
     },
     manualMapping: {
       productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
       salesLevel: String,
-      scsmsLevel: String,
+      scmsLevel: String,
       internalBELevel: String,
       entityLevel: String
     },

@@ -14,7 +14,8 @@ const collections = [
   'dollar_upload',
   'measure',
   'open_period',
-  'user_role'
+  'user_role',
+  'rev_classification'
 ];
 
 collections.forEach(coll => {
@@ -38,9 +39,11 @@ db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 db.getCollection('allocation_rule').createIndex({name: 1, updatedDate: -1});
 
 // unique constraints
+db.module.createIndex({name: 1}, {unique: true});
+db.module.createIndex({seqnum: 1}, {unique: true});
 db.submeasure.createIndex({name: 1}, {unique: true});
 db.measure.createIndex({name: 1}, {unique: true});
-
+db.rev_classification.createIndex({name: 1}, {unique: true});
 
 print('create-collections complete');
 

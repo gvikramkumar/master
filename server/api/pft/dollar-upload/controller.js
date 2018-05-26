@@ -6,7 +6,7 @@ const DollarUploadRepo = require('./repo'),
   NamedApiError = require('../../../lib/common/named-api-error'),
   _ = require('lodash'),
   ApiError = require('../../../lib/common/api-error'),
-  userRoleRepo = require('../../../lib/database/repos/user-role-repo'),
+  UserRoleRepo = require('../../../lib/database/repos/user-role-repo'),
   mail = require('../../../lib/common/mail'),
   OpenPeriodRepo = require('../open-period/repo'),
   InputFilterLevelUploadController = require('../../../lib/base-classes/input-filter-level-upload-controller'),
@@ -17,6 +17,7 @@ const repo = new DollarUploadRepo();
 const UploadValidationError = 'UploadValidationError';
 const openPeriodRepo = new OpenPeriodRepo();
 const pgRepo = new PostgresRepo();
+const userRoleRepo = new UserRoleRepo();
 
 module.exports = class DollarUploadController extends InputFilterLevelUploadController {
 
@@ -31,7 +32,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
       grossUnbilledAccruedRevenueFlag: 'Gross Unbilled Accrued Revenue Flag',
       inputLegalEntityValue: 'Input Legal Entity Value',
       inputBusinessEntityValue: 'Input Business Entity Value',
-      ScmsSegment: 'SCMS Segment',
+      scmsSegment: 'SCMS Segment',
       amount: 'Amount',
       dealId: 'Deal ID',
       revenueClassification: 'Revenue Classification'
@@ -39,7 +40,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   }
 
   getValidationAndImportData() {
-    Promise.all([
+    return Promise.all([
       this.getInputFilterLevelValidationData(),
       this.getImportData()
     ])
@@ -53,10 +54,11 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     this.validateMeasureAccess();
     this.validateSubmeasureCanManualUpload()
     this.lookForErrors();
-    this.validateProductValue();
-    this.validateSalesValue();
+    this.validateInputProductValue();
+    this.validateInputSalesValue();
     this.validateGrossUnbilledAccruedRevenueFlag();
-    this.validatLegalEntityValue();
+    this.validateInputLegalEntityValue();
+    this.validateInputBusinessEntityValue();
     this.validateSCMSSegment();
     this.validateAmount();
     this.validateRevenueClassification();
@@ -74,7 +76,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   }
 
   getSubmeasure() {
-    this.submeasure = _.find(this.submeasures, {name: this.temp.submeasureName});
+    this.submeasure = _.find(this.data.submeasures, {name: this.temp.submeasureName});
     return Promise.resolve();
   }
 
@@ -82,26 +84,28 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     if (!this.temp.submeasureName) {
       this.addErrorRequired(this.PropNames.submeasureName);
     } else if (!this.submeasure) {
-      this.addError(this.PropNames.submeasureName, 'No Sub Measure exists by this name.');
+      this.addError(this.PropNames.submeasureName, 'No Sub Measure exists by this name');
     }
     return Promise.resolve();
   }
 
   validateMeasureAccess() {
     // todo: requires onramp table, this is a temporary placeholder
+/*
     return userRoleRepo.userHasRole(this.req.user.id, this.submeasure.measureName)
       .then(hasRole => {
         if (!hasRole) {
           this.addError('', 'Not authorized for this upload.');
         }
-      })
+      });
+*/
+    // need to check this with cached data
   }
 
   validateSubmeasureCanManualUpload() {
     if (this.submeasure.source !== 'manual') {
       this.addError('', `Sub Measure doesn't allow manual upload`);
     }
-    return Promise.resolve();
   }
 
   getFiscalMonth() {

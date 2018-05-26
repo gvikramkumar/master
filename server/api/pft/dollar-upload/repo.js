@@ -4,12 +4,13 @@ const mg = require('mongoose'),
 
 const schema = new mg.Schema(
   {
+    transactionId: {type: mg.SchemaTypes.ObjectId, required: true},
     fiscalMonth: {type: Number, required: true},
     submeasureName: {type: String, required: true},
     product: String,
     sales: String,
     legalEntity: String,
-    intbusinessEntity: String,
+    intBusinessEntity: String,
     scms: String,
     dealId: String,
     grossUnbilledAccruedFlag: String,

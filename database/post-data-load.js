@@ -10,7 +10,7 @@ db.submeasure.insertOne({
   endFiscalMonth:204012,
   processingTime:"Monthly",
   pnlnodeGrouping:"Indirect Adjustments",
-  inputFilterLevel:{productLevel:"PF",salesLevel:"level1",scsmsLevel:"",internalBELevel:"",entityLevel:""},
+  inputFilterLevel:{productLevel:"PF",salesLevel:"level1",scmsLevel:"",internalBELevel:"",entityLevel:""},
   manualMapping:{productLevel:"",salesLevel:"",scmsLevel:"",internalBELevel:"",entityLevel:""},
   reportingLevels:[],
   indicators:{dollaruploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualmapping:"Y"},
@@ -55,6 +55,11 @@ db.mapping_upload.insert({
   Scms:"enterprise",
   percentage:450.57})
 
+
+db.rev_classification.insert({
+  name: 'lala'
+})
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
@@ -63,7 +68,8 @@ const collectionsWithCreatedUpdated = [
   'dollar_upload',
   'measure',
   'open_period',
-  'mapping_upload'
+  'mapping_upload',
+  'rev_classification'
 ];
 
 const date = new Date();

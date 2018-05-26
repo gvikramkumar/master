@@ -4,8 +4,8 @@ module.exports = class DollarUploadImport {
 
   constructor(row) {
     this.submeasureName = row[0];
-    this.product = row[1];
-    this.sales = row[2];
+    this.data.product = row[1];
+    this.data.sales = row[2];
     this.grossUnbilledAccruedFlag = row[3];
     this.legalEntity = row[4];
     this.intbusinessEntity = row[5];

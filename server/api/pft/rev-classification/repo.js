@@ -4,19 +4,18 @@ const mg = require('mongoose'),
 
 const schema = new mg.Schema(
   {
-    fiscalMonth: {type: Number, required: true},
-    openFlag: {type: String, required: true},
+    name: {type: String, required: true},
     createdBy: String,
     createdDate: Date,
     updatedBy: String,
     updatedDate: Date
   },
-  {collection: 'open_period'}
+  {collection: 'rev_classification'}
 );
 
-module.exports = class OpenPeriodRepo extends RepoBase {
+module.exports = class RevClassificationRepo extends RepoBase {
   constructor() {
-    super(schema, 'OpenPeriod');
+    super(schema, 'RevClassification');
   }
 }
 

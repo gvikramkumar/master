@@ -10,7 +10,7 @@ const schema = new mg.Schema(
   {collection: 'user_role'}
 );
 
-class UserRoleRepo extends RepoBase {
+module.exports = class UserRoleRepo extends RepoBase {
   constructor() {
     super(schema, 'UserRole');
   }
@@ -29,4 +29,3 @@ class UserRoleRepo extends RepoBase {
 
 }
 
-module.exports = new UserRoleRepo();

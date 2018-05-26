@@ -8,9 +8,15 @@ module.exports = class PostgresRepo {
       .then(results => results.rows[0].exists);
   }
 
-  getSortedUpperListFromColumn(table, column) {
-    return db.query(`select distinct upper(${column}) as col from ${config.schema}.${table} order by upper(${column})`)
-      .then(results => results.rows[0].map(obj => obj.col));
+  getSortedUpperListFromColumn(table, column, whereClause) {
+    let query = `select distinct upper(${column}) as col from ${config.schema}.${table}`;
+    if (whereClause) {
+      query += ' where ' + whereClause;
+    }
+    query += ` order by upper(${column})`;
+
+    return db.query(query)
+      .then(results => results.rows.map(obj => obj.col));
   }
 
 }

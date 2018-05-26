@@ -22,7 +22,7 @@ module.exports = class RepoBase {
   }
 
   // group by groupField and get latest of each group
-  getManyByGroupLatest(_filter) {
+  getManyByGroupLatest(_filter = {}) {
     let filter = _filter;
     const groupField = filter.groupField;
     delete filter.groupField;
@@ -45,7 +45,7 @@ module.exports = class RepoBase {
   }
 
   // returns the latest value
-  getOneLatest(_filter) {
+  getOneLatest(_filter = {}) {
     let filter = _filter;
     delete filter.getLatest;
     filter = this.addDateRangeToFilter(filter);
@@ -53,7 +53,7 @@ module.exports = class RepoBase {
       .then(arr => arr.length? arr[0]: null);
   }
 
-  getOne(_filter) {
+  getOne(_filter = {}) {
     let filter = _filter;
     filter = this.addDateRangeToFilter(filter);
     return this.Model.findOne(filter).exec();
@@ -79,7 +79,8 @@ module.exports = class RepoBase {
   }
 
   addMany(docs, userId) {
-    let createdBy = updatedBy = false;
+    let createdBy = false;
+    let updatedBy = false;
     const date = new Date();
     if (this.schema.path('createdBy')) {
       createdBy = true;
@@ -100,7 +101,22 @@ module.exports = class RepoBase {
     return this.Model.insertMany(docs);
   }
 
-  add(data, userId) {
+  addManyTransaction(_docs, userId) {
+    const transId = new mg.Types.ObjectId();
+    const docs = _docs.map(doc => {
+      doc.transactionId = transId;
+      return doc;
+    })
+    return this.addMany(docs)
+      .catch(err => {
+        if (err.result.nInserted > 0) {
+          return this.Model.deleteMany({transactionId: transId})
+            .then(() => Promise.reject(err))
+        }
+      })
+  }
+
+  addOne(data, userId) {
     // if versioning items, our edits will actually be adds, so dump the ids in that case
     delete data._id;
     delete data.id;

@@ -1,9 +1,9 @@
 const express = require('express'),
   router = express.Router(),
-  OpenPeriodController = require('./controller'),
+  RevClassificationController = require('./controller'),
   authorize = require('../../../lib/middleware/authorize');
 
-const ctrl = new OpenPeriodController();
+const ctrl = new RevClassificationController();
 
 module.exports = router
   .get('/', ctrl.getMany.bind(ctrl))

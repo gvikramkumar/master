@@ -1,18 +1,13 @@
-const DollarUploadRepo = require('../../api/pft/dollar-upload/repo'),
-  ControllerBase = require('./controller-base'),
+const ControllerBase = require('./controller-base'),
   xlsx = require('node-xlsx'),
-  DollarUploadTemplate = require('../../api/pft/dollar-upload/template'),
-  DollarUploadImport = require('../../api/pft/dollar-upload/import'),
   NamedApiError = require('../common/named-api-error'),
-  SubmeasureRepo = require('../../api/pft/submeasure/repo'),
   _ = require('lodash'),
-  ApiError = require('../common/api-error'),
-  userRoleRepo = require('../database/repos/user-role-repo'),
-  mail = require('../common/mail'),
-  OpenPeriodRepo = require('../../api/pft/open-period/repo');
+  UserRoleRepo = require('../database/repos/user-role-repo'),
+  mail = require('../common/mail');
 
 
 const UploadValidationError = 'UploadValidationError';
+const userRoleRepo = new UserRoleRepo();
 
 module.exports = class UploadController extends ControllerBase {
 
@@ -28,24 +23,24 @@ module.exports = class UploadController extends ControllerBase {
     this.totalErrors = {};
     this.hasTotalErrors = false;
 
-    this.getValidationData()
-      .then(() => res.end())
-      .then(() => this.validateRows())
+    res.end();
+    this.getValidationAndImportData()
       .then(() => {
-        if (this.hasTotalErrors) {
-          this.sendValidationEmail();
-        }
+        return this.validateRows()
+          .then(() => {
+            if (this.hasTotalErrors) {
+              return Promise.reject(new NamedApiError(UploadValidationError));
+            }
+          })
       })
-      .then(() => {
-        return this.importRows();
-      })
-      .then(() => {
-        if (!this.hasTotalErrors) {
-          this.sendSuccessEmail();
-        }
-      })
+      .then(() => this.importRows())
+      .then(() => this.sendSuccessEmail())
       .catch(err => {
-        this.sendErrorEmail(err);
+        if (err && err.name === UploadValidationError) {
+          this.sendValidationEmail();
+        } else {
+          this.sendErrorEmail(err);
+        }
       });
 
   }
@@ -83,7 +78,7 @@ module.exports = class UploadController extends ControllerBase {
 
   importRows() {
     const imports = this.rows.map(row => this.getImportDoc(row));
-    return this.repo.addMany(imports);
+    return this.repo.addManyTransaction(imports);
   }
 
   sendEmail(title, body) {
@@ -116,6 +111,9 @@ module.exports = class UploadController extends ControllerBase {
     const obj = Object.assign({}, err);
     if (err.message) {
       obj.message = err.message;
+    }
+    if (err.stack) {
+      obj.stack = err.stack;
     }
     return `
     <div>An unexpected error occured during upload:</div>
@@ -165,12 +163,16 @@ module.exports = class UploadController extends ControllerBase {
     this.addError(property, 'Required.')
   }
 
-  addErrorInvalid(property, value) {
-    this.addError(property, 'Invalid value.', value)
+  addErrorInvalid(property, value, acceptableValues) {
+    let msg = 'Invalid value';
+    if (acceptableValues) {
+      msg += ` (${acceptableValues})`;
+    }
+    this.addError(property, msg, value)
   }
 
   addErrorRequiredForItem(property, item) {
-    this.addError(property, `${property} is required for this ${item}.`)
+    this.addError(property, `${property} is required for this ${item}`)
   }
 
   addErrorRequiredForSubmeasure(property) {
@@ -178,7 +180,7 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   addErrorNotAllowedForItem(property, item) {
-    this.addError(property, `${property} is not allowed for this ${item}.`)
+    this.addError(property, `${property} is not allowed for this ${item}`)
   }
 
   addErrorNotAllowedForSubmeasure(property) {
