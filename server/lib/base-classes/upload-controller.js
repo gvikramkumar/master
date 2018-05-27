@@ -169,7 +169,7 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   addErrorRequired(property) {
-    this.addError(property, 'Required.')
+    this.addError(property, 'Required')
   }
 
   addErrorInvalid(property, value, acceptableValues) {
@@ -201,7 +201,7 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   validateNumber(prop, val, required) {
-    if (required && val === (undefined || '')) {
+    if (required && (val === undefined || val === '')) {
       this.addErrorRequired(prop);
       return false;
     } else if (Number.isNaN(Number(val))) {

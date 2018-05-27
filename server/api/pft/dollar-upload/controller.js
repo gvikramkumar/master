@@ -76,7 +76,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   }
 
   validateAmount() {
-    if (this.validateNumber(this.PropNames.amount, this.temp.amount)) {
+    if (this.validateNumber(this.PropNames.amount, this.temp.amount, true)) {
       this.temp.amount = Number(this.temp.amount);
     }
   }
