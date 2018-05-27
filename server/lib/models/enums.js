@@ -6,7 +6,8 @@ obj.Directory = {
 }
 
 obj.BuUploadType = {
-  dollarUpload: 'adu'
+  dollarUpload: 'du',
+  manualMapping: 'mm'
 };
 
 obj.BuFileType =

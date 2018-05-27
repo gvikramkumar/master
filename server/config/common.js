@@ -6,7 +6,8 @@ module.exports = {
     port: 5432,
     database: 'postgres',
     user: 'postgres',
-    password: 'finit1'
+    password: 'finit1',
+    schema: 'fdscon'
   },
   corsOrigin: [],
   showStack: false,

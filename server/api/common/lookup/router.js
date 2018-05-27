@@ -5,4 +5,4 @@ const express = require('express'),
 const ctrl = new LookupController();
 
 module.exports = router
-  .get('/', ctrl.getMany.bind(ctrl));
+  .get('/', ctrl.getValues.bind(ctrl));

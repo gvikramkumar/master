@@ -1,41 +1,36 @@
-const DollarUploadRepo = require('./repo'),
+const MappingUploadRepo = require('./repo'),
   ControllerBase = require('../../../lib/base-classes/controller-base'),
   xlsx = require('node-xlsx'),
-  DollarUploadTemplate = require('./template'),
-  DollarUploadImport = require('./import'),
+  MappingUploadTemplate = require('./template'),
+  MappingUploadImport = require('./import'),
   NamedApiError = require('../../../lib/common/named-api-error'),
   _ = require('lodash'),
   ApiError = require('../../../lib/common/api-error'),
   UserRoleRepo = require('../../../lib/database/repos/user-role-repo'),
   mail = require('../../../lib/common/mail'),
-  OpenPeriodRepo = require('../../common/open-period/repo'),
   InputFilterLevelUploadController = require('../../../lib/base-classes/input-filter-level-upload-controller'),
   PostgresRepo = require('../../../lib/database/repos/postgres-repo');
 
 
-const repo = new DollarUploadRepo();
+const repo = new MappingUploadRepo();
 const UploadValidationError = 'UploadValidationError';
-const openPeriodRepo = new OpenPeriodRepo();
 const pgRepo = new PostgresRepo();
 const userRoleRepo = new UserRoleRepo();
 
-module.exports = class DollarUploadController extends InputFilterLevelUploadController {
+module.exports = class MappingUploadController extends InputFilterLevelUploadController {
 
   constructor() {
     super(repo);
-    this.uploadName = 'Dollar Upload';
+    this.uploadName = 'Mapping Upload';
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
       inputProductValue: 'Input Product Value',
       inputSalesValue: 'Input Sales Value',
-      grossUnbilledAccruedRevenueFlag: 'Gross Unbilled Accrued Revenue Flag',
       inputLegalEntityValue: 'Input Legal Entity Value',
       inputBusinessEntityValue: 'Input Business Entity Value',
       scmsSegment: 'SCMS Segment',
-      amount: 'Amount',
-      dealId: 'Deal ID',
-      revenueClassification: 'Revenue Classification'
+      percentage: 'Percentage Value'
     }
   }
 
@@ -46,12 +41,12 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   }
 
   validate(row) {
-    this.temp = new DollarUploadTemplate(row);
+    this.temp = new MappingUploadTemplate(row);
     this.getSubmeasure();
     this.validateSubmeasureName();
     this.lookForErrors();// get out early as later validation depends on submeasure
     this.validateMeasureAccess();
-    this.validateSubmeasureCanManualUpload()
+    // this.validateSubmeasureCanMappingUpload()
     this.lookForErrors();
     this.validateInputProductValue();
     this.validateInputSalesValue();
@@ -59,25 +54,30 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     this.validateInputLegalEntityValue();
     this.validateInputBusinessEntityValue();
     this.validateSCMSSegment();
-    this.validateAmount();
+    this.validatePercentage();
     this.validateRevenueClassification();
   }
 
   getImportDoc(row) {
-    const doc = new DollarUploadImport(row);
+    const doc = new MappingUploadImport(row);
     doc.fiscalMonth = this.fiscalMonth;
     return doc;
   }
 
-  validateSubmeasureCanManualUpload() {
+  validateSubmeasureCanMappingUpload() {
+    // todo:
+    // requirement says check if submeasure.manualMapping = 'Y', but manualMapping is an object exactly
+    // the same as submeasure.inputFilterLevel, either way, probably need some check here, have to verify
+/*
     if (this.submeasure.source !== 'manual') {
       this.addError('', `Sub Measure doesn't allow manual upload`);
     }
+*/
   }
 
-  validateAmount() {
-    if (this.validateNumber(this.PropNames.amount, this.temp.amount)) {
-      this.temp.amount = Number(this.temp.amount);
+  validatePercentage() {
+    if (this.validateNumber(this.PropNames.percentage, this.temp.percentage)) {
+      this.temp.percentage = Number(this.temp.percentage);
     }
   }
 
@@ -86,11 +86,6 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
       this.notExists(this.data.revClassifications, this.temp.revenueClassification)) {
       this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
-  }
-
-  getFiscalMonth() {
-    return openPeriodRepo.getOneLatest({})
-      .then(doc => this.import.fiscalMonth = doc.fiscalMonth);
   }
 
 }

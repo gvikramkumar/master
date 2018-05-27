@@ -10,10 +10,10 @@ mgConn.promise.then(({db, mongo}) => {
   const meta = {directory: 'pft.bu', buFileType: 'template'};
   const promises = [];
   const buTemplates = [
-    {fileName: 'dollar-upload.xlsx', buUploadType: 'adu'},
+    {fileName: 'dollar-upload.xlsx', buUploadType: 'du'},
     {fileName: 'iaspu-upload.xlsx', buUploadType: 'iaspu'},
     {fileName: 'slspu-upload.xlsx', buUploadType: 'slspu'},
-    {fileName: 'mmspu-upload.xlsx', buUploadType: 'mmspu'},
+    {fileName: 'mapping-upload.xlsx', buUploadType: 'mm'},
     {fileName: 'pcu-upload.xlsx', buUploadType: 'pcu'}
   ]
 

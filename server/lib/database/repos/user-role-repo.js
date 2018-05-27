@@ -1,5 +1,5 @@
 const mg = require('mongoose'),
-  RepoBase = require('../models/repo-base');
+  RepoBase = require('../../base-classes/repo-base');
 
 
 const schema = new mg.Schema(
@@ -10,7 +10,7 @@ const schema = new mg.Schema(
   {collection: 'user_role'}
 );
 
-class UserRoleRepo extends RepoBase {
+module.exports = class UserRoleRepo extends RepoBase {
   constructor() {
     super(schema, 'UserRole');
   }
@@ -20,10 +20,12 @@ class UserRoleRepo extends RepoBase {
   }
 
   userHasRole(userId, role) {
+    return Promise.resolve(true);
+/*
     return this.Model.findOne({userId, role})
       .then(x => Boolean(x));
+*/
   }
 
 }
 
-module.exports = new UserRoleRepo();

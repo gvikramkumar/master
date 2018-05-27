@@ -1,28 +1,24 @@
 const _ = require('lodash'),
   Q = require('q');
 
+
+Promise.resolve()
+  .then(() => Promise.all([fgood(), fbad(), fgood()]))
 /*
-let date = new Date(1978, 1);
-// date.setHours(date.getHours()-8);
-console.log(date, date.getHours(), date.getUTCHours())
-return;
+  .catch(err => {
+    console.error('myerr', err);
+    return Promise.reject(err);
+  })
 */
+  .then(x => console.log('success'))
+  .catch(err => console.error('myerr', err));
 
-let val = 197801;
-console.log(test(val))
-
-
-function test(_yearmo) {
-  let yearmo = _yearmo;
-  if (typeof yearmo === 'number') {
-    yearmo = yearmo.toString();
-  }
-  const year = Number(yearmo.substr(0, 4));
-  const month = Number(yearmo.substr(4, 2));
-
-
-  let startDate = new Date(year, month - 1 + 7);
-  let endDate = new Date(year, month - 1 + 8);
-
-  return {startDate, endDate};
+function fbad() {
+  _.sortBy5();
+  return Promise.reject('rej');
 }
+function fgood() {
+  return Promise.resolve();
+}
+
+

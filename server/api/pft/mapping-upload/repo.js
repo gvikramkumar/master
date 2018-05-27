@@ -12,10 +12,7 @@ const schema = new mg.Schema(
     legalEntity: String,
     intBusinessEntity: String,
     scms: String,
-    dealId: String,
-    grossUnbilledAccruedFlag: String,
-    revenueClassification: String,
-    amount: {type: Number, required: true},
+    percentage: {type: Number, required: true},
     createdBy: String,
     createdDate: Date,
     updatedBy: String,
@@ -24,9 +21,9 @@ const schema = new mg.Schema(
   {collection: 'dollar_upload'}
 );
 
-module.exports = class DollarUploadRepo extends RepoBase {
+module.exports = class MappingUploadRepo extends RepoBase {
   constructor() {
-    super(schema, 'DollarUpload');
+    super(schema, 'MappingUpload');
   }
 
 }
