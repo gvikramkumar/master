@@ -36,7 +36,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
 
   getValidationAndImportData() {
     return Promise.all([
-      super.getValidationAndImportData
+      super.getValidationAndImportData()
     ])
   }
 
@@ -76,11 +76,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
   }
 
   validatePercentage() {
-    if (this.temp.percentage === undefined || '') {
-      this.addErrorRequired(this.PropNames.percentage);
-    } else if (Number.isNaN(Number(this.temp.percentage))) {
-      this.addError(this.PropNames.percentage, 'Not a number');
-    } else {
+    if (this.validateNumber(this.PropNames.percentage, this.temp.percentage)) {
       this.temp.percentage = Number(this.temp.percentage);
     }
   }

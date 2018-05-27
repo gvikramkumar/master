@@ -12,7 +12,7 @@ const uploadTypeUrl = [
   {type: 'du', url: 'dollar-upload'},
   {type: 'iaspu', url: ''},
   {type: 'slspu', url: ''},
-  {type: 'mm', url: ''},
+  {type: 'mm', url: 'mapping-upload'},
   {type: 'pcu', url: ''}
 ];
 

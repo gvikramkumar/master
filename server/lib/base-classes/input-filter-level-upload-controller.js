@@ -78,7 +78,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
     if (!this.temp.submeasureName) {
       this.addErrorRequired(this.PropNames.submeasureName);
     } else if (!this.submeasure) {
-      this.addError(this.PropNames.submeasureName, 'No Sub Measure exists by this name');
+      this.addError(this.PropNames.submeasureName, 'No Sub Measure exists by this name', this.temp.submeasureName);
     }
     return Promise.resolve();
   }
@@ -200,14 +200,14 @@ module.exports = class InputFilterLevelUploadController extends UploadController
 
   validateSCMSSegment() {
     let scmsLevel = this.submeasure.inputFilterLevel.scmsLevel.toUpperCase();
-    if (scmsLevel && !this.temp.ScmsSegment) {
+    if (scmsLevel && !this.temp.scmsSegment) {
       this.addErrorRequiredForSubmeasure(this.PropNames.scmsSegment);
-    } else if (!scmsLevel && this.temp.ScmsSegment) {
+    } else if (!scmsLevel && this.temp.scmsSegment) {
       this.addErrorNotAllowedForSubmeasure(this.PropNames.scmsSegment);
     } else {
       if (scmsLevel === 'SCMS') {
-        if (this.notExists(this.data.scms, this.temp.ScmsSegment)) {
-          this.addErrorInvalid(this.PropNames.scmsSegment, this.temp.ScmsSegment);
+        if (this.notExists(this.data.scms, this.temp.scmsSegment)) {
+          this.addErrorInvalid(this.PropNames.scmsSegment, this.temp.scmsSegment);
         }
       }
     }

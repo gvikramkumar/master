@@ -53,6 +53,8 @@ module.exports = class UploadController extends ControllerBase {
     return Promise.resolve();
   }
 
+  // this is sync now, but could easily be rolled to async, just that getting all data beforehand
+  // and doing binary searches is much faster so we'll focus on keeping validation sync
   validateRow(row, rowNum) {
     this.errors = [];
     this.rowNum = rowNum;
@@ -68,7 +70,6 @@ module.exports = class UploadController extends ControllerBase {
         throw err;
       }
     }
-    return Promise.resolve();
   }
 
   lookForErrors() {
@@ -197,6 +198,17 @@ module.exports = class UploadController extends ControllerBase {
 
   notExists(values, value) {
     return _.sortedIndexOf(values, value.toUpperCase()) === -1;
+  }
+
+  validateNumber(prop, val, required) {
+    if (required && val === (undefined || '')) {
+      this.addErrorRequired(prop);
+      return false;
+    } else if (Number.isNaN(Number(val))) {
+      this.addError(prop, 'Not a number', val);
+      return false;
+    }
+     return true;
   }
 
 }
