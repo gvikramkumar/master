@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import {environment} from '../../../../environments/environment';
 import {BusinessUploadService, BuUploadMetadata} from '../../services/business-upload.service';
 import {ToastService} from '../../../core/services/common/toast.service';
+import {UtilService} from '../../../core/services/common/util';
 
 const directory = Directory.businessUpload;
 
@@ -36,12 +37,28 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   uploadType = this.uploadTypes[0].value;
 
   constructor(
+    private util: UtilService,
     public store: Store,
     private route: ActivatedRoute,
     private fsFileService: FsFileService,
     private businessUploadService: BusinessUploadService,
     private toast: ToastService) {
     super(store, route);
+  }
+
+  getReport(endpoint) {
+    const params = <any>{};
+    switch(endpoint) {
+      case 'dollar-upload':
+        params.submeasureName = '2 Tier Adjustment';
+        params.fiscalMonth = '201809';
+        params.excelHeaders = 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Amount';
+        params.excelProperties = 'fiscalMonth,submeasureName, product,sales   ,   amount';
+        break;
+    }
+    params.excelFilename = endpoint + '.csv';
+    const url = `${environment.apiUrl}/api/${endpoint}?excelDownload=true`;
+    this.util.submitForm(url, params);
   }
 
   changeMeasure() {

@@ -1,13 +1,42 @@
 const {Duplex} = require('stream'),
   {Buffer} = require('buffer'),
-  ApiError = require('./api-error')
+  _ = require('lodash'),
+  ApiError = require('./api-error');
 
 module.exports = {
+  objToString,
+  convertJsonToCsv,
   getDateRangeFromFiscalYearMo,
   streamToBuffer,
   bufferToStream,
   checkParams,
   setSchemaAdditions
+}
+
+function convertJsonToCsv(docs, props) {
+  const arrCsv = [];
+  docs.forEach(doc => {
+    const arrDoc = [];
+    props.forEach(prop => {
+      arrDoc.push(objToString(doc[prop]));
+    });
+    arrCsv.push(arrDoc.join(','));
+  });
+  return arrCsv;
+}
+
+function objToString(val) {
+  if (typeof val === 'string') {
+    return val;
+  } else if (_.isNumber(val) || _.isBoolean(val)) {
+    return String(val);
+  } else if (_.isDate(val)) {
+    return val.toISOString();
+  } else if (typeof val === 'object') {
+    return val.toString();
+  } else {
+    return '';
+  }
 }
 
 function getDateRangeFromFiscalYearMo(_yearmo) {
