@@ -1,24 +1,33 @@
 const _ = require('lodash'),
   Q = require('q');
 
-
-Promise.resolve()
-  .then(() => Promise.all([fgood(), fbad(), fgood()]))
-/*
-  .catch(err => {
-    console.error('myerr', err);
-    return Promise.reject(err);
-  })
-*/
-  .then(x => console.log('success'))
-  .catch(err => console.error('myerr', err));
-
-function fbad() {
-  _.sortBy5();
-  return Promise.reject('rej');
-}
-function fgood() {
-  return Promise.resolve();
+function objToString(val) {
+  if (typeof val === 'string') {
+    return val;
+  } else if (_.isNumber(val) || _.isBoolean(val)) {
+    return String(val);
+  } else if (_.isDate(val)) {
+    return val.toISOString();
+  } else if (typeof val === 'object') {
+    return val.toString();
+  } else {
+    return '';
+  }
 }
 
+class Pet {
+  constructor(name) {
+    this.name = 'glenda';
+  }
+
+}
+
+console.log(objToString(undefined));
+console.log(objToString(false));
+console.log(objToString(true));
+console.log(objToString(new Date()));
+console.log(objToString('lala'));
+console.log(objToString(0));
+console.log(objToString(5));
+console.log(objToString(new Pet));
 

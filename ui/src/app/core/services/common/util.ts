@@ -1,8 +1,25 @@
 
-export class Util {
+export class UtilService {
 
-  static isGuid(val) {
-    return /^\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}?$/.test(val);
+  submitForm(url, params) {
+
+    var form = document.createElement("form");
+    form.setAttribute("method", 'post');
+    form.setAttribute("action", url);
+
+    for(var key in params) {
+      if(params.hasOwnProperty(key)) {
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", key);
+        hiddenField.setAttribute("value", params[key]);
+        form.appendChild(hiddenField);
+      }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    setTimeout(() => document.body.removeChild(form));
   }
 
   static isKeydown(event) {
@@ -10,7 +27,6 @@ export class Util {
     // 13 = Return, 32 = Space
     return ((code === 13) || (code === 32));
   }
-
 
   static keydownAndNotEnterOrSpace(event) {
     return event.type === 'keydown' && !(event.which === 13 || event.which === 32);
