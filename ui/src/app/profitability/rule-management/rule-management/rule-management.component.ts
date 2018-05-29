@@ -43,7 +43,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
       this.nameFilter.next(name);
     });
 
-    this.ruleService.getManyLatest()
+    this.ruleService.getManyLatest('name')
       .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
         this.rulesCount = rules.length;
