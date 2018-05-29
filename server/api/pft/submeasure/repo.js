@@ -27,11 +27,11 @@ const schema = new mg.Schema(
     },
     reportingLevels: [String],
     indicators: {
-      dollaruploadFlag: {type: String, enum: ['Y', 'N']},
+      dollarUploadFlag: {type: String, enum: ['Y', 'N']},
       discountFlag: {type: String, enum: ['Y', 'N']},
       approveFlag: {type: String, enum: ['Y', 'N']},
       status: {type: String, enum: ['A']},
-      manualmapping: {type: String, enum: ['Y', 'N']}
+      manualMapping: {type: String, enum: ['Y', 'N']}
     },
     rules: [String]
   },

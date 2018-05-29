@@ -14,7 +14,7 @@ db.submeasure.insertMany([
     inputFilterLevel:{productLevel:"PF",salesLevel:"level1",scmsLevel:"SCMS",internalBELevel:"Internal BE",entityLevel:"BE"},
     manualMapping:{productLevel:"TG",salesLevel:"level2",scmsLevel:"SCMS",internalBELevel:"Internal SUB BE",entityLevel:"BE"},
     reportingLevels:[],
-    indicators:{dollaruploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualmapping:"Y"},
+    indicators:{dollarUploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualMapping:"Y"},
     rules:["2TierPOSPID","2TierPOSBE"]
   },
   {
@@ -29,7 +29,7 @@ db.submeasure.insertMany([
     inputFilterLevel:{productLevel:"TG",salesLevel:"level3",scmsLevel:"SCMS",internalBELevel:"Internal SUB BE",entityLevel:"BE"},
     manualMapping:{productLevel:"PF",salesLevel:"level4",scmsLevel:"SCMS",internalBELevel:"Internal BE",entityLevel:"BE"},
     reportingLevels:[],
-    indicators:{dollaruploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualmapping:"Y"},
+    indicators:{dollarUploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualMapping:"Y"},
     rules:["2TierPOSPID","2TierPOSBE"]
   }
   ])

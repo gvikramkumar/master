@@ -51,7 +51,8 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     this.validateSubmeasureName();
     this.lookForErrors();// get out early as later validation depends on submeasure
     this.validateMeasureAccess();
-    this.validateSubmeasureCanManualUpload()
+    this.validateSubmeasureCanManualUpload();
+    this.validateCanDollarUpload();
     this.lookForErrors();
     this.validateInputProductValue();
     this.validateInputSalesValue();
@@ -72,6 +73,12 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   validateSubmeasureCanManualUpload() {
     if (this.submeasure.source !== 'manual') {
       this.addError('', `Sub Measure doesn't allow manual upload`);
+    }
+  }
+
+  validateCanDollarUpload() {
+    if (this.submeasure.indicators.dollarUploadFlag.toUpperCase() !== 'Y') {
+      this.addError('', `Sub Measure doesn't allow dollar upload`);
     }
   }
 
