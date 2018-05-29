@@ -1,6 +1,7 @@
 const ControllerBase = require('./controller-base'),
   xlsx = require('node-xlsx'),
   NamedApiError = require('../common/named-api-error'),
+  ApiError = require('../common/api-error'),
   _ = require('lodash'),
   mail = require('../common/mail'),
   OpenPeriodRepo = require('../../api/common/open-period/repo');
@@ -23,10 +24,11 @@ module.exports = class UploadController extends ControllerBase {
     this.rows = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
     this.totalErrors = {};
     this.hasTotalErrors = false;
-    res.end();
     if (this.rows < 1) {
-      this.sendNoRecordsToUpload();
+      next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
       return;
+    } else {
+      res.end();
     }
 
     this.getValidationAndImportData()
@@ -114,16 +116,6 @@ module.exports = class UploadController extends ControllerBase {
 
   sendSuccessEmail() {
     this.sendEmail(`${this.uploadName} - Success`, this.buildSuccessEmailBody());
-  }
-
-  sendNoRecordsToUpload() {
-    this.sendEmail(`${this.uploadName} - No Records To Upload`, this.noRowsToUploadEmailBody());
-  }
-
-
-
-  noRowsToUploadEmailBody() {
-    return `<div>No records found to upload. Please use the appropriate upload template and add new rows after row 5.</div>`
   }
 
   buildSuccessEmailBody() {
