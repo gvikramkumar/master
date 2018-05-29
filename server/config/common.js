@@ -11,8 +11,15 @@ module.exports = {
   },
   corsOrigin: [],
   showStack: false,
-  fileSizeMax: 10000000, // 10mb
-  fileCountMax: 1 // limit file count and size for dos attacks
+  fileUpload: {
+    fileSizeMax: 10000000, // 10mb
+    fileCountMax: 1, // limit file count and size for dos attacks
+  },
+  mail: {
+    host: 'mail.cisco.com',
+    secure: false,
+    port: 25
+  }
 
   /*
   ssl: {

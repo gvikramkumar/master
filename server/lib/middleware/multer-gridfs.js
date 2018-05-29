@@ -1,4 +1,4 @@
-const config = require('../../config/get-config'),
+const config = require('../../config/get-config').fileUpload,
   {db} = require('../database/mongoose-conn'),
   multer = require('multer'),
   multerGridFsStorage = require('multer-gridfs-storage')
