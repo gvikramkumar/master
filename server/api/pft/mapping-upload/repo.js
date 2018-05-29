@@ -18,7 +18,7 @@ const schema = new mg.Schema(
     updatedBy: String,
     updatedDate: Date
   },
-  {collection: 'dollar_upload'}
+  {collection: 'mapping_upload'}
 );
 
 module.exports = class MappingUploadRepo extends RepoBase {
