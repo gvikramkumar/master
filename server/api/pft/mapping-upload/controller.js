@@ -46,7 +46,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
     this.validateSubmeasureName();
     this.lookForErrors();// get out early as later validation depends on submeasure
     this.validateMeasureAccess();
-    // this.validateSubmeasureCanMappingUpload()
+    this.validateCanMappingUpload()
     this.lookForErrors();
     this.validateInputProductValue();
     this.validateInputSalesValue();
@@ -64,16 +64,12 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
     return doc;
   }
 
-  validateSubmeasureCanMappingUpload() {
-    // todo:
-    // requirement says check if submeasure.manualMapping = 'Y', but manualMapping is an object exactly
-    // the same as submeasure.inputFilterLevel, either way, probably need some check here, have to verify
-/*
-    if (this.submeasure.source !== 'manual') {
-      this.addError('', `Sub Measure doesn't allow manual upload`);
+  validateCanMappingUpload() {
+    if (this.submeasure.indicators.manualMapping.toUpperCase() !== 'Y') {
+      this.addError('', `Sub Measure doesn't allow mapping upload`);
     }
-*/
   }
+
 
   validatePercentage() {
     if (this.validateNumber(this.PropNames.percentage, this.temp.percentage, true)) {
