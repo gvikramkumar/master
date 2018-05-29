@@ -14,9 +14,4 @@ export class RuleService extends RestBase<AllocationRule> {
     super('allocation-rule', httpClient)
   }
 
-  getManyLatest(): Observable<AllocationRule[]> {
-    const params = new HttpParams().set('groupField', 'name');
-    return this.httpClient.get<AllocationRule[]>(`${apiUrl}/api/${this.endpointName}`, {params});
-  }
-
 }
