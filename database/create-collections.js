@@ -10,7 +10,6 @@ const collections = [
   'allocation_rule',
   'module',
   'submeasure',
-  'submeasure_rule',
   'dollar_upload',
   'measure',
   'open_period',
@@ -37,6 +36,9 @@ fileCollections.forEach(coll => {
 // todo: add appropriate indexes on all collections
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 db.getCollection('allocation_rule').createIndex({name: 1, updatedDate: -1});
+
+db.dollar_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.mapping_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
 
 // unique constraints
 db.module.createIndex({name: 1}, {unique: true});

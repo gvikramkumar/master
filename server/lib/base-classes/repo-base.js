@@ -13,8 +13,30 @@ module.exports = class RepoBase {
 
   // get all that match filter, if yearmo/upperOnly exists, sets date constraints
   getMany(_filter = {}) {
-    const filter = this.addDateRangeToFilter(_filter);
-    return this.Model.find(filter).exec();
+    let filter = _.clone(_filter);
+    let query;
+    const distinct = filter.getDistinct,
+      limit = filter.setLimit,
+      skip = filter.setSkip,
+      sortBy = filter.setSort;
+    filter = _.omit(filter, ['getDistinct', 'setLimit', 'setSkip', 'setSort']);
+    filter = this.addDateRangeToFilter(filter);
+    if (distinct) {
+      // can't use limit with distinct.
+      query = this.Model.distinct(distinct, filter);
+    } else {
+      query = this.Model.find(filter);
+      if (skip) {
+        query = query.skip(Number(skip));
+      }
+      if (limit) {
+        query = query.limit(Number(limit));
+      }
+      if (sortBy) {
+        query = query.sort(sortBy); // need to use string syntax: "name -updatedDate" so sortBy=name+-updatedDate
+      }
+    }
+    return query.exec();
   }
 
   getManyByIds(ids) {
