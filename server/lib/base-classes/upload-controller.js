@@ -23,8 +23,12 @@ module.exports = class UploadController extends ControllerBase {
     this.rows = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
     this.totalErrors = {};
     this.hasTotalErrors = false;
-
     res.end();
+    if (this.rows < 1) {
+      this.sendNoRecordsToUpload();
+      return;
+    }
+
     this.getValidationAndImportData()
       .then(() => {
         return this.validateRows()
@@ -101,15 +105,25 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   sendErrorEmail(err) {
-    this.sendEmail(`${this.uploadName} Upload Error`, this.buildErrorEmailBody(err));
+    this.sendEmail(`${this.uploadName} - Upload Error`, this.buildErrorEmailBody(err));
   }
 
   sendValidationEmail() {
-    this.sendEmail(`${this.uploadName} Validation Errors`, this.buildValidationEmailBody());
+    this.sendEmail(`${this.uploadName} - Validation Errors`, this.buildValidationEmailBody());
   }
 
   sendSuccessEmail() {
-    this.sendEmail(`${this.uploadName} Success`, this.buildSuccessEmailBody());
+    this.sendEmail(`${this.uploadName} - Success`, this.buildSuccessEmailBody());
+  }
+
+  sendNoRecordsToUpload() {
+    this.sendEmail(`${this.uploadName} - No Records To Upload`, this.noRowsToUploadEmailBody());
+  }
+
+
+
+  noRowsToUploadEmailBody() {
+    return `<div>No records found to upload. Please use the appropriate upload template and add new rows after row 5.</div>`
   }
 
   buildSuccessEmailBody() {
