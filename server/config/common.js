@@ -5,8 +5,6 @@ module.exports = {
     host: 'finpg-dev-01',
     port: 5432,
     database: 'postgres',
-    user: 'postgres',
-    password: 'finit1',
     schema: 'fdscon'
   },
   corsOrigin: [],
