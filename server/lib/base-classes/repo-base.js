@@ -189,11 +189,11 @@ module.exports = class RepoBase {
     return item.validateSync(data); // if(repo.validate(data)) >>  then have an error
   }
 
-  // adds a data range to the filter if yearmo param, if upperOnly=true then only uppper constraint
+  // adds a data range to the filter if setYearmo param, if upperOnly=true then only upper constraint
   addDateRangeToFilter(_filter) {
     let filter = _filter;
-    if (filter.yearmo) {
-      const dates = util.getDateRangeFromFiscalYearMo(filter.yearmo);
+    if (filter.setYearmo) {
+      const dates = util.getDateRangeFromFiscalYearMo(filter.setYearmo);
       const dateRange = {
         updatedDate: {
           $gte: dates.startDate,
@@ -206,7 +206,7 @@ module.exports = class RepoBase {
       }
 
       filter = Object.assign(filter, dateRange);
-      delete filter.yearmo;
+      delete filter.setYearmo;
       delete filter.upperOnly;
     }
     return filter;
