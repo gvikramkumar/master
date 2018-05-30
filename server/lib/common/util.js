@@ -54,8 +54,6 @@ function getDateRangeFromFiscalYearMo(_yearmo) {
   return {startDate, endDate};
 }
 
-
-
 function setSchemaAdditions(schema) {
   schema.set('toObject', {
     getters: true,
