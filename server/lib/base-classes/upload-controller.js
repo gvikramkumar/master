@@ -1,6 +1,7 @@
 const ControllerBase = require('./controller-base'),
   xlsx = require('node-xlsx'),
   NamedApiError = require('../common/named-api-error'),
+  ApiError = require('../common/api-error'),
   _ = require('lodash'),
   mail = require('../common/mail'),
   OpenPeriodRepo = require('../../api/common/open-period/repo');
@@ -17,14 +18,20 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   upload(req, res, next) {
+    // this.startTime = Date.now();
     this.req = req;
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
     this.rows = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
     this.totalErrors = {};
     this.hasTotalErrors = false;
+    if (this.rows < 1) {
+      next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
+      return;
+    } else {
+      res.end();
+    }
 
-    res.end();
     this.getValidationAndImportData()
       .then(() => {
         return this.validateRows()
@@ -35,8 +42,10 @@ module.exports = class UploadController extends ControllerBase {
           })
       })
       .then(() => this.importRows())
+      // .then(() => console.log('>>>>>>>>> ms duration', Date.now() - this.startTime))
       .then(() => this.sendSuccessEmail())
       .catch(err => {
+        // console.log('>>>>>>>>> ms duration', Date.now() - this.startTime)
         if (err && err.name === UploadValidationError) {
           this.sendValidationEmail();
         } else {
@@ -101,15 +110,15 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   sendErrorEmail(err) {
-    this.sendEmail(`${this.uploadName} Upload Error`, this.buildErrorEmailBody(err));
+    this.sendEmail(`${this.uploadName} - Upload Error`, this.buildErrorEmailBody(err));
   }
 
   sendValidationEmail() {
-    this.sendEmail(`${this.uploadName} Validation Errors`, this.buildValidationEmailBody());
+    this.sendEmail(`${this.uploadName} - Validation Errors`, this.buildValidationEmailBody());
   }
 
   sendSuccessEmail() {
-    this.sendEmail(`${this.uploadName} Success`, this.buildSuccessEmailBody());
+    this.sendEmail(`${this.uploadName} - Success`, this.buildSuccessEmailBody());
   }
 
   buildSuccessEmailBody() {

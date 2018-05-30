@@ -20,11 +20,12 @@ mgConn.promise.then(({db, mongo}) => {
   buTemplates.forEach(template => {
     const metadata = Object.assign({}, meta);
     const fileName = template.fileName;
+    const contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     metadata.fileName = fileName;
     metadata.buUploadType = template.buUploadType;
     // console.log(fileName, metadata);
     const promise = new Promise((resolve, reject) => {
-      fs.createReadStream(dirPath + fileName).pipe(gfs.openUploadStream(fileName, {metadata}))
+      fs.createReadStream(dirPath + fileName).pipe(gfs.openUploadStream(fileName, {metadata, contentType}))
         .on('error', function (err) {
           reject(err);
         })

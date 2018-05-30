@@ -1,5 +1,17 @@
+import {Injectable} from '@angular/core';
+import {HttpParams} from '@angular/common/http';
+import * as _ from 'lodash';
 
+@Injectable()
 export class UtilService {
+
+  createHttpParams(_params) {
+    let params = new HttpParams();
+    _.forEach(params, key => {
+      params.set(key, params[key]);
+    })
+    return params;
+  }
 
   submitForm(url, params) {
 
