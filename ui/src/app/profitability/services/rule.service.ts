@@ -4,14 +4,15 @@ import {AllocationRule} from '../store/models/allocation-rule';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {RestBase} from '../../core/base-classes/rest-base';
+import {UtilService} from '../../core/services/common/util';
 
 const apiUrl = environment.apiUrl;
 
 @Injectable()
 export class RuleService extends RestBase<AllocationRule> {
 
-  constructor(httpClient: HttpClient) {
-    super('allocation-rule', httpClient)
+  constructor(httpClient: HttpClient, util: UtilService) {
+    super('allocation-rule', httpClient, util)
   }
 
 }

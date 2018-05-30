@@ -18,6 +18,7 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   upload(req, res, next) {
+    // this.startTime = Date.now();
     this.req = req;
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
@@ -41,8 +42,10 @@ module.exports = class UploadController extends ControllerBase {
           })
       })
       .then(() => this.importRows())
+      // .then(() => console.log('>>>>>>>>> ms duration', Date.now() - this.startTime))
       .then(() => this.sendSuccessEmail())
       .catch(err => {
+        // console.log('>>>>>>>>> ms duration', Date.now() - this.startTime)
         if (err && err.name === UploadValidationError) {
           this.sendValidationEmail();
         } else {
