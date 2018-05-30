@@ -6,8 +6,8 @@ const client = new Client({
   host: config.host,
   database: config.database,
   port: config.port,
-  user: config.user,
-  password: config.password
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD
 })
 
 const rtn = {pgdb: client};
