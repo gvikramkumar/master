@@ -14,7 +14,7 @@ db.submeasure.insertMany([
     inputFilterLevel:{productLevel:"PF",salesLevel:"level1",scmsLevel:"SCMS",internalBELevel:"Internal BE",entityLevel:"BE"},
     manualMapping:{productLevel:"TG",salesLevel:"level2",scmsLevel:"SCMS",internalBELevel:"Internal SUB BE",entityLevel:"BE"},
     reportingLevels:[],
-    indicators:{dollarUploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualMapping:"Y"},
+    indicators:{dollarUploadFlag:"Y",discountFlag:"N",approveFlag:"Y",status:"A",manualMapping:"Y",expenseSSOT:"Y"},
     rules:["2TierPOSPID","2TierPOSBE"]
   },
   {
@@ -73,6 +73,13 @@ db.mapping_upload.insert({
   scms:"enterprise",
   percentage:450.57})
 
+db.expense_SSOT_map.insertOne({
+  submeasureName:"2 Tier Adjustment",
+  hierarchyName:"pl_hierarchy",
+  nodeLevelValue:"node_level03_name",
+  nodeId:"375821",
+  glAccount: "60001"})
+
 db.lookup.insertMany([
   {type: 'revenue_classification', values:  ["Recurring Deferred","Recurring Non Deferred","Recurring Other","Non Recurring"]},
 ]);
@@ -84,7 +91,8 @@ const collectionsWithCreatedUpdated = [
   'dollar_upload',
   'measure',
   'open_period',
-  'mapping_upload'
+  'mapping_upload',
+  'expense_SSOT_map'
 ];
 
 const date = new Date();

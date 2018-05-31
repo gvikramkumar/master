@@ -14,7 +14,8 @@ const collections = [
   'measure',
   'open_period',
   'user_role',
-  'lookup'
+  'lookup',
+  'expense_SSOT_map'
 ];
 
 collections.forEach(coll => {
