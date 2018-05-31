@@ -73,6 +73,13 @@ db.mapping_upload.insert({
   scms:"enterprise",
   percentage:450.57})
 
+db.expense_SSOT_mapping.insertOne({
+  submeasureName:"2 Tier Adjustment",
+  hierarchyName:"pl_hierarchy",
+  nodelevelValue:"node_level03_name",
+  nodeID:"375821",
+  glAccount: "60001"})
+
 db.lookup.insertMany([
   {type: 'revenue_classification', values:  ["Recurring Deferred","Recurring Non Deferred","Recurring Other","Non Recurring"]},
 ]);
@@ -84,7 +91,8 @@ const collectionsWithCreatedUpdated = [
   'dollar_upload',
   'measure',
   'open_period',
-  'mapping_upload'
+  'mapping_upload',
+  'expense_SSOT_mapping'
 ];
 
 const date = new Date();
