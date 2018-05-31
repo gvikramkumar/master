@@ -73,7 +73,7 @@ db.mapping_upload.insert({
   scms:"enterprise",
   percentage:450.57})
 
-db.expense_SSOT_mapping.insertOne({
+db.expense_SSOT_map.insertOne({
   submeasureName:"2 Tier Adjustment",
   hierarchyName:"pl_hierarchy",
   nodelevelValue:"node_level03_name",
@@ -92,7 +92,7 @@ const collectionsWithCreatedUpdated = [
   'measure',
   'open_period',
   'mapping_upload',
-  'expense_SSOT_mapping'
+  'expense_SSOT_map'
 ];
 
 const date = new Date();
