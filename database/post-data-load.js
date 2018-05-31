@@ -76,8 +76,8 @@ db.mapping_upload.insert({
 db.expense_SSOT_map.insertOne({
   submeasureName:"2 Tier Adjustment",
   hierarchyName:"pl_hierarchy",
-  nodelevelValue:"node_level03_name",
-  nodeID:"375821",
+  nodeLevelValue:"node_level03_name",
+  nodeId:"375821",
   glAccount: "60001"})
 
 db.lookup.insertMany([
