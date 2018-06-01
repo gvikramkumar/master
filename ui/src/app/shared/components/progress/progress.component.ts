@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ProgressService} from '../../../core/services/common/progress.service';
+import {ProgressService} from '../../../core/services/progress.service';
 
 @Component({
   selector: 'dk-progress',

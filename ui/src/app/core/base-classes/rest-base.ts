@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {ModelBase} from '../../store/models/model-base';
-import {UtilService} from '../services/common/util';
+import {UtilService} from '../services/util';
 const apiUrl = environment.apiUrl;
 
 export class RestBase<T extends ModelBase> {

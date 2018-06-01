@@ -3,12 +3,13 @@ import {RoutingComponentBase} from '../../../shared/routing-component-base';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '../../../store/store';
 import * as _ from 'lodash';
-import {MeasureService} from "../../services/measure.service";
+import {MeasureService} from "../../../core/services/measure.service";
 import {Measure} from "../../store/models/measure";
 import {Submeasure} from "../../store/models/submeasure";
-import {SubmeasureService} from "../../services/submeasure.service";
+import {SubmeasureService} from "../../../core/services/submeasure.service";
 import {environment} from "../../../../environments/environment";
-import {UtilService} from "../../../core/services/common/util";
+import {UtilService} from "../../../core/services/util";
+import {DollarUploadService} from '../../../core/services/dollar-upload.service';
 
 @Component({
   selector: 'fin-reports',
@@ -38,6 +39,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     private router: Router,
     private measureService: MeasureService,
     private subMeasureService: SubmeasureService,
+    private dollarUploadService: DollarUploadService,
     private store: Store
   ) {
     super(store, route);
@@ -51,18 +53,17 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   }
 
- /* selectMeasureName() {
-    this.subMeasureService.getManySubMeasure(this.measureSelection).subscribe(data => {
+  selectMeasureName() {
+    this.subMeasureService.getMany({measureName: this.measureSelection}).subscribe(data => {
       this.subMeasureList = data;
     });
   }
 
   selectSubMeasureName() {
-    this.reportService.getManyFiscalMonth(this.subMeasureSelection).subscribe(data => {
+    this.dollarUploadService.getDistinct('fiscalMonth', {submeasureName: this.subMeasureSelection}).subscribe(data => {
       this.fiscalMonthList = data;
     });
   }
-*/
 
   selectFiscalMonth() {
 

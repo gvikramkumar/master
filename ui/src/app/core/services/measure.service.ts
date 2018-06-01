@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {RestBase} from '../../core/base-classes/rest-base';
-import {Measure} from "../store/models/measure";
-import {UtilService} from "../../core/services/common/util";
+import {RestBase} from '../base-classes/rest-base';
+import {Measure} from "../../profitability/store/models/measure";
+import {UtilService} from "./util";
 
 const apiUrl = environment.apiUrl;
 
