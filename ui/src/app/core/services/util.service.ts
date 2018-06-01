@@ -7,8 +7,8 @@ export class UtilService {
 
   createHttpParams(_params) {
     let params = new HttpParams();
-    _.forEach(_params, key => {
-      params.set(key, _params[key]);
+    _.forEach(_params, (val, key) => {
+      params = params.set(key, _params[key]);
     })
     return params;
   }
