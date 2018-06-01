@@ -3,8 +3,8 @@ import {RoutingComponentBase} from '../../../shared/routing-component-base';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '../../../store/store';
 import * as _ from 'lodash';
-import {ReportService} from "../../services/report.service";
-import {Reports} from "../../store/models/reports";
+import {MeasureService} from "../../services/measure.service";
+import {Measure} from "../../store/models/measure";
 import {Submeasure} from "../../store/models/submeasure";
 import {SubmeasureService} from "../../services/submeasure.service";
 import {environment} from "../../../../environments/environment";
@@ -19,7 +19,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   measureSelection: string;
   subMeasureSelection: string;
   fiscalMonthSelection: string;
-  measureList: Reports[];
+  measureList: Measure[];
   subMeasureList: Submeasure[];
   fiscalMonthList: any;
   downloadFlag : boolean=true;
@@ -36,7 +36,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     private util: UtilService,
     private route: ActivatedRoute,
     private router: Router,
-    private reportService: ReportService,
+    private measureService: MeasureService,
     private subMeasureService: SubmeasureService,
     private store: Store
   ) {
@@ -45,13 +45,13 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   ngOnInit(){
-    this.reportService.getMany().subscribe(data => {
+    this.measureService.getMany().subscribe(data => {
       this.measureList = data;
     });
 
   }
 
-  selectMeasureName() {
+ /* selectMeasureName() {
     this.subMeasureService.getManySubMeasure(this.measureSelection).subscribe(data => {
       this.subMeasureList = data;
     });
@@ -62,6 +62,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       this.fiscalMonthList = data;
     });
   }
+*/
 
   selectFiscalMonth() {
 

@@ -18,7 +18,7 @@ import {FsFileService} from './services/common/fsfile.service';
 import {AuthorizationGuard} from './guards/authorization.guard';
 import {ToastService} from './services/common/toast.service';
 import {UtilService} from './services/common/util';
-import {ReportService} from "../profitability/services/report.service";
+import {MeasureService} from "../profitability/services/measure.service";
 
 @NgModule({
   imports: [
@@ -35,7 +35,7 @@ import {ReportService} from "../profitability/services/report.service";
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ModifyRequestInterceptor, multi: true},
     BreakpointService, ModuleService, RuleService, SubmeasureService, TestService,
-    FsFileService, AuthorizationGuard, ToastService, UtilService, ReportService
+    FsFileService, AuthorizationGuard, ToastService, UtilService, MeasureService
   ]
 })
 export class CoreModule {

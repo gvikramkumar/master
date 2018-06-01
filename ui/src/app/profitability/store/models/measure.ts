@@ -1,6 +1,6 @@
 import {ModelBase} from '../../../store/models/model-base';
 
-export class Reports extends ModelBase {
+export class Measure extends ModelBase {
   name: string;
   typeCode: string;
   statusFlag: string;
