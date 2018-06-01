@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {FsFile} from '../../store/models/fsfile';
 import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import * as _ from 'lodash';
 import {BusinessUploadFileType} from '../store/models/enums';
@@ -9,10 +9,10 @@ import {BusinessUploadFileType} from '../store/models/enums';
 const apiUrl = environment.apiUrl;
 
 const uploadTypeUrl = [
-  {type: 'adu', url: 'dollar-upload'},
+  {type: 'du', url: 'dollar-upload'},
   {type: 'iaspu', url: ''},
   {type: 'slspu', url: ''},
-  {type: 'mmspu', url: ''},
+  {type: 'mm', url: 'mapping-upload'},
   {type: 'pcu', url: ''}
 ];
 
@@ -30,10 +30,10 @@ export class BusinessUploadService {
   upload(file, metadata: BuUploadMetadata): Observable<FsFile> {
     const formData: FormData = new FormData();
     _.forEach(metadata, (val, key) => formData.append(key, val));
-    formData.append('fileUploadField', file, file.name)
-    const fdOptions = {headers: {Accept: 'application/json'}};
+    formData.append('fileUploadField', file, file.name);
+    const options = {headers: {Accept: 'application/json'}};
     const url = _.find(uploadTypeUrl, {type: metadata.buUploadType}).url;
-    return this.httpClient.post<FsFile>(`${apiUrl}/api/${url}`, formData, fdOptions);
+    return this.httpClient.post<FsFile>(`${apiUrl}/api/${url}/upload`, formData, options);
   }
 
 }

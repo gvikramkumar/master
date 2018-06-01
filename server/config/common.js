@@ -5,13 +5,19 @@ module.exports = {
     host: 'finpg-dev-01',
     port: 5432,
     database: 'postgres',
-    user: 'postgres',
-    password: 'finit1'
+    schema: 'fdscon'
   },
   corsOrigin: [],
   showStack: false,
-  fileSizeMax: 10000000, // 10mb
-  fileCountMax: 1 // limit file count and size for dos attacks
+  fileUpload: {
+    fileSizeMax: 10000000, // 10mb
+    fileCountMax: 1, // limit file count and size for dos attacks
+  },
+  mail: {
+    host: 'mail.cisco.com',
+    secure: false,
+    port: 25
+  }
 
   /*
   ssl: {

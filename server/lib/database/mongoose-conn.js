@@ -6,7 +6,9 @@ const options = {
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 500,
   poolSize: 10,
-  bufferMaxEntries: 0
+  bufferMaxEntries: 0,
+  user: process.env.MONGODB_USER,
+  pass: process.env.MONGODB_PASSWORD
 };
 
 const rtn = {};

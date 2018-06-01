@@ -16,8 +16,10 @@ const config = require('./config/get-config'),
   User = require('./lib/models/user'),
   authorize = require('./lib/middleware/authorize'),
   dollarUploadRouter = require('./api/pft/dollar-upload/router'),
-  measureRouter = require('./api/pft/measure/router');
-
+  mappingUploadRouter = require('./api/pft/mapping-upload/router'),
+  measureRouter = require('./api/pft/measure/router'),
+  openPeriodRouter = require('./api/common/open-period/router'),
+  lookupRouter = require('./api/common/lookup/router');
 
 // start express
 const app = express();
@@ -30,10 +32,12 @@ var corsOptions = {
 app.use(cors(corsOptions));
 app.use(function(req, res, next) {
   //todo: placeholder for req.user.id till security is in
-  req.user = new User('jodoe', 'John Doe', []);
+  req.user = new User('jodoe', 'John Doe', 'dakahle@cisco.com', []);
   next();
 })
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
 app.use(morgan('dev'));
@@ -59,7 +63,10 @@ app.use('/api/allocation-rule', allocationRuleRouter);
 app.use('/api/submeasure', submeasureRouter);
 app.use('/api/file', fileRouter);
 app.use('/api/dollar-upload', dollarUploadRouter);
+app.use('/api/mapping-upload', mappingUploadRouter);
 app.use('/api/measure', measureRouter);
+app.use('/api/open-period', openPeriodRouter);
+app.use('/api/lookup', lookupRouter);
 
 app.use(express.static(path.resolve(__dirname, '../ui/dist')));
 

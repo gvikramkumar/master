@@ -1,5 +1,5 @@
 const mg = require('mongoose'),
-  RepoBase = require('../../../lib/models/repo-base');
+  RepoBase = require('../../../lib/base-classes/repo-base');
 
 const schema = new mg.Schema(
   {
@@ -11,27 +11,27 @@ const schema = new mg.Schema(
     endFiscalMonth: Number,
     processingTime: {type: String, enum: ['Monthly']},
     pnlnodeGrouping: String,
-    inputfilterLevel: {
+    inputFilterLevel: {
       productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
       salesLevel: String,
-      scsmsLevel: String,
+      scmsLevel: String,
       internalBELevel: String,
       entityLevel: String
     },
     manualMapping: {
       productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
       salesLevel: String,
-      scsmsLevel: String,
+      scmsLevel: String,
       internalBELevel: String,
       entityLevel: String
     },
     reportingLevels: [String],
     indicators: {
-      dollaruploadFlag: {type: String, enum: ['Y', 'N']},
+      dollarUploadFlag: {type: String, enum: ['Y', 'N']},
       discountFlag: {type: String, enum: ['Y', 'N']},
       approveFlag: {type: String, enum: ['Y', 'N']},
       status: {type: String, enum: ['A']},
-      manualmapping: {type: String, enum: ['Y', 'N']}
+      manualMapping: {type: String, enum: ['Y', 'N']}
     },
     rules: [String]
   },

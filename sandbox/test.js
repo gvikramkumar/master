@@ -1,28 +1,33 @@
 const _ = require('lodash'),
   Q = require('q');
 
-/*
-let date = new Date(1978, 1);
-// date.setHours(date.getHours()-8);
-console.log(date, date.getHours(), date.getUTCHours())
-return;
-*/
-
-let val = 197801;
-console.log(test(val))
-
-
-function test(_yearmo) {
-  let yearmo = _yearmo;
-  if (typeof yearmo === 'number') {
-    yearmo = yearmo.toString();
+function objToString(val) {
+  if (typeof val === 'string') {
+    return val;
+  } else if (_.isNumber(val) || _.isBoolean(val)) {
+    return String(val);
+  } else if (_.isDate(val)) {
+    return val.toISOString();
+  } else if (typeof val === 'object') {
+    return val.toString();
+  } else {
+    return '';
   }
-  const year = Number(yearmo.substr(0, 4));
-  const month = Number(yearmo.substr(4, 2));
-
-
-  let startDate = new Date(year, month - 1 + 7);
-  let endDate = new Date(year, month - 1 + 8);
-
-  return {startDate, endDate};
 }
+
+class Pet {
+  constructor(name) {
+    this.name = 'glenda';
+  }
+
+}
+
+console.log(objToString(undefined));
+console.log(objToString(false));
+console.log(objToString(true));
+console.log(objToString(new Date()));
+console.log(objToString('lala'));
+console.log(objToString(0));
+console.log(objToString(5));
+console.log(objToString(new Pet));
+

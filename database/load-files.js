@@ -10,21 +10,22 @@ mgConn.promise.then(({db, mongo}) => {
   const meta = {directory: 'pft.bu', buFileType: 'template'};
   const promises = [];
   const buTemplates = [
-    {fileName: 'dollar-upload.xlsx', buUploadType: 'adu'},
+    {fileName: 'dollar-upload.xlsx', buUploadType: 'du'},
     {fileName: 'iaspu-upload.xlsx', buUploadType: 'iaspu'},
     {fileName: 'slspu-upload.xlsx', buUploadType: 'slspu'},
-    {fileName: 'mmspu-upload.xlsx', buUploadType: 'mmspu'},
+    {fileName: 'mapping-upload.xlsx', buUploadType: 'mm'},
     {fileName: 'pcu-upload.xlsx', buUploadType: 'pcu'}
   ]
 
   buTemplates.forEach(template => {
     const metadata = Object.assign({}, meta);
     const fileName = template.fileName;
+    const contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     metadata.fileName = fileName;
     metadata.buUploadType = template.buUploadType;
     // console.log(fileName, metadata);
     const promise = new Promise((resolve, reject) => {
-      fs.createReadStream(dirPath + fileName).pipe(gfs.openUploadStream(fileName, {metadata}))
+      fs.createReadStream(dirPath + fileName).pipe(gfs.openUploadStream(fileName, {metadata, contentType}))
         .on('error', function (err) {
           reject(err);
         })
@@ -36,7 +37,7 @@ mgConn.promise.then(({db, mongo}) => {
   })
   Promise.all(promises)
     .then(() => {
-      console.log('file upload complete');
+      console.log('>>>>>>>>> file upload complete');
       process.exit(0);
     })
     .catch(err => console.error('file upload failure:', err));
