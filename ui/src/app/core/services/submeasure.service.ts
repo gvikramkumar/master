@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {Submeasure} from '../../profitability/store/models/submeasure';
 import {environment} from '../../../environments/environment';
 import {RestBase} from '../base-classes/rest-base';
-import {UtilService} from './util';
+import {UtilService} from './util.service';
 
 const apiUrl = environment.apiUrl;
 

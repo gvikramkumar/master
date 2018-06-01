@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import {environment} from '../../../../environments/environment';
 import {BusinessUploadService, BuUploadMetadata} from '../../services/business-upload.service';
 import {ToastService} from '../../../core/services/toast.service';
-import {UtilService} from '../../../core/services/util';
+import {UtilService} from '../../../core/services/util.service';
 
 const directory = Directory.businessUpload;
 

@@ -7,7 +7,7 @@ import {environment} from '../../../environments/environment';
 import {Store} from '../../store/store';
 import {RestBase} from '../base-classes/rest-base';
 import * as _ from 'lodash';
-import {UtilService} from './util';
+import {UtilService} from './util.service';
 
 const apiUrl = environment.apiUrl;
 

@@ -1,42 +1,34 @@
 <div fxLayout="row" fxLayoutAlign="start stretch">
   <div class="leftnav" fxFlex="1 1 20%">
-    <mat-radio-group class="example-radio-group" [(ngModel)]="downloadType" (change)="$event">
-      <mat-radio-button class="example-radio-button" *ngFor="let downloadType of downloadTypes" [value]="downloadType.value" [disabled]="downloadType.disabled">
-        {{downloadType.text}}
-      </mat-radio-button>
+    <mat-radio-group class="example-radio-group" [(ngModel)]="downloadType" (change)="reset()">
+      <mat-radio-button class="example-radio-button" *ngFor="let dtype of downloadTypes"
+                        [value]="dtype" [disabled]="dtype.disabled">{{dtype.text}}</mat-radio-button>
     </mat-radio-group>
   </div>
 
   <div class="file-upload" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center start">
     <div class="content " fxFlex="1 1 60%">
-      <div class="example-selected-value"> {{getDownloadTypeText()}}</div>
+      <div class="example-selected-value"> {{downloadType.text}}</div>
+
       <br>
       <div class="upload-form-container">
-        <!-- <mat-form-field>
-          <input matInput placeholder="Input">
-        </mat-form-field> -->
         <label>Measure:</label>
-        <select id="Id" #Id="ngModel" class="hideLabel form-control" [(ngModel)]="measureSelection" name="id" (change)="selectMeasureName();">
-          <option [ngValue]="k.name" *ngFor="let k of measureList">
-            {{k.name}}
-          </option>
+        <select [(ngModel)]="measureName" name="id" (change)="measureSelected();">
+          <option [ngValue]="k.name" *ngFor="let k of measures">{{k.name}}</option>
         </select>
         <br><br>
         <label>Sub Measure:</label>
-        <select id="Id" #Id="ngModel" class="hideLabel form-control" [(ngModel)]="subMeasureSelection" name="id" (change)="selectSubMeasureName();">
-          <option [ngValue]="k.name" *ngFor="let k of subMeasureList">
-            {{k.name}}
-          </option>
+        <select [(ngModel)]="submeasureName" name="id" (change)="submeasureSelected();">
+          <option [ngValue]="k.name" *ngFor="let k of submeasures">{{k.name}}</option>
         </select>
         <br><br>
         <label>Fiscal Month:</label>
-        <select id="Id" #Id="ngModel" class="hideLabel form-control" [(ngModel)]="fiscalMonthSelection" name="id" (change)="selectFiscalMonth();">
-          <option [ngValue]="k.fiscalMonth" *ngFor="let k of fiscalMonthList">
-            {{k.fiscalMonth}}
-          </option>
+        <select [(ngModel)]="fiscalMonth" name="id" (change)="fiscalMonthSelected();">
+          <option [ngValue]="k" *ngFor="let k of fiscalMonths">{{k}}</option>
         </select>
         <br><br>
-        <button mat-button (click)="getReport('dollar-upload')" [disabled]="downloadFlag">Download Report</button><button mat-button>Reset</button>
+        <button mat-button (click)="getReport('dollar-upload')" [disabled]="disableDownload">
+          Download Report</button><button mat-button (click)="reset()">Reset</button>
       </div>
     </div>
   </div>

@@ -17,9 +17,9 @@ import {TestService} from './services/test.service';
 import {FsFileService} from './services/fsfile.service';
 import {AuthorizationGuard} from './guards/authorization.guard';
 import {ToastService} from './services/toast.service';
-import {UtilService} from './services/util';
+import {UtilService} from './services/util.service';
 import {MeasureService} from "./services/measure.service";
-import {DollarUploadService} from './services/dollar-upload.service';
+import {DollarUploadService} from '../profitability/services/dollar-upload.service';
 
 @NgModule({
   imports: [
@@ -36,8 +36,7 @@ import {DollarUploadService} from './services/dollar-upload.service';
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ModifyRequestInterceptor, multi: true},
     BreakpointService, ModuleService, RuleService, SubmeasureService, TestService,
-    FsFileService, AuthorizationGuard, ToastService, UtilService, MeasureService,
-    DollarUploadService
+    FsFileService, AuthorizationGuard, ToastService, UtilService, MeasureService
   ]
 })
 export class CoreModule {

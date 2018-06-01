@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {RestBase} from '../base-classes/rest-base';
-import {Measure} from "../../profitability/store/models/measure";
-import {UtilService} from "./util";
-import {DollarUpload} from '../../profitability/store/models/dollar-upload';
+import {RestBase} from '../../core/base-classes/rest-base';
+import {Measure} from "../store/models/measure";
+import {UtilService} from "../../core/services/util.service";
+import {DollarUpload} from '../store/models/dollar-upload';
 
 const apiUrl = environment.apiUrl;
 

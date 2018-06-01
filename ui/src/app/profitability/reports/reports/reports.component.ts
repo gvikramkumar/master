@@ -8,8 +8,17 @@ import {Measure} from "../../store/models/measure";
 import {Submeasure} from "../../store/models/submeasure";
 import {SubmeasureService} from "../../../core/services/submeasure.service";
 import {environment} from "../../../../environments/environment";
-import {UtilService} from "../../../core/services/util";
-import {DollarUploadService} from '../../../core/services/dollar-upload.service';
+import {UtilService} from "../../../core/services/util.service";
+import {DollarUploadService} from '../../services/dollar-upload.service';
+import {MappingUploadService} from '../../services/mapping-upload.service';
+
+interface ReportSettings {
+  submeasureName: string,
+  fiscalMonth?: number,
+  excelFilename: string,
+  excelProperties: string,
+  excelHeaders: string
+}
 
 @Component({
   selector: 'fin-reports',
@@ -17,21 +26,21 @@ import {DollarUploadService} from '../../../core/services/dollar-upload.service'
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent extends RoutingComponentBase implements OnInit {
-  measureSelection: string;
-  subMeasureSelection: string;
-  fiscalMonthSelection: string;
-  measureList: Measure[];
-  subMeasureList: Submeasure[];
-  fiscalMonthList: any;
-  downloadFlag : boolean=true;
+  measureName: string;
+  submeasureName: string;
+  fiscalMonth: number;
+  measures: Measure[];
+  submeasures: Submeasure[];
+  fiscalMonths: any;
+  disableDownload = true;
 
   downloadTypes = [
-    {value: 'mud', text: 'Manual Uploaded Data', disabled: false},
-    {value: 'mmd', text: 'Manual Mapping Data', disabled: false},
+    {value: 'mud', text: 'Manual Uploaded Data', endpoint: 'dollar-upload', disabled: false},
+    {value: 'mmd', text: 'Manual Mapping Data', endpoint: 'mapping-upload', disabled: false},
     {value: 'vph', text: 'Valid Product Hierarchy', disabled: false},
     {value: 'vsh', text: 'Valid Sales Hierarchy', disabled: false}
   ];
-  downloadType = this.downloadTypes[0].value;
+  downloadType = this.downloadTypes[0];
 
   constructor(
     private util: UtilService,
@@ -40,52 +49,90 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     private measureService: MeasureService,
     private subMeasureService: SubmeasureService,
     private dollarUploadService: DollarUploadService,
+    private mappingUploadService: MappingUploadService,
     private store: Store
   ) {
     super(store, route);
 
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.measureService.getMany().subscribe(data => {
-      this.measureList = data;
+      this.measures = data;
     });
 
   }
 
-  selectMeasureName() {
-    this.subMeasureService.getMany({measureName: this.measureSelection}).subscribe(data => {
-      this.subMeasureList = data;
-    });
+  isFiscalMonthDownload() {
+    return _.includes(['mud', 'mmd'], this.downloadType.value)
   }
 
-  selectSubMeasureName() {
-    this.dollarUploadService.getDistinct('fiscalMonth', {submeasureName: this.subMeasureSelection}).subscribe(data => {
-      this.fiscalMonthList = data;
-    });
+  measureSelected() {
+    this.disableDownload = true;
+    this.submeasureName = undefined;
+    this.fiscalMonth = undefined;
+    this.submeasures = [];
+    this.fiscalMonths = [];
+    this.subMeasureService.getMany({measureName: this.measureName})
+      .subscribe(submeasures => this.submeasures = submeasures);
   }
 
-  selectFiscalMonth() {
-
-    this.downloadFlag = false;
+  submeasureSelected() {
+    if (this.isFiscalMonthDownload()) {
+      this.disableDownload = true;
+      this.fiscalMonth = undefined;
+      this.fiscalMonths = [];
+      let obs;
+      switch (this.downloadType.value) {
+        case 'mud':
+          obs = this.dollarUploadService.getDistinct('fiscalMonth',
+            {submeasureName: this.submeasureName});
+          break;
+        case 'mmd':
+          obs = this.mappingUploadService.getDistinct('fiscalMonth',
+            {submeasureName: this.submeasureName});
+          break;
+      }
+      obs.subscribe(fiscalMonths => this.fiscalMonths = fiscalMonths);
+    } else {
+      this.disableDownload = false;
+    }
   }
 
-  getDownloadTypeText() {
-    return _.find(this.downloadTypes, {value: this.downloadType}).text;
+  fiscalMonthSelected() {
+    this.disableDownload = false;
   }
 
-  getReport(endpoint) {
-    const params = <any>{};
-    switch(endpoint) {
-      case 'dollar-upload':
-        params.submeasureName = this.subMeasureSelection;
-        params.fiscalMonth = this.fiscalMonthSelection;
+  getReport() {
+    const endpoint = this.downloadType.endpoint;
+    const params = <ReportSettings>{
+      submeasureName: this.submeasureName,
+      excelFilename: endpoint + '.csv'
+    };
+
+    if (this.isFiscalMonthDownload()) {
+      params.fiscalMonth = this.fiscalMonth;
+    }
+    switch (this.downloadType.value) {
+      case 'mud':
         params.excelHeaders = 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Amount';
-        params.excelProperties = 'fiscalMonth,submeasureName, product,sales   ,   amount';
+        params.excelProperties = 'fiscalMonth, submeasureName, product, sales, amount';
+        break;
+      case 'mmd':
+        params.excelHeaders = 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Percentage';
+        params.excelProperties = 'fiscalMonth, submeasureName, product, sales, percentage';
         break;
     }
-    params.excelFilename = endpoint + '.csv';
     const url = `${environment.apiUrl}/api/${endpoint}?excelDownload=true`;
     this.util.submitForm(url, params);
+  }
+
+  reset() {
+    this.measureName = undefined;
+    this.submeasureName = undefined;
+    this.fiscalMonth = undefined;
+    this.submeasures = [];
+    this.fiscalMonths = [];
+    this.disableDownload = true;
   }
 }

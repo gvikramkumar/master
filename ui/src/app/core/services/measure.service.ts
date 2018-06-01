@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {RestBase} from '../base-classes/rest-base';
 import {Measure} from "../../profitability/store/models/measure";
-import {UtilService} from "./util";
+import {UtilService} from "./util.service";
 
 const apiUrl = environment.apiUrl;
 
