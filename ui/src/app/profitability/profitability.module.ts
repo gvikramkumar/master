@@ -11,6 +11,7 @@ import {SharedModule} from '../shared/shared.module';
 import {ProfitabilityRoutingModule} from './profitability-routing.module';
 import {BusinessUploadService} from './services/business-upload.service';
 import {StoreProfitability} from './store/store-profitability';
+import { ReportsComponent } from './reports/reports/reports.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {StoreProfitability} from './store/store-profitability';
     SubmeasureAddComponent,
     RuleManagementEditComponent,
     RuleManagementAssignComponent,
-    BusinessUploadComponent
+    BusinessUploadComponent,
+    ReportsComponent
   ],
   exports: [
     SubmeasureComponent,

@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {ModelBase} from '../../store/models/model-base';
 import {UtilService} from '../services/common/util';
+import {Reports} from "../../profitability/store/models/reports";
 const apiUrl = environment.apiUrl;
 
 export class RestBase<T extends ModelBase> {
@@ -58,6 +59,16 @@ export class RestBase<T extends ModelBase> {
   getManyLatest(groupField, _params = {}): Observable<T[]> {
     const params = Object.assign(_params, {groupField});
     return this.getMany(params);
+  }
+
+  getManySubMeasure(measureName): Observable<T[]> {
+    const params = new HttpParams().set('measureName', measureName);
+    return this.httpClient.get<T[]>(`${apiUrl}/api/${this.endpointName}`, {params});
+  }
+
+  getManyFiscalMonth(submeasureName): Observable<Reports> {
+    const params = new HttpParams().set('submeasureName', submeasureName);
+    return this.httpClient.get<Reports>(`${apiUrl}/api/dollar-upload`, {params});
   }
 
   // filters by params, then gets latest value using updatedDate
