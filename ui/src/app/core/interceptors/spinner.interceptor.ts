@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ProgressService} from '../services/common/progress.service';
+import {ProgressService} from '../services/progress.service';
 import {tap} from 'rxjs/operators';
 
 

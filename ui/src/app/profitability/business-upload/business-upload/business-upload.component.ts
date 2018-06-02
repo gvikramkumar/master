@@ -3,13 +3,13 @@ import {RoutingComponentBase} from '../../../shared/routing-component-base';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '../../../store/store';
 import {FsFile} from '../../../store/models/fsfile';
-import {FsFileService} from '../../../core/services/common/fsfile.service';
+import {FsFileService} from '../../../core/services/fsfile.service';
 import {BusinessUploadFileType, Directory} from '../../store/models/enums';
 import * as _ from 'lodash';
 import {environment} from '../../../../environments/environment';
 import {BusinessUploadService, BuUploadMetadata} from '../../services/business-upload.service';
-import {ToastService} from '../../../core/services/common/toast.service';
-import {UtilService} from '../../../core/services/common/util';
+import {ToastService} from '../../../core/services/toast.service';
+import {UtilService} from '../../../core/services/util.service';
 
 const directory = Directory.businessUpload;
 

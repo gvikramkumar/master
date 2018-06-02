@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {ActivatedRoute, ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
 import {Observable, Subject, forkJoin} from 'rxjs';
 import {mergeMap, map, catchError} from 'rxjs/operators';
-import {Init1, Init2, Init3, Init4, Init5} from '../services/common/test-init-service';
+import {Init1, Init2, Init3, Init4, Init5} from '../services/test-init-service';
 import {Store} from '../../store/store';
-import {BreakpointService} from "../services/common/breakpoint.service";
-import {ModuleService} from '../services/common/module.service';
-import {TestService} from '../services/common/test.service';
+import {BreakpointService} from "../services/breakpoint.service";
+import {ModuleService} from '../services/module.service';
+import {TestService} from '../services/test.service';
 import {User} from '../../store/models/user';
 
 @Injectable()

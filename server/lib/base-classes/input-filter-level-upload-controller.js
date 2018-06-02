@@ -1,7 +1,7 @@
 const UploadController = require('./upload-controller'),
   PostgresRepo = require('../database/repos/postgres-repo'),
   _ = require('lodash'),
-  SubmeasureRepo = require('../../api/pft/submeasure/repo'),
+  SubmeasureRepo = require('../../api/common/submeasure/repo'),
   UserRoleRepo = require('../database/repos/user-role-repo'),
   LookupRepo = require('../../api/common/lookup/repo');
 

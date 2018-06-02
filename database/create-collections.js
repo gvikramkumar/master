@@ -11,6 +11,7 @@ const collections = [
   'module',
   'submeasure',
   'dollar_upload',
+  'mapping_upload',
   'measure',
   'open_period',
   'user_role',

@@ -1,0 +1,44 @@
+
+.leftnav {
+  min-width: 300px;
+
+  .example-radio-group {
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  .example-radio-button {
+    margin: 15px;
+    font-weight: 400;
+  }
+
+  .example-selected-value {
+    margin: 15px;
+  }
+
+}
+
+.file-upload {
+
+  .content {
+  }
+
+  button.choose-file {
+    label {
+      display: block;
+      margin: 0 -16px;
+      padding: 0 16px;
+      height: 100%;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .file-list {
+    margin: 14px 0;
+  }
+}
+
+
+
