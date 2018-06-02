@@ -9,10 +9,10 @@ import {BusinessUploadFileType} from '../store/models/enums';
 const apiUrl = environment.apiUrl;
 
 const uploadTypeUrl = [
-  {type: 'du', url: 'dollar-upload'},
+  {type: 'du', url: 'pft/dollar-upload'},
   {type: 'iaspu', url: ''},
   {type: 'slspu', url: ''},
-  {type: 'mm', url: 'mapping-upload'},
+  {type: 'mm', url: 'pft/mapping-upload'},
   {type: 'pcu', url: ''}
 ];
 

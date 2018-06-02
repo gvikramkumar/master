@@ -130,8 +130,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         params.excelProperties = 'fiscalMonth, submeasureName, product, sales, percentage';
         break;
     }
-    const url = `${environment.apiUrl}/api/${endpoint}?excelDownload=true`;
+    const url = `${environment.apiUrl}/api/pft/report/${endpoint}`;
     this.util.submitForm(url, params);
   }
 
 }
+

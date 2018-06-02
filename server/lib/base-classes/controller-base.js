@@ -8,8 +8,28 @@ module.exports = class ControllerBase {
     this.repo = repo;
   }
 
-  // if groupField, groups by groupField and gets Latest of each group
-  // else if getLatest, returns the lastest value
+  // GetMany special query parameters
+  // params get sent in as queryString and become mongo find(filter)
+  // other values used to determine query type get pulled out before filtering
+
+  // setYearmo:
+  // eg: 201809, this will filter data to updatedDate within that date range, if upperOnly=true
+  // then only filters using the upper date of that range. The uploads have fiscalMonth so best done using
+  // fiscalMonth for those, it will be indexed.
+
+  // setSkip, setLimit, setSort:
+  // support paging
+
+  // getDistinct=someField:
+  // gets distinct values for that field after filtering
+
+  // groupField=someField:
+  // groups by this field after filtering, then selects latest of each group. This is used to get
+  // current rules grouping by name. If setYearmo and upperOnly used, can get current rules for any fiscal month
+
+  // getLatest=true:
+  // filters then picks latest value (only returns one value) using updatedDate
+
   getManyPromise(req) {
     let promise;
     if (req.query.groupField) {
@@ -40,15 +60,13 @@ module.exports = class ControllerBase {
       .catch(next)
   }
 
-  // if queryPost querystring: assume all get, not add, query params are in body, just queryPost is in query string
-  // insertMany querystring: insertMany
+  // if queryPost querystring, then just a query with params in body instead of querystring
+  // insertMany querystring: insertMany, else insert one
   handlePost(req, res, next) {
     const data = req.body;
     if (req.query.queryPost) {
       req.query = req.body;
       this.getMany(req, res, next);
-    } else if (req.query.excelDownload) {
-      this.handleExcelDownload(req, res, next);
     } else if (req.query.insertMany) {
       this.repo.addMany(data, req.user.id)
         .then(() => res.end())
@@ -82,34 +100,6 @@ module.exports = class ControllerBase {
         throw new ApiError(`Property missing: ${prop}.`, data, 400)
       }
     })
-  }
-
-  // for excelDownload we expect:
-  // * excelFilename: name of file it will download to
-  // * excelProperties: an array of property names to determine the properties downloaded and order
-  // * excelHeaders (optional) an array of header names for the first row of download
-  // we push headers, convert json to csv using properties, concat csv, join with line terminator and send
-  handleExcelDownload(req, res, next) {
-    const body = req.body;
-    req.query = _.omit(body, ['excelFilename', 'excelProperties', 'excelHeaders']);
-
-    if (!body.excelFilename || !body.excelProperties) {
-      next(new ApiError('Missing properties for excelDownload. Require: excelFilename, excelProperties.', null, 400));
-      return;
-    }
-    let arrRtn = [];
-    if (body.excelHeaders) {
-      arrRtn.push(util.cleanCsv(body.excelHeaders));
-    }
-    this.getManyPromise(req)
-      .then(docs => util.convertJsonToCsv(docs, util.cleanCsvArr(body.excelProperties)))
-      .then(arrCsv => {
-        arrRtn = arrRtn.concat(arrCsv);
-        res.set('Content-Type', 'text/csv');
-        res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
-        res.send(arrRtn.join('\n'));
-      })
-      .catch(next);
   }
 
 }

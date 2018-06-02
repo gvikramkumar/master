@@ -12,7 +12,7 @@ const apiUrl = environment.apiUrl;
 export class DollarUploadService extends RestBase<any> {
 
   constructor(httpClient: HttpClient, util: UtilService) {
-    super('dollar-upload', httpClient, util)
+    super('pft/dollar-upload', httpClient, util)
   }
 
 
