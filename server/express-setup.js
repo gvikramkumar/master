@@ -10,16 +10,17 @@ const config = require('./config/get-config'),
   notFound = require('./lib/middleware/not-found'),
   errorHandler = require('./lib/middleware/error-handler'),
   moduleRouter = require('./api/common/module/router'),
-  allocationRuleRouter = require('./api/pft/allocation-rule/router'),
-  submeasureRouter = require('./api/pft/submeasure/router'),
+  allocationRuleRouter = require('./api/common/allocation-rule/router'),
+  submeasureRouter = require('./api/common/submeasure/router'),
   fileRouter = require('./api/common/file/router'),
   User = require('./lib/models/user'),
   authorize = require('./lib/middleware/authorize'),
   dollarUploadRouter = require('./api/pft/dollar-upload/router'),
   mappingUploadRouter = require('./api/pft/mapping-upload/router'),
-  measureRouter = require('./api/pft/measure/router'),
+  measureRouter = require('./api/common/measure/router'),
   openPeriodRouter = require('./api/common/open-period/router'),
-  lookupRouter = require('./api/common/lookup/router');
+  lookupRouter = require('./api/common/lookup/router'),
+  reportRouter = require('./api/pft/report/router');
 
 // start express
 const app = express();
@@ -58,15 +59,18 @@ app.get('/crash-site', function (req, res, next) {
 })
 
 app.use(authorize('api:access')); // authorize api access
+app.use('/api/file', fileRouter);
+app.use('/api/open-period', openPeriodRouter);
 app.use('/api/module', moduleRouter);
+app.use('/api/measure', measureRouter);
 app.use('/api/allocation-rule', allocationRuleRouter);
 app.use('/api/submeasure', submeasureRouter);
-app.use('/api/file', fileRouter);
-app.use('/api/dollar-upload', dollarUploadRouter);
-app.use('/api/mapping-upload', mappingUploadRouter);
-app.use('/api/measure', measureRouter);
-app.use('/api/open-period', openPeriodRouter);
 app.use('/api/lookup', lookupRouter);
+// profitability:
+app.use('/api/pft/dollar-upload', dollarUploadRouter);
+app.use('/api/pft/mapping-upload', mappingUploadRouter);
+app.use('/api/pft/report', reportRouter);
+
 
 app.use(express.static(path.resolve(__dirname, '../ui/dist')));
 
