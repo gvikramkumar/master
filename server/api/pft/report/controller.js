@@ -1,15 +1,12 @@
 const _ = require('lodash'),
   DollarUploadController = require('../dollar-upload/controller'),
   MappingUploadController = require('../mapping-upload/controller'),
-  PostgresRepo = require('../../../lib/database/repos/postgres-repo'),
-  ReportRepo = require('./repo'),
-  ControllerBase = require('../../../lib/base-classes/controller-base'),
   util = require('../../../lib/common/util'),
-  ApiError = require('../../../lib/common/api-error');
+  ApiError = require('../../../lib/common/api-error'),
+  pgdb = require('../../../lib/database/postgres-conn').pgdb;
 
 const dollarUploadCtrl = new DollarUploadController(),
-  mappingUploadCtrl = new MappingUploadController(),
-  postgresRepo = new PostgresRepo();
+  mappingUploadCtrl = new MappingUploadController();
 
 module.exports = class ReportController {
 
@@ -19,7 +16,7 @@ module.exports = class ReportController {
   // * excelHeaders (optional) an array of header names for the first row of download
   // we push headers, convert json to csv using properties, concat csv, join with line terminator and send
   getReport(req, res, next) {
-    const body = req.body;
+    const body = req.body;// post request, params are in the body
     req.query = _.omit(body, ['excelFilename', 'excelProperties', 'excelHeaders']);
 
     if (!body.excelFilename || !body.excelProperties) {
@@ -39,12 +36,19 @@ module.exports = class ReportController {
       case 'mapping-upload':
         promise = mappingUploadCtrl.getManyPromise(req);
         break;
+      case 'product-hierarchy':
+        promise = pgdb.query(`SELECT item_key, product_id, base_product_id, goods_or_service_type FROM fdscon.vw_fds_products limit 10`);
+        break
+      case 'sales-hierarchy':
+        promise = pgdb.query(`SELECT sales_territory_key, l0_sales_territory_name_code, l1_sales_territory_name_code FROM fdscon.vw_fds_sales_hierarchy limit 10`);
+        break
       default:
         next(new ApiError('Bad report type', null, 400));
         return;
     }
 
     promise
+      .then(results => results.rows || results)
       .then(docs => util.convertJsonToCsv(docs, util.cleanCsvArr(body.excelProperties)))
       .then(arrCsv => {
         arrRtn = arrRtn.concat(arrCsv);
