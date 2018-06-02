@@ -33,6 +33,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   submeasures: Submeasure[];
   fiscalMonths: any;
   disableDownload = true;
+  isFiscalMonthDownload = false;
 
   downloadTypes = [
     {value: 'mud', text: 'Manual Uploaded Data', endpoint: 'dollar-upload', disabled: false},
@@ -53,18 +54,24 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     private store: Store
   ) {
     super(store, route);
-
   }
 
   ngOnInit() {
     this.measureService.getMany().subscribe(data => {
       this.measures = data;
     });
-
+   this.reset();
   }
 
-  isFiscalMonthDownload() {
-    return _.includes(['mud', 'mmd'], this.downloadType.value)
+  reset() {
+    console.log('reset')
+    this.measureName = undefined;
+    this.submeasureName = undefined;
+    this.fiscalMonth = undefined;
+    this.submeasures = [];
+    this.fiscalMonths = [];
+    this.disableDownload = true;
+    this.isFiscalMonthDownload = _.includes(['mud', 'mmd'], this.downloadType.value)
   }
 
   measureSelected() {
@@ -78,7 +85,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   submeasureSelected() {
-    if (this.isFiscalMonthDownload()) {
+    if (this.isFiscalMonthDownload) {
       this.disableDownload = true;
       this.fiscalMonth = undefined;
       this.fiscalMonths = [];
@@ -110,7 +117,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       excelFilename: endpoint + '.csv'
     };
 
-    if (this.isFiscalMonthDownload()) {
+    if (this.isFiscalMonthDownload) {
       params.fiscalMonth = this.fiscalMonth;
     }
     switch (this.downloadType.value) {
@@ -127,12 +134,4 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.util.submitForm(url, params);
   }
 
-  reset() {
-    this.measureName = undefined;
-    this.submeasureName = undefined;
-    this.fiscalMonth = undefined;
-    this.submeasures = [];
-    this.fiscalMonths = [];
-    this.disableDownload = true;
-  }
 }

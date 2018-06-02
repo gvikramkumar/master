@@ -22,12 +22,14 @@
           <option [ngValue]="k.name" *ngFor="let k of submeasures">{{k.name}}</option>
         </select>
         <br><br>
-        <label>Fiscal Month:</label>
-        <select [(ngModel)]="fiscalMonth" name="id" (change)="fiscalMonthSelected();">
-          <option [ngValue]="k" *ngFor="let k of fiscalMonths">{{k}}</option>
-        </select>
-        <br><br>
-        <button mat-button (click)="getReport('dollar-upload')" [disabled]="disableDownload">
+        <div *ngIf="isFiscalMonthDownload">
+          <label>Fiscal Month:</label>
+          <select [(ngModel)]="fiscalMonth" name="id" (change)="fiscalMonthSelected();">
+            <option [ngValue]="k" *ngFor="let k of fiscalMonths">{{k}}</option>
+          </select>
+          <br><br>
+        </div>
+        <button mat-button (click)="getReport()" [disabled]="disableDownload">
           Download Report</button><button mat-button (click)="reset()">Reset</button>
       </div>
     </div>
