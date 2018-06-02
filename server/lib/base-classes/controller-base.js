@@ -99,10 +99,10 @@ module.exports = class ControllerBase {
     }
     let arrRtn = [];
     if (body.excelHeaders) {
-      arrRtn.push(body.excelHeaders.split(',').map(x => x.trim()).join(','));
+      arrRtn.push(util.cleanCsv(body.excelHeaders));
     }
     this.getManyPromise(req)
-      .then(docs => util.convertJsonToCsv(docs, body.excelProperties.split(',').map(x => x.trim())))
+      .then(docs => util.convertJsonToCsv(docs, util.cleanCsvArr(body.excelProperties)))
       .then(arrCsv => {
         arrRtn = arrRtn.concat(arrCsv);
         res.set('Content-Type', 'text/csv');
