@@ -1,24 +1,21 @@
-const ControllerBase = require('./controller-base'),
-  xlsx = require('node-xlsx'),
+const xlsx = require('node-xlsx'),
   NamedApiError = require('../common/named-api-error'),
   ApiError = require('../common/api-error'),
   _ = require('lodash'),
   mail = require('../common/mail'),
-  OpenPeriodRepo = require('../../api/common/open-period/repo'),
-  util = require('../common/util');
-
-
+  OpenPeriodRepo = require('../../api/common/open-period/repo');
 
 const UploadValidationError = 'UploadValidationError';
 const openPeriodRepo = new OpenPeriodRepo();
 
-module.exports = class UploadController extends ControllerBase {
+module.exports = class UploadController {
 
   constructor(repo) {
-    super(repo);
+    this.repo = repo;
   }
 
   upload(req, res, next) {
+    this.startUpload = Date.now();
     this.req = req;
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
@@ -34,6 +31,7 @@ module.exports = class UploadController extends ControllerBase {
 
     this.getValidationAndImportData()
       .then(() => {
+        console.log('done getting data', Date.now() - this.startUpload);
         return this.validateRows()
           .then(() => {
             if (this.hasTotalErrors) {
@@ -125,7 +123,8 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   buildSuccessEmailBody() {
-    return `<div>${this.rows.length} records successfully uploaded.</div>`
+    const duration = Math.round((Date.now() - this.startUpload)/1000);
+    return `<div>${this.rows.length} records successfully uploaded in ${duration} seconds.</div>`
   }
 
   buildErrorEmailBody(err) {

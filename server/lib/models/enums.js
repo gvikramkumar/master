@@ -5,11 +5,6 @@ obj.Directory = {
   businessUpload: 'pft.bu'
 }
 
-obj.BuUploadType = {
-  dollarUpload: 'du',
-  manualMapping: 'mm'
-};
-
 obj.BuFileType =
   {
     template: 'template',

@@ -9,7 +9,6 @@ import {RuleManagementAssignComponent} from './rule-management/rule-management-a
 import {BusinessUploadComponent} from './business-upload/business-upload/business-upload.component';
 import {SharedModule} from '../shared/shared.module';
 import {ProfitabilityRoutingModule} from './profitability-routing.module';
-import {BusinessUploadService} from './services/business-upload.service';
 import {StoreProfitability} from './store/store-profitability';
 import { ReportsComponent } from './reports/reports/reports.component';
 import {DollarUploadService} from './services/dollar-upload.service';
@@ -42,7 +41,6 @@ import {MappingUploadService} from './services/mapping-upload.service';
     BusinessUploadComponent
   ],
   providers: [
-    BusinessUploadService,
     StoreProfitability,
     DollarUploadService,
     MappingUploadService]
