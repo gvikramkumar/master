@@ -20,7 +20,8 @@ const config = require('./config/get-config'),
   measureRouter = require('./api/common/measure/router'),
   openPeriodRouter = require('./api/common/open-period/router'),
   lookupRouter = require('./api/common/lookup/router'),
-  reportRouter = require('./api/pft/report/router');
+  reportRouter = require('./api/pft/report/router'),
+  uploadRouter = require('./api/pft/upload/router');
 
 // start express
 const app = express();
@@ -70,6 +71,7 @@ app.use('/api/lookup', lookupRouter);
 app.use('/api/pft/dollar-upload', dollarUploadRouter);
 app.use('/api/pft/mapping-upload', mappingUploadRouter);
 app.use('/api/pft/report', reportRouter);
+app.use('/api/pft/upload', uploadRouter);
 
 
 app.use(express.static(path.resolve(__dirname, '../ui/dist')));

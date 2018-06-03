@@ -4,6 +4,7 @@ const {Duplex} = require('stream'),
   ApiError = require('./api-error');
 
 module.exports = {
+  getMemoryUsage,
   cleanCsv,
   cleanCsvArr,
   objToString,
@@ -13,6 +14,11 @@ module.exports = {
   bufferToStream,
   checkParams,
   setSchemaAdditions
+}
+
+function getMemoryUsage() {
+  const obj = process.memoryUsage();
+  return _.forEach(obj, (val, key) => obj[key] = obj[key]/1000000);
 }
 
 // clear out whitespace

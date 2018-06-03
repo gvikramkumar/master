@@ -9,5 +9,6 @@ const ctrl = new MappingUploadController();
 module.exports = router
   .get('/', ctrl.getMany.bind(ctrl))
   .post('/', authorize('api:manage'), ctrl.handlePost.bind(ctrl))
-  .post('/upload', authorize('api:manage'), upload.single('fileUploadField'), ctrl.upload.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))
+  .put('/:id', authorize('api:manage'), ctrl.update.bind(ctrl))
+  .delete('/:id', authorize('api:admin'), ctrl.remove.bind(ctrl))
