@@ -10,6 +10,7 @@ import {DollarUploadService} from '../../services/dollar-upload.service';
 import {MappingUploadService} from '../../services/mapping-upload.service';
 import {environment} from '../../../../environments/environment';
 import {UtilService} from '../../../core/services/util.service';
+import * as _ from 'lodash';
 
 interface ReportSettings {
   submeasureName: string,
@@ -35,22 +36,26 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   reports = [
     {
-      type: 'mud', name: 'dollar-upload', hasFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
+      type: 'dollar-upload', hasFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
+      filename: 'manual_uploaded_data',
       excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Amount',
       excelProperties: 'fiscalMonth, submeasureName, product, sales, amount'
     },
     {
-      type: 'mmd', name: 'mapping-upload', hasFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
+      type: 'mapping-upload', hasFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
+      filename: 'manual_mapping_data',
       excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Percentage',
       excelProperties: 'fiscalMonth, submeasureName, product, sales, percentage'
     },
     {
-      type: 'vph', name: 'product-hierarchy', hasFiscalMonth: false, text: 'Valid Product Hierarchy', disabled: false,
+      type: 'product-hierarchy', hasFiscalMonth: false, text: 'Valid Product Hierarchy', disabled: false,
+      filename: 'product_hierarchy',
       excelHeaders: 'Item Key, Product ID, Base Product ID, Goods or Service Type',
       excelProperties: 'item_key, product_id, base_product_id, goods_or_service_type'
     },
     {
-      type: 'vsh', name: 'sales-hierarchy', hasFiscalMonth: false, text: 'Valid Sales Hierarchy', disabled: false,
+      type: 'sales-hierarchy', hasFiscalMonth: false, text: 'Valid Sales Hierarchy', disabled: false,
+      filename: 'sales_hierarchy',
       excelHeaders: 'Sales Territory Key, l0 Name Code, l1 Name Code',
       excelProperties: 'sales_territory_key, l0_sales_territory_name_code, l1_sales_territory_name_code'
     }
@@ -71,8 +76,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   ngOnInit() {
-    this.measureService.getMany().subscribe(data => {
-      this.measures = data;
+    this.measureService.getMany().subscribe(measures => {
+      this.measures = _.sortBy(measures, 'name');
     });
     this.reset();
   }
@@ -93,7 +98,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.submeasures = [];
     this.fiscalMonths = [];
     this.subMeasureService.getMany({measureName: this.measureName})
-      .subscribe(submeasures => this.submeasures = submeasures);
+      .subscribe(submeasures => this.submeasures = _.sortBy(submeasures, 'name'));
   }
 
   submeasureSelected() {
@@ -103,16 +108,16 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       this.fiscalMonths = [];
       let obs;
       switch (this.report.type) {
-        case 'mud':
+        case 'dollar-upload':
           obs = this.dollarUploadService.getDistinct('fiscalMonth',
             {submeasureName: this.submeasureName});
           break;
-        case 'mmd':
+        case 'mapping-upload':
           obs = this.mappingUploadService.getDistinct('fiscalMonth',
             {submeasureName: this.submeasureName});
           break;
       }
-      obs.subscribe(fiscalMonths => this.fiscalMonths = fiscalMonths);
+      obs.subscribe(fiscalMonths => this.fiscalMonths = _.sortBy(fiscalMonths, _.identity).reverse().slice(0,24));
     } else {
       this.disableDownload = false;
     }
@@ -122,10 +127,18 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.disableDownload = false;
   }
 
+  getFilename() {
+    if (this.report.hasFiscalMonth) {
+      return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${this.fiscalMonth}.csv`;
+    } else {
+      return this.report.filename + `_${_.snakeCase(this.submeasureName)}.csv`;
+    }
+  }
+
   downloadReport() {
     const params = <ReportSettings>{
       submeasureName: this.submeasureName,
-      excelFilename: this.report.name + '.csv',
+      excelFilename: this.getFilename(),
       excelHeaders: this.report.excelHeaders,
       excelProperties: this.report.excelProperties
     };
@@ -133,7 +146,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     if (this.report.hasFiscalMonth) {
       params.fiscalMonth = this.fiscalMonth;
     }
-    const url = `${environment.apiUrl}/api/pft/report/${this.report.name}`;
+    const url = `${environment.apiUrl}/api/pft/report/${this.report.type}`;
     this.util.submitForm(url, params);
   }
 
