@@ -1,4 +1,4 @@
-
+const util = require('../../../../lib/common/util');
 
 module.exports = class DeptUploadImport {
 
@@ -9,15 +9,7 @@ module.exports = class DeptUploadImport {
     this.nodeId = params.nodeId;
     this.glAccount = row[1];
 
-    this.trimStrings();
-  }
-
-  trimStrings() {
-    Object.keys(this).forEach(key => {
-      if (typeof this[key] === 'string') {
-        this[key] = this[key].trim();
-      }
-    })
+    util.trimStringProperties(this);
   }
 
 }

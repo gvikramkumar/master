@@ -4,6 +4,7 @@ const {Duplex} = require('stream'),
   ApiError = require('./api-error');
 
 module.exports = {
+  trimStringProperties,
   getMemoryUsage,
   cleanCsv,
   cleanCsvArr,
@@ -14,6 +15,15 @@ module.exports = {
   bufferToStream,
   checkParams,
   setSchemaAdditions
+}
+
+function trimStringProperties(obj) {
+  Object.keys(obj).forEach(key => {
+    if (typeof obj[key] === 'string') {
+      obj[key] = obj[key].trim();
+    }
+  })
+
 }
 
 function getMemoryUsage() {

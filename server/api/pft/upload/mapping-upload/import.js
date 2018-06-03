@@ -1,4 +1,4 @@
-
+const util = require('../../../../lib/common/util');
 
 module.exports = class MappingUploadImport {
 
@@ -11,15 +11,7 @@ module.exports = class MappingUploadImport {
     this.scms = row[5];
     this.percentage = row[6];
 
-    this.trimStrings();
-  }
-
-  trimStrings() {
-    Object.keys(this).forEach(key => {
-      if (typeof this[key] === 'string') {
-        this[key] = this[key].trim();
-      }
-    })
+    util.trimStringProperties(this);
   }
 
 }
