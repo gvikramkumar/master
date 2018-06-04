@@ -50,14 +50,16 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     {
       type: 'product-hierarchy', hasFiscalMonth: false, text: 'Valid Product Hierarchy', disabled: false,
       filename: 'product_hierarchy',
-      excelHeaders: 'Item Key, Product ID, Base Product ID, Goods or Service Type',
-      excelProperties: 'item_key, product_id, base_product_id, goods_or_service_type'
+      excelHeaders: 'Technology Group, Business Unit, Product Family',
+      excelProperties: 'technology_group_id, business_unit_id, product_family_id'
     },
     {
       type: 'sales-hierarchy', hasFiscalMonth: false, text: 'Valid Sales Hierarchy', disabled: false,
       filename: 'sales_hierarchy',
-      excelHeaders: 'Sales Territory Key, l0 Name Code, l1 Name Code',
-      excelProperties: 'sales_territory_key, l0_sales_territory_name_code, l1_sales_territory_name_code'
+      excelHeaders: 'Sales Territory 1, Sales Territory 2, Sales Territory 3, Sales Territory 4, ' +
+      'Sales Territory 5, Sales Territory 6',
+      excelProperties: 'l1_sales_territory_descr, l2_sales_territory_descr, l3_sales_territory_descr,' +
+      'l4_sales_territory_descr, l5_sales_territory_descr, l6_sales_territory_descr'
     }
   ];
   report = this.reports[0];

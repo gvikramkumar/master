@@ -37,10 +37,24 @@ module.exports = class ReportController {
         promise = mappingUploadCtrl.getManyPromise(req);
         break;
       case 'product-hierarchy':
-        promise = pgdb.query(`SELECT item_key, product_id, base_product_id, goods_or_service_type FROM fdscon.vw_fds_products limit 10`);
+        promise = pgdb.query(`select technology_group_id, 
+                                business_unit_id, 
+                                product_family_id
+                                from fdscon.vw_fds_products
+                                group by 1,2,3 order by 1,2,3`);
         break
       case 'sales-hierarchy':
-        promise = pgdb.query(`SELECT sales_territory_key, l0_sales_territory_name_code, l1_sales_territory_name_code FROM fdscon.vw_fds_sales_hierarchy limit 10`);
+        promise = pgdb.query(`select l1_sales_territory_descr,
+          l2_sales_territory_descr,
+          l3_sales_territory_descr,
+          l4_sales_territory_descr,
+          l5_sales_territory_descr,
+          l6_sales_territory_descr
+          from fdscon.vw_fds_sales_hierarchy
+          where sales_territory_type_code in ('CORP. REVENUE')
+          group by 1,2,3,4,5,6
+          order by 1,2,3,4,5,6
+        `);
         break
       default:
         next(new ApiError('Bad report type', null, 400));
