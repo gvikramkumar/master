@@ -10,6 +10,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
   constructor() {
     super(repo);
     this.uploadName = 'Mapping Upload';
+    this.rowColumnCount = 7;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
@@ -30,20 +31,25 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
 
   validate(row) {
     this.temp = new MappingUploadTemplate(row);
-    this.getSubmeasure();
-    this.validateSubmeasureName();
-    this.lookForErrors();// get out early as later validation depends on submeasure
-    this.validateMeasureAccess();
-    this.validateCanMappingUpload()
-    this.lookForErrors();
-    this.validateInputProductValue();
-    this.validateInputSalesValue();
-    this.validateGrossUnbilledAccruedRevenueFlag();
-    this.validateInputLegalEntityValue();
-    this.validateInputBusinessEntityValue();
-    this.validateSCMSSegment();
-    this.validatePercentage();
-    this.validateRevenueClassification();
+    return Promise.all([
+      this.getSubmeasure(),
+      this.validateSubmeasureName(),
+      this.lookForErrors()
+    ])
+      .then(() => Promise.all([
+        this.validateMeasureAccess(),
+        this.validateCanMappingUpload(),
+        this.lookForErrors()
+      ]))
+      .then(() => Promise.all([
+        this.validateInputProductValue(),
+        this.validateInputSalesValue(),
+        this.validateInputLegalEntityValue(),
+        this.validateInputBusinessEntityValue(),
+        this.validateSCMSSegment(),
+        this.validatePercentage(),
+        this.lookForErrors()
+      ]));
   }
 
   getImportDoc(row) {

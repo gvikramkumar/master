@@ -12,6 +12,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   constructor() {
     super(repo);
     this.uploadName = 'Dollar Upload';
+    this.rowColumnCount = 10;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
@@ -35,21 +36,28 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
 
   validate(row) {
     this.temp = new DollarUploadTemplate(row);
-    this.getSubmeasure();
-    this.validateSubmeasureName();
-    this.lookForErrors();// get out early as later validation depends on submeasure
-    this.validateMeasureAccess();
-    this.validateSubmeasureCanManualUpload();
-    this.validateCanDollarUpload();
-    this.lookForErrors();
-    this.validateInputProductValue();
-    this.validateInputSalesValue();
-    this.validateGrossUnbilledAccruedRevenueFlag();
-    this.validateInputLegalEntityValue();
-    this.validateInputBusinessEntityValue();
-    this.validateSCMSSegment();
-    this.validateAmount();
-    this.validateRevenueClassification();
+    return Promise.all([
+      this.getSubmeasure(),
+      this.validateSubmeasureName(),
+      this.lookForErrors()
+    ])
+      .then(() => Promise.all([
+        this.validateMeasureAccess(),
+        this.validateSubmeasureCanManualUpload(),
+        this.validateCanDollarUpload(),
+        this.lookForErrors()
+      ]))
+      .then(() => Promise.all([
+        this.validateInputProductValue(),
+        this.validateInputSalesValue(),
+        this.validateGrossUnbilledAccruedRevenueFlag(),
+        this.validateInputLegalEntityValue(),
+        this.validateInputBusinessEntityValue(),
+        this.validateSCMSSegment(),
+        this.validateAmount(),
+        this.validateRevenueClassification(),
+        this.lookForErrors()
+      ]));
   }
 
   getImportDoc(row) {

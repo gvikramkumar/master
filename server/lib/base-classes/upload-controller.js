@@ -25,13 +25,15 @@ module.exports = class UploadController {
     if (this.rows < 1) {
       next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
       return;
+    } else if (!(this.rowColumnCount === Object.keys(this.rows[0]).length)) {
+      next(new ApiError(`Incorrect column count for ${this.uploadName}. Are you sending up the correct template?`, null, 400));
+      return;
     } else {
       res.end();
     }
 
     this.getValidationAndImportData()
       .then(() => {
-        console.log('done getting data', Date.now() - this.startUpload);
         return this.validateRows()
           .then(() => {
             if (this.hasTotalErrors) {
@@ -52,34 +54,31 @@ module.exports = class UploadController {
   }
 
   validateRows() {
-    _.forEach(this.rows, (row, idx) => {
-      this.validateRow(row, idx + 6);
-      // todo: revisit this if we send out spreadsheet of errors instead of email
-      // currently we're emailing the errors, if we get thousands, it messes up outlook so stop at 100 rows
-      if (this.hasTotalErrors && Object.keys(this.totalErrors).length > 99) {
-        return false;// break out of forEach
-      }
+    let chain = Promise.resolve();
+
+    this.rows.forEach((row, idx) => {
+      chain = chain.then(() => this.validateRow(row, idx + 6));
     });
-    return Promise.resolve();
+    return chain;
   }
 
-  // this is sync now, but could easily be rolled to async, just that getting all data beforehand
-  // and doing binary searches is much faster so we'll focus on keeping validation sync
   validateRow(row, rowNum) {
     this.errors = [];
     this.rowNum = rowNum;
 
-    try {
-      this.validate(row);
-      this.lookForErrors();
-    } catch (err) {
-      if (err.name === UploadValidationError) {
-        this.totalErrors['Row ' + this.rowNum] = err.data;
-        this.hasTotalErrors = true;
-      } else {
-        throw err;
-      }
-    }
+    return this.validate(row)
+      .catch(err => {
+        if (err.name === UploadValidationError) {
+          this.totalErrors['Row ' + this.rowNum] = err.data;
+          this.hasTotalErrors = true;
+          if (Object.keys(this.totalErrors).length > 99) {
+            return Promise.reject(err); // send validation email
+          }
+
+        } else {
+          return Promise.reject(err); // send error email
+        }
+      })
   }
 
   lookForErrors() {
@@ -123,7 +122,7 @@ module.exports = class UploadController {
   }
 
   buildSuccessEmailBody() {
-    const duration = Math.round((Date.now() - this.startUpload)/1000);
+    const duration = Math.round((Date.now() - this.startUpload) / 1000);
     return `<div>${this.rows.length} records successfully uploaded in ${duration} seconds.</div>`
   }
 
@@ -219,7 +218,7 @@ module.exports = class UploadController {
       this.addError(prop, 'Not a number', val);
       return false;
     }
-     return true;
+    return true;
   }
 
 }
