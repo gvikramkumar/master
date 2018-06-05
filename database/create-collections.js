@@ -17,6 +17,7 @@ const collections = [
   'user_role',
   'lookup',
   'expense_SSOT_map'
+  'sales_split_pct'
 ];
 
 collections.forEach(coll => {

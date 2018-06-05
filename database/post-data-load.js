@@ -162,6 +162,14 @@ db.lookup.insertMany([
   },
 ]);
 
+db.sales_split_pct.insertOne({
+  fiscalMonth:201810,
+  accountID:"42127",
+  companyCode:"555",
+  subAccountCode:"033",
+  salesTerritoryCode: "AFRICA-PROG-REB-COMM",
+  split_pct: 0.2});
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
@@ -170,7 +178,8 @@ const collectionsWithCreatedUpdated = [
   'measure',
   'open_period',
   'mapping_upload',
-  'expense_SSOT_map'
+  'expense_SSOT_map',
+  'sales_split_pct'
 ];
 
 const date = new Date();
