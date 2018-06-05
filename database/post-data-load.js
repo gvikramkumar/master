@@ -170,6 +170,12 @@ db.sales_split_pct.insertOne({
   salesTerritoryCode: "AFRICA-PROG-REB-COMM",
   split_pct: 0.2});
 
+db.swalloc_manual_mix.insertOne({
+  fiscalMonth:201810,
+  subMeasureName:"2 Tier",
+  splitCategory:"HARDWARE",
+  splitPercentage:1});
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
