@@ -3,10 +3,11 @@ const _ = require('lodash'),
   MappingUploadController = require('../mapping-upload/controller'),
   util = require('../../../lib/common/util'),
   ApiError = require('../../../lib/common/api-error'),
-  pgdb = require('../../../lib/database/postgres-conn').pgdb;
+  PostgresRepo = require('../../../lib/database/repos/postgres-repo');
 
 const dollarUploadCtrl = new DollarUploadController(),
-  mappingUploadCtrl = new MappingUploadController();
+  mappingUploadCtrl = new MappingUploadController(),
+  postgresRepo = new PostgresRepo();
 
 module.exports = class ReportController {
 
@@ -37,24 +38,10 @@ module.exports = class ReportController {
         promise = mappingUploadCtrl.getManyPromise(req);
         break;
       case 'product-hierarchy':
-        promise = pgdb.query(`select technology_group_id, 
-                                business_unit_id, 
-                                product_family_id
-                                from fdscon.vw_fds_products
-                                group by 1,2,3 order by 1,2,3`);
+        promise = postgresRepo.getProductHierarchyReport();
         break
       case 'sales-hierarchy':
-        promise = pgdb.query(`select l1_sales_territory_descr,
-          l2_sales_territory_descr,
-          l3_sales_territory_descr,
-          l4_sales_territory_descr,
-          l5_sales_territory_descr,
-          l6_sales_territory_descr
-          from fdscon.vw_fds_sales_hierarchy
-          where sales_territory_type_code in ('CORP. REVENUE')
-          group by 1,2,3,4,5,6
-          order by 1,2,3,4,5,6
-        `);
+        promise = postgresRepo.getSalesHierarchyReport();
         break
       default:
         next(new ApiError('Bad report type', null, 400));
