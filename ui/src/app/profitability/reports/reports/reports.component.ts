@@ -34,7 +34,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   fiscalMonths: any;
   disableDownload = true;
 
-  reports = [
+  reports: any[] = [
     {
       type: 'dollar-upload', hasFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
       filename: 'manual_uploaded_data',
@@ -48,14 +48,14 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       excelProperties: 'fiscalMonth, submeasureName, product, sales, percentage'
     },
     {
-      type: 'product-hierarchy', hasFiscalMonth: false, text: 'Valid Product Hierarchy', disabled: false,
-      filename: 'product_hierarchy',
+      type: 'product-hierarchy', text: 'Valid Product Hierarchy', disabled: false,
+      filename: 'product_hierarchy.csv',
       excelHeaders: 'Technology Group, Business Unit, Product Family',
       excelProperties: 'technology_group_id, business_unit_id, product_family_id'
     },
     {
-      type: 'sales-hierarchy', hasFiscalMonth: false, text: 'Valid Sales Hierarchy', disabled: false,
-      filename: 'sales_hierarchy',
+      type: 'sales-hierarchy', text: 'Valid Sales Hierarchy', disabled: false,
+      filename: 'sales_hierarchy.csv',
       excelHeaders: 'Sales Territory 1, Sales Territory 2, Sales Territory 3, Sales Territory 4, ' +
       'Sales Territory 5, Sales Territory 6',
       excelProperties: 'l1_sales_territory_descr, l2_sales_territory_descr, l3_sales_territory_descr,' +
@@ -90,7 +90,11 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
-    this.disableDownload = true;
+    if (this.report.hasSubmeasure || this.report.hasFiscalMonth) {
+      this.disableDownload = true;
+    } else {
+      this.disableDownload = false;
+    }
   }
 
   measureSelected() {
@@ -132,18 +136,23 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   getFilename() {
     if (this.report.hasFiscalMonth) {
       return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${this.fiscalMonth}.csv`;
-    } else {
+    } else if (this.report.hasSubmeasure) {
       return this.report.filename + `_${_.snakeCase(this.submeasureName)}.csv`;
+    } else {
+      return this.report.filename;
     }
   }
 
   downloadReport() {
     const params = <ReportSettings>{
-      submeasureName: this.submeasureName,
       excelFilename: this.getFilename(),
       excelHeaders: this.report.excelHeaders,
       excelProperties: this.report.excelProperties
     };
+
+    if (this.report.hasSubmeasure || this.report.hasFiscalMonth) {
+      params.submeasureName = this.submeasureName;
+    }
 
     if (this.report.hasFiscalMonth) {
       params.fiscalMonth = this.fiscalMonth;
