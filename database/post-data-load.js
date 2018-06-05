@@ -32,7 +32,8 @@ db.submeasure.insertMany([
       approveFlag: "Y",
       status: "A",
       manualMapping: "Y",
-      expenseSSOT: "Y"
+      expenseSSOT: "Y",
+      manualMix: "Y"
     },
     rules: ["2TierPOSPID", "2TierPOSBE"]
   },
@@ -185,7 +186,8 @@ const collectionsWithCreatedUpdated = [
   'open_period',
   'mapping_upload',
   'expense_SSOT_map',
-  'sales_split_pct'
+  'sales_split_pct',
+  'swalloc_manual_mix'
 ];
 
 const date = new Date();
