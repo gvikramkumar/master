@@ -3,10 +3,11 @@ const _ = require('lodash'),
   MappingUploadController = require('../mapping-upload/controller'),
   util = require('../../../lib/common/util'),
   ApiError = require('../../../lib/common/api-error'),
-  pgdb = require('../../../lib/database/postgres-conn').pgdb;
+  PostgresRepo = require('../../../lib/database/repos/postgres-repo');
 
 const dollarUploadCtrl = new DollarUploadController(),
-  mappingUploadCtrl = new MappingUploadController();
+  mappingUploadCtrl = new MappingUploadController(),
+  postgresRepo = new PostgresRepo();
 
 module.exports = class ReportController {
 
@@ -37,10 +38,10 @@ module.exports = class ReportController {
         promise = mappingUploadCtrl.getManyPromise(req);
         break;
       case 'product-hierarchy':
-        promise = pgdb.query(`SELECT item_key, product_id, base_product_id, goods_or_service_type FROM fdscon.vw_fds_products limit 10`);
+        promise = postgresRepo.getProductHierarchyReport();
         break
       case 'sales-hierarchy':
-        promise = pgdb.query(`SELECT sales_territory_key, l0_sales_territory_name_code, l1_sales_territory_name_code FROM fdscon.vw_fds_sales_hierarchy limit 10`);
+        promise = postgresRepo.getSalesHierarchyReport();
         break
       default:
         next(new ApiError('Bad report type', null, 400));

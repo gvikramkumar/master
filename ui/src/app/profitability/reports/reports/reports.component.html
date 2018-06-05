@@ -2,7 +2,8 @@
   <div class="leftnav" fxFlex="1 1 20%">
     <mat-radio-group class="example-radio-group" [(ngModel)]="report" (change)="reset()">
       <mat-radio-button class="example-radio-button" *ngFor="let rpt of reports"
-                        [value]="rpt" [disabled]="rpt.disabled">{{rpt.text}}</mat-radio-button>
+                        [value]="rpt" [disabled]="rpt.disabled">{{rpt.text}}
+      </mat-radio-button>
     </mat-radio-group>
   </div>
 
@@ -12,16 +13,18 @@
 
       <br>
       <div class="upload-form-container">
-        <label>Measure:</label>
-        <select [(ngModel)]="measureName" name="id" (change)="measureSelected();">
-          <option [ngValue]="k.name" *ngFor="let k of measures">{{k.name}}</option>
-        </select>
-        <br><br>
-        <label>Sub Measure:</label>
-        <select [(ngModel)]="submeasureName" name="id" (change)="submeasureSelected();">
-          <option [ngValue]="k.name" *ngFor="let k of submeasures">{{k.name}}</option>
-        </select>
-        <br><br>
+        <div *ngIf="report.hasSubmeasure || report.hasFiscalMonth">
+          <label>Measure:</label>
+          <select [(ngModel)]="measureName" name="id" (change)="measureSelected();">
+            <option [ngValue]="k.name" *ngFor="let k of measures">{{k.name}}</option>
+          </select>
+          <br><br>
+          <label>Sub Measure:</label>
+          <select [(ngModel)]="submeasureName" name="id" (change)="submeasureSelected();">
+            <option [ngValue]="k.name" *ngFor="let k of submeasures">{{k.name}}</option>
+          </select>
+          <br><br>
+        </div>
         <div *ngIf="report.hasFiscalMonth">
           <label>Fiscal Month:</label>
           <select [(ngModel)]="fiscalMonth" name="id" (change)="fiscalMonthSelected();">
@@ -30,7 +33,7 @@
           <br><br>
         </div>
         <button mat-button (click)="downloadReport()" [disabled]="disableDownload">Download Report</button>
-        <button mat-button (click)="reset()">Reset</button>
+        <button *ngIf="report.hasSubmeasure || report.hasFiscalMonth" mat-button (click)="reset()">Reset</button>
       </div>
     </div>
   </div>
