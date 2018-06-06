@@ -16,9 +16,9 @@ const collections = [
   'open_period',
   'user_role',
   'lookup',
-  'expense_SSOT_map',
   'sales_split_pct',
-  'swalloc_manual_mix'
+  'swalloc_manual_mix',
+  'department_acc_map'
 ];
 
 collections.forEach(coll => {
