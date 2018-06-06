@@ -32,7 +32,8 @@ db.submeasure.insertMany([
       approveFlag: "Y",
       status: "A",
       manualMapping: "Y",
-      expenseSSOT: "Y"
+      expenseSSOT: "Y",
+      manualMix: "Y"
     },
     rules: ["2TierPOSPID", "2TierPOSBE"]
   },
@@ -147,20 +148,32 @@ db.mapping_upload.insert({
   percentage: 458.58
 })
 
-db.expense_SSOT_map.insertOne({
-  submeasureName: "2 Tier Adjustment",
-  hierarchyName: "pl_hierarchy",
-  nodeLevelValue: "node_level03_name",
-  nodeId: "375821",
-  glAccount: "60001"
-})
-
 db.lookup.insertMany([
   {
     type: 'revenue_classification',
     values: ["Recurring Deferred", "Recurring Non Deferred", "Recurring Other", "Non Recurring"]
   },
 ]);
+
+db.sales_split_pct.insertOne({
+  fiscalMonth:201810,
+  accountID:"42127",
+  companyCode:"555",
+  subAccountCode:"033",
+  salesTerritoryCode: "AFRICA-PROG-REB-COMM",
+  split_pct: 0.2});
+
+db.swalloc_manual_mix.insertOne({
+  fiscalMonth:201810,
+  subMeasureName:"2 Tier",
+  splitCategory:"HARDWARE",
+  splitPercentage:1});
+
+db.department_acc_map.insertOne({
+  subMeasureName:"2 Tier Adjustment",
+  departmentCode:"020070506",
+  startAccountCode:"60000",
+  endAccountCode:"69999"});
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
@@ -170,7 +183,9 @@ const collectionsWithCreatedUpdated = [
   'measure',
   'open_period',
   'mapping_upload',
-  'expense_SSOT_map'
+  'sales_split_pct',
+  'swalloc_manual_mix',
+  'department_acc_map'
 ];
 
 const date = new Date();
