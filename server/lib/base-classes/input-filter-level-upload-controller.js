@@ -94,6 +94,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
           });
     */
     // need to check this with cached data
+    return Promise.resolve();
   }
 
   validateInputProductValue() {
@@ -118,6 +119,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
   validateInputSalesValue() {
@@ -154,13 +156,6 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
-  }
-
-  validateGrossUnbilledAccruedRevenueFlag() {
-    if (!_.includes([undefined, 'Y', 'N'], this.temp.grossUnbilledAccruedRevenueFlag)) {
-      this.addErrorInvalid(this.PropNames.grossUnbilledAccruedRevenueFlag,
-        this.temp.grossUnbilledAccruedRevenueFlag, 'Y/N/NULL');
-    }
     return Promise.resolve();
   }
 
@@ -177,6 +172,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
   validateInputBusinessEntityValue() {
@@ -196,6 +192,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
   validateSCMSSegment() {
@@ -211,6 +208,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
 }

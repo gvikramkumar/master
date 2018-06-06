@@ -1,6 +1,7 @@
 const DeptUploadRepo = require('../../dollar-upload/repo'),
-  DeptUploadTemplate = require('./dept-template'),
-  DeptUploadImport = require('./import'),
+  DeptUploadDeptTemplate = require('./dept-template'),
+  DeptUploadExludeAcctTemplate = require('./exclude-acct-template'),
+  DeptUploadImport = require('./import');
 
 const repo = new DeptUploadRepo();
 
@@ -23,8 +24,12 @@ module.exports = class DeptUploadController extends UploadController {
     ])
   }
 
-  validate(row) {
-    this.temp = new DeptUploadTemplate(row);
+  validateSheet1(row) {
+    this.temp = new DeptUploadDeptTemplate(row);
+  }
+
+  validateSheet2(row) {
+    this.temp = new DeptUploadExludeAcctTemplate(row);
   }
 
   getImportDoc(row) {

@@ -22,7 +22,7 @@ module.exports = class UploadController {
     this.rows = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
     this.totalErrors = {};
     this.hasTotalErrors = false;
-    if (this.rows < 1) {
+    if (this.rows.length < 1) {
       next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
       return;
     } else if (!(this.rowColumnCount === Object.keys(this.rows[0]).length)) {
@@ -51,6 +51,98 @@ module.exports = class UploadController {
         }
       });
 
+  }
+
+  upload2Sheets(req, res, next) {
+    this.startUpload = Date.now();
+    this.req = req;
+    this.userId = req.user.id;
+    const sheets = xlsx.parse(req.file.buffer);
+    this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 1); // might be comment row in there
+    this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 1); // might be comment row in there
+    this.totalErrors1 = {};
+    this.totalErrors2 = {};
+    this.hasTotalErrors1 = false;
+    this.hasTotalErrors2 = false;
+    if (this.rows1.length < 1) { // assumes the import data is in sheet 1
+      next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
+      return;
+    } else if (!(this.rowColumnCount === Object.keys(this.rows[0]).length)) {
+      next(new ApiError(`Incorrect column count for ${this.uploadName}. Are you sending up the correct template?`, null, 400));
+      return;
+    } else {
+      res.end();
+    }
+
+    this.getValidationAndImportData()
+      .then(() => {
+        return this.validateRows2Sheets()
+          .then(() => {
+            if (this.hasTotalErrors) {
+              return Promise.reject(new NamedApiError(UploadValidationError));
+            }
+          })
+      })
+      .then(() => this.importRows())
+      .then(() => this.sendSuccessEmail())
+      .catch(err => {
+        if (err && err.name === UploadValidationError) {
+          this.sendValidationEmail();
+        } else {
+          this.sendErrorEmail(err);
+        }
+      });
+
+  }
+
+  validateRows2Sheets() {
+    let chain = Promise.resolve();
+
+    this.rows1.forEach((row, idx) => {
+      chain = chain.then(() => this.validateRowSheet1(row, idx + 6));
+    });
+    this.rows2.forEach((row, idx) => {
+      chain = chain.then(() => this.validateRowSheet2(row, idx + 6));
+    });
+    return chain;
+  }
+
+  validateRowSheet1(row, rowNum) {
+    this.errors = [];
+    this.rowNum = rowNum;
+
+    return this.validateSheet1(row)
+      .catch(err => {
+        if (err.name === UploadValidationError) {
+          this.totalErrors['Row ' + this.rowNum] = err.data;
+          this.hasTotalErrors = true;
+          if (Object.keys(this.totalErrors).length > 99) {
+            return Promise.reject(err); // send validation email
+          }
+
+        } else {
+          return Promise.reject(err); // send error email
+        }
+      })
+  }
+
+  validateRowSheet2(row, rowNum) {
+    this.errors = [];
+    this.rowNum = rowNum;
+
+    return this.validateSheet2(row)
+      .catch(err => {
+        if (err.name === UploadValidationError) {
+          this.totalErrors['Row ' + this.rowNum] = err.data;
+          this.hasTotalErrors = true;
+          if (Object.keys(this.totalErrors).length > 99) {
+            return Promise.reject(err); // send validation email
+          }
+
+        } else {
+          return Promise.reject(err); // send error email
+        }
+      })
   }
 
   validateRows() {
@@ -83,8 +175,9 @@ module.exports = class UploadController {
 
   lookForErrors() {
     if (this.errors.length) {
-      throw new NamedApiError(UploadValidationError, null, _.sortBy(this.errors, 'property'));
+      return Promise.reject(new NamedApiError(UploadValidationError, null, _.sortBy(this.errors, 'property')));
     }
+    return Promise.resolve();
   }
 
   importRows() {

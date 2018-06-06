@@ -62,6 +62,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
     if (this.submeasure.indicators.manualMapping.toUpperCase() !== 'Y') {
       this.addError('', `Sub Measure doesn't allow mapping upload`);
     }
+    return Promise.resolve();
   }
 
 
@@ -69,6 +70,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
     if (this.validateNumber(this.PropNames.percentage, this.temp.percentage, true)) {
       this.temp.percentage = Number(this.temp.percentage);
     }
+    return Promise.resolve();
   }
 
   validateRevenueClassification() {
@@ -76,6 +78,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
       this.notExists(this.data.revClassifications, this.temp.revenueClassification)) {
       this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
+    return Promise.resolve();
   }
 
 }

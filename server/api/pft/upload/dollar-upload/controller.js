@@ -2,7 +2,8 @@ const DollarUploadRepo = require('../../dollar-upload/repo'),
   DollarUploadTemplate = require('./template'),
   DollarUploadImport = require('./import'),
   OpenPeriodRepo = require('../../../common/open-period/repo'),
-  InputFilterLevelUploadController = require('../../../../lib/base-classes/input-filter-level-upload-controller');
+  InputFilterLevelUploadController = require('../../../../lib/base-classes/input-filter-level-upload-controller'),
+  _ = require('lodash');
 
 const repo = new DollarUploadRepo();
 const openPeriodRepo = new OpenPeriodRepo();
@@ -70,18 +71,29 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     if (this.submeasure.source !== 'manual') {
       this.addError('', `Sub Measure doesn't allow manual upload`);
     }
+    return Promise.resolve();
   }
 
   validateCanDollarUpload() {
     if (this.submeasure.indicators.dollarUploadFlag.toUpperCase() !== 'Y') {
       this.addError('', `Sub Measure doesn't allow dollar upload`);
     }
+    return Promise.resolve();
+  }
+
+  validateGrossUnbilledAccruedRevenueFlag() {
+    if (!_.includes([undefined, 'Y', 'N'], this.temp.grossUnbilledAccruedRevenueFlag)) {
+      this.addErrorInvalid(this.PropNames.grossUnbilledAccruedRevenueFlag,
+        this.temp.grossUnbilledAccruedRevenueFlag, 'Y/N/NULL');
+    }
+    return Promise.resolve();
   }
 
   validateAmount() {
     if (this.validateNumber(this.PropNames.amount, this.temp.amount, true)) {
       this.temp.amount = Number(this.temp.amount);
     }
+    return Promise.resolve();
   }
 
   validateRevenueClassification() {
@@ -89,6 +101,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
       this.notExists(this.data.revClassifications, this.temp.revenueClassification)) {
       this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
+    return Promise.resolve();
   }
 
   getFiscalMonth() {
