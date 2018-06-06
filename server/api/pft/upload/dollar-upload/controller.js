@@ -61,10 +61,9 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
       ]));
   }
 
-  getImportDoc(row) {
-    const doc = new DollarUploadImport(row);
-    doc.fiscalMonth = this.fiscalMonth;
-    return doc;
+  importRows() {
+    this.imports = this.rows.map(row => new DollarUploadImport(row, this.fiscalMonth));
+    return super.importRows();
   }
 
   validateSubmeasureCanManualUpload() {
@@ -102,11 +101,6 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
       this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
     return Promise.resolve();
-  }
-
-  getFiscalMonth() {
-    return openPeriodRepo.getOneLatest({})
-      .then(doc => this.import.fiscalMonth = doc.fiscalMonth);
   }
 
 }

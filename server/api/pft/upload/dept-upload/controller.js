@@ -32,11 +32,13 @@ module.exports = class DeptUploadController extends UploadController {
     this.temp = new DeptUploadExludeAcctTemplate(row);
   }
 
-  getImportDoc(row) {
-    const doc = new DeptUploadImport(row);
-    doc.fiscalMonth = this.fiscalMonth;
-    return doc;
+  importRows() {
+    this.imports = this.rows.map(row => {
+      const doc = new DeptUploadImport(row);
+      doc.fiscalMonth = this.fiscalMonth;
+      return doc;
+    });
+    return super.importRows();
   }
-
 }
 

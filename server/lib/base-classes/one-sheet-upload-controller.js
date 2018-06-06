@@ -83,8 +83,7 @@ module.exports = class OneSheetUploadController extends UploadController {
   }
 
   importRows() {
-    const imports = this.rows.map(row => this.getImportDoc(row));
-    return this.repo.addManyTransaction(imports);
+    return this.repo.addManyTransaction(this.imports);
   }
 
   buildValidationEmailBody() {

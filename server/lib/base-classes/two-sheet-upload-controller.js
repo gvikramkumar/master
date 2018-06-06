@@ -147,13 +147,6 @@ module.exports = class TwoSheetUploadController extends UploadController {
     return this.repo.addManyTransaction(imports);
   }
 
-  getValidationAndImportData() {
-    return Promise.all([
-      openPeriodRepo.getOne()
-        .then(doc => this.fiscalMonth = doc.fiscalMonth)
-    ]);
-  }
-
   sendEmail(title, body) {
     return mail.send(
       this.req.user.email,

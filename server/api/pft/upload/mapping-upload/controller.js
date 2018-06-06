@@ -52,10 +52,9 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
       ]));
   }
 
-  getImportDoc(row) {
-    const doc = new MappingUploadImport(row);
-    doc.fiscalMonth = this.fiscalMonth;
-    return doc;
+  importRows() {
+    this.imports = this.rows.map(row => new MappingUploadImport(row, this.fiscalMonth));
+    return super.importRows();
   }
 
   validateCanMappingUpload() {
