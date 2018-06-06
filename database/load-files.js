@@ -11,8 +11,10 @@ mgConn.promise.then(({db, mongo}) => {
   const promises = [];
   const buTemplates = [
     {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload'},
-    {fileName: 'manual_mapping_template.xlsx', buUploadType: 'mapping-upload'},
-    {fileName: 'department_upload_template.xlsx', buUploadType: 'dept-upload'}
+    {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload'},
+    {fileName: 'department_upload_template.xlsx', buUploadType: 'dept-upload'},
+    {fileName: 'sales_level_split_upload_template.xlsx', buUploadType: 'sales-split-upload'},
+    {fileName: 'product_classification_upload_template.xlsx', buUploadType: 'product-class-upload'}
   ]
 
   buTemplates.forEach(template => {
