@@ -43,6 +43,9 @@ module.exports = class ReportController {
       case 'sales-hierarchy':
         promise = postgresRepo.getSalesHierarchyReport();
         break
+      case 'department-mapping':
+        promise = postgresRepo.getDepartmentMappingReport();
+        break
       default:
         next(new ApiError('Bad report type', null, 400));
         return;

@@ -38,14 +38,14 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     {
       type: 'dollar-upload', hasFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
       filename: 'manual_uploaded_data',
-      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Amount',
-      excelProperties: 'fiscalMonth, submeasureName, product, sales, amount'
+      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Amount',
+      excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, amount'
     },
     {
       type: 'mapping-upload', hasFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
       filename: 'manual_mapping_data',
-      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Percentage',
-      excelProperties: 'fiscalMonth, submeasureName, product, sales, percentage'
+      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Percentage',
+      excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, percentage'
     },
     {
       type: 'product-hierarchy', text: 'Valid Product Hierarchy', disabled: false,
@@ -60,6 +60,15 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       'Sales Territory 5, Sales Territory 6',
       excelProperties: 'l1_sales_territory_descr, l2_sales_territory_descr, l3_sales_territory_descr,' +
       'l4_sales_territory_descr, l5_sales_territory_descr, l6_sales_territory_descr'
+    },
+    {
+      type: 'department-mapping', hasSubmeasure: true, text: 'Department Mapping Report', disabled: false,
+      filename: 'department_mapping_data',
+      excelHeaders: 'Measure Name, *Sub-Measure Name, Sub Measure Description, Sub Measure Key, ' +
+      'Department Code, Start Account, End Account, Report Level 1, Report Level 2, Report Level 3',
+      excelProperties: 'l1_sales_territory_descr, l2_sales_territory_descr, l3_sales_territory_descr,' +
+      'l4_sales_territory_descr, l5_sales_territory_descr, l6_sales_territory_descr, l6_sales_territory_descr,'+
+        'l6_sales_territory_descr, l6_sales_territory_descr, l6_sales_territory_descr'
     }
   ];
   report = this.reports[0];

@@ -32,6 +32,22 @@ module.exports = class PostgresRepo {
           `);
   }
 
+  getDepartmentMappingReport() {
+    return db.query(`
+            select 
+            l1_sales_territory_descr,
+            l2_sales_territory_descr,
+            l3_sales_territory_descr,
+            l4_sales_territory_descr,
+            l5_sales_territory_descr,
+            l6_sales_territory_descr
+            from fdscon.vw_fds_sales_hierarchy
+            where sales_territory_type_code in ('CORP. REVENUE')
+            group by 1,2,3,4,5,6
+            order by 1,2,3,4,5,6          
+          `);
+  }
+
   checkForExistenceText(table, column, value) {
     return db.query(`select exists (select 1 from ${config.schema}.${table} where upper(${column}) = $1 limit 1)`, [value.toUpperCase()])
       .then(results => results.rows[0].exists);
