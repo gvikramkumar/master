@@ -1,12 +1,14 @@
 const _ = require('lodash'),
   DollarUploadController = require('../dollar-upload/controller'),
   MappingUploadController = require('../mapping-upload/controller'),
+  DeptUploadController = require('../dept-upload/controller'),
   util = require('../../../lib/common/util'),
   ApiError = require('../../../lib/common/api-error'),
   PostgresRepo = require('../../../lib/database/repos/postgres-repo');
 
 const dollarUploadCtrl = new DollarUploadController(),
   mappingUploadCtrl = new MappingUploadController(),
+  deptUploadCtrl = new DeptUploadController(),
   postgresRepo = new PostgresRepo();
 
 module.exports = class ReportController {
@@ -42,6 +44,9 @@ module.exports = class ReportController {
         break
       case 'sales-hierarchy':
         promise = postgresRepo.getSalesHierarchyReport();
+        break
+      case 'dept-upload':
+        promise = deptUploadCtrl.getManyPromise(req);
         break
       default:
         next(new ApiError('Bad report type', null, 400));
