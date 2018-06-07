@@ -63,7 +63,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
 
   validateCanMappingUpload() {
     if (this.submeasure.indicators.manualMapping.toUpperCase() !== 'Y') {
-      this.addError('', `Sub Measure doesn't allow mapping upload`);
+      this.addErrorMessageOnly(`Sub Measure doesn't allow mapping upload`);
     }
     return Promise.resolve();
   }

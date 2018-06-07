@@ -31,14 +31,14 @@ module.exports = class UploadController {
     } else if (!(this.rowColumnCount === Object.keys(this.rows1[0]).length)) {
       next(new ApiError(`Incorrect column count for ${this.uploadName}. Are you sending up the correct template?`, null, 400));
       return;
-    } else {
-      res.end();
     }
-
 
     let chain = this.getValidationAndImportData()
       .then(() => this.validateRows(1, this.rows1))
-      .then(() => this.lookForTotalErrors());
+      .then(() => this.lookForTotalErrors())
+      .then(() => {
+        throw new Error("something bad");
+      });
 
     if (this.numSheets === 2) {
       chain = chain.then(() => this.validateRows(2, this.rows2))
@@ -48,12 +48,25 @@ module.exports = class UploadController {
     chain = chain.then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
       .then(() => this.importRows())
-      .then(() => this.sendSuccessEmail())
+      .then(() => {
+        this.sendSuccessEmail();
+        res.send({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
+      })
       .catch(err => {
         if (err && err.name === UploadValidationError) {
           this.sendValidationEmail();
+          res.send({status: 'fail'});
         } else {
-          this.sendErrorEmail(err);
+          const data = Object.assign({}, err);
+          if (err.message) {
+            data.message = err.message;
+          }
+          if (err.stack) {
+            data.stack = err.stack;
+          }
+          const _err = new ApiError(`Unexpected ${this.uploadName} error`, data);
+          this.sendErrorEmail(_err);
+          next(_err);
         }
       });
   }
@@ -146,22 +159,14 @@ module.exports = class UploadController {
   }
 
   buildSuccessEmailBody() {
-    const duration = Math.round((Date.now() - this.startUpload) / 1000);
-    return `<div>${this.rows1.length} records successfully uploaded in ${duration} seconds.</div>`
+    return `<div>${this.rows1.length} rows successfully processed.</div>`
   }
 
   buildErrorEmailBody(err) {
-    const obj = Object.assign({}, err);
-    if (err.message) {
-      obj.message = err.message;
-    }
-    if (err.stack) {
-      obj.stack = err.stack;
-    }
     return `
-    <div>An unexpected error occured during upload:</div>
+    <div>${err.message}</div>
     <pre>
-      ${JSON.stringify(obj, null, 2)}
+      ${JSON.stringify(err.data, null, 2)}
     </pre>`
   }
 
@@ -194,12 +199,30 @@ module.exports = class UploadController {
     return body;
   }
 
+  /*
+  Error display:
+  originally written just to cater to row validation so displayed like:
+  Row X
+  prop error value? // with the errors in an array of prop/error/value?
+  we can call addErrorMessageOnly and will combing first 2 columns and prefix message with "* " for
+  errors that don't pertain to rows
+  For validateOther, we will reuse the row scenario, with the "Row X" replaced with a error title and
+  the errors listed in an array of {property, error, value?} just reusing these properties. If we need
+  errorMessageOnly, maybe drop the "* " prefix as it won't look right there?
+   */
+
   addError(property, message, value) {
     const obj = {property, error: message};
     if (value) {
       obj.value = value;
     }
     this.errors.push(obj);
+  }
+
+  // comines the first 2 columns and places this message in it with a * in front
+  // this make it stand out from the property/message/value? errors and gives it more room.
+  addErrorMessageOnly(message) {
+    this.addError('', message);
   }
 
   addErrorRequired(property) {

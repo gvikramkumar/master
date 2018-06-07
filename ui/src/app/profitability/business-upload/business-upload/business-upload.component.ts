@@ -57,10 +57,17 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     formData.append('fileUploadField', file, file.name);
     const options = {headers: {Accept: 'application/json'}};
     const url = `${apiUrl}/api/pft/upload/${this.uploadType.type}`;
-    this.httpClient.post<FsFile>(url, formData, options)
-      .subscribe(file => {
+    this.httpClient.post<{status: string, numRows?: number}>(url, formData, options)
+      .subscribe(result => {
         fileInput.value = '';
-        this.toast.addToast('Business Upload', 'Upload initiated. Results will be emailed to you.')
+        if (result.status === 'success') {
+          this.toast.addToast(result.uploadName,
+            `Upload succeeded. ${result.rowCount} rows have been processed.`)
+        } else if (result.status === 'fail') {
+          this.toast.addToast(result.uploadName,
+            'Upload failed. Errors have been emailed.')
+        }
+
       });
   }
 

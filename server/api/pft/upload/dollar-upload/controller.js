@@ -72,14 +72,14 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
 
   validateSubmeasureCanManualUpload() {
     if (this.submeasure.source !== 'manual') {
-      this.addError('', `Sub Measure doesn't allow manual upload`);
+      this.addErrorMessageOnly(`Sub Measure doesn't allow manual upload`);
     }
     return Promise.resolve();
   }
 
   validateCanDollarUpload() {
     if (this.submeasure.indicators.dollarUploadFlag.toUpperCase() !== 'Y') {
-      this.addError('', `Sub Measure doesn't allow dollar upload`);
+      this.addErrorMessageOnly(`Sub Measure doesn't allow dollar upload`);
     }
     return Promise.resolve();
   }

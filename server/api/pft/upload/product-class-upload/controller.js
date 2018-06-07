@@ -54,7 +54,7 @@ module.exports = class ProductClassUploadController extends UploadController {
 
   validate() {
     // sort by submeasureName, add up splitPercentage, error if not 1.0
-    const arr = this.rows1.map(row => new ProductClassUploadTemplate(row));
+    const arr = _.sortBy(this.rows1.map(row => new ProductClassUploadTemplate(row)), 'submeasureName');
     const obj = {};
     arr.forEach(val => {
       if (obj[val.submeasureName]) {
