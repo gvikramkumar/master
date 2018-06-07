@@ -29,7 +29,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
     ])
   }
 
-  validate(row) {
+  validateRow1(row) {
     this.temp = new MappingUploadTemplate(row);
     return Promise.all([
       this.getSubmeasure(),
@@ -52,8 +52,12 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
       ]));
   }
 
+  validate() {
+    return Promise.resolve();
+  }
+
   importRows() {
-    this.imports = this.rows.map(row => new MappingUploadImport(row, this.fiscalMonth));
+    this.imports = this.rows1.map(row => new MappingUploadImport(row, this.fiscalMonth));
     return super.importRows();
   }
 

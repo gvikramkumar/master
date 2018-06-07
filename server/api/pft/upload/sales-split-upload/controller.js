@@ -1,14 +1,12 @@
-const SalesSplitUploadRepo = require('../../dollar-upload/repo'),
+const SalesSplitUploadRepo = require('../../sales-split-upload/repo'),
   SalesSplitUploadTemplate = require('./template'),
   SalesSplitUploadImport = require('./import'),
-  OpenPeriodRepo = require('../../../common/open-period/repo'),
-  InputFilterLevelUploadController = require('../../../../lib/base-classes/input-filter-level-upload-controller'),
-  _ = require('lodash');
+  _ = require('lodash'),
+  UploadController = require('../../../../lib/base-classes/upload-controller');
 
 const repo = new SalesSplitUploadRepo();
-const openPeriodRepo = new OpenPeriodRepo();
 
-module.exports = class SalesSplitUploadController extends InputFilterLevelUploadController {
+module.exports = class SalesSplitUploadController extends UploadController {
 
   constructor() {
     super(repo);
@@ -16,10 +14,10 @@ module.exports = class SalesSplitUploadController extends InputFilterLevelUpload
     this.rowColumnCount = 10;
 
     this.PropNames = {
-      accountId: '*Account ID',
+      accountId: 'Account ID',
       companyCode: 'Company Code',
-      salesTerritoryCode: '*Sales Territory Code',
-      splitPercentage: '*Percentage Value'
+      salesTerritoryCode: 'Sales Territory Code',
+      splitPercentage: 'Percentage Value'
     }
   }
 
@@ -29,7 +27,7 @@ module.exports = class SalesSplitUploadController extends InputFilterLevelUpload
     ])
   }
 
-  validate(row) {
+  validateRow1(row) {
     this.temp = new SalesSplitUploadTemplate(row);
     return Promise.all([
       // this.getSubmeasure(),
@@ -55,6 +53,10 @@ module.exports = class SalesSplitUploadController extends InputFilterLevelUpload
       ]));
   }
 
+  validate() {
+    return Promise.resolve();
+  }
+
   importRows() {
     this.imports = [];
     // maybe this happens in getValidationAndImportData instead??
@@ -62,7 +64,7 @@ module.exports = class SalesSplitUploadController extends InputFilterLevelUpload
 /*
     getSubAccountCodeDataFromUploadData()
       .then(subaccts => {
-        this.rows.forEach(row => {
+        this.rows1.forEach(row => {
           _.filter(subaccts, {x: row[?], y: row[?]})
             .forEach(sa => {
               this.imports.push(new SalesSplitUploadImport(row, this.fiscalMonth, sa.subAccountCode));

@@ -1,4 +1,6 @@
-const NamedApiError = require('../common/named-api-error'),
+const xlsx = require('node-xlsx'),
+  NamedApiError = require('../common/named-api-error'),
+  ApiError = require('../common/api-error'),
   _ = require('lodash'),
   mail = require('../common/mail'),
   OpenPeriodRepo = require('../../api/common/open-period/repo');
@@ -12,9 +14,104 @@ module.exports = class UploadController {
     this.repo = repo;
   }
 
+  upload(req, res, next) {
+    this.startUpload = Date.now();
+    this.req = req;
+    this.userId = req.user.id;
+    const sheets = xlsx.parse(req.file.buffer);
+    this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 1);
+    if (this.numSheets === 2) {
+      this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 1);
+    }
+    this.totalErrors = {};
+    this.hasTotalErrors = false;
+    if (this.rows1.length < 1) {
+      next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
+      return;
+    } else if (!(this.rowColumnCount === Object.keys(this.rows1[0]).length)) {
+      next(new ApiError(`Incorrect column count for ${this.uploadName}. Are you sending up the correct template?`, null, 400));
+      return;
+    } else {
+      res.end();
+    }
+
+
+    let chain = this.getValidationAndImportData()
+      .then(() => this.validateRows(1, this.rows1))
+      .then(() => this.lookForTotalErrors());
+
+    if (this.numSheets === 2) {
+      chain = chain.then(() => this.validateRows(2, this.rows2))
+        .then(() => this.lookForTotalErrors());
+    }
+
+    chain = chain.then(() => this.validateOther())
+      .then(() => this.lookForTotalErrors())
+      .then(() => this.importRows())
+      .then(() => this.sendSuccessEmail())
+      .catch(err => {
+        if (err && err.name === UploadValidationError) {
+          this.sendValidationEmail();
+        } else {
+          this.sendErrorEmail(err);
+        }
+      });
+  }
+
+  validateRows(sheet, rows) {
+    let chain = Promise.resolve();
+    rows.forEach((row, idx) => {
+      chain = chain.then(() => this.validateRow(sheet, row, idx + 6));
+    });
+    return chain;
+  }
+
+  validateRow(sheet, row, rowNum) {
+    this.errors = [];
+    this.rowNum = rowNum;
+
+    return this['validateRow' + sheet](row)
+      .catch(err => {
+        if (err.name === UploadValidationError) {
+          this.totalErrors['Row ' + this.rowNum] = err.data;
+          this.hasTotalErrors = true;
+          if (Object.keys(this.totalErrors).length > 99) {
+            return Promise.reject(err); // send validation email
+          }
+        } else {
+          return Promise.reject(err); // send error email
+        }
+      })
+  }
+
+  validateOther() {
+    this.errors = [];
+
+    return this.validate()
+      .catch(err => {
+        if (err.name === UploadValidationError) {
+          this.totalErrors[err.message] = err.data;
+          this.hasTotalErrors = true;
+        } else {
+          return Promise.reject(err); // send error email
+        }
+      })
+  }
+
+  importRows() {
+    return this.repo.addManyTransaction(this.imports);
+  }
+
   lookForErrors() {
     if (this.errors.length) {
       return Promise.reject(new NamedApiError(UploadValidationError, null, _.sortBy(this.errors, 'property')));
+    }
+    return Promise.resolve();
+  }
+
+  lookForTotalErrors() {
+    if (this.hasTotalErrors) {
+      return Promise.reject(new NamedApiError(UploadValidationError));
     }
     return Promise.resolve();
   }
@@ -50,7 +147,7 @@ module.exports = class UploadController {
 
   buildSuccessEmailBody() {
     const duration = Math.round((Date.now() - this.startUpload) / 1000);
-    return `<div>${this.rows.length} records successfully uploaded in ${duration} seconds.</div>`
+    return `<div>${this.rows1.length} records successfully uploaded in ${duration} seconds.</div>`
   }
 
   buildErrorEmailBody(err) {
@@ -66,6 +163,35 @@ module.exports = class UploadController {
     <pre>
       ${JSON.stringify(obj, null, 2)}
     </pre>`
+  }
+
+  buildValidationEmailBody() {
+    let first = true;
+    let body = '';
+    _.forEach(this.totalErrors, (val, key) => {
+      if (first) {
+        first = false;
+        body += '<br>';
+      } else {
+        body += '<br><br>';
+      }
+      body += '<div style="font-size:18px;">' + key + '</div><hr><table>';
+      val.forEach(err => {
+        if (err.property) {
+          let append = `<tr><td style="width: 300px; margin-right: 30px">${err.property}:</td>
+                <td style="width: 300px; margin-right: 30px">${err.error}</td>`;
+          if (err.value) {
+            append += `<td style="width: 300px;">${err.value}</td>`
+          }
+          append += '</tr>';
+          body += append;
+        } else {
+          body += `<tr><td colspan="2" style="width:630px">* ${err.error}</td></tr>`
+        }
+      })
+      body += '</table>'
+    });
+    return body;
   }
 
   addError(property, message, value) {

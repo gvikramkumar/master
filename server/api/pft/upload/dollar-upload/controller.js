@@ -35,7 +35,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     ])
   }
 
-  validate(row) {
+  validateRow1(row) {
     this.temp = new DollarUploadTemplate(row);
     return Promise.all([
       this.getSubmeasure(),
@@ -61,8 +61,12 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
       ]));
   }
 
+  validate() {
+    return Promise.resolve();
+  }
+
   importRows() {
-    this.imports = this.rows.map(row => new DollarUploadImport(row, this.fiscalMonth));
+    this.imports = this.rows1.map(row => new DollarUploadImport(row, this.fiscalMonth));
     return super.importRows();
   }
 

@@ -1,4 +1,4 @@
-const OneSheetUploadController = require('./one-sheet-upload-controller'),
+const UploadController = require('./upload-controller'),
   PostgresRepo = require('../database/repos/postgres-repo'),
   _ = require('lodash'),
   SubmeasureRepo = require('../../api/common/submeasure/repo'),
@@ -11,7 +11,7 @@ const pgRepo = new PostgresRepo();
 const submeasureRepo = new SubmeasureRepo();
 const lookupRepo = new LookupRepo();
 
-module.exports = class InputFilterLevelUploadController extends OneSheetUploadController {
+module.exports = class InputFilterLevelUploadController extends UploadController {
   constructor(repo) {
     super(repo);
     this.data = {};
