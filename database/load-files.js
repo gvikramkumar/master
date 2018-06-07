@@ -7,7 +7,7 @@ mgConn.promise.then(({db, mongo}) => {
 
   const gfs = new mongo.GridFSBucket(db);
   const dirPath = 'files/business-upload/';
-  const meta = {directory: 'pft.bu', buFileType: 'template'};
+  const meta = {directory: 'prof.bu', buFileType: 'template'};
   const promises = [];
   const buTemplates = [
     {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload'},

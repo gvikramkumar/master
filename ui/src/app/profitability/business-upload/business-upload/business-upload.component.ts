@@ -13,6 +13,12 @@ import {HttpClient} from '@angular/common/http';
 
 const apiUrl = environment.apiUrl;
 
+interface UploadResults {
+  status: string,
+  uploadName?: string,
+  rowCount?: number
+}
+
 @Component({
   selector: 'fin-business-upload',
   templateUrl: './business-upload.component.html',
@@ -56,9 +62,9 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     const formData: FormData = new FormData();
     formData.append('fileUploadField', file, file.name);
     const options = {headers: {Accept: 'application/json'}};
-    const url = `${apiUrl}/api/pft/upload/${this.uploadType.type}`;
+    const url = `${apiUrl}/api/prof/upload/${this.uploadType.type}`;
     this.httpClient.post<{status: string, numRows?: number}>(url, formData, options)
-      .subscribe(result => {
+      .subscribe((result: UploadResults) => {
         fileInput.value = '';
         if (result.status === 'success') {
           this.toast.addToast(result.uploadName,

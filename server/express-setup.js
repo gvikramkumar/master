@@ -15,14 +15,14 @@ const config = require('./config/get-config'),
   fileRouter = require('./api/common/file/router'),
   User = require('./lib/models/user'),
   authorize = require('./lib/middleware/authorize'),
-  dollarUploadRouter = require('./api/pft/dollar-upload/router'),
-  mappingUploadRouter = require('./api/pft/mapping-upload/router'),
-  deptUploadRouter = require('./api/pft/dept-upload/router'),
+  dollarUploadRouter = require('./api/prof/dollar-upload/router'),
+  mappingUploadRouter = require('./api/prof/mapping-upload/router'),
+  deptUploadRouter = require('./api/prof/dept-upload/router'),
   measureRouter = require('./api/common/measure/router'),
   openPeriodRouter = require('./api/common/open-period/router'),
   lookupRouter = require('./api/common/lookup/router'),
-  reportRouter = require('./api/pft/report/router'),
-  uploadRouter = require('./api/pft/upload/router');
+  reportRouter = require('./api/prof/report/router'),
+  uploadRouter = require('./api/prof/upload/router');
 
 // start express
 const app = express();
@@ -69,16 +69,16 @@ app.use('/api/allocation-rule', allocationRuleRouter);
 app.use('/api/submeasure', submeasureRouter);
 app.use('/api/lookup', lookupRouter);
 // profitability:
-app.use('/api/pft/dollar-upload', dollarUploadRouter);
-app.use('/api/pft/mapping-upload', mappingUploadRouter);
-app.use('/api/pft/dept-upload', deptUploadRouter);
-app.use('/api/pft/report', reportRouter);
-app.use('/api/pft/upload', uploadRouter);
+app.use('/api/prof/dollar-upload', dollarUploadRouter);
+app.use('/api/prof/mapping-upload', mappingUploadRouter);
+app.use('/api/prof/dept-upload', deptUploadRouter);
+app.use('/api/prof/report', reportRouter);
+app.use('/api/prof/upload', uploadRouter);
 
 
 app.use(express.static(path.resolve(__dirname, '../ui/dist')));
 
-app.get(['/', '/pft/*'], (req, res) => {
+app.get(['/', '/prof/*'], (req, res) => {
   console.log('>>>>>> served index.html');
   res.sendFile(path.resolve(__dirname, '../ui/dist') + '/index.html');
 });

@@ -12,21 +12,18 @@ const schema = new mg.Schema(
     legalEntity: String,
     intBusinessEntity: String,
     scms: String,
-    dealId: String,
-    grossUnbilledAccruedFlag: String,
-    revenueClassification: String,
-    amount: {type: Number, required: true},
+    percentage: {type: Number, required: true},
     createdBy: String,
     createdDate: Date,
     updatedBy: String,
     updatedDate: Date
   },
-  {collection: 'sales_split_pct'}
+  {collection: 'prof_mapping_upload'}
 );
 
-module.exports = class SalesSplitUploadRepo extends RepoBase {
+module.exports = class MappingUploadRepo extends RepoBase {
   constructor() {
-    super(schema, 'SalesSplitUpload');
+    super(schema, 'MappingUpload');
   }
 
 }

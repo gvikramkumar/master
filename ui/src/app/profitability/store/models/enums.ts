@@ -1,7 +1,6 @@
 
-const pft = 'profitability';
 export enum Directory {
-  businessUpload = 'pft.bu'
+  businessUpload = 'prof.bu'
 }
 
 export enum BusinessUploadFileType {

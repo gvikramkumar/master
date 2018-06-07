@@ -21,7 +21,7 @@ const schema = new mg.Schema(
     updatedBy: String,
     updatedDate: Date
   },
-  {collection: 'swalloc_manual_mix'}
+  {collection: 'prof_swalloc_manual_mix'}
 );
 
 module.exports = class ProductClassUploadRepo extends RepoBase {

@@ -105,7 +105,7 @@ db.user_role.insertOne({
   role: "Indirect Revenue Adjustments"
 })
 
-db.dollar_upload.insertOne({
+db.prof_dollar_upload.insertOne({
   fiscalMonth: 201809,
   submeasureName: "2 Tier Adjustment",
   product: "UCS",
@@ -137,7 +137,7 @@ db.open_period.insert({
   openFlag: "Y"
 })
 
-db.mapping_upload.insert({
+db.prof_mapping_upload.insert({
   fiscalMonth: 201809,
   submeasureName: "2 Tier Adjustment",
   product: "UCS",
@@ -156,14 +156,14 @@ db.lookup.insertMany([
 ]);
 
 // dept-upload
-db.department_acc_map.insertOne({
+db.prof_department_acc_map.insertOne({
   submeasureName:"2 Tier Adjustment",
   departmentCode:"020070506",
   startAccountCode:"60000",
   endAccountCode:"69999"});
 
 // sales-split-upload
-db.sales_split_pct.insertOne({
+db.prof_sales_split_pct.insertOne({
   fiscalMonth:201810,
   accountId:"42127",
   companyCode:"555",
@@ -172,7 +172,7 @@ db.sales_split_pct.insertOne({
   splitPercentage: 0.2});
 
 // product-class-upload
-db.swalloc_manual_mix.insertOne({
+db.prof_swalloc_manual_mix.insertOne({
   fiscalMonth:201810,
   submeasureName:"2 Tier",
   splitCategory:"HARDWARE",
@@ -182,13 +182,13 @@ db.swalloc_manual_mix.insertOne({
 const collectionsWithCreatedUpdated = [
   'allocation_rule',
   'submeasure',
-  'dollar_upload',
+  'prof_dollar_upload',
   'measure',
   'open_period',
-  'mapping_upload',
-  'sales_split_pct',
-  'swalloc_manual_mix',
-  'department_acc_map'
+  'prof_mapping_upload',
+  'prof_sales_split_pct',
+  'prof_swalloc_manual_mix',
+  'prof_department_acc_map'
 ];
 
 const date = new Date();

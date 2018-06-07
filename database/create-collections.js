@@ -10,15 +10,15 @@ const collections = [
   'allocation_rule',
   'module',
   'submeasure',
-  'dollar_upload',
-  'mapping_upload',
+  'prof_dollar_upload',
+  'prof_mapping_upload',
   'measure',
   'open_period',
   'user_role',
   'lookup',
-  'sales_split_pct',
-  'swalloc_manual_mix',
-  'department_acc_map'
+  'prof_sales_split_pct',
+  'prof_swalloc_manual_mix',
+  'prof_department_acc_map'
 ];
 
 collections.forEach(coll => {
@@ -41,8 +41,9 @@ fileCollections.forEach(coll => {
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 db.getCollection('allocation_rule').createIndex({name: 1, updatedDate: -1});
 
-db.dollar_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
-db.mapping_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.prof_dollar_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.prof_mapping_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.prof_swalloc_manual_mix.createIndex({submeasureName: 1, fiscalMonth: -1});
 
 // unique constraints
 db.module.createIndex({name: 1}, {unique: true});
