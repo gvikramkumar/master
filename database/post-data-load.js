@@ -155,6 +155,14 @@ db.lookup.insertMany([
   },
 ]);
 
+// dept-upload
+db.department_acc_map.insertOne({
+  submeasureName:"2 Tier Adjustment",
+  departmentCode:"020070506",
+  startAccountCode:"60000",
+  endAccountCode:"69999"});
+
+// sales-split-upload
 db.sales_split_pct.insertOne({
   fiscalMonth:201810,
   accountId:"42127",
@@ -169,12 +177,6 @@ db.swalloc_manual_mix.insertOne({
   submeasureName:"2 Tier",
   splitCategory:"HARDWARE",
   splitPercentage:1});
-
-db.department_acc_map.insertOne({
-  submeasureName:"2 Tier Adjustment",
-  departmentCode:"020070506",
-  startAccountCode:"60000",
-  endAccountCode:"69999"});
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
