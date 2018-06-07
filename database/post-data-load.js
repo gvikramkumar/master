@@ -170,7 +170,7 @@ db.swalloc_manual_mix.insertOne({
   splitPercentage:1});
 
 db.department_acc_map.insertOne({
-  subMeasureName:"2 Tier Adjustment",
+  submeasureName:"2 Tier Adjustment",
   departmentCode:"020070506",
   startAccountCode:"60000",
   endAccountCode:"69999"});

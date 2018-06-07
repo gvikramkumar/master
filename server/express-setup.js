@@ -17,6 +17,7 @@ const config = require('./config/get-config'),
   authorize = require('./lib/middleware/authorize'),
   dollarUploadRouter = require('./api/pft/dollar-upload/router'),
   mappingUploadRouter = require('./api/pft/mapping-upload/router'),
+  deptUploadRouter = require('./api/pft/dept-upload/router'),
   measureRouter = require('./api/common/measure/router'),
   openPeriodRouter = require('./api/common/open-period/router'),
   lookupRouter = require('./api/common/lookup/router'),
@@ -70,6 +71,7 @@ app.use('/api/lookup', lookupRouter);
 // profitability:
 app.use('/api/pft/dollar-upload', dollarUploadRouter);
 app.use('/api/pft/mapping-upload', mappingUploadRouter);
+app.use('/api/pft/dept-upload', deptUploadRouter);
 app.use('/api/pft/report', reportRouter);
 app.use('/api/pft/upload', uploadRouter);
 

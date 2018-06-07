@@ -62,13 +62,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       'l4_sales_territory_descr, l5_sales_territory_descr, l6_sales_territory_descr'
     },
     {
-      type: 'department-mapping', hasSubmeasure: true, text: 'Department Mapping Report', disabled: false,
+      type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping Report', disabled: false,
       filename: 'department_mapping_data',
-      excelHeaders: 'Measure Name, *Sub-Measure Name, Sub Measure Description, Sub Measure Key, ' +
-      'Department Code, Start Account, End Account, Report Level 1, Report Level 2, Report Level 3',
-      excelProperties: 'l1_sales_territory_descr, l2_sales_territory_descr, l3_sales_territory_descr,' +
-      'l4_sales_territory_descr, l5_sales_territory_descr, l6_sales_territory_descr, l6_sales_territory_descr,'+
-        'l6_sales_territory_descr, l6_sales_territory_descr, l6_sales_territory_descr'
+      excelHeaders: 'Sub-Measure Name, Department Code, Start Account Code, End Account Code',
+      excelProperties: 'submeasureName, departmentCode, startAccountCode, endAccountCode'
     }
   ];
   report = this.reports[0];
