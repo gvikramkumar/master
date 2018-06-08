@@ -35,7 +35,6 @@ module.exports = function (options) {
       statusCode = 400;
     } else if (err.message === 'Cannot read property \'query\' of undefined' && !pgdb) {
       statusCode = 500;
-      obj = new ApiError('Postgres is down', err, 500);
       const data = _.clone(err);
       data.url = urlInfo;
       if (err && err.message) {
@@ -44,7 +43,7 @@ module.exports = function (options) {
       if (err && err.stack && opts.showStack) {
         data.stack = err.stack;
       }
-      obj.data = data;
+      obj = new ApiError('Postgres is down', data, 500);
     } else {
       Object.assign(obj, err);
       statusCode = err.statusCode || 500;
