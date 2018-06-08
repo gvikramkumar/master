@@ -37,6 +37,7 @@ module.exports = function (options) {
       statusCode = 500;
       obj = new ApiError('Postgres is down', err, 500);
       const data = _.clone(err);
+      data.url = urlInfo;
       if (err && err.message) {
         data.message = err.message;
       }
