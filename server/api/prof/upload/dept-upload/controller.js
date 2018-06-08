@@ -16,8 +16,7 @@ module.exports = class DeptUploadController extends UploadController {
   constructor() {
     super(repo);
     this.uploadName = 'Department Upload';
-    this.rowColumnCount = 2;
-    this.numSheets = 2;
+    this.hasTwoSheets = true;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
@@ -60,19 +59,14 @@ module.exports = class DeptUploadController extends UploadController {
         this.lookForErrors()
       ]))
       .then(() => Promise.all([
-        this.validateInputProductValue(),
-        this.validateInputSalesValue(),
-        this.validateGrossUnbilledAccruedRevenueFlag(),
-        this.validateInputLegalEntityValue(),
-        this.validateInputBusinessEntityValue(),
-        this.validateSCMSSegment(),
-        this.validateAmount(),
-        this.validateRevenueClassification(),
+        this.validateNodeValue(),
         this.lookForErrors()
       ]));
   }
 
   validateRow2(row) {
+    return Promise.resolve();
+/*
     this.temp = new DeptUploadExludeAcctTemplate(row);
     return Promise.all([
       this.getSubmeasure(),
@@ -96,6 +90,7 @@ module.exports = class DeptUploadController extends UploadController {
         this.validateRevenueClassification(),
         this.lookForErrors()
       ]));
+*/
   }
 
   validate() {
@@ -108,7 +103,6 @@ module.exports = class DeptUploadController extends UploadController {
   }
 
   validateCanDeptUpload() {
-    debugger;
     if (this.submeasure.indicators.expenseSSOT.toUpperCase() !== 'Y') {
       this.addErrorMessageOnly(`Sub Measure doesn't allow department upload`);
     }

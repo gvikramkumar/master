@@ -12,7 +12,6 @@ module.exports = class ProductClassUploadController extends UploadController {
   constructor() {
     super(repo);
     this.uploadName = 'Product Classification Upload';
-    this.rowColumnCount = 3;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',

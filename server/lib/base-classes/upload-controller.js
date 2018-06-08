@@ -20,17 +20,14 @@ module.exports = class UploadController {
     this.req = req;
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
-    this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 1);
-    if (this.numSheets === 2) {
-      this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 1);
+    this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 0);
+    if (this.hasTwoSheets) {
+      this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 0);
     }
     this.totalErrors = {};
     this.hasTotalErrors = false;
-    if (this.rows1.length < 1) {
+    if (this.rows1.length === 0) {
       next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
-      return;
-    } else if (!(this.rowColumnCount === Object.keys(this.rows1[0]).length)) {
-      next(new ApiError(`Incorrect column count for ${this.uploadName}. Are you sending up the correct template?`, null, 400));
       return;
     }
 
@@ -38,7 +35,7 @@ module.exports = class UploadController {
       .then(() => this.validateRows(1, this.rows1))
       .then(() => this.lookForTotalErrors());
 
-    if (this.numSheets === 2) {
+    if (this.hasTwoSheets) {
       chain = chain.then(() => this.validateRows(2, this.rows2))
         .then(() => this.lookForTotalErrors());
     }
@@ -84,7 +81,13 @@ module.exports = class UploadController {
     return this['validateRow' + sheet](row)
       .catch(err => {
         if (err.name === this.UploadValidationError) {
-          this.totalErrors['Row ' + this.rowNum] = err.data;
+          let key;
+          if (this.hasTwoSheets) {
+            key = `Sheet ${sheet} - Row ${this.rowNum}`;
+          } else {
+            key = `Row ${this.rowNum}`;
+          }
+          this.totalErrors[key] = err.data;
           this.hasTotalErrors = true;
           if (Object.keys(this.totalErrors).length > 99) {
             return Promise.reject(err); // send validation email

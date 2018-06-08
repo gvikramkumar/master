@@ -13,7 +13,6 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   constructor() {
     super(repo);
     this.uploadName = 'Dollar Upload';
-    this.rowColumnCount = 10;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',

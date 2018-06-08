@@ -11,7 +11,6 @@ module.exports = class SalesSplitUploadController extends UploadController {
   constructor() {
     super(repo);
     this.uploadName = 'Sales Level Split Upload';
-    this.rowColumnCount = 4;
 
     this.PropNames = {
       accountId: 'Account ID',

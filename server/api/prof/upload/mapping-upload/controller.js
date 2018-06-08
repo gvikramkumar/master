@@ -10,7 +10,6 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
   constructor() {
     super(repo);
     this.uploadName = 'Mapping Upload';
-    this.rowColumnCount = 7;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
