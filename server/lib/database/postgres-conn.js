@@ -17,7 +17,8 @@ if (process.env.NO_POSTGRES) {
   rtn.promise = Promise.resolve()
     .then(() => {
       console.log(`POSTGRES NOT CONNECTED, USING NO_POSTGRES ENV VAR`);
-      return client;
+      rtn.pgdb = undefined;
+      return undefined;
     });
 } else {
   rtn.promise = client.connect()
