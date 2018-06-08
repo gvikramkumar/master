@@ -275,7 +275,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       .subscribe(valid => {
         if (valid) {
           this.ruleService.add(this.rule)
-            .subscribe(rule => this.router.navigateByUrl('/pft/rule-management'));
+            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
         }
       })
   }

@@ -2,7 +2,8 @@ const DollarUploadRepo = require('../../dollar-upload/repo'),
   DollarUploadTemplate = require('./template'),
   DollarUploadImport = require('./import'),
   OpenPeriodRepo = require('../../../common/open-period/repo'),
-  InputFilterLevelUploadController = require('../../../../lib/base-classes/input-filter-level-upload-controller');
+  InputFilterLevelUploadController = require('../../../../lib/base-classes/input-filter-level-upload-controller'),
+  _ = require('lodash');
 
 const repo = new DollarUploadRepo();
 const openPeriodRepo = new OpenPeriodRepo();
@@ -12,6 +13,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   constructor() {
     super(repo);
     this.uploadName = 'Dollar Upload';
+    this.rowColumnCount = 10;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
@@ -33,47 +35,69 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     ])
   }
 
-  validate(row) {
+  validateRow1(row) {
     this.temp = new DollarUploadTemplate(row);
-    this.getSubmeasure();
-    this.validateSubmeasureName();
-    this.lookForErrors();// get out early as later validation depends on submeasure
-    this.validateMeasureAccess();
-    this.validateSubmeasureCanManualUpload();
-    this.validateCanDollarUpload();
-    this.lookForErrors();
-    this.validateInputProductValue();
-    this.validateInputSalesValue();
-    this.validateGrossUnbilledAccruedRevenueFlag();
-    this.validateInputLegalEntityValue();
-    this.validateInputBusinessEntityValue();
-    this.validateSCMSSegment();
-    this.validateAmount();
-    this.validateRevenueClassification();
+    return Promise.all([
+      this.getSubmeasure(),
+      this.validateSubmeasureName(),
+      this.lookForErrors()
+    ])
+      .then(() => Promise.all([
+        this.validateMeasureAccess(),
+        this.validateSubmeasureCanManualUpload(),
+        this.validateCanDollarUpload(),
+        this.lookForErrors()
+      ]))
+      .then(() => Promise.all([
+        this.validateInputProductValue(),
+        this.validateInputSalesValue(),
+        this.validateGrossUnbilledAccruedRevenueFlag(),
+        this.validateInputLegalEntityValue(),
+        this.validateInputBusinessEntityValue(),
+        this.validateSCMSSegment(),
+        this.validateAmount(),
+        this.validateRevenueClassification(),
+        this.lookForErrors()
+      ]));
   }
 
-  getImportDoc(row) {
-    const doc = new DollarUploadImport(row);
-    doc.fiscalMonth = this.fiscalMonth;
-    return doc;
+  validate() {
+    return Promise.resolve();
+  }
+
+  // put together imports for use in UpdateController.importRows
+  getImportArray() {
+    const imports = this.rows1.map(row => new DollarUploadImport(row, this.fiscalMonth));
+    return Promise.resolve(imports);
   }
 
   validateSubmeasureCanManualUpload() {
     if (this.submeasure.source !== 'manual') {
-      this.addError('', `Sub Measure doesn't allow manual upload`);
+      this.addErrorMessageOnly(`Sub Measure doesn't allow manual upload`);
     }
+    return Promise.resolve();
   }
 
   validateCanDollarUpload() {
     if (this.submeasure.indicators.dollarUploadFlag.toUpperCase() !== 'Y') {
-      this.addError('', `Sub Measure doesn't allow dollar upload`);
+      this.addErrorMessageOnly(`Sub Measure doesn't allow dollar upload`);
     }
+    return Promise.resolve();
+  }
+
+  validateGrossUnbilledAccruedRevenueFlag() {
+    if (!_.includes([undefined, 'Y', 'N'], this.temp.grossUnbilledAccruedRevenueFlag)) {
+      this.addErrorInvalid(this.PropNames.grossUnbilledAccruedRevenueFlag,
+        this.temp.grossUnbilledAccruedRevenueFlag, 'Y/N/NULL');
+    }
+    return Promise.resolve();
   }
 
   validateAmount() {
     if (this.validateNumber(this.PropNames.amount, this.temp.amount, true)) {
       this.temp.amount = Number(this.temp.amount);
     }
+    return Promise.resolve();
   }
 
   validateRevenueClassification() {
@@ -81,11 +105,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
       this.notExists(this.data.revClassifications, this.temp.revenueClassification)) {
       this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
-  }
-
-  getFiscalMonth() {
-    return openPeriodRepo.getOneLatest({})
-      .then(doc => this.import.fiscalMonth = doc.fiscalMonth);
+    return Promise.resolve();
   }
 
 }

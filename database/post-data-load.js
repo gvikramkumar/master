@@ -1,9 +1,9 @@
 const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
-db.submeasure.insertMany([
-  {
-    name: "22 Tier Adjustment",
+db.dfa_submeasure.insertMany([
+    {
+    name: "2 Tier Adjustment",
     description: "2 Tier Adjustment",
     source: "manual",
     measureName: "Indirect Revenue Adjustments",
@@ -38,40 +38,6 @@ db.submeasure.insertMany([
     rules: ["2TierPOSPID", "2TierPOSBE"]
   },
   {
-    name: "2 Tier Adjustment",
-    description: "2 Tier Adjustment",
-    source: "manual",
-    measureName: "Indirect Revenue Adjustments",
-    startFiscalMonth: 201810,
-    endFiscalMonth: 204012,
-    processingTime: "Monthly",
-    pnlnodeGrouping: "Indirect Adjustments",
-    inputFilterLevel: {
-      productLevel: "PF",
-      salesLevel: "level1",
-      scmsLevel: "SCMS",
-      internalBELevel: "Internal BE",
-      entityLevel: "BE"
-    },
-    manualMapping: {
-      productLevel: "TG",
-      salesLevel: "level2",
-      scmsLevel: "SCMS",
-      internalBELevel: "Internal SUB BE",
-      entityLevel: "BE"
-    },
-    reportingLevels: [],
-    indicators: {
-      dollarUploadFlag: "Y",
-      discountFlag: "N",
-      approveFlag: "Y",
-      status: "A",
-      manualMapping: "Y",
-      expenseSSOT: "Y"
-    },
-    rules: ["2TierPOSPID", "2TierPOSBE"]
-  },
-  {
     name: "2 Tier Adjustment2",
     description: "2 Tier Adjustment2",
     source: "manual",
@@ -95,7 +61,15 @@ db.submeasure.insertMany([
       entityLevel: "BE"
     },
     reportingLevels: [],
-    indicators: {dollarUploadFlag: "Y", discountFlag: "N", approveFlag: "Y", status: "A", manualMapping: "Y"},
+    indicators: {
+      dollarUploadFlag: "Y",
+      discountFlag: "N",
+      approveFlag: "Y",
+      status: "A",
+      manualMapping: "Y",
+      expenseSSOT: "Y",
+      manualMix: "Y"
+    },
     rules: ["2TierPOSPID", "2TierPOSBE"]
   }
 ])
@@ -105,7 +79,7 @@ db.user_role.insertOne({
   role: "Indirect Revenue Adjustments"
 })
 
-db.dollar_upload.insertOne({
+db.prof_dollar_upload.insertOne({
   fiscalMonth: 201809,
   submeasureName: "2 Tier Adjustment",
   product: "UCS",
@@ -119,7 +93,7 @@ db.dollar_upload.insertOne({
   amount: 457.57
 });
 
-db.measure.insertMany([
+db.dfa_measure.insertMany([
   {
     name: "Indirect Revenue Adjustments",
     typeCode: "revadj",
@@ -132,12 +106,12 @@ db.measure.insertMany([
   }
 ])
 
-db.open_period.insert({
+db.dfa_open_period.insert({
   fiscalMonth: 201809,
   openFlag: "Y"
 })
 
-db.mapping_upload.insert({
+db.prof_mapping_upload.insert({
   fiscalMonth: 201809,
   submeasureName: "2 Tier Adjustment",
   product: "UCS",
@@ -155,37 +129,40 @@ db.lookup.insertMany([
   },
 ]);
 
-db.sales_split_pct.insertOne({
-  fiscalMonth:201810,
-  accountID:"42127",
-  companyCode:"555",
-  subAccountCode:"033",
-  salesTerritoryCode: "AFRICA-PROG-REB-COMM",
-  split_pct: 0.2});
-
-db.swalloc_manual_mix.insertOne({
-  fiscalMonth:201810,
-  subMeasureName:"2 Tier",
-  splitCategory:"HARDWARE",
-  splitPercentage:1});
-
-db.department_acc_map.insertOne({
+// dept-upload
+db.prof_department_acc_map.insertOne({
   submeasureName:"2 Tier Adjustment",
   departmentCode:"020070506",
   startAccountCode:"60000",
   endAccountCode:"69999"});
 
+// sales-split-upload
+db.prof_sales_split_pct.insertOne({
+  fiscalMonth:201810,
+  accountId:"42127",
+  companyCode:"555",
+  subAccountCode:"033",
+  salesTerritoryCode: "AFRICA-PROG-REB-COMM",
+  splitPercentage: 0.2});
+
+// product-class-upload
+db.prof_swalloc_manual_mix.insertOne({
+  fiscalMonth:201810,
+  submeasureName:"2 Tier",
+  splitCategory:"HARDWARE",
+  splitPercentage:1});
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
-  'allocation_rule',
-  'submeasure',
-  'dollar_upload',
-  'measure',
-  'open_period',
-  'mapping_upload',
-  'sales_split_pct',
-  'swalloc_manual_mix',
-  'department_acc_map'
+  'dfa_allocation_rule',
+  'dfa_submeasure',
+  'prof_dollar_upload',
+  'dfa_measure',
+  'dfa_open_period',
+  'prof_mapping_upload',
+  'prof_sales_split_pct',
+  'prof_swalloc_manual_mix',
+  'prof_department_acc_map'
 ];
 
 const date = new Date();

@@ -1,5 +1,7 @@
+const util = require('../../../../lib/common/util');
 
 module.exports = class MappingUploadTemplate {
+
   constructor(row) {
     this.submeasureName = row[0];
     this.inputProductValue = row[1];
@@ -9,14 +11,7 @@ module.exports = class MappingUploadTemplate {
     this.scmsSegment = row[5];
     this.percentage = row[6];
 
-    this.trimStrings();
+    util.trimStringProperties(this);
   }
 
-  trimStrings() {
-    Object.keys(this).forEach(key => {
-      if (typeof this[key] === 'string') {
-        this[key] = this[key].trim();
-      }
-    })
-  }
 }

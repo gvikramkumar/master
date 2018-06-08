@@ -7,23 +7,19 @@ const schema = new mg.Schema(
     transactionId: {type: mg.SchemaTypes.ObjectId, required: true},
     fiscalMonth: {type: Number, required: true},
     submeasureName: {type: String, required: true},
-    product: String,
-    sales: String,
-    legalEntity: String,
-    intBusinessEntity: String,
-    scms: String,
-    percentage: {type: Number, required: true},
+    splitCategory: {type: String, required: true},
+    splitPercentage: {type: Number, required: true},
     createdBy: String,
     createdDate: Date,
     updatedBy: String,
     updatedDate: Date
   },
-  {collection: 'mapping_upload'}
+  {collection: 'prof_swalloc_manual_mix'}
 );
 
-module.exports = class MappingUploadRepo extends RepoBase {
+module.exports = class ProductClassUploadRepo extends RepoBase {
   constructor() {
-    super(schema, 'MappingUpload');
+    super(schema, 'ProductClassUpload');
   }
 
 }

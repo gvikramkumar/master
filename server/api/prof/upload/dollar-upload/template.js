@@ -1,5 +1,7 @@
+const util = require('../../../../lib/common/util');
 
 module.exports = class DollarUploadTemplate {
+
   constructor(row) {
     this.submeasureName = row[0];
     this.inputProductValue = row[1];
@@ -12,14 +14,7 @@ module.exports = class DollarUploadTemplate {
     this.dealId = row[8];
     this.revenueClassification = row[9];
 
-    this.trimStrings();
+    util.trimStringProperties(this);
   }
 
-  trimStrings() {
-    Object.keys(this).forEach(key => {
-      if (typeof this[key] === 'string') {
-        this[key] = this[key].trim();
-      }
-    })
-  }
 }

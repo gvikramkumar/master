@@ -14,7 +14,6 @@ const lookupRepo = new LookupRepo();
 module.exports = class InputFilterLevelUploadController extends UploadController {
   constructor(repo) {
     super(repo);
-    this.data = {};
   }
 
   // IMPORTANT: we use a lodash binary search on these values, so all values need to be upper case and
@@ -69,33 +68,6 @@ module.exports = class InputFilterLevelUploadController extends UploadController
       })
   }
 
-  getSubmeasure() {
-    this.submeasure = _.find(this.data.submeasures, {name: this.temp.submeasureName});
-    return Promise.resolve();
-  }
-
-  validateSubmeasureName() {
-    if (!this.temp.submeasureName) {
-      this.addErrorRequired(this.PropNames.submeasureName);
-    } else if (!this.submeasure) {
-      this.addError(this.PropNames.submeasureName, 'No Sub Measure exists by this name', this.temp.submeasureName);
-    }
-    return Promise.resolve();
-  }
-
-  validateMeasureAccess() {
-    // todo: requires onramp table, this is a temporary placeholder
-    /*
-        return userRoleRepo.userHasRole(this.req.user.id, this.submeasure.measureName)
-          .then(hasRole => {
-            if (!hasRole) {
-              this.addError('', 'Not authorized for this upload.');
-            }
-          });
-    */
-    // need to check this with cached data
-  }
-
   validateInputProductValue() {
     let productLevel = this.submeasure.inputFilterLevel.productLevel.toUpperCase();
     if (productLevel && !this.temp.inputProductValue) {
@@ -118,6 +90,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
   validateInputSalesValue() {
@@ -154,13 +127,6 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
-  }
-
-  validateGrossUnbilledAccruedRevenueFlag() {
-    if (!_.includes([undefined, 'Y', 'N'], this.temp.grossUnbilledAccruedRevenueFlag)) {
-      this.addErrorInvalid(this.PropNames.grossUnbilledAccruedRevenueFlag,
-        this.temp.grossUnbilledAccruedRevenueFlag, 'Y/N/NULL');
-    }
     return Promise.resolve();
   }
 
@@ -177,6 +143,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
   validateInputBusinessEntityValue() {
@@ -196,6 +163,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
   validateSCMSSegment() {
@@ -211,6 +179,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
 }

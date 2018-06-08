@@ -6,13 +6,13 @@ export class User {
 
     this.roles = [
       'dfa:access',
-      'pft:access',
-      'pft-bu:access',
-      'pft-bu:upload',
-      'pft-rm:access',
-      'pft-rm:manage',
-      'pft-sm:access',
-      'pft-sm:manage'
+      'prof:access',
+      'prof-bu:access',
+      'prof-bu:upload',
+      'prof-rm:access',
+      'prof-rm:manage',
+      'prof-sm:access',
+      'prof-sm:manage'
     ]
   }
 

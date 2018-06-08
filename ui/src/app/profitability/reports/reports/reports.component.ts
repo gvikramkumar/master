@@ -163,7 +163,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     if (this.report.hasFiscalMonth) {
       params.fiscalMonth = this.fiscalMonth;
     }
-    const url = `${environment.apiUrl}/api/pft/report/${this.report.type}`;
+    const url = `${environment.apiUrl}/api/prof/report/${this.report.type}`;
     this.util.submitForm(url, params);
   }
 

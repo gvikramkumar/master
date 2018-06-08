@@ -21,7 +21,7 @@ const schema = new mg.Schema(
     updatedBy: String,
     updatedDate: Date
   },
-  {collection: 'allocation_rule'}
+  {collection: 'dfa_allocation_rule'}
 );
 
 module.exports = class AllocationRuleRepo extends RepoBase {

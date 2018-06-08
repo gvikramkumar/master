@@ -14,7 +14,7 @@ const schema = new mg.Schema(
     updatedBy: String,
     updatedDate: Date
   },
-  {collection: 'department_acc_map'}
+  {collection: 'prof_department_acc_map'}
 );
 
 module.exports = class DeptUploadRepo extends RepoBase {

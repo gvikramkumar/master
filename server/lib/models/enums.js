@@ -2,7 +2,7 @@ const obj = {};
 module.exports = obj;
 
 obj.Directory = {
-  businessUpload: 'pft.bu'
+  businessUpload: 'prof.bu'
 }
 
 obj.BuFileType =

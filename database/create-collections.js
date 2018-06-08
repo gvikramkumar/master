@@ -7,18 +7,18 @@ var db = conn.getDB(_db);
 
 
 const collections = [
-  'allocation_rule',
-  'module',
-  'submeasure',
-  'dollar_upload',
-  'mapping_upload',
-  'measure',
-  'open_period',
+  'dfa_allocation_rule',
+  'dfa_module',
+  'dfa_submeasure',
+  'prof_dollar_upload',
+  'prof_mapping_upload',
+  'dfa_measure',
+  'dfa_open_period',
   'user_role',
   'lookup',
-  'sales_split_pct',
-  'swalloc_manual_mix',
-  'department_acc_map'
+  'prof_sales_split_pct',
+  'prof_swalloc_manual_mix',
+  'prof_department_acc_map'
 ];
 
 collections.forEach(coll => {
@@ -39,16 +39,17 @@ fileCollections.forEach(coll => {
 // add indexes;
 // todo: add appropriate indexes on all collections
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});
-db.getCollection('allocation_rule').createIndex({name: 1, updatedDate: -1});
+db.dfa_allocation_rule.createIndex({name: 1, updatedDate: -1});
 
-db.dollar_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
-db.mapping_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.prof_dollar_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.prof_mapping_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.prof_swalloc_manual_mix.createIndex({submeasureName: 1, fiscalMonth: -1});
 
 // unique constraints
-db.module.createIndex({name: 1}, {unique: true});
-db.module.createIndex({seqnum: 1}, {unique: true});
-db.submeasure.createIndex({name: 1}, {unique: true});
-db.measure.createIndex({name: 1}, {unique: true});
+db.dfa_module.createIndex({name: 1}, {unique: true});
+db.dfa_module.createIndex({seqnum: 1}, {unique: true});
+db.dfa_submeasure.createIndex({name: 1}, {unique: true});
+db.dfa_measure.createIndex({name: 1}, {unique: true});
 db.lookup.createIndex({type: 1}, {unique: true});
 
 print('>>>>>>>>>>>> create-collections complete');
