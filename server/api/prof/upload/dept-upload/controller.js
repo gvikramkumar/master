@@ -37,12 +37,10 @@ module.exports = class DeptUploadController extends UploadController {
       .then(results => {
         this.data.userRoles = results[1];
         this.data.submeasures = results[2];
-/*
         this.data.department = {
-          department_codes: results[3],
-          company_codes: results[4]
+          department_codes: [], //results[3],
+          company_codes: [] //results[4]
         };
-*/
       })
   }
 
@@ -122,10 +120,10 @@ module.exports = class DeptUploadController extends UploadController {
       let deptCode = arr[1];
       let companyCode = arr[2];
       if (this.notExists(this.data.department.department_codes, deptCode)) {
-        this.addError(this.PropNames.nodeValue, 'Invalid department code',  nodeValue);
+        this.addError(this.PropNames.nodeValue, 'Invalid department code',  deptCode);
       }
       if (this.notExists(this.data.department.company_codes, companyCode)) {
-        this.addError(this.PropNames.nodeValue, 'Invalid company code',  nodeValue);
+        this.addError(this.PropNames.nodeValue, 'Invalid company code',  companyCode);
       }
     }
     return Promise.resolve();
