@@ -1,4 +1,6 @@
-const _ = require('lodash');
+const _ = require('lodash'),
+  pgdb = require('../database/postgres-conn').pgdb,
+  ApiError = require('../common/api-error');
 
 /**
  * errorHandler
@@ -31,6 +33,17 @@ module.exports = function (options) {
       }
       obj.data = Object.assign(data, err.errors);
       statusCode = 400;
+    } else if (err.message === 'Cannot read property \'query\' of undefined' && !pgdb) {
+      statusCode = 500;
+      obj = new ApiError('Postgres is down', err, 500);
+      const data = _.clone(err);
+      if (err && err.message) {
+        data.message = err.message;
+      }
+      if (err && err.stack && opts.showStack) {
+        data.stack = err.stack;
+      }
+      obj.data = data;
     } else {
       Object.assign(obj, err);
       statusCode = err.statusCode || 500;
