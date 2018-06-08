@@ -56,9 +56,9 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
     return Promise.resolve();
   }
 
-  importRows() {
-    this.imports = this.rows1.map(row => new MappingUploadImport(row, this.fiscalMonth));
-    return super.importRows();
+  getImportArray() {
+    const imports = this.rows1.map(row => new MappingUploadImport(row, this.fiscalMonth));
+    return Promise.resolve(imports);
   }
 
   validateCanMappingUpload() {

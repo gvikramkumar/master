@@ -18,6 +18,8 @@ const config = require('./config/get-config'),
   dollarUploadRouter = require('./api/prof/dollar-upload/router'),
   mappingUploadRouter = require('./api/prof/mapping-upload/router'),
   deptUploadRouter = require('./api/prof/dept-upload/router'),
+  salesSplitUploadRouter = require('./api/prof/sales-split-upload/router'),
+  productClassUploadRouter = require('./api/prof/product-class-upload/router'),
   measureRouter = require('./api/common/measure/router'),
   openPeriodRouter = require('./api/common/open-period/router'),
   lookupRouter = require('./api/common/lookup/router'),
@@ -27,6 +29,13 @@ const config = require('./config/get-config'),
 // start express
 const app = express();
 module.exports = app;
+
+/*
+app.use(function tap(req, res, next) {
+  console.log(req.method, req.url);
+  next();
+})
+*/
 
 var corsOptions = {
   origin: config.corsOrigin,
@@ -72,6 +81,8 @@ app.use('/api/lookup', lookupRouter);
 app.use('/api/prof/dollar-upload', dollarUploadRouter);
 app.use('/api/prof/mapping-upload', mappingUploadRouter);
 app.use('/api/prof/dept-upload', deptUploadRouter);
+app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
+app.use('/api/prof/product-class-upload', productClassUploadRouter);
 app.use('/api/prof/report', reportRouter);
 app.use('/api/prof/upload', uploadRouter);
 

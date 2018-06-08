@@ -2,7 +2,8 @@ const ProductClassUploadRepo = require('../../product-class-upload/repo'),
   ProductClassUploadTemplate = require('./template'),
   ProductClassUploadImport = require('./import'),
   _ = require('lodash'),
-  UploadController = require('../../../../lib/base-classes/upload-controller');
+  UploadController = require('../../../../lib/base-classes/upload-controller'),
+  NamedApiError = require('../../../../lib/common/named-api-error');
 
 const repo = new ProductClassUploadRepo();
 
@@ -10,8 +11,8 @@ module.exports = class ProductClassUploadController extends UploadController {
 
   constructor() {
     super(repo);
-    this.uploadName = 'ProductClass Upload';
-    this.rowColumnCount = 10;
+    this.uploadName = 'Product Classification Upload';
+    this.rowColumnCount = 3;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
@@ -58,9 +59,9 @@ module.exports = class ProductClassUploadController extends UploadController {
     const obj = {};
     arr.forEach(val => {
       if (obj[val.submeasureName]) {
-        obj[val.submeasureName].total += val.splitPercentage;
+        obj[val.submeasureName] += val.splitPercentage;
       } else {
-        obj[val.submeasureName].total = val.splitPercentage;
+        obj[val.submeasureName] = val.splitPercentage;
       }
     });
     _.forEach(obj, (val, key) => {
@@ -70,14 +71,14 @@ module.exports = class ProductClassUploadController extends UploadController {
     });
 
     if (this.errors.length) {
-      return Promise.reject(new ApiError('Submeasure Percentage Errors', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Submeasure Percentage Errors', this.errors));
     }
     return Promise.resolve();
   }
 
-  importRows() {
-    this.imports = this.rows1.map(row => new ProductClassUploadImport(row, this.fiscalMonth));
-    return super.importRows();
+  getImportArray() {
+    const imports = this.rows1.map(row => new ProductClassUploadImport(row, this.fiscalMonth));
+    return Promise.resolve(imports);
   }
 
 }

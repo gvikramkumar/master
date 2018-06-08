@@ -1,4 +1,4 @@
-const DeptUploadRepo = require('../../dollar-upload/repo'),
+const DeptUploadRepo = require('../../dept-upload/repo'),
   DeptUploadDeptTemplate = require('./dept-template'),
   DeptUploadExludeAcctTemplate = require('./exclude-acct-template'),
   DeptUploadImport = require('./import'),
@@ -11,6 +11,7 @@ module.exports = class DeptUploadController extends UploadController {
   constructor() {
     super(repo);
     this.uploadName = 'Department Upload';
+    this.rowColumnCount = 2;
     this.numSheets = 2;
 
     this.PropNames = {
@@ -41,13 +42,9 @@ module.exports = class DeptUploadController extends UploadController {
   }
 
 
-  importRows() {
-    this.imports = this.rows1.map(row => {
-      const doc = new DeptUploadImport(row);
-      doc.fiscalMonth = this.fiscalMonth;
-      return doc;
-    });
-    return super.importRows();
+  getImportArray() {
+    const imports = this.rows1.map(row => new DeptUploadImport(row, this.fiscalMonth));
+    return Promise.resolve(imports);
   }
 }
 

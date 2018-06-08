@@ -6,7 +6,7 @@ const schema = new mg.Schema(
     seqnum: {type: Number, required: true},
     name: {type: String, required: true}
   },
-  {collection: 'module'}
+  {collection: 'dfa_module'}
 );
 
 module.exports = class ModuleRepo extends RepoBase {

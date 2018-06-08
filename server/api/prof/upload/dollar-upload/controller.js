@@ -65,9 +65,10 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
     return Promise.resolve();
   }
 
-  importRows() {
-    this.imports = this.rows1.map(row => new DollarUploadImport(row, this.fiscalMonth));
-    return super.importRows();
+  // put together imports for use in UpdateController.importRows
+  getImportArray() {
+    const imports = this.rows1.map(row => new DollarUploadImport(row, this.fiscalMonth));
+    return Promise.resolve(imports);
   }
 
   validateSubmeasureCanManualUpload() {

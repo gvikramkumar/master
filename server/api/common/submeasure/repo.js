@@ -35,7 +35,7 @@ const schema = new mg.Schema(
     },
     rules: [String]
   },
-  {collection: 'submeasure'}
+  {collection: 'dfa_submeasure'}
 );
 
 module.exports = class SubmeasureRepo extends RepoBase {

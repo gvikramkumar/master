@@ -10,8 +10,8 @@ module.exports = class SalesSplitUploadController extends UploadController {
 
   constructor() {
     super(repo);
-    this.uploadName = 'SalesSplit Upload';
-    this.rowColumnCount = 10;
+    this.uploadName = 'Sales Level Split Upload';
+    this.rowColumnCount = 4;
 
     this.PropNames = {
       accountId: 'Account ID',
@@ -57,8 +57,8 @@ module.exports = class SalesSplitUploadController extends UploadController {
     return Promise.resolve();
   }
 
-  importRows() {
-    this.imports = [];
+  getImportArray() {
+    const imports = [];
     // maybe this happens in getValidationAndImportData instead??
     // have no idea what the query looks like and pg table doesn't exist yet
 /*
@@ -67,12 +67,12 @@ module.exports = class SalesSplitUploadController extends UploadController {
         this.rows1.forEach(row => {
           _.filter(subaccts, {x: row[?], y: row[?]})
             .forEach(sa => {
-              this.imports.push(new SalesSplitUploadImport(row, this.fiscalMonth, sa.subAccountCode));
+              imports.push(new SalesSplitUploadImport(row, this.fiscalMonth, sa.subAccountCode));
           })
         });
-        return super.importRows();
       })
 */
+    return Promise.resolve(imports);
   }
 
 }

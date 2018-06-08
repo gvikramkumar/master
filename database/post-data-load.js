@@ -1,7 +1,7 @@
 const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
-db.submeasure.insertMany([
+db.dfa_submeasure.insertMany([
   {
     name: "22 Tier Adjustment",
     description: "2 Tier Adjustment",
@@ -119,7 +119,7 @@ db.prof_dollar_upload.insertOne({
   amount: 457.57
 });
 
-db.measure.insertMany([
+db.dfa_measure.insertMany([
   {
     name: "Indirect Revenue Adjustments",
     typeCode: "revadj",
@@ -132,7 +132,7 @@ db.measure.insertMany([
   }
 ])
 
-db.open_period.insert({
+db.dfa_open_period.insert({
   fiscalMonth: 201809,
   openFlag: "Y"
 })
@@ -180,11 +180,11 @@ db.prof_swalloc_manual_mix.insertOne({
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
-  'allocation_rule',
-  'submeasure',
+  'dfa_allocation_rule',
+  'dfa_submeasure',
   'prof_dollar_upload',
-  'measure',
-  'open_period',
+  'dfa_measure',
+  'dfa_open_period',
   'prof_mapping_upload',
   'prof_sales_split_pct',
   'prof_swalloc_manual_mix',

@@ -5,13 +5,13 @@ const xlsx = require('node-xlsx'),
   mail = require('../common/mail'),
   OpenPeriodRepo = require('../../api/common/open-period/repo');
 
-const UploadValidationError = 'UploadValidationError';
 const openPeriodRepo = new OpenPeriodRepo();
 
 module.exports = class UploadController {
 
   constructor(repo) {
     this.repo = repo;
+    this.UploadValidationError = 'UploadValidationError'
   }
 
   upload(req, res, next) {
@@ -35,10 +35,7 @@ module.exports = class UploadController {
 
     let chain = this.getValidationAndImportData()
       .then(() => this.validateRows(1, this.rows1))
-      .then(() => this.lookForTotalErrors())
-      .then(() => {
-        throw new Error("something bad");
-      });
+      .then(() => this.lookForTotalErrors());
 
     if (this.numSheets === 2) {
       chain = chain.then(() => this.validateRows(2, this.rows2))
@@ -53,7 +50,7 @@ module.exports = class UploadController {
         res.send({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
       })
       .catch(err => {
-        if (err && err.name === UploadValidationError) {
+        if (err && err.name === this.UploadValidationError) {
           this.sendValidationEmail();
           res.send({status: 'fail'});
         } else {
@@ -85,7 +82,7 @@ module.exports = class UploadController {
 
     return this['validateRow' + sheet](row)
       .catch(err => {
-        if (err.name === UploadValidationError) {
+        if (err.name === this.UploadValidationError) {
           this.totalErrors['Row ' + this.rowNum] = err.data;
           this.hasTotalErrors = true;
           if (Object.keys(this.totalErrors).length > 99) {
@@ -102,7 +99,7 @@ module.exports = class UploadController {
 
     return this.validate()
       .catch(err => {
-        if (err.name === UploadValidationError) {
+        if (err.name === this.UploadValidationError) {
           this.totalErrors[err.message] = err.data;
           this.hasTotalErrors = true;
         } else {
@@ -112,19 +109,20 @@ module.exports = class UploadController {
   }
 
   importRows() {
-    return this.repo.addManyTransaction(this.imports);
+    return this.getImportArray()
+      .then(imports => this.repo.addManyTransaction(imports))
   }
 
   lookForErrors() {
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(UploadValidationError, null, _.sortBy(this.errors, 'property')));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, null, _.sortBy(this.errors, 'property')));
     }
     return Promise.resolve();
   }
 
   lookForTotalErrors() {
     if (this.hasTotalErrors) {
-      return Promise.reject(new NamedApiError(UploadValidationError));
+      return Promise.reject(new NamedApiError(this.UploadValidationError));
     }
     return Promise.resolve();
   }
@@ -147,7 +145,7 @@ module.exports = class UploadController {
   }
 
   sendErrorEmail(err) {
-    this.sendEmail(`${this.uploadName} - Upload Error`, this.buildErrorEmailBody(err));
+    this.sendEmail(`${this.uploadName} - Error`, this.buildErrorEmailBody(err));
   }
 
   sendValidationEmail() {
