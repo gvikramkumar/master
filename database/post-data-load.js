@@ -2,8 +2,8 @@ const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
 db.dfa_submeasure.insertMany([
-  {
-    name: "22 Tier Adjustment",
+    {
+    name: "2 Tier Adjustment",
     description: "2 Tier Adjustment",
     source: "manual",
     measureName: "Indirect Revenue Adjustments",
@@ -38,40 +38,6 @@ db.dfa_submeasure.insertMany([
     rules: ["2TierPOSPID", "2TierPOSBE"]
   },
   {
-    name: "2 Tier Adjustment",
-    description: "2 Tier Adjustment",
-    source: "manual",
-    measureName: "Indirect Revenue Adjustments",
-    startFiscalMonth: 201810,
-    endFiscalMonth: 204012,
-    processingTime: "Monthly",
-    pnlnodeGrouping: "Indirect Adjustments",
-    inputFilterLevel: {
-      productLevel: "PF",
-      salesLevel: "level1",
-      scmsLevel: "SCMS",
-      internalBELevel: "Internal BE",
-      entityLevel: "BE"
-    },
-    manualMapping: {
-      productLevel: "TG",
-      salesLevel: "level2",
-      scmsLevel: "SCMS",
-      internalBELevel: "Internal SUB BE",
-      entityLevel: "BE"
-    },
-    reportingLevels: [],
-    indicators: {
-      dollarUploadFlag: "Y",
-      discountFlag: "N",
-      approveFlag: "Y",
-      status: "A",
-      manualMapping: "Y",
-      expenseSSOT: "Y"
-    },
-    rules: ["2TierPOSPID", "2TierPOSBE"]
-  },
-  {
     name: "2 Tier Adjustment2",
     description: "2 Tier Adjustment2",
     source: "manual",
@@ -95,7 +61,15 @@ db.dfa_submeasure.insertMany([
       entityLevel: "BE"
     },
     reportingLevels: [],
-    indicators: {dollarUploadFlag: "Y", discountFlag: "N", approveFlag: "Y", status: "A", manualMapping: "Y"},
+    indicators: {
+      dollarUploadFlag: "Y",
+      discountFlag: "N",
+      approveFlag: "Y",
+      status: "A",
+      manualMapping: "Y",
+      expenseSSOT: "Y",
+      manualMix: "Y"
+    },
     rules: ["2TierPOSPID", "2TierPOSBE"]
   }
 ])
