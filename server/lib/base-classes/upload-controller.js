@@ -93,6 +93,8 @@ module.exports = class UploadController {
       })
   }
 
+  // this is different from rows, rows will title per row with an error array: {error} or {property, error, value?}
+  // this will title via error message and display (error} or {property, error, value?} from error array
   validateOther() {
     this.errors = [];
 
@@ -112,9 +114,11 @@ module.exports = class UploadController {
       .then(imports => this.repo.addManyTransaction(imports))
   }
 
-  lookForErrors() {
+  // message is only used by validateOther where it's used to title the error list
+  // validateRows will add "Row X" instead
+  lookForErrors(message) {
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, null, _.sortBy(this.errors, 'property')));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, message, _.sortBy(this.errors, 'property')));
     }
     return Promise.resolve();
   }
@@ -293,6 +297,15 @@ module.exports = class UploadController {
           });
     */
     // need to check this with cached data
+    return Promise.resolve();
+  }
+
+  validateTest() {
+    if (true) {
+      this.addErrorMessageOnly(`Sub Measure doesn't allow department upload`);
+      this.addError('Some Prop', `Sub Measure doesn't allow department upload`);
+      this.addError('Some Prop', `Sub Measure doesn't allow department upload`, 'Some val');
+    }
     return Promise.resolve();
   }
 

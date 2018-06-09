@@ -83,7 +83,6 @@ module.exports = class DeptUploadController extends UploadController {
   }
 
   validate() {
-
     return Promise.resolve();
   }
 
