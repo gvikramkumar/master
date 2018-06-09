@@ -6,8 +6,8 @@ const schema = new mg.Schema(
   {
     transactionId: {type: mg.SchemaTypes.ObjectId, required: true},
     submeasureName: {type: String, required: true},
-    departmentCode: String,
-    glAccount: {type: Number, required: true},// todo: need to sort this out with arindam
+    departmentCode: {type: String, required: true},
+    glAccount: Number, // todo: need to sort this out with arindam
     startAccountCode: String,
     endAccountCode: String,
     createdBy: String,

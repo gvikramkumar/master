@@ -45,7 +45,7 @@ module.exports = class DeptUploadController extends UploadController {
           department_codes: [123], //results[3], //todo: fix this postgres down hack.
           company_codes: [456789] //results[4]
         };
-        this.data.glAccounts = [62345];// results[5];
+        this.data.glAccounts = [62345, 62346, 62347];// results[5];
       })
   }
 
@@ -87,18 +87,53 @@ module.exports = class DeptUploadController extends UploadController {
   }
 
   validate() {
-    return Promise.all([
-      this.validateTest(),
-      this.lookForErrors('Test Validation Heading')
-    ])
-    // return Promise.resolve();
+    /*
+        return Promise.all([
+          this.validateTest(),
+          this.lookForErrors('Test Validation Heading')
+        ])
+    */
+    return Promise.resolve();
   }
 
   getImportArray() {
-    // convert
+    // lineup sheet1 by submeasureName, lineup sheet2 by submeasureName and ordered glAccounts
+    // for each sheet1 val, insert each sheet2 matching submeasure glAccount
 
+    const depts = _.sortBy(this.rows1.map(row => new DeptUploadDeptTemplate(row)), 'submeasureName');
 
-    const imports = this.rows1.map(row => new DeptUploadImport(row, this.fiscalMonth));
+    // get all sheet2 into object {submeasureName: arrayOfGlAccounts}
+    const exclusions = {};
+    const rows2 = _.sortBy(this.rows2.map(row => new DeptUploadExludeAcctTemplate(row)), 'submeasureName');
+
+    rows2.forEach(exclusion => {
+      if (exclusions[exclusion.submeasureName]) {
+        exclusions[exclusion.submeasureName].push(exclusion.glAccount);
+      } else {
+        exclusions[exclusion.submeasureName] = [exclusion.glAccount];
+      }
+    });
+    _.forEach(exclusions, (val, key) => exclusions[key] = _.sortBy(val, _.identity));
+
+    const imports = [];
+
+    depts.forEach(dept => {
+      if (exclusions[dept.submeasureName]) {
+        exclusions[dept.submeasureName].forEach(glAccount => {
+          imports.push(new DeptUploadImport(
+            dept.submeasureName,
+            dept.nodeValue.replace('_', ''),
+            glAccount
+          ));
+        })
+      } else {
+        imports.push(new DeptUploadImport(
+          dept.submeasureName,
+          dept.nodeValue.replace('_', '')
+        ));
+      }
+    })
+
     return Promise.resolve(imports);
   }
 

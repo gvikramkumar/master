@@ -39,7 +39,7 @@ module.exports = class UploadController {
       .then(() => this.lookForTotalErrors())
       .then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
-      .then(() => this.importRows())
+      .then(() => this.importRows(req.user.id))
       .then(() => {
         this.sendSuccessEmail();
         res.send({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
@@ -111,9 +111,9 @@ module.exports = class UploadController {
       })
   }
 
-  importRows() {
+  importRows(userId) {
     return this.getImportArray()
-      .then(imports => this.repo.addManyTransaction(imports))
+      .then(imports => this.repo.addManyTransaction(imports, userId))
   }
 
   // message is only used by validateOther where it's used to title the error list
