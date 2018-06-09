@@ -38,7 +38,7 @@ module.exports = class DeptUploadController extends UploadController {
         this.data.userRoles = results[1];
         this.data.submeasures = results[2];
         this.data.department = {
-          department_codes: [], //results[3],
+          department_codes: [], //results[3], //todo: fix this postgres down hack.
           company_codes: [] //results[4]
         };
       })
