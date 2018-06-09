@@ -118,6 +118,8 @@ module.exports = class UploadController {
 
   // message is only used by validateOther where it's used to title the error list
   // validateRows will add "Row X" instead
+  // this is our break out of the validateRow promise chain, call this to get out if no reason to continue
+  // say no submeasure, then can't continue submeasure based validations
   lookForErrors(message) {
     if (this.errors.length) {
       return Promise.reject(new NamedApiError(this.UploadValidationError, message, _.sortBy(this.errors, 'property')));
@@ -125,6 +127,8 @@ module.exports = class UploadController {
     return Promise.resolve();
   }
 
+  // this is out break out of upload promise chain. If we have errors in sheet1, this could mess
+  // up later validation in sheet2 or validate, so we break out
   lookForTotalErrors() {
     if (this.hasTotalErrors) {
       return Promise.reject(new NamedApiError(this.UploadValidationError));
