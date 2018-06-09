@@ -19,6 +19,7 @@ module.exports = class DeptUploadController extends UploadController {
     this.uploadName = 'Department Upload';
     this.hasTwoSheets = true;
     this.sheet1SubmeasureNames = [];
+    this.startedSheet2 = false;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
@@ -41,16 +42,16 @@ module.exports = class DeptUploadController extends UploadController {
         this.data.userRoles = results[1];
         this.data.submeasures = results[2];
         this.data.department = {
-          department_codes: [], //results[3], //todo: fix this postgres down hack.
-          company_codes: [] //results[4]
+          department_codes: [123], //results[3], //todo: fix this postgres down hack.
+          company_codes: [456789] //results[4]
         };
-        this.data.glAccounts = [62346];// results[5];
+        this.data.glAccounts = [62345];// results[5];
       })
   }
 
   validateRow1(row) {
     this.temp = new DeptUploadDeptTemplate(row);
-    this.sheet1SubmeasureNames.push(row.submeasureName);
+    this.sheet1SubmeasureNames.push(this.temp.submeasureName);
     return Promise.all([
       this.getSubmeasure(),
       this.validateSubmeasureName(),
@@ -69,7 +70,10 @@ module.exports = class DeptUploadController extends UploadController {
 
   validateRow2(row) {
     this.temp = new DeptUploadExludeAcctTemplate(row);
-    this.sheet1SubmeasureNames = _.sortBy(_.uniq(this.sheet1SubmeasureNames, _.identity))
+    if (!this.startedSheet2) {
+      this.startedSheet2 = true;
+      this.sheet1SubmeasureNames = _.sortBy(_.uniq(this.sheet1SubmeasureNames), _.identity)
+    }
     return Promise.all([
       this.getSubmeasure(),
       this.validateSubmeasureName(),
@@ -83,10 +87,17 @@ module.exports = class DeptUploadController extends UploadController {
   }
 
   validate() {
-    return Promise.resolve();
+    return Promise.all([
+      this.validateTest(),
+      this.lookForErrors('Test Validation Heading')
+    ])
+    // return Promise.resolve();
   }
 
   getImportArray() {
+    // convert
+
+
     const imports = this.rows1.map(row => new DeptUploadImport(row, this.fiscalMonth));
     return Promise.resolve(imports);
   }
@@ -108,13 +119,13 @@ module.exports = class DeptUploadController extends UploadController {
       this.addErrorInvalid(this.PropNames.nodeValue, this.temp.nodeValue);
     } else {
       const arr = this.temp.nodeValue.match(re);
-      let deptCode = arr[1];
-      let companyCode = arr[2];
+      let deptCode = Number(arr[1]);
+      let companyCode = Number(arr[2]);
       if (this.notExists(this.data.department.department_codes, deptCode)) {
-        this.addError(this.PropNames.nodeValue, 'Invalid department code', deptCode);
+        this.addError(this.PropNames.nodeValue, 'Invalid department code', nodeValue);
       }
       if (this.notExists(this.data.department.company_codes, companyCode)) {
-        this.addError(this.PropNames.nodeValue, 'Invalid company code', companyCode);
+        this.addError(this.PropNames.nodeValue, 'Invalid company code', nodeValue);
       }
     }
     return Promise.resolve();

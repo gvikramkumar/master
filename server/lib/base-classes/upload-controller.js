@@ -34,7 +34,9 @@ module.exports = class UploadController {
 
     this.getValidationAndImportData()
       .then(() => this.validateRows(1, this.rows1))
+      .then(() => this.lookForTotalErrors())
       .then(() => this.validateRows(2, this.rows2))
+      .then(() => this.lookForTotalErrors())
       .then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
       .then(() => this.importRows())
