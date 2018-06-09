@@ -267,12 +267,22 @@ module.exports = class UploadController {
     return _.sortedIndexOf(values, value) === -1;
   }
 
-  validateNumber(prop, val, required) {
+  validateNumberValue(prop, val, required) {
     if (required && (val === undefined || val === '')) {
       this.addErrorRequired(prop);
       return false;
     } else if (Number.isNaN(Number(val))) {
       this.addError(prop, 'Not a number', val);
+      return false;
+    }
+    return true;
+  }
+
+  validatePercentageValue(prop, val, required) {
+    if (!this.validateNumberValue(prop, val, required)) {
+      return false;
+    } else if (!(Number(val) <= 1.0)) {
+      this.addError(prop, 'Not a valid percentage', val);
       return false;
     }
     return true;

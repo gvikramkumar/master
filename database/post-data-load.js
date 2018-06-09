@@ -141,7 +141,7 @@ db.prof_sales_split_pct.insertOne({
   fiscalMonth:201810,
   accountId:"42127",
   companyCode:"555",
-  subAccountCode:"033",
+  subaccountCode:"033",
   salesTerritoryCode: "AFRICA-PROG-REB-COMM",
   splitPercentage: 0.2});
 
