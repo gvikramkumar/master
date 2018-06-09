@@ -21,6 +21,7 @@ module.exports = class UploadController {
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
     this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 0);
+    this.rows2 = [];
     if (this.hasTwoSheets) {
       this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 0);
     }
@@ -33,15 +34,8 @@ module.exports = class UploadController {
 
     let chain = this.getValidationAndImportData()
       .then(() => this.validateRows(1, this.rows1))
-      .then(() => this.lookForTotalErrors());
-
-    if (this.hasTwoSheets) {
-      chain = chain.then(() => this.validateRows(2, this.rows2))
-        .then(() => this.lookForTotalErrors());
-    }
-
-    chain = chain.then(() => this.validateOther())
-      .then(() => this.lookForTotalErrors())
+      .then(() => this.validateRows(2, this.rows2))
+      .then(() => this.validateOther()
       .then(() => this.importRows())
       .then(() => {
         this.sendSuccessEmail();
