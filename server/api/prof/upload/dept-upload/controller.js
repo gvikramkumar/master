@@ -4,7 +4,8 @@ const DeptUploadRepo = require('../../dept-upload/repo'),
   DeptUploadImport = require('./import'),
   UploadController = require('../../../../lib/base-classes/upload-controller'),
   SubmeasureRepo = require('../../../../api/common/submeasure/repo'),
-  UserRoleRepo = require('../../../../lib/database/repos/user-role-repo')
+  UserRoleRepo = require('../../../../lib/database/repos/user-role-repo'),
+  _ = require('lodash');
 
 
 const repo = new DeptUploadRepo();
@@ -17,6 +18,7 @@ module.exports = class DeptUploadController extends UploadController {
     super(repo);
     this.uploadName = 'Department Upload';
     this.hasTwoSheets = true;
+    this.sheet1SubmeasureNames = [];
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
@@ -33,6 +35,7 @@ module.exports = class DeptUploadController extends UploadController {
       submeasureRepo.getMany()
       // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_department', 'department_code'),
       // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_department', 'company_code'),
+      // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_account', 'financial_account_code'),
     ])
       .then(results => {
         this.data.userRoles = results[1];
@@ -41,11 +44,13 @@ module.exports = class DeptUploadController extends UploadController {
           department_codes: [], //results[3], //todo: fix this postgres down hack.
           company_codes: [] //results[4]
         };
+        this.data.glAccounts = [62346];// results[5];
       })
   }
 
   validateRow1(row) {
     this.temp = new DeptUploadDeptTemplate(row);
+    this.sheet1SubmeasureNames.push(row.submeasureName);
     return Promise.all([
       this.getSubmeasure(),
       this.validateSubmeasureName(),
@@ -63,35 +68,22 @@ module.exports = class DeptUploadController extends UploadController {
   }
 
   validateRow2(row) {
-    return Promise.resolve();
-/*
     this.temp = new DeptUploadExludeAcctTemplate(row);
+    this.sheet1SubmeasureNames = _.sortBy(_.uniq(this.sheet1SubmeasureNames, _.identity))
     return Promise.all([
       this.getSubmeasure(),
       this.validateSubmeasureName(),
       this.lookForErrors()
     ])
       .then(() => Promise.all([
-        this.validateMeasureAccess(),
-        this.validateSubmeasureCanManualUpload(),
-        this.validateCanDollarUpload(),
-        this.lookForErrors()
-      ]))
-      .then(() => Promise.all([
-        this.validateNodeValue(),
-        this.validateInputSalesValue(),
-        this.validateGrossUnbilledAccruedRevenueFlag(),
-        this.validateInputLegalEntityValue(),
-        this.validateInputBusinessEntityValue(),
-        this.validateSCMSSegment(),
-        this.validateAmount(),
-        this.validateRevenueClassification(),
+        this.validateSubmeasureNameInSheet1(),
+        this.validateGlAccount(),
         this.lookForErrors()
       ]));
-*/
   }
 
   validate() {
+
     return Promise.resolve();
   }
 
@@ -120,14 +112,36 @@ module.exports = class DeptUploadController extends UploadController {
       let deptCode = arr[1];
       let companyCode = arr[2];
       if (this.notExists(this.data.department.department_codes, deptCode)) {
-        this.addError(this.PropNames.nodeValue, 'Invalid department code',  deptCode);
+        this.addError(this.PropNames.nodeValue, 'Invalid department code', deptCode);
       }
       if (this.notExists(this.data.department.company_codes, companyCode)) {
-        this.addError(this.PropNames.nodeValue, 'Invalid company code',  companyCode);
+        this.addError(this.PropNames.nodeValue, 'Invalid company code', companyCode);
       }
     }
     return Promise.resolve();
   }
+
+  validateSubmeasureNameInSheet1() {
+    if (_.sortedIndexOf(this.sheet1SubmeasureNames, this.temp.submeasureName) === -1) {
+      this.addError(this.PropNames.submeasureName, 'No matching submeasure in sheet1', this.temp.submeasureName);
+    }
+    return Promise.resolve();
+  }
+
+  validateGlAccount() {
+    const re = /^6\d{4}$/;
+    const glAccount = this.temp.glAccount;
+
+    if (!glAccount) {
+      this.addErrorRequired(this.PropNames.glAccount);
+    } else if (!re.test(this.temp.glAccount)) {
+      this.addErrorInvalid(this.PropNames.glAccount, this.temp.glAccount);
+    } else if (this.notExists(this.data.glAccounts, glAccount)) {
+      this.addErrorInvalid(this.PropNames.glAccount, glAccount);
+    }
+    return Promise.resolve();
+  }
+
 
 }
 

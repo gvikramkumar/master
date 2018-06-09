@@ -32,10 +32,11 @@ module.exports = class UploadController {
       return;
     }
 
-    let chain = this.getValidationAndImportData()
+    this.getValidationAndImportData()
       .then(() => this.validateRows(1, this.rows1))
       .then(() => this.validateRows(2, this.rows2))
-      .then(() => this.validateOther()
+      .then(() => this.validateOther())
+      .then(() => this.lookForTotalErrors())
       .then(() => this.importRows())
       .then(() => {
         this.sendSuccessEmail();
@@ -176,7 +177,7 @@ module.exports = class UploadController {
       } else {
         body += '<br><br>';
       }
-      body += '<div style="font-size:18px;">' + key + '</div><hr><table>';
+      body += '<div style="font-size:18px;">' + key + '</div><hr style="width: 960px;text-align:left;"><table>';
       val.forEach(err => {
         if (err.property) {
           let append = `<tr><td style="width: 300px; margin-right: 30px">${err.property}:</td>
@@ -250,7 +251,10 @@ module.exports = class UploadController {
   }
 
   notExists(values, value) {
-    return _.sortedIndexOf(values, value.toUpperCase()) === -1;
+    if (typeof value === 'string') {
+      value = value.toUpperCase();
+    }
+    return _.sortedIndexOf(values, value) === -1;
   }
 
   validateNumber(prop, val, required) {
@@ -291,7 +295,6 @@ module.exports = class UploadController {
     // need to check this with cached data
     return Promise.resolve();
   }
-
 
 
 }

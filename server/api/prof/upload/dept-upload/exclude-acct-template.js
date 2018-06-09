@@ -4,7 +4,7 @@ module.exports = class DeptUploadExludeAcctTemplate {
 
   constructor(row) {
     this.submeasureName = row[0];
-    this.glAccount = row[1];
+    this.glAccount = Number(row[1]);
 
     util.trimStringProperties(this);
   }

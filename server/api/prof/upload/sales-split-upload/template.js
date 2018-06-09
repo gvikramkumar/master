@@ -6,7 +6,7 @@ module.exports = class SalesSplitUploadTemplate {
     this.accountId = row[0];
     this.companyCode = row[1];
     this.salesTerritoryCode = row[2];
-    this.splitPercentage = row[3];
+    this.splitPercentage = Number(row[3]);
 
     util.trimStringProperties(this);
   }
