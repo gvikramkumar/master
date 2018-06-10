@@ -1,6 +1,5 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {ProgressService} from "./services/progress.service";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {SpinnerInterceptor} from "./interceptors/spinner.interceptor";
 import {TimingInterceptor} from "./interceptors/timing.interceptor";
@@ -30,7 +29,7 @@ import {DollarUploadService} from '../profitability/services/dollar-upload.servi
   exports: [
     HttpClientModule
   ],
-  providers: [InitializationGuard, Init1, Init2, Init3, Init4, Init5, ProgressService,
+  providers: [InitializationGuard, Init1, Init2, Init3, Init4, Init5,
     {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

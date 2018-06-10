@@ -5,12 +5,12 @@ import {
   HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,
   HttpResponse
 } from '@angular/common/http';
-import {ProgressService} from '../services/progress.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ErrorModalComponent} from '../../shared/dialogs/error-modal/error-modal.component';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {environment} from '../../../environments/environment';
+import {Store} from '../../store/store';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -22,7 +22,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     // {status: 404, methods: ['GET', 'POST'], url: new RegExp(`^${environment.apiUrl}api/login`)},
   ];
 
-  constructor(private progressService: ProgressService, public dialog: MatDialog, private router: Router) {
+  constructor(private store: Store, public dialog: MatDialog, private router: Router) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -32,7 +32,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         tap(event => {
         }),
         catchError(resp => {
-          this.progressService.hideProgressBar();
+          this.store.showSpinner = false;
 
           const error = resp.error;
           let err;

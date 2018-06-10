@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import {environment} from '../../../../environments/environment';
 import {ToastService} from '../../../core/services/toast.service';
 import {UtilService} from '../../../core/services/util.service';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
 const apiUrl = environment.apiUrl;
 
@@ -61,7 +61,8 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     const file = fileInput.files[0];
     const formData: FormData = new FormData();
     formData.append('fileUploadField', file, file.name);
-    const options = {headers: {Accept: 'application/json'}};
+    const params = new HttpParams().set('showSpinner', 'true')
+    const options = {headers: {Accept: 'application/json'}, params};
     const url = `${apiUrl}/api/prof/upload/${this.uploadType.type}`;
     this.httpClient.post<{status: string, numRows?: number}>(url, formData, options)
       .subscribe((result: UploadResults) => {

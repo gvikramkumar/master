@@ -6,7 +6,6 @@ import {ForbiddenNameValidator} from './validators/forbidden-name.validator';
 import {MinValidator} from './validators/min.validator';
 import {MaxValidator} from './validators/max.validator';
 import {MaterialIndexModule} from './material-index/material-index.module';
-import {ProgressComponent} from './components/progress/progress.component';
 import {ErrorModalComponent} from './dialogs/error-modal/error-modal.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {NotImplementedComponent} from './dialogs/not-implemented/not-implemented.component';
@@ -41,7 +40,6 @@ import {AuthDirective} from './directives/auth.directive';
     ForbiddenNameValidator,
     MinValidator,
     MaxValidator,
-    ProgressComponent,
     ErrorModalComponent,
     NotImplementedComponent,
     TrimInputValueAccessor,
@@ -53,7 +51,6 @@ import {AuthDirective} from './directives/auth.directive';
     ForbiddenNameValidator,
     MinValidator,
     MaxValidator,
-    ProgressComponent,
     ErrorModalComponent,
     NotImplementedComponent,
     TrimInputValueAccessor,
