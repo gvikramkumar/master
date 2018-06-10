@@ -13,7 +13,6 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   constructor() {
     super(repo);
     this.uploadName = 'Dollar Upload';
-    this.rowColumnCount = 10;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
@@ -94,7 +93,7 @@ module.exports = class DollarUploadController extends InputFilterLevelUploadCont
   }
 
   validateAmount() {
-    if (this.validateNumber(this.PropNames.amount, this.temp.amount, true)) {
+    if (this.validateNumberValue(this.PropNames.amount, this.temp.amount, true)) {
       this.temp.amount = Number(this.temp.amount);
     }
     return Promise.resolve();

@@ -8,7 +8,7 @@ const schema = new mg.Schema(
     fiscalMonth: {type: Number, required: true},
     accountId: {type: String, required: true},
     companyCode: String,
-    subAccountCode: {type: String, required: true},
+    subaccountCode: {type: String, required: true},
     salesTerritoryCode: {type: String, required: true},
     splitPercentage: {type: String, required: true},
     createdBy: String,

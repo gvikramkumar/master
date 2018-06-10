@@ -10,7 +10,6 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
   constructor() {
     super(repo);
     this.uploadName = 'Mapping Upload';
-    this.rowColumnCount = 7;
 
     this.PropNames = {
       submeasureName: 'Sub Measure Name',
@@ -70,7 +69,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
 
 
   validatePercentage() {
-    if (this.validateNumber(this.PropNames.percentage, this.temp.percentage, true)) {
+    if (this.validatePercentageValue((this.PropNames.percentage, this.temp.percentage, true))) {
       this.temp.percentage = Number(this.temp.percentage);
     }
     return Promise.resolve();

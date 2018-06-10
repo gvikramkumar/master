@@ -3,9 +3,14 @@ const xlsx = require('node-xlsx'),
   ApiError = require('../common/api-error'),
   _ = require('lodash'),
   mail = require('../common/mail'),
-  OpenPeriodRepo = require('../../api/common/open-period/repo');
+  OpenPeriodRepo = require('../../api/common/open-period/repo'),
+  UserRoleRepo = require('../database/repos/user-role-repo'),
+  SubmeasureRepo = require('../../api/common/submeasure/repo');
+
 
 const openPeriodRepo = new OpenPeriodRepo();
+const userRoleRepo = new UserRoleRepo();
+const submeasureRepo = new SubmeasureRepo();
 
 module.exports = class UploadController {
 
@@ -20,32 +25,26 @@ module.exports = class UploadController {
     this.req = req;
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
-    this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 1);
-    if (this.numSheets === 2) {
-      this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 1);
+    this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 0);
+    this.rows2 = [];
+    if (this.hasTwoSheets) {
+      this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 0);
     }
     this.totalErrors = {};
     this.hasTotalErrors = false;
-    if (this.rows1.length < 1) {
+    if (this.rows1.length === 0) {
       next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
       return;
-    } else if (!(this.rowColumnCount === Object.keys(this.rows1[0]).length)) {
-      next(new ApiError(`Incorrect column count for ${this.uploadName}. Are you sending up the correct template?`, null, 400));
-      return;
     }
 
-    let chain = this.getValidationAndImportData()
+    this.getValidationAndImportData()
       .then(() => this.validateRows(1, this.rows1))
-      .then(() => this.lookForTotalErrors());
-
-    if (this.numSheets === 2) {
-      chain = chain.then(() => this.validateRows(2, this.rows2))
-        .then(() => this.lookForTotalErrors());
-    }
-
-    chain = chain.then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
-      .then(() => this.importRows())
+      .then(() => this.validateRows(2, this.rows2))
+      .then(() => this.lookForTotalErrors())
+      .then(() => this.validateOther())
+      .then(() => this.lookForTotalErrors())
+      .then(() => this.importRows(req.user.id))
       .then(() => {
         this.sendSuccessEmail();
         res.send({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
@@ -69,6 +68,20 @@ module.exports = class UploadController {
       });
   }
 
+  getValidationAndImportData() {
+    return Promise.all([
+      openPeriodRepo.getOne(),
+      userRoleRepo.getRolesByUserId(),
+      submeasureRepo.getMany()
+    ])
+      .then(results => {
+        this.fiscalMonth = results[0].fiscalMonth;
+        this.data.userRoles = results[1];
+        this.data.submeasures = results[2];
+      })
+
+  }
+
   validateRows(sheet, rows) {
     let chain = Promise.resolve();
     rows.forEach((row, idx) => {
@@ -84,7 +97,13 @@ module.exports = class UploadController {
     return this['validateRow' + sheet](row)
       .catch(err => {
         if (err.name === this.UploadValidationError) {
-          this.totalErrors['Row ' + this.rowNum] = err.data;
+          let key;
+          if (this.hasTwoSheets) {
+            key = `Sheet ${sheet} - Row ${this.rowNum}`;
+          } else {
+            key = `Row ${this.rowNum}`;
+          }
+          this.totalErrors[key] = err.data;
           this.hasTotalErrors = true;
           if (Object.keys(this.totalErrors).length > 99) {
             return Promise.reject(err); // send validation email
@@ -95,6 +114,8 @@ module.exports = class UploadController {
       })
   }
 
+  // this is different from rows, rows will title per row with an error array: {error} or {property, error, value?}
+  // this will title via error message and display (error} or {property, error, value?} from error array
   validateOther() {
     this.errors = [];
 
@@ -109,30 +130,29 @@ module.exports = class UploadController {
       })
   }
 
-  importRows() {
+  importRows(userId) {
     return this.getImportArray()
-      .then(imports => this.repo.addManyTransaction(imports))
+      .then(imports => this.repo.addManyTransaction(imports, userId))
   }
 
-  lookForErrors() {
+  // message is only used by validateOther where it's used to title the error list
+  // validateRows will add "Row X" instead
+  // this is our break out of the validateRow promise chain, call this to get out if no reason to continue
+  // say no submeasure, then can't continue submeasure based validations
+  lookForErrors(message) {
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, null, _.sortBy(this.errors, 'property')));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, message, _.sortBy(this.errors, 'property')));
     }
     return Promise.resolve();
   }
 
+  // this is out break out of upload promise chain. If we have errors in sheet1, this could mess
+  // up later validation in sheet2 or validate, so we break out
   lookForTotalErrors() {
     if (this.hasTotalErrors) {
       return Promise.reject(new NamedApiError(this.UploadValidationError));
     }
     return Promise.resolve();
-  }
-
-  getValidationAndImportData() {
-    return Promise.all([
-      openPeriodRepo.getOne()
-        .then(doc => this.fiscalMonth = doc.fiscalMonth)
-    ]);
   }
 
   sendEmail(title, body) {
@@ -179,7 +199,7 @@ module.exports = class UploadController {
       } else {
         body += '<br><br>';
       }
-      body += '<div style="font-size:18px;">' + key + '</div><hr><table>';
+      body += '<div style="font-size:18px;">' + key + '</div><hr style="width: 960px;text-align:left;"><table>';
       val.forEach(err => {
         if (err.property) {
           let append = `<tr><td style="width: 300px; margin-right: 30px">${err.property}:</td>
@@ -253,15 +273,28 @@ module.exports = class UploadController {
   }
 
   notExists(values, value) {
-    return _.sortedIndexOf(values, value.toUpperCase()) === -1;
+    if (typeof value === 'string') {
+      value = value.toUpperCase();
+    }
+    return _.sortedIndexOf(values, value) === -1;
   }
 
-  validateNumber(prop, val, required) {
+  validateNumberValue(prop, val, required) {
     if (required && (val === undefined || val === '')) {
       this.addErrorRequired(prop);
       return false;
     } else if (Number.isNaN(Number(val))) {
       this.addError(prop, 'Not a number', val);
+      return false;
+    }
+    return true;
+  }
+
+  validatePercentageValue(prop, val, required) {
+    if (!this.validateNumberValue(prop, val, required)) {
+      return false;
+    } else if (!(Number(val) <= 1.0)) {
+      this.addError(prop, 'Not a valid percentage, should be <= 1', val);
       return false;
     }
     return true;
@@ -295,6 +328,14 @@ module.exports = class UploadController {
     return Promise.resolve();
   }
 
+  validateTest() {
+    if (true) {
+      this.addErrorMessageOnly(`Sub Measure doesn't allow department upload`);
+      this.addError('Some Prop', `Sub Measure doesn't allow department upload`);
+      this.addError('Some Prop', `Sub Measure doesn't allow department upload`, 'Some val');
+    }
+    return Promise.resolve();
+  }
 
 
 }
