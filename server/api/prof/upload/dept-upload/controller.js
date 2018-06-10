@@ -32,8 +32,6 @@ module.exports = class DeptUploadController extends UploadController {
     this.data = {};
     return Promise.all([
       super.getValidationAndImportData(),
-      userRoleRepo.getRolesByUserId(),
-      submeasureRepo.getMany()
       // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_department', 'department_code'),
       // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_department', 'company_code'),
       // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_account', 'financial_account_code'),
@@ -151,7 +149,7 @@ module.exports = class DeptUploadController extends UploadController {
     if (!nodeValue) {
       this.addErrorRequired(this.PropNames.nodeValue);
     } else if (!re.test(this.temp.nodeValue)) {
-      this.addErrorInvalid(this.PropNames.nodeValue, this.temp.nodeValue);
+      this.addErrorInvalid(this.PropNames.nodeValue, this.temp.nodeValue, 'Number string: XXX_XXXXXX');
     } else {
       const arr = this.temp.nodeValue.match(re);
       let deptCode = Number(arr[1]);
@@ -180,7 +178,7 @@ module.exports = class DeptUploadController extends UploadController {
     if (!glAccount) {
       this.addErrorRequired(this.PropNames.glAccount);
     } else if (!re.test(this.temp.glAccount)) {
-      this.addErrorInvalid(this.PropNames.glAccount, this.temp.glAccount);
+      this.addErrorInvalid(this.PropNames.glAccount, this.temp.glAccount, 'Number 6XXXX');
     } else if (this.notExists(this.data.glAccounts, glAccount)) {
       this.addErrorInvalid(this.PropNames.glAccount, glAccount);
     }

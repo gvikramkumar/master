@@ -3,9 +3,14 @@ const xlsx = require('node-xlsx'),
   ApiError = require('../common/api-error'),
   _ = require('lodash'),
   mail = require('../common/mail'),
-  OpenPeriodRepo = require('../../api/common/open-period/repo');
+  OpenPeriodRepo = require('../../api/common/open-period/repo'),
+  UserRoleRepo = require('../database/repos/user-role-repo'),
+  SubmeasureRepo = require('../../api/common/submeasure/repo');
+
 
 const openPeriodRepo = new OpenPeriodRepo();
+const userRoleRepo = new UserRoleRepo();
+const submeasureRepo = new SubmeasureRepo();
 
 module.exports = class UploadController {
 
@@ -61,6 +66,20 @@ module.exports = class UploadController {
           next(_err);
         }
       });
+  }
+
+  getValidationAndImportData() {
+    return Promise.all([
+      openPeriodRepo.getOne(),
+      userRoleRepo.getRolesByUserId(),
+      submeasureRepo.getMany()
+    ])
+      .then(results => {
+        this.fiscalMonth = results[0].fiscalMonth;
+        this.data.userRoles = results[1];
+        this.data.submeasures = results[2];
+      })
+
   }
 
   validateRows(sheet, rows) {
@@ -134,13 +153,6 @@ module.exports = class UploadController {
       return Promise.reject(new NamedApiError(this.UploadValidationError));
     }
     return Promise.resolve();
-  }
-
-  getValidationAndImportData() {
-    return Promise.all([
-      openPeriodRepo.getOne()
-        .then(doc => this.fiscalMonth = doc.fiscalMonth)
-    ]);
   }
 
   sendEmail(title, body) {
@@ -282,7 +294,7 @@ module.exports = class UploadController {
     if (!this.validateNumberValue(prop, val, required)) {
       return false;
     } else if (!(Number(val) <= 1.0)) {
-      this.addError(prop, 'Not a valid percentage', val);
+      this.addError(prop, 'Not a valid percentage, should be <= 1', val);
       return false;
     }
     return true;

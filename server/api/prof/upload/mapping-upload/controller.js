@@ -69,7 +69,7 @@ module.exports = class MappingUploadController extends InputFilterLevelUploadCon
 
 
   validatePercentage() {
-    if (this.validateNumberValue(this.PropNames.percentage, this.temp.percentage, true)) {
+    if (this.validatePercentageValue((this.PropNames.percentage, this.temp.percentage, true))) {
       this.temp.percentage = Number(this.temp.percentage);
     }
     return Promise.resolve();

@@ -131,7 +131,7 @@ module.exports = class RepoBase {
     })
     return this.addMany(docs, userId)
       .catch(err => {
-        if (err.result.nInserted > 0) {
+        if (err.result && err.result.nInserted > 0) {
           return this.Model.deleteMany({transactionId: transId})
             .then(() => Promise.reject(err))
         }
