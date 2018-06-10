@@ -22,6 +22,7 @@ export class Store extends StoreBase {
   leftNavClosed = false;
   initialBreakpoint: string;
   modules = [];
+  showSpinner = false;
 
   authenticated$ = new BehaviorSubject<boolean>(this.authenticated);
   subAuthenticated = this.authenticated$.subscribe.bind(this.authenticated$);

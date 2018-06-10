@@ -5,7 +5,8 @@ const xlsx = require('node-xlsx'),
   mail = require('../common/mail'),
   OpenPeriodRepo = require('../../api/common/open-period/repo'),
   UserRoleRepo = require('../database/repos/user-role-repo'),
-  SubmeasureRepo = require('../../api/common/submeasure/repo');
+  SubmeasureRepo = require('../../api/common/submeasure/repo'),
+  Q = require('q');
 
 
 const openPeriodRepo = new OpenPeriodRepo();
@@ -38,6 +39,7 @@ module.exports = class UploadController {
     }
 
     this.getValidationAndImportData()
+      // .then(() => Q().delay(3000))
       .then(() => this.validateRows(1, this.rows1))
       .then(() => this.lookForTotalErrors())
       .then(() => this.validateRows(2, this.rows2))

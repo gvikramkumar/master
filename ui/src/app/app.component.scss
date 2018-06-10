@@ -1,0 +1,12 @@
+
+// current cui-spinner has garbage characters in it that extend to the right, we can get around it by
+// setting width, justify-content:start and overflow:hidden for now
+cui-spinner {
+  position: absolute;
+  left: 20px;
+  top: 23px;
+  width: 64px;
+  height: 64px;
+  justify-content: start !important;
+  overflow: hidden;
+}
