@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {ModelBase} from '../../store/models/model-base';
-import {UtilService} from '../services/common/util';
+import {UtilService} from '../services/util.service';
 const apiUrl = environment.apiUrl;
 
 export class RestBase<T extends ModelBase> {
@@ -73,8 +73,8 @@ export class RestBase<T extends ModelBase> {
   // same as getMany(params) just uses POST body instead of querystrings. The post body uses
   // bodyParser.urlEncoded extended version so can accept objects as well. Remains to be tested, but
   // could possibly be used to project via mongos's {prop1: 1, prop2: 1} syntax
-  queryPost(data) {
-    return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}?queryPost=true`, data);
+  queryPost(params) {
+    return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}?queryPost=true`, params);
   }
 
   add(data) {

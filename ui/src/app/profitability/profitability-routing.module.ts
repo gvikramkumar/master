@@ -10,6 +10,7 @@ import {BusinessUploadComponent} from './business-upload/business-upload/busines
 import {MainComponent} from '../shared/components/main/main.component';
 import {RuleManagementAssignComponent} from './rule-management/rule-management-assign/rule-management-assign.component';
 import {AuthorizationGuard} from '../core/guards/authorization.guard';
+import {ReportsComponent} from "./reports/reports/reports.component";
 
 const routes: Routes = [
   {
@@ -122,6 +123,18 @@ const routes: Routes = [
           breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Business Upload'}]
         }
       },
+      {
+        path: 'reports', component: ReportsComponent,
+        canActivate: [AuthorizationGuard],
+        data: {
+          authorization: 'pft-bu:access',
+          hero: {
+            title: 'Profitability: Reports',
+            desc: 'Allow users to download a report'
+          },
+          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Report'}]
+        },
+      }
     ]
   }
 ];

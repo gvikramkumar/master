@@ -4,6 +4,9 @@ const {Duplex} = require('stream'),
   ApiError = require('./api-error');
 
 module.exports = {
+  getMemoryUsage,
+  cleanCsv,
+  cleanCsvArr,
   objToString,
   convertJsonToCsv,
   getDateRangeFromFiscalYearMo,
@@ -11,6 +14,21 @@ module.exports = {
   bufferToStream,
   checkParams,
   setSchemaAdditions
+}
+
+function getMemoryUsage() {
+  const obj = process.memoryUsage();
+  return _.forEach(obj, (val, key) => obj[key] = obj[key]/1000000);
+}
+
+// clear out whitespace
+function cleanCsv(csv) {
+  return csv.split(',').map(x => x.trim()).join(',');
+}
+
+// clear out whitespace
+function cleanCsvArr(csv) {
+  return csv.split(',').map(x => x.trim());
 }
 
 function convertJsonToCsv(docs, props) {

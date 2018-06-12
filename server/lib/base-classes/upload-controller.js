@@ -1,24 +1,21 @@
-const ControllerBase = require('./controller-base'),
-  xlsx = require('node-xlsx'),
+const xlsx = require('node-xlsx'),
   NamedApiError = require('../common/named-api-error'),
   ApiError = require('../common/api-error'),
   _ = require('lodash'),
   mail = require('../common/mail'),
   OpenPeriodRepo = require('../../api/common/open-period/repo');
 
-
-
 const UploadValidationError = 'UploadValidationError';
 const openPeriodRepo = new OpenPeriodRepo();
 
-module.exports = class UploadController extends ControllerBase {
+module.exports = class UploadController {
 
   constructor(repo) {
-    super(repo);
+    this.repo = repo;
   }
 
   upload(req, res, next) {
-    // this.startTime = Date.now();
+    this.startUpload = Date.now();
     this.req = req;
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
@@ -34,6 +31,7 @@ module.exports = class UploadController extends ControllerBase {
 
     this.getValidationAndImportData()
       .then(() => {
+        console.log('done getting data', Date.now() - this.startUpload);
         return this.validateRows()
           .then(() => {
             if (this.hasTotalErrors) {
@@ -42,10 +40,8 @@ module.exports = class UploadController extends ControllerBase {
           })
       })
       .then(() => this.importRows())
-      // .then(() => console.log('>>>>>>>>> ms duration', Date.now() - this.startTime))
       .then(() => this.sendSuccessEmail())
       .catch(err => {
-        // console.log('>>>>>>>>> ms duration', Date.now() - this.startTime)
         if (err && err.name === UploadValidationError) {
           this.sendValidationEmail();
         } else {
@@ -56,8 +52,13 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   validateRows() {
-    this.rows.forEach((row, idx) => {
-      this.validateRow(row, idx + 1);
+    _.forEach(this.rows, (row, idx) => {
+      this.validateRow(row, idx + 6);
+      // todo: revisit this if we send out spreadsheet of errors instead of email
+      // currently we're emailing the errors, if we get thousands, it messes up outlook so stop at 100 rows
+      if (this.hasTotalErrors && Object.keys(this.totalErrors).length > 99) {
+        return false;// break out of forEach
+      }
     });
     return Promise.resolve();
   }
@@ -122,7 +123,8 @@ module.exports = class UploadController extends ControllerBase {
   }
 
   buildSuccessEmailBody() {
-    return `<div>${this.rows.length} records successfully uploaded.</div>`
+    const duration = Math.round((Date.now() - this.startUpload)/1000);
+    return `<div>${this.rows.length} records successfully uploaded in ${duration} seconds.</div>`
   }
 
   buildErrorEmailBody(err) {
@@ -150,7 +152,7 @@ module.exports = class UploadController extends ControllerBase {
       } else {
         body += '<br><br>';
       }
-      body += '<div style="font-size:18px;">' + key + ' Errors</div><hr><table>';
+      body += '<div style="font-size:18px;">' + key + '</div><hr><table>';
       val.forEach(err => {
         if (err.property) {
           let append = `<tr><td style="width: 300px; margin-right: 30px">${err.property}:</td>

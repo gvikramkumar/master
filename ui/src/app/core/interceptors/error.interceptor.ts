@@ -5,7 +5,7 @@ import {
   HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,
   HttpResponse
 } from '@angular/common/http';
-import {ProgressService} from '../services/common/progress.service';
+import {ProgressService} from '../services/progress.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ErrorModalComponent} from '../../shared/dialogs/error-modal/error-modal.component';
 import {Router} from '@angular/router';
