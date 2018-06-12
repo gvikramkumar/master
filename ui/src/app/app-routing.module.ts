@@ -19,10 +19,10 @@ const routes: Routes = [
     canActivate: [InitializationGuard, AuthorizationGuard]
   },
   {
-    path: 'pft',
+    path: 'prof',
     loadChildren: 'app/profitability/profitability.module#ProfitabilityModule',
     data: {
-      authorization: 'pft:access'
+      authorization: 'prof:access'
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },

@@ -31,11 +31,13 @@ const schema = new mg.Schema(
       discountFlag: {type: String, enum: ['Y', 'N']},
       approveFlag: {type: String, enum: ['Y', 'N']},
       status: {type: String, enum: ['A']},
-      manualMapping: {type: String, enum: ['Y', 'N']}
+      manualMapping: {type: String, enum: ['Y', 'N']},
+      expenseSSOT: {type: String, enum: ['Y', 'N']},
+      manualMix: {type: String, enum: ['Y', 'N']}
     },
     rules: [String]
   },
-  {collection: 'submeasure'}
+  {collection: 'dfa_submeasure'}
 );
 
 module.exports = class SubmeasureRepo extends RepoBase {

@@ -24,7 +24,7 @@ const routes: Routes = [
             path: '', component: SubmeasureComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'pft-sm:access',
+              authorization: 'prof-sm:access',
               hero: {
                 title: 'Profitability: Sub-Measures',
                 desc: 'Create and update sub-measures for profitability group'
@@ -36,24 +36,24 @@ const routes: Routes = [
             path: 'add', component: SubmeasureAddComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'pft-sm:manage',
+              authorization: 'prof-sm:manage',
               hero: {
                 title: 'Profitability: Add a New Sub-Measure',
                 desc: 'Add new sub-measure for Profitability group'
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/pft/submeasure'}, {label: 'Add New'}]
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/prof/submeasure'}, {label: 'Add New'}]
             }
           },
           {
             path: 'upload', component: SubmeasureUploadComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'pft-sm:manage',
+              authorization: 'prof-sm:manage',
               hero: {
                 title: 'Profitability: Upload a New Sub-Measure',
                 desc: 'Upload new sub-measure for Profitability group'
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/pft/submeasure'}, {label: 'Upload'}]
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/prof/submeasure'}, {label: 'Upload'}]
             }
           },
         ]
@@ -65,7 +65,7 @@ const routes: Routes = [
             path: '', component: RuleManagementComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'pft-rm:access',
+              authorization: 'prof-rm:access',
               hero: {
                 title: 'Profitability: Rule Management',
                 desc: 'Create and update rules for Profitability group'
@@ -77,36 +77,36 @@ const routes: Routes = [
             path: 'add', component: RuleManagementEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'pft-rm:manage',
+              authorization: 'prof-rm:manage',
               hero: {
                 title: 'Profitability: Create New Rule',
                 desc: 'Create a new rule for Profitability group'
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/pft/rule-management'}, {label: 'Create'}]
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/prof/rule-management'}, {label: 'Create'}]
             }
           },
           {
             path: 'edit/:id', component: RuleManagementEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'pft-rm:manage',
+              authorization: 'prof-rm:manage',
               hero: {
                 title: 'Profitability: Update Rule',
                 desc: 'Update the selected rule'
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/pft/rule-management'}, {label: 'Update'}]
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/prof/rule-management'}, {label: 'Update'}]
             }
           },
           {
             path: 'assign', component: RuleManagementAssignComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'pft-rm:manage',
+              authorization: 'prof-rm:manage',
               hero: {
                 title: 'Profitability: Assign Rule',
                 desc: 'Assign rule for Profitability group'
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/pft/rule-management'}, {label: 'Assign'}]
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/prof/rule-management'}, {label: 'Assign'}]
             }
           },
         ],
@@ -115,7 +115,7 @@ const routes: Routes = [
         path: 'business-upload', component: BusinessUploadComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'pft-bu:access',
+          authorization: 'prof-bu:access',
           hero: {
             title: 'Profitability: Business Uploads',
             desc: 'Perform bulk uploads'
@@ -127,7 +127,7 @@ const routes: Routes = [
         path: 'reports', component: ReportsComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'pft-bu:access',
+          authorization: 'prof-bu:access',
           hero: {
             title: 'Profitability: Reports',
             desc: 'Allow users to download a report'

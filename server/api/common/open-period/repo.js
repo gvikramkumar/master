@@ -11,7 +11,7 @@ const schema = new mg.Schema(
     updatedBy: String,
     updatedDate: Date
   },
-  {collection: 'open_period'}
+  {collection: 'dfa_open_period'}
 );
 
 module.exports = class OpenPeriodRepo extends RepoBase {

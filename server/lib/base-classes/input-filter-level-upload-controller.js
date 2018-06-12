@@ -1,20 +1,14 @@
 const UploadController = require('./upload-controller'),
   PostgresRepo = require('../database/repos/postgres-repo'),
-  _ = require('lodash'),
-  SubmeasureRepo = require('../../api/common/submeasure/repo'),
-  UserRoleRepo = require('../database/repos/user-role-repo'),
   LookupRepo = require('../../api/common/lookup/repo');
 
 
-const userRoleRepo = new UserRoleRepo();
 const pgRepo = new PostgresRepo();
-const submeasureRepo = new SubmeasureRepo();
 const lookupRepo = new LookupRepo();
 
 module.exports = class InputFilterLevelUploadController extends UploadController {
   constructor(repo) {
     super(repo);
-    this.data = {};
   }
 
   // IMPORTANT: we use a lodash binary search on these values, so all values need to be upper case and
@@ -25,8 +19,6 @@ module.exports = class InputFilterLevelUploadController extends UploadController
   getValidationAndImportData() {
     return Promise.all([
       super.getValidationAndImportData(),
-      userRoleRepo.getRolesByUserId(),
-      submeasureRepo.getMany(),
       pgRepo.getSortedUpperListFromColumn('vw_fds_products', 'product_family_id'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_products', 'business_unit_id'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_products', 'technology_group_id'),
@@ -44,56 +36,27 @@ module.exports = class InputFilterLevelUploadController extends UploadController
       pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'sales_coverage_code')
     ])
       .then(results => {
-        this.data.userRoles = results[1];
-        this.data.submeasures = results[2];
         this.data.product = {
-          productFamilies: results[3],
-          businessUnits: results[4],
-          techGroups: results[5]
+          productFamilies: results[1],
+          businessUnits: results[2],
+          techGroups: results[3]
         };
         this.data.sales = {
-          level1s: results[6],
-          level2s: results[7],
-          level3s: results[8],
-          level4s: results[9],
-          level5s: results[10],
-          level6s: results[11]
+          level1s: results[4],
+          level2s: results[5],
+          level3s: results[6],
+          level4s: results[7],
+          level5s: results[8],
+          level6s: results[9]
         };
-        this.data.legalEntities = results[12];
+        this.data.legalEntities = results[10];
         this.data.businessEntity = {
-          internalBe: results[13],
-          internalSubBe: results[14]
+          internalBe: results[11],
+          internalSubBe: results[12]
         };
-        this.data.revClassifications = results[15];
-        this.data.scms = results[16];
+        this.data.revClassifications = results[13];
+        this.data.scms = results[14];
       })
-  }
-
-  getSubmeasure() {
-    this.submeasure = _.find(this.data.submeasures, {name: this.temp.submeasureName});
-    return Promise.resolve();
-  }
-
-  validateSubmeasureName() {
-    if (!this.temp.submeasureName) {
-      this.addErrorRequired(this.PropNames.submeasureName);
-    } else if (!this.submeasure) {
-      this.addError(this.PropNames.submeasureName, 'No Sub Measure exists by this name', this.temp.submeasureName);
-    }
-    return Promise.resolve();
-  }
-
-  validateMeasureAccess() {
-    // todo: requires onramp table, this is a temporary placeholder
-    /*
-        return userRoleRepo.userHasRole(this.req.user.id, this.submeasure.measureName)
-          .then(hasRole => {
-            if (!hasRole) {
-              this.addError('', 'Not authorized for this upload.');
-            }
-          });
-    */
-    // need to check this with cached data
   }
 
   validateInputProductValue() {
@@ -118,6 +81,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
   validateInputSalesValue() {
@@ -154,13 +118,6 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
-  }
-
-  validateGrossUnbilledAccruedRevenueFlag() {
-    if (!_.includes([undefined, 'Y', 'N'], this.temp.grossUnbilledAccruedRevenueFlag)) {
-      this.addErrorInvalid(this.PropNames.grossUnbilledAccruedRevenueFlag,
-        this.temp.grossUnbilledAccruedRevenueFlag, 'Y/N/NULL');
-    }
     return Promise.resolve();
   }
 
@@ -177,6 +134,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
   validateInputBusinessEntityValue() {
@@ -196,6 +154,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
   validateSCMSSegment() {
@@ -211,6 +170,7 @@ module.exports = class InputFilterLevelUploadController extends UploadController
         }
       }
     }
+    return Promise.resolve();
   }
 
 }

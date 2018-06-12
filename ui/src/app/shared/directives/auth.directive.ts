@@ -12,7 +12,7 @@ export class AuthDirective implements OnInit  {
 
   ngOnInit() {
     if (!this.store.user.isAuthorized(this.roles)) {
-      this.elem.nativeElement.classList.add('fin-auth-hide');
+      this.elem.nativeElement.classList.add('fin-hide');
     }
   }
 

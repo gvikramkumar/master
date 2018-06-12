@@ -34,30 +34,38 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   fiscalMonths: any;
   disableDownload = true;
 
-  reports = [
+  reports: any[] = [
     {
       type: 'dollar-upload', hasFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
       filename: 'manual_uploaded_data',
-      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Amount',
-      excelProperties: 'fiscalMonth, submeasureName, product, sales, amount'
+      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Amount',
+      excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, amount'
     },
     {
       type: 'mapping-upload', hasFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
       filename: 'manual_mapping_data',
-      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Percentage',
-      excelProperties: 'fiscalMonth, submeasureName, product, sales, percentage'
+      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Percentage',
+      excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, percentage'
     },
     {
-      type: 'product-hierarchy', hasFiscalMonth: false, text: 'Valid Product Hierarchy', disabled: false,
-      filename: 'product_hierarchy',
-      excelHeaders: 'Item Key, Product ID, Base Product ID, Goods or Service Type',
-      excelProperties: 'item_key, product_id, base_product_id, goods_or_service_type'
+      type: 'product-hierarchy', text: 'Valid Product Hierarchy', disabled: false,
+      filename: 'product_hierarchy.csv',
+      excelHeaders: 'Technology Group, Business Unit, Product Family',
+      excelProperties: 'technology_group_id, business_unit_id, product_family_id'
     },
     {
-      type: 'sales-hierarchy', hasFiscalMonth: false, text: 'Valid Sales Hierarchy', disabled: false,
-      filename: 'sales_hierarchy',
-      excelHeaders: 'Sales Territory Key, l0 Name Code, l1 Name Code',
-      excelProperties: 'sales_territory_key, l0_sales_territory_name_code, l1_sales_territory_name_code'
+      type: 'sales-hierarchy', text: 'Valid Sales Hierarchy', disabled: false,
+      filename: 'sales_hierarchy.csv',
+      excelHeaders: 'Sales Territory 1, Sales Territory 2, Sales Territory 3, Sales Territory 4, ' +
+      'Sales Territory 5, Sales Territory 6',
+      excelProperties: 'l1_sales_territory_descr, l2_sales_territory_descr, l3_sales_territory_descr,' +
+      'l4_sales_territory_descr, l5_sales_territory_descr, l6_sales_territory_descr'
+    },
+    {
+      type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping Report', disabled: false,
+      filename: 'department_mapping_data',
+      excelHeaders: 'Sub-Measure Name, Department Code, Start Account Code, End Account Code',
+      excelProperties: 'submeasureName, departmentCode, startAccountCode, endAccountCode'
     }
   ];
   report = this.reports[0];
@@ -88,7 +96,11 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
-    this.disableDownload = true;
+    if (this.report.hasSubmeasure || this.report.hasFiscalMonth) {
+      this.disableDownload = true;
+    } else {
+      this.disableDownload = false;
+    }
   }
 
   measureSelected() {
@@ -130,23 +142,28 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   getFilename() {
     if (this.report.hasFiscalMonth) {
       return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${this.fiscalMonth}.csv`;
-    } else {
+    } else if (this.report.hasSubmeasure) {
       return this.report.filename + `_${_.snakeCase(this.submeasureName)}.csv`;
+    } else {
+      return this.report.filename;
     }
   }
 
   downloadReport() {
     const params = <ReportSettings>{
-      submeasureName: this.submeasureName,
       excelFilename: this.getFilename(),
       excelHeaders: this.report.excelHeaders,
       excelProperties: this.report.excelProperties
     };
 
+    if (this.report.hasSubmeasure || this.report.hasFiscalMonth) {
+      params.submeasureName = this.submeasureName;
+    }
+
     if (this.report.hasFiscalMonth) {
       params.fiscalMonth = this.fiscalMonth;
     }
-    const url = `${environment.apiUrl}/api/pft/report/${this.report.type}`;
+    const url = `${environment.apiUrl}/api/prof/report/${this.report.type}`;
     this.util.submitForm(url, params);
   }
 

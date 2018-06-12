@@ -13,7 +13,7 @@ const schema = new mg.Schema(
     updatedBy: String,
     updatedDate: Date
   },
-  {collection: 'measure'}
+  {collection: 'dfa_measure'}
 );
 
 module.exports = class MeasureRepo extends RepoBase {

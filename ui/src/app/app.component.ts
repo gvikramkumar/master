@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   title = 'fin-dfa';
   @ViewChild(CuiToastComponent) toast: CuiToastComponent;
 
-  constructor(private titleService: Title, private store: Store) {
+  constructor(private titleService: Title, public store: Store) {
   }
 
   public ngOnInit() {
