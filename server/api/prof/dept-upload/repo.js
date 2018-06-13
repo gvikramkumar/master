@@ -7,9 +7,9 @@ const schema = new mg.Schema(
     transactionId: {type: mg.SchemaTypes.ObjectId, required: true},
     submeasureName: {type: String, required: true},
     departmentCode: {type: String, required: true},
-    glAccount: Number, // todo: need to sort this out with arindam
-    startAccountCode: String,
-    endAccountCode: String,
+    glAccount: Number,
+    startAccountCode: {type: String, required: true},
+    endAccountCode: {type: String, required: true},
     createdBy: String,
     createdDate: Date,
     updatedBy: String,
