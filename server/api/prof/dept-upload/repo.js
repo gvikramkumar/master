@@ -8,8 +8,6 @@ const schema = new mg.Schema(
     submeasureName: {type: String, required: true},
     departmentCode: {type: String, required: true},
     glAccount: Number,
-    startAccountCode: {type: String, required: true},
-    endAccountCode: {type: String, required: true},
     createdBy: String,
     createdDate: Date,
     updatedBy: String,

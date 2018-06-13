@@ -133,8 +133,7 @@ db.lookup.insertMany([
 db.prof_department_acc_map.insertOne({
   submeasureName:"2 Tier Adjustment",
   departmentCode:"020070506",
-  startAccountCode:"60000",
-  endAccountCode:"69999"});
+  glAccount:"69999"});
 
 // sales-split-upload
 db.prof_sales_split_pct.insertOne({
