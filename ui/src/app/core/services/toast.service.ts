@@ -20,8 +20,12 @@ export class ToastService {
   constructor(private store: Store) {
   }
 
-  addToast(title, message, severity = ToastSeverity.info) {
-    this.store.toast.addToast(severity, title, message);
+  addPermToast(title, message, severity = ToastSeverity.info) {
+    this.store.permToast.addToast(severity, title, message);
+  }
+
+  addAutoHideToast(title, message, severity = ToastSeverity.info) {
+    this.store.autoHideToast.addToast(severity, title, message);
   }
 
 }

@@ -14,7 +14,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   @HostBinding('@.disabled') animationsDisabled = environment.disableAnimations;
   @HostBinding('class.notransition') transitionDisabled = environment.disableAnimations;
   title = 'fin-dfa';
-  @ViewChild(CuiToastComponent) toast: CuiToastComponent;
+  @ViewChild('permToast') permToast: CuiToastComponent;
+  @ViewChild('autoHideToast') autoHideToast: CuiToastComponent;
 
   constructor(private titleService: Title, public store: Store) {
   }
@@ -24,7 +25,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.store.toast = this.toast;
+    this.store.permToast = this.permToast;
+    this.store.autoHideToast = this.autoHideToast;
   }
 
   headerOptions = new CuiHeaderOptions({
