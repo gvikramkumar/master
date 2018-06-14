@@ -34,7 +34,8 @@ export class Store extends StoreBase {
   routeDataSub = this.routeData$.asObservable().subscribe.bind(this.routeData$);
   currentUrl$ = new BehaviorSubject('');
   currentUrlSub = this.currentUrl$.asObservable().subscribe.bind(this.currentUrl$);
-  toast: CuiToastComponent;
+  permToast: CuiToastComponent;
+  autoHideToast: CuiToastComponent;
 
   headerOptionsBase = new CuiHeaderOptions({
     "showBrandingLogo": true,
