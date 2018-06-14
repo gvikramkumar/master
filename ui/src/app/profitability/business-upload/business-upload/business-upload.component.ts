@@ -70,7 +70,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
         if (result.status === 'success') {
           this.toast.addToast(`${result.uploadName} - success`,
             `${result.rowCount} rows have been processed.`)
-        } else if (result.status === 'fail') {
+        } else if (result.status === 'failure') {
           this.toast.addToast(`${result.uploadName} - failure`,
             'Errors have been emailed to your email account.')
         }

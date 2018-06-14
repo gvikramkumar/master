@@ -54,7 +54,7 @@ module.exports = class UploadController {
       .catch(err => {
         if (err && err.name === this.UploadValidationError) {
           this.sendValidationEmail();
-          res.send({status: 'fail'});
+          res.send({status: 'failure', uploadName: this.uploadName});
         } else {
           const data = Object.assign({}, err);
           if (err.message) {
