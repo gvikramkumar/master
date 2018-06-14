@@ -3,14 +3,10 @@ const DeptUploadRepo = require('../../dept-upload/repo'),
   DeptUploadExludeAcctTemplate = require('./exclude-acct-template'),
   DeptUploadImport = require('./import'),
   UploadController = require('../../../../lib/base-classes/upload-controller'),
-  SubmeasureRepo = require('../../../../api/common/submeasure/repo'),
-  UserRoleRepo = require('../../../../lib/database/repos/user-role-repo'),
   _ = require('lodash');
 
 
 const repo = new DeptUploadRepo();
-const submeasureRepo = new SubmeasureRepo();
-const userRoleRepo = new UserRoleRepo();
 
 module.exports = class DeptUploadController extends UploadController {
 
@@ -37,11 +33,9 @@ module.exports = class DeptUploadController extends UploadController {
       // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_account', 'financial_account_code'),
     ])
       .then(results => {
-        this.data.userRoles = results[1];
-        this.data.submeasures = results[2];
         this.data.department = {
-          department_codes: [123], //results[3], //todo: fix this postgres down hack.
-          company_codes: [456789] //results[4]
+          department_codes: [111, 222], //results[3], //todo: fix this postgres down hack.
+          company_codes: [333333, 444444, ] //results[4]
         };
         this.data.glAccounts = [62345, 62346, 62347];// results[5];
       })

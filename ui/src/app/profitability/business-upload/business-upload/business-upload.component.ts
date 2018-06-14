@@ -68,11 +68,11 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
       .subscribe((result: UploadResults) => {
         fileInput.value = '';
         if (result.status === 'success') {
-          this.toast.addToast(result.uploadName,
-            `Upload succeeded. ${result.rowCount} rows have been processed.`)
-        } else if (result.status === 'fail') {
-          this.toast.addToast(result.uploadName,
-            'Upload failed. Errors have been emailed.')
+          this.toast.addToast(`${result.uploadName} - success`,
+            `${result.rowCount} rows have been processed.`)
+        } else if (result.status === 'failure') {
+          this.toast.addToast(`${result.uploadName} - failure`,
+            'Errors have been emailed to your email account.')
         }
 
       });

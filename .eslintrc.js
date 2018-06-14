@@ -1,15 +1,18 @@
 module.exports = {
   "env": {
     "es6": true,
-    "node": true
+    "node": true,
+    "jasmine": true
   },
   "parserOptions": {
     "ecmaVersion": 2018
   },
+  "globals": {
+  },
   "overrides": [
     {
       "files": ["server/**/*.js"],
-      "excludedFiles": ["database/**/*.js"],
+      "excludedFiles": ["database/**/*.js", "server/spec/**/*.js"],
       "rules": {
         "quotes": [2, "single"],
         "no-console": "warn",

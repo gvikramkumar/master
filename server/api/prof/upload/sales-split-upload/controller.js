@@ -2,9 +2,11 @@ const SalesSplitUploadRepo = require('../../sales-split-upload/repo'),
   SalesSplitUploadTemplate = require('./template'),
   SalesSplitUploadImport = require('./import'),
   _ = require('lodash'),
-  UploadController = require('../../../../lib/base-classes/upload-controller');
+  UploadController = require('../../../../lib/base-classes/upload-controller'),
+  PostgresRepo = require('../../../../lib/database/repos/postgres-repo');
 
 const repo = new SalesSplitUploadRepo();
+const pgRepo = new PostgresRepo();
 
 module.exports = class SalesSplitUploadController extends UploadController {
 
@@ -23,14 +25,14 @@ module.exports = class SalesSplitUploadController extends UploadController {
   getValidationAndImportData() {
     return Promise.all([
       super.getValidationAndImportData(),
-      // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_account', 'financial_account_code'),
-      // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_department', 'company_code'),
-      // pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'sales_territory_name_code')
+      pgRepo.getSortedUpperListFromColumn('vw_fds_financial_account', 'financial_account_code'),
+      pgRepo.getSortedUpperListFromColumn('vw_fds_financial_department', 'company_code'),
+      pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'sales_territory_name_code')
     ])
       .then(results => {
-        this.data.accountIds = ['123']; //results[1];
-        this.data.companyCodes = ['456']; //results[2];
-        this.data.salesTerritoryCodes = ['789']; // results[3];
+        this.data.accountIds = results[1];
+        this.data.companyCodes = results[2];
+        this.data.salesTerritoryCodes = results[3];
       })
   }
 
@@ -49,7 +51,7 @@ module.exports = class SalesSplitUploadController extends UploadController {
     return Promise.resolve();
   }
 
-  getSubaccountCodeDataFromUploadData() {
+  getSubaccountCodeDataFromUploadData(sales) {
     return Promise.resolve([]);
   }
 
@@ -61,7 +63,7 @@ module.exports = class SalesSplitUploadController extends UploadController {
     // have no idea what the query looks like and pg table doesn't exist yet
     this.getSubaccountCodeDataFromUploadData(sales)
       .then(subaccts => {
-        this.sales.forEach(sale => {
+        sales.forEach(sale => {
           _.sortBy(_.filter(subaccts, {
             accountId: sale.accountId,
             salesTerritoryCode: sale.salesTerritoryCode

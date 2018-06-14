@@ -25,6 +25,10 @@ if (process.env.NO_POSTGRES) {
     .then(() => {
       console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}`)
       return client;
+    })
+    .catch(err => {
+      console.error('failed to connect to postgres');
+      return Promise.reject(err);
     });
 }
 
