@@ -8,7 +8,6 @@ module.exports = class DeptUploadImport {
     if (glAccount) {
       this.glAccount = glAccount;
     }
-
     util.trimStringProperties(this);
   }
 

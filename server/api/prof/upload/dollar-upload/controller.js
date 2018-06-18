@@ -1,12 +1,10 @@
 const DollarUploadRepo = require('../../dollar-upload/repo'),
   DollarUploadTemplate = require('./template'),
   DollarUploadImport = require('./import'),
-  OpenPeriodRepo = require('../../../common/open-period/repo'),
   InputFilterLevelUploadController = require('../../../../lib/base-classes/input-filter-level-upload-controller'),
   _ = require('lodash');
 
 const repo = new DollarUploadRepo();
-const openPeriodRepo = new OpenPeriodRepo();
 
 module.exports = class DollarUploadController extends InputFilterLevelUploadController {
 

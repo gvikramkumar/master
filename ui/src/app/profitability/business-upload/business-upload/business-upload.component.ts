@@ -42,7 +42,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     public store: Store,
     private route: ActivatedRoute,
     private fsFileService: FsFileService,
-    private toast: ToastService) {
+    private toastService: ToastService) {
     super(store, route);
   }
 
@@ -64,18 +64,20 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     const params = new HttpParams().set('showSpinner', 'true')
     const options = {headers: {Accept: 'application/json'}, params};
     const url = `${apiUrl}/api/prof/upload/${this.uploadType.type}`;
-    this.httpClient.post<{status: string, numRows?: number}>(url, formData, options)
+    this.httpClient.post<{ status: string, numRows?: number }>(url, formData, options)
       .subscribe((result: UploadResults) => {
         fileInput.value = '';
+        let title;
+        let message;
         if (result.status === 'success') {
-          this.toast.addToast(result.uploadName,
-            `Upload succeeded. ${result.rowCount} rows have been processed.`)
-        } else if (result.status === 'fail') {
-          this.toast.addToast(result.uploadName,
-            'Upload failed. Errors have been emailed.')
+          title = `${result.uploadName} - success`;
+          message = `${result.rowCount} rows have been processed.`;
+        } else if (result.status === 'failure') {
+          title = `${result.uploadName} - failure`;
+          message = 'Errors have been emailed to your email account.';
         }
-
-      });
+        this.toastService.addPermToast(title, message);
+      })
   }
 
   getDownloadUri() {
