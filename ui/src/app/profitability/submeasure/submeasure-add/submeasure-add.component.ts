@@ -10,8 +10,11 @@ import {Store} from '../../../store/store';
 })
 export class SubmeasureAddComponent extends RoutingComponentBase implements OnInit {
 
+  ruleForms: number[] = [];
+
   constructor(private store: Store, private route: ActivatedRoute) {
     super(store, route);
+    this.ruleForms[0] = 0;
   }
 
   ngOnInit() {
@@ -22,6 +25,53 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
   myModel: string;
   reportingLevel1: string;
   reportingLevel2: string;
+
+  rules = [
+    {
+      "name": "rule1",
+      "value": 1,
+      "selected":null
+    },
+    {
+      "name": "rule2",
+      "value": 2,
+      "selected":null
+    },
+    {
+      "name": "rule3",
+      "value": 3,
+      "selected":null
+    },
+    {
+      "name": "rule4",
+      "value": 4,
+      "selected":null
+    },
+    {
+      "name": "rule5",
+      "value": 5,
+      "selected":null
+    },
+    {
+      "name": "rule6",
+      "value": 6,
+      "selected":null
+    }
+  ]
+
+  // ruleForms: number[];
+
+  ruleSelected() {
+
+  }
+
+  addRule() {
+    this.ruleForms.push(this.ruleForms.length);
+  }
+
+  removeRule() {
+    this.ruleForms.pop();
+  }
 
   measureName: string;
   measureNames = [

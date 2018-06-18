@@ -58,7 +58,11 @@
   <cui-input type="text" [(model)]="reportingLevel2" label="Reporting Level 2"></cui-input>
   <cui-input type="text" [(model)]="subMeasureName" label="Reporting Level 3"></cui-input>
   <br><br>
-  <cui-input type="text" [(model)]="associatedRule" label="Rule Association"></cui-input>
+  <div *ngFor="let ruleForm of ruleForms; let i = index;">
+    <cui-select [items]="rules" label="Associated Rule(s)" empty="true" (selectChange)="ruleSelected()"></cui-select>
+  </div>
+  <button type="button" (click)="addRule()">+</button>
+  <button type="button" (click)="removeRule()">-</button>
   <br><br>
   <button (click)="resetForm()">Reset</button><a routerLink=".."><button>Cancel</button></a><button>Next</button>
   <br>
