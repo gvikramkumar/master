@@ -61,8 +61,8 @@
   <div *ngFor="let ruleForm of ruleForms; let i = index;">
     <cui-select [items]="rules" label="Associated Rule(s)" empty="true" (selectChange)="ruleSelected()"></cui-select>
   </div>
-  <button type="button" (click)="addRule()">+</button>
-  <button type="button" (click)="removeRule()">-</button>
+  <button type="button" [hidden]="addRuleHidden" (click)="addRule()">+</button>
+  <button type="button" [hidden]="removeRuleHidden" (click)="removeRule()">-</button>
   <br><br>
   <button (click)="resetForm()">Reset</button><a routerLink=".."><button>Cancel</button></a><button>Next</button>
   <br>
