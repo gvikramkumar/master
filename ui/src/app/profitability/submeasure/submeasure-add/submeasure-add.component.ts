@@ -65,12 +65,36 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
 
   }
 
+  addRuleHidden: boolean = false;
+  removeRuleHidden: boolean = true;
+
   addRule() {
     this.ruleForms.push(this.ruleForms.length);
+    if (this.ruleForms.length >= 5) {
+      //add button should disappear
+      this.addRuleHidden = true;
+    } else {
+      this.addRuleHidden = false;
+    }
+
+    if (this.ruleForms.length > 1) {
+      this.removeRuleHidden = false;
+    }
+
   }
 
   removeRule() {
     this.ruleForms.pop();
+    if (this.ruleForms.length <= 1) {
+      //minus button should disappear
+      this.removeRuleHidden = true;
+    } else {
+      this.removeRuleHidden = false;
+    }
+
+    if (this.ruleForms.length < 5) {
+      this.addRuleHidden = false;
+    }
   }
 
   measureName: string;
