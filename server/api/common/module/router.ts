@@ -1,0 +1,12 @@
+import {Router} from 'express';
+import ModuleController from './controller';
+import {injector} from '../../../lib/common/inversify.config';
+
+const ctrl = injector.get(ModuleController);
+
+export default Router()
+  .get('/', ctrl.getMany.bind(ctrl))
+  .post('/', ctrl.handlePost.bind(ctrl))
+  .get('/:id', ctrl.getOne.bind(ctrl))
+  .put('/:id', ctrl.update.bind(ctrl))
+  .delete('/:id', ctrl.remove.bind(ctrl))

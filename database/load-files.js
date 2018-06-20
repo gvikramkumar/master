@@ -1,46 +1,56 @@
-const config = require('../server/config/get-config'),
-  fs = require('fs'),
-  mgConn = require('../server/lib/database/mongoose-conn');
+const fs = require('fs'),
+  mg = require('mongoose');
 
-mgConn.promise.then(({db, mongo}) => {
-  console.log('loading files...');
+const args = process.argv;
+const uri = `mongodb://${args[2]}:${args[3]}/${args[4]}`;
 
-  const gfs = new mongo.GridFSBucket(db);
-  const dirPath = 'files/business-upload/';
-  const meta = {directory: 'prof.bu', buFileType: 'template'};
-  const promises = [];
-  const buTemplates = [
-    {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload'},
-    {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload'},
-    {fileName: 'department_upload_template.xlsx', buUploadType: 'dept-upload'},
-    {fileName: 'sales_level_split_upload_template.xlsx', buUploadType: 'sales-split-upload'},
-    {fileName: 'product_classification_upload_template.xlsx', buUploadType: 'product-class-upload'}
-  ]
+mg.connect(uri)
+  .then(() => {
+    const mongo = mg.mongo;
+    const db = mg.connection.db;
 
-  buTemplates.forEach(template => {
-    const metadata = Object.assign({}, meta);
-    const fileName = template.fileName;
-    const contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    metadata.fileName = fileName;
-    metadata.buUploadType = template.buUploadType;
-    // console.log(fileName, metadata);
-    const promise = new Promise((resolve, reject) => {
-      fs.createReadStream(dirPath + fileName).pipe(gfs.openUploadStream(fileName, {metadata, contentType}))
-        .on('error', function (err) {
-          reject(err);
-        })
-        .on('finish', function () {
-          resolve();
-        });
-    });
-    promises.push(promise);
-  })
-  Promise.all(promises)
-    .then(() => {
-      console.log('>>>>>>>>> file upload complete');
-      process.exit(0);
+    console.log('loading files...');
+
+    const gfs = new mongo.GridFSBucket(db);
+    const dirPath = 'files/business-upload/';
+    const meta = {directory: 'prof.bu', buFileType: 'template'};
+    const promises = [];
+    const buTemplates = [
+      {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload'},
+      {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload'},
+      {fileName: 'department_upload_template.xlsx', buUploadType: 'dept-upload'},
+      {fileName: 'sales_level_split_upload_template.xlsx', buUploadType: 'sales-split-upload'},
+      {fileName: 'product_classification_upload_template.xlsx', buUploadType: 'product-class-upload'}
+    ]
+
+    buTemplates.forEach(template => {
+      const metadata = Object.assign({}, meta);
+      const fileName = template.fileName;
+      const contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      metadata.fileName = fileName;
+      metadata.buUploadType = template.buUploadType;
+      // console.log(fileName, metadata);
+      const promise = new Promise((resolve, reject) => {
+        fs.createReadStream(dirPath + fileName).pipe(gfs.openUploadStream(fileName, {metadata, contentType}))
+          .on('error', function (err) {
+            reject(err);
+          })
+          .on('finish', function () {
+            resolve();
+          });
+      });
+      promises.push(promise);
     })
-    .catch(err => console.error('file upload failure:', err));
+    Promise.all(promises)
+      .then(() => {
+        console.log('>>>>>>>>> file upload complete');
+        process.exit(0);
+      })
+      .catch(err => console.error('file upload failure:', err));
+  })
+  .catch(err => {
+    console.error(`mongoose connection error: ${uri}`, err);
+    return Promise.reject(err);
+  });
 
 
-})
