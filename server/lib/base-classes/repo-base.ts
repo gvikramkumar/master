@@ -5,7 +5,7 @@ import util from '../common/util';
 import {ApiError} from '../common/api-error';
 
 export default class RepoBase {
-  Model: any
+  protected Model: any
 
   constructor(public schema: Schema, modelName: string) {
     this.schema = schema;

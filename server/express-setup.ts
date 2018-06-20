@@ -90,7 +90,7 @@ export default function () {
   app.use('/api/prof/upload', uploadRouter);
 
 
-  app.use(express.static(path.resolve(__dirname, '../ui/dist')));
+  app.use(express.static(path.resolve(__dirname, '../../ui/dist')));
 
   app.get(['/', '/prof/*'], (req, res) => {
     console.log('>>>>>> served index.html');
