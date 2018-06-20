@@ -1,12 +1,17 @@
 import {pgc} from '../postgres-conn';
 import _config from '../../../config/get-config';
 import _ from 'lodash';
+import {injectable} from 'inversify';
 
 const config = _config.postgres;
-const db = pgc.pgdb;
+let db;
 
+@injectable()
 export default class PostgresRepo {
 
+  constructor() {
+    db = pgc.pgdb;
+  }
 
   getProductHierarchyReport() {
     return db.query(`

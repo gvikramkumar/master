@@ -1,4 +1,4 @@
-const util = require('../../../../lib/common/util');
+import util from '../../../../lib/common/util';
 
 export default class ProductClassUploadImport {
   submeasureName: string;

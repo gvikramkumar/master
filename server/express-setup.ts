@@ -94,7 +94,7 @@ export default function () {
 
   app.get(['/', '/prof/*'], (req, res) => {
     console.log('>>>>>> served index.html');
-    res.sendFile(path.resolve(__dirname, '../ui/dist') + '/index.html');
+    res.sendFile(path.resolve(__dirname, '../../ui/dist') + '/index.html');
   });
 
   app.use(notFound());

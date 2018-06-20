@@ -1,13 +1,12 @@
-const DeptUploadController = require('./controller'),
-  repo = require('../../../../../spec/helpers/mock-repo')();
+import DeptUploadController from './controller';
+import {injector} from '../../../../lib/common/inversify.config';
 
 
 fdescribe('upload/dept-upload tests', () => {
   let sut;
 
   beforeAll(() => {
-    sut = new DeptUploadController();
-    sut.repo = repo;
+    sut = injector.get(DeptUploadController);
   });
 
 

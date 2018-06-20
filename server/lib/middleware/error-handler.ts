@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 import {pgc} from '../database/postgres-conn';
 import {ApiError} from '../common/api-error';
 
-const {pgdb} = pgc;
 /**
  * errorHandler
  * @desc - error handling middleware. We need the error json to show the message and stack properties
@@ -34,7 +33,7 @@ export default function (options) {
       }
       obj.data = Object.assign(data, err.errors);
       statusCode = 400;
-    } else if (err.message === 'Cannot read property \'query\' of undefined' && !pgdb) {
+    } else if (err.message === 'Cannot read property \'query\' of undefined' && !pgc.pgdb) {
       statusCode = 500;
       const data = _.clone(err);
       data.url = urlInfo;

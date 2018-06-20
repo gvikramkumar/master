@@ -6,13 +6,14 @@ import util from '../../../lib/common/util';
 import {ApiError} from '../../../lib/common/api-error';
 import FileRepo from './repo';
 
-const {db, mongo} = mgc;
-const {GridFSBucket} = mongo;
+let db, mongo;
 
 @injectable()
 export default class FileController {
 
   constructor(private repo: FileRepo) {
+    db = mgc.db;
+    mongo = mgc.mongo;
   }
 
   // 3 ways to go here:
@@ -64,7 +65,7 @@ export default class FileController {
         }
         res.set('Content-Type', fileInfo.contentType);
         res.set('Content-Disposition', 'attachment; filename="' + fileInfo.metadata.fileName + '"');
-        const gfs = new GridFSBucket(db);
+        const gfs = new mongo.GridFSBucket(db);
         const readStream = gfs.openDownloadStream(new mongo.ObjectID(id));
         readStream.on('error', next);
         readStream.pipe(res);
@@ -88,7 +89,7 @@ export default class FileController {
   */
 
   remove(req, res, next) {
-    const gfs = new GridFSBucket(db);
+    const gfs = new mongo.GridFSBucket(db);
     const id = req.params.id;
     this.repo.getOneById(id)
       .then(fileInfo => {

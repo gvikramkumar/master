@@ -3,11 +3,19 @@ import {mgc} from './mongoose-conn';
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
 
-const {db, mongo} = mgc;
+let db, mongo;
 
 // todo: needs testing. Only uploadFile has been tested so far
-module.exports = class GridFSBucket {
-  gfs = new mongo.GridFSBucket(db);
+export default class GridFSBucket {
+  gfs;
+
+  constructor() {
+    db = mgc.db;
+    mongo = mgc.mongo;
+    this.gfs = new mongo.GridFSBucket(db);
+
+  }
+
 
 
   /*

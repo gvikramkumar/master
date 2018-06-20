@@ -1,4 +1,4 @@
-const util = require('../../../../lib/common/util');
+import util from '../../../../lib/common/util';
 
 export default class DollarUploadImport {
   submeasureName: string;
@@ -25,6 +25,7 @@ export default class DollarUploadImport {
     this.dealId = row[8];
     this.revenueClassification = row[9];
     this.fiscalMonth = fiscalMonth;
+
     util.trimStringProperties(this);
   }
 

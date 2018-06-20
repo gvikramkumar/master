@@ -1,12 +1,11 @@
-const express = require('express'),
-  router = express.Router(),
-  DollarUploadController = require('./controller'),
-  authorize = require('../../../lib/middleware/authorize'),
-  upload = require('../../../lib/middleware/multer');
+import DollarUploadController from './controller';
+import {injector} from '../../../lib/common/inversify.config';
+import {authorize} from '../../../lib/middleware/authorize';
+import {Router} from 'express';
 
-const ctrl = new DollarUploadController();
+const ctrl = injector.get(DollarUploadController);
 
-export default router
+export default Router()
   .get('/', ctrl.getMany.bind(ctrl))
   .post('/', authorize('api:manage'), ctrl.handlePost.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))
