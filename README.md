@@ -1,5 +1,5 @@
 ### fin-dfa4
-### Digital Finance Allocations  
+### Digital Finance Allocation
   
 #### database setup
 You can either use an existing database:  
