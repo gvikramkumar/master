@@ -1,0 +1,108 @@
+import {injectable} from 'inversify';
+import {mgc} from '../../../lib/database/mongoose-conn';
+import Q from 'q';
+import * as _ from 'lodash';
+import util from '../../../lib/common/util';
+import {ApiError} from '../../../lib/common/api-error';
+import FileRepo from './repo';
+
+let db, mongo;
+
+@injectable()
+export default class FileController {
+
+  constructor(private repo: FileRepo) {
+    db = mgc.db;
+    mongo = mgc.mongo;
+  }
+
+  // 3 ways to go here:
+  // get all: just send in parms
+  // get latest one: getLatest=true query val (uses uploadDate)
+  // group, then get latest of each group: groupField=xxx query val, say groupField=buUploadType
+  // will group by buUploadType and then get latest version of each one
+  getInfoMany(req, res, next) {
+    if (util.checkParams(req.query, ['directory'], next)) {
+      return;
+    }
+    const params = _.omit(req.query, ['groupField', 'getLatest']);
+    if (req.query.groupField) { // groups then gets latest of each group
+      this.repo.getManyGroupLatest(params, req.query.groupField)
+        .then(items => res.send(items))
+        .catch(next);
+    } else if (req.query.getLatest) {// gets latest "one" of results
+      this.repo.getOneLatest(params)
+        .then(items => res.send(items))
+        .catch(next);
+    } else {
+      this.repo.getMany(req.query)
+        .then(items => res.send(items))
+        .catch(next);
+    }
+  }
+
+  getInfoOne(req, res, next) {
+    this.repo.getOneById(req.params.id)
+      .then(item => {
+        if (item) {
+          res.send(item);
+        } else {
+          res.status(404).end();
+        }
+      })
+      .catch(next)
+  }
+
+  // file upload/download/remove
+  // upload/download
+  download(req, res, next) {
+    const id = req.params.id;
+    this.repo.getOneById(id)
+      .then(fileInfo => {
+        if (!fileInfo) {
+          next(new ApiError('File not found.', null, 400))
+          return;
+        }
+        res.set('Content-Type', fileInfo.contentType);
+        res.set('Content-Disposition', 'attachment; filename="' + fileInfo.metadata.fileName + '"');
+        const gfs = new mongo.GridFSBucket(db);
+        const readStream = gfs.openDownloadStream(new mongo.ObjectID(id));
+        readStream.on('error', next);
+        readStream.pipe(res);
+      })
+      .catch(next);
+  }
+
+  uploadMany(req, res, next) {
+    return this.repo.getManyByIds(req.files.map(file => file.id))
+      .then(files => res.send(files))
+      .catch(next);
+  }
+
+  // uploadMany does one and many so just use that to simply the endpoint to one
+  /*
+    uploadOne(req, res, next) {
+      return this.repo.getOneById(req.file.id)
+        .then(file => res.send(file))
+        .catch(next);
+    }
+  */
+
+  remove(req, res, next) {
+    const gfs = new mongo.GridFSBucket(db);
+    const id = req.params.id;
+    this.repo.getOneById(id)
+      .then(fileInfo => {
+        if (!fileInfo) {
+          next(new ApiError('File not found.', null, 400))
+          return;
+        }
+        return Q.ninvoke(gfs, 'delete', new mongo.ObjectID(id))
+          .then(() => res.send(fileInfo));
+      })
+      .catch(next);
+  }
+
+
+}
+
