@@ -132,7 +132,7 @@ db.lookup.insertMany([
 // dept-upload
 db.prof_department_acc_map.insertOne({
   submeasureName:"2 Tier Adjustment",
-  departmentCode:"020070506",
+  nodeValue:"020_070506",
   glAccount:"69999"});
 
 // sales-split-upload

@@ -6,7 +6,7 @@ const schema = new Schema(
   {
     transactionId: {type: SchemaTypes.ObjectId, required: true},
     submeasureName: {type: String, required: true},
-    departmentCode: {type: String, required: true},
+    nodeValue: {type: String, required: true},
     glAccount: Number,
     createdBy: String,
     createdDate: Date,

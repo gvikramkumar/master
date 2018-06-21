@@ -114,10 +114,10 @@ export default class DeptUploadUploadController extends UploadController {
         exclusions[dept.submeasureName].forEach(glAccount => {
           imports.push(new DeptUploadImport(
             dept.submeasureName,
-            dept.nodeValue.replace('_', ''),
+            dept.nodeValue,
             glAccount
           ));
-        })
+        });
       } else {
         imports.push(new DeptUploadImport(
           dept.submeasureName,
