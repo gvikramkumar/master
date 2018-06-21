@@ -5,7 +5,8 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
-    seqnum: {type: Number, required: true},
+    id: {type: Number, required: true},
+    displayOrder: {type: Number, required: true},
     name: {type: String, required: true}
   },
   {collection: 'dfa_module'}

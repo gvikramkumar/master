@@ -3,6 +3,7 @@ const db = conn.getDB(_db);
 
 db.dfa_submeasure.insertMany([
     {
+      moduleId: NumberInt(1),
     name: "2 Tier Adjustment",
     description: "2 Tier Adjustment",
     source: "manual",
@@ -38,6 +39,7 @@ db.dfa_submeasure.insertMany([
     rules: ["2TierPOSPID", "2TierPOSBE"]
   },
   {
+    moduleId: NumberInt(1),
     name: "2 Tier Adjustment2",
     description: "2 Tier Adjustment2",
     source: "manual",
@@ -95,11 +97,13 @@ db.prof_dollar_upload.insertOne({
 
 db.dfa_measure.insertMany([
   {
+    moduleId: NumberInt(1),
     name: "Indirect Revenue Adjustments",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    moduleId: NumberInt(1),
     name: "Indirect Revenue Adjustments2",
     typeCode: "revadj2",
     statusFlag: "Y"
@@ -107,6 +111,7 @@ db.dfa_measure.insertMany([
 ])
 
 db.dfa_open_period.insert({
+  moduleId: NumberInt(1),
   fiscalMonth: 201809,
   openFlag: "Y"
 })

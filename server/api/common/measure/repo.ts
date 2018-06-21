@@ -5,6 +5,7 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
+    moduleId: {type: Number, required: true},
     name: {type: String, required: true, trim: true},
     typeCode: {type: String, required: true},
     statusFlag: {type: String, required: true},

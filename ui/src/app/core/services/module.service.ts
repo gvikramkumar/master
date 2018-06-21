@@ -20,7 +20,7 @@ export class ModuleService extends RestBase<Module> {
 
   getMany(): Observable<Module[]> {
     return super.getMany().pipe(
-      tap(modules => this.store.modules = _.sortBy(modules, 'seqnum'))
+      tap(modules => this.store.modules = _.sortBy(modules, 'displayOrder'))
     )
   }
 

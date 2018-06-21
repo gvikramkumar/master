@@ -1,8 +1,8 @@
-seqnum,name
-1,Profitability
-2,As COGS Triangulation
-3,Deferred Revenueeee
-4,Opex Allocation
-5,Bookings Miscallenous
-6,CA Automation
-7,Testing
+id,displayOrder,name
+1,1,Profitability
+2,2,As COGS Triangulation
+3,3,Deferred Revenueeee
+4,4,Opex Allocation
+5,5,Bookings Miscallenous
+6,6,CA Automation
+7,7,Testing

@@ -4,6 +4,7 @@ import {injectable} from 'inversify';
 
 const schema = new Schema(
   {
+    moduleId: {type: Number, required: true},
     name: {type: String, required: true, trim: true},
     period: {type: String, required: true},
     driverName: {type: String, required: true},
