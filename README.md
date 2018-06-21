@@ -12,8 +12,11 @@ assume site root unless specified otherwise
 7. windows: <code>set POSTRGES_USER=xxx set POSTGRES_PASSWORD=xxx npm start</code> // starts server on http://localhost:3002 (configurable in server/config/dev.json)
 8. mac: <code>POSTRGES_USER=xxx POSTGRES_PASSWORD=xxx npm start</code> // starts server on http://localhost:3002 (configurable in server/config/dev.json)
 9. linux: <code>NODE_ENV=sdev/qa/prod PORT=xxx POSTRGES_USER=xxx POSTGRES_PASSWORD=xxx npm start</code> // starts server on http://localhost:3002 (configurable in server/config/sdev-qa-prod.json)
-10. dual server mode (local (dev/unit): /ui: <code>ng serve</code> starts the ui server on http://localhost:4200  
-11. single server mode (sdev/qa/prod): /ui:  <code>npm run build-prod</code> builds ui to /ui/dist directory for api server to serve along with api
+10. build server: <code>npm run build</code>
+11. UI dual server mode (local only): /ui: <code>ng serve</code> starts the ui server on http://localhost:4200  
+12. UI single server mode (sdev/qa/prod):   
+/ui:  <code>npm run build-prod</code> builds ui to /ui/dist directory for api server to serve along with api
+13. start server: <code>npm start</code>
 
 #### config
 **server config:**  
