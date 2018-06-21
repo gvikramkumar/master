@@ -31,7 +31,22 @@ You can either use an existing database:
 This script depends on host/port/database sent in by the npm script. Another script: npm run seedbatdev/seedshdev will do the same for the shared dev environment (sdev). The shell script uses the sent in host/port/database to run mongo scripts and imports. 
 
 
+#### webstorm
+we need two node runners to debug the server and tests  
 
+##### serve  
+node runner:  
+**working directory:** somepath/fin-dfa/dist/server  
+**javascript file:** server.js  
+**environment variables:** POSTGRES_USER, POSTGRES_PASSWORD  
+** use with <code>npm run build</code>
+
+##### test
+node runner:  
+**working directory:** somepath/fin-dfa  
+**javascript file:** node_modules/jasmine/bin/jasmine.js  
+**environment variabls:** NODE_ENV=unit (for e2e tests when we have a unit testing database)  
+** use with <code>npm run watch</code>
 
 
 
