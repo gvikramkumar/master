@@ -2,6 +2,7 @@ import util from '../common/util';
 import {mgc} from './mongoose-conn';
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
+import AnyObj from '../models/any-obj';
 
 let db, mongo;
 
@@ -31,7 +32,7 @@ export default class GridFSBucket {
           })
 
    */
-  uploadFile(file, metadata: any = {}) {
+  uploadFile(file, metadata: AnyObj = {}) {
     if (!metadata.directory) {
       throw new ApiError('metadata.directory required');
     }

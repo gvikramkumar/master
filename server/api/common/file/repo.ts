@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+import {Schema, model, Model} from 'mongoose';
 import * as _ from 'lodash';
 import util from '../../../lib/common/util';
 import {injectable} from 'inversify';
@@ -15,7 +15,7 @@ util.setSchemaAdditions(schema);
 // this is for fs.files only (file info gets)
 @injectable()
 export default class FileRepo {
-  Model: any;
+  Model: Model<any>;
 
   constructor() {
     this.Model = model('Files', schema);
