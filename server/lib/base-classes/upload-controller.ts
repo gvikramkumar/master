@@ -9,7 +9,8 @@ import SubmeasureRepo from '../../api/common/submeasure/repo';
 import Q from 'q';
 import RepoBase from './repo-base';
 import {Request} from 'express';
-import IApiRequest from '../models/api-request';
+import ApiRequest from '../models/api-request';
+import AnyObj from '../models/any-obj';
 
 
 const openPeriodRepo = new OpenPeriodRepo();
@@ -18,11 +19,11 @@ const submeasureRepo = new SubmeasureRepo();
 
 export default class UploadController {
   UploadValidationError = 'UploadValidationError';
-  data: any = {};
+  data: AnyObj = {};
   startUpload: number;
-  req: IApiRequest;
-  rows1: any[];
-  rows2: any[];
+  req: ApiRequest;
+  rows1: AnyObj[];
+  rows2: AnyObj[];
   totalErrors;
   hasTotalErrors: boolean;
   hasTwoSheets: boolean;

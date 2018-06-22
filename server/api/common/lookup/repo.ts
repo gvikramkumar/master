@@ -1,5 +1,5 @@
 import {injectable} from 'inversify';
-import {Schema, model} from 'mongoose';
+import {Schema, model, Model} from 'mongoose';
 import * as _ from 'lodash';
 
 const schema = new Schema(
@@ -12,7 +12,7 @@ const schema = new Schema(
 
 @injectable()
 export default class LookupRepo {
-Model: any;
+Model: Model<any>;
 
   constructor() {
     this.Model = model('Lookup', schema);

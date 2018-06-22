@@ -3,9 +3,10 @@ import {NamedApiError} from '../common/named-api-error';
 import _ from 'lodash';
 import util from '../common/util';
 import {ApiError} from '../common/api-error';
+import AnyObj from '../models/any-obj';
 
 export default class RepoBase {
-  protected Model: any
+  protected Model: Model<any>;
 
   constructor(public schema: Schema, modelName: string) {
     this.schema = schema;
@@ -14,7 +15,7 @@ export default class RepoBase {
   }
 
   // get all that match filter, if yearmo/upperOnly exists, sets date constraints
-  getMany(_filter: any = {}) {
+  getMany(_filter: AnyObj = {}) {
     let filter = _.clone(_filter);
     let query;
     const distinct = filter.getDistinct,
@@ -46,7 +47,7 @@ export default class RepoBase {
   }
 
   // group by groupField and get latest of each group
-  getManyByGroupLatest(_filter: any = {}) {
+  getManyByGroupLatest(_filter: AnyObj = {}) {
     let filter = _filter;
     const groupField = filter.groupField;
     delete filter.groupField;
@@ -69,7 +70,7 @@ export default class RepoBase {
   }
 
   // returns the latest value
-  getOneLatest(_filter: any = {}) {
+  getOneLatest(_filter: AnyObj = {}) {
     let filter = _filter;
     delete filter.getLatest;
     filter = this.addDateRangeToFilter(filter);

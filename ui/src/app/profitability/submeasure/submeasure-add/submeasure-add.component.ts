@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Submeasure} from '../../store/models/submeasure';
 import {Store} from '../../../store/store';
+import {RuleService} from "../../services/rule.service";
+//import {SubmeasureService} from "../../services/submeasure.service";
+import {SubmeasureService} from '../../../core/services/submeasure.service';
+import {AllocationRule} from "../../store/models/allocation-rule";
+import {Observable, of} from "rxjs/index";
 
 @Component({
   selector: 'fin-submeasure-add',
@@ -9,20 +15,48 @@ import {Store} from '../../../store/store';
   styleUrls: ['./submeasure-add.component.scss']
 })
 export class SubmeasureAddComponent extends RoutingComponentBase implements OnInit {
+  editMode = false;
+  title: string;
+  submeasure: Submeasure = new Submeasure();
+
 
   ruleForms: number[] = [];
 
-  constructor(private store: Store, private route: ActivatedRoute) {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private ruleService: RuleService,
+    private submeasureService: SubmeasureService,
+    private store: Store
+  ) {
     super(store, route);
-    this.ruleForms[0] = 0;
+    this.editMode = !!this.route.snapshot.params.id;
   }
 
   ngOnInit() {
+    this.ruleForms.push(0);
+    if (this.editMode) {
+      this.title = 'Edit Submeasure';
+      this.submeasureService.getOneById(this.route.snapshot.params.id)
+        .subscribe(submeasure => {
+          this.submeasure = submeasure;
+          this.measureNameSelection = this.submeasure.measureName? this.measureNamesMap[this.submeasure.measureName]: '';
+          console.log("measure selection is: " + this.measureNameSelection);
+          this.subMeasureName = submeasure.name;
+          this.description = submeasure.description;
+          this.source = submeasure.source;
+
+
+        });
+    } else {
+      this.title = 'Create Submeasure';
+    }
   }
 
   subMeasureName: string;
   description: string;
-  myModel: string;
+  source: string;
+  discountFlag: string;
   reportingLevel1: string;
   reportingLevel2: string;
 
@@ -59,8 +93,6 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
     }
   ]
 
-  // ruleForms: number[];
-
   ruleSelected() {
 
   }
@@ -96,8 +128,9 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
       this.addRuleHidden = false;
     }
   }
-
-  measureName: string;
+  //measure;
+  //measureName: string;
+  measureNameSelection: number;
   measureNames = [
     {
       "name": "Indirect Revenue Adjustments",
@@ -130,6 +163,15 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
       "selected":null
     }
   ]
+
+  measureNamesMap: {[key: string]: any} = {
+    'Indirect Revenue Adjustments':1,
+    'Manufacturing Overhead':2,
+    'Manufacturing Supply Chain Expenses':3,
+    'Manufacturing V&O':4,
+    'Standard COGS Adjustments':5,
+    'Warranty':6
+  }
 
   categoriesHidden: boolean = true;
   categoryTypes = [
@@ -262,11 +304,114 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
   scms_br_hidden: boolean = false;
 
   months = [
-
+    {
+      "name": "201806 - Jun18",
+      "value": 1,
+      "selected": null
+    },
+    {
+      "name": "201805 - May18",
+      "value": 2,
+      "selected": null
+    },
+    {
+      "name": "201804 - Apr18",
+      "value": 3,
+      "selected": null
+    },
+    {
+      "name": "201803 - Mar18",
+      "value": 4,
+      "selected": null
+    },
+    {
+      "name": "201802 - Feb18",
+      "value": 5,
+      "selected": null
+    },
+    {
+      "name": "201801 - Jan18",
+      "value": 6,
+      "selected": null
+    }
   ]
 
   timings = [
-
+    {
+      "name": "Daily",
+      "value": 1,
+      "selected": null
+    },
+    {
+      "name": "Weekly",
+      "value": 2,
+      "selected": null
+    },
+    {
+      "name": "Monthly",
+      "value": 3,
+      "selected": null
+    },
+    {
+      "name": "Quarterly",
+      "value": 4,
+      "selected": null
+    },
+    {
+      "name": "WD-5",
+      "value": 5,
+      "selected": null
+    },
+    {
+      "name": "WD-4",
+      "value": 6,
+      "selected": null
+    },
+    {
+      "name": "WD-3",
+      "value": 7,
+      "selected": null
+    },
+    {
+      "name": "WD-2",
+      "value": 8,
+      "selected": null
+    },
+    {
+      "name": "WD-1",
+      "value": 9,
+      "selected": null
+    },
+    {
+      "name": "WD0",
+      "value": 10,
+      "selected": null
+    },
+    {
+      "name": "WD+1",
+      "value": 11,
+      "selected": null
+    },
+    {
+      "name": "WD+2",
+      "value": 12,
+      "selected": null
+    },
+    {
+      "name": "WD+3",
+      "value": 13,
+      "selected": null
+    },
+    {
+      "name": "WD+4",
+      "value": 14,
+      "selected": null
+    },
+    {
+      "name": "WD+5",
+      "value": 15,
+      "selected": null
+    }
   ]
 
   discountFlagOptions = [
@@ -281,10 +426,14 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
   ]
 
   groupings = [
-
+    {
+      "name": "Indirect Revenue Adjustments",
+      "value": 1,
+      "selected": null
+    }
   ]
 
-  associatedRule: string;
+  //associatedRule: string;
 
   test() {
     //empty test function
@@ -350,11 +499,10 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
 
     this.subMeasureName = "";
     this.description = "";
-    this.myModel = "";
+    this.discountFlag = "";
     this.reportingLevel1 = "";
     this.reportingLevel2 = "";
 
-    this.measureName = null;
     this.measureNames = [
       {
         "name": "Indirect Revenue Adjustments",
@@ -486,6 +634,34 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
     this.scms_br_hidden = false;
   }
 
+  formChange() {
+    this.submeasure.name = this.subMeasureName;
+  }
+
+  public save() {
+    //this.formChange();
+
+    this.validate()
+      .subscribe(valid => {
+        if (valid) {
+          this.submeasureService.add(this.submeasure)
+            .subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
+        }
+      })
+  }
+
+  validate(): Observable<boolean> {
+    //todo: need to search for rule name duplicity on add only
+    let obs: Observable<AllocationRule>;
+    if (this.editMode) {
+      return of(true);
+    } else {
+      //todo: validate name doesn't exist already. Could be done with an ngModel validator realtime if rules cached
+      // otherwise hit server here
+      // check for fule name existence in store (if cached rules) or hit the server (why it's observable)
+      return of(true);
+    }
+  }
 
 }
 

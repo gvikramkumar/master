@@ -16,35 +16,35 @@
                     <div style="width: 100%; display: table;">
                         <div style="display: table-row">
                             <div style="width: 600px; display: table-cell;"><cui-select class="matching" [(ngModel)]="salesMatch" [items]="salesLevels" label="Sales" empty="true" (selectChange)="formChange()" required="true" optionsKey="name" optionsValue="value"></cui-select></div>
-                            <div class="selectionCriteria" style="display: table-cell;"><cui-input type="text" [(ngModel)]="rule.sl1Select" label="Selection Criteria:" required="true"></cui-input></div>
+                            <div class="selectionCriteria" style="display: table-cell;"><cui-input type="text" [(ngModel)]="sl1Select" label="Selection Criteria:" required="true"></cui-input></div>
                         </div>
                     </div>
                     <br>
                     <div style="width: 100%; display: table;">
                         <div style="display: table-row">
                               <div style="width: 600px; display: table-cell;"><cui-select class="matching" [(ngModel)]="productMatch" [items]="productLevels" label="Product" empty="true" (selectChange)="formChange()" required="true" optionsKey="name" optionsValue="value"></cui-select></div>
-                              <div class="selectionCriteria" style="display: table-cell;"><cui-input type="text" label="Selection Criteria:" required="true"></cui-input></div>
+                              <div class="selectionCriteria" style="display: table-cell;"><cui-input disabled=true type="text" label="Selection Criteria:" required="true"></cui-input></div>
                         </div>
                     </div>
                     <br>
                     <div style="width: 100%; display: table;">
                         <div style="display: table-row">
                               <div style="width: 600px; display: table-cell;"><cui-select class="matching" [(ngModel)]="scmsMatch" [items]="scmsLevels" label="SCMS" empty="true" (selectChange)="formChange()" optionsKey="name" optionsValue="value"></cui-select></div>
-                              <div class="selectionCriteria" style="display: table-cell;"><cui-input type="text" [(ngModel)]="rule.scmsSelect" label="Selection Criteria:"></cui-input></div>
+                              <div class="selectionCriteria" style="display: table-cell;"><cui-input type="text" [(ngModel)]="scmsSelect" label="Selection Criteria:"></cui-input></div>
                         </div>
                     </div>
                     <br>
                     <div style="width: 100%; display: table;">
                         <div style="display: table-row">
-                              <div style="width: 600px; display: table-cell;"><cui-select class="matching" [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityLevels" label="Legal Entity" empty="true" (selectChange)="formChange()" optionsKey="name" optionsValue="value"></cui-select></div>
-                              <div class="selectionCriteria" style="display: table-cell;"><cui-input type="text" label="Selection Criteria:"></cui-input></div>
+                              <div style="width: 600px; display: table-cell;"><cui-select class="matching" [(ngModel)]="legalMatch" [items]="legalEntityLevels" label="Legal Entity" empty="true" (selectChange)="formChange()" optionsKey="name" optionsValue="value"></cui-select></div>
+                              <div class="selectionCriteria" style="display: table-cell;"><cui-input disabled=true type="text" label="Selection Criteria:"></cui-input></div>
                         </div>
                     </div>
                     <br>
                     <div style="width: 100%; display: table;">
                         <div style="display: table-row">
                               <div style="width: 600px; display: table-cell;"><cui-select class="matching" [(ngModel)]="beMatch" [items]="ibeLevels" label="Internal Business Entity" empty="true" (selectChange)="formChange()" required="true" optionsKey="name" optionsValue="value"> </cui-select></div>
-                              <div class="selectionCriteria" style="display: table-cell;"><cui-input type="text" [(ngModel)]="rule.beSelect" label="Selection Criteria:" required="true"></cui-input></div>
+                              <div class="selectionCriteria" style="display: table-cell;"><cui-input type="text" [(ngModel)]="beSelect" label="Selection Criteria:" required="true"></cui-input></div>
                         </div>
                     </div>
                     <br>
