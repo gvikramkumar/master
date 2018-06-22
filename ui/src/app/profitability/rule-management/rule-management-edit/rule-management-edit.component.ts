@@ -14,14 +14,18 @@ import {Store} from '../../../store/store';
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
   editMode = false;
   rule: AllocationRule = new AllocationRule();
-  title: string;
-  periodSelection: number;
-  driverSelection: number;
-  salesMatch: number;
-  productMatch: number;
-  scmsMatch: number;
-  legalMatch: number;
-  beMatch: number;
+  title: string = "";
+  periodSelection: number = 0;
+  driverSelection: number = 0;
+  salesMatch: number = 0;
+  productMatch: number = 0;
+  scmsMatch: number = 0;
+  legalMatch: number = 0;
+  beMatch: number = 0;
+
+  sl1Select: string = "";
+  scmsSelect: string = "";
+  beSelect: string = "";
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +50,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.scmsMatch = this.rule.scmsMatch? this.scmsLevelsMap[this.rule.scmsMatch]: '';
           this.legalMatch = this.rule.legalEntityMatch? this.legalLevelsMap[this.rule.legalEntityMatch]: '';
           this.beMatch = this.rule.beMatch? this.beLevelsMap[this.rule.beMatch]: '';
+          this.sl1Select = this.rule.sl1Select;
+          this.scmsSelect = this.rule.scmsSelect;
+          this.beSelect = this.rule.beSelect;
           this.formChange();
         });
     } else {
@@ -248,23 +255,63 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     if(this.periodSelection && this.driverPeriods[this.periodSelection-1].name != null) {
       this.rule.period = this.driverPeriods[this.periodSelection-1].name;
     }
+    else {
+      this.rule.period = "";
+    }
     if(this.driverSelection && this.driverNamesAbbrev[this.driverSelection-1] != null) {
       this.rule.driverName = this.driverNamesAbbrev[this.driverSelection-1];
+    }
+    else {
+      this.rule.driverName = "";
     }
     if(this.salesMatch && this.salesLevels[this.salesMatch-1].name != null) {
       this.rule.salesMatch = this.salesLevels[this.salesMatch-1].name;
     }
+    else {
+      this.rule.salesMatch = "";
+    }
     if (this.productMatch && this.productLevels[this.productMatch-1].name != null) {
       this.rule.productMatch = this.productLevels[this.productMatch-1].name;
+    }
+    else {
+      this.rule.productMatch = "";
     }
     if (this.scmsMatch && this.scmsLevels[this.scmsMatch-1].name != null) {
       this.rule.scmsMatch = this.scmsLevels[this.scmsMatch-1].name;
     }
+    else {
+      this.rule.scmsMatch = "";
+    }
     if (this.legalMatch && this.legalEntityLevels[this.legalMatch-1].name != null) {
       this.rule.legalEntityMatch = this.legalEntityLevels[this.legalMatch-1].name;
     }
+    else {
+      this.rule.legalEntityMatch = "";
+    }
     if (this.beMatch && this.ibeLevels[this.beMatch-1].name != null) {
       this.rule.beMatch = this.ibeLevels[this.beMatch-1].name;
+    }
+    else {
+      this.rule.beMatch = "";
+    }
+
+    if (this.sl1Select.length > 0) {
+      this.rule.sl1Select = this.sl1Select;
+    }
+    else {
+      this.rule.sl1Select = "";
+    }
+    if (this.scmsSelect.length > 0) {
+      this.rule.scmsSelect = this.scmsSelect;
+    }
+    else {
+      this.rule.scmsSelect = "";
+    }
+    if (this. beSelect.length > 0) {
+      this.rule.beSelect = this.beSelect;
+    }
+    else {
+      this.rule.beSelect = "";
     }
   }
 
