@@ -45,6 +45,18 @@ const routes: Routes = [
             }
           },
           {
+            path: 'edit/:id', component: SubmeasureAddComponent,
+            canActivate: [AuthorizationGuard],
+            data: {
+              authorization: 'prof-sm:manage',
+              hero: {
+                title: 'Profitability: Update Sub-Measure',
+                desc: 'Update the selected sub-measure for Profitability group'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/prof/submeasure'}, {label: 'Update'}]
+            }
+          },
+          {
             path: 'upload', component: SubmeasureUploadComponent,
             canActivate: [AuthorizationGuard],
             data: {
