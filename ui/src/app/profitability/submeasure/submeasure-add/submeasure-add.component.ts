@@ -6,6 +6,8 @@ import {Store} from '../../../store/store';
 import {RuleService} from "../../services/rule.service";
 //import {SubmeasureService} from "../../services/submeasure.service";
 import {SubmeasureService} from '../../../core/services/submeasure.service';
+import {AllocationRule} from "../../store/models/allocation-rule";
+import {Observable, of} from "rxjs/index";
 
 @Component({
   selector: 'fin-submeasure-add',
@@ -42,6 +44,8 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
           console.log("measure selection is: " + this.measureNameSelection);
           this.subMeasureName = submeasure.name;
           this.description = submeasure.description;
+          this.source = submeasure.source;
+
 
         });
     } else {
@@ -51,6 +55,7 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
 
   subMeasureName: string;
   description: string;
+  source: string;
   discountFlag: string;
   reportingLevel1: string;
   reportingLevel2: string;
@@ -299,11 +304,114 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
   scms_br_hidden: boolean = false;
 
   months = [
-
+    {
+      "name": "201806 - Jun18",
+      "value": 1,
+      "selected": null
+    },
+    {
+      "name": "201805 - May18",
+      "value": 2,
+      "selected": null
+    },
+    {
+      "name": "201804 - Apr18",
+      "value": 3,
+      "selected": null
+    },
+    {
+      "name": "201803 - Mar18",
+      "value": 4,
+      "selected": null
+    },
+    {
+      "name": "201802 - Feb18",
+      "value": 5,
+      "selected": null
+    },
+    {
+      "name": "201801 - Jan18",
+      "value": 6,
+      "selected": null
+    }
   ]
 
   timings = [
-
+    {
+      "name": "Daily",
+      "value": 1,
+      "selected": null
+    },
+    {
+      "name": "Weekly",
+      "value": 2,
+      "selected": null
+    },
+    {
+      "name": "Monthly",
+      "value": 3,
+      "selected": null
+    },
+    {
+      "name": "Quarterly",
+      "value": 4,
+      "selected": null
+    },
+    {
+      "name": "WD-5",
+      "value": 5,
+      "selected": null
+    },
+    {
+      "name": "WD-4",
+      "value": 6,
+      "selected": null
+    },
+    {
+      "name": "WD-3",
+      "value": 7,
+      "selected": null
+    },
+    {
+      "name": "WD-2",
+      "value": 8,
+      "selected": null
+    },
+    {
+      "name": "WD-1",
+      "value": 9,
+      "selected": null
+    },
+    {
+      "name": "WD0",
+      "value": 10,
+      "selected": null
+    },
+    {
+      "name": "WD+1",
+      "value": 11,
+      "selected": null
+    },
+    {
+      "name": "WD+2",
+      "value": 12,
+      "selected": null
+    },
+    {
+      "name": "WD+3",
+      "value": 13,
+      "selected": null
+    },
+    {
+      "name": "WD+4",
+      "value": 14,
+      "selected": null
+    },
+    {
+      "name": "WD+5",
+      "value": 15,
+      "selected": null
+    }
   ]
 
   discountFlagOptions = [
@@ -318,10 +426,14 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
   ]
 
   groupings = [
-
+    {
+      "name": "Indirect Revenue Adjustments",
+      "value": 1,
+      "selected": null
+    }
   ]
 
-  associatedRule: string;
+  //associatedRule: string;
 
   test() {
     //empty test function
@@ -522,6 +634,34 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
     this.scms_br_hidden = false;
   }
 
+  formChange() {
+    this.submeasure.name = this.subMeasureName;
+  }
+
+  public save() {
+    //this.formChange();
+
+    this.validate()
+      .subscribe(valid => {
+        if (valid) {
+          this.submeasureService.add(this.submeasure)
+            .subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
+        }
+      })
+  }
+
+  validate(): Observable<boolean> {
+    //todo: need to search for rule name duplicity on add only
+    let obs: Observable<AllocationRule>;
+    if (this.editMode) {
+      return of(true);
+    } else {
+      //todo: validate name doesn't exist already. Could be done with an ngModel validator realtime if rules cached
+      // otherwise hit server here
+      // check for fule name existence in store (if cached rules) or hit the server (why it's observable)
+      return of(true);
+    }
+  }
 
 }
 

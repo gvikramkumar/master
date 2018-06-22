@@ -32,13 +32,13 @@
               </ng-container> -->
 
               <ng-container matColumnDef="key">
-                <mat-header-cell *matHeaderCellDef mat-sort-header> Source </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.source}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Measure </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.measureName}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-                <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"> {{row.name}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Submeasure Name </mat-header-cell>
+                <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"><a> {{row.name}} </a></mat-cell>
               </ng-container>
 
               <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>

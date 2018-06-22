@@ -1,8 +1,9 @@
 <div class="add-form-container">
   <cui-select [items]="measureNames" label="Measure Name" empty="true" [(ngModel)]="measureNameSelection" (selectChange)="measureNameSelected()" required="true" optionsKey="name" optionsValue="value"></cui-select>
-  <img matTooltip="Naming convention: example here" matTooltipPosition="left" src="assets/img/tooltip.png" class="tooltip" width="18"> <cui-input id="subname" type="text" [(model)]="subMeasureName" label="Sub-Measure Name" required="true"></cui-input>
+  <cui-input id="subname" type="text" [(model)]="subMeasureName" label="Sub-Measure Name" required="true"></cui-input>
   <cui-select [hidden]="categoriesHidden" [items]="categoryTypes" label="Submeasure Category Type" empty="true" (selectChange)="categoryTypeSelected()"></cui-select>
   <cui-input type="textarea" [(model)]="description" label="Description"></cui-input>
+  <cui-input type="textarea" [(model)]="source" label="Source"></cui-input>
   <br><br>
   <div class="input-filter-level">
     Input Filter Level*
@@ -65,6 +66,6 @@
   <button type="button" [hidden]="addRuleHidden" (click)="addRule()">+</button>
   <button type="button" [hidden]="removeRuleHidden" (click)="removeRule()">-</button>
   <br><br>
-  <button (click)="resetForm()">Reset</button><a routerLink=".."><button>Cancel</button></a><button>Next</button>
+  <button [hidden]=true (click)="resetForm()">Reset</button><a routerLink=".."><button (click)="save()">Submit</button></a><button>Cancel</button>
   <br>
 </div>
