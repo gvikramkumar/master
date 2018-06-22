@@ -23,6 +23,7 @@ export class Store extends StoreBase {
   initialBreakpoint: string;
   modules = [];
   showSpinner = false;
+  currentModule: {id: 1, name: 'Proffy'};
 
   authenticated$ = new BehaviorSubject<boolean>(this.authenticated);
   subAuthenticated = this.authenticated$.subscribe.bind(this.authenticated$);

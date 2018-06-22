@@ -13,8 +13,8 @@ export class MainComponent implements OnInit {
   hero: { title: string, desc: string } = {title: '', desc: ''};
   headerOptions;
 
-  constructor(private store: Store, private router: Router) {
-    const i = 5;
+  constructor(public store: Store, private router: Router) {
+    const i = 7;
   }
 
   ngOnInit() {

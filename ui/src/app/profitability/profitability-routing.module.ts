@@ -11,6 +11,7 @@ import {MainComponent} from '../shared/components/main/main.component';
 import {RuleManagementAssignComponent} from './rule-management/rule-management-assign/rule-management-assign.component';
 import {AuthorizationGuard} from '../core/guards/authorization.guard';
 import {ReportsComponent} from "./reports/reports/reports.component";
+import {Store} from '../store/store';
 
 const routes: Routes = [
   {
@@ -129,7 +130,7 @@ const routes: Routes = [
         data: {
           authorization: 'prof-bu:access',
           hero: {
-            title: 'Profitability: Reports',
+            title: ': Reports',
             desc: 'Allow users to download a report'
           },
           breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Report'}]
@@ -147,4 +148,6 @@ const routes: Routes = [
     RouterModule
   ]
 })
-export class ProfitabilityRoutingModule { }
+export class ProfitabilityRoutingModule {
+
+}
