@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '../../../store/store';
+import {RuleService} from "../../services/rule.service";
+import {SubmeasureService} from "../../services/submeasure.service";
 
 @Component({
   selector: 'fin-submeasure-add',
@@ -9,12 +11,22 @@ import {Store} from '../../../store/store';
   styleUrls: ['./submeasure-add.component.scss']
 })
 export class SubmeasureAddComponent extends RoutingComponentBase implements OnInit {
-
+  editMode = false;
   ruleForms: number[] = [];
 
-  constructor(private store: Store, private route: ActivatedRoute) {
+  /*constructor(private store: Store, private route: ActivatedRoute) {
     super(store, route);
     this.ruleForms[0] = 0;
+  }*/
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private ruleService: RuleService,
+    private submeasureService: SubmeasureService,
+    private store: Store
+  ) {
+    super(store, route);
+    this.editMode = !!this.route.snapshot.params.id;
   }
 
   ngOnInit() {
