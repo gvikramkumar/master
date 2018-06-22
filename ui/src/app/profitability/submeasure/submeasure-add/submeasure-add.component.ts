@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {RoutingComponentBase} from '../../../shared/routing-component-base';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Submeasure} from '../../store/models/submeasure';
 import {Store} from '../../../store/store';
 import {RuleService} from "../../services/rule.service";
-import {SubmeasureService} from "../../services/submeasure.service";
+//import {SubmeasureService} from "../../services/submeasure.service";
+import {SubmeasureService} from '../../../core/services/submeasure.service';
 
 @Component({
   selector: 'fin-submeasure-add',
@@ -12,12 +14,12 @@ import {SubmeasureService} from "../../services/submeasure.service";
 })
 export class SubmeasureAddComponent extends RoutingComponentBase implements OnInit {
   editMode = false;
+  title: string;
+  submeasure: Submeasure = new Submeasure();
+
+
   ruleForms: number[] = [];
 
-  /*constructor(private store: Store, private route: ActivatedRoute) {
-    super(store, route);
-    this.ruleForms[0] = 0;
-  }*/
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -30,11 +32,26 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
   }
 
   ngOnInit() {
+    this.ruleForms.push(0);
+    if (this.editMode) {
+      this.title = 'Edit Submeasure';
+      this.submeasureService.getOneById(this.route.snapshot.params.id)
+        .subscribe(submeasure => {
+          this.submeasure = submeasure;
+          this.measureNameSelection = this.submeasure.measureName? this.measureNamesMap[this.submeasure.measureName]: '';
+          console.log("measure selection is: " + this.measureNameSelection);
+          this.subMeasureName = submeasure.name;
+          this.description = submeasure.description;
+
+        });
+    } else {
+      this.title = 'Create Submeasure';
+    }
   }
 
   subMeasureName: string;
   description: string;
-  myModel: string;
+  discountFlag: string;
   reportingLevel1: string;
   reportingLevel2: string;
 
@@ -71,8 +88,6 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
     }
   ]
 
-  // ruleForms: number[];
-
   ruleSelected() {
 
   }
@@ -108,8 +123,9 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
       this.addRuleHidden = false;
     }
   }
-
-  measureName: string;
+  //measure;
+  //measureName: string;
+  measureNameSelection: number;
   measureNames = [
     {
       "name": "Indirect Revenue Adjustments",
@@ -142,6 +158,15 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
       "selected":null
     }
   ]
+
+  measureNamesMap: {[key: string]: any} = {
+    'Indirect Revenue Adjustments':1,
+    'Manufacturing Overhead':2,
+    'Manufacturing Supply Chain Expenses':3,
+    'Manufacturing V&O':4,
+    'Standard COGS Adjustments':5,
+    'Warranty':6
+  }
 
   categoriesHidden: boolean = true;
   categoryTypes = [
@@ -362,11 +387,10 @@ export class SubmeasureAddComponent extends RoutingComponentBase implements OnIn
 
     this.subMeasureName = "";
     this.description = "";
-    this.myModel = "";
+    this.discountFlag = "";
     this.reportingLevel1 = "";
     this.reportingLevel2 = "";
 
-    this.measureName = null;
     this.measureNames = [
       {
         "name": "Indirect Revenue Adjustments",

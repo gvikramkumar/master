@@ -14,7 +14,7 @@ import {Store} from '../../../store/store';
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
   editMode = false;
   rule: AllocationRule = new AllocationRule();
-  title: string = "";
+  title: string;
   periodSelection: number = 0;
   driverSelection: number = 0;
   salesMatch: number = 0;
