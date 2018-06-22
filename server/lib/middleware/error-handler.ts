@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import {pgc} from '../database/postgres-conn';
 import {ApiError} from '../common/api-error';
+import AnyObj from '../models/any-obj';
 
 /**
  * errorHandler
@@ -19,7 +20,7 @@ export default function (options) {
   const truncateLength = 66;
 
   return function (err, req, res, next) {
-    let obj: any = {}, statusCode;
+    let obj: AnyObj = {}, statusCode;
     const urlInfo = `${req.method}  ${req.url}`;
     // mongoose validation error
     if (err.name === 'ValidationError' && err.errors) {

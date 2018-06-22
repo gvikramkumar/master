@@ -5,10 +5,11 @@ import ProductClassUploadRepo from '../../product-class-upload/repo';
 import ProductClassUploadTemplate from './template';
 import ProductClassUploadImport from './import';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
+import AnyObj from '../../../../lib/models/any-obj';
 
 @injectable()
 export default class ProductClassUploadUploadController extends UploadController {
-imports: any[];
+imports: AnyObj[];
 
   constructor(repo: ProductClassUploadRepo) {
     super(repo);
