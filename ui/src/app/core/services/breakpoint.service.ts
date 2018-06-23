@@ -16,7 +16,9 @@ export class BreakpointChange {
     public direction: BreakpointDirection) {}
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class BreakpointService {
   breakpoints$ = new BehaviorSubject<BreakpointChange|null>(null);
   subscribe = this.breakpoints$.subscribe.bind(this.breakpoints$);

@@ -47,9 +47,10 @@ db.prof_mapping_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
 db.prof_swalloc_manual_mix.createIndex({submeasureName: 1, fiscalMonth: -1});
 
 // unique constraints
+db.dfa_module.createIndex({abbrev: 1}, {unique: true});
 db.dfa_module.createIndex({name: 1}, {unique: true});
-db.dfa_module.createIndex({id: 1}, {unique: true});
 db.dfa_module.createIndex({displayOrder: 1}, {unique: true});
+
 db.dfa_submeasure.createIndex({name: 1}, {unique: true});
 db.dfa_measure.createIndex({name: 1}, {unique: true});
 db.lookup.createIndex({type: 1}, {unique: true});

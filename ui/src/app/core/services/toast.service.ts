@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Store} from '../../store/store';
+import {AppStore} from '../../app/app-store';
 
 export enum ToastSeverity {
   info = 'info',
@@ -14,10 +14,12 @@ export enum ToastPadding {
   loose = 'loose'
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ToastService {
 
-  constructor(private store: Store) {
+  constructor(private store: AppStore) {
   }
 
   addPermToast(title, message, severity = ToastSeverity.info) {

@@ -80,7 +80,7 @@ export default function () {
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/submeasure', submeasureRouter);
   app.use('/api/lookup', lookupRouter);
-// profitability:
+  // prof:
   app.use('/api/prof/dollar-upload', dollarUploadRouter);
   app.use('/api/prof/mapping-upload', mappingUploadRouter);
   app.use('/api/prof/dept-upload', deptUploadRouter);

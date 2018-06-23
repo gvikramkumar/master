@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import * as _ from 'lodash';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UtilService {
 
   createHttpParams(_params) {

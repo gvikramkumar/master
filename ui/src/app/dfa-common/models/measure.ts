@@ -1,0 +1,11 @@
+import {ModelBase} from './model-base';
+
+export class Measure extends ModelBase {
+  name: string;
+  typeCode: string;
+  statusFlag: string;
+  createdBy?: string;
+  createdDate?: string;
+  updatedBy?: string;
+  updatedDate?: string;
+}

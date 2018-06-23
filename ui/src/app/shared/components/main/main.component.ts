@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
-import {Store} from '../../../store/store';
+import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import * as _ from 'lodash';
 
@@ -13,7 +13,7 @@ export class MainComponent implements OnInit {
   hero: { title: string, desc: string } = {title: '', desc: ''};
   headerOptions;
 
-  constructor(public store: Store, private router: Router) {
+  constructor(public store: AppStore, private router: Router) {
     const i = 7;
   }
 
@@ -22,7 +22,8 @@ export class MainComponent implements OnInit {
     this.store.routeDataSub(data => {
         this.hero = data.hero;
         this.headerOptions.breadcrumbs = data.breadcrumbs;
-      })
+        this.store.updateModule(data.module);
+      });
   }
 
 }

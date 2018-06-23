@@ -1,8 +1,13 @@
-id,displayOrder,name
-1,1,Profitability
-2,2,As COGS Triangulation
-3,3,Deferred Revenueeee
-4,4,Opex Allocation
-5,5,Bookings Miscallenous
-6,6,CA Automation
-7,7,Testing
+_id,displayOrder,abbrev,name
+1,1,prof,Profitability Allocations
+2,2,prdt,Product Triangulation
+3,3,bkgm,Bookings Misc Allocation
+4,4,svct,Service Triangulation
+5,5,tsct,TSS Cogs Triangulation
+6,6,ascg,AS Cogs Allocation
+7,7,cisc,CIS Cogs Allocation
+8,8,opex,Opex Allocation
+9,9,defr,Deferred Revenue
+10,10,gubr,Gross Unbilled Revenue
+11,11,bkir,Bookings IR Allocation
+12,12,rrev,Recurring Revenue

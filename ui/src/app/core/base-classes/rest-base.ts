@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {ModelBase} from '../../store/models/model-base';
+import {ModelBase} from '../../dfa-common/models/model-base';
 import {UtilService} from '../services/util.service';
 const apiUrl = environment.apiUrl;
 
