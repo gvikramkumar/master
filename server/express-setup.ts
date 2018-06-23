@@ -90,11 +90,12 @@ export default function () {
   app.use('/api/prof/upload', uploadRouter);
 
 
-  app.use(express.static(path.resolve(__dirname, '../../ui/dist')));
+  app.use(express.static(path.resolve(__dirname, '../ui/')));
 
-  app.get(['/', '/prof/*'], (req, res) => {
+  app.get(['/', '/prof/*', '/prdt/*', '/bkgm/*', '/svct/*', '/tsct/*', '/ascg/*',
+    '/cisc/*', '/opex/*', '/defr/*', '/gubr/*', '/bkir/*', '/rrev/*'], (req, res) => {
     console.log('>>>>>> served index.html');
-    res.sendFile(path.resolve(__dirname, '../../ui/dist') + '/index.html');
+    res.sendFile(path.resolve(__dirname, '../ui/index.html'));
   });
 
   app.use(notFound());

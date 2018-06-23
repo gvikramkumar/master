@@ -1,14 +1,14 @@
 import {injectable} from 'inversify';
-import LookupRepo from './repo';
+import ModuleLookupRepo from './repo';
 
 
 @injectable()
-export default class LookupController {
+export default class ModuleLookupController {
 
-  constructor(private repo: LookupRepo) {}
+  constructor(private repo: ModuleLookupRepo) {}
 
   getValues(req, res, next) {
-    this.repo.getValuesByType(req.params.type)
+    this.repo.getValuesByType(req.query.moduleId, req.params.type)
       .then(values => res.send(values))
       .catch(next);
   }

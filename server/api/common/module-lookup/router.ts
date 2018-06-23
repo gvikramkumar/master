@@ -1,9 +1,9 @@
 import {injector} from '../../../lib/common/inversify.config';
-import LookupController from './controller';
 import {Router} from 'express';
+import ModuleLookupController from './controller';
 
 
-const ctrl = injector.get(LookupController)
+const ctrl = injector.get(ModuleLookupController)
 
 export default Router()
   .get('/:type', ctrl.getValues.bind(ctrl));
