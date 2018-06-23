@@ -13,16 +13,15 @@ export class MainComponent implements OnInit {
   hero: { title: string, desc: string } = {title: '', desc: ''};
   headerOptions;
 
-  constructor(public store: AppStore, private router: Router) {
-    const i = 7;
+  constructor(public store: AppStore, private router: Router, route: ActivatedRoute) {
+    store.updateModule(route.snapshot.data.module);
   }
 
   ngOnInit() {
-    this.headerOptions = _.clone(this.store.headerOptionsBase);
+    this.headerOptions = _.clone(this.store.headerOptions);
     this.store.routeDataSub(data => {
         this.hero = data.hero;
         this.headerOptions.breadcrumbs = data.breadcrumbs;
-        this.store.updateModule(data.module);
       });
   }
 

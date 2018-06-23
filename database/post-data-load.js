@@ -110,11 +110,20 @@ db.dfa_measure.insertMany([
   }
 ])
 
-db.dfa_open_period.insert({
-  moduleId: NumberInt(1),
-  fiscalMonth: 201809,
-  openFlag: "Y"
-})
+db.dfa_open_period.insertMany([
+  {moduleId: NumberInt(1), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(2), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(3), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(4), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(5), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(6), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(7), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(8), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(9), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(10), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(11), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(12), fiscalMonth: 201809, openFlag: "Y"},
+]);
 
 db.prof_mapping_upload.insert({
   fiscalMonth: 201809,

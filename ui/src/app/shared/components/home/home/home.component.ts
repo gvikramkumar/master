@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit() {
-    this.headerOptions = _.clone(this.store.headerOptionsBase);
+    this.headerOptions = _.clone(this.store.headerOptions);
     this.modules = this.store.modules;
   }
 

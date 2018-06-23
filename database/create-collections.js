@@ -16,6 +16,7 @@ const collections = [
   'dfa_open_period',
   'user_role',
   'lookup',
+  'module_lookup',
   'prof_sales_split_pct',
   'prof_swalloc_manual_mix',
   'prof_department_acc_map'
@@ -37,23 +38,21 @@ fileCollections.forEach(coll => {
 });
 
 // add indexes;
-// todo: add appropriate indexes on all collections
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 db.dfa_allocation_rule.createIndex({moduleId: 1, name: 1, updatedDate: -1});
-db.submeasure.createIndex({moduleId: 1, name: 1});
+db.dfa_submeasure.createIndex({moduleId:1, name: 1}, {unique: true});
+db.dfa_measure.createIndex({moduleId:1, name: 1}, {unique: true});
 
 db.prof_dollar_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
 db.prof_mapping_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
 db.prof_swalloc_manual_mix.createIndex({submeasureName: 1, fiscalMonth: -1});
 
-// unique constraints
 db.dfa_module.createIndex({abbrev: 1}, {unique: true});
 db.dfa_module.createIndex({name: 1}, {unique: true});
 db.dfa_module.createIndex({displayOrder: 1}, {unique: true});
 
-db.dfa_submeasure.createIndex({name: 1}, {unique: true});
-db.dfa_measure.createIndex({name: 1}, {unique: true});
-db.lookup.createIndex({type: 1}, {unique: true});
+db.lookup.createIndex({type: 1}, {unique: true});// shared lookup values
+db.module_lookup.createIndex({moduleId: 1, type: 1}, {unique: true});// lookup values per moduleId
 
 print('>>>>>>>>>>>> create-collections complete');
 // unique constraints

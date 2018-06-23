@@ -26,6 +26,14 @@ const routes: Routes = [
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },
+  {
+    path: 'prdt',
+    loadChildren: 'app/prdt/prdt.module#PrdtModule',
+    data: {
+      authorization: 'prof:access'
+    },
+    canActivate: [InitializationGuard, AuthorizationGuard]
+  },
   {path: '**', component: PageNotFoundComponent}
 ];
 
@@ -52,7 +60,7 @@ export class AppRoutingModule {
     this.router.events.pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.store.currentUrlPub(event.url);
-        console.log(event.url);
+        // console.log(event.url);
       });
 
   }

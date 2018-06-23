@@ -4,6 +4,7 @@ import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
 import {Title} from '@angular/platform-browser';
 import {AppStore} from './app-store';
+import {ToastService} from '../core/services/toast.service';
 
 @Component({
   selector: 'fin-root',
@@ -17,7 +18,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('permToast') permToast: CuiToastComponent;
   @ViewChild('autoHideToast') autoHideToast: CuiToastComponent;
 
-  constructor(private titleService: Title, public store: AppStore) {
+  constructor(private titleService: Title, public store: AppStore, private toastService: ToastService) {
   }
 
   public ngOnInit() {
@@ -25,8 +26,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.store.permToast = this.permToast;
-    this.store.autoHideToast = this.autoHideToast;
+    this.toastService.permToast = this.permToast;
+    this.toastService.autoHideToast = this.autoHideToast;
   }
 
   headerOptions = new CuiHeaderOptions({

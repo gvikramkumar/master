@@ -14,7 +14,7 @@ const routes: Routes = [
   {
     path: '',
     component: MainComponent,
-    data: {module: Modules.prof},
+    data: {module: Modules.prdt},
     children: [
       {
         path: 'submeasure',
@@ -134,6 +134,6 @@ const routes: Routes = [
     RouterModule
   ]
 })
-export class ProfRoutingModule {
+export class PrdtRoutingModule {
 
 }
