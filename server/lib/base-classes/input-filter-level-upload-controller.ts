@@ -1,6 +1,10 @@
 import UploadController from './upload-controller';
 import PostgresRepo from '../database/repos/postgres-repo';
 import LookupRepo from '../../api/common/lookup/repo';
+import {Modules} from '../../../shared/enums';
+import SubmeasureRepo from '../../api/common/submeasure/repo';
+import OpenPeriodRepo from '../../api/common/open-period/repo';
+import UserRoleRepo from '../database/repos/user-role-repo';
 
 const pgRepo = new PostgresRepo();
 const lookupRepo = new LookupRepo();
@@ -8,8 +12,20 @@ const lookupRepo = new LookupRepo();
 export default class InputFilterLevelUploadController extends UploadController {
 data;
 
-  constructor(repo) {
-    super(repo);
+  constructor(
+    moduleId,
+    repo,
+    openPeriodRepo: OpenPeriodRepo,
+    submeasureRepo: SubmeasureRepo,
+    userRoleRepo: UserRoleRepo
+  ) {
+    super(
+      moduleId,
+      repo,
+      openPeriodRepo,
+      submeasureRepo,
+      userRoleRepo
+      );
   }
 
   // IMPORTANT: we use a lodash binary search on these values, so all values need to be upper case and

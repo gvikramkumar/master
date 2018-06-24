@@ -3,12 +3,27 @@ import InputFilterLevelUploadController from '../../../../lib/base-classes/input
 import MappingUploadRepo from '../../mapping-upload/repo';
 import MappingUploadTemplate from './template';
 import MappingUploadImport from './import';
+import {Modules} from '../../../../../shared/enums';
+import SubmeasureRepo from '../../../common/submeasure/repo';
+import OpenPeriodRepo from '../../../common/open-period/repo';
+import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 
 @injectable()
 export default class MappingUploadUploadController extends InputFilterLevelUploadController {
 
-  constructor(repo: MappingUploadRepo) {
-    super(repo);
+  constructor(
+    repo: MappingUploadRepo,
+    openPeriodRepo: OpenPeriodRepo,
+    submeasureRepo: SubmeasureRepo,
+    userRoleRepo: UserRoleRepo
+  ) {
+    super(
+      Modules.prof,
+      repo,
+      openPeriodRepo,
+      submeasureRepo,
+      userRoleRepo
+    );
     this.uploadName = 'Mapping Upload';
 
     this.PropNames = {

@@ -5,13 +5,28 @@ import * as _ from 'lodash';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import DeptUploadDeptTemplate from './dept-template';
 import DeptUploadExludeAcctTemplate from './exclude-acct-template';
+import {Modules} from '../../../../../shared/enums';
+import SubmeasureRepo from '../../../common/submeasure/repo';
+import OpenPeriodRepo from '../../../common/open-period/repo';
+import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 
 
 @injectable()
 export default class DeptUploadUploadController extends UploadController {
 
-  constructor(repo: DeptUploadRepo) {
-    super(repo);
+  constructor(
+    repo: DeptUploadRepo,
+    openPeriodRepo: OpenPeriodRepo,
+    submeasureRepo: SubmeasureRepo,
+    userRoleRepo: UserRoleRepo
+  ) {
+    super(
+      Modules.prof,
+      repo,
+      openPeriodRepo,
+      submeasureRepo,
+      userRoleRepo
+    );
     this.uploadName = 'Department Upload';
     this.hasTwoSheets = true;
     this.sheet1SubmeasureNames = [];
@@ -35,7 +50,7 @@ export default class DeptUploadUploadController extends UploadController {
       .then(results => {
         this.data.department = {
           department_codes: [111, 222], // results[3], //todo: fix this postgres down hack.
-          company_codes: [333333, 444444, ] // results[4]
+          company_codes: [333333, 444444,] // results[4]
         };
         this.data.glAccounts = [62345, 62346, 62347]; // results[5];
       });

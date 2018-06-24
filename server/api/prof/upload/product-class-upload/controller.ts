@@ -6,13 +6,28 @@ import ProductClassUploadTemplate from './template';
 import ProductClassUploadImport from './import';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
 import AnyObj from '../../../../lib/models/any-obj';
+import {Modules} from '../../../../../shared/enums';
+import SubmeasureRepo from '../../../common/submeasure/repo';
+import OpenPeriodRepo from '../../../common/open-period/repo';
+import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 
 @injectable()
 export default class ProductClassUploadUploadController extends UploadController {
-imports: AnyObj[];
+  imports: AnyObj[];
 
-  constructor(repo: ProductClassUploadRepo) {
-    super(repo);
+  constructor(
+    repo: ProductClassUploadRepo,
+    openPeriodRepo: OpenPeriodRepo,
+    submeasureRepo: SubmeasureRepo,
+    userRoleRepo: UserRoleRepo
+  ) {
+    super(
+      Modules.prof,
+      repo,
+      openPeriodRepo,
+      submeasureRepo,
+      userRoleRepo
+    );
     this.uploadName = 'Product Classification Upload';
 
     this.PropNames = {

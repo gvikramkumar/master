@@ -6,7 +6,7 @@ import {ApiError} from '../common/api-error';
 import AnyObj from '../models/any-obj';
 import RepoBase from './repo-base';
 
-export default class ModuleRepoBase extends RepoBase{
+export default class ModuleRepoBase extends RepoBase {
   protected Model: Model<any>;
 
   constructor(public schema: Schema, modelName: string) {

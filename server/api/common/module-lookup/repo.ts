@@ -1,6 +1,7 @@
 import {injectable} from 'inversify';
 import {Schema, model, Model} from 'mongoose';
 import * as _ from 'lodash';
+import {ApiError} from '../../../lib/common/api-error';
 
 const schema = new Schema(
   {
@@ -19,6 +20,9 @@ Model: Model<any>;
   }
 
   getValuesByType(moduleId, type) {
+    if (!moduleId) {
+      throw new ApiError('Missing moduleId', null, 400);
+    }
     return this.Model.findOne({moduleId, type}).exec()
       .then(doc => doc.values);
   }

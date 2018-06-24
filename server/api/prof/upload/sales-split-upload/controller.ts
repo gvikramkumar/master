@@ -5,12 +5,28 @@ import PostgresRepo from '../../../../lib/database/repos/postgres-repo';
 import SalesSplitUploadTemplate from './template';
 import * as _ from 'lodash';
 import SalesSplitUploadImport from './import';
+import {Modules} from '../../../../../shared/enums';
+import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
+import SubmeasureRepo from '../../../common/submeasure/repo';
+import OpenPeriodRepo from '../../../common/open-period/repo';
 
 @injectable()
 export default class SalesSplitUploadUploadController extends UploadController {
 
-  constructor(repo: SalesSplitUploadRepo, private pgRepo: PostgresRepo) {
-    super(repo);
+  constructor(
+    repo: SalesSplitUploadRepo,
+    private pgRepo: PostgresRepo,
+    openPeriodRepo: OpenPeriodRepo,
+    submeasureRepo: SubmeasureRepo,
+    userRoleRepo: UserRoleRepo
+  ) {
+    super(
+      Modules.prof,
+      repo,
+      openPeriodRepo,
+      submeasureRepo,
+      userRoleRepo
+    );
     this.uploadName = 'Sales Level Split Upload';
 
     this.PropNames = {

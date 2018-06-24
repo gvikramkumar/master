@@ -4,13 +4,28 @@ import * as _ from 'lodash';
 import InputFilterLevelUploadController from '../../../../lib/base-classes/input-filter-level-upload-controller';
 import DollarUploadTemplate from './template';
 import DollarUploadImport from './import';
+import {Modules} from '../../../../../shared/enums';
+import SubmeasureRepo from '../../../common/submeasure/repo';
+import OpenPeriodRepo from '../../../common/open-period/repo';
+import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 
 
 @injectable()
 export default class DollarUploadUploadController extends InputFilterLevelUploadController {
 
-  constructor(repo: DollarUploadRepo) {
-    super(repo);
+  constructor(
+    repo: DollarUploadRepo,
+    openPeriodRepo: OpenPeriodRepo,
+    submeasureRepo: SubmeasureRepo,
+    userRoleRepo: UserRoleRepo
+  ) {
+    super(
+      Modules.prof,
+      repo,
+      openPeriodRepo,
+      submeasureRepo,
+      userRoleRepo
+    );
     this.uploadName = 'Dollar Upload';
 
     this.PropNames = {

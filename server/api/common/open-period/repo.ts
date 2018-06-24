@@ -1,6 +1,6 @@
 import {injectable} from 'inversify';
 import {Schema} from 'mongoose';
-import RepoBase from '../../../lib/base-classes/repo-base';
+import ModuleRepoBase from '../../../lib/base-classes/module-repo-base';
 
 
 const schema = new Schema(
@@ -17,7 +17,7 @@ const schema = new Schema(
 );
 
 @injectable()
-export default class OpenPeriodRepo extends RepoBase {
+export default class OpenPeriodRepo extends ModuleRepoBase {
   constructor() {
     super(schema, 'OpenPeriod');
   }
