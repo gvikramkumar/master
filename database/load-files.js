@@ -16,11 +16,11 @@ mg.connect(uri)
     const meta = {directory: 'prof.bu', buFileType: 'template'};
     const promises = [];
     const buTemplates = [
-      {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload'},
-      {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload'},
-      {fileName: 'department_upload_template.xlsx', buUploadType: 'dept-upload'},
-      {fileName: 'sales_level_split_upload_template.xlsx', buUploadType: 'sales-split-upload'},
-      {fileName: 'product_classification_upload_template.xlsx', buUploadType: 'product-class-upload'}
+      {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar'},
+      {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping'},
+      {fileName: 'department_upload_template.xlsx', buUploadType: 'dept'},
+      {fileName: 'sales_level_split_upload_template.xlsx', buUploadType: 'sales-split'},
+      {fileName: 'product_classification_upload_template.xlsx', buUploadType: 'product-class'}
     ]
 
     buTemplates.forEach(template => {

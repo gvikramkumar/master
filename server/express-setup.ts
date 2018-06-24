@@ -23,7 +23,6 @@ import productClassUploadRouter from './api/prof/product-class-upload/router';
 import measureRouter from './api/common/measure/router';
 import openPeriodRouter from './api/common/open-period/router';
 import lookupRouter from './api/common/lookup/router';
-import moduleLookupRouter from './api/common/module-lookup/router';
 import reportRouter from './api/prof/report/router';
 import uploadRouter from './api/prof/upload/router';
 
@@ -81,13 +80,13 @@ export default function () {
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/submeasure', submeasureRouter);
   app.use('/api/lookup', lookupRouter);
-  app.use('/api/module-lookup', moduleLookupRouter);
+  // app.use('/api/module-lookup', moduleLookupRouter);
   // prof:
-  app.use('/api/prof/dollar-upload', dollarUploadRouter);
-  app.use('/api/prof/mapping-upload', mappingUploadRouter);
-  app.use('/api/prof/dept-upload', deptUploadRouter);
-  app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
-  app.use('/api/prof/product-class-upload', productClassUploadRouter);
+  app.use('/api/prof/dollar', dollarUploadRouter);
+  app.use('/api/prof/mapping', mappingUploadRouter);
+  app.use('/api/prof/dept', deptUploadRouter);
+  app.use('/api/prof/sales-split', salesSplitUploadRouter);
+  app.use('/api/prof/product-class', productClassUploadRouter);
   app.use('/api/prof/report', reportRouter);
   app.use('/api/prof/upload', uploadRouter);
 

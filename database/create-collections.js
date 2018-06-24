@@ -51,8 +51,8 @@ db.dfa_module.createIndex({abbrev: 1}, {unique: true});
 db.dfa_module.createIndex({name: 1}, {unique: true});
 db.dfa_module.createIndex({displayOrder: 1}, {unique: true});
 
-db.lookup.createIndex({type: 1}, {unique: true});// shared lookup values
-db.module_lookup.createIndex({moduleId: 1, type: 1}, {unique: true});// lookup values per moduleId
+db.lookup.createIndex({key: 1}, {unique: true});// shared
+db.module_lookup.createIndex({moduleId: 1, key: 1}, {unique: true});// per module
 
 print('>>>>>>>>>>>> create-collections complete');
 // unique constraints

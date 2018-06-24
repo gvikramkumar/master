@@ -36,13 +36,13 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   reports: any[] = [
     {
-      type: 'dollar-upload', hasFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
+      type: 'dollar', hasFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
       filename: 'manual_uploaded_data',
       excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Amount',
       excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, amount'
     },
     {
-      type: 'mapping-upload', hasFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
+      type: 'mapping', hasFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
       filename: 'manual_mapping_data',
       excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Percentage',
       excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, percentage'
@@ -62,7 +62,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       'l4_sales_territory_descr, l5_sales_territory_descr, l6_sales_territory_descr'
     },
     {
-      type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping Report', disabled: true,
+      type: 'dept', hasSubmeasure: true, text: 'Department Mapping Report', disabled: true,
       filename: 'department_mapping_data',
       excelHeaders: 'Sub-Measure Name, Department Code, Start Account Code, End Account Code',
       excelProperties: 'submeasureName, departmentCode, startAccountCode, endAccountCode'
@@ -120,11 +120,11 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       this.fiscalMonths = [];
       let obs;
       switch (this.report.type) {
-        case 'dollar-upload':
+        case 'dollar':
           obs = this.dollarUploadService.getDistinct('fiscalMonth',
             {submeasureName: this.submeasureName});
           break;
-        case 'mapping-upload':
+        case 'mapping':
           obs = this.mappingUploadService.getDistinct('fiscalMonth',
             {submeasureName: this.submeasureName});
           break;

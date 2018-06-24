@@ -49,7 +49,7 @@ data;
       Promise.resolve(['LEGAL ENTITY VALUE']), // todo: this doesn't exits yet: pgRepo.getSortedUpperListFromColumn('business_entity', 'business_entity_name'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_be_hierarchy', 'bk_business_entity_name'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_be_hierarchy', 'bk_sub_business_entity_name'),
-      lookupRepo.getTextValuesByTypeandSortedUpperCase('revenue_classification'),
+      lookupRepo.getTextValuesSortedUpperCase('revenue_classification'),
       pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'sales_coverage_code')
     ])
       .then(results => {

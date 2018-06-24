@@ -24,7 +24,7 @@ export default class GridFSBucket {
           return gfs.uploadFile(this.req.file, {
           directory: Directory.businessUpload,
           buUploadType: BuUploadType.dollarUpload,
-          buFileType: BuFileType.upload
+          buFileType: BusinessUploadFileType.upload
         })
           .then(fileId => {
             return fileRepo.getOneById(fileId)

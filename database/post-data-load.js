@@ -138,18 +138,18 @@ db.prof_mapping_upload.insert({
 
 db.lookup.insertMany([
   {
-    type: 'revenue_classification',
-    values: ["Recurring Deferred", "Recurring Non Deferred", "Recurring Other", "Non Recurring"]
+    key: 'revenue_classification',
+    value: ["Recurring Deferred", "Recurring Non Deferred", "Recurring Other", "Non Recurring"]
   },
 ]);
 
-// dept-upload
+// dept
 db.prof_department_acc_map.insertOne({
   submeasureName:"2 Tier Adjustment",
   nodeValue:"020_070506",
   glAccount:"69999"});
 
-// sales-split-upload
+// sales-split
 db.prof_sales_split_pct.insertOne({
   fiscalMonth:201810,
   accountId:"42127",
@@ -158,7 +158,7 @@ db.prof_sales_split_pct.insertOne({
   salesTerritoryCode: "AFRICA-PROG-REB-COMM",
   splitPercentage: 0.2});
 
-// product-class-upload
+// product-class
 db.prof_swalloc_manual_mix.insertOne({
   fiscalMonth:201810,
   submeasureName:"2 Tier",

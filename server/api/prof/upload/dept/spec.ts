@@ -2,7 +2,7 @@ import DeptUploadController from './controller';
 import {injector} from '../../../../lib/common/inversify.config';
 
 
-fdescribe('upload/dept-upload tests', () => {
+fdescribe('upload/dept tests', () => {
   let sut;
 
   beforeAll(() => {

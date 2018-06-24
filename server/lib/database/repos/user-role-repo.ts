@@ -1,5 +1,6 @@
 import mg from 'mongoose';
 import RepoBase from '../../base-classes/repo-base';
+import {injectable} from 'inversify';
 
 
 const schema = new mg.Schema(
@@ -10,6 +11,7 @@ const schema = new mg.Schema(
   {collection: 'user_role'}
 );
 
+@injectable()
 export default class UserRoleRepo extends RepoBase {
   constructor() {
     super(schema, 'UserRole');

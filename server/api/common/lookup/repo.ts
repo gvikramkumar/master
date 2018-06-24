@@ -1,11 +1,12 @@
 import {injectable} from 'inversify';
-import {Schema, model, Model} from 'mongoose';
+import {model, Model, Schema} from 'mongoose';
 import * as _ from 'lodash';
+import {ApiError} from '../../../lib/common/api-error';
 
 const schema = new Schema(
   {
-    type: String,
-    values: []
+    key: String,
+    value: Schema.Types.Mixed
   },
   {collection: 'lookup'}
 );
@@ -18,17 +19,44 @@ Model: Model<any>;
     this.Model = model('Lookup', schema);
   }
 
-  getValuesByType(type) {
-    return this.Model.findOne({type}).exec()
-      .then(doc => doc.values);
+  getDoc(key) {
+    return this.Model.findOne({key}).exec();
   }
 
   // this is for upload data validation for entries with just text values (not objects),
   // we need them upper case and sorted by lodash
-  getTextValuesByTypeandSortedUpperCase(type) {
-    return this.getValuesByType(type)
-      .then(values => values.map(value => value.toUpperCase()))
+  getTextValuesSortedUpperCase(key) {
+    return this.getDoc(key)
+      .then(doc => doc.value.map(val => val.toUpperCase()))
       .then(values => _.sortBy(values, _.identity));
+  }
+
+  add(data) {
+    // if versioning items, our edits will actually be adds, so dump the ids in that case
+    const item = new this.Model(data);
+    return item.save();
+  }
+
+  update({key, value}) {
+    return this.getDoc(key)
+      .then(item => {
+        if (!item) {
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
+        }
+        item.value = value;
+        return item.save();
+      });
+  }
+
+  remove(key) {
+    return this.getDoc(key)
+      .then(item => {
+        if (!item) {
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
+        }
+        return item.remove()
+          .then(() => item.value);
+      });
   }
 
 }

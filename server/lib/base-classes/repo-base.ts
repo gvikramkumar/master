@@ -92,12 +92,10 @@ export default class RepoBase {
       return query.exec()
       .then(item => {
         if (!item && data.updatedDate) {
-          const err = new NamedApiError('ConcurrencyError', 'Concurrency error, please refresh your data.', null, 400);
-          throw(err);
+          throw new NamedApiError('ConcurrencyError', 'Concurrency error, please refresh your data.', null, 400);
         }
         else if (!item) {
-          const err = new ApiError('Item not found, please refresh your data.', null, 400);
-          throw(err);
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         return item;
       });
@@ -176,8 +174,7 @@ export default class RepoBase {
     return this.getOneById(id)
       .then(item => {
       if (!item) {
-          const err = new ApiError('Item not found, please refresh your data.', null, 400);
-          throw(err);
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         return item.remove();
       });

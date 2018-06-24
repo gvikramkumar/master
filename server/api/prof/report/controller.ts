@@ -36,10 +36,10 @@ export default class ReportController {
 
     let promise;
     switch (req.params.report) {
-      case 'dollar-upload':
+      case 'dollar':
         promise = this.dollarUploadCtrl.getManyPromise(req);
         break;
-      case 'mapping-upload':
+      case 'mapping':
         promise = this.mappingUploadCtrl.getManyPromise(req);
         break;
       case 'product-hierarchy':
@@ -48,7 +48,7 @@ export default class ReportController {
       case 'sales-hierarchy':
         promise = this.postgresRepo.getSalesHierarchyReport();
         break
-      case 'dept-upload':
+      case 'dept':
         promise = this.deptUploadCtrl.getManyPromise(req);
         break
       default:

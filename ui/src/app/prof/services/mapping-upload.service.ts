@@ -12,7 +12,7 @@ const apiUrl = environment.apiUrl;
 export class MappingUploadService extends RestBase<any> {
 
   constructor(httpClient: HttpClient, util: UtilService) {
-    super('prof/mapping-upload', httpClient, util);
+    super('prof/mapping', httpClient, util);
   }
 
 

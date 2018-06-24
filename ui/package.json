@@ -5,7 +5,7 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
-    "build-prod": "rimraf ../dist/ui/**/*.* && ng build --prod && copyfiles -u 1 dist/**/* ../dist/ui/",
+    "build-prod": "rimraf ../dist/ui/**/*.* &&  copyfiles -u 1 dist/**/* ../dist/ui/",
     "test": "ng test",
     "e2e": "cd ui && ng e2e -e=unit %1 %2",
     "lint": "ng lint"
