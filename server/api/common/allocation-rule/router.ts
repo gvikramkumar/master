@@ -1,11 +1,11 @@
-import express from 'express';
+import {Router} from 'express';
 import AllocationRuleController from './controller';
 import {injector} from '../../../lib/common/inversify.config';
 import {authorize} from '../../../lib/middleware/authorize';
 
 const ctrl = injector.get(AllocationRuleController)
 
-export default express.Router()
+export const allocationRuleRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
   .post('/', authorize('api:manage'), ctrl.handlePost.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))

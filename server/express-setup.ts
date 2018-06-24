@@ -9,22 +9,23 @@ import cors from 'cors';
 import {NamedApiError} from './lib/common/named-api-error';
 import notFound from './lib/middleware/not-found';
 import errorHandler from './lib/middleware/error-handler';
-import moduleRouter from './api/common/module/router';
-import allocationRuleRouter from './api/common/allocation-rule/router';
-import submeasureRouter from './api/common/submeasure/router';
-import fileRouter from './api/common/file/router';
 import User from './lib/models/user';
 import {authorize} from './lib/middleware/authorize';
-import dollarUploadRouter from './api/prof/dollar-upload/router';
-import mappingUploadRouter from './api/prof/mapping-upload/router';
-import deptUploadRouter from './api/prof/dept-upload/router';
-import salesSplitUploadRouter from './api/prof/sales-split-upload/router';
-import productClassUploadRouter from './api/prof/product-class-upload/router';
-import measureRouter from './api/common/measure/router';
-import openPeriodRouter from './api/common/open-period/router';
-import lookupRouter from './api/common/lookup/router';
-import reportRouter from './api/prof/report/router';
-import uploadRouter from './api/prof/upload/router';
+import {moduleLookupRouter} from './api/common/module-lookup/router';
+import {reportRouter} from './api/prof/report/router';
+import {salesSplitUploadRouter} from './api/prof/sales-split-upload/router';
+import {deptUploadRouter} from './api/prof/dept-upload/router';
+import {mappingUploadRouter} from './api/prof/mapping-upload/router';
+import {dollarUploadRouter} from './api/prof/dollar-upload/router';
+import {lookupRouter} from './api/common/lookup/router';
+import {submeasureRouter} from './api/common/submeasure/router';
+import {allocationRuleRouter} from './api/common/allocation-rule/router';
+import {measureRouter} from './api/common/measure/router';
+import {moduleRouter} from './api/common/module/router';
+import {openPeriodRouter} from './api/common/open-period/router';
+import {fileRouter} from './api/common/file/router';
+import {productClassUploadRouter} from './api/prof/product-class-upload/router';
+import {profUploadRouter} from './api/prof/upload/router';
 
 
 export default function () {
@@ -80,7 +81,7 @@ export default function () {
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/submeasure', submeasureRouter);
   app.use('/api/lookup', lookupRouter);
-  // app.use('/api/module-lookup', moduleLookupRouter);
+  app.use('/api/module-lookup', moduleLookupRouter);
   // prof:
   app.use('/api/prof/dollar', dollarUploadRouter);
   app.use('/api/prof/mapping', mappingUploadRouter);
@@ -88,7 +89,7 @@ export default function () {
   app.use('/api/prof/sales-split', salesSplitUploadRouter);
   app.use('/api/prof/product-class', productClassUploadRouter);
   app.use('/api/prof/report', reportRouter);
-  app.use('/api/prof/upload', uploadRouter);
+  app.use('/api/prof/upload', profUploadRouter);
 
 
   app.use(express.static(path.resolve(__dirname, '../ui/')));

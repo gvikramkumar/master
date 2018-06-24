@@ -7,7 +7,7 @@ import {authorize} from '../../../lib/middleware/authorize';
 
 const ctrl = injector.get(FileController);
 
-export default Router()
+export const fileRouter = Router()
   // fileInfo handlers
   .get('/info', ctrl.getInfoMany.bind(ctrl))
   .get('/info/:id', ctrl.getInfoOne.bind(ctrl))

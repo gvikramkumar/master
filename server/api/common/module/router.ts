@@ -4,7 +4,7 @@ import {injector} from '../../../lib/common/inversify.config';
 
 const ctrl = injector.get(ModuleController);
 
-export default Router()
+export const moduleRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
   .post('/', ctrl.handlePost.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))

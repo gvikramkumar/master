@@ -13,7 +13,7 @@ const deptUploadCtrl = injector.get(DeptUploadUploadController);
 const salesSplitUploadCtrl = injector.get(SalesSplitUploadUploadController);
 const productClassUploadCtrl = injector.get(ProductClassUploadUploadController);
 
-export default Router()
+export const profUploadRouter = Router()
   .post('/dollar', upload.single('fileUploadField'), dollarUploadCtrl.upload.bind(dollarUploadCtrl))
   .post('/mapping', upload.single('fileUploadField'), mappingUploadCtrl.upload.bind(mappingUploadCtrl))
   .post('/dept', upload.single('fileUploadField'), deptUploadCtrl.upload.bind(deptUploadCtrl))
