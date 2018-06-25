@@ -21,7 +21,8 @@
       "emitDecoratorMetadata": true
     },
     "include": [
-        "server/**/*",
+      "server/**/*",
+      "shared/**/*",
         "spec/**/*"
     ]
 }
