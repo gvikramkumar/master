@@ -1,6 +1,6 @@
-import {ModelBase} from './model-base';
 
-export class Module extends ModelBase {
+export class Module {
+  id?: string;
   moduleId: number;
   displayOrder: number;
   abbrev: string;

@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import {pgc} from '../database/postgres-conn';
 import {ApiError} from '../common/api-error';
-import AnyObj from '../models/any-obj';
+import AnyObj from '../../../shared/models/any-obj';
 
 /**
  * errorHandler

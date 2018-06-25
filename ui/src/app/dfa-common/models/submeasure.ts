@@ -1,6 +1,6 @@
-import {ModelBase} from './model-base';
 
-export class Submeasure extends ModelBase {
+export class Submeasure {
+  id?: string;
   name: string;
   description: string;
   source: string;

@@ -7,7 +7,7 @@ import {User} from '../dfa-common/models/user';
 import {first} from 'rxjs/operators';
 import {Module} from '../dfa-common/models/module';
 import * as _ from 'lodash';
-import AnyObj from '../core/models/any-obj';
+import AnyObj from '../../../../shared/models/any-obj';
 import {Subject} from 'rxjs/Subject';
 
 @Injectable({
@@ -65,11 +65,22 @@ export class AppStore extends StoreBase {
     this.initialized$.next(this.initialized);
   }
 
-  module: Module;
+  private _module: Module;
+  get module(): Module {
+    // need to know if people are accessing this before it's ready
+    if (!this._module) {
+      throw new Error('store.module doesn\'t exist');
+    }
+    return this._module;
+  }
+  set module(module) {
+    this._module = module;
+  }
   module$ = new Subject<Module>();
   subModule = this.module$.subscribe.bind(this.module$);
   pubModule(moduleId) {
-    if (!this.module || this.module.moduleId !== moduleId) {
+    // if no module yet or it has changed, set it
+    if (!this._module || this._module.moduleId !== moduleId) {
       const module = _.find(this.modules, {moduleId});
       if (module) {
         this.module = module;
@@ -102,7 +113,7 @@ export class AppStore extends StoreBase {
   }
 
   updateModule(moduleId) {
-    if (!this.module || this.module.moduleId !== moduleId) {
+    if (!this._module || this._module.moduleId !== moduleId) {
       const module = _.find(this.modules, {moduleId});
       if (!module) {
         console.error(`No module found for moduleId: ${moduleId}`);

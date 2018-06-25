@@ -1,6 +1,6 @@
 import {injectable} from 'inversify';
 import {Schema} from 'mongoose';
-import ModuleRepoBase from '../../../lib/base-classes/module-repo-base';
+import RepoBase from '../../../lib/base-classes/repo-base';
 
 
 const schema = new Schema(
@@ -18,9 +18,9 @@ const schema = new Schema(
 );
 
 @injectable()
-export default class MeasureRepo extends ModuleRepoBase {
+export default class MeasureRepo extends RepoBase {
   constructor() {
-    super(schema, 'Measure');
+    super(schema, 'Measure', true);
   }
 
 }

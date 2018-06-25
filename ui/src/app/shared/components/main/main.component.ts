@@ -14,7 +14,11 @@ export class MainComponent implements OnInit {
   headerOptions;
 
   constructor(public store: AppStore, private router: Router, route: ActivatedRoute) {
-    store.updateModule(route.snapshot.data.module);
+    const moduleId = route.snapshot.data.moduleId;
+    if (!moduleId) {
+      throw new Error('Routing for module is missing moduleId');
+    }
+    store.updateModule(moduleId);
   }
 
   ngOnInit() {

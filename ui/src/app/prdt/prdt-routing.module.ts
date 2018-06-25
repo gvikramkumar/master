@@ -8,13 +8,13 @@ import {BusinessUploadComponent} from '../dfa-common/business-upload/business-up
 import {MainComponent} from '../shared/components/main/main.component';
 import {AuthorizationGuard} from '../core/guards/authorization.guard';
 import {ReportsComponent} from '../dfa-common/reports/reports/reports.component';
-import {Modules} from '../dfa-common/models/enums';
+import {Modules} from '../../../../shared/enums';
 
 const routes: Routes = [
   {
     path: '',
     component: MainComponent,
-    data: {module: Modules.prdt},
+    data: {moduleId: Modules.prdt},
     children: [
       {
         path: 'submeasure',

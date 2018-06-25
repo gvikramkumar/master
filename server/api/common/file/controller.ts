@@ -6,14 +6,11 @@ import util from '../../../lib/common/util';
 import {ApiError} from '../../../lib/common/api-error';
 import FileRepo from './repo';
 
-let db, mongo;
 
 @injectable()
 export default class FileController {
 
   constructor(private repo: FileRepo) {
-    db = mgc.db;
-    mongo = mgc.mongo;
   }
 
   // 3 ways to go here:
@@ -65,8 +62,8 @@ export default class FileController {
         }
         res.set('Content-Type', fileInfo.contentType);
         res.set('Content-Disposition', 'attachment; filename="' + fileInfo.metadata.fileName + '"');
-        const gfs = new mongo.GridFSBucket(db);
-        const readStream = gfs.openDownloadStream(new mongo.ObjectID(id));
+        const gfs = new mgc.mongo.GridFSBucket(mgc.db);
+        const readStream = gfs.openDownloadStream(new mgc.mongo.ObjectID(id));
         readStream.on('error', next);
         readStream.pipe(res);
       })
@@ -89,7 +86,7 @@ export default class FileController {
   */
 
   remove(req, res, next) {
-    const gfs = new mongo.GridFSBucket(db);
+    const gfs = new mgc.mongo.GridFSBucket(mgc.db);
     const id = req.params.id;
     this.repo.getOneById(id)
       .then(fileInfo => {
@@ -97,7 +94,7 @@ export default class FileController {
           next(new ApiError('File not found.', null, 400))
           return;
         }
-        return Q.ninvoke(gfs, 'delete', new mongo.ObjectID(id))
+        return Q.ninvoke(gfs, 'delete', new mgc.mongo.ObjectID(id))
           .then(() => res.send(fileInfo));
       })
       .catch(next);

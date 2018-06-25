@@ -14,8 +14,8 @@ const salesSplitUploadCtrl = injector.get(SalesSplitUploadUploadController);
 const productClassUploadCtrl = injector.get(ProductClassUploadUploadController);
 
 export const profUploadRouter = Router()
-  .post('/dollar', upload.single('fileUploadField'), dollarUploadCtrl.upload.bind(dollarUploadCtrl))
-  .post('/mapping', upload.single('fileUploadField'), mappingUploadCtrl.upload.bind(mappingUploadCtrl))
-  .post('/dept', upload.single('fileUploadField'), deptUploadCtrl.upload.bind(deptUploadCtrl))
-  .post('/sales-split', upload.single('fileUploadField'), salesSplitUploadCtrl.upload.bind(salesSplitUploadCtrl))
-  .post('/product-class', upload.single('fileUploadField'), productClassUploadCtrl.upload.bind(productClassUploadCtrl));
+  .post('/dollar-upload', upload.single('fileUploadField'), dollarUploadCtrl.upload.bind(dollarUploadCtrl))
+  .post('/mapping-upload', upload.single('fileUploadField'), mappingUploadCtrl.upload.bind(mappingUploadCtrl))
+  .post('/dept-upload', upload.single('fileUploadField'), deptUploadCtrl.upload.bind(deptUploadCtrl))
+  .post('/sales-split-upload', upload.single('fileUploadField'), salesSplitUploadCtrl.upload.bind(salesSplitUploadCtrl))
+  .post('/product-class-upload', upload.single('fileUploadField'), productClassUploadCtrl.upload.bind(productClassUploadCtrl));

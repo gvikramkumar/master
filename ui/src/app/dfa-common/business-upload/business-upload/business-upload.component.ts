@@ -28,11 +28,11 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   files: FsFile[];
   templates: FsFile[];
   uploadTypes = [
-    {type: 'dollar', text: 'Adjustments - Dollar Upload', disabled: false},
-    {type: 'mapping', text: 'Manual Mapping Split Percentage Upload', disabled: false},
-    {type: 'dept', text: 'Department / Excluded Account Upload', disabled: false},
-    {type: 'sales-split', text: 'Sales Level Split Percentage Upload', disabled: false},
-    {type: 'product-class', text: 'Product Classification (SW/HW Mix) Upload', disabled: false}
+    {type: 'dollar-upload', text: 'Adjustments - Dollar Upload', disabled: false},
+    {type: 'mapping-upload', text: 'Manual Mapping Split Percentage Upload', disabled: false},
+    {type: 'dept-upload', text: 'Department / Excluded Account Upload', disabled: false},
+    {type: 'sales-split-upload', text: 'Sales Level Split Percentage Upload', disabled: false},
+    {type: 'product-class-upload', text: 'Product Classification (SW/HW Mix) Upload', disabled: false}
   ];
   uploadType = this.uploadTypes[0];
 

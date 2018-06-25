@@ -5,7 +5,7 @@ import ProductClassUploadRepo from '../../product-class-upload/repo';
 import ProductClassUploadTemplate from './template';
 import ProductClassUploadImport from './import';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
-import AnyObj from '../../../../lib/models/any-obj';
+import AnyObj from '../../../../../shared/models/any-obj';
 import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';

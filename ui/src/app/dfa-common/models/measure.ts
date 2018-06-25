@@ -1,6 +1,6 @@
-import {ModelBase} from './model-base';
 
-export class Measure extends ModelBase {
+export class Measure {
+  id?: string;
   name: string;
   typeCode: string;
   statusFlag: string;

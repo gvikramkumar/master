@@ -40,8 +40,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.submeasureService.getOneById(this.route.snapshot.params.id)
         .subscribe(submeasure => {
           this.submeasure = submeasure;
-          this.measureNameSelection = this.submeasure.measureName? this.measureNamesMap[this.submeasure.measureName]: '';
-          console.log("measure selection is: " + this.measureNameSelection);
+          this.measureNameSelection = this.submeasure.measureName ? this.measureNamesMap[this.submeasure.measureName]: '';
+          console.log('measure selection is: ' + this.measureNameSelection);
           this.subMeasureName = submeasure.name;
           this.description = submeasure.description;
           this.source = submeasure.source;

@@ -1,6 +1,6 @@
 import {Schema} from 'mongoose';
 import {injectable} from 'inversify';
-import ModuleRepoBase from '../../../lib/base-classes/module-repo-base';
+import RepoBase from '../../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
@@ -25,9 +25,9 @@ const schema = new Schema(
 );
 
 @injectable()
-export default class AllocationRuleRepo extends ModuleRepoBase {
+export default class AllocationRuleRepo extends RepoBase {
   constructor() {
-    super(schema, 'Rule');
+    super(schema, 'Rule', true);
   }
 
 }

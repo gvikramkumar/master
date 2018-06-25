@@ -10,7 +10,7 @@ import Q from 'q';
 import RepoBase from './repo-base';
 import {Request} from 'express';
 import ApiRequest from '../models/api-request';
-import AnyObj from '../models/any-obj';
+import AnyObj from '../../../shared/models/any-obj';
 import PostgresRepo from '../database/repos/postgres-repo';
 
 
@@ -34,15 +34,15 @@ export default class UploadController {
   PropNames;
   sheet1SubmeasureNames;
   startedSheet2;
-  moduleId: number;
 
   constructor(
-    moduleId: number,
+    protected moduleId: number,
     protected repo: RepoBase,
     protected openPeriodRepo: OpenPeriodRepo,
     protected submeasureRepo: SubmeasureRepo,
     protected userRoleRepo: UserRoleRepo
     ) {
+    const i = 5;
   }
 
   upload(req, res, next) {
@@ -98,7 +98,7 @@ export default class UploadController {
     return Promise.all([
       this.openPeriodRepo.getOne({moduleId: this.moduleId}),
       this.userRoleRepo.getRolesByUserId('jodoe'),
-      this.submeasureRepo.getMany()
+      this.submeasureRepo.getMany({moduleId: this.moduleId})
     ])
       .then(results => {
         this.fiscalMonth = results[0].fiscalMonth;
