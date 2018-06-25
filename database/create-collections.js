@@ -39,7 +39,6 @@ fileCollections.forEach(coll => {
 
 // add indexes;
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});
-db.dfa_allocation_rule.createIndex({moduleId: 1, name: 1}, {unique: true});
 db.dfa_allocation_rule.createIndex({moduleId: 1, name: 1, updatedDate: -1});
 db.dfa_submeasure.createIndex({moduleId:1, name: 1}, {unique: true});
 db.dfa_measure.createIndex({moduleId:1, name: 1}, {unique: true});
