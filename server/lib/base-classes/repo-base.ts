@@ -8,7 +8,7 @@ import AnyObj from '../../../shared/models/any-obj';
 export default class RepoBase {
   protected Model: Model<any>;
 
-  constructor(public schema: Schema, modelName: string, protected isModuleRepo = false) {
+  constructor(public schema: Schema, protected modelName: string, protected isModuleRepo = false) {
     this.schema = schema;
     util.setSchemaAdditions(this.schema);
     this.Model = mg.model(modelName, schema);
@@ -218,7 +218,7 @@ export default class RepoBase {
   verifyModuleId(filter) {
     if (this.isModuleRepo) {
       if (!filter.moduleId) {
-        throw new ApiError('Missing moduleId', null, 400);
+        throw new ApiError(`${this.modelName} repo call is missing moduleId`, null, 400);
       } else {
         filter.moduleId = Number(filter.moduleId);
       }
