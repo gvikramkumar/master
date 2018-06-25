@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {ModelBase} from '../../store/models/model-base';
 import {UtilService} from '../services/util.service';
+import AnyObj from '../../../../../shared/models/any-obj';
+
 const apiUrl = environment.apiUrl;
 
-export class RestBase<T extends ModelBase> {
+export class RestBase<T extends AnyObj> {
 
   constructor(
     protected endpointName: string,
@@ -46,6 +46,7 @@ export class RestBase<T extends ModelBase> {
     if (sort) {
       params.setSort = sort;
     }
+    return this.getMany(params);
   }
 
   // selects distinct fieldName, params become distinct(fieldName, filter)
@@ -66,7 +67,7 @@ export class RestBase<T extends ModelBase> {
     return this.getMany(params);
   }
 
-  getOneById(id: number): Observable<T> {
+  getOneById(id: string): Observable<T> {
     return this.httpClient.get<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
   }
 
@@ -85,7 +86,7 @@ export class RestBase<T extends ModelBase> {
     return this.httpClient.put<T>(`${apiUrl}/api/${this.endpointName}/${data.id}`, data);
   }
 
-  remove(id: number): Observable<T> {
+  remove(id: string): Observable<T> {
     return this.httpClient.delete<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
   }
 }

@@ -10,12 +10,9 @@ import Q from 'q';
 import RepoBase from './repo-base';
 import {Request} from 'express';
 import ApiRequest from '../models/api-request';
-import AnyObj from '../models/any-obj';
+import AnyObj from '../../../shared/models/any-obj';
+import PostgresRepo from '../database/repos/postgres-repo';
 
-
-const openPeriodRepo = new OpenPeriodRepo();
-const userRoleRepo = new UserRoleRepo();
-const submeasureRepo = new SubmeasureRepo();
 
 export default class UploadController {
   UploadValidationError = 'UploadValidationError';
@@ -38,7 +35,14 @@ export default class UploadController {
   sheet1SubmeasureNames;
   startedSheet2;
 
-  constructor(protected repo: RepoBase) {
+  constructor(
+    protected moduleId: number,
+    protected repo: RepoBase,
+    protected openPeriodRepo: OpenPeriodRepo,
+    protected submeasureRepo: SubmeasureRepo,
+    protected userRoleRepo: UserRoleRepo
+    ) {
+    const i = 5;
   }
 
   upload(req, res, next) {
@@ -92,9 +96,9 @@ export default class UploadController {
 
   getValidationAndImportData(): Promise<any> {
     return Promise.all([
-      openPeriodRepo.getOne(),
-      userRoleRepo.getRolesByUserId('jodoe'),
-      submeasureRepo.getMany()
+      this.openPeriodRepo.getOne({moduleId: this.moduleId}),
+      this.userRoleRepo.getRolesByUserId('jodoe'),
+      this.submeasureRepo.getMany({moduleId: this.moduleId})
     ])
       .then(results => {
         this.fiscalMonth = results[0].fiscalMonth;

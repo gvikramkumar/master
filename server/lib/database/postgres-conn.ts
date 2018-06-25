@@ -1,6 +1,6 @@
 import { Client } from 'pg';
 import _config from '../../config/get-config';
-import AnyObj from '../models/any-obj';
+import AnyObj from '../../../shared/models/any-obj';
 const config = _config.postgres;
 
 const client = new Client({

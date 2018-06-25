@@ -3,12 +3,12 @@ import {NamedApiError} from '../common/named-api-error';
 import _ from 'lodash';
 import util from '../common/util';
 import {ApiError} from '../common/api-error';
-import AnyObj from '../models/any-obj';
+import AnyObj from '../../../shared/models/any-obj';
 
 export default class RepoBase {
   protected Model: Model<any>;
 
-  constructor(public schema: Schema, modelName: string) {
+  constructor(public schema: Schema, protected modelName: string, protected isModuleRepo = false) {
     this.schema = schema;
     util.setSchemaAdditions(this.schema);
     this.Model = mg.model(modelName, schema);
@@ -17,6 +17,7 @@ export default class RepoBase {
   // get all that match filter, if yearmo/upperOnly exists, sets date constraints
   getMany(_filter: AnyObj = {}) {
     let filter = _.clone(_filter);
+    this.verifyModuleId(filter);
     let query;
     const distinct = filter.getDistinct,
       limit = filter.setLimit,
@@ -49,13 +50,14 @@ export default class RepoBase {
   // group by groupField and get latest of each group
   getManyByGroupLatest(_filter: AnyObj = {}) {
     let filter = _filter;
+    this.verifyModuleId(filter);
     const groupField = filter.groupField;
     delete filter.groupField;
     filter = this.addDateRangeToFilter(filter);
     return this.Model.aggregate([
       {$match: filter},
       {$sort: {updatedDate: -1}},
-      {$group: {_id: '$'+groupField, id: {$first: '$_id'}}},
+      {$group: {_id: '$' + groupField, id: {$first: '$_id'}}},
       {$project: {_id: '$id'}}
     ])
       .then(arr => {
@@ -72,10 +74,11 @@ export default class RepoBase {
   // returns the latest value
   getOneLatest(_filter: AnyObj = {}) {
     let filter = _filter;
+    this.verifyModuleId(filter);
     delete filter.getLatest;
     filter = this.addDateRangeToFilter(filter);
     return this.Model.find(filter).sort({updatedDate: -1}).limit(1).exec()
-      .then(arr => arr.length? arr[0]: null);
+      .then(arr => arr.length ? arr[0] : null);
   }
 
   getOne(_filter = {}) {
@@ -89,15 +92,13 @@ export default class RepoBase {
     if (data.updatedDate) {
       query.where({updatedDate: data.updatedDate});
     }
-      return query.exec()
+    return query.exec()
       .then(item => {
         if (!item && data.updatedDate) {
-          const err = new NamedApiError('ConcurrencyError', 'Concurrency error, please refresh your data.', null, 400);
-          throw(err);
+          throw new NamedApiError('ConcurrencyError', 'Concurrency error, please refresh your data.', null, 400);
         }
         else if (!item) {
-          const err = new ApiError('Item not found, please refresh your data.', null, 400);
-          throw(err);
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         return item;
       });
@@ -175,9 +176,8 @@ export default class RepoBase {
   remove(id) {
     return this.getOneById(id)
       .then(item => {
-      if (!item) {
-          const err = new ApiError('Item not found, please refresh your data.', null, 400);
-          throw(err);
+        if (!item) {
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         return item.remove();
       });
@@ -213,6 +213,16 @@ export default class RepoBase {
       delete filter.upperOnly;
     }
     return filter;
+  }
+
+  verifyModuleId(filter) {
+    if (this.isModuleRepo) {
+      if (!filter.moduleId) {
+        throw new ApiError(`${this.modelName} repo call is missing moduleId`, null, 400);
+      } else {
+        filter.moduleId = Number(filter.moduleId);
+      }
+    }
   }
 
 }

@@ -3,13 +3,15 @@ import {ActivatedRoute, ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot
 import {Observable, Subject, forkJoin} from 'rxjs';
 import {mergeMap, map, catchError} from 'rxjs/operators';
 import {Init1, Init2, Init3, Init4, Init5} from '../services/test-init-service';
-import {Store} from '../../store/store';
+import {AppStore} from '../../app/app-store';
 import {BreakpointService} from "../services/breakpoint.service";
-import {ModuleService} from '../services/module.service';
+import {ModuleService} from '../../dfa-common/services/module.service';
 import {TestService} from '../services/test.service';
-import {User} from '../../store/models/user';
+import {User} from '../../dfa-common/models/user';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 /**
  * InitializationGuard
  * desc - provide a complex hierarchy of initialization "before" app starts up including dependecies of dependencies
@@ -17,7 +19,7 @@ import {User} from '../../store/models/user';
 export class InitializationGuard implements CanActivate {
   response$ = new Subject<boolean>();
 
-  constructor(private store: Store,
+  constructor(private store: AppStore,
               private route: ActivatedRoute,
               private breakpoints: BreakpointService,
               private moduleService: ModuleService,

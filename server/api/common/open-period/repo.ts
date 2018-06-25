@@ -5,6 +5,7 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
+    moduleId: {type: Number, required: true},
     fiscalMonth: {type: Number, required: true},
     openFlag: {type: String, required: true},
     createdBy: String,
@@ -18,7 +19,7 @@ const schema = new Schema(
 @injectable()
 export default class OpenPeriodRepo extends RepoBase {
   constructor() {
-    super(schema, 'OpenPeriod');
+    super(schema, 'OpenPeriod', true);
   }
 }
 

@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {Store} from '../../../../store/store';
+import {AppStore} from '../../../../app/app-store';
 import * as _ from 'lodash';
 
 @Component({
@@ -19,11 +19,11 @@ export class HomeComponent implements OnInit, AfterViewInit{
   @ViewChild('myIdentifier') myIdentifier: ElementRef;
   headerOptions;
 
-  constructor(private store: Store) {
+  constructor(private store: AppStore) {
   }
 
   ngOnInit() {
-    this.headerOptions = _.clone(this.store.headerOptionsBase);
+    this.headerOptions = _.clone(this.store.headerOptions);
     this.modules = this.store.modules;
   }
 

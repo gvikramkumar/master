@@ -4,7 +4,9 @@ import {HttpClient} from '@angular/common/http';
 
 const apiUrl = environment.apiUrl;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TestService {
 
   constructor(private httpClient: HttpClient) { }

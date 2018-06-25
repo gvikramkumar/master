@@ -1,5 +1,5 @@
 import {AfterViewInit, Directive, ElementRef, Input, OnChanges, OnInit} from '@angular/core';
-import {Store} from '../../store/store';
+import {AppStore} from '../../app/app-store';
 
 @Directive({
   selector: '[finAuth]'
@@ -7,7 +7,7 @@ import {Store} from '../../store/store';
 export class AuthDirective implements OnInit  {
 @Input('finAuth') roles;
 
-  constructor(private store: Store, private elem: ElementRef) {
+  constructor(private store: AppStore, private elem: ElementRef) {
   }
 
   ngOnInit() {

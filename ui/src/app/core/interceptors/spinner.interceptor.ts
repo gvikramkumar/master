@@ -2,12 +2,12 @@ import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {Store} from '../../store/store';
+import {AppStore} from '../../app/app-store';
 
 
 @Injectable()
 export class SpinnerInterceptor implements HttpInterceptor {
-  constructor(private store: Store) {
+  constructor(private store: AppStore) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

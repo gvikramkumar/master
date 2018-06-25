@@ -1,6 +1,6 @@
 import config from '../../config/get-config';
 import mg from 'mongoose';
-import AnyObj from '../models/any-obj';
+import AnyObj from '../../../shared/models/any-obj';
 
 const options = {
   autoIndex: false,

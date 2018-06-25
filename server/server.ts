@@ -55,8 +55,8 @@ Promise.all([mgc.promise, pgc.promise])
   .catch(err => {
     console.error('server creation error:', err);
     mg.connection.close();
-    if (pgc.db) {
-      pgc.db.end();
+    if (pgc.pgdb) {
+      pgc.pgdb.end();
     }
     process.exit(0);
   });

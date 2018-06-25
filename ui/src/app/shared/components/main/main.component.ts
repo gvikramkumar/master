@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
-import {Store} from '../../../store/store';
+import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import * as _ from 'lodash';
 
@@ -13,16 +13,20 @@ export class MainComponent implements OnInit {
   hero: { title: string, desc: string } = {title: '', desc: ''};
   headerOptions;
 
-  constructor(private store: Store, private router: Router) {
-    const i = 5;
+  constructor(public store: AppStore, private router: Router, route: ActivatedRoute) {
+    const moduleId = route.snapshot.data.moduleId;
+    if (!moduleId) {
+      throw new Error('Routing for module is missing moduleId');
+    }
+    store.updateModule(moduleId);
   }
 
   ngOnInit() {
-    this.headerOptions = _.clone(this.store.headerOptionsBase);
+    this.headerOptions = _.clone(this.store.headerOptions);
     this.store.routeDataSub(data => {
         this.hero = data.hero;
         this.headerOptions.breadcrumbs = data.breadcrumbs;
-      })
+      });
   }
 
 }

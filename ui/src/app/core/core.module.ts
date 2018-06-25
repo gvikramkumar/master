@@ -9,16 +9,15 @@ import {ModifyRequestInterceptor} from "./interceptors/modify-request.intercepto
 import {InitializationGuard} from "./guards/initialization.guard";
 import {RouterModule} from "@angular/router";
 import {BreakpointService} from "./services/breakpoint.service";
-import {ModuleService} from './services/module.service';
-import {RuleService} from '../profitability/services/rule.service';
-import {SubmeasureService} from './services/submeasure.service';
+import {ModuleService} from '../dfa-common/services/module.service';
+import {RuleService} from '../dfa-common/services/rule.service';
+import {SubmeasureService} from '../dfa-common/services/submeasure.service';
 import {TestService} from './services/test.service';
 import {FsFileService} from './services/fsfile.service';
 import {AuthorizationGuard} from './guards/authorization.guard';
 import {ToastService} from './services/toast.service';
 import {UtilService} from './services/util.service';
-import {MeasureService} from "./services/measure.service";
-import {DollarUploadService} from '../profitability/services/dollar-upload.service';
+import {MeasureService} from '../dfa-common/services/measure.service';
 
 @NgModule({
   imports: [
@@ -29,13 +28,11 @@ import {DollarUploadService} from '../profitability/services/dollar-upload.servi
   exports: [
     HttpClientModule
   ],
-  providers: [InitializationGuard, Init1, Init2, Init3, Init4, Init5,
+  providers: [
     {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: ModifyRequestInterceptor, multi: true},
-    BreakpointService, ModuleService, RuleService, SubmeasureService, TestService,
-    FsFileService, AuthorizationGuard, ToastService, UtilService, MeasureService
+    {provide: HTTP_INTERCEPTORS, useClass: ModifyRequestInterceptor, multi: true}
   ]
 })
 export class CoreModule {

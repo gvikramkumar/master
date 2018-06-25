@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {tap, delay} from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class Init1 {
   get() {
     return of('one').pipe(
@@ -14,7 +16,9 @@ export class Init1 {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class Init2 {
   get() {
     return of('two').pipe(
@@ -26,7 +30,9 @@ export class Init2 {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class Init3 {
   get() {
     return of('three').pipe(
@@ -38,7 +44,9 @@ export class Init3 {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class Init4 {
   get() {
     return of('four').pipe(
@@ -50,7 +58,9 @@ export class Init4 {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class Init5 {
   get() {
     return of('five').pipe(

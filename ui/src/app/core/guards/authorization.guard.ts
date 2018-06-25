@@ -1,11 +1,13 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {Store} from '../../store/store';
+import {AppStore} from '../../app/app-store';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthorizationGuard implements CanActivate {
-  constructor(private store: Store, private router: Router) {
+  constructor(private store: AppStore, private router: Router) {
 
   }
 
@@ -15,6 +17,8 @@ export class AuthorizationGuard implements CanActivate {
     const roles = next.data.authorization;
     const path = `path: ${next.pathFromRoot.map(x => x.url.toString())}`;
     // console.log('auth guard', `roles: ${roles}`, path);
+    // next.url.forEach(seg => console.log('>>>> seg', seg.path));
+
     if (!roles) {
       console.error(`No authorization roles for route: ${path}`);
       return false;

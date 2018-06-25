@@ -5,6 +5,7 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
+    moduleId: {type: Number, required: true},
     name: String,
     description: String,
     source: {type: String, enum: ['manual']},
@@ -45,7 +46,7 @@ const schema = new Schema(
 @injectable()
 export default class SubmeasureRepo extends RepoBase {
   constructor() {
-    super(schema, 'Submeasure');
+    super(schema, 'Submeasure', true);
   }
 
 }

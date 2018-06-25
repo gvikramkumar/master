@@ -20,6 +20,7 @@ import {AuthDirective} from './directives/auth.directive';
 
 @NgModule({
   imports: [
+    CoreModule,
     CommonModule,
     RouterModule,
     MaterialIndexModule,
@@ -27,7 +28,6 @@ import {AuthDirective} from './directives/auth.directive';
     FlexLayoutModule,
     FormsModule,
     SidebarModule.forRoot(),
-    CoreModule
   ],
   exports: [
     CoreModule,

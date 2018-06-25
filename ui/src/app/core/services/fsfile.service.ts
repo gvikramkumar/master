@@ -3,11 +3,13 @@ import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as _ from 'lodash';
 import {environment} from '../../../environments/environment';
-import {FsFile} from '../../store/models/fsfile';
+import {FsFile} from '../../dfa-common/models/fsfile';
 
 const apiUrl = environment.apiUrl;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FsFileService {
 
 

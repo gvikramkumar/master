@@ -2,29 +2,28 @@ import util from '../common/util';
 import {mgc} from './mongoose-conn';
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
-import AnyObj from '../models/any-obj';
+import AnyObj from '../../../shared/models/any-obj';
 
-let db, mongo;
 
 // todo: needs testing. Only uploadFile has been tested so far
 export default class GridFSBucket {
   gfs;
 
   constructor() {
-    db = mgc.db;
-    mongo = mgc.mongo;
-    this.gfs = new mongo.GridFSBucket(db);
-
   }
 
-
+  getGfs() {
+    if (!this.gfs) {
+      this.gfs = new mgc.mongo.GridFSBucket(mgc.db);
+    }
+  }
 
   /*
   eg:
           return gfs.uploadFile(this.req.file, {
           directory: Directory.businessUpload,
           buUploadType: BuUploadType.dollarUpload,
-          buFileType: BuFileType.upload
+          buFileType: BusinessUploadFileType.upload
         })
           .then(fileId => {
             return fileRepo.getOneById(fileId)
@@ -33,6 +32,7 @@ export default class GridFSBucket {
 
    */
   uploadFile(file, metadata: AnyObj = {}) {
+    this.getGfs();
     if (!metadata.directory) {
       throw new ApiError('metadata.directory required');
     }
@@ -56,6 +56,7 @@ export default class GridFSBucket {
   }
 
   uploadFiles(files, _metadata) {
+    this.getGfs();
     const promises = [];
     files.forEach((file, idx) => {
       const metadata = _.isArray(_metadata) ? _metadata[idx] : _metadata;
@@ -65,8 +66,9 @@ export default class GridFSBucket {
   }
 
   downloadFile(fileId, writableStream) {
+    this.getGfs();
     return new Promise((resolve, reject) => {
-      this.gfs.openDownloadStream(new mongo.ObjectID(fileId))
+      this.gfs.openDownloadStream(new mgc.mongo.ObjectID(fileId))
         .pipe(writableStream)
         .on('error', function (err) {
           reject(err);
@@ -78,6 +80,7 @@ export default class GridFSBucket {
   }
 
   downloadFiles(fileIds, writableStream) {
+    this.getGfs();
     const promises = [];
     fileIds.forEach(fileId => {
       promises.push(this.downloadFile(fileId, writableStream));

@@ -97,7 +97,7 @@ export default class ControllerBase {
   verifyProperties(data, arr) {
     arr.forEach(prop => {
       if (!data[prop]) {
-        throw new ApiError(`Property missing: ${prop}.`, data, 400)
+        throw new ApiError(`Property missing: ${prop}.`, data, 400);
       }
     })
   }

@@ -5,7 +5,7 @@ import {Router} from 'express';
 
 const ctrl = injector.get(DollarUploadController);
 
-export default Router()
+export const dollarUploadRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
   .post('/', authorize('api:manage'), ctrl.handlePost.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))

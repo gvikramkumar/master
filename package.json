@@ -5,10 +5,11 @@
   "main": "dist/server/server.js",
   "scripts": {
     "start": "npm run serve",
-    "build": "rimraf dist/**/*.* && tsc",
+    "build": "rimraf dist/server/**/*.* && tsc",
     "build-serve": "npm run build && npm run serve",
     "build-test": "npm run build && npm run test",
     "serve": "node dist/server/server.js",
+    "serve-nodemon": "nodemon dist/server/server.js",
     "placeholder": "node $NODE_DEBUG_OPTION somefile",
     "test": "jasmine",
     "e2e": "NODE_ENV=unit jasmine",
