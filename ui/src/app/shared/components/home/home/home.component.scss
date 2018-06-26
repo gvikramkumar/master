@@ -1,21 +1,30 @@
 
-.main {
+@import '../../../../../styles/comp-index';
+
+.wrap {
   padding: 15px;
 
-  .modules {
-    width: 600px;
-    height: 100%;
-    margin-left: 100px;
-    min-width: 0;
+  .column {
+    width: 25px;
+    max-width: 400px;
+    padding: 0 15px;
 
+    $module-height: 40px;
     .module {
-      display: inline-block;
-      width: 40%;
-      margin-right: 30px;
+      height: $module-height;
+      background-color: $cisco-light-blue;
+      color: white;
+      margin-bottom: 3px;
+      text-align: center;
+      line-height: $module-height;
       &:hover {
         cursor: pointer;
       }
+      &.selected {
+        background-color: darken($cisco-light-blue, 10%);
+      }
     }
+
   }
 
 }

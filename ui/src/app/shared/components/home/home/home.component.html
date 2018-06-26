@@ -3,13 +3,18 @@
 
   <cui-header [options]="headerOptions"></cui-header>
 
-  <div style="overflow:auto;" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start stretch">
+  <div class="wrap" style="overflow:auto;" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start stretch">
 
-    <fin-leftnav class="outline"></fin-leftnav>
+    <fin-leftnav></fin-leftnav>
 
-    <div class="main" fxFlex="1 1 auto">
-      <div class="modules outline">
-        <div class="module" *ngFor="let module of modules" (click)="moduleChange(module)">{{module.name}}</div>
+    <div class="main" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start stretch">
+      <div class="column" fxFlex="1 1 auto">
+        <div class="module" [class.selected]="module1===selectedModule"
+             *ngFor="let module1 of modules1" (click)="moduleChange(module1)">{{module1.name}}</div>
+      </div>
+      <div class="column" fxFlex="1 1 auto">
+        <div class="module" [class.selected]="module2===selectedModule"
+             *ngFor="let module2 of modules2" (click)="moduleChange(module2)">{{module2.name}}</div>
       </div>
     </div>
 
