@@ -10,14 +10,13 @@ import {ErrorModalComponent} from './dialogs/error-modal/error-modal.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {NotImplementedComponent} from './dialogs/not-implemented/not-implemented.component';
 import {TrimInputValueAccessor} from './accessors/trim-input-value.accessor';
-import {CuiIndexModule} from "./cui-index/cui-index.module";
-import {SidebarModule} from 'ng-sidebar';
 import {RouterModule} from '@angular/router';
 import {CoreModule} from '../core/core.module';
 import {HomeComponent} from './components/home';
 import {MainComponent} from './components/main/main.component';
 import {AuthDirective} from './directives/auth.directive';
 import { LeftnavComponent } from './components/leftnav/leftnav.component';
+import {CuiIndexModule} from './cui-index/cui-index.module';
 
 @NgModule({
   imports: [
@@ -28,7 +27,6 @@ import { LeftnavComponent } from './components/leftnav/leftnav.component';
     CuiIndexModule,
     FlexLayoutModule,
     FormsModule,
-    SidebarModule.forRoot(),
   ],
   exports: [
     CoreModule,
@@ -36,7 +34,6 @@ import { LeftnavComponent } from './components/leftnav/leftnav.component';
     CuiIndexModule,
     FlexLayoutModule,
     FormsModule,
-    SidebarModule,
     PageNotFoundComponent,
     ForbiddenNameValidator,
     MinValidator,

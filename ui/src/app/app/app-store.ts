@@ -152,10 +152,13 @@ export class AppStore extends StoreBase {
   routeData$ = new BehaviorSubject({hero: {}, breadcrumbs:[]});
   routeDataSub = this.routeData$.asObservable().subscribe.bind(this.routeData$);
   routeDataPub(routeData) {
-    if (this.displayModule && routeData.breadcrumbs && routeData.breadcrumbs.length > 0) {
-      routeData.breadcrumbs.splice(1, 0, {label: this.displayModule.name});
+    // clone isn't good enough here as it reuses the breadcrumb array, and we keep appending module name
+    // to the same array.
+    const data = _.cloneDeep(routeData);
+    if (this.displayModule && data.breadcrumbs && data.breadcrumbs.length > 0) {
+      data.breadcrumbs.splice(1, 0, {label: this.displayModule.name});
     }
-    this.routeData$.next(routeData);
+    this.routeData$.next(data);
   }
 
   currentUrl$ = new BehaviorSubject('');

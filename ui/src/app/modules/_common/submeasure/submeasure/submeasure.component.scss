@@ -1,29 +1,20 @@
-ng-sidebar-container {
-    height: 76vh;
-    /* overflow: auto; */
-    /* background-color: #2b5592; */
+
+.wrap {
+  .left {
+
+  }
+
+  .right {
+
+  }
+
 }
 
-ng-sidebar {
-    display: inline-flex;
-}
 
-ng-sidebar p {
-    padding-left: 14px;
-    padding-right: 14px;
-    /* color: white; */
-}
 
-ng-sidebar a {
-    /* color: white; */
-}
 
-ng-sidebar h3 {
-    padding-left: 14px;
-    padding-right: 14px;
-    padding-top: 14px;
-    /* color: white; */
-}
+
+
 
 button {
     margin: 15px;
@@ -39,12 +30,12 @@ button {
     display: inline-flex;
     flex-direction: column;
   }
-  
+
   .example-radio-button {
     margin: 15px;
     font-weight:400;
   }
-  
+
   .example-selected-value {
     margin: 15px;
     /* padding-left: 15px;
@@ -60,7 +51,7 @@ button {
     margin: 15px;
     padding-right: 15px;
   }
-  
+
   .example-header {
     min-height: 64px;
     display: flex;
@@ -68,7 +59,7 @@ button {
     padding-left: 24px;
     font-size: 20px;
   }
-  
+
   .mat-table .mat-header-row {
 	  background: #64bbe3;
    }
