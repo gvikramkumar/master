@@ -1,19 +1,23 @@
 
+.main {
+  padding: 15px;
 
-.modules {
-  width: 600px;
-  height: 100%;
-  margin-left: 100px;
-  min-width: 0;
+  .modules {
+    width: 600px;
+    height: 100%;
+    margin-left: 100px;
+    min-width: 0;
 
-  .module {
-    display: inline-block;
-    width: 40%;
-    margin-right: 30px;
-    &:hover {
-      cursor: pointer;
+    .module {
+      display: inline-block;
+      width: 40%;
+      margin-right: 30px;
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
+
 }
 
 

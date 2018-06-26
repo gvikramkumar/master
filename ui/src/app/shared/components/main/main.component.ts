@@ -22,7 +22,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.headerOptions = this.store.headerOptions;
+    this.headerOptions = _.clone(this.store.headerOptions);
     this.store.routeDataSub(data => {
         this.hero = data.hero;
         this.headerOptions.breadcrumbs = data.breadcrumbs;

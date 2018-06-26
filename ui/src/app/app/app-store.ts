@@ -151,8 +151,11 @@ export class AppStore extends StoreBase {
 
   routeData$ = new BehaviorSubject({hero: {}, breadcrumbs:[]});
   routeDataSub = this.routeData$.asObservable().subscribe.bind(this.routeData$);
-  routeDataPub(val) {
-    this.routeData$.next(val);
+  routeDataPub(routeData) {
+    if (this.displayModule && routeData.breadcrumbs && routeData.breadcrumbs.length > 0) {
+      routeData.breadcrumbs.splice(1, 0, {label: this.displayModule.name});
+    }
+    this.routeData$.next(routeData);
   }
 
   currentUrl$ = new BehaviorSubject('');

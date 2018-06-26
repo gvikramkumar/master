@@ -20,7 +20,7 @@ const routes: Routes = [
             title: 'Set Open Period',
             desc: 'Set open period for modules'
           },
-          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Admin'}, {label: 'Open Period'}]
+          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Open Period'}]
         }
       },
       // admin pages go here, just like module pages do,

@@ -1,7 +1,12 @@
 
 .wrap {
-  min-width: 200px;
-  max-width: 300px;
+  min-width: 250px;
+  max-width: 350px;
   width: 20%;
+  padding: 15px;
+
+  .title {
+    font-size: 18px !important; // cui changes font size at breakpoints, we don't want that here.
+  }
 }
 

@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.headerOptions = this.store.headerOptions;
+    this.headerOptions = _.clone(this.store.headerOptions);
     this.modules = this.store.modules;
   }
 

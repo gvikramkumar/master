@@ -26,10 +26,10 @@ const routes: Routes = [
             data: {
               authorization: 'prof-sm:manage',
               hero: {
-                title: 'Administer Sources',
+                title: 'Sources',
                 desc: 'Add - remove sources'
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Admin', routerUrl: '/prof/admin'}, {label: 'Sources'}]
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sources'}]
             }
           },
         ]
