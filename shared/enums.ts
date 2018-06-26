@@ -20,5 +20,6 @@ export enum Modules {
   defr,
   gubr,
   bkir,
-  rrev
+  rrev,
+  admn = 99
 }

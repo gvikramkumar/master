@@ -1,11 +1,19 @@
 import {Injectable} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import * as _ from 'lodash';
+import {AppStore} from '../../app/app-store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
+
+  constructor(private store: AppStore) {
+  }
+
+  isAdminModule(moduleId) {
+    return moduleId === 99;
+  }
 
   createHttpParams(_params) {
     let params = new HttpParams();

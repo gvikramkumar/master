@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 import {AppStore} from './app-store';
 import {AppRoutingModule} from './app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DfaCommonModule} from '../dfa-common/dfa-common.module';
+import {DfaCommonModule} from '../modules/_common/dfa-common.module';
 
 @NgModule({
   declarations: [

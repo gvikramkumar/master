@@ -4,10 +4,10 @@ import {Observable, Subject, forkJoin} from 'rxjs';
 import {mergeMap, map, catchError} from 'rxjs/operators';
 import {Init1, Init2, Init3, Init4, Init5} from '../services/test-init-service';
 import {AppStore} from '../../app/app-store';
-import {BreakpointService} from "../services/breakpoint.service";
-import {ModuleService} from '../../dfa-common/services/module.service';
 import {TestService} from '../services/test.service';
-import {User} from '../../dfa-common/models/user';
+import {BreakpointService} from '../services/breakpoint.service';
+import {ModuleService} from '../../modules/_common/services/module.service';
+import {User} from '../../modules/_common/models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +70,7 @@ export class InitializationGuard implements CanActivate {
   init() {
     // console.log('initguard start');
 
-    this.store.user = new User('jodoe', "John Doe", []);
+    this.store.user = new User('jodoe', 'John Doe', []);
 
     forkJoin(
       // this.userService.getAll(),
