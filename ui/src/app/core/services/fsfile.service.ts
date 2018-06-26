@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as _ from 'lodash';
 import {environment} from '../../../environments/environment';
-import {FsFile} from '../../dfa-common/models/fsfile';
+import {FsFile} from '../../modules/_common/models/fsfile';
 
 const apiUrl = environment.apiUrl;
 

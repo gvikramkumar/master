@@ -17,6 +17,7 @@ import {CoreModule} from '../core/core.module';
 import {HomeComponent} from './components/home';
 import {MainComponent} from './components/main/main.component';
 import {AuthDirective} from './directives/auth.directive';
+import { LeftnavComponent } from './components/leftnav/leftnav.component';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import {AuthDirective} from './directives/auth.directive';
     TrimInputValueAccessor,
     HomeComponent,
     MainComponent,
-    AuthDirective
+    AuthDirective,
+    LeftnavComponent
   ],
   entryComponents: [
     ErrorModalComponent,

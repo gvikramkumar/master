@@ -3,43 +3,29 @@ import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {AppStore} from '../../../../app/app-store';
 import * as _ from 'lodash';
+import {DfaModule} from '../../../../modules/_common/models/module';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, AfterViewInit{
+export class HomeComponent implements OnInit {
 
-  //public modules: QueryRef<PostsInterface>;
-  public modules: any[];
-  public listPostFilter: string;
-  private nameFilter: Subject<string> = new Subject<string>();
-  public postControl = new FormControl();
-  @ViewChild('myIdentifier') myIdentifier: ElementRef;
+  public modules: DfaModule[];
   headerOptions;
 
   constructor(private store: AppStore) {
   }
 
   ngOnInit() {
-    this.headerOptions = _.clone(this.store.headerOptions);
+    this.headerOptions = this.store.headerOptions;
     this.modules = this.store.modules;
   }
 
-  ngAfterViewInit() {
-    this.sidebarHeight = this.myIdentifier.nativeElement.offsetHeight;
+  moduleChange(module) {
+    this.store.updateModule(module.moduleId);
   }
-
-  public _opened: boolean = false;
-  public _mode: string = 'push';
-  //public width: Number;
-  public sidebarHeight: Number;
-
-  public _toggleSidebar() {
-    this._opened = !this._opened;
-  }
-
 
 
 }

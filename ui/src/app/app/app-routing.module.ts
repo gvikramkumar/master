@@ -19,8 +19,16 @@ const routes: Routes = [
     canActivate: [InitializationGuard, AuthorizationGuard]
   },
   {
+    path: 'admn',
+    loadChildren: 'app/modules/admn/admn.module#AdmnModule',
+    data: {
+      authorization: 'prof:access'
+    },
+    canActivate: [InitializationGuard, AuthorizationGuard]
+  },
+  {
     path: 'prof',
-    loadChildren: 'app/prof/prof.module#ProfModule',
+    loadChildren: 'app/modules/prof/prof.module#ProfModule',
     data: {
       authorization: 'prof:access'
     },
@@ -28,7 +36,7 @@ const routes: Routes = [
   },
   {
     path: 'prdt',
-    loadChildren: 'app/prdt/prdt.module#PrdtModule',
+    loadChildren: 'app/modules/prdt/prdt.module#PrdtModule',
     data: {
       authorization: 'prof:access'
     },
