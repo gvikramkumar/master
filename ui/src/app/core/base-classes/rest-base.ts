@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {UtilService} from '../services/util.service';
 import AnyObj from '../../../../../shared/models/any-obj';
+import {AppStore} from '../../app/app-store';
 
 const apiUrl = environment.apiUrl;
 
@@ -11,7 +12,9 @@ export class RestBase<T extends AnyObj> {
   constructor(
     protected endpointName: string,
     protected httpClient: HttpClient,
-    protected util: UtilService) {
+    protected util: UtilService,
+    protected store: AppStore,
+    protected isModuleRepo = false) {
   }
 
   // GetMany special query parameters
@@ -36,6 +39,7 @@ export class RestBase<T extends AnyObj> {
   // getLatest=true:
   // filters then picks latest value (only returns one value) using updatedDate
   getMany(_params = {}): Observable<T[]> {
+    this.addModuleId(_params);
     const params = this.util.createHttpParams(_params)
     return this.httpClient.get<T[]>(`${apiUrl}/api/${this.endpointName}`, {params});
   }
@@ -75,10 +79,12 @@ export class RestBase<T extends AnyObj> {
   // bodyParser.urlEncoded extended version so can accept objects as well. Remains to be tested, but
   // could possibly be used to project via mongos's {prop1: 1, prop2: 1} syntax
   queryPost(params) {
+    this.addModuleId(params);
     return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}?queryPost=true`, params);
   }
 
   add(data) {
+    this.addModuleId(data);
     return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}`, data);
   }
 
@@ -89,4 +95,11 @@ export class RestBase<T extends AnyObj> {
   remove(id: string): Observable<T> {
     return this.httpClient.delete<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
   }
+
+  addModuleId(params) {
+    if (this.isModuleRepo) {
+      params.moduleId = this.store.moduleId;
+    }
+  }
+
 }

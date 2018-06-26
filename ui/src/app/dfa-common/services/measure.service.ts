@@ -3,18 +3,18 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {Measure} from '../models/measure';
 import {UtilService} from '../../core/services/util.service';
-import {ModuleRestBase} from '../../core/base-classes/module-rest-base';
 import {AppStore} from '../../app/app-store';
+import {RestBase} from '../../core/base-classes/rest-base';
 
 const apiUrl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
-export class MeasureService extends ModuleRestBase<Measure> {
+export class MeasureService extends RestBase<Measure> {
 
   constructor(httpClient: HttpClient, util: UtilService, store: AppStore) {
-    super('measure', httpClient, util, store);
+    super('measure', httpClient, util, store, true);
   }
 
 

@@ -16,8 +16,8 @@ const apiUrl = environment.apiUrl;
 })
 export class ModuleService extends RestBase<Module> {
 
-  constructor(httpClient: HttpClient, private store: AppStore, util: UtilService) {
-    super('module', httpClient, util)
+  constructor(httpClient: HttpClient, util: UtilService, store: AppStore) {
+    super('module', httpClient, util, store);
   }
 
   getMany(): Observable<Module[]> {

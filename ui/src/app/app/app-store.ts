@@ -66,6 +66,9 @@ export class AppStore extends StoreBase {
   }
 
   private _module: Module;
+  get moduleId() {
+    return this.module.moduleId;
+  }
   get module(): Module {
     // need to know if people are accessing this before it's ready
     if (!this._module) {
