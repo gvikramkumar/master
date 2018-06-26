@@ -3,18 +3,18 @@ import {HttpClient} from '@angular/common/http';
 import {Submeasure} from '../models/submeasure';
 import {environment} from '../../../environments/environment';
 import {UtilService} from '../../core/services/util.service';
-import {ModuleRestBase} from '../../core/base-classes/module-rest-base';
 import {AppStore} from '../../app/app-store';
+import {RestBase} from '../../core/base-classes/rest-base';
 
 const apiUrl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
-export class SubmeasureService extends ModuleRestBase<Submeasure> {
+export class SubmeasureService extends RestBase<Submeasure> {
 
   constructor(httpClient: HttpClient, util: UtilService, store: AppStore) {
-    super('submeasure', httpClient, util, store);
+    super('submeasure', httpClient, util, store, true);
   }
 
 }
