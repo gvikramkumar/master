@@ -18,7 +18,7 @@ export class MainComponent implements OnInit {
     if (!moduleId) {
       throw new Error('Routing for module is missing moduleId');
     }
-    store.updateModule(moduleId);
+    store.pubModule(moduleId);
   }
 
   ngOnInit() {

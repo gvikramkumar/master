@@ -24,14 +24,14 @@ export class HomeComponent implements OnInit {
     this.headerOptions = _.clone(this.store.headerOptions);
     this.modules1 = this.store.modules.slice(0, 6);
     this.modules2 = this.store.modules.slice(6);
-    if (this.store.displayModule) {
-      this.selectedModule = this.store.displayModule;
+    if (this.store.module) {
+      this.selectedModule = this.store.module;
     }
   }
 
   moduleChange(module) {
     this.selectedModule = module;
-    this.store.updateModule(module.moduleId);
+    this.store.pubModule(module.moduleId);
   }
 
 

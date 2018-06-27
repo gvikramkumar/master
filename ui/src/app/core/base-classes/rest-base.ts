@@ -97,8 +97,8 @@ export class RestBase<T extends AnyObj> {
   }
 
   addModuleId(params) {
-    if (this.isModuleRepo) {
-      params.moduleId = this.store.repoModuleId;
+    if (this.isModuleRepo && !params.moduleId) {
+      params.moduleId = this.store.getRepoModule(this.endpointName).moduleId;
     }
   }
 

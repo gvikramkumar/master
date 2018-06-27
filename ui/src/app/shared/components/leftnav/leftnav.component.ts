@@ -18,7 +18,7 @@ export class LeftnavComponent {
   alinks: Link[] = [];
 
   constructor(private store: AppStore) {
-    this.store.subDisplayModule(module => {
+    this.store.subModule(module => {
       this.module = module;
       this.refresh();
     });
