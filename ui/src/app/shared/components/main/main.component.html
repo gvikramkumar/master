@@ -1,21 +1,20 @@
-<div fxLayout="column" fxLayoutAlign="start stretch" style="height:100%">
+<div class="main-comp">
 
   <cui-header [options]="headerOptions"></cui-header>
 
-  <div class="main-wrap" style="overflow:auto;" fxFlex="1 1 auto">
-
-    <div class="hero hero--blue">
-      <div class="container">
-        <div class="hero__content">
-          <h1>{{store.module.name + ':&nbsp;&nbsp;' + hero.title}}</h1>
-          <p>{{hero.desc}}</p>
-        </div>
+  <div class="hero hero--blue">
+    <div class="container">
+      <div class="hero__content">
+        <h1>{{store.module.name + ':&nbsp;&nbsp;' + hero.title}}</h1>
+        <p>{{hero.desc}}</p>
       </div>
     </div>
+  </div>
 
-    <div class="main" fxLayout="row" fxLayoutAlign="start stretch">
-      <fin-leftnav></fin-leftnav>
-      <div fxFlex="1 1 auto">
+  <div class="main">
+    <div class="main-content" fxLayout="row" fxLayoutAlign="start stretch">
+      <fin-leftnav fxFlex="0 0 auto"></fin-leftnav>
+      <div class="content" fxFlex="1 1 auto">
         <router-outlet></router-outlet>
       </div>
     </div>

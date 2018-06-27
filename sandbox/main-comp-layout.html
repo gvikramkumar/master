@@ -1,0 +1,49 @@
+<html>
+<style>
+  body, html {height: 100%; padding:0; margin:0;}
+  .outer {height:100%;}
+  .header {height:70px; background-color:tan; }
+  .hero {height:70px; background-color:blue;}
+  .main {background-color:plum; height:calc(100% - 140px); overflow-y: auto;}
+  .main-content {background-color:transparent;  display:flex; flex-direction: row; justify-content: start; align-items: stretch; min-height: calc(100% - 70px);}
+  .leftnav {flex:0 0 auto; width: 200px;}
+  .content {flex:1 1 auto;}
+  .footer {height:70px; background-color:transparent;}
+  .outline {outline:1px solid; outline-offset: -1px;}
+  .outline-red {outline:1px solid; outline-offset: -1px; outline-color:red;}
+</style>
+<body>
+
+<div class="outer outline">
+
+  <div class="header"></div>
+  <div class="hero"></div>
+
+  <div class="main outline-red">
+    <div class="main-content">
+      <div class="leftnav outline">left</div>
+      <div class="content">
+          content
+          lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+          lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+          lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+      </div>
+    </div>
+
+    <div class="footer outline"></div>
+  </div>
+
+
+
+</div>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
