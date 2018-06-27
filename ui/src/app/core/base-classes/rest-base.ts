@@ -1,9 +1,9 @@
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {UtilService} from '../services/util.service';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {AppStore} from '../../app/app-store';
+import {uiUtil} from '../services/ui-util';
 
 const apiUrl = environment.apiUrl;
 
@@ -12,7 +12,6 @@ export class RestBase<T extends AnyObj> {
   constructor(
     protected endpointName: string,
     protected httpClient: HttpClient,
-    protected util: UtilService,
     protected store: AppStore,
     protected isModuleRepo = false) {
   }
@@ -40,7 +39,7 @@ export class RestBase<T extends AnyObj> {
   // filters then picks latest value (only returns one value) using updatedDate
   getMany(_params = {}): Observable<T[]> {
     this.addModuleId(_params);
-    const params = this.util.createHttpParams(_params)
+    const params = uiUtil.createHttpParams(_params)
     return this.httpClient.get<T[]>(`${apiUrl}/api/${this.endpointName}`, {params});
   }
 
@@ -96,9 +95,15 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.delete<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
   }
 
+  // we'll automatically add moduleId to calls without them, but not for itamdmin as that module is only
+  // for display purposes, not for data. ITadmin will have to set it's own moduleId
   addModuleId(params) {
     if (this.isModuleRepo && !params.moduleId) {
-      params.moduleId = this.store.getRepoModule(this.endpointName).moduleId;
+      const moduleId = this.store.getRepoModule(this.endpointName).moduleId;
+      if (uiUtil.isAdminModuleId(moduleId)) {
+        throw new Error(`No moduleId for itAdmin call to ${this.endpointName}`);
+      }
+      params.moduleId = moduleId;
     }
   }
 

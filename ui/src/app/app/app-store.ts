@@ -9,7 +9,6 @@ import AnyObj from '../../../../shared/models/any-obj';
 import {Subject} from 'rxjs/Subject';
 import {DfaModule} from '../modules/_common/models/module';
 import {User} from '../modules/_common/models/user';
-import {UtilService} from '../core/services/util.service';
 
 
 @Injectable({
@@ -37,7 +36,7 @@ export class AppStore extends StoreBase {
   });
 
 
-  constructor(private media: ObservableMedia, util: UtilService) {
+  constructor(private media: ObservableMedia) {
     super();
     this.init();
   }

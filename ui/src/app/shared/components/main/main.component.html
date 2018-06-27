@@ -1,7 +1,9 @@
 <div fxLayout="column" fxLayoutAlign="start stretch" style="height:100%">
 
   <cui-header [options]="headerOptions"></cui-header>
+
   <div class="main-wrap" style="overflow:auto;" fxFlex="1 1 auto">
+
     <div class="hero hero--blue">
       <div class="container">
         <div class="hero__content">
@@ -10,13 +12,15 @@
         </div>
       </div>
     </div>
+
     <div class="main" fxLayout="row" fxLayoutAlign="start stretch">
       <fin-leftnav></fin-leftnav>
       <div fxFlex="1 1 auto">
         <router-outlet></router-outlet>
       </div>
     </div>
+
+    <cui-footer></cui-footer>
   </div>
-  <cui-footer></cui-footer>
 
 </div>

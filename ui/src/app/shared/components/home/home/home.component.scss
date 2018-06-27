@@ -1,33 +1,39 @@
 
 @import '../../../../../styles/comp-index';
 
-.wrap {
-  padding: 15px;
+.vert-wrap {
+  overflow:auto;
 
-  .column {
-    width: 25px;
-    max-width: 400px;
-    padding: 0 15px;
+  .horiz-wrap {
+    padding: 15px;
 
-    $module-height: 40px;
-    .module {
-      height: $module-height;
-      background-color: $cisco-light-blue;
-      color: white;
-      margin-bottom: 3px;
-      text-align: center;
-      line-height: $module-height;
-      &:hover {
-        cursor: pointer;
+    .column {
+      width: 25px;
+      max-width: 400px;
+      padding: 0 15px;
+
+      $module-height: 40px;
+      .module {
+        height: $module-height;
+        background-color: $cisco-light-blue;
+        color: white;
+        margin-bottom: 3px;
+        text-align: center;
+        line-height: $module-height;
+        &:hover {
+          cursor: pointer;
+        }
+        &.selected {
+          background-color: darken($cisco-light-blue, 10%);
+        }
       }
-      &.selected {
-        background-color: darken($cisco-light-blue, 10%);
-      }
+
     }
 
   }
 
 }
+
 
 
 

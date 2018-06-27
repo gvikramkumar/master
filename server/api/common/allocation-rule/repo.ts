@@ -16,10 +16,10 @@ const schema = new Schema(
     sl1Select: String,
     scmsSelect: String,
     beSelect: String,
-    createdBy: String,
-    createdDate: Date,
-    updatedBy: String,
-    updatedDate: Date
+    createdBy: {type: String, required: true},
+    createdDate: {type: Date, required: true},
+    updatedBy: {type: String, required: true},
+    updatedDate: {type: Date, required: true}
   },
   {collection: 'dfa_allocation_rule'}
 );

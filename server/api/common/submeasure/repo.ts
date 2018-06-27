@@ -38,7 +38,11 @@ const schema = new Schema(
       expenseSSOT: {type: String, enum: ['Y', 'N']},
       manualMix: {type: String, enum: ['Y', 'N']}
     },
-    rules: [String]
+    rules: [String],
+    createdBy: {type: String, required: true},
+    createdDate: {type: Date, required: true},
+    updatedBy: {type: String, required: true},
+    updatedDate: {type: Date, required: true}
   },
   {collection: 'dfa_submeasure'}
 );
