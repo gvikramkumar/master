@@ -9,14 +9,14 @@ import {SubmeasureService} from '../../services/submeasure.service';
 import {DollarUploadService} from '../../../prof/services/dollar-upload.service';
 import {MappingUploadService} from '../../../prof/services/mapping-upload.service';
 import {environment} from '../../../../../environments/environment';
-import {UtilService} from '../../../../core/services/util.service';
 import * as _ from 'lodash';
+import {uiUtil} from '../../../../core/services/ui-util';
 
 interface ReportSettings {
-  submeasureName: string,
-  fiscalMonth?: number,
-  excelFilename: string,
-  excelProperties: string,
+  submeasureName: string;
+  fiscalMonth?: number;
+  excelFilename: string;
+  excelProperties: string;
   excelHeaders: string
 }
 
@@ -77,7 +77,6 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     private subMeasureService: SubmeasureService,
     private dollarUploadService: DollarUploadService,
     private mappingUploadService: MappingUploadService,
-    private util: UtilService,
     private store: AppStore
   ) {
     super(store, route);
@@ -164,7 +163,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       params.fiscalMonth = this.fiscalMonth;
     }
     const url = `${environment.apiUrl}/api/prof/report/${this.report.type}`;
-    this.util.submitForm(url, params);
+    uiUtil.submitForm(url, params);
   }
 
 }

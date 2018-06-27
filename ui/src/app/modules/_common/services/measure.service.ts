@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {Measure} from '../models/measure';
-import {UtilService} from '../../../core/services/util.service';
 import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
 
@@ -13,8 +12,8 @@ const apiUrl = environment.apiUrl;
 })
 export class MeasureService extends RestBase<Measure> {
 
-  constructor(httpClient: HttpClient, util: UtilService, store: AppStore) {
-    super('measure', httpClient, util, store, true);
+  constructor(httpClient: HttpClient, store: AppStore) {
+    super('measure', httpClient, store, true);
   }
 
 

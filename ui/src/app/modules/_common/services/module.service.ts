@@ -7,7 +7,6 @@ import {environment} from '../../../../environments/environment';
 import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
 import * as _ from 'lodash';
-import {UtilService} from '../../../core/services/util.service';
 
 const apiUrl = environment.apiUrl;
 
@@ -16,8 +15,8 @@ const apiUrl = environment.apiUrl;
 })
 export class ModuleService extends RestBase<DfaModule> {
 
-  constructor(httpClient: HttpClient, util: UtilService, store: AppStore) {
-    super('module', httpClient, util, store);
+  constructor(httpClient: HttpClient, store: AppStore) {
+    super('module', httpClient, store);
   }
 
   getMany(): Observable<DfaModule[]> {

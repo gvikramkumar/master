@@ -1,8 +1,8 @@
 
-const pg = require('../server/lib/database/postgres-conn');
+const pgc = require('../dist/server/lib/database/postgres-conn').pgc;
 
-
-pg.promise.then(db => {
+const a = pgc.promise;
+pgc.promise.then(db => {
 
   console.log('pg up');
 

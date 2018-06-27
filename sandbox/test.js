@@ -1,7 +1,9 @@
 const _ = require('lodash'),
   Q = require('q');
 
-const re = /^\/\w{4}\//;
-console.log('/prof/lala/sssss/sss'.match(re));
+const a = {name:'dank', age: 50};
 
+for (const key in a) {
+  console.log(key, a[key]);
+}
 

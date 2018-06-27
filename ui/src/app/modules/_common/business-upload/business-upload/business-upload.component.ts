@@ -7,7 +7,6 @@ import {FsFileService} from '../../../../core/services/fsfile.service';
 import * as _ from 'lodash';
 import {environment} from '../../../../../environments/environment';
 import {ToastService} from '../../../../core/services/toast.service';
-import {UtilService} from '../../../../core/services/util.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BusinessUploadFileType, Directory} from '../../../../../../../shared/enums';
 
@@ -38,7 +37,6 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
 
   constructor(
     private httpClient: HttpClient,
-    private util: UtilService,
     public store: AppStore,
     private route: ActivatedRoute,
     private fsFileService: FsFileService,

@@ -3,6 +3,7 @@
   min-width: 250px;
   max-width: 350px;
   width: 30%;
+  overflow-x: hidden;
 
   .title {
     font-size: 18px !important; // cui changes font size at breakpoints, we don't want that here.
