@@ -45,13 +45,13 @@ Model: Model<any>;
       });
   }
 
-  update({key, value}) {
-    return this.getDoc(key)
+  upsert(data) {
+    return this.getDoc(data.key)
       .then(item => {
         if (!item) {
-          throw new ApiError('Item not found, please refresh your data.', null, 400);
+            return this.add(data);
         }
-        item.value = value;
+        item.value = data.value;
         return item.save().then(doc => doc.value);
       });
   }

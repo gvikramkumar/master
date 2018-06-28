@@ -27,14 +27,17 @@ export default class LookupController {
   }
 
   add(req, res, next) {
-    this.repo.add(req.body)
+    const data = req.body;
+    this.verifyProperties(data, ['key']);
+    this.repo.add(data)
       .then(item => res.json(item))
       .catch(next);
   }
 
-  update(req, res, next) {
+  upsert(req, res, next) {
     const data = req.body;
-    this.repo.update(data)
+    this.verifyProperties(data, ['key']);
+    this.repo.upsert(data)
       .then(item => {
         res.json(item);
       })
@@ -45,6 +48,14 @@ export default class LookupController {
     this.repo.remove(req.params.key)
       .then(item => res.json(item))
       .catch(next);
+  }
+
+  verifyProperties(data, arr) {
+    arr.forEach(prop => {
+      if (!data[prop]) {
+        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+      }
+    });
   }
 
 }

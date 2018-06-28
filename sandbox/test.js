@@ -1,9 +1,12 @@
 const _ = require('lodash'),
   Q = require('q');
 
-const a = {name:'dank', age: 50};
+function fcn(name) {
+  if (!name) {
+    name = 'dank';
+  }
+  console.log('name', name);
 
-for (const key in a) {
-  console.log(key, a[key]);
 }
 
+fcn();

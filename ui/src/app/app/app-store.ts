@@ -9,6 +9,7 @@ import AnyObj from '../../../../shared/models/any-obj';
 import {Subject} from 'rxjs/Subject';
 import {DfaModule} from '../modules/_common/models/module';
 import {User} from '../modules/_common/models/user';
+import {uiUtil} from '../core/services/ui-util';
 
 
 @Injectable({
@@ -67,7 +68,7 @@ export class AppStore extends StoreBase {
   }
 
   module: DfaModule;
-  // we
+  // a special function that "must" get a module, so errors if not there yet
   getRepoModule(endpointName): DfaModule {
     // need to know if people are accessing this before it's ready
     if (!this.module) {

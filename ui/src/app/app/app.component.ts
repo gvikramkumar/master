@@ -28,14 +28,18 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   get() {
-    this.ls.getValue(key, this.noerror).subscribe(val => this.val = val);
+    if (this.noerror) {
+      this.ls.getNoError(key).subscribe(val => this.val = val);
+    } else {
+      this.ls.getWithError(key).subscribe(val => this.val = val);
+    }
   }
   add() {
     this.ls.add(key, this.val).subscribe(_val => this.val = _val);
   }
 
   update() {
-    this.ls.update(key, this.val).subscribe(_val => this.val = _val);
+    this.ls.upsert(key, this.val).subscribe(_val => this.val = _val);
   }
 
   remove() {

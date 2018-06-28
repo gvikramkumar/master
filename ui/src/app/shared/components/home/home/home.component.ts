@@ -26,6 +26,8 @@ export class HomeComponent implements OnInit {
     this.modules2 = this.store.modules.slice(6);
     if (this.store.module) {
       this.selectedModule = this.store.module;
+    } else {
+      this.moduleChange(this.store.modules[0]);
     }
   }
 

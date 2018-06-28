@@ -11,15 +11,17 @@ const apiUrl = environment.apiUrl;
 export class LookupService {
   endpointName = 'lookup';
 
-  constructor(private httpClient: HttpClient) {
+  constructor(protected httpClient: HttpClient) {
   }
 
-  getValue(key: string, ignoreError = false): Observable<any> {
-    let params = new HttpParams();
-    if (ignoreError) {
-      params = params.set('noerror', 'true');
-    }
+  // will 404 if not found
+  getWithError(key: string): Observable<any> {
+    return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}/${key}`);
+  }
 
+  // will 204 if not found (no error, nothing in body)
+  getNoError(key: string): Observable<any> {
+    const params = new HttpParams().set('noerror', 'true');
     return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}/${key}`, {params});
   }
 
@@ -27,7 +29,7 @@ export class LookupService {
     return this.httpClient.post<any>(`${apiUrl}/api/${this.endpointName}`, {key, value});
   }
 
-  update(key, value) {
+  upsert(key, value) {
     return this.httpClient.put<any>(`${apiUrl}/api/${this.endpointName}/${key}`, {key, value});
   }
 
