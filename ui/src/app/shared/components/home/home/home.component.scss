@@ -1,42 +1,41 @@
-
 @import '../../../../../styles/comp-index';
 
-.vert-wrap {
-  overflow:auto;
+$header-height: 110.994px;
+$footer-height: 108.314px;
 
-  .horiz-wrap {
-    padding: 15px;
+.home-comp {
+  height: 100%;
 
-    .column {
-      width: 25px;
-      max-width: 400px;
-      padding: 0 15px;
+  .main {
+    height: calc(100% - #{$header-height});
+    overflow-y: auto;
 
-      $module-height: 40px;
-      .module {
-        height: $module-height;
-        background-color: $cisco-light-blue;
-        color: white;
-        margin-bottom: 3px;
-        text-align: center;
-        line-height: $module-height;
-        &:hover {
-          cursor: pointer;
-        }
-        &.selected {
-          background-color: darken($cisco-light-blue, 10%);
+    .main-content {
+      padding: 15px;
+      min-height: calc(100% -  #{$footer-height});
+
+      .column {
+        width: 25px;
+        max-width: 400px;
+        padding: 0 15px;
+
+        $module-height: 40px;
+        .module {
+          height: $module-height;
+          background-color: $cisco-light-blue;
+          color: white;
+          margin-bottom: 3px;
+          text-align: center;
+          line-height: $module-height;
+          &:hover {
+            cursor: pointer;
+          }
+          &.selected {
+            background-color: darken($cisco-light-blue, 10%);
+          }
         }
       }
-
     }
-
   }
-
 }
-
-
-
-
-
-
 

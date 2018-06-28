@@ -1,15 +1,13 @@
 
-<div #wrap fxLayout="column" fxLayoutAlign="start stretch" style="height:100%">
+<div class="home-comp" style="height:100%">
 
   <cui-header [options]="headerOptions"></cui-header>
 
-  <div class="vert-wrap" fxFlex="1 1 auto">
+  <div class="main">
+    <div class="main-content" fxLayout="row" fxLayoutAlign="start stretch">
+      <fin-leftnav fxFlex="0 0 auto"></fin-leftnav>
+      <div class="content" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start stretch">
 
-    <div class="horiz-wrap" fxLayout="row" fxLayoutAlign="start stretch">
-
-      <fin-leftnav></fin-leftnav>
-
-      <div class="main" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start stretch">
         <div class="column" fxFlex="1 1 auto">
           <div class="module" [class.selected]="module1===selectedModule"
                *ngFor="let module1 of modules1" (click)="moduleChange(module1)">{{module1.name}}</div>
@@ -18,8 +16,8 @@
           <div class="module" [class.selected]="module2===selectedModule"
                *ngFor="let module2 of modules2" (click)="moduleChange(module2)">{{module2.name}}</div>
         </div>
-      </div>
 
+      </div>
     </div>
 
     <cui-footer></cui-footer>
