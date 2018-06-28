@@ -5,6 +5,10 @@ import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
 import {Title} from '@angular/platform-browser';
 import {AppStore} from './app-store';
 import {ToastService} from '../core/services/toast.service';
+import {LookupService} from '../modules/_common/services/lookup.service';
+import {HttpParams} from '@angular/common/http';
+
+const key = 'stuff';
 
 @Component({
   selector: 'fin-root',
@@ -17,9 +21,30 @@ export class AppComponent implements OnInit, AfterViewInit {
   title = 'fin-dfa';
   @ViewChild('permToast') permToast: CuiToastComponent;
   @ViewChild('autoHideToast') autoHideToast: CuiToastComponent;
+  val: any;
+  noerror = false;
 
-  constructor(private titleService: Title, public store: AppStore, private toastService: ToastService) {
+  constructor(private ls: LookupService, private titleService: Title, public store: AppStore, private toastService: ToastService) {
   }
+
+  get() {
+    this.ls.getValue(key, this.noerror).subscribe(val => this.val = val);
+  }
+  add() {
+    this.ls.add(key, this.val).subscribe(_val => this.val = _val);
+  }
+
+  update() {
+    this.ls.update(key, this.val).subscribe(_val => this.val = _val);
+  }
+
+  remove() {
+    this.ls.remove(key).subscribe(val => this.val = val);
+  }
+
+
+
+
 
   public ngOnInit() {
     this.titleService.setTitle('FIN-DFA')

@@ -20,7 +20,7 @@ export default class LookupController {
             return;
           }
         } else {
-          res.send(item.value);
+          res.json(item.value);
         }
       })
       .catch(next);
@@ -28,7 +28,7 @@ export default class LookupController {
 
   add(req, res, next) {
     this.repo.add(req.body)
-      .then(item => res.send(item))
+      .then(item => res.json(item))
       .catch(next);
   }
 
@@ -36,14 +36,14 @@ export default class LookupController {
     const data = req.body;
     this.repo.update(data)
       .then(item => {
-        res.send(item);
+        res.json(item);
       })
       .catch(next);
   }
 
   remove(req, res, next) {
     this.repo.remove(req.params.key)
-      .then(item => res.send(item))
+      .then(item => res.json(item))
       .catch(next);
   }
 

@@ -1,5 +1,14 @@
+<!--
 <cui-toast #permToast></cui-toast>
 <cui-toast autoHide="5000" #autoHideToast></cui-toast>
-<!--<div class="fin-cui-spinner-wrap"><cui-spinner></cui-spinner></div>-->
+&lt;!&ndash;<div class="fin-cui-spinner-wrap"><cui-spinner></cui-spinner></div>&ndash;&gt;
 <cui-spinner [class.fin-hide]="!store.showSpinner"></cui-spinner>
 <router-outlet></router-outlet>
+-->
+
+val: <input [(ngModel)]="val"><br>
+noerror: <input type="checkbox" [(ngModel)]="noerror"><br>
+<button (click)="get()">get</button>
+<button (click)="add()">add</button>
+<button (click)="update()">update</button>
+<button (click)="remove()">delete</button>

@@ -35,7 +35,12 @@ Model: Model<any>;
   add(data) {
     // if versioning items, our edits will actually be adds, so dump the ids in that case
     const item = new this.Model(data);
-    return item.save();
+    return item.save()
+      .catch(err => {
+        if (err.message.match(/duplicate/i)) {
+          throw new ApiError(`Lookup key already exists: ${data.key}`);
+        }
+      });
   }
 
   update({moduleId, key, value}) {

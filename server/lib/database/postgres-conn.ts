@@ -17,8 +17,8 @@ if (process.env.NO_POSTGRES) {
   pgc.promise = Promise.resolve()
     .then(() => {
       console.log(`POSTGRES NOT CONNECTED, USING NO_POSTGRES ENV VAR`);
-      pgc.pgdb = undefined;
-      return undefined;
+      pgc.pgdb = {};
+      return pgc;
     });
 } else {
   pgc.promise = client.connect()

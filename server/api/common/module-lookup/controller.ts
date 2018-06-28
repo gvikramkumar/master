@@ -24,7 +24,7 @@ export default class ModuleLookupController {
             return;
           }
         } else {
-          res.send(item.value);
+          res.json(item.value);
         }
       })
       .catch(next);
@@ -32,7 +32,7 @@ export default class ModuleLookupController {
 
   add(req, res, next) {
     this.repo.add(req.body)
-      .then(item => res.send(item))
+      .then(item => res.json(item))
       .catch(next);
   }
 
@@ -40,7 +40,7 @@ export default class ModuleLookupController {
     const data = req.body;
     this.repo.update(data)
       .then(item => {
-        res.send(item);
+        res.json(item);
       })
       .catch(next);
   }
@@ -51,7 +51,7 @@ export default class ModuleLookupController {
       return Promise.resolve();
     }
     this.repo.remove(req.query.moduleId, req.params.key)
-      .then(item => res.send(item))
+      .then(item => res.json(item))
       .catch(next);
   }
 
