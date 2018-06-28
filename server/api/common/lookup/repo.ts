@@ -56,15 +56,9 @@ Model: Model<any>;
       });
   }
 
-  remove(key) {
-    return this.getDoc(key)
-      .then(item => {
-        if (!item) {
-          throw new ApiError('Item not found, please refresh your data.', null, 400);
-        }
-        return item.remove()
-          .then(() => item.value);
-      });
+  remove(item) {
+    return item.remove()
+      .then(() => item.value);
   }
 
 }

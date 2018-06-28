@@ -55,10 +55,19 @@ export default class ModuleLookupController {
     if (!req.query.moduleId) {
       next(new ApiError('moduleId required', null, 400));
     }
-    this.repo.remove(req.query.moduleId, req.params.key)
-      .then(item => res.json(item))
+    return this.repo.getDoc(req.query.moduleId, req.params.key)
+      .then(item => {
+        if (!item) {
+          res.status(204).end();
+        } else {
+          this.repo.remove(item)
+            .then(val => res.json(val));
+        }
+      })
       .catch(next);
   }
+
+
 
   verifyProperties(data, arr) {
     arr.forEach(prop => {

@@ -45,8 +45,15 @@ export default class LookupController {
   }
 
   remove(req, res, next) {
-    this.repo.remove(req.params.key)
-      .then(item => res.json(item))
+    return this.repo.getDoc(req.params.key)
+      .then(item => {
+        if (!item) {
+          res.status(204).end();
+        } else {
+          this.repo.remove(item)
+            .then(val => res.json(val));
+        }
+      })
       .catch(next);
   }
 

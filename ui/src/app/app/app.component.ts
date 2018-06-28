@@ -7,6 +7,7 @@ import {AppStore} from './app-store';
 import {ToastService} from '../core/services/toast.service';
 import {LookupService} from '../modules/_common/services/lookup.service';
 import {HttpParams} from '@angular/common/http';
+import {ModuleLookupService} from '../modules/_common/services/module-lookup.service';
 
 const key = 'stuff';
 
@@ -38,7 +39,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ls.add(key, this.val).subscribe(_val => this.val = _val);
   }
 
-  update() {
+  upsert() {
     this.ls.upsert(key, this.val).subscribe(_val => this.val = _val);
   }
 
