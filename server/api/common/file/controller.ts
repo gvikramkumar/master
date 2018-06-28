@@ -25,15 +25,15 @@ export default class FileController {
     const params = _.omit(req.query, ['groupField', 'getLatest']);
     if (req.query.groupField) { // groups then gets latest of each group
       this.repo.getManyGroupLatest(params, req.query.groupField)
-        .then(items => res.send(items))
+        .then(items => res.json(items))
         .catch(next);
     } else if (req.query.getLatest) {// gets latest "one" of results
       this.repo.getOneLatest(params)
-        .then(items => res.send(items))
+        .then(items => res.json(items))
         .catch(next);
     } else {
       this.repo.getMany(req.query)
-        .then(items => res.send(items))
+        .then(items => res.json(items))
         .catch(next);
     }
   }
@@ -42,7 +42,7 @@ export default class FileController {
     this.repo.getOneById(req.params.id)
       .then(item => {
         if (item) {
-          res.send(item);
+          res.json(item);
         } else {
           res.status(404).end();
         }
@@ -72,7 +72,7 @@ export default class FileController {
 
   uploadMany(req, res, next) {
     return this.repo.getManyByIds(req.files.map(file => file.id))
-      .then(files => res.send(files))
+      .then(files => res.json(files))
       .catch(next);
   }
 
@@ -80,7 +80,7 @@ export default class FileController {
   /*
     uploadOne(req, res, next) {
       return this.repo.getOneById(req.file.id)
-        .then(file => res.send(file))
+        .then(file => res.json(file))
         .catch(next);
     }
   */
@@ -95,7 +95,7 @@ export default class FileController {
           return;
         }
         return Q.ninvoke(gfs, 'delete', new mgc.mongo.ObjectID(id))
-          .then(() => res.send(fileInfo));
+          .then(() => res.json(fileInfo));
       })
       .catch(next);
   }

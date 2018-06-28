@@ -30,6 +30,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       .handle(req)
       .pipe(
         tap(event => {
+          const a = event;
         }),
         catchError(resp => {
           this.store.showSpinner = false;

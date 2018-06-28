@@ -21,7 +21,10 @@ export class ModuleService extends RestBase<DfaModule> {
 
   getMany(): Observable<DfaModule[]> {
     return super.getMany().pipe(
-      tap(modules => this.store.modules = _.sortBy(modules, 'displayOrder'))
+      tap(modules => {
+        this.store.modules = _.sortBy(modules, 'displayOrder');
+        return modules;
+      })
     )
   }
 

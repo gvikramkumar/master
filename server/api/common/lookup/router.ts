@@ -9,5 +9,5 @@ const ctrl = injector.get(LookupController)
 export const lookupRouter = Router()
   .post('/', ctrl.add.bind(ctrl))
   .get('/:key', ctrl.getValue.bind(ctrl))
-  .put('/:key', ctrl.update.bind(ctrl))
+  .put('/:key', ctrl.upsert.bind(ctrl))
   .delete('/:key', ctrl.remove.bind(ctrl));

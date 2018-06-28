@@ -44,7 +44,7 @@ export default class ControllerBase {
 
   getMany(req, res, next) {
     this.getManyPromise(req)
-      .then(items => res.send(items))
+      .then(items => res.json(items))
       .catch(next);
   }
 
@@ -52,7 +52,7 @@ export default class ControllerBase {
     this.repo.getOneById(req.params.id)
       .then(item => {
         if (item) {
-          res.send(item);
+          res.json(item);
         } else {
           res.status(404).end();
         }
@@ -73,7 +73,7 @@ export default class ControllerBase {
         .catch(next);
     } else {
       this.repo.addOne(data, req.user.id)
-        .then(item => res.send(item))
+        .then(item => res.json(item))
         .catch(next);
     }
   }
@@ -83,14 +83,14 @@ export default class ControllerBase {
     this.verifyProperties(data, ['id']);
     this.repo.update(data, req.user.id)
       .then(item => {
-        res.send(item);
+        res.json(item);
       })
       .catch(next)
   }
 
   remove(req, res, next) {
     this.repo.remove(req.params.id)
-      .then(item => res.send(item))
+      .then(item => res.json(item))
       .catch(next);
   }
 

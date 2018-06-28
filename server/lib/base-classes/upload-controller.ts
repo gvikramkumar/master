@@ -73,12 +73,12 @@ export default class UploadController {
       .then(() => this.importRows(req.user.id))
       .then(() => {
         this.sendSuccessEmail();
-        res.send({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
+        res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
       })
       .catch(err => {
         if (err && err.name === this.UploadValidationError) {
           this.sendValidationEmail();
-          res.send({status: 'failure', uploadName: this.uploadName});
+          res.json({status: 'failure', uploadName: this.uploadName});
         } else {
           const data = Object.assign({}, err);
           if (err.message) {

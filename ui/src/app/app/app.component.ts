@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, HostBinding, OnInit, ViewChild} from "@angular/core";
-import {environment} from "../../environments/environment";
+import {AfterViewInit, Component, HostBinding, OnInit, ViewChild} from '@angular/core';
+import {environment} from '../../environments/environment';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
 import {Title} from '@angular/platform-browser';
@@ -22,27 +22,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit() {
-    this.titleService.setTitle('FIN-DFA')
+    this.titleService.setTitle('FIN-DFA');
   }
 
   public ngAfterViewInit() {
     this.toastService.permToast = this.permToast;
     this.toastService.autoHideToast = this.autoHideToast;
   }
-
-  headerOptions = new CuiHeaderOptions({
-    "showBrandingLogo": true,
-    "brandingLink": "https://cisco.com",
-    "brandingTitle": "",
-    "showMobileNav": true,
-    "title": "Digitized Financial Allocations",
-    "breadcrumbs": [
-      {
-        "label": "Home",
-        "url": "dfa"
-      }
-    ],
-    "username": "Maryellen Oltman",
-  });
 
 }

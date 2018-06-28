@@ -19,6 +19,8 @@ Model: Model<any>;
     this.Model = model('Lookup', schema);
   }
 
+  // would rather have getValue, but controller needs to be able to error if nothing is found. Something
+  // "could" be found and have an undefined value, so only way to know is to return the doc itself
   getDoc(key) {
     return this.Model.findOne({key}).exec();
   }
@@ -34,29 +36,29 @@ Model: Model<any>;
   add(data) {
     // if versioning items, our edits will actually be adds, so dump the ids in that case
     const item = new this.Model(data);
-    return item.save();
-  }
-
-  update({key, value}) {
-    return this.getDoc(key)
-      .then(item => {
-        if (!item) {
-          throw new ApiError('Item not found, please refresh your data.', null, 400);
+    return item.save()
+      .then(doc => doc.value)
+      .catch(err => {
+        if (err.message.match(/duplicate/i)) {
+          throw new ApiError(`Lookup key already exists: ${data.key}`);
         }
-        item.value = value;
-        return item.save();
       });
   }
 
-  remove(key) {
-    return this.getDoc(key)
+  upsert(data) {
+    return this.getDoc(data.key)
       .then(item => {
         if (!item) {
-          throw new ApiError('Item not found, please refresh your data.', null, 400);
+            return this.add(data);
         }
-        return item.remove()
-          .then(() => item.value);
+        item.value = data.value;
+        return item.save().then(doc => doc.value);
       });
+  }
+
+  remove(item) {
+    return item.remove()
+      .then(() => item.value);
   }
 
 }

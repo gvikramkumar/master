@@ -35,29 +35,29 @@ Model: Model<any>;
   add(data) {
     // if versioning items, our edits will actually be adds, so dump the ids in that case
     const item = new this.Model(data);
-    return item.save();
-  }
-
-  update({moduleId, key, value}) {
-    return this.getDoc(moduleId, key)
-      .then(item => {
-        if (!item) {
-          throw new ApiError('Item not found, please refresh your data.', null, 400);
+    return item.save()
+      .then(doc => doc.value)
+      .catch(err => {
+        if (err.message.match(/duplicate/i)) {
+          throw new ApiError(`Lookup key already exists for this moduleId/key: ${data.moduleId}/${data.key}`);
         }
-        item.value = value;
-        return item.save();
       });
   }
 
-  remove(moduleId, key) {
-    return this.getDoc(moduleId, key)
+  upsert(data) {
+    return this.getDoc(data.moduleId, data.key)
       .then(item => {
         if (!item) {
-          throw new ApiError('Item not found, please refresh your data.', null, 400);
+          return this.add(data);
         }
-        return item.remove()
-          .then(() => item.value);
+        item.value = data.value;
+        return item.save().then(doc => doc.value);
       });
+  }
+
+  remove(item) {
+    return item.remove()
+      .then(() => item.value);
   }
 
 }

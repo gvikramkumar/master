@@ -20,31 +20,49 @@ export default class LookupController {
             return;
           }
         } else {
-          res.send(item.value);
+          res.json(item.value);
         }
       })
       .catch(next);
   }
 
   add(req, res, next) {
-    this.repo.add(req.body)
-      .then(item => res.send(item))
+    const data = req.body;
+    this.verifyProperties(data, ['key']);
+    this.repo.add(data)
+      .then(item => res.json(item))
       .catch(next);
   }
 
-  update(req, res, next) {
+  upsert(req, res, next) {
     const data = req.body;
-    this.repo.update(data)
+    this.verifyProperties(data, ['key']);
+    this.repo.upsert(data)
       .then(item => {
-        res.send(item);
+        res.json(item);
       })
       .catch(next);
   }
 
   remove(req, res, next) {
-    this.repo.remove(req.params.key)
-      .then(item => res.send(item))
+    return this.repo.getDoc(req.params.key)
+      .then(item => {
+        if (!item) {
+          res.status(204).end();
+        } else {
+          this.repo.remove(item)
+            .then(val => res.json(val));
+        }
+      })
       .catch(next);
+  }
+
+  verifyProperties(data, arr) {
+    arr.forEach(prop => {
+      if (!data[prop]) {
+        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+      }
+    });
   }
 
 }
