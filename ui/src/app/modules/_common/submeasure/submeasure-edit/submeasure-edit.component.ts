@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RoutingComponentBase} from '../../../../shared/routing-component-base';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Submeasure} from '../../models/submeasure';
@@ -66,32 +66,32 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     {
       "name": "rule1",
       "value": 1,
-      "selected":null
+      "selected": null
     },
     {
       "name": "rule2",
       "value": 2,
-      "selected":null
+      "selected": null
     },
     {
       "name": "rule3",
       "value": 3,
-      "selected":null
+      "selected": null
     },
     {
       "name": "rule4",
       "value": 4,
-      "selected":null
+      "selected": null
     },
     {
       "name": "rule5",
       "value": 5,
-      "selected":null
+      "selected": null
     },
     {
       "name": "rule6",
       "value": 6,
-      "selected":null
+      "selected": null
     }
   ]
 
@@ -110,13 +110,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.ruleForms.pop();
   }
 
-  measureNamesMap: {[key: string]: any} = {
-    'Indirect Revenue Adjustments':1,
-    'Manufacturing Overhead':2,
-    'Manufacturing Supply Chain Expenses':3,
-    'Manufacturing V&O':4,
-    'Standard COGS Adjustments':5,
-    'Warranty':6
+  measureNamesMap: { [key: string]: any } = {
+    'Indirect Revenue Adjustments': 1,
+    'Manufacturing Overhead': 2,
+    'Manufacturing Supply Chain Expenses': 3,
+    'Manufacturing V&O': 4,
+    'Standard COGS Adjustments': 5,
+    'Warranty': 6
   }
 
   categoriesHidden: boolean = true;
@@ -139,21 +139,21 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   ]
 
-/*  measureNameSelected() {
-    //Make "Submeasure Category Type" field visible if "Standard Cogs" is chosen
-    if (this.measureNames[4].selected==true) {
-      this.categoriesHidden=false;
-    }
-    else {
-      this.categoriesHidden=true;
-    }
-  }*/
+  /*  measureNameSelected() {
+      //Make "Submeasure Category Type" field visible if "Standard Cogs" is chosen
+      if (this.measureNames[4].selected==true) {
+        this.categoriesHidden=false;
+      }
+      else {
+        this.categoriesHidden=true;
+      }
+    }*/
 
   categoryTypeSelected() {
   }
 
   switch_ibe: boolean;
-  ibe_items= [
+  ibe_items = [
     {
       "name": "Internal BE",
       "value": 1,
@@ -166,7 +166,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   ]
   switch_le: boolean;
-  le_items= [
+  le_items = [
     {
       "name": "BE",
       "value": 1,
@@ -174,7 +174,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   ]
   switch_p: boolean;
-  p_items= [
+  p_items = [
     {
       "name": "TG",
       "value": 1,
@@ -197,7 +197,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   ]
   switch_s: boolean;
-  s_items= [
+  s_items = [
     {
       "name": "Level 1",
       "value": 1,
@@ -230,7 +230,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   ]
   switch_scms: boolean;
-  scms_items= [
+  scms_items = [
     {
       "name": "SCMS",
       "value": 1,
@@ -396,8 +396,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
     //If Internal Business Entity is selected, make sure Product is unselected
     if (this.switch_ibe && this.switch_p) {
-        this.switch_p = false;
-        this.pChange();
+      this.switch_p = false;
+      this.pChange();
     }
   }
 
@@ -414,8 +414,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
     //If Product is selected, make sure Internal Business Entity is unselected
     if (this.switch_ibe && this.switch_p) {
-        this.switch_ibe = false;
-        this.ibeChange();
+      this.switch_ibe = false;
+      this.ibeChange();
     }
   }
 
@@ -483,7 +483,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     ]*/
 
     this.switch_ibe = false;
-    this.ibe_items= [
+    this.ibe_items = [
       {
         "name": "Internal BE",
         "value": 1,
@@ -496,7 +496,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       }
     ]
     this.switch_le = false;
-    this.le_items= [
+    this.le_items = [
       {
         "name": "BE",
         "value": 1,
@@ -504,7 +504,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       }
     ]
     this.switch_p = false;
-    this.p_items= [
+    this.p_items = [
       {
         "name": "TG",
         "value": 1,
@@ -527,7 +527,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       }
     ]
     this.switch_s = false;
-    this.s_items= [
+    this.s_items = [
       {
         "name": "Level 1",
         "value": 1,
@@ -589,9 +589,14 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
     this.validate()
       .subscribe(valid => {
+        let obs: Observable<Submeasure>;
         if (valid) {
-          this.submeasureService.add(this.submeasure)
-            .subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
+          if (this.editMode) {
+            obs = this.submeasureService.update(this.submeasure);
+          } else {
+            obs = this.submeasureService.add(this.submeasure);
+          }
+          obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
         }
       })
   }

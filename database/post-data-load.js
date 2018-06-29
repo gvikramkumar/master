@@ -206,9 +206,9 @@ const date = new Date();
 collectionsWithCreatedUpdated.forEach(coll => {
   db.getCollection(coll).updateMany({}, {
     $set: {
-      createdBy: '',
+      createdBy: 'system',
       createdDate: date,
-      updatedBy: '',
+      updatedBy: 'system',
       updatedDate: date
     }
   });
