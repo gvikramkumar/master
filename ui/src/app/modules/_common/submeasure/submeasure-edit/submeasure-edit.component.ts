@@ -8,6 +8,8 @@ import {RuleService} from "../../services/rule.service";
 import {SubmeasureService} from '../../services/submeasure.service';
 import {AllocationRule} from "../../models/allocation-rule";
 import {Observable, of} from "rxjs/index";
+import {MeasureService} from "../../services/measure.service";
+import {Measure} from "../../models/measure";
 
 @Component({
   selector: 'fin-submeasure-add',
@@ -27,7 +29,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     private router: Router,
     private ruleService: RuleService,
     private submeasureService: SubmeasureService,
-    private store: AppStore
+    private store: AppStore,
+    private measureService: MeasureService
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
@@ -40,7 +43,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.submeasureService.getOneById(this.route.snapshot.params.id)
         .subscribe(submeasure => {
           this.submeasure = submeasure;
-          this.measureNameSelection = this.submeasure.measureName ? this.measureNamesMap[this.submeasure.measureName]: '';
+          // this.measureNameSelection = this.submeasure.measureName ? this.measureNamesMap[this.submeasure.measureName]: '';
+          //this.measureNameSelection = this.submeasure.measureName;
           console.log('measure selection is: ' + this.measureNameSelection);
           this.subMeasureName = submeasure.name;
           this.description = submeasure.description;
@@ -48,11 +52,14 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
 
         });
+      this.measureService.getMany()
+        .subscribe(
+          measures => this.measures = measures)
     } else {
       this.title = 'Create Submeasure';
     }
   }
-
+  measures: Measure[] = [];
   subMeasureName: string;
   description: string;
   source: string;
@@ -130,8 +137,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
   //measure;
   //measureName: string;
-  measureNameSelection: number;
-  measureNames = [
+  //measureNameSelection: number;
+  measureNameSelection: string;
+ /* measureNames = [
     {
       "name": "Indirect Revenue Adjustments",
       "value": 1,
@@ -162,7 +170,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       "value": 6,
       "selected":null
     }
-  ]
+  ]*/
 
   measureNamesMap: {[key: string]: any} = {
     'Indirect Revenue Adjustments':1,
@@ -193,7 +201,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   ]
 
-  measureNameSelected() {
+/*  measureNameSelected() {
     //Make "Submeasure Category Type" field visible if "Standard Cogs" is chosen
     if (this.measureNames[4].selected==true) {
       this.categoriesHidden=false;
@@ -201,7 +209,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     else {
       this.categoriesHidden=true;
     }
-  }
+  }*/
 
   categoryTypeSelected() {
   }
@@ -503,7 +511,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.reportingLevel1 = "";
     this.reportingLevel2 = "";
 
-    this.measureNames = [
+    /*this.measureNames = [
       {
         "name": "Indirect Revenue Adjustments",
         "value": 1,
@@ -534,7 +542,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         "value": 6,
         "selected":false
       }
-    ]
+    ]*/
 
     this.switch_ibe = false;
     this.ibe_items= [
