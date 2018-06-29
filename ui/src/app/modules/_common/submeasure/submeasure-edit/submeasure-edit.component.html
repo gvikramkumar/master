@@ -1,5 +1,5 @@
 <div class="add-form-container">
-  <cui-select [items]="measureNames" label="Measure Name" empty="true" [(ngModel)]="measureNameSelection" (selectChange)="measureNameSelected()" required="true" optionsKey="name" optionsValue="value"></cui-select>
+  <cui-select [items]="measures" label="Measure Name" empty="true" [(ngModel)]="measureNameSelection" required="true" optionsKey="name" optionsValue="name"></cui-select>
   <cui-input id="subname" type="text" [(model)]="subMeasureName" label="Sub-Measure Name" required="true"></cui-input>
   <cui-select [hidden]="categoriesHidden" [items]="categoryTypes" label="Submeasure Category Type" empty="true" (selectChange)="categoryTypeSelected()"></cui-select>
   <cui-input type="textarea" [(model)]="description" label="Description"></cui-input>
