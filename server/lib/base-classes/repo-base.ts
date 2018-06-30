@@ -163,16 +163,14 @@ export default class RepoBase {
   update(data, userId) {
     return this.getOneWithTimestamp(data)
       .then(item => {
-        const oid = item._id;
-        const obj = _.merge(item.toObject(), data);
         if (this.schema.path('updatedBy')) {
           item.updatedBy = userId;
           item.updatedDate = new Date();
         }
-        const _obj = this.validate(obj);
+        this.validate(data);
         // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
         // we'll just replace the doc in entirety and be done with it
-        return this.Model.replaceOne({_id: oid}, _obj)
+        return this.Model.replaceOne({_id: data.id}, data)
           .then(x => x);
 
       });
@@ -195,7 +193,6 @@ export default class RepoBase {
     if (errs) {
       throw errs;
     }
-    return doc.toObject();
   }
 
   // adds a data range to the filter if setYearmo param, if upperOnly=true then only upper constraint

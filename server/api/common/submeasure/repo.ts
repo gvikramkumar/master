@@ -7,7 +7,7 @@ const schema = new Schema(
   {
     moduleId: {type: Number, required: true},
     name: String,
-    description: String,
+    description: {type: String, required: true},
     source: {type: String, enum: ['manual']},
     measureName: String,
     startFiscalMonth: Number,
