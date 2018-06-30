@@ -1,19 +1,18 @@
 const _ = require('lodash'),
   Q = require('q');
 
-function getDateRangeFromFiscalYearMo(_yearmo) {
-  let yearmo = _yearmo;
-  if (typeof yearmo === 'number') {
-    yearmo = yearmo.toString();
-  }
-  const year = Number(yearmo.substr(0, 4));
-  const month = Number(yearmo.substr(4, 2));
+function getFiscalMonthListFromDate(date, numMonths) {
+  const yearmos = [];
+  const months = _.range(date.getMonth() + 5, date.getMonth() + 5 - numMonths);
+  console.log(months);
 
+  months.forEach(mon => {
+    date.setMonth(mon);
+    month = date.getMonth() + 1;
+    yearmos.push('' + date.getFullYear() + (month < 10? '0' + month : month) )
+  })
 
-  let startDate = new Date(year, month - 6);
-  let endDate = new Date(year, month - 5);
-
-  return {startDate, endDate};
+  return yearmos;
 }
 
-console.log(getDateRangeFromFiscalYearMo(201901))
+console.log(getFiscalMonthListFromDate(new Date(), 18));

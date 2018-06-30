@@ -7,8 +7,23 @@ export const uiUtil = {
   isAdminModule,
   isAdminModuleId,
   createHttpParams,
-  submitForm
+  submitForm,
+  getFiscalMonthListFromDate
 };
+
+function getFiscalMonthListFromDate(date, numMonths) {
+  const yearmos = [];
+  const months = _.range(date.getMonth() + 5, date.getMonth() + 5 - numMonths);
+  let month;
+
+  months.forEach(mon => {
+    date.setMonth(mon);
+    month = date.getMonth() + 1;
+    yearmos.push('' + date.getFullYear() + (month < 10 ? '0' + month : month));
+  })
+
+  return yearmos;
+}
 
 function screenHeightShort(elem) {
 }

@@ -9,8 +9,9 @@ import {AllocationRule} from '../../models/allocation-rule';
 import {forkJoin, Observable, of} from 'rxjs/index';
 import {MeasureService} from '../../services/measure.service';
 import {Measure} from '../../models/measure';
-import {constants} from '../../../../core/models/constants';
+import {uiConst} from '../../../../core/models/ui-const';
 import * as _ from 'lodash';
+import {uiUtil} from '../../../../core/services/ui-util';
 
 @Component({
   selector: 'fin-submeasure-add',
@@ -31,8 +32,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   reportingLevel1: string;
   reportingLevel2: string;
   reportingLevel3: string;
-  con = constants;
+  uiConst = uiConst;
   errs: string[] = [];
+  months: string[];
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +49,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
+    this.months = uiUtil.getFiscalMonthListFromDate(new Date(), 6);
     Promise.all([
       this.measureService.getMany().toPromise(),
       this.ruleService.getMany().toPromise()
@@ -214,39 +217,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   p_br_hidden: boolean = false;
   s_br_hidden: boolean = false;
   scms_br_hidden: boolean = false;
-
-  months = [
-    {
-      'name': '201806 - Jun18',
-      'value': 1,
-      'selected': null
-    },
-    {
-      'name': '201805 - May18',
-      'value': 2,
-      'selected': null
-    },
-    {
-      'name': '201804 - Apr18',
-      'value': 3,
-      'selected': null
-    },
-    {
-      'name': '201803 - Mar18',
-      'value': 4,
-      'selected': null
-    },
-    {
-      'name': '201802 - Feb18',
-      'value': 5,
-      'selected': null
-    },
-    {
-      'name': '201801 - Jan18',
-      'value': 6,
-      'selected': null
-    }
-  ]
 
   timings = [
     {

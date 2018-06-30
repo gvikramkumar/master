@@ -11,7 +11,7 @@ const yesNoRadioOptions = [
 ];
 
 
-export const constants = {
+export const uiConst = {
   yesNoRadioOptions
 };
 

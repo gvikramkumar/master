@@ -50,10 +50,10 @@
       <br [hidden]="scms_br_hidden">
   </div>
   <br>
-  <cui-select [items]="months" label="Effective Month" empty="true" (selectChange)="monthSelected()" required="true"></cui-select>
+  <cui-select [items]="months" label="Effective Month" empty="true" [(ngModel)]="sm.startFiscalMonth" required="true"></cui-select>
   <cui-select [items]="timings" label="Processing Timing" empty="true" (selectChange)="timingSelected()"></cui-select>
   Discount Flag
-  <cui-input type="radio" [(model)]="sm.indicators.discountFlag" [items]="con.yesNoRadioOptions" label="Discount Flag"></cui-input>
+  <cui-input type="radio" [(model)]="sm.indicators.discountFlag" [items]="uiConst.yesNoRadioOptions" label="Discount Flag"></cui-input>
   <cui-select [items]="groupings" label="P&L Node Grouping" empty="true" (selectChange)="groupingSelected()"></cui-select>
   <br><br>
   Legacy Reporting Support
