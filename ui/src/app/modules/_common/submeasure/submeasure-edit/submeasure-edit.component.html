@@ -1,9 +1,9 @@
 <div class="add-form-container">
-  <cui-select [items]="measures" label="Measure Name" empty="true" [(ngModel)]="measureNameSelection" required="true" optionsKey="name" optionsValue="name"></cui-select>
-  <cui-input id="subname" type="text" [(model)]="subMeasureName" label="Sub-Measure Name" required="true"></cui-input>
+  <cui-select [items]="measures" label="Measure Name" empty="true" [(ngModel)]="sm.measureName" required="true" optionsKey="name" optionsValue="name"></cui-select>
+  <cui-input id="subname" type="text" [(model)]="sm.name" label="Sub-Measure Name" required="true"></cui-input>
   <cui-select [hidden]="categoriesHidden" [items]="categoryTypes" label="Submeasure Category Type" empty="true" (selectChange)="categoryTypeSelected()"></cui-select>
-  <cui-input type="textarea" [(model)]="description" label="Description"></cui-input>
-  <cui-input type="textarea" [(model)]="source" label="Source"></cui-input>
+  <cui-input type="textarea" [(model)]="sm.description" label="Description"></cui-input>
+  <cui-input type="textarea" [(model)]="sm.source" label="Source"></cui-input>
   <br><br>
   <div class="input-filter-level">
     Input Filter Level*
@@ -52,20 +52,25 @@
   <br>
   <cui-select [items]="months" label="Effective Month" empty="true" (selectChange)="monthSelected()" required="true"></cui-select>
   <cui-select [items]="timings" label="Processing Timing" empty="true" (selectChange)="timingSelected()"></cui-select>
-  Discount Flag<cui-input type="radio" [(model)]="discountFlag" [items]="discountFlagOptions" label="Discount Flag"></cui-input>
+  Discount Flag
+  <cui-input type="radio" [(model)]="sm.indicators.discountFlag" [items]="con.yesNoRadioOptions" label="Discount Flag"></cui-input>
   <cui-select [items]="groupings" label="P&L Node Grouping" empty="true" (selectChange)="groupingSelected()"></cui-select>
   <br><br>
-  Legacy Reporting Support<cui-input type="text" [(model)]="reportingLevel1" label="Reporting Level 1"></cui-input>
+  Legacy Reporting Support
+  <cui-input type="text" [(model)]="reportingLevel1" label="Reporting Level 1"></cui-input>
   <cui-input type="text" [(model)]="reportingLevel2" label="Reporting Level 2"></cui-input>
-  <cui-input type="text" [(model)]="subMeasureName" label="Reporting Level 3"></cui-input>
+  <cui-input type="text" [(model)]="reportingLevel3" label="Reporting Level 3"></cui-input>
   <br><br>
   <img matTooltip="Attach up to 5 rules" matTooltipPosition="left" src="assets/img/tooltip.png" class="tooltip" width="18"> Rule Association<br>
-  <div *ngFor="let ruleForm of ruleForms; let i = index;">
-    <cui-select [items]="rules" label="Associated Rule(s)" empty="true" (selectChange)="ruleSelected()"></cui-select>
+  <div *ngFor="let rule of sm.rules; let i = index;">
+    <cui-select [items]="rules" label="Associated Rule(s)" empty="true"
+                [(ngModel)]="sm.rules[i]" optionsKey="name" optionsValue="name"></cui-select>
   </div>
-  <button type="button" [hidden]="ruleForms.length >= 5" (click)="addRule()">+</button>
-  <button type="button" [hidden]="!ruleForms.length" (click)="removeRule()">-</button>
+  <button type="button" [disabled] ="sm.rules.length >= 5" (click)="addRule()">+</button>
+  <button type="button" [disabled] ="!sm.rules.length" (click)="removeRule()">-</button>
   <br><br>
-  <button [hidden]=true (click)="resetForm()">Reset</button><<button (click)="save()">Submit</button><button>Cancel</button>
+  <button [hidden]=true (click)="resetForm()">Reset</button>
+  <button (click)="save()">Submit</button>
+  <button>Cancel</button>
   <br>
 </div>

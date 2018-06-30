@@ -1,12 +1,8 @@
 const _ = require('lodash'),
   Q = require('q');
 
-function fcn(name) {
-  if (!name) {
-    name = 'dank';
-  }
-  console.log('name', name);
 
-}
+const a = {name: 'dank', age: 50, lint: 'li', rules: ['one', 'two'], obj: {stuff: 'lala', arr: [3], dat: 5}};
+const b = {name: 'carl', age: 60, rules: ['three', 'four'], obj: {stuff: 'lala2', arr: [4, 2]}};
 
-fcn();
+console.log(_.merge(a, b));

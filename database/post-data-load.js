@@ -36,7 +36,7 @@ db.dfa_submeasure.insertMany([
       expenseSSOT: "Y",
       manualMix: "Y"
     },
-    rules: ["2TierPOSPID", "2TierPOSBE"]
+    rules: ["GLREVMIX-PL3SL2-NOWWDIST-ROLL3", "MANUALMAP-PL3SL6-PERCENT"]
   },
   {
     moduleId: NumberInt(1),
@@ -72,7 +72,7 @@ db.dfa_submeasure.insertMany([
       expenseSSOT: "Y",
       manualMix: "Y"
     },
-    rules: ["2TierPOSPID", "2TierPOSBE"]
+    rules: ["REVPOS-NODISTI-NOSCMSOTHER-ROLL3", "SERVMAP-PL3BE-MTD"]
   }
 ])
 

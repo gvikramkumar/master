@@ -9,38 +9,15 @@ export class Submeasure {
   endFiscalMonth: string;
   processingTime: string;
   pnlnodeGrouping: string;
-  inputFilterLevel: {
-  productLevel: string;
-  salesLevel: string;
-  scmsLevel: string;
-  internalBElevel: string;
-  entityLevel: string;
-    };
-  manualMapping: {
-    productLevel: string;
-    salesLevel: string;
-    scmsLevel: string;
-    internalBElevel: string;
-    entityLevel: string;
-  };
-  reportingLevels: string[];
-  indicators: {
-    dollarUploadFlag: string;
-    discountFlag: string;
-    approveFlag: string;
-    status: string;
-    manualMapping: string;
-    expenseSSOT: string;
-    manualMix: string;
-  };
-  rules: string[];
-  createdBy?: string;
-  createdDate?: string;
-  updatedBy?: string;
-  updatedDate?: string;
+  inputFilterLevel = new InputFilterLevel();
+  manualMapping = new InputFilterLevel();
+  reportingLevels: string[] = [];
+  indicators = new Indicators();
+  rules: string[] = [];
+
 }
 
-/*class InputFilterLevel {
+class InputFilterLevel {
   productLevel: string;
   salesLevel: string;
   scmsLevel: string;
@@ -56,4 +33,4 @@ class Indicators {
   manualMapping: string;
   expenseSSOT: string;
   manualMix: string;
-}*/
+}
