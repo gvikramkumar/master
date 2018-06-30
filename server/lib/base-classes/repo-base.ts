@@ -164,14 +164,19 @@ export default class RepoBase {
     return this.getOneWithTimestamp(data)
       .then(item => {
         if (this.schema.path('updatedBy')) {
-          item.updatedBy = userId;
-          item.updatedDate = new Date();
+          data.updatedBy = userId;
+          data.updatedDate = new Date();
         }
         this.validate(data);
         // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
         // we'll just replace the doc in entirety and be done with it
         return this.Model.replaceOne({_id: data.id}, data)
-          .then(x => x);
+          .then(results => {
+            if (results.nModified !== 1) {
+              throw new ApiError('Failed to update document', data);
+            }
+            return data;
+          });
 
       });
   }
