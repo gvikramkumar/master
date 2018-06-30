@@ -1,34 +1,19 @@
 const _ = require('lodash'),
   Q = require('q');
 
-
-const a = {
-  name: 'dank',
-  age: 50,
-  lint: 'li',
-  rules: ['one', 'two'],
-  tags: [
-    {name: 'jim', tag: 2}, {name: 'carl', tag: 3}
-  ],
-  obj: {
-    stuff: 'lala',
-    arr: [3],
-    dat: 5
+function getDateRangeFromFiscalYearMo(_yearmo) {
+  let yearmo = _yearmo;
+  if (typeof yearmo === 'number') {
+    yearmo = yearmo.toString();
   }
-};
-const b = {
-  name: 'mary',
-  age: 20,
-  lint: 'ma',
-  rules: ['three'],
-  tags: [
-    {name: 'mary', tag: 2}, {name: 'carl', tag: 33}, {name: 'jim', tag: 44},
-  ],
-  obj: {
-    stuff: 'lala',
-    arr: [3],
-    dat: 5
-  }
-};
+  const year = Number(yearmo.substr(0, 4));
+  const month = Number(yearmo.substr(4, 2));
 
-console.log(_.merge(a, b));
+
+  let startDate = new Date(year, month - 6);
+  let endDate = new Date(year, month - 5);
+
+  return {startDate, endDate};
+}
+
+console.log(getDateRangeFromFiscalYearMo(201901))
