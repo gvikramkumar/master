@@ -34,7 +34,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   reportingLevel3: string;
   uiConst = uiConst;
   errs: string[] = [];
-  yearmos: string[];
+  yearmos: {str: string, num: number}[];
 
   constructor(
     private route: ActivatedRoute,

@@ -53,8 +53,6 @@
   <cui-select [items]="yearmos" label="Start Fiscal Month" empty="true" [(ngModel)]="sm.startFiscalMonth" required="true" optionsKey="str" optionsValue="num"></cui-select>
   <cui-select [items]="yearmos" label="End Fiscal Month" empty="true" [(ngModel)]="sm.endFiscalMonth" required="true" optionsKey="str" optionsValue="num"></cui-select>
   <cui-select [items]="timings" label="Processing Timing" empty="true" (selectChange)="timingSelected()"></cui-select>
-  Discount Flag
-  <cui-input type="radio" [(model)]="sm.indicators.discountFlag" [items]="uiConst.yesNoRadioOptions" label="Discount Flag"></cui-input>
   <cui-select [items]="groupings" label="P&L Node Grouping" empty="true" (selectChange)="groupingSelected()"></cui-select>
   <br><br>
   Legacy Reporting Support

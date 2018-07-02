@@ -29,7 +29,6 @@ db.dfa_submeasure.insertMany([
     reportingLevels: [],
     indicators: {
       dollarUploadFlag: "Y",
-      discountFlag: "N",
       approveFlag: "Y",
       status: "A",
       manualMapping: "Y",
@@ -65,7 +64,6 @@ db.dfa_submeasure.insertMany([
     reportingLevels: [],
     indicators: {
       dollarUploadFlag: "Y",
-      discountFlag: "N",
       approveFlag: "Y",
       status: "A",
       manualMapping: "Y",

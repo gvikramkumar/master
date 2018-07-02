@@ -31,7 +31,6 @@ const schema = new Schema(
     reportingLevels: [String],
     indicators: {
       dollarUploadFlag: {type: String, enum: ['Y', 'N']},
-      discountFlag: {type: String, enum: ['Y', 'N']},
       approveFlag: {type: String, enum: ['Y', 'N']},
       status: {type: String, enum: ['A']},
       manualMapping: {type: String, enum: ['Y', 'N']},

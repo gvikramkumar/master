@@ -27,7 +27,6 @@ class InputFilterLevel {
 
 class Indicators {
   dollarUploadFlag: string;
-  discountFlag: string;
   approveFlag: string;
   status: string;
   manualMapping: string;
