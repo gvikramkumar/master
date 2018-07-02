@@ -56,7 +56,7 @@
   <cui-select [items]="groupings" label="P&L Node Grouping" empty="true" (selectChange)="groupingSelected()"></cui-select>
   <br><br>
   Legacy Reporting Support
-  <cui-input type="text" [(model)]="reportingLevel1" label="Reporting Level 1"></cui-input>
+  <cui-input type="text" [disabled]="true" [(model)]="sm.name" label="Reporting Level 1"></cui-input>
   <cui-input type="text" [(model)]="reportingLevel2" label="Reporting Level 2"></cui-input>
   <cui-input type="text" [(model)]="reportingLevel3" label="Reporting Level 3"></cui-input>
   <br><br>
