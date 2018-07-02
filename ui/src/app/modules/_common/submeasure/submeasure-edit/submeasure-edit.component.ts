@@ -29,9 +29,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   description: string;
   source: string;
   discountFlag: string;
-  reportingLevel1: string;
-  reportingLevel2: string;
-  reportingLevel3: string;
+  reportingLevels: string[];
   uiConst = uiConst;
   errs: string[] = [];
   yearmos: {str: string, num: number}[];
@@ -63,7 +61,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.submeasureService.getOneById(this.route.snapshot.params.id)
             .subscribe(submeasure => {
               this.sm = submeasure;
-
             });
         } else {
           this.title = 'Create Submeasure';
@@ -369,10 +366,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
     console.log('RESETTING FORM');
 
-    this.discountFlag = '';
-    this.reportingLevel1 = '';
-    this.reportingLevel2 = '';
-    this.reportingLevel3 = '';
 
     /*this.measureNames = [
       {
