@@ -26,7 +26,7 @@ db.dfa_submeasure.insertMany([
       internalBELevel: "Internal SUB BE",
       entityLevel: "BE"
     },
-    reportingLevels: [],
+    reportingLevels: ["Indirect Revenue Adjustments"],
     indicators: {
       dollarUploadFlag: "Y",
       approveFlag: "Y",
@@ -61,7 +61,7 @@ db.dfa_submeasure.insertMany([
       internalBELevel: "Internal BE",
       entityLevel: "BE"
     },
-    reportingLevels: [],
+    reportingLevels: ["Manufacturing Overhead"],
     indicators: {
       dollarUploadFlag: "Y",
       approveFlag: "Y",
