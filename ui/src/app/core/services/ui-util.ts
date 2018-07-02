@@ -22,7 +22,9 @@ function getFiscalMonthListFromDate(date, numMonths) {
     yearmos.push('' + date.getFullYear() + (month < 10 ? '0' + month : month));
   })
 
-  return yearmos;
+  return yearmos.map(str => {
+    return {str: str, num: Number(str)};
+  });
 }
 
 function screenHeightShort(elem) {

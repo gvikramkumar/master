@@ -34,7 +34,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   reportingLevel3: string;
   uiConst = uiConst;
   errs: string[] = [];
-  months: string[];
+  yearmos: string[];
 
   constructor(
     private route: ActivatedRoute,
@@ -49,7 +49,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
-    this.months = uiUtil.getFiscalMonthListFromDate(new Date(), 6);
+    this.yearmos = uiUtil.getFiscalMonthListFromDate(new Date(), 6);
     Promise.all([
       this.measureService.getMany().toPromise(),
       this.ruleService.getMany().toPromise()
@@ -63,6 +63,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.submeasureService.getOneById(this.route.snapshot.params.id)
             .subscribe(submeasure => {
               this.sm = submeasure;
+
             });
         } else {
           this.title = 'Create Submeasure';
