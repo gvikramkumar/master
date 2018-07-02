@@ -29,21 +29,20 @@ db.dfa_submeasure.insertMany([
     reportingLevels: [],
     indicators: {
       dollarUploadFlag: "Y",
-      discountFlag: "N",
       approveFlag: "Y",
       status: "A",
       manualMapping: "Y",
       expenseSSOT: "Y",
       manualMix: "Y"
     },
-    rules: ["2TierPOSPID", "2TierPOSBE"]
+    rules: ["GLREVMIX-PL3SL2-NOWWDIST-ROLL3", "MANUALMAP-PL3SL6-PERCENT"]
   },
   {
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment2",
     description: "2 Tier Adjustment2",
     source: "manual",
-    measureName: "Indirect Revenue Adjustments2",
+    measureName: "Manufacturing Overhead",
     startFiscalMonth: 201810,
     endFiscalMonth: 204012,
     processingTime: "Monthly",
@@ -65,14 +64,13 @@ db.dfa_submeasure.insertMany([
     reportingLevels: [],
     indicators: {
       dollarUploadFlag: "Y",
-      discountFlag: "N",
       approveFlag: "Y",
       status: "A",
       manualMapping: "Y",
       expenseSSOT: "Y",
       manualMix: "Y"
     },
-    rules: ["2TierPOSPID", "2TierPOSBE"]
+    rules: ["REVPOS-NODISTI-NOSCMSOTHER-ROLL3", "SERVMAP-PL3BE-MTD"]
   }
 ])
 
@@ -104,8 +102,32 @@ db.dfa_measure.insertMany([
   },
   {
     moduleId: NumberInt(1),
-    name: "Indirect Revenue Adjustments2",
-    typeCode: "revadj2",
+    name: "Manufacturing Overhead",
+    typeCode: "revadj",
+    statusFlag: "Y"
+  },
+  {
+    moduleId: NumberInt(1),
+    name: "Manufacturing Supply Chain Expenses",
+    typeCode: "revadj",
+    statusFlag: "Y"
+  },
+  {
+    moduleId: NumberInt(1),
+    name: "Manufacturing V&O",
+    typeCode: "revadj",
+    statusFlag: "Y"
+  },
+  {
+    moduleId: NumberInt(1),
+    name: "Standard Cogs Adjustments",
+    typeCode: "revadj",
+    statusFlag: "Y"
+  },
+  {
+    moduleId: NumberInt(1),
+    name: "Warranty",
+    typeCode: "revadj",
     statusFlag: "Y"
   }
 ])
@@ -182,9 +204,9 @@ const date = new Date();
 collectionsWithCreatedUpdated.forEach(coll => {
   db.getCollection(coll).updateMany({}, {
     $set: {
-      createdBy: '',
+      createdBy: 'system',
       createdDate: date,
-      updatedBy: '',
+      updatedBy: 'system',
       updatedDate: date
     }
   });

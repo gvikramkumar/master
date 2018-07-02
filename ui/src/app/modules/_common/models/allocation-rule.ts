@@ -12,8 +12,4 @@ export class AllocationRule {
   sl1Select?: string;
   scmsSelect?: string;
   beSelect?: string;
-  createdBy?: string;
-  createdDate?: string;
-  updatedBy?: string;
-  updatedDate?: string;
 }

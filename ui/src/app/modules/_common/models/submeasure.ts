@@ -9,15 +9,12 @@ export class Submeasure {
   endFiscalMonth: string;
   processingTime: string;
   pnlnodeGrouping: string;
-  inputFilterLevel: InputFilterLevel;
-  manualMapping: InputFilterLevel;
-  reportingLevels: string[];
-  indicators: Indicators;
-  rules: string[];
-  createdBy?: string;
-  createdDate?: string;
-  updatedBy?: string;
-  updatedDate?: string;
+  inputFilterLevel = new InputFilterLevel();
+  manualMapping = new InputFilterLevel();
+  reportingLevels: string[] = [];
+  indicators = new Indicators();
+  rules: string[] = [];
+
 }
 
 class InputFilterLevel {
@@ -30,7 +27,6 @@ class InputFilterLevel {
 
 class Indicators {
   dollarUploadFlag: string;
-  discountFlag: string;
   approveFlag: string;
   status: string;
   manualMapping: string;

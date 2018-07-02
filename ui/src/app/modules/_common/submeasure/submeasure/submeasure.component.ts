@@ -5,7 +5,6 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {BehaviorSubject, Observable, Subject, merge} from 'rxjs';
 import {debounceTime, map} from 'rxjs/operators';
 import {SubmeasureService} from '../../services/submeasure.service';
-//import {SubmeasureService} from "../../services/submeasure.service";
 import {Submeasure} from '../../models/submeasure';
 import {RoutingComponentBase} from '../../../../shared/routing-component-base';
 import {ActivatedRoute} from '@angular/router';

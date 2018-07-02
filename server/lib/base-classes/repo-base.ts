@@ -4,6 +4,7 @@ import _ from 'lodash';
 import util from '../common/util';
 import {ApiError} from '../common/api-error';
 import AnyObj from '../../../shared/models/any-obj';
+import {mgc} from '../database/mongoose-conn';
 
 export default class RepoBase {
   protected Model: Model<any>;
@@ -162,14 +163,21 @@ export default class RepoBase {
   update(data, userId) {
     return this.getOneWithTimestamp(data)
       .then(item => {
-        _.merge(item, data);
-        delete item._id;
-        delete item.id;
         if (this.schema.path('updatedBy')) {
-          item.updatedBy = userId;
-          item.updatedDate = new Date();
+          data.updatedBy = userId;
+          data.updatedDate = new Date();
         }
-        return item.save()
+        this.validate(data);
+        // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
+        // we'll just replace the doc in entirety and be done with it
+        return this.Model.replaceOne({_id: data.id}, data)
+          .then(results => {
+            if (results.nModified !== 1) {
+              throw new ApiError('Failed to update document', data);
+            }
+            return data;
+          });
+
       });
   }
 
@@ -179,17 +187,17 @@ export default class RepoBase {
         if (!item) {
           throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
-        return item.remove();
+        return item.remove();``
       });
   }
 
-  // a way to validate early from the controller. Say your controller updates 2 things in database
-  // and second one fails validation... could mess things up. In that case, validate both early in
-  // controller to know beforehand. Also, mongoose update doesn't call validate, only save(), in that case,
-  // you'll have to call it yourself.
+  // a way to validate using mongoose outside of save(). If errs, then throw errs
   validate(data) {
-    const item = new this.Model(data);
-    return item.validateSync(data); // if(repo.validate(data)) >>  then have an error
+    const doc = new this.Model(data);
+    const errs = doc.validateSync(data);
+    if (errs) {
+      throw errs;
+    }
   }
 
   // adds a data range to the filter if setYearmo param, if upperOnly=true then only upper constraint
