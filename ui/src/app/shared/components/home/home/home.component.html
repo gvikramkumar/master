@@ -6,7 +6,7 @@
   <div class="main">
     <div class="main-content" fxLayout="row" fxLayoutAlign="start stretch">
       <fin-leftnav fxFlex="0 0 auto"></fin-leftnav>
-      <div class="content" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start stretch">
+      <div class="fin-content" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start stretch">
 
         <div class="column" fxFlex="1 1 auto">
           <div class="module" [class.selected]="module1===selectedModule"
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <cui-footer></cui-footer>
+    <cui-footer *ngIf="false"></cui-footer>
   </div>
 
 </div>

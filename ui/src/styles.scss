@@ -1,17 +1,8 @@
 @import '~normalize.css/normalize.css';
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-// this is what cui team says you need for typography, and maybe for their components as well
-// thing is: this is a lot of code to compile to css and stick in header, when it's already available
-// in css form (dist directory), so we'll shove that in assets/cisco-ui for now. This would give us access
-// to their cui variables though, say you want a button that matches the header of their card... color is in
-// here maybe? Not sure. We'd have to determine if this is their global stylesheet for components, or they
-// have something per component. material has a global stylesheet. We also had problems with this cisco-ui
-// package getting dropped when you npm install/uninstall stuff. Not sure why, but this will solve that problem
-// too.
-//$cui-resource-path: "../node_modules/cisco-ui/dist";
-//@import "~cisco-ui/src/scss/cui-standard.scss";
-@import 'assets/cisco-ui/css/cui-standard.min.css';
+$cui-resource-path: "../node_modules/cisco-ui/dist";
+@import '~cisco-ui/src/scss/cui-standard.scss';
 
 @import 'styles/elements';
 @import 'styles/classes';
