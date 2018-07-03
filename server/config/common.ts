@@ -5,7 +5,8 @@ export default {
     host: 'finpg-dev-01',
     port: 5432,
     database: 'fpadev',
-    schema: 'fpadfa'
+    conSchema: 'fpacon',
+    dfaSchema: 'fpadfa'
   },
   corsOrigin: [],
   showStack: false,

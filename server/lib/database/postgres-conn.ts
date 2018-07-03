@@ -23,7 +23,7 @@ if (process.env.NO_POSTGRES) {
 } else {
   pgc.promise = client.connect()
     .then(() => {
-      console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}-${config.schema}`)
+      console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}`)
       return pgc;
     })
     .catch(err => {
