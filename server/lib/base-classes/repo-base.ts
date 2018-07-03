@@ -3,19 +3,22 @@ import {NamedApiError} from '../common/named-api-error';
 import _ from 'lodash';
 import util from '../common/util';
 import {ApiError} from '../common/api-error';
+import AnyObj from '../../../shared/models/any-obj';
+import {mgc} from '../database/mongoose-conn';
 
 export default class RepoBase {
-  protected Model: any
+  protected Model: Model<any>;
 
-  constructor(public schema: Schema, modelName: string) {
+  constructor(public schema: Schema, protected modelName: string, protected isModuleRepo = false) {
     this.schema = schema;
     util.setSchemaAdditions(this.schema);
     this.Model = mg.model(modelName, schema);
   }
 
   // get all that match filter, if yearmo/upperOnly exists, sets date constraints
-  getMany(_filter: any = {}) {
+  getMany(_filter: AnyObj = {}) {
     let filter = _.clone(_filter);
+    this.verifyModuleId(filter);
     let query;
     const distinct = filter.getDistinct,
       limit = filter.setLimit,
@@ -46,15 +49,16 @@ export default class RepoBase {
   }
 
   // group by groupField and get latest of each group
-  getManyByGroupLatest(_filter: any = {}) {
+  getManyByGroupLatest(_filter: AnyObj = {}) {
     let filter = _filter;
+    this.verifyModuleId(filter);
     const groupField = filter.groupField;
     delete filter.groupField;
     filter = this.addDateRangeToFilter(filter);
     return this.Model.aggregate([
       {$match: filter},
       {$sort: {updatedDate: -1}},
-      {$group: {_id: '$'+groupField, id: {$first: '$_id'}}},
+      {$group: {_id: '$' + groupField, id: {$first: '$_id'}}},
       {$project: {_id: '$id'}}
     ])
       .then(arr => {
@@ -69,12 +73,13 @@ export default class RepoBase {
   }
 
   // returns the latest value
-  getOneLatest(_filter: any = {}) {
+  getOneLatest(_filter: AnyObj = {}) {
     let filter = _filter;
+    this.verifyModuleId(filter);
     delete filter.getLatest;
     filter = this.addDateRangeToFilter(filter);
     return this.Model.find(filter).sort({updatedDate: -1}).limit(1).exec()
-      .then(arr => arr.length? arr[0]: null);
+      .then(arr => arr.length ? arr[0] : null);
   }
 
   getOne(_filter = {}) {
@@ -88,15 +93,13 @@ export default class RepoBase {
     if (data.updatedDate) {
       query.where({updatedDate: data.updatedDate});
     }
-      return query.exec()
+    return query.exec()
       .then(item => {
         if (!item && data.updatedDate) {
-          const err = new NamedApiError('ConcurrencyError', 'Concurrency error, please refresh your data.', null, 400);
-          throw(err);
+          throw new NamedApiError('ConcurrencyError', 'Concurrency error, please refresh your data.', null, 400);
         }
         else if (!item) {
-          const err = new ApiError('Item not found, please refresh your data.', null, 400);
-          throw(err);
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         return item;
       });
@@ -160,35 +163,41 @@ export default class RepoBase {
   update(data, userId) {
     return this.getOneWithTimestamp(data)
       .then(item => {
-        _.merge(item, data);
-        delete item._id;
-        delete item.id;
         if (this.schema.path('updatedBy')) {
-          item.updatedBy = userId;
-          item.updatedDate = new Date();
+          data.updatedBy = userId;
+          data.updatedDate = new Date();
         }
-        return item.save()
+        this.validate(data);
+        // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
+        // we'll just replace the doc in entirety and be done with it
+        return this.Model.replaceOne({_id: data.id}, data)
+          .then(results => {
+            if (results.nModified !== 1) {
+              throw new ApiError('Failed to update document', data);
+            }
+            return data;
+          });
+
       });
   }
 
   remove(id) {
     return this.getOneById(id)
       .then(item => {
-      if (!item) {
-          const err = new ApiError('Item not found, please refresh your data.', null, 400);
-          throw(err);
+        if (!item) {
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
-        return item.remove();
+        return item.remove();``
       });
   }
 
-  // a way to validate early from the controller. Say your controller updates 2 things in database
-  // and second one fails validation... could mess things up. In that case, validate both early in
-  // controller to know beforehand. Also, mongoose update doesn't call validate, only save(), in that case,
-  // you'll have to call it yourself.
+  // a way to validate using mongoose outside of save(). If errs, then throw errs
   validate(data) {
-    const item = new this.Model(data);
-    return item.validateSync(data); // if(repo.validate(data)) >>  then have an error
+    const doc = new this.Model(data);
+    const errs = doc.validateSync(data);
+    if (errs) {
+      throw errs;
+    }
   }
 
   // adds a data range to the filter if setYearmo param, if upperOnly=true then only upper constraint
@@ -212,6 +221,16 @@ export default class RepoBase {
       delete filter.upperOnly;
     }
     return filter;
+  }
+
+  verifyModuleId(filter) {
+    if (this.isModuleRepo) {
+      if (!filter.moduleId) {
+        throw new ApiError(`${this.modelName} repo call is missing moduleId`, null, 400);
+      } else {
+        filter.moduleId = Number(filter.moduleId);
+      }
+    }
   }
 
 }

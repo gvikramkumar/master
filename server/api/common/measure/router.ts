@@ -6,7 +6,7 @@ import {authorize} from '../../../lib/middleware/authorize';
 
 const ctrl = injector.get(MeasureController);
 
-export default Router()
+export const measureRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
   .post('/', authorize('api:manage'), ctrl.handlePost.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))

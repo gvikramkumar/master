@@ -9,20 +9,18 @@ import SubmeasureRepo from '../../api/common/submeasure/repo';
 import Q from 'q';
 import RepoBase from './repo-base';
 import {Request} from 'express';
-import IApiRequest from '../models/api-request';
+import ApiRequest from '../models/api-request';
+import AnyObj from '../../../shared/models/any-obj';
+import PostgresRepo from '../database/repos/postgres-repo';
 
-
-const openPeriodRepo = new OpenPeriodRepo();
-const userRoleRepo = new UserRoleRepo();
-const submeasureRepo = new SubmeasureRepo();
 
 export default class UploadController {
   UploadValidationError = 'UploadValidationError';
-  data: any = {};
+  data: AnyObj = {};
   startUpload: number;
-  req: IApiRequest;
-  rows1: any[];
-  rows2: any[];
+  req: ApiRequest;
+  rows1: AnyObj[];
+  rows2: AnyObj[];
   totalErrors;
   hasTotalErrors: boolean;
   hasTwoSheets: boolean;
@@ -37,7 +35,14 @@ export default class UploadController {
   sheet1SubmeasureNames;
   startedSheet2;
 
-  constructor(protected repo: RepoBase) {
+  constructor(
+    protected moduleId: number,
+    protected repo: RepoBase,
+    protected openPeriodRepo: OpenPeriodRepo,
+    protected submeasureRepo: SubmeasureRepo,
+    protected userRoleRepo: UserRoleRepo
+    ) {
+    const i = 5;
   }
 
   upload(req, res, next) {
@@ -68,12 +73,12 @@ export default class UploadController {
       .then(() => this.importRows(req.user.id))
       .then(() => {
         this.sendSuccessEmail();
-        res.send({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
+        res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
       })
       .catch(err => {
         if (err && err.name === this.UploadValidationError) {
           this.sendValidationEmail();
-          res.send({status: 'failure', uploadName: this.uploadName});
+          res.json({status: 'failure', uploadName: this.uploadName});
         } else {
           const data = Object.assign({}, err);
           if (err.message) {
@@ -91,9 +96,9 @@ export default class UploadController {
 
   getValidationAndImportData(): Promise<any> {
     return Promise.all([
-      openPeriodRepo.getOne(),
-      userRoleRepo.getRolesByUserId('jodoe'),
-      submeasureRepo.getMany()
+      this.openPeriodRepo.getOne({moduleId: this.moduleId}),
+      this.userRoleRepo.getRolesByUserId('jodoe'),
+      this.submeasureRepo.getMany({moduleId: this.moduleId})
     ])
       .then(results => {
         this.fiscalMonth = results[0].fiscalMonth;

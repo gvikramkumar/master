@@ -10,7 +10,7 @@ import {ErrorModalComponent} from '../../shared/dialogs/error-modal/error-modal.
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {environment} from '../../../environments/environment';
-import {Store} from '../../store/store';
+import {AppStore} from '../../app/app-store';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -22,7 +22,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     // {status: 404, methods: ['GET', 'POST'], url: new RegExp(`^${environment.apiUrl}api/login`)},
   ];
 
-  constructor(private store: Store, public dialog: MatDialog, private router: Router) {
+  constructor(private store: AppStore, public dialog: MatDialog, private router: Router) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -30,6 +30,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       .handle(req)
       .pipe(
         tap(event => {
+          const a = event;
         }),
         catchError(resp => {
           this.store.showSpinner = false;

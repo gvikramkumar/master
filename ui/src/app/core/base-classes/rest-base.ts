@@ -1,17 +1,19 @@
-import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {ModelBase} from '../../store/models/model-base';
-import {UtilService} from '../services/util.service';
+import AnyObj from '../../../../../shared/models/any-obj';
+import {AppStore} from '../../app/app-store';
+import {uiUtil} from '../services/ui-util';
+
 const apiUrl = environment.apiUrl;
 
-export class RestBase<T extends ModelBase> {
+export class RestBase<T extends AnyObj> {
 
   constructor(
     protected endpointName: string,
     protected httpClient: HttpClient,
-    protected util: UtilService) {
+    protected store: AppStore,
+    protected isModuleRepo = false) {
   }
 
   // GetMany special query parameters
@@ -36,7 +38,8 @@ export class RestBase<T extends ModelBase> {
   // getLatest=true:
   // filters then picks latest value (only returns one value) using updatedDate
   getMany(_params = {}): Observable<T[]> {
-    const params = this.util.createHttpParams(_params)
+    this.addModuleId(_params);
+    const params = uiUtil.createHttpParams(_params)
     return this.httpClient.get<T[]>(`${apiUrl}/api/${this.endpointName}`, {params});
   }
 
@@ -46,6 +49,7 @@ export class RestBase<T extends ModelBase> {
     if (sort) {
       params.setSort = sort;
     }
+    return this.getMany(params);
   }
 
   // selects distinct fieldName, params become distinct(fieldName, filter)
@@ -66,7 +70,7 @@ export class RestBase<T extends ModelBase> {
     return this.getMany(params);
   }
 
-  getOneById(id: number): Observable<T> {
+  getOneById(id: string): Observable<T> {
     return this.httpClient.get<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
   }
 
@@ -74,10 +78,12 @@ export class RestBase<T extends ModelBase> {
   // bodyParser.urlEncoded extended version so can accept objects as well. Remains to be tested, but
   // could possibly be used to project via mongos's {prop1: 1, prop2: 1} syntax
   queryPost(params) {
+    this.addModuleId(params);
     return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}?queryPost=true`, params);
   }
 
   add(data) {
+    this.addModuleId(data);
     return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}`, data);
   }
 
@@ -85,7 +91,20 @@ export class RestBase<T extends ModelBase> {
     return this.httpClient.put<T>(`${apiUrl}/api/${this.endpointName}/${data.id}`, data);
   }
 
-  remove(id: number): Observable<T> {
+  remove(id: string): Observable<T> {
     return this.httpClient.delete<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
   }
+
+  // we'll automatically add moduleId to calls without them, but not for itamdmin as that module is only
+  // for display purposes, not for data. ITadmin will have to set it's own moduleId
+  addModuleId(params) {
+    if (this.isModuleRepo && !params.moduleId) {
+      const moduleId = this.store.getRepoModule(this.endpointName).moduleId;
+      if (uiUtil.isAdminModuleId(moduleId)) {
+        throw new Error(`No moduleId for itAdmin call to ${this.endpointName}`);
+      }
+      params.moduleId = moduleId;
+    }
+  }
+
 }

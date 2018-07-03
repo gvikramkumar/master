@@ -5,7 +5,7 @@ import DeptUploadController from './controller';
 
 const ctrl = injector.get(DeptUploadController);
 
-export default Router()
+export const deptUploadRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
   .post('/', authorize('api:manage'), ctrl.handlePost.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))

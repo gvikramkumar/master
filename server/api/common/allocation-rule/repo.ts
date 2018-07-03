@@ -1,9 +1,10 @@
 import {Schema} from 'mongoose';
-import RepoBase from '../../../lib/base-classes/repo-base';
 import {injectable} from 'inversify';
+import RepoBase from '../../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
+    moduleId: {type: Number, required: true},
     name: {type: String, required: true, trim: true},
     period: {type: String, required: true},
     driverName: {type: String, required: true},
@@ -15,10 +16,10 @@ const schema = new Schema(
     sl1Select: String,
     scmsSelect: String,
     beSelect: String,
-    createdBy: String,
-    createdDate: Date,
-    updatedBy: String,
-    updatedDate: Date
+    createdBy: {type: String, required: true},
+    createdDate: {type: Date, required: true},
+    updatedBy: {type: String, required: true},
+    updatedDate: {type: Date, required: true}
   },
   {collection: 'dfa_allocation_rule'}
 );
@@ -26,7 +27,7 @@ const schema = new Schema(
 @injectable()
 export default class AllocationRuleRepo extends RepoBase {
   constructor() {
-    super(schema, 'Rule');
+    super(schema, 'Rule', true);
   }
 
 }

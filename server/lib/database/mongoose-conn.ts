@@ -1,5 +1,6 @@
 import config from '../../config/get-config';
 import mg from 'mongoose';
+import AnyObj from '../../../shared/models/any-obj';
 
 const options = {
   autoIndex: false,
@@ -11,7 +12,7 @@ const options = {
   pass: process.env.MONGODB_PASSWORD
 };
 
-export const mgc: {promise: any, db: any, mongo: any} = <any>{};
+export const mgc: {promise: Promise<AnyObj>, db: AnyObj, mongo: AnyObj} = <any>{};
 
 mgc.promise = mg.connect(config.mongoUri, options)
   .then(() => {

@@ -4,17 +4,15 @@ import _ from 'lodash';
 import {injectable} from 'inversify';
 
 const config = _config.postgres;
-let db;
 
 @injectable()
 export default class PostgresRepo {
 
   constructor() {
-    db = pgc.pgdb;
   }
 
   getProductHierarchyReport() {
-    return db.query(`
+    return pgc.pgdb.query(`
             select 
             technology_group_id, 
             business_unit_id, 
@@ -25,7 +23,7 @@ export default class PostgresRepo {
   }
 
   getSalesHierarchyReport() {
-    return db.query(`
+    return pgc.pgdb.query(`
             select 
             l1_sales_territory_descr,
             l2_sales_territory_descr,
@@ -41,7 +39,7 @@ export default class PostgresRepo {
   }
 
   checkForExistenceText(table, column, value) {
-    return db.query(`select exists (select 1 from ${config.schema}.${table} where upper(${column}) = $1 limit 1)`, [value.toUpperCase()])
+    return pgc.pgdb.query(`select exists (select 1 from ${config.schema}.${table} where upper(${column}) = $1 limit 1)`, [value.toUpperCase()])
       .then(results => results.rows[0].exists);
   }
 
@@ -52,7 +50,7 @@ export default class PostgresRepo {
     }
     query += ` order by upper(${column})`;
 
-    return db.query(query)
+    return pgc.pgdb.query(query)
       .then(results => results.rows.map(obj => obj.col))
       .then(results => _.sortBy(results, _.identity));
   }

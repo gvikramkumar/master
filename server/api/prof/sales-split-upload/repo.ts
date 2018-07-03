@@ -11,10 +11,10 @@ const schema = new Schema(
     subaccountCode: {type: String, required: true},
     salesTerritoryCode: {type: String, required: true},
     splitPercentage: {type: String, required: true},
-    createdBy: String,
-    createdDate: Date,
-    updatedBy: String,
-    updatedDate: Date
+    createdBy: {type: String, required: true},
+    createdDate: {type: Date, required: true},
+    updatedBy: {type: String, required: true},
+    updatedDate: {type: Date, required: true}
   },
   {collection: 'prof_sales_split_pct'}
 );

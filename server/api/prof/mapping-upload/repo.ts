@@ -13,10 +13,10 @@ const schema = new Schema(
     intBusinessEntity: String,
     scms: String,
     percentage: {type: Number, required: true},
-    createdBy: String,
-    createdDate: Date,
-    updatedBy: String,
-    updatedDate: Date
+    createdBy: {type: String, required: true},
+    createdDate: {type: Date, required: true},
+    updatedBy: {type: String, required: true},
+    updatedDate: {type: Date, required: true}
   },
   {collection: 'prof_mapping_upload'}
 );

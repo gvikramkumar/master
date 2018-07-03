@@ -1,5 +1,6 @@
 import { Client } from 'pg';
 import _config from '../../config/get-config';
+import AnyObj from '../../../shared/models/any-obj';
 const config = _config.postgres;
 
 const client = new Client({
@@ -10,14 +11,14 @@ const client = new Client({
   password: process.env.POSTGRES_PASSWORD
 })
 
-export const pgc: any = {pgdb: client};
+export const pgc: AnyObj = {pgdb: client};
 
 if (process.env.NO_POSTGRES) {
   pgc.promise = Promise.resolve()
     .then(() => {
       console.log(`POSTGRES NOT CONNECTED, USING NO_POSTGRES ENV VAR`);
-      pgc.pgdb = undefined;
-      return undefined;
+      pgc.pgdb = {};
+      return pgc;
     });
 } else {
   pgc.promise = client.connect()

@@ -6,14 +6,11 @@ import util from '../../../lib/common/util';
 import {ApiError} from '../../../lib/common/api-error';
 import FileRepo from './repo';
 
-let db, mongo;
 
 @injectable()
 export default class FileController {
 
   constructor(private repo: FileRepo) {
-    db = mgc.db;
-    mongo = mgc.mongo;
   }
 
   // 3 ways to go here:
@@ -28,15 +25,15 @@ export default class FileController {
     const params = _.omit(req.query, ['groupField', 'getLatest']);
     if (req.query.groupField) { // groups then gets latest of each group
       this.repo.getManyGroupLatest(params, req.query.groupField)
-        .then(items => res.send(items))
+        .then(items => res.json(items))
         .catch(next);
     } else if (req.query.getLatest) {// gets latest "one" of results
       this.repo.getOneLatest(params)
-        .then(items => res.send(items))
+        .then(items => res.json(items))
         .catch(next);
     } else {
       this.repo.getMany(req.query)
-        .then(items => res.send(items))
+        .then(items => res.json(items))
         .catch(next);
     }
   }
@@ -45,7 +42,7 @@ export default class FileController {
     this.repo.getOneById(req.params.id)
       .then(item => {
         if (item) {
-          res.send(item);
+          res.json(item);
         } else {
           res.status(404).end();
         }
@@ -65,8 +62,8 @@ export default class FileController {
         }
         res.set('Content-Type', fileInfo.contentType);
         res.set('Content-Disposition', 'attachment; filename="' + fileInfo.metadata.fileName + '"');
-        const gfs = new mongo.GridFSBucket(db);
-        const readStream = gfs.openDownloadStream(new mongo.ObjectID(id));
+        const gfs = new mgc.mongo.GridFSBucket(mgc.db);
+        const readStream = gfs.openDownloadStream(new mgc.mongo.ObjectID(id));
         readStream.on('error', next);
         readStream.pipe(res);
       })
@@ -75,7 +72,7 @@ export default class FileController {
 
   uploadMany(req, res, next) {
     return this.repo.getManyByIds(req.files.map(file => file.id))
-      .then(files => res.send(files))
+      .then(files => res.json(files))
       .catch(next);
   }
 
@@ -83,13 +80,13 @@ export default class FileController {
   /*
     uploadOne(req, res, next) {
       return this.repo.getOneById(req.file.id)
-        .then(file => res.send(file))
+        .then(file => res.json(file))
         .catch(next);
     }
   */
 
   remove(req, res, next) {
-    const gfs = new mongo.GridFSBucket(db);
+    const gfs = new mgc.mongo.GridFSBucket(mgc.db);
     const id = req.params.id;
     this.repo.getOneById(id)
       .then(fileInfo => {
@@ -97,8 +94,8 @@ export default class FileController {
           next(new ApiError('File not found.', null, 400))
           return;
         }
-        return Q.ninvoke(gfs, 'delete', new mongo.ObjectID(id))
-          .then(() => res.send(fileInfo));
+        return Q.ninvoke(gfs, 'delete', new mgc.mongo.ObjectID(id))
+          .then(() => res.json(fileInfo));
       })
       .catch(next);
   }

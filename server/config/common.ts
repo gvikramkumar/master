@@ -4,7 +4,7 @@ export default {
   postgres: {
     host: 'finpg-dev-01',
     port: 5432,
-    database: 'postgres',
+    database: 'fpadev',
     schema: 'fdscon'
   },
   corsOrigin: [],

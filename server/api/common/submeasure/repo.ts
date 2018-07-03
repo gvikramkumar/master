@@ -5,8 +5,9 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
+    moduleId: {type: Number, required: true},
     name: String,
-    description: String,
+    description: {type: String, required: true},
     source: {type: String, enum: ['manual']},
     measureName: String,
     startFiscalMonth: Number,
@@ -30,14 +31,17 @@ const schema = new Schema(
     reportingLevels: [String],
     indicators: {
       dollarUploadFlag: {type: String, enum: ['Y', 'N']},
-      discountFlag: {type: String, enum: ['Y', 'N']},
       approveFlag: {type: String, enum: ['Y', 'N']},
       status: {type: String, enum: ['A']},
       manualMapping: {type: String, enum: ['Y', 'N']},
       expenseSSOT: {type: String, enum: ['Y', 'N']},
       manualMix: {type: String, enum: ['Y', 'N']}
     },
-    rules: [String]
+    rules: [String],
+    createdBy: {type: String, required: true},
+    createdDate: {type: Date, required: true},
+    updatedBy: {type: String, required: true},
+    updatedDate: {type: Date, required: true}
   },
   {collection: 'dfa_submeasure'}
 );
@@ -45,7 +49,7 @@ const schema = new Schema(
 @injectable()
 export default class SubmeasureRepo extends RepoBase {
   constructor() {
-    super(schema, 'Submeasure');
+    super(schema, 'Submeasure', true);
   }
 
 }
