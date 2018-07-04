@@ -279,10 +279,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
-  hasChanges() {
-    return !_.isEqual(this.sm, this.orgSubmeasure);
-  }
-
   syncFilerLevelSwitches() {
     this.ifl_switch_ibe = !!this.sm.inputFilterLevel.internalBELevel;
     this.ifl_switch_p = !!this.sm.inputFilterLevel.productLevel;
@@ -298,6 +294,31 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.mm_switch_s = !!this.sm.manualMapping.salesLevel;
     this.mm_switch_scms = !!this.sm.manualMapping.scmsLevel;
   }
+
+  cleanUpSubmeasure() {
+    this.sm.rules = this.sm.rules.filter(r => !!r);
+    if (!this.ifl_switch_ibe) {
+      delete this.sm.inputFilterLevel.internalBELevel;
+    }
+    if (!this.ifl_switch_p) {
+      delete this.sm.inputFilterLevel.productLevel;
+    }
+    if (!this.mm_switch_ibe) {
+      delete this.sm.manualMapping.internalBELevel;
+    }
+    if (!this.mm_switch_p) {
+      delete this.sm.manualMapping.productLevel;
+    }
+
+    if (!this.isCogsMeasure()) {
+      delete this.sm.categoryType;
+    }
+  }
+
+  hasChanges() {
+    return !_.isEqual(this.sm, this.orgSubmeasure);
+  }
+
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
@@ -323,26 +344,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         }
         this.init();
       });
-  }
-
-  cleanUpSubmeasure() {
-    this.sm.rules = this.sm.rules.filter(r => !!r);
-    if (!this.ifl_switch_ibe) {
-      delete this.sm.inputFilterLevel.internalBELevel;
-    }
-    if (!this.ifl_switch_p) {
-      delete this.sm.inputFilterLevel.productLevel;
-    }
-    if (!this.mm_switch_ibe) {
-      delete this.sm.manualMapping.internalBELevel;
-    }
-    if (!this.mm_switch_p) {
-      delete this.sm.manualMapping.productLevel;
-    }
-
-    if (!this.isCogsMeasure()) {
-      delete this.sm.categoryType;
-    }
   }
 
   confirmSave() {
