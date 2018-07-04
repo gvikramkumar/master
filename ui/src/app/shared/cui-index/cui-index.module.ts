@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  CuiButtonModule,
   CuiFooterModule,
   CuiHeaderModule, CuiInputModule,
   CuiProgressbarModule,
   CuiSearchModule, CuiSelectModule, CuiSpinnerModule,
   CuiTableModule, CuiToastModule
-} from "@cisco-ngx/cui-components";
+} from '@cisco-ngx/cui-components';
 
 @NgModule({
   imports: [
+    CuiButtonModule,
     CuiHeaderModule,
     CuiFooterModule,
     CuiSearchModule,
@@ -20,6 +22,7 @@ import {
     CuiSpinnerModule
   ],
   exports: [
+    CuiButtonModule,
     CuiHeaderModule,
     CuiFooterModule,
     CuiSearchModule,

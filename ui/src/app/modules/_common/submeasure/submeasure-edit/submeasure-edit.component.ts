@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {RoutingComponentBase} from '../../../../shared/routing-component-base';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {Submeasure} from '../../models/submeasure';
 import {AppStore} from '../../../../app/app-store';
 import {RuleService} from '../../services/rule.service';
@@ -12,6 +12,7 @@ import {Measure} from '../../models/measure';
 import {uiConst} from '../../../../core/models/ui-const';
 import * as _ from 'lodash';
 import {uiUtil} from '../../../../core/services/ui-util';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'fin-submeasure-add',
@@ -27,7 +28,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   rules: AllocationRule[];
   source: string;
   errs: string[] = [];
-  yearmos: {str: string, num: number}[];
+  yearmos: { str: string, num: number }[];
   standardCogs = 'Standard Cogs Adjustments'; // todo: move to lookup
   showCategories = false;
   ifl_switch_ibe = false;
@@ -92,6 +93,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.sm.rules.push('');
   }
 
+  sources = [
+    {name: 'Manual', value: 'manual'}
+  ]
+
   categoryTypes = [
     {
       name: 'Hardware',
@@ -116,8 +121,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   measureNameChange() {
-      this.showCategories =  this.isCogsMeasure() ? true : false;
-    }
+    this.showCategories = this.isCogsMeasure() ? true : false;
+  }
 
   ibe_items = [
     {
@@ -294,18 +299,30 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.mm_switch_scms = !!this.sm.manualMapping.scmsLevel;
   }
 
-  resetForm() {
+  verifyLosingChanges() {
     if (this.hasChanges()) {
-      alert('Are you sure you want to reset and lose your changes?');
-      // put up modal asking if it's cool to lose their changes
-      // if ok then...
-      if (this.editMode) {
-        this.sm = _.cloneDeep(this.orgSubmeasure);
-      } else {
-        this.sm = new Submeasure();
-      }
-      this.init();
+      alert('Are you sure you want to lose your changes?');
+      return Promise.resolve();
+    } else {
+      return Promise.resolve();
     }
+  }
+
+  cancel() {
+    this.verifyLosingChanges()
+      .then(() => this.router.navigateByUrl('/prof/submeasure'));
+  }
+
+  reset() {
+    this.verifyLosingChanges()
+      .then(() => {
+        if (this.editMode) {
+          this.sm = _.cloneDeep(this.orgSubmeasure);
+        } else {
+          this.sm = new Submeasure();
+        }
+        this.init();
+      });
   }
 
   cleanUpSubmeasure() {
@@ -326,23 +343,30 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.isCogsMeasure()) {
       delete this.sm.categoryType;
     }
-
   }
 
-  public save() {
-    this.cleanUpSubmeasure();
-    const errs = this.validate();
-    if (!errs) {
-      let obs: Observable<Submeasure>;
-      if (this.editMode) {
-        obs = this.submeasureService.update(this.sm);
-      } else {
-        obs = this.submeasureService.add(this.sm);
-      }
-      obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
-    } else {
-      alert(this.errs.join('\n'));
-    }
+  confirmSave() {
+    alert('Are you sure you want to save?');
+    return Promise.resolve();
+  }
+
+  save() {
+    this.confirmSave()
+      .then(() => {
+        this.cleanUpSubmeasure();
+        const errs = this.validate();
+        if (!errs) {
+          let obs: Observable<Submeasure>;
+          if (this.editMode) {
+            obs = this.submeasureService.update(this.sm);
+          } else {
+            obs = this.submeasureService.add(this.sm);
+          }
+          obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
+        } else {
+          alert(this.errs.join('\n'));
+        }
+      });
   }
 
   validate() {
@@ -354,5 +378,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return this.errs.length ? this.errs : null;
   }
 
+  ngOnDestroy() {
+
+  }
 }
 
