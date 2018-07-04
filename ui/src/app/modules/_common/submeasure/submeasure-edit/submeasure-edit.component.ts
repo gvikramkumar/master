@@ -22,7 +22,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   editMode = false;
   title: string;
   sm = new Submeasure();
-  orgSubmeasure = this.sm;
+  orgSubmeasure = _.cloneDeep(this.sm);
   measures: Measure[] = [];
   rules: AllocationRule[];
   source: string;
@@ -68,7 +68,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.submeasureService.getOneById(this.route.snapshot.params.id)
             .subscribe(submeasure => {
               this.sm = submeasure;
-              this.orgSubmeasure = this.sm;
+              this.orgSubmeasure = _.cloneDeep(this.sm);
               this.init();
             });
         } else {
@@ -111,13 +111,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   ]
 
-  measureNameChange() {
-      this.showCategories = this.sm.measureName === this.standardCogs ? true : false;
-    }
-
-  categoryTypeSelected() {
+  isCogsMeasure() {
+    return this.sm.measureName === this.standardCogs;
   }
 
+  measureNameChange() {
+      this.showCategories =  this.isCogsMeasure() ? true : false;
+    }
 
   ibe_items = [
     {
@@ -296,10 +296,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   resetForm() {
     if (this.hasChanges()) {
+      alert('Are you sure you want to reset and lose your changes?');
       // put up modal asking if it's cool to lose their changes
       // if ok then...
       if (this.editMode) {
-        this.sm = this.orgSubmeasure;
+        this.sm = _.cloneDeep(this.orgSubmeasure);
       } else {
         this.sm = new Submeasure();
       }
@@ -321,6 +322,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.mm_switch_p) {
       delete this.sm.manualMapping.productLevel;
     }
+
+    if (!this.isCogsMeasure()) {
+      delete this.sm.categoryType;
+    }
+
   }
 
   public save() {

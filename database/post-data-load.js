@@ -2,8 +2,8 @@ const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
 db.dfa_submeasure.insertMany([
-    {
-      moduleId: NumberInt(1),
+  {
+    moduleId: NumberInt(1),
     name: "2 Tier Adjustment",
     description: "2 Tier Adjustment",
     source: "manual",
@@ -12,6 +12,7 @@ db.dfa_submeasure.insertMany([
     endFiscalMonth: 204012,
     processingTime: "Monthly",
     pnlnodeGrouping: "Indirect Adjustments",
+    categoryType: "HW",
     inputFilterLevel: {
       productLevel: "PF",
       salesLevel: "level1",
@@ -47,6 +48,7 @@ db.dfa_submeasure.insertMany([
     endFiscalMonth: 204012,
     processingTime: "Monthly",
     pnlnodeGrouping: "Indirect Adjustments",
+    categoryType: "SW",
     inputFilterLevel: {
       productLevel: "TG",
       salesLevel: "level3",
@@ -167,25 +169,28 @@ db.lookup.insertMany([
 
 // dept
 db.prof_department_acc_map.insertOne({
-  submeasureName:"2 Tier Adjustment",
-  nodeValue:"020_070506",
-  glAccount:"69999"});
+  submeasureName: "2 Tier Adjustment",
+  nodeValue: "020_070506",
+  glAccount: "69999"
+});
 
 // sales-split
 db.prof_sales_split_pct.insertOne({
-  fiscalMonth:201810,
-  accountId:"42127",
-  companyCode:"555",
-  subaccountCode:"033",
+  fiscalMonth: 201810,
+  accountId: "42127",
+  companyCode: "555",
+  subaccountCode: "033",
   salesTerritoryCode: "AFRICA-PROG-REB-COMM",
-  splitPercentage: 0.2});
+  splitPercentage: 0.2
+});
 
 // product-class
 db.prof_swalloc_manual_mix.insertOne({
-  fiscalMonth:201810,
-  submeasureName:"2 Tier",
-  splitCategory:"HARDWARE",
-  splitPercentage:1});
+  fiscalMonth: 201810,
+  submeasureName: "2 Tier",
+  splitCategory: "HARDWARE",
+  splitPercentage: 1
+});
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [

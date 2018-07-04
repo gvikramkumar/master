@@ -38,6 +38,7 @@ const schema = new Schema(
       manualMix: {type: String, enum: ['Y', 'N']}
     },
     rules: [String],
+    categoryType: String,
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},
