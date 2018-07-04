@@ -4,34 +4,28 @@ button {
   margin: 5px;
 }
 
-.add-form-container {
+.edit-form-container {
   width: 80%;
   max-width: 600px;
   margin: auto;
   padding: 10px;
-}
 
-.input-filter-level, .manual-mapping {
-
-  .two-col-row {
-    height: 44px;
+  .input-filter-level, .manual-mapping {
+    .two-col-row {
+      height: 44px;
+    }
   }
+
 }
+
 
 .level {
   display: inline-block;
 }
 
-.switch {
-  float: left;
-}
 
 .option {
 
-}
-
-.columnHeader {
-  text-align: center;
 }
 
 /* .categories {

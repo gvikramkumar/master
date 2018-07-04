@@ -1,4 +1,4 @@
-<div class="add-form-container">
+<div class="edit-form-container">
   <cui-select [items]="measures" label="Measure Name" empty="true" [(ngModel)]="sm.measureName" required="true"
               optionsKey="name" optionsValue="name" (selectChange)="measureNameChange()"></cui-select>
 
@@ -17,8 +17,8 @@
     <legend>Business Input Level*</legend>
 
     <div class="two-col-row">
-      <div class="left columnHeader">Hierarchy</div>
-      <div class="right columnHeader">Level</div>
+      <div class="left text-center">Hierarchy</div>
+      <div class="right text-center">Level</div>
     </div>
 
     <div class="two-col-row">
