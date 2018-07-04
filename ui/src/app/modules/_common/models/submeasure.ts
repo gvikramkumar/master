@@ -9,6 +9,7 @@ export class Submeasure {
   endFiscalMonth: string;
   processingTime: string;
   pnlnodeGrouping: string;
+  categoryType: string;
   inputFilterLevel = new InputFilterLevel();
   manualMapping = new InputFilterLevel();
   reportingLevels: string[] = [];
@@ -21,7 +22,7 @@ class InputFilterLevel {
   productLevel: string;
   salesLevel: string;
   scmsLevel: string;
-  internalBElevel: string;
+  internalBELevel: string;
   entityLevel: string;
 }
 

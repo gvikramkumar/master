@@ -1,3 +1,5 @@
+@import '../../../../../styles/_comp-index.scss';
+
 button {
   margin: 5px;
 }
@@ -9,25 +11,11 @@ button {
   padding: 10px;
 }
 
-.input-filter-level {
-  .fl-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 44px;
+.input-filter-level, .manual-mapping {
 
-    .left {
-      flex: 1 1 45%;
-      margin-right: 20px;
-    }
-    .right {
-      flex: 1 1 auto;
-      /deep/ .form-group {
-        margin-bottom: 0;
-      }
-    }
+  .two-col-row {
+    height: 44px;
   }
-  /* styling here */
 }
 
 .level {
