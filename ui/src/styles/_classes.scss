@@ -1,6 +1,26 @@
 @import '_variables';
 @import '_mixins';
 
+
+.two-col-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px; // this should change on usage
+  .left {
+    //@extend .outline;
+    flex: 1 1 48%;
+    margin-right: 4%;
+  }
+  .right {
+    //@extend .outline;
+    flex: 1 1 48%;
+    /deep/ .form-group {
+      margin-bottom: 0;
+    }
+  }
+}
+
 .fin.cui .fin-hide {
   display: none !important;
 }

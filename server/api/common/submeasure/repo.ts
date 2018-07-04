@@ -8,11 +8,11 @@ const schema = new Schema(
     moduleId: {type: Number, required: true},
     name: String,
     description: {type: String, required: true},
-    source: {type: String, enum: ['manual']},
+    source: {type: String, required: true},
     measureName: String,
     startFiscalMonth: Number,
     endFiscalMonth: Number,
-    processingTime: {type: String, enum: ['Monthly']},
+    processingTime: {type: Number},
     pnlnodeGrouping: String,
     inputFilterLevel: {
       productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},

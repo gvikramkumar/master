@@ -1,76 +1,149 @@
 <div class="add-form-container">
   <cui-select [items]="measures" label="Measure Name" empty="true" [(ngModel)]="sm.measureName" required="true"
-              optionsKey="name" optionsValue="name" (selectChange)="sm.reportingLevels[0]=sm.measureName"></cui-select>
+              optionsKey="name" optionsValue="name" (selectChange)="measureNameChange()"></cui-select>
+
   <cui-input type="text" [(model)]="sm.name" label="Sub-Measure Name" required="true"></cui-input>
-  <cui-select [hidden]="categoriesHidden" [items]="categoryTypes" label="Submeasure Category Type" empty="true"
-              (selectChange)="categoryTypeSelected()"></cui-select>
+
+  <cui-select [fxShow]="showCategories" [items]="categoryTypes" label="Submeasure Category Type" empty="true"
+              optionsKey="name" optionsValue="value"></cui-select>
+
   <cui-input type="textarea" [(model)]="sm.description" label="Description"></cui-input>
+
   <cui-input type="textarea" [(model)]="sm.source" label="Source"></cui-input>
   <br><br>
+
   <div class="input-filter-level">
     Input Filter Level*
-    <div class="fl-row">
+    <div class="two-col-row">
       <div class="left columnHeader">Hierarchy</div>
       <div class="right columnHeader">Hierarchy Level</div>
     </div>
 
-    <div class="fl-row">
+    <div class="two-col-row">
       <div class="left">
-        <cui-input class="switch" type="switch" [(model)]="switch_ibe" label="Internal Business Entity"
-                   (modelChange)="ibeChange()"></cui-input>
+        <cui-input class="switch" type="switch" [(model)]="ifl_switch_ibe" label="Internal Business Entity"
+                   (modelChange)="iflChange('ibe')"></cui-input>
       </div>
       <div class="right">
-        <cui-select [hidden]="ibe_hidden" class="option" [items]="ibe_items" (modelChange)="test()"></cui-select>
+        <cui-select [fxShow]="ifl_switch_ibe" class="option" [items]="ibe_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.inputFilterLevel.internalBELevel"></cui-select>
       </div>
     </div>
 
-    <div class="fl-row">
+    <div class="two-col-row">
       <div class="left">
-        <cui-input type="switch" [(model)]="switch_le" label="Legal Entity" (modelChange)="leChange()"></cui-input>
+        <cui-input type="switch" [(model)]="ifl_switch_p" label="Product" (modelChange)="iflChange('p')"></cui-input>
       </div>
       <div class="right">
-        <cui-select [hidden]="le_hidden" class="option" [items]="le_items" (modelChange)="test()"></cui-select>
+        <cui-select [fxShow]="ifl_switch_p" class="option" [items]="p_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.inputFilterLevel.productLevel"></cui-select>
       </div>
     </div>
 
-    <div class="fl-row">
+    <div class="two-col-row">
       <div class="left">
-        <cui-input type="switch" [(model)]="switch_p" label="Product" (modelChange)="pChange()"></cui-input>
+        <cui-input type="switch" [(model)]="ifl_switch_le" label="Legal Entity"></cui-input>
       </div>
       <div class="right">
-        <cui-select [hidden]="p_hidden" class="option" [items]="p_items" (modelChange)="test()"></cui-select>
+        <cui-select [fxShow]="ifl_switch_le" class="option" [items]="le_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.inputFilterLevel.entityLevel"></cui-select>
       </div>
     </div>
 
-    <div class="fl-row">
+    <div class="two-col-row">
       <div class="left">
-        <cui-input type="switch" [(model)]="switch_s" label="Sales" (modelChange)="sChange()"></cui-input>
+        <cui-input type="switch" [(model)]="ifl_switch_s" label="Sales"></cui-input>
       </div>
       <div class="right">
-        <cui-select [hidden]="s_hidden" class="option" [items]="s_items" (modelChange)="test()"></cui-select>
+        <cui-select [fxShow]="ifl_switch_s" class="option" [items]="s_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.inputFilterLevel.salesLevel"></cui-select>
       </div>
     </div>
 
-    <div class="fl-row">
+    <div class="two-col-row">
       <div class="left">
-        <cui-input type="switch" [(model)]="switch_scms" label="SCMS" (modelChange)="scmsChange()"></cui-input>
+        <cui-input type="switch" [(model)]="ifl_switch_scms" label="SCMS"></cui-input>
       </div>
       <div class="right">
-        <cui-select [hidden]="scms_hidden" class="option" [items]="scms_items" (modelChange)="test()"></cui-select>
+        <cui-select [fxShow]="ifl_switch_scms" class="option" [items]="scms_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.inputFilterLevel.scmsLevel"></cui-select>
       </div>
     </div>
   </div>
   <br>
-  <cui-select [items]="yearmos" label="Start Fiscal Month" empty="true" [(ngModel)]="sm.startFiscalMonth"
+
+
+  <div class="manual-mapping">
+    Manual Mapping
+    <div class="two-col-row">
+      <div class="left columnHeader">Hierarchy</div>
+      <div class="right columnHeader">Hierarchy Level</div>
+    </div>
+
+    <div class="two-col-row">
+      <div class="left">
+        <cui-input class="switch" type="switch" [(model)]="mm_switch_ibe" label="Internal Business Entity"
+                   (modelChange)="mmChange('ibe')"></cui-input>
+      </div>
+      <div class="right">
+        <cui-select [fxShow]="mm_switch_ibe" class="option" [items]="ibe_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.manualMapping.internalBELevel"></cui-select>
+      </div>
+    </div>
+
+    <div class="two-col-row">
+      <div class="left">
+        <cui-input type="switch" [(model)]="mm_switch_p" label="Product" (modelChange)="mmChange('p')"></cui-input>
+      </div>
+      <div class="right">
+        <cui-select [fxShow]="mm_switch_p" class="option" [items]="p_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.manualMapping.productLevel"></cui-select>
+      </div>
+    </div>
+
+    <div class="two-col-row">
+      <div class="left">
+        <cui-input type="switch" [(model)]="mm_switch_le" label="Legal Entity"></cui-input>
+      </div>
+      <div class="right">
+        <cui-select [fxShow]="mm_switch_le" class="option" [items]="le_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.manualMapping.entityLevel"></cui-select>
+      </div>
+    </div>
+
+    <div class="two-col-row">
+      <div class="left">
+        <cui-input type="switch" [(model)]="mm_switch_s" label="Sales"></cui-input>
+      </div>
+      <div class="right">
+        <cui-select [fxShow]="mm_switch_s" class="option" [items]="s_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.manualMapping.salesLevel"></cui-select>
+      </div>
+    </div>
+
+    <div class="two-col-row">
+      <div class="left">
+        <cui-input type="switch" [(model)]="mm_switch_scms" label="SCMS"></cui-input>
+      </div>
+      <div class="right">
+        <cui-select [fxShow]="mm_switch_scms" class="option" [items]="scms_items" optionsKey="name"
+                    optionsValue="value" [(ngModel)]="sm.manualMapping.scmsLevel"></cui-select>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <cui-select [items]="yearmos" label="Effective Month" empty="true" [(ngModel)]="sm.startFiscalMonth"
               required="true" optionsKey="long" optionsValue="num"></cui-select>
-  <cui-select [items]="yearmos" label="End Fiscal Month" empty="true" [(ngModel)]="sm.endFiscalMonth" required="true"
-              optionsKey="long" optionsValue="num"></cui-select>
-  <cui-select [items]="timings" label="Processing Timing" empty="true" (selectChange)="timingSelected()"></cui-select>
-  <cui-select [items]="groupings" label="P&L Node Grouping" empty="true"
-              (selectChange)="groupingSelected()"></cui-select>
+
+  <cui-select [items]="timings" label="Processing Timing" empty="true" [(ngModel)]="sm.processingTime"
+              optionsKey="name" optionsValue="value"></cui-select>
+
+  <cui-select [items]="groupings" label="P&L Node Grouping" empty="true" [(ngModel)]="sm.pnlnodeGrouping"
+              optionsKey="name" optionsValue="value"></cui-select>
   <br><br>
   Legacy Reporting Support
-  <cui-input type="text" [disabled]="true" [(model)]="sm.reportingLevels[0]" label="Reporting Level 1"></cui-input>
+  <cui-input type="text" [(model)]="sm.reportingLevels[0]" label="Reporting Level 1"></cui-input>
   <cui-input type="text" [(model)]="sm.reportingLevels[1]" label="Reporting Level 2"></cui-input>
   <cui-input type="text" [(model)]="sm.reportingLevels[2]" label="Reporting Level 3"></cui-input>
   <br><br>
