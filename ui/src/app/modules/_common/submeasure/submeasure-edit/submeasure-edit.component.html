@@ -2,22 +2,23 @@
   <cui-select [items]="measures" label="Measure Name" empty="true" [(ngModel)]="sm.measureName" required="true"
               optionsKey="name" optionsValue="name" (selectChange)="measureNameChange()"></cui-select>
 
-  <cui-input type="text" [(model)]="sm.name" label="Sub-Measure Name" required="true"></cui-input>
+  <cui-input [disabled]="this.editMode" type="text" [(model)]="sm.name" label="Sub-Measure Name" required="true"></cui-input>
 
   <cui-select [fxShow]="showCategories" [items]="categoryTypes" label="Submeasure Category Type" empty="true"
               optionsKey="name" optionsValue="value" [(ngModel)]="sm.categoryType"></cui-select>
 
   <cui-input type="textarea" [(model)]="sm.description" label="Description"></cui-input>
 
-  <cui-input type="textarea" [(model)]="sm.source" label="Source"></cui-input>
+  <cui-select [items]="sources" label="Source" empty="true"
+              optionsKey="name" optionsValue="value" [(ngModel)]="sm.source"></cui-select>
   <br><br>
 
   <fieldset class="input-filter-level">
-    <legend>Input Filter Level*</legend>
+    <legend>Business Input Level*</legend>
 
     <div class="two-col-row">
       <div class="left columnHeader">Hierarchy</div>
-      <div class="right columnHeader">Hierarchy Level</div>
+      <div class="right columnHeader">Level</div>
     </div>
 
     <div class="two-col-row">
@@ -79,7 +80,7 @@
 
     <div class="two-col-row">
       <div class="left columnHeader">Hierarchy</div>
-      <div class="right columnHeader">Hierarchy Level</div>
+      <div class="right columnHeader">Level</div>
     </div>
 
     <div class="two-col-row">
@@ -169,8 +170,8 @@
   <button type="button" [disabled]="sm.rules.length >= 5" (click)="addRule()">+</button>
   <button type="button" [disabled]="!sm.rules.length" (click)="removeRule()">-</button>
   <br><br>
-  <button (click)="resetForm()">Reset</button>
-  <button (click)="save()">Submit</button>
-  <button>Cancel</button>
+  <button cuiButton color="primary" small="true" (click)="save()">Submit</button>
+  <button cuiButton color="secondary" small="true" (click)="cancel()">Cancel</button>
+  <button cuiButton color="secondary" small="true" (click)="reset()">Reset</button>
   <br>
 </div>
