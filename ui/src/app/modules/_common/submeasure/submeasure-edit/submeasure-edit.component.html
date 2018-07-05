@@ -162,7 +162,7 @@
     </legend>
 
   <div *ngFor="let rule of sm.rules; let i = index;">
-    <cui-select [items]="rules" label="Associated Rule(s)" empty="true"
+    <cui-select [items]="rules" label="Associated Rule(s)" empty="true"  dropdownMaxHeight="300"
                 [(ngModel)]="sm.rules[i]" optionsKey="name" optionsValue="name"></cui-select>
   </div>
   </fieldset>
