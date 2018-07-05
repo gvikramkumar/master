@@ -1,31 +1,4 @@
 
-.wrap {
-  .left {
-
-  }
-
-  .right {
-
-  }
-
-}
-
-
-
-
-
-
-
-button {
-    margin: 15px;
-}
-
-.addUploadButton {
-    float: right;
-    margin: 5px;
-    padding-right: 10px;
-}
-
 .example-radio-group {
     display: inline-flex;
     flex-direction: column;
@@ -36,33 +9,11 @@ button {
     font-weight:400;
   }
 
-  .example-selected-value {
-    margin: 15px;
-    /* padding-left: 15px;
-    padding-right: 15px; */
-  }
-
-
-  /* CSS for table */
-.example-container {
-    display: flex;
-    flex-direction: column;
-    min-width: 300px;
-    margin: 15px;
-    padding-right: 15px;
-  }
-
-  .example-header {
-    min-height: 64px;
-    display: flex;
-    align-items: center;
-    padding-left: 24px;
-    font-size: 20px;
-  }
 
   .mat-table .mat-header-row {
 	  background: #64bbe3;
    }
+
   .mat-table {
     overflow: auto;
     max-height: 500px;
