@@ -19,7 +19,15 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   rule = new AllocationRule();
   orgRule = _.cloneDeep(this.rule);
   title: string;
-  driverNames = ['GLREVMIX', 'MANUALMAP', 'REVPOS', 'SERVMAP', 'SHIPMENT', 'SHIPREV', 'VIP'];
+  driverNames = [
+    {name: 'GL Revenue Mix', value: 'GLREVMIX'},
+    {name: 'Manual Mapping', value: 'MANUALMAP'},
+    {name: 'POS Revenue', value: 'REVPOS'},
+    {name: 'Service Map', value: 'SERVMAP'},
+    {name: 'Shipment', value: 'SHIPMENT'},
+    {name: 'Shipped Revenue', value: 'SHIPREV'},
+    {name: 'VIP Rebates', value: 'VIP'},
+  ]
   periods = ['MTD', 'ROLL6', 'ROLL3'];
   salesMatches = ['SL1', 'SL2', 'SL3', 'SL4', 'SL5', 'SL6'];
   productMatches = ['BU', 'PF', 'TG', 'PID'];
