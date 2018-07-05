@@ -5,10 +5,8 @@
 <div class="edit-form-container">
   <!-- <form [formGroup]="form" (ngSubmit)="save()"> -->
   <cui-input type="text" [(ngModel)]="rule.name" label="Rule Name" required="true"></cui-input>
-  <cui-select [(ngModel)]="driverSelection" [items]="driverNames" empty="true" label="Driver" required="true"
-              optionsKey="name" optionsValue="value"></cui-select>
-  <cui-select [(ngModel)]="periodSelection" [items]="driverPeriods" label="Driver Period" empty="true" required="true"
-              optionsKey="name" optionsValue="value"></cui-select>
+  <cui-select [(ngModel)]="rule.driverName" [items]="driverNames" empty="true" label="Driver" required="true"></cui-select>
+  <cui-select [(ngModel)]="rule.period" [items]="periods" label="Driver Period" empty="true" required="true"></cui-select>
   <br>
 
   <div class="two-col-row">
@@ -18,18 +16,18 @@
 
   <div class="two-col-row">
     <div class="left">
-      <cui-select class="matching" [(ngModel)]="salesMatch" [items]="salesLevels" label="Sales" empty="true"
-                  (selectChange)="formChange()" required="true" optionsKey="name" optionsValue="value"></cui-select>
+      <cui-select [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
+                  required="true"></cui-select>
     </div>
     <div class="right">
-      <cui-input type="text" [(ngModel)]="sl1Select" label="&nbsp;" required="true"></cui-input>
+      <cui-input type="text" [(ngModel)]="rule.sl1Select" label="&nbsp;" required="true"></cui-input>
     </div>
   </div>
 
   <div class="two-col-row">
     <div class="left">
-      <cui-select class="matching" [(ngModel)]="productMatch" [items]="productLevels" label="Product" empty="true"
-                  (selectChange)="formChange()" required="true" optionsKey="name" optionsValue="value"></cui-select>
+      <cui-select [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true"
+                  required="true"></cui-select>
     </div>
     <div class="right">
       <cui-input disabled=true type="text" label="&nbsp;" required="true"></cui-input>
@@ -38,18 +36,16 @@
 
   <div class="two-col-row">
     <div class="left">
-      <cui-select class="matching" [(ngModel)]="scmsMatch" [items]="scmsLevels" label="SCMS" empty="true"
-                  (selectChange)="formChange()" optionsKey="name" optionsValue="value"></cui-select>
+      <cui-select [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS" empty="true"></cui-select>
     </div>
     <div class="right">
-      <cui-input type="text" [(ngModel)]="scmsSelect" label="&nbsp;"></cui-input>
+      <cui-input type="text" [(ngModel)]="rule.scmsSelect" label="&nbsp;"></cui-input>
     </div>
   </div>
 
   <div class="two-col-row">
     <div class="left">
-      <cui-select class="matching" [(ngModel)]="legalMatch" [items]="legalEntityLevels" label="Legal Entity"
-                  empty="true" (selectChange)="formChange()" optionsKey="name" optionsValue="value"></cui-select>
+      <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity" empty="true"></cui-select>
     </div>
     <div class="right">
       <cui-input disabled=true type="text" label="&nbsp;"></cui-input>
@@ -58,18 +54,17 @@
 
   <div class="two-col-row">
     <div class="left">
-      <cui-select class="matching" [(ngModel)]="beMatch" [items]="ibeLevels" label="Internal Business Entity"
-                  empty="true" (selectChange)="formChange()" required="true" optionsKey="name"
-                  optionsValue="value"></cui-select>
+      <cui-select [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
+                  empty="true" required="true"></cui-select>
     </div>
     <div class="right">
-      <cui-input type="text" [(ngModel)]="beSelect" label="&nbsp;" required="true"></cui-input>
+      <cui-input type="text" [(ngModel)]="rule.beSelect" label="&nbsp;" required="true"></cui-input>
     </div>
   </div>
 
   <br>
   <button cuiButton color="primary" small="small" (click)="save()">Submit</button>
   <button cuiButton color="secondary" small="small" (click)="cancel()">Cancel</button>
-  <button cuiButton color="secondary" small="small" (click)="reset">Reset</button>
+  <button cuiButton color="secondary" small="small" (click)="reset()">Reset</button>
   <!-- </form> -->
 </div>
