@@ -44,7 +44,7 @@ export default class FileController {
         if (item) {
           res.json(item);
         } else {
-          res.status(404).end();
+          next(new ApiError('Not found', null, 404));
         }
       })
       .catch(next)
