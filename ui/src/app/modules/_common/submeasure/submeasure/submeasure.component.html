@@ -11,8 +11,14 @@
   </div>
   <div class="right" fxFlex="1 1 auto">
     <div class="example-selected-value"> {{selectedRadio}}</div>
-    <a routerLink="add" class="addUploadButton"><button mat-button>Add New</button></a>
+
     <br><br>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+      </mat-form-field>
+      <a routerLink="add" class="addUploadButton"><button mat-button>Add New</button></a>
+    </div>
     <!-- Table measure content goes here -->
     <div class="example-container mat-elevation-z8">
 
