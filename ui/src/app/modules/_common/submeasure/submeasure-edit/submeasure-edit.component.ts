@@ -83,6 +83,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
     this.measureNameChange();
+    if (!this.isCogsMeasure()) {
+      this.sm.categoryType = 'HW';
+    }
   }
 
   removeRule() {
@@ -295,23 +298,49 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.mm_switch_scms = !!this.sm.manualMapping.scmsLevel;
   }
 
-  cleanUpSubmeasure() {
-    this.sm.rules = this.sm.rules.filter(r => !!r);
+  cleanIflSwitchChoices() {
     if (!this.ifl_switch_ibe) {
       delete this.sm.inputFilterLevel.internalBELevel;
     }
     if (!this.ifl_switch_p) {
       delete this.sm.inputFilterLevel.productLevel;
     }
+    if (!this.ifl_switch_le) {
+      delete this.sm.inputFilterLevel.entityLevel;
+    }
+    if (!this.ifl_switch_s) {
+      delete this.sm.inputFilterLevel.salesLevel;
+    }
+    if (!this.ifl_switch_scms) {
+      delete this.sm.inputFilterLevel.scmsLevel;
+    }
+  }
+
+  cleanMMSwitchChoices() {
     if (!this.mm_switch_ibe) {
       delete this.sm.manualMapping.internalBELevel;
     }
     if (!this.mm_switch_p) {
       delete this.sm.manualMapping.productLevel;
     }
+    if (!this.mm_switch_le) {
+      delete this.sm.manualMapping.entityLevel;
+    }
+    if (!this.mm_switch_s) {
+      delete this.sm.manualMapping.salesLevel;
+    }
+    if (!this.mm_switch_scms) {
+      delete this.sm.manualMapping.scmsLevel;
+    }
+  }
+
+  cleanUpSubmeasure() {
+    this.cleanIflSwitchChoices();
+    this.cleanMMSwitchChoices();
+    this.sm.rules = this.sm.rules.filter(r => !!r);
 
     if (!this.isCogsMeasure()) {
-      delete this.sm.categoryType;
+      this.sm.categoryType = 'HW';
     }
   }
 
