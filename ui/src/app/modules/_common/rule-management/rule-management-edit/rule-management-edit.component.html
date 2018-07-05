@@ -5,7 +5,8 @@
 <div class="edit-form-container">
   <!-- <form [formGroup]="form" (ngSubmit)="save()"> -->
   <cui-input type="text" [(ngModel)]="rule.name" label="Rule Name" required="true"></cui-input>
-  <cui-select [(ngModel)]="rule.driverName" [items]="driverNames" empty="true" label="Driver" required="true"></cui-select>
+  <cui-select [(ngModel)]="rule.driverName" [items]="driverNames" empty="true" label="Driver"
+              optionsKey="name" optionsValue="value" required="true"></cui-select>
   <cui-select [(ngModel)]="rule.period" [items]="periods" label="Driver Period" empty="true" required="true"></cui-select>
   <br>
 
