@@ -54,10 +54,10 @@ export default class ControllerBase {
         if (item) {
           res.json(item);
         } else {
-          res.status(404).end();
+          next(new ApiError('Not found', null, 404));
         }
       })
-      .catch(next)
+      .catch(next);
   }
 
   // if queryPost querystring, then just a query with params in body instead of querystring
