@@ -9,6 +9,9 @@ import {Submeasure} from '../../models/submeasure';
 import {RoutingComponentBase} from '../../../../shared/routing-component-base';
 import {ActivatedRoute} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
+import {Measure} from "../../models/measure";
+import {MeasureService} from "../../services/measure.service";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'fin-submeasure',
@@ -25,23 +28,18 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   private nameFilter: Subject<string> = new Subject<string>();
   tableColumns = ['key', 'name'];
   dataSource: MatTableDataSource<Submeasure>;
+  measures: Measure[] = [];
 
   //@Output() private changeTestEmitter: EventEmitter<MatRadioChange>;
 
   //for radio button list in sidebar:
   selectedRadio: string;
   //todo: these need to have role-based access (likely stored in Mongo)
-  radios = [
-    'Indirect Revenue Adjustments',
-    'Manufacturing Overhead',
-    'Manufacturing Supply Chain Expenses',
-    'Manufacturing V&O',
-    'Standard COGS Adjustments',
-    'Warranty'
-  ];
+  radios:  string[];
 
   constructor(
     private submeasureService: SubmeasureService,
+    private measureService: MeasureService,
     private store: AppStore,
     private route: ActivatedRoute
   ) {
@@ -54,7 +52,6 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   }
 
   // -----------table testing:
-  // todo: add column for radio button select
   // Temporary hardcoded columns:
   // columns = [
   //   { columnDef: 'userId',    header: 'ID',       cell: (row: UserData) => `${row.id}`        },
@@ -70,7 +67,18 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit() {
-    //this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator);
+
+    //Get Measures (for radio buttons)
+    Promise.all([
+      this.measureService.getMany().toPromise()
+    ])
+      .then(results => {
+        this.measures = _.sortBy(results[0], name);
+
+        //Set radios to measure names
+        this.radios = this.measures.map(measure => measure.name);
+      });
+
     this.formControl.valueChanges.pipe(debounceTime(300))
       .subscribe(name => {
       this.nameFilter.next(name);
