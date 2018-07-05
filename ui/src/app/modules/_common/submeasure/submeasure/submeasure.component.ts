@@ -53,14 +53,6 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     //Runs whenever new radio button is selected (new measure selected)
   }
 
-  onSearchTextUpdated() {
-    //Runs when new search query.
-    //todo: input validation for search queries
-  }
-
-
-  //
-  //
   // -----------table testing:
   // todo: add column for radio button select
   // Temporary hardcoded columns:
