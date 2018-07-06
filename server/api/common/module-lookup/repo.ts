@@ -20,6 +20,10 @@ Model: Model<any>;
     this.Model = model('ModuleLookup', schema);
   }
 
+  getMany(moduleId, keys: string[]) {
+    return this.Model.find({moduleId, key: {$in: keys}}).exec();
+  }
+
   getDoc(moduleId, key) {
     return this.Model.findOne({moduleId, key}).exec();
   }
