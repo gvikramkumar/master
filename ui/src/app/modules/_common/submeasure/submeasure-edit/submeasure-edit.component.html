@@ -162,13 +162,17 @@
     </legend>
 
   <div *ngFor="let rule of sm.rules; let i = index;">
-    <cui-select [items]="rules" label="Associated Rule(s)" empty="true"  dropdownMaxHeight="300"
-                [(ngModel)]="sm.rules[i]" optionsKey="name" optionsValue="name"></cui-select>
+    <div class="rule">
+      <button class="remove-rule" type="button" (click)="removeRule(i)">x</button>
+      <cui-select class="rule-select" [items]="rules" label="Associated Rule(s)" empty="true"  dropdownMaxHeight="300"
+                  [(ngModel)]="sm.rules[i]" optionsKey="name" optionsValue="name"></cui-select>
+      <button class="add-rule" type="button" [disabled]="sm.rules.length >= 5" (click)="addRule(i)">+</button>
+    </div>
   </div>
   </fieldset>
-
+<!--
   <button type="button" [disabled]="sm.rules.length >= 5" (click)="addRule()">+</button>
-  <button type="button" [disabled]="!sm.rules.length" (click)="removeRule()">-</button>
+  <button type="button" [disabled]="!sm.rules.length" (click)="removeRule()">-</button>-->
   <br><br>
   <button cuiButton color="primary" small="true" (click)="save()">Submit</button>
   <button cuiButton color="secondary" small="true" (click)="cancel()">Cancel</button>
