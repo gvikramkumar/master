@@ -88,12 +88,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
-  removeRule() {
-    this.sm.rules.pop();
+  removeRule(i) {
+    this.sm.rules.splice(i,1);
   }
 
-  addRule() {
-    this.sm.rules.push('');
+  addRule(i) {
+    this.sm.rules.splice(i+1,0,'');
   }
 
   sources = [
