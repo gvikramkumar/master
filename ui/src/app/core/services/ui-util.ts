@@ -28,7 +28,7 @@ function getFiscalMonthListFromDate(date, numMonths) {
     const fisMonth = fisDate.getMonth() + 1;
     const fisYearMoStr = '' + fisYear + (fisMonth < 10 ? '0' + fisMonth : fisMonth)
     const fisYearMoNum = Number(fisYearMoStr);
-    const yearMoMoYear = `${fisYearMoStr};${curMonthName} FY${fisYear}`;
+    const yearMoMoYear = `${fisYearMoStr} ${curMonthName} FY${fisYear}`;
     yearmos.push({
       // curYear,
       // curMonthNum,
