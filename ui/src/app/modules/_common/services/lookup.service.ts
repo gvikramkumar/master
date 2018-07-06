@@ -14,6 +14,12 @@ export class LookupService {
   constructor(protected httpClient: HttpClient) {
   }
 
+  getMany(keys: string[]) {
+    keys = keys.map(key => key.trim());
+    const params = new HttpParams().set('keys', keys.join(','));
+    return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}`, {params});
+  }
+
   // will 404 if not found
   getWithError(key: string): Observable<any> {
     return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}/${key}`);

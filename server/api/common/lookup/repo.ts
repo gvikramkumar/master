@@ -19,6 +19,10 @@ Model: Model<any>;
     this.Model = model('Lookup', schema);
   }
 
+  getMany(keys: string[]) {
+    return this.Model.find({key: {$in: keys}}).exec();
+  }
+
   // would rather have getValue, but controller needs to be able to error if nothing is found. Something
   // "could" be found and have an undefined value, so only way to know is to return the doc itself
   getDoc(key) {

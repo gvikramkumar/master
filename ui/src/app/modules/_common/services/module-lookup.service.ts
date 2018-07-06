@@ -17,6 +17,13 @@ export class ModuleLookupService {
   constructor(protected httpClient: HttpClient, private store: AppStore) {
   }
 
+  getMany(keys: string[], moduleId?: number) {
+    keys = keys.map(key => key.trim());
+    let params = new HttpParams().set('keys', keys.join(','));
+    params = this.setModuleIdInParams(moduleId, params);
+    return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}`, {params});
+  }
+
   // will 404 if not found
   getWithError(key: string, moduleId?: number): Observable<any> {
     let params = new HttpParams();

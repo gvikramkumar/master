@@ -9,6 +9,20 @@ export default class ModuleLookupController {
   constructor(private repo: ModuleLookupRepo) {
   }
 
+  // we get all in array and put as properties of an object
+  getMany(req, res, next) {
+    if (!req.query.moduleId) {
+      next(new ApiError('moduleId required', null, 400));
+      return Promise.resolve();
+    }
+    this.repo.getMany(req.query.moduleId, req.query.keys.split(','))
+      .then(docs => {
+        const obj = {};
+        docs.forEach(doc => obj[doc.key] = doc.value);
+        res.json(obj);
+      });
+  }
+
   getValue(req, res, next) {
     if (!req.query.moduleId) {
       next(new ApiError('moduleId required', null, 400));
