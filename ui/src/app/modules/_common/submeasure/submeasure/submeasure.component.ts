@@ -21,8 +21,8 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   dataSource: MatTableDataSource<Submeasure>;
   selectedMeasure: Measure;
   measures: Measure[];
-  submeasures: Submeasure[];
-  filteredSubmeasures: Submeasure[];
+  submeasures: Submeasure[] = [];
+  filteredSubmeasures: Submeasure[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   filterValue = '';
