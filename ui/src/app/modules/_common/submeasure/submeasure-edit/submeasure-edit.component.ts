@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {RoutingComponentBase} from '../../../../shared/routing-component-base';
+import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {Submeasure} from '../../models/submeasure';
 import {AppStore} from '../../../../app/app-store';

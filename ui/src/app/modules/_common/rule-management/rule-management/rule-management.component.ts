@@ -7,7 +7,7 @@ import {AllocationRule} from '../../models/allocation-rule';
 import * as moment from 'moment';
 import {ActivatedRoute} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
-import {RoutingComponentBase} from '../../../../shared/routing-component-base';
+import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import * as _ from 'lodash';
 import {debounceTime} from 'rxjs/operators';
 

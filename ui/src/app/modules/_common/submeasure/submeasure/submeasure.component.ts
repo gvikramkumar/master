@@ -4,7 +4,7 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Subject} from 'rxjs';
 import {SubmeasureService} from '../../services/submeasure.service';
 import {Submeasure} from '../../models/submeasure';
-import {RoutingComponentBase} from '../../../../shared/routing-component-base';
+import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
 import {Measure} from '../../models/measure';

@@ -5,7 +5,7 @@ import {PageNotFoundComponent} from './components/page-not-found/page-not-found.
 import {ForbiddenNameValidator} from './validators/forbidden-name.validator';
 import {MinValidator} from './validators/min.validator';
 import {MaxValidator} from './validators/max.validator';
-import {MaterialIndexModule} from './material-index/material-index.module';
+import {MaterialIndexModule} from './material-index.module';
 import {ErrorModalComponent} from './dialogs/error-modal/error-modal.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {NotImplementedComponent} from './dialogs/not-implemented/not-implemented.component';
@@ -16,7 +16,7 @@ import {HomeComponent} from './components/home';
 import {MainComponent} from './components/main/main.component';
 import {AuthDirective} from './directives/auth.directive';
 import { LeftnavComponent } from './components/leftnav/leftnav.component';
-import {CuiIndexModule} from './cui-index/cui-index.module';
+import {CuiIndexModule} from './cui-index.module';
 
 @NgModule({
   imports: [

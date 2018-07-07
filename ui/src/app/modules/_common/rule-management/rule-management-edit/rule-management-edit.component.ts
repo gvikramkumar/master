@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AllocationRule} from '../../models/allocation-rule';
 import {RuleService} from '../../services/rule.service';
 import {Observable, of} from 'rxjs';
-import {RoutingComponentBase} from '../../../../shared/routing-component-base';
+import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {AppStore} from '../../../../app/app-store';
 import {Submeasure} from '../../models/submeasure';
 import * as _ from 'lodash';
