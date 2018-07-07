@@ -16,42 +16,30 @@ button {
     }
   }
 
-}
+  .rule-assoc {
+    position: relative;
+
+    legend .tooltip {
+      position: absolute;
+      top: 0px;
+      left: -23px;
+    }
+  }
+  .rule {
+    position: relative;
+
+    .icons {
+      width: 43px;
+      position: absolute;
+      top: 32px;
+      right: -50px;
+
+      i:not(:last-of-type) {
+        margin-right: 6px;
+      }
+    }
+  }
 
 
-.level {
-  display: inline-block;
-}
-
-.rule {
-  text-align: center;
-}
-
-.rule .add-rule {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.rule .remove-rule {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.rule .rule-select {
-  display: inline-block;
-  vertical-align: middle;
-  width: 80%;
-}
-
-.option {
-
-}
-
-/* .categories {
-    visibility: hidden;
-} */
-
-.tooltip {
-  display: inline-block;
 }
 
