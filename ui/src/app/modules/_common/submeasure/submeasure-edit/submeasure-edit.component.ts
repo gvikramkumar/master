@@ -80,6 +80,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   init() {
+    if (this.sm.rules.length === 0) {
+      this.sm.rules[0] = '';
+    }
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
     this.measureNameChange();
@@ -88,12 +91,20 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
+  showDeleteRuleIcon() {
+    return this.sm.rules.length > 1;
+  }
+
+  showAddRuleIcon() {
+    return this.sm.rules.length < 5;
+  }
+
   removeRule(i) {
-    this.sm.rules.splice(i,1);
+    this.sm.rules.splice(i, 1);
   }
 
   addRule(i) {
-    this.sm.rules.splice(i+1,0,'');
+    this.sm.rules.splice(i + 1, 0, '');
   }
 
   sources = [
