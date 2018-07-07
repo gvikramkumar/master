@@ -1,8 +1,7 @@
 import {ActivatedRoute} from '@angular/router';
-import {AppStore} from '../app/app-store';
-import {MainComponent} from './components/main/main.component';
+import {AppStore} from '../../app/app-store';
 
-  export class RoutingComponentBase {
+export class RoutingComponentBase {
 
   constructor(store: AppStore, route: ActivatedRoute) {
     store.routeDataPub(route.snapshot.data);

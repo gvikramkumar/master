@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AppStore} from '../../../../app/app-store';
 import {ActivatedRoute} from '@angular/router';
-import {RoutingComponentBase} from '../../../../shared/routing-component-base';
+import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 
 @Component({
   selector: 'fin-source',

@@ -8,6 +8,7 @@ import {
   CuiSearchModule, CuiSelectModule, CuiSpinnerModule,
   CuiTableModule, CuiToastModule
 } from '@cisco-ngx/cui-components';
+import {FromNowPipeModule} from '@cisco-ngx/cui-pipes';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {
     CuiSelectModule,
     CuiTableModule,
     CuiToastModule,
-    CuiSpinnerModule
+    CuiSpinnerModule,
+    FromNowPipeModule
   ],
   exports: [
     CuiButtonModule,
@@ -30,7 +32,8 @@ import {
     CuiSelectModule,
     CuiTableModule,
     CuiToastModule,
-    CuiSpinnerModule
+    CuiSpinnerModule,
+    FromNowPipeModule
   ],
 })
 export class CuiIndexModule { }
