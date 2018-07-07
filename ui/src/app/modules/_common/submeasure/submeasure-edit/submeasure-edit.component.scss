@@ -27,17 +27,18 @@ button {
   }
   .rule {
     position: relative;
+    margin-top: 13px;
 
-    .icons {
-      width: 43px;
-      position: absolute;
-      top: 32px;
-      right: -50px;
-
-      i:not(:last-of-type) {
-        margin-right: 6px;
+      i {
+        position: absolute;
+        top: 11px;
+        &.delete {
+          right: -29px;
+        }
+        &.add {
+          right: -56px;
+        }
       }
-    }
   }
 
 

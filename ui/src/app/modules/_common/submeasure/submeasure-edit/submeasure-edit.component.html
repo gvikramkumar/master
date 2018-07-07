@@ -161,13 +161,11 @@
     </legend>
 
   <div class="rule" *ngFor="let rule of sm.rules; let i = index;">
-      <cui-select class="rule-select" [items]="rules" label="Associated Rule(s)" empty="true"  dropdownMaxHeight="300"
+      <cui-select class="rule-select" [items]="rules" empty="true"  dropdownMaxHeight="300"
                   [(ngModel)]="sm.rules[i]" optionsKey="name" optionsValue="name"></cui-select>
 
-      <div class="icons">
-        <i class="icon-exit-outline icon-small" (click)="removeRule(i)"></i>
-        <i class="icon-add-outline icon-small" [fxShow]="sm.rules.length < 5" (click)="addRule(i)"></i>
-      </div>
+    <i class="delete icon-exit-outline icon-small" [fxShow]="showDeleteRuleIcon()" (click)="removeRule(i)"></i>
+    <i class="add icon-add-outline icon-small" [fxShow]="showAddRuleIcon()" (click)="addRule(i)"></i>
   </div>
   </fieldset>
 
