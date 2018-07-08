@@ -2,7 +2,7 @@
 
   <div class="leftnav" fxFlex="1 1 30%">
 
-    <div class="form-group"  *ngFor="let rpt of reports">
+    <div class="form-group form-group--loose"  *ngFor="let rpt of reports">
       <label class="radio">
         <input type="radio" name="uploadType" [value]="rpt" [(ngModel)]="report" (change)="$event">
         <span class="radio__input"></span>

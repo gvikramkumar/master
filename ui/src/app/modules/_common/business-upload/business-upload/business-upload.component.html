@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="start stretch">
   <div class="leftnav" fxFlex="1 1 40%">
 
-    <div class="form-group"  *ngFor="let utype of uploadTypes">
+    <div class="form-group form-group--loose"  *ngFor="let utype of uploadTypes">
       <label class="radio">
         <input type="radio" name="uploadType" [value]="utype" [(ngModel)]="uploadType" (change)="$event">
         <span class="radio__input"></span>
