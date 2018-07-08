@@ -1,6 +1,32 @@
 
+// header and hero the same height looks clean
+$hero-and-header-height: 83px;
 
-.cui .main-comp .hero {
+
+@media (min-width: 990px) {
+  .fin.cui .header-breadcrumbs {
+    margin: 16px 0;
+  }
+  .fin.cui .header-heading .page-title {
+    position: relative;
+    top: 10px;
+  }
+}
+
+@media (max-width: 990px) {
+  .fin.cui .header-breadcrumbs {
+    display: none;
+  }
+}
+
+
+.fin.cui .header-bar {
+  height: $hero-and-header-height;
+}
+
+.cui .hero.main-comp {
+  height: $hero-and-header-height;
+
   h1 {
     font-size: 28px;
   }
@@ -14,6 +40,3 @@
   padding: 6px 0;
 }
 
-.fin.cui .header-bar {
-  max-height: 90px;
-}

@@ -10,7 +10,6 @@ const yesNoRadioOptions = [
   }
 ];
 
-
 export const uiConst = {
   yesNoRadioOptions
 };

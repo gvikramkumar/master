@@ -1,19 +1,5 @@
-$header-height: 90px;
-$hero-height: 85.918px;
-$top-height: $header-height + $hero-height;
-$footer-height: 129px;
 
-.main-comp {
-  height: 100%;
-
-  .main {
-    height: calc(100% - #{$top-height});
-    overflow-y: auto;
-
-    .main-content {
-      padding: 15px;
-      min-height: calc(100% -  #{$footer-height});
-    }
-  }
+.main-content {
+  padding: 20px;
 }
 

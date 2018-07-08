@@ -1,55 +1,57 @@
-<div class="wrap" fxLayout="row" fxLayoutAlign="start stretch">
 
-  <div class="left" fxFlex="1 1 30%">
-    <!-- <mat-radio-group class="example-radio-group" [(ngModel)]="selectedRadio"> -->
-    <mat-radio-group class="example-radio-group" [(ngModel)]="selectedMeasure" (change)="changeMeasure()">
-      <mat-radio-button class="example-radio-button" *ngFor="let measure of measures" [value]="measure">
-        {{measure.name}}
-      </mat-radio-button>
-    </mat-radio-group>
-    <br>
-  </div>
-
-
-  <div class="right" fxFlex="1 1 auto">
-    <br>
-    <div class="text-center"> {{selectedMeasure?.name}}</div>
-
-    <div fxLayout="row" fxLayoutAlign="space-between center">
-      <mat-form-field>
-        <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
-      </mat-form-field>
-      <a routerLink="add"><button mat-button>Add New</button></a>
-    </div>
-
-    <div class="mat-elevation-z8">
-
-      <mat-table [dataSource]="dataSource" matSort>
-
-        <ng-container matColumnDef="key">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Measure </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.measureName}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Submeasure Name </mat-header-cell>
-          <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"><a> {{row.name}} </a></mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
-      </mat-table>
-
-
-      <mat-paginator #paginator
-                     [length]="filteredSubmeasures.length"
-                     [pageIndex]="0"
-                     [pageSize]="5"
-                     [pageSizeOptions]="[5, 10, 25, 100]">
-      </mat-paginator>
-    </div>
-
-  </div>
-
-
+<div class="text-center measure-select">
+  <cui-select [items]="measures" [(ngModel)]="selectedMeasureName" label="Filter By Measure"
+              (selectChange)="changeMeasure()" optionsKey="name" optionsValue="name"></cui-select>
 </div>
+
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <mat-form-field>
+    <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
+  </mat-form-field>
+  <a routerLink="add">
+    <button mat-button>Add New</button>
+  </a>
+</div>
+
+<div class="mat-elevation-z8">
+
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"><a> {{row.name}} </a></mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="source">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Source</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.source}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="processingTime">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Processing Time</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.processingTime}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="startFiscalMonth">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Start Fiscal Month</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.startFiscalMonth}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="endFiscalMonth">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>end Fiscal Month</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.endFiscalMonth}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+  </mat-table>
+
+
+  <mat-paginator #paginator
+                 [length]="filteredSubmeasures.length"
+                 [pageIndex]="0"
+                 [pageSize]="5"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>
+
