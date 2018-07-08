@@ -17,10 +17,10 @@ import * as _ from 'lodash';
   styleUrls: ['./submeasure.component.scss']
 })
 export class SubmeasureComponent extends RoutingComponentBase implements OnInit {
-  tableColumns = ['key', 'name'];
+  tableColumns = ['name', 'source', 'processingTime', 'startFiscalMonth', 'endFiscalMonth'];
   dataSource: MatTableDataSource<Submeasure>;
-  selectedMeasure: Measure;
-  measures: Measure[];
+  selectedMeasureName: string;
+  measures: Measure[] = [];
   submeasures: Submeasure[] = [];
   filteredSubmeasures: Submeasure[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -43,9 +43,9 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
       this.submeasureService.getMany().toPromise()
     ])
       .then(results => {
-        this.measures = _.sortBy(results[0], name);
+        this.measures = _.sortBy(results[0], 'name');
         this.submeasures = _.sortBy(results[1], 'name');
-        this.selectedMeasure = this.measures[0];
+        this.selectedMeasureName = this.measures[0].name;
         this.changeMeasure();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -53,7 +53,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   }
 
   changeMeasure() {
-    this.filteredSubmeasures = _.filter(this.submeasures, {measureName: this.selectedMeasure.name})
+    this.filteredSubmeasures = _.filter(this.submeasures, {measureName: this.selectedMeasureName})
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);
     this.filterValue = '';
   }
