@@ -1,21 +1,11 @@
 
 .leftnav {
   min-width: 300px;
+  margin-top: 20px;
 
-  .example-radio-group {
-    display: inline-flex;
-    flex-direction: column;
+  .form-group {
+    margin-bottom: 26px;
   }
-
-  .example-radio-button {
-    margin: 15px;
-    font-weight: 400;
-  }
-
-  .example-selected-value {
-    margin: 15px;
-  }
-
 }
 
 .file-upload {
