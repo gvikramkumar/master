@@ -29,9 +29,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   measureName: string;
   submeasureName: string;
   fiscalMonth: number;
-  measures: Measure[];
-  submeasures: Submeasure[];
-  fiscalMonths: any;
+  measures: Measure[] = [];
+  submeasures: Submeasure[] = [];
+  fiscalMonths: number[] = [];
   disableDownload = true;
 
   reports: any[] = [
@@ -62,7 +62,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       'l4_sales_territory_descr, l5_sales_territory_descr, l6_sales_territory_descr'
     },
     {
-      type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping Report', disabled: true,
+      type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping Report', disabled: false,
       filename: 'department_mapping_data',
       excelHeaders: 'Sub-Measure Name, Department Code, Start Account Code, End Account Code',
       excelProperties: 'submeasureName, departmentCode, startAccountCode, endAccountCode'
@@ -128,7 +128,12 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
             {submeasureName: this.submeasureName});
           break;
       }
-      obs.subscribe(fiscalMonths => this.fiscalMonths = _.sortBy(fiscalMonths, _.identity).reverse().slice(0,24));
+      obs.subscribe(fiscalMonths => {
+        this.fiscalMonths = _.sortBy(fiscalMonths, _.identity).reverse().slice(0,24)
+          .map(fiscalMonth => {
+            return {fiscalMonth};
+          });
+      });
     } else {
       this.disableDownload = false;
     }

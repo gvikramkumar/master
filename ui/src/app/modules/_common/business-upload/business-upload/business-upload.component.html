@@ -9,15 +9,14 @@
 
   <div class="file-upload" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center start">
     <div class="fin-content " fxFlex="1 1 60%">
-      <div class="example-selected-value"> {{uploadType.text}}</div>
-      <br>
+      <div class="selected-value"> {{uploadType.text}}</div>
       <div class="upload-form-container">
-        <!-- <mat-form-field>
-          <input matInput placeholder="Input">
-        </mat-form-field> -->
+
+        <br>
+
         <div finAuth="prof-bu:upload" *ngIf="store.user.isAuthorized('prof-bu:upload')">
           <div>
-            <button class="choose-file" mat-raised-button color="accent">
+            <button class="choose-file" cuiButton color="primary" small="small">
               <label for="file-input">Choose a File</label>
             </button>
             <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".csv,.xlsx"
@@ -25,13 +24,16 @@
           </div>
           <div *ngIf="fileInput.files.length">
             <div class="file-list" *ngFor="let file of fileInput.files">{{file.name}}</div>
+            <br>
             <div>
-              <button mat-raised-button color="accent" (click)="uploadFile(fileInput)">Upload File</button>
+              <button cuiButton color="primary" small="small"
+                      (click)="uploadFile(fileInput)">Upload File</button>
             </div>
           </div>
         </div>
-        <br>
+        <br><br>
         <a [href]="getDownloadUri()">Download Template</a>
+
       </div>
     </div>
   </div>

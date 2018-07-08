@@ -1,4 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="start stretch">
+
   <div class="leftnav" fxFlex="1 1 20%">
     <mat-radio-group class="example-radio-group" [(ngModel)]="report" (change)="reset()">
       <mat-radio-button class="example-radio-button" *ngFor="let rpt of reports"
@@ -9,31 +10,31 @@
 
   <div class="file-upload" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center start">
     <div class="fin-content " fxFlex="1 1 60%">
-      <div class="example-selected-value"> {{report.text}}</div>
+      <div class="selected-value"> {{report.text}}</div>
 
       <br>
       <div class="upload-form-container">
         <div *ngIf="report.hasSubmeasure || report.hasFiscalMonth">
-          <label>Measure:</label>
-          <select [(ngModel)]="measureName" name="id" (change)="measureSelected();">
-            <option [ngValue]="k.name" *ngFor="let k of measures">{{k.name}}</option>
-          </select>
-          <br><br>
-          <label>Sub Measure:</label>
-          <select [(ngModel)]="submeasureName" name="id" (change)="submeasureSelected();">
-            <option [ngValue]="k.name" *ngFor="let k of submeasures">{{k.name}}</option>
-          </select>
-          <br><br>
+
+          <div class="sel-row">
+            <cui-select label="Measure" [items]="measures" [(ngModel)]="measureName"
+                        optionsKey="name" optionsValue="name" (selectChange)="measureSelected()"></cui-select>
+          </div>
+
+          <div class="sel-row">
+            <cui-select label="Sub Measure" [items]="submeasures" [(ngModel)]="submeasureName"
+                        optionsKey="name" optionsValue="name" (selectChange)="submeasureSelected()"></cui-select>
+          </div>
         </div>
-        <div *ngIf="report.hasFiscalMonth">
-          <label>Fiscal Month:</label>
-          <select [(ngModel)]="fiscalMonth" name="id" (change)="fiscalMonthSelected();">
-            <option [ngValue]="k" *ngFor="let k of fiscalMonths">{{k}}</option>
-          </select>
-          <br><br>
+        <div class="sel-row" *ngIf="report.hasFiscalMonth">
+          <cui-select label="Fiscal Month" [items]="fiscalMonths" [(ngModel)]="fiscalMonth"
+                      (selectChange)="fiscalMonthSelected()" optionsKey="fiscalMonth" optionsValue="fiscalMonth"></cui-select>
         </div>
-        <button mat-button (click)="downloadReport()" [disabled]="disableDownload">Download Report</button>
-        <button *ngIf="report.hasSubmeasure || report.hasFiscalMonth" mat-button (click)="reset()">Reset</button>
+        <br>
+        <button (click)="downloadReport()" [disabled]="disableDownload"
+                cuiButton small="small" color="primary">Download Report</button>
+        <button *ngIf="report.hasSubmeasure || report.hasFiscalMonth" (click)="reset()"
+                cuiButton small="small" color="secondary">Reset</button>
       </div>
     </div>
   </div>
