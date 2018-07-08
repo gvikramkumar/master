@@ -1,18 +1,11 @@
 @import '../../../../../styles/comp-index';
 
-$header-height: 110.994px;
-$footer-height: 108.314px;
-
 .home-comp {
-  height: 100%;
 
   .main {
-    height: calc(100% - #{$header-height});
-    overflow-y: auto;
 
     .main-content {
       padding: 15px;
-      min-height: calc(100% -  #{$footer-height});
 
       .column {
         width: 25px;

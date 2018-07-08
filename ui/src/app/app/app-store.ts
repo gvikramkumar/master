@@ -10,6 +10,7 @@ import {Subject} from 'rxjs/Subject';
 import {DfaModule} from '../modules/_common/models/module';
 import {User} from '../modules/_common/models/user';
 import {uiUtil} from '../core/services/ui-util';
+import {uiConst} from '../core/models/ui-const';
 
 
 @Injectable({
@@ -27,15 +28,15 @@ export class AppStore extends StoreBase {
   modules = [];
   showSpinner = false;
   currentModule: DfaModule;
-  headerOptions = new CuiHeaderOptions({
-    'showBrandingLogo': true,
-    'brandingLink': 'https://cisco.com',
-    'brandingTitle': '',
-    'showMobileNav': true,
-    'title': 'Digitized Financial Allocations',
-    'username': this.user.name,
-  });
 
+  headerOptions = new CuiHeaderOptions({
+    showBrandingLogo: true,
+    brandingLink: 'https://cisco.com',
+    brandingTitle: '',
+    showMobileNav: true,
+    title: 'Digitized Financial Allocations',
+    username: this.user.name,
+  });
 
   constructor(private media: ObservableMedia) {
     super();

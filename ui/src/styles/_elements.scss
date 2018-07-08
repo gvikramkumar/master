@@ -6,7 +6,14 @@ input[type="file"] {
   display: none;
 }
 
+// cui height 100% is making the footer land at screeh-height, seems like an angular thing, i.e. <router-outlet>
+// hasn't resized yet, gets put there and sticks for some reason.
+html, body {
+  height: initial !important;
+}
 
+body {
+}
 
 
 /*

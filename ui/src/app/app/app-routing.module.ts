@@ -14,7 +14,8 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     data: {
-      authorization: 'dfa:access'
+      authorization: 'dfa:access',
+      breadcrumbs: [{label: 'Home'}]
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },

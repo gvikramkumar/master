@@ -5,6 +5,7 @@ import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
 import {Title} from '@angular/platform-browser';
 import {AppStore} from './app-store';
 import {ToastService} from '../core/services/toast.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'fin-root',
@@ -23,6 +24,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   public ngOnInit() {
     this.titleService.setTitle('FIN-DFA');
+    this.store.routeDataSub(data => {
+      this.store.headerOptions = _.clone(this.store.headerOptions);
+      this.store.headerOptions.breadcrumbs = data.breadcrumbs;
+    });
   }
 
   public ngAfterViewInit() {
