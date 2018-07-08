@@ -1,3 +1,5 @@
+<a fxHide.lg routerLink="/prof/submeasure">< Back</a>
+
 <div class="edit-form-container">
   <cui-select [items]="measures" label="Measure Name" empty="true" [(ngModel)]="sm.measureName" required="true"
               optionsKey="name" optionsValue="name" (selectChange)="measureNameChange()"></cui-select>
