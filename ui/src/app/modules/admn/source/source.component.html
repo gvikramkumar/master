@@ -1,0 +1,41 @@
+
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <mat-form-field>
+    <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
+  </mat-form-field>
+  <a routerLink="add">
+    <button mat-button>Add New</button>
+  </a>
+</div>
+
+<div class="mat-elevation-z8">
+
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="code">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Code</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.code}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="active">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.active}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+  </mat-table>
+
+
+  <mat-paginator #paginator
+                 [length]="sources.length"
+                 [pageIndex]="0"
+                 [pageSize]="5"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>
