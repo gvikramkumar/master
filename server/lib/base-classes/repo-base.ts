@@ -8,6 +8,7 @@ import {mgc} from '../database/mongoose-conn';
 
 export default class RepoBase {
   protected Model: Model<any>;
+  protected autoIncrementField: string;
 
   constructor(public schema: Schema, protected modelName: string, protected isModuleRepo = false) {
     this.schema = schema;
@@ -105,6 +106,7 @@ export default class RepoBase {
       });
   }
 
+  // no autoincrement on this
   addMany(docs, userId) {
     let createdBy = false;
     let updatedBy = false;
@@ -128,6 +130,7 @@ export default class RepoBase {
     return this.Model.insertMany(docs);
   }
 
+  // no autoincrement on this
   addManyTransaction(_docs, userId) {
     const transId = new mg.Types.ObjectId();
     const docs = _docs.map(doc => {
@@ -157,7 +160,20 @@ export default class RepoBase {
       item.updatedBy = userId;
       item.updatedDate = date;
     }
-    return item.save();
+    if (this.autoIncrementField) {
+      return this.Model.find({})
+        .sort({[this.autoIncrementField]: -1}).limit(1).exec()
+        .then(docs => {
+          if (docs.length) {
+            item[this.autoIncrementField] = docs[0][this.autoIncrementField] + 1;
+          } else {
+            item[this.autoIncrementField] = 1;
+          }
+          return item.save();
+        });
+    } else {
+      return item.save();
+    }
   }
 
   update(data, userId) {
