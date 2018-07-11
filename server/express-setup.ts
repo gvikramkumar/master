@@ -26,6 +26,7 @@ import {openPeriodRouter} from './api/common/open-period/router';
 import {fileRouter} from './api/common/file/router';
 import {productClassUploadRouter} from './api/prof/product-class-upload/router';
 import {profUploadRouter} from './api/prof/upload/router';
+import {sourceRouter} from './api/common/source/router';
 
 
 export default function () {
@@ -47,7 +48,7 @@ export default function () {
   }
   app.use(cors(corsOptions));
   app.use(function(req, res, next) {
-    //todo: placeholder for req.user.id till security is in
+    // todo: placeholder for req.user.id till security is in
     req['user'] = new User('jodoe', 'John Doe', 'dakahle@cisco.com', []);
     next();
   })
@@ -74,21 +75,23 @@ export default function () {
   })
 
   app.use(authorize('api:access')); // authorize api access
-  app.use('/api/file', fileRouter);
-  app.use('/api/open-period', openPeriodRouter);
-  app.use('/api/module', moduleRouter);
-  app.use('/api/measure', measureRouter);
   app.use('/api/allocation-rule', allocationRuleRouter);
-  app.use('/api/submeasure', submeasureRouter);
+  app.use('/api/file', fileRouter);
   app.use('/api/lookup', lookupRouter);
+  app.use('/api/module', moduleRouter);
   app.use('/api/module-lookup', moduleLookupRouter);
+  app.use('/api/measure', measureRouter);
+  app.use('/api/open-period', openPeriodRouter);
+  app.use('/api/source', sourceRouter);
+  app.use('/api/submeasure', submeasureRouter);
+
   // prof:
+  app.use('/api/prof/dept-upload', deptUploadRouter);
   app.use('/api/prof/dollar-upload', dollarUploadRouter);
   app.use('/api/prof/mapping-upload', mappingUploadRouter);
-  app.use('/api/prof/dept-upload', deptUploadRouter);
-  app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
   app.use('/api/prof/product-class-upload', productClassUploadRouter);
   app.use('/api/prof/report', reportRouter);
+  app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
   app.use('/api/prof/upload', profUploadRouter);
 
 

@@ -19,7 +19,8 @@ const collections = [
   'module_lookup',
   'prof_sales_split_pct',
   'prof_swalloc_manual_mix',
-  'prof_department_acc_map'
+  'prof_department_acc_map',
+  'dfa_source'
 ];
 
 collections.forEach(coll => {
@@ -53,6 +54,9 @@ db.dfa_module.createIndex({displayOrder: 1}, {unique: true});
 
 db.lookup.createIndex({key: 1}, {unique: true});// shared
 db.module_lookup.createIndex({moduleId: 1, key: 1}, {unique: true});// per module
+
+db.dfa_source.createIndex({sourceId: -1}, {unique: true});
+
 
 print('>>>>>>>>>>>> create-collections complete');
 // unique constraints
