@@ -4,7 +4,9 @@
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
   </mat-form-field>
-  <a routerLink="add"><button mat-button>Create Rule</button></a>
+  <a routerLink="add">
+    <button cuiButton small="small" color="secondary">Add New</button>
+  </a>
 </div>
 
 <div class="mat-elevation-z8">
