@@ -27,7 +27,7 @@
                    (change)="$event" class="ng-hide"><br>
           </div>
           <div *ngIf="fileInput.files.length">
-            <div class="file-list" *ngFor="let file of fileInput.files">{{file.name}}</div>
+            <div class="file-list text-darkgreen" *ngFor="let file of fileInput.files">{{file.name}}</div>
             <br>
             <div>
               <button cuiButton color="primary" small="small"
