@@ -11,7 +11,7 @@ import {MeasureService} from '../../services/measure.service';
 import {Measure} from '../../models/measure';
 import {uiConst} from '../../../../core/models/ui-const';
 import * as _ from 'lodash';
-import {uiUtil} from '../../../../core/services/ui-util';
+import {UiUtil} from '../../../../core/services/ui-util';
 import {filter} from 'rxjs/operators';
 
 @Component({
@@ -55,7 +55,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
-    this.yearmos = uiUtil.getFiscalMonthListFromDate(new Date(), 6);
+    this.yearmos = UiUtil.getFiscalMonthListFromDate(new Date(), 6);
     Promise.all([
       this.measureService.getMany().toPromise(),
       this.ruleService.getMany().toPromise()

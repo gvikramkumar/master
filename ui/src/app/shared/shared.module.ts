@@ -26,7 +26,7 @@ import { TestComponent } from './components/test/test.component';
     RouterModule,
     MaterialIndexModule,
     CuiIndexModule,
-    FlexLayoutModule,
+    FlexLayoutModule.withConfig({disableDefaultBps: true}),
     FormsModule,
   ],
   exports: [
