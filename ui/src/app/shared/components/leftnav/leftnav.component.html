@@ -4,10 +4,14 @@
   <div *ngIf="module">
 
     <h5 class="title">{{module.name}}</h5>
-    <div class="nav-link" *ngFor="let link of links"><a [routerLink]="link.route">{{link.text}}</a></div>
+    <div class="links">
+      <div *ngFor="let link of links"><a [routerLink]="link.route">{{link.text}}</a></div>
+    </div>
 
     <h5 class="title" *ngIf="alinks.length">Admin</h5>
-    <div class="nav-link" *ngFor="let alink of alinks"><a [routerLink]="alink.route">{{alink.text}}</a></div>
+    <div class="links">
+      <div *ngFor="let alink of alinks"><a [routerLink]="alink.route">{{alink.text}}</a></div>
+    </div>
 
   </div>
 

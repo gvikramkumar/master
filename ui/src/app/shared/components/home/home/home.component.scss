@@ -7,7 +7,7 @@
 $padding: 20px;
 
 .home-comp {
-  height: 100%;
+  min-height: calc(100vh - #{$hero-and-header-height});
   //min-width: 0;
 
   /deep/ fin-leftnav {
@@ -26,8 +26,9 @@ $padding: 20px;
     background-image: url('../../../../../assets/img/AS01421.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    height: 100%;
+    min-height: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
 
     .modules {
       height: 100%;
@@ -43,6 +44,9 @@ $padding: 20px;
 
         .module-name {
           margin: auto;
+        }
+        &.selected {
+          background-color: darken($vibrant-blue, 10%);
         }
       }
     }
