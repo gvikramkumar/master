@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/index';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {LookupService} from './lookup.service';
 import {AppStore} from '../../../app/app-store';
-import {uiUtil} from '../../../core/services/ui-util';
+import {UiUtil} from '../../../core/services/ui-util';
 
 const apiUrl = environment.apiUrl;
 
@@ -57,7 +57,7 @@ export class ModuleLookupService {
   verifyModuleId(moduleId) {
     if (!moduleId) {
       moduleId = this.store.getRepoModule(this.endpointName).moduleId;
-      if (uiUtil.isAdminModuleId(moduleId)) {
+      if (UiUtil.isAdminModuleId(moduleId)) {
         throw new Error(`No moduleId for itAdmin call to ${this.endpointName}`);
       }
     }

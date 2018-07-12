@@ -31,6 +31,7 @@ export class BreakpointService {
     // called once initially. We have to do some gymnastics to get it down to one...
     media.asObservable()
       .subscribe(change => {
+        // console.log('breakpoint', change.mqAlias);
         if (!this.initialBreakpoint) {
           this.initialBreakpoint = change.mqAlias;
           this.handleBreakpoints(change.mqAlias);

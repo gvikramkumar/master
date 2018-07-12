@@ -9,7 +9,7 @@ import AnyObj from '../../../../shared/models/any-obj';
 import {Subject} from 'rxjs/Subject';
 import {DfaModule} from '../modules/_common/models/module';
 import {User} from '../modules/_common/models/user';
-import {uiUtil} from '../core/services/ui-util';
+import {UiUtil} from '../core/services/ui-util';
 import {uiConst} from '../core/models/ui-const';
 
 

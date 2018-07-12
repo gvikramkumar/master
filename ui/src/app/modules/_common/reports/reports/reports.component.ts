@@ -10,7 +10,7 @@ import {DollarUploadService} from '../../../prof/services/dollar-upload.service'
 import {MappingUploadService} from '../../../prof/services/mapping-upload.service';
 import {environment} from '../../../../../environments/environment';
 import * as _ from 'lodash';
-import {uiUtil} from '../../../../core/services/ui-util';
+import {UiUtil} from '../../../../core/services/ui-util';
 
 interface ReportSettings {
   submeasureName: string;
@@ -168,7 +168,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       params.fiscalMonth = this.fiscalMonth;
     }
     const url = `${environment.apiUrl}/api/prof/report/${this.report.type}`;
-    uiUtil.submitForm(url, params);
+    UiUtil.submitForm(url, params);
   }
 
 }

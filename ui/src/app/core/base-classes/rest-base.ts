@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {AppStore} from '../../app/app-store';
-import {uiUtil} from '../services/ui-util';
+import {UiUtil} from '../services/ui-util';
 
 const apiUrl = environment.apiUrl;
 
@@ -39,7 +39,7 @@ export class RestBase<T extends AnyObj> {
   // filters then picks latest value (only returns one value) using updatedDate
   getMany(_params = {}): Observable<T[]> {
     this.addModuleId(_params);
-    const params = uiUtil.createHttpParams(_params)
+    const params = UiUtil.createHttpParams(_params)
     return this.httpClient.get<T[]>(`${apiUrl}/api/${this.endpointName}`, {params});
   }
 
@@ -100,7 +100,7 @@ export class RestBase<T extends AnyObj> {
   addModuleId(params) {
     if (this.isModuleRepo && !params.moduleId) {
       const moduleId = this.store.getRepoModule(this.endpointName).moduleId;
-      if (uiUtil.isAdminModuleId(moduleId)) {
+      if (UiUtil.isAdminModuleId(moduleId)) {
         throw new Error(`No moduleId for itAdmin call to ${this.endpointName}`);
       }
       params.moduleId = moduleId;
