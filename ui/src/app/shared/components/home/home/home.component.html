@@ -1,23 +1,20 @@
+<div class="home-comp hero hero--vibblue" fxLayout="row" fxLayoutAlign="start stretch">
 
-<div class="home-comp" style="height:100%">
+  <fin-leftnav fxFlex="1 1 50%"></fin-leftnav>
 
-  <div class="main">
-    <div class="main-content" fxLayout="row" fxLayoutAlign="start stretch">
-      <fin-leftnav fxFlex="0 0 auto"></fin-leftnav>
-      <div class="fin-content" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start stretch">
+  <div class="main" fxFlex="1 1 auto">
 
-        <div class="column" fxFlex="1 1 auto">
-          <div class="module" [class.selected]="module1===selectedModule"
-               *ngFor="let module1 of modules1" (click)="moduleChange(module1)">{{module1.name}}</div>
-        </div>
-        <div class="column" fxFlex="1 1 auto">
-          <div class="module" [class.selected]="module2===selectedModule"
-               *ngFor="let module2 of modules2" (click)="moduleChange(module2)">{{module2.name}}</div>
-        </div>
-
-      </div>
+    <div class="text">
+      <div>Digitized business processes</div>
+      <div>Simpdivfied user experience</div>
+      <div>Analytics that explore business profitabidivty</div>
     </div>
 
+    <div class="modules base-padding">
+      <div class="module" *ngFor="let module of modules" (click)="moduleChange(module)">
+        <div class="module-name">{{module.name}}</div>
+      </div>
+    </div>
   </div>
 
 </div>

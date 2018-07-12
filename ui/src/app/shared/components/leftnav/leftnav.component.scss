@@ -1,12 +1,19 @@
+@import '../../../../styles/cisco-ui-variables';
 
 .wrap {
-  min-width: 220px;
-  max-width: 350px;
-  width: 30%;
+  //min-width: 220px;
+  //max-width: 350px;
+  //width: 30%;
   overflow-x: hidden;
+  padding: $cui-base-padding;
+  padding-right: 0;
 
   .title {
     font-size: 18px !important; // cui changes font size at breakpoints, we don't want that here.
+  }
+
+  .nav-link {
+    margin-left: 10px;
   }
 }
 
