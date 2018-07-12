@@ -1,9 +1,21 @@
 
+<style>
+  .one {
+    min-height: 200px;
+    min-width: 200px;
+  }
+  .two {
+    min-height: 100px;
+    min-width: 100px;
+  }
+</style>
+<div class="one outline-red">one
+  <div class="two outline">two</div>
 
-<cui-select *ngFor="let a of arr; let i = index" [items]="items" [(ngModel)]="arr[i]"></cui-select><br>
-<button (click)="arr.push('')">add item</button>
-<br>
-items:<br>
-<pre>{{items|json}}</pre>
-arr:<br>
-<pre>{{arr|json}}</pre>
+</div>
+
+
+
+
+
+
