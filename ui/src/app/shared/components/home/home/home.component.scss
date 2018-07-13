@@ -27,22 +27,28 @@ $padding: 20px;
     overflow-x: auto;
     overflow-y: hidden;
 
-    .modules {
-      white-space: nowrap;
+    .modules-wrap {
+      min-height: calc(100% - 140px);
 
-      .module {
-        height: 200px;
-        width: 200px;
-        background-color: $vibrant-blue;
-        border-radius: 50%;
-        display: inline-flex;
-        margin-right: $padding;
+      .modules {
+        white-space: nowrap;
 
-        .module-name {
-          margin: auto;
-        }
-        &.selected {
-          background-color: darken($vibrant-blue, 10%);
+        .module {
+          height: 40vh;
+          width: 40vh;
+          max-height: 300px;
+          max-width: 300px;
+          background-color: $vibrant-blue;
+          border-radius: 50%;
+          display: inline-flex;
+          margin-right: $padding;
+
+          .module-name {
+            margin: auto;
+          }
+          &.selected {
+            background-color: darken($vibrant-blue, 10%);
+          }
         }
       }
     }

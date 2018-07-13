@@ -1,8 +1,8 @@
 <div class="row home-comp hero hero--vibblue">
 
-  <fin-leftnav class="col-4"></fin-leftnav>
+  <fin-leftnav class="col-3"></fin-leftnav>
 
-  <div class="main col-8">
+  <div class="main col-9">
 
     <div class="text">
       <div>Digitized business processes</div>
@@ -10,12 +10,15 @@
       <div>Analytics that explore business profitabidivty</div>
     </div>
 
-    <div class="modules base-padding">
-      <div class="module" *ngFor="let module of modules"[class.selected]="module === selectedModule"
-           (click)="moduleChange(module)">
-        <div class="module-name">{{module.name}}</div>
+    <div class="modules-wrap" fxLayout="column" fxLayoutAlign="center stretch">
+      <div class="modules base-padding">
+        <div class="module" *ngFor="let module of modules"[class.selected]="module === selectedModule"
+             (click)="moduleChange(module)">
+          <div class="module-name">{{module.name}}</div>
+        </div>
       </div>
     </div>
+
   </div>
 
 </div>
