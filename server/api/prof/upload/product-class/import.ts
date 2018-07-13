@@ -1,4 +1,4 @@
-import util from '../../../../lib/common/util';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class ProductClassUploadImport {
   submeasureName: string;
@@ -12,7 +12,7 @@ export default class ProductClassUploadImport {
     this.splitPercentage = Number(row[2]);
     this.fiscalMonth = fiscalMonth;
 
-    util.trimStringProperties(this);
+    svrUtil.trimStringProperties(this);
   }
 
 }

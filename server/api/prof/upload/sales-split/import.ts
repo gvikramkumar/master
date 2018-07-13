@@ -1,4 +1,4 @@
-import util from '../../../../lib/common/util';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class SalesSplitUploadImport {
   accountId: string;
@@ -16,7 +16,7 @@ export default class SalesSplitUploadImport {
     this.subaccountCode = subaccountCode;
     this.fiscalMonth = fiscalMonth;
 
-    util.trimStringProperties(this);
+    svrUtil.trimStringProperties(this);
   }
 
 }

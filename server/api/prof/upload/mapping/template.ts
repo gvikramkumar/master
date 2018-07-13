@@ -1,4 +1,4 @@
-import util from '../../../../lib/common/util';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class MappingUploadTemplate {
   submeasureName: string;
@@ -18,7 +18,7 @@ export default class MappingUploadTemplate {
     this.scmsSegment = row[5];
     this.percentage = row[6];
 
-    util.trimStringProperties(this);
+    svrUtil.trimStringProperties(this);
   }
 
 }

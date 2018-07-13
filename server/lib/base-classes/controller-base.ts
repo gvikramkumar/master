@@ -1,6 +1,6 @@
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
-import util from '../common/util';
+import {svrUtil} from '../common/svr-util';
 import RepoBase from './repo-base';
 
 export default class ControllerBase {

@@ -1,6 +1,6 @@
 import {Schema, model, Model} from 'mongoose';
 import * as _ from 'lodash';
-import util from '../../../lib/common/util';
+import {svrUtil} from '../../../lib/common/svr-util';
 import {injectable} from 'inversify';
 
 const schema = new Schema({
@@ -10,7 +10,7 @@ const schema = new Schema({
   contentType: String,
   metadata: Object
 }, {collection: 'fs.files'});
-util.setSchemaAdditions(schema);
+svrUtil.setSchemaAdditions(schema);
 
 // this is for fs.files only (file info gets)
 @injectable()

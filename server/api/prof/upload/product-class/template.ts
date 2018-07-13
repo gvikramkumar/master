@@ -1,4 +1,4 @@
-import util from '../../../../lib/common/util';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class ProductClassUploadTemplate {
   submeasureName: string;
@@ -10,7 +10,7 @@ export default class ProductClassUploadTemplate {
     this.splitCategory = String(row[1]);
     this.splitPercentage = Number(row[2]);
 
-    util.trimStringProperties(this);
+    svrUtil.trimStringProperties(this);
   }
 
 }

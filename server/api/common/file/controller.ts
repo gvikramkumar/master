@@ -2,7 +2,7 @@ import {injectable} from 'inversify';
 import {mgc} from '../../../lib/database/mongoose-conn';
 import Q from 'q';
 import * as _ from 'lodash';
-import util from '../../../lib/common/util';
+import {svrUtil} from '../../../lib/common/svr-util';
 import {ApiError} from '../../../lib/common/api-error';
 import FileRepo from './repo';
 
@@ -19,7 +19,7 @@ export default class FileController {
   // group, then get latest of each group: groupField=xxx query val, say groupField=buUploadType
   // will group by buUploadType and then get latest version of each one
   getInfoMany(req, res, next) {
-    if (util.checkParams(req.query, ['directory'], next)) {
+    if (svrUtil.checkParams(req.query, ['directory'], next)) {
       return;
     }
     const params = _.omit(req.query, ['groupField', 'getLatest']);

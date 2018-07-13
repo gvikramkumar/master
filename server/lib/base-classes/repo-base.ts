@@ -1,7 +1,7 @@
 import mg, {Model, Schema} from 'mongoose';
 import {NamedApiError} from '../common/named-api-error';
 import _ from 'lodash';
-import util from '../common/util';
+import {svrUtil} from '../common/svr-util';
 import {ApiError} from '../common/api-error';
 import AnyObj from '../../../shared/models/any-obj';
 import {mgc} from '../database/mongoose-conn';
@@ -12,7 +12,7 @@ export default class RepoBase {
 
   constructor(public schema: Schema, protected modelName: string, protected isModuleRepo = false) {
     this.schema = schema;
-    util.setSchemaAdditions(this.schema);
+    svrUtil.setSchemaAdditions(this.schema);
     this.Model = mg.model(modelName, schema);
   }
 
@@ -220,7 +220,7 @@ export default class RepoBase {
   addDateRangeToFilter(_filter) {
     let filter = _filter;
     if (filter.setYearmo) {
-      const dates = util.getDateRangeFromFiscalYearMo(filter.setYearmo);
+      const dates = svrUtil.getDateRangeFromFiscalYearMo(filter.setYearmo);
       const dateRange = {
         updatedDate: {
           $gte: dates.startDate,
