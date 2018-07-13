@@ -1,34 +1,58 @@
 @import '../../../../../styles/comp-index';
 
+
+$padding: 20px;
+
 .home-comp {
+  min-height: calc(100vh - #{$header-and-footer-height});
+  //min-width: 0;
 
+  /deep/ fin-leftnav {
+    .title {
+      font-weight: 300;
+    }
+    a {
+      color: white !important;
+    }
+  }
+
+  .text {
+    padding: $cui-double-padding;
+  }
   .main {
+    background-image: url('../../../../../assets/img/AS01421.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
 
-    .main-content {
-      padding: 15px;
+    .modules-wrap {
+      min-height: calc(100% - 140px);
 
-      .column {
-        width: 25px;
-        max-width: 400px;
-        padding: 0 15px;
+      .modules {
+        white-space: nowrap;
 
-        $module-height: 40px;
         .module {
-          height: $module-height;
-          background-color: $cisco-light-blue;
-          color: white;
-          margin-bottom: 3px;
-          text-align: center;
-          line-height: $module-height;
-          &:hover {
-            cursor: pointer;
+          height: 40vh;
+          width: 40vh;
+          max-height: 300px;
+          max-width: 300px;
+          background-color: $vibrant-blue;
+          border-radius: 50%;
+          display: inline-flex;
+          margin-right: $padding;
+
+          .module-name {
+            margin: auto;
           }
           &.selected {
-            background-color: darken($cisco-light-blue, 10%);
+            background-color: darken($vibrant-blue, 10%);
           }
         }
       }
     }
+
   }
 }
 

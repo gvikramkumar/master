@@ -15,8 +15,7 @@ import {AppComponent} from '../../../../app/app.component';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent extends RoutingComponentBase implements OnInit {
-  public modules1: DfaModule[];
-  public modules2: DfaModule[];
+  public modules: DfaModule[];
   selectedModule: DfaModule;
 
   constructor(private store: AppStore, route: ActivatedRoute) {
@@ -24,8 +23,7 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
   }
 
   ngOnInit() {
-    this.modules1 = this.store.modules.slice(0, 6);
-    this.modules2 = this.store.modules.slice(6);
+    this.modules = this.store.modules;
     if (this.store.module) {
       this.selectedModule = this.store.module;
     } else {

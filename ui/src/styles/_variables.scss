@@ -1,6 +1,9 @@
 
-// cisco colors
-$cisco-light-blue: #049fd9;
+
+$hero-and-header-height: 83px;
+$fin-footer-height: 117px;
+$header-and-footer-height: $hero-and-header-height + $fin-footer-height;
+
 
 // mat colors
 $mat-primary: rgb(103, 58, 183);

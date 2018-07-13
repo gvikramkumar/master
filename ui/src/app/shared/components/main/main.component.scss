@@ -1,5 +1,10 @@
 
-.main-content {
-  padding: 20px;
-}
+@import '../../../../styles/comp-index';
 
+$top-height: $hero-and-header-height * 2;
+$total-height: $top-height + $fin-footer-height;
+
+.main-content {
+  min-height: calc(100vh - #{$total-height});
+
+}
