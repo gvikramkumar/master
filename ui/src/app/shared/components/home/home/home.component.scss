@@ -27,11 +27,11 @@ $padding: 20px;
     background-repeat: no-repeat;
     background-size: cover;
     min-height: 100%;
-    overflow-x: auto;
     overflow-y: hidden;
 
     .modules-wrap {
       min-height: calc(100% - 140px);
+      overflow-x: auto;
 
       .modules {
         white-space: nowrap;
