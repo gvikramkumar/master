@@ -1,4 +1,4 @@
-import util from '../common/util';
+import {svrUtil} from '../common/svr-util';
 import {mgc} from './mongoose-conn';
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
@@ -44,7 +44,7 @@ export default class GridFSBucket {
     });
     const fileId = uploadStream.id.toString();
     return new Promise((resolve, reject) => {
-      util.bufferToStream(file.buffer)
+      svrUtil.bufferToStream(file.buffer)
         .pipe(uploadStream)
         .on('error', function (err) {
           reject(err);

@@ -5,7 +5,7 @@ import MappingUploadController from '../mapping-upload/controller';
 import DeptUploadController from '../dept-upload/controller';
 import PostgresRepo from '../../../lib/database/repos/postgres-repo';
 import {ApiError} from '../../../lib/common/api-error';
-import util from '../../../lib/common/util';
+import {svrUtil} from '../../../lib/common/svr-util';
 
 @injectable()
 export default class ReportController {
@@ -31,7 +31,7 @@ export default class ReportController {
     }
     let arrRtn = [];
     if (body.excelHeaders) {
-      arrRtn.push(util.cleanCsv(body.excelHeaders));
+      arrRtn.push(svrUtil.cleanCsv(body.excelHeaders));
     }
 
     let promise;
@@ -58,7 +58,7 @@ export default class ReportController {
 
     promise
       .then(results => results.rows || results)
-      .then(docs => util.convertJsonToCsv(docs, util.cleanCsvArr(body.excelProperties)))
+      .then(docs => svrUtil.convertJsonToCsv(docs, svrUtil.cleanCsvArr(body.excelProperties)))
       .then(arrCsv => {
         arrRtn = arrRtn.concat(arrCsv);
         res.set('Content-Type', 'text/csv');

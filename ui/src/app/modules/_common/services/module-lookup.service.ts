@@ -5,6 +5,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {LookupService} from './lookup.service';
 import {AppStore} from '../../../app/app-store';
 import {UiUtil} from '../../../core/services/ui-util';
+import {shUtil} from '../../../../../../shared/shared-util';
 
 const apiUrl = environment.apiUrl;
 
@@ -57,7 +58,7 @@ export class ModuleLookupService {
   verifyModuleId(moduleId) {
     if (!moduleId) {
       moduleId = this.store.getRepoModule(this.endpointName).moduleId;
-      if (UiUtil.isAdminModuleId(moduleId)) {
+      if (shUtil.isAdminModuleId(moduleId)) {
         throw new Error(`No moduleId for itAdmin call to ${this.endpointName}`);
       }
     }

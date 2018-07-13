@@ -65,14 +65,6 @@ export class UiUtil {
   static screenHeightShort(elem) {
   }
 
-  static isAdminModule(module) {
-    return module.moduleId === 99;
-  }
-
-  static isAdminModuleId(moduleId) {
-    return moduleId === 99;
-  }
-
   static createHttpParams(_params) {
     let params = new HttpParams();
     _.forEach(_params, (val, key) => {

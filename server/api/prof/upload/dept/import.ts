@@ -1,4 +1,4 @@
-import util from '../../../../lib/common/util';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class DeptUploadImport {
   submeasureName: string;
@@ -10,7 +10,7 @@ export default class DeptUploadImport {
     this.nodeValue = nodeValue;
     this.glAccount = glAccount;
 
-    util.trimStringProperties(this);
+    svrUtil.trimStringProperties(this);
   }
 
 }

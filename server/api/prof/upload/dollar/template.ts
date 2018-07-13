@@ -1,4 +1,4 @@
-import util from '../../../../lib/common/util';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class DollarUploadTemplate {
   submeasureName: string;
@@ -24,7 +24,7 @@ export default class DollarUploadTemplate {
     this.dealId = row[8];
     this.revenueClassification = row[9];
 
-    util.trimStringProperties(this);
+    svrUtil.trimStringProperties(this);
   }
 
 }

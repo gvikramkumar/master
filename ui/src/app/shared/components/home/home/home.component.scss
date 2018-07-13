@@ -19,9 +19,19 @@ $padding: 20px;
     }
   }
 
-  .text {
-    padding: $cui-double-padding;
+  .top-section {
+
+    .text {}
+
+    .admin-button {
+      margin-left: 30px;
+      &.selected {
+        // todo: test later once cuiButton stops clobbering class attribute
+        //outline: 1px solid $status-yellow;
+      }
+    }
   }
+
   .main {
     background-image: url('../../../../../assets/img/AS01421.jpg');
     background-repeat: no-repeat;

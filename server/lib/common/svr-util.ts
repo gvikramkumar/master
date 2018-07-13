@@ -3,7 +3,7 @@ import {Buffer} from 'buffer';
 import _ from 'lodash';
 import {ApiError} from './api-error';
 
-export default {
+export const svrUtil = {
   trimStringProperties,
   getMemoryUsage,
   cleanCsv,

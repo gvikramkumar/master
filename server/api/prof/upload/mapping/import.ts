@@ -1,4 +1,4 @@
-import util from '../../../../lib/common/util';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class MappingUploadImport {
   submeasureName: string;
@@ -20,7 +20,7 @@ export default class MappingUploadImport {
     this.percentage = row[6];
     this.fiscalMonth = fiscalMonth;
 
-    util.trimStringProperties(this);
+    svrUtil.trimStringProperties(this);
   }
 
 }

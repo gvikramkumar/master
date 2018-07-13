@@ -8,6 +8,7 @@ import {uiConst} from '../../../../core/models/ui-const';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute} from '@angular/router';
 import {AppComponent} from '../../../../app/app.component';
+import {shUtil} from '../../../../../../../shared/shared-util';
 
 @Component({
   selector: 'app-home',
@@ -17,13 +18,15 @@ import {AppComponent} from '../../../../app/app.component';
 export class HomeComponent extends RoutingComponentBase implements OnInit {
   public modules: DfaModule[];
   selectedModule: DfaModule;
+  adminModule: DfaModule;
 
   constructor(private store: AppStore, route: ActivatedRoute) {
     super(store, route);
   }
 
   ngOnInit() {
-    this.modules = this.store.modules;
+    this.modules = this.store.modules.filter(module => !shUtil.isAdminModuleId(module.moduleId));
+    this.adminModule = this.store.modules.filter(module => shUtil.isAdminModuleId(module.moduleId))[0];
     if (this.store.module) {
       this.selectedModule = this.store.module;
     } else {

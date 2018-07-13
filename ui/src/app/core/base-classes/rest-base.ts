@@ -4,6 +4,7 @@ import {environment} from '../../../environments/environment';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {AppStore} from '../../app/app-store';
 import {UiUtil} from '../services/ui-util';
+import {shUtil} from '../../../../../shared/shared-util';
 
 const apiUrl = environment.apiUrl;
 
@@ -100,7 +101,7 @@ export class RestBase<T extends AnyObj> {
   addModuleId(params) {
     if (this.isModuleRepo && !params.moduleId) {
       const moduleId = this.store.getRepoModule(this.endpointName).moduleId;
-      if (UiUtil.isAdminModuleId(moduleId)) {
+      if (shUtil.isAdminModuleId(moduleId)) {
         throw new Error(`No moduleId for itAdmin call to ${this.endpointName}`);
       }
       params.moduleId = moduleId;

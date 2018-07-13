@@ -1,4 +1,4 @@
-import util from '../../../../lib/common/util';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class SalesSplitUploadTemplate {
   accountId: string;
@@ -12,7 +12,7 @@ export default class SalesSplitUploadTemplate {
     this.salesTerritoryCode = String(row[2]);
     this.splitPercentage = Number(row[3]);
 
-    util.trimStringProperties(this);
+    svrUtil.trimStringProperties(this);
   }
 
 }

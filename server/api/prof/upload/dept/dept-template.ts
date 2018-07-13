@@ -1,4 +1,4 @@
-import util from '../../../../lib/common/util';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class DeptUploadDeptTemplate {
   submeasureName: string;
@@ -8,7 +8,7 @@ export default class DeptUploadDeptTemplate {
     this.submeasureName = row[0];
     this.nodeValue = row[1];
 
-    util.trimStringProperties(this);
+    svrUtil.trimStringProperties(this);
   }
 
 }
