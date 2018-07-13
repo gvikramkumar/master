@@ -26,7 +26,11 @@ import { TestComponent } from './components/test/test.component';
     RouterModule,
     MaterialIndexModule,
     CuiIndexModule,
-    FlexLayoutModule.withConfig({disableDefaultBps: true}),
+    // FlexLayoutModule.withConfig({disableDefaultBps: true}), // causing this jenkins error currently (7/12/18)
+    // ERROR in Error during template compile of 'SharedModule'
+    //   Function calls are not supported in decorators but 'FlexLayoutModule' was called.
+    //     FlexLayoutModule.withConfig({disableDefaultBps: true}),
+    FlexLayoutModule,
     FormsModule,
   ],
   exports: [
