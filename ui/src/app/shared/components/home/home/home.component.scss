@@ -4,8 +4,11 @@
 $padding: 20px;
 
 .home-comp {
-  min-height: calc(100vh - #{$header-and-footer-height});
-  //min-width: 0;
+  min-height: calc(100vh - #{$header-height-ltlg + $fin-footer-height});
+
+  @media (min-width: $breakpoint-lg) {
+    min-height: calc(100vh - #{$hero-header-height + $fin-footer-height});
+  }
 
   /deep/ fin-leftnav {
     .title {
@@ -34,8 +37,8 @@ $padding: 20px;
         white-space: nowrap;
 
         .module {
-          height: 40vh;
-          width: 40vh;
+          height: 20vh;
+          width: 20vh;
           max-height: 300px;
           max-width: 300px;
           background-color: $vibrant-blue;

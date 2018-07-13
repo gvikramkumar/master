@@ -1,13 +1,6 @@
 import {BreakPoint} from '@angular/flex-layout';
 
 /*
-flexlayout breakpoints:
-xs: 0
-sm: 600
-md: 960
-lg: 1280
-xl: 1920
-
 bootstrap breakpoints:
 xs: 0,
 sm: 576px,
@@ -15,6 +8,12 @@ md: 768px,
 lg: 992px,
 xl: 1200px
 
+flexlayout breakpoints:
+xs: 0
+sm: 600
+md: 960
+lg: 1280
+xl: 1920
  */
 // cui is using bootstrap for their grid, so set defaults to bootstrap breakpoints
 export const FIN_DEFAULT_BREAKPOINTS: BreakPoint[] = [
