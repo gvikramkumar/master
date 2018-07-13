@@ -1,10 +1,15 @@
 
 @import '../../../../styles/comp-index';
 
-$top-height: $hero-and-header-height * 2;
+$top-height: $hero-header-height * 2;
 $total-height: $top-height + $fin-footer-height;
 
 .main-content {
-  min-height: calc(100vh - #{$total-height});
+  min-height: calc(100vh - #{$header-height-ltlg + $hero-header-height + $fin-footer-height});
+
+  @media (min-width: $breakpoint-lg) {
+    min-height: calc(100vh - #{$hero-header-height + $hero-header-height + $fin-footer-height});
+  }
+
 
 }

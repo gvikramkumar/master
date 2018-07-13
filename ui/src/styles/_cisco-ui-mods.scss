@@ -3,7 +3,7 @@
 // header and hero the same height looks clean
 
 
-@media (min-width: 990px) {
+@media (min-width: $breakpoint-lg) {
   .fin.cui .header-breadcrumbs {
     margin: 16px 0;
   }
@@ -13,19 +13,21 @@
   }
 }
 
-@media (max-width: 990px) {
+@media (max-width: $breakpoint-ltlg) {
   .fin.cui .header-breadcrumbs {
     display: none;
   }
 }
 
+@media (min-width: $breakpoint-lg) {
 
-.fin.cui .header-bar {
-  height: $hero-and-header-height;
+  .fin.cui .header-bar {
+    height: $hero-header-height;
+  }
 }
 
 .cui .hero.main-comp {
-  height: $hero-and-header-height;
+  height: $hero-header-height;
 
   h1 {
     font-size: 28px;
