@@ -30,7 +30,7 @@ class Indicators {
   dollarUploadFlag: string;
   approveFlag: string;
   status: string;
-  manualMapping: string;
+  manualMapping = 'N';
   expenseSSOT: string;
   manualMix: string;
 }
