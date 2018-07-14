@@ -6,8 +6,8 @@ db.dfa_submeasure.insertMany([
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment",
     description: "2 Tier Adjustment",
-    source: "manual",
-    measureName: "Indirect Revenue Adjustments",
+    sourceId: NumberInt(1),
+    measureId: NumberInt(1),
     startFiscalMonth: 201810,
     endFiscalMonth: 204012,
     processingTime: "Monthly",
@@ -42,8 +42,8 @@ db.dfa_submeasure.insertMany([
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment2",
     description: "2 Tier Adjustment2",
-    source: "manual",
-    measureName: "Manufacturing Overhead",
+    sourceId: NumberInt(2),
+    measureId: NumberInt(2),
     startFiscalMonth: 201810,
     endFiscalMonth: 204012,
     processingTime: "Monthly",
@@ -68,7 +68,7 @@ db.dfa_submeasure.insertMany([
       dollarUploadFlag: "Y",
       approveFlag: "Y",
       status: "A",
-      manualMapping: "Y",
+      manualMapping: "N",
       expenseSSOT: "Y",
       manualMix: "Y"
     },
@@ -97,36 +97,42 @@ db.prof_dollar_upload.insertOne({
 
 db.dfa_measure.insertMany([
   {
+    measureId: NumberInt(1),
     moduleId: NumberInt(1),
     name: "Indirect Revenue Adjustments",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(2),
     moduleId: NumberInt(1),
     name: "Manufacturing Overhead",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(3),
     moduleId: NumberInt(1),
     name: "Manufacturing Supply Chain Expenses",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(4),
     moduleId: NumberInt(1),
     name: "Manufacturing V&O",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(5),
     moduleId: NumberInt(1),
     name: "Standard Cogs Adjustments",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(6),
     moduleId: NumberInt(1),
     name: "Warranty",
     typeCode: "revadj",
@@ -192,17 +198,33 @@ db.prof_swalloc_manual_mix.insertOne({
   splitPercentage: 1
 });
 
+db.dfa_source.insertMany([
+  {
+    sourceId: NumberInt(1),
+    name: 'Manual Upload',
+    description: 'Manual Upload source',
+    status: 'A'
+  },
+  {
+    sourceId: NumberInt(2),
+    name: 'Rapid Revenue',
+    description: 'Rapid Revenue source',
+    status: 'A'
+  },
+])
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'dfa_allocation_rule',
-  'dfa_submeasure',
-  'prof_dollar_upload',
   'dfa_measure',
   'dfa_open_period',
+  'dfa_source',
+  'dfa_submeasure',
+  'prof_department_acc_map',
+  'prof_dollar_upload',
   'prof_mapping_upload',
   'prof_sales_split_pct',
   'prof_swalloc_manual_mix',
-  'prof_department_acc_map'
 ];
 
 const date = new Date();

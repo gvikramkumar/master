@@ -1,6 +1,7 @@
 
 export class Measure {
   id?: string;
+  measureId?: number;
   name: string;
   typeCode: string;
   statusFlag: string;

@@ -3,8 +3,8 @@ export class Submeasure {
   id?: string;
   name: string;
   description: string;
-  source: string;
-  measureName: string;
+  sourceId: number;
+  measureId: number;
   startFiscalMonth: string;
   endFiscalMonth: string;
   processingTime: string;
@@ -30,7 +30,7 @@ class Indicators {
   dollarUploadFlag: string;
   approveFlag: string;
   status: string;
-  manualMapping: string;
+  manualMapping = 'N';
   expenseSSOT: string;
   manualMix: string;
 }
