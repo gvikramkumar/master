@@ -13,6 +13,8 @@ import {uiConst} from '../../../../core/models/ui-const';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {filter} from 'rxjs/operators';
+import {SourceService} from '../../services/source.service';
+import {Source} from '../../models/source';
 
 @Component({
   selector: 'fin-submeasure-add',
@@ -25,11 +27,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
   measures: Measure[] = [];
+  sources: Source[] = [];
   rules: AllocationRule[];
-  source: string;
   errs: string[] = [];
   yearmos: { str: string, num: number }[];
-  standardCogs = 'Standard Cogs Adjustments'; // todo: move to lookup
+  COGS = ' Cogs '; // todo: move to lookup
   showCategories = false;
   ifl_switch_ibe = false;
   ifl_switch_le = false;
@@ -49,20 +51,30 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     private submeasureService: SubmeasureService,
     private store: AppStore,
     private measureService: MeasureService,
+    private sourceService: SourceService
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
+  }
+
+  get swManualMapping() {
+    return this.sm.indicators.manualMapping === 'Y';
+  }
+  set swManualMapping(val) {
+    this.sm.indicators.manualMapping = val ? 'Y' : 'N';
   }
 
   ngOnInit() {
     this.yearmos = UiUtil.getFiscalMonthListFromDate(new Date(), 6);
     Promise.all([
       this.measureService.getMany().toPromise(),
-      this.ruleService.getMany().toPromise()
+      this.ruleService.getMany().toPromise(),
+      this.sourceService.getMany().toPromise(),
     ])
       .then(results => {
         this.measures = _.sortBy(results[0], name);
         this.rules = _.sortBy(results[1], name);
+        this.sources = _.sortBy(results[2], name);
 
         if (this.editMode) {
           this.title = 'Edit Submeasure';
@@ -107,10 +119,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.sm.rules.splice(i + 1, 0, '');
   }
 
-  sources = [
-    {name: 'Manual', value: 'manual'}
-  ]
-
   categoryTypes = [
     {
       name: 'Hardware',
@@ -131,7 +139,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   ]
 
   isCogsMeasure() {
-    return this.sm.measureName === this.standardCogs;
+    const measure = _.find(this.measures, {measureId: this.sm.measureId});
+    return measure ? measure.name.indexOf(this.COGS) !== -1 : false;
   }
 
   measureNameChange() {
@@ -328,19 +337,19 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   cleanMMSwitchChoices() {
-    if (!this.mm_switch_ibe) {
+    if (!this.swManualMapping || !this.mm_switch_ibe) {
       delete this.sm.manualMapping.internalBELevel;
     }
-    if (!this.mm_switch_p) {
+    if (!this.swManualMapping || !this.mm_switch_p) {
       delete this.sm.manualMapping.productLevel;
     }
-    if (!this.mm_switch_le) {
+    if (!this.swManualMapping || !this.mm_switch_le) {
       delete this.sm.manualMapping.entityLevel;
     }
-    if (!this.mm_switch_s) {
+    if (!this.swManualMapping || !this.mm_switch_s) {
       delete this.sm.manualMapping.salesLevel;
     }
-    if (!this.mm_switch_scms) {
+    if (!this.swManualMapping || !this.mm_switch_scms) {
       delete this.sm.manualMapping.scmsLevel;
     }
   }

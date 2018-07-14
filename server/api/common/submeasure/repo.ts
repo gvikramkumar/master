@@ -6,13 +6,13 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 const schema = new Schema(
   {
     moduleId: {type: Number, required: true},
-    name: String,
+    name: {type: String, required: true},
     description: {type: String, required: true},
-    source: {type: String, required: true},
-    measureName: String,
+    sourceId: {type: Number, required: true},
+    measureId: {type: Number, required: true},
     startFiscalMonth: Number,
     endFiscalMonth: Number,
-    processingTime: {type: Number},
+    processingTime: {type: String},
     pnlnodeGrouping: String,
     inputFilterLevel: {
       productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},

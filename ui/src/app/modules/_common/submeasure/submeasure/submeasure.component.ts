@@ -10,6 +10,8 @@ import {AppStore} from '../../../../app/app-store';
 import {Measure} from '../../models/measure';
 import {MeasureService} from '../../services/measure.service';
 import * as _ from 'lodash';
+import {Source} from '../../models/source';
+import {SourceService} from '../../services/source.service';
 
 @Component({
   selector: 'fin-submeasure',
@@ -17,10 +19,11 @@ import * as _ from 'lodash';
   styleUrls: ['./submeasure.component.scss']
 })
 export class SubmeasureComponent extends RoutingComponentBase implements OnInit {
-  tableColumns = ['name', 'source', 'processingTime', 'startFiscalMonth', 'endFiscalMonth'];
+  tableColumns = ['name', 'sourceId', 'processingTime', 'startFiscalMonth'];
   dataSource: MatTableDataSource<Submeasure>;
-  selectedMeasureName: string;
+  measureId: number;
   measures: Measure[] = [];
+  sources: Source[] = [];
   submeasures: Submeasure[] = [];
   filteredSubmeasures: Submeasure[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -31,7 +34,8 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     private submeasureService: SubmeasureService,
     private store: AppStore,
     private route: ActivatedRoute,
-    private measureService: MeasureService
+    private measureService: MeasureService,
+    private sourceService: SourceService
   ) {
     super(store, route);
   }
@@ -40,20 +44,26 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
 
     Promise.all([
       this.measureService.getMany().toPromise(),
-      this.submeasureService.getMany().toPromise()
+      this.submeasureService.getMany().toPromise(),
+      this.sourceService.getMany().toPromise()
     ])
       .then(results => {
         this.measures = _.sortBy(results[0], 'name');
         this.submeasures = _.sortBy(results[1], 'name');
-        this.selectedMeasureName = this.measures[0].name;
+        this.sources = results[2];
+        this.measureId = this.measures[0].measureId;
         this.changeMeasure();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
   }
 
+  getSourceName(sourceId) {
+    return _.find(this.sources, {sourceId: sourceId}).name;
+  }
+
   changeMeasure() {
-    this.filteredSubmeasures = _.filter(this.submeasures, {measureName: this.selectedMeasureName})
+    this.filteredSubmeasures = _.filter(this.submeasures, {measureId: this.measureId})
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);
     this.filterValue = '';
   }

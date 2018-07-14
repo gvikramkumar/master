@@ -1,8 +1,8 @@
 <a fxHide.lg routerLink="/prof/submeasure">< Back</a>
 
 <div class="edit-form-container">
-  <cui-select [items]="measures" label="Measure Name" empty="true" [(ngModel)]="sm.measureName" required="true"
-              optionsKey="name" optionsValue="name" (selectChange)="measureNameChange()"></cui-select>
+  <cui-select [items]="measures" label="Measure" empty="true" [(ngModel)]="sm.measureId" required="true"
+              optionsKey="name" optionsValue="measureId" (selectChange)="measureNameChange()"></cui-select>
 
   <cui-input [disabled]="this.editMode" type="text" [(model)]="sm.name" label="Sub-Measure Name" required="true"></cui-input>
 
@@ -12,7 +12,7 @@
   <cui-input type="textarea" [(model)]="sm.description" label="Description"></cui-input>
 
   <cui-select [items]="sources" label="Source" empty="true"
-              optionsKey="name" optionsValue="value" [(ngModel)]="sm.source"></cui-select>
+              optionsKey="name" optionsValue="sourceId" [(ngModel)]="sm.sourceId"></cui-select>
   <br><br>
 
   <fieldset class="input-filter-level">
@@ -77,67 +77,6 @@
   <br>
 
 
-  <fieldset class="input-filter-level">
-    <legend>Manual Mapping</legend>
-
-    <div class="two-col-row">
-      <div class="left  text-center">Hierarchy</div>
-      <div class="right  text-center">Level</div>
-    </div>
-
-    <div class="two-col-row">
-      <div class="left">
-        <cui-input class="switch" type="switch" [(model)]="mm_switch_ibe" label="Internal Business Entity"
-                   (modelChange)="mmChange('ibe')"></cui-input>
-      </div>
-      <div class="right">
-        <cui-select [fxShow]="mm_switch_ibe" class="option" [items]="ibe_items" optionsKey="name"
-                    optionsValue="value" [(ngModel)]="sm.manualMapping.internalBELevel"></cui-select>
-      </div>
-    </div>
-
-    <div class="two-col-row">
-      <div class="left">
-        <cui-input type="switch" [(model)]="mm_switch_p" label="Product" (modelChange)="mmChange('p')"></cui-input>
-      </div>
-      <div class="right">
-        <cui-select [fxShow]="mm_switch_p" class="option" [items]="p_items" optionsKey="name"
-                    optionsValue="value" [(ngModel)]="sm.manualMapping.productLevel"></cui-select>
-      </div>
-    </div>
-
-    <div class="two-col-row">
-      <div class="left">
-        <cui-input type="switch" [(model)]="mm_switch_le" label="Legal Entity"></cui-input>
-      </div>
-      <div class="right">
-        <cui-select [fxShow]="mm_switch_le" class="option" [items]="le_items" optionsKey="name"
-                    optionsValue="value" [(ngModel)]="sm.manualMapping.entityLevel"></cui-select>
-      </div>
-    </div>
-
-    <div class="two-col-row">
-      <div class="left">
-        <cui-input type="switch" [(model)]="mm_switch_s" label="Sales"></cui-input>
-      </div>
-      <div class="right">
-        <cui-select [fxShow]="mm_switch_s" class="option" [items]="s_items" optionsKey="name"
-                    optionsValue="value" [(ngModel)]="sm.manualMapping.salesLevel"></cui-select>
-      </div>
-    </div>
-
-    <div class="two-col-row">
-      <div class="left">
-        <cui-input type="switch" [(model)]="mm_switch_scms" label="SCMS"></cui-input>
-      </div>
-      <div class="right">
-        <cui-select [fxShow]="mm_switch_scms" class="option" [items]="scms_items" optionsKey="name"
-                    optionsValue="value" [(ngModel)]="sm.manualMapping.scmsLevel"></cui-select>
-      </div>
-    </div>
-  </fieldset>
-  <br>
-
   <cui-select [items]="yearmos" label="Effective Month" empty="true" [(ngModel)]="sm.startFiscalMonth"
               required="true" optionsKey="long" optionsValue="num"></cui-select>
 
@@ -172,6 +111,72 @@
     <i class="add icon-add-outline icon-small" [fxShow]="showAddRuleIcon()" (click)="addRule(i)"></i>
   </div>
   </fieldset>
+  <br>
+
+  <cui-input type="switch" [(model)]="swManualMapping" label="Manual Mapping"></cui-input>
+  <br>
+  <div *ngIf="swManualMapping">
+    <fieldset class="input-filter-level">
+      <legend>Manual Mapping</legend>
+
+      <div class="two-col-row">
+        <div class="left  text-center">Hierarchy</div>
+        <div class="right  text-center">Level</div>
+      </div>
+
+      <div class="two-col-row">
+        <div class="left">
+          <cui-input class="switch" type="switch" [(model)]="mm_switch_ibe" label="Internal Business Entity"
+                     (modelChange)="mmChange('ibe')"></cui-input>
+        </div>
+        <div class="right">
+          <cui-select [fxShow]="mm_switch_ibe" class="option" [items]="ibe_items" optionsKey="name"
+                      optionsValue="value" [(ngModel)]="sm.manualMapping.internalBELevel"></cui-select>
+        </div>
+      </div>
+
+      <div class="two-col-row">
+        <div class="left">
+          <cui-input type="switch" [(model)]="mm_switch_p" label="Product" (modelChange)="mmChange('p')"></cui-input>
+        </div>
+        <div class="right">
+          <cui-select [fxShow]="mm_switch_p" class="option" [items]="p_items" optionsKey="name"
+                      optionsValue="value" [(ngModel)]="sm.manualMapping.productLevel"></cui-select>
+        </div>
+      </div>
+
+      <div class="two-col-row">
+        <div class="left">
+          <cui-input type="switch" [(model)]="mm_switch_le" label="Legal Entity"></cui-input>
+        </div>
+        <div class="right">
+          <cui-select [fxShow]="mm_switch_le" class="option" [items]="le_items" optionsKey="name"
+                      optionsValue="value" [(ngModel)]="sm.manualMapping.entityLevel"></cui-select>
+        </div>
+      </div>
+
+      <div class="two-col-row">
+        <div class="left">
+          <cui-input type="switch" [(model)]="mm_switch_s" label="Sales"></cui-input>
+        </div>
+        <div class="right">
+          <cui-select [fxShow]="mm_switch_s" class="option" [items]="s_items" optionsKey="name"
+                      optionsValue="value" [(ngModel)]="sm.manualMapping.salesLevel"></cui-select>
+        </div>
+      </div>
+
+      <div class="two-col-row">
+        <div class="left">
+          <cui-input type="switch" [(model)]="mm_switch_scms" label="SCMS"></cui-input>
+        </div>
+        <div class="right">
+          <cui-select [fxShow]="mm_switch_scms" class="option" [items]="scms_items" optionsKey="name"
+                      optionsValue="value" [(ngModel)]="sm.manualMapping.scmsLevel"></cui-select>
+        </div>
+      </div>
+    </fieldset>
+    <br>
+  </div>
 
   <br>
   <button cuiButton color="primary" small="true" (click)="save()">Submit</button>

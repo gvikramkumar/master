@@ -1,7 +1,7 @@
 
 <div class="text-center measure-select">
-  <cui-select [items]="measures" [(ngModel)]="selectedMeasureName" label="Measure"
-              (selectChange)="changeMeasure()" optionsKey="name" optionsValue="name"></cui-select>
+  <cui-select [items]="measures" [(ngModel)]="measureId" label="Measure"
+              (selectChange)="changeMeasure()" optionsKey="name" optionsValue="measureId"></cui-select>
 </div>
 
 <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -22,9 +22,9 @@
       <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"><a> {{row.name}} </a></mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="source">
+    <ng-container matColumnDef="sourceId">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Source</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.source}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{getSourceName(row.sourceId)}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="processingTime">
@@ -33,13 +33,8 @@
     </ng-container>
 
     <ng-container matColumnDef="startFiscalMonth">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Start Fiscal Month</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Effective Month</mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.startFiscalMonth}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="endFiscalMonth">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>end Fiscal Month</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.endFiscalMonth}}</mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>

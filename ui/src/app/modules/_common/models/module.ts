@@ -1,7 +1,7 @@
 
 export class DfaModule {
   id?: string;
-  moduleId: number;
+  moduleId?: number;
   displayOrder: number;
   abbrev: string;
   name: string;
