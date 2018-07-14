@@ -97,36 +97,42 @@ db.prof_dollar_upload.insertOne({
 
 db.dfa_measure.insertMany([
   {
+    measureId: NumberInt(1),
     moduleId: NumberInt(1),
     name: "Indirect Revenue Adjustments",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(2),
     moduleId: NumberInt(1),
     name: "Manufacturing Overhead",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(3),
     moduleId: NumberInt(1),
     name: "Manufacturing Supply Chain Expenses",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(4),
     moduleId: NumberInt(1),
     name: "Manufacturing V&O",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(5),
     moduleId: NumberInt(1),
     name: "Standard Cogs Adjustments",
     typeCode: "revadj",
     statusFlag: "Y"
   },
   {
+    measureId: NumberInt(6),
     moduleId: NumberInt(1),
     name: "Warranty",
     typeCode: "revadj",
@@ -195,14 +201,15 @@ db.prof_swalloc_manual_mix.insertOne({
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'dfa_allocation_rule',
-  'dfa_submeasure',
-  'prof_dollar_upload',
   'dfa_measure',
   'dfa_open_period',
+  'dfa_source',
+  'dfa_submeasure',
+  'prof_department_acc_map',
+  'prof_dollar_upload',
   'prof_mapping_upload',
   'prof_sales_split_pct',
   'prof_swalloc_manual_mix',
-  'prof_department_acc_map'
 ];
 
 const date = new Date();

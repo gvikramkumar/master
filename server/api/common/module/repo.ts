@@ -15,6 +15,8 @@ const schema = new Schema(
 
 @injectable()
 export default class ModuleRepo extends RepoBase {
+  autoIncrementField = 'moduleId';
+
   constructor() {
     super(schema, 'Module');
   }
