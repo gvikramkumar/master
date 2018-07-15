@@ -18,6 +18,7 @@ import {AuthDirective} from './directives/auth.directive';
 import { LeftnavComponent } from './components/leftnav/leftnav.component';
 import {CuiIndexModule} from './indexes/cui-index.module';
 import { TestComponent } from './components/test/test.component';
+import { GenericDialogComponent } from './components/generic-dialog/generic-dialog.component';
 
 @NgModule({
   imports: [
@@ -62,11 +63,13 @@ import { TestComponent } from './components/test/test.component';
     MainComponent,
     AuthDirective,
     LeftnavComponent,
-    TestComponent
+    TestComponent,
+    GenericDialogComponent,
   ],
   entryComponents: [
     ErrorModalComponent,
-    NotImplementedComponent
+    NotImplementedComponent,
+    GenericDialogComponent,
   ]
 })
 export class SharedModule {
