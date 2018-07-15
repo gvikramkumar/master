@@ -1,20 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
-import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Submeasure} from '../../models/submeasure';
 import {AppStore} from '../../../../app/app-store';
 import {RuleService} from '../../services/rule.service';
 import {SubmeasureService} from '../../services/submeasure.service';
 import {AllocationRule} from '../../models/allocation-rule';
-import {forkJoin, Observable, of} from 'rxjs/index';
+import {Observable, of} from 'rxjs';
 import {MeasureService} from '../../services/measure.service';
 import {Measure} from '../../models/measure';
-import {uiConst} from '../../../../core/models/ui-const';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
-import {filter} from 'rxjs/operators';
 import {SourceService} from '../../services/source.service';
 import {Source} from '../../models/source';
+import {DialogType} from '../../../../core/models/ui-enums';
 
 @Component({
   selector: 'fin-submeasure-add',
@@ -51,7 +50,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     private submeasureService: SubmeasureService,
     private store: AppStore,
     private measureService: MeasureService,
-    private sourceService: SourceService
+    private sourceService: SourceService,
+    private uiUtil: UiUtil
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
@@ -371,50 +371,60 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
-      alert('Are you sure you want to lose your changes?');
-      return Promise.resolve();
+      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.okCancel);
     } else {
-      return Promise.resolve();
+      return of(true);
     }
   }
 
   cancel() {
     this.verifyLosingChanges()
-      .then(() => this.router.navigateByUrl('/prof/submeasure'));
+      .subscribe(resp => {
+        if (resp) {
+          this.router.navigateByUrl('/prof/submeasure');
+        }
+      });
   }
 
   reset() {
     this.verifyLosingChanges()
-      .then(() => {
-        if (this.editMode) {
-          this.sm = _.cloneDeep(this.orgSubmeasure);
-        } else {
-          this.sm = new Submeasure();
+      .subscribe(resp => {
+        if (resp) {
+          {
+            if (this.editMode) {
+              this.sm = _.cloneDeep(this.orgSubmeasure);
+            } else {
+              this.sm = new Submeasure();
+            }
+            this.init();
+          }
         }
-        this.init();
       });
   }
 
   confirmSave() {
-    alert('Are you sure you want to save?');
-    return Promise.resolve();
+    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.okCancel);
   }
 
   save() {
     this.confirmSave()
-      .then(() => {
-        this.cleanUpSubmeasure();
-        const errs = this.validate();
-        if (!errs) {
-          let obs: Observable<Submeasure>;
-          if (this.editMode) {
-            obs = this.submeasureService.update(this.sm);
-          } else {
-            obs = this.submeasureService.add(this.sm);
+      .subscribe(resp => {
+        if (resp) {
+          {
+            this.cleanUpSubmeasure();
+            const errs = this.validate();
+            if (!errs) {
+              let obs: Observable<Submeasure>;
+              if (this.editMode) {
+                obs = this.submeasureService.update(this.sm);
+              } else {
+                obs = this.submeasureService.add(this.sm);
+              }
+              obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
+            } else {
+              this.uiUtil.genericDialog(this.errs.join('\n'));
+            }
           }
-          obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
-        } else {
-          alert(this.errs.join('\n'));
         }
       });
   }

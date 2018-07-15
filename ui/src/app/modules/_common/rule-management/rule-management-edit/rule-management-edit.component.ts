@@ -5,9 +5,9 @@ import {RuleService} from '../../services/rule.service';
 import {Observable, of} from 'rxjs';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {AppStore} from '../../../../app/app-store';
-import {Submeasure} from '../../models/submeasure';
 import * as _ from 'lodash';
-import AnyObj from '../../../../../../../shared/models/any-obj';
+import {DialogType} from '../../../../core/models/ui-enums';
+import {UiUtil} from '../../../../core/services/ui-util';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -40,7 +40,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private route: ActivatedRoute,
     private router: Router,
     private ruleService: RuleService,
-    private store: AppStore
+    private store: AppStore,
+    private uiUtil: UiUtil
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
@@ -70,27 +71,32 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
-      alert('Are you sure you want to lose your changes?');
-      return Promise.resolve();
+      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.okCancel);
     } else {
-      return Promise.resolve();
+      return of(true);
     }
   }
 
   cancel() {
     this.verifyLosingChanges()
-      .then(() => this.router.navigateByUrl('/prof/rule-management'));
+      .subscribe(resp => {
+        if (resp) {
+          this.router.navigateByUrl('/prof/rule-management');
+        }
+      });
   }
 
   reset() {
     this.verifyLosingChanges()
-      .then(() => {
-        if (this.editMode) {
-          this.rule = _.cloneDeep(this.orgRule);
-        } else {
-          this.rule = new AllocationRule();
+      .subscribe(resp => {
+        if (resp) {
+          if (this.editMode) {
+            this.rule = _.cloneDeep(this.orgRule);
+          } else {
+            this.rule = new AllocationRule();
+          }
+          this.init();
         }
-        this.init();
       });
   }
 
@@ -101,16 +107,15 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.ruleService.add(this.rule)
             .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
         }
-      })
+      });
   }
 
   validate(): Observable<boolean> {
-    //todo: need to search for rule name duplicity on add only
-    let obs: Observable<AllocationRule>;
+    // todo: need to search for rule name duplicity on add only
     if (this.editMode) {
       return of(true);
     } else {
-      //todo: validate name doesn't exist already. Could be done with an ngModel validator realtime if rules cached
+      // todo: validate name doesn't exist already. Could be done with an ngModel validator realtime if rules cached
       // otherwise hit server here
       // check for fule name existence in store (if cached rules) or hit the server (why it's observable)
       return of(true);

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  CuiButtonModule,
+  CuiButtonModule, CuiDialogModule,
   CuiFooterModule,
   CuiHeaderModule, CuiInputModule,
   CuiProgressbarModule,
@@ -21,7 +21,8 @@ import {FromNowPipeModule} from '@cisco-ngx/cui-pipes';
     CuiTableModule,
     CuiToastModule,
     CuiSpinnerModule,
-    FromNowPipeModule
+    FromNowPipeModule,
+    CuiDialogModule,
   ],
   exports: [
     CuiButtonModule,
@@ -33,7 +34,8 @@ import {FromNowPipeModule} from '@cisco-ngx/cui-pipes';
     CuiTableModule,
     CuiToastModule,
     CuiSpinnerModule,
-    FromNowPipeModule
+    FromNowPipeModule,
+    CuiDialogModule,
   ],
 })
 export class CuiIndexModule { }
