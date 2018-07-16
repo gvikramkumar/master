@@ -1,11 +1,14 @@
 import {Component, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import {AppStore} from "../../../app/app-store";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {RoutingComponentBase} from "../../../core/base-classes/routing-component-base";
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {SourceService} from '../../_common/services/source.service';
 import {Source} from '../../_common/models/source';
 import {CuiTableOptions} from "@cisco-ngx/cui-components";
+import {Observable} from "rxjs/index";
+import {UiUtil} from '../../../core/services/ui-util';
+import {DialogType} from "../../../core/models/ui-enums";
 
 @Component({
   selector: 'fin-source',
@@ -22,7 +25,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   showAdd: boolean = false;
   showEdit: boolean = false;
   showForm: boolean = false;
-  tableColumns = ['name', 'desc', 'status'];
+  tableColumns = ['name', 'desc', 'status', 'edit'];
   dataSource: MatTableDataSource<Source>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -31,8 +34,10 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
 
   constructor(
     private store: AppStore,
+    private router: Router,
     private route: ActivatedRoute,
-    private sourceService: SourceService
+    private sourceService: SourceService,
+    private uiUtil: UiUtil
   ) {
     super(store, route);
 
@@ -91,6 +96,49 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
       }
     }
     return null;
+  }
+
+  confirmSave() {
+    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.okCancel);
+  }
+
+  save() {
+    var source = new Source();
+    source.name = this.sourceName;
+    source.description = this.sourceDesc;
+    source.status = this.sourceStatus;
+    this.confirmSave()
+      .subscribe(resp => {
+        if (resp) {
+          {
+            //this.cleanUpSubmeasure();
+            const errs = this.validate();
+            if (!errs) {
+              let obs: Observable<Source>;
+              if (this.showEdit) {
+                obs = this.sourceService.update(source);
+              } else {
+                obs = this.sourceService.add(source);
+              }
+              obs.subscribe(source => this.router.navigateByUrl('/admn/source'));
+            } else {
+              //this.uiUtil.genericDialog(this.errs.join('\n'));
+            }
+          }
+        }
+      });
+  }
+
+  validate() {
+    //TODO: fill in source validation
+
+    /*this.errs = [];
+    const sm = this.sm;
+    if (sm.rules.length > _.uniq(sm.rules).length) {
+      this.errs.push('Duplicate rules entered');
+    }
+    return this.errs.length ? this.errs : null;*/
+    return false;
   }
 
 }
