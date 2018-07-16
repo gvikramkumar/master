@@ -1,9 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import {AppStore} from "../../../app/app-store";
 import {ActivatedRoute} from "@angular/router";
 import {RoutingComponentBase} from "../../../core/base-classes/routing-component-base";
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {LookupService} from '../../_common/services/lookup.service';
+import {CuiTableOptions} from "@cisco-ngx/cui-components";
 
 @Component({
   selector: 'fin-source',
@@ -12,6 +13,36 @@ import {LookupService} from '../../_common/services/lookup.service';
 })
 export class SourceComponent extends RoutingComponentBase implements OnInit {
 
+  //CUI TABLE
+  tableOptions = new CuiTableOptions({
+    bordered: true,
+    columns: [
+      {
+        name: "Name",
+        sortable: true,
+        key: "name"
+      },
+      {
+        name: "Code",
+        sortable: false,
+        key: "code",
+      },
+      {
+        name: "Status",
+        sortable: true,
+        key: "active"
+      }
+    ],
+    striped: true
+
+  });
+
+
+
+
+  sourceName: string;
+  sourceDesc: string;
+  sourceStatus: boolean;
   tableColumns = ['name', 'code', 'active'];
   dataSource: MatTableDataSource<Source>;
   @ViewChild(MatPaginator) paginator: MatPaginator;

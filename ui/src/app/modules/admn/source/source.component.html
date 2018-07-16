@@ -1,4 +1,9 @@
 
+<cui-table hidden="true" [data]="sources" [options]="tableOptions" limit="10"></cui-table>
+
+<br><br><br>
+
+
 <div fxLayout="row" fxLayoutAlign="space-between center">
   <mat-form-field>
     <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
@@ -38,4 +43,14 @@
                  [pageSize]="5"
                  [pageSizeOptions]="[5, 10, 25, 100]">
   </mat-paginator>
+</div>
+<br><br><br>
+<div class="edit-form-container">
+  <fieldset>
+    <legend>Edit Source</legend>
+    <legend>Add New Source</legend>
+    <cui-input type="text" [(model)]="sourceName" label="Source Name"></cui-input>
+    <cui-input type="text" [(model)]="sourceDesc" label="Description"></cui-input>
+    <cui-input type="switch" [(model)]="sourceStatus" label="Status"></cui-input>
+  </fieldset>
 </div>
