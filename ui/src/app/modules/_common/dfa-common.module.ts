@@ -9,6 +9,8 @@ import {RuleManagementComponent} from './rule-management/rule-management/rule-ma
 import {SharedModule} from '../../shared/shared.module';
 import {RouterModule} from '@angular/router';
 import { SourceComponent } from './admin/source/source.component';
+import {MeasureComponent} from './measure/measure/measure.component';
+import {MeasureEditComponent} from './measure/measure-edit/measure-edit.component';
 
 @NgModule({
   imports: [
@@ -23,7 +25,9 @@ import { SourceComponent } from './admin/source/source.component';
     RuleManagementEditComponent,
     BusinessUploadComponent,
     ReportsComponent,
-    SourceComponent
+    SourceComponent,
+    MeasureComponent,
+    MeasureEditComponent,
   ],
   exports: [
     SharedModule,
@@ -31,7 +35,9 @@ import { SourceComponent } from './admin/source/source.component';
     RuleManagementComponent,
     SubmeasureEditComponent,
     RuleManagementEditComponent,
-    BusinessUploadComponent
+    BusinessUploadComponent,
+    MeasureComponent,
+    MeasureEditComponent,
   ]
 })
 export class DfaCommonModule { }

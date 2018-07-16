@@ -1,0 +1,69 @@
+<a fxHide.lg routerLink="/prof/measure">< Back</a>
+
+<div class="edit-form-container">
+  <!-- <form [formGroup]="form" (ngSubmit)="save()"> -->
+  <cui-input type="text" [(ngModel)]="measure.name" label="Measure Name" required="true"></cui-input>
+  <cui-select [(ngModel)]="measure.driverName" [items]="driverNames" empty="true" label="Driver"
+              optionsKey="name" optionsValue="value" required="true"></cui-select>
+  <cui-select [(ngModel)]="measure.period" [items]="periods" label="Driver Period" empty="true" required="true"></cui-select>
+  <br>
+
+  <div class="two-col-row">
+    <div class="left text-center">Matching Criteria</div>
+    <div class="right text-center">Selection Criteria</div>
+  </div>
+
+  <div class="two-col-row">
+    <div class="left">
+      <cui-select [(ngModel)]="measure.salesMatch" [items]="salesMatches" label="Sales" empty="true"
+                  required="true"></cui-select>
+    </div>
+    <div class="right">
+      <cui-input type="text" [(ngModel)]="measure.sl1Select" label="&nbsp;" required="true"></cui-input>
+    </div>
+  </div>
+
+  <div class="two-col-row">
+    <div class="left">
+      <cui-select [(ngModel)]="measure.productMatch" [items]="productMatches" label="Product" empty="true"
+                  required="true"></cui-select>
+    </div>
+    <div class="right">
+      <cui-input disabled=true type="text" label="&nbsp;" required="true"></cui-input>
+    </div>
+  </div>
+
+  <div class="two-col-row">
+    <div class="left">
+      <cui-select [(ngModel)]="measure.scmsMatch" [items]="scmsMatches" label="SCMS" empty="true"></cui-select>
+    </div>
+    <div class="right">
+      <cui-input type="text" [(ngModel)]="measure.scmsSelect" label="&nbsp;"></cui-input>
+    </div>
+  </div>
+
+  <div class="two-col-row">
+    <div class="left">
+      <cui-select [(ngModel)]="measure.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity" empty="true"></cui-select>
+    </div>
+    <div class="right">
+      <cui-input disabled=true type="text" label="&nbsp;"></cui-input>
+    </div>
+  </div>
+
+  <div class="two-col-row">
+    <div class="left">
+      <cui-select [(ngModel)]="measure.beMatch" [items]="beMatches" label="Internal Business Entity"
+                  empty="true" required="true"></cui-select>
+    </div>
+    <div class="right">
+      <cui-input type="text" [(ngModel)]="measure.beSelect" label="&nbsp;" required="true"></cui-input>
+    </div>
+  </div>
+
+  <br>
+  <button cuiButton color="primary" small="small" (click)="save()">Submit</button>
+  <button cuiButton color="secondary" small="small" (click)="cancel()">Cancel</button>
+  <button cuiButton color="secondary" small="small" (click)="reset()">Reset</button>
+  <!-- </form> -->
+</div>

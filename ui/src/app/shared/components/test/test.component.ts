@@ -8,7 +8,17 @@ import {DialogType} from '../../../core/models/ui-enums';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
-
+  items = [
+    {name: 'one', value: 1},
+    {name: 'two', value: 2},
+    {name: 'three', value: 3},
+    {name: 'one', value: 1},
+    {name: 'two', value: 2},
+    {name: 'three', value: 3},
+    {name: 'one', value: 1},
+    {name: 'two', value: 2},
+    {name: 'three', value: 3},
+  ]
   results;
 
   constructor(private uiUtil: UiUtil) { }

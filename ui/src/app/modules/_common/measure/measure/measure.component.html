@@ -1,0 +1,51 @@
+
+
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+  </mat-form-field>
+  <a routerLink="add">
+    <button cuiButton small="small" color="secondary">Add New</button>
+  </a>
+</div>
+
+<div class="mat-elevation-z8">
+
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Measure Name</mat-header-cell>
+      <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"><a> {{row.name}} </a>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acronym">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Period</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.acronym}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Driver Name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.status}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="updatedBy">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.updatedBy}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="updatedDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.updatedDate | fromNow}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+

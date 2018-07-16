@@ -100,43 +100,61 @@ db.dfa_measure.insertMany([
     measureId: NumberInt(1),
     moduleId: NumberInt(1),
     name: "Indirect Revenue Adjustments",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    acronym: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A",
   },
   {
     measureId: NumberInt(2),
     moduleId: NumberInt(1),
     name: "Manufacturing Overhead",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    acronym: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A"
   },
   {
     measureId: NumberInt(3),
     moduleId: NumberInt(1),
     name: "Manufacturing Supply Chain Expenses",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    acronym: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A"
   },
   {
     measureId: NumberInt(4),
     moduleId: NumberInt(1),
     name: "Manufacturing V&O",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    acronym: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A"
   },
   {
     measureId: NumberInt(5),
     moduleId: NumberInt(1),
     name: "Standard Cogs Adjustments",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    acronym: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A"
   },
   {
     measureId: NumberInt(6),
     moduleId: NumberInt(1),
     name: "Warranty",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    acronym: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A"
   }
 ])
 
@@ -170,6 +188,10 @@ db.lookup.insertMany([
   {
     key: 'revenue_classification',
     value: ["Recurring Deferred", "Recurring Non Deferred", "Recurring Other", "Non Recurring"]
+  },
+  {
+    key: 'hierarchies',
+    value: ['LEGAL ENTITY', 'PRODUCT', 'SALES']
   },
 ]);
 
