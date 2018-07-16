@@ -100,12 +100,21 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       });
   }
 
+  confirmSave() {
+    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.okCancel);
+  }
+
   public save() {
-    this.validate()
-      .subscribe(valid => {
-        if (valid) {
-          this.ruleService.add(this.rule)
-            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+    this.confirmSave()
+      .subscribe(resp => {
+        if (resp) {
+          this.validate()
+            .subscribe(valid => {
+              if (valid) {
+                this.ruleService.add(this.rule)
+                  .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+              }
+            });
         }
       });
   }
