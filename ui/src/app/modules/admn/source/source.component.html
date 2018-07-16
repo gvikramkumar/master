@@ -1,10 +1,11 @@
+<br><br>
 
 <div fxLayout="row" fxLayoutAlign="space-between center">
   <mat-form-field>
     <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
   </mat-form-field>
-  <a routerLink="add">
-    <button cuiButton small="small" color="secondary">Add New</button>
+  <a>
+    <button cuiButton small="small" color="secondary" (click)="addSource()">Add New</button>
   </a>
 </div>
 
@@ -14,17 +15,22 @@
 
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+      <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="code">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Code</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.code}}</mat-cell>
+    <ng-container matColumnDef="desc">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.description}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="active">
+    <ng-container matColumnDef="status">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.active}}</mat-cell>
+      <mat-cell *matCellDef="let row"><div *ngIf="row.status=='A';else other_content">Active</div><ng-template #other_content>Inactive</ng-template></mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Edit</mat-header-cell>
+      <mat-cell *matCellDef="let row"><i class="add icon-edit icon-small" (click)="editSource(row.id)"></i></mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
@@ -38,4 +44,16 @@
                  [pageSize]="5"
                  [pageSizeOptions]="[5, 10, 25, 100]">
   </mat-paginator>
+</div>
+<br><br><br>
+<div class="edit-form-container">
+  <legend [fxShow]="showEdit">Edit Source</legend>
+  <legend [fxShow]="showAdd">Add New Source</legend>
+  <fieldset [fxShow]="showForm">
+    <cui-input type="text" [(model)]="sourceName" label="Source Name"></cui-input>
+    <cui-input type="text" [(model)]="sourceDesc" label="Description"></cui-input>
+    <cui-input type="switch" [(model)]="sourceStatusBool" label="Active"></cui-input>
+  </fieldset>
+
+  <button [fxShow]="showForm" cuiButton small="small" color="secondary" (click)="save()">Submit</button>
 </div>
