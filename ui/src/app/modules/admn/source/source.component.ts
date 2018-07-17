@@ -9,6 +9,7 @@ import {CuiTableOptions} from '@cisco-ngx/cui-components';
 import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
 import {DialogType} from '../../../core/models/ui-enums';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'fin-source',
@@ -40,9 +41,6 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   }
 
   ngOnInit() {
-    /*this.dataSource = new MatTableDataSource<Source>(this.sources);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;*/
     this.refresh();
   }
 
@@ -81,6 +79,10 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     this.editMode = true;
     this.showForm = true;
     this.formTitle = 'Edit Source';
+  }
+
+  cancel() {
+    this.showForm = false;
   }
 
   cleanSource() {
