@@ -1,14 +1,14 @@
 import {Component, OnInit, ViewChild, TemplateRef} from '@angular/core';
-import {AppStore} from "../../../app/app-store";
-import {ActivatedRoute, Router} from "@angular/router";
-import {RoutingComponentBase} from "../../../core/base-classes/routing-component-base";
+import {AppStore} from '../../../app/app-store';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {SourceService} from '../../_common/services/source.service';
 import {Source} from '../../_common/models/source';
-import {CuiTableOptions} from "@cisco-ngx/cui-components";
-import {Observable} from "rxjs/index";
+import {CuiTableOptions} from '@cisco-ngx/cui-components';
+import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
-import {DialogType} from "../../../core/models/ui-enums";
+import {DialogType} from '../../../core/models/ui-enums';
 
 @Component({
   selector: 'fin-source',
@@ -16,15 +16,11 @@ import {DialogType} from "../../../core/models/ui-enums";
   styleUrls: ['./source.component.scss']
 })
 export class SourceComponent extends RoutingComponentBase implements OnInit {
-
+  formTitle: string;
   sources: Source[] = [];
-  sourceName: string;
-  sourceDesc: string;
-  sourceStatus: string;
-  sourceStatusBool: boolean;
-  showAdd: boolean = false;
-  showEdit: boolean = false;
-  showForm: boolean = false;
+  source: Source;
+  editMode: boolean;
+  showForm = false;
   tableColumns = ['name', 'desc', 'status', 'edit'];
   dataSource: MatTableDataSource<Source>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -47,55 +43,48 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     /*this.dataSource = new MatTableDataSource<Source>(this.sources);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;*/
+    this.refresh();
+  }
 
-    Promise.all([
-      this.sourceService.getMany().toPromise()
-    ])
-      .then(results => {
-        this.sources = results[0];
+  refresh() {
+    this.showForm = false;
+    this.source = new Source();
+    this.sourceService.getMany()
+      .subscribe(sources => {
+        this.sources = sources;
         this.dataSource = new MatTableDataSource<Source>(this.sources);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
+
   }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  isStatusActive(status) {
+    return status === 'A';
+  }
+
   addSource() {
-    this.sourceName = '';
-    this.sourceDesc = '';
-    this.sourceStatus = 'I';
-    this.sourceStatusBool = false;
-    this.showEdit = false;
-    this.showAdd = true;
+    this.source = new Source();
+    this.source.active = this.isStatusActive(this.source.status);
+    this.editMode = false;
     this.showForm = true;
+    this.formTitle = 'Add New Source';
   }
 
-  editSource(i) {
-    var source = this.getSourceById(i);
-    this.sourceName = source.name;
-    this.sourceDesc = source.description;
-    this.sourceStatus = source.status;
-    if(this.sourceStatus == 'A') {
-      this.sourceStatusBool = true;
-    }
-    else {
-      this.sourceStatusBool = false;
-    }
-    this.showAdd = false;
-    this.showEdit = true;
+  editSource(source) {
+    this.source = source;
+    this.source.active = this.isStatusActive(this.source.status);
+    this.editMode = true;
     this.showForm = true;
+    this.formTitle = 'Edit Source';
   }
 
-  getSourceById(id) {
-    for (var i = 0; i < this.sources.length; i++) {
-      if (this.sources[i]['id'] === id) {
-        return this.sources[i];
-      }
-    }
-    return null;
+  cleanSource() {
+    this.source.status = this.source.active ? 'A' : 'I';
   }
 
   confirmSave() {
@@ -103,26 +92,22 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   }
 
   save() {
-    var source = new Source();
-    source.name = this.sourceName;
-    source.description = this.sourceDesc;
-    source.status = this.sourceStatus;
     this.confirmSave()
       .subscribe(resp => {
         if (resp) {
           {
-            //this.cleanUpSubmeasure();
+            this.cleanSource();
             const errs = this.validate();
             if (!errs) {
               let obs: Observable<Source>;
-              if (this.showEdit) {
-                obs = this.sourceService.update(source);
+              if (this.editMode) {
+                obs = this.sourceService.update(this.source);
               } else {
-                obs = this.sourceService.add(source);
+                obs = this.sourceService.add(this.source);
               }
-              obs.subscribe(source => this.router.navigateByUrl('/admn/source'));
+              obs.subscribe(() => this.refresh());
             } else {
-              //this.uiUtil.genericDialog(this.errs.join('\n'));
+              // this.uiUtil.genericDialog(this.errs.join('\n'));
             }
           }
         }
@@ -130,7 +115,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   }
 
   validate() {
-    //TODO: fill in source validation
+    // TODO: fill in source validation
 
     /*this.errs = [];
     const sm = this.sm;

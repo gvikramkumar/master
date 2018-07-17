@@ -30,7 +30,7 @@
 
     <ng-container matColumnDef="edit">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Edit</mat-header-cell>
-      <mat-cell *matCellDef="let row"><i class="add icon-edit icon-small" (click)="editSource(row.id)"></i></mat-cell>
+      <mat-cell *matCellDef="let row"><i class="add icon-edit icon-small" (click)="editSource(row)"></i></mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
@@ -46,14 +46,13 @@
   </mat-paginator>
 </div>
 <br><br><br>
-<div class="edit-form-container">
-  <legend [fxShow]="showEdit">Edit Source</legend>
-  <legend [fxShow]="showAdd">Add New Source</legend>
-  <fieldset [fxShow]="showForm">
-    <cui-input type="text" [(model)]="sourceName" label="Source Name"></cui-input>
-    <cui-input type="text" [(model)]="sourceDesc" label="Description"></cui-input>
-    <cui-input type="switch" [(model)]="sourceStatusBool" label="Active"></cui-input>
+<div class="edit-form-container" [fxShow]="showForm">
+  <fieldset>
+    <legend>{{formTitle}}</legend>
+    <cui-input type="text" [(model)]="source.name" label="Source Name"></cui-input>
+    <cui-input type="text" [(model)]="source.description" label="Description"></cui-input>
+    <cui-input type="switch" [(model)]="source.active" label="Active"></cui-input>
   </fieldset>
 
-  <button [fxShow]="showForm" cuiButton small="small" color="secondary" (click)="save()">Submit</button>
+  <button cuiButton small="small" color="secondary" (click)="save()">Submit</button>
 </div>

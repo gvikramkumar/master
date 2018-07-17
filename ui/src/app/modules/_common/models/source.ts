@@ -5,6 +5,7 @@ export class Source {
   name: string;
   description: string;
   status: string;
+  active?: boolean; // for ui
 }
 
 
