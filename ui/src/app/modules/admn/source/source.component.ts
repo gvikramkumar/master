@@ -5,7 +5,7 @@ import {RoutingComponentBase} from '../../../core/base-classes/routing-component
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {SourceService} from '../../_common/services/source.service';
 import {Source} from '../../_common/models/source';
-import {CuiTableOptions} from '@cisco-ngx/cui-components';
+import {CuiInputComponent, CuiTableOptions} from '@cisco-ngx/cui-components';
 import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
 import {DialogType} from '../../../core/models/ui-enums';
@@ -17,6 +17,7 @@ import * as _ from 'lodash';
   styleUrls: ['./source.component.scss']
 })
 export class SourceComponent extends RoutingComponentBase implements OnInit {
+  errs: string[];
   formTitle: string;
   sources: Source[] = [];
   source: Source;
@@ -26,6 +27,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   dataSource: MatTableDataSource<Source>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('nameInput') nameInput: CuiInputComponent;
 
   filterValue = '';
 
@@ -67,65 +69,45 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
 
   addSource() {
     this.source = new Source();
-    this.source.active = this.isStatusActive(this.source.status);
     this.editMode = false;
-    this.showForm = true;
     this.formTitle = 'Add New Source';
+    this.doShowForm();
   }
 
   editSource(source) {
-    this.source = source;
-    this.source.active = this.isStatusActive(this.source.status);
+    this.source = new Source(source);
     this.editMode = true;
-    this.showForm = true;
     this.formTitle = 'Edit Source';
+    this.doShowForm();
+  }
+
+  doShowForm() {
+    this.showForm = true;
+    this.nameInput.inputElement.nativeElement.focus();
   }
 
   cancel() {
     this.showForm = false;
   }
 
-  cleanSource() {
-    this.source.status = this.source.active ? 'A' : 'I';
-  }
-
-  confirmSave() {
-    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.okCancel);
-  }
-
   save() {
-    this.confirmSave()
-      .subscribe(resp => {
-        if (resp) {
-          {
-            this.cleanSource();
-            const errs = this.validate();
-            if (!errs) {
-              let obs: Observable<Source>;
-              if (this.editMode) {
-                obs = this.sourceService.update(this.source);
-              } else {
-                obs = this.sourceService.add(this.source);
-              }
-              obs.subscribe(() => this.refresh());
-            } else {
-              // this.uiUtil.genericDialog(this.errs.join('\n'));
-            }
-          }
-        }
-      });
+    const errs = this.validate();
+    if (!errs) {
+      let obs: Observable<Source>;
+      if (this.editMode) {
+        obs = this.sourceService.update(this.source);
+      } else {
+        obs = this.sourceService.add(this.source);
+      }
+      obs.subscribe(() => this.refresh());
+    } else {
+      this.uiUtil.genericDialog(this.errs.join('\n'));
+    }
   }
 
   validate() {
-    // TODO: fill in source validation
-
-    /*this.errs = [];
-    const sm = this.sm;
-    if (sm.rules.length > _.uniq(sm.rules).length) {
-      this.errs.push('Duplicate rules entered');
-    }
-    return this.errs.length ? this.errs : null;*/
-    return false;
+    this.errs = [];
+    return this.errs.length ? this.errs : null;
   }
 
 }
