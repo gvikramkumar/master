@@ -51,8 +51,9 @@
     <legend>{{formTitle}}</legend>
     <cui-input type="text" [(model)]="source.name" label="Source Name"></cui-input>
     <cui-input type="text" [(model)]="source.description" label="Description"></cui-input>
-    <cui-input type="switch" [(model)]="source.active" label="Active"></cui-input>
+    <cui-input type="switch" [(model)]="source.active" label="Active"></cui-input> active: {{source.active}}
   </fieldset>
 
-  <button cuiButton small="small" color="secondary" (click)="save()">Submit</button>
+  <button cuiButton small="small" color="secondary" (click)="cancel()">Cancel</button>
+  <button cuiButton small="small" color="primary" (click)="save()">Submit</button>
 </div>
