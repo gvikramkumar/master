@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 
 export class Source {
   id?: number;
@@ -5,7 +6,19 @@ export class Source {
   name: string;
   description: string;
   status: string;
-  active?: boolean; // for ui
+  get active() {
+    return this.status === 'A';
+  }
+  set active(val) {
+    this.status = val ? 'A' : 'I';
+    console.log(val, this.status);
+  }
+
+  constructor(source?: Source) {
+    if (source) {
+      Object.assign(this, _.cloneDeep(source));
+    }
+  }
 }
 
 

@@ -54,11 +54,15 @@
     <div class="edit-form-container" [fxShow]="showForm">
       <fieldset>
         <legend>{{formTitle}}</legend>
-        <cui-input type="text" [(model)]="source.name" label="Source Name"></cui-input>
+        <cui-input type="text" #nameInput [(model)]="source.name" label="Source Name"></cui-input>
         <cui-input type="text" [(model)]="source.description" label="Description"></cui-input>
-        <cui-input type="switch" [(model)]="source.active" label="Active"></cui-input> active: {{source.active}}
+        <div class="form-group">
+          <div class="form-group__text">
+            <cui-input type="switch" [(model)]="source.active" label="Active"></cui-input>
+          </div>
+        </div>
       </fieldset>
-
+      <br>
       <button cuiButton small="small" color="secondary" (click)="cancel()">Cancel</button>
       <button cuiButton small="small" color="primary" (click)="save()">Submit</button>
     </div>
