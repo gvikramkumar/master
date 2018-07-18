@@ -4,17 +4,12 @@
   <div class="row">
     <div class="col-md-6">
       <cui-input type="text" [(ngModel)]="measure.name" label="Measure Name" required="true"></cui-input>
-      <cui-input type="text" [(ngModel)]="measure.name" label="Measure Name" required="true"></cui-input>
     </div>
     <div class="col-md-6">
       <div fxLayout="row" fxLayoutAlign="center start">
-        <div *ngIf="!isPending()" class="form-group-check">
+        <div class="form-group-check">
           <cui-input type="checkbox" [(model)]="measure.statusBool" label="Active"
                      [items]="[{name: 'Active', value: true}]"></cui-input>
-        </div>
-        <div *ngIf="isPending()" class="form-group-button">
-          <button cuiButton small="small" color="primary">Approve</button>
-          <button cuiButton small="small" color="primary">Reject</button>
         </div>
       </div>
     </div>
@@ -39,15 +34,13 @@
 
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group">
-        <div class="form-group__text">
-          <cui-input type="switch" [(model)]="measure.approvalRequired" label="Approval required"></cui-input>
-        </div>
+      <div class="form-group-switch">
+        <cui-input type="switch" [(model)]="measure.approvalRequired" label="Approval required"></cui-input>
       </div>
     </div>
   </div>
 
-  <div class="row rl-row base-padding-top">
+  <div class="row">
     <div class="col-6">
       <cui-input type="text" [(ngModel)]="measure.reportingLevel1" label="Reporting Level 1"></cui-input>
     </div>
@@ -57,7 +50,7 @@
     </div>
   </div>
 
-  <div class="row rl-row">
+  <div class="row">
     <div class="col-6">
       <cui-input type="text" [(ngModel)]="measure.reportingLevel1" label="Reporting Level 1"></cui-input>
     </div>
@@ -67,7 +60,7 @@
     </div>
   </div>
 
-  <div class="row rl-row">
+  <div class="row">
     <div class="col-6">
       <cui-input type="text" [(ngModel)]="measure.reportingLevel1" label="Reporting Level 1"></cui-input>
     </div>
@@ -78,7 +71,7 @@
   </div>
 
   <br>
-  <button cuiButton color="primary" small="small" (click)="save()" [disabled]="isPending()">Submit</button>
+  <button cuiButton color="primary" small="small" (click)="save()">Submit</button>
   <button cuiButton color="secondary" small="small" (click)="cancel()">Cancel</button>
   <button cuiButton color="secondary" small="small" (click)="reset()">Reset</button>
   <!-- </form> -->

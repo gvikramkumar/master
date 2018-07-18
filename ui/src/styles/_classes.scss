@@ -2,6 +2,12 @@
 @import '_mixins';
 
 
+.edit-form {
+  width: 90%;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
 .form-group-switch {
   height: 60px;
   margin-bottom: 10px;

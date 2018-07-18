@@ -72,8 +72,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   }
 
   isPending() {
-    // return this.measure.status === 'P';
-    return true;
+    return this.measure.status === 'P';
   }
 
   hasChanges() {
