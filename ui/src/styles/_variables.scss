@@ -1,4 +1,11 @@
 
+
+// this is cisco-ui base/quarter/half/double-padding settings
+$padding-base: 20px;
+$padding-quarter: $padding-base / 4;
+$padding-half: $padding-base / 2;
+$padding-double: $padding-base * 2;
+
 // bootstrap/cui breakpoints
 $breakpoint-ltsm: 575px;
 $breakpoint-sm: 576px;

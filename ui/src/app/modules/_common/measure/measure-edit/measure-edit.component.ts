@@ -8,6 +8,9 @@ import {AppStore} from '../../../../app/app-store';
 import * as _ from 'lodash';
 import {DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
+import {Source} from '../../models/source';
+import {SourceService} from '../../services/source.service';
+import {shUtil} from '../../../../../../../shared/shared-util';
 
 @Component({
   selector: 'fin-measure-create',
@@ -18,51 +21,59 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   editMode = false;
   measure = new Measure();
   orgMeasure = _.cloneDeep(this.measure);
-  title: string;
-  driverNames = [
-    {name: 'GL Revenue Mix', value: 'GLREVMIX'},
-    {name: 'Manual Mapping', value: 'MANUALMAP'},
-    {name: 'POS Revenue', value: 'REVPOS'},
-    {name: 'Service Map', value: 'SERVMAP'},
-    {name: 'Shipment', value: 'SHIPMENT'},
-    {name: 'Shipped Revenue', value: 'SHIPREV'},
-    {name: 'VIP Rebates', value: 'VIP'},
-  ]
-  periods = ['MTD', 'ROLL6', 'ROLL3'];
-  salesMatches = ['SL1', 'SL2', 'SL3', 'SL4', 'SL5', 'SL6'];
-  productMatches = ['BU', 'PF', 'TG', 'PID'];
-  scmsMatches = ['SCMS'];
-  legalEntityMatches = ['Business Entity'];
-  legalEntityLevels = ['Business Entity'];
-  beMatches = ['BE', 'Sub BE'];
+  sources: Source[] = [];
+  hierarchies: {name: string}[] = [];
+  shUtil = shUtil;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private measureService: MeasureService,
     private store: AppStore,
-    private uiUtil: UiUtil
+    private uiUtil: UiUtil,
+    private sourceService: SourceService
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
   }
 
-  public ngOnInit(): void {
-    if (this.editMode) {
-      this.title = 'Edit Measure';
-      this.measureService.getOneById(this.route.snapshot.params.id)
-        .subscribe(measure => {
-          this.measure = measure;
-          this.orgMeasure = _.cloneDeep(this.measure);
-          this.init();
-        });
-    } else {
-      this.title = 'Create Measure';
-    }
+  getData(): Promise<void> {
+    return Promise.all([
+      this.sourceService.getMany().toPromise(),
+      Promise.resolve([
+        {name: 'Product'},
+        {name: 'Sales'},
+      ]),
+    ])
+      .then(data => {
+        this.sources = data[0];
+        this.hierarchies = data[1];
+      });
   }
 
-  init() {
+  public ngOnInit(): void {
+    this.getData()
+      .then(() => {
+        if (this.editMode) {
+          this.measureService.getOneById(this.route.snapshot.params.id)
+            .subscribe(measure => {
+              this.measure = measure;
+              this.orgMeasure = _.cloneDeep(this.measure);
+              this.prepForUi();
+            });
+        } else {
+          this.prepForUi();
+        }
+      });
+  }
 
+  prepForUi() {
+    this.measure.statusBool = this.measure.status === 'A';
+  }
+
+  isPending() {
+    // return this.measure.status === 'P';
+    return true;
   }
 
   hasChanges() {
@@ -71,7 +82,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
-      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.okCancel);
+      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.yesNo);
     } else {
       return of(true);
     }
@@ -95,19 +106,24 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
           } else {
             this.measure = new Measure();
           }
-          this.init();
+          this.prepForUi();
         }
       });
   }
 
+  prepForSave() {
+    this.measure.status = this.measure.statusBool ? 'A' : 'I';
+  }
+
   confirmSave() {
-    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.okCancel);
+    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.yesNo);
   }
 
   public save() {
     this.confirmSave()
       .subscribe(resp => {
         if (resp) {
+          this.prepForSave();
           this.validate()
             .subscribe(valid => {
               if (valid) {

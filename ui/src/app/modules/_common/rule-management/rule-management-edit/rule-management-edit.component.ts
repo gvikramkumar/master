@@ -18,7 +18,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   editMode = false;
   rule = new AllocationRule();
   orgRule = _.cloneDeep(this.rule);
-  title: string;
   driverNames = [
     {name: 'GL Revenue Mix', value: 'GLREVMIX'},
     {name: 'Manual Mapping', value: 'MANUALMAP'},
@@ -49,7 +48,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   public ngOnInit(): void {
     if (this.editMode) {
-      this.title = 'Edit Rule';
       this.ruleService.getOneById(this.route.snapshot.params.id)
         .subscribe(rule => {
           this.rule = rule;
@@ -57,7 +55,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.init();
         });
     } else {
-      this.title = 'Create Rule';
     }
   }
 
@@ -71,7 +68,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
-      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.okCancel);
+      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.yesNo);
     } else {
       return of(true);
     }
@@ -101,7 +98,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   confirmSave() {
-    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.okCancel);
+    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.yesNo);
   }
 
   public save() {

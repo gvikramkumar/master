@@ -17,22 +17,19 @@
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="desc">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.description}}</mat-cell>
+          <mat-cell *matCellDef="let row">
+            <a href="javascript:void(0)" (click)="editSource(row)">{{row.name}}</a>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-          <mat-cell *matCellDef="let row"><div *ngIf="row.status=='A';else other_content">Active</div><ng-template #other_content>Inactive</ng-template></mat-cell>
+          <mat-cell *matCellDef="let row">{{row.status}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="edit">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Edit</mat-header-cell>
-          <mat-cell *matCellDef="let row"><i class="add icon-edit icon-small" (click)="editSource(row)"></i></mat-cell>
+        <ng-container matColumnDef="desc">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.desc}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
@@ -55,7 +52,7 @@
       <fieldset>
         <legend>{{formTitle}}</legend>
         <cui-input type="text" #nameInput [(model)]="source.name" label="Source Name"></cui-input>
-        <cui-input type="text" [(model)]="source.description" label="Description"></cui-input>
+        <cui-input type="text" [(model)]="source.desc" label="Description"></cui-input>
         <div class="form-group">
           <div class="form-group__text">
             <cui-input type="switch" [(model)]="source.active" label="Active"></cui-input>

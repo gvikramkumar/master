@@ -23,7 +23,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   source: Source;
   editMode: boolean;
   showForm = false;
-  tableColumns = ['name', 'desc', 'status', 'edit'];
+  tableColumns = ['name', 'status', 'desc'];
   dataSource: MatTableDataSource<Source>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

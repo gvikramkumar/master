@@ -2,7 +2,7 @@
 export class Submeasure {
   id?: string;
   name: string;
-  description: string;
+  desc: string;
   sourceId: number;
   measureId: number;
   startFiscalMonth: string;

@@ -42,7 +42,7 @@ export class LeftnavComponent {
 
       case 'prof':
         this.links = [
-          {route: '/prof/allocation-rule', text: 'Rule Management'},
+          {route: '/prof/rule-management', text: 'Rule Management'},
           {route: '/prof/measure', text: 'Measure'},
           {route: '/prof/submeasure', text: 'Sub-Measure'},
           {route: '/prof/business-upload', text: 'Business Upload'},

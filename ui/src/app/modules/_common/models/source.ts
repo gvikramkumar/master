@@ -4,7 +4,7 @@ export class Source {
   id?: number;
   sourceId?: number;
   name: string;
-  description: string;
+  desc: string;
   status: string;
   get active() {
     return this.status === 'A';

@@ -22,7 +22,6 @@ import {DialogType} from '../../../../core/models/ui-enums';
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
   editMode = false;
-  title: string;
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
   measures: Measure[] = [];
@@ -77,7 +76,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.sources = _.sortBy(results[2], name);
 
         if (this.editMode) {
-          this.title = 'Edit Submeasure';
           this.submeasureService.getOneById(this.route.snapshot.params.id)
             .subscribe(submeasure => {
               this.sm = submeasure;
@@ -85,7 +83,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               this.init();
             });
         } else {
-          this.title = 'Create Submeasure';
           this.init();
         }
       });
@@ -371,7 +368,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
-      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.okCancel);
+      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.yesNo);
     } else {
       return of(true);
     }
@@ -403,7 +400,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   confirmSave() {
-    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.okCancel);
+    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.yesNo);
   }
 
   save() {

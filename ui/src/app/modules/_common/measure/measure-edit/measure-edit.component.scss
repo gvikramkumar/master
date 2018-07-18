@@ -3,26 +3,23 @@ button {
 }
 
 
-  .edit-form-container {
-    width: 80%;
-    max-width: 700px;
-    margin: auto;
-    padding: 10px;
 
+.edit-form {
+  width: 90%;
+  max-width: 1060px;
+  margin: 0 auto;
 
-    .two-col-row {
-      height: 70px;
-      .left {
-      }
-      .right {
-        /deep/ form-group {
-          //margin-top: 4px; // need to fill in missing label but label="&nbsp;" is working for now
-        }
-      }
-    }
-
+  .approve-req {
+    margin: 10px 0 13px 0;
   }
 
+  .rl-row {
+    .enabled {
+      position: relative;
+      top: 29px;
+    }
+  }
+}
 
 .selectionCriteria {
   padding: 12px;

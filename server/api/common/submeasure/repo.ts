@@ -22,7 +22,7 @@ const indicatorsSchema = new Schema({
 const schema = new Schema({
     moduleId: {type: Number, required: true},
     name: {type: String, required: true},
-    description: {type: String, required: true},
+    desc: {type: String, required: true},
     sourceId: {type: Number, required: true},
     measureId: {type: Number, required: true},
     startFiscalMonth: Number,

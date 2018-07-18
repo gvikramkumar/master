@@ -9,7 +9,7 @@
   <cui-select [fxShow]="showCategories" [items]="categoryTypes" label="Submeasure Category Type" empty="true"
               optionsKey="name" optionsValue="value" [(ngModel)]="sm.categoryType"></cui-select>
 
-  <cui-input type="textarea" [(model)]="sm.description" label="Description"></cui-input>
+  <cui-input type="textarea" [(model)]="sm.desc" label="Description"></cui-input>
 
   <cui-select [items]="sources" label="Source" empty="true"
               optionsKey="name" optionsValue="sourceId" [(ngModel)]="sm.sourceId"></cui-select>

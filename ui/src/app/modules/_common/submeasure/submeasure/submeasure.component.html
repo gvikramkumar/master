@@ -37,6 +37,15 @@
       <mat-cell *matCellDef="let row"> {{row.startFiscalMonth}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="updatedBy">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.updatedBy}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="updatedDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.updatedDate | fromNow}}</mat-cell>
+    </ng-container>
     <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
   </mat-table>

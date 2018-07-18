@@ -4,7 +4,7 @@ export class Measure {
   measureId?: number;
   moduleId?: number;
   name: string;
-  acronym: string;
+  abbrev: string;
   sources: number[];
   hierarchies: string[];
   approvalRequired?: boolean;
@@ -15,6 +15,7 @@ export class Measure {
   reportingLevel2Enabled?: boolean;
   reportingLevel3Enabled?: boolean;
   status: string;
+  statusBool?: boolean;
   createdBy?: string;
   createdDate?: string;
   updatedBy?: string;

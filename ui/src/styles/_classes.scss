@@ -2,6 +2,24 @@
 @import '_mixins';
 
 
+.form-group-switch {
+  height: 60px;
+  margin-bottom: 10px;
+  padding-top: 26px;
+}
+
+.form-group-check {
+  height: 60px;
+  margin-bottom: 10px;
+  padding-top: 29px;
+}
+
+.form-group-button {
+  height: 60px;
+  margin-bottom: 10px;
+  padding-top: 20px;
+}
+
 .two-col-row {
   display: flex;
   justify-content: space-between;
