@@ -56,15 +56,10 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
-
   }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  isStatusActive(status) {
-    return status === 'A';
   }
 
   addSource() {
@@ -75,7 +70,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   }
 
   editSource(source) {
-    this.source = new Source(source);
+    this.source = _.cloneDeep(source);
     this.editMode = true;
     this.formTitle = 'Edit Source';
     this.doShowForm();

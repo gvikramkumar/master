@@ -19,6 +19,7 @@ import { LeftnavComponent } from './components/leftnav/leftnav.component';
 import {CuiIndexModule} from './indexes/cui-index.module';
 import { TestComponent } from './components/test/test.component';
 import { GenericDialogComponent } from './components/generic-dialog/generic-dialog.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { GenericDialogComponent } from './components/generic-dialog/generic-dial
     NotImplementedComponent,
     TrimInputValueAccessor,
     AuthDirective,
-    TestComponent
+    TestComponent,
+    CheckboxComponent,
   ],
 
   declarations: [
@@ -65,6 +67,7 @@ import { GenericDialogComponent } from './components/generic-dialog/generic-dial
     LeftnavComponent,
     TestComponent,
     GenericDialogComponent,
+    CheckboxComponent,
   ],
   entryComponents: [
     ErrorModalComponent,
