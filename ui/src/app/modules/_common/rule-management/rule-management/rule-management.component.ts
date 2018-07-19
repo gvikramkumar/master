@@ -22,7 +22,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   rulesCount: Number = 0;
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
-  tableColumns = ['name', 'period', 'driverName', 'updatedBy', 'updatedDate'];
+  tableColumns = ['name', 'period', 'driverName', 'status', 'updatedBy', 'updatedDate'];
   dataSource: MatTableDataSource<AllocationRule>;
 
   constructor(

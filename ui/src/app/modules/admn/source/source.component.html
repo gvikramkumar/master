@@ -1,7 +1,6 @@
-
 <div class="fin-container">
 
-  <br><br>
+  <br>
   <div class="row">
     <div class="col-md-6">
 
@@ -25,14 +24,14 @@
             </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="status">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.status}}</mat-cell>
-          </ng-container>
-
           <ng-container matColumnDef="desc">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.desc}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.status}}</mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
@@ -55,14 +54,16 @@
         <fieldset>
           <legend>{{formTitle}}</legend>
           <cui-input type="text" #nameInput [(model)]="source.name" label="Source Name"></cui-input>
-          <cui-input type="text" [(model)]="source.desc" label="Description"></cui-input>
-          <div class="form-group-check">
+          <cui-input type="textarea" [(model)]="source.desc" [options]="{rows: 2}" label="Description"></cui-input>
+          <div style="padding-top:15px;">
             <fin-checkbox label="Active" [(model)]="source.status" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
         </fieldset>
-        <br>
-        <button cuiButton [small]="true" color="secondary" (click)="cancel()">Cancel</button>
-        <button cuiButton [small]="true" color="primary" (click)="save()">Submit</button>
+
+        <div class="fin-footer-buttons">
+          <button cuiButton [small]="true" color="primary" (click)="save()">Submit</button>
+          <button cuiButton [small]="true" color="secondary" (click)="cancel()">Cancel</button>
+        </div>
       </div>
 
     </div>

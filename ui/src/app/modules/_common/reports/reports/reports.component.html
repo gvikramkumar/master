@@ -22,8 +22,8 @@
         <div class="upload-form-container">
           <div *ngIf="report.hasSubmeasure || report.hasFiscalMonth">
 
-              <cui-select label="Measure" [items]="measures" [(ngModel)]="measureName"
-                          optionsKey="name" optionsValue="name" (selectChange)="measureSelected()"></cui-select>
+              <cui-select label="Measure" [items]="measures" [(ngModel)]="measureId"
+                          optionsKey="name" optionsValue="measureId" (selectChange)="measureSelected()"></cui-select>
 
               <cui-select label="Sub Measure" [items]="submeasures" [(ngModel)]="submeasureName"
                           optionsKey="name" optionsValue="name" (selectChange)="submeasureSelected()"></cui-select>

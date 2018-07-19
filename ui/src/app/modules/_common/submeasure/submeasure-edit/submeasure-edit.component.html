@@ -51,15 +51,15 @@
       <fieldset class="input-filter-level">
         <legend>Business Input Level*</legend>
         <div class="row half-padding">
-          <div class="col-md-6">
+          <div class="col-6">
             <div class="left text-center">Hierarchy</div>
           </div>
-          <div class="col-md-6">
+          <div class="col-6">
             <div class="right text-center">Level</div>
           </div>
         </div>
         <div class="row ifl-section">
-          <div class="col-md-6">
+          <div class="col-6">
             <div class="check-wrap">
               <fin-checkbox [(model)]="ifl_switch_ibe" label="Internal Business Entity"
                             (modelChange)="iflChange('ibe')"></fin-checkbox>
@@ -77,7 +77,7 @@
               <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS"></fin-checkbox>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-6">
             <div class="sel-wrap">
               <cui-select [fxShow]="ifl_switch_ibe" class="option" [items]="ibe_items" optionsKey="name"
                           optionsValue="value" [(ngModel)]="sm.inputFilterLevel.internalBELevel"></cui-select>
@@ -112,15 +112,15 @@
 
         <div [fxShow]="swManualMapping">
           <div class="row half-padding">
-            <div class="col-md-6">
+            <div class="col-6">
               <div class="left text-center">Hierarchy</div>
             </div>
-            <div class="col-md-6">
+            <div class="col-6">
               <div class="right text-center">Level</div>
             </div>
           </div>
           <div class="row ifl-section">
-            <div class="col-md-6">
+            <div class="col-6">
               <div class="check-wrap">
                 <fin-checkbox [(model)]="mm_switch_ibe" label="Internal Business Entity"
                               (modelChange)="mmChange('ibe')"></fin-checkbox>
@@ -138,7 +138,7 @@
                 <fin-checkbox [(model)]="mm_switch_scms" label="SCMS"></fin-checkbox>
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-6">
               <div class="sel-wrap">
                 <cui-select [fxShow]="mm_switch_ibe" class="option" [items]="ibe_items" optionsKey="name"
                             optionsValue="value" [(ngModel)]="sm.manualMapping.internalBELevel"></cui-select>

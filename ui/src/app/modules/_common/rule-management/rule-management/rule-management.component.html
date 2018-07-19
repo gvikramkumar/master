@@ -33,6 +33,11 @@
         <mat-cell *matCellDef="let row"> {{row.driverName}}</mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.status}}</mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="updatedBy">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.updatedBy}}</mat-cell>

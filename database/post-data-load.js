@@ -14,7 +14,6 @@ db.dfa_submeasure.insertMany([
     pnlnodeGrouping: "Indirect Adjustments",
     categoryType: "HW",
     inputFilterLevel: {
-      productLevel: "PF",
       salesLevel: "level1",
       scmsLevel: "SCMS",
       internalBELevel: "Internal BE",
@@ -24,7 +23,6 @@ db.dfa_submeasure.insertMany([
       productLevel: "TG",
       salesLevel: "level2",
       scmsLevel: "SCMS",
-      internalBELevel: "Internal SUB BE",
       entityLevel: "BE"
     },
     reportingLevels: ["Indirect Revenue Adjustments"],
@@ -53,11 +51,9 @@ db.dfa_submeasure.insertMany([
       productLevel: "TG",
       salesLevel: "level3",
       scmsLevel: "SCMS",
-      internalBELevel: "Internal SUB BE",
       entityLevel: "BE"
     },
     manualMapping: {
-      productLevel: "PF",
       salesLevel: "level4",
       scmsLevel: "SCMS",
       internalBELevel: "Internal BE",
@@ -234,6 +230,23 @@ db.dfa_source.insertMany([
     status: 'A'
   },
 ])
+
+const collectionsWithStatus = [
+  'dfa_allocation_rule',
+  'dfa_measure',
+  'dfa_module',
+  'dfa_source',
+  'dfa_submeasure'
+];
+
+collectionsWithStatus.forEach(coll => {
+  db.getCollection(coll).updateMany({}, {
+    $set: {
+      status: 'A'
+    }
+  });
+});
+
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
