@@ -10,6 +10,12 @@ $padding: 20px;
     min-height: calc(100vh - #{$hero-header-height + $fin-footer-height});
   }
 
+  .leftnav {
+    flex: 1 1 25%;
+    min-width: 220px;
+    max-width: 250px;
+  }
+
   /deep/ fin-leftnav {
     .title {
       font-weight: 300;
@@ -49,8 +55,10 @@ $padding: 20px;
         .module {
           height: 40vh;
           width: 40vh;
-          max-height: 300px;
-          max-width: 300px;
+          min-width: 170px;
+          min-height: 170px;
+          max-height: 260px;
+          max-width: 260px;
           background-color: $vibrant-blue;
           border-radius: 50%;
           display: inline-flex;
