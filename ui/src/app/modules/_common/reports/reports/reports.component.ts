@@ -26,7 +26,7 @@ interface ReportSettings {
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent extends RoutingComponentBase implements OnInit {
-  measureName: string;
+  measureId: number;
   submeasureName: string;
   fiscalMonth: number;
   measures: Measure[] = [];
@@ -90,7 +90,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   reset() {
-    this.measureName = undefined;
+    this.measureId = undefined;
     this.submeasureName = undefined;
     this.fiscalMonth = undefined;
     this.submeasures = [];
@@ -108,7 +108,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
-    this.subMeasureService.getMany({measureName: this.measureName})
+    this.subMeasureService.getMany({measureId: this.measureId})
       .subscribe(submeasures => this.submeasures = _.sortBy(submeasures, 'name'));
   }
 
