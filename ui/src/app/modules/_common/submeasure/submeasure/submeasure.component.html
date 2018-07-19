@@ -1,61 +1,65 @@
 
-<div class="text-center measure-select">
-  <cui-select [items]="measures" [(ngModel)]="measureId" label="Measure"
-              (selectChange)="changeMeasure()" optionsKey="name" optionsValue="measureId"></cui-select>
-</div>
+<div class="fin-container">
 
-<div fxLayout="row" fxLayoutAlign="space-between center">
-  <mat-form-field>
-    <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
-  </mat-form-field>
-  <a routerLink="add">
-    <button cuiButton small="small" color="secondary">Add New</button>
-  </a>
-</div>
+  <div class="text-center measure-select">
+    <cui-select [items]="measures" [(ngModel)]="measureId" label="Measure"
+                (selectChange)="changeMeasure()" optionsKey="name" optionsValue="measureId"></cui-select>
+  </div>
 
-<div class="mat-elevation-z8">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-form-field>
+      <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
+    </mat-form-field>
+    <a routerLink="add">
+      <button cuiButton small="small" color="secondary">Add New</button>
+    </a>
+  </div>
 
-  <mat-table [dataSource]="dataSource" matSort>
+  <div class="mat-elevation-z8">
 
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-      <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"><a> {{row.name}} </a></mat-cell>
-    </ng-container>
+    <mat-table [dataSource]="dataSource" matSort>
 
-    <ng-container matColumnDef="sourceId">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Source</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{getSourceName(row.sourceId)}}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"><a> {{row.name}} </a></mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="processingTime">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Processing Time</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.processingTime}}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="sourceId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Source</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{getSourceName(row.sourceId)}}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="startFiscalMonth">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Effective Month</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.startFiscalMonth}}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="processingTime">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Processing Time</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.processingTime}}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="updatedBy">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.updatedBy}}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="startFiscalMonth">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Effective Month</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.startFiscalMonth}}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="updatedDate">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.updatedDate | fromNow}}</mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
-  </mat-table>
+      <ng-container matColumnDef="updatedBy">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.updatedBy}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="updatedDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.updatedDate | fromNow}}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+    </mat-table>
 
 
-  <mat-paginator #paginator
-                 [length]="filteredSubmeasures.length"
-                 [pageIndex]="0"
-                 [pageSize]="5"
-                 [pageSizeOptions]="[5, 10, 25, 100]">
-  </mat-paginator>
+    <mat-paginator #paginator
+                   [length]="filteredSubmeasures.length"
+                   [pageIndex]="0"
+                   [pageSize]="5"
+                   [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+  </div>
+
 </div>
 

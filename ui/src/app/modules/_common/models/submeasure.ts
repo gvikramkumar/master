@@ -15,7 +15,11 @@ export class Submeasure {
   reportingLevels: string[] = [];
   indicators = new Indicators();
   rules: string[] = [];
-
+  status: string;
+  createdBy?: string;
+  createdDate?: string;
+  updatedBy?: string;
+  updatedDate?: string;
 }
 
 class InputFilterLevel {
@@ -29,7 +33,6 @@ class InputFilterLevel {
 class Indicators {
   dollarUploadFlag: string;
   approveFlag: string;
-  status: string;
   manualMapping = 'N';
   expenseSSOT: string;
   manualMix: string;

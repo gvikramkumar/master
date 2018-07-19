@@ -21,6 +21,7 @@ import {DialogType} from '../../../../core/models/ui-enums';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  UiUtil = UiUtil;
   editMode = false;
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
@@ -30,7 +31,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   errs: string[] = [];
   yearmos: { str: string, num: number }[];
   COGS = ' Cogs '; // todo: move to lookup
-  showCategories = false;
+  disableCategories = false;
   ifl_switch_ibe = false;
   ifl_switch_le = false;
   ifl_switch_p = false;
@@ -94,7 +95,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
-    this.measureNameChange();
+    this.measureChange();
     if (!this.isCogsMeasure()) {
       this.sm.categoryType = 'HW';
     }
@@ -140,8 +141,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return measure ? measure.name.indexOf(this.COGS) !== -1 : false;
   }
 
-  measureNameChange() {
-    this.showCategories = this.isCogsMeasure() ? true : false;
+  measureChange() {
+    if (this.isCogsMeasure()) {
+      this.disableCategories = false;
+    } else {
+      this.disableCategories = true;
+      this.sm.categoryType = 'HW';
+    }
   }
 
   ibe_items = [
@@ -355,10 +361,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.cleanIflSwitchChoices();
     this.cleanMMSwitchChoices();
     this.sm.rules = this.sm.rules.filter(r => !!r);
-
-    if (!this.isCogsMeasure()) {
-      this.sm.categoryType = 'HW';
-    }
   }
 
   hasChanges() {

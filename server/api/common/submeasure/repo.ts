@@ -8,16 +8,17 @@ const filterLevelSchema = new Schema({
   scmsLevel: String,
   internalBELevel: String,
   entityLevel: String
-})
+},
+  {_id : false})
 
 const indicatorsSchema = new Schema({
   dollarUploadFlag: {type: String, enum: ['Y', 'N']},
   approveFlag: {type: String, enum: ['Y', 'N']},
-  status: {type: String, enum: ['A', 'I']},
   manualMapping: {type: String, enum: ['Y', 'N'], required: true},
   expenseSSOT: {type: String, enum: ['Y', 'N']},
   manualMix: {type: String, enum: ['Y', 'N']}
-});
+  },
+  {_id : false})
 
 const schema = new Schema({
     moduleId: {type: Number, required: true},
@@ -35,6 +36,7 @@ const schema = new Schema({
     indicators: indicatorsSchema,
     rules: [String],
     categoryType: String,
+    status: {type: String, enum: ['A', 'I', 'P'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},

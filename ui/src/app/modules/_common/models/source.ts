@@ -6,7 +6,10 @@ export class Source {
   name: string;
   desc: string;
   status: string;
-  statusBool?: boolean;
+  createdBy?: string;
+  createdDate?: string;
+  updatedBy?: string;
+  updatedDate?: string;
 }
 
 

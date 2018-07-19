@@ -1,46 +1,52 @@
-<div fxLayout="row" fxLayoutAlign="start stretch">
-  <div class="leftnav" fxFlex="1 1 40%">
 
-    <div class="form-group form-group--loose"  *ngFor="let utype of uploadTypes">
-      <label class="radio" [class.disabled]="utype.disabled">
-        <input type="radio" name="uploadType" [value]="utype" [(ngModel)]="uploadType" (change)="$event">
-        <span class="radio__input"></span>
-        <span class="radio__label">{{utype.text}}</span>
-      </label>
+<div class="fin-edit-container">
+
+  <div fxLayout="row" fxLayoutAlign="start stretch">
+    <div class="leftnav" fxFlex="1 1 40%">
+
+      <div class="form-group form-group--loose"  *ngFor="let utype of uploadTypes">
+        <label class="radio" [class.disabled]="utype.disabled">
+          <input type="radio" name="uploadType" [value]="utype" [(ngModel)]="uploadType" (change)="$event">
+          <span class="radio__input"></span>
+          <span class="radio__label">{{utype.text}}</span>
+        </label>
+      </div>
+
     </div>
 
-  </div>
+    <div class="file-upload" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center start">
+      <div class="fin-content " fxFlex="1 1 60%">
+        <div class="selected-value"> {{uploadType.text}}</div>
+        <div class="upload-form-container">
 
-  <div class="file-upload" fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center start">
-    <div class="fin-content " fxFlex="1 1 60%">
-      <div class="selected-value"> {{uploadType.text}}</div>
-      <div class="upload-form-container">
+          <br>
 
-        <br>
-
-        <div finAuth="prof-bu:upload" *ngIf="store.user.isAuthorized('prof-bu:upload')">
-          <div>
-            <button class="choose-file" cuiButton color="primary" small="small">
-              <label for="file-input">Choose a File</label>
-            </button>
-            <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".csv,.xlsx"
-                   (change)="$event" class="ng-hide"><br>
-          </div>
-          <div *ngIf="fileInput.files.length">
-            <div class="file-list text-darkgreen" *ngFor="let file of fileInput.files">{{file.name}}</div>
-            <br>
+          <div finAuth="prof-bu:upload" *ngIf="store.user.isAuthorized('prof-bu:upload')">
             <div>
-              <button cuiButton color="primary" small="small"
-                      (click)="uploadFile(fileInput)">Upload File</button>
+              <button class="choose-file" cuiButton color="primary" small="small">
+                <label for="file-input">Choose a File</label>
+              </button>
+              <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".csv,.xlsx"
+                     (change)="$event" class="ng-hide"><br>
+            </div>
+            <div *ngIf="fileInput.files.length">
+              <div class="file-list text-darkgreen" *ngFor="let file of fileInput.files">{{file.name}}</div>
+              <br>
+              <div>
+                <button cuiButton color="primary" small="small"
+                        (click)="uploadFile(fileInput)">Upload File</button>
+              </div>
             </div>
           </div>
-        </div>
-        <br><br>
-        <a [href]="getDownloadUri()">Download Template</a>
+          <br><br>
+          <a [href]="getDownloadUri()">Download Template</a>
 
+        </div>
       </div>
     </div>
   </div>
+
 </div>
+
 
 

@@ -15,6 +15,7 @@ import {UiUtil} from '../../../../core/services/ui-util';
   styleUrls: ['./rule-management-edit.component.scss']
 })
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
+  UiUtil = UiUtil;
   editMode = false;
   rule = new AllocationRule();
   orgRule = _.cloneDeep(this.rule);
@@ -40,7 +41,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private router: Router,
     private ruleService: RuleService,
     private store: AppStore,
-    private uiUtil: UiUtil
+    public uiUtil: UiUtil
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;

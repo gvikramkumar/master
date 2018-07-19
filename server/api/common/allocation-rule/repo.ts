@@ -16,6 +16,7 @@ const schema = new Schema(
     sl1Select: String,
     scmsSelect: String,
     beSelect: String,
+    status: {type: String, enum: ['A', 'I', 'P'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},

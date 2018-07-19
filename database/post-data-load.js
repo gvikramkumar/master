@@ -31,12 +31,12 @@ db.dfa_submeasure.insertMany([
     indicators: {
       dollarUploadFlag: "Y",
       approveFlag: "Y",
-      status: "A",
       manualMapping: "Y",
       expenseSSOT: "Y",
       manualMix: "Y"
     },
-    rules: ["GLREVMIX-PL3SL2-NOWWDIST-ROLL3", "MANUALMAP-PL3SL6-PERCENT"]
+    rules: ["GLREVMIX-PL3SL2-NOWWDIST-ROLL3", "MANUALMAP-PL3SL6-PERCENT"],
+    status: "A",
   },
   {
     moduleId: NumberInt(1),
@@ -67,12 +67,12 @@ db.dfa_submeasure.insertMany([
     indicators: {
       dollarUploadFlag: "Y",
       approveFlag: "Y",
-      status: "A",
       manualMapping: "N",
       expenseSSOT: "Y",
       manualMix: "Y"
     },
-    rules: ["REVPOS-NODISTI-NOSCMSOTHER-ROLL3", "SERVMAP-PL3BE-MTD"]
+    rules: ["REVPOS-NODISTI-NOSCMSOTHER-ROLL3", "SERVMAP-PL3BE-MTD"],
+    status: "A",
   }
 ])
 
@@ -142,7 +142,7 @@ db.dfa_measure.insertMany([
     name: "Standard Cogs Adjustments",
     abbrev: "revadj",
     sources: [1,2],
-    hierarchies: ['PRODUCT', 'SALES'],
+    hierarchies: ['SALES'],
     approvalRequired: 'N',
     status: "A"
   },
@@ -152,9 +152,9 @@ db.dfa_measure.insertMany([
     name: "Warranty",
     abbrev: "revadj",
     sources: [1,2],
-    hierarchies: ['PRODUCT', 'SALES'],
+    hierarchies: ['PRODUCT'],
     approvalRequired: 'N',
-    status: "A"
+    status: "I"
   }
 ])
 
@@ -239,6 +239,7 @@ db.dfa_source.insertMany([
 const collectionsWithCreatedUpdated = [
   'dfa_allocation_rule',
   'dfa_measure',
+  'dfa_module',
   'dfa_open_period',
   'dfa_source',
   'dfa_submeasure',

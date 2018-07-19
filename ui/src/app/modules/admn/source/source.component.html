@@ -1,66 +1,71 @@
-<br><br>
-<div class="row">
-  <div class="col-md-6">
 
-    <div fxLayout="row" fxLayoutAlign="space-between center">
-      <mat-form-field>
-        <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
-      </mat-form-field>
-      <a>
-        <button cuiButton small="small" color="secondary" (click)="addSource()">Add New</button>
-      </a>
+<div class="fin-container">
+
+  <br><br>
+  <div class="row">
+    <div class="col-md-6">
+
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-form-field>
+          <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
+        </mat-form-field>
+        <a>
+          <button cuiButton small="small" color="secondary" (click)="addSource()">Add New</button>
+        </a>
+      </div>
+
+      <div class="mat-elevation-z8">
+
+        <mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <a href="javascript:void(0)" (click)="editSource(row)">{{row.name}}</a>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.status}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="desc">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.desc}}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+        </mat-table>
+
+
+        <mat-paginator #paginator
+                       [length]="sources.length"
+                       [pageIndex]="0"
+                       [pageSize]="5"
+                       [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+      </div>
+
     </div>
+    <div class="col-md-6">
 
-    <div class="mat-elevation-z8">
+      <div class="edit-form-container" [fxShow]="showForm">
+        <fieldset>
+          <legend>{{formTitle}}</legend>
+          <cui-input type="text" #nameInput [(model)]="source.name" label="Source Name"></cui-input>
+          <cui-input type="text" [(model)]="source.desc" label="Description"></cui-input>
+          <div class="form-group-check">
+            <fin-checkbox label="Active" [(model)]="source.status" trueVal="A" falseVal="I"></fin-checkbox>
+          </div>
+        </fieldset>
+        <br>
+        <button cuiButton small="small" color="secondary" (click)="cancel()">Cancel</button>
+        <button cuiButton small="small" color="primary" (click)="save()">Submit</button>
+      </div>
 
-      <mat-table [dataSource]="dataSource" matSort>
-
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <a href="javascript:void(0)" (click)="editSource(row)">{{row.name}}</a>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.status}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="desc">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.desc}}</mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
-      </mat-table>
-
-
-      <mat-paginator #paginator
-                     [length]="sources.length"
-                     [pageIndex]="0"
-                     [pageSize]="5"
-                     [pageSizeOptions]="[5, 10, 25, 100]">
-      </mat-paginator>
     </div>
-
   </div>
-  <div class="col-md-6">
 
-    <div class="edit-form-container" [fxShow]="showForm">
-      <fieldset>
-        <legend>{{formTitle}}</legend>
-        <cui-input type="text" #nameInput [(model)]="source.name" label="Source Name"></cui-input>
-        <cui-input type="text" [(model)]="source.desc" label="Description"></cui-input>
-        <div class="form-group-check">
-          <fin-checkbox label="Active" [(model)]="source.status" trueVal="A" falseVal="I"></fin-checkbox>
-        </div>
-      </fieldset>
-      <br>
-      <button cuiButton small="small" color="secondary" (click)="cancel()">Cancel</button>
-      <button cuiButton small="small" color="primary" (click)="save()">Submit</button>
-    </div>
-
-  </div>
 </div>

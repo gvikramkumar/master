@@ -2,7 +2,20 @@
 @import '_mixins';
 
 
-.edit-form {
+.fin-footer-buttons {
+  padding: 20px 0 10px 0;
+  button {
+    margin-right: 10px;
+  }
+}
+
+.fin-container {
+  width: 90%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.fin-edit-container {
   width: 90%;
   max-width: 1060px;
   margin: 0 auto;

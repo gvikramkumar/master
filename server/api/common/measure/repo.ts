@@ -18,7 +18,7 @@ const schema = new Schema(
     reportingLevel1Enabled: Boolean,
     reportingLevel2Enabled: Boolean,
     reportingLevel3Enabled: Boolean,
-    status: {type: String, required: true, enum: ['A', 'I']},
+    status: {type: String, enum: ['A', 'I'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},

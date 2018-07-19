@@ -1,46 +1,28 @@
 @import '../../../../../styles/_comp-index.scss';
 
-button {
-  margin: 5px;
+.rule-assoc {
+  position: relative;
+
+  legend .tooltip {
+    position: absolute;
+    top: 0px;
+    left: -23px;
+  }
 }
 
-.edit-form-container {
-  width: 80%;
-  max-width: 600px;
-  margin: auto;
-  padding: 10px;
+.rule {
+  position: relative;
+  margin-top: 13px;
 
-  .input-filter-level, .manual-mapping {
-    .two-col-row {
-      height: 44px;
+  i {
+    position: absolute;
+    top: 11px;
+    &.delete {
+      right: -29px;
+    }
+    &.add {
+      right: -56px;
     }
   }
-
-  .rule-assoc {
-    position: relative;
-
-    legend .tooltip {
-      position: absolute;
-      top: 0px;
-      left: -23px;
-    }
-  }
-  .rule {
-    position: relative;
-    margin-top: 13px;
-
-      i {
-        position: absolute;
-        top: 11px;
-        &.delete {
-          right: -29px;
-        }
-        &.add {
-          right: -56px;
-        }
-      }
-  }
-
-
 }
 

@@ -12,4 +12,5 @@ export class AllocationRule {
   sl1Select?: string;
   scmsSelect?: string;
   beSelect?: string;
+  status: string;
 }

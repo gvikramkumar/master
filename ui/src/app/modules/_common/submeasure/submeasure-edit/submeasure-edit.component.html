@@ -1,18 +1,50 @@
 <a fxHide.lg routerLink="/prof/submeasure">< Back</a>
 
-<div class="edit-form-container">
-  <cui-select [items]="measures" label="Measure" empty="true" [(ngModel)]="sm.measureId" required="true"
-              optionsKey="name" optionsValue="measureId" (selectChange)="measureNameChange()"></cui-select>
+<div class="fin-edit-container">
 
-  <cui-input [disabled]="this.editMode" type="text" [(model)]="sm.name" label="Sub-Measure Name" required="true"></cui-input>
+  <div class="row">
 
-  <cui-select [fxShow]="showCategories" [items]="categoryTypes" label="Submeasure Category Type" empty="true"
-              optionsKey="name" optionsValue="value" [(ngModel)]="sm.categoryType"></cui-select>
+    <div class="col-md-6">
+      <cui-select [items]="measures" label="Measure" empty="true" [(ngModel)]="sm.measureId" required="true"
+                  optionsKey="name" optionsValue="measureId" (selectChange)="measureChange()"></cui-select>
+    </div>
 
-  <cui-input type="textarea" [(model)]="sm.desc" label="Description"></cui-input>
+    <div class="col-md-6">
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div *ngIf="!UiUtil.statusIsPending(sm.status)" class="form-group-check">
+          <fin-checkbox label="Active" [(model)]="sm.status" trueVal="A" falseVal="I"></fin-checkbox>
+        </div>
+        <div *ngIf="UiUtil.statusIsPending(sm.status)" class="form-group-button">
+          <button cuiButton small="small" color="primary">Approve</button>
+          <button cuiButton small="small" color="primary">Reject</button>
+        </div>
+      </div>
+    </div>
 
-  <cui-select [items]="sources" label="Source" empty="true"
-              optionsKey="name" optionsValue="sourceId" [(ngModel)]="sm.sourceId"></cui-select>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <cui-input [disabled]="this.editMode" type="text" [(model)]="sm.name" label="Sub-Measure Name" required="true"></cui-input>
+    </div>
+    <div class="col-md-6">
+      <cui-select [items]="sources" label="Source" empty="true"
+                  optionsKey="name" optionsValue="sourceId" [(ngModel)]="sm.sourceId"></cui-select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <cui-input type="textarea" [(model)]="sm.desc" label="Description" [options]="{rows: 2}"></cui-input>
+    </div>
+    <div class="col-md-6" style="padding-top:14px;">
+      <cui-select [disabled]="disableCategories" [items]="categoryTypes"
+                  label="Submeasure Category Type"empty="true" optionsKey="name"
+                  optionsValue="value" [(ngModel)]="sm.categoryType"></cui-select>
+    </div>
+  </div>
+
+
   <br><br>
 
   <fieldset class="input-filter-level">
@@ -178,9 +210,10 @@
     <br>
   </div>
 
-  <br>
-  <button cuiButton color="primary" small="true" (click)="save()">Submit</button>
-  <button cuiButton color="secondary" small="true" (click)="cancel()">Cancel</button>
-  <button cuiButton color="secondary" small="true" (click)="reset()">Reset</button>
-  <br>
+  <div class="fin-footer-buttons">
+    <button cuiButton color="primary" small="true" (click)="save()">Submit</button>
+    <button cuiButton color="secondary" small="true" (click)="cancel()">Cancel</button>
+    <button cuiButton color="secondary" small="true" (click)="reset()">Reset</button>
+  </div>
+
 </div>
