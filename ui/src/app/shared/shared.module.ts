@@ -20,6 +20,7 @@ import {CuiIndexModule} from './indexes/cui-index.module';
 import { TestComponent } from './components/test/test.component';
 import { GenericDialogComponent } from './components/generic-dialog/generic-dialog.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
+import {SwitchComponent} from './components/switch/switch.component';
 
 @NgModule({
   imports: [
@@ -51,6 +52,7 @@ import { CheckboxComponent } from './components/checkbox/checkbox.component';
     AuthDirective,
     TestComponent,
     CheckboxComponent,
+    SwitchComponent,
   ],
 
   declarations: [
@@ -68,6 +70,7 @@ import { CheckboxComponent } from './components/checkbox/checkbox.component';
     TestComponent,
     GenericDialogComponent,
     CheckboxComponent,
+    SwitchComponent,
   ],
   entryComponents: [
     ErrorModalComponent,

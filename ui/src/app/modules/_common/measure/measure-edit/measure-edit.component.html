@@ -8,8 +8,7 @@
     <div class="col-md-6">
       <div fxLayout="row" fxLayoutAlign="center start">
         <div class="form-group-check">
-          <cui-input type="checkbox" [(model)]="measure.statusBool" label="Active"
-                     [items]="[{name: 'Active', value: true}]"></cui-input>
+          <fin-checkbox label="Active" [(model)]="measure.status" trueVal="A" falseVal="I"></fin-checkbox>
         </div>
       </div>
     </div>
@@ -28,14 +27,14 @@
     </div>
     <div class="col-md-6">
       <cui-select [(ngModel)]="measure.hierarchies" [items]="hierarchies" empty="true" label="Hierarchies"
-                  [multiSelect]="true" required="true"></cui-select>
+                  optionsKey="name" optionsValue="name" [multiSelect]="true" required="true"></cui-select>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-6">
       <div class="form-group-switch">
-        <cui-input type="switch" [(model)]="measure.approvalRequired" label="Approval required"></cui-input>
+        <fin-checkbox [(model)]="measure.approvalRequired" label="Approval required"></fin-checkbox>
       </div>
     </div>
   </div>
@@ -45,32 +44,25 @@
       <cui-input type="text" [(ngModel)]="measure.reportingLevel1" label="Reporting Level 1"></cui-input>
     </div>
     <div class="col-6 form-group-check">
-      <cui-input type="checkbox" [(model)]="measure.reportingLevel1Enabled"
-                 [items]="[{name: 'Is Enabled?', value: true}]"></cui-input>
-    </div>
-  </div>
-
-  <pre>
-    {{measure.reportingLevel1Enabled | json}}
-  </pre>
-
-  <div class="row">
-    <div class="col-6">
-      <cui-input type="text" [(ngModel)]="measure.reportingLevel2" label="Reporting Level 1"></cui-input>
-    </div>
-    <div class="col-6 form-group-check">
-      <cui-input type="checkbox" [(model)]="measure.reportingLevel2Enabled"
-                 [items]="[{name: 'Is Enabled?', value: true}]"></cui-input>
+      <fin-checkbox [(model)]="measure.reportingLevel1Enabled" label="Enabled"></fin-checkbox>
     </div>
   </div>
 
   <div class="row">
     <div class="col-6">
-      <cui-input type="text" [(ngModel)]="measure.reportingLevel3" label="Reporting Level 1"></cui-input>
+      <cui-input type="text" [(ngModel)]="measure.reportingLevel2" label="Reporting Level 2"></cui-input>
     </div>
     <div class="col-6 form-group-check">
-      <cui-input type="checkbox" [(model)]="measure.reportingLevel3Enabled"
-                 [items]="[{name: 'Is Enabled?', value: true}]"></cui-input>
+      <fin-checkbox [(model)]="measure.reportingLevel2Enabled" label="Enabled"></fin-checkbox>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <cui-input type="text" [(ngModel)]="measure.reportingLevel3" label="Reporting Level 3"></cui-input>
+    </div>
+    <div class="col-6 form-group-check">
+      <fin-checkbox [(model)]="measure.reportingLevel3Enabled" label="Enabled"></fin-checkbox>
     </div>
   </div>
 

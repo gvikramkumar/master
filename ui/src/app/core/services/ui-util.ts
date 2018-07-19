@@ -136,6 +136,9 @@ export class UiUtil {
       .afterCuiDialogClosed();
   }
 
+  confirmSave() {
+    return this.genericDialog('Are you sure you want to save?', DialogType.yesNo);
+  }
 }
 
 

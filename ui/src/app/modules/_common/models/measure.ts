@@ -15,7 +15,6 @@ export class Measure {
   reportingLevel2Enabled?: boolean;
   reportingLevel3Enabled?: boolean;
   status: string;
-  statusBool?: boolean;
   createdBy?: string;
   createdDate?: string;
   updatedBy?: string;

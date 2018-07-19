@@ -97,12 +97,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       });
   }
 
-  confirmSave() {
-    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.yesNo);
-  }
-
   public save() {
-    this.confirmSave()
+    this.uiUtil.confirmSave()
       .subscribe(resp => {
         if (resp) {
           this.validate()

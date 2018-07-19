@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
-  selector: 'fin-checkbox',
-  templateUrl: './checkbox.component.html',
-  styleUrls: ['./checkbox.component.scss']
+  selector: 'fin-switch',
+  templateUrl: './switch.component.html',
+  styleUrls: ['./switch.component.scss']
 })
-export class CheckboxComponent implements OnInit {
+export class SwitchComponent implements OnInit {
   @Input('label') label: string;
   @Input('trueVal') trueVal: any;
   @Input('falseVal') falseVal: any;
@@ -32,4 +32,5 @@ export class CheckboxComponent implements OnInit {
   change() {
     this.modelChange.emit(this.bool ? this.trueVal : this.falseVal);
   }
+
 }

@@ -54,7 +54,7 @@
         <cui-input type="text" #nameInput [(model)]="source.name" label="Source Name"></cui-input>
         <cui-input type="text" [(model)]="source.desc" label="Description"></cui-input>
         <div class="form-group-check">
-          <fin-checkbox [(model)]="source.status" trueVal="A" falseVal="I"></fin-checkbox>
+          <fin-checkbox label="Active" [(model)]="source.status" trueVal="A" falseVal="I"></fin-checkbox>
         </div>
       </fieldset>
       <br>

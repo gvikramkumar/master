@@ -399,12 +399,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       });
   }
 
-  confirmSave() {
-    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.yesNo);
-  }
-
   save() {
-    this.confirmSave()
+    this.uiUtil.confirmSave()
       .subscribe(resp => {
         if (resp) {
           {

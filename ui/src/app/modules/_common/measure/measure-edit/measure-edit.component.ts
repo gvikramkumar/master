@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ApplicationRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Measure} from '../../models/measure';
 import {MeasureService} from '../../services/measure.service';
@@ -22,7 +22,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   measure = new Measure();
   orgMeasure = _.cloneDeep(this.measure);
   sources: Source[] = [];
-  hierarchies: {name: string}[] = [];
+  hierarchies: { name: string, selected?: boolean }[] = [];
   shUtil = shUtil;
 
   constructor(
@@ -68,7 +68,11 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   }
 
   prepForUi() {
-    this.measure.statusBool = this.measure.status === 'A';
+    this.hierarchies.forEach(h => {
+      h.selected = this.measure.hierarchies.indexOf(h.name) !== -1 ? true : false;
+      return h;
+    });
+
   }
 
   isPending() {
@@ -110,26 +114,50 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
       });
   }
 
-  prepForSave() {
-    this.measure.status = this.measure.statusBool ? 'A' : 'I';
-  }
+  /*
+    // not sure we ever do this, not finding async/await to be much more readable, guess if tabs were
+    // 4 spaces more readable, not indented enough. Also... promise.rejects in await throws errors, not that
+    // ng won't throw an error on unhandled rejections, but still, it throws an error so would have
+    // to use a try/catch block instead of catch(fcn), more awkward for sure.
+    public async saveExampleWithAsync() {
+      const resp = await this.uiUtil.confirmSave().toPromise()
+      if (resp) {
+        const valid = await this.validate().toPromise();
+        if (valid) {
+          let obs: Observable<Measure>;
+          if (this.editMode) {
+            obs = this.measureService.add(this.measure);
+          } else {
+            obs = this.measureService.update(this.measure);
+          }
+          obs.subscribe(measure => this.router.navigateByUrl('/prof/measure'));
+        }
+      }
+    }
+  */
 
-  confirmSave() {
-    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.yesNo);
+  prepForSave() {
+    this.measure.hierarchies = this.hierarchies
+      .filter(h => h.selected)
+      .map(h => h.name);
   }
 
   public save() {
-    this.confirmSave()
+    this.uiUtil.confirmSave()
       .subscribe(resp => {
         if (resp) {
           this.prepForSave();
-          this.validate()
-            .subscribe(valid => {
-              if (valid) {
-                this.measureService.add(this.measure)
-                  .subscribe(measure => this.router.navigateByUrl('/prof/measure'));
+          this.validate().subscribe(valid => {
+            if (valid) {
+              let obs: Observable<Measure>;
+              if (this.editMode) {
+                obs = this.measureService.update(this.measure);
+              } else {
+                obs = this.measureService.add(this.measure);
               }
-            });
+              obs.subscribe(measure => this.router.navigateByUrl('/prof/measure'));
+            }
+          });
         }
       });
   }
@@ -139,9 +167,6 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     if (this.editMode) {
       return of(true);
     } else {
-      // todo: validate name doesn't exist already. Could be done with an ngModel validator realtime if measures cached
-      // otherwise hit server here
-      // check for fule name existence in store (if cached measures) or hit the server (why it's observable)
       return of(true);
     }
   }
