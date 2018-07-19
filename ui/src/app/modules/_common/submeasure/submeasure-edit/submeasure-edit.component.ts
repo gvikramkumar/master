@@ -68,7 +68,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.yearmos = UiUtil.getFiscalMonthListFromDate(new Date(), 6);
     Promise.all([
       this.measureService.getMany().toPromise(),
-      this.ruleService.getMany().toPromise(),
+      this.ruleService.getMany({status: 'A'}).toPromise(),
       this.sourceService.getMany().toPromise(),
     ])
       .then(results => {
