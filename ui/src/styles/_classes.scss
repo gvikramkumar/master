@@ -2,6 +2,12 @@
 @import '_mixins';
 
 
+.legend-checkbox {
+  display: inline-block;
+  position: relative;
+  top: 5px;
+}
+
 .fin-footer-buttons {
   padding: 20px 0 10px 0;
   button {
@@ -21,6 +27,11 @@
   margin: 0 auto;
 }
 
+.form-group-text {
+  height: 60px;
+  line-height: 60px;
+}
+
 .form-group-switch {
   height: 60px;
   margin-bottom: 10px;
@@ -37,6 +48,29 @@
   height: 60px;
   margin-bottom: 10px;
   padding-top: 20px;
+}
+
+.form-group-text-no-title {
+  height: 50px;
+  line-height: 50px;
+}
+
+.form-group-switch-no-title {
+  height: 50px;
+  margin-bottom: 10px;
+  padding-top: 9px;
+}
+
+.form-group-check-no-title {
+  height: 50px;
+  margin-bottom: 10px;
+  padding-top: 11px;
+}
+
+.form-group-button-no-title {
+  height: 50px;
+  margin-bottom: 10px;
+  padding-top: 5px;
 }
 
 .two-col-row {

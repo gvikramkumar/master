@@ -23,7 +23,7 @@
 
           <div finAuth="prof-bu:upload" *ngIf="store.user.isAuthorized('prof-bu:upload')">
             <div>
-              <button class="choose-file" cuiButton color="primary" small="small">
+              <button class="choose-file" cuiButton color="primary" [small]="true">
                 <label for="file-input">Choose a File</label>
               </button>
               <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".csv,.xlsx"
@@ -33,7 +33,7 @@
               <div class="file-list text-darkgreen" *ngFor="let file of fileInput.files">{{file.name}}</div>
               <br>
               <div>
-                <button cuiButton color="primary" small="small"
+                <button cuiButton color="primary" [small]="true"
                         (click)="uploadFile(fileInput)">Upload File</button>
               </div>
             </div>

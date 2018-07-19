@@ -1,28 +1,60 @@
 @import '../../../../../styles/_comp-index.scss';
 
-.rule-assoc {
-  position: relative;
 
-  legend .tooltip {
-    position: absolute;
-    top: 0px;
-    left: -23px;
+.fin-edit-container {
+
+  .ifl-section {
+    $height: 44px;
+    .check-wrap {
+      height: $height;
+      padding-top: 13px;
+    }
+
+    .sel-wrap {
+      height: $height;
+    }
+
   }
+
+  .mm-fieldset {
+    legend {
+      height: 20px;
+      position: relative;
+      top: -5px;
+    }
+  }
+
+  .rule-assoc {
+    position: relative;
+
+    legend .tooltip {
+      position: absolute;
+      top: 0px;
+      left: -23px;
+    }
+
+    .rule {
+      position: relative;
+      margin-top: 13px;
+
+      i {
+        position: absolute;
+        top: 11px;
+        &.delete {
+          right: -29px;
+        }
+        &.add {
+          right: -56px;
+        }
+      }
+    }
+
+  }
+
+
+
 }
 
-.rule {
-  position: relative;
-  margin-top: 13px;
 
-  i {
-    position: absolute;
-    top: 11px;
-    &.delete {
-      right: -29px;
-    }
-    &.add {
-      right: -56px;
-    }
-  }
-}
+
 

@@ -1,4 +1,3 @@
-<a fxHide.lg routerLink="/prof/measure">< Back</a>
 
 <div class="fin-container">
   <div class="row">
@@ -67,9 +66,9 @@
   </div>
 
 <div class="fin-footer-buttons">
-  <button cuiButton color="primary" small="small" (click)="save()">Submit</button>
-  <button cuiButton color="secondary" small="small" (click)="cancel()">Cancel</button>
-  <button cuiButton color="secondary" small="small" (click)="reset()">Reset</button>
+  <button cuiButton color="primary" [small]="true" (click)="save()">Submit</button>
+  <button cuiButton color="secondary" [small]="true" (click)="cancel()">Cancel</button>
+  <button cuiButton color="secondary" [small]="true" (click)="reset()">Reset</button>
 </div>
 
 </div>

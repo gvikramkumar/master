@@ -16,7 +16,7 @@ import {Source} from '../../models/source';
 import {DialogType} from '../../../../core/models/ui-enums';
 
 @Component({
-  selector: 'fin-submeasure-add',
+  selector: 'fin-submeasure-edit',
   templateUrl: './submeasure-edit.component.html',
   styleUrls: ['./submeasure-edit.component.scss']
 })

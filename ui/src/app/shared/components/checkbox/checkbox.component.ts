@@ -20,7 +20,9 @@ export class CheckboxComponent implements OnInit {
       this.trueVal = true;
     }
     if (this.falseVal === undefined) {
-      this.trueVal = false;
+      this.falseVal = false;
+    } else if (this.falseVal === 'undefined') {
+      this.falseVal = undefined;
     }
     this.bool = this.model === this.trueVal;
   }
