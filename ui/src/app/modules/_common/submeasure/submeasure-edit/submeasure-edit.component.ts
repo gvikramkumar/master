@@ -16,13 +16,13 @@ import {Source} from '../../models/source';
 import {DialogType} from '../../../../core/models/ui-enums';
 
 @Component({
-  selector: 'fin-submeasure-add',
+  selector: 'fin-submeasure-edit',
   templateUrl: './submeasure-edit.component.html',
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  UiUtil = UiUtil;
   editMode = false;
-  title: string;
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
   measures: Measure[] = [];
@@ -31,7 +31,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   errs: string[] = [];
   yearmos: { str: string, num: number }[];
   COGS = ' Cogs '; // todo: move to lookup
-  showCategories = false;
+  disableCategories = false;
   ifl_switch_ibe = false;
   ifl_switch_le = false;
   ifl_switch_p = false;
@@ -77,7 +77,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.sources = _.sortBy(results[2], name);
 
         if (this.editMode) {
-          this.title = 'Edit Submeasure';
           this.submeasureService.getOneById(this.route.snapshot.params.id)
             .subscribe(submeasure => {
               this.sm = submeasure;
@@ -85,7 +84,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               this.init();
             });
         } else {
-          this.title = 'Create Submeasure';
           this.init();
         }
       });
@@ -97,7 +95,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
-    this.measureNameChange();
+    this.measureChange();
     if (!this.isCogsMeasure()) {
       this.sm.categoryType = 'HW';
     }
@@ -143,8 +141,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return measure ? measure.name.indexOf(this.COGS) !== -1 : false;
   }
 
-  measureNameChange() {
-    this.showCategories = this.isCogsMeasure() ? true : false;
+  measureChange() {
+    if (this.isCogsMeasure()) {
+      this.disableCategories = false;
+    } else {
+      this.disableCategories = true;
+      this.sm.categoryType = 'HW';
+    }
   }
 
   ibe_items = [
@@ -358,10 +361,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.cleanIflSwitchChoices();
     this.cleanMMSwitchChoices();
     this.sm.rules = this.sm.rules.filter(r => !!r);
-
-    if (!this.isCogsMeasure()) {
-      this.sm.categoryType = 'HW';
-    }
   }
 
   hasChanges() {
@@ -371,7 +370,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
-      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.okCancel);
+      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.yesNo);
     } else {
       return of(true);
     }
@@ -402,12 +401,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       });
   }
 
-  confirmSave() {
-    return this.uiUtil.genericDialog('Are you sure you want to save?', DialogType.okCancel);
-  }
-
   save() {
-    this.confirmSave()
+    this.uiUtil.confirmSave()
       .subscribe(resp => {
         if (resp) {
           {

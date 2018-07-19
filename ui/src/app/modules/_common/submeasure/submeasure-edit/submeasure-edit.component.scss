@@ -1,18 +1,26 @@
 @import '../../../../../styles/_comp-index.scss';
 
-button {
-  margin: 5px;
-}
 
-.edit-form-container {
-  width: 80%;
-  max-width: 600px;
-  margin: auto;
-  padding: 10px;
+.fin-edit-container {
 
-  .input-filter-level, .manual-mapping {
-    .two-col-row {
-      height: 44px;
+  .ifl-section {
+    $height: 44px;
+    .check-wrap {
+      height: $height;
+      padding-top: 13px;
+    }
+
+    .sel-wrap {
+      height: $height;
+    }
+
+  }
+
+  .mm-fieldset {
+    legend {
+      height: 20px;
+      position: relative;
+      top: -5px;
     }
   }
 
@@ -24,10 +32,10 @@ button {
       top: 0px;
       left: -23px;
     }
-  }
-  .rule {
-    position: relative;
-    margin-top: 13px;
+
+    .rule {
+      position: relative;
+      margin-top: 13px;
 
       i {
         position: absolute;
@@ -39,8 +47,14 @@ button {
           right: -56px;
         }
       }
+    }
+
   }
 
 
+
 }
+
+
+
 

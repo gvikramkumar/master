@@ -10,6 +10,8 @@ import {SourceComponent} from '../_common/admin/source/source.component';
 import {MainComponent} from '../../shared/components/main/main.component';
 import {Modules} from '../../../../../shared/enums';
 import {AuthorizationGuard} from '../../core/guards/authorization.guard';
+import {MeasureComponent} from '../_common/measure/measure/measure.component';
+import {MeasureEditComponent} from '../_common/measure/measure-edit/measure-edit.component';
 
 const routes: Routes = [
   {
@@ -32,6 +34,47 @@ const routes: Routes = [
               breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sources'}]
             }
           },
+        ]
+      },
+      {
+        path: 'measure',
+        children: [
+          {
+            path: '', component: MeasureComponent,
+            canActivate: [AuthorizationGuard],
+            data: {
+              authorization: 'prof-sm:access',
+              hero: {
+                title: 'Measures',
+                desc: 'Create and update measures'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Measure'}]
+            }
+          },
+          {
+            path: 'add', component: MeasureEditComponent,
+            canActivate: [AuthorizationGuard],
+            data: {
+              authorization: 'prof-sm:manage',
+              hero: {
+                title: 'Add a New Measure',
+                desc: 'Add new measure'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Measure', routerUrl: '/prof/measure'}, {label: 'Add New'}]
+            }
+          },
+          {
+            path: 'edit/:id', component: MeasureEditComponent,
+            canActivate: [AuthorizationGuard],
+            data: {
+              authorization: 'prof-sm:manage',
+              hero: {
+                title: 'Update Measure',
+                desc: 'Update the selected measure'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Measure', routerUrl: '/prof/measure'}, {label: 'Update'}]
+            }
+          }
         ]
       },
       {

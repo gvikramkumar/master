@@ -1,69 +1,56 @@
-<a fxHide.lg routerLink="/prof/rule-management">< Back</a>
 
-<div class="edit-form-container">
-  <!-- <form [formGroup]="form" (ngSubmit)="save()"> -->
-  <cui-input type="text" [(ngModel)]="rule.name" label="Rule Name" required="true"></cui-input>
-  <cui-select [(ngModel)]="rule.driverName" [items]="driverNames" empty="true" label="Driver"
-              optionsKey="name" optionsValue="value" required="true"></cui-select>
-  <cui-select [(ngModel)]="rule.period" [items]="periods" label="Driver Period" empty="true" required="true"></cui-select>
+<div class="fin-container">
+
+  <div class="row">
+    <div class="col-md-6">
+      <cui-input type="text" [(ngModel)]="rule.name" label="Rule Name" required="true"></cui-input>
+      <cui-select [(ngModel)]="rule.driverName" [items]="driverNames" empty="true" label="Driver"
+                  optionsKey="name" optionsValue="value" required="true"></cui-select>
+      <cui-select [(ngModel)]="rule.period" [items]="periods" label="Driver Period" empty="true"
+                  required="true"></cui-select>
+    </div>
+    <div class="col-md-6">
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div *ngIf="!UiUtil.statusIsPending(rule.status)" class="form-group-check">
+          <fin-checkbox label="Active" [(model)]="rule.status" trueVal="A" falseVal="I"></fin-checkbox>
+        </div>
+        <div *ngIf="UiUtil.statusIsPending(rule.status)" class="form-group-button">
+          <button cuiButton [small]="true" color="primary">Approve</button>
+          <button cuiButton [small]="true" color="primary">Reject</button>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- <form [formGroup]="form" (ngSubmit)="save()"> -->
   <br>
 
-  <div class="two-col-row">
-    <div class="left text-center">Matching Criteria</div>
-    <div class="right text-center">Selection Criteria</div>
-  </div>
-
-  <div class="two-col-row">
-    <div class="left">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="left text-center">Matching Criteria</div>
       <cui-select [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
                   required="true"></cui-select>
-    </div>
-    <div class="right">
-      <cui-input type="text" [(ngModel)]="rule.sl1Select" label="&nbsp;" required="true"></cui-input>
-    </div>
-  </div>
-
-  <div class="two-col-row">
-    <div class="left">
       <cui-select [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true"
                   required="true"></cui-select>
-    </div>
-    <div class="right">
-      <cui-input disabled=true type="text" label="&nbsp;" required="true"></cui-input>
-    </div>
-  </div>
-
-  <div class="two-col-row">
-    <div class="left">
       <cui-select [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS" empty="true"></cui-select>
-    </div>
-    <div class="right">
-      <cui-input type="text" [(ngModel)]="rule.scmsSelect" label="&nbsp;"></cui-input>
-    </div>
-  </div>
-
-  <div class="two-col-row">
-    <div class="left">
-      <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity" empty="true"></cui-select>
-    </div>
-    <div class="right">
-      <cui-input disabled=true type="text" label="&nbsp;"></cui-input>
-    </div>
-  </div>
-
-  <div class="two-col-row">
-    <div class="left">
+      <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
+                  empty="true"></cui-select>
       <cui-select [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
                   empty="true" required="true"></cui-select>
     </div>
-    <div class="right">
+
+    <div class="col-md-6">
+      <div class="right text-center">Selection Criteria</div>
+      <cui-input type="text" [(ngModel)]="rule.sl1Select" label="&nbsp;" required="true"></cui-input>
+      <cui-input disabled=true type="text" label="&nbsp;" required="true"></cui-input>
+      <cui-input type="text" [(ngModel)]="rule.scmsSelect" label="&nbsp;"></cui-input>
+      <cui-input disabled=true type="text" label="&nbsp;"></cui-input>
       <cui-input type="text" [(ngModel)]="rule.beSelect" label="&nbsp;" required="true"></cui-input>
     </div>
+
   </div>
 
-  <br>
-  <button cuiButton color="primary" small="small" (click)="save()">Submit</button>
-  <button cuiButton color="secondary" small="small" (click)="cancel()">Cancel</button>
-  <button cuiButton color="secondary" small="small" (click)="reset()">Reset</button>
-  <!-- </form> -->
+  <div class="fin-footer-buttons">
+    <button cuiButton color="primary" [small]="true" (click)="save()">Submit</button>
+    <button cuiButton color="secondary" [small]="true" (click)="cancel()">Cancel</button>
+    <button cuiButton color="secondary" [small]="true" (click)="reset()">Reset</button>
+  </div>
 </div>

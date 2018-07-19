@@ -1,7 +1,7 @@
 {
   "name": "fin-dfa",
   "version": "1.0.0",
-  "description": "finance mean starter project",
+  "desc": "finance mean starter project",
   "main": "dist/server/server.js",
   "scripts": {
     "start": "npm run serve",

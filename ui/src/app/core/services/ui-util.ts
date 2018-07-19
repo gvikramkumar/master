@@ -16,6 +16,14 @@ export class UiUtil {
   constructor(private store: AppStore, private dialogService: CuiDialogService) {
   }
 
+  static statusIsActive(val) {
+    return val === 'A';
+  }
+
+  static statusIsPending(val) {
+    return val === 'P';
+  }
+
   static getFiscalMonthListFromDate(date, numMonths) {
     const yearmos = [];
     const curMonths = _.range(date.getMonth(), date.getMonth() - numMonths);
@@ -136,6 +144,9 @@ export class UiUtil {
       .afterCuiDialogClosed();
   }
 
+  confirmSave() {
+    return this.genericDialog('Are you sure you want to save?', DialogType.yesNo);
+  }
 }
 
 

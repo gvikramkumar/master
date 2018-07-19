@@ -59,7 +59,8 @@ export class ErrorInterceptor implements HttpInterceptor {
           const config = <MatDialogConfig> {
             data: {error: err},
             width: '600px',
-            backdropClass: 'bg-modal-backdrop'
+            hasBackdrop: false
+            // backdropClass: 'bg-modal-backdrop'
           };
           this.dialog.open(ErrorModalComponent, config)
             .afterClosed()

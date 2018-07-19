@@ -1,9 +1,19 @@
 
 
 
+
+<select [size]="items.length">
+  <option *ngFor="let item of items" [value]="item.value">{{item.name}}</option>
+</select>
+
+
+
+
+<!--
 <button (click)="doit()">put up dialog</button><br>
 results: {{results}}
 <input>
+-->
 
 
 

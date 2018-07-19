@@ -5,7 +5,7 @@ db.dfa_submeasure.insertMany([
   {
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment",
-    description: "2 Tier Adjustment",
+    desc: "2 Tier Adjustment",
     sourceId: NumberInt(1),
     measureId: NumberInt(1),
     startFiscalMonth: 201810,
@@ -31,17 +31,17 @@ db.dfa_submeasure.insertMany([
     indicators: {
       dollarUploadFlag: "Y",
       approveFlag: "Y",
-      status: "A",
       manualMapping: "Y",
       expenseSSOT: "Y",
       manualMix: "Y"
     },
-    rules: ["GLREVMIX-PL3SL2-NOWWDIST-ROLL3", "MANUALMAP-PL3SL6-PERCENT"]
+    rules: ["GLREVMIX-PL3SL2-NOWWDIST-ROLL3", "MANUALMAP-PL3SL6-PERCENT"],
+    status: "A",
   },
   {
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment2",
-    description: "2 Tier Adjustment2",
+    desc: "2 Tier Adjustment2",
     sourceId: NumberInt(2),
     measureId: NumberInt(2),
     startFiscalMonth: 201810,
@@ -67,12 +67,12 @@ db.dfa_submeasure.insertMany([
     indicators: {
       dollarUploadFlag: "Y",
       approveFlag: "Y",
-      status: "A",
       manualMapping: "N",
       expenseSSOT: "Y",
       manualMix: "Y"
     },
-    rules: ["REVPOS-NODISTI-NOSCMSOTHER-ROLL3", "SERVMAP-PL3BE-MTD"]
+    rules: ["REVPOS-NODISTI-NOSCMSOTHER-ROLL3", "SERVMAP-PL3BE-MTD"],
+    status: "A",
   }
 ])
 
@@ -100,43 +100,61 @@ db.dfa_measure.insertMany([
     measureId: NumberInt(1),
     moduleId: NumberInt(1),
     name: "Indirect Revenue Adjustments",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    abbrev: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A",
   },
   {
     measureId: NumberInt(2),
     moduleId: NumberInt(1),
     name: "Manufacturing Overhead",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    abbrev: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A"
   },
   {
     measureId: NumberInt(3),
     moduleId: NumberInt(1),
     name: "Manufacturing Supply Chain Expenses",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    abbrev: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A"
   },
   {
     measureId: NumberInt(4),
     moduleId: NumberInt(1),
     name: "Manufacturing V&O",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    abbrev: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT', 'SALES'],
+    approvalRequired: 'N',
+    status: "A"
   },
   {
     measureId: NumberInt(5),
     moduleId: NumberInt(1),
     name: "Standard Cogs Adjustments",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    abbrev: "revadj",
+    sources: [1,2],
+    hierarchies: ['SALES'],
+    approvalRequired: 'N',
+    status: "A"
   },
   {
     measureId: NumberInt(6),
     moduleId: NumberInt(1),
     name: "Warranty",
-    typeCode: "revadj",
-    statusFlag: "Y"
+    abbrev: "revadj",
+    sources: [1,2],
+    hierarchies: ['PRODUCT'],
+    approvalRequired: 'N',
+    status: "I"
   }
 ])
 
@@ -171,6 +189,10 @@ db.lookup.insertMany([
     key: 'revenue_classification',
     value: ["Recurring Deferred", "Recurring Non Deferred", "Recurring Other", "Non Recurring"]
   },
+  {
+    key: 'hierarchies',
+    value: ['LEGAL ENTITY', 'PRODUCT', 'SALES']
+  },
 ]);
 
 // dept
@@ -202,13 +224,13 @@ db.dfa_source.insertMany([
   {
     sourceId: NumberInt(1),
     name: 'Manual Upload',
-    description: 'Manual Upload source',
+    desc: 'Manual Upload source',
     status: 'A'
   },
   {
     sourceId: NumberInt(2),
     name: 'Rapid Revenue',
-    description: 'Rapid Revenue source',
+    desc: 'Rapid Revenue source',
     status: 'A'
   },
 ])
@@ -217,6 +239,7 @@ db.dfa_source.insertMany([
 const collectionsWithCreatedUpdated = [
   'dfa_allocation_rule',
   'dfa_measure',
+  'dfa_module',
   'dfa_open_period',
   'dfa_source',
   'dfa_submeasure',

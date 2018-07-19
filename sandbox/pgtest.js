@@ -3,10 +3,12 @@ const pgc = require('../dist/server/lib/database/postgres-conn').pgc;
 const a = pgc.promise;
 pgc.promise.then(db => {
   console.log('postgres is up');
+  process.exit();
 })
   .catch(err => {
     console.log('postgres is down');
     console.error(err);
+    process.exit();
   });
 // this is good, but we need to create a function that takes (schema.table, field, value), and a then function that tests this existence:
 // function getExists = results => results.rows[0].exists;

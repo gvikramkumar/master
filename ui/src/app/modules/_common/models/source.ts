@@ -4,21 +4,12 @@ export class Source {
   id?: number;
   sourceId?: number;
   name: string;
-  description: string;
+  desc: string;
   status: string;
-  get active() {
-    return this.status === 'A';
-  }
-  set active(val) {
-    this.status = val ? 'A' : 'I';
-    console.log(val, this.status);
-  }
-
-  constructor(source?: Source) {
-    if (source) {
-      Object.assign(this, _.cloneDeep(source));
-    }
-  }
+  createdBy?: string;
+  createdDate?: string;
+  updatedBy?: string;
+  updatedDate?: string;
 }
 
 

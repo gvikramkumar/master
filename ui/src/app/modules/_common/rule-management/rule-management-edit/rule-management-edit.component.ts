@@ -15,10 +15,10 @@ import {UiUtil} from '../../../../core/services/ui-util';
   styleUrls: ['./rule-management-edit.component.scss']
 })
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
+  UiUtil = UiUtil;
   editMode = false;
   rule = new AllocationRule();
   orgRule = _.cloneDeep(this.rule);
-  title: string;
   driverNames = [
     {name: 'GL Revenue Mix', value: 'GLREVMIX'},
     {name: 'Manual Mapping', value: 'MANUALMAP'},
@@ -41,7 +41,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private router: Router,
     private ruleService: RuleService,
     private store: AppStore,
-    private uiUtil: UiUtil
+    public uiUtil: UiUtil
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
@@ -49,7 +49,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   public ngOnInit(): void {
     if (this.editMode) {
-      this.title = 'Edit Rule';
       this.ruleService.getOneById(this.route.snapshot.params.id)
         .subscribe(rule => {
           this.rule = rule;
@@ -57,7 +56,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.init();
         });
     } else {
-      this.title = 'Create Rule';
     }
   }
 
@@ -71,7 +69,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
-      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.okCancel);
+      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.yesNo);
     } else {
       return of(true);
     }
@@ -101,11 +99,16 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   public save() {
-    this.validate()
-      .subscribe(valid => {
-        if (valid) {
-          this.ruleService.add(this.rule)
-            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+    this.uiUtil.confirmSave()
+      .subscribe(resp => {
+        if (resp) {
+          this.validate()
+            .subscribe(valid => {
+              if (valid) {
+                this.ruleService.add(this.rule)
+                  .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+              }
+            });
         }
       });
   }

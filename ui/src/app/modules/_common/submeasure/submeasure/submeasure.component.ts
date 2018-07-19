@@ -19,7 +19,7 @@ import {SourceService} from '../../services/source.service';
   styleUrls: ['./submeasure.component.scss']
 })
 export class SubmeasureComponent extends RoutingComponentBase implements OnInit {
-  tableColumns = ['name', 'sourceId', 'processingTime', 'startFiscalMonth'];
+  tableColumns = ['name', 'sourceId', 'processingTime', 'startFiscalMonth', 'updatedBy', 'updatedDate'];
   dataSource: MatTableDataSource<Submeasure>;
   measureId: number;
   measures: Measure[] = [];

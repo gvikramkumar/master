@@ -1,11 +1,8 @@
-@import '../../../../styles/cisco-ui-variables';
+@import '../../../../styles/comp-index';
 
 .wrap {
-  //min-width: 220px;
-  //max-width: 350px;
-  //width: 30%;
   overflow-x: hidden;
-  padding: $cui-base-padding;
+  padding: $padding-base;
   padding-right: 0;
 
   .title {
