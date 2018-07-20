@@ -106,11 +106,12 @@
     <div class="col-md-6 mm-right-side">
       <fieldset class="input-filter-level mm-fieldset">
         <legend>
-          <fin-checkbox class="legend-checkbox" [(model)]="swManualMapping"></fin-checkbox>
+          <fin-checkbox class="legend-checkbox" [(model)]="sm.indicators.manualMapping"
+          trueVal="Y" falseVal="N"></fin-checkbox>
           Manual Mapping
         </legend>
 
-        <div [fxShow]="swManualMapping">
+        <div [fxShow]="isManualMapping()">
           <div class="row half-padding">
             <div class="col-6">
               <div class="left text-center">Hierarchy</div>

@@ -57,13 +57,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.editMode = !!this.route.snapshot.params.id;
   }
 
-  get swManualMapping() {
-    return this.sm.indicators.manualMapping === 'Y';
-  }
-  set swManualMapping(val) {
-    this.sm.indicators.manualMapping = val ? 'Y' : 'N';
-  }
-
   ngOnInit() {
     this.yearmos = UiUtil.getFiscalMonthListFromDate(new Date(), 6);
     Promise.all([
@@ -99,6 +92,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.isCogsMeasure()) {
       this.sm.categoryType = 'HW';
     }
+  }
+
+  isManualMapping() {
+    return this.sm.indicators.manualMapping === 'Y';
   }
 
   showDeleteRuleIcon() {
@@ -340,19 +337,19 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   cleanMMSwitchChoices() {
-    if (!this.swManualMapping || !this.mm_switch_ibe) {
+    if (!this.isManualMapping() || !this.mm_switch_ibe) {
       delete this.sm.manualMapping.internalBELevel;
     }
-    if (!this.swManualMapping || !this.mm_switch_p) {
+    if (!this.isManualMapping() || !this.mm_switch_p) {
       delete this.sm.manualMapping.productLevel;
     }
-    if (!this.swManualMapping || !this.mm_switch_le) {
+    if (!this.isManualMapping() || !this.mm_switch_le) {
       delete this.sm.manualMapping.entityLevel;
     }
-    if (!this.swManualMapping || !this.mm_switch_s) {
+    if (!this.isManualMapping() || !this.mm_switch_s) {
       delete this.sm.manualMapping.salesLevel;
     }
-    if (!this.swManualMapping || !this.mm_switch_scms) {
+    if (!this.isManualMapping() || !this.mm_switch_scms) {
       delete this.sm.manualMapping.scmsLevel;
     }
   }
