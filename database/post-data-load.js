@@ -19,17 +19,12 @@ db.dfa_submeasure.insertMany([
       internalBELevel: "Internal BE",
       entityLevel: "BE"
     },
-    manualMapping: {
-      productLevel: "TG",
-      salesLevel: "level2",
-      scmsLevel: "SCMS",
-      entityLevel: "BE"
-    },
+    manualMapping: {},
     reportingLevels: ["Indirect Revenue Adjustments"],
     indicators: {
       dollarUploadFlag: "Y",
       approveFlag: "Y",
-      manualMapping: "Y",
+      manualMapping: "N",
       expenseSSOT: "Y",
       manualMix: "Y"
     },
@@ -53,12 +48,7 @@ db.dfa_submeasure.insertMany([
       scmsLevel: "SCMS",
       entityLevel: "BE"
     },
-    manualMapping: {
-      salesLevel: "level4",
-      scmsLevel: "SCMS",
-      internalBELevel: "Internal BE",
-      entityLevel: "BE"
-    },
+    manualMapping: {},
     reportingLevels: ["Manufacturing Overhead"],
     indicators: {
       dollarUploadFlag: "Y",
