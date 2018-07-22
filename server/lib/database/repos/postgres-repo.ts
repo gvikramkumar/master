@@ -1,9 +1,7 @@
 import {pgc} from '../postgres-conn';
-import _config from '../../../config/get-config';
 import _ from 'lodash';
 import {injectable} from 'inversify';
 
-const config = _config.postgres;
 
 @injectable()
 export default class PostgresRepo {
@@ -27,7 +25,7 @@ export default class PostgresRepo {
             technology_group_id, 
             business_unit_id, 
             product_family_id
-            from ${config.conSchema}.vw_fds_products
+            from fpacon.vw_fds_products
             group by 1,2,3 order by 1,2,3    
           `);
   }
@@ -49,12 +47,12 @@ export default class PostgresRepo {
   }
 
   checkForExistenceText(table, column, value) {
-    return pgc.pgdb.query(`select exists (select 1 from ${config.conSchema}.${table} where upper(${column}) = $1 limit 1)`, [value.toUpperCase()])
+    return pgc.pgdb.query(`select exists (select 1 from ${table} where upper(${column}) = $1 limit 1)`, [value.toUpperCase()])
       .then(results => results.rows[0].exists);
   }
 
   getSortedUpperListFromColumn(table, column, whereClause?) {
-    let query = `select distinct upper(${column}) as col from ${config.conSchema}.${table}`;
+    let query = `select distinct upper(${column}) as col from ${table}`;
     if (whereClause) {
       query += ' where ' + whereClause;
     }
@@ -62,7 +60,7 @@ export default class PostgresRepo {
 
     return pgc.pgdb.query(query)
       .then(results => results.rows.map(obj => obj.col))
-      .then(results => _.sortBy(results, _.identity));
+      .then(vals => _.sortBy(vals, _.identity));
   }
 
 }

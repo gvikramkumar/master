@@ -36,21 +36,21 @@ data;
   getValidationAndImportData(): Promise<any> {
     return Promise.all([
       super.getValidationAndImportData(),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_products', 'product_family_id'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_products', 'business_unit_id'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_products', 'technology_group_id'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'l1_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'l2_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'l3_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'l4_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'l5_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'l6_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_products', 'product_family_id'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_products', 'business_unit_id'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_products', 'technology_group_id'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l1_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l2_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l3_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l4_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l5_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l6_sales_territory_name_code'),
       // todo: fix this location:
       Promise.resolve(['LEGAL ENTITY VALUE']), // todo: this doesn't exits yet: pgRepo.getSortedUpperListFromColumn('business_entity', 'business_entity_name'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_be_hierarchy', 'bk_business_entity_name'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_be_hierarchy', 'bk_sub_business_entity_name'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_be_hierarchy', 'bk_business_entity_name'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_be_hierarchy', 'bk_sub_business_entity_name'),
       lookupRepo.getTextValuesSortedUpperCase('revenue_classification'),
-      pgRepo.getSortedUpperListFromColumn('vw_fds_sales_hierarchy', 'sales_coverage_code')
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'sales_coverage_code')
     ])
       .then(results => {
         this.data.product = {

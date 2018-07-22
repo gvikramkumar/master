@@ -5,17 +5,24 @@ import {pgc} from '../server/lib/database/postgres-conn';
 
 const repo = new OpenPeriodPostgresRepo();
 
-const date = new Date().toISOString();
+const date = new Date(1957, 5, 29);
 
 const one = {
-  moduleId: 5,
+  moduleId: 1,
+  fiscalMonth: 201809,
+  openFlag: 'Y'
+}
+/*
+const one = {
+  moduleId: 1,
   fiscalMonth: 201809,
   openFlag: 'Y',
-  createdBy: 'system',
+  createdBy: 'systemx',
   createdDate: date,
-  updatedBy: 'system',
+  updatedBy: 'systemy',
   updatedDate: date,
 }
+*/
 const two = {
   moduleId: 6,
   fiscalMonth: 201810,
@@ -26,36 +33,37 @@ const two = {
   updatedDate: date,
 }
 
+
 const a = pgc.promise;
 pgc.promise.then(db => {
   console.log('postgres is up');
 
+  console.log()
+
+
   try {
-    repo.getMany({moduleId: 1, openFlag: 'Y'})
-    // repo.getOne({moduleId: 1})
-    // repo.addOne(one)
-    // repo.addMany([one, two])
+    // repo.test()
+    repo.getMany({openFlag: 'Y'})
+    // repo.getOne({moduleId: 1}, false)
+    // repo.addOne(one, 'joedo')
+    // repo.addMany([one, two], 'jodoe')
     // repo.updateOne(one, {moduleId: 1})
     // repo.deleteAll()
-    // repo.deleteMany({moduleId: 1})
+    // repo.deleteMany({moduleId: 6})
     // repo.deleteOne({moduleId: 1})
       .then(docs => {
         console.log(docs);
         process.exit();
-      });
+      })
+      .catch((e) => {
+      console.log(e);
+      process.exit(1);
+    });
 
   } catch (e) {
     console.log(JSON.stringify(e));
     process.exit(1);
   }
-
-
-
-
-
-
-
-  process.exit();
 })
   .catch(err => {
     console.log('postgres is down');
