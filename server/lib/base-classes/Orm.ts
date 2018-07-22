@@ -35,25 +35,29 @@ export class Orm {
     return obj;
   }
 
-  objectToRecord(obj, userId?: string): AnyObj {
+  objectToRecordAdd(obj, userId) {
+    return this.objectToRecord(obj, userId, 'add');
+  }
+
+  objectToRecordUpdate(obj, userId) {
+    return this.objectToRecord(obj, userId, 'update');
+  }
+
+  objectToRecord(obj, userId?: string, mode?: string): AnyObj {
     const record = {};
 
     const date = new Date();
-    if (_.find(this.maps, {prop: 'createdBy'}) && !obj.createdBy) {
+    if (_.find(this.maps, {prop: 'createdBy'})) {
       if (!userId) {
-        throw new ApiError('createdBy not set and no userId to set it.');
+        throw new ApiError('no userId for createdBy/updatedBy.');
       }
-      obj.createdBy = userId;
-      obj.createdDate = date;
-    }
-    if (_.find(this.maps, {prop: 'updatedBy'}) && !obj.updatedBy) {
-      if (!userId) {
-        throw new ApiError('updatedBy not set and no userId to set it.');
+      if (mode === 'add' || !obj.createdBy) {
+        obj.createdBy = userId;
+        obj.createdDate = date;
       }
       obj.updatedBy = userId;
       obj.updatedDate = date;
     }
-
     this.maps.forEach(map => {
       if (map.type === OrmTypes.date) {
         let dt: Date;

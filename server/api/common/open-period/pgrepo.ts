@@ -15,6 +15,7 @@ const ormMap: OrmMap[] = [
 
 export class OpenPeriodPostgresRepo extends PostgresRepoBase {
   table = 'fpadfa.dfa_open_period';
+  idProp = 'moduleId';
 
   constructor() {
     super(ormMap);

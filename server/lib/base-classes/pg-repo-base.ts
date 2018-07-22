@@ -33,13 +33,15 @@ const pgc = {
 // passed in filter objects use object properties, not table fields
 export class PostgresRepoBase {
   table: string;
+  idProp: string;
   orm: Orm;
 
-  constructor(private ormMap: OrmMap[]) {
+  constructor(private ormMap: OrmMap[], protected isModuleRepo = false) {
     this.orm = new Orm(ormMap);
   }
 
   getMany(filter = {}) {
+    this.verifyModuleId(filter);
     let sql = 'select ';
     sql += this.ormMap.map(map => map.field).join(', ');
     sql += ` from ${this.table} `;
@@ -49,11 +51,11 @@ export class PostgresRepoBase {
       .then(resp => resp.rows.map(row => this.orm.recordToObject(row)));
   }
 
-  getOne(filter = {}, errorIfMultiple = true) {
-    if (!Object.keys(filter).length) {
-      throw new ApiError('No filter properties for getOne.', null, 400);
+  getOne(idVal, errorIfMultiple = true) {
+    if (!idVal) {
+      throw new ApiError('getOne missing idVal', null, 400);
     }
-    return this.getMany(filter)
+    return this.getMany({[this.idProp]: idVal})
       .then(objs => {
         if (objs.length > 1 && errorIfMultiple) {
           throw new ApiError('Multiple rows returned from getOne query', null, 400);
@@ -68,7 +70,7 @@ export class PostgresRepoBase {
     sql += this.ormMap.map(map => map.field).join(', ') + ' )\n values ';
     const arrSql = [];
     objs.forEach(obj => {
-      const record = this.orm.objectToRecord(obj, userId);
+      const record = this.orm.objectToRecordAdd(obj, userId);
       const str = ' ( ' + this.ormMap.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
       arrSql.push(str);
     })
@@ -77,8 +79,8 @@ export class PostgresRepoBase {
       .then(resp => ({rowCount: resp.rowCount}));
   }
 
-  addOne(obj, userId?) {
-    const record = this.orm.objectToRecord(obj, userId);
+  addOne(obj, userId) {
+    const record = this.orm.objectToRecordAdd(obj, userId);
     let sql = ` insert into ${this.table} ( `;
     sql += this.ormMap.map(map => map.field).join(', ') + ' ) values ( ';
     sql += this.ormMap.map((map, idx) => `$${idx + 1}`).join(', ');
@@ -87,19 +89,20 @@ export class PostgresRepoBase {
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 
-  updateOne(obj, filter: AnyObj = {}) {
-/*
-    // how we could do a concurrency check, but we already have one in mongo. This will be needed if objects exist only in postgres
-    if (_.find(this.ormMap, {prop: 'updatedDate'})) {
-      filter.updatedDate = obj.updatedDate;
-    }
-*/
-    return this.getOne(filter)
+  /*
+      // how we could do a concurrency check, but we already have one in mongo. This will be needed if objects exist only in postgres
+      if (_.find(this.ormMap, {prop: 'updatedDate'})) {
+        filter.updatedDate = obj.updatedDate;
+      }
+  */
+  updateOne(obj, userId) {
+    const filter = {[this.idProp]: obj[this.idProp]};
+    return this.getOne(obj[this.idProp])
       .then(row => {
         if (!row) {
           throw new ApiError(`UpdateOne record not found.`, null, 400);
         }
-        const record = this.orm.objectToRecord(obj);
+        const record = this.orm.objectToRecordUpdate(obj, userId);
         let queryIdx = 0;
         let sql = ` update ${this.table} set `;
         const setArr = [];
@@ -134,8 +137,12 @@ export class PostgresRepoBase {
       .then(resp => ({rowCount: resp.rowCount}));
   }
 
-  deleteOne(filter = {}) {
-    return this.getOne(filter)
+  deleteOne(idVal) {
+    if (!idVal) {
+      throw new ApiError('getOne missing idVal', null, 400);
+    }
+    const filter = {[this.idProp]: idVal};
+    return this.getOne(idVal)
       .then(obj => {
         if (!obj) {
           throw new ApiError(`DeleteOne: no record to delete.`, null, 400);
@@ -172,6 +179,16 @@ export class PostgresRepoBase {
     return sql;
   }
 
+  verifyModuleId(filter) {
+    if (this.isModuleRepo) {
+      if (!filter.moduleId) {
+        throw new ApiError(`${this.table} repo call is missing moduleId`, null, 400);
+      } else {
+        filter.moduleId = Number(filter.moduleId);
+      }
+    }
+  }
+
   test() {
     const sql = ` insert into fpadfa.dfa_open_period ( 
  module_id, 
@@ -186,5 +203,6 @@ export class PostgresRepoBase {
     return pgc.pgdb.query(sql)
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
+
 
 }

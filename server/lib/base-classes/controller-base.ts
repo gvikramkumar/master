@@ -2,10 +2,11 @@ import {ApiError} from '../common/api-error';
 import _ from 'lodash';
 import {svrUtil} from '../common/svr-util';
 import RepoBase from './repo-base';
+import {PostgresRepoBase} from './pg-repo-base';
 
 export default class ControllerBase {
 
-  constructor(protected repo: RepoBase) {
+  constructor(protected repo: RepoBase, protected pgRepo?: PostgresRepoBase) {
   }
 
   // GetMany special query parameters
@@ -33,9 +34,9 @@ export default class ControllerBase {
   getManyPromise(req) {
     let promise;
     if (req.query.groupField) {
-      promise = this.repo.getManyByGroupLatest(req.query)
+      promise = this.repo.getManyByGroupLatest(req.query);
     } else if (req.query.getLatest) {
-      promise = this.repo.getOneLatest(req.query)
+      promise = this.repo.getOneLatest(req.query);
     } else {
       promise = this.repo.getMany(req.query);
     }
@@ -69,11 +70,25 @@ export default class ControllerBase {
       this.getMany(req, res, next);
     } else if (req.query.insertMany) {
       this.repo.addMany(data, req.user.id)
-        .then(() => res.end())
+        .then(() => {
+          if (this.pgRepo) {
+            this.pgRepo.addMany(data, req.user.id)
+              .then(() => res.end());
+          } else {
+            res.end();
+          }
+        })
         .catch(next);
     } else {
       this.repo.addOne(data, req.user.id)
-        .then(item => res.json(item))
+        .then(item => {
+          if (this.pgRepo) {
+            this.pgRepo.addOne(item, req.user.id)
+              .then(() => res.json(item));
+          } else {
+            res.json(item);
+          }
+        })
         .catch(next);
     }
   }
@@ -83,14 +98,26 @@ export default class ControllerBase {
     this.verifyProperties(data, ['id']);
     this.repo.update(data, req.user.id)
       .then(item => {
-        res.json(item);
+        if (this.pgRepo) {
+          this.pgRepo.updateOne(item, {})
+            .then(() => res.json(item));
+        } else {
+          res.json(item);
+        }
       })
-      .catch(next)
+      .catch(next);
   }
 
   remove(req, res, next) {
     this.repo.remove(req.params.id)
-      .then(item => res.json(item))
+      .then(item => {
+        if (this.pgRepo) {
+          this.pgRepo.deleteOne(req.params.id)
+            .then(() => res.json(item));
+        } else {
+          res.json(item);
+        }
+      })
       .catch(next);
   }
 

@@ -43,14 +43,15 @@ pgc.promise.then(db => {
 
   try {
     // repo.test()
-    repo.getMany({openFlag: 'Y'})
-    // repo.getOne({moduleId: 1}, false)
+    // repo.getMany()
+    // repo.getMany({openFlag: 'Y'})
+    // repo.getOne(1, false)
     // repo.addOne(one, 'joedo')
     // repo.addMany([one, two], 'jodoe')
-    // repo.updateOne(one, {moduleId: 1})
+    // repo.updateOne(one, 'jodoe')
     // repo.deleteAll()
     // repo.deleteMany({moduleId: 6})
-    // repo.deleteOne({moduleId: 1})
+    repo.deleteOne(1)
       .then(docs => {
         console.log(docs);
         process.exit();
