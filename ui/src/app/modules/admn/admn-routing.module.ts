@@ -44,7 +44,7 @@ const routes: Routes = [
           authorization: 'prof-sm:manage',
           hero: {
             title: 'Source Mapping',
-            desc: 'Assign active sources to modules'
+            desc: 'Assign active sources to be available for each module'
           },
           breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Source Mapping'}]
         }
