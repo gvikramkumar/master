@@ -64,6 +64,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
 
   addSource() {
     this.source = new Source();
+    this.source.status = 'A'; //set source status to active by default
     this.editMode = false;
     this.formTitle = 'Add New Source';
     this.doShowForm();
