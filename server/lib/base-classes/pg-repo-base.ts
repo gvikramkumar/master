@@ -34,16 +34,14 @@ const pgc = {
 export class PostgresRepoBase {
   table: string;
   idProp: string;
-  orm: Orm;
 
-  constructor(private ormMap: OrmMap[], protected isModuleRepo = false) {
-    this.orm = new Orm(ormMap);
+  constructor(protected orm: Orm, protected isModuleRepo = false) {
   }
 
   getMany(filter = {}) {
     this.verifyModuleId(filter);
     let sql = 'select ';
-    sql += this.ormMap.map(map => map.field).join(', ');
+    sql += this.orm.maps.map(map => map.field).join(', ');
     sql += ` from ${this.table} `;
     const keys = Object.keys(filter);
     sql += this.buildParameterizedWhereClause(keys, 0, false);
@@ -67,11 +65,11 @@ export class PostgresRepoBase {
   // this is NOT paremeterized, no way around that, as we have to upload 5k at a time
   addMany(objs, userId) {
     let sql = ` insert into ${this.table} ( `;
-    sql += this.ormMap.map(map => map.field).join(', ') + ' )\n values ';
+    sql += this.orm.maps.map(map => map.field).join(', ') + ' )\n values ';
     const arrSql = [];
     objs.forEach(obj => {
       const record = this.orm.objectToRecordAdd(obj, userId);
-      const str = ' ( ' + this.ormMap.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
+      const str = ' ( ' + this.orm.maps.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
       arrSql.push(str);
     })
     sql += arrSql.join(',\n');
@@ -82,31 +80,37 @@ export class PostgresRepoBase {
   addOne(obj, userId) {
     const record = this.orm.objectToRecordAdd(obj, userId);
     let sql = ` insert into ${this.table} ( `;
-    sql += this.ormMap.map(map => map.field).join(', ') + ' ) values ( ';
-    sql += this.ormMap.map((map, idx) => `$${idx + 1}`).join(', ');
+    sql += this.orm.maps.map(map => map.field).join(', ') + ' ) values ( ';
+    sql += this.orm.maps.map((map, idx) => `$${idx + 1}`).join(', ');
     sql += ' ) returning *';
-    return pgc.pgdb.query(sql, this.ormMap.map(map => record[map.field]))
+    return pgc.pgdb.query(sql, this.orm.maps.map(map => record[map.field]))
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 
   /*
       // how we could do a concurrency check, but we already have one in mongo. This will be needed if objects exist only in postgres
-      if (_.find(this.ormMap, {prop: 'updatedDate'})) {
+      if (_.find(this.orm.maps, {prop: 'updatedDate'})) {
         filter.updatedDate = obj.updatedDate;
       }
   */
-  updateOne(obj, userId) {
+  updateOne(obj, userId, concurrencyCheck = true) {
     const filter = {[this.idProp]: obj[this.idProp]};
-    return this.getOne(obj[this.idProp])
-      .then(row => {
-        if (!row) {
-          throw new ApiError(`UpdateOne record not found.`, null, 400);
+    if (_.find(this.orm.maps, {prop: 'updatedDate'}) && concurrencyCheck) {
+      filter.updatedDate = obj.updatedDate;
+    }
+    return this.getMany(filter)
+      .then(rows => {
+        if (!rows.length) {
+          throw new ApiError(`UpdateOne concurrency error. Please refresh your data.`);
+        }
+        if (rows.length > 1) {
+          throw new ApiError(`UpdateOne multiple records found.`, null, 400);
         }
         const record = this.orm.objectToRecordUpdate(obj, userId);
         let queryIdx = 0;
         let sql = ` update ${this.table} set `;
         const setArr = [];
-        this.ormMap.forEach((map, idx) => {
+        this.orm.maps.forEach((map, idx) => {
           setArr.push(`${map.field} = $${idx + 1}`);
           queryIdx++;
         });
@@ -115,18 +119,18 @@ export class PostgresRepoBase {
         sql += this.buildParameterizedWhereClause(keys, queryIdx, true);
         sql += ' returning *'
         return pgc.pgdb.query(sql,
-          this.ormMap.map(map => record[map.field]).concat(keys.map(key => filter[key])))
+          this.orm.maps.map(map => record[map.field]).concat(keys.map(key => filter[key])))
           .then(resp => this.orm.recordToObject(resp.rows[0]));
       });
   }
 
-  deleteAll() {
+  removeAll() {
     const sql = `delete from ${this.table}`;
     return pgc.pgdb.query(sql)
       .then(resp => ({rowCount: resp.rowCount}));
   }
 
-  deleteMany(filter = {}) {
+  removeMany(filter = {}) {
     let sql = `delete from ${this.table} `;
     const keys = Object.keys(filter);
     if (!keys.length) {
@@ -137,7 +141,7 @@ export class PostgresRepoBase {
       .then(resp => ({rowCount: resp.rowCount}));
   }
 
-  deleteOne(idVal) {
+  removeOne(idVal) {
     if (!idVal) {
       throw new ApiError('getOne missing idVal', null, 400);
     }
@@ -161,7 +165,7 @@ export class PostgresRepoBase {
     if (keys.length) {
       sql += ' where ';
       keys.forEach((key, idx) => {
-        const map = _.find(this.ormMap, {prop: key});
+        const map = _.find(this.orm.maps, {prop: key});
         if (!map) {
           throw new ApiError(`No property found in ormMap for ${key}`, null, 400);
         }

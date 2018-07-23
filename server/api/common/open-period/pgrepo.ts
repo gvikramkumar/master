@@ -1,7 +1,6 @@
 import {PostgresRepoBase} from '../../../lib/base-classes/pg-repo-base';
-import {OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
+import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 import {injectable} from 'inversify';
-
 
 
 const ormMap: OrmMap[] = [
@@ -20,6 +19,6 @@ export class OpenPeriodPostgresRepo extends PostgresRepoBase {
   idProp = 'moduleId';
 
   constructor() {
-    super(ormMap);
+    super(new Orm(ormMap));
   }
 }

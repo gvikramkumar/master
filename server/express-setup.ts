@@ -58,7 +58,7 @@ export default function () {
   app.use(cookieParser());
 
   app.use((req, res, next) => {
-    console.log(` ${req['user'].name}: ${req.method} - ${req.url}`);
+    console.log(` ${req['user'].id}: ${req.method} - ${req.url}`);
     next();
   });
   // app.use(morgan('dev'));

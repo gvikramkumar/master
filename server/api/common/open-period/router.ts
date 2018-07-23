@@ -1,9 +1,9 @@
 import {Router} from 'express';
-import OpenPeriodController from './controller';
 import {injector} from '../../../lib/common/inversify.config';
 import {authorize} from '../../../lib/middleware/authorize';
+import OpenPeriodPostgresController from './pgcontroller';
 
-const ctrl = injector.get(OpenPeriodController);
+const ctrl = injector.get(OpenPeriodPostgresController);
 
 export const openPeriodRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))

@@ -49,9 +49,9 @@ pgc.promise.then(db => {
     // repo.addOne(one, 'joedo')
     // repo.addMany([one, two], 'jodoe')
     // repo.updateOne(one, 'jodoe')
-    // repo.deleteAll()
-    // repo.deleteMany({moduleId: 6})
-    repo.deleteOne(1)
+    // repo.removeAll()
+    // repo.removeMany({moduleId: 6})
+    repo.removeOne(1)
       .then(docs => {
         console.log(docs);
         process.exit();

@@ -16,7 +16,7 @@ export interface OrmMap {
 
 export class Orm {
 
-  constructor(private maps: OrmMap[]) {
+  constructor(public maps: OrmMap[]) {
   }
 
   recordToObject(record): AnyObj {
@@ -51,7 +51,7 @@ export class Orm {
       if (!userId) {
         throw new ApiError('no userId for createdBy/updatedBy.');
       }
-      if (mode === 'add' || !obj.createdBy) {
+      if (mode === 'add') {
         obj.createdBy = userId;
         obj.createdDate = date;
       }
@@ -60,18 +60,23 @@ export class Orm {
     }
     this.maps.forEach(map => {
       if (map.type === OrmTypes.date) {
-        let dt: Date;
-        if ((obj[map.prop] instanceof Date)) {
-          dt = obj[map.prop];
-        } else {
-          dt = new Date(obj[map.prop]);
-        }
-        record[map.field] = this.dateToString(dt);
+        record[map.field] = this.getPgDateString(obj[map.prop]);
       } else {
         record[map.field] = obj[map.prop];
       }
     });
     return record;
+  }
+
+  getPgDateString(val) {
+    let dt: Date;
+    if (val instanceof Date) {
+      dt = val;
+    } else {
+      dt = new Date(val);
+    }
+    return this.dateToString(dt);
+
   }
 
   quote(val) {

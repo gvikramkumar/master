@@ -99,7 +99,7 @@ export default class ControllerBase {
     this.repo.update(data, req.user.id)
       .then(item => {
         if (this.pgRepo) {
-          this.pgRepo.updateOne(item, {})
+          this.pgRepo.updateOne(item, req.user.id, false)
             .then(() => res.json(item));
         } else {
           res.json(item);
@@ -112,7 +112,7 @@ export default class ControllerBase {
     this.repo.remove(req.params.id)
       .then(item => {
         if (this.pgRepo) {
-          this.pgRepo.deleteOne(req.query.postgresIdProp)
+          this.pgRepo.removeOne(req.query.postgresIdProp)
             .then(() => res.json(item));
         } else {
           res.json(item);
