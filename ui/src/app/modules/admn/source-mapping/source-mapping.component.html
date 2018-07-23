@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-lg-9">
 
-      <div class="row" *ngFor="let module of modules">
+      <div class="row" *ngFor="let module of modules;let i = index;">
         <div class="col-4">
           <div class="module-name">
             {{module.name}}
@@ -11,8 +11,9 @@
         </div>
 
         <div class="col-8">
-          <cui-select [items]="sampleItems" [multiSelect]="true" [(ngModel)]="sample"
-                      optionsKey="name" optionsValue="sample"></cui-select>
+          <cui-select [items]="sources[i] || []" [multiSelect]="true" [(ngModel)]="selectedSources[i]"
+                      optionsKey="name" optionsValue="sourceId"></cui-select>
+          <!--<pre>{{selectedSources[i]|json}}</pre>-->
         </div>
       </div>
     </div>
