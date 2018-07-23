@@ -1,5 +1,12 @@
-<div class="fin-container">
+<div class="fin-edit-container">
 
+  <div class="module" *ngFor="let module of modules">
 
+    <div class="col-md-6">
+      <cui-select [items]="sampleItems" label={{module.name}} [multiSelect]="true" [(ngModel)]="sample"
+                optionsKey="name" optionsValue="sample"></cui-select>
+    </div>
 
+  </div>
+  
 </div>
