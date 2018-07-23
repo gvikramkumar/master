@@ -57,7 +57,11 @@ export default function () {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());
 
-  app.use(morgan('dev'));
+  app.use((req, res, next) => {
+    console.log(` ${req['user'].name}: ${req.method} - ${req.url}`);
+    next();
+  });
+  // app.use(morgan('dev'));
   app.get('/cause-error', function (req, res, next) {
     if (process.env.NODE_ENV === 'unit') {
       const err = new NamedApiError('CauseError', 'api error with data', {some: 'thing'});

@@ -19,7 +19,7 @@ const schema = new Schema(
 @injectable()
 export default class OpenPeriodRepo extends RepoBase {
   constructor() {
-    super(schema, 'OpenPeriod', true);
+    super(schema, 'OpenPeriod');
   }
 }
 

@@ -112,7 +112,7 @@ export default class ControllerBase {
     this.repo.remove(req.params.id)
       .then(item => {
         if (this.pgRepo) {
-          this.pgRepo.deleteOne(req.params.id)
+          this.pgRepo.deleteOne(req.query.postgresIdProp)
             .then(() => res.json(item));
         } else {
           res.json(item);
