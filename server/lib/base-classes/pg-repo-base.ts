@@ -45,7 +45,7 @@ export class PostgresRepoBase {
     sql += ` from ${this.table} `;
     const keys = Object.keys(filter);
     sql += this.buildParameterizedWhereClause(keys, 0, false);
-    return pgc.pgdb.query(sql, keys.map(key => filter[key]))
+    return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
       .then(resp => resp.rows.map(row => this.orm.recordToObject(row)));
   }
 
@@ -119,7 +119,7 @@ export class PostgresRepoBase {
         sql += this.buildParameterizedWhereClause(keys, queryIdx, true);
         sql += ' returning *'
         return pgc.pgdb.query(sql,
-          this.orm.maps.map(map => record[map.field]).concat(keys.map(key => filter[key])))
+          this.orm.maps.map(map => this.orm.getPgValue(null, map.field, record[map.field])).concat(this.getFilterValues(keys, filter)))
           .then(resp => this.orm.recordToObject(resp.rows[0]));
       });
   }
@@ -137,7 +137,7 @@ export class PostgresRepoBase {
       throw new ApiError('DeleteMany with no filter, use DeleteAll', null, 400);
     }
     sql += this.buildParameterizedWhereClause(keys, 0, true);
-    return pgc.pgdb.query(sql, keys.map(key => filter[key]))
+    return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
       .then(resp => ({rowCount: resp.rowCount}));
   }
 
@@ -155,9 +155,15 @@ export class PostgresRepoBase {
         const keys = Object.keys(filter);
         sql += this.buildParameterizedWhereClause(keys, 0, true);
         sql += ' returning *'
-        return pgc.pgdb.query(sql, keys.map(key => filter[key]))
+        return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
           .then(resp => this.orm.recordToObject(resp.rows[0]));
       });
+  }
+
+  getFilterValues(keys, filter) {
+    // need the same keys as buildParameterizedWhereClause to maintain the same order
+    // so pass the same set in
+    return keys.map(key => this.orm.getPgValue(key, null, filter[key]));
   }
 
   buildParameterizedWhereClause(keys, startIndex, errorIfEmpty) {
