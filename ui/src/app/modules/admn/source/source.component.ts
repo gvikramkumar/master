@@ -82,6 +82,15 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     this.nameInput.inputElement.nativeElement.focus();
   }
 
+  statusString(s) {
+    if (s === 'A') {
+      return 'Active';
+    }
+    else {
+      return 'Inactive';
+    }
+  }
+
   cancel() {
     this.showForm = false;
   }
