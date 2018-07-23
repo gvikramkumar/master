@@ -4,6 +4,7 @@ import {AdmnRoutingModule} from './admn-routing.module';
 import {DfaCommonModule} from '../_common/dfa-common.module';
 import { OpenPeriodComponent } from './open-period/open-period.component';
 import { SourceComponent } from './source/source.component';
+import { SourceMappingComponent } from './source-mapping/source-mapping.component';
 
 
 @NgModule({
@@ -12,7 +13,7 @@ import { SourceComponent } from './source/source.component';
     AdmnRoutingModule,
     DfaCommonModule
   ],
-  declarations: [OpenPeriodComponent, SourceComponent]
+  declarations: [OpenPeriodComponent, SourceComponent, SourceMappingComponent]
 })
 export class AdmnModule {
   constructor() {

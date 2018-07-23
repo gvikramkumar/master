@@ -1,0 +1,20 @@
+<div class="fin-edit-container">
+
+  <div class="row">
+    <div class="col-lg-9">
+
+      <div class="row" *ngFor="let module of modules">
+        <div class="col-4">
+          <div class="module-name">
+            {{module.name}}
+          </div>
+        </div>
+
+        <div class="col-8">
+          <cui-select [items]="sampleItems" [multiSelect]="true" [(ngModel)]="sample"
+                      optionsKey="name" optionsValue="sample"></cui-select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

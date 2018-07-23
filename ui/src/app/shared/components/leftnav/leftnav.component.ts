@@ -36,6 +36,7 @@ export class LeftnavComponent {
         this.links = [
           {route: '/admn/open-period', text: 'Open Period'},
           {route: '/admn/source', text: 'Sources'},
+          {route: '/admn/source-mapping', text: 'Source Mapping'},
         ];
         this.alinks = [];
         break;
