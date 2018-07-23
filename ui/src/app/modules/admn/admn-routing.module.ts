@@ -5,6 +5,7 @@ import {AuthorizationGuard} from '../../core/guards/authorization.guard';
 import {Modules} from '../../../../../shared/enums';
 import {OpenPeriodComponent} from './open-period/open-period.component';
 import {SourceComponent} from './source/source.component';
+import {SourceMappingComponent} from './source-mapping/source-mapping.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,18 @@ const routes: Routes = [
             desc: 'Set available sources for each module'
           },
           breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sources'}]
+        }
+      },
+      {
+        path: 'source-mapping', component: SourceMappingComponent,
+        canActivate: [AuthorizationGuard],
+        data: {
+          authorization: 'prof-sm:manage',
+          hero: {
+            title: 'Source Mapping',
+            desc: 'Assign active sources to modules'
+          },
+          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Source Mapping'}]
         }
       },
       // admin pages go here, just like module pages do,
