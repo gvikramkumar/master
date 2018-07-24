@@ -51,26 +51,37 @@ export default class PostgresControllerBase {
       this.getMany(req, res, next);
     } else if (req.query.insertMany) {
       this.repo.addMany(data, req.user.id)
-        .then(() => {
-          res.end();
-        })
+        .then(() => res.end())
         .catch(next);
     } else {
       this.repo.addOne(data, req.user.id)
-        .then(item => {
-          res.json(item);
-        })
+        .then(item => res.json(item))
         .catch(next);
     }
+  }
+
+  handlePut(req, res, next) {
+    if (req.query.setUpsert) {
+      this.upsert(req, res, next);
+    } else {
+      this.update(req, res, next);
+    }
+  }
+
+  upsert(req, res, next) {
+    const data = req.body;
+    const filter = req.query;
+    delete filter.setUpsert;
+    this.repo.upsert(filter, data, req.user.id)
+      .then(item => res.json(item))
+      .catch(next);
   }
 
   update(req, res, next) {
     const data = req.body;
     this.verifyProperties(data, [this.repo.idProp]);
     this.repo.updateOne(data, req.user.id)
-      .then(item => {
-        res.json(item);
-      })
+      .then(item => res.json(item))
       .catch(next);
   }
 

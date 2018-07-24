@@ -176,6 +176,23 @@ export default class RepoBase {
     }
   }
 
+  upsert(filter, data, userId) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('Upsert called with no filter', null, 400);
+    }
+    return this.getMany(filter)
+      .then(docs => {
+        if (docs.length > 1) {
+          throw new ApiError('Upsert refers to more than one item.', null, 400);
+        }
+        if (!docs.length) {
+          return this.addOne(data, userId);
+        } else {
+          return this.update(data, userId);
+        }
+      });
+  }
+
   update(data, userId) {
     return this.getOneWithTimestamp(data)
       .then(item => {
