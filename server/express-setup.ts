@@ -27,6 +27,7 @@ import {fileRouter} from './api/common/file/router';
 import {productClassUploadRouter} from './api/prof/product-class-upload/router';
 import {profUploadRouter} from './api/prof/upload/router';
 import {sourceRouter} from './api/common/source/router';
+import {pgLookupRouter} from './api/common/pg-lookup/router';
 
 
 export default function () {
@@ -86,6 +87,7 @@ export default function () {
   app.use('/api/module-lookup', moduleLookupRouter);
   app.use('/api/measure', measureRouter);
   app.use('/api/open-period', openPeriodRouter);
+  app.use('/api/pg-lookup', pgLookupRouter);
   app.use('/api/source', sourceRouter);
   app.use('/api/submeasure', submeasureRouter);
 
