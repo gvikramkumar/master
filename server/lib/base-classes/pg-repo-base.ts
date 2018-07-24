@@ -87,7 +87,7 @@ export class PostgresRepoBase {
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 
-  upsert(filter, obj, userId, concurrencyCheck?) {
+  upsert(filter, obj, userId) {
     if (Object.keys(filter).length === 0) {
       throw new ApiError('Upsert called with no filter', null, 400);
     }
@@ -99,7 +99,7 @@ export class PostgresRepoBase {
         if (!docs.length) {
           return this.addOne(obj, userId);
         } else {
-          return this.updateOne(obj, userId, concurrencyCheck);
+          return this.updateOne(obj, userId, false);
         }
       });
   }
@@ -168,6 +168,23 @@ export class PostgresRepoBase {
       .then(obj => {
         if (!obj) {
           throw new ApiError(`DeleteOne: no record to delete.`, null, 400);
+        }
+        let sql = `delete from ${this.table} `;
+        const keys = Object.keys(filter);
+        sql += this.buildParameterizedWhereClause(keys, 0, true);
+        sql += ' returning *'
+        return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
+          .then(resp => this.orm.recordToObject(resp.rows[0]));
+      });
+  }
+
+  removeOneQuery(filter) {
+    return this.getMany(filter)
+      .then(items => {
+        if (items.length > 1) {
+          throw new ApiError('RemoveOneQuery multiple items.', null, 400);
+        } else if (!items.length) {
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         let sql = `delete from ${this.table} `;
         const keys = Object.keys(filter);

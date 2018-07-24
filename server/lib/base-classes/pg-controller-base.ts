@@ -60,18 +60,9 @@ export default class PostgresControllerBase {
     }
   }
 
-  handlePut(req, res, next) {
-    if (req.query.setUpsert) {
-      this.upsert(req, res, next);
-    } else {
-      this.update(req, res, next);
-    }
-  }
-
   upsert(req, res, next) {
     const data = req.body;
     const filter = req.query;
-    delete filter.setUpsert;
     this.repo.upsert(filter, data, req.user.id)
       .then(item => res.json(item))
       .catch(next);
@@ -79,7 +70,7 @@ export default class PostgresControllerBase {
 
   update(req, res, next) {
     const data = req.body;
-    this.verifyProperties(data, [this.repo.idProp]);
+    data[this.repo.idProp] = req.params.id;
     this.repo.updateOne(data, req.user.id)
       .then(item => res.json(item))
       .catch(next);
@@ -90,6 +81,13 @@ export default class PostgresControllerBase {
       .then(item => {
         res.json(item);
       })
+      .catch(next);
+  }
+
+  removeOneQuery(req, res, next) {
+    const filter = req.query;
+    this.repo.removeOneQuery(filter)
+      .then(item => res.json(item))
       .catch(next);
   }
 

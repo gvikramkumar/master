@@ -93,27 +93,13 @@ export default class ControllerBase {
     }
   }
 
-  handlePut(req, res, next) {
-    if (req.query.setUpsert) {
-      this.upsert(req, res, next);
-    } else {
-      this.update(req, res, next);
-    }
-  }
-
-  // this assumes you have a filter (req.query) that filters down to one value, if it's there, update
-  // if not, add. Won't apply to identity columns as you'd know if they were there or not, i.e. you'd
-  // already have the id, so we're talking about a unique case here (dfa_open_period) based on some
-  // criteria, moduleId in that case but could just as well have been moduleId, year. Look for it,
-  // if multiple, error, if none, add, else update
   upsert(req, res, next) {
     const data = req.body;
     const filter = req.query;
-    delete filter.setUpsert;
     this.repo.upsert(filter, data, req.user.id)
       .then(item => {
         if (this.pgRepo) {
-          this.pgRepo.upsert(filter, _.clone(item), req.user.id, false)
+          this.pgRepo.upsert(filter, _.clone(item), req.user.id)
             .then(() => res.json(item));
         } else {
           res.json(item);
@@ -124,7 +110,7 @@ export default class ControllerBase {
 
   update(req, res, next) {
     const data = req.body;
-    this.verifyProperties(data, ['id']);
+    data.id = req.params.id;
     this.repo.update(data, req.user.id)
       .then(item => {
         if (this.pgRepo) {
@@ -145,6 +131,20 @@ export default class ControllerBase {
       .then(item => {
         if (this.pgRepo) {
           this.pgRepo.removeOne(req.query.postgresIdProp)
+            .then(() => res.json(item));
+        } else {
+          res.json(item);
+        }
+      })
+      .catch(next);
+  }
+
+  removeOneQuery(req, res, next) {
+    const filter = req.query;
+    this.repo.removeOneQuery(filter)
+      .then(item => {
+        if (this.pgRepo) {
+          this.pgRepo.removeOneQuery(filter)
             .then(() => res.json(item));
         } else {
           res.json(item);
