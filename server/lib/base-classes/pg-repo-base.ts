@@ -87,12 +87,30 @@ export class PostgresRepoBase {
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 
+  upsert(filter, obj, userId) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('Upsert called with no filter', null, 400);
+    }
+    return this.getMany(filter)
+      .then(docs => {
+        if (docs.length > 1) {
+          throw new ApiError('Upsert refers to more than one item.', null, 400);
+        }
+        if (!docs.length) {
+          return this.addOne(obj, userId);
+        } else {
+          return this.updateOne(obj, userId, false);
+        }
+      });
+  }
+
   /*
-      // how we could do a concurrency check, but we already have one in mongo. This will be needed if objects exist only in postgres
-      if (_.find(this.orm.maps, {prop: 'updatedDate'})) {
-        filter.updatedDate = obj.updatedDate;
-      }
-  */
+  concurrencyCheck:
+  currently we allow updating to both mongo and pg. Both repos have the ability to update updatedDate.
+  which means both will be at slightly different dates. the pg repo handles the pg only case so must
+  always updates the updatedDate. What to do? We'll allow turning off the concurrency check in this case,
+  so if pg only, then on, and if mongo and pg then off.
+   */
   updateOne(obj, userId, concurrencyCheck = true) {
     const filter = {[this.idProp]: obj[this.idProp]};
     if (_.find(this.orm.maps, {prop: 'updatedDate'}) && concurrencyCheck) {
@@ -150,6 +168,23 @@ export class PostgresRepoBase {
       .then(obj => {
         if (!obj) {
           throw new ApiError(`DeleteOne: no record to delete.`, null, 400);
+        }
+        let sql = `delete from ${this.table} `;
+        const keys = Object.keys(filter);
+        sql += this.buildParameterizedWhereClause(keys, 0, true);
+        sql += ' returning *'
+        return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
+          .then(resp => this.orm.recordToObject(resp.rows[0]));
+      });
+  }
+
+  removeOneQuery(filter) {
+    return this.getMany(filter)
+      .then(items => {
+        if (items.length > 1) {
+          throw new ApiError('RemoveOneQuery multiple items.', null, 400);
+        } else if (!items.length) {
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         let sql = `delete from ${this.table} `;
         const keys = Object.keys(filter);

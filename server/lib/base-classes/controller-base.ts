@@ -83,7 +83,7 @@ export default class ControllerBase {
       this.repo.addOne(data, req.user.id)
         .then(item => {
           if (this.pgRepo) {
-            this.pgRepo.addOne(item, req.user.id)
+            this.pgRepo.addOne(_.clone(item), req.user.id)
               .then(() => res.json(item));
           } else {
             res.json(item);
@@ -93,13 +93,31 @@ export default class ControllerBase {
     }
   }
 
+  upsert(req, res, next) {
+    const data = req.body;
+    const filter = req.query;
+    this.repo.upsert(filter, data, req.user.id)
+      .then(item => {
+        if (this.pgRepo) {
+          this.pgRepo.upsert(filter, _.clone(item), req.user.id)
+            .then(() => res.json(item));
+        } else {
+          res.json(item);
+        }
+      })
+      .catch(next);
+  }
+
   update(req, res, next) {
     const data = req.body;
-    this.verifyProperties(data, ['id']);
+    data.id = req.params.id;
     this.repo.update(data, req.user.id)
       .then(item => {
         if (this.pgRepo) {
-          this.pgRepo.updateOne(item, req.user.id, false)
+          // we have to clone item as prRepo will change the updatedDate and we'll fail concurrency check
+          // we need the same mongo updatedDate to pass concurrency check. We turn off pg's concurrency
+          // check as we can't have both.
+          this.pgRepo.updateOne(_.clone(item), req.user.id, false)
             .then(() => res.json(item));
         } else {
           res.json(item);
@@ -113,6 +131,20 @@ export default class ControllerBase {
       .then(item => {
         if (this.pgRepo) {
           this.pgRepo.removeOne(req.query.postgresIdProp)
+            .then(() => res.json(item));
+        } else {
+          res.json(item);
+        }
+      })
+      .catch(next);
+  }
+
+  removeOneQuery(req, res, next) {
+    const filter = req.query;
+    this.repo.removeOneQuery(filter)
+      .then(item => {
+        if (this.pgRepo) {
+          this.pgRepo.removeOneQuery(filter)
             .then(() => res.json(item));
         } else {
           res.json(item);

@@ -51,26 +51,28 @@ export default class PostgresControllerBase {
       this.getMany(req, res, next);
     } else if (req.query.insertMany) {
       this.repo.addMany(data, req.user.id)
-        .then(() => {
-          res.end();
-        })
+        .then(() => res.end())
         .catch(next);
     } else {
       this.repo.addOne(data, req.user.id)
-        .then(item => {
-          res.json(item);
-        })
+        .then(item => res.json(item))
         .catch(next);
     }
   }
 
+  upsert(req, res, next) {
+    const data = req.body;
+    const filter = req.query;
+    this.repo.upsert(filter, data, req.user.id)
+      .then(item => res.json(item))
+      .catch(next);
+  }
+
   update(req, res, next) {
     const data = req.body;
-    this.verifyProperties(data, [this.repo.idProp]);
+    data[this.repo.idProp] = req.params.id;
     this.repo.updateOne(data, req.user.id)
-      .then(item => {
-        res.json(item);
-      })
+      .then(item => res.json(item))
       .catch(next);
   }
 
@@ -79,6 +81,13 @@ export default class PostgresControllerBase {
       .then(item => {
         res.json(item);
       })
+      .catch(next);
+  }
+
+  removeOneQuery(req, res, next) {
+    const filter = req.query;
+    this.repo.removeOneQuery(filter)
+      .then(item => res.json(item))
       .catch(next);
   }
 

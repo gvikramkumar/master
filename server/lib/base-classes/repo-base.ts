@@ -176,8 +176,37 @@ export default class RepoBase {
     }
   }
 
-  update(data, userId) {
-    return this.getOneWithTimestamp(data)
+  /*
+  getMany(filter), upsert(filter), removeOneQuery(filter)
+  these three are how you do crud if you have individual items that aren't tracked by id, say open_period.
+  In this table we need one entry per module, so filter is: {moduleId: xxx}, then we can
+  getMany, upsert, and delete using this filter.
+   */
+  upsert(filter, data, userId) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('Upsert called with no filter', null, 400);
+    }
+    return this.getMany(filter)
+      .then(docs => {
+        if (docs.length > 1) {
+          throw new ApiError('Upsert refers to more than one item.', null, 400);
+        }
+        if (!docs.length) {
+          return this.addOne(data, userId);
+        } else {
+          return this.update(data, userId, false);
+        }
+      });
+  }
+
+  update(data, userId, concurrencyCheck = true) {
+    let promise: Promise<any>;
+    if (concurrencyCheck) {
+      promise = this.getOneWithTimestamp(data);
+    } else {
+      promise = this.getOneById(data.id);
+    }
+    return promise
       .then(item => {
         if (this.schema.path('updatedBy')) {
           data.updatedBy = userId;
@@ -204,6 +233,18 @@ export default class RepoBase {
           throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         return item.remove();
+      });
+  }
+
+  removeOneQuery(filter) {
+    return this.getMany(filter)
+      .then(items => {
+        if (items.length > 1) {
+          throw new ApiError('RemoveOneQuery multiple items.', null, 400);
+        } else if (!items.length) {
+          throw new ApiError('Item not found, please refresh your data.', null, 400);
+        }
+        return items[0].remove();
       });
   }
 
