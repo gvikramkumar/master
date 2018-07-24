@@ -31,7 +31,7 @@
 
           <ng-container matColumnDef="status">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.status}}</mat-cell>
+            <mat-cell *matCellDef="let row">{{statusString(row.status)}}</mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>

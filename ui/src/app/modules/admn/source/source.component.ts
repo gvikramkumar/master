@@ -64,6 +64,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
 
   addSource() {
     this.source = new Source();
+    this.source.status = 'A'; //set source status to active by default
     this.editMode = false;
     this.formTitle = 'Add New Source';
     this.doShowForm();
@@ -79,6 +80,15 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   doShowForm() {
     this.showForm = true;
     this.nameInput.inputElement.nativeElement.focus();
+  }
+
+  statusString(s) {
+    if (s === 'A') {
+      return 'Active';
+    }
+    else {
+      return 'Inactive';
+    }
   }
 
   cancel() {
