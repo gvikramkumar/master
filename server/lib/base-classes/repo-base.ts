@@ -203,7 +203,7 @@ export default class RepoBase {
         if (!item) {
           throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
-        return item.remove();``
+        return item.remove();
       });
   }
 
