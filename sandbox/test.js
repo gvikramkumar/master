@@ -1,56 +1,58 @@
 const _ = require('lodash'),
   Q = require('q');
 
-function getFiscalMonthListFromDate(date, numMonths) {
-  const yearmos = [];
-  const curMonths = _.range(date.getMonth(), date.getMonth() - numMonths);
-  const fisMonths = _.range(date.getMonth() + 5, date.getMonth() + 5 - numMonths);
 
-  for (let i = 0; i < numMonths; i++) {
-    const curDate = new Date(date.getTime());
-    const fisDate = new Date(date.getTime());
-    curDate.setMonth(curMonths[i]);
-    const curYear = curDate.getFullYear();
-    const curMonthNum = curDate.getMonth() + 1;
-    const curMonthName = getMonthNameFromNum(curMonthNum);
-    fisDate.setMonth(fisMonths[i]);
-    const fisYear = fisDate.getFullYear();
-    const fisMonth = fisDate.getMonth() + 1;
-    const fisYearMoStr = '' + fisYear + (fisMonth < 10 ? '0' + fisMonth : fisMonth)
-    const fisYearMoNum = Number(fisYearMoStr);
-    const yearMoMoYear = `${fisYearMoStr};${curMonthName} FY${fisYear}`;
-    yearmos.push({
-      // curYear,
-      // curMonthNum,
-      // curMonthName,
-      // fisYear,
-      // fisMonth,
-      yearmoStr: fisYearMoStr,
-      yearmoNum: fisYearMoNum,
-      yearMoMoYear
-    });
+
+
+
+
+class myclass {
+  pad (number, digits) {
+    number = '' + number
+    while (number.length < digits) { number = '0' + number }
+    return number
   }
 
-  return yearmos;
+// stolen from node-postgres/lib/util.js, converts date to postgres string
+  dateToString (date) {
+    let offset = -date.getTimezoneOffset()
+    let ret = this.pad(date.getFullYear(), 4) + '-' +
+      this.pad(date.getMonth() + 1, 2) + '-' +
+      this.pad(date.getDate(), 2) + 'T' +
+      this.pad(date.getHours(), 2) + ':' +
+      this.pad(date.getMinutes(), 2) + ':' +
+      this.pad(date.getSeconds(), 2) + '.' +
+      this.pad(date.getMilliseconds(), 3)
+
+    if (offset < 0) {
+      ret += '-';
+      offset *= -1;
+    } else { ret += '+'; }
+
+    return ret + this.pad(Math.floor(offset / 60), 2) + ':' + this.pad(offset % 60, 2)
+  }
+
 }
 
-function getMonthNameFromNum(mon) {
-  const months = {
-    '1': 'Jan',
-    '2': 'Feb',
-    '3': 'Mar',
-    '4': 'Apr',
-    '5': 'May',
-    '6': 'Jun',
-    '7': 'Jul',
-    '8': 'Aug',
-    '9': 'Sep',
-    '10': 'Oct',
-    '11': 'Nov',
-    '12': 'Dec',
-  };
-  return months[mon.toString()];
-}
 
-console.log(getFiscalMonthListFromDate(new Date(), 18));
-//201810;May FY2018
+console.log(new myclass().dateToString(new Date()));
+
+
+
+
+/*
+const date = new Date(new Date('2018-07-21T02:14:47.481Z'));
+
+const a = new Date().toISOString();
+const b = new Date(a);
+console.log(a);
+console.log(b.toISOString());
+*/
+
+/*
+console.log(date.toString())
+console.log(date.toLocaleString())
+console.log(date.toISOString())
+console.log(date.getTimezoneOffset());
+console.log(moment('2018-07-21T02:14:47.481Z').format('YYYY-MM-DD HH:mm:ssZ'))
+*/

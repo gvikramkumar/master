@@ -45,9 +45,9 @@ export default class DeptUploadUploadController extends UploadController {
     this.data = {};
     return Promise.all([
       super.getValidationAndImportData(),
-      // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_department', 'department_code'),
-      // pgRepo.getSortedUpperListFromColumn('vw_fds_financial_department', 'company_code'),
-      this.pgRepo.getSortedUpperListFromColumn('vw_fds_financial_account', 'financial_account_code'),
+      // pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_financial_department', 'department_code'),
+      // pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_financial_department', 'company_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_financial_account', 'financial_account_code'),
     ])
       .then(results => {
         this.data.glAccounts = results[1];
