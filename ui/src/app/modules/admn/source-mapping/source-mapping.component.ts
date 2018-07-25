@@ -36,13 +36,26 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
 
   ngOnInit() {
     this.modules = this.store.modules.filter(module => !shUtil.isAdminModuleId(module.moduleId));
+
+    let rawSources = [];
+    let activeSources = [];
     this.sourceService.getMany()
       .subscribe(sources => {
-        // this.sources = sources;
-        this.modules.forEach(module => {
-          this.sources.push(_.cloneDeep(sources));
-        });
+        rawSources = sources;
+        // Remove inactive sources
+        rawSources.forEach(source => {
+            if (source.status === 'A') {
+              activeSources.push(source);
+            }
+          }
+        );
+
+      this.modules.forEach(module => {
+        // Create one copy of active sources for each module
+        this.sources.push(_.cloneDeep(activeSources));
       });
+    });
+
 
     // Promise.all to get module/source mapping from module-lookup
     const promiseArr: Promise<any>[] = [];
