@@ -32,7 +32,7 @@ const routes: Routes = [
           authorization: 'prof-sm:manage',
           hero: {
             title: 'Set Sources',
-            desc: 'Set available sources for each module'
+            desc: 'Configure sources for all modules'
           },
           breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sources'}]
         }
