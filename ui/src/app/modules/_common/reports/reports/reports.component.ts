@@ -66,6 +66,54 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'department_mapping_data',
       excelHeaders: 'Sub-Measure Name, Department Code, Start Account Code, End Account Code',
       excelProperties: 'submeasureName, departmentCode, startAccountCode, endAccountCode'
+    },
+    {
+      type: 'submeasure-grouping', text: 'Submeasure Grouping Report', disabled: false,
+      filename: 'Submeasure_Grouping_Report.csv',
+      excelHeaders: 'Submeasure Name, Group Submeasure Name, Created By, Create Time, ' +
+      'Updated By, Update Time',
+      excelProperties: 'sub_measure_name, group_sub_measure_name, create_user,' +
+      'create_datetime, update_user, update_datetime'
+    },
+    {
+      type: '2t-submeasure-list', text: '2T Submeasure List Report', disabled: false,
+      filename: 'Sub_Measure_List_Report.csv',
+      excelHeaders: 'Submeasure Name, Fiscal Month Id, Created By, Created Date, ' +
+      'Last Modified By, Last Modified Date',
+      excelProperties: 'submeasure_name, fiscal_month_id, create_user,' +
+      'create_datetime, update_user, update_datetime'
+    },
+    {
+      type: 'disti-to-direct', text: 'Disti To Direct Mapping Report', disabled: false,
+      filename: 'Disti_to_Direct_Mapping_Report.csv',
+      excelHeaders: 'Group ID, Node Type, Sales Finance Hierarchy, Node Code, ' +
+      'Fiscal Month Id, Created By, Created Date, Last Modified By, Last Modified Date',
+      excelProperties: 'group_id, node_type, sales_finance_hierarchy,' +
+      'node_code, fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
+    },
+    {
+      type: 'alternate-sl2', text: 'Alternate SL2 Report', disabled: false,
+      filename: 'Alternate_SL2_Report.csv',
+      excelHeaders: 'Actual SL2, Alternate SL2, Alternate Country, Fiscal Month Id, ' +
+      'Created By, Created Date, Last Modified By, Last Modified Date',
+      excelProperties: 'actual_sl2_code, alternate_sl2_code, alternate_country_name,' +
+      'fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
+    },
+    {
+      type: 'corp-adjustment', text: 'Corp Adjustment Report', disabled: false,
+      filename: 'Corp_Adjustment_Report.csv',
+      excelHeaders: 'Country Name, Sales Territory Code, SCMS Value, Fiscal Month Id, ' +
+      'Created By, Created Date, Last Modified By, Last Modified Date',
+      excelProperties: 'sales_country_name, sales_territory_code, scms_value,' +
+      'fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
+    },
+    {
+      type: 'sales-split-percentage', text: 'Sales Split Percentage Report', disabled: false,
+      filename: 'Sales_Split_Percentage_Report.csv',
+      excelHeaders: 'Account Id, Company Code, Sub Account Code, Sales Territory Code, Percentage Value, ' +
+      'Fiscal Month Id, Created By, Created Date, Last Modified By, Last Modified Date',
+      excelProperties: 'account_id, company_code, sub_account_code, sales_territory_code, split_percentage,' +
+      'fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
     }
   ];
   report = this.reports[0];

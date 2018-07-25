@@ -45,6 +45,104 @@ export default class PostgresRepo {
             order by 1,2,3,4,5,6          
           `);
   }
+  getSubmeasureGroupingReport() {
+    return pgc.pgdb.query(`
+            select 
+            a.sub_measure_name as sub_measure_name,
+            b.sub_measure_name as group_sub_measure_name,
+            c.create_user,
+            c.create_datetime,
+            c.update_user,
+            c.update_datetime
+            from fpadfa.dfa_sub_measure a, fpadfa.dfa_sub_measure b, fpadfa.dfa_submeasure_group c
+            where a.sub_measure_key = c.sub_measure_key
+            and b.sub_measure_key = c.group_sub_measure_key
+          `);
+  }
+
+  get2TSebmeasureListReport() {
+    return pgc.pgdb.query(`
+            select 
+            submeasure_name, 
+            fiscal_month_id, 
+            create_user,
+            create_datetime,
+            update_user,
+            update_datetime
+            from fpadfa.dfa_2t_submeasure_list
+            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+          `);
+  }
+
+  getDistiToDirectMappingReport() {
+    return pgc.pgdb.query(`
+            select 
+            group_id, 
+            node_type, 
+            CASE
+              WHEN sales_finance_hierarchy != null THEN sales_finance_hierarchy
+              ELSE 'Sales Fin hierarchy'
+            end as sales_finance_hierarchy,
+            node_code,
+            fiscal_month_id,
+            create_user,
+            create_datetime,
+            update_user,
+            update_datetime
+            from fpadfa.dfa_disti_to_direct_mapping
+            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+          `);
+  }
+
+  getAlternateSL2Report() {
+    return pgc.pgdb.query(`
+            select 
+            actual_sl2_code, 
+            alternate_sl2_code, 
+            alternate_country_name,
+            fiscal_month_id,
+            create_user,
+            create_datetime,
+            update_user,
+            update_datetime
+            from fpadfa.dfa_scms_triang_altsl2_map
+            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+          `);
+  }
+
+  getCorpAdjustmentReport() {
+    return pgc.pgdb.query(`
+            select 
+            sales_country_name, 
+            sales_territory_code, 
+            scms_value,
+            fiscal_month_id,
+            create_user,
+            create_datetime,
+            update_user,
+            update_datetime
+            from fpadfa.dfa_scms_triang_corpadj_map
+            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+          `);
+  }
+
+  getSalesSplitPercentageReport() {
+    return pgc.pgdb.query(`
+            select 
+            account_id, 
+            company_code, 
+            sub_account_code,
+            sales_territory_code,
+            split_percentage,
+            fiscal_month_id,
+            create_user,
+            create_datetime,
+            update_user,
+            update_datetime
+            from fpadfa.dfa_sales_split_percentage
+            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+          `);
+  }
 
   checkForExistenceText(table, column, value) {
     return pgc.pgdb.query(`select exists (select 1 from ${table} where upper(${column}) = $1 limit 1)`, [value.toUpperCase()])

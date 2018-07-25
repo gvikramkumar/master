@@ -51,6 +51,24 @@ export default class ReportController {
       case 'dept-upload':
         promise = this.deptUploadCtrl.getManyPromise(req);
         break
+      case 'submeasure-grouping':
+        promise = this.postgresRepo.getSubmeasureGroupingReport();
+        break
+      case '2t-submeasure-list':
+        promise = this.postgresRepo.get2TSebmeasureListReport();
+        break
+      case 'disti-to-direct':
+        promise = this.postgresRepo.getDistiToDirectMappingReport();
+        break
+      case 'alternate-sl2':
+        promise = this.postgresRepo.getAlternateSL2Report();
+        break
+      case 'corp-adjustment':
+        promise = this.postgresRepo.getCorpAdjustmentReport();
+        break
+      case 'sales-split-percentage':
+        promise = this.postgresRepo.getSalesSplitPercentageReport();
+        break
       default:
         next(new ApiError('Bad report type', null, 400));
         return;
