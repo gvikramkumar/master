@@ -49,6 +49,17 @@ export default class ControllerBase {
       .catch(next);
   }
 
+  getQueryOne(req, res, next) {
+    this.getManyPromise(req)
+      .then(items => {
+        if (items.length > 1) {
+          throw new ApiError('getOneQuery returned multiple items');
+        }
+        res.json(items[0]);
+      })
+      .catch(next);
+  }
+
   getOne(req, res, next) {
     this.repo.getOneById(req.params.id)
       .then(item => {
@@ -93,13 +104,13 @@ export default class ControllerBase {
     }
   }
 
-  upsert(req, res, next) {
+  upsertQueryOne(req, res, next) {
     const data = req.body;
     const filter = req.query;
-    this.repo.upsert(filter, data, req.user.id)
+    this.repo.upsertQueryOne(filter, data, req.user.id)
       .then(item => {
         if (this.pgRepo) {
-          this.pgRepo.upsert(filter, _.clone(item), req.user.id)
+          this.pgRepo.upsertQueryOne(filter, _.clone(item), req.user.id)
             .then(() => res.json(item));
         } else {
           res.json(item);
@@ -139,12 +150,12 @@ export default class ControllerBase {
       .catch(next);
   }
 
-  removeOneQuery(req, res, next) {
+  removeQueryOne(req, res, next) {
     const filter = req.query;
-    this.repo.removeOneQuery(filter)
+    this.repo.removeQueryOne(filter)
       .then(item => {
         if (this.pgRepo) {
-          this.pgRepo.removeOneQuery(filter)
+          this.pgRepo.removeQueryOne(filter)
             .then(() => res.json(item));
         } else {
           res.json(item);

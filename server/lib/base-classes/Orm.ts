@@ -72,6 +72,9 @@ export class Orm {
     if (!prop && !field) {
       throw new ApiError('OrmGetPgValue has no prop or field');
     }
+    if (val === undefined) {
+      return val;
+    }
     const type = prop ? _.find(this.maps, {prop}).type : _.find(this.maps, {field}).type;
     switch (type) {
       case OrmTypes.number:
@@ -84,6 +87,9 @@ export class Orm {
   }
 
   getPgDateString(val) {
+    if (!val) {
+      return undefined;
+    }
     let dt: Date;
     if (val instanceof Date) {
       dt = val;
