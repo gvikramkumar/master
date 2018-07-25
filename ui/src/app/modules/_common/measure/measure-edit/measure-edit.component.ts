@@ -10,6 +10,7 @@ import {DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {Source} from '../../models/source';
 import {SourceService} from '../../services/source.service';
+import {ModuleLookupService} from '../../services/module-lookup.service';
 import {shUtil} from '../../../../../../../shared/shared-util';
 
 @Component({
@@ -22,6 +23,8 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   measure = new Measure();
   orgMeasure = _.cloneDeep(this.measure);
   sources: Source[] = [];
+  moduleSourceIds: number[] = [];
+  moduleSources: Source[] = [];
   hierarchies: { name: string, selected?: boolean }[] = [];
   shUtil = shUtil;
 
@@ -31,7 +34,8 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     private measureService: MeasureService,
     private store: AppStore,
     private uiUtil: UiUtil,
-    private sourceService: SourceService
+    private sourceService: SourceService,
+    private moduleLookupService: ModuleLookupService
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
@@ -44,10 +48,16 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
         {name: 'Product'},
         {name: 'Sales'},
       ]),
+      // promise getting sourceIds for current module
+      this.moduleLookupService.getNoError('sources', this.store.module.moduleId).toPromise()
     ])
       .then(data => {
         this.sources = data[0];
         this.hierarchies = data[1];
+        this.moduleSourceIds = data[2];
+
+        // filter sources by current module
+        this.moduleSources = this.sources.filter(source => _.includes(this.moduleSourceIds, source.sourceId));
       });
   }
 
