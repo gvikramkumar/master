@@ -177,19 +177,19 @@ export default class RepoBase {
   }
 
   /*
-  getMany(filter), upsert(filter), removeOneQuery(filter)
+  getMany(filter), upsertQueryOne(filter), removeQueryOne(filter)
   these three are how you do crud if you have individual items that aren't tracked by id, say open_period.
   In this table we need one entry per module, so filter is: {moduleId: xxx}, then we can
-  getMany, upsert, and delete using this filter.
+  getMany, upsertQueryOne, and delete using this filter.
    */
-  upsert(filter, data, userId) {
+  upsertQueryOne(filter, data, userId) {
     if (Object.keys(filter).length === 0) {
-      throw new ApiError('Upsert called with no filter', null, 400);
+      throw new ApiError('upsertQueryOne called with no filter', null, 400);
     }
     return this.getMany(filter)
       .then(docs => {
         if (docs.length > 1) {
-          throw new ApiError('Upsert refers to more than one item.', null, 400);
+          throw new ApiError('upsertQueryOne refers to more than one item.', null, 400);
         }
         if (!docs.length) {
           return this.addOne(data, userId);
@@ -236,11 +236,11 @@ export default class RepoBase {
       });
   }
 
-  removeOneQuery(filter) {
+  removeQueryOne(filter) {
     return this.getMany(filter)
       .then(items => {
         if (items.length > 1) {
-          throw new ApiError('RemoveOneQuery multiple items.', null, 400);
+          throw new ApiError('removeQueryOne multiple items.', null, 400);
         } else if (!items.length) {
           throw new ApiError('Item not found, please refresh your data.', null, 400);
         }

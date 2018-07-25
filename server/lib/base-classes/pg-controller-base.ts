@@ -30,6 +30,17 @@ export default class PostgresControllerBase {
       .catch(next);
   }
 
+  getQueryOne(req, res, next) {
+    this.getManyPromise(req)
+      .then(items => {
+        if (items.length > 1) {
+          throw new ApiError('getOneQuery returned multiple items');
+        }
+        res.json(items[0]);
+      })
+      .catch(next);
+  }
+
   getOne(req, res, next) {
     this.repo.getOne(req.params.id)
       .then(item => {
@@ -60,10 +71,10 @@ export default class PostgresControllerBase {
     }
   }
 
-  upsert(req, res, next) {
+  upsertQueryOne(req, res, next) {
     const data = req.body;
     const filter = req.query;
-    this.repo.upsert(filter, data, req.user.id)
+    this.repo.upsertQueryOne(filter, data, req.user.id)
       .then(item => res.json(item))
       .catch(next);
   }
@@ -84,9 +95,9 @@ export default class PostgresControllerBase {
       .catch(next);
   }
 
-  removeOneQuery(req, res, next) {
+  removeQueryOne(req, res, next) {
     const filter = req.query;
-    this.repo.removeOneQuery(filter)
+    this.repo.removeQueryOne(filter)
       .then(item => res.json(item))
       .catch(next);
   }
