@@ -10,6 +10,7 @@ import {ToastService, ToastSeverity} from '../../../core/services/toast.service'
 import {Source} from '../../_common/models/source';
 import {shUtil} from '../../../../../../shared/shared-util';
 import * as _ from 'lodash';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'fin-source-mapping',
@@ -21,6 +22,7 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
   modules: DfaModule[];
   sources: Source[][] = [];
   selectedSources: number[][] = [];
+  orgSelectedSources: number[][] = [];
 
   constructor(
     private store: AppStore,
@@ -37,25 +39,13 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
   ngOnInit() {
     this.modules = this.store.modules.filter(module => !shUtil.isAdminModuleId(module.moduleId));
 
-    let rawSources = [];
-    let activeSources = [];
-    this.sourceService.getMany()
-      .subscribe(sources => {
-        rawSources = sources;
-        // Remove inactive sources
-        rawSources.forEach(source => {
-            if (source.status === 'A') {
-              activeSources.push(source);
-            }
-          }
-        );
-
-      this.modules.forEach(module => {
-        // Create one copy of active sources for each module
-        this.sources.push(_.cloneDeep(activeSources));
+    this.sourceService.getMany({status: 'A'}).toPromise()
+      .then(activeSources => {
+        this.modules.forEach(module => {
+          // Create one copy of active sources for each module
+          this.sources.push(_.cloneDeep(activeSources));
+        });
       });
-    });
-
 
     // Promise.all to get module/source mapping from module-lookup
     const promiseArr: Promise<any>[] = [];
@@ -67,14 +57,17 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
       .then(results => {
         // handle array of module sources
         this.selectedSources = results.map(x => x || []);
+        this.orgSelectedSources = _.cloneDeep(this.selectedSources);
       });
   }
 
   save() {
     const promiseArr: Promise<any>[] = [];
+
     this.modules.forEach((module, idx) => {
-      promiseArr.push(this.moduleLookupService.upsert('sources', this.selectedSources[idx], module.moduleId).toPromise());
-      // todo: only update ones that have changed
+      if (!_.isEqual(this.selectedSources[idx], this.orgSelectedSources[idx])) {
+        promiseArr.push(this.moduleLookupService.upsert('sources', this.selectedSources[idx], module.moduleId).toPromise());
+      }
     });
 
     Promise.all(promiseArr)

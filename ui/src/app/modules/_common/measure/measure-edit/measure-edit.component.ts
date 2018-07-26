@@ -49,7 +49,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
         {name: 'Sales'},
       ]),
       // promise getting sourceIds for current module
-      this.moduleLookupService.getNoError('sources', this.store.module.moduleId).toPromise()
+      this.moduleLookupService.get('sources', this.store.module.moduleId).toPromise()
     ])
       .then(data => {
         this.sources = data[0];
