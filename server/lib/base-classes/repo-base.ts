@@ -69,8 +69,7 @@ export default class RepoBase {
   }
 
   getOneById(id) {
-    return this.Model.findById(id).exec()
-      .then(x => x);
+    return this.Model.findById(id).exec();
   }
 
   // returns the latest value
@@ -83,7 +82,7 @@ export default class RepoBase {
       .then(arr => arr.length ? arr[0] : null);
   }
 
-  getOne(_filter = {}) {
+  getOneByQuery(_filter = {}) {
     let filter = _filter;
     filter = this.addDateRangeToFilter(filter);
     return this.Model.findOne(filter).exec();
@@ -98,8 +97,7 @@ export default class RepoBase {
       .then(item => {
         if (!item && data.updatedDate) {
           throw new NamedApiError('ConcurrencyError', 'Concurrency error, please refresh your data.', null, 400);
-        }
-        else if (!item) {
+        } else if (!item) {
           throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         return item;

@@ -5,30 +5,6 @@ import {ApiError} from '../common/api-error';
 import * as _ from 'lodash';
 import Any = jasmine.Any;
 
-/*
-interface PgRow {
-  rows: AnyObj[];
-}
-
-const date = new Date().toISOString();
-function query(a, b?): Promise<PgRow> {
-  console.log(a, b);
-  return Promise.resolve({rows: [{
-      module_id: 5,
-      fiscal_month_id: 201809,
-      open_flag: 'Y',
-      create_owner: 'system',
-      create_datetimestamp: date,
-      update_owner: 'system',
-      update_datetimestamp: date,
-    }]});
-}
-
-const pgc = {
-  pgdb: {query: query}
-}
-*/
-
 // date assumption: assumes all dates are iso date strings, can't pass in objects with Date types
 // passed in filter objects use object properties, not table fields
 export class PostgresRepoBase {
@@ -49,13 +25,20 @@ export class PostgresRepoBase {
       .then(resp => resp.rows.map(row => this.orm.recordToObject(row)));
   }
 
-  getOne(idVal, errorIfMultiple = true) {
-    if (!idVal) {
-      throw new ApiError('getOne missing idVal', null, 400);
-    }
+  getOneById(idVal) {
     return this.getMany({[this.idProp]: idVal})
       .then(objs => {
-        if (objs.length > 1 && errorIfMultiple) {
+        if (objs.length > 1) {
+          throw new ApiError('Multiple rows returned from getOne query', null, 400);
+        }
+        return objs[0];
+      });
+  }
+
+  getOneByQuery(filter) {
+    return this.getMany(filter)
+      .then(objs => {
+        if (objs.length > 1) {
           throw new ApiError('Multiple rows returned from getOne query', null, 400);
         }
         return objs[0];
@@ -160,11 +143,8 @@ export class PostgresRepoBase {
   }
 
   removeOne(idVal) {
-    if (!idVal) {
-      throw new ApiError('getOne missing idVal', null, 400);
-    }
     const filter = {[this.idProp]: idVal};
-    return this.getOne(idVal)
+    return this.getOneById(idVal)
       .then(obj => {
         if (!obj) {
           throw new ApiError(`DeleteOne: no record to delete.`, null, 400);

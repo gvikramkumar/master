@@ -26,11 +26,11 @@ export class ToastService {
   constructor(private store: AppStore) {
   }
 
-  addPermToast(title, message, severity = ToastSeverity.info) {
+  showPermToast(title, message, severity = ToastSeverity.info) {
     this.permToast.addToast(severity, title, message);
   }
 
-  addAutoHideToast(title, message, severity = ToastSeverity.info) {
+  showAutoHideToast(title, message, severity = ToastSeverity.info) {
     this.autoHideToast.addToast(severity, title, message);
   }
 

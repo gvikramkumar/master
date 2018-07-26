@@ -47,7 +47,7 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
     // Promise.all to get module/source mapping from module-lookup
     const promiseArr: Promise<any>[] = [];
     this.modules.forEach((module) => {
-      promiseArr.push(this.moduleLookupService.getNoError('sources', module.moduleId).toPromise());
+      promiseArr.push(this.moduleLookupService.get('sources', module.moduleId).toPromise());
     });
 
     Promise.all(promiseArr)
@@ -66,7 +66,7 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
 
     Promise.all(promiseArr)
       .then(results => {
-        this.toastService.addAutoHideToast('Submitted', 'Module-to-source mapping has been submitted successfully.', ToastSeverity.success);
+        this.toastService.showAutoHideToast('Submitted', 'Module-to-source mapping has been submitted successfully.', ToastSeverity.success);
       });
   }
 

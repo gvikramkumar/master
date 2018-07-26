@@ -27,7 +27,6 @@ export class AppStore extends StoreBase {
   initialBreakpoint: string;
   modules = [];
   showSpinner = false;
-  currentModule: DfaModule;
 
   headerOptions = new CuiHeaderOptions({
     showBrandingLogo: true,
