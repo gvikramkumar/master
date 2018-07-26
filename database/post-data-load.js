@@ -211,13 +211,22 @@ db.dfa_source.insertMany([
     sourceId: NumberInt(1),
     name: 'Manual Upload',
     desc: 'Manual Upload source',
+    typeCode: 'MU',
     status: 'A'
   },
   {
     sourceId: NumberInt(2),
     name: 'Rapid Revenue',
     desc: 'Rapid Revenue source',
+    typeCode: 'RR',
     status: 'A'
+  },
+  {
+    sourceId: NumberInt(3),
+    name: 'Inactive Revenue',
+    desc: 'Inactive Revenue source',
+    typeCode: 'IR',
+    status: 'I'
   },
 ])
 
@@ -225,7 +234,6 @@ const collectionsWithStatus = [
   'dfa_allocation_rule',
   'dfa_measure',
   'dfa_module',
-  'dfa_source',
   'dfa_submeasure'
 ];
 

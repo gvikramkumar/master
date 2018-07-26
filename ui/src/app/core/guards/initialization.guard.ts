@@ -47,8 +47,7 @@ export class InitializationGuard implements CanActivate {
     if (this.store.initialized) {
       return true;
     } else {
-      this.init();
-      return this.response$;
+      return this.init();
     }
 
 
@@ -72,51 +71,19 @@ export class InitializationGuard implements CanActivate {
 
     this.store.user = new User('jodoe', 'John Doe', []);
 
-    forkJoin(
-      // this.userService.getAll(),
-      this.moduleService.getMany())
-      .pipe(
-        map(x => {
-          // console.log('initguard done');
-          // this.store.pub({...this.store.state, initialized: true});
-          this.afterInit();
-          this.store.initialized = true;
-          console.log('app initialized');
-          this.response$.next(true);
-          return true;
-        }),
-        catchError(err => {
-          this.response$.next(false);
-          return Observable.throw(err);
-        })
-      )
-      .subscribe();
+    return Promise.all([
+      this.moduleService.refreshStore()
+    ])
+      .then(results => {
+        this.afterInit();
+        this.store.initialized = true;
+        console.log('app initialized');
+        return true;
+      })
+      .catch(err => {
+        throw(err);
+      });
 
-
-    /*
-        // an example of a complex initialization flow with dependencies of dependencies
-        Observable.forkJoin(this.init1.get(), this.init2.get())
-          .mergeMap(arr => {
-            // arr has results of forkJoin calls in same order, this was easier with promises, this is
-            // essentially the same as Promise.all().then(arr => Promise.all().then(..., just with observables now
-            return Observable.forkJoin(this.init3.get(), this.init4.get());
-          })
-          .mergeMap(x => {
-            return Observable.forkJoin(this.init5.get());
-          })
-          .map(x => {
-            this.store.pubInitialized(true);
-            this.afterInit();
-            console.log('app initialized');
-            this.response$.next(true);
-            return true;
-          })
-          .catch(err => {
-            this.response$.next(false);
-            return Observable.throw(err);
-          })
-          .subscribe(); // only need this cause we're not returning this function to canActivate
-    */
   }
 
   // initialization code that depends on the initial data loads

@@ -19,13 +19,11 @@ export class ModuleService extends RestBase<DfaModule> {
     super('module', httpClient, store);
   }
 
-  getMany(): Observable<DfaModule[]> {
-    return super.getMany().pipe(
-      tap(modules => {
-        this.store.modules = _.sortBy(modules, 'displayOrder');
+  refreshStore(): Promise<DfaModule[]> {
+    return super.getMany({status: 'A', setSort: 'displayOrder'}).toPromise()
+      .then(modules => {
+        this.store.pubModules(modules);
         return modules;
-      })
-    )
+      });
   }
-
 }

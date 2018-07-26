@@ -25,8 +25,8 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
   }
 
   ngOnInit() {
-    this.modules = this.store.modules.filter(module => !shUtil.isAdminModuleId(module.moduleId));
-    this.adminModule = this.store.modules.filter(module => shUtil.isAdminModuleId(module.moduleId))[0];
+    this.modules = this.store.nonAdminModules;
+    this.adminModule = this.store.adminModule;
     if (this.store.module) {
       this.selectedModule = this.store.module;
     } else {

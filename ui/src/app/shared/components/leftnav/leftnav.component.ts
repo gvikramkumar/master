@@ -34,8 +34,9 @@ export class LeftnavComponent {
     switch (this.module.abbrev) {
       case 'admn':
         this.links = [
+          {route: '/admn/module', text: 'Module'},
           {route: '/admn/open-period', text: 'Open Period'},
-          {route: '/admn/source', text: 'Sources'},
+          {route: '/admn/source', text: 'Source'},
           {route: '/admn/source-mapping', text: 'Source Mapping'},
         ];
         this.alinks = [];

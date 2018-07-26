@@ -3,28 +3,29 @@ import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {SourceService} from '../../_common/services/source.service';
-import {Source} from '../../_common/models/source';
+import {ModuleService} from '../../_common/services/module.service';
+import {DfaModule} from '../../_common/models/module';
 import {CuiInputComponent, CuiTableOptions} from '@cisco-ngx/cui-components';
 import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
 import {DialogType} from '../../../core/models/ui-enums';
 import * as _ from 'lodash';
+import {shUtil} from '../../../../../../shared/shared-util';
 
 @Component({
-  selector: 'fin-source',
-  templateUrl: './source.component.html',
-  styleUrls: ['./source.component.scss']
+  selector: 'fin-module',
+  templateUrl: './module.component.html',
+  styleUrls: ['./module.component.scss']
 })
-export class SourceComponent extends RoutingComponentBase implements OnInit {
+export class ModuleComponent extends RoutingComponentBase implements OnInit {
   errs: string[];
   formTitle: string;
-  sources: Source[] = [];
-  source: Source;
+  modules: DfaModule[] = [];
+  module = new DfaModule();
   editMode: boolean;
   showForm = false;
-  tableColumns = ['name', 'typeCode', 'status'];
-  dataSource: MatTableDataSource<Source>;
+  tableColumns = ['name', 'abbrev', 'displayOrder', 'status'];
+  dataSource: MatTableDataSource<DfaModule>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('nameInput') nameInput: CuiInputComponent;
@@ -35,7 +36,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     private store: AppStore,
     private router: Router,
     private route: ActivatedRoute,
-    private sourceService: SourceService,
+    private moduleService: ModuleService,
     private uiUtil: UiUtil
   ) {
     super(store, route);
@@ -48,11 +49,11 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
 
   refresh() {
     this.showForm = false;
-    this.source = new Source();
-    this.sourceService.getMany()
-      .subscribe(sources => {
-        this.sources = sources;
-        this.dataSource = new MatTableDataSource<Source>(this.sources);
+    this.module = new DfaModule();
+    this.moduleService.getMany()
+      .subscribe(modules => {
+        this.modules = modules.filter(module => !shUtil.isAdminModuleId(module.moduleId));
+        this.dataSource = new MatTableDataSource<DfaModule>(this.modules);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
@@ -62,17 +63,17 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  addSource() {
-    this.source = new Source();
+  addModule() {
+    this.module = new DfaModule();
     this.editMode = false;
-    this.formTitle = 'Add New Source';
+    this.formTitle = 'Add New Module';
     this.doShowForm();
   }
 
-  editSource(source) {
-    this.source = _.cloneDeep(source);
+  editModule(module) {
+    this.module = _.cloneDeep(module);
     this.editMode = true;
-    this.formTitle = 'Edit Source';
+    this.formTitle = 'Edit Module';
     this.doShowForm();
   }
 
@@ -88,13 +89,16 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   save() {
     const errs = this.validate();
     if (!errs) {
-      let obs: Observable<Source>;
+      let obs: Observable<DfaModule>;
       if (this.editMode) {
-        obs = this.sourceService.update(this.source);
+        obs = this.moduleService.update(this.module);
       } else {
-        obs = this.sourceService.add(this.source);
+        obs = this.moduleService.add(this.module);
       }
-      obs.subscribe(() => this.refresh());
+      obs.subscribe(() => {
+        this.refresh();
+        this.moduleService.refreshStore();
+      });
     } else {
       this.uiUtil.genericDialog(this.errs.join('\n'));
     }

@@ -42,7 +42,7 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
   }
 
   ngOnInit() {
-    this.modules = this.store.modules.filter(module => !shUtil.isAdminModuleId(module.moduleId));
+    this.modules = this.store.nonAdminModules;
     Promise.all([
       this.pgLookupService.getFiscalMonths().toPromise(),
       this.openPeriodService.getMany().toPromise()

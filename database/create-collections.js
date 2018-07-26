@@ -58,6 +58,7 @@ db.prof_swalloc_manual_mix.createIndex({submeasureName: 1, fiscalMonth: -1});
 db.dfa_module.createIndex({name: 1}, {unique: true});
 db.dfa_module.createIndex({displayOrder: 1}, {unique: true});
 db.dfa_source.createIndex({name: 1}, {unique: true});
+db.dfa_source.createIndex({typeCode: 1}, {unique: true});
 
 db.lookup.createIndex({key: 1}, {unique: true});// shared
 db.module_lookup.createIndex({moduleId: 1, key: 1}, {unique: true});// per module

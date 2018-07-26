@@ -9,7 +9,7 @@
           <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
         </mat-form-field>
         <a>
-          <button cuiButton [small]="true" color="secondary" (click)="addSource()">Add New</button>
+          <button cuiButton [small]="true" color="secondary" (click)="addModule()">Add New</button>
         </a>
       </div>
 
@@ -20,13 +20,18 @@
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
             <mat-cell *matCellDef="let row">
-              <a href="javascript:void(0)" (click)="editSource(row)">{{row.name}}</a>
+              <a href="javascript:void(0)" (click)="editModule(row)">{{row.name}}</a>
             </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="typeCode">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Type Code</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.typeCode}}</mat-cell>
+          <ng-container matColumnDef="abbrev">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Abbrev</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.abbrev}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="displayOrder">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Display Order</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.displayOrder}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="status">
@@ -40,7 +45,7 @@
 
 
         <mat-paginator #paginator
-                       [length]="sources.length"
+                       [length]="modules.length"
                        [pageIndex]="0"
                        [pageSize]="5"
                        [pageSizeOptions]="[5, 10, 25, 100]">
@@ -53,11 +58,11 @@
       <div class="edit-form-container" [fxShow]="showForm">
         <fieldset>
           <legend>{{formTitle}}</legend>
-          <cui-input type="text" #nameInput [(model)]="source.name" label="Source Name"></cui-input>
-          <cui-input type="text" [(model)]="source.typeCode" label="Type Code"></cui-input>
-          <cui-input type="textarea" [(model)]="source.desc" [options]="{rows: 2}" label="Description"></cui-input>
+          <cui-input type="text" #nameInput [(model)]="module.name" label="Module Name"></cui-input>
+          <cui-input type="text" [(model)]="module.abbrev" label="Abbreviation"></cui-input>
+          <cui-input type="text" [(model)]="module.displayOrder" label="Display Order"></cui-input>
           <div style="padding-top:15px;">
-            <fin-checkbox label="Active" [(model)]="source.status" trueVal="A" falseVal="I"></fin-checkbox>
+            <fin-checkbox label="Active" [(model)]="module.status" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
         </fieldset>
 

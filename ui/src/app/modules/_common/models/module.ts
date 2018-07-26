@@ -2,7 +2,12 @@
 export class DfaModule {
   id?: string;
   moduleId?: number;
-  displayOrder: number;
-  abbrev: string;
   name: string;
+  abbrev: string;
+  displayOrder: number;
+  status: string;
+
+  constructor(status?) {
+    this.status = status || 'I';
+  }
 }
