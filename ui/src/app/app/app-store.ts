@@ -25,7 +25,6 @@ import {uiConst} from '../core/models/ui-const';
 export class AppStore extends StoreBase {
   user = new User('jodoe', 'John Doe', []);
   initialBreakpoint: string;
-  modules = [];
   showSpinner = false;
 
   headerOptions = new CuiHeaderOptions({
@@ -65,6 +64,18 @@ export class AppStore extends StoreBase {
   pubInitialized(val) {
     this.initialized = val;
     this.initialized$.next(this.initialized);
+  }
+
+  modules: DfaModule[] = [];
+  nonAdminModules: DfaModule[] = [];
+  adminModule: DfaModule;
+  modules$ = new BehaviorSubject<DfaModule[]>(this.modules);
+  subModules = this.modules$.subscribe.bind(this.modules$);
+  pubModules(val) {
+    this.modules = val;
+    this.nonAdminModules = this.modules.filter(module => module.moduleId !== 99);
+    this.adminModule = _.find(this.modules, {moduleId: 99});
+    this.modules$.next(this.modules);
   }
 
   module: DfaModule;

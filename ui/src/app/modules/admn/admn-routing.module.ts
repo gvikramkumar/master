@@ -6,6 +6,7 @@ import {Modules} from '../../../../../shared/enums';
 import {OpenPeriodComponent} from './open-period/open-period.component';
 import {SourceComponent} from './source/source.component';
 import {SourceMappingComponent} from './source-mapping/source-mapping.component';
+import {ModuleComponent} from './module/module.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,18 @@ const routes: Routes = [
     component: MainComponent,
     data: {moduleId: Modules.admn},
     children: [
+      {
+        path: 'module', component: ModuleComponent,
+        canActivate: [AuthorizationGuard],
+        data: {
+          authorization: 'prof-sm:manage',
+          hero: {
+            title: 'Manage Modules',
+            desc: 'Create and configure modules'
+          },
+          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Open Period'}]
+        }
+      },
       {
         path: 'open-period', component: OpenPeriodComponent,
         canActivate: [AuthorizationGuard],

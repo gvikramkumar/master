@@ -20,6 +20,10 @@ export class UiUtil {
     return val === 'A';
   }
 
+  static statusIsInactive(val) {
+    return val === 'I';
+  }
+
   static statusIsPending(val) {
     return val === 'P';
   }

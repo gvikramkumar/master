@@ -5,6 +5,7 @@ import {DfaCommonModule} from '../_common/dfa-common.module';
 import { OpenPeriodComponent } from './open-period/open-period.component';
 import { SourceComponent } from './source/source.component';
 import { SourceMappingComponent } from './source-mapping/source-mapping.component';
+import {ModuleComponent} from './module/module.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { SourceMappingComponent } from './source-mapping/source-mapping.componen
     OpenPeriodComponent,
     SourceComponent,
     SourceMappingComponent,
+    ModuleComponent,
   ]
 })
 export class AdmnModule {

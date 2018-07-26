@@ -37,7 +37,7 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
   }
 
   ngOnInit() {
-    this.modules = this.store.modules.filter(module => !shUtil.isAdminModuleId(module.moduleId));
+    this.modules = this.store.nonAdminModules;
 
     this.sourceService.getMany({status: 'A'}).toPromise()
       .then(activeSources => {
