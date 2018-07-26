@@ -1,27 +1,22 @@
 import { Injectable } from '@angular/core';
+import {RestBase} from '../../../core/base-classes/rest-base';
+import {DfaModule} from '../models/module';
+import {tap} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {AppStore} from '../../../app/app-store';
+import {Observable} from 'rxjs/index';
+import {environment} from '../../../../environments/environment';
+import {OpenPeriod} from '../models/open-period';
 
-const arr = [
-  {fiscalMonthName: 'JUL FY2018', fiscalMonthInt:	201812},
-  {fiscalMonthName: 'JUN FY2018', fiscalMonthInt:	201811},
-  {fiscalMonthName: 'MAY FY2018', fiscalMonthInt:	201810},
-  {fiscalMonthName: 'APR FY2018', fiscalMonthInt:	201809},
-  {fiscalMonthName: 'MAR FY2018', fiscalMonthInt:	201808},
-  {fiscalMonthName: 'FEB FY2018', fiscalMonthInt:	201807},
-  {fiscalMonthName: 'JAN FY2018', fiscalMonthInt:	201806},
-];
-
+const apiUrl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
-export class OpenPeriodService {
+export class OpenPeriodService extends RestBase<OpenPeriod> {
 
-  constructor() { }
-
-  getMany(months) {
-    return arr.slice(0, months);
+  constructor(httpClient: HttpClient, store: AppStore) {
+    super('open-period', httpClient, store);
   }
-
-
 
 }

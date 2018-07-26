@@ -1,15 +1,24 @@
-
-<!--
 <div class="fin-edit-container">
 
-  <div class="col-md-6">
-    <div *ngFor="module of modules">
-      <cui-select [(ngModel)]="measure.sources" [items]="fiscalMonths" empty="true" label="Sources"
-                  [multiSelect]="true" optionsKey="name" optionsValue="sourceId" required="true"></cui-select>
+  <div class="row">
+    <div class="col-lg-9">
+
+      <div class="row" *ngFor="let module of modules;let i = index;">
+        <div class="col-4">
+          <div class="module-name">
+            {{module.name}}
+          </div>
+        </div>
+
+        <div class="col-8">
+          <cui-select [items]="fiscalMonths[i] || []" [(ngModel)]="selFiscalMonths[i]"
+                      optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
+        </div>
+      </div>
+
+      <div class="fin-footer-buttons">
+        <button cuiButton [small]="true" color="primary" (click)="save()">Submit</button>
+      </div>
     </div>
   </div>
-
-
 </div>
--->
-

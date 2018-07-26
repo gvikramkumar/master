@@ -31,21 +31,29 @@ export default class PostgresControllerBase {
   }
 
   getQueryOne(req, res, next) {
-    this.getManyPromise(req)
-      .then(items => {
-        if (items.length > 1) {
-          throw new ApiError('getOneQuery returned multiple items');
+    const setNoError = req.query.setNoError;
+    delete req.query.setNoError;
+    this.repo.getOneByQuery(req.query)
+      .then(item => {
+        if (item) {
+          res.json(item);
+        } else if (setNoError) {
+          res.status(204).end();
+        } else {
+          next(new ApiError('Not found', null, 404));
         }
-        res.json(items[0]);
       })
       .catch(next);
   }
 
+  // ui will always add error modal on 404, we'll allow a querystring "setNoError" to defeat this
   getOne(req, res, next) {
-    this.repo.getOne(req.params.id)
+    this.repo.getOneById(req.params.id)
       .then(item => {
         if (item) {
           res.json(item);
+        } else if (req.query.setNoError) {
+          res.status(204).end();
         } else {
           next(new ApiError('Not found', null, 404));
         }

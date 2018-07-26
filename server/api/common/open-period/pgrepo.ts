@@ -5,7 +5,7 @@ import {injectable} from 'inversify';
 
 const ormMap: OrmMap[] = [
   {prop: 'moduleId', field: 'module_id', type: OrmTypes.number},
-  {prop: 'fiscalMonth', field: 'fiscal_month_id'},
+  {prop: 'fiscalMonth', field: 'fiscal_month_id', type: OrmTypes.number},
   {prop: 'openFlag', field: 'open_flag'},
   {prop: 'createdBy', field: 'create_owner'},
   {prop: 'createdDate', field: 'create_datetimestamp', type: OrmTypes.date},

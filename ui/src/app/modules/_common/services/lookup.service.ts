@@ -26,7 +26,7 @@ export class LookupService {
   }
 
   // will 204 if not found (no error, nothing in body)
-  getNoError(key: string): Observable<any> {
+  get(key: string): Observable<any> {
     const params = new HttpParams().set('noerror', 'true');
     return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}/${key}`, {params});
   }

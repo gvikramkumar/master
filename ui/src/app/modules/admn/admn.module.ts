@@ -13,7 +13,11 @@ import { SourceMappingComponent } from './source-mapping/source-mapping.componen
     AdmnRoutingModule,
     DfaCommonModule
   ],
-  declarations: [OpenPeriodComponent, SourceComponent, SourceMappingComponent]
+  declarations: [
+    OpenPeriodComponent,
+    SourceComponent,
+    SourceMappingComponent,
+  ]
 })
 export class AdmnModule {
   constructor() {

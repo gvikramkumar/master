@@ -96,7 +96,7 @@ export default class UploadController {
 
   getValidationAndImportData(): Promise<any> {
     return Promise.all([
-      this.openPeriodRepo.getOne({moduleId: this.moduleId}),
+      this.openPeriodRepo.getOneByQuery({moduleId: this.moduleId}),
       this.userRoleRepo.getRolesByUserId('jodoe'),
       this.submeasureRepo.getMany({moduleId: this.moduleId})
     ])

@@ -74,7 +74,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
           title = `${result.uploadName} - failure`;
           message = 'Errors have been emailed to your email account.';
         }
-        this.toastService.addPermToast(title, message);
+        this.toastService.showPermToast(title, message);
       })
   }
 

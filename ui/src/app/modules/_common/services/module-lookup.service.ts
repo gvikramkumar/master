@@ -33,7 +33,7 @@ export class ModuleLookupService {
   }
 
   // will 204 if not found (no error, just empty)
-  getNoError(key: string, moduleId?: number): Observable<any> {
+  get(key: string, moduleId?: number): Observable<any> {
     let params = new HttpParams().set('noerror', 'true');
     params = this.setModuleIdInParams(moduleId, params);
     return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}/${key}`, {params});
