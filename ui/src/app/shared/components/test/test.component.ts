@@ -30,9 +30,10 @@ export class TestComponent implements OnInit {
 
   doit() {
     const data = `
-    <div class="outline">four<br>five</div>
-    `
-
+    one<br>
+    two<br>
+    three
+    `;
 
     this.uiUtil.genericDialog('some <b>body</b> text', DialogType.ok, 'My Title', data);
 

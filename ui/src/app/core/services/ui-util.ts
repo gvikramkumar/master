@@ -142,7 +142,7 @@ export class UiUtil {
       hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
       // Not sure why, cdk or cui? Could be material messing it up? Added an issue in cui-components
       animated: false,
-      data: {message, title, mode, data},
+      data: {message, title, mode, data, stuff: 'one\ntwos'},
     };
     return this.dialogService.open(GenericDialogComponent, <CuiDialogConfig>config)
       .afterCuiDialogClosed();

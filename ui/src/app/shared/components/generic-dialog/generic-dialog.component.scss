@@ -1,6 +1,18 @@
 
-.data {
-  margin-top: 20px;
+
+.modal__content {
+  $margin-horiz: 30px;
+
+  .message {
+    margin: 0 $margin-horiz;
+    text-align: left;
+  }
+
+  .data {
+    margin: 20px $margin-horiz 0 $margin-horiz;
+    text-align: left;
+  }
+
 }
 
 
