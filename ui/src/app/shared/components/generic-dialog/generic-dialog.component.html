@@ -1,10 +1,10 @@
-
 <div class="modal__content">
   <div *ngIf="data.title" class="modal__header">
     <h1>{{data.title}}</h1>
   </div>
   <div class="modal__body">
-    <h5>{{data.message}}</h5>
+    <h5 class="message"></h5>
+    <div class="data" *ngIf="data.data"></div>
   </div>
   <div class="modal__footer">
     <button *ngIf="cancelText" cuiButton [small]="true" color="primary" type="button" (click)="dialogRef.close()">{{cancelText}}</button>

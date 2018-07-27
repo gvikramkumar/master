@@ -19,7 +19,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('permToast') permToast: CuiToastComponent;
   @ViewChild('autoHideToast') autoHideToast: CuiToastComponent;
 
-  constructor(private titleService: Title, public store: AppStore, private toastService: ToastService) {
+  constructor(
+    private titleService: Title,
+    public store: AppStore,
+    private toastService: ToastService
+  ) {
   }
 
   public ngOnInit() {

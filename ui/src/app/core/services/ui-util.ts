@@ -136,13 +136,13 @@ export class UiUtil {
   // returns true if submit button hit, undefined if not. Have to subscribe, THEN check for response,
   // no response, then canceled, if true (truthy) then they hit ok/yes. so:
   // this.uiUtil.genericDialog(message).subscribe(resp => {if (resp) { they hit ok, do your work}
-  genericDialog(message: string, mode = DialogType.ok, title = null): Observable<any> {
+  genericDialog(message: string, mode = DialogType.ok, title = null, data = null): Observable<any> {
     const config = {
       maxWidth: '500px',
       hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
       // Not sure why, cdk or cui? Could be material messing it up? Added an issue in cui-components
       animated: false,
-      data: {message, title, mode},
+      data: {message, title, mode, data, stuff: 'one\ntwos'},
     };
     return this.dialogService.open(GenericDialogComponent, <CuiDialogConfig>config)
       .afterCuiDialogClosed();
