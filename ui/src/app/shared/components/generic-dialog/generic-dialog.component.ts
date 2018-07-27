@@ -30,6 +30,13 @@ submitText: string;
         this.submitText = 'OK';
         break;
     }
+    setTimeout(() => {
+      document.querySelector('.modal__body .message').innerHTML = this.data.message;
+      if (this.data.data) {
+        document.querySelector('.modal__body .data').innerHTML = this.data.data;
+      }
+    });
   }
 
 }
+

@@ -26,15 +26,17 @@ export class TestComponent implements OnInit {
   ngOnInit() {
   }
 
+
+
   doit() {
-    this.uiUtil.genericDialog('My message fddsafdsa fasd fa dsf dsaf', DialogType.yesNo)
-      .subscribe(resp => {
-        if (resp) {
-          this.results = 'submit';
-        } else {
-          this.results = 'cancel';
-        }
-      })
+    const data = `
+    <div class="outline">four<br>five</div>
+    `
+
+
+    this.uiUtil.genericDialog('some <b>body</b> text', DialogType.ok, 'My Title', data);
+
   }
+
 
 }
