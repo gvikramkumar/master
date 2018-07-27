@@ -35,7 +35,7 @@ export class TestComponent implements OnInit {
     three
     `;
 
-    this.uiUtil.genericDialog('some <b>body</b> text', DialogType.ok, 'My Title', data);
+    this.uiUtil.genericDialog('some <b>body</b> tex fsadf dsf dsf dsafds fdsa fdsaft', DialogType.ok, 'My Title', data);
 
   }
 
