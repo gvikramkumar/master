@@ -129,7 +129,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
       }
       obs.subscribe(() => this.refresh());
     } else {
-      this.uiUtil.genericDialog(this.errs.join('<br>'));
+      this.uiUtil.genericDialog('Validaton Errors', this.errs.join('\n'));
     }
   }
 
