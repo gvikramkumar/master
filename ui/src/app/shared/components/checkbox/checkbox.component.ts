@@ -12,6 +12,8 @@ export class CheckboxComponent implements OnInit {
   @Input('model') model;
   @Output('modelChange') modelChange = new EventEmitter<any>();
   bool: boolean;
+  @Input('disabled') disabled;
+  @Input('inline') inline = false;
 
   constructor() { }
 

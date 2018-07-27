@@ -69,7 +69,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
-      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', DialogType.yesNo);
+      return this.uiUtil.genericDialog('Are you sure you want to lose your changes?', null, null, DialogType.yesNo);
     } else {
       return of(true);
     }

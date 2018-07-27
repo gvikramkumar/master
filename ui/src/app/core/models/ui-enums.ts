@@ -5,3 +5,9 @@ export enum DialogType {
   yesNo
 }
 
+export enum DialogSize {
+  small = '500px',
+  medium = '600px',
+  large = '700px'
+}
+
