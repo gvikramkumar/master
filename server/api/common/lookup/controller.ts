@@ -36,14 +36,6 @@ export default class LookupController {
       .catch(next);
   }
 
-  add(req, res, next) {
-    const data = req.body;
-    this.verifyProperties(data, ['key']);
-    this.repo.add(data)
-      .then(item => res.json(item))
-      .catch(next);
-  }
-
   upsert(req, res, next) {
     const data = req.body;
     this.verifyProperties(data, ['key']);

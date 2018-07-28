@@ -42,38 +42,37 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
     this.sourceService.getMany({status: 'A'}).toPromise()
       .then(activeSources => {
         this.modules.forEach(module => {
-          // Create one copy of active sources for each module
           this.sources.push(_.cloneDeep(activeSources));
         });
       });
+    this.getModuleSouceMap();
+  }
 
-    // Promise.all to get module/source mapping from module-lookup
-    const promiseArr: Promise<any>[] = [];
-    this.modules.forEach((module) => {
-      promiseArr.push(this.moduleLookupService.get('sources', module.moduleId).toPromise());
-    });
-
-    Promise.all(promiseArr)
-      .then(results => {
-        // handle array of module sources
-        this.selectedSources = results.map(x => x || []);
+  getModuleSouceMap() {
+    const promiseArr = [];
+    this.moduleLookupService.getOneValueManyModules('sources',
+      this.store.nonAdminModules.map(m => m.moduleId))
+      .subscribe(objs => {
+        this.selectedSources =  objs.map(obj => obj.value || []);
         this.orgSelectedSources = _.cloneDeep(this.selectedSources);
       });
   }
 
   save() {
-    const promiseArr: Promise<any>[] = [];
-
+    const upserts = [];
     this.modules.forEach((module, idx) => {
       if (!_.isEqual(this.selectedSources[idx], this.orgSelectedSources[idx])) {
-        promiseArr.push(this.moduleLookupService.upsert('sources', this.selectedSources[idx], module.moduleId).toPromise());
+        upserts.push({moduleId: module.moduleId, key: 'sources', value: this.selectedSources[idx]});
       }
     });
 
-    Promise.all(promiseArr)
-      .then(results => {
-        this.toastService.showAutoHideToast('Submitted', 'Module-to-source mapping has been submitted successfully.', ToastSeverity.success);
-      });
+    if (upserts.length) {
+      this.moduleLookupService.upsertMany(upserts)
+        .subscribe(() => {
+          this.toastService.showAutoHideToast('Submitted',
+            'Module-to-source mapping has been submitted successfully.', ToastSeverity.success);
+        });
+    }
   }
 
 }
