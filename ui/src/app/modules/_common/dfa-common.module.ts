@@ -8,7 +8,6 @@ import {SubmeasureComponent} from './submeasure/submeasure/submeasure.component'
 import {RuleManagementComponent} from './rule-management/rule-management/rule-management.component';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterModule} from '@angular/router';
-import { SourceComponent } from './admin/source/source.component';
 import {MeasureComponent} from './measure/measure/measure.component';
 import {MeasureEditComponent} from './measure/measure-edit/measure-edit.component';
 
@@ -25,7 +24,6 @@ import {MeasureEditComponent} from './measure/measure-edit/measure-edit.componen
     RuleManagementEditComponent,
     BusinessUploadComponent,
     ReportsComponent,
-    SourceComponent,
     MeasureComponent,
     MeasureEditComponent,
   ],

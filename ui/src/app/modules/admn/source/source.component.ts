@@ -55,13 +55,11 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
 
   getModuleSouceMap() {
     const promiseArr = [];
-    this.store.nonAdminModules.forEach(module => {
-      promiseArr.push(this.moduleLookupService.get('sources', module.moduleId).toPromise());
-    });
-    Promise.all(promiseArr)
-      .then(results => {
-        this.moduleSourceMap = results.map((sources, idx) => {
-          return {module: this.store.nonAdminModules[idx], sources};
+    this.moduleLookupService.getOneValueManyModules('sources',
+      this.store.nonAdminModules.map(m => m.moduleId))
+      .subscribe(objs => {
+        this.moduleSourceMap =  objs.map((o, idx) => {
+          return {module: this.store.nonAdminModules[idx], sources: o.value || []};
         });
       });
   }

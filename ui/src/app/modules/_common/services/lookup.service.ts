@@ -31,10 +31,6 @@ export class LookupService {
     return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}/${key}`, {params});
   }
 
-  add(key, value) {
-    return this.httpClient.post<any>(`${apiUrl}/api/${this.endpointName}`, {key, value});
-  }
-
   upsert(key, value) {
     return this.httpClient.put<any>(`${apiUrl}/api/${this.endpointName}/${key}`, {key, value});
   }

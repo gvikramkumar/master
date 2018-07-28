@@ -6,7 +6,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {RuleManagementEditComponent} from '../_common/rule-management/rule-management-edit/rule-management-edit.component';
 import {BusinessUploadComponent} from '../_common/business-upload/business-upload/business-upload.component';
 import {ReportsComponent} from '../_common/reports/reports/reports.component';
-import {SourceComponent} from '../_common/admin/source/source.component';
 import {MainComponent} from '../../shared/components/main/main.component';
 import {Modules} from '../../../../../shared/enums';
 import {AuthorizationGuard} from '../../core/guards/authorization.guard';
@@ -19,23 +18,6 @@ const routes: Routes = [
     component: MainComponent,
     data: {moduleId: Modules.prof},
     children: [
-      {
-        path: 'admin',
-        children: [
-          {
-            path: 'source', component: SourceComponent,
-            canActivate: [AuthorizationGuard],
-            data: {
-              authorization: 'prof-sm:manage',
-              hero: {
-                title: 'Sources',
-                desc: 'Add - remove sources'
-              },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sources'}]
-            }
-          },
-        ]
-      },
       {
         path: 'measure',
         children: [
@@ -142,7 +124,8 @@ const routes: Routes = [
                 title: 'Create New Rule',
                 desc: 'Create a new rule'
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/prof/rule-management'}, {label: 'Create'}]
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management',
+                routerUrl: '/prof/rule-management'}, {label: 'Create'}]
             }
           },
           {
@@ -154,7 +137,8 @@ const routes: Routes = [
                 title: 'Update Rule',
                 desc: 'Update the selected rule'
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management', routerUrl: '/prof/rule-management'}, {label: 'Update'}]
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management',
+                routerUrl: '/prof/rule-management'}, {label: 'Update'}]
             }
           }
         ],

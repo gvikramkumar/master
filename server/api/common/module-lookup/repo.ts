@@ -20,18 +20,38 @@ Model: Model<any>;
     this.Model = model('ModuleLookup', schema);
   }
 
-  getMany(moduleId, keys: string[]) {
-    return this.Model.find({moduleId, key: {$in: keys}}).exec();
+  getManyValuesOneModule(moduleId, keys: string[]) {
+    return this.Model.find({moduleId, key: {$in: keys}}).exec()
+      .then(docs => {
+        const obj = {};
+        keys.map(key => {
+          const doc = _.find(docs, {key});
+          obj[key] = doc ? doc.value : undefined;
+        });
+        return obj;
+      });
   }
 
-  getDoc(moduleId, key) {
+  // it's important we maintain the same order as called as that's what the ui will need
+  // so get all, then map to same order
+  getOneValueManyModules(key, moduleIds: number[]) {
+    return this.Model.find({key, moduleId: {$in: moduleIds}}).exec()
+      .then(docs => {
+        return moduleIds.map(moduleId => {
+          const doc = _.find(docs, {moduleId});
+          return {moduleId, value: doc ? doc.value : undefined};
+        });
+      });
+  }
+
+  getOne(moduleId, key) {
     return this.Model.findOne({moduleId, key}).exec();
   }
 
   // this is for upload data validation for entries with just text values (not objects),
   // we need them upper case and sorted by lodash
   getTextValuesSortedUpperCase(moduleId, key) {
-    return this.getDoc(moduleId, key)
+    return this.getOne(moduleId, key)
       .then(doc => doc.value.map(val => val.toUpperCase()))
       .then(values => _.sortBy(values, _.identity));
   }
@@ -48,8 +68,16 @@ Model: Model<any>;
       });
   }
 
+  upsertMany(dataArr: {moduleId: number, key: string, value: string}[]) {
+    const promiseArr = [];
+    dataArr.forEach(data => {
+      promiseArr.push(this.upsert(data));
+    });
+    return Promise.all(promiseArr);
+  }
+
   upsert(data) {
-    return this.getDoc(data.moduleId, data.key)
+    return this.getOne(data.moduleId, data.key)
       .then(item => {
         if (!item) {
           return this.add(data);
