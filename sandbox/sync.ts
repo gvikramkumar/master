@@ -1,5 +1,7 @@
 import {mgc} from '../server/lib/database/mongoose-conn';
 import MgRepo from './mgrepo';
+import AnyObj from '../shared/models/any-obj';
+import * as _ from 'lodash';
 
 const repo = new MgRepo();
 
@@ -12,8 +14,9 @@ const dbRecords = [
   {moduleId: 2, name: 'carl', age: 60},//del
   {moduleId: 3, name: 'jim', age: 40},
 ];
+dbRecords.forEach(doc => repo.addCreatedByAndUpdatedBy(doc, 'jodoe'));
 
-const mine = [
+const mine: AnyObj = [
   {moduleId: 1, name: 'dank', age: 51},//up
   {moduleId: 1, name: 'carl', age: 61},//up
   {moduleId: 2, name: 'dank', age: 51},//up
@@ -43,9 +46,16 @@ mgc.promise.then(({db, mongo}) => {
   repo.removeMany({})
     .then(() => {
     repo.addMany(dbRecords, 'jodoe')
-      .then(() => {
+      .then(() => repo.getManyNoCheck({}))
+      .then(dbdocs => {
+        mine.forEach(item => {
+          const doc = _.find(dbdocs, {moduleId: item.moduleId, name: item.name});
+          if (doc) {
+            item.id = doc.id;
+          }
+        })
         const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
-        return repo.syncRecords({setNoIdColumn: true}, predicate, mine, 'jodoe');
+        return <any> repo.syncRecords({}, predicate, mine, 'jodoe');
       })
       .then(() => process.exit(0));
   })

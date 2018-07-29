@@ -45,6 +45,10 @@ export default class RepoBase {
     return query.exec();
   }
 
+  getManyNoCheck(filter = {}) {
+    return this.Model.find(filter);
+  }
+
   getManyByIds(ids) {
     return this.Model.find({_id: {$in: ids}}).exec();
   }
@@ -185,10 +189,7 @@ export default class RepoBase {
     }
     return promise
       .then(item => {
-        if (this.schema.path('updatedBy')) {
-          data.updatedBy = userId;
-          data.updatedDate = new Date();
-        }
+        this.addUpdatedBy(item, userId)
         this.validate(data);
         // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
         // we'll just replace the doc in entirety and be done with it
@@ -204,10 +205,7 @@ export default class RepoBase {
   }
 
   updateNoCheck(data, userId) {
-    if (this.schema.path('updatedBy')) {
-      data.updatedBy = userId;
-      data.updatedDate = new Date();
-    }
+    this.addUpdatedBy(data, userId)
     this.validate(data);
     // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
     // we'll just replace the doc in entirety and be done with it
@@ -281,10 +279,11 @@ export default class RepoBase {
         const promiseArr = [];
         updates.forEach(item => this.addUpdatedBy(item, userId));
         updates.forEach(record => promiseArr.push(this.updateNoCheck(record, userId)));
-
         adds.forEach(item => this.addCreatedByAndUpdatedBy(item, userId));
         adds.forEach(record => promiseArr.push(this.addOne(record, userId)));
-        this.Model.deleteMany(filter);
+        const deleteIds = deletes.map(obj => obj.id);
+        promiseArr.push(this.Model.deleteMany({_id: {$in: deleteIds}}).exec())
+        return Promise.all(promiseArr);
       });
   }
 
@@ -343,8 +342,8 @@ export default class RepoBase {
   }
 
   addCreatedByAndUpdatedBy(item, userId) {
+    const date = new Date();
     if (this.schema.path('createdBy')) {
-      const date = new Date();
       item.createdBy = userId;
       item.createdDate = date;
       item.updatedBy = userId;
@@ -353,8 +352,16 @@ export default class RepoBase {
   }
 
   addUpdatedBy(item, userId) {
+    const date = new Date();
+    if (this.schema.path('createdBy')) {
+      if (!item.createdBy) {
+        item.createdBy = userId;
+      }
+      if (!item.createdDate) {
+        item.createdDate = date;
+      }
+    }
     if (this.schema.path('updatedBy')) {
-      const date = new Date();
       item.updatedBy = userId;
       item.updatedDate = date;
     }
