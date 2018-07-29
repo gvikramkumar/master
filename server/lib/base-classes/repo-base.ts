@@ -106,25 +106,8 @@ export default class RepoBase {
 
   // no autoincrement on this
   addMany(docs, userId) {
-    let createdBy = false;
-    let updatedBy = false;
     const date = new Date();
-    if (this.schema.path('createdBy')) {
-      createdBy = true;
-    }
-    if (this.schema.path('updatedBy')) {
-      updatedBy = true;
-    }
-    docs.map(doc => {
-      if (createdBy) {
-        doc.createdBy = userId;
-        doc.createdDate = date;
-      }
-      if (updatedBy) {
-        doc.updatedBy = userId;
-        doc.updatedDate = date;
-      }
-    });
+    docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
     return this.Model.insertMany(docs);
   }
 
@@ -149,15 +132,7 @@ export default class RepoBase {
     delete data._id;
     delete data.id;
     const item = new this.Model(data);
-    const date = new Date();
-    if (this.schema.path('createdBy')) {
-      item.createdBy = userId;
-      item.createdDate = date;
-    }
-    if (this.schema.path('updatedBy')) {
-      item.updatedBy = userId;
-      item.updatedDate = date;
-    }
+    this.addCreatedByAndUpdatedBy(item, userId);
     return this.fillAutoIncrementField(item)
       .then(() => item.save());
   }
@@ -240,6 +215,13 @@ export default class RepoBase {
       .then(results => data);
   }
 
+  removeMany(filter) {
+    if (!filter) {
+      throw new ApiError('No filter for removeMany');
+    }
+    return this.Model.deleteMany(filter).exec();
+  }
+
   remove(id) {
     return this.getOneById(id)
       .then(item => {
@@ -264,44 +246,43 @@ export default class RepoBase {
 
   getSyncArrays(filter, predicate, records, userId) {
     let updates = [], adds = [], deletes = [];
-    return this.getMany(filter)
+    return this.Model.find(filter)
       .then(docs => {
+        docs = docs.map(doc => doc.toObject());
         updates = _.intersectionWith(records, docs, predicate);
         adds = _.differenceWith(records, docs, predicate);
         deletes = _.differenceWith(docs, records, predicate);
-        if (this.schema.path('createdBy')) {
-          const date = new Date();
-          adds.forEach(record => {
-            record.createdBy = userId;
-            record.createdDate = date;
-            record.updatedBy = userId;
-            record.updatedDate = date;
-          });
-          updates.forEach(record => {
-            record.updatedBy = userId;
-            record.updatedDate = date;
-          });
-        }
+
+        console.log('updates', updates);
+        console.log('adds', adds);
+        console.log('deletes', deletes);
+
         return {updates, adds, deletes};
       });
   }
 
-  // override this if we need the "no id column" case
-  syncRecords(filter, records, userId) {
+  syncRecords(filter, predicate, records, userId) {
     if (filter.setNoIdColumn) {
       delete filter.setNoIdColumn;
-      return this.syncRecordsNoIdColumn(filter, _.matches(filter), records, userId);
+      if (!predicate) {
+        throw new ApiError('No predicate given for syncRecords');
+      }
+      return this.syncRecordsNoIdColumn(filter, predicate, records, userId);
     } else {
-      return this.syncRecordsById(filter, _.matches(filter), records, userId);
+      predicate = (a, b) => a.id === b.id;
+      return this.syncRecordsById(filter, predicate, records, userId);
     }
   }
 
   // use this if you have an id column
   syncRecordsById(filter, predicate, records, userId) {
-    this.getSyncArrays(filter, predicate, records, userId)
+    return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
+        updates.forEach(item => this.addUpdatedBy(item, userId));
         updates.forEach(record => promiseArr.push(this.updateNoCheck(record, userId)));
+
+        adds.forEach(item => this.addCreatedByAndUpdatedBy(item, userId));
         adds.forEach(record => promiseArr.push(this.addOne(record, userId)));
         this.Model.deleteMany(filter);
       });
@@ -309,11 +290,13 @@ export default class RepoBase {
 
   // use this if you don't have an id column
   syncRecordsNoIdColumn(filter, predicate, records, userId) {
-    this.getSyncArrays(filter, predicate, records, userId)
+    return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
+        const inserts = adds.concat(updates);
+        inserts.forEach(item => this.addCreatedByAndUpdatedBy(item, userId));
         const promiseArr = [];
-        this.Model.deleteMany(filter);
-        this.Model.insertMany(updates.concat(adds));
+        return this.Model.deleteMany(filter).exec()
+          .then(() => this.Model.insertMany(inserts));
       });
   }
 
@@ -356,6 +339,24 @@ export default class RepoBase {
       } else {
         filter.moduleId = Number(filter.moduleId);
       }
+    }
+  }
+
+  addCreatedByAndUpdatedBy(item, userId) {
+    if (this.schema.path('createdBy')) {
+      const date = new Date();
+      item.createdBy = userId;
+      item.createdDate = date;
+      item.updatedBy = userId;
+      item.updatedDate = date;
+    }
+  }
+
+  addUpdatedBy(item, userId) {
+    if (this.schema.path('updatedBy')) {
+      const date = new Date();
+      item.updatedBy = userId;
+      item.updatedDate = date;
     }
   }
 

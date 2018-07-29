@@ -21,6 +21,7 @@ const mine = [
   {moduleId: 4, name: 'barney', age: 38},//add
 ]
 
+// const predicate = (a,b) => a.moduleId === b.moduleId && a.name === b.name;
 const predicate = (a,b) => a.moduleId === b.moduleId && a.name === b.name;
 moduleIds = [1,2,3,4]
 const filter = {moduleId: {$in: moduleIds}}
