@@ -87,6 +87,9 @@ export default class ControllerBase {
     if (req.query.queryPost) {
       req.query = req.body;
       this.getMany(req, res, next);
+    } else if (req.query.setSyncRecords) {
+      delete req.query.setSyncRecords
+      this.repo.syncRecords(req.query, req.body, req.user.id);
     } else if (req.query.insertMany) {
       this.repo.addMany(data, req.user.id)
         .then(() => {

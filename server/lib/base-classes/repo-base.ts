@@ -158,6 +158,11 @@ export default class RepoBase {
       item.updatedBy = userId;
       item.updatedDate = date;
     }
+    return this.fillAutoIncrementField(item)
+      .then(() => item.save());
+  }
+
+  fillAutoIncrementField(item) {
     if (this.autoIncrementField) {
       return this.Model.find({})
         .sort({[this.autoIncrementField]: -1}).limit(1).exec()
@@ -167,10 +172,9 @@ export default class RepoBase {
           } else {
             item[this.autoIncrementField] = 1;
           }
-          return item.save();
         });
     } else {
-      return item.save();
+      return Promise.resolve();
     }
   }
 
@@ -224,6 +228,18 @@ export default class RepoBase {
       });
   }
 
+  updateNoCheck(data, userId) {
+    if (this.schema.path('updatedBy')) {
+      data.updatedBy = userId;
+      data.updatedDate = new Date();
+    }
+    this.validate(data);
+    // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
+    // we'll just replace the doc in entirety and be done with it
+    return this.Model.replaceOne({_id: data.id}, data)
+      .then(results => data);
+  }
+
   remove(id) {
     return this.getOneById(id)
       .then(item => {
@@ -243,6 +259,61 @@ export default class RepoBase {
           throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         return items[0].remove();
+      });
+  }
+
+  getSyncArrays(filter, predicate, records, userId) {
+    let updates = [], adds = [], deletes = [];
+    return this.getMany(filter)
+      .then(docs => {
+        updates = _.intersectionWith(records, docs, predicate);
+        adds = _.differenceWith(records, docs, predicate);
+        deletes = _.differenceWith(docs, records, predicate);
+        if (this.schema.path('createdBy')) {
+          const date = new Date();
+          adds.forEach(record => {
+            record.createdBy = userId;
+            record.createdDate = date;
+            record.updatedBy = userId;
+            record.updatedDate = date;
+          });
+          updates.forEach(record => {
+            record.updatedBy = userId;
+            record.updatedDate = date;
+          });
+        }
+        return {updates, adds, deletes};
+      });
+  }
+
+  // override this if we need the "no id column" case
+  syncRecords(filter, records, userId) {
+    if (filter.setNoIdColumn) {
+      delete filter.setNoIdColumn;
+      return this.syncRecordsNoIdColumn(filter, _.matches(filter), records, userId);
+    } else {
+      return this.syncRecordsById(filter, _.matches(filter), records, userId);
+    }
+  }
+
+  // use this if you have an id column
+  syncRecordsById(filter, predicate, records, userId) {
+    this.getSyncArrays(filter, predicate, records, userId)
+      .then(({updates, adds, deletes}) => {
+        const promiseArr = [];
+        updates.forEach(record => promiseArr.push(this.updateNoCheck(record, userId)));
+        adds.forEach(record => promiseArr.push(this.addOne(record, userId)));
+        this.Model.deleteMany(filter);
+      });
+  }
+
+  // use this if you don't have an id column
+  syncRecordsNoIdColumn(filter, predicate, records, userId) {
+    this.getSyncArrays(filter, predicate, records, userId)
+      .then(({updates, adds, deletes}) => {
+        const promiseArr = [];
+        this.Model.deleteMany(filter);
+        this.Model.insertMany(updates.concat(adds));
       });
   }
 
