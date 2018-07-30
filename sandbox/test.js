@@ -1,4 +1,44 @@
+import {ApiError} from "../server/lib/common/api-error";
+
 const _ = require('lodash');
+
+
+
+function buildParameterizedWhereClause(keys, startIndex, errorIfEmpty) {
+  let sql = '';
+  if (keys.length) {
+    sql += ' where ';
+    keys.forEach((key, idx) => {
+      const map = _.find(this.orm.maps, {prop: key});
+      if (!map) {
+        throw new ApiError(`No property found in ormMap for ${key}`, null, 400);
+      }
+      const field = map.field;
+      if (idx !== 0) {
+        sql += ' and ';
+      }
+      sql += ` ${field} = $${startIndex + idx + 1} `;
+    });
+  } else {
+    if (errorIfEmpty) {
+      throw new ApiError('No filter in postgres query.', null, 400);
+    }
+  }
+  return sql;
+}
+
+console.log(buildParameterizedWhereClause(['one', 'two', 'three']))
+
+
+
+
+
+
+
+
+
+
+/*
 
 const db = [
   {moduleId: 1, name: 'dank', age: 50},
@@ -33,6 +73,7 @@ console.log('adds', JSON.stringify(adds,null,2));
 console.log('deletes', JSON.stringify(deletes,null,2));
 
 
+*/
 
 
 /*

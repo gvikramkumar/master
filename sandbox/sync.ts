@@ -55,7 +55,7 @@ mgc.promise.then(({db, mongo}) => {
           }
         })
         const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
-        return <any> repo.syncRecords({}, predicate, mine, 'jodoe');
+        return <any> repo.syncRecords({setNoIdColumn: true}, predicate, mine, 'jodoe');
       })
       .then(() => process.exit(0));
   })

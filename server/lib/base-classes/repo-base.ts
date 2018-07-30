@@ -108,11 +108,19 @@ export default class RepoBase {
       });
   }
 
-  // no autoincrement on this
   addMany(docs, userId) {
     const date = new Date();
     docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
-    return this.Model.insertMany(docs);
+    let promise;
+    if (this.autoIncrementField) {
+      promise = this.getAutoIncrementValue()
+        .then(inc => {
+          docs.forEach(doc => doc[this.autoIncrementField] = inc++);
+        });
+    } else {
+      promise = Promise.resolve();
+    }
+    return promise.then(() => this.Model.insertMany(docs));
   }
 
   // no autoincrement on this
@@ -141,17 +149,22 @@ export default class RepoBase {
       .then(() => item.save());
   }
 
+  getAutoIncrementValue() {
+    return this.Model.find({})
+      .sort({[this.autoIncrementField]: -1}).limit(1).exec()
+      .then(docs => {
+        if (docs.length) {
+          return docs[0][this.autoIncrementField] + 1;
+        } else {
+          return 1;
+        }
+      });
+  }
+
   fillAutoIncrementField(item) {
     if (this.autoIncrementField) {
-      return this.Model.find({})
-        .sort({[this.autoIncrementField]: -1}).limit(1).exec()
-        .then(docs => {
-          if (docs.length) {
-            item[this.autoIncrementField] = docs[0][this.autoIncrementField] + 1;
-          } else {
-            item[this.autoIncrementField] = 1;
-          }
-        });
+      this.getAutoIncrementValue()
+        .then(inc => item[this.autoIncrementField] = inc);
     } else {
       return Promise.resolve();
     }
@@ -250,11 +263,11 @@ export default class RepoBase {
         updates = _.intersectionWith(records, docs, predicate);
         adds = _.differenceWith(records, docs, predicate);
         deletes = _.differenceWith(docs, records, predicate);
-
+/*
         console.log('updates', updates);
         console.log('adds', adds);
         console.log('deletes', deletes);
-
+*/
         return {updates, adds, deletes};
       });
   }
@@ -267,20 +280,19 @@ export default class RepoBase {
       }
       return this.syncRecordsNoIdColumn(filter, predicate, records, userId);
     } else {
-      predicate = (a, b) => a.id === b.id;
-      return this.syncRecordsById(filter, predicate, records, userId);
+      return this.syncRecordsById(filter, null, records, userId);
     }
   }
 
   // use this if you have an id column
   syncRecordsById(filter, predicate, records, userId) {
+    predicate = (a, b) => a.id === b.id;
     return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
         updates.forEach(item => this.addUpdatedBy(item, userId));
         updates.forEach(record => promiseArr.push(this.updateNoCheck(record, userId)));
-        adds.forEach(item => this.addCreatedByAndUpdatedBy(item, userId));
-        adds.forEach(record => promiseArr.push(this.addOne(record, userId)));
+        promiseArr.push(this.addMany(adds, userId));
         const deleteIds = deletes.map(obj => obj.id);
         promiseArr.push(this.Model.deleteMany({_id: {$in: deleteIds}}).exec())
         return Promise.all(promiseArr);
@@ -295,7 +307,7 @@ export default class RepoBase {
         inserts.forEach(item => this.addCreatedByAndUpdatedBy(item, userId));
         const promiseArr = [];
         return this.Model.deleteMany(filter).exec()
-          .then(() => this.Model.insertMany(inserts));
+          .then(() => this.addMany(inserts, 'jodoe'));
       });
   }
 
@@ -342,8 +354,11 @@ export default class RepoBase {
   }
 
   addCreatedByAndUpdatedBy(item, userId) {
-    const date = new Date();
     if (this.schema.path('createdBy')) {
+      if (!userId) {
+        throw new ApiError('no userId for createdBy/updatedBy.');
+      }
+      const date = new Date();
       item.createdBy = userId;
       item.createdDate = date;
       item.updatedBy = userId;
@@ -352,16 +367,17 @@ export default class RepoBase {
   }
 
   addUpdatedBy(item, userId) {
-    const date = new Date();
     if (this.schema.path('createdBy')) {
+      if (!userId) {
+        throw new ApiError('no userId for createdBy/updatedBy.');
+      }
+      const date = new Date();
       if (!item.createdBy) {
         item.createdBy = userId;
       }
       if (!item.createdDate) {
         item.createdDate = date;
       }
-    }
-    if (this.schema.path('updatedBy')) {
       item.updatedBy = userId;
       item.updatedDate = date;
     }

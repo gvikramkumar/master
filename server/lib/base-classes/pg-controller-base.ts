@@ -68,6 +68,9 @@ export default class PostgresControllerBase {
     if (req.query.queryPost) {
       req.query = req.body;
       this.getMany(req, res, next);
+    } else if (req.query.setSyncRecords) {
+      delete req.query.setSyncRecords
+      this.repo.syncRecords(req.query, null, req.body, req.user.id);
     } else if (req.query.insertMany) {
       this.repo.addMany(data, req.user.id)
         .then(() => res.end())
