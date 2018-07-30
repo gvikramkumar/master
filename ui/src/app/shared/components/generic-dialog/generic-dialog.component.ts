@@ -30,6 +30,17 @@ submitText: string;
         this.submitText = 'OK';
         break;
     }
+    // this allows us to use html in message and data sections
+/*
+    setTimeout(() => {
+      document.querySelector('.modal__body .message').innerHTML = this.data.message;
+      if (this.data.data) {
+        document.querySelector('.modal__body .data').innerHTML = this.data.data;
+      }
+    });
+*/
+
   }
 
 }
+

@@ -1,9 +1,12 @@
-const _ = require('lodash'),
-  Q = require('q');
+const _ = require('lodash');
+
+
+const a = {key: 'one', value: undefined};
+console.log(JSON.stringify(a));
 
 
 
-
+/*
 
 
 class myclass {
@@ -38,6 +41,7 @@ class myclass {
 console.log(new myclass().dateToString(new Date()));
 
 
+*/
 
 
 /*

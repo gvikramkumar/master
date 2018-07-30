@@ -17,11 +17,18 @@ export class ModuleLookupService {
 
   constructor(protected httpClient: HttpClient, private store: AppStore) {
   }
-
-  getMany(keys: string[], moduleId?: number) {
+  // moduleId/keys >> {key, value} each key is a property in the object, no prop if no value (json.stringify)
+  getManyValuesOneModule(keys: string[], moduleId?: number) {
     keys = keys.map(key => key.trim());
     let params = new HttpParams().set('keys', keys.join(','));
     params = this.setModuleIdInParams(moduleId, params);
+    return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}`, {params});
+  }
+
+  // key/moduleIds >> {moduleId, value}[]
+  getOneValueManyModules(key: string, moduleIds: number[]) {
+    key = key.trim();
+    const params = new HttpParams().set('key', key).set('moduleIds', moduleIds.join(','));
     return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}`, {params});
   }
 
@@ -39,9 +46,8 @@ export class ModuleLookupService {
     return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}/${key}`, {params});
   }
 
-  add(key: string, value, moduleId?: number) {
-    moduleId = this.verifyModuleId(moduleId);
-    return this.httpClient.post<any>(`${apiUrl}/api/${this.endpointName}`, {key, value, moduleId});
+  upsertMany(upserts: {moduleId: number, key: string, value: any}[]) {
+    return this.httpClient.put<any>(`${apiUrl}/api/${this.endpointName}`, upserts);
   }
 
   upsert(key, value, moduleId?) {

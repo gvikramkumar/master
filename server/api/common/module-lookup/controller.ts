@@ -9,18 +9,28 @@ export default class ModuleLookupController {
   constructor(private repo: ModuleLookupRepo) {
   }
 
-  // we get all in array and put as properties of an object
-  getMany(req, res, next) {
-    if (!req.query.moduleId) {
-      next(new ApiError('moduleId required', null, 400));
-      return Promise.resolve();
+  handleGetMany(req, res, next) {
+    if (req.query.moduleId && req.query.keys) {
+      this.getManyValuesOneModule(req, res, next);
+    } else if (req.query.key && req.query.moduleIds) {
+      this.getOneValueManyModules(req, res, next);
+    } else {
+      throw new ApiError('ModuleLookup getMany called with bad parameters', null, 400);
     }
-    this.repo.getMany(req.query.moduleId, req.query.keys.split(','))
-      .then(docs => {
-        const obj = {};
-        docs.forEach(doc => obj[doc.key] = doc.value);
-        res.json(obj);
-      });
+  }
+
+  // moduleId/keys >> {key, value} each key is a property in the object, no prop if no value (json.stringify)
+  getManyValuesOneModule(req, res, next) {
+    this.repo.getManyValuesOneModule(req.query.moduleId, req.query.keys.split(','))
+      .then(obj => res.json(obj))
+      .catch(next);
+  }
+
+  // key/moduleIds >> {moduleId, value}[]
+  getOneValueManyModules(req, res, next) {
+    this.repo.getOneValueManyModules(req.query.key, req.query.moduleIds.split(',').map(m => Number(m)))
+      .then(objs => res.json(objs))
+      .catch(next);
   }
 
   getValue(req, res, next) {
@@ -28,7 +38,7 @@ export default class ModuleLookupController {
       next(new ApiError('moduleId required', null, 400));
       return Promise.resolve();
     }
-    return this.repo.getDoc(req.query.moduleId, req.params.key)
+    return this.repo.getOne(req.query.moduleId, req.params.key)
       .then(item => {
         if (!item) {
           if (req.query.noerror) {
@@ -44,20 +54,18 @@ export default class ModuleLookupController {
       .catch(next);
   }
 
-  add(req, res, next) {
-    const data = req.body;
-    this.verifyProperties(data, ['moduleId', 'key']);
-    this.repo.add(data)
-      .then(item => res.json(item))
+  upsertMany(req, res, next) {
+    const dataArr = req.body;
+    this.repo.upsertMany(dataArr)
+      .then(items => {
+        res.json(items);
+      })
       .catch(next);
   }
 
   upsert(req, res, next) {
     const data = req.body;
     this.verifyProperties(data, ['moduleId', 'key']);
-    if (!data.moduleId) {
-      next(new ApiError('moduleId required', null, 400));
-    }
     this.repo.upsert(data)
       .then(item => {
         res.json(item);
@@ -69,7 +77,7 @@ export default class ModuleLookupController {
     if (!req.query.moduleId) {
       next(new ApiError('moduleId required', null, 400));
     }
-    return this.repo.getDoc(req.query.moduleId, req.params.key)
+    return this.repo.getOne(req.query.moduleId, req.params.key)
       .then(item => {
         if (!item) {
           res.status(204).end();
@@ -81,10 +89,8 @@ export default class ModuleLookupController {
       .catch(next);
   }
 
-
-
-  verifyProperties(data, arr) {
-    arr.forEach(prop => {
+  verifyProperties(data, props) {
+    props.forEach(prop => {
       if (!data[prop]) {
         throw new ApiError(`Property missing: ${prop}.`, data, 400);
       }

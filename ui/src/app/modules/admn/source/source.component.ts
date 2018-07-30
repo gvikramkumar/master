@@ -10,6 +10,8 @@ import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
 import {DialogType} from '../../../core/models/ui-enums';
 import * as _ from 'lodash';
+import {ModuleLookupService} from '../../_common/services/module-lookup.service';
+import {DfaModule} from '../../_common/models/module';
 
 @Component({
   selector: 'fin-source',
@@ -23,6 +25,9 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   source: Source;
   editMode: boolean;
   showForm = false;
+  moduleSourceMap: {module: DfaModule, sources: number[]}[];
+  usingModuleNames: string[] = [];
+  usingModuleNamesTooltip = '';
   tableColumns = ['name', 'typeCode', 'status'];
   dataSource: MatTableDataSource<Source>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -36,7 +41,8 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private sourceService: SourceService,
-    private uiUtil: UiUtil
+    private uiUtil: UiUtil,
+    private moduleLookupService: ModuleLookupService
   ) {
     super(store, route);
 
@@ -44,6 +50,18 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
 
   ngOnInit() {
     this.refresh();
+    this.getModuleSouceMap();
+  }
+
+  getModuleSouceMap() {
+    const promiseArr = [];
+    this.moduleLookupService.getOneValueManyModules('sources',
+      this.store.nonAdminModules.map(m => m.moduleId))
+      .subscribe(objs => {
+        this.moduleSourceMap =  objs.map((o, idx) => {
+          return {module: this.store.nonAdminModules[idx], sources: o.value || []};
+        });
+      });
   }
 
   refresh() {
@@ -63,6 +81,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   }
 
   addSource() {
+    this.usingModuleNames = [];
     this.source = new Source();
     this.editMode = false;
     this.formTitle = 'Add New Source';
@@ -73,12 +92,24 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     this.source = _.cloneDeep(source);
     this.editMode = true;
     this.formTitle = 'Edit Source';
+    this.checkModuleUse(source.sourceId);
     this.doShowForm();
   }
 
   doShowForm() {
     this.showForm = true;
     this.nameInput.inputElement.nativeElement.focus();
+  }
+
+  checkModuleUse(sourceId) {
+    const maps = this.moduleSourceMap.filter(map => _.includes(map.sources, sourceId));
+    if (maps.length) {
+      this.usingModuleNames = maps.map(map => map.module.name);
+      this.usingModuleNamesTooltip = 'Source is in use by the following modules: ';
+      this.usingModuleNamesTooltip += maps.map(map => map.module.name).join(', ');
+    } else {
+      this.usingModuleNames = [];
+    }
   }
 
   cancel() {
@@ -96,7 +127,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
       }
       obs.subscribe(() => this.refresh());
     } else {
-      this.uiUtil.genericDialog(this.errs.join('\n'));
+      this.uiUtil.genericDialog('Validaton Errors', this.errs.join('\n'));
     }
   }
 

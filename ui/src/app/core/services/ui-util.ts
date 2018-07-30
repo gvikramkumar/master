@@ -1,7 +1,7 @@
 import {Injectable, ViewContainerRef} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import * as _ from 'lodash';
-import {DialogType} from '../models/ui-enums';
+import {DialogSize, DialogType} from '../models/ui-enums';
 import {AppStore} from '../../app/app-store';
 import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-components';
 import {GenericDialogComponent} from '../../shared/components/generic-dialog/generic-dialog.component';
@@ -136,20 +136,20 @@ export class UiUtil {
   // returns true if submit button hit, undefined if not. Have to subscribe, THEN check for response,
   // no response, then canceled, if true (truthy) then they hit ok/yes. so:
   // this.uiUtil.genericDialog(message).subscribe(resp => {if (resp) { they hit ok, do your work}
-  genericDialog(message: string, mode = DialogType.ok, title = null): Observable<any> {
+  genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
     const config = {
-      maxWidth: '500px',
+      width: size,
       hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
       // Not sure why, cdk or cui? Could be material messing it up? Added an issue in cui-components
       animated: false,
-      data: {message, title, mode},
+      data: {message, title, mode, data},
     };
     return this.dialogService.open(GenericDialogComponent, <CuiDialogConfig>config)
       .afterCuiDialogClosed();
   }
 
   confirmSave() {
-    return this.genericDialog('Are you sure you want to save?', DialogType.yesNo);
+    return this.genericDialog('Are you sure you want to save?', null, null, DialogType.yesNo);
   }
 }
 

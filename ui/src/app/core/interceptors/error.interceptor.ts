@@ -11,6 +11,8 @@ import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {environment} from '../../../environments/environment';
 import {AppStore} from '../../app/app-store';
+import {DialogSize, DialogType} from '../models/ui-enums';
+import {UiUtil} from '../services/ui-util';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -22,7 +24,8 @@ export class ErrorInterceptor implements HttpInterceptor {
     // {status: 404, methods: ['GET', 'POST'], url: new RegExp(`^${environment.apiUrl}api/login`)},
   ];
 
-  constructor(private store: AppStore, public dialog: MatDialog, private router: Router) {
+  constructor(private store: AppStore, public dialog: MatDialog, private router: Router,
+              private uiUtil: UiUtil) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -47,7 +50,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           if (this.whiteListed(resp, req.method)) {
-            return Observable.throw(err);
+            return throwError(err);
           }
 
           /*
@@ -56,19 +59,15 @@ export class ErrorInterceptor implements HttpInterceptor {
                   }
           */
 
-          const config = <MatDialogConfig> {
-            data: {error: err},
-            width: '600px',
-            hasBackdrop: false
-            // backdropClass: 'bg-modal-backdrop'
-          };
-          this.dialog.open(ErrorModalComponent, config)
-            .afterClosed()
-            .subscribe(result => {
-              // if (resp.error && resp.error.errorCode === 'xxx-xxxx') {
-              //   this.router.navigateByUrl('/');
-              // }
-            });
+          let data;
+          if (err.data) {
+            try {
+              delete err.data.stack;
+              data = JSON.stringify(err.data, null, 2);
+            } catch (e) {
+            }
+          }
+          this.uiUtil.genericDialog(err.message, data, 'Error', DialogType.ok, DialogSize.medium);
           return throwError(err);
         }));
   }
