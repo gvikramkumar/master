@@ -48,11 +48,11 @@ export class PostgresRepoBase {
   // this is NOT paremeterized, no way around that, as we have to upload 5k at a time
   addMany(objs, userId) {
     let sql = ` insert into ${this.table} ( `;
-    sql += this.orm.maps.map(map => map.field).join(', ') + ' )\n values ';
+    sql += this.orm.mapsNoSerial.map(map => map.field).join(', ') + ' )\n values ';
     const arrSql = [];
     objs.forEach(obj => {
       const record = this.orm.objectToRecordAdd(obj, userId);
-      const str = ' ( ' + this.orm.maps.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
+      const str = ' ( ' + this.orm.mapsNoSerial.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
       arrSql.push(str);
     })
     sql += arrSql.join(',\n');
@@ -63,10 +63,10 @@ export class PostgresRepoBase {
   addOne(obj, userId) {
     const record = this.orm.objectToRecordAdd(obj, userId);
     let sql = ` insert into ${this.table} ( `;
-    sql += this.orm.maps.map(map => map.field).join(', ') + ' ) values ( ';
-    sql += this.orm.maps.map((map, idx) => `$${idx + 1}`).join(', ');
+    sql += this.orm.mapsNoSerial.map(map => map.field).join(', ') + ' ) values ( ';
+    sql += this.orm.mapsNoSerial.map((map, idx) => `$${idx + 1}`).join(', ');
     sql += ' ) returning *';
-    return pgc.pgdb.query(sql, this.orm.maps.map(map => record[map.field]))
+    return pgc.pgdb.query(sql, this.orm.mapsNoSerial.map(map => record[map.field]))
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 

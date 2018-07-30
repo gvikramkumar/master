@@ -12,12 +12,15 @@ export interface OrmMap {
   prop: string;
   field: string;
   type?: OrmTypes;
+  serial?: boolean;
 }
 
 export class Orm {
   hasCreatedBy = false;
+  mapsNoSerial: OrmMap[];
 
   constructor(public maps: OrmMap[]) {
+    this.mapsNoSerial = this.maps.filter(map => !map.serial);
     this.hasCreatedBy = _.find(maps, {prop: 'createdBy'});
   }
 
@@ -105,7 +108,7 @@ export class Orm {
   }
 
   quote(val) {
-    return typeof val === 'string' ? '\'' + val + '\'' : val.toString();
+    return typeof val === 'string' ? '\'' + val + '\'' : (val ? val.toString() : '');
   }
 
 

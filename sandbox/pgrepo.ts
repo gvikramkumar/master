@@ -2,7 +2,7 @@ import {Orm, OrmMap, OrmTypes} from '../server/lib/base-classes/Orm';
 import {PostgresRepoBase} from '../server/lib/base-classes/pg-repo-base';
 
 const ormMap: OrmMap[] = [
-  {prop: 'idCol', field: 'id_col', type: OrmTypes.number},
+  {prop: 'idCol', field: 'id_col', type: OrmTypes.number, serial: true},
   {prop: 'moduleId', field: 'module_id', type: OrmTypes.number},
   {prop: 'name', field: 'user_name'},
   {prop: 'age', field: 'user_age', type: OrmTypes.number},
