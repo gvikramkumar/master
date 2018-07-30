@@ -12,11 +12,16 @@ export interface OrmMap {
   prop: string;
   field: string;
   type?: OrmTypes;
+  serial?: boolean;
 }
 
 export class Orm {
+  hasCreatedBy = false;
+  mapsNoSerial: OrmMap[];
 
   constructor(public maps: OrmMap[]) {
+    this.mapsNoSerial = this.maps.filter(map => !map.serial);
+    this.hasCreatedBy = _.find(maps, {prop: 'createdBy'});
   }
 
   recordToObject(record): AnyObj {
@@ -46,18 +51,12 @@ export class Orm {
   objectToRecord(obj, userId?: string, mode?: string): AnyObj {
     const record = {};
 
-    const date = new Date();
-    if (_.find(this.maps, {prop: 'createdBy'})) {
-      if (!userId) {
-        throw new ApiError('no userId for createdBy/updatedBy.');
-      }
-      if (mode === 'add') {
-        obj.createdBy = userId;
-        obj.createdDate = date;
-      }
-      obj.updatedBy = userId;
-      obj.updatedDate = date;
+    if (mode === 'add') {
+      this.addCreatedByAndUpdatedBy(obj, userId);
+    } else {
+      this.addUpdatedBy(obj, userId);
     }
+
     this.maps.forEach(map => {
       if (map.type === OrmTypes.date) {
         record[map.field] = this.getPgDateString(obj[map.prop]);
@@ -100,19 +99,29 @@ export class Orm {
 
   }
 
+  getPgField(idProp) {
+    const map = _.find(this.maps, {prop: idProp});
+    if (!map) {
+      throw new ApiError('Failed to find idProp map');
+    }
+    return map.field;
+  }
+
   quote(val) {
-    return typeof val === 'string' ? '\'' + val + '\'' : val.toString();
+    return typeof val === 'string' ? '\'' + val + '\'' : (val ? val.toString() : '');
   }
 
 
-  pad (number, digits) {
+  pad(number, digits) {
     number = '' + number
-    while (number.length < digits) { number = '0' + number }
+    while (number.length < digits) {
+      number = '0' + number
+    }
     return number
   }
 
   // stolen from node-postgres/lib/util.js, converts date to postgres string
-  dateToString (date) {
+  dateToString(date) {
     let offset = -date.getTimezoneOffset()
     let ret = this.pad(date.getFullYear(), 4) + '-' +
       this.pad(date.getMonth() + 1, 2) + '-' +
@@ -125,9 +134,41 @@ export class Orm {
     if (offset < 0) {
       ret += '-';
       offset *= -1;
-    } else { ret += '+'; }
+    } else {
+      ret += '+';
+    }
 
     return ret + this.pad(Math.floor(offset / 60), 2) + ':' + this.pad(offset % 60, 2)
+  }
+
+  addCreatedByAndUpdatedBy(item, userId) {
+    if (this.hasCreatedBy) {
+      if (!userId) {
+        throw new ApiError('no userId for createdBy/updatedBy.');
+      }
+      const date = new Date();
+      item.createdBy = userId;
+      item.createdDate = date;
+      item.updatedBy = userId;
+      item.updatedDate = date;
+    }
+  }
+
+  addUpdatedBy(item, userId) {
+    if (this.hasCreatedBy) {
+      if (!userId) {
+        throw new ApiError('no userId for createdBy/updatedBy.');
+      }
+      const date = new Date();
+      if (!item.createdBy) {
+        item.createdBy = userId;
+      }
+      if (!item.createdDate) {
+        item.createdDate = date;
+      }
+      item.updatedBy = userId;
+      item.updatedDate = date;
+    }
   }
 
 }

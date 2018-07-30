@@ -14,13 +14,13 @@ export class PostgresRepoBase {
   constructor(protected orm: Orm, protected isModuleRepo = false) {
   }
 
-  getMany(filter = {}) {
+  getMany(filter = {}, errorNoFilter = true) {
     this.verifyModuleId(filter);
     let sql = 'select ';
     sql += this.orm.maps.map(map => map.field).join(', ');
     sql += ` from ${this.table} `;
     const keys = Object.keys(filter);
-    sql += this.buildParameterizedWhereClause(keys, 0, false);
+    sql += this.buildParameterizedWhereClause(keys, 0, errorNoFilter);
     return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
       .then(resp => resp.rows.map(row => this.orm.recordToObject(row)));
   }
@@ -48,11 +48,11 @@ export class PostgresRepoBase {
   // this is NOT paremeterized, no way around that, as we have to upload 5k at a time
   addMany(objs, userId) {
     let sql = ` insert into ${this.table} ( `;
-    sql += this.orm.maps.map(map => map.field).join(', ') + ' )\n values ';
+    sql += this.orm.mapsNoSerial.map(map => map.field).join(', ') + ' )\n values ';
     const arrSql = [];
     objs.forEach(obj => {
       const record = this.orm.objectToRecordAdd(obj, userId);
-      const str = ' ( ' + this.orm.maps.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
+      const str = ' ( ' + this.orm.mapsNoSerial.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
       arrSql.push(str);
     })
     sql += arrSql.join(',\n');
@@ -63,10 +63,10 @@ export class PostgresRepoBase {
   addOne(obj, userId) {
     const record = this.orm.objectToRecordAdd(obj, userId);
     let sql = ` insert into ${this.table} ( `;
-    sql += this.orm.maps.map(map => map.field).join(', ') + ' ) values ( ';
-    sql += this.orm.maps.map((map, idx) => `$${idx + 1}`).join(', ');
+    sql += this.orm.mapsNoSerial.map(map => map.field).join(', ') + ' ) values ( ';
+    sql += this.orm.mapsNoSerial.map((map, idx) => `$${idx + 1}`).join(', ');
     sql += ' ) returning *';
-    return pgc.pgdb.query(sql, this.orm.maps.map(map => record[map.field]))
+    return pgc.pgdb.query(sql, this.orm.mapsNoSerial.map(map => record[map.field]))
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 
@@ -125,19 +125,37 @@ export class PostgresRepoBase {
       });
   }
 
-  removeAll() {
-    const sql = `delete from ${this.table}`;
-    return pgc.pgdb.query(sql)
-      .then(resp => ({rowCount: resp.rowCount}));
+  updateOneNoCheck(obj, userId) {
+    const filter = {[this.idProp]: obj[this.idProp]};
+    const record = this.orm.objectToRecordUpdate(obj, userId);
+    let queryIdx = 0;
+    let sql = ` update ${this.table} set `;
+    const setArr = [];
+    this.orm.maps.forEach((map, idx) => {
+      setArr.push(`${map.field} = $${idx + 1}`);
+      queryIdx++;
+    });
+    sql += setArr.join(', ');
+    const keys = Object.keys(filter);
+    sql += this.buildParameterizedWhereClause(keys, queryIdx, true);
+    return pgc.pgdb.query(sql,
+      this.orm.maps.map(map => this.orm.getPgValue(null, map.field,
+        record[map.field])).concat(this.getFilterValues(keys, filter)));
+  }
+
+  removeManyByIds(ids) {
+    if (!ids.length) {
+      return Promise.resolve();
+    }
+    let sql = `delete from ${this.table} `;
+    sql += this.buildIdsWhereClause(ids);
+    return pgc.pgdb.query(sql);
   }
 
   removeMany(filter = {}) {
     let sql = `delete from ${this.table} `;
     const keys = Object.keys(filter);
-    if (!keys.length) {
-      throw new ApiError('DeleteMany with no filter, use DeleteAll', null, 400);
-    }
-    sql += this.buildParameterizedWhereClause(keys, 0, true);
+    sql += this.buildParameterizedWhereClause(keys, 0, false);
     return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
       .then(resp => ({rowCount: resp.rowCount}));
   }
@@ -147,7 +165,7 @@ export class PostgresRepoBase {
     return this.getOneById(idVal)
       .then(obj => {
         if (!obj) {
-          throw new ApiError(`DeleteOne: no record to delete.`, null, 400);
+          throw new ApiError(`removeOne: no record to delete.`, null, 400);
         }
         let sql = `delete from ${this.table} `;
         const keys = Object.keys(filter);
@@ -175,10 +193,71 @@ export class PostgresRepoBase {
       });
   }
 
+    getSyncArrays(filter, predicate, records, userId) {
+      let updates = [], adds = [], deletes = [];
+      return this.getMany(filter, false)
+        .then(docs => {
+          updates = _.intersectionWith(records, docs, predicate);
+          adds = _.differenceWith(records, docs, predicate);
+          deletes = _.differenceWith(docs, records, predicate);
+
+          console.log('updates', updates);
+          console.log('adds', adds);
+          console.log('deletes', deletes);
+
+          return {updates, adds, deletes};
+        });
+    }
+
+    syncRecords(filter, predicate, records, userId) {
+      if (filter.setNoIdColumn) {
+        delete filter.setNoIdColumn;
+        if (!predicate) {
+          throw new ApiError('No predicate given for syncRecords');
+        }
+        return this.syncRecordsNoIdColumn(filter, predicate, records, userId);
+      } else {
+        return this.syncRecordsById(filter, null, records, userId);
+      }
+    }
+
+    // use this if you have an id column
+    syncRecordsById(filter, predicate, records, userId) {
+      predicate = (a, b) => a[this.idProp] === b[this.idProp];
+      return this.getSyncArrays(filter, predicate, records, userId)
+        .then(({updates, adds, deletes}) => {
+          const promiseArr = [];
+          updates.forEach(record => promiseArr.push(this.updateOneNoCheck(record, userId)));
+          promiseArr.push(this.addMany(adds, userId));
+          const deleteIds = deletes.map(obj => obj[this.idProp]);
+          promiseArr.push(this.removeManyByIds(deleteIds));
+          return Promise.all(promiseArr);
+        });
+    }
+
+    // use this if you don't have an id column
+    syncRecordsNoIdColumn(filter, predicate, records, userId) {
+      return this.getSyncArrays(filter, predicate, records, userId)
+        .then(({updates, adds, deletes}) => {
+          const inserts = adds.concat(updates);
+          const promiseArr = [];
+          return this.removeMany(filter)
+            .then(() => this.addMany(inserts, userId));
+        });
+    }
+
   getFilterValues(keys, filter) {
     // need the same keys as buildParameterizedWhereClause to maintain the same order
     // so pass the same set in
     return keys.map(key => this.orm.getPgValue(key, null, filter[key]));
+  }
+
+  buildIdsWhereClause(ids) {
+    if (!ids.length) {
+      throw new ApiError('No ids for buildIdsWhereClause');
+    }
+    const sql = ` where ${this.orm.getPgField(this.idProp)} in (${ids.join(', ')}) `;
+    return sql;
   }
 
   buildParameterizedWhereClause(keys, startIndex, errorIfEmpty) {
@@ -202,6 +281,36 @@ export class PostgresRepoBase {
       }
     }
     return sql;
+  }
+
+  addCreatedByAndUpdatedBy(item, userId) {
+    if (this.orm.hasCreatedBy) {
+      if (!userId) {
+        throw new ApiError('no userId for createdBy/updatedBy.');
+      }
+      const date = new Date();
+      item.createdBy = userId;
+      item.createdDate = date;
+      item.updatedBy = userId;
+      item.updatedDate = date;
+    }
+  }
+
+  addUpdatedBy(item, userId) {
+    if (this.orm.hasCreatedBy) {
+      if (!userId) {
+        throw new ApiError('no userId for createdBy/updatedBy.');
+      }
+      const date = new Date();
+      if (!item.createdBy) {
+        item.createdBy = userId;
+      }
+      if (!item.createdDate) {
+        item.createdDate = date;
+      }
+      item.updatedBy = userId;
+      item.updatedDate = date;
+    }
   }
 
   verifyModuleId(filter) {

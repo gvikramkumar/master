@@ -45,6 +45,10 @@ export default class RepoBase {
     return query.exec();
   }
 
+  getManyNoCheck(filter = {}) {
+    return this.Model.find(filter);
+  }
+
   getManyByIds(ids) {
     return this.Model.find({_id: {$in: ids}}).exec();
   }
@@ -104,28 +108,19 @@ export default class RepoBase {
       });
   }
 
-  // no autoincrement on this
   addMany(docs, userId) {
-    let createdBy = false;
-    let updatedBy = false;
     const date = new Date();
-    if (this.schema.path('createdBy')) {
-      createdBy = true;
+    docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
+    let promise;
+    if (this.autoIncrementField) {
+      promise = this.getAutoIncrementValue()
+        .then(inc => {
+          docs.forEach(doc => doc[this.autoIncrementField] = inc++);
+        });
+    } else {
+      promise = Promise.resolve();
     }
-    if (this.schema.path('updatedBy')) {
-      updatedBy = true;
-    }
-    docs.map(doc => {
-      if (createdBy) {
-        doc.createdBy = userId;
-        doc.createdDate = date;
-      }
-      if (updatedBy) {
-        doc.updatedBy = userId;
-        doc.updatedDate = date;
-      }
-    });
-    return this.Model.insertMany(docs);
+    return promise.then(() => this.Model.insertMany(docs));
   }
 
   // no autoincrement on this
@@ -149,28 +144,29 @@ export default class RepoBase {
     delete data._id;
     delete data.id;
     const item = new this.Model(data);
-    const date = new Date();
-    if (this.schema.path('createdBy')) {
-      item.createdBy = userId;
-      item.createdDate = date;
-    }
-    if (this.schema.path('updatedBy')) {
-      item.updatedBy = userId;
-      item.updatedDate = date;
-    }
+    this.addCreatedByAndUpdatedBy(item, userId);
+    return this.fillAutoIncrementField(item)
+      .then(() => item.save());
+  }
+
+  getAutoIncrementValue() {
+    return this.Model.find({})
+      .sort({[this.autoIncrementField]: -1}).limit(1).exec()
+      .then(docs => {
+        if (docs.length) {
+          return docs[0][this.autoIncrementField] + 1;
+        } else {
+          return 1;
+        }
+      });
+  }
+
+  fillAutoIncrementField(item) {
     if (this.autoIncrementField) {
-      return this.Model.find({})
-        .sort({[this.autoIncrementField]: -1}).limit(1).exec()
-        .then(docs => {
-          if (docs.length) {
-            item[this.autoIncrementField] = docs[0][this.autoIncrementField] + 1;
-          } else {
-            item[this.autoIncrementField] = 1;
-          }
-          return item.save();
-        });
+      this.getAutoIncrementValue()
+        .then(inc => item[this.autoIncrementField] = inc);
     } else {
-      return item.save();
+      return Promise.resolve();
     }
   }
 
@@ -206,10 +202,7 @@ export default class RepoBase {
     }
     return promise
       .then(item => {
-        if (this.schema.path('updatedBy')) {
-          data.updatedBy = userId;
-          data.updatedDate = new Date();
-        }
+        this.addUpdatedBy(item, userId)
         this.validate(data);
         // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
         // we'll just replace the doc in entirety and be done with it
@@ -222,6 +215,22 @@ export default class RepoBase {
           });
 
       });
+  }
+
+  updateNoCheck(data, userId) {
+    this.addUpdatedBy(data, userId)
+    this.validate(data);
+    // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
+    // we'll just replace the doc in entirety and be done with it
+    return this.Model.replaceOne({_id: data.id}, data)
+      .then(results => data);
+  }
+
+  removeMany(filter) {
+    if (!filter) {
+      throw new ApiError('No filter for removeMany');
+    }
+    return this.Model.deleteMany(filter).exec();
   }
 
   remove(id) {
@@ -243,6 +252,62 @@ export default class RepoBase {
           throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
         return items[0].remove();
+      });
+  }
+
+  getSyncArrays(filter, predicate, records, userId) {
+    let updates = [], adds = [], deletes = [];
+    return this.Model.find(filter)
+      .then(docs => {
+        docs = docs.map(doc => doc.toObject());
+        updates = _.intersectionWith(records, docs, predicate);
+        adds = _.differenceWith(records, docs, predicate);
+        deletes = _.differenceWith(docs, records, predicate);
+/*
+        console.log('updates', updates);
+        console.log('adds', adds);
+        console.log('deletes', deletes);
+*/
+        return {updates, adds, deletes};
+      });
+  }
+
+  syncRecords(filter, predicate, records, userId) {
+    if (filter.setNoIdColumn) {
+      delete filter.setNoIdColumn;
+      if (!predicate) {
+        throw new ApiError('No predicate given for syncRecords');
+      }
+      return this.syncRecordsNoIdColumn(filter, predicate, records, userId);
+    } else {
+      return this.syncRecordsById(filter, null, records, userId);
+    }
+  }
+
+  // use this if you have an id column
+  syncRecordsById(filter, predicate, records, userId) {
+    predicate = (a, b) => a.id === b.id;
+    return this.getSyncArrays(filter, predicate, records, userId)
+      .then(({updates, adds, deletes}) => {
+        const promiseArr = [];
+        updates.forEach(item => this.addUpdatedBy(item, userId));
+        updates.forEach(record => promiseArr.push(this.updateNoCheck(record, userId)));
+        promiseArr.push(this.addMany(adds, userId));
+        const deleteIds = deletes.map(obj => obj.id);
+        promiseArr.push(this.Model.deleteMany({_id: {$in: deleteIds}}).exec())
+        return Promise.all(promiseArr);
+      });
+  }
+
+  // use this if you don't have an id column
+  syncRecordsNoIdColumn(filter, predicate, records, userId) {
+    return this.getSyncArrays(filter, predicate, records, userId)
+      .then(({updates, adds, deletes}) => {
+        const inserts = adds.concat(updates);
+        inserts.forEach(item => this.addCreatedByAndUpdatedBy(item, userId));
+        const promiseArr = [];
+        return this.Model.deleteMany(filter).exec()
+          .then(() => this.addMany(inserts, 'jodoe'));
       });
   }
 
@@ -285,6 +350,36 @@ export default class RepoBase {
       } else {
         filter.moduleId = Number(filter.moduleId);
       }
+    }
+  }
+
+  addCreatedByAndUpdatedBy(item, userId) {
+    if (this.schema.path('createdBy')) {
+      if (!userId) {
+        throw new ApiError('no userId for createdBy/updatedBy.');
+      }
+      const date = new Date();
+      item.createdBy = userId;
+      item.createdDate = date;
+      item.updatedBy = userId;
+      item.updatedDate = date;
+    }
+  }
+
+  addUpdatedBy(item, userId) {
+    if (this.schema.path('createdBy')) {
+      if (!userId) {
+        throw new ApiError('no userId for createdBy/updatedBy.');
+      }
+      const date = new Date();
+      if (!item.createdBy) {
+        item.createdBy = userId;
+      }
+      if (!item.createdDate) {
+        item.createdDate = date;
+      }
+      item.updatedBy = userId;
+      item.updatedDate = date;
     }
   }
 
