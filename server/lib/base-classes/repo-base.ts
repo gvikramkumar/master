@@ -109,6 +109,9 @@ export default class RepoBase {
   }
 
   addMany(docs, userId) {
+    if (!docs.length) {
+      return Promise.resolve();
+    }
     const date = new Date();
     docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
     let promise;
@@ -125,6 +128,9 @@ export default class RepoBase {
 
   // no autoincrement on this
   addManyTransaction(_docs, userId) {
+    if (!_docs.length) {
+      return Promise.resolve();
+    }
     const transId = new mg.Types.ObjectId();
     const docs = _docs.map(doc => {
       doc.transactionId = transId;
@@ -134,9 +140,9 @@ export default class RepoBase {
       .catch(err => {
         if (err.result && err.result.nInserted > 0) {
           return this.Model.deleteMany({transactionId: transId})
-            .then(() => Promise.reject(err))
+            .then(() => Promise.reject(err));
         }
-      })
+      });
   }
 
   addOne(data, userId) {

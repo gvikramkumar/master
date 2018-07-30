@@ -38,7 +38,7 @@ const mine = [
 pgc.promise.then(db => {
   console.log('postgres is up');
 
-  repo.removeMany()
+  repo.removeMany({}, false)
     .then(() => {
       repo.addMany(dbRecords, 'jodoe')
       // repo.addOne(dbRecords[0], 'jodoe')
@@ -51,8 +51,8 @@ pgc.promise.then(db => {
             item.idCol = doc.idCol;
           }
         })
-        // const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
-        return <any> repo.syncRecords({}, null, mine, 'jodoe');
+        const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
+        return <any> repo.syncRecords({setNoIdColumn: true}, predicate, mine, 'jodoe');
       })
       .then(() => process.exit(0));
   })

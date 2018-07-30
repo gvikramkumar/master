@@ -47,6 +47,9 @@ export class PostgresRepoBase {
 
   // this is NOT paremeterized, no way around that, as we have to upload 5k at a time
   addMany(objs, userId) {
+    if (!objs.length) {
+      return Promise.resolve({rowCount: 0});
+    }
     let sql = ` insert into ${this.table} ( `;
     sql += this.orm.mapsNoSerial.map(map => map.field).join(', ') + ' )\n values ';
     const arrSql = [];
@@ -152,10 +155,10 @@ export class PostgresRepoBase {
     return pgc.pgdb.query(sql);
   }
 
-  removeMany(filter = {}) {
+  removeMany(filter = {}, errorIfEmpty = true) {
     let sql = `delete from ${this.table} `;
     const keys = Object.keys(filter);
-    sql += this.buildParameterizedWhereClause(keys, 0, false);
+    sql += this.buildParameterizedWhereClause(keys, 0, errorIfEmpty);
     return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
       .then(resp => ({rowCount: resp.rowCount}));
   }
@@ -241,7 +244,7 @@ export class PostgresRepoBase {
         .then(({updates, adds, deletes}) => {
           const inserts = adds.concat(updates);
           const promiseArr = [];
-          return this.removeMany(filter)
+          return this.removeMany(filter, false)
             .then(() => this.addMany(inserts, userId));
         });
     }
