@@ -26,6 +26,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
   measures: Measure[] = [];
+  currentMeasure: Measure = new Measure;
   sources: Source[] = [];
   rules: AllocationRule[];
   errs: string[] = [];
@@ -145,6 +146,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.disableCategories = true;
       this.sm.categoryType = 'HW';
     }
+    // todo: set up reporting levels according to measure
+
   }
 
   ibe_items = [
