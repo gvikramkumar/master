@@ -6,7 +6,7 @@ import {PgRepo} from './pgrepo';
 const repo = new PgRepo();
 
 const dbRecords = [
-  { moduleId: 1, name: 'dank', age: 50},
+  { moduleId: 1, name: 'dank'},
   {moduleId: 1, name: 'mary', age: 20},//del
   {moduleId: 1, name: 'carl', age: 60},
   {moduleId: 2, name: 'dank', age: 50},
@@ -16,31 +16,32 @@ const dbRecords = [
 ];
 dbRecords.forEach(doc => repo.addCreatedByAndUpdatedBy(doc, 'jodoe'));
 
-/*
 const mine: AnyObj = [
   {moduleId: 1, name: 'dank', age: 51},//up
   {moduleId: 1, name: 'carl', age: 61},//up
   {moduleId: 2, name: 'dank', age: 51},//up
   {moduleId: 2, name: 'mary', age: 21},//up
   {moduleId: 3, name: 'jim', age: 41},//up
-  {moduleId: 3, name: 'casey', age: 37},//add
+  {moduleId: 3, name: 'casey'},//add
   {moduleId: 4, name: 'goerge', age: 71},//add
   {moduleId: 4, name: 'barney',   age: 38},//add
 ];
-*/
+/*
 const mine = [
   {moduleId: 1, name: 'dank', age: 51},
   {moduleId: 1, name: 'carl', age: 61},
   {moduleId: 1, name: 'jim', age: 21},
 ];
+*/
 
   const aa = pgc.promise;
 pgc.promise.then(db => {
   console.log('postgres is up');
 
-  repo.removeMany()
+  repo.removeMany({}, false)
     .then(() => {
       repo.addMany(dbRecords, 'jodoe')
+      // repo.addOne(dbRecords[0], 'jodoe')
       .then(() => repo.getMany({}, false))
       .then(dbdocs => {
         mine.forEach((item: AnyObj) => {
@@ -50,8 +51,8 @@ pgc.promise.then(db => {
             item.idCol = doc.idCol;
           }
         })
-        // const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
-        return <any> repo.syncRecords({moduleId: 1}, null, mine, 'jodoe');
+        const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
+        return <any> repo.syncRecords({setNoIdColumn: true}, predicate, mine, 'jodoe');
       })
       .then(() => process.exit(0));
   })

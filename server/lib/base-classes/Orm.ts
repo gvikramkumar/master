@@ -108,7 +108,15 @@ export class Orm {
   }
 
   quote(val) {
-    return typeof val === 'string' ? '\'' + val + '\'' : (val ? val.toString() : '');
+    if (typeof val === 'string') {
+      return '\'' + val + '\'';
+    } else if (val === null || val === undefined) {
+      return 'null';
+    } else if (val.toString) {
+      return val.toString();
+    } else {
+      return val;
+    }
   }
 
 
