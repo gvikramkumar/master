@@ -176,7 +176,7 @@ export default class ControllerBase {
           // we have to clone item as prRepo will change the updatedDate and we'll fail concurrency check
           // we need the same mongo updatedDate to pass concurrency check. We turn off pg's concurrency
           // check as we can't have both.
-          this.pgRepo.updateOne(_.clone(item), req.user.id, false)
+          this.pgRepo.updateOneById(_.clone(item), req.user.id, false)
             .then(() => res.json(item));
         } else {
           res.json(item);

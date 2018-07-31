@@ -173,10 +173,6 @@ export default class RepoBase {
       });
   }
 
-  updateNoCheck(data, userId) {
-    return this.updateQueryOne({_id: data.id}, data, userId);
-  }
-
   removeMany(filter) {
     if (!filter) {
       throw new ApiError('No filter for removeMany');
@@ -246,10 +242,6 @@ export default class RepoBase {
       });
   }
 
-  removeQueryOneNoCheck(filter) {
-    return this.Model.deleteOne(filter);
-  }
-
   /*
   sync methods:
   these allow multiple ways to sync records in a table with a set being sent up. Can be the whole table
@@ -282,7 +274,7 @@ export default class RepoBase {
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
         updates.forEach(item => this.addUpdatedBy(item, userId));
-        updates.forEach(record => promiseArr.push(this.updateNoCheck(record, userId)));
+        updates.forEach(record => promiseArr.push(this.update(record, userId, false)));
         promiseArr.push(this.addMany(adds, userId));
         const deleteIds = deletes.map(obj => obj.id);
         promiseArr.push(this.Model.deleteMany({_id: {$in: deleteIds}}).exec())
@@ -295,17 +287,18 @@ export default class RepoBase {
     return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
-        updates.forEach(item => this.addUpdatedBy(item, userId));
         updates.forEach(record => {
           const uniqueFilter = {};
           uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+          // console.log('update', uniqueFilter);
           promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId));
         });
         promiseArr.push(this.addMany(adds, userId));
         deletes.forEach(record => {
           const uniqueFilter = {};
           uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
-          promiseArr.push(this.removeQueryOneNoCheck(uniqueFilter));
+          // console.log('delete', uniqueFilter);
+          promiseArr.push(this.removeQueryOne(uniqueFilter));
         });
         return Promise.all(promiseArr);
       });

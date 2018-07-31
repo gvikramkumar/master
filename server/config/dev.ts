@@ -8,4 +8,5 @@ export default {
   //   port: 5432,
   //   database: 'postgres'
   // }
-}
+};
+

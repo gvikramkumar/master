@@ -16,6 +16,7 @@ const dbRecords = [
 ];
 dbRecords.forEach(doc => repo.addCreatedByAndUpdatedBy(doc, 'jodoe'));
 
+/*
 const mine: AnyObj = [
   {moduleId: 1, name: 'dank', age: 51},//up
   {moduleId: 1, name: 'carl', age: 61},//up
@@ -26,13 +27,12 @@ const mine: AnyObj = [
   {moduleId: 4, name: 'goerge', age: 71},//add
   {moduleId: 4, name: 'barney', age: 38},//add
 ];
-/*
+*/
 const mine = [
   {moduleId: 1, name: 'dank', age: 51},
   {moduleId: 1, name: 'carl', age: 61},
   {moduleId: 1, name: 'jim', age: 21},
 ];
-*/
 
   /*
   * test with filter, say by moduleId
@@ -48,14 +48,17 @@ mgc.promise.then(({db, mongo}) => {
     repo.addMany(dbRecords, 'jodoe')
       .then(() => repo.getManyNoCheck({}))
       .then(dbdocs => {
-        mine.forEach(item => {
+        mine.forEach((item: AnyObj) => {
           const doc = _.find(dbdocs, {moduleId: item.moduleId, name: item.name});
           if (doc) {
             item.id = doc.id;
           }
         })
-        const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
-        return <any> repo.syncRecords({setNoIdColumn: true}, predicate, mine, 'jodoe');
+        // return <any> repo.syncRecordsById({moduleId: 1}, mine, 'jodoe');
+        // const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
+        // return <any> repo.syncRecordsQueryOne({moduleId: 1}, ['moduleId', 'name'], predicate, mine, 'jodoe');
+        return <any> repo.syncRecordsReplaceAll({moduleId: 1}, mine, 'jodoe');
+        // return Promise.resolve();
       })
       .then(() => process.exit(0));
   })
