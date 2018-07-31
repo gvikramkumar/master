@@ -88,6 +88,11 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}`, data);
   }
 
+  upsert(data) {
+    this.addModuleId(data);
+    return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}/upsert`, data);
+  }
+
   update(data: T): Observable<T> {
     return this.httpClient.put<T>(`${apiUrl}/api/${this.endpointName}/${data.id}`, data);
   }

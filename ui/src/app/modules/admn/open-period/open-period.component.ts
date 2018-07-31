@@ -68,8 +68,7 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
         } else {
           openPeriod = new OpenPeriod(module.moduleId, this.selFiscalMonths[idx]);
         }
-        promiseArr.push(this.openPeriodService.upsertQueryOne({moduleId: module.moduleId},
-          openPeriod).toPromise());
+        promiseArr.push(this.openPeriodService.upsert(openPeriod).toPromise());
       }
     });
 

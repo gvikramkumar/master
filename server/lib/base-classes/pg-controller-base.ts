@@ -9,15 +9,6 @@ export default class PostgresControllerBase {
   constructor(protected repo: PostgresRepoBase) {
   }
 
-  // post /method/:method
-  callMethod(req, res, next) {
-    const method = this[req.params.method];
-    if (!method) {
-      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
-    }
-    method.call(this, req, res, next);
-  }
-
   // we have this functionality required in other api classes, so pull it out of
   // controller's getMany to reuse
   getManyPromise(req) {
@@ -31,7 +22,7 @@ export default class PostgresControllerBase {
           promise = this.repo.getMany(req.query);
         }
     */
-    promise = this.repo.getMany(req.query);
+    promise = this.repo.getMany(req.query, false);
     return promise;
   }
 
@@ -81,6 +72,27 @@ export default class PostgresControllerBase {
     this.repo.addOne(data, req.user.id)
       .then(item => res.json(item))
       .catch(next);
+  }
+
+  // post /method/:method
+  callMethod(req, res, next) {
+    const method = this[req.params.method];
+    if (!method) {
+      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
+    }
+    method.call(this, req, res, next);
+  }
+
+  // post /upsert
+  upsert(req, res, next) {
+    this.repo.getOneById(req.body.id)
+      .then(item => {
+        if (item) {
+          this.update(req, res, next);
+        } else {
+          this.addOne(req, res, next);
+        }
+      });
   }
 
   // post /query-post

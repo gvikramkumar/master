@@ -9,15 +9,6 @@ export default class ControllerBase {
   constructor(protected repo: RepoBase, protected pgRepo?: PostgresRepoBase) {
   }
 
-  // post /method/:method
-  callMethod(req, res, next) {
-    const method = this[req.params.method];
-    if (!method) {
-      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
-    }
-    method.call(this, req, res, next);
-  }
-
   // GetMany special query parameters
   // params get sent in as queryString and become mongo find(filter)
   // other values used to determine query type get pulled out before filtering
@@ -107,6 +98,27 @@ export default class ControllerBase {
         }
       })
       .catch(next);
+  }
+
+  // post /method/:method
+  callMethod(req, res, next) {
+    const method = this[req.params.method];
+    if (!method) {
+      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
+    }
+    method.call(this, req, res, next);
+  }
+
+  // post /upsert
+  upsert(req, res, next) {
+    this.repo.getOneById(req.body.id)
+      .then(item => {
+        if (item) {
+          this.update(req, res, next);
+        } else {
+          this.addOne(req, res, next);
+        }
+      });
   }
 
   // post /query-post
