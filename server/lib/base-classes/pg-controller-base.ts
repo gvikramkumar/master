@@ -89,13 +89,6 @@ export default class PostgresControllerBase {
     this.getMany(req, res, next);
   }
 
-  // post /sync-records
-  syncRecords(req, res, next) {
-    this.repo.syncRecords(req.query, req.body, req.user.id)
-      .then(() => res.end());
-
-  }
-
   // post /add-many
   addMany(req, res, next) {
     const data = req.body;
@@ -111,6 +104,26 @@ export default class PostgresControllerBase {
     this.repo.upsertQueryOne(filter, data, req.user.id)
       .then(item => res.json(item))
       .catch(next);
+  }
+
+  // post /sync-records
+  syncRecordsById(req, res, next) {
+    this.repo.syncRecordsById(req.query, req.body, req.user.id)
+      .then(() => res.end());
+  }
+
+  // post /sync-records
+  // this is a placeholder, you have to override this and supply the
+  // uniqueFilterOrProps and predicate values, then call super with all
+  syncRecordsQueryOne(req, res, next) {
+    this.repo.syncRecordsQueryOne(req.query, null,  null, req.body, req.user.id)
+      .then(() => res.end());
+  }
+
+  // post /sync-records
+  syncRecordsReplaceAll(req, res, next) {
+    this.repo.syncRecordsReplaceAll(req.query, req.body, req.user.id)
+      .then(() => res.end());
   }
 
   // put /:id

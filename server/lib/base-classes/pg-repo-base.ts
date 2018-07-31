@@ -102,21 +102,7 @@ export class PostgresRepoBase {
   }
 
   updateOneNoCheck(obj, userId) {
-    const filter = {[this.idProp]: obj[this.idProp]};
-    const record = this.orm.objectToRecordUpdate(obj, userId);
-    let queryIdx = 0;
-    let sql = ` update ${this.table} set `;
-    const setArr = [];
-    this.orm.maps.forEach((map, idx) => {
-      setArr.push(`${map.field} = $${idx + 1}`);
-      queryIdx++;
-    });
-    sql += setArr.join(', ');
-    const keys = Object.keys(filter);
-    sql += this.buildParameterizedWhereClause(keys, queryIdx, true);
-    return pgc.pgdb.query(sql,
-      this.orm.maps.map(map => this.orm.getPgValue(null, map.field,
-        record[map.field])).concat(this.getFilterValues(keys, filter)));
+    return this.updateQueryOne({[this.idProp]: obj[this.idProp]}, obj, userId);
   }
 
   removeManyByIds(ids) {
@@ -181,12 +167,33 @@ export class PostgresRepoBase {
         if (!docs.length) {
           return this.addOne(obj, userId);
         } else {
-          return this.updateOne(obj, userId, false);
+          return this.updateQueryOne(filter, obj, userId);
         }
       });
   }
 
+  // update with no check for record uniqueness (getMany) or concurrency
+  updateQueryOne(filter, obj, userId) {
+    const record = this.orm.objectToRecordUpdate(obj, userId);
+    let queryIdx = 0;
+    let sql = ` update ${this.table} set `;
+    const setArr = [];
+    this.orm.maps.forEach((map, idx) => {
+      setArr.push(`${map.field} = $${idx + 1}`);
+      queryIdx++;
+    });
+    sql += setArr.join(', ');
+    const keys = Object.keys(filter);
+    sql += this.buildParameterizedWhereClause(keys, queryIdx, true);
+    return pgc.pgdb.query(sql,
+      this.orm.maps.map(map => this.orm.getPgValue(null, map.field,
+        record[map.field])).concat(this.getFilterValues(keys, filter)));
+  }
+
   removeQueryOne(filter) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('removeQueryOne called with no filter', null, 400);
+    }
     return this.getMany(filter)
       .then(items => {
         if (items.length > 1) {
@@ -201,6 +208,18 @@ export class PostgresRepoBase {
         return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
           .then(resp => this.orm.recordToObject(resp.rows[0]));
       });
+  }
+
+  removeQueryOneNoCheck(filter) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('removeQueryOneNoCheck called with no filter', null, 400);
+    }
+    let sql = `delete from ${this.table} `;
+    const keys = Object.keys(filter);
+    sql += this.buildParameterizedWhereClause(keys, 0, true);
+    sql += ' returning *'
+    return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
+      .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 
   /*
@@ -247,7 +266,29 @@ export class PostgresRepoBase {
       });
   }
 
-  // use this if you don't have an id column
+  // sync using uniqueFilterProps to identify records (instead of id)
+  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId) {
+    return this.getSyncArrays(filter, predicate, records, userId)
+      .then(({updates, adds, deletes}) => {
+        const promiseArr = [];
+        updates.forEach(item => this.addUpdatedBy(item, userId));
+        updates.forEach(record => {
+          const uniqueFilter = {};
+          uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId));
+        });
+        promiseArr.push(this.addMany(adds, userId));
+        deletes.forEach(record => {
+          const uniqueFilter = {};
+          uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+          promiseArr.push(this.removeQueryOneNoCheck(uniqueFilter));
+        });
+        return Promise.all(promiseArr);
+      });
+  }
+
+  // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
+  // and replace
   syncRecordsReplaceAll(filter, records, userId) {
     return this.removeMany(filter, false)
       .then(() => this.addMany(records, userId));

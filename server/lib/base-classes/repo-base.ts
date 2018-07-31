@@ -174,12 +174,7 @@ export default class RepoBase {
   }
 
   updateNoCheck(data, userId) {
-    this.addUpdatedBy(data, userId)
-    this.validate(data);
-    // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
-    // we'll just replace the doc in entirety and be done with it
-    return this.Model.replaceOne({_id: data.id}, data)
-      .then(results => data);
+    return this.updateQueryOne({_id: data.id}, data, userId);
   }
 
   removeMany(filter) {
@@ -224,9 +219,19 @@ export default class RepoBase {
         if (!docs.length) {
           return this.addOne(data, userId);
         } else {
-          return this.update(data, userId, false);
+          return this.updateQueryOne(filter, data, userId);
         }
       });
+  }
+
+  // filter determines record uniqueness. Either an filter object or an array we use to construct the object
+  updateQueryOne(filter, data, userId) {
+    this.addUpdatedBy(data, userId)
+    this.validate(data);
+    // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
+    // we'll just replace the doc in entirety and be done with it
+    return this.Model.replaceOne(filter, data)
+      .then(results => data);
   }
 
   removeQueryOne(filter) {
@@ -241,12 +246,19 @@ export default class RepoBase {
       });
   }
 
+  removeQueryOneNoCheck(filter) {
+    return this.Model.deleteOne(filter);
+  }
+
   /*
   sync methods:
   these allow multiple ways to sync records in a table with a set being sent up. Can be the whole table
   or a subset specified in the filter method. Can be done via delete all, then insert all, or by id or query
    */
   getSyncArrays(filter, predicate, records, userId) {
+    if (!predicate) {
+      throw new ApiError('No predicate for getSyncArrays');
+    }
     let updates = [], adds = [], deletes = [];
     return this.Model.find(filter)
       .then(docs => {
@@ -261,15 +273,6 @@ export default class RepoBase {
 */
         return {updates, adds, deletes};
       });
-  }
-
-  syncRecords(filter, records, userId) {
-    if (filter.syncRecordsById) {
-      delete filter.syncRecordsById;
-      return this.syncRecordsById(filter, records, userId);
-    } else {
-      return this.syncRecordsReplaceAll(filter, records, userId);
-    }
   }
 
   // use this if you have an id column
@@ -287,9 +290,31 @@ export default class RepoBase {
       });
   }
 
-  // use this if you don't have an id column
+  // sync using uniqueFilterProps to identify records (instead of id)
+  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId) {
+    return this.getSyncArrays(filter, predicate, records, userId)
+      .then(({updates, adds, deletes}) => {
+        const promiseArr = [];
+        updates.forEach(item => this.addUpdatedBy(item, userId));
+        updates.forEach(record => {
+          const uniqueFilter = {};
+          uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId));
+        });
+        promiseArr.push(this.addMany(adds, userId));
+        deletes.forEach(record => {
+          const uniqueFilter = {};
+          uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+          promiseArr.push(this.removeQueryOneNoCheck(uniqueFilter));
+        });
+        return Promise.all(promiseArr);
+      });
+  }
+
+  // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
+  // and replace
   syncRecordsReplaceAll(filter, records, userId) {
-    return this.Model.deleteMany(filter).exec()
+    return this.removeMany(filter)
       .then(() => this.addMany(records, 'jodoe'));
   }
 
