@@ -43,19 +43,26 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
 
   ngOnInit() {
     this.modules = this.store.nonAdminModules;
-    Promise.all([
-      this.pgLookupService.getFiscalMonths().toPromise(),
-      this.openPeriodService.getMany().toPromise()
-    ])
-      .then(results => {
+    this.pgLookupService.getFiscalMonths().toPromise()
+      .then(fiscalMonths => {
         this.modules.forEach((module, idx) => {
-          this.fiscalMonths.push(_.cloneDeep(results[0]));
-          this.openPeriods = results[1];
+          this.fiscalMonths.push(_.cloneDeep(fiscalMonths));
+        });
+      });
+    this.refresh();
+  }
+
+  refresh() {
+    this.openPeriodService.getMany().toPromise()
+      .then(openPeriods => {
+        this.modules.forEach((module, idx) => {
+          this.openPeriods = openPeriods;
           const openPeriod: OpenPeriod = _.find(this.openPeriods, {moduleId: module.moduleId});
           this.selFiscalMonths[idx] = openPeriod ? openPeriod.fiscalMonth : undefined;
           this.orgSelFiscalMonths = _.cloneDeep(this.selFiscalMonths);
         });
       });
+
   }
 
   save() {
@@ -68,16 +75,18 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
         } else {
           openPeriod = new OpenPeriod(module.moduleId, this.selFiscalMonths[idx]);
         }
-        promiseArr.push(this.openPeriodService.upsertQueryOne({moduleId: module.moduleId},
-          openPeriod).toPromise());
+        promiseArr.push(this.openPeriodService.upsert(openPeriod).toPromise());
       }
     });
 
-    Promise.all(promiseArr)
-      .then(results => {
-        this.toastService.showAutoHideToast('Submitted',
-          'Module open periods have been submitted successfully.', ToastSeverity.success);
-      });
+    if (promiseArr.length) {
+      Promise.all(promiseArr)
+        .then(results => {
+          this.refresh();
+          this.toastService.showAutoHideToast('Submitted',
+            'Module open periods have been submitted successfully.', ToastSeverity.success);
+        });
+    }
   }
 
 }

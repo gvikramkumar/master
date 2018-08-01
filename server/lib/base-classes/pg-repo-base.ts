@@ -35,14 +35,8 @@ export class PostgresRepoBase {
       });
   }
 
-  getOneByQuery(filter) {
-    return this.getMany(filter)
-      .then(objs => {
-        if (objs.length > 1) {
-          throw new ApiError('Multiple rows returned from getOne query', null, 400);
-        }
-        return objs[0];
-      });
+  getId(data) {
+    return data[this.idProp];
   }
 
   // this is NOT paremeterized, no way around that, as we have to upload 5k at a time
@@ -73,23 +67,10 @@ export class PostgresRepoBase {
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 
-  upsertQueryOne(filter, obj, userId) {
-    if (Object.keys(filter).length === 0) {
-      throw new ApiError('upsertQueryOne called with no filter', null, 400);
-    }
-    return this.getMany(filter)
-      .then(docs => {
-        if (docs.length > 1) {
-          throw new ApiError('upsertQueryOne refers to more than one item.', null, 400);
-        }
-        if (!docs.length) {
-          return this.addOne(obj, userId);
-        } else {
-          return this.updateOne(obj, userId, false);
-        }
-      });
+  updateOneById(obj, userId, concurrencyCheck?) {
+    const filter = {[this.idProp]: obj[this.idProp]};
+    return this.updateQueryOne(filter, obj, userId, concurrencyCheck);
   }
-
   /*
   concurrencyCheck:
   currently we allow updating to both mongo and pg. Both repos have the ability to update updatedDate.
@@ -97,8 +78,7 @@ export class PostgresRepoBase {
   always updates the updatedDate. What to do? We'll allow turning off the concurrency check in this case,
   so if pg only, then on, and if mongo and pg then off.
    */
-  updateOne(obj, userId, concurrencyCheck = true) {
-    const filter = {[this.idProp]: obj[this.idProp]};
+  updateQueryOne(filter, obj, userId, concurrencyCheck = true) {
     if (_.find(this.orm.maps, {prop: 'updatedDate'}) && concurrencyCheck) {
       filter.updatedDate = obj.updatedDate;
     }
@@ -110,6 +90,7 @@ export class PostgresRepoBase {
         if (rows.length > 1) {
           throw new ApiError(`UpdateOne multiple records found.`, null, 400);
         }
+        this.addUpdatedBy(obj, userId)
         const record = this.orm.objectToRecordUpdate(obj, userId);
         let queryIdx = 0;
         let sql = ` update ${this.table} set `;
@@ -123,27 +104,10 @@ export class PostgresRepoBase {
         sql += this.buildParameterizedWhereClause(keys, queryIdx, true);
         sql += ' returning *'
         return pgc.pgdb.query(sql,
-          this.orm.maps.map(map => this.orm.getPgValue(null, map.field, record[map.field])).concat(this.getFilterValues(keys, filter)))
+          this.orm.maps.map(map => this.orm.getPgValue(null, map.field, record[map.field]))
+            .concat(this.getFilterValues(keys, filter)))
           .then(resp => this.orm.recordToObject(resp.rows[0]));
       });
-  }
-
-  updateOneNoCheck(obj, userId) {
-    const filter = {[this.idProp]: obj[this.idProp]};
-    const record = this.orm.objectToRecordUpdate(obj, userId);
-    let queryIdx = 0;
-    let sql = ` update ${this.table} set `;
-    const setArr = [];
-    this.orm.maps.forEach((map, idx) => {
-      setArr.push(`${map.field} = $${idx + 1}`);
-      queryIdx++;
-    });
-    sql += setArr.join(', ');
-    const keys = Object.keys(filter);
-    sql += this.buildParameterizedWhereClause(keys, queryIdx, true);
-    return pgc.pgdb.query(sql,
-      this.orm.maps.map(map => this.orm.getPgValue(null, map.field,
-        record[map.field])).concat(this.getFilterValues(keys, filter)));
   }
 
   removeManyByIds(ids) {
@@ -179,7 +143,44 @@ export class PostgresRepoBase {
       });
   }
 
+  /*
+  queryOne methods
+  getOneByQuery(filter), upsertQueryOne(filter), removeQueryOne(filter)
+  these three are how you do crud if you have individual items that aren't tracked by id, say open_period, where
+  items are identified by a unique moduleId, or say other collections that would use our autoIncrementFields
+  to track items instead of id
+   */
+  getOneByQuery(filter) {
+    return this.getMany(filter)
+      .then(objs => {
+        if (objs.length > 1) {
+          throw new ApiError('Multiple rows returned from getOne query', null, 400);
+        }
+        return objs[0];
+      });
+  }
+
+  upsertQueryOne(filter, obj, userId) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('upsertQueryOne called with no filter', null, 400);
+    }
+    return this.getMany(filter)
+      .then(docs => {
+        if (docs.length > 1) {
+          throw new ApiError('upsertQueryOne refers to more than one item.', null, 400);
+        }
+        if (!docs.length) {
+          return this.addOne(obj, userId);
+        } else {
+          return this.updateQueryOne(filter, obj, userId);
+        }
+      });
+  }
+
   removeQueryOne(filter) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('removeQueryOne called with no filter', null, 400);
+    }
     return this.getMany(filter)
       .then(items => {
         if (items.length > 1) {
@@ -196,58 +197,71 @@ export class PostgresRepoBase {
       });
   }
 
-    getSyncArrays(filter, predicate, records, userId) {
-      let updates = [], adds = [], deletes = [];
-      return this.getMany(filter, false)
-        .then(docs => {
-          updates = _.intersectionWith(records, docs, predicate);
-          adds = _.differenceWith(records, docs, predicate);
-          deletes = _.differenceWith(docs, records, predicate);
+  /*
+  sync methods:
+  these allow multiple ways to sync records in a table with a set being sent up. Can be the whole table
+  or a subset specified in the filter method. Can be done via delete all, then insert all, or by id or query
+   */
+  getSyncArrays(filter, predicate, records, userId) {
+    let updates = [], adds = [], deletes = [];
+    return this.getMany(filter, false)
+      .then(docs => {
+        updates = _.intersectionWith(records, docs, predicate);
+        adds = _.differenceWith(records, docs, predicate);
+        deletes = _.differenceWith(docs, records, predicate);
 
-          console.log('updates', updates);
-          console.log('adds', adds);
-          console.log('deletes', deletes);
+/*
+        console.log('updates', updates);
+        console.log('adds', adds);
+        console.log('deletes', deletes);
+*/
 
-          return {updates, adds, deletes};
+        return {updates, adds, deletes};
+      });
+  }
+
+  // use this if you have an id column
+  syncRecordsById(filter, records, userId) {
+    const predicate = (a, b) => a[this.idProp] === b[this.idProp];
+    return this.getSyncArrays(filter, predicate, records, userId)
+      .then(({updates, adds, deletes}) => {
+        const promiseArr = [];
+        updates.forEach(record => promiseArr.push(this.updateOneById(record, userId, true)));
+        promiseArr.push(this.addMany(adds, userId));
+        const deleteIds = deletes.map(obj => obj[this.idProp]);
+        promiseArr.push(this.removeManyByIds(deleteIds));
+        return Promise.all(promiseArr);
+      });
+  }
+
+  // sync using uniqueFilterProps to identify records (instead of id)
+  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId) {
+    return this.getSyncArrays(filter, predicate, records, userId)
+      .then(({updates, adds, deletes}) => {
+        const promiseArr = [];
+        updates.forEach(record => {
+          const uniqueFilter = {};
+          uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+          // console.log('update', uniqueFilter);
+          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId));
         });
-    }
-
-    syncRecords(filter, predicate, records, userId) {
-      if (filter.setNoIdColumn) {
-        delete filter.setNoIdColumn;
-        if (!predicate) {
-          throw new ApiError('No predicate given for syncRecords');
-        }
-        return this.syncRecordsNoIdColumn(filter, predicate, records, userId);
-      } else {
-        return this.syncRecordsById(filter, null, records, userId);
-      }
-    }
-
-    // use this if you have an id column
-    syncRecordsById(filter, predicate, records, userId) {
-      predicate = (a, b) => a[this.idProp] === b[this.idProp];
-      return this.getSyncArrays(filter, predicate, records, userId)
-        .then(({updates, adds, deletes}) => {
-          const promiseArr = [];
-          updates.forEach(record => promiseArr.push(this.updateOneNoCheck(record, userId)));
-          promiseArr.push(this.addMany(adds, userId));
-          const deleteIds = deletes.map(obj => obj[this.idProp]);
-          promiseArr.push(this.removeManyByIds(deleteIds));
-          return Promise.all(promiseArr);
+        promiseArr.push(this.addMany(adds, userId));
+        deletes.forEach(record => {
+          const uniqueFilter = {};
+          uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+          // console.log('delete', uniqueFilter);
+          promiseArr.push(this.removeQueryOne(uniqueFilter));
         });
-    }
+        return Promise.all(promiseArr);
+      });
+  }
 
-    // use this if you don't have an id column
-    syncRecordsNoIdColumn(filter, predicate, records, userId) {
-      return this.getSyncArrays(filter, predicate, records, userId)
-        .then(({updates, adds, deletes}) => {
-          const inserts = adds.concat(updates);
-          const promiseArr = [];
-          return this.removeMany(filter, false)
-            .then(() => this.addMany(inserts, userId));
-        });
-    }
+  // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
+  // and replace
+  syncRecordsReplaceAll(filter, records, userId) {
+    return this.removeMany(filter, false)
+      .then(() => this.addMany(records, userId));
+  }
 
   getFilterValues(keys, filter) {
     // need the same keys as buildParameterizedWhereClause to maintain the same order

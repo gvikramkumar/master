@@ -1,25 +1,24 @@
+import {PostgresRepoBase} from '../../../lib/base-classes/pg-repo-base';
+import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 import {injectable} from 'inversify';
-import {Schema} from 'mongoose';
-import RepoBase from '../../../lib/base-classes/repo-base';
 
 
-const schema = new Schema(
-  {
-    moduleId: {type: Number, required: true},
-    fiscalMonth: {type: Number, required: true},
-    openFlag: {type: String, required: true},
-    createdBy: {type: String, required: true},
-    createdDate: {type: Date, required: true},
-    updatedBy: {type: String, required: true},
-    updatedDate: {type: Date, required: true}
-  },
-  {collection: 'dfa_open_period'}
-);
+const ormMap: OrmMap[] = [
+  {prop: 'moduleId', field: 'module_id', type: OrmTypes.number},
+  {prop: 'fiscalMonth', field: 'fiscal_month_id', type: OrmTypes.number},
+  {prop: 'openFlag', field: 'open_flag'},
+  {prop: 'createdBy', field: 'create_owner'},
+  {prop: 'createdDate', field: 'create_datetimestamp', type: OrmTypes.date},
+  {prop: 'updatedBy', field: 'update_owner'},
+  {prop: 'updatedDate', field: 'update_datetimestamp', type: OrmTypes.date},
+] ;
 
 @injectable()
-export default class OpenPeriodRepo extends RepoBase {
+export default class OpenPeriodPgRepo extends PostgresRepoBase {
+  table = 'fpadfa.dfa_open_period';
+  idProp = 'moduleId';
+
   constructor() {
-    super(schema, 'OpenPeriod');
+    super(new Orm(ormMap));
   }
 }
-

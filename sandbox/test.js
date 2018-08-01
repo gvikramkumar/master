@@ -1,8 +1,43 @@
-import {ApiError} from "../server/lib/common/api-error";
 
 const _ = require('lodash');
 
 
+function pad(number, digits) {
+  number = '' + number
+  while (number.length < digits) {
+    number = '0' + number;
+  }
+  return number;
+}
+
+// stolen from node-postgres/lib/util.js, converts date to postgres string
+function dateToString(date) {
+  let offset = -date.getTimezoneOffset()
+  let ret = pad(date.getFullYear(), 4) + '-' +
+    pad(date.getMonth() + 1, 2) + '-' +
+    pad(date.getDate(), 2) + 'T' +
+    pad(date.getHours(), 2) + ':' +
+    pad(date.getMinutes(), 2) + ':' +
+    pad(date.getSeconds(), 2) + '.' +
+    pad(date.getMilliseconds(), 3)
+
+  if (offset < 0) {
+    ret += '-';
+    offset *= -1;
+  } else {
+    ret += '+';
+  }
+
+  return ret + pad(Math.floor(offset / 60), 2) + ':' + pad(offset % 60, 2)
+}
+
+const d = new Date();
+console.log(d.toISOString());
+console.log(dateToString(d));
+
+
+
+/*
 
 function buildParameterizedWhereClause(keys, startIndex, errorIfEmpty) {
   let sql = '';
@@ -30,6 +65,7 @@ function buildParameterizedWhereClause(keys, startIndex, errorIfEmpty) {
 console.log(buildParameterizedWhereClause(['one', 'two', 'three']))
 
 
+*/
 
 
 

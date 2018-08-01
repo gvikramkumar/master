@@ -9,6 +9,8 @@ export default class PostgresControllerBase {
   constructor(protected repo: PostgresRepoBase) {
   }
 
+  // we have this functionality required in other api classes, so pull it out of
+  // controller's getMany to reuse
   getManyPromise(req) {
     let promise;
     /*
@@ -20,16 +22,18 @@ export default class PostgresControllerBase {
           promise = this.repo.getMany(req.query);
         }
     */
-    promise = this.repo.getMany(req.query);
+    promise = this.repo.getMany(req.query, false);
     return promise;
   }
 
+  // get /
   getMany(req, res, next) {
     this.getManyPromise(req)
       .then(items => res.json(items))
       .catch(next);
   }
 
+  // get /query-one
   getQueryOne(req, res, next) {
     const setNoError = req.query.setNoError;
     delete req.query.setNoError;
@@ -47,6 +51,7 @@ export default class PostgresControllerBase {
   }
 
   // ui will always add error modal on 404, we'll allow a querystring "setNoError" to defeat this
+  // get /:id
   getOne(req, res, next) {
     this.repo.getOneById(req.params.id)
       .then(item => {
@@ -61,27 +66,50 @@ export default class PostgresControllerBase {
       .catch(next);
   }
 
-  // if queryPost querystring, then just a query with params in body instead of querystring
-  // insertMany querystring: insertMany, else insert one
-  handlePost(req, res, next) {
+  // post /
+  addOne(req, res, next) {
     const data = req.body;
-    if (req.query.queryPost) {
-      req.query = req.body;
-      this.getMany(req, res, next);
-    } else if (req.query.setSyncRecords) {
-      delete req.query.setSyncRecords
-      this.repo.syncRecords(req.query, null, req.body, req.user.id);
-    } else if (req.query.insertMany) {
-      this.repo.addMany(data, req.user.id)
-        .then(() => res.end())
-        .catch(next);
-    } else {
-      this.repo.addOne(data, req.user.id)
-        .then(item => res.json(item))
-        .catch(next);
-    }
+    this.repo.addOne(data, req.user.id)
+      .then(item => res.json(item))
+      .catch(next);
   }
 
+  // post /method/:method
+  callMethod(req, res, next) {
+    const method = this[req.params.method];
+    if (!method) {
+      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
+    }
+    method.call(this, req, res, next);
+  }
+
+  // post /upsert
+  upsert(req, res, next) {
+    this.repo.getOneById(this.repo.getId(req.body))
+      .then(item => {
+        if (item) {
+          this.update(req, res, next);
+        } else {
+          this.addOne(req, res, next);
+        }
+      });
+  }
+
+  // post /query-post
+  queryPost(req, res, next) {
+    req.query = req.body;
+    this.getMany(req, res, next);
+  }
+
+  // post /add-many
+  addMany(req, res, next) {
+    const data = req.body;
+    this.repo.addMany(data, req.user.id)
+      .then(() => res.end())
+      .catch(next);
+  }
+
+  // post /query-one
   upsertQueryOne(req, res, next) {
     const data = req.body;
     const filter = req.query;
@@ -90,14 +118,35 @@ export default class PostgresControllerBase {
       .catch(next);
   }
 
+  // post /sync-records
+  syncRecordsById(req, res, next) {
+    this.repo.syncRecordsById(req.query, req.body, req.user.id)
+      .then(() => res.end());
+  }
+
+  // post /sync-records
+  // this is a placeholder, you have to override this and supply the
+  // uniqueFilterOrProps and predicate values, then call super with all
+  syncRecordsQueryOne(req, res, next) {
+    this.repo.syncRecordsQueryOne(req.query, null,  null, req.body, req.user.id)
+      .then(() => res.end());
+  }
+
+  // post /sync-records
+  syncRecordsReplaceAll(req, res, next) {
+    this.repo.syncRecordsReplaceAll(req.query, req.body, req.user.id)
+      .then(() => res.end());
+  }
+
+  // put /:id
   update(req, res, next) {
     const data = req.body;
-    data[this.repo.idProp] = req.params.id;
-    this.repo.updateOne(data, req.user.id)
+    this.repo.updateOneById(data, req.user.id)
       .then(item => res.json(item))
       .catch(next);
   }
 
+  // delete /:id
   remove(req, res, next) {
     this.repo.removeOne(req.params.id)
       .then(item => {
@@ -106,6 +155,7 @@ export default class PostgresControllerBase {
       .catch(next);
   }
 
+  // delete /query-one
   removeQueryOne(req, res, next) {
     const filter = req.query;
     this.repo.removeQueryOne(filter)

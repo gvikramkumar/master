@@ -45,10 +45,10 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
           this.sources.push(_.cloneDeep(activeSources));
         });
       });
-    this.getModuleSouceMap();
+    this.refresh();
   }
 
-  getModuleSouceMap() {
+  refresh() {
     const promiseArr = [];
     this.moduleLookupService.getOneValueManyModules('sources',
       this.store.nonAdminModules.map(m => m.moduleId))
@@ -69,6 +69,7 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
     if (upserts.length) {
       this.moduleLookupService.upsertMany(upserts)
         .subscribe(() => {
+          this.refresh();
           this.toastService.showAutoHideToast('Submitted',
             'Module-to-source mapping has been submitted successfully.', ToastSeverity.success);
         });

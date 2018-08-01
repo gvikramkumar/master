@@ -123,9 +123,9 @@ export class Orm {
   pad(number, digits) {
     number = '' + number
     while (number.length < digits) {
-      number = '0' + number
+      number = '0' + number;
     }
-    return number
+    return number;
   }
 
   // stolen from node-postgres/lib/util.js, converts date to postgres string

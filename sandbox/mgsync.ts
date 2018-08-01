@@ -48,14 +48,17 @@ mgc.promise.then(({db, mongo}) => {
     repo.addMany(dbRecords, 'jodoe')
       .then(() => repo.getManyNoCheck({}))
       .then(dbdocs => {
-        mine.forEach(item => {
+        mine.forEach((item: AnyObj) => {
           const doc = _.find(dbdocs, {moduleId: item.moduleId, name: item.name});
           if (doc) {
             item.id = doc.id;
           }
         })
-        const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
-        return <any> repo.syncRecords({setNoIdColumn: true}, predicate, mine, 'jodoe');
+        return <any> repo.syncRecordsById({}, mine, 'jodoe');
+        // const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
+        // return <any> repo.syncRecordsQueryOne({}, ['moduleId', 'name'], predicate, mine, 'jodoe');
+        // return <any> repo.syncRecordsReplaceAll({}, mine, 'jodoe');
+        // return Promise.resolve();
       })
       .then(() => process.exit(0));
   })

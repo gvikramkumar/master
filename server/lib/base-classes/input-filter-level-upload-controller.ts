@@ -3,7 +3,7 @@ import PostgresRepo from '../database/repos/postgres-repo';
 import LookupRepo from '../../api/common/lookup/repo';
 import {Modules} from '../../../shared/enums';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
-import OpenPeriodRepo from '../../api/common/open-period/repo';
+import OpenPeriodPgRepo from '../../api/common/open-period/repo';
 import UserRoleRepo from '../database/repos/user-role-repo';
 
 const pgRepo = new PostgresRepo();
@@ -15,7 +15,7 @@ data;
   constructor(
     moduleId,
     repo,
-    openPeriodRepo: OpenPeriodRepo,
+    openPeriodRepo: OpenPeriodPgRepo,
     submeasureRepo: SubmeasureRepo,
     userRoleRepo: UserRoleRepo
   ) {

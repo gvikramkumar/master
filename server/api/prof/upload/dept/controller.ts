@@ -7,7 +7,7 @@ import DeptUploadDeptTemplate from './dept-template';
 import DeptUploadExludeAcctTemplate from './exclude-acct-template';
 import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
-import OpenPeriodRepo from '../../../common/open-period/repo';
+import OpenPeriodPgRepo from '../../../common/open-period/repo';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 import PostgresRepo from '../../../../lib/database/repos/postgres-repo';
 
@@ -17,7 +17,7 @@ export default class DeptUploadUploadController extends UploadController {
 
   constructor(
     repo: DeptUploadRepo,
-    openPeriodRepo: OpenPeriodRepo,
+    openPeriodRepo: OpenPeriodPgRepo,
     submeasureRepo: SubmeasureRepo,
     userRoleRepo: UserRoleRepo,
     private pgRepo: PostgresRepo

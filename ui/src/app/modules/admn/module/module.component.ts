@@ -29,7 +29,7 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('nameInput') nameInput: CuiInputComponent;
-
+  UiUtil = UiUtil;
   filterValue = '';
 
   constructor(

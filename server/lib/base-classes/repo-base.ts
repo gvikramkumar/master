@@ -86,12 +86,6 @@ export default class RepoBase {
       .then(arr => arr.length ? arr[0] : null);
   }
 
-  getOneByQuery(_filter = {}) {
-    let filter = _filter;
-    filter = this.addDateRangeToFilter(filter);
-    return this.Model.findOne(filter).exec();
-  }
-
   getOneWithTimestamp(data) {
     const query = this.Model.findOne({_id: data.id});
     if (data.updatedDate) {
@@ -155,50 +149,6 @@ export default class RepoBase {
       .then(() => item.save());
   }
 
-  getAutoIncrementValue() {
-    return this.Model.find({})
-      .sort({[this.autoIncrementField]: -1}).limit(1).exec()
-      .then(docs => {
-        if (docs.length) {
-          return docs[0][this.autoIncrementField] + 1;
-        } else {
-          return 1;
-        }
-      });
-  }
-
-  fillAutoIncrementField(item) {
-    if (this.autoIncrementField) {
-      this.getAutoIncrementValue()
-        .then(inc => item[this.autoIncrementField] = inc);
-    } else {
-      return Promise.resolve();
-    }
-  }
-
-  /*
-  getMany(filter), upsertQueryOne(filter), removeQueryOne(filter)
-  these three are how you do crud if you have individual items that aren't tracked by id, say open_period.
-  In this table we need one entry per module, so filter is: {moduleId: xxx}, then we can
-  getMany, upsertQueryOne, and delete using this filter.
-   */
-  upsertQueryOne(filter, data, userId) {
-    if (Object.keys(filter).length === 0) {
-      throw new ApiError('upsertQueryOne called with no filter', null, 400);
-    }
-    return this.getMany(filter)
-      .then(docs => {
-        if (docs.length > 1) {
-          throw new ApiError('upsertQueryOne refers to more than one item.', null, 400);
-        }
-        if (!docs.length) {
-          return this.addOne(data, userId);
-        } else {
-          return this.update(data, userId, false);
-        }
-      });
-  }
-
   update(data, userId, concurrencyCheck = true) {
     let promise: Promise<any>;
     if (concurrencyCheck) {
@@ -223,15 +173,6 @@ export default class RepoBase {
       });
   }
 
-  updateNoCheck(data, userId) {
-    this.addUpdatedBy(data, userId)
-    this.validate(data);
-    // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
-    // we'll just replace the doc in entirety and be done with it
-    return this.Model.replaceOne({_id: data.id}, data)
-      .then(results => data);
-  }
-
   removeMany(filter) {
     if (!filter) {
       throw new ApiError('No filter for removeMany');
@@ -249,6 +190,57 @@ export default class RepoBase {
       });
   }
 
+  /*
+  queryOne methods
+  getOneByQuery(filter), upsertQueryOne(filter), removeQueryOne(filter)
+  these three are how you do crud if you have individual items that aren't tracked by id, say open_period, where
+  items are identified by a unique moduleId, or say other collections that would use our autoIncrementFields
+  to track items instead of id
+   */
+  getOneByQuery(_filter = {}) {
+    let filter = _filter;
+    filter = this.addDateRangeToFilter(filter);
+    return this.Model.findOne(filter).exec();
+  }
+
+  upsertQueryOne(filter, data, userId, concurrencyCheck?) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('upsertQueryOne called with no filter', null, 400);
+    }
+    return this.getOneByQuery(filter)
+      .then(doc => {
+        if (!doc) {
+          return this.addOne(data, userId);
+        } else {
+          return this.updateQueryOne(filter, data, userId);
+        }
+      });
+  }
+
+  updateQueryOne(filter, data, userId, concurrencyCheck = true) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('upsertQueryOne called with no filter', null, 400);
+    }
+    const query = this.Model.find(filter);
+    if (data.updatedDate && concurrencyCheck) {
+      query.where({updatedDate: data.updatedDate});
+    }
+    return query.exec()
+      .then(docs => {
+        if (docs.length > 1) {
+          throw new ApiError('updateQueryOne refers to more than one item.', null, 400);
+        } else if (!docs.length) {
+          throw new ApiError('updateQueryOne item not found', null, 400);
+        }
+        this.addUpdatedBy(data, userId)
+        this.validate(data);
+        // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
+        // we'll just replace the doc in entirety and be done with it
+        return this.Model.replaceOne(filter, data)
+          .then(results => data);
+      });
+  }
+
   removeQueryOne(filter) {
     return this.getMany(filter)
       .then(items => {
@@ -261,7 +253,15 @@ export default class RepoBase {
       });
   }
 
+  /*
+  sync methods:
+  these allow multiple ways to sync records in a table with a set being sent up. Can be the whole table
+  or a subset specified in the filter method. Can be done via delete all, then insert all, or by id or query
+   */
   getSyncArrays(filter, predicate, records, userId) {
+    if (!predicate) {
+      throw new ApiError('No predicate for getSyncArrays');
+    }
     let updates = [], adds = [], deletes = [];
     return this.Model.find(filter)
       .then(docs => {
@@ -278,26 +278,14 @@ export default class RepoBase {
       });
   }
 
-  syncRecords(filter, predicate, records, userId) {
-    if (filter.setNoIdColumn) {
-      delete filter.setNoIdColumn;
-      if (!predicate) {
-        throw new ApiError('No predicate given for syncRecords');
-      }
-      return this.syncRecordsNoIdColumn(filter, predicate, records, userId);
-    } else {
-      return this.syncRecordsById(filter, null, records, userId);
-    }
-  }
-
   // use this if you have an id column
-  syncRecordsById(filter, predicate, records, userId) {
-    predicate = (a, b) => a.id === b.id;
+  syncRecordsById(filter, records, userId) {
+    const predicate = (a, b) => a.id === b.id;
     return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
         updates.forEach(item => this.addUpdatedBy(item, userId));
-        updates.forEach(record => promiseArr.push(this.updateNoCheck(record, userId)));
+        updates.forEach(record => promiseArr.push(this.update(record, userId, false)));
         promiseArr.push(this.addMany(adds, userId));
         const deleteIds = deletes.map(obj => obj.id);
         promiseArr.push(this.Model.deleteMany({_id: {$in: deleteIds}}).exec())
@@ -305,16 +293,33 @@ export default class RepoBase {
       });
   }
 
-  // use this if you don't have an id column
-  syncRecordsNoIdColumn(filter, predicate, records, userId) {
+  // sync using uniqueFilterProps to identify records (instead of id)
+  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId) {
     return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
-        const inserts = adds.concat(updates);
-        inserts.forEach(item => this.addCreatedByAndUpdatedBy(item, userId));
         const promiseArr = [];
-        return this.Model.deleteMany(filter).exec()
-          .then(() => this.addMany(inserts, 'jodoe'));
+        updates.forEach(record => {
+          const uniqueFilter = {};
+          uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+          // console.log('update', uniqueFilter);
+          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId));
+        });
+        promiseArr.push(this.addMany(adds, userId));
+        deletes.forEach(record => {
+          const uniqueFilter = {};
+          uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+          // console.log('delete', uniqueFilter);
+          promiseArr.push(this.removeQueryOne(uniqueFilter));
+        });
+        return Promise.all(promiseArr);
       });
+  }
+
+  // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
+  // and replace
+  syncRecordsReplaceAll(filter, records, userId) {
+    return this.removeMany(filter)
+      .then(() => this.addMany(records, 'jodoe'));
   }
 
   // a way to validate using mongoose outside of save(). If errs, then throw errs
@@ -386,6 +391,27 @@ export default class RepoBase {
       }
       item.updatedBy = userId;
       item.updatedDate = date;
+    }
+  }
+
+  getAutoIncrementValue() {
+    return this.Model.find({})
+      .sort({[this.autoIncrementField]: -1}).limit(1).exec()
+      .then(docs => {
+        if (docs.length) {
+          return docs[0][this.autoIncrementField] + 1;
+        } else {
+          return 1;
+        }
+      });
+  }
+
+  fillAutoIncrementField(item) {
+    if (this.autoIncrementField) {
+      this.getAutoIncrementValue()
+        .then(inc => item[this.autoIncrementField] = inc);
+    } else {
+      return Promise.resolve();
     }
   }
 

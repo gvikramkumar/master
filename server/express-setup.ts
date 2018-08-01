@@ -62,7 +62,7 @@ export default function () {
     console.log(` ${req['user'].id}: ${req.method} - ${req.url}`);
     next();
   });
-  // app.use(morgan('dev'));
+  app.use(morgan('dev'));
   app.get('/cause-error', function (req, res, next) {
     if (process.env.NODE_ENV === 'unit') {
       const err = new NamedApiError('CauseError', 'api error with data', {some: 'thing'});

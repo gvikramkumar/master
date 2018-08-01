@@ -6,7 +6,7 @@ import DollarUploadTemplate from './template';
 import DollarUploadImport from './import';
 import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
-import OpenPeriodRepo from '../../../common/open-period/repo';
+import OpenPeriodPgRepo from '../../../common/open-period/repo';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 
 
@@ -15,7 +15,7 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
 
   constructor(
     repo: DollarUploadRepo,
-    openPeriodRepo: OpenPeriodRepo,
+    openPeriodRepo: OpenPeriodPgRepo,
     submeasureRepo: SubmeasureRepo,
     userRoleRepo: UserRoleRepo
   ) {

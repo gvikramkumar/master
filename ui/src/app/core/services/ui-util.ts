@@ -16,6 +16,22 @@ export class UiUtil {
   constructor(private store: AppStore, private dialogService: CuiDialogService) {
   }
 
+  static getStatusText(status) {
+    switch (status) {
+      case 'A':
+        return 'Active';
+      case 'I':
+        return 'Inactive';
+      case 'P':
+        return 'Pending';
+    }
+    if (!status) {
+      return '';
+    } else {
+      throw new Error(`getStatusText: status doesn't exist: ${status}`);
+    }
+  }
+
   static statusIsActive(val) {
     return val === 'A';
   }

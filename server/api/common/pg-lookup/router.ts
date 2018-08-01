@@ -6,4 +6,4 @@ import {PostgresLookupController} from './controller';
 const ctrl = injector.get(PostgresLookupController)
 
 export const pgLookupRouter = Router()
-  .get('/:method', ctrl.callMethod.bind(ctrl))
+  .post('/method/:method', ctrl.callMethod.bind(ctrl))

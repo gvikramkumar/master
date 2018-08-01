@@ -21,7 +21,7 @@ export class PgLookupService {
   }
 
   getFiscalMonths() {
-    return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}/getFiscalMonths`);
+    return this.httpClient.post<any>(`${apiUrl}/api/${this.endpointName}/method/getFiscalMonths`, null);
   }
 
   // helper function to add moduleId to requests

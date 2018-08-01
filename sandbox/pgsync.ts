@@ -47,12 +47,16 @@ pgc.promise.then(db => {
         mine.forEach((item: AnyObj) => {
           const doc = _.find(dbdocs, {moduleId: item.moduleId, name: item.name});
           if (doc) {
-            console.log('>>>>>>>', item.idCol, doc.idCol);
             item.idCol = doc.idCol;
+            item.updatedDate = doc.updatedDate;
+            // console.log(item.moduleId, item.name, item.updatedDate);
           }
         })
+        // return <any> repo.syncRecordsById({}, mine, 'jodoe');
         const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
-        return <any> repo.syncRecords({setNoIdColumn: true}, predicate, mine, 'jodoe');
+        return <any> repo.syncRecordsQueryOne({}, ['moduleId', 'name'], predicate, mine, 'jodoe');
+        // return <any> repo.syncRecordsReplaceAll({moduleId: 1}, mine, 'jodoe');
+        // return Promise.resolve();
       })
       .then(() => process.exit(0));
   })
