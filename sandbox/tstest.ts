@@ -1,8 +1,7 @@
-import {PostgresRepoBase} from '../server/lib/base-classes/pg-repo-base';
-import {OrmMap} from '../server/lib/base-classes/Orm';
-import {OpenPeriodPostgresRepo} from '../server/api/common/open-period/pgrepo';
-import {pgc} from '../server/lib/database/postgres-conn';
 
+
+
+/*
 const repo = new OpenPeriodPostgresRepo();
 
 const date = new Date().toISOString();
@@ -65,3 +64,4 @@ pgc.promise.then(db => {
 
 
 
+*/

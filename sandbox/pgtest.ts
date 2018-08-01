@@ -1,4 +1,4 @@
-const pgc = require('../dist/server/lib/database/postgres-conn').pgc;
+import {pgc} from '../server/lib/database/postgres-conn';
 
 const a = pgc.promise;
 pgc.promise.then(db => {

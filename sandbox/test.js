@@ -1,9 +1,79 @@
+import {ApiError} from "../server/lib/common/api-error";
+
 const _ = require('lodash');
 
 
-const a = {key: 'one', value: undefined};
-console.log(JSON.stringify(a));
 
+function buildParameterizedWhereClause(keys, startIndex, errorIfEmpty) {
+  let sql = '';
+  if (keys.length) {
+    sql += ' where ';
+    keys.forEach((key, idx) => {
+      const map = _.find(this.orm.maps, {prop: key});
+      if (!map) {
+        throw new ApiError(`No property found in ormMap for ${key}`, null, 400);
+      }
+      const field = map.field;
+      if (idx !== 0) {
+        sql += ' and ';
+      }
+      sql += ` ${field} = $${startIndex + idx + 1} `;
+    });
+  } else {
+    if (errorIfEmpty) {
+      throw new ApiError('No filter in postgres query.', null, 400);
+    }
+  }
+  return sql;
+}
+
+console.log(buildParameterizedWhereClause(['one', 'two', 'three']))
+
+
+
+
+
+
+
+
+
+
+/*
+
+const db = [
+  {moduleId: 1, name: 'dank', age: 50},
+  {moduleId: 1, name: 'mary', age: 20},//del
+  {moduleId: 1, name: 'carl', age: 60},
+  {moduleId: 2, name: 'dank', age: 50},
+  {moduleId: 2, name: 'mary', age: 20},
+  {moduleId: 2, name: 'carl', age: 60},//del
+  {moduleId: 3, name: 'jim', age: 40},
+];
+
+const mine = [
+  {moduleId: 1, name: 'dank', age: 51},//up
+  {moduleId: 1, name: 'carl', age: 61},//up
+  {moduleId: 2, name: 'dank', age: 51},//up
+  {moduleId: 2, name: 'mary', age: 21},//up
+  {moduleId: 3, name: 'jim', age: 41},//up
+  {moduleId: 3, name: 'casey', age: 37},//add
+  {moduleId: 4, name: 'goerge', age: 71},//add
+  {moduleId: 4, name: 'barney', age: 38},//add
+]
+
+// const predicate = (a,b) => a.moduleId === b.moduleId && a.name === b.name;
+const predicate = (a,b) => a.moduleId === b.moduleId && a.name === b.name;
+moduleIds = [1,2,3,4]
+const filter = {moduleId: {$in: moduleIds}}
+const updates = _.intersectionWith(mine, db, predicate);
+const adds = _.differenceWith(mine, db, predicate);
+const deletes = _.differenceWith(db, mine, predicate);
+console.log('updates', JSON.stringify(updates,null,2));
+console.log('adds', JSON.stringify(adds,null,2));
+console.log('deletes', JSON.stringify(deletes,null,2));
+
+
+*/
 
 
 /*
