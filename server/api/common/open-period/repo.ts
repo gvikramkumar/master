@@ -14,7 +14,7 @@ const ormMap: OrmMap[] = [
 ] ;
 
 @injectable()
-export class OpenPeriodPostgresRepo extends PostgresRepoBase {
+export default class OpenPeriodPgRepo extends PostgresRepoBase {
   table = 'fpadfa.dfa_open_period';
   idProp = 'moduleId';
 

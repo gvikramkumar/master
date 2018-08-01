@@ -35,6 +35,10 @@ export class PostgresRepoBase {
       });
   }
 
+  getId(data) {
+    return data[this.idProp];
+  }
+
   // this is NOT paremeterized, no way around that, as we have to upload 5k at a time
   addMany(objs, userId) {
     if (!objs.length) {
@@ -99,7 +103,8 @@ export class PostgresRepoBase {
         sql += this.buildParameterizedWhereClause(keys, queryIdx, true);
         sql += ' returning *'
         return pgc.pgdb.query(sql,
-          this.orm.maps.map(map => this.orm.getPgValue(null, map.field, record[map.field])).concat(this.getFilterValues(keys, filter)))
+          this.orm.maps.map(map => this.orm.getPgValue(null, map.field, record[map.field]))
+            .concat(this.getFilterValues(keys, filter)))
           .then(resp => this.orm.recordToObject(resp.rows[0]));
       });
   }

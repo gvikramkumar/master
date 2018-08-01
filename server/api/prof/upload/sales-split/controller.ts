@@ -8,7 +8,7 @@ import SalesSplitUploadImport from './import';
 import {Modules} from '../../../../../shared/enums';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 import SubmeasureRepo from '../../../common/submeasure/repo';
-import OpenPeriodRepo from '../../../common/open-period/repo';
+import OpenPeriodPgRepo from '../../../common/open-period/repo';
 
 @injectable()
 export default class SalesSplitUploadUploadController extends UploadController {
@@ -16,7 +16,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
   constructor(
     repo: SalesSplitUploadRepo,
     private pgRepo: PostgresRepo,
-    openPeriodRepo: OpenPeriodRepo,
+    openPeriodRepo: OpenPeriodPgRepo,
     submeasureRepo: SubmeasureRepo,
     userRoleRepo: UserRoleRepo
   ) {

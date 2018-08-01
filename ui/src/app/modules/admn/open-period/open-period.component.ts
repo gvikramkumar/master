@@ -43,19 +43,26 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
 
   ngOnInit() {
     this.modules = this.store.nonAdminModules;
-    Promise.all([
-      this.pgLookupService.getFiscalMonths().toPromise(),
-      this.openPeriodService.getMany().toPromise()
-    ])
-      .then(results => {
+    this.pgLookupService.getFiscalMonths().toPromise()
+      .then(fiscalMonths => {
         this.modules.forEach((module, idx) => {
-          this.fiscalMonths.push(_.cloneDeep(results[0]));
-          this.openPeriods = results[1];
+          this.fiscalMonths.push(_.cloneDeep(fiscalMonths));
+        });
+      });
+    this.refresh();
+  }
+
+  refresh() {
+    this.openPeriodService.getMany().toPromise()
+      .then(openPeriods => {
+        this.modules.forEach((module, idx) => {
+          this.openPeriods = openPeriods;
           const openPeriod: OpenPeriod = _.find(this.openPeriods, {moduleId: module.moduleId});
           this.selFiscalMonths[idx] = openPeriod ? openPeriod.fiscalMonth : undefined;
           this.orgSelFiscalMonths = _.cloneDeep(this.selFiscalMonths);
         });
       });
+
   }
 
   save() {
@@ -74,6 +81,7 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
 
     Promise.all(promiseArr)
       .then(results => {
+        this.refresh();
         this.toastService.showAutoHideToast('Submitted',
           'Module open periods have been submitted successfully.', ToastSeverity.success);
       });

@@ -85,7 +85,7 @@ export default class PostgresControllerBase {
 
   // post /upsert
   upsert(req, res, next) {
-    this.repo.getOneById(req.body.id)
+    this.repo.getOneById(this.repo.getId(req.body))
       .then(item => {
         if (item) {
           this.update(req, res, next);

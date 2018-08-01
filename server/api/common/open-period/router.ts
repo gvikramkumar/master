@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import {injector} from '../../../lib/common/inversify.config';
 import {authorize} from '../../../lib/middleware/authorize';
-import OpenPeriodPostgresController from './pgcontroller';
+import OpenPeriodPostgresController from './controller';
 
 const ctrl = injector.get(OpenPeriodPostgresController);
 // const ctrl = injector.get(OpenPeriodController);

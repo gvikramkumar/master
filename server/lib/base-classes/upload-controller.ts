@@ -3,7 +3,6 @@ import {NamedApiError} from '../common/named-api-error';
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
 import mail from '../common/mail';
-import OpenPeriodRepo from '../../api/common/open-period/repo';
 import UserRoleRepo from '../database/repos/user-role-repo';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
 import Q from 'q';
@@ -12,6 +11,7 @@ import {Request} from 'express';
 import ApiRequest from '../models/api-request';
 import AnyObj from '../../../shared/models/any-obj';
 import PostgresRepo from '../database/repos/postgres-repo';
+import OpenPeriodPgRepo from '../../api/common/open-period/repo';
 
 
 export default class UploadController {
@@ -38,7 +38,7 @@ export default class UploadController {
   constructor(
     protected moduleId: number,
     protected repo: RepoBase,
-    protected openPeriodRepo: OpenPeriodRepo,
+    protected openPeriodRepo: OpenPeriodPgRepo,
     protected submeasureRepo: SubmeasureRepo,
     protected userRoleRepo: UserRoleRepo
     ) {
@@ -96,7 +96,7 @@ export default class UploadController {
 
   getValidationAndImportData(): Promise<any> {
     return Promise.all([
-      this.openPeriodRepo.getOneByQuery({moduleId: this.moduleId}),
+      this.openPeriodRepo.getOneById(this.moduleId),
       this.userRoleRepo.getRolesByUserId('jodoe'),
       this.submeasureRepo.getMany({moduleId: this.moduleId})
     ])

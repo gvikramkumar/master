@@ -5,7 +5,7 @@ import MappingUploadTemplate from './template';
 import MappingUploadImport from './import';
 import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
-import OpenPeriodRepo from '../../../common/open-period/repo';
+import OpenPeriodPgRepo from '../../../common/open-period/repo';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 
 @injectable()
@@ -13,7 +13,7 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
 
   constructor(
     repo: MappingUploadRepo,
-    openPeriodRepo: OpenPeriodRepo,
+    openPeriodRepo: OpenPeriodPgRepo,
     submeasureRepo: SubmeasureRepo,
     userRoleRepo: UserRoleRepo
   ) {

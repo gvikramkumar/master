@@ -1,9 +1,9 @@
 import {PostgresRepoBase} from '../server/lib/base-classes/pg-repo-base';
 import {OrmMap} from '../server/lib/base-classes/Orm';
-import {OpenPeriodPostgresRepo} from '../server/api/common/open-period/pgrepo';
 import {pgc} from '../server/lib/database/postgres-conn';
+import OpenPeriodPgRepo from '../server/api/common/open-period/repo';
 
-const repo = new OpenPeriodPostgresRepo();
+const repo = new OpenPeriodPgRepo();
 
 const date = new Date(1957, 5, 29);
 

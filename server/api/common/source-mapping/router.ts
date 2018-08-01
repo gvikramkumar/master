@@ -6,4 +6,4 @@ const ctrl = injector.get(SourceMappingController);
 
 export const sourceMappingRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
-  .post('/sync-records', ctrl.syncRecords.bind(ctrl))
+  // .post('/sync-records', ctrl.syncRecords.bind(ctrl))
