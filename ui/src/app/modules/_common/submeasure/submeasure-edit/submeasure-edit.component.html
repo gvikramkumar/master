@@ -180,9 +180,8 @@
                   optionsKey="name" optionsValue="value"></cui-select>
     </div>
     <div class="col-md-6">
-      <cui-input type="text" [(model)]="sm.reportingLevels[0]" [disabled]="disableLvl1" label="Reporting Level 1"></cui-input>
-      <cui-input type="text" [(model)]="sm.reportingLevels[1]" [disabled]="disableLvl2" label="Reporting Level 2"></cui-input>
-      <cui-input type="text" [(model)]="sm.reportingLevels[2]" [disabled]="disableLvl3" label="Reporting Level 3"></cui-input>
+      <cui-input type="text" *ngFor="let level of this.sm.reportingLevels; let idx=index;" [(model)]="sm.reportingLevels[idx]"
+                 [disabled]="disableReportingLevels[idx]" label="Reporting Level {{idx+1}}"></cui-input>
     </div>
   </div>
 

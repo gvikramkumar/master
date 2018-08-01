@@ -12,10 +12,10 @@ export class Submeasure {
   categoryType: string;
   inputFilterLevel = new InputFilterLevel();
   manualMapping = new InputFilterLevel();
-  reportingLevels: string[] = [];
+  reportingLevels: string[] = [undefined, undefined, undefined];
   indicators = new Indicators();
   rules: string[] = [];
-  status: string;
+  status = 'I';
   createdBy?: string;
   createdDate?: string;
   updatedBy?: string;

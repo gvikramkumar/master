@@ -20,7 +20,7 @@ db.dfa_submeasure.insertMany([
       entityLevel: "BE"
     },
     manualMapping: {},
-    reportingLevels: ["Indirect Revenue Adjustments"],
+    reportingLevels: [null, "Indirect Revenue Adjustments", null],
     indicators: {
       dollarUploadFlag: "Y",
       approveFlag: "Y",
@@ -91,6 +91,13 @@ db.dfa_measure.insertMany([
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
     status: "A",
+    reportingLevel1: 'measure val',
+    reportingLevel2: null,
+    reportingLevel3: null,
+    reportingLevel1Enabled: true,
+    reportingLevel2Enabled: true,
+    reportingLevel3Enabled: false,
+
   },
   {
     measureId: NumberInt(2),

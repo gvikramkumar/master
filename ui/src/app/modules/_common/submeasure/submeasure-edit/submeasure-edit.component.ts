@@ -32,9 +32,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   errs: string[] = [];
   yearmos: { str: string, num: number }[];
   COGS = ' Cogs '; // todo: move to lookup
-  disableLvl1 = false;
-  disableLvl2 = false;
-  disableLvl3 = false;
+  disableReportingLevels = [];
   disableCategories = false;
   ifl_switch_ibe = false;
   ifl_switch_le = false;
@@ -150,42 +148,18 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.categoryType = 'HW';
     }
 
-    this.measures.forEach(measure => {
-      if (measure.measureId === this.sm.measureId) {
-        this.currentMeasure = measure;
-      }
-    });
+    this.currentMeasure = _.find(this.measures, {measureId: this.sm.measureId});
 
-    // Handle enabled/disabled fields
-    if (this.currentMeasure.reportingLevel1Enabled) {
-      this.disableLvl1 = false;
-    } else {
-      this.sm.reportingLevels[0] = '';
-      this.disableLvl1 = true;
-    }
-    if (this.currentMeasure.reportingLevel2Enabled) {
-      this.disableLvl2 = false;
-    } else {
-      this.sm.reportingLevels[1] = '';
-      this.disableLvl2 = true;
-    }
-    if (this.currentMeasure.reportingLevel3Enabled) {
-      this.disableLvl3 = false;
-    } else {
-      this.sm.reportingLevels[2] = '';
-      this.disableLvl3 = true;
-    }
+    this.disableReportingLevels[0] = !this.currentMeasure.reportingLevel1Enabled;
+    this.disableReportingLevels[1] = !this.currentMeasure.reportingLevel2Enabled;
+    this.disableReportingLevels[2] = !this.currentMeasure.reportingLevel3Enabled;
 
-    // Handle pre-filled fields
-    if (this.currentMeasure.reportingLevel1) {
-      this.sm.reportingLevels[0] = this.currentMeasure.reportingLevel1;
-    }
-    if (this.currentMeasure.reportingLevel2) {
-      this.sm.reportingLevels[1] = this.currentMeasure.reportingLevel2;
-    }
-    if (this.currentMeasure.reportingLevel3) {
-      this.sm.reportingLevels[2] = this.currentMeasure.reportingLevel3;
-    }
+    this.sm.reportingLevels[0] = this.currentMeasure.reportingLevel1 ? this.currentMeasure.reportingLevel1 :
+      (this.currentMeasure.reportingLevel1Enabled ? this.sm.reportingLevels[0] : undefined);
+    this.sm.reportingLevels[1] = this.currentMeasure.reportingLevel2 ? this.currentMeasure.reportingLevel2 :
+      (this.currentMeasure.reportingLevel2Enabled ? this.sm.reportingLevels[1] : undefined);
+    this.sm.reportingLevels[2] = this.currentMeasure.reportingLevel3 ? this.currentMeasure.reportingLevel3 :
+      (this.currentMeasure.reportingLevel3Enabled ? this.sm.reportingLevels[2] : undefined);
 
   }
   

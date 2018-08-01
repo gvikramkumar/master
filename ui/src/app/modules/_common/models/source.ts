@@ -6,7 +6,7 @@ export class Source {
   name: string;
   typeCode: string;
   desc: string;
-  status: string;
+  status = 'I';
   createdBy?: string;
   createdDate?: string;
   updatedBy?: string;
