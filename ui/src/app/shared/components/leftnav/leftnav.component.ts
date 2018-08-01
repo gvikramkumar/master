@@ -50,9 +50,11 @@ export class LeftnavComponent {
           {route: '/prof/business-upload', text: 'Business Upload'},
           {route: '/prof/reports', text: 'Report'},
         ];
+/*
         this.alinks = [
           {route: '/prof/admin/source', text: 'Sources'},
         ];
+*/
         break;
       default:
         this.links = [];

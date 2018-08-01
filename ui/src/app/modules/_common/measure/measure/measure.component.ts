@@ -10,6 +10,7 @@ import {AppStore} from '../../../../app/app-store';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import * as _ from 'lodash';
 import {debounceTime} from 'rxjs/operators';
+import {UiUtil} from '../../../../core/services/ui-util';
 
 @Component({
   selector: 'fin-measure',
@@ -24,6 +25,7 @@ export class MeasureComponent extends RoutingComponentBase implements OnInit {
   nameFilter: Subject<string> = new Subject<string>();
   tableColumns = ['name', 'abbrev', 'status', 'updatedBy', 'updatedDate'];
   dataSource: MatTableDataSource<Measure>;
+  UiUtil = UiUtil;
 
   constructor(
     private measureService: MeasureService,

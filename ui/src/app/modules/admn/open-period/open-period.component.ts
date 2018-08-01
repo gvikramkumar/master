@@ -79,12 +79,14 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
       }
     });
 
-    Promise.all(promiseArr)
-      .then(results => {
-        this.refresh();
-        this.toastService.showAutoHideToast('Submitted',
-          'Module open periods have been submitted successfully.', ToastSeverity.success);
-      });
+    if (promiseArr.length) {
+      Promise.all(promiseArr)
+        .then(results => {
+          this.refresh();
+          this.toastService.showAutoHideToast('Submitted',
+            'Module open periods have been submitted successfully.', ToastSeverity.success);
+        });
+    }
   }
 
 }

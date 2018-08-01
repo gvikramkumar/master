@@ -12,6 +12,7 @@ import {MeasureService} from '../../services/measure.service';
 import * as _ from 'lodash';
 import {Source} from '../../models/source';
 import {SourceService} from '../../services/source.service';
+import {UiUtil} from '../../../../core/services/ui-util';
 
 @Component({
   selector: 'fin-submeasure',
@@ -29,6 +30,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   filterValue = '';
+  UiUtil = UiUtil;
 
   constructor(
     private submeasureService: SubmeasureService,
