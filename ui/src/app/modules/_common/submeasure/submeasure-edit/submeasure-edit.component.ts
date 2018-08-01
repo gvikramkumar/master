@@ -32,6 +32,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   errs: string[] = [];
   yearmos: { str: string, num: number }[];
   COGS = ' Cogs '; // todo: move to lookup
+  disableLvl1 = false;
+  disableLvl2 = false;
+  disableLvl3 = false;
   disableCategories = false;
   ifl_switch_ibe = false;
   ifl_switch_le = false;
@@ -146,10 +149,46 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.disableCategories = true;
       this.sm.categoryType = 'HW';
     }
-    // todo: set up reporting levels according to measure
+
+    this.measures.forEach(measure => {
+      if (measure.measureId === this.sm.measureId) {
+        this.currentMeasure = measure;
+      }
+    });
+
+    // Handle enabled/disabled fields
+    if (this.currentMeasure.reportingLevel1Enabled) {
+      this.disableLvl1 = false;
+    } else {
+      this.sm.reportingLevels[0] = '';
+      this.disableLvl1 = true;
+    }
+    if (this.currentMeasure.reportingLevel2Enabled) {
+      this.disableLvl2 = false;
+    } else {
+      this.sm.reportingLevels[1] = '';
+      this.disableLvl2 = true;
+    }
+    if (this.currentMeasure.reportingLevel3Enabled) {
+      this.disableLvl3 = false;
+    } else {
+      this.sm.reportingLevels[2] = '';
+      this.disableLvl3 = true;
+    }
+
+    // Handle pre-filled fields
+    if (this.currentMeasure.reportingLevel1) {
+      this.sm.reportingLevels[0] = this.currentMeasure.reportingLevel1;
+    }
+    if (this.currentMeasure.reportingLevel2) {
+      this.sm.reportingLevels[1] = this.currentMeasure.reportingLevel2;
+    }
+    if (this.currentMeasure.reportingLevel3) {
+      this.sm.reportingLevels[2] = this.currentMeasure.reportingLevel3;
+    }
 
   }
-
+  
   ibe_items = [
     {
       name: 'Internal BE',
