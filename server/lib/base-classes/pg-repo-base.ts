@@ -90,6 +90,7 @@ export class PostgresRepoBase {
         if (rows.length > 1) {
           throw new ApiError(`UpdateOne multiple records found.`, null, 400);
         }
+        this.addUpdatedBy(obj, userId)
         const record = this.orm.objectToRecordUpdate(obj, userId);
         let queryIdx = 0;
         let sql = ` update ${this.table} set `;
@@ -225,7 +226,7 @@ export class PostgresRepoBase {
     return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
-        updates.forEach(record => promiseArr.push(this.updateOneById(record, userId, false)));
+        updates.forEach(record => promiseArr.push(this.updateOneById(record, userId, true)));
         promiseArr.push(this.addMany(adds, userId));
         const deleteIds = deletes.map(obj => obj[this.idProp]);
         promiseArr.push(this.removeManyByIds(deleteIds));
@@ -238,12 +239,11 @@ export class PostgresRepoBase {
     return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
-        updates.forEach(item => this.addUpdatedBy(item, userId));
         updates.forEach(record => {
           const uniqueFilter = {};
           uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
           // console.log('update', uniqueFilter);
-          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId, false));
+          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId));
         });
         promiseArr.push(this.addMany(adds, userId));
         deletes.forEach(record => {

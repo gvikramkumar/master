@@ -203,16 +203,13 @@ export default class RepoBase {
     return this.Model.findOne(filter).exec();
   }
 
-  upsertQueryOne(filter, data, userId) {
+  upsertQueryOne(filter, data, userId, concurrencyCheck?) {
     if (Object.keys(filter).length === 0) {
       throw new ApiError('upsertQueryOne called with no filter', null, 400);
     }
-    return this.getMany(filter)
-      .then(docs => {
-        if (docs.length > 1) {
-          throw new ApiError('upsertQueryOne refers to more than one item.', null, 400);
-        }
-        if (!docs.length) {
+    return this.getOneByQuery(filter)
+      .then(doc => {
+        if (!doc) {
           return this.addOne(data, userId);
         } else {
           return this.updateQueryOne(filter, data, userId);
@@ -220,14 +217,28 @@ export default class RepoBase {
       });
   }
 
-  // filter determines record uniqueness. Either an filter object or an array we use to construct the object
-  updateQueryOne(filter, data, userId) {
-    this.addUpdatedBy(data, userId)
-    this.validate(data);
-    // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
-    // we'll just replace the doc in entirety and be done with it
-    return this.Model.replaceOne(filter, data)
-      .then(results => data);
+  updateQueryOne(filter, data, userId, concurrencyCheck = true) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('upsertQueryOne called with no filter', null, 400);
+    }
+    const query = this.Model.find(filter);
+    if (data.updatedDate && concurrencyCheck) {
+      query.where({updatedDate: data.updatedDate});
+    }
+    return query.exec()
+      .then(docs => {
+        if (docs.length > 1) {
+          throw new ApiError('updateQueryOne refers to more than one item.', null, 400);
+        } else if (!docs.length) {
+          throw new ApiError('updateQueryOne item not found', null, 400);
+        }
+        this.addUpdatedBy(data, userId)
+        this.validate(data);
+        // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
+        // we'll just replace the doc in entirety and be done with it
+        return this.Model.replaceOne(filter, data)
+          .then(results => data);
+      });
   }
 
   removeQueryOne(filter) {

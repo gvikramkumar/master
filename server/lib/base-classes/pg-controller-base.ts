@@ -141,7 +141,6 @@ export default class PostgresControllerBase {
   // put /:id
   update(req, res, next) {
     const data = req.body;
-    data[this.repo.idProp] = req.params.id;
     this.repo.updateOneById(data, req.user.id)
       .then(item => res.json(item))
       .catch(next);

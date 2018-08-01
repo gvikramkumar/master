@@ -48,6 +48,8 @@ pgc.promise.then(db => {
           const doc = _.find(dbdocs, {moduleId: item.moduleId, name: item.name});
           if (doc) {
             item.idCol = doc.idCol;
+            item.updatedDate = doc.updatedDate;
+            // console.log(item.moduleId, item.name, item.updatedDate);
           }
         })
         // return <any> repo.syncRecordsById({}, mine, 'jodoe');

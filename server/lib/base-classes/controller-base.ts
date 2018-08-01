@@ -181,7 +181,6 @@ export default class ControllerBase {
   // put /:id
   update(req, res, next) {
     const data = req.body;
-    data.id = req.params.id;
     this.repo.update(data, req.user.id)
       .then(item => {
         if (this.pgRepo) {
