@@ -88,7 +88,7 @@ export default class RepoBase {
 
   getOneWithTimestamp(data) {
     const query = this.Model.findOne({_id: data.id});
-    if (data.updatedDate) {
+    if (this.hasCreatedBy()) {
       query.where({updatedDate: data.updatedDate});
     }
     return query.exec()
@@ -219,7 +219,7 @@ export default class RepoBase {
 
   updateQueryOne(filter, data, userId, concurrencyCheck = true) {
     if (Object.keys(filter).length === 0) {
-      throw new ApiError('upsertQueryOne called with no filter', null, 400);
+      throw new ApiError('updateQueryOne called with no filter', null, 400);
     }
     const query = this.Model.find(filter);
     if (data.updatedDate && concurrencyCheck) {
@@ -365,7 +365,7 @@ export default class RepoBase {
   }
 
   addCreatedByAndUpdatedBy(item, userId) {
-    if (this.schema.path('createdBy')) {
+    if (this.hasCreatedBy()) {
       if (!userId) {
         throw new ApiError('no userId for createdBy/updatedBy.');
       }
@@ -378,7 +378,7 @@ export default class RepoBase {
   }
 
   addUpdatedBy(item, userId) {
-    if (this.schema.path('createdBy')) {
+    if (this.hasCreatedBy()) {
       if (!userId) {
         throw new ApiError('no userId for createdBy/updatedBy.');
       }
@@ -413,6 +413,10 @@ export default class RepoBase {
     } else {
       return Promise.resolve();
     }
+  }
+
+  hasCreatedBy() {
+    return !!this.schema.path('createdBy');
   }
 
 }

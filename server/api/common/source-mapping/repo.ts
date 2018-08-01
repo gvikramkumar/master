@@ -18,7 +18,7 @@ const ormMap: OrmMap[] = [
 
 @injectable()
 export class PostgresSourceMappingRepo extends PostgresRepoBase {
-  table = 'fpadfa.dfa_data_source';
+  table = 'fpadfa.dfa_data_sources';
 
   constructor() {
     super(new Orm(ormMap));

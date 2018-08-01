@@ -79,7 +79,10 @@ export class PostgresRepoBase {
   so if pg only, then on, and if mongo and pg then off.
    */
   updateQueryOne(filter, obj, userId, concurrencyCheck = true) {
-    if (_.find(this.orm.maps, {prop: 'updatedDate'}) && concurrencyCheck) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('updateQueryOne called with no filter', null, 400);
+    }
+    if (this.hasCreatedBy() && concurrencyCheck) {
       filter.updatedDate = obj.updatedDate;
     }
     return this.getMany(filter)
@@ -301,7 +304,7 @@ export class PostgresRepoBase {
   }
 
   addCreatedByAndUpdatedBy(item, userId) {
-    if (this.orm.hasCreatedBy) {
+    if (this.hasCreatedBy()) {
       if (!userId) {
         throw new ApiError('no userId for createdBy/updatedBy.');
       }
@@ -314,7 +317,7 @@ export class PostgresRepoBase {
   }
 
   addUpdatedBy(item, userId) {
-    if (this.orm.hasCreatedBy) {
+    if (this.hasCreatedBy()) {
       if (!userId) {
         throw new ApiError('no userId for createdBy/updatedBy.');
       }
@@ -338,6 +341,10 @@ export class PostgresRepoBase {
         filter.moduleId = Number(filter.moduleId);
       }
     }
+  }
+
+  hasCreatedBy() {
+    return this.orm.hasCreatedBy;
   }
 
   test() {

@@ -21,7 +21,7 @@ export class Orm {
 
   constructor(public maps: OrmMap[]) {
     this.mapsNoSerial = this.maps.filter(map => !map.serial);
-    this.hasCreatedBy = _.find(maps, {prop: 'createdBy'});
+    this.hasCreatedBy = !!_.find(maps, {prop: 'createdBy'});
   }
 
   recordToObject(record): AnyObj {
