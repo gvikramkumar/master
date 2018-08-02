@@ -28,6 +28,7 @@ import {productClassUploadRouter} from './api/prof/product-class-upload/router';
 import {profUploadRouter} from './api/prof/upload/router';
 import {sourceRouter} from './api/common/source/router';
 import {pgLookupRouter} from './api/common/pg-lookup/router';
+import {sourceMappingRouter} from './api/common/source-mapping/router';
 
 
 export default function () {
@@ -90,6 +91,7 @@ export default function () {
   app.use('/api/pg-lookup', pgLookupRouter);
   app.use('/api/source', sourceRouter);
   app.use('/api/submeasure', submeasureRouter);
+  app.use('/api/source-mapping', sourceMappingRouter);
 
   // prof:
   app.use('/api/prof/dept-upload', deptUploadRouter);

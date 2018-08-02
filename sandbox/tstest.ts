@@ -1,5 +1,57 @@
+import * as _ from 'lodash';
 
 
+
+const arr1 = [
+  { moduleId: 1, name: 'dank'},
+  {moduleId: 1, name: 'mary', age: 20},
+  {moduleId: 1, name: 'carl', age: 60},
+  {moduleId: 2, name: 'dank', age: 50},
+  {moduleId: 2, name: 'mary', age: 20},
+  {moduleId: 2, name: 'carl', age: 60},
+  {moduleId: 3, name: 'jim', age: 40},
+];
+const arr2 = [
+  { moduleId: 1, name: 'dank'},
+  {moduleId: 1, name: 'maryx', age: 20},//no
+  {moduleId: 1, name: 'carl', age: 60},
+  {moduleId: 2, name: 'dankx', age: 50},//no
+  {moduleId: 2, name: 'mary', age: 20},
+  {moduleId: 22, name: 'carl', age: 60},//no
+  {moduleId: 3, name: 'jim', age: 40},
+];
+
+
+function   createPredicateFromProperties(props) {
+  return function(a, b) {
+    if (!props.length) {
+      return false;
+    }
+    let bool = true;
+    props.forEach(prop => bool = bool &&
+      (a[prop] !== undefined && b[prop] !== undefined && a[prop] === b[prop]));
+    return bool;
+  };
+}
+
+const pred = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
+console.log(_.intersectionWith(arr1, arr2, createPredicateFromProperties(['moduleId', 'name', 'age']))
+// console.log(_.intersectionWith([arr1, arr2], (a,b) => a.name === b.name));
+
+/*
+const matches = [];
+arr1.forEach(a => {
+  arr2.forEach(b => {
+    // console.log(a,b);
+    if (createPredicateFromProperties(['moduleId', 'name'])(a,b)) {
+      matches.push(a);
+    }
+  });
+});
+
+console.log(matches);
+
+*/
 
 /*
 const repo = new OpenPeriodPostgresRepo();

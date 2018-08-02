@@ -19,10 +19,21 @@ const schema = new Schema(
 );
 
 @injectable()
-export default class ModuleRepo extends RepoBase {
+export class ModuleRepo extends RepoBase {
   autoIncrementField = 'moduleId';
 
   constructor() {
     super(schema, 'Module');
   }
+
+  getActiveSortedByDisplayName() {
+    return this.Model.find({status: 'A'})
+      .sort({displayOrder: 1});
+  }
+
+  getActiveNonAdminSortedByDisplayName() {
+    return this.Model.find({status: 'A', moduleId: {$ne: 99}})
+      .sort({displayOrder: 1});
+  }
+
 }

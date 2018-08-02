@@ -21,7 +21,7 @@ export default class MgRepo extends RepoBase {
   mo
 
   constructor() {
-    super(schema, 'MgTest', true);
+    super(schema, 'MgTest');
   }
 
 }

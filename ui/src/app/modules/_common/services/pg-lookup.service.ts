@@ -15,24 +15,13 @@ const apiUrl = environment.apiUrl;
 @Injectable({
   providedIn: 'root'
 })
-export class PgLookupService {
-  endpointName = 'pg-lookup';
-  constructor(private httpClient: HttpClient, private store: AppStore) {
+export class PgLookupService extends RestBase<any> {
+  constructor(httpClient: HttpClient, store: AppStore) {
+    super('pg-lookup', httpClient, store);
   }
 
   getFiscalMonths() {
-    return this.httpClient.post<any>(`${apiUrl}/api/${this.endpointName}/method/getFiscalMonths`, null);
-  }
-
-  // helper function to add moduleId to requests
-  addModuleId(params) {
-    if (!params.moduleId) {
-      const moduleId = this.store.getRepoModule(this.endpointName).moduleId;
-      if (shUtil.isAdminModuleId(moduleId)) {
-        throw new Error(`No moduleId for itAdmin call to ${this.endpointName}`);
-      }
-      params.moduleId = moduleId;
-    }
+    return this.callMethod('getFiscalMonths');
   }
 
 }

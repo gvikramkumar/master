@@ -3,7 +3,6 @@ import {Orm, OrmMap} from './Orm';
 import {pgc} from '../database/postgres-conn';
 import {ApiError} from '../common/api-error';
 import * as _ from 'lodash';
-import Any = jasmine.Any;
 
 // date assumption: assumes all dates are iso date strings, can't pass in objects with Date types
 // passed in filter objects use object properties, not table fields
@@ -14,15 +13,25 @@ export class PostgresRepoBase {
   constructor(protected orm: Orm, protected isModuleRepo = false) {
   }
 
-  getMany(filter = {}, errorNoFilter = true) {
+  getMany(filter = {}) {
     this.verifyModuleId(filter);
     let sql = 'select ';
     sql += this.orm.maps.map(map => map.field).join(', ');
     sql += ` from ${this.table} `;
     const keys = Object.keys(filter);
-    sql += this.buildParameterizedWhereClause(keys, 0, errorNoFilter);
+    sql += this.buildParameterizedWhereClause(keys, 0, false);
     return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
       .then(resp => resp.rows.map(row => this.orm.recordToObject(row)));
+  }
+
+  getManyActive(filter: AnyObj = {}) {
+    filter.status = 'A';
+    return this.getMany(filter);
+  }
+
+  getManyPending(filter: AnyObj = {}) {
+    filter.status = 'P';
+    return this.getMany(filter);
   }
 
   getOneById(idVal) {
@@ -79,7 +88,10 @@ export class PostgresRepoBase {
   so if pg only, then on, and if mongo and pg then off.
    */
   updateQueryOne(filter, obj, userId, concurrencyCheck = true) {
-    if (_.find(this.orm.maps, {prop: 'updatedDate'}) && concurrencyCheck) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('updateQueryOne called with no filter', null, 400);
+    }
+    if (this.hasCreatedBy() && concurrencyCheck) {
       filter.updatedDate = obj.updatedDate;
     }
     return this.getMany(filter)
@@ -202,9 +214,10 @@ export class PostgresRepoBase {
   these allow multiple ways to sync records in a table with a set being sent up. Can be the whole table
   or a subset specified in the filter method. Can be done via delete all, then insert all, or by id or query
    */
-  getSyncArrays(filter, predicate, records, userId) {
+  getSyncArrays(filter, uniqueFilterProps, records, userId) {
     let updates = [], adds = [], deletes = [];
-    return this.getMany(filter, false)
+    const predicate = this.createPredicateFromProperties(uniqueFilterProps);
+    return this.getMany(filter)
       .then(docs => {
         updates = _.intersectionWith(records, docs, predicate);
         adds = _.differenceWith(records, docs, predicate);
@@ -222,8 +235,7 @@ export class PostgresRepoBase {
 
   // use this if you have an id column
   syncRecordsById(filter, records, userId) {
-    const predicate = (a, b) => a[this.idProp] === b[this.idProp];
-    return this.getSyncArrays(filter, predicate, records, userId)
+    return this.getSyncArrays(filter, [this.idProp], records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
         updates.forEach(record => promiseArr.push(this.updateOneById(record, userId, true)));
@@ -235,15 +247,15 @@ export class PostgresRepoBase {
   }
 
   // sync using uniqueFilterProps to identify records (instead of id)
-  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId) {
-    return this.getSyncArrays(filter, predicate, records, userId)
+  syncRecordsQueryOne(filter, uniqueFilterProps, records, userId, concurrencyCheck = true) {
+    return this.getSyncArrays(filter, uniqueFilterProps, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
         updates.forEach(record => {
           const uniqueFilter = {};
           uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
           // console.log('update', uniqueFilter);
-          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId));
+          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId, concurrencyCheck));
         });
         promiseArr.push(this.addMany(adds, userId));
         deletes.forEach(record => {
@@ -301,7 +313,7 @@ export class PostgresRepoBase {
   }
 
   addCreatedByAndUpdatedBy(item, userId) {
-    if (this.orm.hasCreatedBy) {
+    if (this.hasCreatedBy()) {
       if (!userId) {
         throw new ApiError('no userId for createdBy/updatedBy.');
       }
@@ -314,7 +326,7 @@ export class PostgresRepoBase {
   }
 
   addUpdatedBy(item, userId) {
-    if (this.orm.hasCreatedBy) {
+    if (this.hasCreatedBy()) {
       if (!userId) {
         throw new ApiError('no userId for createdBy/updatedBy.');
       }
@@ -338,6 +350,22 @@ export class PostgresRepoBase {
         filter.moduleId = Number(filter.moduleId);
       }
     }
+  }
+
+  hasCreatedBy() {
+    return this.orm.hasCreatedBy;
+  }
+
+  createPredicateFromProperties(props) {
+    return function(a, b) {
+      if (!props.length) {
+        return false;
+      }
+      let bool = true;
+      props.forEach(prop => bool = bool &&
+        (a[prop] !== undefined && b[prop] !== undefined && a[prop] === b[prop]));
+      return bool;
+    };
   }
 
   test() {

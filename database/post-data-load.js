@@ -209,24 +209,31 @@ db.prof_swalloc_manual_mix.insertOne({
 db.dfa_source.insertMany([
   {
     sourceId: NumberInt(1),
-    name: 'Manual Upload',
-    desc: 'Manual Upload source',
-    typeCode: 'MU',
+    name: 'Rapid Revenue',
+    desc: 'Rapid Revenue source',
+    typeCode: 'RRR',
     status: 'A'
   },
   {
     sourceId: NumberInt(2),
-    name: 'Rapid Revenue',
-    desc: 'Rapid Revenue source',
-    typeCode: 'RR',
+    name: 'MRAP',
+    desc: 'MRAP source',
+    typeCode: 'MRAP',
     status: 'A'
   },
   {
     sourceId: NumberInt(3),
-    name: 'Inactive Revenue',
-    desc: 'Inactive Revenue source',
-    typeCode: 'IR',
-    status: 'I'
+    name: 'Expense SSOT',
+    desc: 'Expense SSOT source',
+    typeCode: 'EXPMFGO',
+    status: 'A'
+  },
+  {
+    sourceId: NumberInt(4),
+    name: 'Manual Upload',
+    desc: 'Manual Upload source',
+    typeCode: 'EXCEL',
+    status: 'A'
   },
 ])
 

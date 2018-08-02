@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UiUtil} from '../../../core/services/ui-util';
 import {AppStore} from '../../../app/app-store';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {DfaModule} from '../../../modules/_common/models/module';
-import {ModuleLookupService} from '../../_common/services/module-lookup.service';
 import {SourceService} from '../../_common/services/source.service';
 import {ToastService, ToastSeverity} from '../../../core/services/toast.service';
 import {Source} from '../../_common/models/source';
-import {shUtil} from '../../../../../../shared/shared-util';
 import * as _ from 'lodash';
-import {map} from 'rxjs/operators';
+import {SourceMappingService} from '../../_common/services/source-mapping.service';
 
 @Component({
   selector: 'fin-source-mapping',
@@ -29,9 +27,9 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
     private router: Router,
     private route: ActivatedRoute,
     private sourceService: SourceService,
-    private moduleLookupService: ModuleLookupService,
     private toastService: ToastService,
-    private uiUtil: UiUtil
+    private uiUtil: UiUtil,
+    private sourceMappingService: SourceMappingService
   ) {
     super(store, route);
   }
@@ -39,7 +37,7 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
   ngOnInit() {
     this.modules = this.store.nonAdminModules;
 
-    this.sourceService.getMany({status: 'A'}).toPromise()
+    this.sourceService.getManyActive().toPromise()
       .then(activeSources => {
         this.modules.forEach(module => {
           this.sources.push(_.cloneDeep(activeSources));
@@ -50,24 +48,23 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
 
   refresh() {
     const promiseArr = [];
-    this.moduleLookupService.getOneValueManyModules('sources',
-      this.store.nonAdminModules.map(m => m.moduleId))
+    this.sourceMappingService.getModuleSourceArray()
       .subscribe(objs => {
-        this.selectedSources =  objs.map(obj => obj.value || []);
+        this.selectedSources =  objs.map(obj => obj.sources);
         this.orgSelectedSources = _.cloneDeep(this.selectedSources);
       });
   }
 
   save() {
-    const upserts = [];
+    const arr = [];
     this.modules.forEach((module, idx) => {
       if (!_.isEqual(this.selectedSources[idx], this.orgSelectedSources[idx])) {
-        upserts.push({moduleId: module.moduleId, key: 'sources', value: this.selectedSources[idx]});
+        arr.push({moduleId: module.moduleId, sources: this.selectedSources[idx]});
       }
     });
 
-    if (upserts.length) {
-      this.moduleLookupService.upsertMany(upserts)
+    if (arr.length) {
+      this.sourceMappingService.updateModuleSourceArray(arr)
         .subscribe(() => {
           this.refresh();
           this.toastService.showAutoHideToast('Submitted',

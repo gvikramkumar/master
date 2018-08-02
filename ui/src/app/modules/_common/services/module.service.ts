@@ -20,7 +20,7 @@ export class ModuleService extends RestBase<DfaModule> {
   }
 
   refreshStore(): Promise<DfaModule[]> {
-    return super.getMany({status: 'A', setSort: 'displayOrder'}).toPromise()
+    return this.callMethod('getActiveSortedByDisplayName').toPromise()
       .then(modules => {
         this.store.pubModules(modules);
         return modules;

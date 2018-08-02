@@ -42,7 +42,7 @@ pgc.promise.then(db => {
     .then(() => {
       repo.addMany(dbRecords, 'jodoe')
       // repo.addOne(dbRecords[0], 'jodoe')
-      .then(() => repo.getMany({}, false))
+      .then(() => repo.getMany({}))
       .then(dbdocs => {
         mine.forEach((item: AnyObj) => {
           const doc = _.find(dbdocs, {moduleId: item.moduleId, name: item.name});
@@ -53,8 +53,7 @@ pgc.promise.then(db => {
           }
         })
         // return <any> repo.syncRecordsById({}, mine, 'jodoe');
-        const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
-        return <any> repo.syncRecordsQueryOne({}, ['moduleId', 'name'], predicate, mine, 'jodoe');
+        return <any> repo.syncRecordsQueryOne({}, ['moduleId', 'name'], mine, 'jodoe');
         // return <any> repo.syncRecordsReplaceAll({moduleId: 1}, mine, 'jodoe');
         // return Promise.resolve();
       })
