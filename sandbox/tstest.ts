@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 
 
 
+/*
 const arr1 = [
   { moduleId: 1, name: 'dank'},
   {moduleId: 1, name: 'mary', age: 20},
@@ -37,6 +38,7 @@ function   createPredicateFromProperties(props) {
 const pred = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
 console.log(_.intersectionWith(arr1, arr2, createPredicateFromProperties(['moduleId', 'name', 'age']))
 // console.log(_.intersectionWith([arr1, arr2], (a,b) => a.name === b.name));
+*/
 
 /*
 const matches = [];
