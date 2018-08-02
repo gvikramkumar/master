@@ -26,11 +26,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
   measures: Measure[] = [];
+  currentMeasure: Measure = new Measure;
   sources: Source[] = [];
   rules: AllocationRule[];
   errs: string[] = [];
   yearmos: { str: string, num: number }[];
   COGS = ' Cogs '; // todo: move to lookup
+  disableReportingLevels = [];
   disableCategories = false;
   ifl_switch_ibe = false;
   ifl_switch_le = false;
@@ -145,8 +147,22 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.disableCategories = true;
       this.sm.categoryType = 'HW';
     }
-  }
 
+    this.currentMeasure = _.find(this.measures, {measureId: this.sm.measureId});
+
+    this.disableReportingLevels[0] = !this.currentMeasure.reportingLevel1Enabled;
+    this.disableReportingLevels[1] = !this.currentMeasure.reportingLevel2Enabled;
+    this.disableReportingLevels[2] = !this.currentMeasure.reportingLevel3Enabled;
+
+    this.sm.reportingLevels[0] = this.currentMeasure.reportingLevel1 ? this.currentMeasure.reportingLevel1 :
+      (this.currentMeasure.reportingLevel1Enabled ? this.sm.reportingLevels[0] : undefined);
+    this.sm.reportingLevels[1] = this.currentMeasure.reportingLevel2 ? this.currentMeasure.reportingLevel2 :
+      (this.currentMeasure.reportingLevel2Enabled ? this.sm.reportingLevels[1] : undefined);
+    this.sm.reportingLevels[2] = this.currentMeasure.reportingLevel3 ? this.currentMeasure.reportingLevel3 :
+      (this.currentMeasure.reportingLevel3Enabled ? this.sm.reportingLevels[2] : undefined);
+
+  }
+  
   ibe_items = [
     {
       name: 'Internal BE',

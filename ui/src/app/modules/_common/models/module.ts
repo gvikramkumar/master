@@ -5,7 +5,7 @@ export class DfaModule {
   name: string;
   abbrev: string;
   displayOrder: number;
-  status: string;
+  status = 'I';
 
   constructor(status?) {
     this.status = status || 'I';
