@@ -8,8 +8,8 @@ import {SubmeasureComponent} from './submeasure/submeasure/submeasure.component'
 import {RuleManagementComponent} from './rule-management/rule-management/rule-management.component';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterModule} from '@angular/router';
-import {MeasureComponent} from './measure/measure/measure.component';
-import {MeasureEditComponent} from './measure/measure-edit/measure-edit.component';
+import {MeasureComponent} from './admin/measure/measure/measure.component';
+import {MeasureEditComponent} from './admin/measure/measure-edit/measure-edit.component';
 
 @NgModule({
   imports: [

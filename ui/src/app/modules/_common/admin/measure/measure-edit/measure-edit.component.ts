@@ -1,17 +1,17 @@
 import {ApplicationRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Measure} from '../../models/measure';
-import {MeasureService} from '../../services/measure.service';
+import {Measure} from '../../../models/measure';
+import {MeasureService} from '../../../services/measure.service';
 import {Observable, of} from 'rxjs';
-import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
-import {AppStore} from '../../../../app/app-store';
+import {RoutingComponentBase} from '../../../../../core/base-classes/routing-component-base';
+import {AppStore} from '../../../../../app/app-store';
 import * as _ from 'lodash';
-import {DialogType} from '../../../../core/models/ui-enums';
-import {UiUtil} from '../../../../core/services/ui-util';
-import {Source} from '../../models/source';
-import {SourceService} from '../../services/source.service';
-import {ModuleLookupService} from '../../services/module-lookup.service';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {DialogType} from '../../../../../core/models/ui-enums';
+import {UiUtil} from '../../../../../core/services/ui-util';
+import {Source} from '../../../models/source';
+import {SourceService} from '../../../services/source.service';
+import {ModuleLookupService} from '../../../services/module-lookup.service';
+import {shUtil} from '../../../../../../../../shared/shared-util';
 
 @Component({
   selector: 'fin-measure-create',
@@ -161,7 +161,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
               } else {
                 obs = this.measureService.add(this.measure);
               }
-              obs.subscribe(measure => this.router.navigateByUrl('/prof/measure'));
+              obs.subscribe(measure => this.router.navigateByUrl('/prof/admin/measure'));
             }
           });
         }
