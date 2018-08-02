@@ -46,7 +46,7 @@ mgc.promise.then(({db, mongo}) => {
   repo.removeMany({})
     .then(() => {
     repo.addMany(dbRecords, 'jodoe')
-      .then(() => repo.getManyNoCheck({}))
+      .then(() => repo.getMany({}))
       .then(dbdocs => {
         mine.forEach((item: AnyObj) => {
           const doc = _.find(dbdocs, {moduleId: item.moduleId, name: item.name});

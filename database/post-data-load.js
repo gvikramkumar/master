@@ -222,18 +222,18 @@ db.dfa_source.insertMany([
     status: 'A'
   },
   {
+    sourceId: NumberInt(3),
+    name: 'Expense SSOT',
+    desc: 'Expense SSOT source',
+    typeCode: 'EXPMFGO',
+    status: 'A'
+  },
+  {
     sourceId: NumberInt(4),
     name: 'Manual Upload',
     desc: 'Manual Upload source',
     typeCode: 'EXCEL',
     status: 'A'
-  },
-  {
-    sourceId: NumberInt(5),
-    name: 'Inactive Revenue',
-    desc: 'Inactive Revenue source',
-    typeCode: 'IR',
-    status: 'I'
   },
 ])
 

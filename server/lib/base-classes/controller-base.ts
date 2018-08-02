@@ -100,7 +100,7 @@ export default class ControllerBase {
       .catch(next);
   }
 
-  // post /method/:method
+  // post /call-method/:method
   callMethod(req, res, next) {
     const method = this[req.params.method];
     if (!method) {

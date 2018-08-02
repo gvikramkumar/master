@@ -45,8 +45,14 @@ export default class RepoBase {
     return query.exec();
   }
 
-  getManyNoCheck(filter = {}) {
-    return this.Model.find(filter);
+  getManyActive(filter: AnyObj = {}) {
+    filter.status = 'A';
+    return this.getMany(filter);
+  }
+
+  getManyPending(filter: AnyObj = {}) {
+    filter.status = 'P';
+    return this.getMany(filter);
   }
 
   getManyByIds(ids) {
@@ -294,7 +300,7 @@ export default class RepoBase {
   }
 
   // sync using uniqueFilterProps to identify records (instead of id)
-  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId) {
+  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId, concurrencyCheck = true) {
     return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
@@ -302,7 +308,7 @@ export default class RepoBase {
           const uniqueFilter = {};
           uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
           // console.log('update', uniqueFilter);
-          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId));
+          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId, concurrencyCheck));
         });
         promiseArr.push(this.addMany(adds, userId));
         deletes.forEach(record => {

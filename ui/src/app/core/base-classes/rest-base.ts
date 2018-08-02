@@ -5,6 +5,7 @@ import AnyObj from '../../../../../shared/models/any-obj';
 import {AppStore} from '../../app/app-store';
 import {UiUtil} from '../services/ui-util';
 import {shUtil} from '../../../../../shared/shared-util';
+import {DfaModule} from '../../modules/_common/models/module';
 
 const apiUrl = environment.apiUrl;
 
@@ -44,6 +45,16 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.get<T[]>(`${apiUrl}/api/${this.endpointName}`, {params});
   }
 
+  getManyActive(filter: AnyObj = {}) {
+    filter.status = 'A';
+    return this.getMany(filter);
+  }
+
+  getManyPending(filter: AnyObj = {}) {
+    filter.status = 'P';
+    return this.getMany(filter);
+  }
+
   // skip/limit required, sort optional, but surely needed to line up in pages. params become find(filter)
   getManySortAndPage(skip, limit, sort = null, _params = <any>{}) {
     const params = Object.assign(_params, {setSkip: skip, setLimit: limit});
@@ -75,6 +86,9 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.get<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
   }
 
+  callMethod(method, data = null) {
+    return this.httpClient.post<T[]>(`${apiUrl}/api/${this.endpointName}/call-method/${method}`, data);
+  }
   // same as getMany(params) just uses POST body instead of querystrings. The post body uses
   // bodyParser.urlEncoded extended version so can accept objects as well. Remains to be tested, but
   // could possibly be used to project via mongos's {prop1: 1, prop2: 1} syntax

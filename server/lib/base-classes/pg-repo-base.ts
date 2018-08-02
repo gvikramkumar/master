@@ -14,15 +14,25 @@ export class PostgresRepoBase {
   constructor(protected orm: Orm, protected isModuleRepo = false) {
   }
 
-  getMany(filter = {}, errorNoFilter = true) {
+  getMany(filter = {}) {
     this.verifyModuleId(filter);
     let sql = 'select ';
     sql += this.orm.maps.map(map => map.field).join(', ');
     sql += ` from ${this.table} `;
     const keys = Object.keys(filter);
-    sql += this.buildParameterizedWhereClause(keys, 0, errorNoFilter);
+    sql += this.buildParameterizedWhereClause(keys, 0, false);
     return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
       .then(resp => resp.rows.map(row => this.orm.recordToObject(row)));
+  }
+
+  getManyActive(filter: AnyObj = {}) {
+    filter.status = 'A';
+    return this.getMany(filter);
+  }
+
+  getManyPending(filter: AnyObj = {}) {
+    filter.status = 'P';
+    return this.getMany(filter);
   }
 
   getOneById(idVal) {
@@ -207,7 +217,7 @@ export class PostgresRepoBase {
    */
   getSyncArrays(filter, predicate, records, userId) {
     let updates = [], adds = [], deletes = [];
-    return this.getMany(filter, false)
+    return this.getMany(filter)
       .then(docs => {
         updates = _.intersectionWith(records, docs, predicate);
         adds = _.differenceWith(records, docs, predicate);
@@ -238,7 +248,7 @@ export class PostgresRepoBase {
   }
 
   // sync using uniqueFilterProps to identify records (instead of id)
-  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId) {
+  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId, concurrencyCheck = true) {
     return this.getSyncArrays(filter, predicate, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
@@ -246,7 +256,7 @@ export class PostgresRepoBase {
           const uniqueFilter = {};
           uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
           // console.log('update', uniqueFilter);
-          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId));
+          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId, concurrencyCheck));
         });
         promiseArr.push(this.addMany(adds, userId));
         deletes.forEach(record => {

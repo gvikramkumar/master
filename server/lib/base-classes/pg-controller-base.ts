@@ -22,7 +22,7 @@ export default class PostgresControllerBase {
           promise = this.repo.getMany(req.query);
         }
     */
-    promise = this.repo.getMany(req.query, false);
+    promise = this.repo.getMany(req.query);
     return promise;
   }
 
@@ -74,7 +74,7 @@ export default class PostgresControllerBase {
       .catch(next);
   }
 
-  // post /method/:method
+  // post /call-method/:method
   callMethod(req, res, next) {
     const method = this[req.params.method];
     if (!method) {

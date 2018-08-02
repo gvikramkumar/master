@@ -1,19 +1,79 @@
 import {injectable} from 'inversify';
 import PostgresControllerBase from '../../../lib/base-classes/pg-controller-base';
-import {PostgresSourceMappingRepo} from './repo';
+import {PgSourceMappingRepo} from './repo';
+import {ModuleRepo} from '../module/repo';
+import * as _ from 'lodash';
+import SourceRepo from '../source/repo';
+import {ApiError} from '../../../lib/common/api-error';
 
+export interface SourceMapping {
+  moduleId: number;
+  sources: number[];
+}
 
 @injectable()
-export default class SourceMappingController extends PostgresControllerBase {
-  constructor(repo: PostgresSourceMappingRepo) {
+export class SourceMappingController extends PostgresControllerBase {
+
+  constructor(
+    protected repo: PgSourceMappingRepo,
+    private moduleRepo: ModuleRepo,
+    private sourceRepo: SourceRepo
+  ) {
     super(repo);
   }
 
-  syncRecordsQueryOne(req, res, next) {
+  getModuleSourceArray(req, res, next) {
+    return Promise.all([
+      this.moduleRepo.getActiveNonAdminSortedByDisplayName(),
+      this.repo.getMany()
+    ])
+      .then(results => {
+        const modules = results[0];
+        const rows = results[1];
+        const rtn = modules.map(module => {
+          return {
+            moduleId: module.moduleId,
+            sources: _.filter(rows, {moduleId: module.moduleId}).map(r => r.sourceId)
+          };
+        });
+        res.json(rtn);
+      })
+      .catch(next);
+  }
 
+  updateModuleSourceArray(req, res, next) {
 
-    this.repo.syncRecordsQueryOne(req.query, null,  null, req.body, req.user.id)
-      .then(() => res.end());
+    const predicate = (a, b) => a.moduleId === b.moduleId && a.sourceId === b.sourceId;
+    const promiseArr = [];
+    this.sourceRepo.getManyActive()
+      .then(sources => {
+
+        const arr: SourceMapping[] = req.body;
+        arr.forEach(mapping => {
+          const updateArr = [];
+          mapping.sources.forEach(sourceId => {
+            const source = _.find(sources, {sourceId})
+            if (!source) {
+              throw new ApiError(`updateModuleSourceArray: failed to find source for sourceId ${sourceId}`);
+            }
+            updateArr.push(this.repo.createRecord(mapping.moduleId, source));
+          }); // mapping.sources.forEach
+
+          promiseArr.push(
+            this.repo.syncRecordsQueryOne(
+              {moduleId: mapping.moduleId},
+              ['moduleId', 'sourceId'],
+              predicate,
+              updateArr,
+              req.user.id,
+              false));
+
+        }); // mapping.forEach
+        return Promise.all(promiseArr)
+          .then(() => res.end());
+      }) // getsources.then
+      .catch(next);
+
   }
 
 }

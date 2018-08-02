@@ -28,10 +28,12 @@ export class Orm {
     const obj = {};
 
     this.maps.forEach(map => {
-      // pg's converting to date objects, but that's working
-      if (false) { // record[map.field] instanceof Date) {
-        obj[map.prop] = record[map.field].toISOString();
-      } else if (map.type === OrmTypes.number) {
+      // pg's converting to date objects, but that's working, so we'll leave that be for now
+      // if we need to, we can convert it to toIsoString()
+      // if (false) { // record[map.field] instanceof Date) {
+      //   obj[map.prop] = record[map.field].toISOString();
+      // } else
+      if (map.type === OrmTypes.number) {
         obj[map.prop] = Number(record[map.field]); // pg returns numbers as strings, so we have to convert
       } else {
         obj[map.prop] = record[map.field];

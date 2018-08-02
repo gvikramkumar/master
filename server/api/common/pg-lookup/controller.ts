@@ -11,6 +11,7 @@ export class PostgresLookupController {
     const i = 5;
   }
 
+  // post /call-method/:method
   callMethod(req, res, next) {
     const method = this[req.params.method];
     if (!method) {
