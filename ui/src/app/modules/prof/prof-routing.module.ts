@@ -9,8 +9,8 @@ import {ReportsComponent} from '../_common/reports/reports/reports.component';
 import {MainComponent} from '../../shared/components/main/main.component';
 import {Modules} from '../../../../../shared/enums';
 import {AuthorizationGuard} from '../../core/guards/authorization.guard';
-import {MeasureComponent} from '../_common/measure/measure/measure.component';
-import {MeasureEditComponent} from '../_common/measure/measure-edit/measure-edit.component';
+import {MeasureComponent} from '../_common/admin/measure/measure/measure.component';
+import {MeasureEditComponent} from '../_common/admin/measure/measure-edit/measure-edit.component';
 
 const routes: Routes = [
   {
@@ -19,44 +19,51 @@ const routes: Routes = [
     data: {moduleId: Modules.prof},
     children: [
       {
-        path: 'measure',
+        path: 'admin',
         children: [
           {
-            path: '', component: MeasureComponent,
-            canActivate: [AuthorizationGuard],
-            data: {
-              authorization: 'prof-sm:access',
-              hero: {
-                title: 'Measures',
-                desc: 'Create and update measures'
+            path: 'measure',
+            children: [
+              {
+                path: '', component: MeasureComponent,
+                canActivate: [AuthorizationGuard],
+                data: {
+                  authorization: 'prof-sm:access',
+                  hero: {
+                    title: 'Measures',
+                    desc: 'Create and update measures'
+                  },
+                  breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Admin'}, {label: 'Measure'}]
+                }
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Measure'}]
-            }
+              {
+                path: 'add', component: MeasureEditComponent,
+                canActivate: [AuthorizationGuard],
+                data: {
+                  authorization: 'prof-sm:manage',
+                  hero: {
+                    title: 'Add a New Measure',
+                    desc: 'Add new measure'
+                  },
+                  breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Admin'},
+                    {label: 'Measure', routerUrl: '/prof/admin/measure'}, {label: 'Add New'}]
+                }
+              },
+              {
+                path: 'edit/:id', component: MeasureEditComponent,
+                canActivate: [AuthorizationGuard],
+                data: {
+                  authorization: 'prof-sm:manage',
+                  hero: {
+                    title: 'Update Measure',
+                    desc: 'Update the selected measure'
+                  },
+                  breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Admin'},
+                    {label: 'Measure', routerUrl: '/prof/admin/measure'}, {label: 'Update'}]
+                }
+              }
+            ]
           },
-          {
-            path: 'add', component: MeasureEditComponent,
-            canActivate: [AuthorizationGuard],
-            data: {
-              authorization: 'prof-sm:manage',
-              hero: {
-                title: 'Add a New Measure',
-                desc: 'Add new measure'
-              },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Measure', routerUrl: '/prof/measure'}, {label: 'Add New'}]
-            }
-          },
-          {
-            path: 'edit/:id', component: MeasureEditComponent,
-            canActivate: [AuthorizationGuard],
-            data: {
-              authorization: 'prof-sm:manage',
-              hero: {
-                title: 'Update Measure',
-                desc: 'Update the selected measure'
-              },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Measure', routerUrl: '/prof/measure'}, {label: 'Update'}]
-            }
-          }
         ]
       },
       {

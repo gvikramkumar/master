@@ -1,16 +1,16 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {MeasureService} from '../../services/measure.service';
 import {FormControl} from '@angular/forms';
 import {Subject, Subscription} from 'rxjs';
-import {Measure} from '../../models/measure';
 import * as moment from 'moment';
 import {ActivatedRoute} from '@angular/router';
-import {AppStore} from '../../../../app/app-store';
-import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import * as _ from 'lodash';
 import {debounceTime} from 'rxjs/operators';
-import {UiUtil} from '../../../../core/services/ui-util';
+import {RoutingComponentBase} from '../../../../../core/base-classes/routing-component-base';
+import {Measure} from '../../../models/measure';
+import {MeasureService} from '../../../services/measure.service';
+import {AppStore} from '../../../../../app/app-store';
+import {UiUtil} from '../../../../../core/services/ui-util';
 
 @Component({
   selector: 'fin-measure',
