@@ -2,6 +2,14 @@
 const _ = require('lodash');
 
 
+
+
+
+
+
+
+/*
+
 function pad(number, digits) {
   number = '' + number
   while (number.length < digits) {
@@ -37,6 +45,7 @@ console.log(dateToString(d));
 
 
 
+*/
 /*
 
 function buildParameterizedWhereClause(keys, startIndex, errorIfEmpty) {

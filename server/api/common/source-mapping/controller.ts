@@ -5,11 +5,8 @@ import {ModuleRepo} from '../module/repo';
 import * as _ from 'lodash';
 import SourceRepo from '../source/repo';
 import {ApiError} from '../../../lib/common/api-error';
+import {SourceMapping} from '../../../../shared/models/source-mapping';
 
-export interface SourceMapping {
-  moduleId: number;
-  sources: number[];
-}
 
 @injectable()
 export class SourceMappingController extends PostgresControllerBase {
@@ -43,7 +40,6 @@ export class SourceMappingController extends PostgresControllerBase {
 
   updateModuleSourceArray(req, res, next) {
 
-    const predicate = (a, b) => a.moduleId === b.moduleId && a.sourceId === b.sourceId;
     const promiseArr = [];
     this.sourceRepo.getManyActive()
       .then(sources => {
@@ -63,7 +59,6 @@ export class SourceMappingController extends PostgresControllerBase {
             this.repo.syncRecordsQueryOne(
               {moduleId: mapping.moduleId},
               ['moduleId', 'sourceId'],
-              predicate,
               updateArr,
               req.user.id,
               false));

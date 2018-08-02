@@ -54,9 +54,8 @@ mgc.promise.then(({db, mongo}) => {
             item.id = doc.id;
           }
         })
-        return <any> repo.syncRecordsById({}, mine, 'jodoe');
-        // const predicate = (a, b) => a.moduleId === b.moduleId && a.name === b.name;
-        // return <any> repo.syncRecordsQueryOne({}, ['moduleId', 'name'], predicate, mine, 'jodoe');
+        // return <any> repo.syncRecordsById({}, mine, 'jodoe');
+        return <any> repo.syncRecordsQueryOne({}, ['moduleId', 'name'], mine, 'jodoe');
         // return <any> repo.syncRecordsReplaceAll({}, mine, 'jodoe');
         // return Promise.resolve();
       })

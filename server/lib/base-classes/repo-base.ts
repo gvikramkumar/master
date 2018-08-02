@@ -264,11 +264,9 @@ export default class RepoBase {
   these allow multiple ways to sync records in a table with a set being sent up. Can be the whole table
   or a subset specified in the filter method. Can be done via delete all, then insert all, or by id or query
    */
-  getSyncArrays(filter, predicate, records, userId) {
-    if (!predicate) {
-      throw new ApiError('No predicate for getSyncArrays');
-    }
+  getSyncArrays(filter, uniqueFilterProps, records, userId) {
     let updates = [], adds = [], deletes = [];
+    const predicate = this.createPredicateFromProperties(uniqueFilterProps);
     return this.Model.find(filter)
       .then(docs => {
         docs = docs.map(doc => doc.toObject());
@@ -286,8 +284,7 @@ export default class RepoBase {
 
   // use this if you have an id column
   syncRecordsById(filter, records, userId) {
-    const predicate = (a, b) => a.id === b.id;
-    return this.getSyncArrays(filter, predicate, records, userId)
+    return this.getSyncArrays(filter, ['id'], records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
         updates.forEach(item => this.addUpdatedBy(item, userId));
@@ -300,8 +297,8 @@ export default class RepoBase {
   }
 
   // sync using uniqueFilterProps to identify records (instead of id)
-  syncRecordsQueryOne(filter, uniqueFilterProps, predicate, records, userId, concurrencyCheck = true) {
-    return this.getSyncArrays(filter, predicate, records, userId)
+  syncRecordsQueryOne(filter, uniqueFilterProps, records, userId, concurrencyCheck = true) {
+    return this.getSyncArrays(filter, uniqueFilterProps, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
         updates.forEach(record => {
@@ -423,6 +420,18 @@ export default class RepoBase {
 
   hasCreatedBy() {
     return !!this.schema.path('createdBy');
+  }
+
+  createPredicateFromProperties(props) {
+    return function(a, b) {
+      if (!props.length) {
+        return false;
+      }
+      let bool = true;
+      props.forEach(prop => bool = bool &&
+        (a[prop] !== undefined && b[prop] !== undefined && a[prop] === b[prop]));
+      return bool;
+    };
   }
 
 }
