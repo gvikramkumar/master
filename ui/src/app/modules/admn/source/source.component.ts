@@ -1,17 +1,16 @@
-import {Component, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {SourceService} from '../../_common/services/source.service';
 import {Source} from '../../_common/models/source';
-import {CuiInputComponent, CuiTableOptions} from '@cisco-ngx/cui-components';
+import {CuiInputComponent} from '@cisco-ngx/cui-components';
 import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
-import {DialogType} from '../../../core/models/ui-enums';
 import * as _ from 'lodash';
-import {ModuleLookupService} from '../../_common/services/module-lookup.service';
 import {DfaModule} from '../../_common/models/module';
+import {SourceMappingService} from '../../_common/services/source-mapping.service';
 
 @Component({
   selector: 'fin-source',
@@ -42,7 +41,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     private route: ActivatedRoute,
     private sourceService: SourceService,
     private uiUtil: UiUtil,
-    private moduleLookupService: ModuleLookupService
+    private sourceMappingService: SourceMappingService
   ) {
     super(store, route);
 
@@ -54,12 +53,13 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   }
 
   getModuleSouceMap() {
-    const promiseArr = [];
-    this.moduleLookupService.getOneValueManyModules('sources',
-      this.store.nonAdminModules.map(m => m.moduleId))
-      .subscribe(objs => {
-        this.moduleSourceMap =  objs.map((o, idx) => {
-          return {module: this.store.nonAdminModules[idx], sources: o.value || []};
+    this.sourceMappingService.getModuleSourceArray()
+      .subscribe(mappings => {
+        this.moduleSourceMap =  mappings.map(mapping => {
+          return {
+            module: _.find(this.store.nonAdminModules, {moduleId: mapping.moduleId}),
+            sources: mapping.sources
+          };
         });
       });
   }
