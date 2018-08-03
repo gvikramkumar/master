@@ -6,8 +6,12 @@ $padding: 20px;
 .home-comp {
   min-height: calc(100vh - #{$header-height-ltlg + $fin-footer-height});
 
-  @media (min-width: $breakpoint-lg) {
+  @media (min-width: $breakpoint-lg) and (max-width: $breakpoint-ltxxl) {
     min-height: calc(100vh - #{$hero-header-height + $fin-footer-height});
+  }
+
+  @media (min-width: $breakpoint-xxl) {
+    min-height: calc(100vh - #{$hero-header-height-xxl + $fin-footer-height});
   }
 
   .leftnav {

@@ -1,7 +1,21 @@
-
-
 // header and hero the same height looks clean
 
+.fin.cui .hero.main-comp {
+  height: $hero-header-height;
+
+  h1 {
+    font-size: 28px;
+  }
+  .hero__content {
+    padding-top: 9px;
+    padding-bottom: 1px;
+    padding-left: $padding-base;
+  }
+}
+
+.fin.cui cui-footer .footer {
+  padding: 6px 0;
+}
 
 @media (min-width: $breakpoint-lg) {
   .fin.cui .header-breadcrumbs {
@@ -19,27 +33,35 @@
   }
 }
 
-@media (min-width: $breakpoint-lg) {
+@media (min-width: $breakpoint-lg) and (max-width: $breakpoint-ltxxl) {
 
   .fin.cui .header-bar {
     height: $hero-header-height;
   }
 }
 
-.cui .hero.main-comp {
-  height: $hero-header-height;
+@media (min-width: $breakpoint-xxl) {
 
-  h1 {
-    font-size: 28px;
+  .fin.cui .header-bar {
+    height: $hero-header-height-xxl;
   }
-  .hero__content {
-    padding-top: 9px;
-    padding-bottom: 1px;
-    padding-left: $padding-base;
+
+  .fin.cui.template--cdc .container {
+    max-width: unset;
   }
+
+  .fin.cui .hero.main-comp {
+    height: $hero-header-height-xxl;
+  }
+
+  .fin.cui .hero.main-comp .hero__content {
+    padding-top: 20px; // set this
+  }
+
+  .fin.cui.template--cdc header, .cui.template--cdc main, .cui.template--cdc footer {
+    max-width: unset;
+  }
+
 }
 
-.cui cui-footer .footer {
-  padding: 6px 0;
-}
 
