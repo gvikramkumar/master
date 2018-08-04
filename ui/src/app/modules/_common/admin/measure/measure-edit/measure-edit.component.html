@@ -1,5 +1,5 @@
 
-<div class="fin-container">
+<div class="fin-edit-container">
   <div class="row">
     <div class="col-lg-6">
       <cui-input type="text" [(ngModel)]="measure.name" label="Measure Name" required="true"></cui-input>
@@ -66,9 +66,9 @@
   </div>
 
 <div class="fin-footer-buttons">
-  <button cuiButton color="primary" [small]="true" (click)="save()">Submit</button>
-  <button cuiButton color="secondary" [small]="true" (click)="cancel()">Cancel</button>
-  <button cuiButton color="secondary" [small]="true" (click)="reset()">Reset</button>
+  <button cuiButton color="primary"(click)="save()">Submit</button>
+  <button cuiButton color="secondary"(click)="cancel()">Cancel</button>
+  <button cuiButton color="secondary"(click)="reset()">Reset</button>
 </div>
 
 </div>

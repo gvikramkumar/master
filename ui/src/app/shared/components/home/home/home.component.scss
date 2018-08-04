@@ -3,21 +3,24 @@
 
 $padding: 20px;
 
+// the exact heights are commented out, leave as a reference. Thing is though: both home and main look "cleaner"
+// if footer is out of view, so we'll roll with that
 .home-comp {
-  min-height: calc(100vh - #{$header-height-ltlg + $fin-footer-height});
+  //min-height: calc(100vh - #{$header-height-ltlg + $fin-footer-height});
+  min-height: calc(100vh - #{$header-height-ltlg});
 
   @media (min-width: $breakpoint-lg) and (max-width: $breakpoint-ltxxl) {
-    min-height: calc(100vh - #{$hero-header-height + $fin-footer-height});
+    //min-height: calc(100vh - #{$hero-header-height + $fin-footer-height});
+    min-height: calc(100vh - #{$hero-header-height});
   }
 
   @media (min-width: $breakpoint-xxl) {
-    min-height: calc(100vh - #{$hero-header-height-xxl + $fin-footer-height});
+    //min-height: calc(100vh - #{$hero-header-height-xxl + $fin-footer-height});
+    min-height: calc(100vh - #{$hero-header-height-xxl});
   }
 
-  .leftnav {
-    flex: 1 1 25%;
-    min-width: 220px;
-    max-width: 250px;
+  .leftnav-wrap {
+    padding: 20px 0 0 10px;
   }
 
   /deep/ fin-leftnav {
@@ -31,19 +34,20 @@ $padding: 20px;
 
   .top-section {
 
-    .text {}
+    .text {
+      @media (min-width: $breakpoint-xxl) {
+        font-size: 18px;
+        line-height: 1.42;
+      }
+    }
 
     .admin-button {
       margin-left: 30px;
-      &.selected {
-        // todo: test later once cuiButton stops clobbering class attribute
-        //outline: 1px solid $status-yellow;
-      }
     }
   }
 
   .main {
-    background-image: url('../../../../../assets/img/AS01421.jpg');
+    background-image: url('../../../../../assets/img/AS01421-200dpi.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     min-height: 100%;
@@ -55,14 +59,15 @@ $padding: 20px;
 
       .modules {
         white-space: nowrap;
+        min-height: 300px;
 
         .module {
-          height: 40vh;
-          width: 40vh;
-          min-width: 170px;
-          min-height: 170px;
-          max-height: 260px;
-          max-width: 260px;
+          height: 35vh;
+          width: 35vh;
+          min-width: 233px;
+          min-height: 233px;
+          max-width: 310px;
+          max-height: 310px;
           background-color: $vibrant-blue;
           border-radius: 50%;
           display: inline-flex;
@@ -74,6 +79,12 @@ $padding: 20px;
           &.selected {
             background-color: darken($vibrant-blue, 10%);
           }
+
+          @media (min-width: $breakpoint-xxl) {
+            font-size: 17px;
+            line-height: 1.42;
+          }
+
         }
       }
     }

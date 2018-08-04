@@ -1,24 +1,27 @@
 <div class="fin-container">
 
-  <div class="row">
-    <div class="col-lg-9">
-
-      <div class="row" *ngFor="let module of modules;let i = index;">
-        <div class="col-4">
-          <div class="module-name">
-            {{module.name}}
-          </div>
-        </div>
-
-        <div class="col-8">
-          <cui-select [items]="sources[i] || []" [multiSelect]="true" [(ngModel)]="selectedSources[i]"
-                      optionsKey="name" optionsValue="sourceId"></cui-select>
-          <!--<pre>{{selectedSources[i]|json}}</pre>-->
-        </div>
+  <div class="row" *ngFor="let module of modules;let i = index;">
+    <div class="col-4 col-lg-4 col-xl-3">
+      <div class="module-name">
+        {{module.name}}
       </div>
+    </div>
+
+    <div class="col-6 col-lg-4" style="min-width:360px">
+      <cui-select [items]="sources[i] || []" [multiSelect]="true" [(ngModel)]="selectedSources[i]"
+                  optionsKey="name" optionsValue="sourceId"></cui-select>
+      <!--<pre>{{selectedSources[i]|json}}</pre>-->
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4 col-lg-4 col-xl-3">
+    </div>
+    <div class="col-6 col-lg-4">
       <div class="fin-footer-buttons">
-        <button cuiButton [small]="true" color="primary" (click)="save()">Submit</button>
+        <button cuiButton color="primary" (click)="save()">Submit</button>
       </div>
     </div>
   </div>
+
 </div>

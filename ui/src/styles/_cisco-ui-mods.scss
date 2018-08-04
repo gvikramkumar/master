@@ -1,5 +1,17 @@
-// header and hero the same height looks clean
 
+
+.fin.cui .business-upload-comp .form-group.radio-list {
+  margin-bottom: 30px;
+}
+
+.fin.cui .btn + .btn {
+  margin-left: 15px;
+  @media (min-width: $breakpoint-xl) {
+    margin-left: 20px;
+  }
+}
+
+// header and hero the same height looks clean, this value affects both
 .fin.cui .hero.main-comp {
   height: $hero-header-height;
 
@@ -24,6 +36,15 @@
   .fin.cui .header-heading .page-title {
     position: relative;
     top: 10px;
+  }
+}
+
+@media (min-width: $breakpoint-xxl) {
+  .fin.cui .header-breadcrumbs {
+    font-size: 14px;
+  }
+  .fin.cui .header-heading .page-title {
+    font-size: 28px;
   }
 }
 

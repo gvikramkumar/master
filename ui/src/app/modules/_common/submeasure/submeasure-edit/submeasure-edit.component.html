@@ -1,4 +1,4 @@
-<div class="fin-container">
+<div class="fin-edit-container">
 
   <div class="row">
 
@@ -16,8 +16,8 @@
           <fin-checkbox label="Active" [(model)]="sm.status" trueVal="A" falseVal="I"></fin-checkbox>
         </div>
         <div *ngIf="UiUtil.statusIsPending(sm.status)" class="form-group-button">
-          <button cuiButton [small]="true" color="primary">Approve</button>
-          <button cuiButton [small]="true" color="primary">Reject</button>
+          <button cuiButton color="primary">Approve</button>
+          <button cuiButton color="primary">Reject</button>
         </div>
       </div>
     </div>
@@ -49,7 +49,7 @@
 
   <div class="row half-padding-top">
 
-    <div class="col-lg-6 ifl-left-side">
+    <div class="col-lg-6  ifl-left-side">
       <fieldset class="input-filter-level">
         <legend>Business Input Level*</legend>
         <div class="row half-padding">
@@ -209,30 +209,34 @@
     </div>
   </div>
 
-  <div class="inline-check-row">
-    <div class="form-group-check form-group-inline-30">
-      <fin-checkbox label="Retained Earnings" [(model)]="sm.indicators.retainedEarnings" trueVal="Y"
-                    falseVal="N"></fin-checkbox>
-    </div>
-    <div class="form-group-check form-group-inline-30">
-      <fin-checkbox label="Transition" [(model)]="sm.indicators.transition" trueVal="Y" falseVal="N"></fin-checkbox>
-    </div>
-    <div class="form-group-check form-group-inline-30">
-      <fin-checkbox label="Corporate Revenue" [(model)]="sm.indicators.corpRevenue" trueVal="Y"
-                    falseVal="N"></fin-checkbox>
-    </div>
-    <div class="form-group-check form-group-inline-30">
-      <fin-checkbox label="2 Tier" [(model)]="sm.indicators.twoTier" trueVal="Y" falseVal="N"></fin-checkbox>
-    </div>
-    <div class="form-group-check form-group-inline-30">
-      <fin-checkbox label="Dual Gaap" [(model)]="sm.indicators.dualGaap" trueVal="Y" falseVal="N"></fin-checkbox>
+  <div class="row">
+    <div class="col-12">
+      <div class="inline-check-row">
+        <div class="form-group-check form-group-inline-30">
+          <fin-checkbox label="Retained Earnings" [(model)]="sm.indicators.retainedEarnings" trueVal="Y"
+                        falseVal="N"></fin-checkbox>
+        </div>
+        <div class="form-group-check form-group-inline-30">
+          <fin-checkbox label="Transition" [(model)]="sm.indicators.transition" trueVal="Y" falseVal="N"></fin-checkbox>
+        </div>
+        <div class="form-group-check form-group-inline-30">
+          <fin-checkbox label="Corporate Revenue" [(model)]="sm.indicators.corpRevenue" trueVal="Y"
+                        falseVal="N"></fin-checkbox>
+        </div>
+        <div class="form-group-check form-group-inline-30">
+          <fin-checkbox label="2 Tier" [(model)]="sm.indicators.twoTier" trueVal="Y" falseVal="N"></fin-checkbox>
+        </div>
+        <div class="form-group-check form-group-inline-30">
+          <fin-checkbox label="Dual Gaap" [(model)]="sm.indicators.dualGaap" trueVal="Y" falseVal="N"></fin-checkbox>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="fin-footer-buttons">
-    <button cuiButton color="primary" small="true" (click)="save()">Submit</button>
-    <button cuiButton color="secondary" small="true" (click)="cancel()">Cancel</button>
-    <button cuiButton color="secondary" small="true" (click)="reset()">Reset</button>
+    <button cuiButton color="primary" (click)="save()">Submit</button>
+    <button cuiButton color="secondary" (click)="cancel()">Cancel</button>
+    <button cuiButton color="secondary" (click)="reset()">Reset</button>
   </div>
 
 </div>

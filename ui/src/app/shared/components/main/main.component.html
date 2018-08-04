@@ -8,7 +8,8 @@
 
   <div class="main-content base-padding" fxLayout="row" fxLayoutAlign="start stretch">
     <!--we'll make this animate out "over" the content with an icon when we get around to it-->
-    <fin-leftnav [fxShow]="false" fxFlex="0 0 auto"></fin-leftnav>
+    <fin-leftnav fxHide fxFlex="0 0 auto"></fin-leftnav>
+
     <div fxFlex="1 1 auto">
       <router-outlet></router-outlet>
     </div>

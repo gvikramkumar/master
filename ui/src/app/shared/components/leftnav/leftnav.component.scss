@@ -1,16 +1,36 @@
 @import '../../../../styles/comp-index';
 
-.wrap {
+.leftnav-comp {
+  width: 260px;
   overflow-x: hidden;
   padding: $padding-base;
   padding-right: 0;
 
   .title {
-    font-size: 18px !important; // cui changes font size at breakpoints, we don't want that here.
+    font-size: 19px !important; // cui changes font size at breakpoints, we don't want that here.
   }
 
   .links {
-    margin: 10px 0;
+    margin: 20px 0;
+
+    .alink {
+      margin-bottom: 10px;
+      font-size: 15px
+    }
+  }
+
+  @media (min-width: $breakpoint-xxl) {
+    width: 310px;
+    .title {
+      font-size: 23px !important; // cui changes font size at breakpoints, we don't want that here.
+    }
+
+    .links {
+      .alink {
+        font-size: 17px
+      }
+    }
+
   }
 }
 

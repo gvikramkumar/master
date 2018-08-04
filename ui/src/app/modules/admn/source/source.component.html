@@ -9,7 +9,7 @@
           <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
         </mat-form-field>
         <a>
-          <button cuiButton [small]="true" color="secondary" (click)="addSource()">Add New</button>
+          <button cuiButton color="primary" (click)="addSource()">Add New</button>
         </a>
       </div>
 
@@ -65,8 +65,8 @@
         </fieldset>
 
         <div class="fin-footer-buttons">
-          <button cuiButton [small]="true" color="primary" (click)="save()">Submit</button>
-          <button cuiButton [small]="true" color="secondary" (click)="cancel()">Cancel</button>
+          <button cuiButton color="primary" (click)="save()">Submit</button>
+          <button cuiButton color="secondary" (click)="cancel()">Cancel</button>
         </div>
       </div>
 

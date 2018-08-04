@@ -1,37 +1,41 @@
 
-.leftnav {
-  min-width: 300px;
-  margin-top: 20px;
 
-}
+.business-upload-comp {
 
-.file-upload {
-
-  .fin-content {
-
-    .selected-value {
-      font-size: 16px;
-      margin: 18px 0 10px 0;
-    }
-
-
+  .left-side {
+    min-width: 370px;
   }
 
-  button.choose-file {
-    label {
-      display: block;
-      margin: 0 -16px;
-      padding: 0 16px;
-      height: 100%;
-      &:hover {
-        cursor: pointer;
+  .file-upload {
+    max-width: 460px;
+
+    .fin-content {
+
+      .selected-value {
+        font-size: 16px;
+        margin: 18px 0 10px 0;
+      }
+
+
+    }
+
+    button.choose-file {
+      label {
+        display: block;
+        margin: 0 -16px;
+        padding: 0 16px;
+        height: 100%;
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
+
+    .file-list {
+      margin: 14px 0;
+    }
   }
 
-  .file-list {
-    margin: 14px 0;
-  }
 }
 
 
