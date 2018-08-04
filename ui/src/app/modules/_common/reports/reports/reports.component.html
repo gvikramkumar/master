@@ -1,8 +1,8 @@
-<div class="fin-container reports-comp">
+<div class="fin-edit-container reports-comp">
 
   <div class="row">
 
-    <div class="col-md-5 col-xl-4">
+    <div class="col-md-5 col-xl-4 base-padding-top">
       <div class="form-group  form-group--loose" *ngFor="let rpt of reports">
         <label class="radio" [class.disabled]="rpt.disabled">
           <input type="radio" name="uploadType" [value]="rpt" [(ngModel)]="report" (change)="reset()">
