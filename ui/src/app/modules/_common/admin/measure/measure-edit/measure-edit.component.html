@@ -1,10 +1,10 @@
 
-<div class="fin-container">
+<div class="fin-edit-container">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <cui-input type="text" [(ngModel)]="measure.name" label="Measure Name" required="true"></cui-input>
     </div>
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <div fxLayout="row" fxLayoutAlign="center start">
         <div class="form-group-check">
           <fin-checkbox label="Active" [(model)]="measure.status" trueVal="A" falseVal="I"></fin-checkbox>
@@ -14,24 +14,24 @@
   </div>
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <cui-input type="text" [(ngModel)]="measure.abbrev" label="Abbrev Name" required="true"></cui-input>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <cui-select [(ngModel)]="measure.sources" [items]="moduleSources" label="Sources"
                   [multiSelect]="true" optionsKey="name" optionsValue="sourceId" required="true"></cui-select>
     </div>
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <cui-select [(ngModel)]="measure.hierarchies" [items]="hierarchies" empty="true" label="Hierarchies"
                   optionsKey="name" optionsValue="name" [multiSelect]="true" required="true"></cui-select>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <div class="form-group-switch">
         <fin-checkbox [(model)]="measure.approvalRequired" label="Approval required"></fin-checkbox>
       </div>
@@ -66,9 +66,9 @@
   </div>
 
 <div class="fin-footer-buttons">
-  <button cuiButton color="primary" [small]="true" (click)="save()">Submit</button>
-  <button cuiButton color="secondary" [small]="true" (click)="cancel()">Cancel</button>
-  <button cuiButton color="secondary" [small]="true" (click)="reset()">Reset</button>
+  <button cuiButton color="primary"(click)="save()">Submit</button>
+  <button cuiButton color="secondary"(click)="cancel()">Cancel</button>
+  <button cuiButton color="secondary"(click)="reset()">Reset</button>
 </div>
 
 </div>

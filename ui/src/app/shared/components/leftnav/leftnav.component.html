@@ -1,11 +1,11 @@
 
-<div class="wrap">
+<div class="leftnav-comp">
 
   <div *ngIf="module">
 
     <h5 class="title">{{module.name}}</h5>
     <div class="links">
-      <div *ngFor="let link of links"><a [routerLink]="link.route">{{link.text}}</a></div>
+      <div class="alink" *ngFor="let link of links"><a [routerLink]="link.route">{{link.text}}</a></div>
     </div>
 
     <h5 class="title" *ngIf="alinks.length">Admin</h5>

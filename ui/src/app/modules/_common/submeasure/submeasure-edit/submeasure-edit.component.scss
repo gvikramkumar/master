@@ -1,7 +1,7 @@
 @import '../../../../../styles/_comp-index.scss';
 
 
-.fin-container {
+.fin-edit-container {
 
   .ifl-section {
     $height: 44px;
@@ -51,7 +51,9 @@
 
   }
 
-
+  .inline-check-row .form-group-check {
+    display: inline-block;
+  }
 
 }
 

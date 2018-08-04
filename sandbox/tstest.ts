@@ -1,6 +1,8 @@
 import * as _ from 'lodash';
 
 
+console.log(_.range(0, 5));
+
 
 /*
 const arr1 = [

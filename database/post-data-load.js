@@ -3,6 +3,7 @@ const db = conn.getDB(_db);
 
 db.dfa_submeasure.insertMany([
   {
+    submeasureId: NumberInt(1),
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment",
     desc: "2 Tier Adjustment",
@@ -26,12 +27,19 @@ db.dfa_submeasure.insertMany([
       approveFlag: "Y",
       manualMapping: "N",
       expenseSSOT: "Y",
-      manualMix: "Y"
+      manualMix: "Y",
+      groupFlag: 'N',
+      retainedEarnings: 'N',
+      transition: 'N',
+      corpRevenue: 'Y',
+      dualGaap: 'N',
+      twoTier: 'N'
     },
     rules: ["GLREVMIX-PL3SL2-NOWWDIST-ROLL3", "MANUALMAP-PL3SL6-PERCENT"],
     status: "A",
   },
   {
+    submeasureId: NumberInt(2),
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment2",
     desc: "2 Tier Adjustment2",
@@ -55,7 +63,13 @@ db.dfa_submeasure.insertMany([
       approveFlag: "Y",
       manualMapping: "N",
       expenseSSOT: "Y",
-      manualMix: "Y"
+      manualMix: "Y",
+      groupFlag: 'Y',
+      retainedEarnings: 'N',
+      transition: 'N',
+      corpRevenue: 'Y',
+      dualGaap: 'N',
+      twoTier: 'N'
     },
     rules: ["REVPOS-NODISTI-NOSCMSOTHER-ROLL3", "SERVMAP-PL3BE-MTD"],
     status: "A",
@@ -87,7 +101,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Indirect Revenue Adjustments",
     abbrev: "revadj",
-    sources: [1,2],
+    sources: [1, 2],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
     status: "A",
@@ -104,7 +118,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Manufacturing Overhead",
     abbrev: "revadj",
-    sources: [1,2],
+    sources: [1, 2],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
     status: "A"
@@ -114,7 +128,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Manufacturing Supply Chain Expenses",
     abbrev: "revadj",
-    sources: [1,2],
+    sources: [1, 2],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
     status: "A"
@@ -124,7 +138,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Manufacturing V&O",
     abbrev: "revadj",
-    sources: [1,2],
+    sources: [1, 2],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
     status: "A"
@@ -134,7 +148,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Standard Cogs Adjustments",
     abbrev: "revadj",
-    sources: [1,2],
+    sources: [1, 2],
     hierarchies: ['SALES'],
     approvalRequired: 'N',
     status: "A"
@@ -144,7 +158,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Warranty",
     abbrev: "revadj",
-    sources: [1,2],
+    sources: [1, 2],
     hierarchies: ['PRODUCT'],
     approvalRequired: 'N',
     status: "I"

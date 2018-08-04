@@ -411,7 +411,7 @@ export default class RepoBase {
 
   fillAutoIncrementField(item) {
     if (this.autoIncrementField) {
-      this.getAutoIncrementValue()
+      return this.getAutoIncrementValue()
         .then(inc => item[this.autoIncrementField] = inc);
     } else {
       return Promise.resolve();

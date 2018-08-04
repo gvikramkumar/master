@@ -2,15 +2,20 @@
 @import '../../../../styles/comp-index';
 
 
+// the exact heights are commented out, leave as a reference. Thing is though: both home and main look "cleaner"
+// if footer is out of view, so we'll roll with that
 .main-content {
-  min-height: calc(100vh - #{$header-height-ltlg + $hero-header-height + $fin-footer-height});
+  //min-height: calc(100vh - #{$header-height-ltlg + $hero-header-height + $fin-footer-height});
+  min-height: calc(100vh - #{$header-height-ltlg + $hero-header-height});
 
   @media (min-width: $breakpoint-lg) and (max-width: $breakpoint-ltxxl) {
-    min-height: calc(100vh - #{$hero-header-height + $hero-header-height + $fin-footer-height});
+    //min-height: calc(100vh - #{$hero-header-height + $hero-header-height + $fin-footer-height});
+    min-height: calc(100vh - #{$hero-header-height + $hero-header-height});
   }
 
   @media (min-width: $breakpoint-xxl) {
-    min-height: calc(100vh - #{$hero-header-height-xxl + $hero-header-height-xxl + $fin-footer-height});
+    //min-height: calc(100vh - #{$hero-header-height-xxl + $hero-header-height-xxl + $fin-footer-height});
+    min-height: calc(100vh - #{$hero-header-height-xxl + $hero-header-height-xxl});
   }
 
 }

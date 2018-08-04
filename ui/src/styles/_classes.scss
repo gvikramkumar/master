@@ -1,7 +1,6 @@
 @import '_variables';
 @import '_mixins';
 
-
 .legend-checkbox {
   display: inline-block;
   position: relative;
@@ -9,10 +8,7 @@
 }
 
 .fin-footer-buttons {
-  padding: 20px 0 10px 0;
-  button {
-    margin-right: 10px;
-  }
+  padding: 25px 0;
 }
 
 .fin-container {
@@ -20,9 +16,44 @@
   margin: 0 auto;
 }
 
+.fin-edit-container {
+  width: 90%;
+  margin: 0 auto;
+
+  @media (min-width: $breakpoint-lg) {
+    & > .row > .col,
+    & > .row > [class^="col-"] {
+      padding: 0 30px;
+      @media (min-width: $breakpoint-xxl) {
+        padding: 0 40px;
+      }
+    }
+  }
+
+  & .fin-footer-buttons {
+    padding: 25px 0;
+
+    @media (min-width: $breakpoint-lg) {
+      padding-left: 20px;
+      @media (min-width: $breakpoint-xxl) {
+        padding-left: 30px;
+      }
+    }
+  }
+
+}
+
 .form-group-text {
   height: 60px;
   line-height: 60px;
+}
+
+.form-group-inline-20 {
+  margin-right: 20px;
+}
+
+.form-group-inline-30 {
+  margin-right: 30px;
 }
 
 .form-group-switch {
@@ -164,6 +195,7 @@ i {
 .outline {
   @include outline;
 }
+
 .outline-red {
   @include outline;
   outline-color: red;

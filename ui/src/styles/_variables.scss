@@ -7,6 +7,7 @@ $padding-half: $padding-base / 2;
 $padding-double: $padding-base * 2;
 
 // bootstrap/cui breakpoints
+$breakpoint-xs: 0px;
 $breakpoint-ltsm: 575px;
 $breakpoint-sm: 576px;
 $breakpoint-ltmd: 767px;
@@ -15,8 +16,8 @@ $breakpoint-ltlg: 991px;
 $breakpoint-lg: 992px;
 $breakpoint-ltxl: 1199px;
 $breakpoint-xl: 1200px;
-$breakpoint-ltxxl: 1599px;
-$breakpoint-xxl: 1600px;
+$breakpoint-ltxxl: 1499px;
+$breakpoint-xxl: 1500px;
 
 
 $header-height-ltlg: 50px;

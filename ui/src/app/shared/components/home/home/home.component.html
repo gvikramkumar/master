@@ -1,6 +1,8 @@
 <div class="home-comp hero hero--vibblue" fxLayout="row" fxLayoutAlign="start stretch">
 
-  <fin-leftnav class="leftnav"></fin-leftnav>
+  <div class="leftnav-wrap">
+    <fin-leftnav class="leftnav"></fin-leftnav>
+  </div>
 
   <div class="main" fxFlex="1 1 auto">
 
@@ -11,8 +13,7 @@
         <div>Analytics that explore business profitability</div>
       </div>
       <div class="admin-button">
-        <button cuiButton (click)="moduleChange(adminModule)"
-                [class.selected]="adminModule === selectedModule">Administration</button>
+        <button cuiButton color="primary" (click)="moduleChange(adminModule)">Administration</button>
       </div>
     </div>
 
