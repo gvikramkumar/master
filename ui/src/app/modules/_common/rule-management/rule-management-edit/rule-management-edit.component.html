@@ -2,14 +2,14 @@
 <div class="fin-container">
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <cui-input type="text" [(ngModel)]="rule.name" label="Rule Name" required="true"></cui-input>
       <cui-select [(ngModel)]="rule.driverName" [items]="driverNames" empty="true" label="Driver"
                   optionsKey="name" optionsValue="value" required="true"></cui-select>
       <cui-select [(ngModel)]="rule.period" [items]="periods" label="Driver Period" empty="true"
                   required="true"></cui-select>
     </div>
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <div fxLayout="row" fxLayoutAlign="center start">
         <div *ngIf="!UiUtil.statusIsPending(rule.status)" class="form-group-check">
           <fin-checkbox label="Active" [(model)]="rule.status" trueVal="A" falseVal="I"></fin-checkbox>
@@ -24,7 +24,7 @@
   <br>
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <div class="left text-center">Matching Criteria</div>
       <cui-select [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
                   required="true"></cui-select>
@@ -37,7 +37,7 @@
                   empty="true" required="true"></cui-select>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-lg-6">
       <div class="right text-center">Selection Criteria</div>
       <cui-input type="text" [(ngModel)]="rule.sl1Select" label="&nbsp;" required="true"></cui-input>
       <cui-input disabled=true type="text" label="&nbsp;" required="true"></cui-input>

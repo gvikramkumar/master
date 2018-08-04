@@ -15,6 +15,7 @@ export class Submeasure {
   reportingLevels: string[] = [undefined, undefined, undefined];
   indicators = new Indicators();
   rules: string[] = [];
+  groupedBySubmeasureId: number;
   status = 'I';
   createdBy?: string;
   createdDate?: string;
@@ -31,9 +32,15 @@ class InputFilterLevel {
 }
 
 class Indicators {
-  dollarUploadFlag: string;
-  approveFlag: string;
+  dollarUploadFlag = 'N';
+  approveFlag = 'N';
   manualMapping = 'N';
-  expenseSSOT: string;
-  manualMix: string;
+  expenseSSOT = 'N';
+  manualMix = 'N';
+  groupFlag = 'N';
+  retainedEarnings = 'N';
+  transition = 'N';
+  corpRevenue = 'Y';
+  dualGaap = 'N';
+  twoTier = 'N';
 }

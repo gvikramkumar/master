@@ -28,7 +28,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
   sources: Source[] = [];
-  rules: AllocationRule[];
+  rules: AllocationRule[] = [];
   errs: string[] = [];
   yearmos: { str: string, num: number }[];
   COGS = ' Cogs '; // todo: move to lookup
@@ -67,9 +67,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sourceService.getMany().toPromise(),
     ])
       .then(results => {
-        this.measures = _.sortBy(results[0], name);
-        this.rules = _.sortBy(results[1], name);
-        this.sources = _.sortBy(results[2], name);
+        this.measures = _.sortBy(results[0], 'name');
+        this.rules = _.sortBy(results[1], 'name').map(rule => ({name: rule.name}));
+        this.sources = _.sortBy(results[2], 'name');
 
         if (this.editMode) {
           this.submeasureService.getOneById(this.route.snapshot.params.id)
@@ -149,7 +149,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
 
     this.currentMeasure = _.find(this.measures, {measureId: this.sm.measureId});
-
+    if (!this.currentMeasure) { // no measure in "add" mode
+      return;
+    }
     this.disableReportingLevels[0] = !this.currentMeasure.reportingLevel1Enabled;
     this.disableReportingLevels[1] = !this.currentMeasure.reportingLevel2Enabled;
     this.disableReportingLevels[2] = !this.currentMeasure.reportingLevel3Enabled;

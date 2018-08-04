@@ -52,7 +52,7 @@ export class SourceMappingController extends PostgresControllerBase {
             if (!source) {
               throw new ApiError(`updateModuleSourceArray: failed to find source for sourceId ${sourceId}`);
             }
-            updateArr.push(this.repo.createRecord(mapping.moduleId, source));
+            updateArr.push(this.createRecord(mapping.moduleId, source));
           }); // mapping.sources.forEach
 
           promiseArr.push(
@@ -69,6 +69,16 @@ export class SourceMappingController extends PostgresControllerBase {
       }) // getsources.then
       .catch(next);
 
+  }
+
+  createRecord(moduleId, source) {
+    return {
+      moduleId,
+      sourceId: source.sourceId,
+      sourceName: source.name,
+      sourceTypeCode: source.typeCode,
+      sourceStatus: source.status
+    };
   }
 
 }

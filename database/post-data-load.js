@@ -3,6 +3,7 @@ const db = conn.getDB(_db);
 
 db.dfa_submeasure.insertMany([
   {
+    submeasureId: NumberInt(1),
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment",
     desc: "2 Tier Adjustment",
@@ -32,6 +33,7 @@ db.dfa_submeasure.insertMany([
     status: "A",
   },
   {
+    submeasureId: NumberInt(2),
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment2",
     desc: "2 Tier Adjustment2",

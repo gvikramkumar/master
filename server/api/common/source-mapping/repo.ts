@@ -24,14 +24,5 @@ export class PgSourceMappingRepo extends PostgresRepoBase {
     super(new Orm(ormMap));
   }
 
-  createRecord(moduleId, source) {
-    return {
-      moduleId,
-      sourceId: source.sourceId,
-      sourceName: source.name,
-      sourceTypeCode: source.typeCode,
-      sourceStatus: source.status
-    };
-  }
 }
 
