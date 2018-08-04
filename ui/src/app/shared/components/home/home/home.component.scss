@@ -35,9 +35,10 @@ $padding: 20px;
   .top-section {
 
     .text {
+      line-height: 1.8;
+
       @media (min-width: $breakpoint-xxl) {
-        font-size: 18px;
-        line-height: 1.42;
+        font-size: 17px;
       }
     }
 

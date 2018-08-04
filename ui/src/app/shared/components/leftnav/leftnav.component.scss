@@ -5,6 +5,7 @@
   overflow-x: hidden;
   padding: $padding-base;
   padding-right: 0;
+  line-height: 1.42;
 
   .title {
     font-size: 19px !important; // cui changes font size at breakpoints, we don't want that here.
@@ -15,7 +16,7 @@
 
     .alink {
       margin-bottom: 10px;
-      font-size: 15px
+      font-size: 15px;
     }
   }
 
