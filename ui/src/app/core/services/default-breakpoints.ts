@@ -75,6 +75,20 @@ export const FIN_DEFAULT_BREAKPOINTS: BreakPoint[] = [
   },
   {
     alias: 'xl',
-    mediaQuery: '(min-width: 1200px) and (max-width: 5000px)'
+    mediaQuery: '(min-width: 1200px) and (max-width: 1499px)'
+  },
+  {
+    alias: 'gt-xl',
+    overlapping: true,
+    mediaQuery: '(min-width: 1500px)'
+  },
+  {
+    alias: 'lt-xxl',
+    overlapping: true,
+    mediaQuery: '(max-width: 1499px)'
+  },
+  {
+    alias: 'xxl',
+    mediaQuery: '(min-width: 1500px) and (max-width: 5000px)'
   }
 ];
