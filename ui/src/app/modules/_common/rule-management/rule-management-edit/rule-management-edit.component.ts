@@ -29,6 +29,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     {name: 'VIP Rebates', value: 'VIP'},
   ]
   periods = ['MTD', 'ROLL6', 'ROLL3'];
+  conditionalOperators = ['IN', 'NOT IN', 'LIKE', 'NOT LIKE'];
   salesMatches = ['SL1', 'SL2', 'SL3', 'SL4', 'SL5', 'SL6'];
   productMatches = ['BU', 'PF', 'TG', 'PID'];
   scmsMatches = ['SCMS'];

@@ -38,11 +38,22 @@
 
     <div class="col-lg-6">
       <div class="right text-center">Selection Criteria</div>
-      <cui-input type="text" [(ngModel)]="rule.sl1Select" label="&nbsp;" required="true"></cui-input>
-      <cui-input disabled=true type="text" label="&nbsp;" required="true"></cui-input>
-      <cui-input type="text" [(ngModel)]="rule.scmsSelect" label="&nbsp;"></cui-input>
-      <cui-input disabled=true type="text" label="&nbsp;"></cui-input>
-      <cui-input type="text" [(ngModel)]="rule.beSelect" label="&nbsp;" required="true"></cui-input>
+      <div class="row">
+        <div class="col-4">
+          <cui-select [(ngModel)]="rule.salesMatch" [items]="conditionalOperators" label="Sales"></cui-select>
+          <cui-select [(ngModel)]="rule.salesMatch" [items]="conditionalOperators" label="Product"></cui-select>
+          <cui-select [(ngModel)]="rule.salesMatch" [items]="conditionalOperators" label="SCMS"></cui-select>
+          <cui-select [(ngModel)]="rule.salesMatch" [items]="conditionalOperators" label="Legal"></cui-select>
+          <cui-select [(ngModel)]="rule.salesMatch" [items]="conditionalOperators" label="IBE"></cui-select>
+        </div>
+        <div class="col-8">
+          <cui-input type="text" [(ngModel)]="rule.sl1Select" label="&nbsp;" required="true"></cui-input>
+          <cui-input disabled=true type="text" label="&nbsp;" required="true"></cui-input>
+          <cui-input type="text" [(ngModel)]="rule.scmsSelect" label="&nbsp;"></cui-input>
+          <cui-input disabled=true type="text" label="&nbsp;"></cui-input>
+          <cui-input type="text" [(ngModel)]="rule.beSelect" label="&nbsp;" required="true"></cui-input>
+        </div>
+      </div>
     </div>
 
   </div>
