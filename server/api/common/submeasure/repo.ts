@@ -55,7 +55,7 @@ const schema = new Schema({
 
 @injectable()
 export default class SubmeasureRepo extends RepoBase {
-  autoIncrementField = 'submeasureId';
+  // autoIncrementField = 'submeasureId'; // can't do this, need to get next value from pg as already has submeasures
 
   constructor() {
     super(schema, 'Submeasure', true);
