@@ -92,7 +92,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
-    this.measureChange();
+    this.measureChange('init');
   }
 
   isManualMapping() {
@@ -139,7 +139,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .name.indexOf(this.COGS) !== -1;
   }
 
-  measureChange() {
+  measureChange(init) {
     if (!this.sm.measureId) { // no measure in "add" mode
       return;
     }
@@ -154,7 +154,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.submeasureService.callMethod('getGroupingSubmeasures', {measureId: this.sm.measureId})
       .subscribe(groupingSubmeasures => {
         this.groupingSubmeasures = groupingSubmeasures;
-      })
+        if (!init) {
+          this.sm.groupingSubmeasureId = undefined;
+        }
+      });
 
     this.currentMeasure = _.find(this.measures, {measureId: this.sm.measureId});
     this.disableReportingLevels[0] = !this.currentMeasure.reportingLevel1Enabled;
@@ -169,7 +172,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       (this.currentMeasure.reportingLevel3Enabled ? this.sm.reportingLevels[2] : undefined);
 
   }
-  
+
   ibe_items = [
     {
       name: 'Internal BE',
