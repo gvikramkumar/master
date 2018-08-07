@@ -1,14 +1,13 @@
 moduleId,displayOrder,abbrev,name
 99,99,admn,Administration
 1,1,prof,Profitability Allocations
-2,2,prdt,Product Triangulation
-3,3,bkgm,Bookings Misc Allocation
-4,4,svct,Service Triangulation
-5,5,tsct,TSS Cogs Triangulation
-6,6,ascg,AS Cogs Allocation
-7,7,cisc,CIS Cogs Allocation
-8,8,opex,Opex Allocation
-9,9,defr,Deferred Revenue
-10,10,gubr,Gross Unbilled Revenue
-11,11,bkir,Bookings IR Allocation
-12,12,rrev,Recurring Revenue
+2,2,bkgm,Bookings Misc Allocation
+3,3,svct,Service Triangulation
+4,4,tsct,TSS Cogs Triangulation
+5,5,ascg,AS Cogs Allocation
+6,6,cisc,CIS Cogs Allocation
+7,7,opex,Opex Allocation
+8,8,defr,Deferred Revenue
+9,9,gubr,Gross Unbilled Revenue
+10,10,bkir,Bookings IR Allocation
+11,11,rrev,Recurring Revenue

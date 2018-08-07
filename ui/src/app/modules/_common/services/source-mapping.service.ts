@@ -5,7 +5,7 @@ import {Measure} from '../models/measure';
 import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
 import {Observable} from 'rxjs';
-import {SourceMapping} from '../../../../../../shared/models/source-mapping';
+import {SourceMapping} from '../../../../../../server/api/common/source-mapping/source-mapping';
 
 const apiUrl = environment.apiUrl;
 

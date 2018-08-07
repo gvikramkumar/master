@@ -30,12 +30,14 @@ const aa = pgc.promise;
 pgc.promise.then(db => {
   console.log('postgres is up');
 
+/*
   repo.getOneById(389)
     .then(doc => {
       doc.name = 'jim2';
       repo.updateOneById(doc, 'jodoe');
     });
 
+*/
 
 /*
   repo.removeMany({}, false)

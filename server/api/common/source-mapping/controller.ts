@@ -5,7 +5,7 @@ import {ModuleRepo} from '../module/repo';
 import * as _ from 'lodash';
 import SourceRepo from '../source/repo';
 import {ApiError} from '../../../lib/common/api-error';
-import {SourceMapping} from '../../../../shared/models/source-mapping';
+import {SourceMapping} from './source-mapping';
 
 
 @injectable()

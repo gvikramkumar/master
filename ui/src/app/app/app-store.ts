@@ -11,7 +11,9 @@ import {DfaModule} from '../modules/_common/models/module';
 import {User} from '../modules/_common/models/user';
 import {UiUtil} from '../core/services/ui-util';
 import {uiConst} from '../core/models/ui-const';
+import {BreakpointChange} from '../core/services/breakpoint.service';
 
+/* tslint:disable:member-ordering*/
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +51,6 @@ export class AppStore extends StoreBase {
       });
   }
 
-  /* tslint:disable:member-ordering*/
   authenticated = false;
   authenticated$ = new BehaviorSubject<boolean>(this.authenticated);
   subAuthenticated = this.authenticated$.subscribe.bind(this.authenticated$);

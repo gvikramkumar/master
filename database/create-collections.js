@@ -43,6 +43,8 @@ fileCollections.forEach(coll => {
 db.dfa_module.createIndex({moduleId: -1}, {unique: true});
 db.dfa_measure.createIndex({measureId: 1}, {unique: true});
 db.dfa_source.createIndex({sourceId: -1}, {unique: true});
+// todo: uncomment when submeasureId creation is complete
+// db.dfa_submeasure.createIndex({submeasureId: -1}, {unique: true});
 
 
 

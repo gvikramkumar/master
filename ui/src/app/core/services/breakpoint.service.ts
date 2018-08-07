@@ -91,6 +91,13 @@ export class BreakpointService {
           }
           break;
         case 'xl':
+          if (_.includes(['xs', 'sm', 'md', 'lg'], this.lastBreakpoint)) {
+            direction = BreakpointDirection.fromBelow;
+          } else {
+            direction = BreakpointDirection.fromAbove;
+          }
+          break;
+        case 'xxl':
             direction = BreakpointDirection.fromBelow;
           break;
       }

@@ -1,6 +1,7 @@
 import {injectable} from 'inversify';
 import {Schema} from 'mongoose';
 import RepoBase from '../../../lib/base-classes/repo-base';
+import {GroupingSubmeasure} from './grouping-submeasure';
 
 const filterLevelSchema = new Schema({
   productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
@@ -41,7 +42,7 @@ const schema = new Schema({
     indicators: indicatorsSchema,
     rules: [String],
     categoryType: String,
-    groupedBySubmeasureId: Number,
+    groupingSubmeasureId: Number,
     status: {type: String, enum: ['A', 'I', 'P'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
@@ -54,10 +55,17 @@ const schema = new Schema({
 
 @injectable()
 export default class SubmeasureRepo extends RepoBase {
-  autoIncrementField = 'submeasureId';
+  // autoIncrementField = 'submeasureId'; // can't do this, need to get next value from pg as already has submeasures
 
   constructor() {
     super(schema, 'Submeasure', true);
+  }
+
+  getGroupingSubmeasures(measureId): Promise<GroupingSubmeasure[]> {
+    return this.Model.find({measureId, 'indicators.groupFlag': 'Y'}, {_id: 0, submeasureId: 1, name: 1})
+      .then(docs => docs.map(doc => {
+        return {submeasureName: doc.name, submeasureId: doc.submeasureId};
+      }));
   }
 
 }
