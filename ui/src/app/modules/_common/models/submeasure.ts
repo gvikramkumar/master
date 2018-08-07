@@ -9,13 +9,13 @@ export class Submeasure {
   endFiscalMonth: string;
   processingTime: string;
   pnlnodeGrouping: string;
-  categoryType: string;
+  categoryType = 'HW';
   inputFilterLevel = new InputFilterLevel();
   manualMapping = new InputFilterLevel();
   reportingLevels: string[] = [undefined, undefined, undefined];
   indicators = new Indicators();
   rules: string[] = [];
-  groupedBySubmeasureId: number;
+  groupingSubmeasureId: number;
   status = 'I';
   createdBy?: string;
   createdDate?: string;

@@ -31,7 +31,7 @@ export class BreakpointService {
     // called once initially. We have to do some gymnastics to get it down to one...
     media.asObservable()
       .subscribe(change => {
-        console.log('breakpoint', change.mqAlias);
+        // console.log('breakpoint', change.mqAlias);
         if (!this.initialBreakpoint) {
           this.initialBreakpoint = change.mqAlias;
           this.handleBreakpoints(change.mqAlias);
@@ -102,7 +102,7 @@ export class BreakpointService {
           break;
       }
       this.breakpoints$.next(new BreakpointChange(breakpoint, this.lastBreakpoint, direction));
-        console.log(`breakpoint: ${breakpoint} ${BreakpointDirection[direction]}`);
+        // console.log(`breakpoint: ${breakpoint} ${BreakpointDirection[direction]}`);
     }
 
     this.lastBreakpoint = breakpoint;

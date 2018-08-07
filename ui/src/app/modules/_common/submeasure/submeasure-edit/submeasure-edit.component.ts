@@ -14,6 +14,7 @@ import {UiUtil} from '../../../../core/services/ui-util';
 import {SourceService} from '../../services/source.service';
 import {Source} from '../../models/source';
 import {DialogType} from '../../../../core/models/ui-enums';
+import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeasure/grouping-submeasure';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -27,6 +28,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   orgSubmeasure = _.cloneDeep(this.sm);
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
+  groupingSubmeasures: GroupingSubmeasure[] = [];
   sources: Source[] = [];
   rules: AllocationRule[] = [];
   errs: string[] = [];
@@ -64,7 +66,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     Promise.all([
       this.measureService.getMany().toPromise(),
       this.ruleService.getManyActive().toPromise(),
-      this.sourceService.getMany().toPromise(),
+      this.sourceService.getMany().toPromise()
     ])
       .then(results => {
         this.measures = _.sortBy(results[0], 'name');
@@ -91,9 +93,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
     this.measureChange();
-    if (!this.isCogsMeasure()) {
-      this.sm.categoryType = 'HW';
-    }
   }
 
   isManualMapping() {
@@ -136,11 +135,15 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   ]
 
   isCogsMeasure() {
-    const measure = _.find(this.measures, {measureId: this.sm.measureId});
-    return measure ? measure.name.indexOf(this.COGS) !== -1 : false;
+    return _.find(this.measures, {measureId: this.sm.measureId})
+      .name.indexOf(this.COGS) !== -1;
   }
 
   measureChange() {
+    if (!this.sm.measureId) { // no measure in "add" mode
+      return;
+    }
+
     if (this.isCogsMeasure()) {
       this.disableCategories = false;
     } else {
@@ -148,10 +151,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.categoryType = 'HW';
     }
 
+    this.submeasureService.callMethod('getGroupingSubmeasures', {measureId: this.sm.measureId})
+      .subscribe(groupingSubmeasures => {
+        this.groupingSubmeasures = groupingSubmeasures;
+      })
+
     this.currentMeasure = _.find(this.measures, {measureId: this.sm.measureId});
-    if (!this.currentMeasure) { // no measure in "add" mode
-      return;
-    }
     this.disableReportingLevels[0] = !this.currentMeasure.reportingLevel1Enabled;
     this.disableReportingLevels[1] = !this.currentMeasure.reportingLevel2Enabled;
     this.disableReportingLevels[2] = !this.currentMeasure.reportingLevel3Enabled;

@@ -87,7 +87,7 @@ export class RestBase<T extends AnyObj> {
   }
 
   callMethod(method, data = null) {
-    return this.httpClient.post<T[]>(`${apiUrl}/api/${this.endpointName}/call-method/${method}`, data);
+    return this.httpClient.post<any>(`${apiUrl}/api/${this.endpointName}/call-method/${method}`, data);
   }
   // same as getMany(params) just uses POST body instead of querystrings. The post body uses
   // bodyParser.urlEncoded extended version so can accept objects as well. Remains to be tested, but
