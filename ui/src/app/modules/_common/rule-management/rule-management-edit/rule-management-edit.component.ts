@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AllocationRule} from '../../models/allocation-rule';
 import {RuleService} from '../../services/rule.service';
+import {PgLookupService} from '../../services/pg-lookup.service';
 import {Observable, of} from 'rxjs';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {AppStore} from '../../../../app/app-store';
@@ -27,7 +28,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     {name: 'Shipment', value: 'SHIPMENT'},
     {name: 'Shipped Revenue', value: 'SHIPREV'},
     {name: 'VIP Rebates', value: 'VIP'},
-  ]
+  ];
   periods = ['MTD', 'ROLL6', 'ROLL3'];
   conditionalOperators = ['IN', 'NOT IN', 'LIKE', 'NOT LIKE'];
   salesMatches = ['SL1', 'SL2', 'SL3', 'SL4', 'SL5', 'SL6'];
@@ -41,6 +42,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private route: ActivatedRoute,
     private router: Router,
     private ruleService: RuleService,
+    private pgLookupService: PgLookupService,
     private store: AppStore,
     public uiUtil: UiUtil
   ) {
