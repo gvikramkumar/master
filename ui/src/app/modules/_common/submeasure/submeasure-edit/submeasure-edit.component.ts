@@ -139,7 +139,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .name.indexOf(this.COGS) !== -1;
   }
 
-  measureChange(init) {
+  measureChange(init = false) {
     if (!this.sm.measureId) { // no measure in "add" mode
       return;
     }
