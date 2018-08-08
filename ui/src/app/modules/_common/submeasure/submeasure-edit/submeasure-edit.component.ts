@@ -92,7 +92,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
-    this.measureChange('init');
+    this.measureChange(true);
   }
 
   isManualMapping() {
