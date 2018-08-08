@@ -36,6 +36,19 @@ export default class LookupController {
       .catch(next);
   }
 
+  // post /call-method/:method
+  callMethod(req, res, next) {
+    const method = this[req.params.method];
+    if (!method) {
+      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
+    }
+    method.call(this, req, res, next);
+  }
+
+  getRequestHeaders(req, res) {
+    res.json(req.headers);
+  }
+
   upsert(req, res, next) {
     const data = req.body;
     this.verifyProperties(data, ['key']);
