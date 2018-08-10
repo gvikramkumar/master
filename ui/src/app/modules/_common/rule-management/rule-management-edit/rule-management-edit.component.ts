@@ -59,9 +59,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getRuleCriteriaChoicesSalesLevel1().toPromise(),
       this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
       this.pgLookupService.getRuleCriteriaChoicesScms().toPromise(),
-      this.pgLookupService.getRuleCriteriaChoicesLegalEntity().toPromise(),
       this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
-      this.pgLookupService.getRuleCriteriaChoicesInternalBeSubBe().toPromise()
     ];
     if (this.editMode) {
       promises.push(this.ruleService.getOneById(this.route.snapshot.params.id).toPromise());
