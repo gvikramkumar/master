@@ -9,7 +9,6 @@ import {AppStore} from '../../../../app/app-store';
 import * as _ from 'lodash';
 import {DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
-import {PgLookupService} from '../../services/pg-lookup.service';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -49,8 +48,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private ruleService: RuleService,
     private pgLookupService: PgLookupService,
     private store: AppStore,
-    public uiUtil: UiUtil,
-    private pgLookupService: PgLookupService
+    public uiUtil: UiUtil
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
