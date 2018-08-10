@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AllocationRule} from '../../models/allocation-rule';
+import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import {RuleService} from '../../services/rule.service';
 import {PgLookupService} from '../../services/pg-lookup.service';
 import {Observable, of} from 'rxjs';
@@ -9,6 +9,7 @@ import {AppStore} from '../../../../app/app-store';
 import * as _ from 'lodash';
 import {DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
+import {PgLookupService} from '../../services/pg-lookup.service';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -48,26 +49,39 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private ruleService: RuleService,
     private pgLookupService: PgLookupService,
     private store: AppStore,
-    public uiUtil: UiUtil
+    public uiUtil: UiUtil,
+    private pgLookupService: PgLookupService
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
   }
 
   public ngOnInit(): void {
+    const promises = [
+      this.pgLookupService.getRuleCriteriaChoicesSalesLevel1().toPromise(),
+      this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
+      this.pgLookupService.getRuleCriteriaChoicesScms().toPromise(),
+      this.pgLookupService.getRuleCriteriaChoicesLegalEntity().toPromise(),
+      this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
+      this.pgLookupService.getRuleCriteriaChoicesInternalBeSubBe().toPromise()
+    ];
     if (this.editMode) {
-      this.ruleService.getOneById(this.route.snapshot.params.id)
-        .subscribe(rule => {
-          this.rule = rule;
+      promises.push(this.ruleService.getOneById(this.route.snapshot.params.id).toPromise());
+    }
+      Promise.all(promises)
+      .then(results => {
+        // assign to your local arrays here, then:
+
+        if (this.editMode) {
+          this.rule = results[6];
           this.orgRule = _.cloneDeep(this.rule);
           this.init();
-        });
-    } else {
-    }
+        } else {
+        }
+      });
   }
 
   init() {
-
   }
 
   salesLevelChange() {

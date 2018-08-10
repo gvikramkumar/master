@@ -167,6 +167,11 @@ export class UiUtil {
   confirmSave() {
     return this.genericDialog('Are you sure you want to save?', null, null, DialogType.yesNo);
   }
+
+  errorDialog(errors) {
+    return this.genericDialog('Errors', errors);
+  }
+
 }
 
 

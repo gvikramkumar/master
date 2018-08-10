@@ -10,7 +10,7 @@ import RepoBase from './repo-base';
 import {Request} from 'express';
 import ApiRequest from '../models/api-request';
 import AnyObj from '../../../shared/models/any-obj';
-import PostgresRepo from '../database/repos/postgres-repo';
+import PostgresRepo from '../../api/common/pg-lookup/postgres-repo';
 import OpenPeriodPgRepo from '../../api/common/open-period/repo';
 
 

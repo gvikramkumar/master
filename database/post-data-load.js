@@ -273,6 +273,35 @@ collectionsWithStatus.forEach(coll => {
   });
 });
 
+const rules = [];
+db.dfa_allocation_rule.find({}).forEach(rule => {
+  if (rule.sl1Select && rule.sl1Select.trim().length) {
+    const parse = parseSelect(rule.sl1Select);
+    rule.salesCritCond = parse.cond;
+    rule.salesCritChoices = parse.arr;
+  }
+  if (rule.scmsSelect && rule.scmsSelect.trim().length) {
+    const parse = parseSelect(rule.scmsSelect);
+    rule.scmsCritCond = parse.cond;
+    rule.scmsCritChoices = parse.arr;
+  }
+  if (rule.beSelect && rule.beSelect.trim().length) {
+    const parse = parseSelect(rule.beSelect);
+    rule.beCritCond = parse.cond;
+    rule.beCritChoices = parse.arr;
+  }
+  rules.push(rule);
+});
+db.dfa_allocation_rule.deleteMany({})
+db.dfa_allocation_rule.insertMany(rules);
+
+function parseSelect(str) {
+  rtn = {};
+  const idx = str.indexOf('(');
+  rtn.cond = str.substr(0, idx).trim();
+  rtn.arr = str.substr(idx).replace(/(\(|\)|'|")/g, '').trim().split(',');
+  return rtn;
+}
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
