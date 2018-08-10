@@ -57,21 +57,8 @@ internal be be/sub be (not sure page will work well with 100 choices in dropdown
       .catch(next);
   }
 
-  getRuleCriteriaChoicesLegalEntity(req, res, next) {
-    res.json([]);
-    // this.repo.getSortedListFromColumn('fpacon.xx', 'xx')
-    // .then(arr => res.json(arr))
-  // .catch(next);
-  }
-
   getRuleCriteriaChoicesInternalBeBe(req, res, next) {
     this.repo.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr')
-      .then(arr => res.json(arr))
-      .catch(next);
-  }
-
-  getRuleCriteriaChoicesInternalBeSubBe(req, res, next) {
-    this.repo.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'sub_business_entity_descr')
       .then(arr => res.json(arr))
       .catch(next);
   }
