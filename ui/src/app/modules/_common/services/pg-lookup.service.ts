@@ -36,16 +36,8 @@ export class PgLookupService extends RestBase<any> {
     return this.callMethod('getRuleCriteriaChoicesScms');
   }
 
-  getRuleCriteriaChoicesLegalEntity() {
-    return this.callMethod('getRuleCriteriaChoicesLegalEntity');
-  }
-
   getRuleCriteriaChoicesInternalBeBe() {
     return this.callMethod('getRuleCriteriaChoicesInternalBeBe');
-  }
-
-  getRuleCriteriaChoicesInternalBeSubBe() {
-    return this.callMethod('getRuleCriteriaChoicesInternalBeSubBe');
   }
 
 }
