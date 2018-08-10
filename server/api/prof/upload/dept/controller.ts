@@ -9,7 +9,7 @@ import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodPgRepo from '../../../common/open-period/repo';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
-import PostgresRepo from '../../../../lib/database/repos/postgres-repo';
+import PostgresRepo from '../../../common/pg-lookup/postgres-repo';
 
 
 @injectable()

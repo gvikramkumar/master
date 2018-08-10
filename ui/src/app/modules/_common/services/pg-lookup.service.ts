@@ -24,4 +24,28 @@ export class PgLookupService extends RestBase<any> {
     return this.callMethod('getFiscalMonths');
   }
 
+  getRuleCriteriaChoicesSalesLevel1() {
+    return this.callMethod('getRuleCriteriaChoicesSalesLevel1');
+  }
+
+  getRuleCriteriaChoicesProdTg() {
+    return this.callMethod('getRuleCriteriaChoicesProdTg');
+  }
+
+  getRuleCriteriaChoicesScms() {
+    return this.callMethod('getRuleCriteriaChoicesScms');
+  }
+
+  getRuleCriteriaChoicesLegalEntity() {
+    return this.callMethod('getRuleCriteriaChoicesLegalEntity');
+  }
+
+  getRuleCriteriaChoicesInternalBeBe() {
+    return this.callMethod('getRuleCriteriaChoicesInternalBeBe');
+  }
+
+  getRuleCriteriaChoicesInternalBeSubBe() {
+    return this.callMethod('getRuleCriteriaChoicesInternalBeSubBe');
+  }
+
 }

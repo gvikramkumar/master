@@ -1,4 +1,4 @@
-import {pgc} from '../postgres-conn';
+import {pgc} from '../../../lib/database/postgres-conn';
 import _ from 'lodash';
 import {injectable} from 'inversify';
 
@@ -9,7 +9,6 @@ export default class PostgresRepo {
   constructor() {
   }
 
-  // get: JUL FY2018	, 201812 for this year and last in descending order (latest to earliest)
   getFiscalMonths() {
     return pgc.pgdb.query(`
             select fiscal_month_name, fiscal_year_month_int from
@@ -147,6 +146,18 @@ export default class PostgresRepo {
   checkForExistenceText(table, column, value) {
     return pgc.pgdb.query(`select exists (select 1 from ${table} where upper(${column}) = $1 limit 1)`, [value.toUpperCase()])
       .then(results => results.rows[0].exists);
+  }
+
+  getSortedListFromColumn(table, column, whereClause?) {
+    let query = `select distinct ${column} as col from ${table}`;
+    if (whereClause) {
+      query += ' where ' + whereClause;
+    }
+    query += ` order by ${column}`;
+
+    return pgc.pgdb.query(query)
+      .then(results => results.rows.map(obj => obj.col))
+      .then(vals => _.sortBy(vals, _.identity));
   }
 
   getSortedUpperListFromColumn(table, column, whereClause?) {
