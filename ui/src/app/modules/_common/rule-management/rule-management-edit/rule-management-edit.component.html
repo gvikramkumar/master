@@ -25,15 +25,11 @@
   <div class="row">
     <div class="col-lg-6">
       <div class="left text-center">Matching Criteria</div>
-      <cui-select [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
-                  required="true"></cui-select>
-      <cui-select [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true"
-                  required="true"></cui-select>
+      <cui-select [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true" required="true" (selectChange)="salesLevelChange()"></cui-select>
+      <cui-select [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true" required="true"></cui-select>
       <cui-select [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS" empty="true"></cui-select>
-      <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
-                  empty="true"></cui-select>
-      <cui-select [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
-                  empty="true" required="true"></cui-select>
+      <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity" empty="true"></cui-select>
+      <cui-select [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity" empty="true" required="true"></cui-select>
     </div>
 
     <div class="col-lg-6">
@@ -47,7 +43,8 @@
           <cui-select [(ngModel)]="rule.salesMatch" [items]="conditionalOperators" label="IBE"></cui-select>
         </div>
         <div class="col-8">
-          <cui-input type="text" [(ngModel)]="rule.sl1Select" label="&nbsp;" required="true"></cui-input>
+          <cui-input type="text" [(ngModel)]="rule.sl1Select" label="&nbsp;" required="true" [hidden]="!manySalesLevels"></cui-input>
+          <cui-select [items]="salesSelect" [multiSelect]="true" [hidden]="manySalesLevels"></cui-select>
           <cui-input disabled=true type="text" label="&nbsp;" required="true"></cui-input>
           <cui-input type="text" [(ngModel)]="rule.scmsSelect" label="&nbsp;"></cui-input>
           <cui-input disabled=true type="text" label="&nbsp;"></cui-input>

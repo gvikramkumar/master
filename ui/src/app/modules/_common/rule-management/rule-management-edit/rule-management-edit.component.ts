@@ -38,6 +38,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   legalEntityLevels = ['Business Entity'];
   beMatches = ['BE', 'Sub BE'];
 
+  // SELECT options to be taken from Postgres
+  salesSelect = ['option1', 'option2'];
+  manySalesLevels = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -63,6 +67,17 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   init() {
+
+  }
+
+  salesLevelChange() {
+    if (!(this.rule.salesMatch === 'SL1' || this.rule.salesMatch === 'SL2')) {
+      // Too many values for dropdown; show text field instead
+      this.manySalesLevels = true;
+    } else {
+      // Few enough sales levels to display dropdown
+      this.manySalesLevels = false;
+    }
 
   }
 
