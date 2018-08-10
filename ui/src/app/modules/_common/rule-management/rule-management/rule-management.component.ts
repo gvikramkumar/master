@@ -3,7 +3,7 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
 import {Subject, Subscription} from 'rxjs';
-import {AllocationRule} from '../../models/allocation-rule';
+import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import * as moment from 'moment';
 import {ActivatedRoute} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
