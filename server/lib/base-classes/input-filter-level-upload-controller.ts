@@ -1,5 +1,5 @@
 import UploadController from './upload-controller';
-import PostgresRepo from '../database/repos/postgres-repo';
+import PostgresRepo from '../../api/common/pg-lookup/postgres-repo';
 import LookupRepo from '../../api/common/lookup/repo';
 import {Modules} from '../../../shared/enums';
 import SubmeasureRepo from '../../api/common/submeasure/repo';

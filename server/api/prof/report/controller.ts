@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import DollarUploadController from '../dollar-upload/controller';
 import MappingUploadController from '../mapping-upload/controller';
 import DeptUploadController from '../dept-upload/controller';
-import PostgresRepo from '../../../lib/database/repos/postgres-repo';
+import PostgresRepo from '../../common/pg-lookup/postgres-repo';
 import {ApiError} from '../../../lib/common/api-error';
 import {svrUtil} from '../../../lib/common/svr-util';
 

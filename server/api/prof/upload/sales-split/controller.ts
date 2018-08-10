@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import SalesSplitUploadRepo from '../../sales-split-upload/repo';
-import PostgresRepo from '../../../../lib/database/repos/postgres-repo';
+import PostgresRepo from '../../../common/pg-lookup/postgres-repo';
 import SalesSplitUploadTemplate from './template';
 import * as _ from 'lodash';
 import SalesSplitUploadImport from './import';

@@ -2,6 +2,7 @@ import {Schema} from 'mongoose';
 import {injectable} from 'inversify';
 import RepoBase from '../../../lib/base-classes/repo-base';
 
+
 const schema = new Schema(
   {
     moduleId: {type: Number, required: true},
@@ -14,8 +15,20 @@ const schema = new Schema(
     legalEntityMatch: String,
     beMatch: String,
     sl1Select: String,
+    salesCritCond: String,
+    salesCritChoices: [String],
+    prodSelect: String,
+    prodCritCond: String,
+    prodCritChoices: [String],
     scmsSelect: String,
+    scmsCritCond: String,
+    scmsCritChoices: [String],
+    leSelect: String,
+    leCritCond: String,
+    leCritChoices: [String],
     beSelect: String,
+    beCritCond: String,
+    beCritChoices: [String],
     status: {type: String, enum: ['A', 'I', 'P'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
