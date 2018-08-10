@@ -12,18 +12,20 @@ export class AllocationRule {
   sl1Select?: string;
   salesCritCond?: string;
   salesCritChoices?: string[];
-  prodSelect?: string;
-  prodCritCond?: string;
-  prodCritChoices?: string[];
+  prodPFSelect?: string;
+  prodPFCritCond?: string;
+  prodPFCritChoices?: string[];
+  prodBUSelect?: string;
+  prodBUCritCond?: string;
+  prodBUCritChoices?: string[];
+  prodTGSelect?: string;
+  prodTGCritCond?: string;
+  prodTGCritChoices?: string[];
   scmsSelect?: string;
   scmsCritCond?: string;
   scmsCritChoices?: string[];
-  leSelect?: string;
-  leCritCond?: string;
-  leCritChoices?: string[];
   beSelect?: string;
   beCritCond?: string;
   beCritChoices?: string[];
   status = 'I';
 }
-
