@@ -5,7 +5,7 @@ import {Submeasure} from '../../models/submeasure';
 import {AppStore} from '../../../../app/app-store';
 import {RuleService} from '../../services/rule.service';
 import {SubmeasureService} from '../../services/submeasure.service';
-import {AllocationRule} from '../../models/allocation-rule';
+import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import {Observable, of} from 'rxjs';
 import {MeasureService} from '../../services/measure.service';
 import {Measure} from '../../models/measure';

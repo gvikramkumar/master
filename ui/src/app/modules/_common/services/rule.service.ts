@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {AllocationRule} from '../models/allocation-rule';
+import {AllocationRule} from '../../../../../../shared/models/allocation-rule';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {AppStore} from '../../../app/app-store';

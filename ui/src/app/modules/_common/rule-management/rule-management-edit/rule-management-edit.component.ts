@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AllocationRule} from '../../models/allocation-rule';
+import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import {RuleService} from '../../services/rule.service';
 import {Observable, of} from 'rxjs';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
