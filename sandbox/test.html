@@ -1,18 +1,137 @@
 <html>
 <style>
-  body, html {height: 100%; padding:0; margin:0;}
-  .outer {display:flex; flex-direction: column; justify-content: flex-start; align-items: stretch; height:100%;}
-  .header {height:70px; background-color:tan; flex:0 0 auto;}
-  .hero {height:70px; background-color:blue; flex:0 0 auto;}
-  .main {background-color:plum; flex:1 0 0; display:flex; flex-direction: column; justify-content: start; align-items: stretch; overflow-y: auto;}
-  .main-content {background-color:transparent;  display:flex; flex-direction: row; justify-content: start; align-items: stretch; height:100%;}
-  .footer {height:70px; background-color:transparent; flex:0 0 auto;}
-  .outline {outline:1px solid; outline-offset: -1px;}
-  .outline-red {outline:1px solid; outline-offset: -1px; outline-color:red;}
-  .leftnav {flex:0 0 auto; width: 200px;}
-  .fin-content {flex:1 1 auto;}
+  body, html {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .outer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: 100%;
+  }
+
+  .header {
+    height: 70px;
+    background-color: tan;
+    flex: 0 0 auto;
+  }
+
+  .hero {
+    height: 70px;
+    background-color: blue;
+    flex: 0 0 auto;
+  }
+
+  .main {
+    background-color: plum;
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: stretch;
+    overflow-y: auto;
+  }
+
+  .main-content {
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: stretch;
+    height: 100%;
+  }
+
+  .footer {
+    height: 70px;
+    background-color: transparent;
+    flex: 0 0 auto;
+  }
+
+  .outline {
+    outline: 1px solid;
+    outline-offset: -1px;
+  }
+
+  .outline-red {
+    outline: 1px solid;
+    outline-offset: -1px;
+    outline-color: red;
+  }
+
+  .leftnav {
+    flex: 0 0 auto;
+    width: 200px;
+  }
+
+  .fin-content {
+    flex: 1 1 auto;
+  }
 </style>
 <body>
+
+
+<div class="form-group"
+     [ngClass]="{'form-group--helper': options.helperText || errorMessage, 'form-group--error' : error, disabled: disabled}"
+     *ngIf="type !== 'switch' && type !== 'radio' && type !== 'checkbox'">
+  <div class="form-group__text" *ngIf="type !== 'radio' && type !== 'checkbox'"><input #inputFocus
+                                                                                       *ngIf="type !== 'number' && type !== 'textarea' && type !== 'date'"
+                                                                                       id="input-{{guid}}"
+                                                                                       [(ngModel)]="model"
+                                                                                       [placeholder]="placeholder"
+                                                                                       [pattern]="options.match"
+                                                                                       type="{{type}}"
+                                                                                       [required]="options.required"
+                                                                                       [disabled]="disabled"
+                                                                                       (ngModelChange)="onChange()">
+    <input #inputFocus *ngIf="type === 'number'" id="input-{{guid}}" [(ngModel)]="model" [placeholder]="placeholder"
+           [min]="options.min" [max]="options.max" [step]="options.step" type="number" [required]="options.required"
+           [disabled]="disabled" (ngModelChange)="onChange()"> <input #inputFocus *ngIf="type === 'date'"
+                                                                      id="input-{{guid}}" [(ngModel)]="model"
+                                                                      [placeholder]="placeholder" type="{{type}}"
+                                                                      [min]="options.minDate" [max]="options.maxDate"
+                                                                      [required]="options.required"
+                                                                      [disabled]="disabled"
+                                                                      (ngModelChange)="onChange()"> <textarea
+      #inputFocus *ngIf="type === 'textarea'" id="input-{{guid}}" [(ngModel)]="model" [placeholder]="placeholder"
+      [pattern]="options.match" [rows]="options.rows" [required]="options.required" [disabled]="disabled"
+      (ngModelChange)="onChange()"></textarea> <label for="input={{guid}}" *ngIf="label">{{label}}</label>
+    <div class="required-block" *ngIf="options.required"><span class="icon-asterisk"
+                                                               title="{{options.helperText}}"></span></div>
+  </div>
+  <div *ngIf="options.helperText && (!errorMessage || !model)" class="help-block text-{{options.helperLevel}}"
+       (ngModelChange)="onChange()"><span
+    [ngClass]="{'icon-exclamation-triangle': options.helperLevel === 'warning', 'icon-error': options.helperLevel === 'danger', 'icon-info-circle': options.helperLevel === 'info', 'icon-check': options.helperLevel === 'success'}"></span>
+    <span>{{options.helperText}}</span></div>
+  <div *ngIf="model && error && errorMessage" class="help-block text-danger"><span class="icon-error"></span> <span>{{errorMessage}}</span>
+  </div>
+</div>
+<div *ngIf="type === 'radio'"><label class="radio radio--alt" *ngFor="let item of items"> <input type="radio"
+                                                                                                 [value]="item['value']"
+                                                                                                 [(ngModel)]="model"
+                                                                                                 (ngModelChange)="onChange()">
+  <span class="radio__input"></span> <span class="radio__label">{{item['name']}}</span> </label>
+  <div class="clearfix"></div>
+</div>
+<div *ngIf="type === 'checkbox'"><label class="checkbox base-margin-right" *ngFor="let item of items"> <input
+  type="checkbox" [(ngModel)]="item['selected']" (ngModelChange)="onChange()"> <span class="checkbox__input"></span>
+  <span class="checkbox__label">{{item['name']}}</span> </label></div>
+<div *ngIf="options && model && options.maxLength && (type === 'text' || type === 'textarea')"><span
+  class="pull-right half-margin-right text-muted">{{maxLengthString}}</span>
+  <div class="clearfix"></div>
+</div>
+<label class="switch" *ngIf="type === 'switch'"> <input type="checkbox" [(ngModel)]="model"
+                                                        (ngModelChange)="onChange()"> <span class="switch__input"> <span
+  class="{{options.leftIcon}}" *ngIf="options.leftIcon"></span> <span class="{{options.rightIcon}}"
+                                                                      *ngIf="options.rightIcon"></span> </span> <span
+  class="switch__label" *ngIf="label">{{label}}</span> </label>
+
+
+
+
 
 <div class="outer outline">
 
@@ -24,16 +143,15 @@
     <div class="main-content">
       <div class="leftnav outline">left</div>
       <div class="fin-content">
-          content
-          lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
-          lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
-          lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+        content
+        lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+        lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+        lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
       </div>
     </div>
 
     <div class="footer outline"></div>
   </div>
-
 
 
 </div>

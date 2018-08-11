@@ -1,20 +1,12 @@
 import * as _ from 'lodash';
 
 
-console.log(createSelect('in', ['one', 'two']));
+const str = `one
+two`;
+const a = {word: str}
 
-function createSelect(cond, choices) {
-  let sql = ` ${cond} ( `;
-  choices.forEach((choice, idx) => {
-    sql += `'${choice.trim()}'`;
-    if (idx < choices.length - 1) {
-      sql += ', ';
-    }
-  });
-  sql += ` ) `;
-  return sql;
-}
-
+console.log(str);
+console.log(JSON.stringify(a));
 
 /*
 const arr1 = [

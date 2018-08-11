@@ -1,0 +1,22 @@
+<div style="padding: 40px; overflow:auto;">
+<form #form="ngForm" class="my-form">
+  <input (blur)="blur()">
+  <cui-input name="name" label="name" #name="ngModel" [(ngModel)]="user.name" [options]="nameOpts"></cui-input>
+  <cui-input name="name2" label="name2" #name2="ngModel" [(ngModel)]="user.name2" [options]="nameOpts2"></cui-input>
+  <cui-input name="age" label="age" #age="ngModel" [(ngModel)]="user.age"></cui-input>
+  <cui-select name="gender" label="gender" #gender="ngModel" [(ngModel)]="user.gender" [items]="genders"
+  optionsKey="name" optionsValue="value" required></cui-select>
+  <button type="submit" cuiButton (click)="submit()">Submit</button>
+  <button type="button" cuiButton color="secondary" (click)="reset()">Reset</button>
+</form>
+<div>name.valid: {{name.valid}}</div>
+<div>name2.valid: {{name2.valid}}</div>
+<div>age.valid: {{age.valid}}</div>
+<div>gender.valid: {{gender.valid}}</div>
+<div>form.valid: {{form.valid}}</div>
+<div>form.submitted: {{form.submitted}}</div>
+<pre>form.errors: {{form.errors|json}}</pre>
+
+</div>
+
+

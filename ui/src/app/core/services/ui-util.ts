@@ -16,6 +16,14 @@ export class UiUtil {
   constructor(private store: AppStore, private dialogService: CuiDialogService) {
   }
 
+  
+  static triggerBlur(selector) {
+    const query = `${selector} input, ${selector} select, my-form textarea`;
+    _.forEach(document.querySelectorAll(query), elem => {
+      elem.dispatchEvent(new Event('blur'));
+    });
+  }
+  
   static getStatusText(status) {
     switch (status) {
       case 'A':
@@ -31,7 +39,7 @@ export class UiUtil {
       throw new Error(`getStatusText: status doesn't exist: ${status}`);
     }
   }
-
+  
   static statusIsActive(val) {
     return val === 'A';
   }

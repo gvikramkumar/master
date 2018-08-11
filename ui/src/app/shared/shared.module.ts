@@ -21,6 +21,7 @@ import { TestComponent } from './components/test/test.component';
 import { GenericDialogComponent } from './components/generic-dialog/generic-dialog.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import {SwitchComponent} from './components/switch/switch.component';
+import { TestValidationComponent } from './components/test-validation/test-validation.component';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import {SwitchComponent} from './components/switch/switch.component';
     TestComponent,
     CheckboxComponent,
     SwitchComponent,
+    TestValidationComponent,
   ],
 
   declarations: [
@@ -71,6 +73,7 @@ import {SwitchComponent} from './components/switch/switch.component';
     GenericDialogComponent,
     CheckboxComponent,
     SwitchComponent,
+    TestValidationComponent,
   ],
   entryComponents: [
     ErrorModalComponent,
