@@ -1,7 +1,19 @@
 import * as _ from 'lodash';
 
 
-console.log(_.range(0, 5));
+console.log(createSelect('in', ['one', 'two']));
+
+function createSelect(cond, choices) {
+  let sql = ` ${cond} ( `;
+  choices.forEach((choice, idx) => {
+    sql += `'${choice.trim()}'`;
+    if (idx < choices.length - 1) {
+      sql += ', ';
+    }
+  });
+  sql += ` ) `;
+  return sql;
+}
 
 
 /*

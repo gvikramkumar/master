@@ -14,7 +14,19 @@ export const svrUtil = {
   streamToBuffer,
   bufferToStream,
   checkParams,
-  setSchemaAdditions
+  setSchemaAdditions,
+  sortedListNotExists
+};
+
+function sortedListNotExists(values, value) {
+  return _.sortedIndexOf(values, value) === -1;
+}
+
+function sortedListNotExistsUpper(values, value) {
+  if (typeof value === 'string') {
+    value = value.toUpperCase();
+  }
+  return sortedListNotExists(values, value);
 }
 
 function trimStringProperties(obj) {
