@@ -24,6 +24,7 @@ import {SwitchComponent} from './components/switch/switch.component';
 import { TestValidationComponent } from './components/test-validation/test-validation.component';
 import {NotInListValidator} from './validators/not-in-list.validator';
 import {AsyncNotInListValidator} from './validators/async-not-in-list.validator';
+import { ErrorFlashDirective } from './directives/error-flash.directive';
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import {AsyncNotInListValidator} from './validators/async-not-in-list.validator'
     TestValidationComponent,
     NotInListValidator,
     AsyncNotInListValidator,
+    ErrorFlashDirective,
   ],
 
   declarations: [
@@ -80,6 +82,7 @@ import {AsyncNotInListValidator} from './validators/async-not-in-list.validator'
     TestValidationComponent,
     NotInListValidator,
     AsyncNotInListValidator,
+    ErrorFlashDirective,
   ],
   entryComponents: [
     ErrorModalComponent,

@@ -64,10 +64,6 @@ export class TestValidationComponent implements OnInit {
     return Promise.resolve(this.list);
   }
 
-  blur() {
-    console.log('blur tt');
-  }
-
   submit() {
     UiUtil.triggerBlur('.my-form');
     /*
@@ -80,6 +76,8 @@ export class TestValidationComponent implements OnInit {
   }
 
 /*
+  // these methods can go here or in a directive file. If only needed on this one page, then just put it
+  // on the page.
   notInListValidator(list: string[]): ValidatorFn {
     return ((control: AbstractControl): {[key: string]: any} | null => {
       if (control.value && list.indexOf(control.value.toUpperCase()) === -1) {
@@ -92,6 +90,14 @@ export class TestValidationComponent implements OnInit {
     });
   }
 */
+
+  blur() {
+    console.log('blur tt');
+  }
+
+  reset() {
+
+  }
 
 
 
