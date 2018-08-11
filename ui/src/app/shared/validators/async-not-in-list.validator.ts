@@ -9,9 +9,16 @@ import {
   Validators
 } from '@angular/forms';
 
-export function asyncNotInListValidator(plist: Promise<string[]>): AsyncValidatorFn {
+export function asyncNotInListValidator(methodName: string): AsyncValidatorFn {
   return ((control: AbstractControl): Promise<ValidationErrors | null> => {
-    return plist
+    let promise;
+    switch (methodName) {
+      case 'mylist':
+        console.log('getting mylist');
+        promise = Promise.resolve(['FIVE', 'SIX']);
+        break;
+    }
+    return promise
       .then(list => {
         if (control.value && list.indexOf(control.value.toUpperCase()) === -1) {
           return {notInList: {value: control.value}};
@@ -27,10 +34,10 @@ export function asyncNotInListValidator(plist: Promise<string[]>): AsyncValidato
   providers: [{provide: NG_ASYNC_VALIDATORS, useExisting: AsyncNotInListValidator, multi: true}]
 })
 export class AsyncNotInListValidator implements AsyncValidator {
-  @Input() plist: Promise<string[]>;
+  @Input('finAsyncNotInList') methodName: string;
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> {
-    return this.plist ? <any>asyncNotInListValidator(this.plist)(control)
+    return this.methodName ? <any>asyncNotInListValidator(this.methodName)(control)
       : Promise.resolve(null);
   }
 }

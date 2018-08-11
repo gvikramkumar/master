@@ -9,7 +9,7 @@
     <div class="form-group" [class.form-group--error]="ng_name2.invalid && (form.submitted || ng_name2.touched || ng_name2.dirty)">
       <div class="form-group__text">
         <input autocomplete="off" name="name2" #ng_name2="ngModel" id="input-state-error" [(ngModel)]="user.name2"
-               required minlength="2" finAsyncNotInList [plist]="getList()" [ngModelOptions]="{updateOn: 'blur'}">
+               required minlength="2" finAsyncNotInList="mylist" [ngModelOptions]="{updateOn: 'blur'}">
 <!--
         <input autocomplete="off" name="name2" #ng_name2="ngModel" id="input-state-error" [(ngModel)]="user.name2"
                required minlength="2" finNotInList [list]="list">
