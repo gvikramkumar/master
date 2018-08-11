@@ -53,14 +53,14 @@ export class TestValidationComponent implements OnInit {
     this.ng_name2.control.setValidators([
       Validators.required,
       Validators.minLength(2)]);
+      // notInListValidator(this.list)]);
 
     this.ng_name2.control.setAsyncValidators([asyncNotInListValidator(Promise.resolve(this.list))]);
-
-      // notInListValidator(this.list)]);
 */
   }
 
   getList() {
+    console.log('getlist');
     return Promise.resolve(this.list);
   }
 
