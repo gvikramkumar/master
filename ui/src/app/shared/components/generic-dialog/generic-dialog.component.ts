@@ -30,6 +30,10 @@ submitText: string;
         this.submitText = 'OK';
         break;
     }
+
+    if (typeof this.data.data === 'object') {
+      this.data.data = JSON.stringify(this.data.data, null, 2);
+    }
     // this allows us to use html in message and data sections
 /*
     setTimeout(() => {

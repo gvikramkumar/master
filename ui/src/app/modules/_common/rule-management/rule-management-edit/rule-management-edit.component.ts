@@ -64,7 +64,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         // assign to your local arrays here, then:
 
         if (this.editMode) {
-          this.rule = results[6];
+          this.rule = results[4];
           this.orgRule = _.cloneDeep(this.rule);
           this.init();
         } else {
