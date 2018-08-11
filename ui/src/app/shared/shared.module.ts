@@ -22,6 +22,8 @@ import { GenericDialogComponent } from './components/generic-dialog/generic-dial
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import {SwitchComponent} from './components/switch/switch.component';
 import { TestValidationComponent } from './components/test-validation/test-validation.component';
+import {NotInListValidator} from './validators/not-in-list.validator';
+import {AsyncNotInListValidator} from './validators/async-not-in-list.validator';
 
 @NgModule({
   imports: [
@@ -55,6 +57,8 @@ import { TestValidationComponent } from './components/test-validation/test-valid
     CheckboxComponent,
     SwitchComponent,
     TestValidationComponent,
+    NotInListValidator,
+    AsyncNotInListValidator,
   ],
 
   declarations: [
@@ -74,6 +78,8 @@ import { TestValidationComponent } from './components/test-validation/test-valid
     CheckboxComponent,
     SwitchComponent,
     TestValidationComponent,
+    NotInListValidator,
+    AsyncNotInListValidator,
   ],
   entryComponents: [
     ErrorModalComponent,

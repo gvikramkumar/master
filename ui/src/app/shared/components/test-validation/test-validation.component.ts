@@ -1,11 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CuiInputOptions} from '@cisco-ngx/cui-components';
-import {NgForm} from '@angular/forms';
+import {CuiInputComponent, CuiInputOptions} from '@cisco-ngx/cui-components';
+import {AbstractControl, AsyncValidatorFn, NgForm, NgModel, ValidatorFn, Validators} from '@angular/forms';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../core/services/ui-util';
+import {Observable, of} from 'rxjs';
+import {notInListValidator} from '../../validators/not-in-list.validator';
+import {asyncNotInListValidator} from '../../validators/async-not-in-list.validator';
 
 class User {
-  name: string;
+  name = 'd';
   name2: string;
   age?: number;
   gender: 1 | 2;
@@ -18,6 +21,7 @@ class User {
 })
 export class TestValidationComponent implements OnInit {
   @ViewChild('form') form: NgForm;
+  @ViewChild('ng_name2') ng_name2: NgModel;
   user = new User();
   genders = [
     {name: 'male', value: 1},
@@ -25,9 +29,7 @@ export class TestValidationComponent implements OnInit {
   ];
   nameOpts = new CuiInputOptions();
   nameOpts2 = new CuiInputOptions();
-
-
-
+  list = ['THREE', 'FOUR'];
 
   constructor() {
     this.nameOpts.maxLength = 3;
@@ -46,17 +48,51 @@ export class TestValidationComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngAfterViewInit() {
+/*
+    this.ng_name2.control.setValidators([
+      Validators.required,
+      Validators.minLength(2)]);
+
+    this.ng_name2.control.setAsyncValidators([asyncNotInListValidator(Promise.resolve(this.list))]);
+
+      // notInListValidator(this.list)]);
+*/
+  }
+
+  getList() {
+    return Promise.resolve(this.list);
+  }
+
   blur() {
-    console.log('myflug')
+    console.log('blur tt');
   }
 
   submit() {
     UiUtil.triggerBlur('.my-form');
+    /*
+        // this markes as touched but cui-input only listens to blur event so useless for cui-input. Would work for
+        // other controls, but they can just use form.submitted, so why bother.
+        _.forEach(this.form.controls, control => {
+          control.markAsTouched();
+        });
+    */
   }
 
-  reset() {
-
+/*
+  notInListValidator(list: string[]): ValidatorFn {
+    return ((control: AbstractControl): {[key: string]: any} | null => {
+      if (control.value && list.indexOf(control.value.toUpperCase()) === -1) {
+        console.log('return error');
+        return {'notInList': {value: control.value}};
+      } else {
+        console.log('return null');
+        return null;
+      }
+    });
   }
+*/
+
 
 
 }
