@@ -15,7 +15,7 @@ export function asyncNotInListValidator(methodName: string): AsyncValidatorFn {
     switch (methodName) {
       case 'mylist':
         console.log('getting mylist');
-        promise = Promise.resolve(['FIVE', 'SIX']);
+        promise = Promise.resolve(['ONE', 'TWO']);
         break;
     }
     return promise

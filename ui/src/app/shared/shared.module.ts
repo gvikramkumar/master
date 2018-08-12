@@ -25,6 +25,7 @@ import { TestValidationComponent } from './components/test-validation/test-valid
 import {NotInListValidator} from './validators/not-in-list.validator';
 import {AsyncNotInListValidator} from './validators/async-not-in-list.validator';
 import { ErrorFlashDirective } from './directives/error-flash.directive';
+import { ValidationInputComponent } from './components/validation-input/validation-input.component';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { ErrorFlashDirective } from './directives/error-flash.directive';
     NotInListValidator,
     AsyncNotInListValidator,
     ErrorFlashDirective,
+    ValidationInputComponent,
   ],
 
   declarations: [
@@ -83,6 +85,7 @@ import { ErrorFlashDirective } from './directives/error-flash.directive';
     NotInListValidator,
     AsyncNotInListValidator,
     ErrorFlashDirective,
+    ValidationInputComponent,
   ],
   entryComponents: [
     ErrorModalComponent,

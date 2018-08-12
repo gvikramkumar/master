@@ -1,15 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CuiInputComponent, CuiInputOptions} from '@cisco-ngx/cui-components';
-import {AbstractControl, AsyncValidatorFn, NgForm, NgModel, ValidatorFn, Validators} from '@angular/forms';
-import * as _ from 'lodash';
+import {CuiInputOptions} from '@cisco-ngx/cui-components';
+import {NgForm, NgModel} from '@angular/forms';
 import {UiUtil} from '../../../core/services/ui-util';
-import {Observable, of} from 'rxjs';
 import {notInListValidator} from '../../validators/not-in-list.validator';
 import {asyncNotInListValidator} from '../../validators/async-not-in-list.validator';
 
 class User {
-  name = 'd';
+  name: string;
   name2: string;
+  name3: string;
   age?: number;
   gender: 1 | 2;
 }
@@ -29,7 +28,25 @@ export class TestValidationComponent implements OnInit {
   ];
   nameOpts = new CuiInputOptions();
   nameOpts2 = new CuiInputOptions();
-  list = ['THREE', 'FOUR'];
+  list = ['FIVE', 'SIX'];
+/*
+  name3Opts = {
+    validations: [{
+      name: 'notInList',
+      message: 'Value is not in xxx list',
+      fcn: notInListValidator(this.list)
+    }]
+  };
+*/
+  name3Opts = {
+    asyncValidations: [{
+      name: 'notInList',
+      message: 'Value is not in xxx list',
+      fcn: asyncNotInListValidator('mylist')
+    }]
+  };
+  disabled = false;
+  RegExp = RegExp
 
   constructor() {
     this.nameOpts.maxLength = 3;
@@ -65,6 +82,7 @@ export class TestValidationComponent implements OnInit {
   }
 
   submit() {
+    console.log('submit called');
     UiUtil.triggerBlur('.my-form');
     /*
         // this markes as touched but cui-input only listens to blur event so useless for cui-input. Would work for

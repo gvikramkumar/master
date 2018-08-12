@@ -24,6 +24,19 @@
       </div>
     </div>
 
+    <label><input name="disabled" type="checkbox" [(ngModel)]="disabled"> disabled</label>
+    <fin-input name="name3" [(model)]="user.name3" label="Name Three"
+               [disabled]="disabled"
+               [required]="true"
+               [minlength]="3"
+               [form]="form"
+    autocomplete="off"
+    [options]="name3Opts"
+    >
+      <!--[ngModelOptions]="{updateOn: 'blur'}"-->
+    </fin-input>
+    <div>user.name3: {{user.name3}}</div>
+
     <cui-input name="age" label="age" #age="ngModel" [(ngModel)]="user.age"></cui-input>
   <cui-select name="gender" label="gender" #gender="ngModel" [(ngModel)]="user.gender" [items]="genders"
   optionsKey="name" optionsValue="value" required></cui-select>
