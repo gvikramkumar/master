@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {AsyncValidatorFn, NgForm, NgModel, ValidatorFn, Validators} from '@angular/forms';
 import AnyObj from '../../../../../../shared/models/any-obj';
 
@@ -26,27 +26,30 @@ export class ValidationInputOptions {
 })
 export class ValidationInputComponent {
   validations: InputValidation[] = [];
+  opts = new ValidationInputOptions();
+  @Input() form: NgForm;
+  @ViewChild('input') input: HTMLInputElement;
+  @ViewChild('ngm') ngm: NgModel;
   @Input() name: string;
   @Input() model;
   @Output() modelChange = new EventEmitter();
   @Input() label: string;
-  @Input () autocomplete: string;
+  @Input() autocomplete: 'on' | 'off';
+  @Input() autofocus: boolean;
   @Input() ngModelOptions;
   @Input() options: ValidationInputOptions;
   @Input() disabled: boolean;
-  @Input () required: boolean;
-  @Input ('minlength') minLength: number;
-  @Input ('maxlength') maxLength: number;
-  @Input () email: boolean;
-  @Input () pattern: string | RegExp;
-  @Input() form: NgForm;
-  @ViewChild('ngm') ngm: NgModel;
-  opts = new ValidationInputOptions();
+  @Input() required: boolean;
+  @Input('minlength') minLength: number;
+  @Input('maxlength') maxLength: number;
+  @Input() email: boolean;
+  @Input() pattern: string | RegExp;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private changeDetectorRef: ChangeDetectorRef, private elemRef: ElementRef) { }
 
   ngAfterViewInit() {
     Object.assign(this.opts, this.options);
+
     if (this.required) {
       this.validations.push({name: 'required', message: null, fcn: Validators.required});
     }
