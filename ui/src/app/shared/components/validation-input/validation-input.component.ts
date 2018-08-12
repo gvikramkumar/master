@@ -26,20 +26,20 @@ export class ValidationInputOptions {
 })
 export class ValidationInputComponent {
   validations: InputValidation[] = [];
-  @Input('name') name: string;
-  @Input('model') model;
-  @Output('modelChange') modelChange = new EventEmitter();
-  @Input('label') label: string;
-  @Input ('autocomplete') autocomplete: string;
-  @Input('ngModelOptions') ngModelOptions;
-  @Input('options') options: ValidationInputOptions;
-  @Input('disabled') disabled: boolean;
-  @Input ('required') required: boolean;
+  @Input() name: string;
+  @Input() model;
+  @Output() modelChange = new EventEmitter();
+  @Input() label: string;
+  @Input () autocomplete: string;
+  @Input() ngModelOptions;
+  @Input() options: ValidationInputOptions;
+  @Input() disabled: boolean;
+  @Input () required: boolean;
   @Input ('minlength') minLength: number;
   @Input ('maxlength') maxLength: number;
-  @Input ('email') email: boolean;
-  @Input ('pattern') pattern: string | RegExp;
-  @Input('form') form: NgForm;
+  @Input () email: boolean;
+  @Input () pattern: string | RegExp;
+  @Input() form: NgForm;
   @ViewChild('ngm') ngm: NgModel;
   opts = new ValidationInputOptions();
 
