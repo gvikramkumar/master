@@ -1,0 +1,62 @@
+<div style="padding: 40px; overflow:auto;">
+
+  <form #form="ngForm" class="my-form">
+  <cui-input name="name" label="name" #name="ngModel" [(ngModel)]="user.name" [options]="nameOpts"></cui-input>
+    <div *ngIf="name.touched">name is touched</div>
+    <div *ngIf="name.dirty">name is dirty</div>
+    <div *ngIf="form.submitted">form is submitted</div>
+
+    <div class="form-group" [class.form-group--error]="ng_name2.invalid && (form.submitted || ng_name2.touched || ng_name2.dirty)">
+      <div class="form-group__text">
+        <input autocomplete="off" name="name2" #ng_name2="ngModel" id="input-state-error" [(ngModel)]="user.name2"
+               required minlength="2" finAsyncNotInList="mylist" [ngModelOptions]="{updateOn: 'blur'}">
+<!--
+        <input autocomplete="off" name="name2" #ng_name2="ngModel" id="input-state-error" [(ngModel)]="user.name2"
+               required minlength="2" finNotInList [list]="list">
+-->
+        <!--<input name="name2" #ng_name2="ngModel" id="input-state-error" [(ngModel)]="user.name2">-->
+        <label for="input-state-error">Name Two</label>
+      </div>
+      <div class="help-block text-danger" role="alert">
+        <span *ngIf="ng_name2.errors?.required && (form.submitted || ng_name2.touched || ng_name2.dirty)">required</span>
+        <span *ngIf="ng_name2.errors?.minlength && (form.submitted || ng_name2.touched || ng_name2.dirty)">min length is 3</span>
+        <span *ngIf="ng_name2.errors?.notInList && (form.submitted || ng_name2.touched || ng_name2.dirty)">Value not in list</span>
+      </div>
+    </div>
+
+    <label><input name="disabled" type="checkbox" [(ngModel)]="disabled"> disabled</label>
+    <fin-input name="name3" [(model)]="user.name3" label="Name Three"
+               [disabled]="disabled"
+               [required]="true"
+               [minlength]="3"
+               [form]="form"
+               autocomplete="off"
+               [options]="name3Opts"
+    >
+      <!--[ngModelOptions]="{updateOn: 'blur'}"-->
+    </fin-input>
+    <div>user.name3: {{user.name3}}</div>
+
+    <cui-input name="age" label="age" #age="ngModel" [(ngModel)]="user.age"></cui-input>
+  <cui-select name="gender" label="gender" #gender="ngModel" [(ngModel)]="user.gender" [items]="genders"
+  optionsKey="name" optionsValue="value" required></cui-select>
+  <button type="submit" finErrorFlash cuiButton (click)="submit()">Submit</button>
+  <button type="button" cuiButton color="secondary" (click)="reset()">Reset</button>
+</form>
+  <div>name.valid: {{name.valid}}</div>
+  <div>name.touched: {{name.touched}}</div>
+<div>name2.valid: {{ng_name2.valid}}</div>
+  <div>name2.touched: {{ng_name2.touched}}</div>
+  <div>name2.dirty: {{ng_name2.dirty}}</div>
+  <pre>name2.errors: {{ng_name2.errors|json}}</pre>
+<div>age.valid: {{age.valid}}</div>
+<div>gender.valid: {{gender.valid}}</div>
+<div>form.valid: {{form.valid}}</div>
+<div>form.submitted: {{form.submitted}}</div>
+<pre>form.errors: {{form.errors|json}}</pre>
+
+
+
+</div>
+
+
