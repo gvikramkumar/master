@@ -1,16 +1,15 @@
-
 <div class="form-group" [class.form-group--error]="ngm.invalid && (form.submitted || ngm.touched || ngm.dirty)">
 
   <div class="form-group__text">
 
-    <input name="{{name}}"
+    <input #input name="{{name}}"
            #ngm="ngModel"
            [(ngModel)]="model"
            (ngModelChange)="modelChange.emit(model)"
            [ngModelOptions]="ngModelOptions"
            [disabled]="disabled"
-    [autocomplete]="autocomplete"
-    updateon="submit">
+           [autocomplete]="autocomplete"
+           [autofocus]="autofocus">
 
     <label>{{label}}</label>
 
@@ -26,12 +25,12 @@
     </div>
   </div>
 
-<!--
-  <div>valid: {{ngm.valid}}</div>
-  <div>touched: {{ngm.touched}}</div>
-  <div>dirty: {{ngm.dirty}}</div>
-  <div>model: {{model}}</div>
-  <pre>errors: {{ngm.errors|json}}</pre>
--->
+  <!--
+    <div>valid: {{ngm.valid}}</div>
+    <div>touched: {{ngm.touched}}</div>
+    <div>dirty: {{ngm.dirty}}</div>
+    <div>model: {{model}}</div>
+    <pre>errors: {{ngm.errors|json}}</pre>
+  -->
 
 </div>
