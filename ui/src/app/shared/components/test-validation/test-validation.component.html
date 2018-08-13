@@ -24,8 +24,9 @@
       </div>
     </div>
 
-    <label><input name="disabled" type="checkbox" [(ngModel)]="disabled"> disabled</label>
-    <fin-input name="name3" [(model)]="user.name3" label="Name Three"
+    label name3: <input name="label-name3" [(ngModel)]="labelName3"><br>
+    <label>name3 disabled <input name="disabled" type="checkbox" [(ngModel)]="disabled"></label><br>
+    <fin-input name="name3" [(model)]="user.name3" [label]="labelName3"
                [disabled]="disabled"
                [required]="true"
                [autofocus]="true"

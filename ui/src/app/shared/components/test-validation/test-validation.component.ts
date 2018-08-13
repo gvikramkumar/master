@@ -29,6 +29,7 @@ export class TestValidationComponent implements OnInit {
   nameOpts = new CuiInputOptions();
   nameOpts2 = new CuiInputOptions();
   list = ['FIVE', 'SIX'];
+  labelName3 = 'Name Three';
 /*
   name3Opts = {
     validations: [{

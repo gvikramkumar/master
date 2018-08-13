@@ -92,6 +92,19 @@ export class ValidationInputComponent {
     }
 
     this.changeDetectorRef.detectChanges();
+    this.addAsteriskToRequiredLabel();
+  }
+
+  addAsteriskToRequiredLabel() {
+    if (this.required && this.label && this.label[this.label.length - 1] !== '*') {
+      this.label += '*';
+    }
+  }
+
+  ngOnChanges(changes) {
+    if (changes.label) {
+      this.addAsteriskToRequiredLabel();
+    }
   }
 
 }
