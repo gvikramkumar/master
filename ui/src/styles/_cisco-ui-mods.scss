@@ -1,5 +1,18 @@
 
 
+
+// remove the stopsign icon in <input> with form-group--error
+.fin.cui .form-group--error .form-group__text:after,
+.fin.cui .form-group--error .form-group__text.select:after {
+  content: '';
+}
+
+.fin.cui .btn.focus, .cui .btn.error-flash:focus {
+  outline: none;
+  box-shadow: 0 0 2px 2px $danger;
+  border: 1px solid #ffffff;
+}
+
 .fin.cui .business-upload-comp .form-group.radio-list {
   margin-bottom: 30px;
 }

@@ -1,8 +1,12 @@
 import * as _ from 'lodash';
 
 
-console.log(_.range(0, 5));
+const str = `one
+two`;
+const a = {word: str}
 
+console.log(str);
+console.log(JSON.stringify(a));
 
 /*
 const arr1 = [
