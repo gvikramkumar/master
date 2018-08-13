@@ -21,6 +21,7 @@ const collections = [
   'prof_mapping_upload',
   'prof_sales_split_pct',
   'prof_swalloc_manual_mix',
+  'dfa_rule_map'
 ];
 
 collections.forEach(coll => {
