@@ -1,8 +1,8 @@
-import {ApplicationRef, NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {NavigationEnd, Router, RouterModule, Routes} from "@angular/router";
-import {InitializationGuard} from "../core/guards/initialization.guard";
-import {CoreModule} from "../core/core.module";
+import {ApplicationRef, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NavigationEnd, Router, RouterModule, Routes} from '@angular/router';
+import {InitializationGuard} from '../core/guards/initialization.guard';
+import {CoreModule} from '../core/core.module';
 import {HomeComponent} from '../shared/components/home/index';
 import {AppStore} from './app-store';
 import {PageNotFoundComponent} from '../shared/components/page-not-found/page-not-found.component';

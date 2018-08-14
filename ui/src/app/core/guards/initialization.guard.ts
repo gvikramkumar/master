@@ -7,7 +7,7 @@ import {AppStore} from '../../app/app-store';
 import {TestService} from '../services/test.service';
 import {BreakpointService} from '../services/breakpoint.service';
 import {ModuleService} from '../../modules/_common/services/module.service';
-import {User} from '../../modules/_common/models/user';
+import {UserService} from '../services/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,8 @@ export class InitializationGuard implements CanActivate {
               private init3: Init3,
               private init4: Init4,
               private init5: Init5,
-              private testService: TestService) {
+              private testService: TestService,
+              private userService: UserService) {
     // testService.causeError().subscribe();
   }
 
@@ -69,14 +70,13 @@ export class InitializationGuard implements CanActivate {
   init() {
     // console.log('initguard start');
 
-    this.store.user = new User('jodoe', 'John Doe', []);
-
     return Promise.all([
-      this.moduleService.refreshStore()
+      this.moduleService.refreshStore(),
+      this.userService.refreshUser(),
     ])
       .then(results => {
         this.afterInit();
-        this.store.initialized = true;
+        this.store.pubInitialized();
         console.log('app initialized');
         return true;
       })
