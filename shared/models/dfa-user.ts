@@ -1,10 +1,19 @@
+
 import * as _ from 'lodash';
 
-export class User {
+export default class DfaUser {
 
-  constructor(public id: string, public name: string, public roles: string[]) {
+  constructor(
+    public id: string,
+    public firstName: string,
+    public lastName: string,
+    public email: string,
+    public roles: string[] = []) {
 
     this.roles = [
+      'api:access',
+      'api:manage',
+      'api:admin',
       'dfa:access',
       'prof:access',
       'prof-bu:access',
@@ -13,12 +22,19 @@ export class User {
       'prof-rm:manage',
       'prof-sm:access',
       'prof-sm:manage'
-    ]
+    ];
   }
 
-  isAuthorized(_allowedRoles: string) {
+  get fullName() {
+    return this.firstName + ' ' + this.lastName;
+  }
+
+  isAuthorized(_allowedRoles) {
     const allowedRoles = _allowedRoles.split(',').map(s => s.toLowerCase().trim());
     return _.intersection(allowedRoles, this.roles).length > 0;
   }
 
 }
+
+
+

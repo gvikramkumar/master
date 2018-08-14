@@ -1,17 +1,16 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {Subject, BehaviorSubject} from 'rxjs';
 import {StoreBase} from '../core/base-classes/store-base';
 import {ObservableMedia} from '@angular/flex-layout';
 import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
 import {first} from 'rxjs/operators';
 import * as _ from 'lodash';
 import AnyObj from '../../../../shared/models/any-obj';
-import {Subject} from 'rxjs/Subject';
 import {DfaModule} from '../modules/_common/models/module';
-import {User} from '../modules/_common/models/user';
 import {UiUtil} from '../core/services/ui-util';
 import {uiConst} from '../core/models/ui-const';
 import {BreakpointChange} from '../core/services/breakpoint.service';
+import DfaUser from '../../../../shared/models/dfa-user';
 
 /* tslint:disable:member-ordering*/
 
@@ -25,9 +24,16 @@ import {BreakpointChange} from '../core/services/breakpoint.service';
  * (has initial value so always returns last value on subscribe)
  */
 export class AppStore extends StoreBase {
-  user = new User('jodoe', 'John Doe', []);
   initialBreakpoint: string;
   showSpinner = false;
+
+  user: DfaUser;
+  user$ = new Subject<DfaUser>();
+  subUser = this.user$.subscribe.bind(this.user$);
+  pubUser(val) {
+    this.user = val;
+    this.user$.next(this.user);
+  }
 
   headerOptions = new CuiHeaderOptions({
     showBrandingLogo: true,
@@ -35,8 +41,9 @@ export class AppStore extends StoreBase {
     brandingTitle: '',
     showMobileNav: true,
     title: 'Digitized Financial Allocations',
-    username: this.user.name,
+    username: '',
   });
+
 
   constructor(private media: ObservableMedia) {
     super();
@@ -49,23 +56,28 @@ export class AppStore extends StoreBase {
       .subscribe(change => {
         this.initialBreakpoint = change.mqAlias;
       });
+    this.subUser(user => {
+      this.headerOptions.username = user.fullName;
+      // this.headerOptions = Object.assign({}, this.headerOptions);
+    });
   }
 
-  authenticated = false;
-  authenticated$ = new BehaviorSubject<boolean>(this.authenticated);
-  subAuthenticated = this.authenticated$.subscribe.bind(this.authenticated$);
-  pubAuthenticated(val) {
-    this.authenticated = val;
-    this.authenticated$.next(this.authenticated);
+  authorized = false;
+  authorized$ = new Subject<boolean>();
+  pubAuthorized(val) {
+    this.authorized = val;
+    this.authorized$.next(val);
   }
 
   initialized = false;
-  initialized$ = new BehaviorSubject<boolean>(this.initialized);
-  subInitialized = this.initialized$.subscribe.bind(this.initialized$);
-  pubInitialized(val) {
-    this.initialized = val;
-    this.initialized$.next(this.initialized);
+  initialized$ = new Subject<boolean>();
+  initializedP = this.initialized$.asObservable().toPromise();
+  pubInitialized() {
+    this.initialized = true;
+    this.initialized$.next(true);
+    this.initialized$.complete();
   }
+
 
   modules: DfaModule[] = [];
   nonAdminModules: DfaModule[] = [];

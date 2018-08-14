@@ -1,12 +1,60 @@
 import * as _ from 'lodash';
+import {Subject, BehaviorSubject} from 'rxjs';
+import {take, first} from 'rxjs/operators';
 
 
-const str = `one
-two`;
-const a = {word: str}
+let init = false;
+const init$ = new BehaviorSubject<boolean>(init);
+// const init$ = new Subject<number>();
+const subInit = init$.subscribe.bind(init$);
+function pubInit(val) {
+  if (val) {
+    init = val;
+    init$.next(init);
+    init$.complete();
+  }
+}
 
-console.log(str);
-console.log(JSON.stringify(a));
+const promise = init$.asObservable().toPromise();
+
+  promise.then(val => {
+    console.log('init1', val);
+  });
+
+  setTimeout(() => {
+    pubInit(true);
+
+    setTimeout(() => {
+      promise.then(val => console.log('init2', val));
+    }, 1000);
+
+  }, 1000);
+
+
+/*
+const promise = init$.asObservable().toPromise();
+
+pubInit(true);
+
+promise.then(val => {
+  console.log('init', val);
+});
+
+
+setTimeout(() => {
+
+  const promise2 = init$.asObservable().toPromise()
+    .then(val => {
+      console.log('init2', val);
+    });
+}, 1000);
+
+*/
+
+
+
+
+
 
 /*
 const arr1 = [

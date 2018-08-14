@@ -9,7 +9,6 @@ import cors from 'cors';
 import {NamedApiError} from './lib/common/named-api-error';
 import notFound from './lib/middleware/not-found';
 import errorHandler from './lib/middleware/error-handler';
-import User from './lib/models/user';
 import {authorize} from './lib/middleware/authorize';
 import {moduleLookupRouter} from './api/common/module-lookup/router';
 import {reportRouter} from './api/prof/report/router';
@@ -29,6 +28,8 @@ import {profUploadRouter} from './api/prof/upload/router';
 import {sourceRouter} from './api/common/source/router';
 import {pgLookupRouter} from './api/common/pg-lookup/router';
 import {sourceMappingRouter} from './api/common/source-mapping/router';
+import {addSsoUser} from './lib/middleware/add-sso-user';
+import {userRouter} from './api/common/user/router';
 
 
 export default function () {
@@ -49,11 +50,7 @@ export default function () {
     credentials: true
   }
   app.use(cors(corsOptions));
-  app.use(function(req, res, next) {
-    // todo: placeholder for req.user.id till security is in
-    req['user'] = new User('jodoe', 'John Doe', 'dakahle@cisco.com', []);
-    next();
-  })
+  app.use(addSsoUser())
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
@@ -92,6 +89,7 @@ export default function () {
   app.use('/api/source', sourceRouter);
   app.use('/api/submeasure', submeasureRouter);
   app.use('/api/source-mapping', sourceMappingRouter);
+  app.use('/api/user', userRouter);
 
   // prof:
   app.use('/api/prof/dept-upload', deptUploadRouter);
