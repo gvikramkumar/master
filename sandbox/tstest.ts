@@ -1,8 +1,9 @@
 import * as _ from 'lodash';
-import {Subject, BehaviorSubject} from 'rxjs';
-import {take, first} from 'rxjs/operators';
+// import {Subject, BehaviorSubject} from 'rxjs';
+// import {take, first} from 'rxjs/operators';
 
 
+/*
 let init = false;
 const init$ = new BehaviorSubject<boolean>(init);
 // const init$ = new Subject<number>();
@@ -30,6 +31,7 @@ const promise = init$.asObservable().toPromise();
 
   }, 1000);
 
+*/
 
 /*
 const promise = init$.asObservable().toPromise();
