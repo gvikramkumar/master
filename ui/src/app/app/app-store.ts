@@ -27,8 +27,8 @@ export class AppStore extends StoreBase {
   initialBreakpoint: string;
   showSpinner = false;
 
-  user: DfaUser = <any>{};
-  user$ = new BehaviorSubject<DfaUser>(this.user);
+  user: DfaUser;
+  user$ = new Subject<DfaUser>();
   subUser = this.user$.subscribe.bind(this.user$);
   pubUser(val) {
     this.user = val;
@@ -41,8 +41,9 @@ export class AppStore extends StoreBase {
     brandingTitle: '',
     showMobileNav: true,
     title: 'Digitized Financial Allocations',
-    username: this.user.fullName,
+    username: '',
   });
+
 
   constructor(private media: ObservableMedia) {
     super();
@@ -55,6 +56,10 @@ export class AppStore extends StoreBase {
       .subscribe(change => {
         this.initialBreakpoint = change.mqAlias;
       });
+    this.subUser(user => {
+      this.headerOptions.username = user.fullName;
+      // this.headerOptions = Object.assign({}, this.headerOptions);
+    });
   }
 
   authorized = false;

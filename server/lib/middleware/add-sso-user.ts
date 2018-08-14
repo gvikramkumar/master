@@ -6,7 +6,7 @@ export function addSsoUser() {
     const headers = req.headers;
     let user: DfaUser;
 
-    if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'unit') {
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'unit') {
       user = new DfaUser(
         'jodoe',
         'John',

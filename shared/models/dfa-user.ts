@@ -2,18 +2,13 @@
 import * as _ from 'lodash';
 
 export default class DfaUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  roles: string[] = [];
 
   constructor(
-    id: string,
-    firstName: string,
-    lastName: string,
-    email: string,
-    roles?: string[]) {
+    public id: string,
+    public firstName: string,
+    public lastName: string,
+    public email: string,
+    public roles: string[] = []) {
 
     this.roles = [
       'api:access',
