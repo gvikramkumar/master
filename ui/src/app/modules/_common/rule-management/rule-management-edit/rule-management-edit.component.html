@@ -38,20 +38,20 @@
       <div class="right text-center">Selection Criteria</div>
       <div class="row">
         <div class="col-4">
-          <cui-select [(ngModel)]="rule.salesCritCond" [items]="conditionalOperators" label="Sales"></cui-select>
-          <cui-select [(ngModel)]="rule.prodPFCritCond" [items]="conditionalOperators" label="Product"></cui-select>
-          <cui-select [(ngModel)]="rule.prodBUCritCond" [items]="conditionalOperators" label="Product"></cui-select>
-          <cui-select [(ngModel)]="rule.prodTGCritCond" [items]="conditionalOperators" label="Product"></cui-select>
-          <cui-select [(ngModel)]="rule.scmsCritCond" [items]="conditionalOperators" label="SCMS"></cui-select>
-          <cui-select [(ngModel)]="rule.beCritCond" [items]="conditionalOperators" label="IBE"></cui-select>
+          <cui-select [(ngModel)]="rule.salesCritCond" [items]="conditionalOperators" label="Sales" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.prodPFCritCond" [items]="conditionalOperators" label="Product" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.prodBUCritCond" [items]="conditionalOperators" label="Product" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.prodTGCritCond" [items]="conditionalOperators" label="Product" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.scmsCritCond" [items]="conditionalOperators" label="SCMS" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.beCritCond" [items]="conditionalOperators" label="IBE" empty="true"></cui-select>
         </div>
         <div class="col-8">
-          <cui-select [(ngModel)]="rule.salesCritChoices" [items]="salesChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" label="SL1"></cui-select>
+          <cui-select [(ngModel)]="rule.salesCritChoices" [items]="salesChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" label="SL1" empty="true"></cui-select>
           <cui-input [(ngModel)]="rule.prodPFCritChoices" type="text" label="PF"></cui-input>
           <cui-input [(ngModel)]="rule.prodBUCritChoices" type="text" label="BU"></cui-input>
-          <cui-select [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" dropdownMaxHeight="300" label="TG"></cui-select>
-          <cui-select [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" label="SCMS"></cui-select>
-          <cui-select [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" dropdownMaxHeight="300" label="BE"></cui-select>
+          <cui-select [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" dropdownMaxHeight="300" label="TG" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" label="SCMS" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" dropdownMaxHeight="300" label="BE" empty="true"></cui-select>
         </div>
       </div>
     </div>
