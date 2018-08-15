@@ -30,7 +30,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     {name: 'VIP Rebates', value: 'VIP'},
   ];
   periods = ['MTD', 'ROLL6', 'ROLL3'];
-  conditionalOperators = ['IN', 'NOT IN', 'LIKE', 'NOT LIKE'];
+  conditionalOperators = ['IN', 'NOT IN'];
   salesMatches = ['SL1', 'SL2', 'SL3', 'SL4', 'SL5', 'SL6'];
   productMatches = ['BU', 'PF', 'TG', 'PID'];
   scmsMatches = ['SCMS'];
@@ -39,8 +39,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   beMatches = ['BE', 'Sub BE'];
 
   // SELECT options to be taken from Postgres
-  salesSelect = ['option1', 'option2'];
-  manySalesLevels = false;
+  salesChoices: {name: string}[] = [];
+  prodTgChoices: string[] = [];
+  scmsChoices: string[] = [];
+  internalBeChoices: string[] = [];
+  // manySalesLevels = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -67,6 +70,14 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       Promise.all(promises)
       .then(results => {
         // assign to your local arrays here, then:
+        // this.salesChoices = results[0];
+        this.salesChoices = results[0].map(x => ({name: x}));
+        this.prodTgChoices = results[1].map(x => ({name: x}));
+        this.scmsChoices = results[2].map(x => ({name: x}));
+        this.internalBeChoices = results[3].map(x => ({name: x}));
+
+        this.init();
+        // console.log('Sales levels: ' + this.salesChoices[0]);
 
         if (this.editMode) {
           this.rule = results[4];
@@ -78,17 +89,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   init() {
-  }
-
-  salesLevelChange() {
-    if (!(this.rule.salesMatch === 'SL1' || this.rule.salesMatch === 'SL2')) {
-      // Too many values for dropdown; show text field instead
-      this.manySalesLevels = true;
-    } else {
-      // Few enough sales levels to display dropdown
-      this.manySalesLevels = false;
-    }
-
   }
 
   hasChanges() {
