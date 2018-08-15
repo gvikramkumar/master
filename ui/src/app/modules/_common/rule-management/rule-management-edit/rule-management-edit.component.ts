@@ -32,7 +32,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   periods = ['MTD', 'ROLL6', 'ROLL3'];
   conditionalOperators = ['IN', 'NOT IN'];
   salesMatches = ['SL1', 'SL2', 'SL3', 'SL4', 'SL5', 'SL6'];
-  productMatches = ['BU', 'PF', 'TG', 'PID'];
+  productMatches = ['BU', 'PF', 'TG']; // no PID
   scmsMatches = ['SCMS'];
   legalEntityMatches = ['Business Entity'];
   legalEntityLevels = ['Business Entity'];
