@@ -1,6 +1,6 @@
 <div style="padding: 40px; overflow:auto;">
 
-  <form #form="ngForm" class="my-form">
+  <form #form class="my-form">
   <cui-input name="name" label="name" #name="ngModel" [(ngModel)]="user.name" [options]="nameOpts"></cui-input>
     <div *ngIf="name.touched">name is touched</div>
     <div *ngIf="name.dirty">name is dirty</div>
@@ -31,10 +31,23 @@
                [required]="true"
                [autofocus]="true"
                [minlength]="3"
-               [form]="form"
                autocomplete="off"
                [options]="name3Opts"
+               [debug]="true"
     >
+      <!--[ngModelOptions]="{updateOn: 'blur'}"-->
+    </fin-input>
+      <fin-input name="name4" [(model)]="user.name4" label="Name Four"
+                 [disabled]="disabled"
+                 [required]="true"
+                 [minlength]="3"
+                 [minlength]="10"
+                 autocomplete="off"
+                 [textarea]="true"
+                 [rows]="5"
+                 [cols]="20"
+                 [debug]="true"
+      >
       <!--[ngModelOptions]="{updateOn: 'blur'}"-->
     </fin-input>
     <div>user.name3: {{user.name3}}</div>

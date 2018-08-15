@@ -21,33 +21,51 @@ export class ValidationInputOptions {
 
 @Component({
   selector: 'fin-input',
+  exportAs: 'finInput',
   templateUrl: './validation-input.component.html',
   styleUrls: ['./validation-input.component.scss']
 })
 export class ValidationInputComponent {
   validations: InputValidation[] = [];
   opts = new ValidationInputOptions();
-  @Input() form: NgForm;
-  @ViewChild('input') input: HTMLInputElement;
+  // @Input() form: NgForm;
+  @ViewChild('input') input: ElementRef; // HTMLInputElement
+  @ViewChild('texta') texta: ElementRef; // HTMLTextAreaElement
   @ViewChild('ngm') ngm: NgModel;
   @Input() name: string;
   @Input() model;
   @Output() modelChange = new EventEmitter();
-  @Input() label: string;
-  @Input() autocomplete: 'on' | 'off';
-  @Input() autofocus: boolean;
-  @Input() ngModelOptions;
-  @Input() options: ValidationInputOptions;
-  @Input() disabled: boolean;
-  @Input() required: boolean;
-  @Input('minlength') minLength: number;
-  @Input('maxlength') maxLength: number;
-  @Input() email: boolean;
+  @Input() label = '';
+  @Input() autocomplete = 'on';
+  @Input() autofocus = false;
+  @Input() ngModelOptions = {};
+  @Input() options: ValidationInputOptions = {};
+  @Input() disabled = false;
+  @Input() required = false;
+  @Input('minlength') minLength = 0;
+  @Input('maxlength') maxLength = 5;
+  @Input() email = false;
   @Input() pattern: string | RegExp;
+  @Input() compressed = false;
+  // textarea
+  @Input() textarea = false;
+  @Input() rows: number;
+  @Input() cols: number;
+  @Input() debug = false;
+  // @Input('maxlength') maxLength: number; // restricts size and validates for textarea
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private elemRef: ElementRef) { }
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private elemRef: ElementRef,
+    public form: NgForm) {
+  }
 
   ngAfterViewInit() {
+    if (!this.name) {
+      console.error('fin-input: name is required');
+      return;
+    }
+
     Object.assign(this.opts, this.options);
 
     if (this.required) {
@@ -105,6 +123,11 @@ export class ValidationInputComponent {
     if (changes.label) {
       this.addAsteriskToRequiredLabel();
     }
+  }
+
+  setFocus() {
+    const elem = (this.textarea ? this.texta : this.input).nativeElement;
+    elem.focus();
   }
 
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
@@ -11,6 +11,8 @@ import {UiUtil} from '../../../core/services/ui-util';
 import * as _ from 'lodash';
 import {DfaModule} from '../../_common/models/module';
 import {SourceMappingService} from '../../_common/services/source-mapping.service';
+import {ValidationInputComponent} from '../../../shared/components/validation-input/validation-input.component';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'fin-source',
@@ -31,7 +33,8 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   dataSource: MatTableDataSource<Source>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('nameInput') nameInput: CuiInputComponent;
+  // @ViewChild(NgForm) form;
+  // @ViewChild('nameInput') nameInput: ValidationInputComponent;
   UiUtil = UiUtil;
   filterValue = '';
 
@@ -41,7 +44,8 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     private route: ActivatedRoute,
     private sourceService: SourceService,
     private uiUtil: UiUtil,
-    private sourceMappingService: SourceMappingService
+    private sourceMappingService: SourceMappingService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     super(store, route);
 
@@ -98,7 +102,13 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
 
   doShowForm() {
     this.showForm = true;
-    this.nameInput.inputElement.nativeElement.focus();
+    // this.changeDetectorRef.detectChanges();
+/*
+    setTimeout(() => {
+      const elem = <any>document.querySelector('.edit-form-container .name-input input');
+      elem.focus();
+    });
+*/
   }
 
   checkModuleUse(sourceId) {

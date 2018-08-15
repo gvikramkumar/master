@@ -50,20 +50,23 @@
     </div>
     <div class="col-lg-6">
 
-      <div class="edit-form-container" [fxShow]="showForm">
-        <fieldset>
-          <legend>{{formTitle}}</legend>
-          <cui-input type="text" #nameInput [(model)]="source.name" label="Source Name"></cui-input>
-          <cui-input type="text" [(model)]="source.typeCode" label="Type Code"></cui-input>
-          <cui-input type="textarea" [(model)]="source.desc" [options]="{rows: 2}" label="Description"></cui-input>
-          <div style="padding-top:15px;">
-            <fin-checkbox label="Active" [(model)]="source.status" trueVal="A" falseVal="I"
-            [disabled]="usingModuleNames.length" [inline]="true"></fin-checkbox>
-            <span class="in-use text--danger cursor-pointer" [fxShow]="usingModuleNames.length"
-            [matTooltip]="usingModuleNamesTooltip">in use</span>
-          </div>
-        </fieldset>
-
+      <div *ngIf="showForm" class="edit-form-container">
+        <form #form="ngForm" novalidate>
+          <fieldset>
+            <legend>{{formTitle}}</legend>
+            <div>form.valid: {{form?.valid}}</div>
+            <fin-input name="name" [debug]="true" class="name-input" [(model)]="source.name" label="Source Name" [required]="true"></fin-input>
+            <fin-input name="typeCode"  [(model)]="source.typeCode" label="Type Code" [required]="true"></fin-input>
+            <fin-input name="desc" [textarea]="true" [(model)]="source.desc" [rows]="2" label="Description"
+                       [required]="true"></fin-input>
+            <div style="padding-top:15px;">
+              <fin-checkbox name="status" label="Active" [(model)]="source.status" trueVal="A" falseVal="I"
+                            [disabled]="usingModuleNames.length" [inline]="true"></fin-checkbox>
+              <span class="in-use text--danger cursor-pointer" [fxShow]="usingModuleNames.length"
+                    [matTooltip]="usingModuleNamesTooltip">in use</span>
+            </div>
+          </fieldset>
+        </form>
         <div class="fin-footer-buttons">
           <button cuiButton color="primary" (click)="save()">Submit</button>
           <button cuiButton color="secondary" (click)="cancel()">Cancel</button>

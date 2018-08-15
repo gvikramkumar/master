@@ -1,8 +1,11 @@
-<div class="form-group" [class.form-group--error]="ngm.invalid && (form.submitted || ngm.touched || ngm.dirty)">
+<div class="form-group"
+     [class.form-group--error]="ngm && ngm.invalid && (form.submitted || ngm.touched || ngm.dirty)"
+     [class.input--compressed]="compressed">
 
   <div class="form-group__text">
 
-    <input #input name="{{name}}"
+    <input *ngIf="!textarea" type="text" novalidate
+           #input name="{{name}}"
            #ngm="ngModel"
            [(ngModel)]="model"
            (ngModelChange)="modelChange.emit(model)"
@@ -10,6 +13,19 @@
            [disabled]="disabled"
            [autocomplete]="autocomplete"
            [autofocus]="autofocus">
+
+    <textarea *ngIf="textarea" #texta
+              name="{{name}}"
+              #ngm="ngModel"
+              [(ngModel)]="model"
+              (ngModelChange)="modelChange.emit(model)"
+              [ngModelOptions]="ngModelOptions"
+              [disabled]="disabled"
+              [autofocus]="autofocus"
+              [rows]="rows"
+              [cols]="cols"
+              [maxLength]="maxLength"
+    ></textarea>
 
     <label>{{label}}</label>
 
@@ -25,12 +41,12 @@
     </div>
   </div>
 
-<!--
-    <div>valid: {{ngm.valid}}</div>
-    <div>touched: {{ngm.touched}}</div>
-    <div>dirty: {{ngm.dirty}}</div>
+  <ng-container *ngIf="debug">
+    <div>form.valid: {{form?.valid}}</div>
+    <div>valid: {{ngm?.valid}}</div>
+    <div>touched: {{ngm?.touched}}</div>
+    <div>dirty: {{ngm?.dirty}}</div>
     <div>model: {{model}}</div>
-    <pre>errors: {{ngm.errors|json}}</pre>
--->
-
+    <pre>errors: {{ngm?.errors|json}}</pre>
+  </ng-container>
 </div>

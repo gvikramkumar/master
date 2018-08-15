@@ -9,6 +9,7 @@ class User {
   name: string;
   name2: string;
   name3: string;
+  name4: string;
   age?: number;
   gender: 1 | 2;
 }
