@@ -27,9 +27,11 @@
       <div class="left text-center">Matching Criteria</div>
       <cui-select [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true" required="true"></cui-select>
       <cui-select [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true" required="true"></cui-select>
+      <div class="form-group-text"></div>
+      <div class="form-group-text"></div>
       <cui-select [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS" empty="true"></cui-select>
-      <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity" empty="true"></cui-select>
       <cui-select [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity" empty="true" required="true"></cui-select>
+      <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity" empty="true"></cui-select>
     </div>
 
     <div class="col-lg-6">
