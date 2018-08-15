@@ -35,7 +35,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   productMatches = ['BU', 'PF', 'TG']; // no PID
   scmsMatches = ['SCMS'];
   legalEntityMatches = ['Business Entity'];
-  legalEntityLevels = ['Business Entity'];
   beMatches = ['BE', 'Sub BE'];
 
   // SELECT options to be taken from Postgres
@@ -43,7 +42,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   prodTgChoices: string[] = [];
   scmsChoices: string[] = [];
   internalBeChoices: string[] = [];
-  // manySalesLevels = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,14 +68,13 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       Promise.all(promises)
       .then(results => {
         // assign to your local arrays here, then:
-        // this.salesChoices = results[0];
+        // map result string arrays to object arrays for use in dropdowns
         this.salesChoices = results[0].map(x => ({name: x}));
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
 
         this.init();
-        // console.log('Sales levels: ' + this.salesChoices[0]);
 
         if (this.editMode) {
           this.rule = results[4];
