@@ -1,5 +1,23 @@
-import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {AsyncValidatorFn, NgForm, NgModel, ValidatorFn, Validators} from '@angular/forms';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter, forwardRef,
+  Input,
+  OnInit, Optional,
+  Output,
+  Renderer2, Self,
+  ViewChild
+} from '@angular/core';
+import {
+  AsyncValidatorFn,
+  ControlValueAccessor, FormControl,
+  NG_VALUE_ACCESSOR, NgControl,
+  NgForm,
+  NgModel,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import AnyObj from '../../../../../../shared/models/any-obj';
 
 export interface InputValidation {
@@ -25,25 +43,25 @@ export class ValidationInputOptions {
   templateUrl: './validation-input.component.html',
   styleUrls: ['./validation-input.component.scss']
 })
-export class ValidationInputComponent {
+export class ValidationInputComponent implements ControlValueAccessor {
   validations: InputValidation[] = [];
   opts = new ValidationInputOptions();
+  value;
   // @Input() form: NgForm;
   @ViewChild('input') input: ElementRef; // HTMLInputElement
-  @ViewChild('texta') texta: ElementRef; // HTMLTextAreaElement
-  @ViewChild('ngm') ngm: NgModel;
+  @Input() options: ValidationInputOptions = {};
+  @Input() debug = false;
+  @Input() id: string;
   @Input() name: string;
-  @Input() model;
-  @Output() modelChange = new EventEmitter();
   @Input() label = '';
+  @Input() placeholder = '';
   @Input() autocomplete = 'on';
   @Input() autofocus = false;
-  @Input() ngModelOptions = {};
-  @Input() options: ValidationInputOptions = {};
+  @Input() ngModelOptions: AnyObj = {};
   @Input() disabled = false;
   @Input() required = false;
-  @Input('minlength') minLength = 0;
-  @Input('maxlength') maxLength = 5;
+  @Input() minLength = 0;
+  @Input() maxLength = 5;
   @Input() email = false;
   @Input() pattern: string | RegExp;
   @Input() compressed = false;
@@ -51,13 +69,67 @@ export class ValidationInputComponent {
   @Input() textarea = false;
   @Input() rows: number;
   @Input() cols: number;
-  @Input() debug = false;
+
   // @Input('maxlength') maxLength: number; // restricts size and validates for textarea
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private elemRef: ElementRef,
-    public form: NgForm) {
+    private renderer: Renderer2,
+    public form: NgForm,
+    @Self() public ngm: NgModel
+    ) {
+
+    // Note: we provide the value accessor through here, instead of
+    // the `providers` to avoid running into a circular import.
+    this.ngm.valueAccessor = this;
+
+  }
+
+  // ControlValueAccessor interface
+  _onChange = (_: any) => {
+  }
+
+  _onTouched = () => {
+  }
+
+  writeValue(value: any): void {
+    const normalizedValue = value == null ? '' : value;
+    this.renderer.setProperty(this.input.nativeElement, 'value', normalizedValue);
+  }
+
+  registerOnChange(fn: (_: any) => void): void {
+    this._onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this._onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.renderer.setProperty(this.input, 'disabled', isDisabled);
+  }
+
+  // End ControlValueAccessor interface
+
+  onInput(event) {
+    if (this.ngModelOptions.updatedOn !== 'blur') {
+      this._onChange(this.input.nativeElement.value);
+    }
+  }
+
+  onChange(event) {
+    this._onChange(this.input.nativeElement.value);
+  }
+
+  onBlur(event) {
+    if (this.ngModelOptions.updatedOn !== 'blur') {
+      this._onChange(this.input.nativeElement.value);
+    }
+  }
+
+  onKeyup(event) {
+    this._onTouched();
   }
 
   ngAfterViewInit() {
@@ -76,28 +148,32 @@ export class ValidationInputComponent {
       this.validations.push({
         name: 'minlength',
         message: `Minimum of ${this.minLength} characters required`,
-        fcn: Validators.minLength(this.minLength)});
+        fcn: Validators.minLength(this.minLength)
+      });
     }
 
     if (this.maxLength) {
       this.validations.push({
         name: 'maxlength',
         message: `Maximum of ${this.maxLength} characters allowed`,
-        fcn: Validators.maxLength(this.maxLength)});
+        fcn: Validators.maxLength(this.maxLength)
+      });
     }
 
     if (this.email) {
       this.validations.push({
         name: 'email',
         message: `Invalid email address`,
-        fcn: Validators.email});
+        fcn: Validators.email
+      });
     }
 
     if (this.pattern) {
       this.validations.push({
         name: 'pattern',
         message: `Invalid pattern address`,
-        fcn: Validators.pattern(this.pattern)});
+        fcn: Validators.pattern(this.pattern)
+      });
     }
 
     this.validations = this.validations.concat(this.opts.validations);
@@ -126,8 +202,7 @@ export class ValidationInputComponent {
   }
 
   setFocus() {
-    const elem = (this.textarea ? this.texta : this.input).nativeElement;
-    elem.focus();
+    this.input.nativeElement.focus();
   }
 
 }

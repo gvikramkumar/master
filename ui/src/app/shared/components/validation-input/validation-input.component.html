@@ -4,27 +4,35 @@
 
   <div class="form-group__text">
 
-    <input *ngIf="!textarea" type="text" novalidate
-           #input name="{{name}}"
-           #ngm="ngModel"
-           [(ngModel)]="model"
-           (ngModelChange)="modelChange.emit(model)"
-           [ngModelOptions]="ngModelOptions"
+    <input *ngIf="!textarea" #input type="text"
+           [id]="id"
+           [name]="name"
+           [value]="value"
+           [placeholder]="placeholder"
            [disabled]="disabled"
            [autocomplete]="autocomplete"
-           [autofocus]="autofocus">
+           [autofocus]="autofocus"
+           (input)="onInput()"
+           (change)="onChange()"
+           (blur)="onBlur()"
+           (keyup)="onKeyup()"
+    >
 
-    <textarea *ngIf="textarea" #texta
-              name="{{name}}"
-              #ngm="ngModel"
-              [(ngModel)]="model"
-              (ngModelChange)="modelChange.emit(model)"
-              [ngModelOptions]="ngModelOptions"
+    <textarea *ngIf="textarea" #input
+              [id]="id"
+              [name]="name"
+              [value]="value"
+              [placeholder]="placeholder"
               [disabled]="disabled"
               [autofocus]="autofocus"
+              [minLength]="minLength"
+              [maxLength]="maxLength"
               [rows]="rows"
               [cols]="cols"
-              [maxLength]="maxLength"
+              (input)="onInput()"
+              (change)="onChange()"
+              (blur)="onBlur()"
+              (keyup)="onKeyup()"
     ></textarea>
 
     <label>{{label}}</label>
