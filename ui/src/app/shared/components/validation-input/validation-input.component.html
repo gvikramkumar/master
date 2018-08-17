@@ -10,10 +10,11 @@
            [disabled]="disabled"
            [autocomplete]="autocomplete"
            [autofocus]="autofocus"
-           (input)="onInput()"
-           (change)="onChange()"
-           (blur)="onBlur()"
-           (keyup)="onKeyup()"
+           [minLength]="minLength"
+           [maxLength]="maxLength"
+           (input)="onInput($event)"
+           (change)="onChange($event)"
+           (blur)="onBlur($event)"
     >
 
     <textarea *ngIf="textarea" #input
@@ -25,10 +26,9 @@
               [maxLength]="maxLength"
               [rows]="rows"
               [cols]="cols"
-              (input)="onInput()"
-              (change)="onChange()"
-              (blur)="onBlur()"
-              (keyup)="onKeyup()"
+              (input)="onInput($event)"
+              (change)="onChange($event)"
+              (blur)="onBlur($event)"
     ></textarea>
 
     <label>{{label}}</label>

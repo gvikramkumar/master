@@ -49,6 +49,7 @@ export class TestValidationComponent implements OnInit {
   };
   disabled = false;
   RegExp = RegExp
+  stuff;
 
   constructor() {
     this.nameOpts.maxLength = 3;
@@ -62,6 +63,10 @@ export class TestValidationComponent implements OnInit {
         message: (): string => `Maxmimum of ${this.nameOpts.maxLength} characters allowed.`,
       });
 */
+  }
+
+  handle(event) {
+    // console.log('handle', event.type, event.target && event.target.value);
   }
 
   ngOnInit() {

@@ -68,6 +68,11 @@ export class ValidationInputComponent implements ControlValueAccessor {
   @Input() pattern: string | RegExp;
   @Input() compressed = false;
   @Input() stringToArray = false; // you have an array in model and comma sep values in textbox
+/*
+  @Output() change = new EventEmitter();
+  @Output() input = new EventEmitter();
+*/
+
   // textarea
   @Input() textarea = false;
   @Input() rows: number;
@@ -82,6 +87,10 @@ export class ValidationInputComponent implements ControlValueAccessor {
     public form: NgForm,
     @Self() public ngm: NgModel
     ) {
+      // this should be injecting NgControl to work with reactive forms, which has all these ngModel
+    // attributes including valueAccessor below, BUT but you need access
+    // NgModelOptions.updateOn for blur, but this is available for
+
 
     // Note: we provide the value accessor through here, instead of
     // the `providers` to avoid running into a circular import.
@@ -135,14 +144,11 @@ export class ValidationInputComponent implements ControlValueAccessor {
   }
 
   onChange(event) {
-    this.handleChange();
+    // this.handleChange(); // not needed if calling "before" onTouched in blur, maybe checkbox/radio needs it??
   }
 
   onBlur(event) {
     this.handleChange();
-  }
-
-  onKeyup(event) {
     this._onTouched();
   }
 

@@ -63,7 +63,7 @@
             <fin-input name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}" label="PF"
                        [disabled]="!rule.productMatch" placeholder="comma separated values"
                        [stringToArray]="true"></fin-input>
-            <fin-input name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" label="BU" [ngModelOptions]="{updateOn: 'change'}"
+            <fin-input name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" label="BU" [ngModelOptions]="{updateOn: 'blur'}"
                        [fxShow]="!!rule.productMatch" placeholder="comma separated values"
                        [stringToArray]="true"></fin-input>
             <div>{{rule.prodBUCritChoices|json}}</div>
