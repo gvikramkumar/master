@@ -39,9 +39,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   // SELECT options to be taken from Postgres
   salesChoices: {name: string}[] = [];
-  prodTgChoices: string[] = [];
-  scmsChoices: string[] = [];
-  internalBeChoices: string[] = [];
+  prodTgChoices: {name: string}[] = [];
+  scmsChoices: {name: string}[] = [];
+  internalBeChoices: {name: string}[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -74,14 +74,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
 
-        this.init();
-
         if (this.editMode) {
           this.rule = results[4];
           this.orgRule = _.cloneDeep(this.rule);
-          this.init();
-        } else {
         }
+        this.init();
       });
   }
 

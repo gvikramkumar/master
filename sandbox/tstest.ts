@@ -3,6 +3,16 @@ import * as _ from 'lodash';
 // import {take, first} from 'rxjs/operators';
 
 
+
+
+const arr = ['one', 'two'];
+
+console.log(arr.toString())
+
+
+
+
+
 /*
 let init = false;
 const init$ = new BehaviorSubject<boolean>(init);

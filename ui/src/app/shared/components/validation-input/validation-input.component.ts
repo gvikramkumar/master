@@ -65,6 +65,7 @@ export class ValidationInputComponent implements ControlValueAccessor {
   @Input() email = false;
   @Input() pattern: string | RegExp;
   @Input() compressed = false;
+  @Input() stringToArray = false; // you have an array in model and comma sep values in textbox
   // textarea
   @Input() textarea = false;
   @Input() rows: number;
@@ -94,7 +95,12 @@ export class ValidationInputComponent implements ControlValueAccessor {
   }
 
   writeValue(value: any): void {
-    const normalizedValue = value == null ? '' : value;
+    let normalizedValue: string;
+    if (value instanceof Array) {
+      normalizedValue = (<any[]>value).join(', ');
+    } else {
+      normalizedValue = value == null ? '' : value;
+    }
     this.renderer.setProperty(this.input.nativeElement, 'value', normalizedValue);
   }
 
@@ -112,20 +118,23 @@ export class ValidationInputComponent implements ControlValueAccessor {
 
   // End ControlValueAccessor interface
 
+  handleChange() {
+    let val = this.input.nativeElement.value;
+    if (this.stringToArray) {
+      val = val ? val.split(',').map(x => x.trim()) : [];
+    }
+    this._onChange(val);
+  }
+
   onInput(event) {
     if (this.ngModelOptions.updatedOn !== 'blur') {
-      this._onChange(this.input.nativeElement.value);
     }
   }
 
   onChange(event) {
-    this._onChange(this.input.nativeElement.value);
   }
 
   onBlur(event) {
-    if (this.ngModelOptions.updatedOn !== 'blur') {
-      this._onChange(this.input.nativeElement.value);
-    }
   }
 
   onKeyup(event) {
