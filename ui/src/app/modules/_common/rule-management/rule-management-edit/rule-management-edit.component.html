@@ -25,24 +25,35 @@
   <div class="row">
     <div class="col-lg-6">
       <div class="left text-center">Matching Criteria</div>
-      <cui-select [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
-                  required="true"></cui-select>
-      <cui-select [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true"
-                  required="true"></cui-select>
+      <cui-select [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true" required="true"></cui-select>
+      <cui-select [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true" required="true"></cui-select>
+      <div class="form-group-text"></div>
+      <div class="form-group-text"></div>
       <cui-select [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS" empty="true"></cui-select>
-      <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
-                  empty="true"></cui-select>
-      <cui-select [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
-                  empty="true" required="true"></cui-select>
+      <cui-select [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity" empty="true" required="true"></cui-select>
+      <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity" empty="true"></cui-select>
     </div>
 
     <div class="col-lg-6">
       <div class="right text-center">Selection Criteria</div>
-      <cui-input type="text" [(ngModel)]="rule.sl1Select" label="&nbsp;" required="true"></cui-input>
-      <cui-input disabled=true type="text" label="&nbsp;" required="true"></cui-input>
-      <cui-input type="text" [(ngModel)]="rule.scmsSelect" label="&nbsp;"></cui-input>
-      <cui-input disabled=true type="text" label="&nbsp;"></cui-input>
-      <cui-input type="text" [(ngModel)]="rule.beSelect" label="&nbsp;" required="true"></cui-input>
+      <div class="row">
+        <div class="col-4">
+          <cui-select [(ngModel)]="rule.salesCritCond" [items]="conditionalOperators" label="Sales" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.prodPFCritCond" [items]="conditionalOperators" label="Product" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.prodBUCritCond" [items]="conditionalOperators" label="Product" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.prodTGCritCond" [items]="conditionalOperators" label="Product" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.scmsCritCond" [items]="conditionalOperators" label="SCMS" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.beCritCond" [items]="conditionalOperators" label="IBE" empty="true"></cui-select>
+        </div>
+        <div class="col-8">
+          <cui-select [(ngModel)]="rule.salesCritChoices" [items]="salesChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" label="SL1" empty="true"></cui-select>
+          <cui-input [(ngModel)]="rule.prodPFCritChoices" type="text" label="PF"></cui-input>
+          <cui-input [(ngModel)]="rule.prodBUCritChoices" type="text" label="BU"></cui-input>
+          <cui-select [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" dropdownMaxHeight="300" label="TG" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" label="SCMS" empty="true"></cui-select>
+          <cui-select [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name" optionsValue="name" [multiSelect]="true" dropdownMaxHeight="300" label="BE" empty="true"></cui-select>
+        </div>
+      </div>
     </div>
 
   </div>

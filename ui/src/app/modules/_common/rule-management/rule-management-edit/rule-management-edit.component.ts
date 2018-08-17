@@ -2,13 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import {RuleService} from '../../services/rule.service';
+import {PgLookupService} from '../../services/pg-lookup.service';
 import {Observable, of} from 'rxjs';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {AppStore} from '../../../../app/app-store';
 import * as _ from 'lodash';
 import {DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
-import {PgLookupService} from '../../services/pg-lookup.service';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -28,22 +28,28 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     {name: 'Shipment', value: 'SHIPMENT'},
     {name: 'Shipped Revenue', value: 'SHIPREV'},
     {name: 'VIP Rebates', value: 'VIP'},
-  ]
+  ];
   periods = ['MTD', 'ROLL6', 'ROLL3'];
+  conditionalOperators = ['IN', 'NOT IN'];
   salesMatches = ['SL1', 'SL2', 'SL3', 'SL4', 'SL5', 'SL6'];
-  productMatches = ['BU', 'PF', 'TG', 'PID'];
+  productMatches = ['BU', 'PF', 'TG']; // no PID
   scmsMatches = ['SCMS'];
   legalEntityMatches = ['Business Entity'];
-  legalEntityLevels = ['Business Entity'];
   beMatches = ['BE', 'Sub BE'];
+
+  // SELECT options to be taken from Postgres
+  salesChoices: {name: string}[] = [];
+  prodTgChoices: string[] = [];
+  scmsChoices: string[] = [];
+  internalBeChoices: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ruleService: RuleService,
+    private pgLookupService: PgLookupService,
     private store: AppStore,
-    public uiUtil: UiUtil,
-    private pgLookupService: PgLookupService
+    public uiUtil: UiUtil
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
@@ -62,6 +68,13 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       Promise.all(promises)
       .then(results => {
         // assign to your local arrays here, then:
+        // map result string arrays to object arrays for use in dropdowns
+        this.salesChoices = results[0].map(x => ({name: x}));
+        this.prodTgChoices = results[1].map(x => ({name: x}));
+        this.scmsChoices = results[2].map(x => ({name: x}));
+        this.internalBeChoices = results[3].map(x => ({name: x}));
+
+        this.init();
 
         if (this.editMode) {
           this.rule = results[4];
