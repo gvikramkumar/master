@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
@@ -33,7 +33,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   dataSource: MatTableDataSource<Source>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  // @ViewChild(NgForm) form;
+  @ViewChild(NgForm) form;
   // @ViewChild('nameInput') nameInput: ValidationInputComponent;
   UiUtil = UiUtil;
   filterValue = '';
@@ -127,6 +127,11 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   }
 
   save() {
+    if (this.form.invalid) {
+      UiUtil.triggerBlur('.edit-form-container form');
+      return;
+    }
+
     const errs = this.validate();
     if (!errs) {
       let obs: Observable<Source>;
@@ -137,7 +142,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
       }
       obs.subscribe(() => this.refresh());
     } else {
-      this.uiUtil.genericDialog('Validaton Errors', this.errs.join('\n'));
+      this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
     }
   }
 

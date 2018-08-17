@@ -16,9 +16,8 @@ export class UiUtil {
   constructor(private store: AppStore, private dialogService: CuiDialogService) {
   }
 
-  
   static triggerBlur(selector) {
-    const query = `${selector} input, ${selector} select, my-form textarea`;
+    const query = `${selector} input, ${selector} select, ${selector} textarea`;
     _.forEach(document.querySelectorAll(query), elem => {
       elem.dispatchEvent(new Event('blur'));
     });

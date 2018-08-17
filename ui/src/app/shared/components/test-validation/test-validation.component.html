@@ -1,21 +1,20 @@
 <div style="padding: 40px; overflow:auto;">
 
-  <form #form class="my-form">
-<!--
+  <form #form="ngForm" class="my-form">
   <cui-input name="name" label="name" #name="ngModel" [(ngModel)]="user.name" [options]="nameOpts"></cui-input>
     <div *ngIf="name.touched">name is touched</div>
     <div *ngIf="name.dirty">name is dirty</div>
     <div *ngIf="form.submitted">form is submitted</div>
 
-    <div class="form-group" [class.form-group&#45;&#45;error]="ng_name2.invalid && (form.submitted || ng_name2.touched || ng_name2.dirty)">
+    <div class="form-group" [class.form-group--error]="ng_name2.invalid && (form.submitted || ng_name2.touched || ng_name2.dirty)">
       <div class="form-group__text">
         <input autocomplete="off" name="name2" #ng_name2="ngModel" id="input-state-error" [(ngModel)]="user.name2"
                required minlength="2" finAsyncNotInList="mylist" [ngModelOptions]="{updateOn: 'blur'}">
-&lt;!&ndash;
+<!--
         <input autocomplete="off" name="name2" #ng_name2="ngModel" id="input-state-error" [(ngModel)]="user.name2"
                required minlength="2" finNotInList [list]="list">
-&ndash;&gt;
-        &lt;!&ndash;<input name="name2" #ng_name2="ngModel" id="input-state-error" [(ngModel)]="user.name2">&ndash;&gt;
+-->
+        <!--<input name="name2" #ng_name2="ngModel" id="input-state-error" [(ngModel)]="user.name2">-->
         <label for="input-state-error">Name Two</label>
       </div>
       <div class="help-block text-danger" role="alert">
@@ -24,7 +23,6 @@
         <span *ngIf="ng_name2.errors?.notInList && (form.submitted || ng_name2.touched || ng_name2.dirty)">Value not in list</span>
       </div>
     </div>
--->
 
     label name3: <input name="label-name3" [(ngModel)]="labelName3"><br>
     <label>name3 disabled <input name="disabled" type="checkbox" [(ngModel)]="disabled"></label><br>

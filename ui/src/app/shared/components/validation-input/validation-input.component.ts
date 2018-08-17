@@ -55,13 +55,13 @@ export class ValidationInputComponent implements ControlValueAccessor {
   @Input() name: string;
   @Input() label = '';
   @Input() placeholder = '';
-  @Input() autocomplete = 'on';
+  @Input() autocomplete = 'off';
   @Input() autofocus = false;
   @Input() ngModelOptions: AnyObj = {};
   @Input() disabled = false;
   @Input() required = false;
   @Input() minLength = 0;
-  @Input() maxLength = 5;
+  @Input() maxLength = 10000;
   @Input() email = false;
   @Input() pattern: string | RegExp;
   @Input() compressed = false;
