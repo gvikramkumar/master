@@ -3,16 +3,16 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <cui-input type="text" name [(ngModel)]="rule.name" label="Rule Name" required="true"></cui-input>
-        <cui-select [(ngModel)]="rule.driverName" [items]="driverNames" empty="true" label="Driver"
-                    optionsKey="name" optionsValue="value" required="true"></cui-select>
-        <cui-select [(ngModel)]="rule.period" [items]="periods" label="Driver Period" empty="true"
-                    required="true"></cui-select>
+        <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [required]="true"></fin-input>
+        <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="driverNames" empty="true" label="Driver"
+                    optionsKey="name" optionsValue="value" [required]="true"></cui-select>
+        <cui-select name="period" [(ngModel)]="rule.period" [items]="periods" label="Driver Period" empty="true"
+                    [required]="true"></cui-select>
       </div>
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center start">
           <div *ngIf="!UiUtil.statusIsPending(rule.status)" class="form-group-check">
-            <fin-checkbox label="Active" [(model)]="rule.status" trueVal="A" falseVal="I"></fin-checkbox>
+            <fin-checkbox name="status" label="Active" [(model)]="rule.status" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
           <div *ngIf="UiUtil.statusIsPending(rule.status)" class="form-group-button">
             <button cuiButton color="primary">Approve</button>
@@ -26,16 +26,16 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="left text-center half-margin-bottom">Matching Criteria</div>
-        <cui-select [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
-                    required="true"></cui-select>
-        <cui-select [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true"
-                    required="true"></cui-select>
+        <cui-select name="salesMatch" [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
+                    [required]="true"></cui-select>
+        <cui-select name="productMatch" [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true"
+                    [required]="true"></cui-select>
         <div class="form-group-text" [fxShow]="!!rule.productMatch"></div>
         <div class="form-group-text" [fxShow]="!!rule.productMatch"></div>
-        <cui-select [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS" empty="true"></cui-select>
-        <cui-select [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity" empty="true"
-                    required="true"></cui-select>
-        <cui-select [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
+        <cui-select name="scmsMatch" [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS" empty="true"></cui-select>
+        <cui-select name="beMatch" [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity" empty="true"
+                    [required]="true"></cui-select>
+        <cui-select name="leMatch" [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
                     empty="true"></cui-select>
       </div>
 
@@ -43,37 +43,38 @@
         <div class="right text-center half-margin-bottom">Selection Criteria</div>
         <div class="row">
           <div class="col-4">
-            <cui-select class="replace-label-space" [(ngModel)]="rule.salesCritCond" [items]="conditionalOperators"
+            <cui-select name="salesCond" class="replace-label-space" [(ngModel)]="rule.salesCritCond" [items]="conditionalOperators"
                         empty="true" [disabled]="!rule.salesMatch"></cui-select>
-            <cui-select class="replace-label-space" [(ngModel)]="rule.prodPFCritCond" [items]="conditionalOperators"
+            <cui-select name="prodPFCond" class="replace-label-space" [(ngModel)]="rule.prodPFCritCond" [items]="conditionalOperators"
                         empty="true" [disabled]="!rule.productMatch"></cui-select>
-            <cui-select class="replace-label-space" [(ngModel)]="rule.prodBUCritCond" [items]="conditionalOperators"
+            <cui-select name="prodBUCond" class="replace-label-space" [(ngModel)]="rule.prodBUCritCond" [items]="conditionalOperators"
                         empty="true" [fxShow]="!!rule.productMatch"></cui-select>
-            <cui-select class="replace-label-space" [(ngModel)]="rule.prodTGCritCond" [items]="conditionalOperators"
+            <cui-select name="prodTGCond" class="replace-label-space" [(ngModel)]="rule.prodTGCritCond" [items]="conditionalOperators"
                         empty="true" [fxShow]="!!rule.productMatch"></cui-select>
-            <cui-select class="replace-label-space" [(ngModel)]="rule.scmsCritCond" [items]="conditionalOperators"
+            <cui-select name="scmsCond" class="replace-label-space" [(ngModel)]="rule.scmsCritCond" [items]="conditionalOperators"
                         empty="true" [disabled]="!rule.scmsMatch"></cui-select>
-            <cui-select class="replace-label-space" [(ngModel)]="rule.beCritCond" [items]="conditionalOperators"
+            <cui-select name="beCond" class="replace-label-space" [(ngModel)]="rule.beCritCond" [items]="conditionalOperators"
                         empty="true" [disabled]="!rule.beMatch"></cui-select>
           </div>
           <div class="col-8">
-            <cui-select [(ngModel)]="rule.salesCritChoices" [items]="salesChoices" [disabled]="!rule.salesMatch"
+            <cui-select name="salesChoice" [(ngModel)]="rule.salesCritChoices" [items]="salesChoices" [disabled]="!rule.salesMatch"
                         optionsKey="name" optionsValue="name" [multiSelect]="true" label="SL1"
                         empty="true"></cui-select>
-            <fin-input [(ngModel)]="rule.prodPFCritChoices" label="PF"
+            <fin-input name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}" label="PF"
                        [disabled]="!rule.productMatch" placeholder="comma separated values"
                        [stringToArray]="true"></fin-input>
-            <fin-input [(ngModel)]="rule.prodBUCritChoices" label="BU"
+            <fin-input name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" label="BU" [ngModelOptions]="{updateOn: 'change'}"
                        [fxShow]="!!rule.productMatch" placeholder="comma separated values"
                        [stringToArray]="true"></fin-input>
-            <cui-select [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
+            <div>{{rule.prodBUCritChoices|json}}</div>
+            <cui-select name="prodTGChoice" [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
                         [fxShow]="!!rule.productMatch"
                         optionsValue="name" [multiSelect]="true" dropdownMaxHeight="300" label="TG"
                         empty="true"></cui-select>
-            <cui-select [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name"
+            <cui-select name="scmsChoice" [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name"
                         [disabled]="!rule.scmsMatch"
                         optionsValue="name" [multiSelect]="true" label="SCMS" empty="true"></cui-select>
-            <cui-select [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
+            <cui-select name="beChoice" [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
                         [disabled]="!rule.beMatch"
                         optionsValue="name" [multiSelect]="true" dropdownMaxHeight="300" label="BE"
                         empty="true"></cui-select>

@@ -19,6 +19,7 @@ import {
   Validators
 } from '@angular/forms';
 import AnyObj from '../../../../../../shared/models/any-obj';
+import {UiUtil} from '../../../core/services/ui-util';
 
 export interface InputValidation {
   name: string;
@@ -54,6 +55,7 @@ export class ValidationInputComponent implements ControlValueAccessor {
   @Input() id: string;
   @Input() name: string;
   @Input() label = '';
+  @Input() type: string; // unused, but people will set it, so don't complain
   @Input() placeholder = '';
   @Input() autocomplete = 'off';
   @Input() autofocus = false;
@@ -121,20 +123,23 @@ export class ValidationInputComponent implements ControlValueAccessor {
   handleChange() {
     let val = this.input.nativeElement.value;
     if (this.stringToArray) {
-      val = val ? val.split(',').map(x => x.trim()) : [];
+      val = UiUtil.stringToArray(val);
     }
     this._onChange(val);
   }
 
   onInput(event) {
-    if (this.ngModelOptions.updatedOn !== 'blur') {
+    if (this.ngModelOptions.updateOn !== 'blur') {
+      this.handleChange();
     }
   }
 
   onChange(event) {
+    this.handleChange();
   }
 
   onBlur(event) {
+    this.handleChange();
   }
 
   onKeyup(event) {

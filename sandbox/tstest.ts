@@ -5,9 +5,8 @@ import * as _ from 'lodash';
 
 
 
-const arr = ['one', 'two'];
 
-console.log(arr.toString())
+console.log('null', typeof true);
 
 
 

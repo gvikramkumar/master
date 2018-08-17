@@ -31,9 +31,12 @@ submitText: string;
         break;
     }
 
-    if (typeof this.data.data === 'object') {
+    if (this.data.data === null || (typeof this.data.data === 'object' && !Object.keys(this.data.data).length)) {
+      this.data.data = undefined;
+    } else if (typeof this.data.data === 'object' || typeof this.data.data === 'number' || typeof this.data.data === 'string') {
       this.data.data = JSON.stringify(this.data.data, null, 2);
     }
+
     // this allows us to use html in message and data sections
 /*
     setTimeout(() => {
