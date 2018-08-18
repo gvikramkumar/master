@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {
   AsyncValidatorFn,
-  ControlValueAccessor, FormControl,
+  ControlValueAccessor, Form, FormControl,
   NG_VALUE_ACCESSOR, NgControl,
   NgForm,
   NgModel,
@@ -47,7 +47,7 @@ export class ValidationInputOptions {
 export class ValidationInputComponent implements ControlValueAccessor {
   validations: InputValidation[] = [];
   opts = new ValidationInputOptions();
-  value;
+  updateOn = 'change';
   // @Input() form: NgForm;
   @ViewChild('input') input: ElementRef; // HTMLInputElement
   @Input() options: ValidationInputOptions = {};
@@ -59,7 +59,6 @@ export class ValidationInputComponent implements ControlValueAccessor {
   @Input() placeholder = '';
   @Input() autocomplete = 'off';
   @Input() autofocus = false;
-  @Input() ngModelOptions: AnyObj = {};
   @Input() disabled = false;
   @Input() required = false;
   @Input() minLength = 0;
@@ -85,17 +84,11 @@ export class ValidationInputComponent implements ControlValueAccessor {
     private elemRef: ElementRef,
     private renderer: Renderer2,
     public form: NgForm,
-    @Self() public ngm: NgModel
+    @Self() public ngc: NgControl
     ) {
-      // this should be injecting NgControl to work with reactive forms, which has all these ngModel
-    // attributes including valueAccessor below, BUT but you need access
-    // NgModelOptions.updateOn for blur, but this is available for
-
-
     // Note: we provide the value accessor through here, instead of
     // the `providers` to avoid running into a circular import.
-    this.ngm.valueAccessor = this;
-
+    this.ngc.valueAccessor = this;
   }
 
   // ControlValueAccessor interface
@@ -138,9 +131,7 @@ export class ValidationInputComponent implements ControlValueAccessor {
   }
 
   onInput(event) {
-    if (this.ngModelOptions.updateOn !== 'blur') {
-      this.handleChange();
-    }
+    this.handleChange();
   }
 
   onChange(event) {
@@ -199,10 +190,10 @@ export class ValidationInputComponent implements ControlValueAccessor {
     this.validations = this.validations.concat(this.opts.validations);
     const asyncValidators = this.opts.asyncValidations.map(v => v.fcn);
     if (this.validations.length) {
-      this.ngm.control.setValidators(this.validations.map(v => v.fcn));
+      this.ngc.control.setValidators(this.validations.map(v => v.fcn));
     }
     if (asyncValidators.length) {
-      this.ngm.control.setAsyncValidators(asyncValidators);
+      this.ngc.control.setAsyncValidators(asyncValidators);
     }
 
     this.changeDetectorRef.detectChanges();
