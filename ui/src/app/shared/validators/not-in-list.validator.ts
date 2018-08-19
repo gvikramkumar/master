@@ -1,13 +1,14 @@
 import {Directive, Input} from '@angular/core';
 import {AbstractControl, NG_VALIDATORS, Validator, ValidatorFn, Validators} from '@angular/forms';
 
-export function notInListValidator(list: string[]): ValidatorFn {
+export function notInListValidator(_list: string[], upper = true): ValidatorFn {
   return ((control: AbstractControl): {[key: string]: any} | null => {
-    if (control.value && list.indexOf(control.value.toUpperCase()) === -1) {
-      console.log('return error');
+    const list = _list.map(x => x.toUpperCase());
+    if (upper && control.value && list.indexOf(control.value.toUpperCase()) !== -1) {
+      return {'notInList': {value: control.value}};
+    } else if (control.value && list.indexOf(control.value) !== -1) {
       return {'notInList': {value: control.value}};
     } else {
-      console.log('return null');
       return null;
     }
   });
@@ -21,8 +22,8 @@ export class NotInListValidator implements Validator {
   @Input() list: string[];
 
   validate(control: AbstractControl): { [key: string]: any } {
-    console.log('validating');
     return this.list ? notInListValidator(this.list)(control)
       : null;
   }
 }
+

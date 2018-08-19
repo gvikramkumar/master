@@ -90,7 +90,10 @@ export class TestValidationComponent implements OnInit {
 
   submit() {
     console.log('submit called');
-    UiUtil.triggerBlur('.my-form');
+    if (this.form.valid) {
+      UiUtil.triggerBlur('.my-form');
+      console.log(this.user);
+    }
     /*
         // this markes as touched but cui-input only listens to blur event so useless for cui-input. Would work for
         // other controls, but they can just use form.submitted, so why bother.

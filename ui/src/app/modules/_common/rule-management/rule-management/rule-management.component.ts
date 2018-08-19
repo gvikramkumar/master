@@ -45,7 +45,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
       this.nameFilter.next(name);
     });
 
-    this.ruleService.getManyLatest('name')
+    this.ruleService.getLatestByNameActive()
       .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
         this.rulesCount = rules.length;
@@ -57,8 +57,8 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   }
 
   ngAfterViewInit() {
-    //this.dataSource.paginator = this.paginator;
-    //this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
   }
 
   applyFilter(filterValue: string) {

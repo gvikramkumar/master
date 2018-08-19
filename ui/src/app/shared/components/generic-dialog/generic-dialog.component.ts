@@ -33,7 +33,7 @@ submitText: string;
 
     if (this.data.data === null || (typeof this.data.data === 'object' && !Object.keys(this.data.data).length)) {
       this.data.data = undefined;
-    } else if (typeof this.data.data === 'object' || typeof this.data.data === 'number' || typeof this.data.data === 'string') {
+    } else if (typeof this.data.data === 'object') {
       this.data.data = JSON.stringify(this.data.data, null, 2);
     }
 

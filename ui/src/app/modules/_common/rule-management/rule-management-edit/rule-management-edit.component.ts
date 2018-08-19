@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import {RuleService} from '../../services/rule.service';
@@ -9,6 +9,10 @@ import {AppStore} from '../../../../app/app-store';
 import * as _ from 'lodash';
 import {DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
+import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {ValidationInputOptions} from '../../../../shared/components/validation-input/validation-input.component';
+import {map} from 'rxjs/operators';
+import {notInListValidator} from '../../../../shared/validators/not-in-list.validator';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -16,6 +20,11 @@ import {UiUtil} from '../../../../core/services/ui-util';
   styleUrls: ['./rule-management-edit.component.scss']
 })
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
+  ruleNames: string[] = [];
+  nameOptions: ValidationInputOptions;
+  prodPFChoiceOptions: ValidationInputOptions;
+  prodBUChoiceOptions: ValidationInputOptions;
+  @ViewChild('form') form: NgForm;
   UiUtil = UiUtil;
   editMode = false;
   rule = new AllocationRule();
@@ -61,6 +70,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
       this.pgLookupService.getRuleCriteriaChoicesScms().toPromise(),
       this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
+      this.ruleService.getDistinctRuleNames().toPromise()
     ];
     if (this.editMode) {
       promises.push(this.ruleService.getOneById(this.route.snapshot.params.id).toPromise());
@@ -73,16 +83,50 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
+        this.ruleNames = results[4].map(x => x.toUpperCase());
 
         if (this.editMode) {
           this.rule = results[4];
           this.orgRule = _.cloneDeep(this.rule);
+          this.ruleNames = _.without(this.ruleNames, this.rule.name);
         }
         this.init();
+
+        this.nameOptions = {
+          validations: [
+            {
+              name: 'notInList',
+              message: 'Rule name already exists',
+              fcn: notInListValidator(this.ruleNames)
+            }
+          ]
+        };
+
+        this.prodPFChoiceOptions = {
+          asyncValidations: [
+            {
+              name: 'prodPFChoices',
+              message: 'Some product PF select fields don\'t exist',
+              fcn: this.prodPFChoicesValidator()
+            }
+          ]
+        };
+
+        this.prodBUChoiceOptions = {
+          asyncValidations: [
+            {
+              name: 'prodBUChoices',
+              message: 'Some product BU select fields don\'t exist',
+              fcn: this.prodBUChoicesValidator()
+            }
+          ]
+        };
+
       });
   }
 
   init() {
+    // called to prepare ui for new rule, in onInit/reset
   }
 
   hasChanges() {
@@ -121,29 +165,88 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   public save() {
-    this.uiUtil.confirmSave()
-      .subscribe(resp => {
-        if (resp) {
-          this.validate()
-            .subscribe(valid => {
-              if (valid) {
-                this.ruleService.add(this.rule)
-                  .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
-              }
-            });
-        }
-      });
-  }
-
-  validate(): Observable<boolean> {
-    // todo: need to search for rule name duplicity on add only
-    if (this.editMode) {
-      return of(true);
+    UiUtil.triggerBlur('.fin-edit-container form');
+    if (this.form.valid) {
+      this.uiUtil.confirmSave()
+        .subscribe(valid => {
+          if (valid) {
+            this.ruleService.add(this.rule)
+              .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+          }
+        });
     } else {
-      // todo: validate name doesn't exist already. Could be done with an ngModel validator realtime if rules cached
-      // otherwise hit server here
-      // check for fule name existence in store (if cached rules) or hit the server (why it's observable)
-      return of(true);
+      console.log(this.form.valid, this.form.pending);
     }
   }
+
+  requiredCond(select) {
+    switch (select) {
+      case 'sl1':
+        if (this.rule.salesMatch && this.rule.salesCritChoices.length) {
+          return true;
+        }
+        break;
+      case 'pf':
+        if (this.rule.productMatch && this.rule.prodPFCritChoices.length) {
+          return true;
+        }
+        break;
+      case 'bu':
+        if (this.rule.productMatch && this.rule.prodBUCritChoices.length) {
+          return true;
+        }
+        break;
+      case 'tg':
+        if (this.rule.productMatch && this.rule.prodTGCritChoices.length) {
+          return true;
+        }
+        break;
+      case 'scms':
+        if (this.rule.scmsMatch && this.rule.scmsCritChoices.length) {
+          return true;
+        }
+        break;
+      case 'be':
+        if (this.rule.beMatch && this.rule.beCritChoices.length) {
+          return true;
+        }
+        break;
+    }
+
+    return false;
+  }
+
+  prodPFChoicesValidator(): AsyncValidatorFn {
+    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+      if (!control.value || !control.value.length) {
+        return Promise.resolve(null);
+      }
+      return this.ruleService.validateProdPFCritChoices(control.value)
+        .pipe(map(valid => {
+          if (!valid) {
+            return {prodPFChoices: {value: control.value}};
+          } else {
+            return null;
+          }
+        }));
+    });
+  }
+
+  prodBUChoicesValidator(): AsyncValidatorFn {
+    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+      if (!control.value || !control.value.length) {
+        return Promise.resolve(null);
+      }
+      return this.ruleService.validateProdBUCritChoices(control.value)
+        .pipe(map(valid => {
+          if (!valid) {
+            return {prodBUChoices: {value: control.value}};
+          } else {
+            return null;
+          }
+        }));
+    });
+  }
+
+
 }

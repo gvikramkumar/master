@@ -9,7 +9,7 @@ import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodPgRepo from '../../../common/open-period/repo';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
-import PostgresRepo from '../../../common/pg-lookup/postgres-repo';
+import PgLookupRepo from '../../../common/pg-lookup/repo';
 
 
 @injectable()
@@ -20,7 +20,7 @@ export default class DeptUploadUploadController extends UploadController {
     openPeriodRepo: OpenPeriodPgRepo,
     submeasureRepo: SubmeasureRepo,
     userRoleRepo: UserRoleRepo,
-    private pgRepo: PostgresRepo
+    private pgRepo: PgLookupRepo
   ) {
     super(
       Modules.prof,

@@ -8,9 +8,10 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
+import {Observable} from 'rxjs';
 
 export function asyncNotInListValidator(methodName: string): AsyncValidatorFn {
-  return ((control: AbstractControl): Promise<ValidationErrors | null> => {
+  return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
     let promise;
     switch (methodName) {
       case 'mylist':

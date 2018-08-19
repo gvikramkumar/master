@@ -1,10 +1,11 @@
 import {pgc} from '../../../lib/database/postgres-conn';
 import _ from 'lodash';
 import {injectable} from 'inversify';
+import {ApiError} from '../../../lib/common/api-error';
 
 
 @injectable()
-export default class PostgresRepo {
+export default class PgLookupRepo {
 
   constructor() {
   }
@@ -143,9 +144,50 @@ export default class PostgresRepo {
           `);
   }
 
-  checkForExistenceText(table, column, value) {
-    return pgc.pgdb.query(`select exists (select 1 from ${table} where upper(${column}) = $1 limit 1)`, [value.toUpperCase()])
+  checkForExistenceValue(table, column, value, upper = true) {
+    let val;
+    let sql = `select exists (select 1 from ${table} where `; // ${column} = $1 limit 1) as exists`
+    if (upper) {
+      sql += ` upper(${column}) = $1 limit 1) as exists`;
+      val = value.toUpperCase();
+    } else {
+      sql += ` ${column} = $1 limit 1) as exists`;
+      val = value;
+    }
+    return pgc.pgdb.query(sql, [val])
       .then(results => results.rows[0].exists);
+  }
+
+  checkForExistenceArray(table, column, arr, upper = true) {
+    if (!arr.length) {
+      throw new ApiError('checkForExistenceArray: empty array', null, 400);
+    }
+    const promises = [];
+    arr.forEach(val => {
+      promises.push(this.checkForExistenceValue(table, column, val, upper));
+    });
+    return Promise.all(promises)
+      .then(results => !_.includes(results, false));
+  }
+
+  selectWhereIn(table, column, arr, conditional: 'in'|'not in' = 'in') {
+    if (!arr.length) {
+      throw new ApiError('selectWhereIn: empty array', null, 400);
+    }
+    const vars = arr.map((x, idx) => `$${idx + 1}`).join(',');
+    const sql = `select * from ${table} where ${column} ${conditional} ( ${vars} )`;
+    return pgc.pgdb.query(sql, arr)
+      .then(results => results.rows);
+  }
+
+  selectWhereInUpper(table, column, arr) {
+    if (!arr.length) {
+      throw new ApiError('selectWhereIn: empty array', null, 400);
+    }
+    const vars = arr.map((x, idx) => `$${idx + 1}`).join(',');
+    const sql = `select * from ${table} where upper(${column}) in ( ${vars} )`;
+    return pgc.pgdb.query(sql, arr.map(x => x.toUpperCase()))
+      .then(results => results.rows);
   }
 
   getSortedListFromColumn(table, column, whereClause?) {
@@ -171,5 +213,7 @@ export default class PostgresRepo {
       .then(results => results.rows.map(obj => obj.col))
       .then(vals => _.sortBy(vals, _.identity));
   }
+
+  verifyExistence
 
 }

@@ -1,24 +1,5 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter, forwardRef,
-  Input,
-  OnInit, Optional,
-  Output,
-  Renderer2, Self,
-  ViewChild
-} from '@angular/core';
-import {
-  AsyncValidatorFn,
-  ControlValueAccessor, Form, FormControl,
-  NG_VALUE_ACCESSOR, NgControl,
-  NgForm,
-  NgModel,
-  ValidatorFn,
-  Validators
-} from '@angular/forms';
-import AnyObj from '../../../../../../shared/models/any-obj';
+import {ChangeDetectorRef, Component, ElementRef, Input, OnChanges, Renderer2, Self, ViewChild} from '@angular/core';
+import {AsyncValidatorFn, ControlValueAccessor, NgControl, NgForm, ValidatorFn, Validators} from '@angular/forms';
 import {UiUtil} from '../../../core/services/ui-util';
 
 export interface InputValidation {
@@ -44,7 +25,7 @@ export class ValidationInputOptions {
   templateUrl: './validation-input.component.html',
   styleUrls: ['./validation-input.component.scss']
 })
-export class ValidationInputComponent implements ControlValueAccessor {
+export class ValidationInputComponent implements OnChanges, ControlValueAccessor {
   validations: InputValidation[] = [];
   opts = new ValidationInputOptions();
   updateOn = 'change';
@@ -143,7 +124,7 @@ export class ValidationInputComponent implements ControlValueAccessor {
     this._onTouched();
   }
 
-  ngAfterViewInit() {
+  init() {
     if (!this.name) {
       console.error('fin-input: name is required');
       return;
@@ -197,7 +178,6 @@ export class ValidationInputComponent implements ControlValueAccessor {
     }
 
     this.changeDetectorRef.detectChanges();
-    this.addAsteriskToRequiredLabel();
   }
 
   addAsteriskToRequiredLabel() {
@@ -209,6 +189,10 @@ export class ValidationInputComponent implements ControlValueAccessor {
   ngOnChanges(changes) {
     if (changes.label) {
       this.addAsteriskToRequiredLabel();
+    }
+
+    if (changes.options) {
+      this.init();
     }
   }
 

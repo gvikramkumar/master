@@ -17,4 +17,24 @@ export class RuleService extends RestBase<AllocationRule> {
     super('allocation-rule', httpClient, store, true);
   }
 
+  getLatestByNameActive() {
+    return this.getManyLatest('name', {status: 'A'});
+  }
+
+  getDistinctRuleNamesActive() {
+    return this.getDistinct('name', {status: 'A'});
+  }
+
+  getDistinctRuleNames() {
+    return this.getDistinct('name', );
+  }
+
+  validateProdPFCritChoices(arr) {
+    return this.callMethod('validateProdPFCritChoices', arr);
+  }
+
+  validateProdBUCritChoices(arr) {
+    return this.callMethod('validateProdBUCritChoices', arr);
+  }
+
 }

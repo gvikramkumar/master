@@ -1,6 +1,7 @@
 
 export class AllocationRule {
   id?: string;
+  moduleId?: number;
   name: string;
   period: string;
   driverName: string;
@@ -11,21 +12,21 @@ export class AllocationRule {
   beMatch?: string;
   sl1Select?: string;
   salesCritCond?: string;
-  salesCritChoices?: string[];
+  salesCritChoices: string[] = [];
   prodPFSelect?: string;
   prodPFCritCond?: string;
-  prodPFCritChoices?: string[];
+  prodPFCritChoices: string[] = [];
   prodBUSelect?: string;
   prodBUCritCond?: string;
-  prodBUCritChoices?: string[];
+  prodBUCritChoices: string[] = [];
   prodTGSelect?: string;
   prodTGCritCond?: string;
-  prodTGCritChoices?: string[];
+  prodTGCritChoices: string[] = [];
   scmsSelect?: string;
   scmsCritCond?: string;
-  scmsCritChoices?: string[];
+  scmsCritChoices: string[] = [];
   beSelect?: string;
   beCritCond?: string;
-  beCritChoices?: string[];
+  beCritChoices: string[] = [];
   status = 'I';
 }

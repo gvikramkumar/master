@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import DollarUploadController from '../dollar-upload/controller';
 import MappingUploadController from '../mapping-upload/controller';
 import DeptUploadController from '../dept-upload/controller';
-import PostgresRepo from '../../common/pg-lookup/postgres-repo';
+import PgLookupRepo from '../../common/pg-lookup/repo';
 import {ApiError} from '../../../lib/common/api-error';
 import {svrUtil} from '../../../lib/common/svr-util';
 
@@ -14,7 +14,7 @@ export default class ReportController {
     private dollarUploadCtrl: DollarUploadController,
     private mappingUploadCtrl: MappingUploadController,
     private deptUploadCtrl: DeptUploadController,
-    private postgresRepo: PostgresRepo
+    private postgresRepo: PgLookupRepo
   ) {}
   // for getReport we expect:
   // * excelFilename: name of file it will download to
