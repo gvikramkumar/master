@@ -27,12 +27,16 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="left text-center half-margin-bottom">Matching Criteria</div>
-        <cui-select name="salesMatch" [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true" [tabIndex]="0"></cui-select>
-        <cui-select name="productMatch" [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product" empty="true" [tabIndex]="0"></cui-select>
+        <cui-select name="salesMatch" [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
+                    [tabIndex]="0" (selectChange)="matchChange('sales')"></cui-select>
+        <cui-select name="productMatch" [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product"
+                    empty="true" [tabIndex]="0" (selectChange)="matchChange('product')"></cui-select>
         <div class="form-group-text" [fxShow]="!!rule.productMatch"></div>
         <div class="form-group-text" [fxShow]="!!rule.productMatch"></div>
-        <cui-select name="scmsMatch" [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS" empty="true" [tabIndex]="0"></cui-select>
-        <cui-select name="beMatch" [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity" empty="true" [tabIndex]="0"></cui-select>
+        <cui-select name="scmsMatch" [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS"
+                    empty="true" [tabIndex]="0" (selectChange)="matchChange('scms')"></cui-select>
+        <cui-select name="beMatch" [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
+                    empty="true" [tabIndex]="0" (selectChange)="matchChange('be')"></cui-select>
         <cui-select name="leMatch" [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
                     empty="true" [tabIndex]="0"></cui-select>
       </div>
@@ -82,8 +86,12 @@
       <button cuiButton color="secondary" (click)="cancel()">Cancel</button>
       <button cuiButton color="secondary" (click)="reset()">Reset</button>
     </div>
+
+<!--
     <div>form.valid: {{form.valid}}</div>
     <div>form.invalid: {{form.invalid}}</div>
     <div>form.pending: {{form.pending}}</div>
+-->
+
   </form>
 </div>

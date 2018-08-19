@@ -17,6 +17,10 @@ export class RuleService extends RestBase<AllocationRule> {
     super('allocation-rule', httpClient, store, true);
   }
 
+  getLatestByName() {
+    return this.getManyLatest('name');
+  }
+
   getLatestByNameActive() {
     return this.getManyLatest('name', {status: 'A'});
   }

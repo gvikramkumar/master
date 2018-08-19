@@ -169,7 +169,7 @@ export default class ControllerBase {
   // this is a placeholder, you have to override this and supply the
   // uniqueFilterOrProps and predicate values, then call super with all
   syncRecordsQueryOne(req, res, next) {
-    this.repo.syncRecordsQueryOne(req.query, null,  null, req.body, req.user.id)
+    this.repo.syncRecordsQueryOne(req.query, null, null, req.body, req.user.id)
       .then(() => res.end());
   }
 
@@ -242,15 +242,15 @@ export default class ControllerBase {
     }
     return this.repo.getMany(filter)
       .then(names => {
+        if (upper) {
+          names = names.map(x => x.toUpperCase());
+          name = name.toUpperCase();
+        }
+
         if (editMode) {
           names = _.without(names, name);
         }
-        if (upper) {
-          names = names.map(x => x.toUpperCase());
-          return !_.includes(names, name.toUpperCase());
-        } else {
-          return !_.includes(names, name);
-        }
+        return !_.includes(names, name);
       });
   }
 

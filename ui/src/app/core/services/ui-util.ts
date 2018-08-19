@@ -16,6 +16,21 @@ export class UiUtil {
   constructor(private store: AppStore, private dialogService: CuiDialogService) {
   }
 
+  static waitForPending(form, resolve) {
+    if (form.status === 'PENDING') {
+      // console.log('waiting...');
+      setTimeout(UiUtil.waitForPending.bind(null, form, resolve), 100);
+    } else {
+      resolve();
+    }
+  }
+
+  static waitForAsyncValidations(form) {
+    return new Promise((resolve, reject) => {
+      UiUtil.waitForPending(form, resolve);
+    });
+  }
+
   static stringToArray(str) {
     return str ? str.split(',').map(x => x.trim()).filter(x => !!x) : [];
 

@@ -65,6 +65,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   public ngOnInit(): void {
+
+
     const promises = [
       this.pgLookupService.getRuleCriteriaChoicesSalesLevel1().toPromise(),
       this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
@@ -86,9 +88,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.ruleNames = results[4].map(x => x.toUpperCase());
 
         if (this.editMode) {
-          this.rule = results[4];
+          this.rule = results[5];
           this.orgRule = _.cloneDeep(this.rule);
-          this.ruleNames = _.without(this.ruleNames, this.rule.name);
+          this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
         }
         this.init();
 
@@ -164,20 +166,53 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       });
   }
 
-  public save() {
-    UiUtil.triggerBlur('.fin-edit-container form');
-    if (this.form.valid) {
-      this.uiUtil.confirmSave()
-        .subscribe(valid => {
-          if (valid) {
-            this.ruleService.add(this.rule)
-              .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
-          }
-        });
-    } else {
-      console.log(this.form.valid, this.form.pending);
+  cleanUp() {
+    // clear out cond/choices if no match selected:
+    // this should be handled via match selectChange events (which it's wired to), but they
+    // don't trigger currently on empty click so do it here for now
+    this.matchChange('sales');
+    this.matchChange('product');
+    this.matchChange('scms');
+    this.matchChange('be');
+
+    // if match selected and cond selected and not choices, clear out cond
+    if (!this.rule.salesCritChoices.length) {
+      this.rule.salesCritCond = undefined;
+    }
+    if (!this.rule.prodPFCritChoices.length) {
+      this.rule.prodPFCritCond = undefined;
+    }
+    if (!this.rule.prodBUCritChoices.length) {
+      this.rule.prodBUCritCond = undefined;
+    }
+    if (!this.rule.prodTGCritChoices.length) {
+      this.rule.prodTGCritCond = undefined;
+    }
+    if (!this.rule.scmsCritChoices.length) {
+      this.rule.scmsCritCond = undefined;
+    }
+    if (!this.rule.beCritChoices.length) {
+      this.rule.beCritCond = undefined;
     }
   }
+
+  save() {
+    UiUtil.triggerBlur('.fin-edit-container form');
+    UiUtil.waitForAsyncValidations(this.form)
+      .then(() => {
+        if (this.form.valid) {
+          this.uiUtil.confirmSave()
+            .subscribe(result => {
+              if (result) {
+                this.cleanUp();
+                this.ruleService.add(this.rule)
+                  .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+              }
+            });
+        }
+      });
+  }
+
 
   requiredCond(select) {
     switch (select) {
@@ -248,5 +283,31 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     });
   }
 
+  // this is what we want to do, i.e. clear out cond/choices when they clear match, but we don't get a
+  // selectChange event on cui-select clear, even when setting emitSelection=true
+  // we'll have to clear the fields on save() instead for now
+  matchChange(type) {
+
+    if (type === 'sales' && !this.rule.salesMatch) {
+      this.rule.salesCritCond = undefined;
+      this.rule.salesCritChoices = [];
+    }
+    if (type === 'product' && !this.rule.productMatch) {
+      this.rule.prodPFCritCond = undefined;
+      this.rule.prodBUCritCond = undefined;
+      this.rule.prodTGCritCond = undefined;
+      this.rule.prodPFCritChoices = [];
+      this.rule.prodBUCritChoices = [];
+      this.rule.prodTGCritChoices = [];
+    }
+    if (type === 'scms' && !this.rule.scmsMatch) {
+      this.rule.scmsCritCond = undefined;
+      this.rule.scmsCritChoices = [];
+    }
+    if (type === 'be' && !this.rule.beMatch) {
+      this.rule.beCritCond = undefined;
+      this.rule.beCritChoices = [];
+    }
+  }
 
 }
