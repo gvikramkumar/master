@@ -2,18 +2,28 @@ import AllocationRuleRepo from './repo';
 import ControllerBase from '../../../lib/base-classes/controller-base';
 import {injectable} from 'inversify';
 import {AllocationRule} from '../../../../shared/models/allocation-rule';
-import PostgresRepo from '../pg-lookup/postgres-repo';
+import PgLookupRepo from '../pg-lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
 import {ApiError} from '../../../lib/common/api-error';
 
 @injectable()
 export default class AllocationRuleController extends ControllerBase {
-  constructor(repo: AllocationRuleRepo, private postgresRepo: PostgresRepo) {
+  constructor(repo: AllocationRuleRepo, private pgLookupRepo: PgLookupRepo) {
     super(repo);
   }
 
-  // we need to generate the sql statements from their condition and choices, and for
-  // some we need to validate their choices against postgres
+  createSelect(cond, choices) {
+    let sql = ` ${cond} ( `;
+    choices.forEach((choice, idx) => {
+      sql += `'${choice.trim()}'`;
+      if (idx < choices.length - 1) {
+        sql += ', ';
+      }
+    });
+    sql += ` ) `;
+    return sql;
+  }
+
   addOne(req, res, next) {
     const rule: AllocationRule = req.body;
     if (rule.salesMatch && rule.salesCritCond && rule.salesCritChoices.length) {
@@ -53,52 +63,59 @@ export default class AllocationRuleController extends ControllerBase {
       rule.beSelect = undefined;
     }
 
-    const promises = [];
-    const validations: {name: string, values: string[]}[] = <any>[];
-    
-    if (rule.prodPFSelect) {
-      promises.push(this.postgresRepo.getSortedListFromColumn('fpacon.vw_fpa_products', 'product_family_id'));
-      validations.push({name: 'Product PF', values: rule.prodPFCritChoices});
-    }
-    if (rule.prodBUSelect) {
-      promises.push(this.postgresRepo.getSortedListFromColumn('fpacon.vw_fpa_products', 'business_unit_id'));
-      validations.push({name: 'Product BU', values: rule.prodBUCritChoices});
-    }
-
-    req.body = rule;
-    if (promises.length) {
-      const errors = [];
-      Promise.all(promises)
-        .then(results => {
-          validations.forEach((validation, valIdx) => {
-            validation.values.forEach(uiValue => {
-                if (svrUtil.sortedListNotExists(results[valIdx], uiValue)) {
-                errors.push(`${uiValue} is invalid for ${validation.name}`);
-              }
-            });
-          });
-          if (errors.length) {
-            next(new ApiError('Invalid values', errors, 400));
-          } else {
-            super.addOne(req, res, next);
-          }
-        });
-    } else {
-      super.addOne(req, res, next);
-    }
-  }
-
-  createSelect(cond, choices) {
-    let sql = ` ${cond} ( `;
-    choices.forEach((choice, idx) => {
-      sql += `'${choice.trim()}'`;
-      if (idx < choices.length - 1) {
-        sql += ', ';
+    Promise.all([
+      this.validateNameDoesntExist(rule.name, true, rule.moduleId),
+      this._validateProdPFCritChoices(rule.prodPFCritChoices),
+      this._validateProdBUCritChoices(rule.prodBUCritChoices)
+    ]).then(results => {
+      const errors = [
+        {message: 'Name already exists'},
+        {message: 'Some product PF select fields don\'t exist.'},
+        {message: 'Some product BU select fields don\'t exist.'}
+      ];
+      const errs = [];
+      results.forEach((valid, idx) => {
+        if (valid === false) {
+          errs.push(errors[idx]);
+        }
+      });
+      if (errs.length) {
+        next(new ApiError('Add rule errors', errs, 400));
+        return;
       }
+      super.addOne(req, res, next);
     });
-    sql += ` ) `;
-    return sql;
   }
+
+
+  _validateProdPFCritChoices(choices) {
+    if (!choices.length) {
+      return Promise.resolve(true);
+    }
+    return this.pgLookupRepo.checkForExistenceArray('fpacon.vw_fpa_products',
+      'product_family_id', choices, false);
+  }
+
+  validateProdPFCritChoices(req, res, next) {
+    this._validateProdPFCritChoices(req.body)
+      .then(exists => res.send(exists))
+      .catch(next);
+  }
+
+  _validateProdBUCritChoices(choices) {
+    if (!choices.length) {
+      return Promise.resolve(true);
+    }
+    return this.pgLookupRepo.checkForExistenceArray('fpacon.vw_fpa_products',
+      'business_unit_id', choices, false);
+  }
+
+  validateProdBUCritChoices(req, res, next) {
+    this._validateProdBUCritChoices(req.body)
+      .then(exists => res.send(exists))
+      .catch(next);
+  }
+
 
 }
 

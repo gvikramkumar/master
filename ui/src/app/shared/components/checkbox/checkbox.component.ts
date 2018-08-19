@@ -6,14 +6,15 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
   styleUrls: ['./checkbox.component.scss']
 })
 export class CheckboxComponent implements OnInit {
-  @Input('label') label: string;
-  @Input('trueVal') trueVal: any;
-  @Input('falseVal') falseVal: any;
-  @Input('model') model;
-  @Output('modelChange') modelChange = new EventEmitter<any>();
+  @Input() name: string;
+  @Input() label: string;
+  @Input() trueVal: any;
+  @Input() falseVal: any;
+  @Input() model;
+  @Output() modelChange = new EventEmitter<any>();
+  @Input() disabled;
+  @Input() inline = false;
   bool: boolean;
-  @Input('disabled') disabled;
-  @Input('inline') inline = false;
 
   constructor() { }
 

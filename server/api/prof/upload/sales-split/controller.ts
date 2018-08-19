@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import SalesSplitUploadRepo from '../../sales-split-upload/repo';
-import PostgresRepo from '../../../common/pg-lookup/postgres-repo';
+import PgLookupRepo from '../../../common/pg-lookup/repo';
 import SalesSplitUploadTemplate from './template';
 import * as _ from 'lodash';
 import SalesSplitUploadImport from './import';
@@ -15,7 +15,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
 
   constructor(
     repo: SalesSplitUploadRepo,
-    private pgRepo: PostgresRepo,
+    private pgRepo: PgLookupRepo,
     openPeriodRepo: OpenPeriodPgRepo,
     submeasureRepo: SubmeasureRepo,
     userRoleRepo: UserRoleRepo

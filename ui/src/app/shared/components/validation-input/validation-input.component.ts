@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {AsyncValidatorFn, NgForm, NgModel, ValidatorFn, Validators} from '@angular/forms';
-import AnyObj from '../../../../../../shared/models/any-obj';
+import {ChangeDetectorRef, Component, ElementRef, Input, OnChanges, Renderer2, Self, ViewChild} from '@angular/core';
+import {AsyncValidatorFn, ControlValueAccessor, NgControl, NgForm, ValidatorFn, Validators} from '@angular/forms';
+import {UiUtil} from '../../../core/services/ui-util';
 
 export interface InputValidation {
   name: string;
@@ -21,33 +21,115 @@ export class ValidationInputOptions {
 
 @Component({
   selector: 'fin-input',
+  exportAs: 'finInput',
   templateUrl: './validation-input.component.html',
   styleUrls: ['./validation-input.component.scss']
 })
-export class ValidationInputComponent {
+export class ValidationInputComponent implements OnChanges, ControlValueAccessor {
   validations: InputValidation[] = [];
   opts = new ValidationInputOptions();
-  @Input() form: NgForm;
-  @ViewChild('input') input: HTMLInputElement;
-  @ViewChild('ngm') ngm: NgModel;
+  updateOn = 'change';
+  // @Input() form: NgForm;
+  @ViewChild('input') input: ElementRef; // HTMLInputElement
+  @Input() options: ValidationInputOptions = {};
+  @Input() debug = false;
+  @Input() id: string;
   @Input() name: string;
-  @Input() model;
-  @Output() modelChange = new EventEmitter();
-  @Input() label: string;
-  @Input() autocomplete: 'on' | 'off';
-  @Input() autofocus: boolean;
-  @Input() ngModelOptions;
-  @Input() options: ValidationInputOptions;
-  @Input() disabled: boolean;
-  @Input() required: boolean;
-  @Input('minlength') minLength: number;
-  @Input('maxlength') maxLength: number;
-  @Input() email: boolean;
+  @Input() label = '';
+  @Input() type: string; // unused, but people will set it, so don't complain
+  @Input() placeholder = '';
+  @Input() autocomplete = 'off';
+  @Input() autofocus = false;
+  @Input() disabled = false;
+  @Input() required = false;
+  @Input() minLength = 0;
+  @Input() maxLength = 10000;
+  @Input() email = false;
   @Input() pattern: string | RegExp;
+  @Input() compressed = false;
+  @Input() stringToArray = false; // you have an array in model and comma sep values in textbox
+/*
+  @Output() change = new EventEmitter();
+  @Output() input = new EventEmitter();
+*/
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private elemRef: ElementRef) { }
+  // textarea
+  @Input() textarea = false;
+  @Input() rows: number;
+  @Input() cols: number;
 
-  ngAfterViewInit() {
+  // @Input('maxlength') maxLength: number; // restricts size and validates for textarea
+
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private elemRef: ElementRef,
+    private renderer: Renderer2,
+    public form: NgForm,
+    @Self() public ngc: NgControl
+    ) {
+    // Note: we provide the value accessor through here, instead of
+    // the `providers` to avoid running into a circular import.
+    this.ngc.valueAccessor = this;
+  }
+
+  // ControlValueAccessor interface
+  _onChange = (_: any) => {
+  }
+
+  _onTouched = () => {
+  }
+
+  writeValue(value: any): void {
+    let normalizedValue: string;
+    if (value instanceof Array) {
+      normalizedValue = (<any[]>value).join(', ');
+    } else {
+      normalizedValue = value == null ? '' : value;
+    }
+    this.renderer.setProperty(this.input.nativeElement, 'value', normalizedValue);
+  }
+
+  registerOnChange(fn: (_: any) => void): void {
+    this._onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this._onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.renderer.setProperty(this.input, 'disabled', isDisabled);
+  }
+
+  // End ControlValueAccessor interface
+
+  handleChange() {
+    let val = this.input.nativeElement.value;
+    if (this.stringToArray) {
+      val = UiUtil.stringToArray(val);
+    }
+    this._onChange(val);
+  }
+
+  onInput(event) {
+    this.handleChange();
+  }
+
+  onChange(event) {
+    // this.handleChange(); // not needed if calling "before" onTouched in blur, maybe checkbox/radio needs it??
+  }
+
+  onBlur(event) {
+    this.handleChange();
+    this._onTouched();
+  }
+
+  init() {
+    if (!this.name) {
+      console.error('fin-input: name is required');
+      return;
+    }
+
     Object.assign(this.opts, this.options);
 
     if (this.required) {
@@ -58,41 +140,44 @@ export class ValidationInputComponent {
       this.validations.push({
         name: 'minlength',
         message: `Minimum of ${this.minLength} characters required`,
-        fcn: Validators.minLength(this.minLength)});
+        fcn: Validators.minLength(this.minLength)
+      });
     }
 
     if (this.maxLength) {
       this.validations.push({
         name: 'maxlength',
         message: `Maximum of ${this.maxLength} characters allowed`,
-        fcn: Validators.maxLength(this.maxLength)});
+        fcn: Validators.maxLength(this.maxLength)
+      });
     }
 
     if (this.email) {
       this.validations.push({
         name: 'email',
         message: `Invalid email address`,
-        fcn: Validators.email});
+        fcn: Validators.email
+      });
     }
 
     if (this.pattern) {
       this.validations.push({
         name: 'pattern',
         message: `Invalid pattern address`,
-        fcn: Validators.pattern(this.pattern)});
+        fcn: Validators.pattern(this.pattern)
+      });
     }
 
     this.validations = this.validations.concat(this.opts.validations);
     const asyncValidators = this.opts.asyncValidations.map(v => v.fcn);
     if (this.validations.length) {
-      this.ngm.control.setValidators(this.validations.map(v => v.fcn));
+      this.ngc.control.setValidators(this.validations.map(v => v.fcn));
     }
     if (asyncValidators.length) {
-      this.ngm.control.setAsyncValidators(asyncValidators);
+      this.ngc.control.setAsyncValidators(asyncValidators);
     }
 
     this.changeDetectorRef.detectChanges();
-    this.addAsteriskToRequiredLabel();
   }
 
   addAsteriskToRequiredLabel() {
@@ -105,6 +190,14 @@ export class ValidationInputComponent {
     if (changes.label) {
       this.addAsteriskToRequiredLabel();
     }
+
+    if (changes.options) {
+      this.init();
+    }
+  }
+
+  setFocus() {
+    this.input.nativeElement.focus();
   }
 
 }

@@ -440,7 +440,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               }
               obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
             } else {
-              this.uiUtil.genericDialog('Validaton Errors', this.errs.join('\n'));
+              this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
             }
           }
         }

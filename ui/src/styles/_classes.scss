@@ -45,24 +45,18 @@
 
 }
 
-.form-group-text {
-  height: 60px;
-  line-height: 60px;
-  margin-bottom: 10px;
-}
-
-.form-group-text-no-title {
-  height: 50px;
-  line-height: 60px;
-  margin-bottom: 10px;
-}
-
 .form-group-inline-20 {
   margin-right: 20px;
 }
 
 .form-group-inline-30 {
   margin-right: 30px;
+}
+
+.form-group-text {
+  height: 60px;
+  margin-bottom: 10px;
+  line-height: 60px;
 }
 
 .form-group-switch {
@@ -84,48 +78,27 @@
 }
 
 .form-group-text-no-title {
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  margin-bottom: 10px;
+  line-height: 40px;
 }
 
 .form-group-switch-no-title {
-  height: 50px;
+  height: 40px;
   margin-bottom: 10px;
   padding-top: 9px;
 }
 
 .form-group-check-no-title {
-  height: 50px;
+  height: 40px;
   margin-bottom: 10px;
   padding-top: 11px;
 }
 
 .form-group-button-no-title {
-  height: 50px;
+  height: 40px;
   margin-bottom: 10px;
   padding-top: 5px;
-}
-
-.two-col-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  //height: 60px; // this should change on usage
-  .left {
-    //@extend .outline;
-    flex: 1 1 48%;
-    margin-right: 4%;
-    /deep/ .form-group {
-      margin-bottom: 0;
-    }
-  }
-  .right {
-    //@extend .outline;
-    flex: 1 1 48%;
-    /deep/ .form-group {
-      margin-bottom: 0;
-    }
-  }
 }
 
 .fin.cui .fin-hide {

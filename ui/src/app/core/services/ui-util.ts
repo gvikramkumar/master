@@ -16,9 +16,28 @@ export class UiUtil {
   constructor(private store: AppStore, private dialogService: CuiDialogService) {
   }
 
+  static waitForPending(form, resolve) {
+    if (form.status === 'PENDING') {
+      // console.log('waiting...');
+      setTimeout(UiUtil.waitForPending.bind(null, form, resolve), 100);
+    } else {
+      resolve();
+    }
+  }
+
+  static waitForAsyncValidations(form) {
+    return new Promise((resolve, reject) => {
+      UiUtil.waitForPending(form, resolve);
+    });
+  }
+
+  static stringToArray(str) {
+    return str ? str.split(',').map(x => x.trim()).filter(x => !!x) : [];
+
+  }
   
   static triggerBlur(selector) {
-    const query = `${selector} input, ${selector} select, my-form textarea`;
+    const query = `${selector} input, ${selector} select, ${selector} textarea`;
     _.forEach(document.querySelectorAll(query), elem => {
       elem.dispatchEvent(new Event('blur'));
     });

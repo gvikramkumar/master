@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {svrUtil} from '../common/svr-util';
 import RepoBase from './repo-base';
 import {PostgresRepoBase} from './pg-repo-base';
+import AnyObj from '../../../shared/models/any-obj';
 
 export default class ControllerBase {
 
@@ -168,7 +169,7 @@ export default class ControllerBase {
   // this is a placeholder, you have to override this and supply the
   // uniqueFilterOrProps and predicate values, then call super with all
   syncRecordsQueryOne(req, res, next) {
-    this.repo.syncRecordsQueryOne(req.query, null,  null, req.body, req.user.id)
+    this.repo.syncRecordsQueryOne(req.query, null, null, req.body, req.user.id)
       .then(() => res.end());
   }
 
@@ -230,7 +231,27 @@ export default class ControllerBase {
       if (!data[prop]) {
         throw new ApiError(`Property missing: ${prop}.`, data, 400);
       }
-    })
+    });
+  }
+
+  // return false if name exists in list
+  validateNameDoesntExist(name: string, editMode: boolean, moduleId = null, upper = true) {
+    const filter: AnyObj = {getDistinct: 'name'};
+    if (moduleId) {
+      filter.moduleId = moduleId;
+    }
+    return this.repo.getMany(filter)
+      .then(names => {
+        if (upper) {
+          names = names.map(x => x.toUpperCase());
+          name = name.toUpperCase();
+        }
+
+        if (editMode) {
+          names = _.without(names, name);
+        }
+        return !_.includes(names, name);
+      });
   }
 
 }

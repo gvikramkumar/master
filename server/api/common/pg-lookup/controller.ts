@@ -2,13 +2,13 @@ import {injectable} from 'inversify';
 import {ApiError} from '../../../lib/common/api-error';
 import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 import {PostgresRepoBase} from '../../../lib/base-classes/pg-repo-base';
-import PostgresRepo from './postgres-repo';
+import PgLookupRepo from './repo';
 
 
 @injectable()
 export class PgLookupController {
 
-  constructor(private repo: PostgresRepo) {
+  constructor(private repo: PgLookupRepo) {
   }
 
   // post /call-method/:method

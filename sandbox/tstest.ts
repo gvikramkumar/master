@@ -3,6 +3,15 @@ import * as _ from 'lodash';
 // import {take, first} from 'rxjs/operators';
 
 
+
+
+
+console.log('null', typeof true);
+
+
+
+
+
 /*
 let init = false;
 const init$ = new BehaviorSubject<boolean>(init);

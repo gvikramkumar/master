@@ -1,36 +1,57 @@
-<div class="form-group" [class.form-group--error]="ngm.invalid && (form.submitted || ngm.touched || ngm.dirty)">
+<div class="form-group"
+     [class.form-group--error]="ngc && ngc.invalid && (form.submitted || ngc.touched || ngc.dirty)"
+     [class.input--compressed]="compressed">
 
   <div class="form-group__text">
 
-    <input #input name="{{name}}"
-           #ngm="ngModel"
-           [(ngModel)]="model"
-           (ngModelChange)="modelChange.emit(model)"
-           [ngModelOptions]="ngModelOptions"
+    <input *ngIf="!textarea" #input type="text"
+           [id]="id"
+           [placeholder]="placeholder"
            [disabled]="disabled"
            [autocomplete]="autocomplete"
-           [autofocus]="autofocus">
+           [autofocus]="autofocus"
+           [minLength]="minLength"
+           [maxLength]="maxLength"
+           (input)="onInput($event)"
+           (change)="onChange($event)"
+           (blur)="onBlur($event)"
+    >
+
+    <textarea *ngIf="textarea" #input
+              [id]="id"
+              [placeholder]="placeholder"
+              [disabled]="disabled"
+              [autofocus]="autofocus"
+              [minLength]="minLength"
+              [maxLength]="maxLength"
+              [rows]="rows"
+              [cols]="cols"
+              (input)="onInput($event)"
+              (change)="onChange($event)"
+              (blur)="onBlur($event)"
+    ></textarea>
 
     <label>{{label}}</label>
 
   </div>
   <div class="help-block text-danger" role="alert">
     <div *ngFor="let v of validations">
-      <span *ngIf="ngm.errors && ngm.errors[v.name] && v.message && (form.submitted || ngm.touched || ngm.dirty)">
+      <span *ngIf="ngc.errors && ngc.errors[v.name] && v.message && (form.submitted || ngc.touched || ngc.dirty)">
         {{v.message}}</span>
     </div>
     <div *ngFor="let av of opts.asyncValidations">
-      <span *ngIf="ngm.errors && ngm.errors[av.name] && av.message && (form.submitted || ngm.touched || ngm.dirty)">
+      <span *ngIf="ngc.errors && ngc.errors[av.name] && av.message && (form.submitted || ngc.touched || ngc.dirty)">
         {{av.message}}</span>
     </div>
   </div>
 
-<!--
-    <div>valid: {{ngm.valid}}</div>
-    <div>touched: {{ngm.touched}}</div>
-    <div>dirty: {{ngm.dirty}}</div>
-    <div>model: {{model}}</div>
-    <pre>errors: {{ngm.errors|json}}</pre>
--->
-
+  <ng-container *ngIf="debug">
+    <div>form.valid: {{form?.valid}}</div>
+    <div>form.submitted: {{form?.submitted}}</div>
+    <div>valid: {{ngc?.valid}}</div>
+    <div>touched: {{ngc?.touched}}</div>
+    <div>dirty: {{ngc?.dirty}}</div>
+    <div>updateOn: {{updateOn}}</div>
+    <pre>errors: {{ngc?.errors|json}}</pre>
+  </ng-container>
 </div>

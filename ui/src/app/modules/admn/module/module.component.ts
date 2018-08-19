@@ -100,7 +100,7 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
         this.moduleService.refreshStore();
       });
     } else {
-      this.uiUtil.genericDialog('Validaton Errors', this.errs.join('\n'));
+      this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
     }
   }
 

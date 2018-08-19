@@ -9,6 +9,7 @@ class User {
   name: string;
   name2: string;
   name3: string;
+  name4: string;
   age?: number;
   gender: 1 | 2;
 }
@@ -48,6 +49,7 @@ export class TestValidationComponent implements OnInit {
   };
   disabled = false;
   RegExp = RegExp
+  stuff;
 
   constructor() {
     this.nameOpts.maxLength = 3;
@@ -61,6 +63,10 @@ export class TestValidationComponent implements OnInit {
         message: (): string => `Maxmimum of ${this.nameOpts.maxLength} characters allowed.`,
       });
 */
+  }
+
+  handle(event) {
+    // console.log('handle', event.type, event.target && event.target.value);
   }
 
   ngOnInit() {
@@ -84,7 +90,10 @@ export class TestValidationComponent implements OnInit {
 
   submit() {
     console.log('submit called');
-    UiUtil.triggerBlur('.my-form');
+    if (this.form.valid) {
+      UiUtil.triggerBlur('.my-form');
+      console.log(this.user);
+    }
     /*
         // this markes as touched but cui-input only listens to blur event so useless for cui-input. Would work for
         // other controls, but they can just use form.submitted, so why bother.
