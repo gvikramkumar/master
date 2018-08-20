@@ -132,24 +132,40 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
 
     Object.assign(this.opts, this.options);
 
+    this.validations = [];
     if (this.required) {
       this.validations.push({name: 'required', message: null, fcn: Validators.required});
     }
 
-    if (this.minLength !== undefined) {
+    if (this.minLength !== undefined && this.maxLength && this.minLength === this.maxLength) {
+      const message = `Must be exactly ${this.minLength} characters long`;
       this.validations.push({
         name: 'minlength',
-        message: `Minimum of ${this.minLength} characters required`,
+        message,
         fcn: Validators.minLength(this.minLength)
       });
-    }
-
-    if (this.maxLength) {
       this.validations.push({
         name: 'maxlength',
-        message: `Maximum of ${this.maxLength} characters allowed`,
+        message,
         fcn: Validators.maxLength(this.maxLength)
       });
+    } else {
+
+      if (this.minLength !== undefined) {
+        this.validations.push({
+          name: 'minlength',
+          message: `Minimum of ${this.minLength} characters required`,
+          fcn: Validators.minLength(this.minLength)
+        });
+      }
+
+      if (this.maxLength) {
+        this.validations.push({
+          name: 'maxlength',
+          message: `Maximum of ${this.maxLength} characters allowed`,
+          fcn: Validators.maxLength(this.maxLength)
+        });
+      }
     }
 
     if (this.email) {
@@ -163,7 +179,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     if (this.pattern) {
       this.validations.push({
         name: 'pattern',
-        message: `Invalid pattern address`,
+        message: `Invalid value`,
         fcn: Validators.pattern(this.pattern)
       });
     }
@@ -177,6 +193,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
       this.ngc.control.setAsyncValidators(asyncValidators);
     }
 
+    this.addAsteriskToRequiredLabel();
     this.changeDetectorRef.detectChanges();
   }
 
@@ -187,13 +204,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   }
 
   ngOnChanges(changes) {
-    if (changes.label) {
-      this.addAsteriskToRequiredLabel();
-    }
-
-    if (changes.options) {
-      this.init();
-    }
+    this.init();
   }
 
   setFocus() {
