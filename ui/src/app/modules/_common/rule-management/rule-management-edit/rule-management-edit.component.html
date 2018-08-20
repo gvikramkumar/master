@@ -3,8 +3,8 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name"
-                   [required]="true"[options]="nameOptions"></fin-input>
+        <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [notInList]="ruleNames"
+                   notInListMessage="Rule name already exists" [required]="true"></fin-input>
         <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="driverNames" label="Driver"
                     optionsKey="name" optionsValue="value" [required]="true" [tabIndex]="0"></cui-select>
         <cui-select name="period" [(ngModel)]="rule.period" [items]="periods" label="Driver Period"

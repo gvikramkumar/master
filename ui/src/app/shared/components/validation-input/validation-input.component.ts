@@ -1,6 +1,8 @@
 import {ChangeDetectorRef, Component, ElementRef, Input, OnChanges, Renderer2, Self, ViewChild} from '@angular/core';
 import {AsyncValidatorFn, ControlValueAccessor, NgControl, NgForm, ValidatorFn, Validators} from '@angular/forms';
 import {UiUtil} from '../../../core/services/ui-util';
+import {inListValidator} from '../../validators/in-list.validator';
+import {notInListValidator} from '../../validators/not-in-list.validator';
 
 export interface InputValidation {
   name: string;
@@ -48,6 +50,16 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   @Input() pattern: string | RegExp;
   @Input() compressed = false;
   @Input() stringToArray = false; // you have an array in model and comma sep values in textbox
+  @Input() requiredMessage: string;
+  @Input() minLengthMessage: string;
+  @Input() maxLengthMessage: string;
+  @Input() emailMessage: string;
+  @Input() patternMessage: string;
+  @Input() inList: string[];
+  @Input() inListMessage: string;
+  @Input() notInList: string[];
+  @Input() notInListMessage: string;
+
 /*
   @Output() change = new EventEmitter();
   @Output() input = new EventEmitter();
@@ -134,11 +146,11 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
 
     this.validations = [];
     if (this.required) {
-      this.validations.push({name: 'required', message: null, fcn: Validators.required});
+      this.validations.push({name: 'required', message: this.requiredMessage || null, fcn: Validators.required});
     }
 
     if (this.minLength !== undefined && this.maxLength && this.minLength === this.maxLength) {
-      const message = `Must be exactly ${this.minLength} characters long`;
+      const message = this.minLengthMessage || `Must be exactly ${this.minLength} characters long`;
       this.validations.push({
         name: 'minlength',
         message,
@@ -154,7 +166,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
       if (this.minLength !== undefined) {
         this.validations.push({
           name: 'minlength',
-          message: `Minimum of ${this.minLength} characters required`,
+          message: this.minLengthMessage || `Minimum of ${this.minLength} characters required`,
           fcn: Validators.minLength(this.minLength)
         });
       }
@@ -162,7 +174,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
       if (this.maxLength) {
         this.validations.push({
           name: 'maxlength',
-          message: `Maximum of ${this.maxLength} characters allowed`,
+          message: this.maxLengthMessage || `Maximum of ${this.maxLength} characters allowed`,
           fcn: Validators.maxLength(this.maxLength)
         });
       }
@@ -171,7 +183,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     if (this.email) {
       this.validations.push({
         name: 'email',
-        message: `Invalid email address`,
+        message: this.emailMessage || `Invalid email address`,
         fcn: Validators.email
       });
     }
@@ -179,8 +191,24 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     if (this.pattern) {
       this.validations.push({
         name: 'pattern',
-        message: `Invalid value`,
+        message: this.patternMessage || `Invalid value`,
         fcn: Validators.pattern(this.pattern)
+      });
+    }
+
+    if (this.inList) {
+      this.validations.push({
+        name: 'inList',
+        message: this.inListMessage || `Value doesn\'t exist`,
+        fcn: inListValidator(this.inList)
+      });
+    }
+
+    if (this.notInList) {
+      this.validations.push({
+        name: 'notInList',
+        message: this.notInListMessage || `Value already exists`,
+        fcn: notInListValidator(this.notInList)
       });
     }
 

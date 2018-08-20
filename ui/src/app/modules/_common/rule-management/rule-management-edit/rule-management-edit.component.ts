@@ -21,7 +21,6 @@ import {notInListValidator} from '../../../../shared/validators/not-in-list.vali
 })
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
   ruleNames: string[] = [];
-  nameOptions: ValidationInputOptions;
   prodPFChoiceOptions: ValidationInputOptions;
   prodBUChoiceOptions: ValidationInputOptions;
   @ViewChild('form') form: NgForm;
@@ -93,16 +92,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
         }
         this.init();
-
-        this.nameOptions = {
-          validations: [
-            {
-              name: 'notInList',
-              message: 'Rule name already exists',
-              fcn: notInListValidator(this.ruleNames)
-            }
-          ]
-        };
 
         this.prodPFChoiceOptions = {
           asyncValidations: [

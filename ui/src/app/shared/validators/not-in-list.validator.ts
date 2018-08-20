@@ -15,7 +15,7 @@ export function notInListValidator(_list: string[], upper = true): ValidatorFn {
 }
 
 @Directive({
-  selector: '[finNotInList]',
+  selector: 'input[finNotInList]',
   providers: [{provide: NG_VALIDATORS, useExisting: NotInListValidator, multi: true}]
 })
 export class NotInListValidator implements Validator {
