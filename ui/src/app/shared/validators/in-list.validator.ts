@@ -3,13 +3,20 @@ import {AbstractControl, NG_VALIDATORS, Validator, ValidatorFn, Validators} from
 
 export function inListValidator(_list: string[], upper = true): ValidatorFn {
   return ((control: AbstractControl): {[key: string]: any} | null => {
-    const list = _list.map(x => x.toUpperCase());
-    if (upper && control.value && list.indexOf(control.value.toUpperCase()) === -1) {
-      return {'inList': {value: control.value}};
-    } else if (control.value && list.indexOf(control.value) === -1) {
-      return {'inList': {value: control.value}};
+    if (upper) {
+      const list = _list.map(x => x.toUpperCase());
+      if (control.value && list.indexOf(control.value.toUpperCase()) === -1) {
+        return {'notInList': {value: control.value}};
+      } else {
+        return null;
+      }
     } else {
-      return null;
+      const list = _list;
+      if (control.value && list.indexOf(control.value) === -1) {
+        return {'notInList': {value: control.value}};
+      } else {
+        return null;
+      }
     }
   });
 }

@@ -57,8 +57,10 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   @Input() patternMessage: string;
   @Input() inList: string[];
   @Input() inListMessage: string;
+  @Input() inListProperty: string;
   @Input() notInList: string[];
   @Input() notInListMessage: string;
+  @Input() notInListProperty: string;
 
 /*
   @Output() change = new EventEmitter();
@@ -197,18 +199,30 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     }
 
     if (this.inList) {
+      let list: string[];
+      if (this.inListProperty) {
+        list = this.inList.map(x => x[this.inListProperty]);
+      } else {
+        list = this.inList;
+      }
       this.validations.push({
         name: 'inList',
         message: this.inListMessage || `Value doesn\'t exist`,
-        fcn: inListValidator(this.inList)
+        fcn: inListValidator(list, true)
       });
     }
 
     if (this.notInList) {
+      let list: string[];
+      if (this.notInListProperty) {
+        list = this.notInList.map(x => x[this.notInListProperty]);
+      } else {
+        list = this.notInList;
+      }
       this.validations.push({
         name: 'notInList',
         message: this.notInListMessage || `Value already exists`,
-        fcn: notInListValidator(this.notInList)
+        fcn: notInListValidator(list, true)
       });
     }
 
