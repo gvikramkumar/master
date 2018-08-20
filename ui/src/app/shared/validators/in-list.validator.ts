@@ -15,11 +15,11 @@ export function inListValidator(_list: string[], upper = true): ValidatorFn {
 }
 
 @Directive({
-  selector: '[finInList]',
+  selector: 'input[finInList]',
   providers: [{provide: NG_VALIDATORS, useExisting: InListValidator, multi: true}]
 })
 export class InListValidator implements Validator {
-  @Input() list: string[];
+  @Input('finInList') list: string[];
 
   validate(control: AbstractControl): { [key: string]: any } {
     return this.list ? inListValidator(this.list)(control)
