@@ -3,11 +3,11 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [required]="true"
-                   [options]="nameOptions"></fin-input>
-        <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="driverNames" empty="true" label="Driver"
+        <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name"
+                   [required]="true"[options]="nameOptions"></fin-input>
+        <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="driverNames" label="Driver"
                     optionsKey="name" optionsValue="value" [required]="true" [tabIndex]="0"></cui-select>
-        <cui-select name="period" [(ngModel)]="rule.period" [items]="periods" label="Driver Period" empty="true"
+        <cui-select name="period" [(ngModel)]="rule.period" [items]="periods" label="Driver Period"
                     [required]="true" [tabIndex]="0"></cui-select>
       </div>
       <div class="col-lg-6">

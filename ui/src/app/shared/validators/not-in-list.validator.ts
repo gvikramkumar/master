@@ -19,7 +19,7 @@ export function notInListValidator(_list: string[], upper = true): ValidatorFn {
   providers: [{provide: NG_VALIDATORS, useExisting: NotInListValidator, multi: true}]
 })
 export class NotInListValidator implements Validator {
-  @Input() list: string[];
+  @Input('finNotInList') list: string[];
 
   validate(control: AbstractControl): { [key: string]: any } {
     return this.list ? notInListValidator(this.list)(control)

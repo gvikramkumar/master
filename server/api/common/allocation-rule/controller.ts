@@ -98,7 +98,7 @@ export default class AllocationRuleController extends ControllerBase {
 
   validateProdPFCritChoices(req, res, next) {
     this._validateProdPFCritChoices(req.body)
-      .then(exists => res.send(exists))
+      .then(exists => res.json(exists))
       .catch(next);
   }
 
@@ -112,7 +112,7 @@ export default class AllocationRuleController extends ControllerBase {
 
   validateProdBUCritChoices(req, res, next) {
     this._validateProdBUCritChoices(req.body)
-      .then(exists => res.send(exists))
+      .then(exists => res.json(exists))
       .catch(next);
   }
 
