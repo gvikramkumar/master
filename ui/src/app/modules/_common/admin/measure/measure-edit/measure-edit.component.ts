@@ -1,4 +1,4 @@
-import {ApplicationRef, Component, OnInit} from '@angular/core';
+import {ApplicationRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Measure} from '../../../models/measure';
 import {MeasureService} from '../../../services/measure.service';
@@ -12,6 +12,7 @@ import {Source} from '../../../models/source';
 import {SourceService} from '../../../services/source.service';
 import {ModuleLookupService} from '../../../services/module-lookup.service';
 import {shUtil} from '../../../../../../../../shared/shared-util';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'fin-measure-create',
@@ -27,6 +28,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   moduleSources: Source[] = [];
   hierarchies: { name: string, selected?: boolean }[] = [];
   shUtil = shUtil;
+  @ViewChild('form') form: NgForm;
 
   constructor(
     private route: ActivatedRoute,
@@ -142,38 +144,26 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     }
   */
 
-  prepForSave() {
+  cleanUp() {
     this.measure.hierarchies = this.hierarchies
       .filter(h => h.selected)
       .map(h => h.name);
   }
 
   public save() {
-    this.uiUtil.confirmSave()
-      .subscribe(resp => {
-        if (resp) {
-          this.prepForSave();
-          this.validate().subscribe(valid => {
-            if (valid) {
-              let obs: Observable<Measure>;
-              if (this.editMode) {
-                obs = this.measureService.update(this.measure);
-              } else {
-                obs = this.measureService.add(this.measure);
-              }
-              obs.subscribe(measure => this.router.navigateByUrl('/prof/admin/measure'));
-            }
-          });
-        }
-      });
-  }
-
-  validate(): Observable<boolean> {
-    // todo: need to search for measure name duplicity on add only
-    if (this.editMode) {
-      return of(true);
-    } else {
-      return of(true);
+    UiUtil.triggerBlur('');
+    if (this.form.valid) {
+      this.uiUtil.confirmSave()
+        .subscribe(resp => {
+          let obs: Observable<Measure>;
+          if (this.editMode) {
+            obs = this.measureService.update(this.measure);
+          } else {
+            obs = this.measureService.add(this.measure);
+          }
+          obs.subscribe(measure => this.router.navigateByUrl('/prof/admin/measure'));
+        });
     }
   }
+
 }

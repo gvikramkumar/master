@@ -23,12 +23,12 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <cui-select name="sources" [(ngModel)]="measure.sources" [items]="moduleSources" label="Sources"
+        <cui-select name="sources" [(ngModel)]="measure.sources" [items]="moduleSources" label="Sources" [tabIndex]="0"
                     [multiSelect]="true" optionsKey="name" optionsValue="sourceId" [required]="true"></cui-select>
       </div>
       <div class="col-lg-6">
         <cui-select name="hier" [(ngModel)]="measure.hierarchies" [items]="hierarchies" empty="true" label="Hierarchies"
-                    optionsKey="name" optionsValue="name" [multiSelect]="true" [required]="true"></cui-select>
+                    optionsKey="name" optionsValue="name" [multiSelect]="true" [required]="true" [tabIndex]="0"></cui-select>
       </div>
     </div>
 
@@ -68,7 +68,7 @@
     </div>
 
     <div class="fin-footer-buttons">
-      <button cuiButton color="primary"(click)="save()">Submit</button>
+      <button type="submit" cuiButton color="primary"(click)="save()">Submit</button>
       <button cuiButton color="secondary"(click)="cancel()">Cancel</button>
       <button cuiButton color="secondary"(click)="reset()">Reset</button>
     </div>
