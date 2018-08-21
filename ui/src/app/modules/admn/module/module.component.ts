@@ -68,11 +68,11 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
         this.displayOrders = this.modules.map(module => module.displayOrder);
 
         // if in edit mode, make sure form doesn't complain that module attributes already exist
-        if (this.editMode) {
+        /*if (this.editMode) {
           this.moduleNames.splice(this.moduleNames.indexOf(this.module.name), 1);
           this.abbrevs.splice(this.abbrevs.indexOf(this.module.abbrev), 1);
           this.displayOrders.splice(this.displayOrders.indexOf(this.module.displayOrder), 1);
-        }
+        }*/
       });
   }
 
@@ -81,6 +81,8 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
   }
 
   addModule() {
+    // update form modules to include all modules
+    this.formModules = _.cloneDeep(this.modules);
     this.module = new DfaModule();
     this.editMode = false;
     this.formTitle = 'Add New Module';
@@ -88,6 +90,8 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
   }
 
   editModule(module) {
+    // update form modules to include all modules, then remove current module from list
+    this.formModules = _.without(this.modules, module);
     this.module = _.cloneDeep(module);
     this.editMode = true;
     this.formTitle = 'Edit Module';
