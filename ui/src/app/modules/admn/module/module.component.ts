@@ -82,7 +82,7 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
 
   addModule() {
     // update form modules to include all modules
-    this.formModules = _.cloneDeep(this.modules);
+    this.formModules = this.modules;
     this.module = new DfaModule();
     this.editMode = false;
     this.formTitle = 'Add New Module';
