@@ -50,6 +50,7 @@ export class TestValidationComponent implements OnInit {
   disabled = false;
   RegExp = RegExp
   stuff;
+  // list3 = [];
   list3 = [
     {name: 'dank', age: 50},
     {name: 'carl', age: 60}

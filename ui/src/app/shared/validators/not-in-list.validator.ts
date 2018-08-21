@@ -3,16 +3,30 @@ import {AbstractControl, NG_VALIDATORS, Validator, ValidatorFn, Validators} from
 
 export function notInListValidator(_list: string[], upper = true): ValidatorFn {
   return ((control: AbstractControl): {[key: string]: any} | null => {
-    if (upper) {
+    if (control.value === undefined || control.value === null || control.value.trim() === '') {
+      return null;
+    } else if (!_list.length) {
+      return null;
+    }
+    let isNumberList = false;
+    if (typeof _list[0] === 'number') {
+      isNumberList = true;
+    }
+    if (upper && !isNumberList) {
       const list = _list.map(x => x.toUpperCase());
-      if (control.value && list.indexOf(control.value.toUpperCase()) !== -1) {
+      if (list.indexOf(control.value.toUpperCase()) !== -1) {
         return {'notInList': {value: control.value}};
       } else {
         return null;
       }
     } else {
       const list = _list;
-      if (control.value && list.indexOf(control.value) !== -1) {
+      const value = isNumberList ? Number(control.value) : control.value;
+      if (isNaN(value)) {
+        console.error('notInList: value is not a number', control.value);
+        return {'notInList': {value: control.value}};
+      }
+      if (list.indexOf(value) !== -1) {
         return {'notInList': {value: control.value}};
       } else {
         return null;
@@ -30,8 +44,7 @@ export class NotInListValidator implements Validator {
   @Input() finNotInListProperty: string;
 
   validate(control: AbstractControl): { [key: string]: any } {
-    return this.list ? notInListValidator(this.list)(control)
-      : null;
+    return this.list ? notInListValidator(this.list)(control) : null;
   }
 }
 
