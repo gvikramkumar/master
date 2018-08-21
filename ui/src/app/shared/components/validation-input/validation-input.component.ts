@@ -3,6 +3,7 @@ import {AsyncValidatorFn, ControlValueAccessor, NgControl, NgForm, ValidatorFn, 
 import {UiUtil} from '../../../core/services/ui-util';
 import {inListValidator} from '../../validators/in-list.validator';
 import {notInListValidator} from '../../validators/not-in-list.validator';
+import {numberValidator} from '../../validators/number.validator';
 
 export interface InputValidation {
   name: string;
@@ -61,6 +62,8 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   @Input() notInList: string[];
   @Input() notInListMessage: string;
   @Input() notInListProperty: string;
+  @Input() isNumber: boolean;
+  @Input() isNumberMessage: string;
 
 /*
   @Output() change = new EventEmitter();
@@ -149,6 +152,14 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     this.validations = [];
     if (this.required) {
       this.validations.push({name: 'required', message: this.requiredMessage || null, fcn: Validators.required});
+    }
+
+    if (this.isNumber) {
+      this.validations.push({
+        name: 'isNumber',
+        message: this.isNumberMessage || `Not a number`,
+        fcn: numberValidator()
+      });
     }
 
     if (this.minLength !== undefined && this.maxLength && this.minLength === this.maxLength) {
