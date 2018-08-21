@@ -36,4 +36,9 @@ export class ModuleRepo extends RepoBase {
       .sort({displayOrder: 1});
   }
 
+  getNonAdminSortedByDisplayName() {
+    return this.Model.find({moduleId: {$ne: 99}})
+      .sort({displayOrder: 1});
+  }
+
 }

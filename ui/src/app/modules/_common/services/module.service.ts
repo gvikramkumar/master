@@ -26,4 +26,8 @@ export class ModuleService extends RestBase<DfaModule> {
         return modules;
       });
   }
+
+  getNonAdminSortedByDisplayName(): Observable<DfaModule[]> {
+    return this.callMethod('getNonAdminSortedByDisplayName');
+  }
 }

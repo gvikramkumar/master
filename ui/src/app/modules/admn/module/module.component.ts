@@ -55,9 +55,10 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
   refresh() {
     this.showForm = false;
     this.module = new DfaModule();
-    this.moduleService.getMany()
+    this.moduleService.getNonAdminSortedByDisplayName()
       .subscribe(modules => {
-        this.modules = modules.filter(module => !shUtil.isAdminModuleId(module.moduleId));
+        this.modules = modules;
+          // .filter(module => !shUtil.isAdminModuleId(module.moduleId));
         this.dataSource = new MatTableDataSource<DfaModule>(this.modules);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -66,13 +67,6 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
         this.moduleNames = this.modules.map(module => module.name);
         this.abbrevs = this.modules.map(module => module.abbrev);
         this.displayOrders = this.modules.map(module => module.displayOrder);
-
-        // if in edit mode, make sure form doesn't complain that module attributes already exist
-        /*if (this.editMode) {
-          this.moduleNames.splice(this.moduleNames.indexOf(this.module.name), 1);
-          this.abbrevs.splice(this.abbrevs.indexOf(this.module.abbrev), 1);
-          this.displayOrders.splice(this.displayOrders.indexOf(this.module.displayOrder), 1);
-        }*/
       });
   }
 
