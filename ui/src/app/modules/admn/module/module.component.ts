@@ -11,6 +11,7 @@ import {UiUtil} from '../../../core/services/ui-util';
 import {DialogType} from '../../../core/models/ui-enums';
 import * as _ from 'lodash';
 import {shUtil} from '../../../../../../shared/shared-util';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'fin-module',
@@ -21,6 +22,10 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
   errs: string[];
   formTitle: string;
   modules: DfaModule[] = [];
+  formModules: DfaModule[] = []; // todo: use this to fix validation
+  moduleNames: string[];
+  abbrevs: string[];
+  displayOrders: number[];
   module = new DfaModule();
   editMode: boolean;
   showForm = false;
@@ -28,7 +33,7 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
   dataSource: MatTableDataSource<DfaModule>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('nameInput') nameInput: CuiInputComponent;
+  @ViewChild('form') form: NgForm;
   UiUtil = UiUtil;
   filterValue = '';
 
@@ -56,6 +61,18 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
         this.dataSource = new MatTableDataSource<DfaModule>(this.modules);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        // populate lists for each attribute for validation
+        this.moduleNames = this.modules.map(module => module.name);
+        this.abbrevs = this.modules.map(module => module.abbrev);
+        this.displayOrders = this.modules.map(module => module.displayOrder);
+
+        // if in edit mode, make sure form doesn't complain that module attributes already exist
+        if (this.editMode) {
+          this.moduleNames.splice(this.moduleNames.indexOf(this.module.name), 1);
+          this.abbrevs.splice(this.abbrevs.indexOf(this.module.abbrev), 1);
+          this.displayOrders.splice(this.displayOrders.indexOf(this.module.displayOrder), 1);
+        }
       });
   }
 
@@ -79,7 +96,6 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
 
   doShowForm() {
     this.showForm = true;
-    this.nameInput.inputElement.nativeElement.focus();
   }
 
   cancel() {
@@ -87,8 +103,7 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
   }
 
   save() {
-    const errs = this.validate();
-    if (!errs) {
+    if (this.form.valid) {
       let obs: Observable<DfaModule>;
       if (this.editMode) {
         obs = this.moduleService.update(this.module);
@@ -99,8 +114,6 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
         this.refresh();
         this.moduleService.refreshStore();
       });
-    } else {
-      this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
     }
   }
 

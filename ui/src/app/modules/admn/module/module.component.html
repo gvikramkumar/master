@@ -55,21 +55,25 @@
     </div>
     <div class="col-lg-6">
 
-      <div class="edit-form-container" [fxShow]="showForm">
-        <fieldset>
+      <div class="edit-form-container" *ngIf="showForm">
+        <form #form="ngForm">
+          <fieldset>
           <legend>{{formTitle}}</legend>
-          <cui-input type="text" #nameInput [(model)]="module.name" label="Module Name"></cui-input>
-          <cui-input type="text" [(model)]="module.abbrev" label="Abbreviation"></cui-input>
-          <cui-input type="text" [(model)]="module.displayOrder" label="Display Order"></cui-input>
+          <fin-input name="name" type="text" #nameInput [(ngModel)]="module.name" label="Module Name"
+                     [required]="true" [notInList]="modules" notInListProperty="name"></fin-input>
+          <fin-input name="abbrev" type="text" [(ngModel)]="module.abbrev" label="Abbreviation"
+                     [required]="true" [notInList]="modules" notInListProperty="abbrev" [minLength]="4" [maxLength]="4"></fin-input>
+          <fin-input name="order" type="text" [(ngModel)]="module.displayOrder" label="Display Order" [required]="true"></fin-input>
           <div style="padding-top:15px;">
             <fin-checkbox label="Active" [(model)]="module.status" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
         </fieldset>
 
-        <div class="fin-footer-buttons">
-          <button cuiButton color="primary" (click)="save()">Submit</button>
-          <button cuiButton color="secondary" (click)="cancel()">Cancel</button>
-        </div>
+          <div class="fin-footer-buttons">
+            <button finErrorFlash type="submit" cuiButton color="primary" (click)="save()">Submit</button>
+            <button cuiButton color="secondary" (click)="cancel()">Cancel</button>
+          </div>
+        </form>
       </div>
 
     </div>
