@@ -21,5 +21,11 @@ export default class ModuleController extends ControllerBase {
       .catch(next);
   }
 
+  getNonAdminSortedByDisplayName(req, res, next) {
+    this.repo.getNonAdminSortedByDisplayName()
+      .then(docs => res.json(docs))
+      .catch(next);
+  }
+
 }
 
