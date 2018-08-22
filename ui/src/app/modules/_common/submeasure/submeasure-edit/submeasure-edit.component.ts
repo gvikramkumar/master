@@ -46,6 +46,158 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   mm_switch_p = false;
   mm_switch_s = false;
   mm_switch_scms = false;
+  categoryTypes = [
+    {
+      name: 'Hardware',
+      value: 'HW',
+    },
+    {
+      name: 'Software',
+      value: 'SW',
+    },
+    {
+      name: 'HMP',
+      value: 'HMP'
+    },
+    {
+      name: 'Manual Mix',
+      value: 'MM'
+    }
+  ];
+  ibe_items = [
+    {
+      name: 'Internal BE',
+      value: 'Internal BE',
+    },
+    {
+      name: 'Internal Sub BE',
+      value: 'Internal Sub BE',
+    }
+  ];
+  le_items = [
+    {
+      name: 'Business Entity',
+      value: 'BE',
+    }
+  ];
+  p_items = [
+    {
+      name: 'Technology Group',
+      value: 'TG',
+    },
+    {
+      name: 'Business Unit',
+      value: 'BU',
+    },
+    {
+      name: 'Product Family',
+      value: 'PF',
+    },
+    {
+      name: 'Product ID',
+      value: 'PID',
+    }
+  ];
+  s_items = [
+    {
+      name: 'Level 1',
+      value: 'level1',
+    },
+    {
+      name: 'Level 2',
+      value: 'level2',
+    },
+    {
+      name: 'Level 3',
+      value: 'level3',
+    },
+    {
+      name: 'Level 4',
+      value: 'level4',
+    },
+    {
+      name: 'Level 5',
+      value: 'level5',
+    },
+    {
+      name: 'Level 6',
+      value: 'level6',
+    }
+  ];
+  scms_items = [
+    {
+      name: 'SCMS',
+      value: 'SCMS',
+    }
+  ];
+  timings = [
+    {
+      name: 'Daily',
+      value: 1,
+    },
+    {
+      name: 'Weekly',
+      value: 2,
+    },
+    {
+      name: 'Monthly',
+      value: 3,
+    },
+    {
+      name: 'Quarterly',
+      value: 4,
+    },
+    {
+      name: 'WD-5',
+      value: 5,
+    },
+    {
+      name: 'WD-4',
+      value: 6,
+    },
+    {
+      name: 'WD-3',
+      value: 7,
+    },
+    {
+      name: 'WD-2',
+      value: 8,
+    },
+    {
+      name: 'WD-1',
+      value: 9,
+    },
+    {
+      name: 'WD0',
+      value: 10,
+    },
+    {
+      name: 'WD+1',
+      value: 11,
+    },
+    {
+      name: 'WD+2',
+      value: 12,
+    },
+    {
+      name: 'WD+3',
+      value: 13,
+    },
+    {
+      name: 'WD+4',
+      value: 14,
+    },
+    {
+      name: 'WD+5',
+      value: 15,
+    }
+  ];
+  groupings = [
+    {
+      name: 'Indirect Revenue Adjustments',
+      value: 'Indirect Revenue',
+    }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -115,25 +267,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.sm.rules.splice(i + 1, 0, '');
   }
 
-  categoryTypes = [
-    {
-      name: 'Hardware',
-      value: 'HW',
-    },
-    {
-      name: 'Software',
-      value: 'SW',
-    },
-    {
-      name: 'HMP',
-      value: 'HMP'
-    },
-    {
-      name: 'Manual Mix',
-      value: 'MM'
-    }
-  ]
-
   isCogsMeasure() {
     return _.find(this.measures, {measureId: this.sm.measureId})
       .name.indexOf(this.COGS) !== -1;
@@ -172,143 +305,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       (this.currentMeasure.reportingLevel3Enabled ? this.sm.reportingLevels[2] : undefined);
 
   }
-
-  ibe_items = [
-    {
-      name: 'Internal BE',
-      value: 'Internal BE',
-    },
-    {
-      name: 'Internal Sub BE',
-      value: 'Internal Sub BE',
-    }
-  ]
-  le_items = [
-    {
-      name: 'Business Entity',
-      value: 'BE',
-    }
-  ]
-  p_items = [
-    {
-      name: 'Technology Group',
-      value: 'TG',
-    },
-    {
-      name: 'Business Unit',
-      value: 'BU',
-    },
-    {
-      name: 'Product Family',
-      value: 'PF',
-    },
-    {
-      name: 'Product ID',
-      value: 'PID',
-    }
-  ]
-  s_items = [
-    {
-      name: 'Level 1',
-      value: 'level1',
-    },
-    {
-      name: 'Level 2',
-      value: 'level2',
-    },
-    {
-      name: 'Level 3',
-      value: 'level3',
-    },
-    {
-      name: 'Level 4',
-      value: 'level4',
-    },
-    {
-      name: 'Level 5',
-      value: 'level5',
-    },
-    {
-      name: 'Level 6',
-      value: 'level6',
-    }
-  ]
-  scms_items = [
-    {
-      name: 'SCMS',
-      value: 'SCMS',
-    }
-  ]
-
-  timings = [
-    {
-      name: 'Daily',
-      value: 1,
-    },
-    {
-      name: 'Weekly',
-      value: 2,
-    },
-    {
-      name: 'Monthly',
-      value: 3,
-    },
-    {
-      name: 'Quarterly',
-      value: 4,
-    },
-    {
-      name: 'WD-5',
-      value: 5,
-    },
-    {
-      name: 'WD-4',
-      value: 6,
-    },
-    {
-      name: 'WD-3',
-      value: 7,
-    },
-    {
-      name: 'WD-2',
-      value: 8,
-    },
-    {
-      name: 'WD-1',
-      value: 9,
-    },
-    {
-      name: 'WD0',
-      value: 10,
-    },
-    {
-      name: 'WD+1',
-      value: 11,
-    },
-    {
-      name: 'WD+2',
-      value: 12,
-    },
-    {
-      name: 'WD+3',
-      value: 13,
-    },
-    {
-      name: 'WD+4',
-      value: 14,
-    },
-    {
-      name: 'WD+5',
-      value: 15,
-    }
-  ]
-
-  groupings = [
-    {
-      name: 'Indirect Revenue Adjustments',
-      value: 'Indirect Revenue',
-    }
-  ]
 
   iflChange(sw) {
     // if Internal Business Entity is selected, make sure Product is unselected
