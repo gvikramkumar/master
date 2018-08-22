@@ -15,9 +15,10 @@ import {UiUtil} from '../../../../core/services/ui-util';
 interface ReportSettings {
   submeasureName: string;
   fiscalMonth?: number;
+  excelSheetname: string;
   excelFilename: string;
   excelProperties: string;
-  excelHeaders: string
+  excelHeaders: string;
 }
 
 @Component({
@@ -38,24 +39,28 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     {
       type: 'dollar-upload', hasFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
       filename: 'manual_uploaded_data',
+      excelSheetname: 'Manual Uploaded Data',
       excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Amount',
       excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, amount'
     },
     {
       type: 'mapping-upload', hasFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
       filename: 'manual_mapping_data',
+      excelSheetname: 'Manual Mapping Data',
       excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Percentage',
       excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, percentage'
     },
     {
       type: 'product-hierarchy', text: 'Valid Product Hierarchy', disabled: false,
-      filename: 'product_hierarchy.csv',
+      filename: 'product_hierarchy.xlsx',
+      excelSheetname: 'Product Hierarchy',
       excelHeaders: 'Technology Group, Business Unit, Product Family',
       excelProperties: 'technology_group_id, business_unit_id, product_family_id'
     },
     {
       type: 'sales-hierarchy', text: 'Valid Sales Hierarchy', disabled: false,
-      filename: 'sales_hierarchy.csv',
+      filename: 'sales_hierarchy.xlsx',
+      excelSheetname: 'Sales Hierarchy',
       excelHeaders: 'Sales Territory 1, Sales Territory 2, Sales Territory 3, Sales Territory 4, ' +
       'Sales Territory 5, Sales Territory 6',
       excelProperties: 'l1_sales_territory_descr, l2_sales_territory_descr, l3_sales_territory_descr,' +
@@ -64,12 +69,14 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     {
       type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping Report', disabled: false,
       filename: 'department_mapping_data',
+      excelSheetname: 'Dept Upload',
       excelHeaders: 'Sub-Measure Name, Department Code, Start Account Code, End Account Code',
       excelProperties: 'submeasureName, departmentCode, startAccountCode, endAccountCode'
     },
     {
       type: 'submeasure-grouping', text: 'Submeasure Grouping Report', disabled: false,
-      filename: 'Submeasure_Grouping_Report.csv',
+      filename: 'Submeasure_Grouping_Report.xlsx',
+      excelSheetname: 'Submeasure Grouping',
       excelHeaders: 'Submeasure Name, Group Submeasure Name, Created By, Create Time, ' +
       'Updated By, Update Time',
       excelProperties: 'sub_measure_name, group_sub_measure_name, create_user,' +
@@ -77,7 +84,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: '2t-submeasure-list', text: '2T Submeasure List Report', disabled: false,
-      filename: 'Sub_Measure_List_Report.csv',
+      filename: 'Sub_Measure_List_Report.xlsx',
+      excelSheetname: '2t Submeasure List',
       excelHeaders: 'Submeasure Name, Fiscal Month Id, Created By, Created Date, ' +
       'Last Modified By, Last Modified Date',
       excelProperties: 'submeasure_name, fiscal_month_id, create_user,' +
@@ -85,7 +93,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'disti-to-direct', text: 'Disti To Direct Mapping Report', disabled: false,
-      filename: 'Disti_to_Direct_Mapping_Report.csv',
+      filename: 'Disti_to_Direct_Mapping_Report.xlsx',
+      excelSheetname: 'Disti to Direct',
       excelHeaders: 'Group ID, Node Type, Sales Finance Hierarchy, Node Code, ' +
       'Fiscal Month Id, Created By, Created Date, Last Modified By, Last Modified Date',
       excelProperties: 'group_id, node_type, sales_finance_hierarchy,' +
@@ -93,7 +102,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'alternate-sl2', text: 'Alternate SL2 Report', disabled: false,
-      filename: 'Alternate_SL2_Report.csv',
+      filename: 'Alternate_SL2_Report.xlsx',
+      excelSheetname: 'Alternate SL2',
       excelHeaders: 'Actual SL2, Alternate SL2, Alternate Country, Fiscal Month Id, ' +
       'Created By, Created Date, Last Modified By, Last Modified Date',
       excelProperties: 'actual_sl2_code, alternate_sl2_code, alternate_country_name,' +
@@ -101,7 +111,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'corp-adjustment', text: 'Corp Adjustment Report', disabled: false,
-      filename: 'Corp_Adjustment_Report.csv',
+      filename: 'Corp_Adjustment_Report.xlsx',
+      excelSheetname: 'Corp Adjustment',
       excelHeaders: 'Country Name, Sales Territory Code, SCMS Value, Fiscal Month Id, ' +
       'Created By, Created Date, Last Modified By, Last Modified Date',
       excelProperties: 'sales_country_name, sales_territory_code, scms_value,' +
@@ -109,11 +120,21 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'sales-split-percentage', text: 'Sales Split Percentage Report', disabled: false,
-      filename: 'Sales_Split_Percentage_Report.csv',
+      filename: 'Sales_Split_Percentage_Report.xlsx',
+      excelSheetname: 'Sales Split Percentage',
       excelHeaders: 'Account Id, Company Code, Sub Account Code, Sales Territory Code, Percentage Value, ' +
       'Fiscal Month Id, Created By, Created Date, Last Modified By, Last Modified Date',
       excelProperties: 'account_id, company_code, sub_account_code, sales_territory_code, split_percentage,' +
       'fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
+    },
+    {
+      type: 'multi-sheet', text: 'Multi-sheet Report', disabled: false,
+      filename: 'Multi_Sheet_Report.xlsx',
+      excelSheetname: ['Submeasure Grouping', '2t Submeasure List'],
+      excelHeaders: ['Submeasure Name, Group Submeasure Name, Created By, Create Time, Updated By, Update Time',
+        'Submeasure Name, Fiscal Month Id, Created By, Created Date, Last Modified By, Last Modified Date'],
+      excelProperties: ['sub_measure_name, group_sub_measure_name, create_user, create_datetime, update_user, update_datetime',
+        'submeasure_name, fiscal_month_id, create_user,create_datetime, update_user, update_datetime']
     }
   ];
   report = this.reports[0];
@@ -193,9 +214,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   getFilename() {
     if (this.report.hasFiscalMonth) {
-      return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${this.fiscalMonth}.csv`;
+      return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${this.fiscalMonth}.xlsx`;
     } else if (this.report.hasSubmeasure) {
-      return this.report.filename + `_${_.snakeCase(this.submeasureName)}.csv`;
+      return this.report.filename + `_${_.snakeCase(this.submeasureName)}.xlsx`;
     } else {
       return this.report.filename;
     }
@@ -204,8 +225,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   downloadReport() {
     const params = <ReportSettings>{
       excelFilename: this.getFilename(),
-      excelHeaders: this.report.excelHeaders,
-      excelProperties: this.report.excelProperties
+      excelSheetname: this.report.excelSheetname.join(';;'),
+      excelHeaders: this.report.excelHeaders.join(';;'),
+      excelProperties: this.report.excelProperties.join(';;')
     };
 
     if (this.report.hasSubmeasure || this.report.hasFiscalMonth) {

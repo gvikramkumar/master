@@ -19,11 +19,11 @@
 
     }
 
-    button.choose-file {
+    button#choose-file {
       label {
         display: block;
-        margin: 0 -16px;
-        padding: 0 16px;
+        margin: 0 -35px;
+        padding: 0 35px;
         height: 100%;
         &:hover {
           cursor: pointer;

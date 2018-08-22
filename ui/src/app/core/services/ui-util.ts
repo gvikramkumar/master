@@ -31,11 +31,6 @@ export class UiUtil {
     });
   }
 
-  static stringToArray(str) {
-    return str ? str.split(',').map(x => x.trim()).filter(x => !!x) : [];
-
-  }
-  
   static triggerBlur(selector) {
     const query = `${selector} input, ${selector} select, ${selector} textarea`;
     _.forEach(document.querySelectorAll(query), elem => {

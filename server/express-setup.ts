@@ -103,7 +103,7 @@ export default function () {
 
   app.use(express.static(path.resolve(__dirname, '../../ui/dist')));
 
-  app.get(['/', '/prof/*', '/prdt/*', '/bkgm/*', '/svct/*', '/tsct/*', '/ascg/*',
+  app.get(['/', '/admn/*', '/prof/*', '/prdt/*', '/bkgm/*', '/svct/*', '/tsct/*', '/ascg/*',
     '/cisc/*', '/opex/*', '/defr/*', '/gubr/*', '/bkir/*', '/rrev/*'], (req, res) => {
     console.log('>>>>>> served index.html');
     res.sendFile(path.resolve(__dirname, '../../ui/dist/index.html'));

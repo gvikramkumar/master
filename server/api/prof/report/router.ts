@@ -6,4 +6,6 @@ import {authorize} from '../../../lib/middleware/authorize';
 const ctrl = injector.get(ReportController);
 
 export const reportRouter = Router()
-  .post('/:report', authorize('api:manage'), ctrl.getReport.bind(ctrl));
+  .post('/call-method/:method', ctrl.callMethod.bind(ctrl))
+  .post('/:report', ctrl.getExcelReport.bind(ctrl));
+

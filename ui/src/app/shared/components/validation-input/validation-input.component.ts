@@ -4,6 +4,7 @@ import {UiUtil} from '../../../core/services/ui-util';
 import {inListValidator} from '../../validators/in-list.validator';
 import {notInListValidator} from '../../validators/not-in-list.validator';
 import {numberValidator} from '../../validators/number.validator';
+import {shUtil} from '../../../../../../shared/shared-util';
 
 export interface InputValidation {
   name: string;
@@ -123,7 +124,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   handleChange() {
     let val = this.input.nativeElement.value;
     if (this.stringToArray) {
-      val = UiUtil.stringToArray(val);
+      val = shUtil.stringToArray(val);
     }
     this._onChange(val);
   }
