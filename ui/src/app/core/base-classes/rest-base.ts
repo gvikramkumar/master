@@ -10,12 +10,14 @@ import {DfaModule} from '../../modules/_common/models/module';
 const apiUrl = environment.apiUrl;
 
 export class RestBase<T extends AnyObj> {
+  endpointUrl: string;
 
   constructor(
     protected endpointName: string,
     protected httpClient: HttpClient,
     protected store: AppStore,
     protected isModuleRepo = false) {
+    this.endpointUrl = `${apiUrl}/api/${this.endpointName}`;
   }
 
   // GetMany special query parameters
@@ -42,7 +44,7 @@ export class RestBase<T extends AnyObj> {
   getMany(_params = {}): Observable<T[]> {
     this.addModuleId(_params);
     const params = UiUtil.createHttpParams(_params)
-    return this.httpClient.get<T[]>(`${apiUrl}/api/${this.endpointName}`, {params});
+    return this.httpClient.get<T[]>(this.endpointUrl, {params});
   }
 
   getManyActive(filter: AnyObj = {}) {
@@ -83,36 +85,37 @@ export class RestBase<T extends AnyObj> {
   }
 
   getOneById(id: string): Observable<T> {
-    return this.httpClient.get<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
+    return this.httpClient.get<T>(`${this.endpointUrl}/${id}`);
   }
 
   callMethod(method, data = null) {
-    return this.httpClient.post<any>(`${apiUrl}/api/${this.endpointName}/call-method/${method}`, data);
+    return this.httpClient.post<any>(`${this.endpointUrl}/call-method/${method}`, data);
   }
+
   // same as getMany(params) just uses POST body instead of querystrings. The post body uses
   // bodyParser.urlEncoded extended version so can accept objects as well. Remains to be tested, but
   // could possibly be used to project via mongos's {prop1: 1, prop2: 1} syntax
   queryPost(params) {
     this.addModuleId(params);
-    return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}/query-post`, params);
+    return this.httpClient.post<T>(`${this.endpointUrl}/query-post`, params);
   }
 
   add(data) {
     this.addModuleId(data);
-    return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}`, data);
+    return this.httpClient.post<T>(this.endpointUrl, data);
   }
 
   upsert(data) {
     this.addModuleId(data);
-    return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}/upsert`, data);
+    return this.httpClient.post<T>(`${this.endpointUrl}/upsert`, data);
   }
 
   update(data: T): Observable<T> {
-    return this.httpClient.put<T>(`${apiUrl}/api/${this.endpointName}/${data.id}`, data);
+    return this.httpClient.put<T>(`${this.endpointUrl}/${data.id}`, data);
   }
 
   remove(id: string): Observable<T> {
-    return this.httpClient.delete<T>(`${apiUrl}/api/${this.endpointName}/${id}`);
+    return this.httpClient.delete<T>(`${this.endpointUrl}/${id}`);
   }
 
   /*
@@ -122,17 +125,17 @@ export class RestBase<T extends AnyObj> {
    */
   getQueryOne(filter): Observable<T> {
     const params = UiUtil.createHttpParams(filter)
-    return this.httpClient.get<T>(`${apiUrl}/api/${this.endpointName}/query-one`, {params});
+    return this.httpClient.get<T>(`${this.endpointUrl}/query-one`, {params});
   }
 
   upsertQueryOne(filter, data): Observable<T> {
     const params = UiUtil.createHttpParams(filter)
-    return this.httpClient.post<T>(`${apiUrl}/api/${this.endpointName}/query-one`, data,  {params});
+    return this.httpClient.post<T>(`${this.endpointUrl}/query-one`, data, {params});
   }
 
   removeQueryOne(filter): Observable<T> {
     const params = UiUtil.createHttpParams(filter)
-    return this.httpClient.delete<T>(`${apiUrl}/api/${this.endpointName}/query-one`, {params});
+    return this.httpClient.delete<T>(`${this.endpointUrl}/query-one`, {params});
   }
 
   // we'll automatically add moduleId to calls without them, but not for itamdmin as that module is only
