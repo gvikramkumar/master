@@ -144,7 +144,33 @@ export default class PgLookupRepo {
           `);
   }
 
+  checkForExistenceAndReturnValue(table, column, value, upper = true) {
+    if (!value && value !== 0) {
+      throw new ApiError('checkForExistenceAndReturnValue: undefined or null value', null, 400);
+    }
+    let val;
+    let sql = `select ${column} as col from ${table} where `; // ${column} = $1 limit 1) as exists`
+    if (upper) {
+      sql += ` upper(${column}) = $1 limit 1`;
+      val = value.toUpperCase();
+    } else {
+      sql += ` ${column} = $1 limit 1`;
+      val = value;
+    }
+    return pgc.pgdb.query(sql, [val])
+      .then(results => {
+        if (results.rows.length === 0) {
+          return null;
+        } else {
+          return results.rows[0].col;
+        }
+      });
+  }
+
   checkForExistenceValue(table, column, value, upper = true) {
+    if (!value && value !== 0) {
+      throw new ApiError('checkForExistenceAndReturnValue: undefined or null value', null, 400);
+    }
     let val;
     let sql = `select exists (select 1 from ${table} where `; // ${column} = $1 limit 1) as exists`
     if (upper) {
@@ -158,16 +184,23 @@ export default class PgLookupRepo {
       .then(results => results.rows[0].exists);
   }
 
-  checkForExistenceArray(table, column, arr, upper = true) {
+  checkForExistenceArray(table, column, arr, upper = true): Promise<{values: any[], exist: boolean}> {
     if (!arr.length) {
       throw new ApiError('checkForExistenceArray: empty array', null, 400);
     }
+    arr.forEach(val => {
+      if (val === undefined || val === null) {
+        throw new ApiError('checkForExistenceArray: undefined or null value', null, 400);
+      }
+    })
     const promises = [];
     arr.forEach(val => {
-      promises.push(this.checkForExistenceValue(table, column, val, upper));
+      promises.push(this.checkForExistenceAndReturnValue(table, column, val, upper));
     });
     return Promise.all(promises)
-      .then(results => !_.includes(results, false));
+      .then(results => {
+        return {values: results, exist: !results.filter(x => x === null).length};
+      });
   }
 
   selectWhereIn(table, column, arr, conditional: 'in'|'not in' = 'in') {

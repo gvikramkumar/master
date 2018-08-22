@@ -74,7 +74,8 @@ export default class AllocationRuleController extends ControllerBase {
         {message: 'Some product BU select fields don\'t exist.'}
       ];
       const errs = [];
-      results.forEach((valid, idx) => {
+      results.map(x => x.values ? x.exist : x)
+        .forEach((valid, idx) => {
         if (valid === false) {
           errs.push(errors[idx]);
         }
@@ -88,31 +89,31 @@ export default class AllocationRuleController extends ControllerBase {
   }
 
 
-  _validateProdPFCritChoices(choices) {
+  _validateProdPFCritChoices(choices): Promise<{values: any[], exist: boolean}> {
     if (!choices.length) {
-      return Promise.resolve(true);
+      return Promise.resolve({values: [], exist: true});
     }
     return this.pgLookupRepo.checkForExistenceArray('fpacon.vw_fpa_products',
-      'product_family_id', choices, false);
+      'product_family_id', choices, true);
   }
 
   validateProdPFCritChoices(req, res, next) {
     this._validateProdPFCritChoices(req.body)
-      .then(exists => res.json(exists))
+      .then(results => res.json(results))
       .catch(next);
   }
 
-  _validateProdBUCritChoices(choices) {
+  _validateProdBUCritChoices(choices): Promise<{values: any[], exist: boolean}> {
     if (!choices.length) {
-      return Promise.resolve(true);
+      return Promise.resolve({values: [], exist: true});
     }
     return this.pgLookupRepo.checkForExistenceArray('fpacon.vw_fpa_products',
-      'business_unit_id', choices, false);
+      'business_unit_id', choices, true);
   }
 
   validateProdBUCritChoices(req, res, next) {
     this._validateProdBUCritChoices(req.body)
-      .then(exists => res.json(exists))
+      .then(results => res.json(results))
       .catch(next);
   }
 

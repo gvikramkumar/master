@@ -246,10 +246,13 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         return Promise.resolve(null);
       }
       return this.ruleService.validateProdPFCritChoices(control.value)
-        .pipe(map(valid => {
-          if (!valid) {
+        .pipe(map(results => {
+          if (!results.exist) {
             return {prodPFChoices: {value: control.value}};
           } else {
+            if (!_.isEqual(this.rule.prodPFCritChoices, results.values)) {
+              this.rule.prodPFCritChoices = results.values;
+            }
             return null;
           }
         }));
@@ -262,10 +265,13 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         return Promise.resolve(null);
       }
       return this.ruleService.validateProdBUCritChoices(control.value)
-        .pipe(map(valid => {
-          if (!valid) {
+        .pipe(map(results => {
+          if (!results.exist) {
             return {prodBUChoices: {value: control.value}};
           } else {
+            if (!_.isEqual(this.rule.prodBUCritChoices, results.values)) {
+              this.rule.prodBUCritChoices = results.values;
+            }
             return null;
           }
         }));

@@ -66,7 +66,7 @@
                        [stringToArray]="true" [options]="prodPFChoiceOptions"></fin-input>
             <fin-input name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" label="BU" [ngModelOptions]="{updateOn: 'blur'}"
                        [fxShow]="!!rule.productMatch" placeholder="comma separated values"
-                       [stringToArray]="true" [options]="prodPFChoiceOptions"></fin-input>
+                       [stringToArray]="true" [options]="prodBUChoiceOptions"></fin-input>
             <cui-select name="prodTGChoice" [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
                         [fxShow]="!!rule.productMatch"optionsValue="name" [multiSelect]="true" dropdownMaxHeight="300" label="TG"
                         empty="true" [tabIndex]="0"></cui-select>
