@@ -66,41 +66,41 @@
             <div class="col-6">
               <div class="check-wrap">
                 <fin-checkbox [(model)]="ifl_switch_ibe" label="Internal Business Entity"
-                              (modelChange)="iflChange('ibe')"></fin-checkbox>
+                              (modelChange)="iflChange('ibe')" [disabled]="BeIflDisabled"></fin-checkbox>
               </div>
               <div class="check-wrap">
-                <fin-checkbox [(model)]="ifl_switch_p" label="Product" (modelChange)="iflChange('p')"></fin-checkbox>
+                <fin-checkbox [(model)]="ifl_switch_p" label="Product" (modelChange)="iflChange('p')" [disabled]="ProductIflDisabled"></fin-checkbox>
               </div>
               <div class="check-wrap">
-                <fin-checkbox [(model)]="ifl_switch_le" label="Legal Entity"></fin-checkbox>
+                <fin-checkbox [(model)]="ifl_switch_le" label="Legal Entity" (modelChange)="iflChange('le')" [disabled]="LegalIflDisabled"></fin-checkbox>
               </div>
               <div class="check-wrap">
-                <fin-checkbox [(model)]="ifl_switch_s" label="Sales"></fin-checkbox>
+                <fin-checkbox [(model)]="ifl_switch_s" label="Sales" (modelChange)="iflChange('s')" [disabled]="SalesIflDisabled"></fin-checkbox>
               </div>
               <div class="check-wrap">
-                <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS"></fin-checkbox>
+                <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')" [disabled]="ScmsIflDisabled"></fin-checkbox>
               </div>
             </div>
             <div class="col-6">
               <div class="sel-wrap">
                 <cui-select name="ibeLevel" [(ngModel)]="sm.inputFilterLevel.internalBELevel" [fxShow]="ifl_switch_ibe" class="option"
-                             [items]="ibe_items" optionsKey="name"optionsValue="value"></cui-select>
+                             [items]="ibe_items" optionsKey="name"optionsValue="value" empty="true"></cui-select>
               </div>
               <div class="sel-wrap">
                 <cui-select name="productLevel" [(ngModel)]="sm.inputFilterLevel.productLevel" [fxShow]="ifl_switch_p" class="option"
-                            [items]="p_items" optionsKey="name" optionsValue="value"></cui-select>
+                            [items]="p_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
               </div>
               <div class="sel-wrap">
                 <cui-select name="entityLevel" [(ngModel)]="sm.inputFilterLevel.entityLevel" [fxShow]="ifl_switch_le" class="option"
-                            [items]="le_items" optionsKey="name" optionsValue="value"></cui-select>
+                            [items]="le_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
               </div>
               <div class="sel-wrap">
                 <cui-select name="salesLevel" [(ngModel)]="sm.inputFilterLevel.salesLevel" [fxShow]="ifl_switch_s" class="option"
-                            [items]="s_items" optionsKey="name" optionsValue="value"></cui-select>
+                            [items]="s_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
               </div>
               <div class="sel-wrap">
                 <cui-select name="scmsLevel" [(ngModel)]="sm.inputFilterLevel.scmsLevel" [fxShow]="ifl_switch_scms" class="option"
-                            [items]="scms_items" optionsKey="name" optionsValue="value"></cui-select>
+                            [items]="scms_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
               </div>
             </div>
           </div>
@@ -128,41 +128,41 @@
               <div class="col-6">
                 <div class="check-wrap">
                   <fin-checkbox [(model)]="mm_switch_ibe" label="Internal Business Entity"
-                                (modelChange)="mmChange('ibe')"></fin-checkbox>
+                                (modelChange)="mmChange('ibe')" [disabled]="BeMmDisabled"></fin-checkbox>
                 </div>
                 <div class="check-wrap">
-                  <fin-checkbox [(model)]="mm_switch_p" label="Product" (modelChange)="mmChange('p')"></fin-checkbox>
+                  <fin-checkbox [(model)]="mm_switch_p" label="Product" (modelChange)="mmChange('p')" [disabled]="ProductMmDisabled"></fin-checkbox>
                 </div>
                 <div class="check-wrap">
-                  <fin-checkbox [(model)]="mm_switch_le" label="Legal Entity"></fin-checkbox>
+                  <fin-checkbox [(model)]="mm_switch_le" label="Legal Entity" (modelChange)="mmChange('le')" [disabled]="LegalMmDisabled"></fin-checkbox>
                 </div>
                 <div class="check-wrap">
-                  <fin-checkbox [(model)]="mm_switch_s" label="Sales"></fin-checkbox>
+                  <fin-checkbox [(model)]="mm_switch_s" label="Sales" (modelChange)="mmChange('s')" [disabled]="SalesMmDisabled"></fin-checkbox>
                 </div>
                 <div class="check-wrap">
-                  <fin-checkbox [(model)]="mm_switch_scms" label="SCMS"></fin-checkbox>
+                  <fin-checkbox [(model)]="mm_switch_scms" label="SCMS" (modelChange)="mmChange('scms')" [disabled]="ScmsMmDisabled"></fin-checkbox>
                 </div>
               </div>
               <div class="col-6">
                 <div class="sel-wrap">
                   <cui-select name="ibeLevelMM" [(ngModel)]="sm.manualMapping.internalBELevel" [fxShow]="mm_switch_ibe" class="option"
-                              [items]="ibe_items" optionsKey="name" optionsValue="value"></cui-select>
+                              [items]="ibe_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
                 </div>
                 <div class="sel-wrap">
                   <cui-select name="productLevelMM" [(ngModel)]="sm.manualMapping.productLevel" [fxShow]="mm_switch_p" class="option"
-                              [items]="p_items" optionsKey="name" optionsValue="value"></cui-select>
+                              [items]="p_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
                 </div>
                 <div class="sel-wrap">
                   <cui-select name="entityLevelMM" [(ngModel)]="sm.manualMapping.entityLevel" [fxShow]="mm_switch_le" class="option"
-                              [items]="le_items" optionsKey="name" optionsValue="value"></cui-select>
+                              [items]="le_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
                 </div>
                 <div class="sel-wrap">
                   <cui-select name="salesLevelMM" [(ngModel)]="sm.manualMapping.salesLevel" [fxShow]="mm_switch_s" class="option"
-                              [items]="s_items" optionsKey="name" optionsValue="value"></cui-select>
+                              [items]="s_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
                 </div>
                 <div class="sel-wrap">
                   <cui-select name="scmsLevelMM" [(ngModel)]="sm.manualMapping.scmsLevel" [fxShow]="mm_switch_scms" class="option"
-                              [items]="scms_items" optionsKey="name" optionsValue="value"></cui-select>
+                              [items]="scms_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
                 </div>
               </div>
             </div>
