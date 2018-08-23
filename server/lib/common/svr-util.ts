@@ -72,7 +72,9 @@ function objToString(val) {
     return String(val);
   } else if (_.isDate(val)) {
     return val.toISOString();
-  } else if (typeof val === 'object') {
+  } else if (val === null) {
+    return '';
+  } else if (typeof val === 'object') {// typeof null === 'object' BUT has no toString() method
     return val.toString();
   } else {
     return '';
