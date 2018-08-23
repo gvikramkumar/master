@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Submeasure} from '../../models/submeasure';
@@ -15,6 +15,7 @@ import {SourceService} from '../../services/source.service';
 import {Source} from '../../models/source';
 import {DialogType} from '../../../../core/models/ui-enums';
 import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeasure/grouping-submeasure';
+import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -23,6 +24,7 @@ import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeas
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
   UiUtil = UiUtil;
+  @ViewChild('form') form: NgForm;
   editMode = false;
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
@@ -307,11 +309,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   iflChange(sw) {
-    // if Internal Business Entity is selected, make sure Product is unselected
+    // if Internal Business Entity is selected, make Product disabled, and vice-versa
     if (sw === 'ibe' && this.ifl_switch_ibe && this.ifl_switch_p) {
-      this.ifl_switch_p = false;
+      // this.ifl_switch_p = false;
+
     } else if (sw === 'p' && this.ifl_switch_ibe && this.ifl_switch_p) {
-      this.ifl_switch_ibe = false;
+      // this.ifl_switch_ibe = false;
+
     }
   }
 
@@ -421,26 +425,29 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   save() {
-    this.uiUtil.confirmSave()
-      .subscribe(resp => {
-        if (resp) {
-          {
-            this.cleanUpSubmeasure();
-            const errs = this.validate();
-            if (!errs) {
-              let obs: Observable<Submeasure>;
-              if (this.editMode) {
-                obs = this.submeasureService.update(this.sm);
+    UiUtil.triggerBlur('.fin-edit-container form');
+    if (this.form.valid) {
+      this.uiUtil.confirmSave()
+        .subscribe(resp => {
+          if (resp) {
+            {
+              this.cleanUpSubmeasure();
+              const errs = this.validate();
+              if (!errs) {
+                let obs: Observable<Submeasure>;
+                if (this.editMode) {
+                  obs = this.submeasureService.update(this.sm);
+                } else {
+                  obs = this.submeasureService.add(this.sm);
+                }
+                obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
               } else {
-                obs = this.submeasureService.add(this.sm);
+                this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
               }
-              obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
-            } else {
-              this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
             }
           }
-        }
-      });
+        });
+    }
   }
 
   validate() {
@@ -456,4 +463,3 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   }
 }
-
