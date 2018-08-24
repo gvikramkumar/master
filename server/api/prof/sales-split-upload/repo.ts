@@ -16,7 +16,7 @@ const schema = new Schema(
     updatedBy: {type: String, required: true},
     updatedDate: {type: Date, required: true}
   },
-  {collection: 'prof_sales_split_pct'}
+  {collection: 'dfa_prof_sales_split_pctmap_upld'}
 );
 
 @injectable()

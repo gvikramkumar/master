@@ -13,7 +13,7 @@ const schema = new Schema(
     updatedBy: {type: String, required: true},
     updatedDate: {type: Date, required: true}
   },
-  {collection: 'prof_department_acc_map'}
+  {collection: 'dfa_prof_dept_acct_map_upld'}
 );
 
 @injectable()

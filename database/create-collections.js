@@ -7,20 +7,20 @@ var db = conn.getDB(_db);
 
 
 const collections = [
-  'lookup',
-  'module_lookup',
+  'dfa_lookup',
+  'dfa_module_lookup',
   'user_role',
   'dfa_allocation_rule',
   'dfa_measure',
   'dfa_module',
   'dfa_open_period',
-  'dfa_source',
+  'dfa_data_source',
   'dfa_submeasure',
-  'prof_department_acc_map',
-  'prof_dollar_upload',
-  'prof_mapping_upload',
-  'prof_sales_split_pct',
-  'prof_swalloc_manual_mix',
+  'dfa_prof_dept_acct_map_upld',
+  'dfa_prof_input_amnt_upld',
+  'dfa_prof_manual_map_upld',
+  'dfa_prof_sales_split_pctmap_upld',
+  'dfa_prof_swalloc_manualmix_upld',
   'dfa_rule_map'
 ];
 
@@ -43,7 +43,7 @@ fileCollections.forEach(coll => {
 // id columns
 db.dfa_module.createIndex({moduleId: -1}, {unique: true});
 db.dfa_measure.createIndex({measureId: 1}, {unique: true});
-db.dfa_source.createIndex({sourceId: -1}, {unique: true});
+db.dfa_data_source.createIndex({sourceId: -1}, {unique: true});
 // todo: uncomment when submeasureId creation is complete
 // db.dfa_submeasure.createIndex({submeasureId: -1}, {unique: true});
 
@@ -54,17 +54,17 @@ db.dfa_allocation_rule.createIndex({moduleId: 1, name: 1, updatedDate: -1});
 db.dfa_submeasure.createIndex({moduleId:1, name: 1}, {unique: true});
 db.dfa_measure.createIndex({moduleId:1, name: 1}, {unique: true});
 
-db.prof_dollar_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
-db.prof_mapping_upload.createIndex({submeasureName: 1, fiscalMonth: -1});
-db.prof_swalloc_manual_mix.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.dfa_prof_input_amnt_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.dfa_prof_manual_map_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.dfa_prof_swalloc_manualmix_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
 
 db.dfa_module.createIndex({name: 1}, {unique: true});
 db.dfa_module.createIndex({displayOrder: 1}, {unique: true});
-db.dfa_source.createIndex({name: 1}, {unique: true});
-db.dfa_source.createIndex({typeCode: 1}, {unique: true});
+db.dfa_data_source.createIndex({name: 1}, {unique: true});
+db.dfa_data_source.createIndex({typeCode: 1}, {unique: true});
 
-db.lookup.createIndex({key: 1}, {unique: true});// shared
-db.module_lookup.createIndex({moduleId: 1, key: 1}, {unique: true});// per module
+db.dfa_lookup.createIndex({key: 1}, {unique: true});// shared
+db.dfa_module_lookup.createIndex({moduleId: 1, key: 1}, {unique: true});// per module
 
 
 

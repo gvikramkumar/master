@@ -81,7 +81,7 @@ db.user_role.insertOne({
   role: "Indirect Revenue Adjustments"
 })
 
-db.prof_dollar_upload.insertOne({
+db.dfa_prof_input_amnt_upld.insertOne({
   fiscalMonth: 201809,
   submeasureName: "2 Tier Adjustment",
   product: "UCS",
@@ -180,7 +180,7 @@ db.dfa_open_period.insertMany([
   {moduleId: NumberInt(12), fiscalMonth: 201809, openFlag: "Y"},
 ]);
 
-db.prof_mapping_upload.insert({
+db.dfa_prof_manual_map_upld.insert({
   fiscalMonth: 201809,
   submeasureName: "2 Tier Adjustment",
   product: "UCS",
@@ -191,7 +191,7 @@ db.prof_mapping_upload.insert({
   percentage: 458.58
 })
 
-db.lookup.insertMany([
+db.dfa_lookup.insertMany([
   {
     key: 'revenue_classification',
     value: ["Recurring Deferred", "Recurring Non Deferred", "Recurring Other", "Non Recurring"]
@@ -203,14 +203,14 @@ db.lookup.insertMany([
 ]);
 
 // dept
-db.prof_department_acc_map.insertOne({
+db.dfa_prof_dept_acct_map_upld.insertOne({
   submeasureName: "2 Tier Adjustment",
   nodeValue: "020_070506",
   glAccount: "69999"
 });
 
 // sales-split
-db.prof_sales_split_pct.insertOne({
+db.dfa_prof_sales_split_pctmap_upld.insertOne({
   fiscalMonth: 201810,
   accountId: "42127",
   companyCode: "555",
@@ -220,14 +220,14 @@ db.prof_sales_split_pct.insertOne({
 });
 
 // product-class
-db.prof_swalloc_manual_mix.insertOne({
+db.dfa_prof_swalloc_manualmix_upld.insertOne({
   fiscalMonth: 201810,
   submeasureName: "2 Tier",
   splitCategory: "HARDWARE",
   splitPercentage: 1
 });
 
-db.dfa_source.insertMany([
+db.dfa_data_source.insertMany([
   {
     sourceId: NumberInt(1),
     name: 'Rapid Revenue',
@@ -309,13 +309,13 @@ const collectionsWithCreatedUpdated = [
   'dfa_measure',
   'dfa_module',
   'dfa_open_period',
-  'dfa_source',
+  'dfa_data_source',
   'dfa_submeasure',
-  'prof_department_acc_map',
-  'prof_dollar_upload',
-  'prof_mapping_upload',
-  'prof_sales_split_pct',
-  'prof_swalloc_manual_mix',
+  'dfa_prof_dept_acct_map_upld',
+  'dfa_prof_input_amnt_upld',
+  'dfa_prof_manual_map_upld',
+  'dfa_prof_sales_split_pctmap_upld',
+  'dfa_prof_swalloc_manualmix_upld',
 ];
 
 const date = new Date();

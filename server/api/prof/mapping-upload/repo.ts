@@ -18,7 +18,7 @@ const schema = new Schema(
     updatedBy: {type: String, required: true},
     updatedDate: {type: Date, required: true}
   },
-  {collection: 'prof_mapping_upload'}
+  {collection: 'dfa_prof_manual_map_upld'}
 );
 
 @injectable()

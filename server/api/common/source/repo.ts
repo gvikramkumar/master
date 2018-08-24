@@ -15,7 +15,7 @@ const schema = new Schema(
     updatedBy: {type: String, required: true},
     updatedDate: {type: Date, required: true}
   },
-  {collection: 'dfa_source'}
+  {collection: 'dfa_data_source'}
 );
 
 @injectable()
