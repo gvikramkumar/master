@@ -11,7 +11,7 @@ import {Request} from 'express';
 import ApiRequest from '../models/api-request';
 import AnyObj from '../../../shared/models/any-obj';
 import PgLookupRepo from '../../api/common/pg-lookup/repo';
-import OpenPeriodPgRepo from '../../api/common/open-period/repo';
+import OpenPeriodRepo from '../../api/common/open-period/repo';
 
 
 export default class UploadController {
@@ -38,7 +38,7 @@ export default class UploadController {
   constructor(
     protected moduleId: number,
     protected repo: RepoBase,
-    protected openPeriodRepo: OpenPeriodPgRepo,
+    protected openPeriodRepo: OpenPeriodRepo,
     protected submeasureRepo: SubmeasureRepo,
     protected userRoleRepo: UserRoleRepo
     ) {
