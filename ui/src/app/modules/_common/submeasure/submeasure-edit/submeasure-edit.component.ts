@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Submeasure} from '../../models/submeasure';
@@ -15,6 +15,7 @@ import {SourceService} from '../../services/source.service';
 import {Source} from '../../../../../../../shared/models/source';
 import {DialogType} from '../../../../core/models/ui-enums';
 import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeasure/grouping-submeasure';
+import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -23,6 +24,7 @@ import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeas
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
   UiUtil = UiUtil;
+  @ViewChild('form') form: NgForm;
   editMode = false;
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
@@ -36,6 +38,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   COGS = ' Cogs '; // todo: move to lookup
   disableReportingLevels = [];
   disableCategories = false;
+  BeIflDisabled = false;
+  ProductIflDisabled = false;
+  LegalIflDisabled = false;
+  SalesIflDisabled = false;
+  ScmsIflDisabled = false;
+  BeMmDisabled = false;
+  ProductMmDisabled = false;
+  LegalMmDisabled = false;
+  SalesMmDisabled = false;
+  ScmsMmDisabled = false;
   ifl_switch_ibe = false;
   ifl_switch_le = false;
   ifl_switch_p = false;
@@ -46,6 +58,158 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   mm_switch_p = false;
   mm_switch_s = false;
   mm_switch_scms = false;
+  categoryTypes = [
+    {
+      name: 'Hardware',
+      value: 'HW',
+    },
+    {
+      name: 'Software',
+      value: 'SW',
+    },
+    {
+      name: 'HMP',
+      value: 'HMP'
+    },
+    {
+      name: 'Manual Mix',
+      value: 'MM'
+    }
+  ];
+  ibe_items = [
+    {
+      name: 'Internal BE',
+      value: 'Internal BE',
+    },
+    {
+      name: 'Internal Sub BE',
+      value: 'Internal Sub BE',
+    }
+  ];
+  le_items = [
+    {
+      name: 'Business Entity',
+      value: 'BE',
+    }
+  ];
+  p_items = [
+    {
+      name: 'Technology Group',
+      value: 'TG',
+    },
+    {
+      name: 'Business Unit',
+      value: 'BU',
+    },
+    {
+      name: 'Product Family',
+      value: 'PF',
+    },
+    {
+      name: 'Product ID',
+      value: 'PID',
+    }
+  ];
+  s_items = [
+    {
+      name: 'Level 1',
+      value: 'level1',
+    },
+    {
+      name: 'Level 2',
+      value: 'level2',
+    },
+    {
+      name: 'Level 3',
+      value: 'level3',
+    },
+    {
+      name: 'Level 4',
+      value: 'level4',
+    },
+    {
+      name: 'Level 5',
+      value: 'level5',
+    },
+    {
+      name: 'Level 6',
+      value: 'level6',
+    }
+  ];
+  scms_items = [
+    {
+      name: 'SCMS',
+      value: 'SCMS',
+    }
+  ];
+  timings = [
+    {
+      name: 'Daily',
+      value: 1,
+    },
+    {
+      name: 'Weekly',
+      value: 2,
+    },
+    {
+      name: 'Monthly',
+      value: 3,
+    },
+    {
+      name: 'Quarterly',
+      value: 4,
+    },
+    {
+      name: 'WD-5',
+      value: 5,
+    },
+    {
+      name: 'WD-4',
+      value: 6,
+    },
+    {
+      name: 'WD-3',
+      value: 7,
+    },
+    {
+      name: 'WD-2',
+      value: 8,
+    },
+    {
+      name: 'WD-1',
+      value: 9,
+    },
+    {
+      name: 'WD0',
+      value: 10,
+    },
+    {
+      name: 'WD+1',
+      value: 11,
+    },
+    {
+      name: 'WD+2',
+      value: 12,
+    },
+    {
+      name: 'WD+3',
+      value: 13,
+    },
+    {
+      name: 'WD+4',
+      value: 14,
+    },
+    {
+      name: 'WD+5',
+      value: 15,
+    }
+  ];
+  groupings = [
+    {
+      name: 'Indirect Revenue Adjustments',
+      value: 'Indirect Revenue',
+    }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -115,25 +279,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.sm.rules.splice(i + 1, 0, '');
   }
 
-  categoryTypes = [
-    {
-      name: 'Hardware',
-      value: 'HW',
-    },
-    {
-      name: 'Software',
-      value: 'SW',
-    },
-    {
-      name: 'HMP',
-      value: 'HMP'
-    },
-    {
-      name: 'Manual Mix',
-      value: 'MM'
-    }
-  ]
-
   isCogsMeasure() {
     return _.find(this.measures, {measureId: this.sm.measureId})
       .name.indexOf(this.COGS) !== -1;
@@ -173,158 +318,134 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   }
 
-  ibe_items = [
-    {
-      name: 'Internal BE',
-      value: 'Internal BE',
-    },
-    {
-      name: 'Internal Sub BE',
-      value: 'Internal Sub BE',
-    }
-  ]
-  le_items = [
-    {
-      name: 'Business Entity',
-      value: 'BE',
-    }
-  ]
-  p_items = [
-    {
-      name: 'Technology Group',
-      value: 'TG',
-    },
-    {
-      name: 'Business Unit',
-      value: 'BU',
-    },
-    {
-      name: 'Product Family',
-      value: 'PF',
-    },
-    {
-      name: 'Product ID',
-      value: 'PID',
-    }
-  ]
-  s_items = [
-    {
-      name: 'Level 1',
-      value: 'level1',
-    },
-    {
-      name: 'Level 2',
-      value: 'level2',
-    },
-    {
-      name: 'Level 3',
-      value: 'level3',
-    },
-    {
-      name: 'Level 4',
-      value: 'level4',
-    },
-    {
-      name: 'Level 5',
-      value: 'level5',
-    },
-    {
-      name: 'Level 6',
-      value: 'level6',
-    }
-  ]
-  scms_items = [
-    {
-      name: 'SCMS',
-      value: 'SCMS',
-    }
-  ]
-
-  timings = [
-    {
-      name: 'Daily',
-      value: 1,
-    },
-    {
-      name: 'Weekly',
-      value: 2,
-    },
-    {
-      name: 'Monthly',
-      value: 3,
-    },
-    {
-      name: 'Quarterly',
-      value: 4,
-    },
-    {
-      name: 'WD-5',
-      value: 5,
-    },
-    {
-      name: 'WD-4',
-      value: 6,
-    },
-    {
-      name: 'WD-3',
-      value: 7,
-    },
-    {
-      name: 'WD-2',
-      value: 8,
-    },
-    {
-      name: 'WD-1',
-      value: 9,
-    },
-    {
-      name: 'WD0',
-      value: 10,
-    },
-    {
-      name: 'WD+1',
-      value: 11,
-    },
-    {
-      name: 'WD+2',
-      value: 12,
-    },
-    {
-      name: 'WD+3',
-      value: 13,
-    },
-    {
-      name: 'WD+4',
-      value: 14,
-    },
-    {
-      name: 'WD+5',
-      value: 15,
-    }
-  ]
-
-  groupings = [
-    {
-      name: 'Indirect Revenue Adjustments',
-      value: 'Indirect Revenue',
-    }
-  ]
-
   iflChange(sw) {
-    // if Internal Business Entity is selected, make sure Product is unselected
-    if (sw === 'ibe' && this.ifl_switch_ibe && this.ifl_switch_p) {
-      this.ifl_switch_p = false;
-    } else if (sw === 'p' && this.ifl_switch_ibe && this.ifl_switch_p) {
-      this.ifl_switch_ibe = false;
+    // if Internal Business Entity is selected, make Product disabled, and vice-versa.
+    // undo disabled when unselected
+    // if anything is selected in ifl, disable in mm
+    switch (sw) {
+      case 'ibe' :
+        if (this.ifl_switch_ibe) {
+          this.mm_switch_ibe = false;
+          this.ifl_switch_p = false;
+          this.ProductIflDisabled = true;
+          this.BeMmDisabled = true;
+          this.ProductMmDisabled = true;
+          this.sm.inputFilterLevel.productLevel = undefined;
+        } else {
+          this.ProductIflDisabled = false;
+          this.BeMmDisabled = false;
+          this.ProductMmDisabled = false;
+        }
+        break;
+      case 'p' :
+        if (this.ifl_switch_p) {
+          this.ifl_switch_ibe = false;
+          this.BeIflDisabled = true;
+          this.ProductMmDisabled = true;
+          this.sm.inputFilterLevel.internalBELevel = undefined;
+        } else {
+          this.BeIflDisabled = false;
+          this.ProductMmDisabled = false;
+        }
+        break;
+      case 'le' :
+        if (this.ifl_switch_le) {
+          this.LegalMmDisabled = true;
+          this.sm.manualMapping.entityLevel = undefined;
+        } else {
+          this.LegalMmDisabled = false;
+        }
+        break;
+      case 's' :
+        if (this.ifl_switch_s) {
+          this.SalesMmDisabled = true;
+          this.sm.manualMapping.salesLevel = undefined;
+        } else {
+          this.SalesMmDisabled = false;
+        }
+        break;
+      case 'scms' :
+        if (this.ifl_switch_scms) {
+          this.ScmsMmDisabled = true;
+          this.sm.manualMapping.scmsLevel = undefined;
+        } else {
+          this.ScmsMmDisabled = false;
+        }
+        break;
     }
   }
 
   mmChange(sw) {
-    // if Internal Business Entity is selected, make sure Product is unselected
-    if (sw === 'ibe' && this.mm_switch_ibe && this.mm_switch_p) {
-      this.mm_switch_p = false;
-    } else if (sw === 'p' && this.mm_switch_ibe && this.mm_switch_p) {
+    // if Internal Business Entity is selected, disable product
+    // disable corresponding value in ifl
+    
+    switch (sw) {
+      case 'ibe' :
+        if (this.mm_switch_ibe) {
+          this.ifl_switch_ibe = false;
+          this.mm_switch_p = false;
+          this.ProductMmDisabled = true;
+          this.BeIflDisabled = true;
+          this.sm.manualMapping.productLevel = undefined;
+          this.sm.manualMapping.internalBELevel = undefined;
+        } else {
+          this.ProductMmDisabled = false;
+          this.BeIflDisabled = false;
+        }
+        break;
+      case 'p' :
+        if (this.mm_switch_p) {
+          this.mm_switch_ibe = false;
+          this.BeMmDisabled = true;
+          this.ProductIflDisabled = true;
+          this.sm.manualMapping.internalBELevel = undefined;
+          this.sm.inputFilterLevel.productLevel = undefined;
+        } else {
+          this.BeMmDisabled = false;
+          this.ProductIflDisabled = false;
+        }
+        break;
+      case 'le' :
+        if (this.mm_switch_le) {
+          this.LegalIflDisabled = true;
+          this.sm.inputFilterLevel.entityLevel = undefined;
+        } else {
+          this.LegalIflDisabled = false;
+        }
+        break;
+      case 's' :
+        if (this.mm_switch_s) {
+          this.SalesIflDisabled = true;
+          this.sm.inputFilterLevel.salesLevel = undefined;
+        } else {
+          this.SalesIflDisabled = false;
+        }
+        break;
+      case 'scms' :
+        if (this.mm_switch_scms) {
+          this.ScmsIflDisabled = true;
+          this.sm.inputFilterLevel.scmsLevel = undefined;
+        } else {
+          this.ScmsIflDisabled = false;
+        }
+        break;
+    }
+  }
+
+  mmSelect() {
+    // if manual mapping is unselected, clear out the values
+    if (!this.isManualMapping()) {
       this.mm_switch_ibe = false;
+      this.mm_switch_p = false;
+      this.mm_switch_le = false;
+      this.mm_switch_s = false;
+      this.mm_switch_scms = false;
+
+      this.sm.manualMapping.internalBELevel = undefined;
+      this.sm.manualMapping.productLevel = undefined;
+      this.sm.manualMapping.entityLevel = undefined;
+      this.sm.manualMapping.salesLevel = undefined;
+      this.sm.manualMapping.scmsLevel = undefined;
     }
   }
 
@@ -425,26 +546,29 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   save() {
-    this.uiUtil.confirmSave()
-      .subscribe(resp => {
-        if (resp) {
-          {
-            this.cleanUpSubmeasure();
-            const errs = this.validate();
-            if (!errs) {
-              let obs: Observable<Submeasure>;
-              if (this.editMode) {
-                obs = this.submeasureService.update(this.sm);
+    UiUtil.triggerBlur('.fin-edit-container form');
+    if (this.form.valid) {
+      this.uiUtil.confirmSave()
+        .subscribe(resp => {
+          if (resp) {
+            {
+              this.cleanUpSubmeasure();
+              const errs = this.validate();
+              if (!errs) {
+                let obs: Observable<Submeasure>;
+                if (this.editMode) {
+                  obs = this.submeasureService.update(this.sm);
+                } else {
+                  obs = this.submeasureService.add(this.sm);
+                }
+                obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
               } else {
-                obs = this.submeasureService.add(this.sm);
+                this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
               }
-              obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
-            } else {
-              this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
             }
           }
-        }
-      });
+        });
+    }
   }
 
   validate() {
@@ -460,4 +584,3 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   }
 }
-
