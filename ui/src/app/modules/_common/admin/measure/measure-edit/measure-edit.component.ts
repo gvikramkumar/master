@@ -8,7 +8,7 @@ import {AppStore} from '../../../../../app/app-store';
 import * as _ from 'lodash';
 import {DialogType} from '../../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../../core/services/ui-util';
-import {Source} from '../../../models/source';
+import {Source} from '../../../../../../../../shared/models/source';
 import {SourceService} from '../../../services/source.service';
 import {ModuleLookupService} from '../../../services/module-lookup.service';
 import {shUtil} from '../../../../../../../../shared/shared-util';

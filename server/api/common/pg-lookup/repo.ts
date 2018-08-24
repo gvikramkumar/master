@@ -25,7 +25,7 @@ export default class PgLookupRepo {
             technology_group_id, 
             business_unit_id, 
             product_family_id
-            from fpacon.vw_fds_products
+            from fpacon.vw_fpa_products
             group by 1,2,3 order by 1,2,3    
           `);
   }
@@ -39,7 +39,7 @@ export default class PgLookupRepo {
             l4_sales_territory_descr,
             l5_sales_territory_descr,
             l6_sales_territory_descr
-            from fdscon.vw_fds_sales_hierarchy
+            from fpacon.vw_fpa_sales_hierarchy
             where sales_territory_type_code in ('CORP. REVENUE')
             group by 1,2,3,4,5,6
             order by 1,2,3,4,5,6          

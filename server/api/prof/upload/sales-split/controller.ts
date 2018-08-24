@@ -40,9 +40,9 @@ export default class SalesSplitUploadUploadController extends UploadController {
   getValidationAndImportData() {
     return Promise.all([
       super.getValidationAndImportData(),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_financial_account', 'financial_account_code'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_financial_department', 'company_code'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'sales_territory_name_code')
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_account', 'financial_account_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_department', 'company_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name_code')
     ])
       .then(results => {
         this.data.accountIds = results[1];

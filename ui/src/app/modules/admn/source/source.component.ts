@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {SourceService} from '../../_common/services/source.service';
-import {Source} from '../../_common/models/source';
+import {Source} from '../../../../../../shared/models/source';
 import {CuiInputComponent} from '@cisco-ngx/cui-components';
 import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';

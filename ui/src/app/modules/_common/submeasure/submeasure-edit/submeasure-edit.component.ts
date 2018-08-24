@@ -12,7 +12,7 @@ import {Measure} from '../../models/measure';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {SourceService} from '../../services/source.service';
-import {Source} from '../../models/source';
+import {Source} from '../../../../../../../shared/models/source';
 import {DialogType} from '../../../../core/models/ui-enums';
 import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeasure/grouping-submeasure';
 
