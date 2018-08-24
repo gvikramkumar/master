@@ -45,8 +45,7 @@ data;
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l4_sales_territory_name_code'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l5_sales_territory_name_code'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l6_sales_territory_name_code'),
-      // todo: fix this location:
-      Promise.resolve(['LEGAL ENTITY VALUE']), // todo: this doesn't exits yet: pgRepo.getSortedUpperListFromColumn('business_entity', 'business_entity_name'),
+      pgRepo.getSortedUpperListFromColumn('fpadfa.dfa_business_entity', 'business_entity_name'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_be_hierarchy', 'bk_business_entity_name'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_be_hierarchy', 'bk_sub_business_entity_name'),
       lookupRepo.getTextValuesSortedUpperCase('revenue_classification'),
@@ -73,7 +72,7 @@ data;
         };
         this.data.revClassifications = results[13];
         this.data.scms = results[14];
-      })
+      });
   }
 
   validateInputProductValue() {

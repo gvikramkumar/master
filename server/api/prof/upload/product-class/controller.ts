@@ -51,7 +51,7 @@ export default class ProductClassUploadUploadController extends UploadController
       this.lookForErrors()
     ])
       .then(() => Promise.all([
-        // this.validateMeasureAccess(), // todo: verify you don't need this
+        this.validateMeasureAccess(),
         this.validateCanProductClassUpload(),
         this.lookForErrors()
       ]))
