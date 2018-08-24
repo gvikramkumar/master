@@ -25,7 +25,7 @@ export default class PgLookupRepo {
             technology_group_id, 
             business_unit_id, 
             product_family_id
-            from fpacon.vw_fds_products
+            from fpacon.vw_fpa_products
             group by 1,2,3 order by 1,2,3    
           `);
   }
@@ -39,7 +39,7 @@ export default class PgLookupRepo {
             l4_sales_territory_descr,
             l5_sales_territory_descr,
             l6_sales_territory_descr
-            from fdscon.vw_fds_sales_hierarchy
+            from fpacon.vw_fpa_sales_hierarchy
             where sales_territory_type_code in ('CORP. REVENUE')
             group by 1,2,3,4,5,6
             order by 1,2,3,4,5,6          
@@ -143,6 +143,125 @@ export default class PgLookupRepo {
             where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
           `);
   }
+
+  getAdjustmentPFReport() {
+    return pgc.pgdb.query(`
+            SELECT DISTINCT 
+            ph.technology_group_id,
+            ph.business_unit_id,
+            ph.product_family_id
+            FROM fpacon.vw_fpa_products ph
+            where 1=1
+            AND REPLACE(REPLACE(ph.product_family_id,'_ADJ_PF',''),'_ADJ_BU','')||'_ADJ_PROD' = ph.product_id 
+            AND ph.product_id LIKE '%_ADJ_PROD'
+            GROUP by 1,2,3
+            ORDER by 1,2,3
+          `);
+  }
+
+  getDriverSL3Report() {
+    return pgc.pgdb.query(`
+            SELECT
+            driver_type,
+            sh.l1_sales_territory_name_code,
+            sh.l1_sales_territory_descr,
+            sh.l2_sales_territory_name_code,
+            sh.l2_sales_territory_descr,
+            sh.l3_sales_territory_name_code,
+            sh.l3_sales_territory_descr 
+            FROM
+            fpadfa.dfa_prof_driver_data drv,fpacon.vw_fpa_sales_hierarchy sh
+            WHERE 1=1
+            and drv.fiscal_month_id
+            in (SELECT fiscal_year_month_int 
+              FROM (SELECT fiscal_year_month_int 
+                  FROM fpacon.vw_fpa_fiscal_month_to_year  
+                  WHERE fiscal_year_month_int in (SELECT FISCAL_MONTH_ID FROM fpadfa.dfa_open_period WHERE OPEN_FLAG = 'Y' and module_id=1)
+                  order by fiscal_year_month_int desc) as fm 
+              limit 3)
+            and drv.sales_territory_code = sh.sales_territory_type_code
+            GROUP BY DRIVER_TYPE, sh.l1_sales_territory_name_code, sh.l1_sales_territory_descr,
+            sh.l2_sales_territory_name_code, sh.l2_sales_territory_descr ,
+            sh.l3_sales_territory_name_code, sh.l3_sales_territory_descr
+            ORDER BY
+            DRIVER_TYPE,
+            sh.l1_sales_territory_name_code,
+            sh.l1_sales_territory_descr,
+            sh.l2_sales_territory_name_code,
+            sh.l2_sales_territory_descr,
+            sh.l3_sales_territory_name_code,
+            sh.l3_sales_territory_descr
+          `);
+  }
+
+  getShipmentDriverPFReport() {
+    return pgc.pgdb.query(`
+            SELECT 
+            product_hier.technology_group_id,
+            product_hier.business_unit_id,
+            product_hier.product_family_id 
+            FROM 
+            (SELECT product_family
+            FROM fpadfa.dfa_prof_driver_data drv
+            WHERE fiscal_month_id in 
+            (SELECT fiscal_year_month_int 
+              FROM (SELECT fiscal_year_month_int 
+                  FROM fpacon.vw_fpa_fiscal_month_to_year  
+                  WHERE fiscal_year_month_int in (SELECT FISCAL_MONTH_ID FROM fpadfa.dfa_open_period WHERE OPEN_FLAG = 'Y' and module_id=1)
+                  order by fiscal_year_month_int desc) as fm 
+              limit 3)
+            and driver_type ='SHIPMENT' 
+            group by product_family
+            having sum(usd_ext_selling_price)<>0) driver,
+            (SELECT ph.technology_group_id, 
+              ph.business_unit_id,
+              ph.product_family_id
+              FROM fpacon.vw_fpa_products ph 
+              WHERE REPLACE(REPLACE(ph.product_family_id,'_ADJ_PF',''),'_ADJ_BU','')||'_ADJ_PROD'=ph.product_id
+              and ph.product_id like '%_ADJ_PROD' 
+              group by ph.technology_group_id, ph.business_unit_id,ph.product_family_id) product_hier
+            WHERE driver.PRODUCT_FAMILY = product_hier.product_family_id 
+            order by product_hier.technology_group_id,product_hier.business_unit_id, product_hier.product_family_id
+          `);
+  }
+
+  getRoll3DriverWithBEReport() {
+    return pgc.pgdb.query(`
+            SELECT 
+            driver.driver_type,
+            product_hier.technology_group_id,
+            product_hier.business_unit_id,
+            product_hier.product_family_id,
+            driver.bk_business_entity_name,
+            driver.sub_business_entity_name
+            FROM 
+            (SELECT driver_type,
+            product_family,
+            bk_business_entity_name,
+            sub_business_entity_name
+            FROM fpadfa.dfa_prof_driver_data drv
+            WHERE fiscal_month_id in
+            (SELECT fiscal_year_month_int 
+              FROM (SELECT fiscal_year_month_int 
+                  FROM fpacon.vw_fpa_fiscal_month_to_year  
+                  WHERE fiscal_year_month_int in (SELECT FISCAL_MONTH_ID FROM fpadfa.dfa_open_period WHERE OPEN_FLAG = 'Y' and module_id=1)
+                  order by fiscal_year_month_int desc) as fm 
+              limit 3)
+            and driver_type in ('SHIPMENT','GLREV','REMKTREV')
+            and (COALESCE( USD_EXT_SELLING_PRICE, 0)!=0 or COALESCE(USD_EXT_GROSS_REVENUE,0)!=0 or COALESCE(usd_ext_cmdm_amount, 0)!= 0)
+            group by driver_type, product_family, bk_business_entity_name,sub_business_entity_name) driver,
+            (SELECT ph.technology_group_id, 
+              ph.business_unit_id,
+              ph.product_family_id
+              FROM fpacon.vw_fpa_products ph 
+              WHERE REPLACE(REPLACE(ph.product_family_id,'_ADJ_PF',''),'_ADJ_BU','')||'_ADJ_PROD'=ph.product_id
+              and ph.product_id like '%_ADJ_PROD' 
+              group by ph.technology_group_id, ph.business_unit_id,ph.product_family_id) product_hier 
+            WHERE driver.PRODUCT_FAMILY = product_hier.product_family_id 
+            order by DRIVER_TYPE, product_hier.technology_group_id,product_hier.business_unit_id, product_hier.product_family_id
+          `);
+  }
+
 
   checkForExistenceAndReturnValue(table, column, value, upper = true) {
     if (!value && value !== 0) {

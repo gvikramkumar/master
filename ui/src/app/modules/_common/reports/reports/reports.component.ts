@@ -128,13 +128,17 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       'fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
     },
     {
-      type: 'multi-sheet', text: 'Multi-sheet Report', disabled: false,
-      filename: 'Multi_Sheet_Report.xlsx',
-      excelSheetname: ['Submeasure Grouping', '2t Submeasure List'],
-      excelHeaders: ['Submeasure Name, Group Submeasure Name, Created By, Create Time, Updated By, Update Time',
-        'Submeasure Name, Fiscal Month Id, Created By, Created Date, Last Modified By, Last Modified Date'],
-      excelProperties: ['sub_measure_name, group_sub_measure_name, create_user, create_datetime, update_user, update_datetime',
-        'submeasure_name, fiscal_month_id, create_user,create_datetime, update_user, update_datetime']
+      type: 'valid-driver', text: 'Valid Driver Report', disabled: false,
+      filename: 'Valid_Driver_Report.xlsx',
+      excelSheetname: ['Adjustment PF Report', 'Driver SL3 Report', 'Shipment Driver PF Report', 'Roll3 Driver With BE'],
+      excelHeaders: ['Tech Group, Business Unit, Product Family',
+        'Driver Type, Sales Level1 Code, Sales Level1 Description, Sales Level2 Code, Sales Level2 Description, Sales Level3 Code, Sales Level3 Description',
+        'Tech Group, Business Unit, Product Family',
+        'Driver Type, Tech Group, Business Unit, Product Family, Business Entity, Sub Business Entity'],
+      excelProperties: ['technology_group_id, business_unit_id, product_family_id',
+        'driver_type, l1_sales_territory_name_code, l1_sales_territory_descr, l2_sales_territory_name_code, l2_sales_territory_descr, l3_sales_territory_name_code, l3_sales_territory_descr',
+        'technology_group_id, business_unit_id, product_family_id',
+        'driver_type, technology_group_id, business_unit_id, product_family_id, bk_business_entity_name, sub_business_entity_name']
     }
   ];
   report = this.reports[0];

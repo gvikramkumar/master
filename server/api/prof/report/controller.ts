@@ -88,10 +88,12 @@ export default class ReportController extends ControllerBase {
       case 'sales-split-percentage':
         promise = this.postgresRepo.getSalesSplitPercentageReport();
         break;
-      case 'multi-sheet':
+      case 'valid-driver':
         promise = [
-          promise = this.postgresRepo.getSubmeasureGroupingReport(),
-          promise = this.postgresRepo.get2TSebmeasureListReport()
+          promise = this.postgresRepo.getAdjustmentPFReport(),
+          promise = this.postgresRepo.getDriverSL3Report(),
+          promise = this.postgresRepo.getShipmentDriverPFReport(),
+          promise = this.postgresRepo.getRoll3DriverWithBEReport()
         ];
         break;
       default:
