@@ -8,7 +8,7 @@ import {NamedApiError} from '../../../../lib/common/named-api-error';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
-import OpenPeriodPgRepo from '../../../common/open-period/repo';
+import OpenPeriodRepo from '../../../common/open-period/repo';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 
 @injectable()
@@ -17,7 +17,7 @@ export default class ProductClassUploadUploadController extends UploadController
 
   constructor(
     repo: ProductClassUploadRepo,
-    openPeriodRepo: OpenPeriodPgRepo,
+    openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
     userRoleRepo: UserRoleRepo
   ) {

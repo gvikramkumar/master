@@ -15,7 +15,7 @@ const schema = new Schema(
     updatedBy: {type: String, required: true},
     updatedDate: {type: Date, required: true}
   },
-  {collection: 'prof_swalloc_manual_mix'}
+  {collection: 'dfa_prof_swalloc_manualmix_upld'}
 );
 
 @injectable()

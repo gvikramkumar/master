@@ -9,7 +9,7 @@ const schema = new Schema(
     key: {type: String, required: true},
     value: Schema.Types.Mixed
   },
-  {collection: 'module_lookup'}
+  {collection: 'dfa_module_lookup'}
 );
 
 @injectable()
