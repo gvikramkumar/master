@@ -225,9 +225,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   downloadReport() {
     const params = <ReportSettings>{
       excelFilename: this.getFilename(),
-      excelSheetname: this.report.excelSheetname.join(';;'),
-      excelHeaders: this.report.excelHeaders.join(';;'),
-      excelProperties: this.report.excelProperties.join(';;')
+      excelSheetname: this.report.excelSheetname instanceof Array ? this.report.excelSheetname.join(';;') : this.report.excelSheetname,
+      excelHeaders: this.report.excelHeaders instanceof Array ? this.report.excelHeaders.join(';;') : this.report.excelHeaders,
+      excelProperties: this.report.excelProperties instanceof Array ? this.report.excelProperties.join(';;') : this.report.excelProperties,
     };
 
     if (this.report.hasSubmeasure || this.report.hasFiscalMonth) {
