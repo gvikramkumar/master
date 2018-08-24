@@ -48,8 +48,8 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
         this.modules.forEach((module, idx) => {
           this.fiscalMonths.push(_.cloneDeep(fiscalMonths));
         });
+        this.refresh();
       });
-    this.refresh();
   }
 
   refresh() {

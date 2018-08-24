@@ -57,7 +57,7 @@ export default class ControllerBase {
   getQueryOne(req, res, next) {
     const setNoError = req.query.setNoError;
     delete req.query.setNoError;
-    this.repo.getOneByQuery(req)
+    this.repo.getOneByQuery(req.query)
       .then(item => {
         if (item) {
           res.json(item);
