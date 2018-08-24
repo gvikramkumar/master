@@ -8,16 +8,21 @@ import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodPgRepo from '../../../common/open-period/repo';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
+import SourceRepo from '../../../common/source/repo';
+import {Source} from '../../../../../shared/models/source';
+import {ApiError} from '../../../../lib/common/api-error';
 
 
 @injectable()
 export default class DollarUploadUploadController extends InputFilterLevelUploadController {
+  sources: Source[];
 
   constructor(
     repo: DollarUploadRepo,
     openPeriodRepo: OpenPeriodPgRepo,
     submeasureRepo: SubmeasureRepo,
-    userRoleRepo: UserRoleRepo
+    userRoleRepo: UserRoleRepo,
+    private sourceRepo: SourceRepo
   ) {
     super(
       Modules.prof,
@@ -44,8 +49,12 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
 
   getValidationAndImportData() {
     return Promise.all([
-      super.getValidationAndImportData()
+      super.getValidationAndImportData(),
+      this.sourceRepo.getMany()
     ])
+      .then(results => {
+        this.sources = results[1];
+      });
   }
 
   validateRow1(row) {
@@ -85,7 +94,8 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
   }
 
   validateSubmeasureCanManualUpload() {
-    if (this.submeasure.source !== 'manual') {
+    const source = _.find(this.sources, {typeCode: 'EXCEL'}); // manual upload source
+    if (!source || this.submeasure.sourceId !== source.sourceId) {
       this.addErrorMessageOnly(`Sub Measure doesn't allow manual upload`);
     }
     return Promise.resolve();

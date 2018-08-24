@@ -78,7 +78,7 @@ pgc.promise.then(db => {
 // function getExists = results => results.rows[0].exists;
 
 /*
-  db.query('select exists (select 1 from fdscon.vw_fds_products where product_family_id = $1 limit 1)', ['HCS'])
+  db.query('select exists (select 1 from fpacon.vw_fpa_products where product_family_id = $1 limit 1)', ['HCS'])
     .then(results => console.log(results.rows[0].exists))
     .catch(err => console.error('myerr', err));
 */

@@ -36,21 +36,21 @@ data;
   getValidationAndImportData(): Promise<any> {
     return Promise.all([
       super.getValidationAndImportData(),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_products', 'product_family_id'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_products', 'business_unit_id'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_products', 'technology_group_id'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l1_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l2_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l3_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l4_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l5_sales_territory_name_code'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'l6_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'product_family_id'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'business_unit_id'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'technology_group_id'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l1_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l3_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l4_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l5_sales_territory_name_code'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l6_sales_territory_name_code'),
       // todo: fix this location:
       Promise.resolve(['LEGAL ENTITY VALUE']), // todo: this doesn't exits yet: pgRepo.getSortedUpperListFromColumn('business_entity', 'business_entity_name'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_be_hierarchy', 'bk_business_entity_name'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_be_hierarchy', 'bk_sub_business_entity_name'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_be_hierarchy', 'bk_business_entity_name'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_be_hierarchy', 'bk_sub_business_entity_name'),
       lookupRepo.getTextValuesSortedUpperCase('revenue_classification'),
-      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fds_sales_hierarchy', 'sales_coverage_code')
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code')
     ])
       .then(results => {
         this.data.product = {
@@ -77,13 +77,13 @@ data;
   }
 
   validateInputProductValue() {
-    let productLevel = this.submeasure.inputFilterLevel.productLevel.toUpperCase();
+    const productLevel = this.submeasure.inputFilterLevel.productLevel &&
+      this.submeasure.inputFilterLevel.productLevel.toUpperCase();
     if (productLevel && !this.temp.inputProductValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputProductValue);
     } else if (!productLevel && this.temp.inputProductValue) {
       this.addErrorNotAllowedForSubmeasure(this.PropNames.inputProductValue);
     } else {
-      productLevel = productLevel.toUpperCase();
       if (productLevel === 'PF') {
         if (this.notExists(this.data.product.productFamilies, this.temp.inputProductValue)) {
           this.addErrorInvalid(this.PropNames.inputProductValue, this.temp.inputProductValue);
@@ -102,13 +102,13 @@ data;
   }
 
   validateInputSalesValue() {
-    let salesLevel = this.submeasure.inputFilterLevel.salesLevel.toUpperCase();
+    const salesLevel = this.submeasure.inputFilterLevel.salesLevel &&
+      this.submeasure.inputFilterLevel.salesLevel.toUpperCase();
     if (salesLevel && !this.temp.inputSalesValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputSalesValue);
     } else if (!salesLevel && this.temp.inputSalesValue) {
       this.addErrorNotAllowedForSubmeasure(this.PropNames.inputSalesValue);
     } else {
-      salesLevel = salesLevel.toUpperCase();
       if (salesLevel === 'LEVEL1') {
         if (this.notExists(this.data.sales.level1s, this.temp.inputSalesValue)) {
           this.addErrorInvalid(this.PropNames.inputSalesValue, this.temp.inputSalesValue);
@@ -139,7 +139,8 @@ data;
   }
 
   validateInputLegalEntityValue() {
-    let entityLevel = this.submeasure.inputFilterLevel.entityLevel.toUpperCase();
+    const entityLevel = this.submeasure.inputFilterLevel.entityLevel &&
+      this.submeasure.inputFilterLevel.entityLevel.toUpperCase();
     if (entityLevel && !this.temp.inputLegalEntityValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputLegalEntityValue);
     } else if (!entityLevel && this.temp.inputLegalEntityValue) {
@@ -155,7 +156,8 @@ data;
   }
 
   validateInputBusinessEntityValue() {
-    let internalBELevel = this.submeasure.inputFilterLevel.internalBELevel.toUpperCase();
+    const internalBELevel = this.submeasure.inputFilterLevel.internalBELevel &&
+      this.submeasure.inputFilterLevel.internalBELevel.toUpperCase();
     if (internalBELevel && !this.temp.inputBusinessEntityValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputBusinessEntityValue);
     } else if (!internalBELevel && this.temp.inputBusinessEntityValue) {
@@ -175,7 +177,8 @@ data;
   }
 
   validateSCMSSegment() {
-    let scmsLevel = this.submeasure.inputFilterLevel.scmsLevel.toUpperCase();
+    const scmsLevel = this.submeasure.inputFilterLevel.scmsLevel &&
+      this.submeasure.inputFilterLevel.scmsLevel.toUpperCase();
     if (scmsLevel && !this.temp.scmsSegment) {
       this.addErrorRequiredForSubmeasure(this.PropNames.scmsSegment);
     } else if (!scmsLevel && this.temp.scmsSegment) {

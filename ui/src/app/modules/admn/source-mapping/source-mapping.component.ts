@@ -6,7 +6,7 @@ import {RoutingComponentBase} from '../../../core/base-classes/routing-component
 import {DfaModule} from '../../../modules/_common/models/module';
 import {SourceService} from '../../_common/services/source.service';
 import {ToastService, ToastSeverity} from '../../../core/services/toast.service';
-import {Source} from '../../_common/models/source';
+import {Source} from '../../../../../../shared/models/source';
 import * as _ from 'lodash';
 import {SourceMappingService} from '../../_common/services/source-mapping.service';
 

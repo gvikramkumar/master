@@ -7,7 +7,7 @@ import {SourceService} from '../../_common/services/source.service';
 import {UiUtil} from '../../../core/services/ui-util';
 import {ToastService, ToastSeverity} from '../../../core/services/toast.service';
 import {DfaModule} from '../../_common/models/module';
-import {Source} from '../../_common/models/source';
+import {Source} from '../../../../../../shared/models/source';
 import {ModuleLookupService} from '../../_common/services/module-lookup.service';
 import {shUtil} from '../../../../../../shared/shared-util';
 import {OpenPeriodService} from '../../_common/services/open-period.service';
