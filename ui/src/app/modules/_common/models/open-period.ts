@@ -2,7 +2,7 @@
 export class OpenPeriod {
   moduleId: number;
   fiscalMonth: number;
-  openFlag: string;
+  openFlag = 'Y';
   createdBy: string;
   createdDate: string;
   updatedBy: string;
@@ -11,7 +11,6 @@ export class OpenPeriod {
   constructor(moduleId?, fiscalMonth?) {
     this.moduleId = moduleId;
     this.fiscalMonth = fiscalMonth;
-    this.openFlag = 'Y';
   }
 }
 
