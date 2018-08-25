@@ -35,12 +35,15 @@
   & .fin-footer-buttons {
     padding: 25px 0;
 
+    /*
+    // can't figure out the reasoning for this, it misaligns the buttons with grid, but why?
     @media (min-width: $breakpoint-lg) {
       padding-left: 20px;
       @media (min-width: $breakpoint-xxl) {
         padding-left: 30px;
       }
     }
+    */
   }
 
 }
