@@ -15,6 +15,7 @@ const collections = [
   'dfa_module',
   'dfa_open_period',
   'dfa_data_source',
+  'dfa_module_data_source',
   'dfa_submeasure',
   'dfa_prof_dept_acct_map_upld',
   'dfa_prof_input_amnt_upld',
@@ -62,11 +63,10 @@ db.dfa_module.createIndex({name: 1}, {unique: true});
 db.dfa_module.createIndex({displayOrder: 1}, {unique: true});
 db.dfa_data_source.createIndex({name: 1}, {unique: true});
 db.dfa_data_source.createIndex({typeCode: 1}, {unique: true});
+db.dfa_module_data_source.createIndex({moduleId: 1}, {unique: true});
 
 db.dfa_lookup.createIndex({key: 1}, {unique: true});// shared
 db.dfa_module_lookup.createIndex({moduleId: 1, key: 1}, {unique: true});// per module
-
-
 
 print('>>>>>>>>>>>> create-collections complete');
 // unique constraints

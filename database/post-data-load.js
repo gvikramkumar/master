@@ -9,8 +9,8 @@ db.dfa_submeasure.insertMany([
     desc: "2 Tier Adjustment",
     sourceId: NumberInt(4),
     measureId: NumberInt(1),
-    startFiscalMonth: 201810,
-    endFiscalMonth: 204012,
+    startFiscalMonth: NumberInt(201810),
+    endFiscalMonth: NumberInt(204012),
     processingTime: "Monthly",
     pnlnodeGrouping: "Indirect Adjustments",
     categoryType: "HW",
@@ -45,8 +45,8 @@ db.dfa_submeasure.insertMany([
     desc: "2 Tier Adjustment2",
     sourceId: NumberInt(4),
     measureId: NumberInt(2),
-    startFiscalMonth: 201810,
-    endFiscalMonth: 204012,
+    startFiscalMonth: NumberInt(201810),
+    endFiscalMonth: NumberInt(204012),
     processingTime: "Monthly",
     pnlnodeGrouping: "Indirect Adjustments",
     categoryType: "SW",
@@ -82,7 +82,7 @@ db.user_role.insertOne({
 })
 
 db.dfa_prof_input_amnt_upld.insertOne({
-  fiscalMonth: 201809,
+  fiscalMonth: NumberInt(201809),
   submeasureName: "2 Tier Adjustment",
   product: "UCS",
   sales: "Americas",
@@ -101,7 +101,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Indirect Revenue Adjustments",
     abbrev: "revadj",
-    sources: [1, 2],
+    sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
     status: "A",
@@ -118,7 +118,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Manufacturing Overhead",
     abbrev: "revadj",
-    sources: [1, 2],
+    sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
     status: "A"
@@ -128,7 +128,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Manufacturing Supply Chain Expenses",
     abbrev: "revadj",
-    sources: [1, 2],
+    sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
     status: "A"
@@ -138,7 +138,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Manufacturing V&O",
     abbrev: "revadj",
-    sources: [1, 2],
+    sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
     status: "A"
@@ -148,7 +148,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Standard Cogs Adjustments",
     abbrev: "revadj",
-    sources: [1, 2],
+    sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['SALES'],
     approvalRequired: 'N',
     status: "A"
@@ -158,7 +158,7 @@ db.dfa_measure.insertMany([
     moduleId: NumberInt(1),
     name: "Warranty",
     abbrev: "revadj",
-    sources: [1, 2],
+    sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['PRODUCT'],
     approvalRequired: 'N',
     status: "I"
@@ -166,22 +166,21 @@ db.dfa_measure.insertMany([
 ])
 
 db.dfa_open_period.insertMany([
-  {moduleId: NumberInt(1), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(2), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(3), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(4), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(5), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(6), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(7), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(8), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(9), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(10), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(11), fiscalMonth: 201809, openFlag: "Y"},
-  {moduleId: NumberInt(12), fiscalMonth: 201809, openFlag: "Y"},
+  {moduleId: NumberInt(1), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(2), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(3), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(4), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(5), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(6), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(7), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(8), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(9), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(10), fiscalMonth: NumberInt(201809), openFlag: "Y"},
+  {moduleId: NumberInt(11), fiscalMonth: NumberInt(201809), openFlag: "Y"},
 ]);
 
 db.dfa_prof_manual_map_upld.insert({
-  fiscalMonth: 201809,
+  fiscalMonth: NumberInt(201809),
   submeasureName: "2 Tier Adjustment",
   product: "UCS",
   sales: "Americas",
@@ -206,12 +205,12 @@ db.dfa_lookup.insertMany([
 db.dfa_prof_dept_acct_map_upld.insertOne({
   submeasureName: "2 Tier Adjustment",
   nodeValue: "020_070506",
-  glAccount: "69999"
+  glAccount: NumberInt(69999)
 });
 
 // sales-split
 db.dfa_prof_sales_split_pctmap_upld.insertOne({
-  fiscalMonth: 201810,
+  fiscalMonth: NumberInt(201810),
   accountId: "42127",
   companyCode: "555",
   subaccountCode: "033",
@@ -221,11 +220,17 @@ db.dfa_prof_sales_split_pctmap_upld.insertOne({
 
 // product-class
 db.dfa_prof_swalloc_manualmix_upld.insertOne({
-  fiscalMonth: 201810,
+  fiscalMonth: (201810),
   submeasureName: "2 Tier",
   splitCategory: "HARDWARE",
   splitPercentage: 1
 });
+
+db.dfa_module_data_source.insertMany([
+  {moduleId: NumberInt(1), sources: [NumberInt(1),NumberInt(2), NumberInt(3),NumberInt(4)]},
+  {moduleId: NumberInt(11), sources: [NumberInt(2),NumberInt(4)]},
+
+])
 
 db.dfa_data_source.insertMany([
   {
@@ -306,10 +311,11 @@ function parseSelect(str) {
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'dfa_allocation_rule',
+  'dfa_data_source',
   'dfa_measure',
   'dfa_module',
+  'dfa_module_data_source',
   'dfa_open_period',
-  'dfa_data_source',
   'dfa_submeasure',
   'dfa_prof_dept_acct_map_upld',
   'dfa_prof_input_amnt_upld',
