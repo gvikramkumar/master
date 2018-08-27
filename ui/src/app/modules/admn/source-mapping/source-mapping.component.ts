@@ -8,7 +8,8 @@ import {SourceService} from '../../_common/services/source.service';
 import {ToastService, ToastSeverity} from '../../../core/services/toast.service';
 import {Source} from '../../../../../../shared/models/source';
 import * as _ from 'lodash';
-import {SourceMappingService} from '../../_common/services/source-mapping.service';
+import {ModuleSource} from '../../_common/models/module_source';
+import {ModuleSourceService} from '../../_common/services/module-source.service';
 
 @Component({
   selector: 'fin-source-mapping',
@@ -29,7 +30,7 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
     private sourceService: SourceService,
     private toastService: ToastService,
     private uiUtil: UiUtil,
-    private sourceMappingService: SourceMappingService
+    private moduleSourceService: ModuleSourceService
   ) {
     super(store, route);
   }
@@ -48,24 +49,27 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
 
   refresh() {
     const promiseArr = [];
-    this.sourceMappingService.getModuleSourceArray()
-      .subscribe(objs => {
-        this.selectedSources =  objs.map(obj => obj.sources);
+    this.moduleSourceService.getManySortByModuleId()
+      .subscribe(modSourceArr => {
+        this.selectedSources = this.modules.map(module => {
+          const moduleSource = _.find(modSourceArr, {moduleId: module.moduleId});
+          return moduleSource ? moduleSource.sources : [];
+        })
         this.orgSelectedSources = _.cloneDeep(this.selectedSources);
       });
   }
 
   save() {
-    const arr = [];
+    const promises = [];
     this.modules.forEach((module, idx) => {
       if (!_.isEqual(this.selectedSources[idx], this.orgSelectedSources[idx])) {
-        arr.push({moduleId: module.moduleId, sources: this.selectedSources[idx]});
+        promises.push(this.moduleSourceService.upsert(new ModuleSource(module.moduleId, this.selectedSources[idx])).toPromise());
       }
     });
 
-    if (arr.length) {
-      this.sourceMappingService.updateModuleSourceArray(arr)
-        .subscribe(() => {
+    if (promises.length) {
+      Promise.all(promises)
+        .then(() => {
           this.refresh();
           this.toastService.showAutoHideToast('Submitted',
             'Module-to-source mapping has been submitted successfully.', ToastSeverity.success);

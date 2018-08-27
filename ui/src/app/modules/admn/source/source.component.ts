@@ -10,9 +10,9 @@ import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
 import * as _ from 'lodash';
 import {DfaModule} from '../../_common/models/module';
-import {SourceMappingService} from '../../_common/services/source-mapping.service';
 import {ValidationInputComponent} from '../../../shared/components/validation-input/validation-input.component';
 import {NgForm} from '@angular/forms';
+import {ModuleSourceService} from '../../_common/services/module-source.service';
 
 @Component({
   selector: 'fin-source',
@@ -44,7 +44,7 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     private route: ActivatedRoute,
     private sourceService: SourceService,
     private uiUtil: UiUtil,
-    private sourceMappingService: SourceMappingService,
+    private moduleSourceService: ModuleSourceService,
     private changeDetectorRef: ChangeDetectorRef
   ) {
     super(store, route);
@@ -57,12 +57,13 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
   }
 
   getModuleSouceMap() {
-    this.sourceMappingService.getModuleSourceArray()
-      .subscribe(mappings => {
-        this.moduleSourceMap =  mappings.map(mapping => {
+    this.moduleSourceService.getManySortByModuleId()
+      .subscribe(moduleSourceArr => {
+        this.moduleSourceMap =  this.store.nonAdminModules.map(module => {
+          const moduleSource = _.find(moduleSourceArr, {moduleId: module.moduleId});
           return {
-            module: _.find(this.store.nonAdminModules, {moduleId: mapping.moduleId}),
-            sources: mapping.sources
+            module,
+            sources: moduleSource ? moduleSource.sources : []
           };
         });
       });
