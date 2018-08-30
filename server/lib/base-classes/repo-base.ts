@@ -9,6 +9,7 @@ import {mgc} from '../database/mongoose-conn';
 export default class RepoBase {
   protected Model: Model<any>;
   protected autoIncrementField: string;
+  protected secondAutoIncrementField: string;
 
   constructor(public schema: Schema, protected modelName: string, protected isModuleRepo = false) {
     this.schema = schema;
@@ -108,17 +109,23 @@ export default class RepoBase {
       });
   }
 
-  addMany(docs, userId) {
+  addMany(docs, userId, bypassAutoInc = false) {
     if (!docs.length) {
       return Promise.resolve();
     }
     const date = new Date();
     docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
     let promise;
-    if (this.autoIncrementField) {
+    if (this.autoIncrementField && !bypassAutoInc) {
       promise = this.getAutoIncrementValue()
         .then(inc => {
-          docs.forEach(doc => doc[this.autoIncrementField] = inc++);
+          docs.forEach(doc => {
+            doc[this.autoIncrementField] = inc;
+            if (this.secondAutoIncrementField) {
+              doc[this.secondAutoIncrementField] = inc;
+            }
+            inc += 1;
+          });
         });
     } else {
       promise = Promise.resolve();
@@ -320,9 +327,9 @@ export default class RepoBase {
 
   // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
   // and replace
-  syncRecordsReplaceAll(filter, records, userId) {
+  syncRecordsReplaceAll(filter, records, userId, byPassAutoInc = false) {
     return this.removeMany(filter)
-      .then(() => this.addMany(records, 'jodoe'));
+      .then(() => this.addMany(records, userId, byPassAutoInc));
   }
 
   // a way to validate using mongoose outside of save(). If errs, then throw errs
@@ -412,7 +419,12 @@ export default class RepoBase {
   fillAutoIncrementField(item) {
     if (this.autoIncrementField) {
       return this.getAutoIncrementValue()
-        .then(inc => item[this.autoIncrementField] = inc);
+        .then(inc => {
+          item[this.autoIncrementField] = inc;
+          if (this.secondAutoIncrementField) {
+            item[this.secondAutoIncrementField] = inc;
+          }
+        });
     } else {
       return Promise.resolve();
     }

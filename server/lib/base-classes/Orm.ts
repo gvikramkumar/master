@@ -13,30 +13,41 @@ export interface OrmMap {
   field: string;
   type?: OrmTypes;
   serial?: boolean;
+  mgDefault?: any;
+  pgDefault?: any;
 }
 
 export class Orm {
+  mapsFull: OrmMap[];
+  maps: OrmMap[];
   hasCreatedBy = false;
   mapsNoSerial: OrmMap[];
 
-  constructor(public maps: OrmMap[]) {
+  constructor(_maps: OrmMap[]) {
+    this.mapsFull = _maps;
+    this.maps = _maps.filter(map => map.prop && map.field);
     this.mapsNoSerial = this.maps.filter(map => !map.serial);
-    this.hasCreatedBy = !!_.find(maps, {prop: 'createdBy'});
+    this.hasCreatedBy = !!_.find(this.maps, {prop: 'createdBy'});
   }
 
   recordToObject(record): AnyObj {
     const obj = {};
 
-    this.maps.forEach(map => {
+    this.mapsFull.filter(map => map.prop).forEach(map => {
       // pg's converting to date objects, but that's working, so we'll leave that be for now
       // if we need to, we can convert it to toIsoString()
       // if (false) { // record[map.field] instanceof Date) {
       //   obj[map.prop] = record[map.field].toISOString();
       // } else
-      if (map.type === OrmTypes.number) {
-        obj[map.prop] = Number(record[map.field]); // pg returns numbers as strings, so we have to convert
+      if (map.prop && !map.field) {
+        if (map.mgDefault === undefined) {
+          throw new ApiError(`Orm.recordToObject no mgDefault for ${map.prop}`);
+        }
+        _.set(obj, map.prop, map.mgDefault);
+      } else if (map.type === OrmTypes.number) {
+        _.set(obj, map.prop, Number(record[map.field])); // pg returns numbers as strings, so we have to convert
       } else {
-        obj[map.prop] = record[map.field];
+        _.set(obj, map.prop, record[map.field]);
       }
     });
     return obj;
@@ -59,11 +70,16 @@ export class Orm {
       this.addUpdatedBy(obj, userId);
     }
 
-    this.maps.forEach(map => {
-      if (map.type === OrmTypes.date) {
-        record[map.field] = this.getPgDateString(obj[map.prop]);
+    this.mapsFull.filter(map => map.field).forEach(map => {
+      if (map.field && !map.prop) {
+        if (map.pgDefault === undefined) {
+          throw new ApiError(`Orm.objectToRecord no pgDefault for ${map.field}`);
+        }
+        record[map.field] = map.pgDefault;
+      } else if (map.type === OrmTypes.date) {
+        record[map.field] = this.getPgDateString(_.get(obj, map.prop));
       } else {
-        record[map.field] = obj[map.prop];
+        record[map.field] = _.get(obj, map.prop);
       }
     });
     return record;

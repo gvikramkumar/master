@@ -2,12 +2,12 @@ import {ApiError} from '../common/api-error';
 import _ from 'lodash';
 import {svrUtil} from '../common/svr-util';
 import RepoBase from './repo-base';
-import {PostgresRepoBase} from './pg-repo-base';
+import {PgRepoBase} from './pg-repo-base';
 import AnyObj from '../../../shared/models/any-obj';
 
 export default class ControllerBase {
 
-  constructor(protected repo: RepoBase, protected pgRepo?: PostgresRepoBase) {
+  constructor(protected repo: RepoBase, protected pgRepo?: PgRepoBase) {
   }
 
   // GetMany special query parameters
@@ -105,7 +105,7 @@ export default class ControllerBase {
   callMethod(req, res, next) {
     const method = this[req.params.method];
     if (!method) {
-      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
+      throw new ApiError(`PgLookupController: no method found for ${req.params.method}`)
     }
     method.call(this, req, res, next);
   }

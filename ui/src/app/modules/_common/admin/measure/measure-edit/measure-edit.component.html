@@ -4,7 +4,8 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <fin-input name="name" [(ngModel)]="measure.name" label="Measure Name" [required]="true"></fin-input>
+        <fin-input name="name" [(ngModel)]="measure.name" label="Measure Name" [required]="true"
+                   [notInList]="measureNames" notInListMessage="Measure name already exists"></fin-input>
       </div>
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center start">
@@ -17,7 +18,7 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <fin-input name="abbrev" [(ngModel)]="measure.abbrev" label="Abbrev Name" [required]="true"></fin-input>
+        <fin-input name="typeCode" [(ngModel)]="measure.typeCode" label="Type Code" [required]="true"></fin-input>
       </div>
     </div>
 

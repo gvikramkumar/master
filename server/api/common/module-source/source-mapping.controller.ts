@@ -1,6 +1,6 @@
 /*
 import {injectable} from 'inversify';
-import PostgresControllerBase from '../../../lib/base-classes/pg-controller-base';
+import PgControllerBase from '../../../lib/base-classes/pg-controller-base';
 import {PgSourceMappingRepo} from '../source-mapping/repo';
 import {ModuleRepo} from '../module/repo';
 import * as _ from 'lodash';
@@ -10,7 +10,7 @@ import {SourceMapping} from './source-mapping';
 
 
 @injectable()
-export class SourceMappingController extends PostgresControllerBase {
+export class SourceMappingController extends PgControllerBase {
 
   constructor(
     protected repo: PgSourceMappingRepo,

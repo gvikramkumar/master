@@ -40,7 +40,7 @@ export default class LookupController {
   callMethod(req, res, next) {
     const method = this[req.params.method];
     if (!method) {
-      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
+      throw new ApiError(`PgLookupController: no method found for ${req.params.method}`)
     }
     method.call(this, req, res, next);
   }

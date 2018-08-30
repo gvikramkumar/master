@@ -1,4 +1,4 @@
-import {PostgresRepoBase} from '../server/lib/base-classes/pg-repo-base';
+import {PgRepoBase} from '../server/lib/base-classes/pg-repo-base';
 import {OrmMap} from '../server/lib/base-classes/Orm';
 import {pgc} from '../server/lib/database/postgres-conn';
 import OpenPeriodPgRepo from '../server/api/common/open-period/pgrepo';

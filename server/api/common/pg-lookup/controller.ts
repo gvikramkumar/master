@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
 import {ApiError} from '../../../lib/common/api-error';
 import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
-import {PostgresRepoBase} from '../../../lib/base-classes/pg-repo-base';
+import {PgRepoBase} from '../../../lib/base-classes/pg-repo-base';
 import PgLookupRepo from './repo';
 
 
@@ -15,7 +15,7 @@ export class PgLookupController {
   callMethod(req, res, next) {
     const method = this[req.params.method];
     if (!method) {
-      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
+      throw new ApiError(`PgLookupController: no method found for ${req.params.method}`)
     }
     method.call(this, req, res, next);
   }

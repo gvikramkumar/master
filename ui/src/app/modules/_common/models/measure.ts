@@ -4,7 +4,7 @@ export class Measure {
   measureId?: number;
   moduleId?: number;
   name: string;
-  abbrev: string;
+  typeCode: string;
   sources: number[];
   hierarchies: string[] = [];
   approvalRequired?: boolean;

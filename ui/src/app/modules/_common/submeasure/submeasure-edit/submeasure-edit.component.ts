@@ -79,11 +79,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   ibe_items = [
     {
       name: 'Internal BE',
-      value: 'Internal BE',
+      value: 'INTERNAL BE',
     },
     {
       name: 'Internal Sub BE',
-      value: 'Internal Sub BE',
+      value: 'INTERNAL SUB BE',
     }
   ];
   le_items = [
@@ -113,27 +113,27 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   s_items = [
     {
       name: 'Level 1',
-      value: 'level1',
+      value: 'LEVEL1',
     },
     {
       name: 'Level 2',
-      value: 'level2',
+      value: 'LEVEL2',
     },
     {
       name: 'Level 3',
-      value: 'level3',
+      value: 'LEVEL3',
     },
     {
       name: 'Level 4',
-      value: 'level4',
+      value: 'LEVEL4',
     },
     {
       name: 'Level 5',
-      value: 'level5',
+      value: 'LEVEL5',
     },
     {
       name: 'Level 6',
-      value: 'level6',
+      value: 'LEVEL6',
     }
   ];
   scms_items = [

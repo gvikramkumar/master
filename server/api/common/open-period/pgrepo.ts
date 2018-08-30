@@ -1,4 +1,4 @@
-import {PostgresRepoBase} from '../../../lib/base-classes/pg-repo-base';
+import {PgRepoBase} from '../../../lib/base-classes/pg-repo-base';
 import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 import {injectable} from 'inversify';
 
@@ -14,7 +14,7 @@ const ormMap: OrmMap[] = [
 ] ;
 
 @injectable()
-export default class OpenPeriodPgRepo extends PostgresRepoBase {
+export default class OpenPeriodPgRepo extends PgRepoBase {
   table = 'fpadfa.dfa_open_period';
   idProp = 'moduleId';
 

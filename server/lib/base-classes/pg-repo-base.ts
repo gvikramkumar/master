@@ -6,20 +6,25 @@ import * as _ from 'lodash';
 
 // date assumption: assumes all dates are iso date strings, can't pass in objects with Date types
 // passed in filter objects use object properties, not table fields
-export class PostgresRepoBase {
+export class PgRepoBase {
   table: string;
   idProp: string;
 
   constructor(protected orm: Orm, protected isModuleRepo = false) {
   }
 
-  getMany(filter = {}) {
+  getMany(filter: AnyObj = {}) {
     this.verifyModuleId(filter);
+    const sortBy = filter.setSort;
+    filter = _.omit(filter, ['setSort']);
     let sql = 'select ';
     sql += this.orm.maps.map(map => map.field).join(', ');
     sql += ` from ${this.table} `;
     const keys = Object.keys(filter);
     sql += this.buildParameterizedWhereClause(keys, 0, false);
+    if (sortBy) {
+      sql += ` order by ${sortBy}`;
+    }
     return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
       .then(resp => resp.rows.map(row => this.orm.recordToObject(row)));
   }

@@ -8,7 +8,7 @@ const schema = new Schema(
     measureId: {type: Number, required: true},
     moduleId: {type: Number, required: true},
     name: {type: String, required: true, trim: true},
-    abbrev: {type: String, required: true, trim: true},
+    typeCode: {type: String, required: true, trim: true},
     sources: {type: [Number], required: true},
     hierarchies: {type: [String], required: true},
     approvalRequired: {type: Boolean, enum: ['Y', 'N']},

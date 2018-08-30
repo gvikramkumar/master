@@ -100,7 +100,7 @@ db.dfa_measure.insertMany([
     measureId: NumberInt(1),
     moduleId: NumberInt(1),
     name: "Indirect Revenue Adjustments",
-    abbrev: "revadj",
+    typeCode: "REVADJ",
     sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
@@ -116,52 +116,87 @@ db.dfa_measure.insertMany([
   {
     measureId: NumberInt(2),
     moduleId: NumberInt(1),
-    name: "Manufacturing Overhead",
-    abbrev: "revadj",
+    name: "Standard COGS Adjustments",
+    typeCode: "STDCOGSADJ",
     sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
-    status: "A"
+    status: "A",
+    reportingLevel1: null,
+    reportingLevel2: null,
+    reportingLevel3: null,
+    reportingLevel1Enabled: true,
+    reportingLevel2Enabled: true,
+    reportingLevel3Enabled: true,
+
   },
   {
     measureId: NumberInt(3),
     moduleId: NumberInt(1),
-    name: "Manufacturing Supply Chain Expenses",
-    abbrev: "revadj",
+    name: "Manufacturing Overhead",
+    typeCode: "MOVHD",
     sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
-    status: "A"
+    status: "A",
+    reportingLevel1: null,
+    reportingLevel2: null,
+    reportingLevel3: null,
+    reportingLevel1Enabled: true,
+    reportingLevel2Enabled: true,
+    reportingLevel3Enabled: true,
+
   },
   {
     measureId: NumberInt(4),
     moduleId: NumberInt(1),
-    name: "Manufacturing V&O",
-    abbrev: "revadj",
+    name: "Manufacturing Supply Chain Expenses",
+    typeCode: "INVEX",
     sources: [NumberInt(1), NumberInt(2)],
     hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
-    status: "A"
+    status: "A",
+    reportingLevel1: null,
+    reportingLevel2: null,
+    reportingLevel3: null,
+    reportingLevel1Enabled: true,
+    reportingLevel2Enabled: true,
+    reportingLevel3Enabled: true,
+
   },
   {
     measureId: NumberInt(5),
     moduleId: NumberInt(1),
-    name: "Standard Cogs Adjustments",
-    abbrev: "revadj",
+    name: "Warranty",
+    typeCode: "WAREX",
     sources: [NumberInt(1), NumberInt(2)],
-    hierarchies: ['SALES'],
+    hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
-    status: "A"
+    status: "A",
+    reportingLevel1: null,
+    reportingLevel2: null,
+    reportingLevel3: null,
+    reportingLevel1Enabled: true,
+    reportingLevel2Enabled: true,
+    reportingLevel3Enabled: true,
+
   },
   {
     measureId: NumberInt(6),
     moduleId: NumberInt(1),
-    name: "Warranty",
-    abbrev: "revadj",
+    name: "Manufacturing V&O",
+    typeCode: "MOCOGS",
     sources: [NumberInt(1), NumberInt(2)],
-    hierarchies: ['PRODUCT'],
+    hierarchies: ['PRODUCT', 'SALES'],
     approvalRequired: 'N',
-    status: "I"
+    status: "A",
+    reportingLevel1: null,
+    reportingLevel2: null,
+    reportingLevel3: null,
+    reportingLevel1Enabled: true,
+    reportingLevel2Enabled: true,
+    reportingLevel3Enabled: true,
+
   }
 ])
 
@@ -227,9 +262,7 @@ db.dfa_prof_swalloc_manualmix_upld.insertOne({
 });
 
 db.dfa_module_data_source.insertMany([
-  {moduleId: NumberInt(1), sources: [NumberInt(1),NumberInt(2), NumberInt(3),NumberInt(4)]},
-  {moduleId: NumberInt(11), sources: [NumberInt(2),NumberInt(4)]},
-
+  {moduleId: NumberInt(1), sources: [NumberInt(1),NumberInt(2), NumberInt(3),NumberInt(4)]}
 ])
 
 db.dfa_data_source.insertMany([

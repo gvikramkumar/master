@@ -24,6 +24,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   measure = new Measure();
   orgMeasure = _.cloneDeep(this.measure);
   sources: Source[] = [];
+  measureNames: string[] = [];
   moduleSourceIds: number[] = [];
   moduleSources: Source[] = [];
   hierarchies: { name: string, selected?: boolean }[] = [];
@@ -51,12 +52,14 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
         {name: 'Sales'},
       ]),
       // promise getting sourceIds for current module
-      this.moduleLookupService.get('sources', this.store.module.moduleId).toPromise()
+      this.moduleLookupService.get('sources', this.store.module.moduleId).toPromise(),
+      this.measureService.getMany().toPromise()
     ])
       .then(data => {
         this.sources = data[0];
         this.hierarchies = data[1];
         this.moduleSourceIds = data[2];
+        this.measureNames = data[3].map(measure => measure.name);
 
         // filter sources by current module
         this.moduleSources = this.sources.filter(source => _.includes(this.moduleSourceIds, source.sourceId));

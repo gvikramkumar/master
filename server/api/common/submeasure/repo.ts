@@ -5,10 +5,10 @@ import {GroupingSubmeasure} from './grouping-submeasure';
 
 const filterLevelSchema = new Schema({
   productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
-  salesLevel: String,
-  scmsLevel: String,
-  internalBELevel: String,
-  entityLevel: String
+  salesLevel: {type: String, enum: ['LEVEL1', 'LEVEL2', 'LEVEL3', 'LEVEL4', 'LEVEL5', 'LEVEL6']},
+  scmsLevel: {type: String, enum: ['SCMS']},
+  internalBELevel: {type: String, enum: ['INTERNAL BE', 'INTERNAL SUB BE']},
+  entityLevel: {type: String, enum: ['BE']},
 })
 
 const indicatorsSchema = new Schema({
@@ -22,11 +22,13 @@ const indicatorsSchema = new Schema({
   transition: {type: String, enum: ['Y', 'N'], required: true},
   corpRevenue: {type: String, enum: ['Y', 'N'], required: true},
   dualGaap: {type: String, enum: ['Y', 'N'], required: true},
-  twoTier: {type: String, enum: ['Y', 'N'], required: true}
+  twoTier: {type: String, enum: ['Y', 'N'], required: true},
+  deptAcct: {type: String, enum: ['Y', 'N', 'D', 'A'], required: true}
 })
 
 const schema = new Schema({
     submeasureId: {type: Number, required: true},
+    submeasureKey: {type: Number, required: true},
     moduleId: {type: Number, required: true},
     name: {type: String, required: true},
     desc: {type: String, required: true},
@@ -43,6 +45,8 @@ const schema = new Schema({
     rules: [String],
     categoryType: String,
     groupingSubmeasureId: Number,
+    sourceSystemAdjTypeId: Number,
+    glAcctNumber: Number,
     status: {type: String, enum: ['A', 'I', 'P'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
@@ -55,7 +59,8 @@ const schema = new Schema({
 
 @injectable()
 export default class SubmeasureRepo extends RepoBase {
-  // autoIncrementField = 'submeasureId'; // can't do this, need to get next value from pg as already has submeasures
+  autoIncrementField = 'submeasureKey';
+  secondAutoIncrementField = 'submeasureId';
 
   constructor() {
     super(schema, 'Submeasure', true);

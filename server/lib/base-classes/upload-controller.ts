@@ -62,7 +62,7 @@ export default class UploadController {
       return;
     }
 
-    this.getValidationAndImportData()
+    this.getValidationAndImportData(req.user.id)
       // .then(() => Q().delay(3000))
       .then(() => this.validateRows(1, this.rows1))
       .then(() => this.lookForTotalErrors())
@@ -94,10 +94,10 @@ export default class UploadController {
       });
   }
 
-  getValidationAndImportData(): Promise<any> {
+  getValidationAndImportData(userId): Promise<any> {
     return Promise.all([
       this.openPeriodRepo.getOneByQuery({moduleId: this.moduleId}),
-      this.userRoleRepo.getRolesByUserId('jodoe'),
+      this.userRoleRepo.getRolesByUserId(userId),
       this.submeasureRepo.getMany({moduleId: this.moduleId})
     ])
       .then(results => {
