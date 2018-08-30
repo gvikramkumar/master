@@ -2,6 +2,17 @@ import {PgRepoBase} from '../../../lib/base-classes/pg-repo-base';
 import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 import {injectable} from 'inversify';
 
+export class SubmeasureInputLvl {
+  constructor(
+    public moduleId: number,
+    public submeasureKey: number,
+    public hierarchyId: number,
+    public inputLevelFlag: ('I' | 'M'),
+    public levelId: number,
+    public levelName: string,
+  ) {}
+}
+
 const ormMap: OrmMap[] = [
   {prop: 'moduleId', field: 'module_id', type: OrmTypes.number},
   {prop: 'submeasureKey', field: 'sub_measure_key', type: OrmTypes.number},

@@ -23,7 +23,8 @@ const indicatorsSchema = new Schema({
   corpRevenue: {type: String, enum: ['Y', 'N'], required: true},
   dualGaap: {type: String, enum: ['Y', 'N'], required: true},
   twoTier: {type: String, enum: ['Y', 'N'], required: true},
-  deptAcct: {type: String, enum: ['Y', 'N', 'D', 'A'], required: true}
+  deptAcct: {type: String, enum: ['Y', 'N', 'D', 'A'], required: true},
+  productService: {type: String, enum: ['Y', 'N'], required: true}
 })
 
 const schema = new Schema({

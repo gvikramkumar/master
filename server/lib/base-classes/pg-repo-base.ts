@@ -277,7 +277,8 @@ export class PgRepoBase {
   // and replace
   syncRecordsReplaceAll(filter, records, userId) {
     return this.removeMany(filter, false)
-      .then(() => this.addMany(records, userId));
+      .then(() => this.addMany(records, userId))
+      .then(() => ({recordCount: records.length}));
   }
 
   getFilterValues(keys, filter) {

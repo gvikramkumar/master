@@ -4,9 +4,11 @@ import SubmeasureRepo from './repo';
 import {ApiError} from '../../../lib/common/api-error';
 import {GroupingSubmeasure} from './grouping-submeasure';
 import SubmeasurePgRepo from './pgrepo';
-import SubmeasureInputLvlPgRepo from './input-level-pgrepo';
+import SubmeasureInputLvlPgRepo, {SubmeasureInputLvl} from './input-level-pgrepo';
 import * as _ from 'lodash';
 import InputLevelPgRepo from './input-level-pgrepo';
+import AnyObj from '../../../../shared/models/any-obj';
+import Any = jasmine.Any;
 
 
 interface FilterLevel {
@@ -45,7 +47,47 @@ export default class SubmeasureController extends ControllerBase {
     super(repo);
   }
 
-  syncSubmeasurePgToMongo(req, res, next) {
+  mongoToPgSyncFilterLevel(userId, log: string[]) {
+    const tableName = 'dfa_submeasure_input_lvl';
+    try {
+      this.repo.getMany()
+        .then(docs => {
+          const records = [];
+          docs.forEach(sub => {
+            this.addFilterLevelRecords('I', sub.inputFilterLevel, sub, records, log);
+            if (sub.indicators.manualMapping) {
+              this.addFilterLevelRecords('M', sub.manualMapping, sub, records, log);
+            }
+          })
+          return this.inputLevelPgRepo.syncRecordsReplaceAll({}, records, userId)
+            .then(results => log.push(`${tableName}: ${results.recordCount}`));
+        });
+    } catch (err) {
+      log.push(`${tableName}: ${err.message}`);
+    }
+  }
+
+  addFilterLevelRecords(flag, fl, sub, records, log) {
+    ['productLevel', 'salesLevel', 'scmsLevel', 'internalBELevel', 'entityLevel'].forEach(flProp => {
+      if (fl[flProp]) {
+        const map = _.find(this.filterLevelMap, {prop: flProp, levelName: fl[flProp]});
+        if (!map) {
+          log.push(`dfa_submeasure_input_lvl: no filterLevelMap for flag/prop/levelName: ${flag}/${fl.prop}/${fl.levelName}`);
+          return;
+        }
+        records.push(new SubmeasureInputLvl(
+          sub.moduleId,
+          sub.submeasureKey,
+          map.hierarchyId,
+          flag,
+          map.levelId,
+          map.levelName
+        ));
+      }
+    });
+  }
+
+  pgToMongoSync(req, res, next) {
     Promise.all([
       this.pgRepo.getMany(),
       this.inputLevelPgRepo.getMany()
@@ -93,7 +135,6 @@ export default class SubmeasureController extends ControllerBase {
       .then(docs => res.json(docs));
   }
 
-  // res.json(item);
 
 /*
 

@@ -179,6 +179,19 @@ export default class ControllerBase {
       .then(() => res.end());
   }
 
+  mongoToPgSync(tableName, userId, log: string[], mgFilter = {}, pgFilter = {}) {
+    try {
+      this.repo.getMany(mgFilter)
+        .then(docs => docs.map(docs.toObject()))
+        .then(objs => {
+          return this.pgRepo.syncRecordsReplaceAll(pgFilter, objs, userId)
+            .then(results => log.push(`${tableName}: ${results.recordCount}`));
+        });
+    } catch (err) {
+      log.push(`${tableName}: ${err.message}`);
+    }
+  }
+
   // put /:id
   update(req, res, next) {
     const data = req.body;
