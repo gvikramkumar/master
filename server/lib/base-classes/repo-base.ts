@@ -9,8 +9,9 @@ import {mgc} from '../database/mongoose-conn';
 export default class RepoBase {
   protected Model: Model<any>;
   protected autoIncrementField: string;
+  protected secondAutoIncrementField: string;
 
-  constructor(public schema: Schema, protected modelName: string, protected isModuleRepo = false) {
+  constructor(public schema: Schema, protected modelName: string, public isModuleRepo = false) {
     this.schema = schema;
     svrUtil.setSchemaAdditions(this.schema);
     this.Model = mg.model(modelName, schema);
@@ -108,17 +109,23 @@ export default class RepoBase {
       });
   }
 
-  addMany(docs, userId) {
+  addMany(docs, userId, bypassAutoInc = false) {
     if (!docs.length) {
       return Promise.resolve();
     }
     const date = new Date();
     docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
     let promise;
-    if (this.autoIncrementField) {
+    if (this.autoIncrementField && !bypassAutoInc) {
       promise = this.getAutoIncrementValue()
         .then(inc => {
-          docs.forEach(doc => doc[this.autoIncrementField] = inc++);
+          docs.forEach(doc => {
+            doc[this.autoIncrementField] = inc;
+            if (this.secondAutoIncrementField) {
+              doc[this.secondAutoIncrementField] = inc;
+            }
+            inc += 1;
+          });
         });
     } else {
       promise = Promise.resolve();
@@ -164,7 +171,10 @@ export default class RepoBase {
     }
     return promise
       .then(item => {
-        this.addUpdatedBy(item, userId)
+        if (!item) {
+          throw new ApiError(`Measure doesn't exist.`);
+        }
+        this.addUpdatedBy(data, userId)
         this.validate(data);
         // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
         // we'll just replace the doc in entirety and be done with it
@@ -320,9 +330,9 @@ export default class RepoBase {
 
   // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
   // and replace
-  syncRecordsReplaceAll(filter, records, userId) {
+  syncRecordsReplaceAll(filter, records, userId, byPassAutoInc = false) {
     return this.removeMany(filter)
-      .then(() => this.addMany(records, 'jodoe'));
+      .then(() => this.addMany(records, userId, byPassAutoInc));
   }
 
   // a way to validate using mongoose outside of save(). If errs, then throw errs
@@ -358,9 +368,13 @@ export default class RepoBase {
   }
 
   verifyModuleId(filter) {
+    // this may come in via collectoins that don't have repo.isModuleRepo = true
+    // so delete either way
     if (this.isModuleRepo) {
       if (!filter.moduleId) {
         throw new ApiError(`${this.modelName} repo call is missing moduleId`, null, 400);
+      } else if (filter.moduleId === -1) {
+        delete filter.moduleId; // get all modules
       } else {
         filter.moduleId = Number(filter.moduleId);
       }
@@ -412,7 +426,12 @@ export default class RepoBase {
   fillAutoIncrementField(item) {
     if (this.autoIncrementField) {
       return this.getAutoIncrementValue()
-        .then(inc => item[this.autoIncrementField] = inc);
+        .then(inc => {
+          item[this.autoIncrementField] = inc;
+          if (this.secondAutoIncrementField) {
+            item[this.secondAutoIncrementField] = inc;
+          }
+        });
     } else {
       return Promise.resolve();
     }

@@ -23,7 +23,7 @@ export class MeasureComponent extends RoutingComponentBase implements OnInit {
   measuresCount: Number = 0;
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
-  tableColumns = ['name', 'abbrev', 'status', 'updatedBy', 'updatedDate'];
+  tableColumns = ['name', 'typeCode', 'status', 'updatedBy', 'updatedDate'];
   dataSource: MatTableDataSource<Measure>;
   UiUtil = UiUtil;
 

@@ -1,5 +1,5 @@
 import {Orm, OrmMap, OrmTypes} from '../server/lib/base-classes/Orm';
-import {PostgresRepoBase} from '../server/lib/base-classes/pg-repo-base';
+import {PgRepoBase} from '../server/lib/base-classes/pg-repo-base';
 
 const ormMap: OrmMap[] = [
   {prop: 'idCol', field: 'id_col', type: OrmTypes.number, serial: true},
@@ -12,7 +12,7 @@ const ormMap: OrmMap[] = [
   {prop: 'updatedDate', field: 'updated_date', type: OrmTypes.date},
 ] ;
 
-export class PgRepo extends PostgresRepoBase {
+export class PgRepo extends PgRepoBase {
   table = 'public.sync_test';
   idProp = 'idCol';
 

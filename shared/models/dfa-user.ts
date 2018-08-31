@@ -1,4 +1,3 @@
-
 import * as _ from 'lodash';
 
 export default class DfaUser {
@@ -8,21 +7,7 @@ export default class DfaUser {
     public firstName: string,
     public lastName: string,
     public email: string,
-    public roles: string[] = []) {
-
-    this.roles = [
-      'api:access',
-      'api:manage',
-      'api:admin',
-      'dfa:access',
-      'prof:access',
-      'prof-bu:access',
-      'prof-bu:upload',
-      'prof-rm:access',
-      'prof-rm:manage',
-      'prof-sm:access',
-      'prof-sm:manage'
-    ];
+    public roles: string[]) {
   }
 
   get fullName() {

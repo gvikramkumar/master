@@ -1,12 +1,13 @@
 import {injectable} from 'inversify';
 import ControllerBase from '../../../lib/base-classes/controller-base';
 import {ModuleRepo} from './repo';
+import {ModulePgRepo} from './pgrepo';
 
 
 @injectable()
 export default class ModuleController extends ControllerBase {
-  constructor(protected repo: ModuleRepo) {
-    super(repo);
+  constructor(protected repo: ModuleRepo, pgRepo: ModulePgRepo) {
+    super(repo, pgRepo);
   }
 
   getActiveSortedByDisplayName(req, res, next) {

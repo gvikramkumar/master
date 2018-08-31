@@ -124,7 +124,7 @@ console.log(matches);
 */
 
 /*
-const repo = new OpenPeriodPostgresRepo();
+const repo = new OpenPeriodPgRepo();
 
 const date = new Date().toISOString();
 

@@ -12,6 +12,7 @@ import ApiRequest from '../models/api-request';
 import AnyObj from '../../../shared/models/any-obj';
 import PgLookupRepo from '../../api/common/pg-lookup/repo';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
+import DfaUser from '../../../shared/models/dfa-user';
 
 
 export default class UploadController {
@@ -34,6 +35,7 @@ export default class UploadController {
   PropNames;
   sheet1SubmeasureNames;
   startedSheet2;
+  user: DfaUser;
 
   constructor(
     protected moduleId: number,
@@ -46,6 +48,7 @@ export default class UploadController {
   }
 
   upload(req, res, next) {
+    this.user = req.user;
     this.startUpload = Date.now();
     this.req = req;
     this.userId = req.user.id;
@@ -97,14 +100,12 @@ export default class UploadController {
   getValidationAndImportData(): Promise<any> {
     return Promise.all([
       this.openPeriodRepo.getOneByQuery({moduleId: this.moduleId}),
-      this.userRoleRepo.getRolesByUserId('jodoe'),
       this.submeasureRepo.getMany({moduleId: this.moduleId})
     ])
       .then(results => {
         this.fiscalMonth = results[0].fiscalMonth;
-        this.data.userRoles = results[1];
-        this.data.submeasures = results[2];
-      })
+        this.data.submeasures = results[1];
+      });
 
   }
 
@@ -137,7 +138,7 @@ export default class UploadController {
         } else {
           return Promise.reject(err); // send error email
         }
-      })
+      });
   }
 
   // this is different from rows, rows will title per row with an error array: {error} or {property, error, value?}
@@ -153,7 +154,7 @@ export default class UploadController {
         } else {
           return Promise.reject(err); // send error email
         }
-      })
+      });
   }
 
   importRows(userId) {
@@ -341,16 +342,10 @@ export default class UploadController {
   }
 
   validateMeasureAccess() {
-    // todo: requires onramp table, this is a temporary placeholder
-    /*
-        return userRoleRepo.userHasRole(this.req.user.id, this.submeasure.measureName)
-          .then(hasRole => {
-            if (!hasRole) {
-              this.addError('', 'Not authorized for this upload.');
-            }
-          });
-    */
-    // need to check this with cached data
+    // todo: need a measureId to measureRole map (from ART data) to determine measure role here
+    if (!this.user.isAuthorized('someMeasureRole')) {
+      this.addError('', `Not authorized for this measure: ${this.submeasure.measureId}.`);
+    }
     return Promise.resolve();
   }
 

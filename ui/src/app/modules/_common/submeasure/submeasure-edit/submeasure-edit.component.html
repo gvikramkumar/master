@@ -9,9 +9,6 @@
 
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center center">
-          <div class="form-group-check form-group-inline-30">
-            <fin-checkbox label="Is Group" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N"></fin-checkbox>
-          </div>
           <div *ngIf="!UiUtil.statusIsPending(sm.status)" class="form-group-check form-group-inline-30">
             <fin-checkbox label="Active" [(model)]="sm.status" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
@@ -45,6 +42,10 @@
       <div class="col-lg-6" style="padding-top:14px;">
         <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes"
                     label="Submeasure Category Type" empty="true" optionsKey="name" optionsValue="value" [required]="true"></cui-select>
+        <div class="form-group-check">
+          <fin-checkbox label="Is Group" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N" [inline]="true"></fin-checkbox>
+          <fin-checkbox label="Is Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N" [inline]="true"></fin-checkbox>
+        </div>
       </div>
     </div>
     <br>

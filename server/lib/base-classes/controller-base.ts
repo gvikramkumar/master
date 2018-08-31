@@ -2,12 +2,13 @@ import {ApiError} from '../common/api-error';
 import _ from 'lodash';
 import {svrUtil} from '../common/svr-util';
 import RepoBase from './repo-base';
-import {PostgresRepoBase} from './pg-repo-base';
+import {PgRepoBase} from './pg-repo-base';
 import AnyObj from '../../../shared/models/any-obj';
 
 export default class ControllerBase {
+  isMirrorRepo = false;
 
-  constructor(protected repo: RepoBase, protected pgRepo?: PostgresRepoBase) {
+  constructor(protected repo: RepoBase, protected pgRepo?: PgRepoBase) {
   }
 
   // GetMany special query parameters
@@ -91,7 +92,7 @@ export default class ControllerBase {
     const data = req.body;
     this.repo.addOne(data, req.user.id)
       .then(item => {
-        if (this.pgRepo) {
+        if (this.pgRepo && this.isMirrorRepo) {
           this.pgRepo.addOne(_.clone(item), req.user.id)
             .then(() => res.json(item));
         } else {
@@ -105,7 +106,7 @@ export default class ControllerBase {
   callMethod(req, res, next) {
     const method = this[req.params.method];
     if (!method) {
-      throw new ApiError(`PostgresLookupController: no method found for ${req.params.method}`)
+      throw new ApiError(`PgLookupController: no method found for ${req.params.method}`)
     }
     method.call(this, req, res, next);
   }
@@ -133,7 +134,7 @@ export default class ControllerBase {
     const data = req.body;
     this.repo.addMany(data, req.user.id)
       .then(() => {
-        if (this.pgRepo) {
+        if (this.pgRepo && this.isMirrorRepo) {
           this.pgRepo.addMany(data, req.user.id)
             .then(() => res.end());
         } else {
@@ -149,7 +150,7 @@ export default class ControllerBase {
     const filter = req.query;
     this.repo.upsertQueryOne(filter, data, req.user.id)
       .then(item => {
-        if (this.pgRepo) {
+        if (this.pgRepo && this.isMirrorRepo) {
           this.pgRepo.upsertQueryOne(filter, _.clone(item), req.user.id)
             .then(() => res.json(item));
         } else {
@@ -179,12 +180,31 @@ export default class ControllerBase {
       .then(() => res.end());
   }
 
+  mongoToPgSync(tableName, userId, log: string[], mgFilter: AnyObj = {}, pgFilter: AnyObj = {}) {
+    try {
+      if (this.repo.isModuleRepo) {
+        if (mgFilter.moduleId && mgFilter.moduleId !== -1) {
+          throw new Error(`repo.isModuleRepo has mgFilter.moduleId defined: ${mgFilter.moduleId}`);
+        }
+        mgFilter.moduleId = -1; // get all modules for repo.isModuleRepo (get past the moduleId enforcement)
+      }
+      this.repo.getMany(mgFilter)
+        .then(docs => docs.map(docs.toObject()))
+        .then(objs => {
+          return this.pgRepo.syncRecordsReplaceAll(pgFilter, objs, userId)
+            .then(results => log.push(`${tableName}: ${results.recordCount}`));
+        });
+    } catch (err) {
+      log.push(`${tableName}: ${err.message}`);
+    }
+  }
+
   // put /:id
   update(req, res, next) {
     const data = req.body;
     this.repo.update(data, req.user.id)
       .then(item => {
-        if (this.pgRepo) {
+        if (this.pgRepo && this.isMirrorRepo) {
           // we have to clone item as prRepo will change the updatedDate and we'll fail concurrency check
           // we need the same mongo updatedDate to pass concurrency check. We turn off pg's concurrency
           // check as we can't have both.
@@ -201,7 +221,7 @@ export default class ControllerBase {
   remove(req, res, next) {
     this.repo.remove(req.params.id)
       .then(item => {
-        if (this.pgRepo) {
+        if (this.pgRepo && this.isMirrorRepo) {
           this.pgRepo.removeOne(req.query.postgresIdProp)
             .then(() => res.json(item));
         } else {
@@ -216,7 +236,7 @@ export default class ControllerBase {
     const filter = req.query;
     this.repo.removeQueryOne(filter)
       .then(item => {
-        if (this.pgRepo) {
+        if (this.pgRepo && this.isMirrorRepo) {
           this.pgRepo.removeQueryOne(filter)
             .then(() => res.json(item));
         } else {

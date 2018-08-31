@@ -6,20 +6,25 @@ import * as _ from 'lodash';
 
 // date assumption: assumes all dates are iso date strings, can't pass in objects with Date types
 // passed in filter objects use object properties, not table fields
-export class PostgresRepoBase {
+export class PgRepoBase {
   table: string;
   idProp: string;
 
   constructor(protected orm: Orm, protected isModuleRepo = false) {
   }
 
-  getMany(filter = {}) {
+  getMany(filter: AnyObj = {}) {
     this.verifyModuleId(filter);
+    const sortBy = filter.setSort;
+    filter = _.omit(filter, ['setSort']);
     let sql = 'select ';
     sql += this.orm.maps.map(map => map.field).join(', ');
     sql += ` from ${this.table} `;
     const keys = Object.keys(filter);
     sql += this.buildParameterizedWhereClause(keys, 0, false);
+    if (sortBy) {
+      sql += ` order by ${sortBy}`;
+    }
     return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
       .then(resp => resp.rows.map(row => this.orm.recordToObject(row)));
   }
@@ -272,7 +277,8 @@ export class PostgresRepoBase {
   // and replace
   syncRecordsReplaceAll(filter, records, userId) {
     return this.removeMany(filter, false)
-      .then(() => this.addMany(records, userId));
+      .then(() => this.addMany(records, userId))
+      .then(() => ({recordCount: records.length}));
   }
 
   getFilterValues(keys, filter) {
@@ -346,6 +352,8 @@ export class PostgresRepoBase {
     if (this.isModuleRepo) {
       if (!filter.moduleId) {
         throw new ApiError(`${this.table} repo call is missing moduleId`, null, 400);
+      } else if (filter.moduleId === -1) {
+        delete filter.moduleId; // get all modules
       } else {
         filter.moduleId = Number(filter.moduleId);
       }

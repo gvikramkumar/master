@@ -23,11 +23,6 @@ export class InitializationGuard implements CanActivate {
               private route: ActivatedRoute,
               private breakpoints: BreakpointService,
               private moduleService: ModuleService,
-              private init1: Init1,
-              private init2: Init2,
-              private init3: Init3,
-              private init4: Init4,
-              private init5: Init5,
               private testService: TestService,
               private userService: UserService) {
     // testService.causeError().subscribe();
