@@ -3,7 +3,7 @@ import {AbstractControl, NG_VALIDATORS, Validator, ValidatorFn, Validators} from
 
 export function inListValidator(_list: string[], upper = true): ValidatorFn {
   return ((control: AbstractControl): {[key: string]: any} | null => {
-    if (control.value === undefined || control.value === null || control.value.trim() === '') {
+    if (control.value === undefined || control.value === null || (typeof control.value === 'string' && control.value.trim() === '')) {
       return null;
     } else if (!_list.length) {
       console.error('inList: list is empty');

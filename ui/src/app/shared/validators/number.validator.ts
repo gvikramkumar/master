@@ -3,7 +3,7 @@ import {AbstractControl, NG_VALIDATORS, Validator, ValidatorFn, Validators} from
 
 export function numberValidator(): ValidatorFn {
   return ((control: AbstractControl): {[key: string]: any} | null => {
-    if (control.value === undefined || control.value === null || control.value.trim() === '') {
+    if (control.value === undefined || control.value === null || (typeof control.value === 'string' && control.value.trim() === '')) {
       return null;
     } else {
       if (isNaN(Number(control.value))) {

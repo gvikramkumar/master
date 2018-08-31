@@ -74,25 +74,28 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  clearFormIfAlreadyUp() {
+    if (this.showForm && this.form) {
+      this.form.reset();
+    }
+  }
   addModule() {
+    this.clearFormIfAlreadyUp();
     // update form modules to include all modules
     this.formModules = this.modules;
     this.module = new DfaModule();
     this.editMode = false;
     this.formTitle = 'Add New Module';
-    this.doShowForm();
+    this.showForm = true;
   }
 
   editModule(module) {
+    this.clearFormIfAlreadyUp();
     // update form modules to include all modules, then remove current module from list
     this.formModules = _.without(this.modules, module);
     this.module = _.cloneDeep(module);
     this.editMode = true;
     this.formTitle = 'Edit Module';
-    this.doShowForm();
-  }
-
-  doShowForm() {
     this.showForm = true;
   }
 
