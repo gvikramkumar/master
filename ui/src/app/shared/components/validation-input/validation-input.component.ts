@@ -1,4 +1,14 @@
-import {ChangeDetectorRef, Component, ElementRef, Input, OnChanges, Renderer2, Self, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  Optional,
+  Renderer2,
+  Self,
+  ViewChild
+} from '@angular/core';
 import {AsyncValidatorFn, ControlValueAccessor, NgControl, NgForm, ValidatorFn, Validators} from '@angular/forms';
 import {UiUtil} from '../../../core/services/ui-util';
 import {inListValidator} from '../../validators/in-list.validator';
@@ -83,7 +93,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     private elemRef: ElementRef,
     private renderer: Renderer2,
     public form: NgForm,
-    @Self() public ngc: NgControl
+    @Self() @Optional() public ngc: NgControl
     ) {
     // Note: we provide the value accessor through here, instead of
     // the `providers` to avoid running into a circular import.
