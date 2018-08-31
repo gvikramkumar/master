@@ -85,31 +85,28 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  clearFormIfAlreadyUp() {
+    if (this.showForm && this.form) {
+      this.form.reset();
+    }
+  }
+
   addSource() {
+    this.clearFormIfAlreadyUp();
     this.usingModuleNames = [];
     this.source = new Source();
     this.editMode = false;
     this.formTitle = 'Add New Source';
-    this.doShowForm();
+    this.showForm = true;
   }
 
   editSource(source) {
+    this.clearFormIfAlreadyUp();
     this.source = _.cloneDeep(source);
     this.editMode = true;
     this.formTitle = 'Edit Source';
     this.checkModuleUse(source.sourceId);
-    this.doShowForm();
-  }
-
-  doShowForm() {
     this.showForm = true;
-    // this.changeDetectorRef.detectChanges();
-/*
-    setTimeout(() => {
-      const elem = <any>document.querySelector('.edit-form-container .name-input input');
-      elem.focus();
-    });
-*/
   }
 
   checkModuleUse(sourceId) {
