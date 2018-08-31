@@ -11,7 +11,7 @@ export default class RepoBase {
   protected autoIncrementField: string;
   protected secondAutoIncrementField: string;
 
-  constructor(public schema: Schema, protected modelName: string, protected isModuleRepo = false) {
+  constructor(public schema: Schema, protected modelName: string, public isModuleRepo = false) {
     this.schema = schema;
     svrUtil.setSchemaAdditions(this.schema);
     this.Model = mg.model(modelName, schema);
@@ -171,7 +171,10 @@ export default class RepoBase {
     }
     return promise
       .then(item => {
-        this.addUpdatedBy(item, userId)
+        if (!item) {
+          throw new ApiError(`Measure doesn't exist.`);
+        }
+        this.addUpdatedBy(data, userId)
         this.validate(data);
         // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
         // we'll just replace the doc in entirety and be done with it
@@ -365,9 +368,13 @@ export default class RepoBase {
   }
 
   verifyModuleId(filter) {
+    // this may come in via collectoins that don't have repo.isModuleRepo = true
+    // so delete either way
     if (this.isModuleRepo) {
       if (!filter.moduleId) {
         throw new ApiError(`${this.modelName} repo call is missing moduleId`, null, 400);
+      } else if (filter.moduleId === -1) {
+        delete filter.moduleId; // get all modules
       } else {
         filter.moduleId = Number(filter.moduleId);
       }

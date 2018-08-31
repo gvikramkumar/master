@@ -51,9 +51,9 @@ export default class SubmeasureController extends ControllerBase {
     const tableName = 'dfa_submeasure_input_lvl';
     try {
       this.repo.getMany()
-        .then(docs => {
+        .then(subs => {
           const records = [];
-          docs.forEach(sub => {
+          subs.forEach(sub => {
             this.addFilterLevelRecords('I', sub.inputFilterLevel, sub, records, log);
             if (sub.indicators.manualMapping) {
               this.addFilterLevelRecords('M', sub.manualMapping, sub, records, log);

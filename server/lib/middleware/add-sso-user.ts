@@ -2,28 +2,50 @@ import DfaUser from '../../../shared/models/dfa-user';
 
 export function addSsoUser() {
 
+  const roles = [
+    'api:access',
+    'api:manage',
+    'api:admin',
+    'dfa:access',
+    'prof:access',
+    'prof-bu:access',
+    'prof-bu:upload',
+    'prof-rm:access',
+    'prof-rm:manage',
+    'prof-sm:access',
+    'prof-sm:manage'
+  ];
+
   return function(req, res, next) {
     const headers = req.headers;
-    let user: DfaUser;
+    let promise;
 
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'unit') {
-      user = new DfaUser(
+      promise = Promise.resolve(new DfaUser(
         'jodoe',
         'John',
         'Doe',
-        'dakahle@cisco.com'
-      );
+        'dakahle@cisco.com',
+        roles
+      ));
     } else {
-      user = new DfaUser(
-        headers['auth-user'],
-        headers['givenname'],
-        headers['familyname'],
-        headers['email']
-      );
+      // todo: need to hit pg here and get users roles to pass into constructor
+      promise = Promise.resolve('getroleshere')
+        .then(usersRoles => {
+          return new DfaUser(
+            headers['auth-user'],
+            headers['givenname'],
+            headers['familyname'],
+            headers['email'],
+            roles // pass in usersRoles here, when you finally get them
+          );
+        });
     }
 
-    req.user = user;
-    next();
+    promise.then(user => {
+      req.user = user;
+      next();
+    });
   };
 
 }

@@ -105,7 +105,7 @@ const ormMap: OrmMap[] = [
   {prop: 'indicators.corpRevenue', field: 'corporate_revenue_flag'},
   {prop: 'indicators.dualGaap', field: 'dual_gaap_flag'},
   {prop: 'indicators.twoTier', field: 'twotier_flag'},
-  {prop: 'indicators.productService', field: 'product_service_flag'}, // verify field when ram adds it
+  {prop: 'indicators.service', field: 'service_flag'}, // not added yet
   {prop: 'indicators.deptAcct', field: 'dept_acct_flag'},
   {prop: 'reportingLevels[0]', field: 'gross_mgn_rollup1'},
   {prop: 'reportingLevels[1]', field: 'gross_mgn_rollup2'},

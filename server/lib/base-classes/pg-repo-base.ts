@@ -352,6 +352,8 @@ export class PgRepoBase {
     if (this.isModuleRepo) {
       if (!filter.moduleId) {
         throw new ApiError(`${this.table} repo call is missing moduleId`, null, 400);
+      } else if (filter.moduleId === -1) {
+        delete filter.moduleId; // get all modules
       } else {
         filter.moduleId = Number(filter.moduleId);
       }

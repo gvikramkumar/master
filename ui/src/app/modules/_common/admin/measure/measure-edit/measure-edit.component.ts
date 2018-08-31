@@ -13,6 +13,7 @@ import {SourceService} from '../../../services/source.service';
 import {ModuleLookupService} from '../../../services/module-lookup.service';
 import {shUtil} from '../../../../../../../../shared/shared-util';
 import {NgForm} from '@angular/forms';
+import {ModuleSourceService} from '../../../services/module-source.service';
 
 @Component({
   selector: 'fin-measure-create',
@@ -27,7 +28,11 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   measureNames: string[] = [];
   moduleSourceIds: number[] = [];
   moduleSources: Source[] = [];
-  hierarchies: { name: string, selected?: boolean }[] = [];
+  hierarchies: { name: string, selected?: boolean }[] = [
+    {name: 'Product'},
+    {name: 'Sales'},
+  ];
+
   shUtil = shUtil;
   @ViewChild('form') form: NgForm;
 
@@ -38,7 +43,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     private store: AppStore,
     private uiUtil: UiUtil,
     private sourceService: SourceService,
-    private moduleLookupService: ModuleLookupService
+    private moduleSourceService: ModuleSourceService
   ) {
     super(store, route);
     this.editMode = !!this.route.snapshot.params.id;
@@ -47,19 +52,13 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   getData(): Promise<void> {
     return Promise.all([
       this.sourceService.getMany().toPromise(),
-      Promise.resolve([
-        {name: 'Product'},
-        {name: 'Sales'},
-      ]),
-      // promise getting sourceIds for current module
-      this.moduleLookupService.get('sources', this.store.module.moduleId).toPromise(),
+      this.moduleSourceService.getQueryOne({moduleId: this.store.module.moduleId}).toPromise(),
       this.measureService.getMany().toPromise()
     ])
       .then(data => {
         this.sources = data[0];
-        this.hierarchies = data[1];
-        this.moduleSourceIds = data[2];
-        this.measureNames = data[3].map(measure => measure.name);
+        this.moduleSourceIds = data[1].sources;
+        this.measureNames = data[2].map(measure => measure.name);
 
         // filter sources by current module
         this.moduleSources = this.sources.filter(source => _.includes(this.moduleSourceIds, source.sourceId));
@@ -73,16 +72,17 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
           this.measureService.getOneById(this.route.snapshot.params.id)
             .subscribe(measure => {
               this.measure = measure;
+              this.measureNames = this.measureNames.filter(name => name !== this.measure.name);
               this.orgMeasure = _.cloneDeep(this.measure);
-              this.prepForUi();
+              this.init();
             });
         } else {
-          this.prepForUi();
+          this.init();
         }
       });
   }
 
-  prepForUi() {
+  init() {
     this.hierarchies.forEach(h => {
       h.selected = this.measure.hierarchies.indexOf(h.name) !== -1 ? true : false;
       return h;
@@ -120,7 +120,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
           } else {
             this.measure = new Measure();
           }
-          this.prepForUi();
+          this.init();
         }
       });
   }

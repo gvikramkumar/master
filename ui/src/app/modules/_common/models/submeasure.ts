@@ -44,5 +44,5 @@ class Indicators {
   corpRevenue = 'Y';
   dualGaap = 'N';
   twoTier = 'N';
-  productService: 'Y';
+  service = 'N';
 }
