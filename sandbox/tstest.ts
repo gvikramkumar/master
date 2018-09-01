@@ -3,7 +3,13 @@ import * as _ from 'lodash';
 // import {take, first} from 'rxjs/operators';
 
 
+const a = Number(5);
+console.log(typeof a, a);
 
+
+
+
+/*
 //const str = 'module_id, sub_measure_key, sub_measure_id, sub_measure_name, sub_measure_description, category_type, grouped_by_smeasure_key, measure_id, source_system_id, source_system_adj_type_id, start_fiscal_period_id, end_fiscal_period_id, processing_frequency, pnlnode_grouping, dollar_upld_flag, manual_mapping_flag, dept_acct_flag, approve_flag, change_approve_flag, status_flag, retained_earnings_flag, transition_flag, corporate_revenue_flag, dual_gaap_flag, twotier_flag, gross_mgn_rollup1, gross_mgn_rollup2, gross_mgn_rollup3, gl_acct_number, create_owner, create_datetimestamp, update_owner, update_datetimestamp, rule1, rule2, rule3, rule4, rule5';
 
 const str =  'module_id, sub_measure_key, hierarchy_id, input_level_flag, level_id, level_name, create_owner, create_datetimestamp, update_owner, update_datetimestamp';
@@ -12,6 +18,7 @@ const str =  'module_id, sub_measure_key, hierarchy_id, input_level_flag, level_
 
 console.log(str.split(',').map(x => x.trim()).join('\n'));
 
+*/
 
 
 

@@ -368,15 +368,16 @@ export default class RepoBase {
   }
 
   verifyModuleId(filter) {
-    // this may come in via collectoins that don't have repo.isModuleRepo = true
-    // so delete either way
+
+    if (filter.moduleId && typeof filter.moduleId === 'string') {
+      filter.moduleId = Number(filter.moduleId);
+    }
+    // we expect repo.isModuleRepo repo's to always specify a moduleId, they must specify moduleId = -1 to override
     if (this.isModuleRepo) {
       if (!filter.moduleId) {
         throw new ApiError(`${this.modelName} repo call is missing moduleId`, null, 400);
       } else if (filter.moduleId === -1) {
         delete filter.moduleId; // get all modules
-      } else {
-        filter.moduleId = Number(filter.moduleId);
       }
     }
   }

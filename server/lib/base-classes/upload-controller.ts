@@ -159,7 +159,7 @@ export default class UploadController {
 
   importRows(userId) {
     return this.getImportArray()
-      .then(imports => this.repo.addManyTransaction(imports, userId))
+      .then(imports => this.repo.addManyTransaction(imports, userId));
   }
 
   // message is only used by validateOther where it's used to title the error list
