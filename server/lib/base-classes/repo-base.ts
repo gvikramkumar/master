@@ -133,6 +133,15 @@ export default class RepoBase {
     return promise.then(() => this.Model.insertMany(docs));
   }
 
+  // delete all records except the current fiscalMonth, then addMany
+  importUploadRecords(imports, fiscalMonth, userId) {
+    if (!fiscalMonth) {
+      throw new ApiError(`importUploadRecords: no fiscalMonth`);
+    }
+    return this.removeMany({fiscalMonth: {$ne: fiscalMonth}})
+      .then(() => this.addManyTransaction(imports, userId));
+  }
+
   // no autoincrement on this
   addManyTransaction(_docs, userId) {
     if (!_docs.length) {

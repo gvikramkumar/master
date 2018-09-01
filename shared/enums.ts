@@ -10,7 +10,6 @@ export enum BusinessUploadFileType {
 
 export enum Modules {
   prof = 1,
-  prdt,
   bkgm,
   svct,
   tsct,

@@ -22,7 +22,6 @@ export default class ProductClassUploadUploadController extends UploadController
     userRoleRepo: UserRoleRepo
   ) {
     super(
-      Modules.prof,
       repo,
       openPeriodRepo,
       submeasureRepo,

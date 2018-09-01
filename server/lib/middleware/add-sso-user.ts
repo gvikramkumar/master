@@ -13,8 +13,9 @@ export function addSsoUser() {
     'prof-rm:access',
     'prof-rm:manage',
     'prof-sm:access',
-    'prof-sm:manage'
-  ];
+    'prof-sm:manage',
+    'someMeasureRole'
+  ].map(role => role.toLowerCase());
 
   return function(req, res, next) {
     const headers = req.headers;

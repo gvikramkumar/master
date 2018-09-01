@@ -35,14 +35,6 @@ const routes: Routes = [
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },
-  {
-    path: 'prdt',
-    loadChildren: 'app/modules/prdt/prdt.module#PrdtModule',
-    data: {
-      authorization: 'prof:access'
-    },
-    canActivate: [InitializationGuard, AuthorizationGuard]
-  },
   {path: '**', component: PageNotFoundComponent}
 ];
 
