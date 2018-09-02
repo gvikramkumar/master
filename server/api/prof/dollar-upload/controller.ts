@@ -8,4 +8,5 @@ export default class DollarUploadController extends ControllerBase {
   constructor(repo: DollarUploadRepo) {
     super(repo);
   }
+
 }
