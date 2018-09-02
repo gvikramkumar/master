@@ -180,11 +180,11 @@ export default class ControllerBase {
       .then(() => res.end());
   }
 
-  transformForMongoToPgSync(objs) {
+  mongoToPgSyncTransform(objs, userId, log) {
     return objs;
   }
 
-  mongoToPgSync(tableName, userId, log: string[], mgFilter: AnyObj = {}, pgFilter: AnyObj = {}) {
+  mongoToPgSync(tableName: string, userId: string, log: string[], mgFilter: AnyObj = {}, pgFilter: AnyObj = {}) {
     try {
       if (this.repo.isModuleRepo) {
         if (mgFilter.moduleId && mgFilter.moduleId !== -1) {
@@ -194,7 +194,7 @@ export default class ControllerBase {
       }
       this.repo.getMany(mgFilter)
         .then(docs => docs.map(docs.toObject()))
-        .then(objs => this.transformForMongoToPgSync(objs)) // override this to transform
+        .then(objs => this.mongoToPgSyncTransform(objs, userId, log)) // override this to transform
         .then(objs => {
           return this.pgRepo.syncRecordsReplaceAll(pgFilter, objs, userId)
             .then(results => log.push(`${tableName}: ${results.recordCount}`));

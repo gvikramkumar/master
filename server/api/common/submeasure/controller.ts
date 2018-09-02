@@ -47,24 +47,17 @@ export default class SubmeasureController extends ControllerBase {
     super(repo);
   }
 
-  mongoToPgSyncFilterLevel(userId, log: string[]) {
+  mongoToPgSyncTransform(subs, userId, log: string[]) {
     const tableName = 'dfa_submeasure_input_lvl';
-    try {
-      this.repo.getMany()
-        .then(subs => {
-          const records = [];
-          subs.forEach(sub => {
-            this.addFilterLevelRecords('I', sub.inputFilterLevel, sub, records, log);
-            if (sub.indicators.manualMapping) {
-              this.addFilterLevelRecords('M', sub.manualMapping, sub, records, log);
-            }
-          })
-          return this.inputLevelPgRepo.syncRecordsReplaceAll({}, records, userId)
-            .then(results => log.push(`${tableName}: ${results.recordCount}`));
-        });
-    } catch (err) {
-      log.push(`${tableName}: ${err.message}`);
-    }
+    const records = [];
+    subs.forEach(sub => {
+      this.addFilterLevelRecords('I', sub.inputFilterLevel, sub, records, log);
+      if (sub.indicators.manualMapping) {
+        this.addFilterLevelRecords('M', sub.manualMapping, sub, records, log);
+      }
+    })
+    return this.inputLevelPgRepo.syncRecordsReplaceAll({}, records, userId)
+      .then(results => log.push(`dfa_submeasure_input_lvl: ${results.recordCount}`));
   }
 
   addFilterLevelRecords(flag, fl, sub, records, log) {
