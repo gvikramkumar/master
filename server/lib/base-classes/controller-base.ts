@@ -195,6 +195,14 @@ export default class ControllerBase {
       }
       return this.repo.getMany(mgFilter)
         .then(docs => docs.map(doc => doc.toObject()))
+        .then(objs => {
+          if (tableName === 'dfa_sub_measure' && objs.length < 100) {
+            // this is a safety if we forget to pgToMongoSync before mongoToPgSync, if we do, we could wipe
+            // out all the pg submeasures
+            throw new ApiError('mongoToPgSync: dfa_sub_measure sync has less than 100 records');
+          }
+          return objs;
+        })
         .then(objs => this.mongoToPgSyncTransform(objs, userId, log, elog)) // override this to transform
         .then(objs => {
           return this.pgRepo.syncRecordsReplaceAll(pgFilter, objs, userId)
