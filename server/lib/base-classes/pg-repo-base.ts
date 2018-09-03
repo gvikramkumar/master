@@ -54,16 +54,16 @@ export class PgRepoBase {
   }
 
   // this is NOT paremeterized, no way around that, as we have to upload 5k at a time
-  addMany(objs, userId) {
+  addMany(objs, userId, bypassCreatedUpdated?) {
     if (!objs.length) {
       return Promise.resolve({rowCount: 0});
     }
     let sql = ` insert into ${this.table} ( `;
-    sql += this.orm.mapsNoSerial.map(map => map.field).join(', ') + ' )\n values ';
+    sql += this.orm.mapsToPg.map(map => map.field).join(', ') + ' )\n values ';
     const arrSql = [];
     objs.forEach(obj => {
-      const record = this.orm.objectToRecordAdd(obj, userId);
-      const str = ' ( ' + this.orm.mapsNoSerial.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
+      const record = this.orm.objectToRecordAdd(obj, userId, bypassCreatedUpdated);
+      const str = ' ( ' + this.orm.mapsToPg.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
       arrSql.push(str);
     })
     sql += arrSql.join(',\n');
@@ -74,10 +74,10 @@ export class PgRepoBase {
   addOne(obj, userId) {
     const record = this.orm.objectToRecordAdd(obj, userId);
     let sql = ` insert into ${this.table} ( `;
-    sql += this.orm.mapsNoSerial.map(map => map.field).join(', ') + ' ) values ( ';
-    sql += this.orm.mapsNoSerial.map((map, idx) => `$${idx + 1}`).join(', ');
+    sql += this.orm.mapsToPg.map(map => map.field).join(', ') + ' ) values ( ';
+    sql += this.orm.mapsToPg.map((map, idx) => `$${idx + 1}`).join(', ');
     sql += ' ) returning *';
-    return pgc.pgdb.query(sql, this.orm.mapsNoSerial.map(map => record[map.field]))
+    return pgc.pgdb.query(sql, this.orm.mapsToPg.map(map => record[map.field]))
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 
@@ -275,9 +275,9 @@ export class PgRepoBase {
 
   // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
   // and replace
-  syncRecordsReplaceAll(filter, records, userId) {
+  syncRecordsReplaceAll(filter, records, userId, bypassCreatedUpdated?) {
     return this.removeMany(filter, false)
-      .then(() => this.addMany(records, userId))
+      .then(() => this.addMany(records, userId, bypassCreatedUpdated))
       .then(() => ({recordCount: records.length}));
   }
 
@@ -300,6 +300,12 @@ export class PgRepoBase {
     if (keys.length) {
       sql += ' where ';
       keys.forEach((key, idx) => {
+        let operator = ' = ';
+        if (key.indexOf('$ne$')) { // not equal properties will end in $ne$ else will be "="
+          operator = ' <> ';
+          key = key.substr(0, key.length - 4);
+          keys[idx] = key; // clean off $ne$ or won't find in orm map
+        }
         const map = _.find(this.orm.maps, {prop: key});
         if (!map) {
           throw new ApiError(`No property found in ormMap for ${key}`, null, 400);
@@ -308,7 +314,7 @@ export class PgRepoBase {
         if (idx !== 0) {
           sql += ' and ';
         }
-        sql += ` ${field} = $${startIndex + idx + 1} `;
+        sql += ` ${field} ${operator} $${startIndex + idx + 1} `;
       });
     } else {
       if (errorIfEmpty) {

@@ -36,18 +36,18 @@ export default class UploadController {
   sheet1SubmeasureNames;
   startedSheet2;
   user: DfaUser;
+  moduleId: number;
 
   constructor(
-    protected moduleId: number,
     protected repo: RepoBase,
     protected openPeriodRepo: OpenPeriodRepo,
     protected submeasureRepo: SubmeasureRepo,
     protected userRoleRepo: UserRoleRepo
     ) {
-    const i = 5;
   }
 
   upload(req, res, next) {
+    this.moduleId = Number(req.body.moduleId);
     this.user = req.user;
     this.startUpload = Date.now();
     this.req = req;
@@ -159,7 +159,7 @@ export default class UploadController {
 
   importRows(userId) {
     return this.getImportArray()
-      .then(imports => this.repo.addManyTransaction(imports, userId))
+      .then(imports => this.repo.importUploadRecords(imports, this.fiscalMonth, userId));
   }
 
   // message is only used by validateOther where it's used to title the error list

@@ -18,7 +18,6 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
     userRoleRepo: UserRoleRepo
   ) {
     super(
-      Modules.prof,
       repo,
       openPeriodRepo,
       submeasureRepo,

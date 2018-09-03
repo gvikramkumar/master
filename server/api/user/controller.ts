@@ -1,5 +1,5 @@
 import {injectable} from 'inversify';
-import {ControllerCallMethodBase} from '../../../lib/base-classes/controller-call-method-base';
+import {ControllerCallMethodBase} from '../../lib/base-classes/controller-call-method-base';
 
 
 @injectable()

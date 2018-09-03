@@ -11,7 +11,7 @@ export default class RepoBase {
   protected autoIncrementField: string;
   protected secondAutoIncrementField: string;
 
-  constructor(public schema: Schema, protected modelName: string, public isModuleRepo = false) {
+  constructor(public schema: Schema, public modelName: string, public isModuleRepo = false) {
     this.schema = schema;
     svrUtil.setSchemaAdditions(this.schema);
     this.Model = mg.model(modelName, schema);
@@ -109,12 +109,13 @@ export default class RepoBase {
       });
   }
 
-  addMany(docs, userId, bypassAutoInc = false) {
+  addMany(docs, userId, bypassAutoInc = false, bypassCreatedUpdated = false) {
     if (!docs.length) {
       return Promise.resolve();
     }
-    const date = new Date();
-    docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
+    if (!bypassCreatedUpdated) {
+      docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
+    }
     let promise;
     if (this.autoIncrementField && !bypassAutoInc) {
       promise = this.getAutoIncrementValue()
@@ -131,6 +132,15 @@ export default class RepoBase {
       promise = Promise.resolve();
     }
     return promise.then(() => this.Model.insertMany(docs));
+  }
+
+  // delete all records except the current fiscalMonth, then addMany
+  importUploadRecords(imports, fiscalMonth, userId) {
+    if (!fiscalMonth) {
+      throw new ApiError(`importUploadRecords: no fiscalMonth`);
+    }
+    return this.removeMany({fiscalMonth: {$ne: fiscalMonth}})
+      .then(() => this.addManyTransaction(imports, userId));
   }
 
   // no autoincrement on this
@@ -330,9 +340,9 @@ export default class RepoBase {
 
   // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
   // and replace
-  syncRecordsReplaceAll(filter, records, userId, byPassAutoInc = false) {
+  syncRecordsReplaceAll(filter, records, userId, bypassAutoInc = false, bypassCreatedUpdated = false) {
     return this.removeMany(filter)
-      .then(() => this.addMany(records, userId, byPassAutoInc));
+      .then(() => this.addMany(records, userId, bypassAutoInc, bypassCreatedUpdated));
   }
 
   // a way to validate using mongoose outside of save(). If errs, then throw errs
@@ -368,15 +378,16 @@ export default class RepoBase {
   }
 
   verifyModuleId(filter) {
-    // this may come in via collectoins that don't have repo.isModuleRepo = true
-    // so delete either way
+
+    if (filter.moduleId && typeof filter.moduleId === 'string') {
+      filter.moduleId = Number(filter.moduleId);
+    }
+    // we expect repo.isModuleRepo repo's to always specify a moduleId, they must specify moduleId = -1 to override
     if (this.isModuleRepo) {
       if (!filter.moduleId) {
         throw new ApiError(`${this.modelName} repo call is missing moduleId`, null, 400);
       } else if (filter.moduleId === -1) {
         delete filter.moduleId; // get all modules
-      } else {
-        filter.moduleId = Number(filter.moduleId);
       }
     }
   }

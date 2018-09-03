@@ -13,14 +13,12 @@ export default class InputFilterLevelUploadController extends UploadController {
 data;
 
   constructor(
-    moduleId,
     repo,
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
     userRoleRepo: UserRoleRepo
   ) {
     super(
-      moduleId,
       repo,
       openPeriodRepo,
       submeasureRepo,

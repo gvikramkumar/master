@@ -25,7 +25,7 @@ export default class SubmeasureController extends ControllerBase {
   filterLevelMap: {prop: string, hierarchyId: number, levelId: number, levelName: string}[] = [
     {prop: 'productLevel',	hierarchyId: 1, levelId:	1, levelName: 'TG'},
     {prop: 'productLevel',	hierarchyId: 1, levelId:	2, levelName: 'BU'},
-    {prop: 'productLevel',	hierarchyId: 1, levelId:	3, levelName: 'PG'},
+    {prop: 'productLevel',	hierarchyId: 1, levelId:	3, levelName: 'PF'},
     {prop: 'productLevel',	hierarchyId: 1, levelId:	4, levelName: 'PID'},
     {prop: 'salesLevel',	hierarchyId: 2, levelId:	1, levelName: 'LEVEL1'},
     {prop: 'salesLevel',	hierarchyId: 2, levelId:	2, levelName: 'LEVEL2'},
@@ -47,32 +47,28 @@ export default class SubmeasureController extends ControllerBase {
     super(repo);
   }
 
-  mongoToPgSyncFilterLevel(userId, log: string[]) {
+  mongoToPgSyncTransform(subs, userId, log, elog) {
     const tableName = 'dfa_submeasure_input_lvl';
-    try {
-      this.repo.getMany()
-        .then(subs => {
-          const records = [];
-          subs.forEach(sub => {
-            this.addFilterLevelRecords('I', sub.inputFilterLevel, sub, records, log);
-            if (sub.indicators.manualMapping) {
-              this.addFilterLevelRecords('M', sub.manualMapping, sub, records, log);
-            }
-          })
-          return this.inputLevelPgRepo.syncRecordsReplaceAll({}, records, userId)
-            .then(results => log.push(`${tableName}: ${results.recordCount}`));
-        });
-    } catch (err) {
-      log.push(`${tableName}: ${err.message}`);
-    }
+    const records = [];
+    subs.forEach(sub => {
+      this.addFilterLevelRecords('I', sub.inputFilterLevel, sub, records, log, elog);
+      if (sub.indicators.manualMapping) {
+        this.addFilterLevelRecords('M', sub.manualMapping, sub, records, log, elog);
+      }
+    })
+    return this.inputLevelPgRepo.syncRecordsReplaceAll({}, records, userId, true)
+      .then(results => {
+        log.push(`dfa_submeasure_input_lvl: ${results.recordCount} records transferred`);
+        return subs;
+      });
   }
 
-  addFilterLevelRecords(flag, fl, sub, records, log) {
+  addFilterLevelRecords(flag, fl, sub, records, log, elog) {
     ['productLevel', 'salesLevel', 'scmsLevel', 'internalBELevel', 'entityLevel'].forEach(flProp => {
       if (fl[flProp]) {
         const map = _.find(this.filterLevelMap, {prop: flProp, levelName: fl[flProp]});
         if (!map) {
-          log.push(`dfa_submeasure_input_lvl: no filterLevelMap for flag/prop/levelName: ${flag}/${fl.prop}/${fl.levelName}`);
+          elog.push(`dfa_submeasure_input_lvl: no filterLevelMap for flag/prop/levelName: ${flag}/${flProp}/${fl[flProp]}`);
           return;
         }
         records.push(new SubmeasureInputLvl(
@@ -81,36 +77,50 @@ export default class SubmeasureController extends ControllerBase {
           map.hierarchyId,
           flag,
           map.levelId,
-          map.levelName
+          map.levelName,
+          sub.createdBy,
+          sub.createdDate,
+          sub.updatedBy,
+          sub.updatedDate
         ));
       }
     });
   }
 
-  pgToMongoSync(req, res, next) {
-    Promise.all([
+  pgToMongoSync(userId, log, elog) {
+    return Promise.all([
       this.pgRepo.getMany(),
       this.inputLevelPgRepo.getMany()
     ])
       .then(results => {
         const subs = results[0];
-        const ifls = this.setFilterLevels(results[0], results[1]);
-        return this.repo.syncRecordsReplaceAll({}, subs, req.user.id, true)
-          .then(() => res.json({submeasureCount: subs.length}));
+        const ifls = results[1];
+        this.setFilterLevels(subs, ifls, log, elog);
+        subs.forEach(sub => {
+          sub.rules = sub.rules.filter(x => !!x); // clean out null rules
+          sub.inputFilterLevel = sub.inputFilterLevel || {};
+          sub.manualMapping = sub.manualMapping || {};
+        });
+        return this.repo.syncRecordsReplaceAll({}, subs, userId, true, true)
+          .then(() => {
+            log.push(`submeasure: ${subs.length} records transferred`);
+          });
       })
-      .catch(next);
+      .catch(err => {
+        elog.push(err);
+      });
   }
 
-  setFilterLevels(subs, filterLevels) {
+  setFilterLevels(subs, filterLevels, log, elog) {
     filterLevels.forEach(fl => {
       const sub = _.find(subs, {submeasureKey: fl.submeasureKey});
       if (!sub) {
-        console.error(`setFilterLevels: no matching submeasure for submeasureKey: ${fl.submesureKey}.`);
+        elog.push(`setFilterLevels: no matching submeasure for submeasureKey: ${fl.submesureKey}.`);
         return;
       }
       const map = _.find(this.filterLevelMap, {hierarchyId: fl.hierarchyId});
       if (!map) {
-        console.error(`setFilterLevels: can't find map for hierarchyId: ${fl.hierarchyId}`);
+        elog.push(`setFilterLevels: can't find map for hierarchyId: ${fl.hierarchyId}`);
         return;
       }
       let path: string;
@@ -119,7 +129,7 @@ export default class SubmeasureController extends ControllerBase {
       } else if (fl.inputLevelFlag === 'M') {
         path = 'manualMapping.' + map.prop;
       } else {
-        console.error(`setFilterLevels: invalid inputLevelFlag: ${fl.inputLevelFlag}`);
+        elog.push(`setFilterLevels: invalid inputLevelFlag: ${fl.inputLevelFlag}`);
         return;
       }
       _.set(sub, path, fl.levelName);

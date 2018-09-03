@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import UserController from './controller';
-import {injector} from '../../../lib/common/inversify.config';
+import {injector} from '../../lib/common/inversify.config';
 
 const ctrl = injector.get(UserController);
 

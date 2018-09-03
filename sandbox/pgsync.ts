@@ -1,3 +1,4 @@
+/*
 import AnyObj from '../shared/models/any-obj';
 import * as _ from 'lodash';
 import {pgc} from '../server/lib/database/postgres-conn';
@@ -26,13 +27,13 @@ const mine: AnyObj = [
   {moduleId: 4, name: 'goerge', age: 71},//add
   {moduleId: 4, name: 'barney',   age: 38},//add
 ];
-/*
+/!*
 const mine = [
   {moduleId: 1, name: 'dank', age: 51},
   {moduleId: 1, name: 'carl', age: 61},
   {moduleId: 1, name: 'jim', age: 21},
 ];
-*/
+*!/
 
   const aa = pgc.promise;
 pgc.promise.then(db => {
@@ -65,3 +66,4 @@ pgc.promise.then(db => {
 });
 
 
+*/

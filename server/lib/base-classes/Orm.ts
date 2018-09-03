@@ -21,19 +21,20 @@ export class Orm {
   mapsFull: OrmMap[];
   maps: OrmMap[];
   hasCreatedBy = false;
-  mapsNoSerial: OrmMap[];
+  mapsToPg: OrmMap[];
+  mapsToMongo: OrmMap[];
 
   constructor(_maps: OrmMap[]) {
-    this.mapsFull = _maps;
     this.maps = _maps.filter(map => map.prop && map.field);
-    this.mapsNoSerial = this.maps.filter(map => !map.serial);
+    this.mapsToPg = _maps.filter(map => !map.serial && map.field);
+    this.mapsToMongo = _maps.filter(map => map.prop);
     this.hasCreatedBy = !!_.find(this.maps, {prop: 'createdBy'});
   }
 
   recordToObject(record): AnyObj {
     const obj = {};
 
-    this.mapsFull.filter(map => map.prop).forEach(map => {
+    this.mapsToMongo.forEach(map => {
       // pg's converting to date objects, but that's working, so we'll leave that be for now
       // if we need to, we can convert it to toIsoString()
       // if (false) { // record[map.field] instanceof Date) {
@@ -45,7 +46,10 @@ export class Orm {
         }
         _.set(obj, map.prop, map.mgDefault);
       } else if (map.type === OrmTypes.number) {
-        _.set(obj, map.prop, Number(record[map.field])); // pg returns numbers as strings, so we have to convert
+        // Number(undefined) = NaN and Number(null) = 0, we don't want either
+        if (record[map.field] !== undefined && record[map.field] !== null) {
+          _.set(obj, map.prop, Number(record[map.field])); // pg returns numbers as strings, so we have to convert
+        }
       } else {
         _.set(obj, map.prop, record[map.field]);
       }
@@ -53,24 +57,26 @@ export class Orm {
     return obj;
   }
 
-  objectToRecordAdd(obj, userId) {
-    return this.objectToRecord(obj, userId, 'add');
+  objectToRecordAdd(obj, userId, bypassCreatedUpdated?) {
+    return this.objectToRecord(obj, userId, 'add', bypassCreatedUpdated);
   }
 
   objectToRecordUpdate(obj, userId) {
     return this.objectToRecord(obj, userId, 'update');
   }
 
-  objectToRecord(obj, userId?: string, mode?: string): AnyObj {
+  objectToRecord(obj, userId?: string, mode?: string, bypassCreatedUpdated = false): AnyObj {
     const record = {};
 
-    if (mode === 'add') {
+    if (bypassCreatedUpdated) {
+      // need to skip this for mongoToPgSync, we want to maintain current created/updated values
+    } else if (mode === 'add') {
       this.addCreatedByAndUpdatedBy(obj, userId);
     } else {
       this.addUpdatedBy(obj, userId);
     }
 
-    this.mapsFull.filter(map => map.field).forEach(map => {
+    this.mapsToPg.forEach(map => {
       if (map.field && !map.prop) {
         if (map.pgDefault === undefined) {
           throw new ApiError(`Orm.objectToRecord no pgDefault for ${map.field}`);

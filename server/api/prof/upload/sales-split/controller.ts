@@ -21,7 +21,6 @@ export default class SalesSplitUploadUploadController extends UploadController {
     userRoleRepo: UserRoleRepo
   ) {
     super(
-      Modules.prof,
       repo,
       openPeriodRepo,
       submeasureRepo,

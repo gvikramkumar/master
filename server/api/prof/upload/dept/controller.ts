@@ -23,7 +23,6 @@ export default class DeptUploadUploadController extends UploadController {
     private pgRepo: PgLookupRepo
   ) {
     super(
-      Modules.prof,
       repo,
       openPeriodRepo,
       submeasureRepo,

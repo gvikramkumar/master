@@ -25,7 +25,6 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
     private sourceRepo: SourceRepo
   ) {
     super(
-      Modules.prof,
       repo,
       openPeriodRepo,
       submeasureRepo,
