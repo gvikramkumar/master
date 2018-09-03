@@ -19,10 +19,10 @@ export class ModuleSourceController extends ControllerBase {
     pgRepo: ModuleSourcePgRepo,
     private sourceRepo: SourceRepo
   ) {
-    super(repo);
+    super(repo, pgRepo);
   }
 
-  mongoToPgSyncTransform(moduleSources: ModuleSourceMapping[], userId, log) {
+  mongoToPgSyncTransform(moduleSources: ModuleSourceMapping[], userId, log, elog) {
     return this.sourceRepo.getManyActive()
       .then(sources => {
         const records: AnyObj[] = [];
@@ -30,7 +30,7 @@ export class ModuleSourceController extends ControllerBase {
           ms.sources.forEach(sourceId => {
             const source = _.find(sources, {sourceId});
             if (!source) {
-              log.push(`No source found for sourceId: ${source.sourceId}`);
+              elog.push(`No source found for sourceId: ${source.sourceId}`);
               return;
             }
             records.push(this.createRecord(ms.moduleId, source));

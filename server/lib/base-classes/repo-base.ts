@@ -11,7 +11,7 @@ export default class RepoBase {
   protected autoIncrementField: string;
   protected secondAutoIncrementField: string;
 
-  constructor(public schema: Schema, protected modelName: string, public isModuleRepo = false) {
+  constructor(public schema: Schema, public modelName: string, public isModuleRepo = false) {
     this.schema = schema;
     svrUtil.setSchemaAdditions(this.schema);
     this.Model = mg.model(modelName, schema);

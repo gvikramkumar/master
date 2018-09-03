@@ -4,7 +4,7 @@ import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 
 const ormMap: OrmMap[] = [
   {prop: 'moduleId', field: 'module_id', type: OrmTypes.number},
-  {prop: 'abbrev', field: 'module_abbrevation', type: OrmTypes.number},
+  {prop: 'abbrev', field: 'module_abbr', type: OrmTypes.number},
   {prop: 'name', field: 'module_name'},
   {prop: 'status', field: 'status_flag'},
   {prop: 'createdBy', field: 'create_owner'},

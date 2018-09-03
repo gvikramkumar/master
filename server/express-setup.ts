@@ -28,8 +28,9 @@ import {profUploadRouter} from './api/prof/upload/router';
 import {sourceRouter} from './api/common/source/router';
 import {pgLookupRouter} from './api/common/pg-lookup/router';
 import {addSsoUser} from './lib/middleware/add-sso-user';
-import {userRouter} from './api/common/user/router';
+import {userRouter} from './api/user/router';
 import {moduleSourceRouter} from './api/common/module-source/router';
+import {databaseRouter} from './api/database/router';
 
 
 export default function () {
@@ -79,16 +80,17 @@ export default function () {
 
   app.use(authorize('api:access')); // authorize api access
   app.use('/api/allocation-rule', allocationRuleRouter);
+  app.use('/api/database', databaseRouter);
   app.use('/api/file', fileRouter);
   app.use('/api/lookup', lookupRouter);
+  app.use('/api/measure', measureRouter);
   app.use('/api/module', moduleRouter);
   app.use('/api/module-lookup', moduleLookupRouter);
-  app.use('/api/measure', measureRouter);
+  app.use('/api/module-source', moduleSourceRouter);
   app.use('/api/open-period', openPeriodRouter);
   app.use('/api/pg-lookup', pgLookupRouter);
   app.use('/api/source', sourceRouter);
   app.use('/api/submeasure', submeasureRouter);
-  app.use('/api/module-source', moduleSourceRouter);
   app.use('/api/user', userRouter);
 
   // prof:

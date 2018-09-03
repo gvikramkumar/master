@@ -1,6 +1,6 @@
 import {injectable} from 'inversify';
 import {Schema} from 'mongoose';
-import RepoBase from '../../../lib/base-classes/repo-base';
+import RepoBase from '../../lib/base-classes/repo-base';
 
 
 const schema = new Schema(

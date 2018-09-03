@@ -59,11 +59,11 @@ export class PgRepoBase {
       return Promise.resolve({rowCount: 0});
     }
     let sql = ` insert into ${this.table} ( `;
-    sql += this.orm.mapsNoSerial.map(map => map.field).join(', ') + ' )\n values ';
+    sql += this.orm.mapsToPg.map(map => map.field).join(', ') + ' )\n values ';
     const arrSql = [];
     objs.forEach(obj => {
       const record = this.orm.objectToRecordAdd(obj, userId);
-      const str = ' ( ' + this.orm.mapsNoSerial.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
+      const str = ' ( ' + this.orm.mapsToPg.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
       arrSql.push(str);
     })
     sql += arrSql.join(',\n');
@@ -74,10 +74,10 @@ export class PgRepoBase {
   addOne(obj, userId) {
     const record = this.orm.objectToRecordAdd(obj, userId);
     let sql = ` insert into ${this.table} ( `;
-    sql += this.orm.mapsNoSerial.map(map => map.field).join(', ') + ' ) values ( ';
-    sql += this.orm.mapsNoSerial.map((map, idx) => `$${idx + 1}`).join(', ');
+    sql += this.orm.mapsToPg.map(map => map.field).join(', ') + ' ) values ( ';
+    sql += this.orm.mapsToPg.map((map, idx) => `$${idx + 1}`).join(', ');
     sql += ' ) returning *';
-    return pgc.pgdb.query(sql, this.orm.mapsNoSerial.map(map => record[map.field]))
+    return pgc.pgdb.query(sql, this.orm.mapsToPg.map(map => record[map.field]))
       .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 

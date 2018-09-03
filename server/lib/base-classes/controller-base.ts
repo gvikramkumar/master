@@ -180,28 +180,32 @@ export default class ControllerBase {
       .then(() => res.end());
   }
 
-  mongoToPgSyncTransform(objs, userId, log) {
+  mongoToPgSyncTransform(objs, userId, log, elog) {
     return objs;
   }
 
-  mongoToPgSync(tableName: string, userId: string, log: string[], mgFilter: AnyObj = {}, pgFilter: AnyObj = {}) {
-    try {
+  mongoToPgSync(tableName: string, userId: string, log: string[], elog: string[],
+                mgFilter: AnyObj = {}, pgFilter: AnyObj = {}) {
+    // try {
       if (this.repo.isModuleRepo) {
         if (mgFilter.moduleId && mgFilter.moduleId !== -1) {
-          throw new Error(`repo.isModuleRepo has mgFilter.moduleId defined: ${mgFilter.moduleId}`);
+          elog.push(`${this.repo.modelName} isModuleRepo, but has mgFilter.moduleId defined: ${mgFilter.moduleId}`);
         }
         mgFilter.moduleId = -1; // get all modules for repo.isModuleRepo (get past the moduleId enforcement)
       }
-      this.repo.getMany(mgFilter)
-        .then(docs => docs.map(docs.toObject()))
-        .then(objs => this.mongoToPgSyncTransform(objs, userId, log)) // override this to transform
+      return this.repo.getMany(mgFilter)
+        .then(docs => docs.map(doc => doc.toObject()))
+        .then(objs => this.mongoToPgSyncTransform(objs, userId, log, elog)) // override this to transform
         .then(objs => {
           return this.pgRepo.syncRecordsReplaceAll(pgFilter, objs, userId)
-            .then(results => log.push(`${tableName}: ${results.recordCount}`));
+            .then(results => log.push(`${tableName}: ${results.recordCount} records transferred`));
         });
+/*
     } catch (err) {
-      log.push(`${tableName}: ${err.message}`);
+      elog.push(`${tableName}: ${err.message}`);
+      throw err;
     }
+*/
   }
 
   // put /:id
