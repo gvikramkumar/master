@@ -57,18 +57,20 @@ export class Orm {
     return obj;
   }
 
-  objectToRecordAdd(obj, userId) {
-    return this.objectToRecord(obj, userId, 'add');
+  objectToRecordAdd(obj, userId, bypassCreatedUpdated?) {
+    return this.objectToRecord(obj, userId, 'add', bypassCreatedUpdated);
   }
 
   objectToRecordUpdate(obj, userId) {
     return this.objectToRecord(obj, userId, 'update');
   }
 
-  objectToRecord(obj, userId?: string, mode?: string): AnyObj {
+  objectToRecord(obj, userId?: string, mode?: string, bypassCreatedUpdated = false): AnyObj {
     const record = {};
 
-    if (mode === 'add') {
+    if (bypassCreatedUpdated) {
+      // need to skip this for mongoToPgSync, we want to maintain current created/updated values
+    } else if (mode === 'add') {
       this.addCreatedByAndUpdatedBy(obj, userId);
     } else {
       this.addUpdatedBy(obj, userId);

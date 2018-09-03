@@ -50,22 +50,13 @@ export default class SubmeasureController extends ControllerBase {
   mongoToPgSyncTransform(subs, userId, log, elog) {
     const tableName = 'dfa_submeasure_input_lvl';
     const records = [];
-/*
-    subs.forEach(sub => {
-      const badsubs = [];
-      if (!sub.inputFilterLevel || !sub.manualMapping) {
-        badsubs.push(sub);
-      }
-      const i = 5;
-    });
-*/
     subs.forEach(sub => {
       this.addFilterLevelRecords('I', sub.inputFilterLevel, sub, records, log, elog);
       if (sub.indicators.manualMapping) {
         this.addFilterLevelRecords('M', sub.manualMapping, sub, records, log, elog);
       }
     })
-    return this.inputLevelPgRepo.syncRecordsReplaceAll({}, records, userId)
+    return this.inputLevelPgRepo.syncRecordsReplaceAll({}, records, userId, true)
       .then(results => {
         log.push(`dfa_submeasure_input_lvl: ${results.recordCount} records transferred`);
         return subs;
@@ -86,7 +77,11 @@ export default class SubmeasureController extends ControllerBase {
           map.hierarchyId,
           flag,
           map.levelId,
-          map.levelName
+          map.levelName,
+          sub.createdBy,
+          sub.createdDate,
+          sub.updatedBy,
+          sub.updatedDate
         ));
       }
     });
@@ -106,7 +101,7 @@ export default class SubmeasureController extends ControllerBase {
           sub.inputFilterLevel = sub.inputFilterLevel || {};
           sub.manualMapping = sub.manualMapping || {};
         });
-        return this.repo.syncRecordsReplaceAll({}, subs, userId, true)
+        return this.repo.syncRecordsReplaceAll({}, subs, userId, true, true)
           .then(() => {
             log.push(`submeasure: ${subs.length} records transferred`);
           });

@@ -205,7 +205,7 @@ export default class ControllerBase {
         })
         .then(objs => this.mongoToPgSyncTransform(objs, userId, log, elog)) // override this to transform
         .then(objs => {
-          return this.pgRepo.syncRecordsReplaceAll(pgFilter, objs, userId)
+          return this.pgRepo.syncRecordsReplaceAll(pgFilter, objs, userId, true)
             .then(results => log.push(`${tableName}: ${results.recordCount} records transferred`));
         });
 /*

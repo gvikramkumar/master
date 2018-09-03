@@ -10,6 +10,10 @@ export class SubmeasureInputLvl {
     public inputLevelFlag: ('I' | 'M'),
     public levelId: number,
     public levelName: string,
+    public createdBy: string,
+    public createdDate: Date,
+    public updatedBy: string,
+    public updatedDate: Date
   ) {}
 }
 

@@ -109,12 +109,13 @@ export default class RepoBase {
       });
   }
 
-  addMany(docs, userId, bypassAutoInc = false) {
+  addMany(docs, userId, bypassAutoInc = false, bypassCreatedUpdated = false) {
     if (!docs.length) {
       return Promise.resolve();
     }
-    const date = new Date();
-    docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
+    if (!bypassCreatedUpdated) {
+      docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
+    }
     let promise;
     if (this.autoIncrementField && !bypassAutoInc) {
       promise = this.getAutoIncrementValue()
@@ -339,9 +340,9 @@ export default class RepoBase {
 
   // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
   // and replace
-  syncRecordsReplaceAll(filter, records, userId, byPassAutoInc = false) {
+  syncRecordsReplaceAll(filter, records, userId, bypassAutoInc = false, bypassCreatedUpdated = false) {
     return this.removeMany(filter)
-      .then(() => this.addMany(records, userId, byPassAutoInc));
+      .then(() => this.addMany(records, userId, bypassAutoInc, bypassCreatedUpdated));
   }
 
   // a way to validate using mongoose outside of save(). If errs, then throw errs

@@ -54,7 +54,7 @@ export class PgRepoBase {
   }
 
   // this is NOT paremeterized, no way around that, as we have to upload 5k at a time
-  addMany(objs, userId) {
+  addMany(objs, userId, bypassCreatedUpdated?) {
     if (!objs.length) {
       return Promise.resolve({rowCount: 0});
     }
@@ -62,7 +62,7 @@ export class PgRepoBase {
     sql += this.orm.mapsToPg.map(map => map.field).join(', ') + ' )\n values ';
     const arrSql = [];
     objs.forEach(obj => {
-      const record = this.orm.objectToRecordAdd(obj, userId);
+      const record = this.orm.objectToRecordAdd(obj, userId, bypassCreatedUpdated);
       const str = ' ( ' + this.orm.mapsToPg.map(map => this.orm.quote(record[map.field])).join(', ') + ' ) ';
       arrSql.push(str);
     })
@@ -275,9 +275,9 @@ export class PgRepoBase {
 
   // use this if you don't have an id column or uniqueFilterProps can just delete all (in filter section)
   // and replace
-  syncRecordsReplaceAll(filter, records, userId) {
+  syncRecordsReplaceAll(filter, records, userId, bypassCreatedUpdated?) {
     return this.removeMany(filter, false)
-      .then(() => this.addMany(records, userId))
+      .then(() => this.addMany(records, userId, bypassCreatedUpdated))
       .then(() => ({recordCount: records.length}));
   }
 
