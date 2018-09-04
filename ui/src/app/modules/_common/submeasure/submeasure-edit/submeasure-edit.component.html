@@ -24,7 +24,7 @@
     <div class="row">
       <div class="col-lg-6">
         <fin-input name="name" [(ngModel)]="sm.name" [disabled]="this.editMode" type="text" label="Sub-Measure Name"
-                   [required]="true"></fin-input>
+                   [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true"></fin-input>
       </div>
       <div class="col-lg-6">
         <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="sources" label="Source" empty="true"
@@ -37,13 +37,14 @@
         <cui-input type="textarea" [(model)]="sm.desc" label="Description" [options]="{rows: 2}"></cui-input>
         <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
                     label="Grouping Submeasure" empty="true" optionsKey="submeasureName"
-                    optionsValue="submeasureId"></cui-select>
+                    optionsValue="submeasureId" [disabled]="sm.indicators.groupFlag === 'Y'"></cui-select>
       </div>
       <div class="col-lg-6" style="padding-top:14px;">
         <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes"
                     label="Submeasure Category Type" empty="true" optionsKey="name" optionsValue="value" [required]="true"></cui-select>
         <div class="form-group-check">
-          <fin-checkbox label="Is Group" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N" [inline]="true"></fin-checkbox>
+          <fin-checkbox label="Is Group" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N" [inline]="true"
+                        [disabled]="sm.groupingSubmeasureId"></fin-checkbox>
           <fin-checkbox label="Is Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N" [inline]="true"></fin-checkbox>
         </div>
       </div>
@@ -112,7 +113,7 @@
         <fieldset class="input-filter-level mm-fieldset">
           <legend>
             <fin-checkbox class="legend-checkbox" [(model)]="sm.indicators.manualMapping"
-                          trueVal="Y" falseVal="N"></fin-checkbox>
+                          trueVal="Y" falseVal="N" (modelChange)="mmSelect()"></fin-checkbox>
             Manual Mapping
           </legend>
 

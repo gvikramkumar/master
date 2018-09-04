@@ -26,6 +26,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   UiUtil = UiUtil;
   @ViewChild('form') form: NgForm;
   editMode = false;
+  submeasureNames: string[] = [];
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
   measures: Measure[] = [];
@@ -227,23 +228,33 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   ngOnInit() {
     this.yearmos = UiUtil.getFiscalMonthListFromDate(new Date(), 6);
-    Promise.all([
+    const promises: Promise<any>[] = [
       this.measureService.getMany().toPromise(),
       this.ruleService.getManyActive().toPromise(),
-      this.sourceService.getMany().toPromise()
-    ])
+      this.sourceService.getMany().toPromise(),
+      this.submeasureService.getDistinctSubmeasureNames().toPromise()
+    ];
+    if (this.editMode) {
+      promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
+    }
+    Promise.all(promises)
       .then(results => {
         this.measures = _.sortBy(results[0], 'name');
         this.rules = _.sortBy(results[1], 'name').map(rule => ({name: rule.name}));
         this.sources = _.sortBy(results[2], 'name');
+        this.submeasureNames = results[3].map(x => x.toUpperCase());
 
         if (this.editMode) {
-          this.submeasureService.getOneById(this.route.snapshot.params.id)
+          this.sm = results[4];
+          this.orgSubmeasure = _.cloneDeep(this.sm);
+          this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
+          this.init();
+          /*this.submeasureService.getOneById(this.route.snapshot.params.id)
             .subscribe(submeasure => {
               this.sm = submeasure;
               this.orgSubmeasure = _.cloneDeep(this.sm);
               this.init();
-            });
+            });*/
         } else {
           this.init();
         }
@@ -434,7 +445,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   mmSelect() {
     // if manual mapping is unselected, clear out the values
-    if (!this.isManualMapping()) {
+    if (this.sm.indicators.manualMapping ===  'N') {
       this.mm_switch_ibe = false;
       this.mm_switch_p = false;
       this.mm_switch_le = false;
@@ -446,6 +457,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.manualMapping.entityLevel = undefined;
       this.sm.manualMapping.salesLevel = undefined;
       this.sm.manualMapping.scmsLevel = undefined;
+
+      this.mmChange('ibe');
+      this.mmChange('p');
+      this.mmChange('le');
+      this.mmChange('s');
+      this.mmChange('scms');
     }
   }
 
@@ -571,11 +588,31 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
+  noIflMmSelected(): boolean {
+    if (this.ifl_switch_ibe ||
+        this.ifl_switch_p ||
+        this.ifl_switch_le ||
+        this.ifl_switch_s ||
+        this.ifl_switch_scms ||
+        this.mm_switch_ibe ||
+        this.mm_switch_p ||
+        this.mm_switch_le ||
+        this.mm_switch_s ||
+        this.mm_switch_scms) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   validate() {
     this.errs = [];
     const sm = this.sm;
     if (sm.rules.length > _.uniq(sm.rules).length) {
       this.errs.push('Duplicate rules entered');
+    }
+    if (this.noIflMmSelected()) {
+      this.errs.push('No value entered for Input Filter Level or Manual Mapping');
     }
     return this.errs.length ? this.errs : null;
   }
