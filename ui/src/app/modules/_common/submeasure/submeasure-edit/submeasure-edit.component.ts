@@ -32,6 +32,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
   groupingSubmeasures: GroupingSubmeasure[] = [];
+  groupingSubmeasureDisabled = false;
+  isGroupDisabled = false;
   sources: Source[] = [];
   rules: AllocationRule[] = [];
   errs: string[] = [];
@@ -248,6 +250,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.sm = results[4];
           this.orgSubmeasure = _.cloneDeep(this.sm);
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
+          if (this.sm.groupingSubmeasureId) {
+            this.isGroupDisabled = true;
+          }
           this.init();
           /*this.submeasureService.getOneById(this.route.snapshot.params.id)
             .subscribe(submeasure => {
@@ -268,6 +273,22 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
     this.measureChange(true);
+  }
+
+  groupingChange() {
+    if (this.sm.indicators.groupFlag === 'Y') {
+      // todo: logic for grouping field change
+      this.groupingSubmeasureDisabled = true;
+      this.sm.groupingSubmeasureId = null;
+    } else {
+      this.groupingSubmeasureDisabled = false;
+    }
+    if (!this.sm.groupingSubmeasureId) {
+      this.isGroupDisabled = false;
+    } else {
+      this.isGroupDisabled = true;
+      this.sm.indicators.groupFlag = 'N';
+    }
   }
 
   isManualMapping() {
@@ -445,7 +466,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   mmSelect() {
     // if manual mapping is unselected, clear out the values
-    if (!this.isManualMapping()) {
+    if (this.sm.indicators.manualMapping ===  'N') {
       this.mm_switch_ibe = false;
       this.mm_switch_p = false;
       this.mm_switch_le = false;
@@ -457,6 +478,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.manualMapping.entityLevel = undefined;
       this.sm.manualMapping.salesLevel = undefined;
       this.sm.manualMapping.scmsLevel = undefined;
+
+      this.mmChange('ibe');
+      this.mmChange('p');
+      this.mmChange('le');
+      this.mmChange('s');
+      this.mmChange('scms');
     }
   }
 
