@@ -24,7 +24,7 @@
     <div class="row">
       <div class="col-lg-6">
         <fin-input name="name" [(ngModel)]="sm.name" [disabled]="this.editMode" type="text" label="Sub-Measure Name"
-                   [required]="true"></fin-input>
+                   [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true"></fin-input>
       </div>
       <div class="col-lg-6">
         <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="sources" label="Source" empty="true"

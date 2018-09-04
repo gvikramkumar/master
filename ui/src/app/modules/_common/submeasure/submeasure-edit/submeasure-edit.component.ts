@@ -26,6 +26,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   UiUtil = UiUtil;
   @ViewChild('form') form: NgForm;
   editMode = false;
+  submeasureNames: string[] = [];
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
   measures: Measure[] = [];
@@ -227,23 +228,33 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   ngOnInit() {
     this.yearmos = UiUtil.getFiscalMonthListFromDate(new Date(), 6);
-    Promise.all([
+    const promises: Promise<any>[] = [
       this.measureService.getMany().toPromise(),
       this.ruleService.getManyActive().toPromise(),
-      this.sourceService.getMany().toPromise()
-    ])
+      this.sourceService.getMany().toPromise(),
+      this.submeasureService.getDistinctSubmeasureNames().toPromise()
+    ];
+    if (this.editMode) {
+      promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
+    }
+    Promise.all(promises)
       .then(results => {
         this.measures = _.sortBy(results[0], 'name');
         this.rules = _.sortBy(results[1], 'name').map(rule => ({name: rule.name}));
         this.sources = _.sortBy(results[2], 'name');
+        this.submeasureNames = results[3].map(x => x.toUpperCase());
 
         if (this.editMode) {
-          this.submeasureService.getOneById(this.route.snapshot.params.id)
+          this.sm = results[4];
+          this.orgSubmeasure = _.cloneDeep(this.sm);
+          this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
+          this.init();
+          /*this.submeasureService.getOneById(this.route.snapshot.params.id)
             .subscribe(submeasure => {
               this.sm = submeasure;
               this.orgSubmeasure = _.cloneDeep(this.sm);
               this.init();
-            });
+            });*/
         } else {
           this.init();
         }
