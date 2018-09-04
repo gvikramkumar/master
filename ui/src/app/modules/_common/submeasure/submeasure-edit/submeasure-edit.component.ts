@@ -32,8 +32,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
   groupingSubmeasures: GroupingSubmeasure[] = [];
-  groupingSubmeasureDisabled = false;
-  isGroupDisabled = false;
   sources: Source[] = [];
   rules: AllocationRule[] = [];
   errs: string[] = [];
@@ -250,9 +248,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.sm = results[4];
           this.orgSubmeasure = _.cloneDeep(this.sm);
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
-          if (this.sm.groupingSubmeasureId) {
-            this.isGroupDisabled = true;
-          }
           this.init();
           /*this.submeasureService.getOneById(this.route.snapshot.params.id)
             .subscribe(submeasure => {
@@ -273,22 +268,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
     this.measureChange(true);
-  }
-
-  groupingChange() {
-    if (this.sm.indicators.groupFlag === 'Y') {
-      // todo: logic for grouping field change
-      this.groupingSubmeasureDisabled = true;
-      this.sm.groupingSubmeasureId = null;
-    } else {
-      this.groupingSubmeasureDisabled = false;
-    }
-    if (!this.sm.groupingSubmeasureId) {
-      this.isGroupDisabled = false;
-    } else {
-      this.isGroupDisabled = true;
-      this.sm.indicators.groupFlag = 'N';
-    }
   }
 
   isManualMapping() {
