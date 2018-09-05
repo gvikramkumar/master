@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 import InputFilterLevelUploadController from '../../../../lib/base-classes/input-filter-level-upload-controller';
 import DollarUploadTemplate from './template';
 import DollarUploadImport from './import';
-import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 import SourceRepo from '../../../common/source/repo';

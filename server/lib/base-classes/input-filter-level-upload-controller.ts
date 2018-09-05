@@ -1,7 +1,6 @@
 import UploadController from './upload-controller';
 import PgLookupRepo from '../../api/common/pg-lookup/repo';
 import LookupRepo from '../../api/common/lookup/repo';
-import {Modules} from '../../../shared/enums';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
 import UserRoleRepo from '../database/repos/user-role-repo';

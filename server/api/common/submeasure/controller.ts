@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import InputLevelPgRepo from './input-level-pgrepo';
 import AnyObj from '../../../../shared/models/any-obj';
 import Any = jasmine.Any;
+import {filterLevelMap} from '../../../../shared/models/filter-level-map';
 
 
 interface FilterLevel {
@@ -21,23 +22,6 @@ interface FilterLevel {
 
 @injectable()
 export default class SubmeasureController extends ControllerBase {
-
-  filterLevelMap: {prop: string, hierarchyId: number, levelId: number, levelName: string}[] = [
-    {prop: 'productLevel',	hierarchyId: 1, levelId:	1, levelName: 'TG'},
-    {prop: 'productLevel',	hierarchyId: 1, levelId:	2, levelName: 'BU'},
-    {prop: 'productLevel',	hierarchyId: 1, levelId:	3, levelName: 'PF'},
-    {prop: 'productLevel',	hierarchyId: 1, levelId:	4, levelName: 'PID'},
-    {prop: 'salesLevel',	hierarchyId: 2, levelId:	1, levelName: 'LEVEL1'},
-    {prop: 'salesLevel',	hierarchyId: 2, levelId:	2, levelName: 'LEVEL2'},
-    {prop: 'salesLevel',	hierarchyId: 2, levelId:	3, levelName: 'LEVEL3'},
-    {prop: 'salesLevel',	hierarchyId: 2, levelId:	4, levelName: 'LEVEL4'},
-    {prop: 'salesLevel',	hierarchyId: 2, levelId:	5, levelName: 'LEVEL5'},
-    {prop: 'salesLevel',	hierarchyId: 2, levelId:	6, levelName: 'LEVEL6'},
-    {prop: 'scmsLevel',	hierarchyId: 7, levelId:	1, levelName: 'SCMS'},
-    {prop: 'entityLevel',	hierarchyId: 3, levelId:	1, levelName: 'BE'},
-    {prop: 'internalBELevel',	hierarchyId: 8, levelId:	1, levelName: 'INTERNAL BE'},
-    {prop: 'internalBELevel',	hierarchyId: 8, levelId:	2, levelName: 'INTERNAL SUB BE'},
-  ];
 
   constructor(
     protected repo: SubmeasureRepo,
@@ -66,7 +50,7 @@ export default class SubmeasureController extends ControllerBase {
   addFilterLevelRecords(flag, fl, sub, records, log, elog) {
     ['productLevel', 'salesLevel', 'scmsLevel', 'internalBELevel', 'entityLevel'].forEach(flProp => {
       if (fl[flProp]) {
-        const map = _.find(this.filterLevelMap, {prop: flProp, levelName: fl[flProp]});
+        const map = _.find(filterLevelMap, {prop: flProp, levelName: fl[flProp]});
         if (!map) {
           elog.push(`dfa_submeasure_input_lvl: no filterLevelMap for flag/prop/levelName: ${flag}/${flProp}/${fl[flProp]}`);
           return;
@@ -118,7 +102,7 @@ export default class SubmeasureController extends ControllerBase {
         elog.push(`setFilterLevels: no matching submeasure for submeasureKey: ${fl.submesureKey}.`);
         return;
       }
-      const map = _.find(this.filterLevelMap, {hierarchyId: fl.hierarchyId});
+      const map = _.find(filterLevelMap, {hierarchyId: fl.hierarchyId});
       if (!map) {
         elog.push(`setFilterLevels: can't find map for hierarchyId: ${fl.hierarchyId}`);
         return;

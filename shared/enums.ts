@@ -8,7 +8,7 @@ export enum BusinessUploadFileType {
   template = 'template'
 }
 
-export enum Modules {
+export enum DfaModuleIds {
   prof = 1,
   bkgm,
   svct,
