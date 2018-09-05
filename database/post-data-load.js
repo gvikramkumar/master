@@ -261,7 +261,7 @@ db.dfa_prof_sales_split_pctmap_upld.insertOne({
 
 // product-class
 db.dfa_prof_swalloc_manualmix_upld.insertOne({
-  fiscalMonth: (201810),
+  fiscalMonth: NumberInt(201810),
   submeasureName: "2 Tier",
   splitCategory: "HARDWARE",
   splitPercentage: 1

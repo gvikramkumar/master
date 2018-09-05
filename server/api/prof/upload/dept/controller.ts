@@ -5,7 +5,6 @@ import * as _ from 'lodash';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import DeptUploadDeptTemplate from './dept-template';
 import DeptUploadExludeAcctTemplate from './exclude-acct-template';
-import {Modules} from '../../../../../shared/enums';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 import PgLookupRepo from '../../../common/pg-lookup/repo';
@@ -67,7 +66,7 @@ export default class DeptUploadUploadController extends UploadController {
         this.lookForErrors()
       ]))
       .then(() => Promise.all([
-        this.validateNodeValue(),
+        // this.validateNodeValue(),
         this.lookForErrors()
       ]));
   }
@@ -85,7 +84,7 @@ export default class DeptUploadUploadController extends UploadController {
     ])
       .then(() => Promise.all([
         this.validateSubmeasureNameInSheet1(),
-        this.validateGlAccount(),
+        // this.validateGlAccount(),
         this.lookForErrors()
       ]));
   }
@@ -133,7 +132,7 @@ export default class DeptUploadUploadController extends UploadController {
       } else {
         imports.push(new DeptUploadImport(
           dept.submeasureName,
-          dept.nodeValue.replace('_', '')
+          dept.nodeValue,
         ));
       }
     })

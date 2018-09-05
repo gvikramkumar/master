@@ -6,7 +6,7 @@ import {PgRepoBase} from './pg-repo-base';
 import AnyObj from '../../../shared/models/any-obj';
 
 export default class ControllerBase {
-  isMirrorRepo = false;
+  isMirrorRepo = false; // set if you're writing to mongo and pg at same time (we sync daily now so not used currently)
 
   constructor(protected repo: RepoBase, protected pgRepo?: PgRepoBase) {
   }
