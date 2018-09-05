@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Subject} from 'rxjs';
@@ -55,8 +55,6 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
         this.sources = results[2];
         this.measureId = this.measures[0].measureId;
         this.changeMeasure();
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
       });
   }
 
@@ -68,6 +66,8 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     this.filteredSubmeasures = _.filter(this.submeasures, {measureId: this.measureId})
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);
     this.filterValue = '';
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(filterValue: string) {
