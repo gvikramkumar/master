@@ -22,4 +22,8 @@ export class SubmeasureService extends RestBase<Submeasure> {
     return <any>super.callMethod('getGroupingSubmeasures', {measureId});
   }
 
+  getDistinctSubmeasureNames() {
+    return this.getDistinct('name', );
+  }
+
 }
