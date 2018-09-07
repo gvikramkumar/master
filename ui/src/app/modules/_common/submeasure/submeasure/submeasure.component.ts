@@ -72,8 +72,9 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   }
 
   changeFilter() {
-    this.filteredSubmeasures = _.filter(this.submeasures, {measureId: this.measureId});
-    this.filteredSubmeasures = _.filter(this.filteredSubmeasures, (sm) => _.includes(this.showStatuses, sm.status));
+    this.filteredSubmeasures = this.submeasures.filter(sm => {
+      return sm.measureId = this.measureId && _.includes(this.showStatuses, sm.status);
+    });
 
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);
     this.filterValue = '';
