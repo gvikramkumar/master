@@ -7,8 +7,8 @@ const filterLevelSchema = new Schema({
   productLevel: {type: String, enum: ['PF', 'BU', 'TG', 'PID']},
   salesLevel: {type: String, enum: ['LEVEL1', 'LEVEL2', 'LEVEL3', 'LEVEL4', 'LEVEL5', 'LEVEL6']},
   scmsLevel: {type: String, enum: ['SCMS']},
-  internalBELevel: {type: String, enum: ['INTERNAL BE', 'INTERNAL SUB BE']},
   entityLevel: {type: String, enum: ['BE']},
+  internalBELevel: {type: String, enum: ['INTERNAL BE', 'INTERNAL SUB BE']}
 })
 
 const indicatorsSchema = new Schema({

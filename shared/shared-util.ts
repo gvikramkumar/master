@@ -2,8 +2,13 @@
 
 export const shUtil = {
   isAdminModuleId,
-  stringToArray
+  stringToArray,
+  isManualUploadSource
 };
+
+function isManualUploadSource(sourceId: number) {
+  return sourceId === 4;
+}
 
 function stringToArray(_str) {
   let str = _str.trim();

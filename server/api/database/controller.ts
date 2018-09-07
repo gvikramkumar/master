@@ -33,9 +33,9 @@ export default class DatabaseController {
       // this.measureCtrl.mongoToPgSync('dfa_measure', req.user.id, log, elog),
       // this.moduleCtrl.mongoToPgSync('dfa_module', req.user.id, log, elog),
       // this.openPeriodCtrl.mongoToPgSync('dfa_open_period', req.user.id, log, elog),
-      this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog),
+      // this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog),
       // this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', req.user.id, log, elog),
-      // this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', req.user.id, log, elog),
+      this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', req.user.id, log, elog),
       // this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog),
     ])
       .then(() => {
