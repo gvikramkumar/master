@@ -25,6 +25,12 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   measureId: number;
   measures: Measure[] = [];
   sources: Source[] = [];
+  statuses = [
+    {name: 'Active', value: 'A'},
+    {name: 'Inactive', value: 'I'},
+    {name: 'Pending', value: 'P'},
+    {name: 'Draft', value: 'D'}];
+  showStatuses = ['A', 'I', 'P', 'D'];
   submeasures: Submeasure[] = [];
   filteredSubmeasures: Submeasure[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,16 +60,21 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
         this.submeasures = _.sortBy(results[1], 'name');
         this.sources = results[2];
         this.measureId = this.measures[0].measureId;
-        this.changeMeasure();
+        this.changeFilter();
       });
   }
 
   getSourceName(sourceId) {
-    return _.find(this.sources, {sourceId: sourceId}).name;
+    // todo: REMOVE THIS IF BEFORE CHECK IN
+    if (sourceId > 0 && sourceId <= 4) {
+      return _.find(this.sources, {sourceId: sourceId}).name;
+    }
   }
 
-  changeMeasure() {
-    this.filteredSubmeasures = _.filter(this.submeasures, {measureId: this.measureId})
+  changeFilter() {
+    this.filteredSubmeasures = _.filter(this.submeasures, {measureId: this.measureId});
+    this.filteredSubmeasures = _.filter(this.filteredSubmeasures, (sm) => _.includes(this.showStatuses, sm.status));
+
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);
     this.filterValue = '';
     this.dataSource.paginator = this.paginator;

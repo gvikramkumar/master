@@ -3,7 +3,9 @@
 
   <div class="text-center measure-select">
     <cui-select [items]="measures" [(ngModel)]="measureId" label="Measure"
-                (selectChange)="changeMeasure()" optionsKey="name" optionsValue="measureId"></cui-select>
+                (selectChange)="changeFilter()" optionsKey="name" optionsValue="measureId"></cui-select>
+    <cui-select [items]="statuses" [(ngModel)]="showStatuses" label="Show only:" [multiSelect]="true"
+                (ngModelChange)="changeFilter()" optionsKey="name" optionsValue="value"></cui-select>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="space-between center">
