@@ -100,7 +100,7 @@ export default class UploadController {
   getValidationAndImportData(): Promise<any> {
     return Promise.all([
       this.openPeriodRepo.getOneByQuery({moduleId: this.moduleId}),
-      this.submeasureRepo.getMany({moduleId: this.moduleId})
+      this.submeasureRepo.getManyActive({moduleId: this.moduleId})
     ])
       .then(results => {
         this.fiscalMonth = results[0].fiscalMonth;

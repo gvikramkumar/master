@@ -28,7 +28,7 @@
       </div>
       <div class="col-lg-6">
         <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="sources" label="Source" empty="true"
-                    optionsKey="name" optionsValue="sourceId" [required]="true"></cui-select>
+                    optionsKey="name" optionsValue="sourceId" [required]="true" (selectChange)=sourceChange()></cui-select>
       </div>
     </div>
 

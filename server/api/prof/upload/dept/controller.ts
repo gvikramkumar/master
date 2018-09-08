@@ -124,6 +124,7 @@ export default class DeptUploadUploadController extends UploadController {
       if (exclusions[dept.submeasureName]) {
         exclusions[dept.submeasureName].forEach(glAccount => {
           imports.push(new DeptUploadImport(
+            this.fiscalMonth,
             dept.submeasureName,
             dept.nodeValue,
             glAccount
@@ -131,6 +132,7 @@ export default class DeptUploadUploadController extends UploadController {
         });
       } else {
         imports.push(new DeptUploadImport(
+          this.fiscalMonth,
           dept.submeasureName,
           dept.nodeValue,
         ));

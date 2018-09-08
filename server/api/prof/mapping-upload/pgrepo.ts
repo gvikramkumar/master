@@ -1,10 +1,10 @@
 import {injectable} from 'inversify';
 import {PgRepoBase} from '../../../lib/base-classes/pg-repo-base';
 import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
-import DollarUploadImport from '../upload/dollar/import';
+import MappingUploadImport from '../upload/mapping/import';
 import AnyObj from '../../../../shared/models/any-obj';
 
-export class DollarUploadPg {
+export class MappingUploadPg {
   fiscalMonth: number;
   measureId: number;
   submeasureKey: number;
@@ -23,10 +23,7 @@ export class DollarUploadPg {
   beLevelId: string;
   beLevelName: string;
   beValue: string;
-  dealId: string;
-  grossUnbilledAccruedFlag: string;
-  revenueClassification: string;
-  amount: number;
+  percentage: number;
   createdBy: string;
   createdDate: Date;
   updatedBy: string;
@@ -39,10 +36,7 @@ export class DollarUploadPg {
     this.scmsValue = obj.scms;
     this.leValue = obj.legalEntity;
     this.beValue = obj.intBusinessEntity;
-    this.dealId = obj.dealId;
-    this.grossUnbilledAccruedFlag = obj.grossUnbilledAccruedFlag;
-    this.revenueClassification = obj.revenueClassification;
-    this.amount = obj.amount;
+    this.percentage = obj.percentage;
     this.createdBy = obj.createdBy;
     this.createdDate = obj.createdDate;
     this.updatedBy = obj.updatedBy;
@@ -69,10 +63,8 @@ const ormMap: OrmMap[] = [
   {prop: 'beLevelId', field: 'input_internal_be_hier_level_id', type: OrmTypes.number},
   {prop: 'beLevelName', field: 'input_internal_be_hier_level_name'},
   {prop: 'beValue', field: 'input_internal_be_value'},
-  {prop: 'dealId', field: 'deal_id'},
-  {prop: 'grossUnbilledAccruedFlag', field: 'gross_unbilled_accrued_rev_flg'},
-  {prop: 'revenueClassification', field: 'revenue_classification'},
-  {prop: 'amount', field: 'amount_value', type: OrmTypes.number},
+  {prop: 'percentage', field: 'percentage_value', type: OrmTypes.number},
+  {prop: null, field: 'system_roll_over_flag', pgDefault: 'N'},
   {prop: 'createdBy', field: 'create_owner'},
   {prop: 'createdDate', field: 'create_datetimestamp', type: OrmTypes.date},
   {prop: 'updatedBy', field: 'update_owner'},
@@ -80,8 +72,8 @@ const ormMap: OrmMap[] = [
 ] ;
 
 @injectable()
-export class DollarUploadPgRepo extends PgRepoBase {
-  table = 'fpadfa.dfa_prof_input_amnt_upld';
+export class MappingUploadPgRepo extends PgRepoBase {
+  table = 'fpadfa.dfa_prof_manual_map_upld';
 
   constructor() {
     super(new Orm(ormMap));

@@ -1,13 +1,17 @@
 import * as _ from 'lodash';
+import AnyObj from '../shared/models/any-obj';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
 
+const sub: AnyObj = {};
+_.set(sub, 'inputFilterLevel.productLevel', '');
+_.set(sub, 'manualMapping.productLevel', 'mm');
+_.set(sub, 'indicators.manualMapping', true);
+const productLevel = sub.inputFilterLevel.productLevel || (
+  sub.indicators.manualMapping && sub.manualMapping.productLevel);
 
-console.log('undefined', Number(undefined));
-console.log('null', Number(null));
-
-
+console.log(productLevel);
 
 
 
