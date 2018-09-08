@@ -1,6 +1,5 @@
 import {injectable} from 'inversify';
 import MeasureController from '../common/measure/controller';
-import {ModuleSourceController} from '../common/module-source/controller';
 import ModuleController from '../common/module/controller';
 import {OpenPeriodController} from '../common/open-period/controller';
 import SubmeasureController from '../common/submeasure/controller';
@@ -8,6 +7,7 @@ import DeptUploadController from '../prof/dept-upload/controller';
 import MappingUploadController from '../prof/mapping-upload/controller';
 import DollarUploadController from '../prof/dollar-upload/controller';
 import {ApiError} from '../../lib/common/api-error';
+import {ModuleSourceController} from '../common/module-source/controller';
 
 
 @injectable()
