@@ -5,6 +5,7 @@
   "main": "dist/server/server.js",
   "scripts": {
     "start": "pm2 start",
+    "stop": "pm2 stop all",
     "build": "rimraf dist/server/**/*.* && tsc",
     "build-serve": "npm run build && npm run serve",
     "build-test": "npm run build && npm run test",
