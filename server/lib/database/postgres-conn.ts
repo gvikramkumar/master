@@ -1,9 +1,9 @@
-import { Client } from 'pg';
+import { Client, Pool } from 'pg';
 import _config from '../../config/get-config';
 import AnyObj from '../../../shared/models/any-obj';
 const config = _config.postgres;
 
-const client = new Client({
+const pool = new Pool({
   host: config.host,
   database: config.database,
   port: config.port,
@@ -11,7 +11,7 @@ const client = new Client({
   password: process.env.POSTGRES_PASSWORD
 })
 
-export const pgc: AnyObj = {pgdb: client};
+export const pgc: AnyObj = {pgdb: pool};
 
 if (process.env.NO_POSTGRES) {
   pgc.promise = Promise.resolve()
@@ -21,8 +21,9 @@ if (process.env.NO_POSTGRES) {
       return pgc;
     });
 } else {
-  pgc.promise = client.connect()
-    .then(() => {
+  pgc.promise = pool.connect()
+    .then(client => {
+      client.release(); // We want to know if pg is up when we start server, so connect and release
       console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}`)
       return pgc;
     })
