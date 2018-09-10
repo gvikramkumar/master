@@ -4,11 +4,11 @@
   "desc": "finance mean starter project",
   "main": "dist/server/server.js",
   "scripts": {
-    "start": "pm2 start",
-    "stop": "pm2 stop all",
+    "start": "npm run serve",
     "build": "rimraf dist/server/**/*.* && tsc",
     "build-serve": "npm run build && npm run serve",
     "build-test": "npm run build && npm run test",
+    "serve": "node dist/server/server.js",
     "serve-nodemon": "nodemon dist/server/server.js",
     "placeholder": "node $NODE_DEBUG_OPTION somefile",
     "test": "jasmine",
