@@ -4,6 +4,8 @@ import {injectable} from 'inversify';
 import {ApiError} from '../../../lib/common/api-error';
 
 
+
+
 @injectable()
 export default class PgLookupRepo {
 
@@ -366,6 +368,127 @@ export default class PgLookupRepo {
       .then(vals => _.sortBy(vals, _.identity));
   }
 
-  verifyExistence
+
+  verifyNodeValueInPlOrMgmtHierarchies(nodeValue): Promise<boolean> {
+    const sqlPlHierarchy = `
+      SELECT DISTINCT column_name
+      FROM (SELECT (CASE
+      WHEN node_level01_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL01_VALUE'
+      WHEN node_level02_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL02_VALUE'
+      WHEN node_level03_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL03_VALUE'
+      WHEN node_level04_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL04_VALUE'
+      WHEN node_level05_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL05_VALUE'
+      WHEN node_level06_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL06_VALUE'
+      WHEN node_level07_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL07_VALUE'
+      WHEN node_level08_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL08_VALUE'
+      WHEN node_level09_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL09_VALUE'
+      WHEN node_level10_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL10_VALUE'
+      WHEN node_level11_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL11_VALUE'
+      WHEN node_level12_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL12_VALUE'
+      WHEN node_level13_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL13_VALUE'
+      WHEN node_level14_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL14_VALUE'
+      WHEN node_level15_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL15_VALUE'
+      ELSE
+      NULL
+      END)
+      column_name
+      FROM fpacon.vw_fpa_pl_hierarchy) t;
+`;
+    const sqlMgmtHierarchy = `
+      SELECT DISTINCT column_name
+      FROM (SELECT (CASE
+      WHEN node_level01_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL01_VALUE'
+      WHEN node_level02_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL02_VALUE'
+      WHEN node_level03_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL03_VALUE'
+      WHEN node_level04_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL04_VALUE'
+      WHEN node_level05_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL05_VALUE'
+      WHEN node_level06_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL06_VALUE'
+      WHEN node_level07_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL07_VALUE'
+      WHEN node_level08_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL08_VALUE'
+      WHEN node_level09_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL09_VALUE'
+      WHEN node_level10_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL10_VALUE'
+      WHEN node_level11_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL11_VALUE'
+      WHEN node_level12_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL12_VALUE'
+      WHEN node_level13_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL13_VALUE'
+      WHEN node_level14_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL14_VALUE'
+      WHEN node_level15_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL15_VALUE'
+      ELSE
+      NULL
+      END)
+      column_name
+      FROM fpacon.vw_fpa_management_hierarchy) t;
+`;
+
+    return pgc.pgdb.query(sqlPlHierarchy)
+      .then(results => results.rows[0].column_name)
+      .then(valid => {
+        if (valid) {
+          return true;
+        } else {
+          return pgc.pgdb.query(sqlMgmtHierarchy)
+            .then(results => Boolean(results.rows[0].column_name));
+        }
+      });
+  }
 
 }
