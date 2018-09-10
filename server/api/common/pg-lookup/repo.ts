@@ -421,8 +421,8 @@ export default class PgLookupRepo {
       ELSE
       NULL
       END)
-      column_name
-      FROM fpacon.vw_fpa_pl_hierarchy) t;
+      as column_name
+      FROM fpacon.vw_fpa_pl_hierarchy) t where column_name is not null;
 `;
     const sqlMgmtHierarchy = `
       SELECT DISTINCT column_name
@@ -475,18 +475,18 @@ export default class PgLookupRepo {
       ELSE
       NULL
       END)
-      column_name
-      FROM fpacon.vw_fpa_management_hierarchy) t;
+      as column_name
+      FROM fpacon.vw_fpa_management_hierarchy) t where column_name is not null;
 `;
 
     return pgc.pgdb.query(sqlPlHierarchy)
-      .then(results => results.rows[0].column_name)
+      .then(results => results.rows[0] && results.rows[0].column_name)
       .then(valid => {
         if (valid) {
           return true;
         } else {
           return pgc.pgdb.query(sqlMgmtHierarchy)
-            .then(results => Boolean(results.rows[0].column_name));
+            .then(results => Boolean(results.rows[0] && results.rows[0].column_name));
         }
       });
   }

@@ -46,13 +46,13 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
     return Promise.all([
       this.getSubmeasure(),
       this.validateSubmeasureName(),
-      this.lookForErrors()
     ])
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateMeasureAccess(),
         this.validateCanMappingUpload(),
-        this.lookForErrors()
       ]))
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateInputProductValue(),
         this.validateInputSalesValue(),
@@ -60,8 +60,8 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
         this.validateInputBusinessEntityValue(),
         this.validateSCMSSegment(),
         this.validatePercentage(),
-        this.lookForErrors()
-      ]));
+      ]))
+      .then(() => this.lookForErrors());
   }
 
   validate() {
