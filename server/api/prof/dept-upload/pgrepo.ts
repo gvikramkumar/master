@@ -3,7 +3,6 @@ import {PgRepoBase} from '../../../lib/base-classes/pg-repo-base';
 import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 
 const ormMap: OrmMap[] = [
-  {prop: 'fiscalMonth', field: 'fiscal_month_id'},
   {prop: 'submeasureName', field: ''},
   {prop: 'submeasureKey', field: 'sub_measure_key'},
   {prop: 'nodeValue', field: 'node_value'},

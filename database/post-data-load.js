@@ -242,13 +242,6 @@ db.dfa_lookup.insertMany([
   },
 ]);
 
-// dept
-db.dfa_prof_dept_acct_map_upld.insertOne({
-  submeasureName: "2 Tier Adjustment",
-  nodeValue: "020_070506",
-  glAccount: NumberInt(69999)
-});
-
 // sales-split
 db.dfa_prof_sales_split_pctmap_upld.insertOne({
   fiscalMonth: NumberInt(201810),

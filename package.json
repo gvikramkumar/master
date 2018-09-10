@@ -4,7 +4,8 @@
   "desc": "finance mean starter project",
   "main": "dist/server/server.js",
   "scripts": {
-    "start": "npm run serve",
+    "stop": "pm2 stop all",
+    "start": "pm2 start",
     "build": "rimraf dist/server/**/*.* && tsc",
     "build-serve": "npm run build && npm run serve",
     "build-test": "npm run build && npm run test",
