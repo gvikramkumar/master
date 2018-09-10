@@ -5,7 +5,6 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 const schema = new Schema(
   {
     transactionId: {type: SchemaTypes.ObjectId, required: true},
-    fiscalMonth: {type: Number, required: true},
     submeasureName: {type: String, required: true},
     nodeValue: {type: String, required: true},
     glAccount: Number,

@@ -46,18 +46,18 @@ export default class ProductClassUploadUploadController extends UploadController
     return Promise.all([
       this.getSubmeasure(),
       this.validateSubmeasureName(),
-      this.lookForErrors()
     ])
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateMeasureAccess(),
         this.validateCanProductClassUpload(),
-        this.lookForErrors()
       ]))
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateSplitCategory(),
         this.validateSplitPercentage(),
-        this.lookForErrors()
-      ]));
+      ]))
+      .then(() => this.lookForErrors());
   }
 
   validate() {

@@ -55,18 +55,18 @@ export default class DeptUploadUploadController extends UploadController {
     this.sheet1SubmeasureNames.push(this.temp.submeasureName);
     return Promise.all([
       this.getSubmeasure(),
-      this.validateSubmeasureName(),
-      this.lookForErrors()
+      this.validateSubmeasureName()
     ])
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateMeasureAccess(),
-        this.validateCanDeptUpload(),
-        this.lookForErrors()
+        this.validateCanDeptUpload()
       ]))
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
-        this.validateNodeValue(),
-        this.lookForErrors()
-      ]));
+        this.validateNodeValue()
+      ]))
+      .then(() => this.lookForErrors());
   }
 
   validateRow2(row) {
@@ -78,13 +78,13 @@ export default class DeptUploadUploadController extends UploadController {
     return Promise.all([
       this.getSubmeasure(),
       this.validateSubmeasureName(),
-      this.lookForErrors()
     ])
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateSubmeasureNameInSheet1(),
         this.validateGlAccount(),
-        this.lookForErrors()
-      ]));
+      ]))
+      .then(() => this.lookForErrors());
   }
 
   validate() {
@@ -122,7 +122,6 @@ export default class DeptUploadUploadController extends UploadController {
       if (exclusions[dept.submeasureName]) {
         exclusions[dept.submeasureName].forEach(glAccount => {
           imports.push(new DeptUploadImport(
-            this.fiscalMonth,
             dept.submeasureName,
             dept.nodeValue,
             glAccount
@@ -130,7 +129,6 @@ export default class DeptUploadUploadController extends UploadController {
         });
       } else {
         imports.push(new DeptUploadImport(
-          this.fiscalMonth,
           dept.submeasureName,
           dept.nodeValue,
         ));
