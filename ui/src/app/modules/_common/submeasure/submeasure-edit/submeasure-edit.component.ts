@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Submeasure} from '../../models/submeasure';
 import {AppStore} from '../../../../app/app-store';
 import {RuleService} from '../../services/rule.service';
 import {SubmeasureService} from '../../services/submeasure.service';
@@ -16,6 +15,8 @@ import {Source} from '../../../../../../../shared/models/source';
 import {DialogType} from '../../../../core/models/ui-enums';
 import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeasure/grouping-submeasure';
 import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {Submeasure} from '../../models/submeasure';
+import {shUtil} from '../../../../../../../shared/shared-util';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -288,6 +289,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   addRule(i) {
     this.sm.rules.splice(i + 1, 0, '');
+  }
+
+  // todo: make sure this hasn't changed, it's 4 currently
+  sourceChange() {
+    this.sm.indicators.dollarUploadFlag = shUtil.isManualUploadSource(this.sm.sourceId) ? 'Y' : 'N';
   }
 
   isCogsMeasure() {

@@ -4,9 +4,9 @@ export default {
   corsOrigin: ['http://localhost:4200'],
   showStack: true,
   postgres: {
-    host: 'finpg-dev-01',
+    host: 'localhost',
     port: 5432,
-    database: 'fpadev',
+    database: 'postgres'
   }
 };
 

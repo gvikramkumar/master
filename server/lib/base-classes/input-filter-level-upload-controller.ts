@@ -73,8 +73,9 @@ data;
   }
 
   validateInputProductValue() {
-    const productLevel = this.submeasure.inputFilterLevel.productLevel &&
-      this.submeasure.inputFilterLevel.productLevel.toUpperCase();
+    let productLevel = this.submeasure.inputFilterLevel.productLevel || (
+      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.productLevel);
+    productLevel = productLevel ? productLevel.toUpperCase() : productLevel;
     if (productLevel && !this.temp.inputProductValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputProductValue);
     } else if (!productLevel && this.temp.inputProductValue) {
@@ -98,8 +99,9 @@ data;
   }
 
   validateInputSalesValue() {
-    const salesLevel = this.submeasure.inputFilterLevel.salesLevel &&
-      this.submeasure.inputFilterLevel.salesLevel.toUpperCase();
+    let salesLevel = this.submeasure.inputFilterLevel.salesLevel || (
+      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.salesLevel);
+    salesLevel = salesLevel ? salesLevel.toUpperCase() : salesLevel;
     if (salesLevel && !this.temp.inputSalesValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputSalesValue);
     } else if (!salesLevel && this.temp.inputSalesValue) {
@@ -134,9 +136,28 @@ data;
     return Promise.resolve();
   }
 
+  validateSCMSSegment() {
+    let scmsLevel = this.submeasure.inputFilterLevel.scmsLevel || (
+      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.scmsLevel);
+    scmsLevel = scmsLevel ? scmsLevel.toUpperCase() : scmsLevel;
+    if (scmsLevel && !this.temp.scmsSegment) {
+      this.addErrorRequiredForSubmeasure(this.PropNames.scmsSegment);
+    } else if (!scmsLevel && this.temp.scmsSegment) {
+      this.addErrorNotAllowedForSubmeasure(this.PropNames.scmsSegment);
+    } else {
+      if (scmsLevel === 'SCMS') {
+        if (this.notExists(this.data.scms, this.temp.scmsSegment)) {
+          this.addErrorInvalid(this.PropNames.scmsSegment, this.temp.scmsSegment);
+        }
+      }
+    }
+    return Promise.resolve();
+  }
+
   validateInputLegalEntityValue() {
-    const entityLevel = this.submeasure.inputFilterLevel.entityLevel &&
-      this.submeasure.inputFilterLevel.entityLevel.toUpperCase();
+    let entityLevel = this.submeasure.inputFilterLevel.entityLevel || (
+      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.entityLevel);
+    entityLevel = entityLevel ? entityLevel.toUpperCase() : entityLevel;
     if (entityLevel && !this.temp.inputLegalEntityValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputLegalEntityValue);
     } else if (!entityLevel && this.temp.inputLegalEntityValue) {
@@ -152,8 +173,9 @@ data;
   }
 
   validateInputBusinessEntityValue() {
-    const internalBELevel = this.submeasure.inputFilterLevel.internalBELevel &&
-      this.submeasure.inputFilterLevel.internalBELevel.toUpperCase();
+    let internalBELevel = this.submeasure.inputFilterLevel.internalBELevel || (
+      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.internalBELevel);
+    internalBELevel = internalBELevel ? internalBELevel.toUpperCase() : internalBELevel;
     if (internalBELevel && !this.temp.inputBusinessEntityValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputBusinessEntityValue);
     } else if (!internalBELevel && this.temp.inputBusinessEntityValue) {
@@ -166,23 +188,6 @@ data;
       } else if (internalBELevel === 'INTERNAL SUB BE') {
         if (this.notExists(this.data.businessEntity.internalSubBe, this.temp.inputBusinessEntityValue)) {
           this.addErrorInvalid(this.PropNames.inputBusinessEntityValue, this.temp.inputBusinessEntityValue);
-        }
-      }
-    }
-    return Promise.resolve();
-  }
-
-  validateSCMSSegment() {
-    const scmsLevel = this.submeasure.inputFilterLevel.scmsLevel &&
-      this.submeasure.inputFilterLevel.scmsLevel.toUpperCase();
-    if (scmsLevel && !this.temp.scmsSegment) {
-      this.addErrorRequiredForSubmeasure(this.PropNames.scmsSegment);
-    } else if (!scmsLevel && this.temp.scmsSegment) {
-      this.addErrorNotAllowedForSubmeasure(this.PropNames.scmsSegment);
-    } else {
-      if (scmsLevel === 'SCMS') {
-        if (this.notExists(this.data.scms, this.temp.scmsSegment)) {
-          this.addErrorInvalid(this.PropNames.scmsSegment, this.temp.scmsSegment);
         }
       }
     }
