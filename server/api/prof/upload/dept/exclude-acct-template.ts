@@ -6,7 +6,7 @@ export default class DeptUploadExludeAcctTemplate {
 
   constructor(row) {
     this.submeasureName = row[0];
-    this.glAccount = row[1].toString();
+    this.glAccount = row[1] && row[1].toString();
 
     svrUtil.trimStringProperties(this);
   }

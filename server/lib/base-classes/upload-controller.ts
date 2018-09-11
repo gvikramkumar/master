@@ -158,8 +158,12 @@ export default class UploadController {
   }
 
   importRows(userId) {
+    let fiscalMonth;
+    if (this.repo.hasFiscalMonth()) {
+      fiscalMonth = this.fiscalMonth;
+    }
     return this.getImportArray()
-      .then(imports => this.repo.importUploadRecords(imports, this.fiscalMonth, userId));
+      .then(imports => this.repo.importUploadRecords(imports, userId, fiscalMonth || -1));
   }
 
   // message is only used by validateOther where it's used to title the error list

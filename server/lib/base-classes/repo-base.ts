@@ -135,11 +135,18 @@ export default class RepoBase {
   }
 
   // delete all records except the current fiscalMonth, then addMany
-  importUploadRecords(imports, fiscalMonth, userId) {
+  importUploadRecords(imports, userId, fiscalMonth) {
     if (!fiscalMonth) {
       throw new ApiError(`importUploadRecords: no fiscalMonth`);
     }
-    return this.removeMany({fiscalMonth: {$ne: fiscalMonth}})
+    // for fiscalMonth repos we remove all but the current fiscalMonth, then insert. In not fiscalMonth
+    // repo, we remove all (dept upload)
+    let filter = {};
+    if (fiscalMonth && fiscalMonth !== -1) {
+      filter = {fiscalMonth: {$ne: fiscalMonth}};
+    }
+
+    return this.removeMany(filter)
       .then(() => this.addManyTransaction(imports, userId));
   }
 
@@ -450,6 +457,10 @@ export default class RepoBase {
 
   hasCreatedBy() {
     return !!this.schema.path('createdBy');
+  }
+
+  hasFiscalMonth() {
+    return !!this.schema.path('fiscalMonth');
   }
 
   createPredicateFromProperties(props) {
