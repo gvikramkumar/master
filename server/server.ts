@@ -38,14 +38,18 @@ Promise.all([mgc.promise, pgc.promise])
 
       server.on('close', (e) => {
         mg.connection.close();
-        pgdb.end();
+        if (pgc.pgdb) {
+          pgc.pgdb.end();
+        }
       });
 
       return server.listen(port, '127.0.0.1', function (err) {
         if (err) {
           console.error('server listen creation error:', err);
           mg.connection.close();
-          pgdb.end();
+          if (pgc.pgdb) {
+            pgc.pgdb.end();
+          }
           throw(err);
         }
         console.log(`${protocol} server listening on ${port}`);
