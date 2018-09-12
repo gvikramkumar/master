@@ -18,6 +18,7 @@ export class Submeasure {
   rules: string[] = [];
   groupingSubmeasureId: number;
   status = 'I';
+  newStatus = 'I';
   createdBy?: string;
   createdDate?: string;
   updatedBy?: string;
