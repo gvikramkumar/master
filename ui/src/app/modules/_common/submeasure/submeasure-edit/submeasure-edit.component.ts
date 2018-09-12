@@ -583,11 +583,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               const errs = this.validate();
               if (!errs) {
                 let obs: Observable<Submeasure>;
-                if (this.editMode) {
-                  obs = this.submeasureService.update(this.sm);
-                } else {
-                  obs = this.submeasureService.add(this.sm);
-                }
+                obs = this.submeasureService.add(this.sm);
                 obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
               } else {
                 this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));

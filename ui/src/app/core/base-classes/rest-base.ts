@@ -52,6 +52,10 @@ export class RestBase<T extends AnyObj> {
     return this.getMany(filter);
   }
 
+  getLatestByName() {
+    return this.getManyLatest('name');
+  }
+
   getManyPending(filter: AnyObj = {}) {
     filter.status = 'P';
     return this.getMany(filter);

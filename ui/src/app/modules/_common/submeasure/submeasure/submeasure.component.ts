@@ -52,7 +52,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
 
     Promise.all([
       this.measureService.getMany().toPromise(),
-      this.submeasureService.getMany().toPromise(),
+      this.submeasureService.getLatestByName().toPromise(),
       this.sourceService.getMany().toPromise()
     ])
       .then(results => {
