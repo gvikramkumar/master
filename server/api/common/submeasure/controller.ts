@@ -10,6 +10,7 @@ import InputLevelPgRepo from './input-level-pgrepo';
 import AnyObj from '../../../../shared/models/any-obj';
 import Any = jasmine.Any;
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
+import ApprovalController from '../../../lib/base-classes/approval-controller';
 
 
 interface FilterLevel {
@@ -21,7 +22,7 @@ interface FilterLevel {
 }
 
 @injectable()
-export default class SubmeasureController extends ControllerBase {
+export default class SubmeasureController extends ApprovalController {
 
   constructor(
     protected repo: SubmeasureRepo,

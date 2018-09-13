@@ -19,6 +19,7 @@ export default class ApprovalController extends ControllerBase {
   }
 
   saveToDraft(req, res, next) {
+    req.body.status = 'D';
     this.addOneNoValidate(req, res, next);
   }
 
@@ -47,11 +48,7 @@ export default class ApprovalController extends ControllerBase {
 
   handleApprovals(req, res, next, newStatus, mode) {
     const data = req.body;
-    const errors = this.repo.validate(data);
-    if (errors) {
-      next(new ApiError('Validation Errors', errors, 400));
-      return;
-    }
+    this.repo.validate(data);
     data.status = newStatus;
     if (mode === Mode.submit) {
       data.approvedOnce = true;
