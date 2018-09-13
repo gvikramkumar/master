@@ -5,9 +5,10 @@ import {AllocationRule} from '../../../../shared/models/allocation-rule';
 import PgLookupRepo from '../pg-lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
 import {ApiError} from '../../../lib/common/api-error';
+import ApprovalController from '../../../lib/base-classes/approval-controller';
 
 @injectable()
-export default class AllocationRuleController extends ControllerBase {
+export default class AllocationRuleController extends ApprovalController {
   constructor(repo: AllocationRuleRepo, private pgLookupRepo: PgLookupRepo) {
     super(repo);
   }
