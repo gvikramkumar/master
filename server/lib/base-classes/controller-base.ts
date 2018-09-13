@@ -102,6 +102,20 @@ export default class ControllerBase {
       .catch(next);
   }
 
+  addOneNoValidate(req, res, next) {
+    const data = req.body;
+    this.repo.addOne(data, req.user.id, false)
+      .then(item => {
+        if (this.pgRepo && this.isMirrorRepo) {
+          this.pgRepo.addOne(_.clone(item), req.user.id)
+            .then(() => res.json(item));
+        } else {
+          res.json(item);
+        }
+      })
+      .catch(next);
+  }
+
   // post /call-method/:method
   callMethod(req, res, next) {
     const method = this[req.params.method];

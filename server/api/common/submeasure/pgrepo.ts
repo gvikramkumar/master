@@ -19,6 +19,7 @@ const ormMap: OrmMap[] = [
   {prop: 'sourceSystemAdjTypeId', field: 'source_system_adj_type_id', type: OrmTypes.number},
   {prop: 'glAcctNumber', field: 'gl_acct_number', type: OrmTypes.number},
   {prop: 'status', field: 'status_flag'},
+  {prop: 'approvedOnce', field: null, mgDefault: true},
   {prop: 'indicators.dollarUploadFlag', field: 'dollar_upld_flag'},
   {prop: 'indicators.approveFlag', field: 'approve_flag'},
   {prop: 'indicators.manualMapping', field: 'manual_mapping_flag'},
