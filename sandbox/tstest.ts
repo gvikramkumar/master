@@ -3,7 +3,78 @@ import AnyObj from '../shared/models/any-obj';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+const nodeValue = 'lala';
+const sqlPlHierarchy = `
+      SELECT DISTINCT column_name
+      INTO lv_column_name
+      FROM (SELECT (CASE
+      WHEN node_level01_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL01_VALUE'
+      WHEN node_level02_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL02_VALUE'
+      WHEN node_level03_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL03_VALUE'
+      WHEN node_level04_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL04_VALUE'
+      WHEN node_level05_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL05_VALUE'
+      WHEN node_level06_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL06_VALUE'
+      WHEN node_level07_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL07_VALUE'
+      WHEN node_level08_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL08_VALUE'
+      WHEN node_level09_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL09_VALUE'
+      WHEN node_level10_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL10_VALUE'
+      WHEN node_level11_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL11_VALUE'
+      WHEN node_level12_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL12_VALUE'
+      WHEN node_level13_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL13_VALUE'
+      WHEN node_level14_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL14_VALUE'
+      WHEN node_level15_value = '${nodeValue}'
+      THEN
+      'NODE_LEVEL15_VALUE'
+      ELSE
+      NULL
+      END)
+      column_name
+      FROM fpacon.vw_fpa_pl_hierarchy
+`;
 
+console.log(sqlPlHierarchy);
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 const sub: AnyObj = {};
 _.set(sub, 'inputFilterLevel.productLevel', '');
 _.set(sub, 'manualMapping.productLevel', 'mm');
@@ -14,16 +85,7 @@ const productLevel = sub.inputFilterLevel.productLevel || (
 console.log(productLevel);
 
 
-
-
-
-
-
-
-
-
-
-
+*/
 
 /*
 const arr = ['one$ne$', 'two'];

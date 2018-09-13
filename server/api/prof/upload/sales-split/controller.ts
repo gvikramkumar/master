@@ -56,8 +56,8 @@ export default class SalesSplitUploadUploadController extends UploadController {
       this.validateCompanyCode(),
       this.validateSalesTerritoryCode(),
       this.validateSplitPercentage(),
-      this.lookForErrors()
-    ]);
+    ])
+      .then(() => this.lookForErrors());
   }
 
   validate() {

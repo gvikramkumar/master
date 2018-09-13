@@ -4,10 +4,11 @@ import multer from 'multer';
 import multerGridFsStorage from 'multer-gridfs-storage';
 
 const config = _config.fileUpload;
-const {db} = mgc;
+const promise = mgc.promise
+  .then(({db}) => db);
 
 const gfsStorage = multerGridFsStorage({
-  db,
+  db: promise,
   file: (req, file) => {
     const metadata = {
       userId: req.user.id,

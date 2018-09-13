@@ -60,14 +60,14 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
     return Promise.all([
       this.getSubmeasure(),
       this.validateSubmeasureName(),
-      this.lookForErrors()
     ])
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateMeasureAccess(),
         this.validateSubmeasureCanManualUpload(),
         this.validateCanDollarUpload(),
-        this.lookForErrors()
       ]))
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateInputProductValue(),
         this.validateInputSalesValue(),
@@ -77,8 +77,8 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
         this.validateSCMSSegment(),
         this.validateAmount(),
         this.validateRevenueClassification(),
-        this.lookForErrors()
-      ]));
+      ]))
+      .then(() => this.lookForErrors());
   }
 
   validate() {

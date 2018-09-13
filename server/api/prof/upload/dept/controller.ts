@@ -43,8 +43,6 @@ export default class DeptUploadUploadController extends UploadController {
     this.data = {};
     return Promise.all([
       super.getValidationAndImportData(),
-      // pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_department', 'department_code'),
-      // pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_department', 'company_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_account', 'financial_account_code'),
     ])
       .then(results => {
@@ -57,18 +55,18 @@ export default class DeptUploadUploadController extends UploadController {
     this.sheet1SubmeasureNames.push(this.temp.submeasureName);
     return Promise.all([
       this.getSubmeasure(),
-      this.validateSubmeasureName(),
-      this.lookForErrors()
+      this.validateSubmeasureName()
     ])
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateMeasureAccess(),
-        this.validateCanDeptUpload(),
-        this.lookForErrors()
+        this.validateCanDeptUpload()
       ]))
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
-        // this.validateNodeValue(),
-        this.lookForErrors()
-      ]));
+        this.validateNodeValue()
+      ]))
+      .then(() => this.lookForErrors());
   }
 
   validateRow2(row) {
@@ -80,13 +78,13 @@ export default class DeptUploadUploadController extends UploadController {
     return Promise.all([
       this.getSubmeasure(),
       this.validateSubmeasureName(),
-      this.lookForErrors()
     ])
+      .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateSubmeasureNameInSheet1(),
-        // this.validateGlAccount(),
-        this.lookForErrors()
-      ]));
+        this.validateGlAccount(),
+      ]))
+      .then(() => this.lookForErrors());
   }
 
   validate() {
@@ -124,7 +122,6 @@ export default class DeptUploadUploadController extends UploadController {
       if (exclusions[dept.submeasureName]) {
         exclusions[dept.submeasureName].forEach(glAccount => {
           imports.push(new DeptUploadImport(
-            this.fiscalMonth,
             dept.submeasureName,
             dept.nodeValue,
             glAccount
@@ -132,7 +129,6 @@ export default class DeptUploadUploadController extends UploadController {
         });
       } else {
         imports.push(new DeptUploadImport(
-          this.fiscalMonth,
           dept.submeasureName,
           dept.nodeValue,
         ));
@@ -150,25 +146,12 @@ export default class DeptUploadUploadController extends UploadController {
   }
 
   validateNodeValue() {
-    const nodeValue = this.temp.nodeValue;
-    const re = /^(\d{3})_(\d{6})$/;
-
-    if (!nodeValue) {
-      this.addErrorRequired(this.PropNames.nodeValue);
-    } else if (!re.test(this.temp.nodeValue)) {
-      this.addErrorInvalid(this.PropNames.nodeValue, this.temp.nodeValue, 'Number string: XXX_XXXXXX');
-    } else {
-      const arr = this.temp.nodeValue.match(re);
-      const deptCode = Number(arr[1]);
-      const companyCode = Number(arr[2]);
-      if (this.notExists(this.data.department.department_codes, deptCode)) {
-        this.addError(this.PropNames.nodeValue, 'Invalid department code', nodeValue);
-      }
-      if (this.notExists(this.data.department.company_codes, companyCode)) {
-        this.addError(this.PropNames.nodeValue, 'Invalid company code', nodeValue);
-      }
-    }
-    return Promise.resolve();
+    return this.pgRepo.verifyNodeValueInPlOrMgmtHierarchies(this.temp.nodeValue)
+      .then(valid => {
+        if (!valid) {
+          this.addErrorInvalid(this.PropNames.nodeValue, this.temp.nodeValue);
+        }
+      });
   }
 
   validateSubmeasureNameInSheet1() {
@@ -185,13 +168,12 @@ export default class DeptUploadUploadController extends UploadController {
     if (!glAccount) {
       this.addErrorRequired(this.PropNames.glAccount);
     } else if (!re.test(this.temp.glAccount)) {
-      this.addErrorInvalid(this.PropNames.glAccount, this.temp.glAccount, 'Number 6XXXX');
+      this.addErrorInvalid(this.PropNames.glAccount, this.temp.glAccount, 'Number 60000 - 69999');
     } else if (this.notExists(this.data.glAccounts, glAccount)) {
       this.addErrorInvalid(this.PropNames.glAccount, glAccount);
     }
     return Promise.resolve();
   }
-
 
 }
 

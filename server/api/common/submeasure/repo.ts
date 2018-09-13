@@ -49,6 +49,7 @@ const schema = new Schema({
     sourceSystemAdjTypeId: Number,
     glAcctNumber: Number,
     status: {type: String, enum: ['A', 'I', 'P'], required: true},
+    approvedOnce: Boolean,
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},

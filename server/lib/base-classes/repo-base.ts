@@ -135,11 +135,18 @@ export default class RepoBase {
   }
 
   // delete all records except the current fiscalMonth, then addMany
-  importUploadRecords(imports, fiscalMonth, userId) {
+  importUploadRecords(imports, userId, fiscalMonth) {
     if (!fiscalMonth) {
       throw new ApiError(`importUploadRecords: no fiscalMonth`);
     }
-    return this.removeMany({fiscalMonth: {$ne: fiscalMonth}})
+    // for fiscalMonth repos we remove all but the current fiscalMonth, then insert. In not fiscalMonth
+    // repo, we remove all (dept upload)
+    let filter = {};
+    if (fiscalMonth && fiscalMonth !== -1) {
+      filter = {fiscalMonth: {$ne: fiscalMonth}};
+    }
+
+    return this.removeMany(filter)
       .then(() => this.addManyTransaction(imports, userId));
   }
 
@@ -162,14 +169,14 @@ export default class RepoBase {
       });
   }
 
-  addOne(data, userId) {
+  addOne(data, userId, validate = true) {
     // if versioning items, our edits will actually be adds, so dump the ids in that case
     delete data._id;
     delete data.id;
     const item = new this.Model(data);
     this.addCreatedByAndUpdatedBy(item, userId);
     return this.fillAutoIncrementField(item)
-      .then(() => item.save());
+      .then(() => item.save({validateBeforeSave: validate}));
   }
 
   update(data, userId, concurrencyCheck = true) {
@@ -398,8 +405,14 @@ export default class RepoBase {
         throw new ApiError('no userId for createdBy/updatedBy.');
       }
       const date = new Date();
-      item.createdBy = userId;
-      item.createdDate = date;
+      // with our rule and submeasure versioning, we add instead of update, in this case, we don't want to
+      // wipe out the created user or date
+      if (!item.createdBy) {
+        item.createdBy = userId;
+      }
+      if (!item.createdDate) {
+        item.createdDate = date;
+      }
       item.updatedBy = userId;
       item.updatedDate = date;
     }
@@ -450,6 +463,10 @@ export default class RepoBase {
 
   hasCreatedBy() {
     return !!this.schema.path('createdBy');
+  }
+
+  hasFiscalMonth() {
+    return !!this.schema.path('fiscalMonth');
   }
 
   createPredicateFromProperties(props) {
