@@ -5,13 +5,14 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
+import {ApprovalRestBase} from '../../../core/base-classes/approval-rest-base';
 
 const apiUrl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
-export class RuleService extends RestBase<AllocationRule> {
+export class RuleService extends ApprovalRestBase<AllocationRule> {
 
   constructor(httpClient: HttpClient, store: AppStore) {
     super('allocation-rule', httpClient, store, true);

@@ -33,6 +33,7 @@ const schema = new Schema(
     beCritCond: String,
     beCritChoices: [String],
     status: {type: String, enum: ['D', 'P', 'A', 'I'], required: true},
+    approvedOnce: Boolean,
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},
