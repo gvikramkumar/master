@@ -19,6 +19,7 @@ export default class ApprovalController extends ControllerBase {
   }
 
   saveToDraft(req, res, next) {
+    req.body.status = 'D';
     this.addOneNoValidate(req, res, next);
   }
 
