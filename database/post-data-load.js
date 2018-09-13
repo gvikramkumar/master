@@ -25,7 +25,6 @@ db.dfa_submeasure.insertMany([
     reportingLevels: [null, "Indirect Revenue Adjustments", null],
     indicators: {
       dollarUploadFlag: "Y",
-      approveFlag: "Y",
       manualMapping: "Y",
       expenseSSOT: "Y",
       manualMix: "Y",
@@ -40,6 +39,7 @@ db.dfa_submeasure.insertMany([
     },
     rules: ["GLREVMIX-PL3SL2-NOWWDIST-ROLL3", "MANUALMAP-PL3SL6-PERCENT"],
     status: "A",
+    approvedOnce: "Y",
   },
   {
     submeasureId: NumberInt(2),
@@ -64,7 +64,6 @@ db.dfa_submeasure.insertMany([
     reportingLevels: ["Manufacturing Overhead"],
     indicators: {
       dollarUploadFlag: "Y",
-      approveFlag: "Y",
       manualMapping: "Y",
       expenseSSOT: "Y",
       manualMix: "Y",
@@ -79,6 +78,7 @@ db.dfa_submeasure.insertMany([
     },
     rules: ["REVPOS-NODISTI-NOSCMSOTHER-ROLL3", "SERVMAP-PL3BE-MTD"],
     status: "A",
+    approvedOnce: "Y",
   }
 ])
 
@@ -331,6 +331,7 @@ db.dfa_allocation_rule.find({}).forEach(rule => {
 });
 db.dfa_allocation_rule.deleteMany({})
 db.dfa_allocation_rule.insertMany(rules);
+db.dfa_allocation_rule.update({}, {$set: {approvedOnce: 'Y'}});
 
 function parseSelect(str) {
   rtn = {};

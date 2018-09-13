@@ -10,7 +10,8 @@ import InputLevelPgRepo from './input-level-pgrepo';
 import AnyObj from '../../../../shared/models/any-obj';
 import Any = jasmine.Any;
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
-import ApprovalController from '../../../lib/base-classes/approval-controller';
+import ApprovalController, {ApprovalMode} from '../../../lib/base-classes/approval-controller';
+import DfaUser from '../../../../shared/models/dfa-user';
 
 
 interface FilterLevel {
@@ -130,28 +131,9 @@ export default class SubmeasureController extends ApprovalController {
       .then(docs => res.json(docs));
   }
 
-
-/*
-
-// ***** NEED TO GET NEXT sub_measure_key from pg to start it off, so no autoinc field for mongo repo then
-  addOne(req, res, next) {
-    const data = req.body;
-    this.repo.addOne(data, req.user.id)
-      .then(item => {
-        this.pgRepo.addOne(_.clone(item), req.user.id) // pgRepo changes updated date so clone it
-          .then(() => {
-            const inputLvls = [];
-
-            //get input levls toegher
-            return inputLvlPgRepo.addMany(inputLvls, req.user.id)
-              .then(() => res.json(item));
-          });
-      })
-      .catch(next);
+  sendApprovalEmail(user: DfaUser, mode: ApprovalMode) {
+    throw new ApiError('sendApprovalEmail not defined for approval controller');
   }
-*/
-
-
 
 }
 

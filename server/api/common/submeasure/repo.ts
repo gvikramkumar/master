@@ -13,7 +13,6 @@ const filterLevelSchema = new Schema({
 
 const indicatorsSchema = new Schema({
   dollarUploadFlag: {type: String, enum: ['Y', 'N'], required: true},
-  approveFlag: {type: String, enum: ['Y', 'N'], required: true},
   manualMapping: {type: String, enum: ['Y', 'N'], required: true},
   expenseSSOT: {type: String, enum: ['Y', 'N'], required: true},
   manualMix: {type: String, enum: ['Y', 'N'], required: true},
@@ -49,7 +48,7 @@ const schema = new Schema({
     sourceSystemAdjTypeId: Number,
     glAcctNumber: Number,
     status: {type: String, enum: ['A', 'I', 'P'], required: true},
-    approvedOnce: Boolean,
+    approvedOnce: {type: String, enum: ['Y', 'N'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},
