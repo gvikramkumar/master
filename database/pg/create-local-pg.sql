@@ -7,6 +7,8 @@ DROP TABLE fpadfa.dfa_open_period;
 DROP TABLE fpadfa.dfa_prof_dept_acct_map_upld;
 DROP TABLE fpadfa.dfa_prof_input_amnt_upld;
 DROP TABLE fpadfa.dfa_prof_manual_map_upld;
+DROP TABLE fpadfa.dfa_prof_sales_split_pctmap_upld
+DROP TABLE fpadfa.dfa_prof_swalloc_manualmix_upld
 DROP TABLE fpadfa.dfa_sub_measure;
 DROP TABLE fpadfa.dfa_submeasure_input_lvl;
 */
@@ -130,6 +132,31 @@ CREATE TABLE fpadfa.dfa_prof_manual_map_upld (
 	update_owner varchar(30) NULL,
 	update_datetimestamp timestamp NULL
 );
+
+CREATE TABLE fpadfa.dfa_prof_sales_split_pctmap_upld (
+	fiscal_month_id numeric(22) NOT NULL,
+	account_code varchar(5) NULL,
+	sub_account_code varchar(10) NULL,
+	company_code varchar(3) NULL,
+	sales_territory_code varchar(50) NOT NULL,
+	split_percentage numeric(10,4) NULL,
+	create_owner varchar(30) NULL,
+	create_datetimestamp timestamp NULL,
+	update_owner varchar(30) NULL,
+	update_datetimestamp timestamp NULL
+) ;
+
+CREATE TABLE fpadfa.dfa_prof_swalloc_manualmix_upld (
+	fiscal_month_id numeric(22) NOT NULL,
+	sub_measure_key numeric(22) NOT NULL,
+	split_category varchar(60) NOT NULL,
+	split_percentage numeric(10,4) NULL,
+	create_owner varchar(30) NULL,
+	create_datetimestamp timestamp NULL,
+	update_owner varchar(30) NULL,
+	update_datetimestamp timestamp NULL
+) ;
+
 
 CREATE TABLE fpadfa.dfa_sub_measure (
 	module_id numeric(10) NOT NULL,

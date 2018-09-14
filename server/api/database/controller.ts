@@ -8,6 +8,7 @@ import MappingUploadController from '../prof/mapping-upload/controller';
 import DollarUploadController from '../prof/dollar-upload/controller';
 import {ApiError} from '../../lib/common/api-error';
 import {ModuleSourceController} from '../common/module-source/controller';
+import ProductClassUploadController from '../prof/product-class-upload/controller';
 
 
 @injectable()
@@ -21,6 +22,7 @@ export default class DatabaseController {
     private deptUploadCtrl: DeptUploadController,
     private dollarUploadCtrl: DollarUploadController,
     private mappingUploadCtrl: MappingUploadController,
+    private productClassUploadCtrl: ProductClassUploadController
     ) {
   }
 
@@ -33,9 +35,10 @@ export default class DatabaseController {
       // this.measureCtrl.mongoToPgSync('dfa_measure', req.user.id, log, elog),
       // this.moduleCtrl.mongoToPgSync('dfa_module', req.user.id, log, elog),
       // this.openPeriodCtrl.mongoToPgSync('dfa_open_period', req.user.id, log, elog),
-      this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog),
+      // this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog),
       // this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', req.user.id, log, elog),
       // this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', req.user.id, log, elog),
+      this.productClassUploadCtrl.mongoToPgSync('dfa_prof_swalloc_manualmix_upld', req.user.id, log, elog),
       // this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog),
     ])
       .then(() => {
