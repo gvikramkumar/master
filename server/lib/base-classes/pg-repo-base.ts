@@ -301,7 +301,7 @@ export class PgRepoBase {
       sql += ' where ';
       keys.forEach((key, idx) => {
         let operator = ' = ';
-        if (key.indexOf('$ne$')) { // not equal properties will end in $ne$ else will be "="
+        if (key.indexOf('$ne$') !== -1) { // not equal properties will end in $ne$ else will be "="
           operator = ' <> ';
           key = key.substr(0, key.length - 4);
           keys[idx] = key; // clean off $ne$ or won't find in orm map

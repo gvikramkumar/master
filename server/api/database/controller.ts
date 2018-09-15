@@ -10,11 +10,14 @@ import {ApiError} from '../../lib/common/api-error';
 import {ModuleSourceController} from '../common/module-source/controller';
 import ProductClassUploadController from '../prof/product-class-upload/controller';
 import SalesSplitUploadController from '../prof/sales-split-upload/controller';
-
+import OpenPeriodRepo from '../common/open-period/repo';
+import {DfaModuleIds} from '../../../shared/enums';
+import * as _ from 'lodash';
 
 @injectable()
 export default class DatabaseController {
   constructor(
+    private openPeriodRepo: OpenPeriodRepo,
     private measureCtrl: MeasureController,
     private moduleCtrl: ModuleController,
     private moduleSourceCtrl: ModuleSourceController,
@@ -29,38 +32,58 @@ export default class DatabaseController {
   }
 
   mongoToPgSync(req, res, next) {
+    let openPeriods: {moduleId: number, fiscalMonth: number}[];
+    let profFiscalMonth;
     const resultArr = [];
     const log: string[] = [];
     const elog: string[] = [];
     Promise.all([
-      this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', req.user.id, log, elog),
-      this.measureCtrl.mongoToPgSync('dfa_measure', req.user.id, log, elog),
-      this.moduleCtrl.mongoToPgSync('dfa_module', req.user.id, log, elog),
-      this.openPeriodCtrl.mongoToPgSync('dfa_open_period', req.user.id, log, elog),
-      this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog),
-      this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', req.user.id, log, elog),
-      this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', req.user.id, log, elog),
-      this.productClassUploadCtrl.mongoToPgSync('dfa_prof_swalloc_manualmix_upld', req.user.id, log, elog),
-      this.salesSplitUploadCtrl.mongoToPgSync('dfa_prof_sales_split_pctmap_upld', req.user.id, log, elog),
-      // this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog),
+      this.openPeriodRepo.getMany()
     ])
-      .then(() => {
-        if (elog.length) {
-          next(new ApiError('MongoToPgSync Errors', {success: log, errors: elog}));
-        } else {
-          res.json({success: log});
+      .then(results => {
+        openPeriods = results[0];
+        profFiscalMonth = _.find(openPeriods, {moduleId: DfaModuleIds.prof}).fiscalMonth;
+        if (!profFiscalMonth) { // add them all here, just need to know if one is missing
+          throw new ApiError('fiscal month missing');
         }
       })
-      .catch(err => {
-        const data = {success: log, errors: elog};
-        next(Object.assign(err, data));
-        return;
-        // this is how we'd not stop for errors (below) along with try/catch in controllerBase.mongoToPgSync()
-        // but if we do this, we don't get stack trace from error. Need that stack trace to find the issue
-        // albeit the try/catch method will show us all the records having issues, not stopping on the first one
-        // so both are useful, the above for debugging code and below for debugging data. You'd need to log and ignore
-        // errors to debug the data, not just jump out on first failure.
-        // next(new ApiError('MongoToPgSync Errors', data));
+      .then(() => {
+        Promise.all([
+          // common
+          // this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', req.user.id, log, elog),
+          // this.measureCtrl.mongoToPgSync('dfa_measure', req.user.id, log, elog, {moduleId: -1}),
+          // this.moduleCtrl.mongoToPgSync('dfa_module', req.user.id, log, elog),
+          // this.openPeriodCtrl.mongoToPgSync('dfa_open_period', req.user.id, log, elog),
+          // this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog, {moduleId: -1}),
+          // // prof
+          // this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog), // deletes all on upload and pgsync
+          // this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', req.user.id, log, elog, {}, {fiscalMonth: profFiscalMonth}),
+          // this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', req.user.id, log, elog,
+          //   {fiscalMonth: profFiscalMonth}, {fiscalMonth: profFiscalMonth}),
+          // this.productClassUploadCtrl.mongoToPgSync('dfa_prof_swalloc_manualmix_upld', req.user.id, log, elog,
+          //   {fiscalMonth: profFiscalMonth}, {fiscalMonth: profFiscalMonth}),
+          this.salesSplitUploadCtrl.mongoToPgSync('dfa_prof_sales_split_pctmap_upld', req.user.id, log, elog,
+            {fiscalMonth: profFiscalMonth}, {fiscalMonth: profFiscalMonth}),
+
+        ])
+          .then(() => {
+            if (elog.length) {
+              next(new ApiError('MongoToPgSync Errors', {success: log, errors: elog}));
+            } else {
+              res.json({success: log});
+            }
+          })
+          .catch(err => {
+            const data = {success: log, errors: elog};
+            next(Object.assign(err, data));
+            return;
+            // this is how we'd not stop for errors (below) along with try/catch in controllerBase.mongoToPgSync()
+            // but if we do this, we don't get stack trace from error. Need that stack trace to find the issue
+            // albeit the try/catch method will show us all the records having issues, not stopping on the first one
+            // so both are useful, the above for debugging code and below for debugging data. You'd need to log and ignore
+            // errors to debug the data, not just jump out on first failure.
+            // next(new ApiError('MongoToPgSync Errors', data));
+          });
       });
   }
 

@@ -62,9 +62,10 @@ const schema = new Schema({
 export default class SubmeasureRepo extends RepoBase {
   autoIncrementField = 'submeasureKey';
   secondAutoIncrementField = 'submeasureId';
+  isModuleRepo = true;
 
   constructor() {
-    super(schema, 'Submeasure', true);
+    super(schema, 'Submeasure');
   }
 
   getGroupingSubmeasures(measureId): Promise<GroupingSubmeasure[]> {

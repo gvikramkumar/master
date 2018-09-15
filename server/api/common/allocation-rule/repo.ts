@@ -44,8 +44,10 @@ const schema = new Schema(
 
 @injectable()
 export default class AllocationRuleRepo extends RepoBase {
+  isModuleRepo = true;
+
   constructor() {
-    super(schema, 'Rule', true);
+    super(schema, 'Rule');
   }
 
 }

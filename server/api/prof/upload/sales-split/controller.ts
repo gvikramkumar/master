@@ -8,6 +8,7 @@ import SalesSplitUploadImport from './import';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
+import DollarUploadImport from '../dollar/import';
 
 @injectable()
 export default class SalesSplitUploadUploadController extends UploadController {
@@ -112,28 +113,8 @@ export default class SalesSplitUploadUploadController extends UploadController {
     });
   }
 
-  getSubaccountCodeDataFromUploadData(sales) {
-    return Promise.resolve([]);
-  }
-
   getImportArray() {
-    const imports = [];
-    const sales = this.rows1.map(row => new SalesSplitUploadTemplate(row))
-
-    // maybe this happens in getValidationAndImportData instead??
-    // have no idea what the query looks like and pg table doesn't exist yet
-    this.getSubaccountCodeDataFromUploadData(sales)
-      .then(subaccts => {
-        sales.forEach(sale => {
-          _.sortBy(_.filter(subaccts, {
-            accountId: sale.accountId,
-            salesTerritoryCode: sale.salesTerritoryCode
-          }), 'subaccountCode')
-            .forEach(sa => {
-              imports.push(new SalesSplitUploadImport(sale, this.fiscalMonth, sa.subaccountCode));
-            });
-        });
-      })
+    const imports = this.rows1.map(row => new SalesSplitUploadImport(row, this.fiscalMonth));
     return Promise.resolve(imports);
   }
 

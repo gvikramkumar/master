@@ -4,7 +4,6 @@ import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 
 const ormMap: OrmMap[] = [
   {prop: 'fiscalMonth', field: 'fiscal_month_id', type: OrmTypes.number},
-  {prop: 'submeasureKey', field: 'sub_measure_key', type: OrmTypes.number},
   {prop: 'accountId', field: 'account_code'},
   {prop: 'companyCode', field: 'company_code'},
   {prop: 'subaccountCode', field: 'sub_account_code'},
@@ -17,7 +16,7 @@ const ormMap: OrmMap[] = [
 ] ;
 
 @injectable()
-export class SalesSplitPgRepo extends PgRepoBase {
+export class SalesSplitUploadPgRepo extends PgRepoBase {
   table = 'fpadfa.dfa_prof_sales_split_pctmap_upld';
 
   constructor() {
