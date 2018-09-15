@@ -199,15 +199,12 @@ export default class ControllerBase {
   }
 
   mongoToPgSync(tableName: string, userId: string, log: string[], elog: string[],
-                mgFilter: AnyObj = {}, pgFilter: AnyObj = {}) {
+                mgGetFilter: AnyObj = {}, pgRemoveFilter: AnyObj = {}) {
     // try {
-      if (this.repo.isModuleRepo) {
-        if (mgFilter.moduleId && mgFilter.moduleId !== -1) {
-          elog.push(`${this.repo.modelName} isModuleRepo, but has mgFilter.moduleId defined: ${mgFilter.moduleId}`);
-        }
-        mgFilter.moduleId = -1; // get all modules for repo.isModuleRepo (get past the moduleId enforcement)
+      if (this.repo.isModuleRepo && mgGetFilter.moduleId !== -1) {
+          elog.push(`mongoToPgSync: ${this.repo.modelName} isModuleRepo but doesn't have mgGetFilter.moduleId set to -1.`);
       }
-      return this.repo.getMany(mgFilter)
+      return this.repo.getMany(mgGetFilter)
         .then(docs => docs.map(doc => doc.toObject()))
         .then(objs => {
           if (tableName === 'dfa_sub_measure' && objs.length < 100) {
@@ -219,7 +216,7 @@ export default class ControllerBase {
         })
         .then(objs => this.mongoToPgSyncTransform(objs, userId, log, elog)) // override this to transform
         .then(objs => {
-          return this.pgRepo.syncRecordsReplaceAll(pgFilter, objs, userId, true)
+          return this.pgRepo.syncRecordsReplaceAll(pgRemoveFilter, objs, userId, true)
             .then(results => log.push(`${tableName}: ${results.recordCount} records transferred`));
         });
 /*

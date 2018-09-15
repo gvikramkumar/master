@@ -3,10 +3,12 @@ import {PgRepoBase} from '../../../lib/base-classes/pg-repo-base';
 import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 
 const ormMap: OrmMap[] = [
-  {prop: 'submeasureName', field: ''},
-  {prop: 'submeasureKey', field: 'sub_measure_key', type: OrmTypes.number},
-  {prop: 'nodeValue', field: 'node_value'},
-  {prop: 'glAccount', field: 'gl_account', type: OrmTypes.number},
+  {prop: 'fiscalMonth', field: 'fiscal_month_id', type: OrmTypes.number},
+  {prop: 'accountId', field: 'account_code'},
+  {prop: 'companyCode', field: 'company_code'},
+  {prop: 'subaccountCode', field: 'sub_account_code'},
+  {prop: 'salesTerritoryCode', field: 'sales_territory_code'},
+  {prop: 'splitPercentage', field: 'split_percentage', type: OrmTypes.number},
   {prop: 'createdBy', field: 'create_owner'},
   {prop: 'createdDate', field: 'create_datetimestamp', type: OrmTypes.date},
   {prop: 'updatedBy', field: 'update_owner'},
@@ -14,8 +16,8 @@ const ormMap: OrmMap[] = [
 ] ;
 
 @injectable()
-export class DeptUploadPgRepo extends PgRepoBase {
-  table = 'fpadfa.dfa_prof_dept_acct_map_upld';
+export class SalesSplitUploadPgRepo extends PgRepoBase {
+  table = 'fpadfa.dfa_prof_sales_split_pctmap_upld';
 
   constructor() {
     super(new Orm(ormMap));

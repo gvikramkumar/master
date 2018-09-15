@@ -33,9 +33,10 @@ const schema = new Schema(
 @injectable()
 export default class MeasureRepo extends RepoBase {
   autoIncrementField = 'measureId';
+  isModuleRepo = true;
 
   constructor() {
-    super(schema, 'Measure', true);
+    super(schema, 'Measure');
   }
 
 }

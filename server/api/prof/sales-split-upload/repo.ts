@@ -7,7 +7,7 @@ const schema = new Schema(
     transactionId: {type: SchemaTypes.ObjectId, required: true},
     fiscalMonth: {type: Number, required: true},
     accountId: {type: String, required: true},
-    companyCode: String,
+    companyCode: {type: String, required: true},
     subaccountCode: {type: String, required: true},
     salesTerritoryCode: {type: String, required: true},
     splitPercentage: {type: String, required: true},

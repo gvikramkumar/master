@@ -7,6 +7,8 @@ delete from fpadfa.dfa_open_period;
 delete from fpadfa.dfa_prof_dept_acct_map_upld;
 delete from fpadfa.dfa_prof_input_amnt_upld;
 delete from fpadfa.dfa_prof_manual_map_upld;
+delete from fpadfa.fpadfa.dfa_prof_sales_split_pctmap_upld;
+delete from fpadfa.dfa_prof_swalloc_manualmix_upld;
 delete from fpadfa.dfa_sub_measure;
 delete from fpadfa.dfa_submeasure_input_lvl;
 */
@@ -18,6 +20,8 @@ select * from fpadfa.dfa_open_period;
 select * from fpadfa.dfa_prof_dept_acct_map_upld;
 select * from fpadfa.dfa_prof_input_amnt_upld;
 select * from fpadfa.dfa_prof_manual_map_upld;
+select * from fpadfa.dfa_prof_sales_split_pctmap_upld;
+select * from fpadfa.dfa_prof_swalloc_manualmix_upld;
 select * from fpadfa.dfa_sub_measure;
 select * from fpadfa.dfa_submeasure_input_lvl;
 
