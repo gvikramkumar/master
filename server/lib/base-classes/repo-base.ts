@@ -134,7 +134,6 @@ export default class RepoBase {
     return promise.then(() => this.Model.insertMany(docs));
   }
 
-  // delete all records except the current fiscalMonth, then addMany
   importUploadRecords(imports, userId, fiscalMonth) {
     if (!fiscalMonth) {
       throw new ApiError(`importUploadRecords: no fiscalMonth`);
