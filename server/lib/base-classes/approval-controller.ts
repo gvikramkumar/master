@@ -2,6 +2,7 @@ import RepoBase from './repo-base';
 import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
 import DfaUser from '../../../shared/models/dfa-user';
+import mail from '../common/mail';
 
 enum Mode {
   submit = 1,
@@ -34,7 +35,7 @@ export default class ApprovalController extends ControllerBase {
   reject(req, res, next) {
     req.body.status = 'D';
     this.addOneNoValidate(req, res, next);
-    this.sendApprovalEmail(req.user, Mode.reject);
+    this.sendApprovalEmail(req.user, Mode.reject, req.body.id);
   }
 
   activate(req, res, next) {
@@ -55,14 +56,30 @@ export default class ApprovalController extends ControllerBase {
     }
     this.repo.addOne(data, req.user.id)
       .then(item => {
-        this.sendApprovalEmail(req.user, mode);
+        this.sendApprovalEmail(req.user, mode, data.id);
         res.json(item);
       })
       .catch(next);
   }
 
-  sendApprovalEmail(user: DfaUser, mode: Mode) {
-
+  sendApprovalEmail(user: DfaUser, mode: Mode, id: string) {
+    switch (mode) {
+      case 1: // submit
+        break;
+      case 2: // approve
+        return mail.send(
+          user.email,
+          user.email,
+          'Your ___ has been approved',
+          null,
+          null
+        );
+        break;
+      case 3: // reject
+        break;
+      case 4: // activate
+        break;
+    }
   }
 
 }

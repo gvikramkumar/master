@@ -568,10 +568,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       });
   }
 
-  saveDraft() {
-
-  }
-
   save() {
     UiUtil.triggerBlur('.fin-edit-container form');
     if (this.form.valid) {
@@ -583,7 +579,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               const errs = this.validate();
               if (!errs) {
                 let obs: Observable<Submeasure>;
+
+
                 obs = this.submeasureService.add(this.sm);
+
+
                 obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
               } else {
                 this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));

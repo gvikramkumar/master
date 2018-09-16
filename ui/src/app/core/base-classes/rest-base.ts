@@ -104,6 +104,13 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.post<T>(`${this.endpointUrl}/query-post`, params);
   }
 
+  submitForApproval(data) {
+    // todo: change status to pending, send email to admin
+    data.status = 'P';
+    this.addModuleId(data);
+    return this.httpClient.post<T>(this.endpointUrl, data);
+  }
+
   add(data) {
     this.addModuleId(data);
     return this.httpClient.post<T>(this.endpointUrl, data);
