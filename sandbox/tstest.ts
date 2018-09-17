@@ -3,6 +3,13 @@ import AnyObj from '../shared/models/any-obj';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+console.log(Number(undefined));
+
+
+
+
+
+/*
 const nodeValue = 'lala';
 const sqlPlHierarchy = `
       SELECT DISTINCT column_name
@@ -62,17 +69,7 @@ const sqlPlHierarchy = `
 
 console.log(sqlPlHierarchy);
 
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 /*
 const sub: AnyObj = {};

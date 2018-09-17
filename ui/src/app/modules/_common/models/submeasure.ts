@@ -18,7 +18,7 @@ export class Submeasure {
   rules: string[] = [];
   groupingSubmeasureId: number;
   status = 'I';
-  newStatus = 'I';
+  approvedOnce = 'N';
   createdBy?: string;
   createdDate?: string;
   updatedBy?: string;
@@ -35,7 +35,6 @@ class InputFilterLevel {
 
 class Indicators {
   dollarUploadFlag = 'N';
-  approveFlag = 'N';
   manualMapping = 'N';
   expenseSSOT = 'N';
   manualMix = 'N';
@@ -46,4 +45,5 @@ class Indicators {
   dualGaap = 'N';
   twoTier = 'N';
   service = 'N';
+  deptAcct = 'N';
 }

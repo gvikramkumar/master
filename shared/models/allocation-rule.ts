@@ -29,5 +29,5 @@ export class AllocationRule {
   beCritCond?: string;
   beCritChoices: string[] = [];
   status = 'I';
-  newStatus = 'I';
+  approvedOnce = 'N';
 }

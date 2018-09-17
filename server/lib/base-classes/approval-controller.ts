@@ -2,13 +2,11 @@ import RepoBase from './repo-base';
 import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
 import DfaUser from '../../../shared/models/dfa-user';
-import mail from '../common/mail';
 
-enum Mode {
+export enum ApprovalMode {
   submit = 1,
   approve,
-  reject,
-  activate
+  reject
 }
 
 export default class ApprovalController extends ControllerBase {
@@ -25,21 +23,22 @@ export default class ApprovalController extends ControllerBase {
   }
 
   submitForApproval(req, res, next) {
-    this.handleApprovals(req, res, next, 'P', Mode.submit);
+    this.handleApprovals(req, res, next, 'P', ApprovalMode.submit);
   }
 
   approve(req, res, next) {
-    this.handleApprovals(req, res, next, 'A', Mode.approve);
+    this.handleApprovals(req, res, next, 'A', ApprovalMode.approve);
   }
 
   reject(req, res, next) {
     req.body.status = 'D';
     this.addOneNoValidate(req, res, next);
-    this.sendApprovalEmail(req.user, Mode.reject, req.body.id);
+    this.sendApprovalEmail(req.user, ApprovalMode.reject);
   }
 
   activate(req, res, next) {
-    this.handleApprovals(req, res, next, 'A', Mode.activate);
+    req.body.status = 'A';
+    this.addOne(req, res, next);
   }
 
   inactivate(req, res, next) {
@@ -51,35 +50,19 @@ export default class ApprovalController extends ControllerBase {
     const data = req.body;
     this.repo.validate(data);
     data.status = newStatus;
-    if (mode === Mode.submit) {
-      data.approvedOnce = true;
+    if (mode === ApprovalMode.submit) {
+      data.approvedOnce = 'Y';
     }
     this.repo.addOne(data, req.user.id)
       .then(item => {
-        this.sendApprovalEmail(req.user, mode, data.id);
+        this.sendApprovalEmail(req.user, mode);
         res.json(item);
       })
       .catch(next);
   }
 
-  sendApprovalEmail(user: DfaUser, mode: Mode, id: string) {
-    switch (mode) {
-      case 1: // submit
-        break;
-      case 2: // approve
-        return mail.send(
-          user.email,
-          user.email,
-          'Your ___ has been approved',
-          null,
-          null
-        );
-        break;
-      case 3: // reject
-        break;
-      case 4: // activate
-        break;
-    }
+  sendApprovalEmail(user: DfaUser, mode: ApprovalMode) {
+    throw new ApiError('sendApprovalEmail not defined for approval controller');
   }
 
 }

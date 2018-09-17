@@ -33,7 +33,7 @@ const schema = new Schema(
     beCritCond: String,
     beCritChoices: [String],
     status: {type: String, enum: ['D', 'P', 'A', 'I'], required: true},
-    approvedOnce: Boolean,
+    approvedOnce: {type: String, enum: ['Y', 'N'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},
@@ -44,8 +44,10 @@ const schema = new Schema(
 
 @injectable()
 export default class AllocationRuleRepo extends RepoBase {
+  isModuleRepo = true;
+
   constructor() {
-    super(schema, 'Rule', true);
+    super(schema, 'Rule');
   }
 
 }

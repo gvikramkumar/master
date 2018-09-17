@@ -5,7 +5,8 @@ import {AllocationRule} from '../../../../shared/models/allocation-rule';
 import PgLookupRepo from '../pg-lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
 import {ApiError} from '../../../lib/common/api-error';
-import ApprovalController from '../../../lib/base-classes/approval-controller';
+import ApprovalController, {ApprovalMode} from '../../../lib/base-classes/approval-controller';
+import DfaUser from '../../../../shared/models/dfa-user';
 
 @injectable()
 export default class AllocationRuleController extends ApprovalController {
@@ -118,6 +119,9 @@ export default class AllocationRuleController extends ApprovalController {
       .catch(next);
   }
 
+  sendApprovalEmail(user: DfaUser, mode: ApprovalMode) {
+    throw new ApiError('sendApprovalEmail not defined for approval controller');
+  }
 
 }
 

@@ -8,6 +8,7 @@ import SalesSplitUploadImport from './import';
 import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
+import DollarUploadImport from '../dollar/import';
 
 @injectable()
 export default class SalesSplitUploadUploadController extends UploadController {
@@ -30,6 +31,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
     this.PropNames = {
       accountId: 'Account ID',
       companyCode: 'Company Code',
+      subaccountCode: 'Sub Account Code',
       salesTerritoryCode: 'Sales Territory Code',
       splitPercentage: 'Percentage Value'
     };
@@ -38,14 +40,16 @@ export default class SalesSplitUploadUploadController extends UploadController {
   getValidationAndImportData() {
     return Promise.all([
       super.getValidationAndImportData(),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_account', 'financial_account_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_account_sub_account', 'bk_financial_account_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_department', 'company_code'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name_code')
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_account_sub_account', 'bk_subaccount_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name')
     ])
       .then(results => {
         this.data.accountIds = results[1];
         this.data.companyCodes = results[2];
-        this.data.salesTerritoryCodes = results[3];
+        this.data.subaccountCodes = results[3];
+        this.data.salesTerritoryCodes = results[4];
       });
   }
 
@@ -54,6 +58,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
     return Promise.all([
       this.validateAccountId(),
       this.validateCompanyCode(),
+      this.validateSubaccountCode(),
       this.validateSalesTerritoryCode(),
       this.validateSplitPercentage(),
     ])
@@ -61,31 +66,55 @@ export default class SalesSplitUploadUploadController extends UploadController {
   }
 
   validate() {
+    return this.verifyUniqueCombination()
+      .then(() => this.lookForErrors())
+      .then(() => this.accountId_companyCode_subaccountCode_addUpTo1())
+      .then(() => this.lookForErrors());
+  }
+
+  verifyUniqueCombination() {
+    const temps = this.rows1.map(row => new SalesSplitUploadTemplate(row));
+    const results = {};
+    temps.forEach(temp => {
+      const val = _.get(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.${temp.salesTerritoryCode}.count`) || 0;
+      _.set(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.${temp.salesTerritoryCode}.count`, val + 1);
+    })
+
+    Object.keys(results).forEach(accountId => {
+      Object.keys(results[accountId]).forEach(companyCode => {
+        Object.keys(results[accountId][companyCode]).forEach(subaccountCode => {
+          Object.keys(results[accountId][companyCode][subaccountCode]).forEach(salesTerritoryCode => {
+          if (results[accountId][companyCode][subaccountCode][salesTerritoryCode].count > 1) {
+            this.addErrorMessageOnly(`${this.PropNames.accountId}/${this.PropNames.companyCode}/${this.PropNames.subaccountCode}/${this.PropNames.salesTerritoryCode}, ${accountId}/${companyCode}/${subaccountCode}/${salesTerritoryCode} has duplicate entries.`);
+          }
+          });
+        });
+      });
+    });
     return Promise.resolve();
   }
 
-  getSubaccountCodeDataFromUploadData(sales) {
-    return Promise.resolve([]);
+  accountId_companyCode_subaccountCode_addUpTo1() {
+    const temps = this.rows1.map(row => new SalesSplitUploadTemplate(row));
+    const results = {};
+    temps.forEach(temp => {
+      const val = _.get(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.total`) || 0.0;
+      _.set(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.total`, val + temp.splitPercentage);
+    })
+
+    Object.keys(results).forEach(accountId => {
+      Object.keys(results[accountId]).forEach(companyCode => {
+        Object.keys(results[accountId][companyCode]).forEach(subaccountCode => {
+          if (parseFloat(results[accountId][companyCode][subaccountCode].total.toFixed(4)) !== 1.00) {
+            this.addErrorMessageOnly(`${this.PropNames.accountId}/${this.PropNames.companyCode}/${this.PropNames.subaccountCode}, ${accountId}/${companyCode}/${subaccountCode} total does not add up to 1.`);
+          }
+        });
+      });
+    });
   }
 
   getImportArray() {
-    const imports = [];
-    const sales = this.rows1.map(row => new SalesSplitUploadTemplate(row))
-
-    // maybe this happens in getValidationAndImportData instead??
-    // have no idea what the query looks like and pg table doesn't exist yet
-    this.getSubaccountCodeDataFromUploadData(sales)
-      .then(subaccts => {
-        sales.forEach(sale => {
-          _.sortBy(_.filter(subaccts, {
-            accountId: sale.accountId,
-            salesTerritoryCode: sale.salesTerritoryCode
-          }), 'subaccountCode')
-            .forEach(sa => {
-              imports.push(new SalesSplitUploadImport(sale, this.fiscalMonth, sa.subaccountCode));
-            });
-        });
-      })
+    const imports = this.rows1.map(row => new SalesSplitUploadImport(row, this.fiscalMonth));
     return Promise.resolve(imports);
   }
 
@@ -99,8 +128,19 @@ export default class SalesSplitUploadUploadController extends UploadController {
   }
 
   validateCompanyCode() {
-    if (this.temp.companyCode && this.notExists(this.data.companyCodes, this.temp.companyCode)) {
+    if (!this.temp.companyCode) {
+      this.addErrorRequired(this.PropNames.companyCode);
+    } else if (this.notExists(this.data.companyCodes, this.temp.companyCode)) {
       this.addErrorInvalid(this.PropNames.companyCode, this.temp.companyCode);
+    }
+    return Promise.resolve();
+  }
+
+  validateSubaccountCode() {
+    if (!this.temp.subaccountCode) {
+      this.addErrorRequired(this.PropNames.subaccountCode);
+    } else if (this.notExists(this.data.subaccountCodes, this.temp.subaccountCode)) {
+      this.addErrorInvalid(this.PropNames.subaccountCode, this.temp.subaccountCode);
     }
     return Promise.resolve();
   }
