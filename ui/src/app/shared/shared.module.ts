@@ -18,7 +18,8 @@ import {AuthDirective} from './directives/auth.directive';
 import { LeftnavComponent } from './components/leftnav/leftnav.component';
 import {CuiIndexModule} from './indexes/cui-index.module';
 import { TestComponent } from './components/test/test.component';
-import { GenericDialogComponent } from './components/generic-dialog/generic-dialog.component';
+import { GenericDialogComponent } from './dialogs/generic-dialog/generic-dialog.component';
+import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import {SwitchComponent} from './components/switch/switch.component';
 import { TestValidationComponent } from './components/test-validation/test-validation.component';
@@ -83,6 +84,7 @@ import {NumberValidator} from './validators/number.validator';
     LeftnavComponent,
     TestComponent,
     GenericDialogComponent,
+    PromptDialogComponent,
     CheckboxComponent,
     SwitchComponent,
     TestValidationComponent,
@@ -97,6 +99,7 @@ import {NumberValidator} from './validators/number.validator';
     ErrorModalComponent,
     NotImplementedComponent,
     GenericDialogComponent,
+    PromptDialogComponent
   ]
 })
 export class SharedModule {

@@ -1,0 +1,13 @@
+<div class="modal__content">
+  <div *ngIf="data.title" class="modal__header">
+    <h1>{{data.title}}</h1>
+  </div>
+  <div class="modal__body">
+    <h5 class="message">{{data.message}}</h5>
+    <pre class="data" *ngIf="data.data">{{data.data}}</pre>
+  </div>
+  <div class="modal__footer">
+    <button *ngIf="cancelText" cuiButton color="primary" type="button" (click)="dialogRef.close()">{{cancelText}}</button>
+    <button autofocus cuiButton color="primary" (click)="dialogRef.close(true)">{{submitText}}</button>
+  </div>
+</div>

@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import {DialogSize, DialogType} from '../models/ui-enums';
 import {AppStore} from '../../app/app-store';
 import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-components';
-import {GenericDialogComponent} from '../../shared/components/generic-dialog/generic-dialog.component';
+import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
 import {Observable} from 'rxjs/Observable';
 import {CuiDialogRole} from '@cisco-ngx/cui-components/dist/cui-dialog/cui-dialog-config';
 

@@ -52,7 +52,6 @@ db.dfa_data_source.createIndex({sourceId: -1}, {unique: true});
 
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 db.dfa_allocation_rule.createIndex({name: 1, updatedDate: -1});
-db.dfa_submeasure.createIndex({name: 1}, {unique: true});
 db.dfa_measure.createIndex({name: 1}, {unique: true});
 
 db.dfa_prof_input_amnt_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
