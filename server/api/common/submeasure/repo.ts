@@ -47,7 +47,7 @@ const schema = new Schema({
     groupingSubmeasureId: Number,
     sourceSystemAdjTypeId: Number,
     glAcctNumber: Number,
-    status: {type: String, enum: ['A', 'I', 'P'], required: true},
+    status: {type: String, enum: ['A', 'I', 'P', 'D'], required: true},
     approvedOnce: {type: String, enum: ['Y', 'N'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},

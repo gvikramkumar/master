@@ -568,6 +568,28 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       });
   }
 
+  saveToDraft() {
+    this.uiUtil.confirmSave()
+      .subscribe(result => {
+        if (result) {
+          // this.cleanUp();
+          this.submeasureService.saveToDraft(this.sm)
+            .subscribe(rule => this.router.navigateByUrl('/prof/submeasure'));
+        }
+      });
+  }
+
+  reject() {
+    this.uiUtil.confirmSave()
+      .subscribe(result => {
+        if (result) {
+          // this.cleanUp();
+          this.submeasureService.reject(this.sm)
+            .subscribe(rule => this.router.navigateByUrl('/prof/submeasure'));
+        }
+      });
+  }
+
   save(mode: string) {
     UiUtil.triggerBlur('.fin-edit-container form');
     if (this.form.valid) {
@@ -581,21 +603,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                 let obs: Observable<Submeasure>;
 
                 switch (mode) {
-                  case 'draft':
-                    obs = this.submeasureService.saveToDraft(this.sm);
-                    break;
                   case 'submit':
                     obs = this.submeasureService.submitForApproval(this.sm);
                     break;
                   case 'approve':
                     obs = this.submeasureService.approve(this.sm);
                     break;
-                  case 'reject':
-                    obs = this.submeasureService.reject(this.sm);
-                    break;
                 }
-                // obs = this.submeasureService.add(this.sm);
-
 
                 obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
               } else {
@@ -605,14 +619,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           }
         });
     }
-  }
-
-  approve() {
-
-  }
-
-  reject() {
-
   }
 
   validate() {
