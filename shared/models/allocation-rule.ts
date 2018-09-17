@@ -28,6 +28,6 @@ export class AllocationRule {
   beSelect?: string;
   beCritCond?: string;
   beCritChoices: string[] = [];
-  status = 'I';
+  status = 'D';
   approvedOnce = 'N';
 }

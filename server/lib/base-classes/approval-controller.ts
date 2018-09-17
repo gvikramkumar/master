@@ -25,7 +25,6 @@ export default class ApprovalController extends ControllerBase {
 
   submitForApproval(req, res, next) {
     this.handleApprovals(req, res, next, 'P', ApprovalMode.submit);
-    console.log('submitforapproval called from approval-controller');
   }
 
   approve(req, res, next) {
@@ -35,7 +34,7 @@ export default class ApprovalController extends ControllerBase {
   reject(req, res, next) {
     req.body.status = 'D';
     this.addOneNoValidate(req, res, next);
-    this.sendApprovalEmail(req.user, ApprovalMode.reject, req.id);
+    this.sendApprovalEmail(req, ApprovalMode.reject, req.body.id);
   }
 
   activate(req, res, next) {
@@ -50,14 +49,15 @@ export default class ApprovalController extends ControllerBase {
 
   handleApprovals(req, res, next, newStatus, mode) {
     const data = req.body;
+    this.repo.addCreatedByAndUpdatedBy(data, req.user.id);
     this.repo.validate(data);
     data.status = newStatus;
-    if (mode === ApprovalMode.submit) {
+    if (mode === ApprovalMode.approve) {
       data.approvedOnce = 'Y';
     }
     this.repo.addOne(data, req.user.id)
       .then(item => {
-        this.sendApprovalEmail(req.user, mode, req.id);
+        this.sendApprovalEmail(req, mode, item.id);
         res.json(item);
       })
       .catch(next);

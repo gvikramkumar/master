@@ -185,6 +185,28 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     }
   }
 
+  saveToDraft() {
+    this.uiUtil.confirmSave()
+      .subscribe(result => {
+        if (result) {
+          this.cleanUp();
+          this.ruleService.saveToDraft(this.rule)
+            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+        }
+      });
+  }
+
+  reject() {
+    this.uiUtil.confirmSave()
+      .subscribe(result => {
+        if (result) {
+          this.cleanUp();
+          this.ruleService.reject(this.rule)
+            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+        }
+      });
+  }
+
   save(mode: string) {
     UiUtil.triggerBlur('.fin-edit-container form');
     UiUtil.waitForAsyncValidations(this.form)
@@ -194,27 +216,16 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
             .subscribe(result => {
               if (result) {
                 this.cleanUp();
-
+                let promise;
                 switch (mode) {
-                  case 'draft':
-                    this.ruleService.saveToDraft(this.rule)
-                      .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
-                    break;
                   case 'submit':
-                    this.ruleService.submitForApproval(this.rule)
-                      .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+                    promise = this.ruleService.submitForApproval(this.rule).toPromise();
                     break;
                   case 'approve':
-                    this.ruleService.approve(this.rule)
-                      .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
-                    break;
-                  case 'reject':
-                    this.ruleService.reject(this.rule)
-                      .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+                    promise = this.ruleService.approve(this.rule).toPromise();
                     break;
                 }
-
-                this.router.navigateByUrl('/prof/rule-management');
+                promise.then(() => this.router.navigateByUrl('/prof/rule-management'));
               }
             });
         }

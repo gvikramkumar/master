@@ -131,28 +131,26 @@ export default class SubmeasureController extends ApprovalController {
       .then(docs => res.json(docs));
   }
 
-  sendApprovalEmail(user: DfaUser, mode: ApprovalMode, id) {
+  sendApprovalEmail(req, mode: ApprovalMode, submeasureId) {
+    const url = `<a href="${req.headers.origin}/prof/submeasure/edit/${submeasureId}">
+      ${req.headers.origin}/prof/submeasure/edit/${submeasureId}</a>`;
     switch (mode) {
       case 1: // submit
-              // this.sendEmail(user.email,
-        this.sendEmail('moltman@cisco.com',
+        this.sendEmail(req.user.email,
           'DFA: Submeasure Submitted for Approval',
-          'A DFA submeasure has been submitted by ' + user.id + 'for approval: '
-          + 'http://findp-dev-01.cisco.com:8080/prof/submeasure/edit/' + id);
+          'A DFA submeasure has been submitted by ' + req.user.id + ' for approval: ' + url);
         break;
       case 2: // approve
-        // this.sendEmail(user.email,
-        this.sendEmail('moltman@cisco.com',
-          'DFA: Submeasure Not Approved',
-          'The DFA submeasure submitted by ' + user.id + 'for approval has been approved.');
+          this.sendEmail(req.user.email,
+          'DFA: Submeasure Approved',
+          'The DFA submeasure submitted by ${req.user.id} for approval has been approved: ' + url);
         break;
       case 3: // reject
-        // this.sendEmail(user.email,
-        this.sendEmail('moltman@cisco.com',
-          'DFA: Rule Not Approved',
-          'The DFA submeasure submitted by ' + user.id + 'for approval has been rejected.');
+          this.sendEmail(req.user.email,
+          'DFA: Submeasure Not Approved',
+          'The DFA submeasure submitted by ' + req.user.id + ' for approval has been rejected: ' + url);
         break;
-    }
+      }
   }
 
 }

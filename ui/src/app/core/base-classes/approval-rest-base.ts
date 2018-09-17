@@ -17,15 +17,13 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
       super(endpointName, httpClient, store, isModuleRepo);
   }
 
-  /*callMethod(method, data = null) {
-    return this.httpClient.post<any>(`${this.endpointUrl}/call-method/${method}`, data);
-  }*/
-
   saveToDraft(data) {
+    this.addModuleId(data);
     return this.callMethod('saveToDraft', data);
   }
 
   submitForApproval(data) {
+    this.addModuleId(data);
     return this.callMethod('submitForApproval', data);
   }
 
