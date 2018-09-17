@@ -78,8 +78,6 @@ export default function () {
     }
   })
 
-  app.use(authorize('api:access')); // authorize api access
-
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/database', databaseRouter);
   app.use('/api/file', fileRouter);

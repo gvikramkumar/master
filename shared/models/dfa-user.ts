@@ -16,6 +16,7 @@ export default class DfaUser {
 
   isAuthorized(_allowedRoles) {
     const allowedRoles = _allowedRoles.split(',').map(s => s.toLowerCase().trim());
+    allowedRoles.push('itadmin'); // has access to everything
     return _.intersection(allowedRoles, this.roles).length > 0;
   }
 

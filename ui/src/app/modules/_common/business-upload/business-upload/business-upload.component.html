@@ -23,7 +23,7 @@
 
           <br>
 
-          <div finAuth="prof-bu:upload" *ngIf="store.user.isAuthorized('prof-bu:upload')">
+          <div finAuth="prof:user" *ngIf="store.user.isAuthorized('prof:admin,prof:user')">
             <div>
               <button id="choose-file" cuiButton color="primary">
                 <label for="file-input">Choose a File</label>

@@ -2,12 +2,13 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {AppStore} from '../../app/app-store';
+import {UiUtil} from '../services/ui-util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthorizationGuard implements CanActivate {
-  constructor(private store: AppStore, private router: Router) {
+  constructor(private store: AppStore, private router: Router, private uiUtil: UiUtil) {
 
   }
 
@@ -30,6 +31,7 @@ export class AuthorizationGuard implements CanActivate {
       .then(() => {
         const authorized = this.store.user.isAuthorized(roles);
         if (!authorized) {
+          this.uiUtil.genericDialog(`Not authorized.`);
           console.log('User not authorized for path:', path);
           this.store.pubAuthorized(false);
           return false;
