@@ -2,6 +2,7 @@ import RepoBase from './repo-base';
 import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
 import DfaUser from '../../../shared/models/dfa-user';
+import mail from '../common/mail';
 
 export enum ApprovalMode {
   submit = 1,
@@ -24,6 +25,7 @@ export default class ApprovalController extends ControllerBase {
 
   submitForApproval(req, res, next) {
     this.handleApprovals(req, res, next, 'P', ApprovalMode.submit);
+    console.log('submitforapproval called from approval-controller');
   }
 
   approve(req, res, next) {
@@ -33,7 +35,7 @@ export default class ApprovalController extends ControllerBase {
   reject(req, res, next) {
     req.body.status = 'D';
     this.addOneNoValidate(req, res, next);
-    this.sendApprovalEmail(req.user, ApprovalMode.reject);
+    this.sendApprovalEmail(req.user, ApprovalMode.reject, req.id);
   }
 
   activate(req, res, next) {
@@ -55,13 +57,23 @@ export default class ApprovalController extends ControllerBase {
     }
     this.repo.addOne(data, req.user.id)
       .then(item => {
-        this.sendApprovalEmail(req.user, mode);
+        this.sendApprovalEmail(req.user, mode, req.id);
         res.json(item);
       })
       .catch(next);
   }
 
-  sendApprovalEmail(user: DfaUser, mode: ApprovalMode) {
+  sendEmail(address, title, body) {
+    return mail.send(
+      address,
+      address,
+      title,
+      null,
+      body
+    );
+  }
+
+  sendApprovalEmail(user: DfaUser, mode: ApprovalMode, id) {
     throw new ApiError('sendApprovalEmail not defined for approval controller');
   }
 

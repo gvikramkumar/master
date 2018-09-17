@@ -119,8 +119,28 @@ export default class AllocationRuleController extends ApprovalController {
       .catch(next);
   }
 
-  sendApprovalEmail(user: DfaUser, mode: ApprovalMode) {
-    throw new ApiError('sendApprovalEmail not defined for approval controller');
+  sendApprovalEmail(user: DfaUser, mode: ApprovalMode, id) {
+    switch (mode) {
+      case 1: // submit
+        // this.sendEmail(user.email,
+        this.sendEmail('moltman@cisco.com',
+          'DFA: Rule Submitted for Approval',
+          'A DFA rule has been submitted by ' + user.id + 'for approval: '
+        + 'http://findp-dev-01.cisco.com:8080/prof/rule-management/edit/' + id);
+        break;
+      case 2: // approve
+              // this.sendEmail(user.email,
+        this.sendEmail('moltman@cisco.com',
+          'DFA: Rule Not Approved',
+          'The DFA rule submitted by ' + user.id + 'for approval has been approved.');
+        break;
+      case 3: // reject
+              // this.sendEmail(user.email,
+        this.sendEmail('moltman@cisco.com',
+          'DFA: Rule Not Approved',
+          'The DFA rule submitted by ' + user.id + 'for approval has been rejected.');
+        break;
+    }
   }
 
 }
