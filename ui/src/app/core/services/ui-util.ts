@@ -46,6 +46,8 @@ export class UiUtil {
         return 'Inactive';
       case 'P':
         return 'Pending';
+      case 'D':
+        return 'Draft';
     }
     if (!status) {
       return '';

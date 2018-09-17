@@ -185,7 +185,29 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     }
   }
 
-  save() {
+  saveToDraft() {
+    this.uiUtil.confirmSave()
+      .subscribe(result => {
+        if (result) {
+          this.cleanUp();
+          this.ruleService.saveToDraft(this.rule)
+            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+        }
+      });
+  }
+
+  reject() {
+    this.uiUtil.confirmSave()
+      .subscribe(result => {
+        if (result) {
+          this.cleanUp();
+          this.ruleService.reject(this.rule)
+            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+        }
+      });
+  }
+
+  save(mode: string) {
     UiUtil.triggerBlur('.fin-edit-container form');
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
@@ -194,8 +216,16 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
             .subscribe(result => {
               if (result) {
                 this.cleanUp();
-                this.ruleService.add(this.rule)
-                  .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+                let promise;
+                switch (mode) {
+                  case 'submit':
+                    promise = this.ruleService.submitForApproval(this.rule).toPromise();
+                    break;
+                  case 'approve':
+                    promise = this.ruleService.approve(this.rule).toPromise();
+                    break;
+                }
+                promise.then(() => this.router.navigateByUrl('/prof/rule-management'));
               }
             });
         }

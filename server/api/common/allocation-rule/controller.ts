@@ -7,6 +7,7 @@ import {svrUtil} from '../../../lib/common/svr-util';
 import {ApiError} from '../../../lib/common/api-error';
 import ApprovalController, {ApprovalMode} from '../../../lib/base-classes/approval-controller';
 import DfaUser from '../../../../shared/models/dfa-user';
+import {join} from 'path';
 
 @injectable()
 export default class AllocationRuleController extends ApprovalController {
@@ -119,8 +120,26 @@ export default class AllocationRuleController extends ApprovalController {
       .catch(next);
   }
 
-  sendApprovalEmail(user: DfaUser, mode: ApprovalMode) {
-    throw new ApiError('sendApprovalEmail not defined for approval controller');
+  sendApprovalEmail(req, mode: ApprovalMode, ruleId) {
+    const url = `<a href="${req.headers.origin}/prof/rule-management/edit/${ruleId}">
+      ${req.headers.origin}/prof/rule-management/edit/${ruleId}</a>`;
+    switch (mode) {
+      case 1: // submit
+        this.sendEmail(req.user.email,
+          'DFA: Rule Submitted for Approval',
+          'A DFA rule has been submitted by ' + req.user.id + ' for approval: ' + url);
+        break;
+      case 2: // approve
+          this.sendEmail(req.user.email,
+          'DFA: Rule Approved',
+          'The DFA rule submitted by ' + req.user.id + ' for approval has been approved: ' + url);
+        break;
+      case 3: // reject
+          this.sendEmail(req.user.email,
+          'DFA: Rule Not Approved',
+          'The DFA rule submitted by ' + req.user.id + ' for approval has been rejected: ' + url);
+        break;
+    }
   }
 
 }

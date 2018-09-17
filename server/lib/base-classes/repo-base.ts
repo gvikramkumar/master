@@ -159,7 +159,7 @@ export default class RepoBase {
     const docs = _docs.map(doc => {
       doc.transactionId = transId;
       return doc;
-    })
+    });
     return this.addMany(docs, userId)
       .catch(err => {
         if (err.result && err.result.nInserted > 0) {
@@ -191,7 +191,7 @@ export default class RepoBase {
         if (!item) {
           throw new ApiError(`Measure doesn't exist.`);
         }
-        this.addUpdatedBy(data, userId)
+        this.addUpdatedBy(data, userId);
         this.validate(data);
         // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
         // we'll just replace the doc in entirety and be done with it
@@ -265,7 +265,7 @@ export default class RepoBase {
         } else if (!docs.length) {
           throw new ApiError('updateQueryOne item not found', null, 400);
         }
-        this.addUpdatedBy(data, userId)
+        this.addUpdatedBy(data, userId);
         this.validate(data);
         // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
         // we'll just replace the doc in entirety and be done with it
@@ -318,7 +318,7 @@ export default class RepoBase {
         updates.forEach(record => promiseArr.push(this.update(record, userId, false)));
         promiseArr.push(this.addMany(adds, userId));
         const deleteIds = deletes.map(obj => obj.id);
-        promiseArr.push(this.Model.deleteMany({_id: {$in: deleteIds}}).exec())
+        promiseArr.push(this.Model.deleteMany({_id: {$in: deleteIds}}).exec());
         return Promise.all(promiseArr);
       });
   }
@@ -371,7 +371,7 @@ export default class RepoBase {
           $gte: dates.startDate,
           $lt: dates.endDate
         }
-      }
+      };
       if (filter.upperOnly) {
         delete dateRange.updatedDate.$gte;
         delete filter.upperOnly;

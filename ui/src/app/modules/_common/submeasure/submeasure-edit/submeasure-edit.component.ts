@@ -568,7 +568,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       });
   }
 
-  save() {
+  save(mode: string) {
     UiUtil.triggerBlur('.fin-edit-container form');
     if (this.form.valid) {
       this.uiUtil.confirmSave()
@@ -579,11 +579,24 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               const errs = this.validate();
               if (!errs) {
                 let obs: Observable<Submeasure>;
-                if (this.editMode) {
-                  obs = this.submeasureService.update(this.sm);
-                } else {
-                  obs = this.submeasureService.add(this.sm);
+
+                switch (mode) {
+                  case 'draft':
+                    obs = this.submeasureService.saveToDraft(this.sm);
+                    break;
+                  case 'submit':
+                    obs = this.submeasureService.submitForApproval(this.sm);
+                    break;
+                  case 'approve':
+                    obs = this.submeasureService.approve(this.sm);
+                    break;
+                  case 'reject':
+                    obs = this.submeasureService.reject(this.sm);
+                    break;
                 }
+                // obs = this.submeasureService.add(this.sm);
+
+
                 obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
               } else {
                 this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
@@ -594,21 +607,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
-  noIflMmSelected(): boolean {
-    if (this.ifl_switch_ibe ||
-        this.ifl_switch_p ||
-        this.ifl_switch_le ||
-        this.ifl_switch_s ||
-        this.ifl_switch_scms ||
-        this.mm_switch_ibe ||
-        this.mm_switch_p ||
-        this.mm_switch_le ||
-        this.mm_switch_s ||
-        this.mm_switch_scms) {
-      return false;
-    } else {
-      return true;
-    }
+  approve() {
+
+  }
+
+  reject() {
+
   }
 
   validate() {
@@ -621,6 +625,23 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.errs.push('No value entered for Input Filter Level or Manual Mapping');
     }
     return this.errs.length ? this.errs : null;
+  }
+
+  noIflMmSelected(): boolean {
+    if (this.ifl_switch_ibe ||
+      this.ifl_switch_p ||
+      this.ifl_switch_le ||
+      this.ifl_switch_s ||
+      this.ifl_switch_scms ||
+      this.mm_switch_ibe ||
+      this.mm_switch_p ||
+      this.mm_switch_le ||
+      this.mm_switch_s ||
+      this.mm_switch_scms) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   ngOnDestroy() {

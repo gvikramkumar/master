@@ -43,13 +43,17 @@ export class RestBase<T extends AnyObj> {
   // filters then picks latest value (only returns one value) using updatedDate
   getMany(_params = {}): Observable<T[]> {
     this.addModuleId(_params);
-    const params = UiUtil.createHttpParams(_params)
+    const params = UiUtil.createHttpParams(_params);
     return this.httpClient.get<T[]>(this.endpointUrl, {params});
   }
 
   getManyActive(filter: AnyObj = {}) {
     filter.status = 'A';
     return this.getMany(filter);
+  }
+
+  getLatestByName() {
+    return this.getManyLatest('name');
   }
 
   getManyPending(filter: AnyObj = {}) {
@@ -100,6 +104,13 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.post<T>(`${this.endpointUrl}/query-post`, params);
   }
 
+  /*submitForApproval(data) {
+    // todo: change status to pending, send email to admin
+    data.status = 'P';
+    this.addModuleId(data);
+    return this.httpClient.post<T>(this.endpointUrl, data);
+  }*/
+
   add(data) {
     this.addModuleId(data);
     return this.httpClient.post<T>(this.endpointUrl, data);
@@ -124,17 +135,17 @@ export class RestBase<T extends AnyObj> {
   ensure uniqueness of records.
    */
   getQueryOne(filter): Observable<T> {
-    const params = UiUtil.createHttpParams(filter)
+    const params = UiUtil.createHttpParams(filter);
     return this.httpClient.get<T>(`${this.endpointUrl}/query-one`, {params});
   }
 
   upsertQueryOne(filter, data): Observable<T> {
-    const params = UiUtil.createHttpParams(filter)
+    const params = UiUtil.createHttpParams(filter);
     return this.httpClient.post<T>(`${this.endpointUrl}/query-one`, data, {params});
   }
 
   removeQueryOne(filter): Observable<T> {
-    const params = UiUtil.createHttpParams(filter)
+    const params = UiUtil.createHttpParams(filter);
     return this.httpClient.delete<T>(`${this.endpointUrl}/query-one`, {params});
   }
 

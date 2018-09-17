@@ -41,7 +41,7 @@ export default class SubmeasureController extends ApprovalController {
       if (sub.indicators.manualMapping) {
         this.addFilterLevelRecords('M', sub.manualMapping, sub, records, log, elog);
       }
-    })
+    });
     return this.inputLevelPgRepo.syncRecordsReplaceAll({}, records, userId, true)
       .then(results => {
         log.push(`dfa_submeasure_input_lvl: ${results.recordCount} records transferred`);
@@ -131,8 +131,26 @@ export default class SubmeasureController extends ApprovalController {
       .then(docs => res.json(docs));
   }
 
-  sendApprovalEmail(user: DfaUser, mode: ApprovalMode) {
-    throw new ApiError('sendApprovalEmail not defined for approval controller');
+  sendApprovalEmail(req, mode: ApprovalMode, submeasureId) {
+    const url = `<a href="${req.headers.origin}/prof/submeasure/edit/${submeasureId}">
+      ${req.headers.origin}/prof/submeasure/edit/${submeasureId}</a>`;
+    switch (mode) {
+      case 1: // submit
+        this.sendEmail(req.user.email,
+          'DFA: Submeasure Submitted for Approval',
+          'A DFA submeasure has been submitted by ' + req.user.id + ' for approval: ' + url);
+        break;
+      case 2: // approve
+          this.sendEmail(req.user.email,
+          'DFA: Submeasure Approved',
+          'The DFA submeasure submitted by ${req.user.id} for approval has been approved: ' + url);
+        break;
+      case 3: // reject
+          this.sendEmail(req.user.email,
+          'DFA: Submeasure Not Approved',
+          'The DFA submeasure submitted by ' + req.user.id + ' for approval has been rejected: ' + url);
+        break;
+      }
   }
 
 }

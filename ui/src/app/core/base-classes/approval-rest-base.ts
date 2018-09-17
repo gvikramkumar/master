@@ -18,19 +18,21 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
   }
 
   saveToDraft(data) {
-    this.callMethod('saveToDraft', data);
+    this.addModuleId(data);
+    return this.callMethod('saveToDraft', data);
   }
 
   submitForApproval(data) {
-    this.callMethod('submitForApproval', data);
+    this.addModuleId(data);
+    return this.callMethod('submitForApproval', data);
   }
 
   approve(data) {
-    this.callMethod('approve', data);
+    return this.callMethod('approve', data);
   }
 
   reject(data) {
-    this.callMethod('reject', data);
+    return this.callMethod('reject', data);
   }
 
   activate(data) {
