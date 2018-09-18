@@ -3,6 +3,7 @@ import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
 import DfaUser from '../../../shared/models/dfa-user';
 import mail from '../common/mail';
+import * as _ from 'lodash';
 
 export enum ApprovalMode {
   submit = 1,
@@ -78,6 +79,24 @@ export default class ApprovalController extends ControllerBase {
 
   sendApprovalEmail(user: DfaUser, mode: ApprovalMode, id) {
     throw new ApiError('sendApprovalEmail not defined for approval controller');
+  }
+
+  getManyLatestByNameActiveConcatDraftPendingOfUser(req, res, next) {
+    return Promise.all([
+      this.repo.getManyByGroupLatest({
+        groupField: 'name',
+        status: 'A',
+        moduleId: req.body.moduleId}),
+      this.repo.getManyByGroupLatest({
+        groupField: 'name',
+        status: {$in: ['D', 'P']},
+        createdBy: req.user.id,
+        moduleId: req.body.moduleId}),
+    ])
+      .then(results => {
+        res.json(results[0].concat(results[1]));
+      })
+      .catch(next);
   }
 
 }

@@ -45,7 +45,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
       this.nameFilter.next(name);
     });
 
-    this.ruleService.getLatestByName()
+    this.ruleService.getApprovalVersionedListByNameAndUserType()
       .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
         this.rulesCount = rules.length;

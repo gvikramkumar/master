@@ -52,12 +52,12 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
 
     Promise.all([
       this.measureService.getMany().toPromise(),
-      this.submeasureService.getLatestByName().toPromise(),
+      this.submeasureService.getApprovalVersionedListByNameAndUserType().toPromise(),
       this.sourceService.getMany().toPromise()
     ])
       .then(results => {
         this.measures = _.sortBy(results[0], 'name');
-        this.submeasures = _.sortBy(results[1], 'name');
+        this.submeasures = _.orderBy(results[1], ['updatedDate'], ['desc']);
         this.sources = results[2];
         this.measureId = this.measures[0].measureId;
         this.changeFilter();

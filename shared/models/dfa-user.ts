@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import AnyObj from './any-obj';
-import {DfaModuleAbbrev} from '../enums';
+import {DfaModuleAbbrev, DfaModuleIds} from '../enums';
 
 export default class DfaUser {
 
@@ -16,32 +16,33 @@ export default class DfaUser {
     return this.firstName + ' ' + this.lastName;
   }
 
-  isModuleUserOnly(moduleAbbrev) {
-    switch (moduleAbbrev) {
-      case DfaModuleAbbrev.prof:
+  isModuleUserOnly(moduleId) {
+    switch (moduleId) {
+      case DfaModuleIds.prof:
         return _.includes(this.roles, 'prof:user') && !_.includes(this.roles, 'prof:admin') &&
           !_.includes(this.roles, 'itadmin');
-      default:
-        return false;
     }
+    return false;
   }
 
-  isModuleUser(moduleAbbrev) {
-    switch (moduleAbbrev) {
-      case DfaModuleAbbrev.prof:
+  isModuleUser(moduleId) {
+    switch (moduleId) {
+      case DfaModuleIds.prof:
         return _.includes(this.roles, 'prof:user');
-      default:
-        return false;
     }
+    return false;
   }
 
-  isModuleAdmin(moduleAbbrev) {
-    switch (moduleAbbrev) {
-      case DfaModuleAbbrev.prof:
+  isModuleAdmin(moduleId) {
+    switch (moduleId) {
+      case DfaModuleIds.prof:
         return _.includes(this.roles, 'prof:admin');
-      default:
-        return false;
     }
+    return false;
+  }
+
+  isItAdmin() {
+    return _.includes(this.roles, 'itadmin');
   }
 
   isAuthorized(_allowedRoles) {

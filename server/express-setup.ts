@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import {NamedApiError} from './lib/common/named-api-error';
 import notFound from './lib/middleware/not-found';
-import errorHandler from './lib/middleware/error-handler';
+import {errorHandler} from './lib/middleware/error-handler';
 import {authorize} from './lib/middleware/authorize';
 import {moduleLookupRouter} from './api/common/module-lookup/router';
 import {reportRouter} from './api/prof/report/router';
@@ -57,11 +57,26 @@ export default function () {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());
 
+/*
   app.use((req, res, next) => {
-    console.log(` ${req['user'].id}: ${req.method} - ${req.url}`);
+    console.log(`${new Date().toISOString()} ${req['user'].id} ${req.method} ${req.url}`);
     next();
   });
-  app.use(morgan('dev'));
+*/
+
+  app.use(morgan(function (tokens, req, res) {
+    return [
+      new Date().toISOString(),
+      req.user.id,
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'), '-',
+      tokens['response-time'](req, res), 'ms'
+    ].join(' ');
+  }));
+
+  // app.use(morgan('dev'));
   app.get('/cause-error', function (req, res, next) {
     if (process.env.NODE_ENV === 'unit') {
       const err = new NamedApiError('CauseError', 'api error with data', {some: 'thing'});

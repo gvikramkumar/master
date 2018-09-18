@@ -61,6 +61,18 @@ export class RestBase<T extends AnyObj> {
     return this.getMany(filter);
   }
 
+  getApprovalVersionedListByNameAndUserType() {
+    const moduleId = this.store.module.moduleId;
+    const user = this.store.user;
+    if (user.isModuleUserOnly(moduleId)) {
+      return this.callMethod('getManyLatestByNameActiveConcatDraftPendingOfUser');
+    } else if (user.isModuleAdmin(moduleId) || user.isItAdmin()) {
+      return this.getLatestByName();
+    } else {
+      throw new Error(`User not user/bizadmin/itadmin for module: ${moduleId} and user: ${user.id}`);
+    }
+  }
+
   // skip/limit required, sort optional, but surely needed to line up in pages. params become find(filter)
   getManySortAndPage(skip, limit, sort = null, _params = <any>{}) {
     const params = Object.assign(_params, {setSkip: skip, setLimit: limit});
@@ -92,7 +104,8 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.get<T>(`${this.endpointUrl}/${id}`);
   }
 
-  callMethod(method, data = null) {
+  callMethod(method, data = {}) {
+    this.addModuleId(data);
     return this.httpClient.post<any>(`${this.endpointUrl}/call-method/${method}`, data);
   }
 

@@ -13,7 +13,7 @@ import AnyObj from '../../../shared/models/any-obj';
  * @param next
  */
 
-export default function (options) {
+export function errorHandler (options) {
 
   const defaults = {showStack: false};
   const opts = _.merge(defaults, options)

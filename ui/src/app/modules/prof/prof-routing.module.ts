@@ -28,7 +28,7 @@ const routes: Routes = [
                 path: '', component: MeasureComponent,
                 canActivate: [AuthorizationGuard],
                 data: {
-                  authorization: 'prof:admin, prof:user',
+                  authorization: 'prof:admin',
                   hero: {
                     title: 'Measures',
                     desc: 'Create and update measures'
@@ -85,7 +85,7 @@ const routes: Routes = [
             path: 'add', component: SubmeasureEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'prof:admin',
+              authorization: 'prof:admin, prof:user',
               hero: {
                 title: 'Add a New Sub-Measure',
                 desc: 'Add new sub-measure'
@@ -97,7 +97,7 @@ const routes: Routes = [
             path: 'edit/:id', component: SubmeasureEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'prof:admin',
+              authorization: 'prof:admin, prof:user',
               hero: {
                 title: 'Update Sub-Measure',
                 desc: 'Update the selected sub-measure'
