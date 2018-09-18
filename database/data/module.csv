@@ -1,13 +1,13 @@
-moduleId,displayOrder,abbrev,name
-99,99,admn,Administration
-1,1,prof,Profitability Allocations
-2,2,bkgm,Bookings Misc Allocation
-3,3,svct,Service Triangulation
-4,4,tsct,TSS Cogs Triangulation
-5,5,ascg,AS Cogs Allocation
-6,6,cisc,CIS Cogs Allocation
-7,7,opex,Opex Allocation
-8,8,defr,Deferred Revenue
-9,9,gubr,Gross Unbilled Revenue
-10,10,bkir,Bookings IR Allocation
-11,11,rrev,Recurring Revenue
+moduleId,displayOrder,abbrev,name, authorization
+99,99,admn,Administration,itadmin
+1,1,prof,Profitability Allocations,"prof:admin,prof:user"
+2,2,bkgm,Bookings Misc Allocation,"bkgm:admin,bkgm:user"
+3,3,svct,Service Triangulation,"svct:admin,svct:user"
+4,4,tsct,TSS Cogs Triangulation,"tsct:admin,tsct:user"
+5,5,ascg,AS Cogs Allocation,"ascg:admin,ascg:user"
+6,6,cisc,CIS Cogs Allocation,"cisc:admin,cisc:user"
+7,7,opex,Opex Allocation,"opex:admin,opex:user"
+8,8,defr,Deferred Revenue,"defr:admin,defr:user"
+9,9,gubr,Gross Unbilled Revenue,"gubr:admin,gubr:user"
+10,10,bkir,Bookings IR Allocation,"bkir:admin,bkir:user"
+11,11,rrev,Recurring Revenue,"rrev:admin,rrev:user"

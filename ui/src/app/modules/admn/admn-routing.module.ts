@@ -18,7 +18,7 @@ const routes: Routes = [
         path: 'module', component: ModuleComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof-sm:manage',
+          authorization: 'prof:admin',
           hero: {
             title: 'Manage Modules',
             desc: 'Create and configure modules'
@@ -30,7 +30,7 @@ const routes: Routes = [
         path: 'open-period', component: OpenPeriodComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof-sm:manage',
+          authorization: 'prof:admin',
           hero: {
             title: 'Set Open Period',
             desc: 'Set open period for modules'
@@ -42,7 +42,7 @@ const routes: Routes = [
         path: 'source', component: SourceComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof-sm:manage',
+          authorization: 'prof:admin',
           hero: {
             title: 'Set Sources',
             desc: 'Configure sources for all modules'
@@ -54,7 +54,7 @@ const routes: Routes = [
         path: 'source-mapping', component: SourceMappingComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof-sm:manage',
+          authorization: 'prof:admin',
           hero: {
             title: 'Source Mapping',
             desc: 'Assign active sources to be available for each module'

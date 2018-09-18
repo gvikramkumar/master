@@ -3,9 +3,8 @@ import AnyObj from '../shared/models/any-obj';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-console.log(Number(undefined));
-
-
+const allowedRoles = ' '.split(',').map(s => s.toLowerCase().trim());
+console.log(allowedRoles);
 
 
 

@@ -9,6 +9,7 @@ import {RoutingComponentBase} from '../../../../core/base-classes/routing-compon
 import {ActivatedRoute} from '@angular/router';
 import {AppComponent} from '../../../../app/app.component';
 import {shUtil} from '../../../../../../../shared/shared-util';
+import AnyObj from '../../../../../../../shared/models/any-obj';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,7 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
   }
 
   ngOnInit() {
-    this.modules = this.store.nonAdminModules;
+    this.modules = this.store.user.authorizeObjects<DfaModule>(this.store.nonAdminModules, 'authorization');
     this.adminModule = this.store.adminModule;
     if (this.store.module) {
       this.selectedModule = this.store.module;

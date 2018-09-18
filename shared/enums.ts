@@ -22,3 +22,20 @@ export enum DfaModuleIds {
   rrev,
   admn = 99
 }
+
+export enum DfaModuleAbbrev {
+  prof = 'prof',
+  bkgm = 'bkgm',
+  svct = 'svct',
+  tsct = 'tsct',
+  ascg = 'ascg',
+  cisc = 'cisc',
+  opex = 'opex',
+  defr = 'defr',
+  gubr = 'gubr',
+  bkir = 'bkir',
+  rrev = 'rrev',
+  admn = 99
+}
+
+

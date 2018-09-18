@@ -7,7 +7,7 @@ const ctrl = injector.get(ProductClassUploadController);
 
 export const productClassUploadRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
-  .post('/', authorize('api:manage'), ctrl.addOne.bind(ctrl))
+  .post('/', ctrl.addOne.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))
-  .put('/:id', authorize('api:manage'), ctrl.update.bind(ctrl))
+  .put('/:id', ctrl.update.bind(ctrl))
   .delete('/:id', authorize('api:admin'), ctrl.remove.bind(ctrl));

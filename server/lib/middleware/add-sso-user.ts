@@ -3,19 +3,11 @@ import DfaUser from '../../../shared/models/dfa-user';
 export function addSsoUser() {
 
   const roles = [
-    'api:access',
-    'api:manage',
-    'api:admin',
-    'dfa:access',
-    'prof:access',
-    'prof-bu:access',
-    'prof-bu:upload',
-    'prof-rm:access',
-    'prof-rm:manage',
-    'prof-sm:access',
-    'prof-sm:manage',
-    'someMeasureRole'
-  ].map(role => role.toLowerCase());
+    'itadmin',
+    'prof:measure',
+    'prof:admin',
+    'prof:user',
+  ];
 
   return function(req, res, next) {
     const headers = req.headers;
@@ -26,8 +18,8 @@ export function addSsoUser() {
         'jodoe',
         'John',
         'Doe',
-        'moltman@cisco.com',
-        roles
+        'dakahle@cisco.com',
+        ['itadmin']
       ));
     } else {
       // todo: need to hit pg here and get users roles to pass into constructor
@@ -38,7 +30,7 @@ export function addSsoUser() {
             headers['givenname'],
             headers['familyname'],
             headers['email'],
-            roles // pass in usersRoles here, when you finally get them
+            ['itadmin']
           );
         });
     }
