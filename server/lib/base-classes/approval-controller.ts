@@ -33,8 +33,11 @@ export default class ApprovalController extends ControllerBase {
 
   reject(req, res, next) {
     req.body.status = 'D';
-    this.addOneNoValidate(req, res, next);
-    this.sendApprovalEmail(req, ApprovalMode.reject, req.body.id);
+    this.addOneNoValidatePromise(req, res, next)
+      .then(item => {
+        this.sendApprovalEmail(req, ApprovalMode.reject, item.id);
+        res.json(item);
+      });
   }
 
   activate(req, res, next) {

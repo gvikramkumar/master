@@ -84,8 +84,8 @@ export class AppStore extends StoreBase {
   adminModule: DfaModule;
   modules$ = new BehaviorSubject<DfaModule[]>(this.modules);
   subModules = this.modules$.subscribe.bind(this.modules$);
-  pubModules(val) {
-    this.modules = val;
+  pubModules(_modules) {
+    this.modules = _modules;
     this.nonAdminModules = this.modules.filter(module => module.moduleId !== 99);
     this.adminModule = _.find(this.modules, {moduleId: 99});
     this.modules$.next(this.modules);

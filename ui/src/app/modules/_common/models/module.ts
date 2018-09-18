@@ -6,8 +6,14 @@ export class DfaModule {
   abbrev: string;
   displayOrder: number;
   status = 'I';
+  authorization?: '';
 
   constructor(status?) {
     this.status = status || 'I';
   }
+
+  setAuthorizations() {
+
+  }
+
 }

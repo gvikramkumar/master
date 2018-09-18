@@ -18,8 +18,8 @@ export function addSsoUser() {
         'jodoe',
         'John',
         'Doe',
-        'moltman@cisco.com',
-        ['prof:user']
+        'dakahle@cisco.com',
+        ['itadmin']
       ));
     } else {
       // todo: need to hit pg here and get users roles to pass into constructor
