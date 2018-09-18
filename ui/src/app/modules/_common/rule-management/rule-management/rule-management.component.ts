@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
@@ -23,14 +23,16 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   rulesCount: Number = 0;
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
-  tableColumns = ['name', 'period', 'driverName', 'status', 'updatedBy', 'updatedDate'];
+  tableColumns = ['name', 'period', 'driverName', 'status', 'updatedBy', 'updatedDate', 'icons'];
   dataSource: MatTableDataSource<AllocationRule>;
   UiUtil = UiUtil;
 
   constructor(
     private ruleService: RuleService,
     private store: AppStore,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private uiUtil: UiUtil,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     super(store, route);
 
@@ -67,6 +69,22 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     this.dataSource.filter = filterValue;
   }
 
+  remove(rule) {
+    this.uiUtil.confirmDelete()
+      .subscribe(resp => {
+        if (resp) {
+          this.ruleService.remove(rule.id)
+            .subscribe(() => {
+              this.rules.splice(this.rules.indexOf(rule), 1);
+              this.changeDetectorRef.detectChanges();
+            });
+        }
+      });
+  }
+
+  showDeleteIcon(rule) {
+    return _.includes(['D', 'P'], rule.status);
+  }
 }
 
 

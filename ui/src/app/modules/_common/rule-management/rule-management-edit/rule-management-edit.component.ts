@@ -13,6 +13,7 @@ import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn
 import {ValidationInputOptions} from '../../../../shared/components/validation-input/validation-input.component';
 import {map} from 'rxjs/operators';
 import {notInListValidator} from '../../../../shared/validators/not-in-list.validator';
+import {ToastService} from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -26,6 +27,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   @ViewChild('form') form: NgForm;
   UiUtil = UiUtil;
   editMode = false;
+  copyMode = false;
   rule = new AllocationRule();
   orgRule = _.cloneDeep(this.rule);
   driverNames = [
@@ -57,15 +59,15 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private ruleService: RuleService,
     private pgLookupService: PgLookupService,
     private store: AppStore,
-    public uiUtil: UiUtil
+    public uiUtil: UiUtil,
+    private toastService: ToastService
   ) {
     super(store, route);
-    this.editMode = !!this.route.snapshot.params.id;
+    this.editMode = this.route.snapshot.params.mode === 'edit';
+    this.copyMode = this.route.snapshot.params.mode === 'copy';
   }
 
   public ngOnInit(): void {
-
-
     const promises = [
       this.pgLookupService.getRuleCriteriaChoicesSalesLevel1().toPromise(),
       this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
@@ -73,7 +75,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
       this.ruleService.getDistinctRuleNames().toPromise()
     ];
-    if (this.editMode) {
+    if (this.editMode || this.copyMode) {
       promises.push(this.ruleService.getOneById(this.route.snapshot.params.id).toPromise());
     }
       Promise.all(promises)
@@ -86,10 +88,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.internalBeChoices = results[3].map(x => ({name: x}));
         this.ruleNames = results[4].map(x => x.toUpperCase());
 
-        if (this.editMode) {
+        if (this.editMode || this.copyMode) {
           this.rule = results[5];
           this.orgRule = _.cloneDeep(this.rule);
-          this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
+          if (this.editMode) {
+            this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
+          }
         }
         this.init();
 
@@ -145,11 +149,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     this.verifyLosingChanges()
       .subscribe(resp => {
         if (resp) {
-          if (this.editMode) {
-            this.rule = _.cloneDeep(this.orgRule);
-          } else {
-            this.rule = new AllocationRule();
-          }
+          this.rule = _.cloneDeep(this.orgRule);
           this.init();
         }
       });
@@ -186,18 +186,20 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   saveToDraft() {
-    this.uiUtil.confirmSave()
-      .subscribe(result => {
-        if (result) {
-          this.cleanUp();
-          this.ruleService.saveToDraft(this.rule)
-            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
-        }
-      });
+    if (!this.rule.name.trim()) {
+      this.uiUtil.genericDialog('You must define a name to save to draft.')
+    } else {
+      this.cleanUp();
+      this.ruleService.saveToDraft(this.rule)
+        .subscribe(rule => {
+          this.router.navigateByUrl('/prof/rule-management')
+          this.toastService.showAutoHideToast(null, 'Rule saved to draft');
+        });
+    }
   }
 
   reject() {
-    this.uiUtil.confirmSave()
+    this.uiUtil.genericDialog('Enter a reason for rejection:')
       .subscribe(result => {
         if (result) {
           this.cleanUp();
@@ -207,7 +209,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       });
   }
 
-  save(mode: string) {
+  save(saveMode: string) {
     UiUtil.triggerBlur('.fin-edit-container form');
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
@@ -217,21 +219,26 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
               if (result) {
                 this.cleanUp();
                 let promise;
-                switch (mode) {
+                let message;
+                switch (saveMode) {
                   case 'submit':
                     promise = this.ruleService.submitForApproval(this.rule).toPromise();
+                    message = 'Rule submitted for approval';
                     break;
                   case 'approve':
                     promise = this.ruleService.approve(this.rule).toPromise();
+                    message = 'Rule approved';
                     break;
                 }
-                promise.then(() => this.router.navigateByUrl('/prof/rule-management'));
+                promise.then(() => {
+                  this.toastService.showAutoHideToast(null, message);
+                  this.router.navigateByUrl('/prof/rule-management');
+                });
               }
             });
         }
       });
   }
-
 
   requiredCond(select) {
     switch (select) {

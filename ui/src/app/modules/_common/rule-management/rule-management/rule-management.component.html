@@ -19,8 +19,7 @@
 
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Rule Name</mat-header-cell>
-        <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"><a> {{row.name}} </a>
-        </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="period">
@@ -48,8 +47,26 @@
         <mat-cell *matCellDef="let row"> {{row.updatedDate | fromNow}}</mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="icons">
+        <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <div class="fin-table-icon-list">
+            <i class="icon-edit icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'edit'}]"
+               matTooltip="edit" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
+            <i class="icon-add-outline icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'copy'}]"
+               matTooltip="copy" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
+            <i class="icon-exit-outline icon-small" (click)="remove(row)" [fxShow]="showDeleteIcon(row)"
+               matTooltip="delete" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
+          </div>
+        </mat-cell>
+      </ng-container>
+
       <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+      <mat-row *matRowDef="let row; columns: tableColumns;">
+        <div class="matrowtest">lala</div>
+
+      </mat-row>
+
     </mat-table>
 
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>

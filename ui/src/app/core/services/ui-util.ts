@@ -193,6 +193,14 @@ export class UiUtil {
     return this.genericDialog('Are you sure you want to save?', null, null, DialogType.yesNo);
   }
 
+  confirmDelete() {
+    return this.genericDialog('Are you sure you want to delete?', null, null, DialogType.yesNo);
+  }
+
+  confirmSubmit() {
+    return this.genericDialog('Are you sure you want to submit?', null, null, DialogType.yesNo);
+  }
+
   errorDialog(errors) {
     return this.genericDialog('Errors', errors);
   }
