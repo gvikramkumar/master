@@ -121,6 +121,25 @@ export default class ControllerBase {
       .catch(next);
   }
 
+  copyOneNoValidatePromise(req, res, next) {
+    const data = req.body;
+    return this.repo.copyOne(data, req.user.id, false)
+      .then(item => {
+        if (this.pgRepo && this.isMirrorRepo) {
+          return this.pgRepo.addOne(_.clone(item), req.user.id)
+            .then(() => item);
+        } else {
+          return item;
+        }
+      });
+  }
+
+  copyOneNoValidate(req, res, next) {
+    this.copyOneNoValidatePromise(req, res, next)
+      .then(item => res.json(item))
+      .catch(next);
+  }
+
   updateOneNoValidatePromise(req, res, next) {
     const data = req.body;
     return this.repo.update(data, req.user.id, true, false)

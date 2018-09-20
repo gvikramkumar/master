@@ -17,6 +17,7 @@ import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeas
 import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {Submeasure} from '../../models/submeasure';
 import {shUtil} from '../../../../../../../shared/shared-util';
+import {ToastService} from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -26,7 +27,9 @@ import {shUtil} from '../../../../../../../shared/shared-util';
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
   UiUtil = UiUtil;
   @ViewChild('form') form: NgForm;
+  addMode = false;
   editMode = false;
+  copyMode = false;
   submeasureNames: string[] = [];
   sm = new Submeasure();
   orgSubmeasure = _.cloneDeep(this.sm);
@@ -221,10 +224,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     private store: AppStore,
     private measureService: MeasureService,
     private sourceService: SourceService,
-    private uiUtil: UiUtil
+    private uiUtil: UiUtil,
+    private toastService: ToastService
   ) {
     super(store, route);
-    this.editMode = !!this.route.snapshot.params.id;
+    if (!this.route.snapshot.params.mode) {
+      throw new Error('Edit page called with no add/edit/copy mode');
+    }
+    this.addMode = this.route.snapshot.params.mode === 'add';
+    this.editMode = this.route.snapshot.params.mode === 'edit';
+    this.copyMode = this.route.snapshot.params.mode === 'copy';
   }
 
   ngOnInit() {
@@ -235,7 +244,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinctSubmeasureNames().toPromise()
     ];
-    if (this.editMode) {
+    if (this.editMode || this.copyMode) {
       promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
     }
     Promise.all(promises)
@@ -245,20 +254,23 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.sources = _.sortBy(results[2], 'name');
         this.submeasureNames = results[3].map(x => x.toUpperCase());
 
+        if (this.copyMode) {
+          this.sm = results[4];
+          this.sm.approvedOnce = 'N';
+          delete this.sm.createdBy;
+          delete this.sm.createdDate;
+          this.orgSubmeasure = _.cloneDeep(this.sm);
+        }
         if (this.editMode) {
           this.sm = results[4];
+          if (_.includes(['A', 'I'], this.sm.status)) {
+            delete this.sm.createdBy;
+            delete this.sm.createdDate;
+          }
           this.orgSubmeasure = _.cloneDeep(this.sm);
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
-          this.init();
-          /*this.submeasureService.getOneById(this.route.snapshot.params.id)
-            .subscribe(submeasure => {
-              this.sm = submeasure;
-              this.orgSubmeasure = _.cloneDeep(this.sm);
-              this.init();
-            });*/
-        } else {
-          this.init();
         }
+        this.init();
       });
   }
 
@@ -524,7 +536,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
-  cleanUpSubmeasure() {
+  cleanUp() {
     this.cleanIflSwitchChoices();
     this.cleanMMSwitchChoices();
     this.sm.rules = this.sm.rules.filter(r => !!r);
@@ -533,7 +545,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   hasChanges() {
     return !_.isEqual(this.sm, this.orgSubmeasure);
   }
-
 
   verifyLosingChanges() {
     if (this.hasChanges()) {
@@ -557,68 +568,104 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .subscribe(resp => {
         if (resp) {
           {
-            if (this.editMode) {
-              this.sm = _.cloneDeep(this.orgSubmeasure);
-            } else {
-              this.sm = new Submeasure();
-            }
+            this.sm = _.cloneDeep(this.orgSubmeasure);
             this.init();
           }
         }
       });
   }
 
+  validateSaveToDraft() {
+    const errors = [];
+    if (!this.sm.name.trim()) {
+      errors.push('You must define a name to save to draft.');
+    }
+    if (_.includes(this.submeasureNames, this.sm.name)) {
+      errors.push('Rule name already exists.');
+    }
+    return errors.length ? errors : null;
+  }
+
   saveToDraft() {
-    this.uiUtil.confirmSave()
-      .subscribe(result => {
-        if (result) {
-          // this.cleanUp();
-          this.submeasureService.saveToDraft(this.sm)
-            .subscribe(rule => this.router.navigateByUrl('/prof/submeasure'));
-        }
-      });
+    const errors = this.validateSaveToDraft();
+    if (errors) {
+      this.uiUtil.validationErrorsDialog(errors);
+    } else {
+      this.cleanUp();
+      const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
+      this.submeasureService.saveToDraft(this.sm, {saveMode})
+        .subscribe(sm => {
+          this.toastService.showAutoHideToast('Save To Draft', 'Submeasure saved to draft.');
+          this.sm = sm;
+        });
+    }
   }
 
   reject() {
-    this.uiUtil.confirmSave()
+    this.uiUtil.genericDialog('Enter a reason for rejection:')
       .subscribe(result => {
         if (result) {
-          // this.cleanUp();
+          this.cleanUp();
           this.submeasureService.reject(this.sm)
-            .subscribe(rule => this.router.navigateByUrl('/prof/submeasure'));
+            .subscribe(sm => {
+              this.toastService.showAutoHideToast('Approval Rejected', 'Submeasure has been rejected, user notified.');
+              this.router.navigateByUrl('/prof/submeasure');
+            });
         }
       });
   }
 
-  save(mode: string) {
+  approve() {
     UiUtil.triggerBlur('.fin-edit-container form');
-    if (this.form.valid) {
-      this.uiUtil.confirmSave()
-        .subscribe(resp => {
-          if (resp) {
-            {
-              this.cleanUpSubmeasure();
-              const errs = this.validate();
-              if (!errs) {
-                let obs: Observable<Submeasure>;
-
-                switch (mode) {
-                  case 'submit':
-                    obs = this.submeasureService.submitForApproval(this.sm);
-                    break;
-                  case 'approve':
-                    obs = this.submeasureService.approve(this.sm);
-                    break;
+    UiUtil.waitForAsyncValidations(this.form)
+      .then(() => {
+        if (this.form.valid) {
+          this.uiUtil.confirmApprove()
+            .subscribe(result => {
+              if (result) {
+                this.cleanUp();
+                const errs = this.validate();
+                if (errs) {
+                  this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
+                  return;
+                } else {
+                  this.submeasureService.approve(this.sm)
+                    .subscribe(() => {
+                      this.toastService.showAutoHideToast('Approval Approved', 'Submeasure approved, user notified.');
+                      this.router.navigateByUrl('/prof/submeasure');
+                    });
                 }
-
-                obs.subscribe(submeasure => this.router.navigateByUrl('/prof/submeasure'));
-              } else {
-                this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
               }
-            }
-          }
-        });
-    }
+            });
+        }
+      });
+  }
+
+  submitForApproval() {
+    UiUtil.triggerBlur('.fin-edit-container form');
+    UiUtil.waitForAsyncValidations(this.form)
+      .then(() => {
+        if (this.form.valid) {
+          this.uiUtil.confirmSubmitForApproval()
+            .subscribe(result => {
+              if (result) {
+                this.cleanUp();
+                const errs = this.validate();
+                if (errs) {
+                  this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
+                  return;
+                } else {
+                  const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
+                  this.submeasureService.submitForApproval(this.sm, {saveMode})
+                    .subscribe(() => {
+                      this.toastService.showAutoHideToast('Approval Submitted', 'Submeasure submitted for approval.');
+                      this.router.navigateByUrl('/prof/submeasure');
+                    });
+                }
+              }
+            });
+        }
+      });
   }
 
   validate() {

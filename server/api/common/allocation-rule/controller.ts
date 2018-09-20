@@ -126,25 +126,23 @@ export default class AllocationRuleController extends ApprovalController {
     const link = `<a href="${url}">${url}</a>`
     switch (mode) {
       case ApprovalMode.submit:
-        let prefix;
+        let body;
         if (data.approvedOnce === 'Y') {
-          prefix = 'An updated';
+          body = `The "${data.name}" DFA rule has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
         } else {
-          prefix = 'A new';
+          body = `A new DFA rule has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
         }
-        this.sendEmail(req.user.email,
-          'DFA: Rule Submitted for Approval',
-          `${prefix} DFA rule has been submitted by ${req.user.fullName} for approval: <br>${link}`);
+        this.sendEmail(req.user.email, 'DFA: Rule Submitted for Approval', body);
         break;
       case ApprovalMode.approve:
           this.sendEmail(req.user.email,
           'DFA: Rule Approved',
-          `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br>${link}`);
+          `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`);
         break;
       case ApprovalMode.reject:
           this.sendEmail(req.user.email,
           'DFA: Rule Not Approved',
-          `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br>${link}`);
+          `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`);
         break;
     }
   }

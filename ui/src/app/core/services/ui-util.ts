@@ -23,8 +23,10 @@ export class UiUtil {
     edit >> D/P and editMode >> update
   */
   static getApprovalSaveMode(status, add, edit, copy) {
-    if ((add || copy) || (edit && _.includes(['A', 'I'], status))) {
+    if ((add || copy)) {
       return 'add';
+    } else if (edit && _.includes(['A', 'I'], status)) {
+      return 'copy';
     } else if ((edit && _.includes(['D', 'P'], status))) {
       return 'update';
     }

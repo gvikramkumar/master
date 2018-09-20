@@ -19,6 +19,8 @@ export default class ApprovalController extends ControllerBase {
     const saveMode = req.query.saveMode;
     if (saveMode === 'add') {
       this.addOneNoValidate(req, res, next);
+    } else if (saveMode === 'copy') {
+      this.copyOneNoValidate(req, res, next);
     } else if (saveMode === 'update') {
       this.updateOneNoValidate(req, res, next);
     }
@@ -33,6 +35,8 @@ export default class ApprovalController extends ControllerBase {
     let promise;
     if (saveMode === 'add') {
       promise = this.addOneNoValidatePromise(req, res, next);
+    } else if (saveMode === 'copy') {
+      promise = this.copyOneNoValidatePromise(req, res, next);
     } else if (saveMode === 'update') {
       promise = this.updateOneNoValidatePromise(req, res, next);
     }
