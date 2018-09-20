@@ -1,9 +1,14 @@
 
 <div class="fin-container">
 
+  <div class="text-center status-filter">
+    <cui-select [items]="statuses" [(ngModel)]="showStatuses" label="Show only:" [multiSelect]="true"
+                (ngModelChange)="changeFilter()" optionsKey="name" optionsValue="value"></cui-select>
+  </div>
+
   <div fxLayout="row" fxLayoutAlign="space-between center">
     <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+      <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
     </mat-form-field>
     <a routerLink="add">
       <button cuiButton color="primary">Add New</button>
@@ -69,7 +74,12 @@
 
     </mat-table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator #paginator
+                   [length]="filteredRules.length"
+                   [pageIndex]="0"
+                   [pageSize]="5"
+                   [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
   </div>
 
 

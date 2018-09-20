@@ -20,12 +20,20 @@ import {UiUtil} from '../../../../core/services/ui-util';
 export class RuleManagementComponent extends RoutingComponentBase implements OnInit {
   moment = moment;
   rules: AllocationRule[];
+  filteredRules: AllocationRule[] = [];
   rulesCount: Number = 0;
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
   tableColumns = ['name', 'period', 'driverName', 'status', 'updatedBy', 'updatedDate', 'icons'];
   dataSource: MatTableDataSource<AllocationRule>;
   UiUtil = UiUtil;
+  statuses = [
+    {name: 'Active', value: 'A'},
+    {name: 'Inactive', value: 'I'},
+    {name: 'Pending', value: 'P'},
+    {name: 'Draft', value: 'D'}];
+  showStatuses = ['A', 'I', 'P', 'D'];
+  filterValue = '';
 
   constructor(
     private ruleService: RuleService,
@@ -54,19 +62,21 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
         this.dataSource = new MatTableDataSource(this.rules);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        // this.changeFilter();
       });
-
   }
 
-  ngAfterViewInit() {
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
+  changeFilter() {
+    this.filteredRules = this.rules.filter(rule =>
+      _.includes(this.showStatuses, rule.status) );
+    this.dataSource = new MatTableDataSource<AllocationRule>(this.filteredRules);
+    this.filterValue = '';
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   remove(rule) {
