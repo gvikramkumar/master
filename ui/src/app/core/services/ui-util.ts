@@ -16,6 +16,20 @@ export class UiUtil {
   constructor(private store: AppStore, private dialogService: CuiDialogService) {
   }
 
+  /*
+    approvedOnce is no help here as we can have draft mode status D and approvedOnce
+    copy or add >> add
+    edit >> I/A and editMode >> add
+    edit >> D/P and editMode >> update
+  */
+  static getApprovalSaveMode(status, add, edit, copy) {
+    if ((add || copy) || (edit && _.includes(['A', 'I'], status))) {
+      return 'add';
+    } else if ((edit && _.includes(['D', 'P'], status))) {
+      return 'update';
+    }
+  }
+
   static waitForPending(form, resolve) {
     if (form.status === 'PENDING') {
       // console.log('waiting...');
@@ -189,8 +203,24 @@ export class UiUtil {
       .afterCuiDialogClosed();
   }
 
+  validationErrorsDialog(errors) {
+    return this.genericDialog('Validation Errors', errors.join('\n'));
+  }
+
   confirmSave() {
     return this.genericDialog('Are you sure you want to save?', null, null, DialogType.yesNo);
+  }
+
+  confirmDelete() {
+    return this.genericDialog('Are you sure you want to delete?', null, null, DialogType.yesNo);
+  }
+
+  confirmSubmitForApproval() {
+    return this.genericDialog('Are you sure you want to submit for approval?', null, null, DialogType.yesNo);
+  }
+
+  confirmApprove() {
+    return this.genericDialog('Are you sure you want to approve?', null, null, DialogType.yesNo);
   }
 
   errorDialog(errors) {

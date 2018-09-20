@@ -34,10 +34,12 @@ const schema = new Schema(
     beCritChoices: [String],
     status: {type: String, enum: ['D', 'P', 'A', 'I'], required: true},
     approvedOnce: {type: String, enum: ['Y', 'N'], required: true},
-    createdBy: {type: String, required: true},
-    createdDate: {type: Date, required: true},
-    updatedBy: {type: String, required: true},
-    updatedDate: {type: Date, required: true}
+    // we validate early in approval repos, when this isn't set yet, if we set it before validation,
+    // we mess up our concurrency check, can't win then, we'll sacrifice the required=true
+    createdBy: {type: String},
+    createdDate: {type: Date},
+    updatedBy: {type: String},
+    updatedDate: {type: Date}
   },
   {collection: 'dfa_allocation_rule'}
 );

@@ -13,6 +13,7 @@ import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn
 import {ValidationInputOptions} from '../../../../shared/components/validation-input/validation-input.component';
 import {map} from 'rxjs/operators';
 import {notInListValidator} from '../../../../shared/validators/not-in-list.validator';
+import {ToastService} from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -25,7 +26,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   prodBUChoiceOptions: ValidationInputOptions;
   @ViewChild('form') form: NgForm;
   UiUtil = UiUtil;
+  addMode = false;
   editMode = false;
+  copyMode = false;
   rule = new AllocationRule();
   orgRule = _.cloneDeep(this.rule);
   driverNames = [
@@ -57,15 +60,19 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private ruleService: RuleService,
     private pgLookupService: PgLookupService,
     private store: AppStore,
-    public uiUtil: UiUtil
+    public uiUtil: UiUtil,
+    private toastService: ToastService
   ) {
     super(store, route);
-    this.editMode = !!this.route.snapshot.params.id;
+    if (!this.route.snapshot.params.mode) {
+      throw new Error('Edit page called with no add/edit/copy mode');
+    }
+    this.addMode = this.route.snapshot.params.mode === 'add';
+    this.editMode = this.route.snapshot.params.mode === 'edit';
+    this.copyMode = this.route.snapshot.params.mode === 'copy';
   }
 
   public ngOnInit(): void {
-
-
     const promises = [
       this.pgLookupService.getRuleCriteriaChoicesSalesLevel1().toPromise(),
       this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
@@ -73,7 +80,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
       this.ruleService.getDistinctRuleNames().toPromise()
     ];
-    if (this.editMode) {
+    if (this.editMode || this.copyMode) {
       promises.push(this.ruleService.getOneById(this.route.snapshot.params.id).toPromise());
     }
       Promise.all(promises)
@@ -86,8 +93,19 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.internalBeChoices = results[3].map(x => ({name: x}));
         this.ruleNames = results[4].map(x => x.toUpperCase());
 
+        if (this.copyMode) {
+          this.rule = results[5];
+          this.rule.approvedOnce = 'N';
+          delete this.rule.createdBy;
+          delete this.rule.createdDate;
+          this.orgRule = _.cloneDeep(this.rule);
+        }
         if (this.editMode) {
           this.rule = results[5];
+          if (_.includes(['A', 'I'], this.rule.status)) {
+            delete this.rule.createdBy;
+            delete this.rule.createdDate;
+          }
           this.orgRule = _.cloneDeep(this.rule);
           this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
         }
@@ -145,11 +163,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     this.verifyLosingChanges()
       .subscribe(resp => {
         if (resp) {
-          if (this.editMode) {
-            this.rule = _.cloneDeep(this.orgRule);
-          } else {
-            this.rule = new AllocationRule();
-          }
+          this.rule = _.cloneDeep(this.orgRule);
           this.init();
         }
       });
@@ -185,53 +199,86 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     }
   }
 
+  validateSaveToDraft() {
+    const errors = [];
+    if (!this.rule.name.trim()) {
+      errors.push('You must define a name to save to draft.');
+    }
+    if (_.includes(this.ruleNames, this.rule.name)) {
+      errors.push('Rule name already exists.');
+    }
+    return errors.length ? errors : null;
+  }
+
   saveToDraft() {
-    this.uiUtil.confirmSave()
-      .subscribe(result => {
-        if (result) {
-          this.cleanUp();
-          this.ruleService.saveToDraft(this.rule)
-            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
-        }
-      });
+    const errors = this.validateSaveToDraft();
+    if (errors) {
+      this.uiUtil.validationErrorsDialog(errors);
+    } else {
+      this.cleanUp();
+      const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+      this.ruleService.saveToDraft(this.rule, {saveMode})
+        .subscribe(rule => {
+          this.toastService.showAutoHideToast('Save To Draft', 'Rule saved to draft.');
+          this.rule = rule;
+        });
+    }
   }
 
   reject() {
-    this.uiUtil.confirmSave()
+    this.uiUtil.genericDialog('Enter a reason for rejection:')
       .subscribe(result => {
         if (result) {
           this.cleanUp();
           this.ruleService.reject(this.rule)
-            .subscribe(rule => this.router.navigateByUrl('/prof/rule-management'));
+            .subscribe(rule => {
+              this.toastService.showAutoHideToast('Approval Rejected', 'Rule has been rejected, user notified.');
+              this.router.navigateByUrl('/prof/rule-management');
+            });
         }
       });
   }
 
-  save(mode: string) {
+  approve() {
     UiUtil.triggerBlur('.fin-edit-container form');
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
-          this.uiUtil.confirmSave()
+          this.uiUtil.confirmApprove()
             .subscribe(result => {
               if (result) {
                 this.cleanUp();
-                let promise;
-                switch (mode) {
-                  case 'submit':
-                    promise = this.ruleService.submitForApproval(this.rule).toPromise();
-                    break;
-                  case 'approve':
-                    promise = this.ruleService.approve(this.rule).toPromise();
-                    break;
-                }
-                promise.then(() => this.router.navigateByUrl('/prof/rule-management'));
+                this.ruleService.approve(this.rule)
+                  .subscribe(() => {
+                    this.toastService.showAutoHideToast('Approval Approved', 'Rule approved, user notified.');
+                    this.router.navigateByUrl('/prof/rule-management');
+                  });
               }
             });
         }
       });
   }
 
+  submitForApproval() {
+    UiUtil.triggerBlur('.fin-edit-container form');
+    UiUtil.waitForAsyncValidations(this.form)
+      .then(() => {
+        if (this.form.valid) {
+          this.uiUtil.confirmSubmitForApproval()
+            .subscribe(result => {
+              if (result) {
+                this.cleanUp();
+                const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+                this.ruleService.submitForApproval(this.rule, {saveMode})
+                  .subscribe(() => {
+                  this.toastService.showAutoHideToast('Approval Submitted', 'Rule submitted for approval.');
+                  this.router.navigateByUrl('/prof/rule-management');
+                });
+              }
+            });
+        }
+      });
+  }
 
   requiredCond(select) {
     switch (select) {

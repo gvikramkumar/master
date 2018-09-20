@@ -3,12 +3,7 @@ import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
 import DfaUser from '../../../shared/models/dfa-user';
 import mail from '../common/mail';
-
-export enum ApprovalMode {
-  submit = 1,
-  approve,
-  reject
-}
+import {ApprovalMode} from '../../../shared/enums';
 
 export default class ApprovalController extends ControllerBase {
 
@@ -20,20 +15,51 @@ export default class ApprovalController extends ControllerBase {
 
   saveToDraft(req, res, next) {
     req.body.status = 'D';
-    this.addOneNoValidate(req, res, next);
+    this.verifyProperties(req.query, ['saveMode']);
+    const saveMode = req.query.saveMode;
+    if (saveMode === 'add') {
+      this.addOneNoValidate(req, res, next);
+    } else if (saveMode === 'update') {
+      this.updateOneNoValidate(req, res, next);
+    }
   }
 
   submitForApproval(req, res, next) {
-    this.handleApprovals(req, res, next, 'P', ApprovalMode.submit);
+    const data = req.body;
+    this.verifyProperties(req.query, ['saveMode']);
+    const saveMode = req.query.saveMode;
+    this.repo.validate(data);
+    data.status = 'P';
+    let promise;
+    if (saveMode === 'add') {
+      promise = this.addOneNoValidatePromise(req, res, next);
+    } else if (saveMode === 'update') {
+      promise = this.updateOneNoValidatePromise(req, res, next);
+    }
+    promise
+      .then(item => {
+        this.sendApprovalEmail(req, ApprovalMode.submit, item.id);
+        res.json(item);
+      })
+      .catch(next);
   }
 
   approve(req, res, next) {
-    this.handleApprovals(req, res, next, 'A', ApprovalMode.approve);
+    const data = req.body;
+    this.repo.validate(data);
+    data.status = 'A';
+    data.approvedOnce = 'Y';
+    this.repo.update(data, req.user.id)
+      .then(item => {
+        this.sendApprovalEmail(req, ApprovalMode.approve, item.id);
+        res.json(item);
+      })
+      .catch(next);
   }
 
   reject(req, res, next) {
     req.body.status = 'D';
-    this.addOneNoValidatePromise(req, res, next)
+    this.updateOneNoValidatePromise(req, res, next)
       .then(item => {
         this.sendApprovalEmail(req, ApprovalMode.reject, item.id);
         res.json(item);
@@ -42,28 +68,12 @@ export default class ApprovalController extends ControllerBase {
 
   activate(req, res, next) {
     req.body.status = 'A';
-    this.addOne(req, res, next);
+    this.update(req, res, next);
   }
 
   inactivate(req, res, next) {
     req.body.status = 'I';
-    this.addOneNoValidate(req, res, next);
-  }
-
-  handleApprovals(req, res, next, newStatus, mode) {
-    const data = req.body;
-    this.repo.addCreatedByAndUpdatedBy(data, req.user.id);
-    this.repo.validate(data);
-    data.status = newStatus;
-    if (mode === ApprovalMode.approve) {
-      data.approvedOnce = 'Y';
-    }
-    this.repo.addOne(data, req.user.id)
-      .then(item => {
-        this.sendApprovalEmail(req, mode, item.id);
-        res.json(item);
-      })
-      .catch(next);
+    this.updateOneNoValidate(req, res, next);
   }
 
   sendEmail(address, title, body) {
@@ -78,6 +88,23 @@ export default class ApprovalController extends ControllerBase {
 
   sendApprovalEmail(user: DfaUser, mode: ApprovalMode, id) {
     throw new ApiError('sendApprovalEmail not defined for approval controller');
+  }
+
+  getManyLatestByNameActiveConcatDraftPendingOfUser(req, res, next) {
+    return Promise.all([
+      this.repo.getManyByGroupLatest({
+        groupField: 'name',
+        status: 'A',
+        moduleId: req.body.moduleId}),
+      this.repo.getMany({
+        status: {$in: ['D', 'P']},
+        createdBy: req.user.id,
+        moduleId: req.body.moduleId}),
+    ])
+      .then(results => {
+        res.json(results[0].concat(results[1]));
+      })
+      .catch(next);
   }
 
 }

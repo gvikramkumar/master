@@ -24,7 +24,7 @@ export class SubmeasureService extends ApprovalRestBase<Submeasure> {
   }
 
   getDistinctSubmeasureNames() {
-    return this.getDistinct('name', );
+    return this.getDistinct('name', {status: 'A'});
   }
 
 }

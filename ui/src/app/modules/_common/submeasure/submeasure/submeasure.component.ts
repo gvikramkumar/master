@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 import {Source} from '../../../../../../../shared/models/source';
 import {SourceService} from '../../services/source.service';
 import {UiUtil} from '../../../../core/services/ui-util';
+import * as moment from 'moment';
 
 @Component({
   selector: 'fin-submeasure',
@@ -37,6 +38,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   @ViewChild(MatSort) sort: MatSort;
   filterValue = '';
   UiUtil = UiUtil;
+  moment = moment;
 
   constructor(
     private submeasureService: SubmeasureService,
@@ -52,12 +54,12 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
 
     Promise.all([
       this.measureService.getMany().toPromise(),
-      this.submeasureService.getLatestByName().toPromise(),
+      this.submeasureService.getApprovalVersionedListByNameAndUserType().toPromise(),
       this.sourceService.getMany().toPromise()
     ])
       .then(results => {
         this.measures = _.sortBy(results[0], 'name');
-        this.submeasures = _.sortBy(results[1], 'name');
+        this.submeasures = _.orderBy(results[1], ['updatedDate'], ['desc']);
         this.sources = results[2];
         this.measureId = this.measures[0].measureId;
         this.changeFilter();

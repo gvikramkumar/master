@@ -179,7 +179,7 @@ export default class RepoBase {
       .then(() => item.save({validateBeforeSave: validate}));
   }
 
-  update(data, userId, concurrencyCheck = true) {
+  update(data, userId, concurrencyCheck = true, validate = true) {
     let promise: Promise<any>;
     if (concurrencyCheck) {
       promise = this.getOneWithTimestamp(data);
@@ -192,7 +192,9 @@ export default class RepoBase {
           throw new ApiError(`Measure doesn't exist.`);
         }
         this.addUpdatedBy(data, userId);
-        this.validate(data);
+        if (validate) {
+          this.validate(data);
+        }
         // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
         // we'll just replace the doc in entirety and be done with it
         return this.Model.replaceOne({_id: data.id}, data)
@@ -407,10 +409,8 @@ export default class RepoBase {
       const date = new Date();
       // with our rule and submeasure versioning, we add instead of update, in this case, we don't want to
       // wipe out the created user or date
-      if (!item.createdBy) {
+      if (!item.createdBy || item.createdBy === 'system') {
         item.createdBy = userId;
-      }
-      if (!item.createdDate) {
         item.createdDate = date;
       }
       item.updatedBy = userId;
@@ -424,10 +424,8 @@ export default class RepoBase {
         throw new ApiError('no userId for createdBy/updatedBy.');
       }
       const date = new Date();
-      if (!item.createdBy) {
+      if (!item.createdBy || item.createdBy === 'system') {
         item.createdBy = userId;
-      }
-      if (!item.createdDate) {
         item.createdDate = date;
       }
       item.updatedBy = userId;

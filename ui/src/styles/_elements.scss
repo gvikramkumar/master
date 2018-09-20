@@ -1,6 +1,10 @@
 @import 'variables';
 @import 'mixins';
 
+i + i {
+  padding-left: 7px;
+}
+
 // our <input type=file> css hiding
 input[type="file"] {
   display: none;

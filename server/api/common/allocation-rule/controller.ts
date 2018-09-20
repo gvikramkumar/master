@@ -5,9 +5,10 @@ import {AllocationRule} from '../../../../shared/models/allocation-rule';
 import PgLookupRepo from '../pg-lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
 import {ApiError} from '../../../lib/common/api-error';
-import ApprovalController, {ApprovalMode} from '../../../lib/base-classes/approval-controller';
 import DfaUser from '../../../../shared/models/dfa-user';
 import {join} from 'path';
+import ApprovalController from '../../../lib/base-classes/approval-controller';
+import {ApprovalMode} from '../../../../shared/enums';
 
 @injectable()
 export default class AllocationRuleController extends ApprovalController {
@@ -91,7 +92,6 @@ export default class AllocationRuleController extends ApprovalController {
     });
   }
 
-
   _validateProdPFCritChoices(choices): Promise<{values: any[], exist: boolean}> {
     if (!choices.length) {
       return Promise.resolve({values: [], exist: true});
@@ -121,23 +121,30 @@ export default class AllocationRuleController extends ApprovalController {
   }
 
   sendApprovalEmail(req, mode: ApprovalMode, ruleId) {
-    const url = `<a href="${req.headers.origin}/prof/rule-management/edit/${ruleId}">
-      ${req.headers.origin}/prof/rule-management/edit/${ruleId}</a>`;
+    const data = req.body;
+    const url = `${req.headers.origin}/prof/rule-management/edit/${ruleId};mode=edit`;
+    const link = `<a href="${url}">${url}</a>`
     switch (mode) {
-      case 1: // submit
+      case ApprovalMode.submit:
+        let prefix;
+        if (data.approvedOnce === 'Y') {
+          prefix = 'An updated';
+        } else {
+          prefix = 'A new';
+        }
         this.sendEmail(req.user.email,
           'DFA: Rule Submitted for Approval',
-          'A DFA rule has been submitted by ' + req.user.id + ' for approval: ' + url);
+          `${prefix} DFA rule has been submitted by ${req.user.fullName} for approval: <br>${link}`);
         break;
-      case 2: // approve
+      case ApprovalMode.approve:
           this.sendEmail(req.user.email,
           'DFA: Rule Approved',
-          'The DFA rule submitted by ' + req.user.id + ' for approval has been approved: ' + url);
+          `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br>${link}`);
         break;
-      case 3: // reject
+      case ApprovalMode.reject:
           this.sendEmail(req.user.email,
           'DFA: Rule Not Approved',
-          'The DFA rule submitted by ' + req.user.id + ' for approval has been rejected: ' + url);
+          `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br>${link}`);
         break;
     }
   }

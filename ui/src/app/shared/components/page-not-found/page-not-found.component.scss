@@ -1,0 +1,6 @@
+@import '../../../../styles/comp-index';
+
+:host {
+  min-height: calc(100vh - #{$fin-footer-height});
+  display: flex;
+}

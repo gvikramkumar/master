@@ -46,8 +46,8 @@ export class LeftnavComponent {
 
       case 'prof':
         this.links = [
-          {route: '/prof/rule-management', text: 'Rule Management', authorization: 'prof:admin'},
-          {route: '/prof/submeasure', text: 'Sub-Measure', authorization: 'prof:admin'},
+          {route: '/prof/rule-management', text: 'Rule Management', authorization: 'prof:admin,prof:user'},
+          {route: '/prof/submeasure', text: 'Sub-Measure', authorization: 'prof:admin,prof:user'},
           {route: '/prof/business-upload', text: 'Business Upload', authorization: 'prof:admin, prof:user'},
           {route: '/prof/reports', text: 'Report', authorization: 'prof:admin, prof:user'},
         ];

@@ -1,4 +1,5 @@
 
+
 /*
 material is viewEncapsulation.none and all their css is global, so has to be dealt with at this level. If you
 try something like: mat-xx {...} in a component, we're viewEncapsulated:Emulated, which means that will get decorated with [_ngContentxxx] attribute rendering it useless if inside a mat component. If up here, won't get decorated, but then addresses all mat comps of that type ,but then you can decorate yours with a class and select it from here with that class: mat-xxx.myclass {...}

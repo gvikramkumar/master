@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
@@ -24,7 +24,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   rulesCount: Number = 0;
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
-  tableColumns = ['name', 'period', 'driverName', 'status', 'updatedBy', 'updatedDate'];
+  tableColumns = ['name', 'period', 'driverName', 'status', 'updatedBy', 'updatedDate', 'icons'];
   dataSource: MatTableDataSource<AllocationRule>;
   UiUtil = UiUtil;
   statuses = [
@@ -38,10 +38,11 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   constructor(
     private ruleService: RuleService,
     private store: AppStore,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private uiUtil: UiUtil,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     super(store, route);
-
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -52,15 +53,10 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
       .subscribe(name => {
       this.nameFilter.next(name);
     });
-
-    this.ruleService
-      .getLatestByName().subscribe(rules => {
+    this.ruleService.getApprovalVersionedListByNameAndUserType()
+      .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
-        this.rulesCount = rules.length;
-        this.dataSource = new MatTableDataSource(this.rules);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        // this.changeFilter();
+        this.changeFilter();
       });
   }
 
@@ -77,6 +73,22 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  remove(rule) {
+    this.uiUtil.confirmDelete()
+      .subscribe(resp => {
+        if (resp) {
+          this.ruleService.remove(rule.id)
+            .subscribe(() => {
+              this.rules.splice(this.rules.indexOf(rule), 1);
+              this.changeFilter();
+            });
+        }
+      });
+  }
+
+  showDeleteIcon(rule) {
+    return _.includes(['D', 'P'], rule.status);
+  }
 }
 
 

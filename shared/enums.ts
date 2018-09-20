@@ -1,4 +1,18 @@
 
+
+export enum ApprovalMode {
+  submit = 1,
+  approve,
+  reject
+}
+
+export enum Statuses {
+  draft = 'D',
+  pending = 'P',
+  active = 'A',
+  inactive = 'I'
+}
+
 export enum Directory {
   businessUpload = 'prof.bu'
 }
