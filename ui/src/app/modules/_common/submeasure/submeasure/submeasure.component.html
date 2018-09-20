@@ -12,7 +12,7 @@
     <mat-form-field>
       <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
     </mat-form-field>
-    <a routerLink="add">
+    <a  [routerLink]="['add', {mode: 'add'}]">
       <button cuiButton color="primary">Add New</button>
     </a>
   </div>
@@ -23,7 +23,7 @@
 
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-        <mat-cell *matCellDef="let row" [routerLink]="['edit', row.id]"><a> {{row.name}} </a></mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="sourceId">
@@ -54,6 +54,20 @@
       <ng-container matColumnDef="updatedDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{moment(row.updatedDate).fromNow()}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="icons">
+        <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <div class="fin-table-icon-list">
+            <i class="icon-edit icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'edit'}]"
+               matTooltip="edit" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
+            <i class="icon-add-outline icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'copy'}]"
+               matTooltip="copy" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
+            <i class="icon-exit-outline icon-small" (click)="remove(row)" [fxShow]="showDeleteIcon(row)"
+               matTooltip="delete" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
+          </div>
+        </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>

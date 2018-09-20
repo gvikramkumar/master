@@ -21,7 +21,7 @@ import * as moment from 'moment';
   styleUrls: ['./submeasure.component.scss']
 })
 export class SubmeasureComponent extends RoutingComponentBase implements OnInit {
-  tableColumns = ['name', 'sourceId', 'processingTime', 'startFiscalMonth', 'status', 'updatedBy', 'updatedDate'];
+  tableColumns = ['name', 'sourceId', 'processingTime', 'startFiscalMonth', 'status', 'updatedBy', 'updatedDate', 'icons'];
   dataSource: MatTableDataSource<Submeasure>;
   measureId: number;
   measures: Measure[] = [];
@@ -45,8 +45,9 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     private store: AppStore,
     private route: ActivatedRoute,
     private measureService: MeasureService,
-    private sourceService: SourceService
-  ) {
+    private sourceService: SourceService,
+    private uiUtil: UiUtil
+    ) {
     super(store, route);
   }
 
@@ -88,5 +89,21 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  remove(submeasure) {
+    this.uiUtil.confirmDelete()
+      .subscribe(resp => {
+        if (resp) {
+          this.submeasureService.remove(submeasure.id)
+            .subscribe(() => {
+              this.submeasures.splice(this.submeasures.indexOf(submeasure), 1);
+              this.changeFilter();
+            });
+        }
+      });
+  }
+
+  showDeleteIcon(rule) {
+    return _.includes(['D', 'P'], rule.status);
+  }
 
 }

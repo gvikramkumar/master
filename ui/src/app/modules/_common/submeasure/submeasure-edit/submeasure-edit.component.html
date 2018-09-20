@@ -13,7 +13,7 @@
             <fin-checkbox label="Active" [(model)]="sm.status" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
           <div *ngIf="UiUtil.statusIsPending(sm.status)" class="form-group-button">
-            <button cuiButton color="primary" (click)="save('approve')">Approve</button>
+            <button cuiButton color="primary" (click)="approve()">Approve</button>
             <button cuiButton color="primary" (click)="reject()">Reject</button>
           </div>
         </div>
@@ -238,8 +238,8 @@
     </div>
 
     <div class="fin-footer-buttons">
-      <button finErrorFlash type="submit" cuiButton color="primary" (click)="save('submit')">Submit</button>
-      <button cuiButton color="secondary" (click)="saveToDraft()">Save Draft</button>
+      <button finErrorFlash type="submit" cuiButton color="primary" (click)="submitForApproval()">Submit</button>
+      <button cuiButton color="primary" (click)="saveToDraft()">Save Draft</button>
       <button cuiButton color="secondary" (click)="cancel()">Cancel</button>
       <button cuiButton color="secondary" (click)="reset()">Reset</button>
     </div>

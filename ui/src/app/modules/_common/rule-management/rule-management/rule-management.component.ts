@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
@@ -39,8 +39,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     private ruleService: RuleService,
     private store: AppStore,
     private route: ActivatedRoute,
-    private uiUtil: UiUtil,
-    private changeDetectorRef: ChangeDetectorRef
+    private uiUtil: UiUtil
   ) {
     super(store, route);
   }
