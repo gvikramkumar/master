@@ -10,7 +10,7 @@
     <mat-form-field>
       <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
     </mat-form-field>
-    <a routerLink="add">
+    <a [routerLink]="['add', {mode: 'add'}]">
       <button cuiButton color="primary">Add New</button>
     </a>
   </div>
@@ -49,7 +49,7 @@
 
       <ng-container matColumnDef="updatedDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.updatedDate | fromNow}}</mat-cell>
+        <mat-cell *matCellDef="let row"> {{moment(row.updatedDate).fromNow()}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="icons">

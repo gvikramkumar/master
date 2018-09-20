@@ -104,9 +104,9 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.get<T>(`${this.endpointUrl}/${id}`);
   }
 
-  callMethod(method, data = {}) {
+  callMethod(method, data = {}, params = {}) {
     this.addModuleId(data);
-    return this.httpClient.post<any>(`${this.endpointUrl}/call-method/${method}`, data);
+    return this.httpClient.post<any>(`${this.endpointUrl}/call-method/${method}`, data, {params});
   }
 
   // same as getMany(params) just uses POST body instead of querystrings. The post body uses

@@ -43,7 +43,6 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     private changeDetectorRef: ChangeDetectorRef
   ) {
     super(store, route);
-
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,15 +53,10 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
       .subscribe(name => {
       this.nameFilter.next(name);
     });
-
     this.ruleService.getApprovalVersionedListByNameAndUserType()
       .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
-        this.rulesCount = rules.length;
-        this.dataSource = new MatTableDataSource(this.rules);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        // this.changeFilter();
+        this.changeFilter();
       });
   }
 
@@ -86,7 +80,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
           this.ruleService.remove(rule.id)
             .subscribe(() => {
               this.rules.splice(this.rules.indexOf(rule), 1);
-              this.changeDetectorRef.detectChanges();
+              this.changeFilter();
             });
         }
       });

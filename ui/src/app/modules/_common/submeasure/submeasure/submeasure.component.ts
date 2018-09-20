@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 import {Source} from '../../../../../../../shared/models/source';
 import {SourceService} from '../../services/source.service';
 import {UiUtil} from '../../../../core/services/ui-util';
+import * as moment from 'moment';
 
 @Component({
   selector: 'fin-submeasure',
@@ -37,6 +38,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   @ViewChild(MatSort) sort: MatSort;
   filterValue = '';
   UiUtil = UiUtil;
+  moment = moment;
 
   constructor(
     private submeasureService: SubmeasureService,

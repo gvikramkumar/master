@@ -10,8 +10,9 @@ import InputLevelPgRepo from './input-level-pgrepo';
 import AnyObj from '../../../../shared/models/any-obj';
 import Any = jasmine.Any;
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
-import ApprovalController, {ApprovalMode} from '../../../lib/base-classes/approval-controller';
 import DfaUser from '../../../../shared/models/dfa-user';
+import ApprovalController from '../../../lib/base-classes/approval-controller';
+import {ApprovalMode} from '../../../../shared/enums';
 
 
 interface FilterLevel {
@@ -132,23 +133,30 @@ export default class SubmeasureController extends ApprovalController {
   }
 
   sendApprovalEmail(req, mode: ApprovalMode, submeasureId) {
-    const url = `<a href="${req.headers.origin}/prof/submeasure/edit/${submeasureId}">
-      ${req.headers.origin}/prof/submeasure/edit/${submeasureId}</a>`;
+    const data = req.body;
+    const url = `${req.headers.origin}/prof/submeasure/edit/${submeasureId};mode=edit`;
+    const link = `<a href="${url}">${url}</a>`
     switch (mode) {
-      case 1: // submit
+      case ApprovalMode.submit:
+        let prefix;
+        if (data.approvedOnce === 'Y') {
+          prefix = 'An updated';
+        } else {
+          prefix = 'A new';
+        }
         this.sendEmail(req.user.email,
           'DFA: Submeasure Submitted for Approval',
-          'A DFA submeasure has been submitted by ' + req.user.id + ' for approval: ' + url);
+          `${prefix} DFA submeasure has been submitted by ${req.user.fullName} for approval: <br>${link}`);
         break;
-      case 2: // approve
-          this.sendEmail(req.user.email,
+      case ApprovalMode.approve:
+        this.sendEmail(req.user.email,
           'DFA: Submeasure Approved',
-          'The DFA submeasure submitted by ${req.user.id} for approval has been approved: ' + url);
+          `The DFA submeasure submitted by ${req.user.fullName} for approval has been approved:<br>${link}`);
         break;
-      case 3: // reject
-          this.sendEmail(req.user.email,
+      case ApprovalMode.reject:
+        this.sendEmail(req.user.email,
           'DFA: Submeasure Not Approved',
-          'The DFA submeasure submitted by ' + req.user.id + ' for approval has been rejected: ' + url);
+          `The DFA submeasure submitted by ${req.user.fullName} for approval has been rejected:<br>${link}`);
         break;
       }
   }
