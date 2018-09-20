@@ -1,4 +1,5 @@
 import DfaUser from '../../../shared/models/dfa-user';
+import * as _ from 'lodash';
 
 export function addSsoUser() {
 
@@ -13,7 +14,7 @@ export function addSsoUser() {
     const headers = req.headers;
     let promise;
 
-    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'unit') {
+    if (!process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV)) {
       promise = Promise.resolve(new DfaUser(
         'jodoe',
         'John',

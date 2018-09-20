@@ -43,13 +43,11 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
 
   ngOnInit() {
     this.modules = this.store.nonAdminModules;
-    this.pgLookupService.getFiscalMonths().toPromise()
-      .then(fiscalMonths => {
-        this.modules.forEach((module, idx) => {
-          this.fiscalMonths.push(_.cloneDeep(fiscalMonths));
-        });
-        this.refresh();
-      });
+    const fiscalMonthList = shUtil.getFiscalMonthListForCurYearAndLast();
+    this.modules.forEach((module, idx) => {
+      this.fiscalMonths.push(_.cloneDeep(fiscalMonthList));
+    });
+    this.refresh();
   }
 
   refresh() {

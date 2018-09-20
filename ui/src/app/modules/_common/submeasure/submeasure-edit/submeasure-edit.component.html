@@ -177,7 +177,7 @@
     <div class="row">
       <div class="col-lg-6">
         <cui-select name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos" label="Effective Month" empty="true"
-                    [required]="true" optionsKey="long" optionsValue="num"></cui-select>
+                    [required]="true" optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
 
         <cui-select name="processingTime" [(ngModel)]="sm.processingTime" [items]="timings" label="Processing Timing" empty="true"
                     optionsKey="name" optionsValue="value"></cui-select>

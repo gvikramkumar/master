@@ -39,7 +39,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   sources: Source[] = [];
   rules: AllocationRule[] = [];
   errs: string[] = [];
-  yearmos: { str: string, num: number }[];
+  yearmos: { fiscalMonthName: string, fiscalMonth: number }[];
   COGS = ' Cogs '; // todo: move to lookup
   disableReportingLevels = [];
   disableCategories = false;
@@ -237,7 +237,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
-    this.yearmos = UiUtil.getFiscalMonthListFromDate(new Date(), 6);
+    this.yearmos = shUtil.getFiscalMonthListFromDate(new Date(), 6);
     const promises: Promise<any>[] = [
       this.measureService.getMany().toPromise(),
       this.ruleService.getManyActive().toPromise(),
