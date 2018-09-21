@@ -13,15 +13,17 @@
         <div>Analytics that explore business profitability</div>
       </div>
       <div finAuth="itadmin" class="admin-button">
-        <button cuiButton color="primary" (click)="moduleChange(adminModule)">Administration</button>
+        <button cuiButton color="primary" (click)="moduleChange(adminModule)"
+                [class.fin-selected]="adminModule === selectedModule">Administration</button>
       </div>
     </div>
 
     <div class="modules-wrap" fxLayout="column" fxLayoutAlign="center stretch">
       <div class="modules base-padding">
-        <div class="module" *ngFor="let module of modules" [class.selected]="module === selectedModule"
+        <div class="module" *ngFor="let module of modules" [class.fin-selected]="module === selectedModule"
              (click)="moduleChange(module)">
           <div class="module-name">{{module.name}}</div>
+          <div class="module-desc">{{module.desc}}</div>
         </div>
       </div>
     </div>

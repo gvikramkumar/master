@@ -8,6 +8,7 @@
   line-height: 1.42;
 
   .title {
+    color: $status-blue;
     font-size: 19px !important; // cui changes font size at breakpoints, we don't want that here.
   }
 

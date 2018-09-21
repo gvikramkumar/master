@@ -7,7 +7,7 @@ export class DfaModule {
   displayOrder: number;
   status = 'I';
   authorization?: '';
-
+  desc?: string;
   constructor(status?) {
     this.status = status || 'I';
   }
