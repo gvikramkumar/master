@@ -1,12 +1,14 @@
 import * as _ from 'lodash';
 import AnyObj from '../shared/models/any-obj';
+import {shUtil} from '../shared/shared-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-const allowedRoles = ' '.split(',').map(s => s.toLowerCase().trim());
-console.log(allowedRoles);
+
+console.log(['2018', '2017'].sort());
 
 
+// console.log(shUtil.getFiscalMonthListForCurYearAndLast());
 
 /*
 const nodeValue = 'lala';

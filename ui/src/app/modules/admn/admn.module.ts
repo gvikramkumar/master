@@ -6,6 +6,7 @@ import { OpenPeriodComponent } from './open-period/open-period.component';
 import { SourceComponent } from './source/source.component';
 import { SourceMappingComponent } from './source-mapping/source-mapping.component';
 import {ModuleComponent} from './module/module.component';
+import { DatabaseSyncComponent } from './database-sync/database-sync.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import {ModuleComponent} from './module/module.component';
     SourceComponent,
     SourceMappingComponent,
     ModuleComponent,
+    DatabaseSyncComponent,
   ]
 })
 export class AdmnModule {

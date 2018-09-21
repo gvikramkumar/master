@@ -13,6 +13,7 @@ import SalesSplitUploadController from '../prof/sales-split-upload/controller';
 import OpenPeriodRepo from '../common/open-period/repo';
 import {DfaModuleIds} from '../../../shared/enums';
 import * as _ from 'lodash';
+import {shUtil} from '../../../shared/shared-util';
 
 @injectable()
 export default class DatabaseController {
@@ -33,7 +34,7 @@ export default class DatabaseController {
 
   mongoToPgSync(req, res, next) {
     let openPeriods: {moduleId: number, fiscalMonth: number}[];
-    let profFiscalMonth;
+    const curFiscalMonth = shUtil.getFiscalMonthListFromDate(new Date(), 1)[0].fiscalMonth;
     const resultArr = [];
     const log: string[] = [];
     const elog: string[] = [];
@@ -42,10 +43,11 @@ export default class DatabaseController {
     ])
       .then(results => {
         openPeriods = results[0];
-        profFiscalMonth = _.find(openPeriods, {moduleId: DfaModuleIds.prof}).fiscalMonth;
-        if (!profFiscalMonth) { // add them all here, just need to know if one is missing
-          throw new ApiError('fiscal month missing');
-        }
+        openPeriods.forEach(op => {
+          if (op.fiscalMonth !== curFiscalMonth) {
+            throw new ApiError('Some modules not set to current fiscal month', null, 400);
+          }
+        });
       })
       .then(() => {
         Promise.all([
@@ -57,13 +59,13 @@ export default class DatabaseController {
           // this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog, {moduleId: -1}),
           // // prof
           // this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog), // deletes all on upload and pgsync
-          // this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', req.user.id, log, elog, {}, {fiscalMonth: profFiscalMonth}),
+          // this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', req.user.id, log, elog, {}, {fiscalMonth: curFiscalMonth}),
           // this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', req.user.id, log, elog,
-          //   {fiscalMonth: profFiscalMonth}, {fiscalMonth: profFiscalMonth}),
+          //   {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
           // this.productClassUploadCtrl.mongoToPgSync('dfa_prof_swalloc_manualmix_upld', req.user.id, log, elog,
-          //   {fiscalMonth: profFiscalMonth}, {fiscalMonth: profFiscalMonth}),
+          //   {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
           this.salesSplitUploadCtrl.mongoToPgSync('dfa_prof_sales_split_pctmap_upld', req.user.id, log, elog,
-            {fiscalMonth: profFiscalMonth}, {fiscalMonth: profFiscalMonth}),
+            {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
 
         ])
           .then(() => {
@@ -84,7 +86,8 @@ export default class DatabaseController {
             // errors to debug the data, not just jump out on first failure.
             // next(new ApiError('MongoToPgSync Errors', data));
           });
-      });
+      })
+      .catch(next);
   }
 
   pgToMongoSync(req, res, next) {
