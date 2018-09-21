@@ -56,6 +56,16 @@ export default class DfaUser {
     return _.intersection(allowedRoles, this.roles).length > 0;
   }
 
+  hasUserId(_allowedUserIds) {
+    if (!_allowedUserIds || _allowedUserIds.trim().length === 0) {
+      throw new Error('getAllowedRoles: no roles sent in.');
+    }
+
+    const allowedUserIds = _allowedUserIds.split(',').map(s => s.toLowerCase().trim());
+    allowedUserIds.filter(x => !!x); // remove empty strings
+    return _.includes(allowedUserIds, this.id);
+  }
+
   // pass in an array of objects and specify the property with authorization role,
   // will return a filtered list of objects that are authorized
   authorizeObjects<T>(objs: T[], prop) {

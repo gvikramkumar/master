@@ -7,6 +7,8 @@ import {OpenPeriodComponent} from './open-period/open-period.component';
 import {SourceComponent} from './source/source.component';
 import {SourceMappingComponent} from './source-mapping/source-mapping.component';
 import {ModuleComponent} from './module/module.component';
+import {DatabaseSyncComponent} from './database-sync/database-sync.component';
+import {UserAuthorizationGuard} from '../../core/guards/user-authorization.guard';
 
 const routes: Routes = [
   {
@@ -18,7 +20,7 @@ const routes: Routes = [
         path: 'module', component: ModuleComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof:admin',
+          authorization: 'itadmin',
           hero: {
             title: 'Manage Modules',
             desc: 'Create and configure modules'
@@ -30,7 +32,7 @@ const routes: Routes = [
         path: 'open-period', component: OpenPeriodComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof:admin',
+          authorization: 'itadmin',
           hero: {
             title: 'Set Open Period',
             desc: 'Set open period for modules'
@@ -42,7 +44,7 @@ const routes: Routes = [
         path: 'source', component: SourceComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof:admin',
+          authorization: 'itadmin',
           hero: {
             title: 'Set Sources',
             desc: 'Configure sources for all modules'
@@ -54,12 +56,24 @@ const routes: Routes = [
         path: 'source-mapping', component: SourceMappingComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof:admin',
+          authorization: 'itadmin',
           hero: {
             title: 'Source Mapping',
             desc: 'Assign active sources to be available for each module'
           },
           breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Source Mapping'}]
+        }
+      },
+      {
+        path: 'database-sync', component: DatabaseSyncComponent,
+        canActivate: [UserAuthorizationGuard],
+        data: {
+          authorization: 'dakahle, rsamband, amalakar',
+          hero: {
+            title: 'Database Sync',
+            desc: 'Sync data from postgres to mongo and mongo to postgres'
+          },
+          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Database Sync'}]
         }
       },
       // admin pages go here, just like module pages do,
