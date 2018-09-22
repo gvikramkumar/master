@@ -31,7 +31,11 @@ import {addSsoUser} from './lib/middleware/add-sso-user';
 import {userRouter} from './api/user/router';
 import {moduleSourceRouter} from './api/common/module-source/router';
 import {databaseRouter} from './api/database/router';
-
+import LookupRepo from './api/common/lookup/repo';
+import * as _ from 'lodash';
+import AnyObj from '../shared/models/any-obj';
+import {ApiError} from './lib/common/api-error';
+import {siteRestriction} from './lib/middleware/site-restriction';
 
 export default function () {
 
@@ -76,7 +80,7 @@ export default function () {
     ].join(' ');
   }));
 
-  // app.use(morgan('dev'));
+/*
   app.get('/cause-error', function (req, res, next) {
     if (process.env.NODE_ENV === 'unit') {
       const err = new NamedApiError('CauseError', 'api error with data', {some: 'thing'});
@@ -92,6 +96,9 @@ export default function () {
       next();
     }
   })
+*/
+
+  app.use(siteRestriction());
 
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/database', databaseRouter);
