@@ -1,45 +1,77 @@
 import DfaUser from '../../../shared/models/dfa-user';
 import * as _ from 'lodash';
+import LookupRepo from '../../api/common/lookup/repo';
+import {ModuleRepo} from '../../api/common/module/repo';
+import {shUtil} from '../../../shared/shared-util';
+import {ApiError} from '../common/api-error';
 
 export function addSsoUser() {
 
-  const roles = [
-    'itadmin',
-    'prof:measure',
-    'prof:admin',
-    'prof:user',
-  ];
+  /*
+    const roles = [
+      'itadmin',
+      'prof:measure',
+      'prof:admin',
+      'prof:super-user',
+      'prof:end-user',
+    ];
+  */
 
-  return function(req, res, next) {
+  return function (req, res, next) {
     const headers = req.headers;
-    let promise;
+    const lookupRepo = new LookupRepo();
+    const moduleRepo = new ModuleRepo();
+    const localEnv = !process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV);
+    let roles, modules;
+    const userId = localEnv ? 'jodoe' : req.headers['auth-user'];
 
-    if (!process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV)) {
-      promise = Promise.resolve(new DfaUser(
-        'jodoe',
-        'John',
-        'Doe',
-        'dakahle@cisco.com',
-        ['itadmin']
-      ));
-    } else {
-      // todo: need to hit pg here and get users roles to pass into constructor
-      promise = Promise.resolve('getroleshere')
-        .then(usersRoles => {
+    Promise.all([
+      lookupRepo.getValue(userId),
+      moduleRepo.getActiveNonAdminSortedByModuleId()
+    ])
+      .then(results => {
+        roles = results[0] ? results[0] : ['itadmin'];
+        modules = results[1];
+
+        const roleList = modules.filter(m => !m.roles || !m.roles.trim());
+        if (roleList.length > 0) {
+          throw new ApiError(`The following modules don't have roles: ${roleList.map(r => r.name).join(', ')}`);
+        }
+
+        if (localEnv) {
           return new DfaUser(
-            headers['auth-user'],
-            headers['givenname'],
-            headers['familyname'],
-            headers['email'],
-            ['itadmin']
+            'jodoe',
+            'John',
+            'Doe',
+            'dakahle@cisco.com',
+            roles,
+            modules
           );
-        });
-    }
-
-    promise.then(user => {
-      req.user = user;
-      next();
-    });
+        } else {
+          return Promise.resolve() // get roles from onramp table here
+            .then(usersRoles => {
+              return new DfaUser(
+                headers['auth-user'],
+                headers['givenname'],
+                headers['familyname'],
+                headers['email'],
+                roles,
+                modules
+              );
+            });
+        }
+      })
+      .then(user => {
+        if (req.requiresAdminAccess && !user.hasAdminRole()) {
+          res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`Admin access required.`));
+        } else if (!user.hasAdminOrUserRole()) {
+          res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`User access required.`));
+        } else {
+          req.user = user;
+          next();
+        }
+      })
+      .catch(next);
   };
 
 }

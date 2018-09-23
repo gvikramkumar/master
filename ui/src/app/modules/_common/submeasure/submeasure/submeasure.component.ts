@@ -14,6 +14,7 @@ import {Source} from '../../../../../../../shared/models/source';
 import {SourceService} from '../../services/source.service';
 import {UiUtil} from '../../../../core/services/ui-util';
 import * as moment from 'moment';
+import AnyObj from '../../../../../../../shared/models/any-obj';
 
 @Component({
   selector: 'fin-submeasure',
@@ -70,13 +71,13 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   getSourceName(sourceId) {
     // todo: REMOVE THIS IF BEFORE CHECK IN
     if (sourceId > 0 && sourceId <= 4) {
-      return _.find(this.sources, {sourceId: sourceId}).name;
+      return (<AnyObj>_.find(this.sources, {sourceId: sourceId})).name;
     }
   }
 
   changeFilter() {
     this.filteredSubmeasures = this.submeasures.filter(sm => {
-      return sm.measureId = this.measureId && _.includes(this.showStatuses, sm.status);
+      return sm.measureId === this.measureId && _.includes(this.showStatuses, sm.status);
     });
 
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);

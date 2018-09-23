@@ -6,19 +6,20 @@ export const shUtil = {
   stringToArray,
   isManualUploadSource,
   getFiscalMonthListFromDate,
-  getFiscalMonthListForCurYearAndLast
+  getFiscalMonthListForCurYearAndLast,
+  getHtmlForLargeSingleMessage
 };
+
+function getHtmlForLargeSingleMessage(msg) {
+  return `<div style="text-align: center; margin-top: 200px;"><h1>${msg}</h1></div>`;
+}
 
 function isManualUploadSource(sourceId: number) {
   return sourceId === 4;
 }
 
-function stringToArray(_str) {
-  let str = _str.trim();
-  if (str[str.length - 1] === ',') {
-    str = str.substr(0, str.length - 1);
-  }
-  return str ? str.split(',').map(x => x.trim()) : [];
+function stringToArray(str) {
+  return str.trim() ? str.split(',').map(x => x.trim()).filter(x => !!x) : [];
 }
 
 function isAdminModuleId(moduleId) {

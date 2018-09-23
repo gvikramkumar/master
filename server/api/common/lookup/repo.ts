@@ -29,6 +29,12 @@ Model: Model<any>;
     return this.Model.findOne({key}).exec();
   }
 
+  // use this if you don't care if document is there or not
+  getValue(key) {
+    return this.Model.findOne({key}).exec()
+      .then(doc => doc && doc.value);
+  }
+
   // this is for upload data validation for entries with just text values (not objects),
   // we need them upper case and sorted by lodash
   getTextValuesSortedUpperCase(key) {

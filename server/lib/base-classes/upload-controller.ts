@@ -347,7 +347,7 @@ export default class UploadController {
 
   validateMeasureAccess() {
     // todo: need a measureId to measureRole map (from ART data) to determine measure role here
-    if (!this.user.isAuthorized('prof:measure')) {
+    if (!this.user.isAuthorized('super-user')) {
       this.addError('', `Not authorized for this measure: ${this.submeasure.measureId}.`);
     }
     return Promise.resolve();
