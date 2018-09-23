@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {RestBase} from '../base-classes/rest-base';
 import {DfaModule} from '../../modules/_common/models/module';
@@ -18,17 +18,19 @@ export class UserService extends RestBase<DfaUser> {
   }
 
   refreshUser() {
-   return this.callMethod('getUser').toPromise()
-     .then((user: DfaUser) => {
-
-       this.store.pubUser(new DfaUser(
-         user.id,
-         user.firstName,
-         user.lastName,
-         user.email,
-         user.roles
-       ));
-     });
+    return this.callMethod('getUser').toPromise()
+      .then((user: DfaUser) => {
+        const usr = new DfaUser(
+          user.id,
+          user.firstName,
+          user.lastName,
+          user.email,
+          user.roles,
+          user.modules
+        );
+        usr.store = this.store;
+        this.store.pubUser(usr);
+      });
   }
 
 }

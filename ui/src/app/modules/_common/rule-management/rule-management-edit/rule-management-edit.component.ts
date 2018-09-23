@@ -201,7 +201,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   validateSaveToDraft() {
     const errors = [];
-    if (!this.rule.name.trim()) {
+    if (!(this.rule.name && this.rule.name.trim())) {
       errors.push('You must define a name to save to draft.');
     }
     if (_.includes(this.ruleNames, this.rule.name)) {

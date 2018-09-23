@@ -29,6 +29,8 @@ import { ErrorFlashDirective } from './directives/error-flash.directive';
 import { ValidationInputComponent } from './components/validation-input/validation-input.component';
 import {InListValidator} from './validators/in-list.validator';
 import {NumberValidator} from './validators/number.validator';
+import {AuthDisableDirective} from './directives/auth-disable.directive';
+import {AuthOnlyDirective} from './directives/auth-only.directive';
 
 @NgModule({
   imports: [
@@ -68,6 +70,8 @@ import {NumberValidator} from './validators/number.validator';
     ErrorFlashDirective,
     ValidationInputComponent,
     NumberValidator,
+    AuthDisableDirective,
+    AuthOnlyDirective,
   ],
 
   declarations: [
@@ -94,6 +98,8 @@ import {NumberValidator} from './validators/number.validator';
     ErrorFlashDirective,
     ValidationInputComponent,
     NumberValidator,
+    AuthDisableDirective,
+    AuthOnlyDirective,
   ],
   entryComponents: [
     ErrorModalComponent,
