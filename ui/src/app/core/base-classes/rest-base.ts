@@ -52,8 +52,8 @@ export class RestBase<T extends AnyObj> {
     return this.getMany(filter);
   }
 
-  getLatestByName() {
-    return this.getManyLatest('name');
+  getLatestByName(params = {}) {
+    return this.getManyLatest('name', params);
   }
 
   getManyPending(filter: AnyObj = {}) {
@@ -64,12 +64,12 @@ export class RestBase<T extends AnyObj> {
   getApprovalVersionedListByNameAndUserType() {
     const moduleId = this.store.module.moduleId;
     const user = this.store.user;
-    if (user.isModuleUserOnly(moduleId)) {
+    if (user.isModuleEndUser()) {
+      return this.getLatestByName({status: 'A'});
+    } else if (user.isModuleSuperUser()) {
       return this.callMethod('getManyLatestByNameActiveConcatDraftPendingOfUser');
-    } else if (user.isModuleAdmin(moduleId) || user.isItAdmin()) {
+    } else if (user.isModuleAdminOrGreater()) {
       return this.getLatestByName();
-    } else {
-      throw new Error(`User not user/bizadmin/itadmin for module: ${moduleId} and user: ${user.id}`);
     }
   }
 

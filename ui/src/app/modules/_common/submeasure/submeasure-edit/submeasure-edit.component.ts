@@ -250,7 +250,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     Promise.all(promises)
       .then(results => {
         this.measures = _.sortBy(results[0], 'name');
-        this.rules = _.sortBy(results[1], 'name').map(rule => ({name: rule.name}));
+        this.rules = _.sortBy(results[1], 'name');
         this.sources = _.sortBy(results[2], 'name');
         this.submeasureNames = results[3].map(x => x.toUpperCase());
 
@@ -577,7 +577,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   validateSaveToDraft() {
     const errors = [];
-    if (!this.sm.name.trim()) {
+    if (!(this.sm.name && this.sm.name.trim())) {
       errors.push('You must define a name to save to draft.');
     }
     if (_.includes(this.submeasureNames, this.sm.name)) {

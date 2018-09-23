@@ -14,7 +14,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     data: {
-      authorization: 'prof:admin, prof:user',
+      authorization: 'prof:admin, prof:super-user, prof:end-user',
       breadcrumbs: [{label: 'Home'}]
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
@@ -31,7 +31,7 @@ const routes: Routes = [
     path: 'prof',
     loadChildren: 'app/modules/prof/prof.module#ProfModule',
     data: {
-      authorization: 'prof:admin, prof:user'
+      authorization: 'prof:admin, prof:super-user, prof:end-user'
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },

@@ -9,6 +9,7 @@ const schema = new Schema(
     displayOrder: {type: Number, required: true},
     abbrev: {type: String, required: true},
     name: {type: String, required: true},
+    roles: {type: String, required: true},
     status: {type: String, enum: ['A', 'I'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
@@ -34,6 +35,11 @@ export class ModuleRepo extends RepoBase {
   getActiveNonAdminSortedByDisplayName() {
     return this.Model.find({status: 'A', moduleId: {$ne: 99}})
       .sort({displayOrder: 1});
+  }
+
+  getActiveNonAdminSortedByModuleId() {
+    return this.Model.find({status: 'A', moduleId: {$ne: 99}})
+      .sort({moduleId: 1});
   }
 
   getNonAdminSortedByDisplayName() {

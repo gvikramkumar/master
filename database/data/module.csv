@@ -1,6 +1,6 @@
-moduleId,displayOrder,abbrev,name, authorization
+moduleId,displayOrder,abbrev,name, roles
 99,99,admn,Administration,itadmin
-1,1,prof,Profitability Allocations,"prof:admin,prof:user"
+1,1,prof,Profitability Allocations,"prof:admin,prof:super-user,prof:end-user"
 2,2,bkgm,Bookings Misc Allocation,"bkgm:admin,bkgm:user"
 3,3,svct,Service Triangulation,"svct:admin,svct:user"
 4,4,tsct,TSS Cogs Triangulation,"tsct:admin,tsct:user"

@@ -87,20 +87,6 @@ db.user_role.insertOne({
   role: "Indirect Revenue Adjustments"
 })
 
-db.dfa_prof_input_amnt_upld.insertOne({
-  fiscalMonth: NumberInt(201809),
-  submeasureName: "2 Tier Adjustment",
-  product: "UCS",
-  sales: "Americas",
-  legalEntity: "Japan",
-  intBusinessEntity: "collaboration",
-  scms: "enterprise",
-  dealId: "",
-  grossUnbilledAccruedFlag: "N",
-  revenueClassification: "Non Recurring",
-  amount: 457.57
-});
-
 db.dfa_measure.insertMany([
   {
     measureId: NumberInt(1),
@@ -220,17 +206,6 @@ db.dfa_open_period.insertMany([
   {moduleId: NumberInt(11), fiscalMonth: NumberInt(201902), openFlag: "Y"},
 ]);
 
-db.dfa_prof_manual_map_upld.insert({
-  fiscalMonth: NumberInt(201809),
-  submeasureName: "2 Tier Adjustment",
-  product: "UCS",
-  sales: "Americas",
-  legalEntity: "Japan",
-  intBusinessEntity: "collaboration",
-  scms: "enterprise",
-  percentage: 458.58
-})
-
 db.dfa_lookup.insertMany([
   {
     key: 'revenue_classification',
@@ -240,25 +215,11 @@ db.dfa_lookup.insertMany([
     key: 'hierarchies',
     value: ['LEGAL ENTITY', 'PRODUCT', 'SALES']
   },
+  {
+    key: 'site-allowed-users',
+    value: ['jodoe', 'dakahle', 'rsamband', 'moltman', 'vgurumoo', 'prmaiya', 'ramgarg', 'mcai', 'amalakar']
+  },
 ]);
-
-// sales-split
-db.dfa_prof_sales_split_pctmap_upld.insertOne({
-  fiscalMonth: NumberInt(201810),
-  accountId: "42127",
-  companyCode: "555",
-  subaccountCode: "033",
-  salesTerritoryCode: "AFRICA-PROG-REB-COMM",
-  splitPercentage: 0.2
-});
-
-// product-class
-db.dfa_prof_swalloc_manualmix_upld.insertOne({
-  fiscalMonth: NumberInt(201810),
-  submeasureName: "2 Tier",
-  splitCategory: "HARDWARE",
-  splitPercentage: 1
-});
 
 db.dfa_module_data_source.insertMany([
   {moduleId: NumberInt(1), sources: [NumberInt(1),NumberInt(2), NumberInt(3),NumberInt(4)]}

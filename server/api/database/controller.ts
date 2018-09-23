@@ -52,18 +52,18 @@ export default class DatabaseController {
       .then(() => {
         Promise.all([
           // common
-          // this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', req.user.id, log, elog),
-          // this.measureCtrl.mongoToPgSync('dfa_measure', req.user.id, log, elog, {moduleId: -1}),
-          // this.moduleCtrl.mongoToPgSync('dfa_module', req.user.id, log, elog),
-          // this.openPeriodCtrl.mongoToPgSync('dfa_open_period', req.user.id, log, elog),
-          // this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog, {moduleId: -1}),
-          // // prof
-          // this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog), // deletes all on upload and pgsync
-          // this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', req.user.id, log, elog, {}, {fiscalMonth: curFiscalMonth}),
-          // this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', req.user.id, log, elog,
-          //   {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
-          // this.productClassUploadCtrl.mongoToPgSync('dfa_prof_swalloc_manualmix_upld', req.user.id, log, elog,
-          //   {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
+          this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', req.user.id, log, elog),
+          this.measureCtrl.mongoToPgSync('dfa_measure', req.user.id, log, elog, {moduleId: -1}),
+          this.moduleCtrl.mongoToPgSync('dfa_module', req.user.id, log, elog),
+          this.openPeriodCtrl.mongoToPgSync('dfa_open_period', req.user.id, log, elog),
+          this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog, {moduleId: -1}),
+          // prof
+          this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog), // deletes all on upload and pgsync
+          this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', req.user.id, log, elog, {}, {fiscalMonth: curFiscalMonth}),
+          this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', req.user.id, log, elog,
+            {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
+          this.productClassUploadCtrl.mongoToPgSync('dfa_prof_swalloc_manualmix_upld', req.user.id, log, elog,
+            {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
           this.salesSplitUploadCtrl.mongoToPgSync('dfa_prof_sales_split_pctmap_upld', req.user.id, log, elog,
             {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
 

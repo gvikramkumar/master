@@ -1,5 +1,5 @@
 <div class="fin-edit-container">
-  <form #form="ngForm">
+  <form #form="ngForm" finAuthDisable="end-user">
     <div class="row">
 
       <div class="col-lg-6">
@@ -12,7 +12,7 @@
           <div *ngIf="UiUtil.approvedOnceAI(sm.approvedOnce, sm.status)" class="form-group-check form-group-inline-30">
             <fin-checkbox label="Active" [(model)]="sm.status" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
-          <div *ngIf="UiUtil.statusIsPending(sm.status)" finAuth="prof:admin" class="form-group-button">
+          <div *ngIf="UiUtil.statusIsPending(sm.status)" finAuth="bizadmin" class="form-group-button">
             <button cuiButton color="primary" (click)="approve()">Approve</button>
             <button cuiButton color="primary" (click)="reject()">Reject</button>
           </div>
@@ -237,7 +237,7 @@
       </div>
     </div>
 
-    <div class="fin-footer-buttons">
+    <div finAuth="super-user" class="fin-footer-buttons">
       <button finErrorFlash type="submit" cuiButton color="primary" (click)="submitForApproval()">Submit</button>
       <button cuiButton color="primary" (click)="saveToDraft()">Save Draft</button>
       <button cuiButton color="secondary" (click)="cancel()">Cancel</button>

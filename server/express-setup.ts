@@ -56,7 +56,6 @@ export default function () {
   }
   app.use(cors(corsOptions));
   app.use(addSsoUser())
-
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());

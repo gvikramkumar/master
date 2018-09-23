@@ -4,7 +4,7 @@
   <br>
   <div class="fin-flex-center text-center ">
     <button cuiButton color="primary" (click)="mongoToPgSync()">Mongo To Postgres Sync</button>
-    <button cuiButton color="primary" (click)="pgToMongoSync()">Postgres To Mongo Sync</button>
+    <button cuiButton color="secondary" (click)="pgToMongoSync()">Postgres To Mongo Sync</button>
     <br><br><br>
     <pre *ngIf="results" class="results">{{results | json}}</pre>
   </div>

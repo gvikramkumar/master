@@ -202,7 +202,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           break;
       }
       obs.subscribe(fiscalMonths => {
-        this.fiscalMonths = _.sortBy(fiscalMonths, _.identity).reverse().slice(0,24)
+        this.fiscalMonths = fiscalMonths.sort().reverse().slice(0, 24)
           .map(fiscalMonth => {
             return {fiscalMonth};
           });
