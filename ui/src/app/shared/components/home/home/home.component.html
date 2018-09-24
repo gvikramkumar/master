@@ -12,8 +12,8 @@
         <div>Simplified user experience</div>
         <div>Analytics that explore business profitability</div>
       </div>
-      <div finAuth="itadmin" class="admin-button">
-        <button cuiButton color="primary" (click)="moduleChange(adminModule)"
+      <div finAuth="itadmin" class="admin-button" [class.fin-selected]="adminModule === selectedModule">
+        <button cuiButton color="primary" [wide]="true" (click)="moduleChange(adminModule)"
                 [class.fin-selected]="adminModule === selectedModule">Administration</button>
       </div>
       <div class="view-as" fxLayout="row" fxLayoutAlign="start start">

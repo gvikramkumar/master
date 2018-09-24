@@ -62,9 +62,7 @@ export function addSsoUser() {
         }
       })
       .then(user => {
-        if (req.requiresAdminAccess && !user.hasAdminRole()) {
-          res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`Admin access required.`));
-        } else if (!user.hasAdminOrUserRole()) {
+        if (!user.hasAdminOrUserRole()) {
           res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`User access required.`));
         } else {
           req.user = user;
