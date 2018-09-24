@@ -43,6 +43,15 @@ $padding: 20px;
 
     .admin-button {
       margin-left: 30px;
+
+      .btn {
+        border: none !important;
+      }
+
+      &.fin-selected .btn {
+        background-color: darken($vibrant-blue, 10%);
+        box-shadow: 0 0 4px 4px lighten($status-blue, 10%);
+      }
     }
 
     .view-as {
@@ -109,8 +118,8 @@ $padding: 20px;
             background-color: darken($vibrant-blue, 10%);
             //background-color: $status-blue;
             //outline: none;
-            box-shadow: 0 0 2px 2px $status-blue;
-            border: 1px solid #ffffff;
+            box-shadow: 0 0 5px 5px lighten($status-blue, 10%);
+            //border: 1px solid #ffffff;
 
             .module-desc {
               color: lighten($status-blue, 10%);

@@ -7,7 +7,9 @@ import {shUtil} from '../../../shared/shared-util';
 export function authAdmin() {
 
   return (req, res, next) => {
-    req.requiresAdminAccess = true;
+    if (!req.user.hasAdminRole()) {
+      throw new ApiError('Admin access only', null, 401);
+    }
     next();
   };
 

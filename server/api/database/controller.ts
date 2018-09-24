@@ -66,7 +66,6 @@ export default class DatabaseController {
             {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
           this.salesSplitUploadCtrl.mongoToPgSync('dfa_prof_sales_split_pctmap_upld', req.user.id, log, elog,
             {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}),
-
         ])
           .then(() => {
             if (elog.length) {
