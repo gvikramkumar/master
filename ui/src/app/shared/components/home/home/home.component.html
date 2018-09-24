@@ -31,8 +31,8 @@
     </div>
 
     <div class="modules-wrap" fxLayout="column" fxLayoutAlign="center stretch">
-      <div class="modules base-padding">
-        <div class="module" *ngFor="let module of modules" [class.fin-selected]="module === selectedModule"
+      <div class="modules base-padding" fxLayout="row" fxLayoutAlign="start center">
+        <div class="module" fxFlex="0 0 auto" *ngFor="let module of modules" [class.fin-selected]="module === selectedModule"
              (click)="moduleChange(module)">
           <div class="module-name">{{module.name}}</div>
           <div class="module-desc">{{module.desc}}</div>

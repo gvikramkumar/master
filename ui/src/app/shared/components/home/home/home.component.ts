@@ -37,7 +37,6 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
 
   ngOnInit() {
     this.modules = this.store.user.authorizeObjects<DfaModule>(this.store.nonAdminModules, 'roles');
-    this.modules[0].desc = 'This capability performs allocations at the multiple dimensions/hierarchies such as Sales Theater Level and Product Family Level used for Company\'s Profit/Loss (P/L) reporting to drive profitable growth.';
     this.adminModule = this.store.adminModule;
     if (this.store.module) {
       this.selectedModule = this.store.module;

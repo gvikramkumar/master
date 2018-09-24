@@ -77,36 +77,44 @@ $padding: 20px;
           background-color: $vibrant-blue;
           border-radius: 50%;
           display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
           margin-right: $padding;
 
           .module-name {
-            margin: auto;
+            //margin: auto;
           }
 
           .module-desc {
+            color: lighten($status-blue, 20%);
+            margin-top: 10px;
+            width: 27vh;
+            max-width: 290px;
             display: none;
-            height: 0px;
+            white-space: normal;
+            overflow: hidden;
+            font-size: 14px !important;
           }
 
           &:hover {
             .module-name {
-              margin: 0;
             }
             .module-desc {
               display: block;
-              height: 100px;
-              width: 150px;
-              transition: height .2s;
             }
           }
 
           &.fin-selected {
-            //background-color: darken($vibrant-blue, 10%);
-            background-color: $status-blue;
+            background-color: darken($vibrant-blue, 10%);
+            //background-color: $status-blue;
             //outline: none;
-            box-shadow: 0 0 2px 2px $selected-yellow;
-            //border: 1px solid #ffffff;
+            box-shadow: 0 0 2px 2px $status-blue;
+            border: 1px solid #ffffff;
 
+            .module-desc {
+              color: lighten($status-blue, 10%);
+            }
           }
 
           @media (min-width: $breakpoint-xxl) {
