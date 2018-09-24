@@ -21,7 +21,6 @@
     "seedsh": "cd database && ./seed.sh localhost 27017 fin-dfa"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.116",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
