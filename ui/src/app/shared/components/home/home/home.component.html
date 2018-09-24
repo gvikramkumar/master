@@ -13,7 +13,8 @@
         <div>Analytics that explore business profitability</div>
       </div>
       <div finAuth="itadmin" class="admin-button">
-        <button cuiButton color="primary" (click)="moduleChange(adminModule)">Administration</button>
+        <button cuiButton color="primary" (click)="moduleChange(adminModule)"
+                [class.fin-selected]="adminModule === selectedModule">Administration</button>
       </div>
       <div class="view-as" fxLayout="row" fxLayoutAlign="start start">
         <div fxFlex="1 1 auto" style="color:white;margin-right: 15px;">View As:</div>
@@ -30,10 +31,11 @@
     </div>
 
     <div class="modules-wrap" fxLayout="column" fxLayoutAlign="center stretch">
-      <div class="modules base-padding">
-        <div class="module" *ngFor="let module of modules" [class.selected]="module === selectedModule"
+      <div class="modules base-padding" fxLayout="row" fxLayoutAlign="start center">
+        <div class="module" fxFlex="0 0 auto" *ngFor="let module of modules" [class.fin-selected]="module === selectedModule"
              (click)="moduleChange(module)">
           <div class="module-name">{{module.name}}</div>
+          <div class="module-desc">{{module.desc}}</div>
         </div>
       </div>
     </div>

@@ -28,6 +28,7 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
     {generic: 'end-user', actual: 'prof:end-user'},
     ];
   selectedRole: string;
+  profDesc = 'This capability performs allocations at the multiple dimensions/hierarchies such as Sales Theater Level and Product Family Level used for Company\'s Profit/Loss (P/L) reporting to drive profitable growth.';
 
   constructor(private store: AppStore, route: ActivatedRoute, private lookupService: LookupService) {
     super(store, route);

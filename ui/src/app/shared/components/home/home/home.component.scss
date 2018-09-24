@@ -1,6 +1,5 @@
 @import '../../../../../styles/comp-index';
 
-
 $padding: 20px;
 
 // the exact heights are commented out, leave as a reference. Thing is though: both home and main look "cleaner"
@@ -78,13 +77,44 @@ $padding: 20px;
           background-color: $vibrant-blue;
           border-radius: 50%;
           display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
           margin-right: $padding;
 
           .module-name {
-            margin: auto;
+            //margin: auto;
           }
-          &.selected {
+
+          .module-desc {
+            color: lighten($status-blue, 20%);
+            margin-top: 10px;
+            width: 27vh;
+            max-width: 290px;
+            display: none;
+            white-space: normal;
+            overflow: hidden;
+            font-size: 14px !important;
+          }
+
+          &:hover {
+            .module-name {
+            }
+            .module-desc {
+              display: block;
+            }
+          }
+
+          &.fin-selected {
             background-color: darken($vibrant-blue, 10%);
+            //background-color: $status-blue;
+            //outline: none;
+            box-shadow: 0 0 2px 2px $status-blue;
+            border: 1px solid #ffffff;
+
+            .module-desc {
+              color: lighten($status-blue, 10%);
+            }
           }
 
           @media (min-width: $breakpoint-xxl) {
