@@ -120,13 +120,20 @@ export default class AllocationRuleController extends ApprovalController {
       .catch(next);
   }
 
-  sendApprovalEmail(req, mode: ApprovalMode, ruleId) {
+  sendApprovalEmail(req, mode: ApprovalMode, ruleId, messageText) {
     const data = req.body;
     const url = `${req.headers.origin}/prof/rule-management/edit/${ruleId};mode=edit`;
-    const link = `<a href="${url}">${url}</a>`
+    const link = `<a href="${url}">${url}</a>`;
+    /*let message = '';
+    if (messageText) {
+      message = messageText;
+    } else {
+      // message = 'No message was given.';
+    }*/
+    let body;
     switch (mode) {
       case ApprovalMode.submit:
-        let body;
+        // let body;
         if (data.approvedOnce === 'Y') {
           body = `The "${data.name}" DFA rule has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
         } else {
@@ -135,14 +142,22 @@ export default class AllocationRuleController extends ApprovalController {
         this.sendEmail(req.user.email, 'DFA: Rule Submitted for Approval', body);
         break;
       case ApprovalMode.approve:
+          body = `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
+          if (messageText) {
+            body += `<br><br>Comments: ${messageText}`;
+          }
           this.sendEmail(req.user.email,
           'DFA: Rule Approved',
-          `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`);
+          body);
         break;
       case ApprovalMode.reject:
+          body = `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
+          if (messageText) {
+            body += `<br><br>Comments: ${messageText}`;
+          }
           this.sendEmail(req.user.email,
           'DFA: Rule Not Approved',
-          `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`);
+          body);
         break;
     }
   }

@@ -226,9 +226,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   reject() {
-    this.uiUtil.genericDialog('Enter a reason for rejection:')
+    this.uiUtil.confirmReject()
       .subscribe(result => {
-        if (result) {
+        if (result !== undefined) {
+          this.rule.approveRejectMessage = result;
           this.cleanUp();
           this.ruleService.reject(this.rule)
             .subscribe(rule => {
@@ -246,7 +247,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         if (this.form.valid) {
           this.uiUtil.confirmApprove()
             .subscribe(result => {
-              if (result) {
+              if (result !== undefined) {
+                this.rule.approveRejectMessage = result;
                 this.cleanUp();
                 this.ruleService.approve(this.rule)
                   .subscribe(() => {

@@ -5,9 +5,11 @@
   <div class="modal__body">
     <h5 class="message">{{data.message}}</h5>
     <pre class="data" *ngIf="data.data">{{data.data}}</pre>
+    <cui-input type="textarea" [(model)]="messageText" [options]="{rows: 2}"></cui-input>
+
   </div>
   <div class="modal__footer">
     <button *ngIf="cancelText" cuiButton color="primary" type="button" (click)="dialogRef.close()">{{cancelText}}</button>
-    <button autofocus cuiButton color="primary" (click)="dialogRef.close(true)">{{submitText}}</button>
+    <button autofocus cuiButton color="primary" (click)="dialogRef.close(messageText)">{{submitText}}</button>
   </div>
 </div>

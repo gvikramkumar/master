@@ -34,4 +34,6 @@ export class AllocationRule {
   createdDate?: string;
   updatedBy?: string;
   updatedDate?: string;
+  // UI Only settings:
+  approveRejectMessage = '';
 }
