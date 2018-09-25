@@ -47,6 +47,7 @@ const schema = new Schema({
     groupingSubmeasureId: Number,
     sourceSystemAdjTypeId: Number,
     glAcctNumber: Number,
+    activeStatus: {type: String, enum: ['A', 'I'], required: true},
     status: {type: String, enum: ['A', 'I', 'P', 'D'], required: true},
     approvedOnce: {type: String, enum: ['Y', 'N'], required: true},
     // we validate early in approval repos, when this isn't set yet, if we set it before validation,

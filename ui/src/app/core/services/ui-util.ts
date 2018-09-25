@@ -84,10 +84,6 @@ export class UiUtil {
     return val === 'P';
   }
 
-  static approvedOnceAI(approvedOnce, status) {
-    return (approvedOnce === 'Y') && (status === 'A' || status === 'I');
-  }
-
   static getFiscalMonthListFromDate(date, numMonths) {
     const yearmos = [];
     const curMonths = _.range(date.getMonth(), date.getMonth() - numMonths);

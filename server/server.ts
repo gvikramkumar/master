@@ -10,15 +10,17 @@ import mg from 'mongoose';
 import {mgc} from './lib/database/mongoose-conn';
 import {pgc} from './lib/database/postgres-conn';
 import expressSetup from './express-setup';
+import {databaseUpdate} from './database-update';
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-  // application specific logging, throwing an error, or other logic here
+  // application specific logging, t(hrowing an error, or other logic here
 });
 
 // wait for database connections, then all middleware will have a connection to work with (instead of a promise)
 Promise.all([mgc.promise, pgc.promise])
-  .then(([{db, mongo}, {pgdb}]) => {
+  .then(databaseUpdate)
+  .then(() => {
 
       const app = expressSetup();
 

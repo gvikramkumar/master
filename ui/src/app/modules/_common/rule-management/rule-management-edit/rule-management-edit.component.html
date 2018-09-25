@@ -12,8 +12,8 @@
       </div>
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center start">
-          <div *ngIf="UiUtil.approvedOnceAI(rule.approvedOnce, rule.status)" class="form-group-check">
-            <fin-checkbox name="status" label="Active" [(model)]="rule.status" trueVal="A" falseVal="I"></fin-checkbox>
+          <div *ngIf="rule.approvedOnce === 'Y'" class="form-group-check">
+            <fin-checkbox name="status" label="Active" [(model)]="rule.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
           <div *ngIf="UiUtil.statusIsPending(rule.status)" finAuth="bizadmin" class="form-group-button">
             <button cuiButton color="primary" (click)="approve()">Approve</button>

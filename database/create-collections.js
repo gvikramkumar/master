@@ -1,15 +1,13 @@
-var conn;
 
 print('host: ' + host + ', port: ' + port + ', db: ' + _db);
 
-conn = new Mongo(host + ':' + port);
-var db = conn.getDB(_db);
+const conn = new Mongo(host + ':' + port);
+const db = conn.getDB(_db);
 
 
 const collections = [
   'dfa_lookup',
   'dfa_module_lookup',
-  'user_role',
   'dfa_allocation_rule',
   'dfa_measure',
   'dfa_module',
@@ -22,7 +20,6 @@ const collections = [
   'dfa_prof_manual_map_upld',
   'dfa_prof_sales_split_pctmap_upld',
   'dfa_prof_swalloc_manualmix_upld',
-  'dfa_rule_map'
 ];
 
 collections.forEach(coll => {

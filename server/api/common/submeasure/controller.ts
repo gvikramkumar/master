@@ -87,6 +87,7 @@ export default class SubmeasureController extends ApprovalController {
           sub.rules = sub.rules.filter(x => !!x); // clean out null rules
           sub.inputFilterLevel = sub.inputFilterLevel || {};
           sub.manualMapping = sub.manualMapping || {};
+          sub.activeStatus = sub.status;
         });
         return this.repo.syncRecordsReplaceAll({}, subs, userId, true, true)
           .then(() => {

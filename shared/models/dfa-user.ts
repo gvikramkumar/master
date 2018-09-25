@@ -42,8 +42,9 @@ export default class DfaUser {
 
   // for protecting api admin endpoints
   hasAdminRole() {
-    const adminRoles = flatten(this.modules.map(x => shUtil.stringToArray(x.roles).filter(this.isAdminRoleType.bind(this))));
-    return intersection(adminRoles.concat('itadmin'), this.roles).length > 0;
+    let adminRoles = this.modules.map(x => shUtil.stringToArray(x.roles).filter(this.isAdminRoleType.bind(this)));
+    adminRoles = flatten(adminRoles).concat('itadmin');
+    return intersection(adminRoles, this.roles).length > 0;
   }
 
   // for protecting api non-admin endpoints, this is our minimum access to hit api

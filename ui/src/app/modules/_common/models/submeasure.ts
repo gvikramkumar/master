@@ -17,6 +17,7 @@ export class Submeasure {
   indicators = new Indicators();
   rules: string[] = [];
   groupingSubmeasureId: number;
+  activeStatus = 'I';
   status = 'D';
   approvedOnce = 'N';
   createdBy?: string;
