@@ -12,7 +12,7 @@ mg.connect(uri)
     console.log('loading files...');
 
     const gfs = new mongo.GridFSBucket(db);
-    const dirPath = 'files/business-upload/';
+    const dirPath = 'files/prof/business-upload/';
     const meta = {directory: 'prof.bu', buFileType: 'template'};
     const promises = [];
     const buTemplates = [

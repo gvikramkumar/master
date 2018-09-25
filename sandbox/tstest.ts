@@ -4,8 +4,11 @@ import {shUtil} from '../shared/shared-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+const x = 'update_4.js';
+// console.log(Number(x.substr(x.indexOf('_') + 1)));
+console.log(x.match(/^.*_(\d{1,3}).js$/ig));
+console.log(/^.*_(\d{1,3}).js$/i.exec(x));
 
-console.log(['2018', '2017'].sort());
 
 
 // console.log(shUtil.getFiscalMonthListForCurYearAndLast());

@@ -56,7 +56,7 @@ export default class DatabaseController {
           this.measureCtrl.mongoToPgSync('dfa_measure', req.user.id, log, elog, {moduleId: -1}),
           this.moduleCtrl.mongoToPgSync('dfa_module', req.user.id, log, elog),
           this.openPeriodCtrl.mongoToPgSync('dfa_open_period', req.user.id, log, elog),
-          this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog, {moduleId: -1}),
+          this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog, {moduleId: -1, status: {$in: ['A', 'I']}}),
           // prof
           this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog), // deletes all on upload and pgsync
           this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', req.user.id, log, elog, {}, {fiscalMonth: curFiscalMonth}),

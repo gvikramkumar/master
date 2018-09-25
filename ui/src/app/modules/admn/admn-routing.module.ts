@@ -66,9 +66,9 @@ const routes: Routes = [
       },
       {
         path: 'database-sync', component: DatabaseSyncComponent,
-        canActivate: [UserAuthorizationGuard],
+        canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'dakahle, rsamband, amalakar',
+          authorization: 'itadmin',
           hero: {
             title: 'Database Sync',
             desc: 'Sync data from postgres to mongo and mongo to postgres'

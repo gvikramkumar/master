@@ -51,8 +51,14 @@ export default class ApprovalController extends ControllerBase {
   approve(req, res, next) {
     const data = req.body;
     this.repo.validate(data);
-    data.status = 'A';
-    data.approvedOnce = 'Y';
+    if (data.approvedOnce === 'Y') {
+     data.status = data.activeStatus;
+    } else if (data.approvedOnce === 'N' && data.status === 'P') {
+      data.status = 'A';
+      data.activeStatus = 'A';
+      data.approvedOnce = 'Y';
+    }
+
     this.repo.update(data, req.user.id)
       .then(item => {
         this.sendApprovalEmail(req, ApprovalMode.approve, item.id);

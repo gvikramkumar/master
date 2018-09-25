@@ -32,6 +32,7 @@ const schema = new Schema(
     beSelect: String,
     beCritCond: String,
     beCritChoices: [String],
+    activeStatus: {type: String, enum: ['A', 'I'], required: true},
     status: {type: String, enum: ['D', 'P', 'A', 'I'], required: true},
     approvedOnce: {type: String, enum: ['Y', 'N'], required: true},
     // we validate early in approval repos, when this isn't set yet, if we set it before validation,

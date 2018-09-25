@@ -9,8 +9,8 @@
 
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center center">
-          <div *ngIf="UiUtil.approvedOnceAI(sm.approvedOnce, sm.status)" class="form-group-check form-group-inline-30">
-            <fin-checkbox label="Active" [(model)]="sm.status" trueVal="A" falseVal="I"></fin-checkbox>
+          <div *ngIf="sm.approvedOnce === 'Y'" class="form-group-check form-group-inline-30">
+            <fin-checkbox label="Active" [(model)]="sm.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
           <div *ngIf="UiUtil.statusIsPending(sm.status)" finAuth="bizadmin" class="form-group-button">
             <button cuiButton color="primary" (click)="approve()">Approve</button>

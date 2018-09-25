@@ -28,6 +28,7 @@ export class AllocationRule {
   beSelect?: string;
   beCritCond?: string;
   beCritChoices: string[] = [];
+  activeStatus = 'I';
   status = 'D';
   approvedOnce = 'N';
   createdBy?: string;
