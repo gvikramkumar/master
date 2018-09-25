@@ -10,6 +10,7 @@ import {DialogType} from '../../../core/models/ui-enums';
 export class PromptDialogComponent implements OnInit {
   cancelText: string;
   submitText: string;
+  messageText = '';
 
   constructor(
     public dialogRef: CuiDialogRef<PromptDialogComponent>,

@@ -24,6 +24,8 @@ export class Submeasure {
   createdDate?: string;
   updatedBy?: string;
   updatedDate?: string;
+  // UI Only settings:
+  approveRejectMessage?: string;
 }
 
 class InputFilterLevel {

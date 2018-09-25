@@ -602,9 +602,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   reject() {
-    this.uiUtil.genericDialog('Enter a reason for rejection:')
+    this.uiUtil.confirmReject()
       .subscribe(result => {
-        if (result) {
+        if (result !== undefined) {
+          this.sm.approveRejectMessage = result;
           this.cleanUp();
           this.submeasureService.reject(this.sm)
             .subscribe(sm => {
@@ -622,7 +623,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         if (this.form.valid) {
           this.uiUtil.confirmApprove()
             .subscribe(result => {
-              if (result) {
+              if (result !== undefined) {
+                this.sm.approveRejectMessage = result;
                 this.cleanUp();
                 const errs = this.validate();
                 if (errs) {

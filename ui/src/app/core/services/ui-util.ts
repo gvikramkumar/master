@@ -7,6 +7,7 @@ import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-co
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
 import {Observable} from 'rxjs/Observable';
 import {CuiDialogRole} from '@cisco-ngx/cui-components/dist/cui-dialog/cui-dialog-config';
+import {PromptDialogComponent} from '../../shared/dialogs/prompt-dialog/prompt-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -205,6 +206,18 @@ export class UiUtil {
       .afterCuiDialogClosed();
   }
 
+  promptDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
+    const config = {
+      width: size,
+      hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
+      // Not sure why, cdk or cui? Could be material messing it up? Added an issue in cui-components
+      animated: false,
+      data: {message, title, mode, data},
+    };
+    return this.dialogService.open(PromptDialogComponent, <CuiDialogConfig>config)
+      .afterCuiDialogClosed();
+  }
+
   validationErrorsDialog(errors) {
     return this.genericDialog('Validation Errors', errors.join('\n'));
   }
@@ -222,7 +235,11 @@ export class UiUtil {
   }
 
   confirmApprove() {
-    return this.genericDialog('Are you sure you want to approve?', null, null, DialogType.yesNo);
+    return this.promptDialog('Add approval comments: ', null, null, DialogType.okCancel);
+  }
+
+  confirmReject() {
+    return this.promptDialog('Enter a reason for rejection: ', null, null, DialogType.okCancel);
   }
 
   errorDialog(errors) {
