@@ -19,7 +19,7 @@ function isManualUploadSource(sourceId: number) {
 }
 
 function stringToArray(str) {
-  return str.trim() ? str.split(',').map(x => x.trim()).filter(x => !!x) : [];
+  return str && str.trim() ? str.split(',').map(x => x.trim()).filter(x => !!x) : [];
 }
 
 function isAdminModuleId(moduleId) {

@@ -52,7 +52,7 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
   refresh() {
     this.showForm = false;
     this.module = new DfaModule();
-    this.moduleService.getNonAdminSortedByDisplayName()
+    this.moduleService.getNonAdminSortedByDisplayOrder()
       .subscribe(modules => {
         this.modules = modules;
           // .filter(module => !shUtil.isAdminModuleId(module.moduleId));

@@ -26,17 +26,17 @@ export class DatabaseRepo extends RepoBase {
     super(schema, 'Database');
   }
 
-  getActiveSortedByDisplayName() {
+  getActiveSortedByDisplayOrder() {
     return this.Model.find({status: 'A'})
       .sort({displayOrder: 1});
   }
 
-  getActiveNonAdminSortedByDisplayName() {
+  getActiveNonAdminSortedByDisplayOrder() {
     return this.Model.find({status: 'A', databaseId: {$ne: 99}})
       .sort({displayOrder: 1});
   }
 
-  getNonAdminSortedByDisplayName() {
+  getNonAdminSortedByDisplayOrder() {
     return this.Model.find({databaseId: {$ne: 99}})
       .sort({displayOrder: 1});
   }
