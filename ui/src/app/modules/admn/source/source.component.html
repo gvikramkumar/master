@@ -56,8 +56,7 @@
             <legend>{{formTitle}}</legend>
             <fin-input name="name" class="name-input" [(ngModel)]="source.name" label="Source Name" [required]="true"></fin-input>
             <fin-input name="typeCode"  [(ngModel)]="source.typeCode" label="Type Code" [required]="true"></fin-input>
-            <fin-input name="desc" [textarea]="true" [(ngModel)]="source.desc" [rows]="2" label="Description"
-                       [required]="true"></fin-input>
+            <fin-input name="desc" [textarea]="true" [(ngModel)]="source.desc" [rows]="2" label="Description"></fin-input>
             <div style="padding-top:15px;">
               <fin-checkbox name="status" label="Active" [(model)]="source.status" trueVal="A" falseVal="I"
                             [disabled]="usingModuleNames.length" [inline]="true"></fin-checkbox>

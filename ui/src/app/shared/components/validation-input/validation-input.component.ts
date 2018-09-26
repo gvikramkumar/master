@@ -43,8 +43,12 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   validations: InputValidation[] = [];
   opts = new ValidationInputOptions();
   updateOn = 'change';
+  delayedWriteValue: any;
+  delayedSetDisabledState: boolean;
+  elem: ElementRef;
   // @Input() form: NgForm;
-  @ViewChild('input') input: ElementRef; // HTMLInputElement
+  @ViewChild('inputElem') inputElem: ElementRef;
+  @ViewChild('textareaElem') textareaElem: ElementRef;
   @Input() options: ValidationInputOptions = {};
   @Input() debug = false;
   @Input() id: string;
@@ -76,10 +80,10 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   @Input() isNumber: boolean;
   @Input() isNumberMessage: string;
 
-/*
-  @Output() change = new EventEmitter();
-  @Output() input = new EventEmitter();
-*/
+  /*
+    @Output() change = new EventEmitter();
+    @Output() input = new EventEmitter();
+  */
 
   // textarea
   @Input() textarea = false;
@@ -94,7 +98,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     private renderer: Renderer2,
     public form: NgForm,
     @Self() @Optional() public ngc: NgControl
-    ) {
+  ) {
     // Note: we provide the value accessor through here, instead of
     // the `providers` to avoid running into a circular import.
     this.ngc.valueAccessor = this;
@@ -114,7 +118,11 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     } else {
       normalizedValue = value == null ? '' : value;
     }
-    this.renderer.setProperty(this.input.nativeElement, 'value', normalizedValue);
+    if (!this.elem) {
+      this.delayedWriteValue = value;
+    } else {
+      this.renderer.setProperty(this.elem.nativeElement, 'value', normalizedValue);
+    }
   }
 
   registerOnChange(fn: (_: any) => void): void {
@@ -126,13 +134,17 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.renderer.setProperty(this.input, 'disabled', isDisabled);
+    if (!this.elem) {
+      this.delayedSetDisabledState = isDisabled;
+    } else {
+      this.renderer.setProperty(this.elem, 'disabled', isDisabled);
+    }
   }
 
   // End ControlValueAccessor interface
 
   handleChange() {
-    let val = this.input.nativeElement.value;
+    let val = this.elem.nativeElement.value;
     if (this.stringToArray) {
       val = shUtil.stringToArray(val);
     }
@@ -271,8 +283,16 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     this.init();
   }
 
-  setFocus() {
-    this.input.nativeElement.focus();
+  ngAfterViewInit() {
+    // hack: these two functions get called "before" we have the ViewContent element (in edge browser), so we delay
+    // their setting in that case.
+    this.elem = this.textarea ? this.textareaElem : this.inputElem;
+    if (this.delayedWriteValue !== undefined) {
+      this.writeValue(this.delayedWriteValue);
+    }
+    if (this.delayedSetDisabledState !== undefined) {
+      this.setDisabledState(this.delayedSetDisabledState);
+    }
   }
 
 }

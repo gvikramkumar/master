@@ -4,7 +4,7 @@
 
   <div class="form-group__text">
 
-    <input *ngIf="!textarea" #input type="text"
+    <input *ngIf="!textarea" #inputElem type="text"
            [id]="id"
            [placeholder]="placeholder"
            [disabled]="disabled"
@@ -17,7 +17,7 @@
            (blur)="onBlur($event)"
     >
 
-    <textarea *ngIf="textarea" #input
+    <textarea *ngIf="textarea" #textareaElem
               [id]="id"
               [placeholder]="placeholder"
               [disabled]="disabled"
