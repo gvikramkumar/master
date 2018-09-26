@@ -8,7 +8,7 @@ const schema = new Schema(
     sourceId: {type: Number, required: true},
     name: {type: String, required: true},
     typeCode: {type: String, required: true},
-    desc: {type: String, required: true},
+    desc: {type: String},
     status: {type: String, enum: ['A', 'I'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},

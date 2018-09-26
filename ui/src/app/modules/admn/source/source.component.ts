@@ -102,7 +102,9 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
 
   editSource(source) {
     this.clearFormIfAlreadyUp();
-    this.source = _.cloneDeep(source);
+    // hack: if we don't do this setTimeout, when you click on an edit link a second time
+    // the edit form stays blank. detectChanges() doesn't help, but this does
+    setTimeout(() => this.source = _.cloneDeep(source));
     this.editMode = true;
     this.formTitle = 'Edit Source';
     this.checkModuleUse(source.sourceId);

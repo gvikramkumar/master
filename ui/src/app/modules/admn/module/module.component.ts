@@ -1,16 +1,13 @@
-import {Component, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {ModuleService} from '../../_common/services/module.service';
 import {DfaModule} from '../../_common/models/module';
-import {CuiInputComponent, CuiTableOptions} from '@cisco-ngx/cui-components';
 import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
-import {DialogType} from '../../../core/models/ui-enums';
 import * as _ from 'lodash';
-import {shUtil} from '../../../../../../shared/shared-util';
 import {NgForm} from '@angular/forms';
 
 @Component({
@@ -91,9 +88,12 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
 
   editModule(module) {
     this.clearFormIfAlreadyUp();
-    // update form modules to include all modules, then remove current module from list
+    // update form modules
+    // to include all modules, then remove current module from list
     this.formModules = _.without(this.modules, module);
-    this.module = _.cloneDeep(module);
+    // hack: if we don't do this setTimeout, when you click on an edit link a second time
+    // the edit form stays blank. detectChanges() doesn't help, but this does
+    setTimeout(() => this.module = _.cloneDeep(module));
     this.editMode = true;
     this.formTitle = 'Edit Module';
     this.showForm = true;

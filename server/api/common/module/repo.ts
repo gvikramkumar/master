@@ -10,6 +10,7 @@ const schema = new Schema(
     abbrev: {type: String, required: true},
     name: {type: String, required: true},
     roles: {type: String, required: true},
+    desc: String,
     status: {type: String, enum: ['A', 'I'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
