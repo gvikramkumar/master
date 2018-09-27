@@ -124,16 +124,9 @@ export default class AllocationRuleController extends ApprovalController {
     const data = req.body;
     const url = `${req.headers.origin}/prof/rule-management/edit/${ruleId};mode=edit`;
     const link = `<a href="${url}">${url}</a>`;
-    /*let message = '';
-    if (messageText) {
-      message = messageText;
-    } else {
-      // message = 'No message was given.';
-    }*/
     let body;
     switch (mode) {
       case ApprovalMode.submit:
-        // let body;
         if (data.approvedOnce === 'Y') {
           body = `The "${data.name}" DFA rule has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
         } else {
