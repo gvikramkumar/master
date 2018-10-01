@@ -27,8 +27,8 @@ const indicatorsSchema = new Schema({
 })
 
 const schema = new Schema({
-    submeasureId: {type: Number, required: true},
-    submeasureKey: {type: Number, required: true},
+    submeasureId: Number,
+    submeasureKey: Number,
     moduleId: {type: Number, required: true},
     name: {type: String, required: true},
     desc: {type: String, required: true},

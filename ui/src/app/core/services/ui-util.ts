@@ -1,7 +1,7 @@
 import {Injectable, ViewContainerRef} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import * as _ from 'lodash';
-import {DialogSize, DialogType} from '../models/ui-enums';
+import {DialogInputType, DialogSize, DialogType} from '../models/ui-enums';
 import {AppStore} from '../../app/app-store';
 import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-components';
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
@@ -206,13 +206,13 @@ export class UiUtil {
       .afterCuiDialogClosed();
   }
 
-  promptDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
+  promptDialog(message: string, title = null, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
     const config = {
       width: size,
       hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
       // Not sure why, cdk or cui? Could be material messing it up? Added an issue in cui-components
       animated: false,
-      data: {message, title, mode, data},
+      data: {message, title, inputType, rows},
     };
     return this.dialogService.open(PromptDialogComponent, <CuiDialogConfig>config)
       .afterCuiDialogClosed();
@@ -235,11 +235,11 @@ export class UiUtil {
   }
 
   confirmApprove() {
-    return this.promptDialog('Add approval comments: ', null, null, DialogType.okCancel);
+    return this.genericDialog('Are you sure you want to approve?', null, null, DialogType.yesNo);
   }
 
   confirmReject() {
-    return this.promptDialog('Enter a reason for rejection: ', null, null, DialogType.okCancel);
+    return this.genericDialog('Are you sure you want to reject?', null, null, DialogType.yesNo);
   }
 
   errorDialog(errors) {

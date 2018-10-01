@@ -42,7 +42,7 @@ export default class ApprovalController extends ControllerBase {
     }
     promise
       .then(item => {
-        this.sendApprovalEmail(req, ApprovalMode.submit, item.id, item.approveRejectMessage);
+        this.sendApprovalEmail(req, ApprovalMode.submit, item.id);
         res.json(item);
       })
       .catch(next);
@@ -61,7 +61,7 @@ export default class ApprovalController extends ControllerBase {
 
     this.repo.update(data, req.user.id)
       .then(item => {
-        this.sendApprovalEmail(req, ApprovalMode.approve, item.id, item.approveRejectMessage);
+        this.sendApprovalEmail(req, ApprovalMode.approve, item.id);
         res.json(item);
       })
       .catch(next);
@@ -71,7 +71,7 @@ export default class ApprovalController extends ControllerBase {
     req.body.status = 'D';
     this.updateOneNoValidatePromise(req, res, next)
       .then(item => {
-        this.sendApprovalEmail(req, ApprovalMode.reject, item.id, item.approveRejectMessage);
+        this.sendApprovalEmail(req, ApprovalMode.reject, item.id);
         res.json(item);
       });
   }
@@ -96,7 +96,7 @@ export default class ApprovalController extends ControllerBase {
     );
   }
 
-  sendApprovalEmail(user: DfaUser, mode: ApprovalMode, id, messageText) {
+  sendApprovalEmail(user: DfaUser, mode: ApprovalMode, id) {
     throw new ApiError('sendApprovalEmail not defined for approval controller');
   }
 
