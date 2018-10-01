@@ -131,7 +131,25 @@ db.dfa_lookup.insertMany([
   },
   {
     key: 'site-allowed-users',
-    value: ['jodoe', 'dakahle', 'rsamband', 'moltman', 'vgurumoo', 'prmaiya', 'ramgarg', 'mcai', 'amalakar']
+    value: ['jodoe', 'dakahle', 'rsamband', 'moltman', 'vgurumoo', 'prmaiya', 'ramgarg', 'mcai', 'amalakar',
+      'akmehrot', 'kalaissu', 'heyeung', 'myjagade', // bizadmin only
+    ]
+  },
+  {
+    key: 'akmehrot',
+    value: ['prof:admin']
+  },
+  {
+    key: 'kalaissu',
+    value: ['prof:admin']
+  },
+  {
+    key: 'heyeung',
+    value: ['prof:admin']
+  },
+  {
+    key: 'myjagade',
+    value: ['prof:admin']
   },
 ]);
 
