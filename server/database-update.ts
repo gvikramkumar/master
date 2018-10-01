@@ -7,6 +7,9 @@ import * as _ from 'lodash';
 
 export function databaseUpdate() {
 
+  return Promise.resolve();
+
+/*
   return new Promise((resolve, reject) => {
 
     let files = fs.readdirSync('../../database/updates').filter(file => /update_\d{1,3}.js/i.test(file));
@@ -15,6 +18,7 @@ export function databaseUpdate() {
     // ChildProcess.exec();
     resolve();
   });
+*/
 
 }
 
