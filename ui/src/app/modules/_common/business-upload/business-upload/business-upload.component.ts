@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
@@ -25,6 +25,7 @@ interface UploadResults {
 })
 export class BusinessUploadComponent extends RoutingComponentBase implements OnInit {
   files: FsFile[];
+  selectedFileName = '';
   templates: FsFile[];
   uploadTypes = [
     {type: 'dollar-upload', text: 'Adjustments - Dollar Upload', disabled: false},
@@ -87,4 +88,11 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     return `${environment.apiUrl}/api/file/${template.id}`;
   }
 
+  changeFile(fileInput) {
+    this.selectedFileName = fileInput.files[0] && fileInput.files[0].name;
+  }
+
+  changeUploadType() {
+    this.selectedFileName = '';
+  }
 }

@@ -59,7 +59,7 @@ export default class DeptUploadUploadController extends UploadController {
     ])
       .then(() => this.lookForErrors())
       .then(() => Promise.all([
-        this.validateMeasureAccess(),
+        // this.validateMeasureAccess(),
         this.validateCanDeptUpload()
       ]))
       .then(() => this.lookForErrors())

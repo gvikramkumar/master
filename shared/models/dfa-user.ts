@@ -207,7 +207,7 @@ export default class DfaUser {
     const moduleId = this.getModuleId();
     const module = _.find<DfaModule>(this.modules, {moduleId});
     if (!module || !module.roles.length) {
-      throw new Error(`getActualRolesByModuleId: no roles for moduleId: ${moduleId}`);
+      throw new Error(`getModuleRoles: no roles for moduleId: ${moduleId}`);
     }
     return shUtil.stringToArray(module.roles);
   }
@@ -217,7 +217,7 @@ export default class DfaUser {
   getModuleId(_moduleId?) {
     const moduleId = _moduleId || _.get(this.store, 'module.moduleId');
     if (!moduleId) {
-      throw new Error('getActualRolesByModuleId: no moduleId or store.module.moduleId');
+      throw new Error('getModuleId: no moduleId or store.module.moduleId');
     }
     return moduleId;
   }

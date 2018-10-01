@@ -49,7 +49,7 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
     ])
       .then(() => this.lookForErrors())
       .then(() => Promise.all([
-        this.validateMeasureAccess(),
+        // this.validateMeasureAccess(),
         this.validateCanMappingUpload(),
       ]))
       .then(() => this.lookForErrors())

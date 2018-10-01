@@ -25,7 +25,7 @@ const routes: Routes = [
             title: 'Manage Modules',
             desc: 'Create and configure modules'
           },
-          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Open Period'}]
+          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Module'}]
         }
       },
       {
@@ -49,7 +49,7 @@ const routes: Routes = [
             title: 'Set Sources',
             desc: 'Configure sources for all modules'
           },
-          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sources'}]
+          breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Source'}]
         }
       },
       {

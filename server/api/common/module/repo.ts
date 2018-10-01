@@ -28,12 +28,12 @@ export class ModuleRepo extends RepoBase {
     super(schema, 'Module');
   }
 
-  getActiveSortedByDisplayName() {
+  getActiveSortedByDisplayOrder() {
     return this.Model.find({status: 'A'})
       .sort({displayOrder: 1});
   }
 
-  getActiveNonAdminSortedByDisplayName() {
+  getActiveNonAdminSortedByDisplayOrder() {
     return this.Model.find({status: 'A', moduleId: {$ne: 99}})
       .sort({displayOrder: 1});
   }
@@ -43,7 +43,7 @@ export class ModuleRepo extends RepoBase {
       .sort({moduleId: 1});
   }
 
-  getNonAdminSortedByDisplayName() {
+  getNonAdminSortedByDisplayOrder() {
     return this.Model.find({moduleId: {$ne: 99}})
       .sort({displayOrder: 1});
   }

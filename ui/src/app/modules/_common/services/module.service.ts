@@ -20,14 +20,14 @@ export class ModuleService extends RestBase<DfaModule> {
   }
 
   refreshStore(): Promise<DfaModule[]> {
-    return this.callMethod('getActiveSortedByDisplayName').toPromise()
+    return this.callMethod('getActiveSortedByDisplayOrder').toPromise()
       .then(modules => {
         this.store.pubModules(modules);
         return modules;
       });
   }
 
-  getNonAdminSortedByDisplayName(): Observable<DfaModule[]> {
-    return this.callMethod('getNonAdminSortedByDisplayName');
+  getNonAdminSortedByDisplayOrder(): Observable<DfaModule[]> {
+    return this.callMethod('getNonAdminSortedByDisplayOrder');
   }
 }
