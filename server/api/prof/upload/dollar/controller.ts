@@ -63,7 +63,7 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
     ])
       .then(() => this.lookForErrors())
       .then(() => Promise.all([
-        this.validateMeasureAccess(),
+        // this.validateMeasureAccess(),
         this.validateSubmeasureCanManualUpload(),
         this.validateCanDollarUpload(),
       ]))
