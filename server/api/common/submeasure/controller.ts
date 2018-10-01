@@ -133,13 +133,13 @@ export default class SubmeasureController extends ApprovalController {
       .then(docs => res.json(docs));
   }
 
-  sendApprovalEmail(req, mode: ApprovalMode, submeasureId) {
+  sendApprovalEmail(req, mode: ApprovalMode, smId, messageText) {
     const data = req.body;
-    const url = `${req.headers.origin}/prof/submeasure/edit/${submeasureId};mode=edit`;
-    const link = `<a href="${url}">${url}</a>`
+    const url = `${req.headers.origin}/prof/submeasure/edit/${smId};mode=edit`;
+    const link = `<a href="${url}">${url}</a>`;
+    let body;
     switch (mode) {
       case ApprovalMode.submit:
-        let body;
         if (data.approvedOnce === 'Y') {
           body = `The "${data.name}" DFA submeasure has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
         } else {
@@ -148,16 +148,24 @@ export default class SubmeasureController extends ApprovalController {
         this.sendEmail(req.user.email, 'DFA: Submeasure Submitted for Approval', body);
         break;
       case ApprovalMode.approve:
+        body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
+        if (messageText) {
+          body += `<br><br>Comments: ${messageText}`;
+        }
         this.sendEmail(req.user.email,
           'DFA: Submeasure Approved',
-          `The DFA submeasure submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`);
+          body);
         break;
       case ApprovalMode.reject:
+        body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
+        if (messageText) {
+          body += `<br><br>Comments: ${messageText}`;
+        }
         this.sendEmail(req.user.email,
           'DFA: Submeasure Not Approved',
-          `The DFA submeasure submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`);
+          body);
         break;
-      }
+    }
   }
 
 }
