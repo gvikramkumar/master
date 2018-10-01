@@ -20,7 +20,7 @@
         <div fxFlex="1 1 auto" style="color:white;margin-right: 15px;">View As:</div>
         <div class="role-list"  fxFlex="1 1 auto">
           <div class="form-group" *ngFor="let role of roles">
-            <label class="radio">
+            <label class="radio" finAuthDisable="bizadmin, super-user, end-user">
               <input type="radio" name="roleType" [value]="role.actual" [(ngModel)]="selectedRole" (change)="roleChange()">
               <span class="radio__input"></span>
               <span class="radio__label" style="color:white;">{{role.generic}}</span>
