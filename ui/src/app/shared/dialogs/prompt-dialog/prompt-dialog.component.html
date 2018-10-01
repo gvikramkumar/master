@@ -1,15 +1,17 @@
 <div class="modal__content">
-  <div *ngIf="data.title" class="modal__header">
-    <h1>{{data.title}}</h1>
-  </div>
-  <div class="modal__body">
-    <h5 class="message">{{data.message}}</h5>
-    <pre class="data" *ngIf="data.data">{{data.data}}</pre>
-    <cui-input type="textarea" [(model)]="messageText" [options]="{rows: 2}"></cui-input>
-
-  </div>
-  <div class="modal__footer">
-    <button *ngIf="cancelText" cuiButton color="primary" type="button" (click)="dialogRef.close()">{{cancelText}}</button>
-    <button autofocus cuiButton color="primary" (click)="dialogRef.close(messageText)">{{submitText}}</button>
-  </div>
+  <form>
+    <div *ngIf="data.title" class="modal__header">
+      <h1>{{data.title}}</h1>
+    </div>
+    <div class="modal__body">
+      <h5 class="message">{{data.message}}:</h5>
+      <br>
+      <fin-input name="prompt" [textarea]="data.inputType === DialogInputType.textarea" [(ngModel)]="messageText"
+                 [rows]="data.rows"></fin-input>
+    </div>
+    <div class="modal__footer">
+      <button type="button" cuiButton color="secondary" (click)="dialogRef.close()">Cancel</button>
+      <button type="submit" cuiButton color="primary" (click)="dialogRef.close(messageText)">OK</button>
+    </div>
+  </form>
 </div>

@@ -120,7 +120,7 @@ export default class AllocationRuleController extends ApprovalController {
       .catch(next);
   }
 
-  sendApprovalEmail(req, mode: ApprovalMode, ruleId, messageText) {
+  sendApprovalEmail(req, mode: ApprovalMode, ruleId) {
     const data = req.body;
     const url = `${req.headers.origin}/prof/rule-management/edit/${ruleId};mode=edit`;
     const link = `<a href="${url}">${url}</a>`;
@@ -135,9 +135,9 @@ export default class AllocationRuleController extends ApprovalController {
         this.sendEmail(req.user.email, 'DFA: Rule Submitted for Approval', body);
         break;
       case ApprovalMode.approve:
-          body = `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
-          if (messageText) {
-            body += `<br><br>Comments: ${messageText}`;
+          body = `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
+          if (data.approveRejectMessage) {
+            body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
           }
           this.sendEmail(req.user.email,
           'DFA: Rule Approved',
@@ -145,8 +145,8 @@ export default class AllocationRuleController extends ApprovalController {
         break;
       case ApprovalMode.reject:
           body = `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
-          if (messageText) {
-            body += `<br><br>Comments: ${messageText}`;
+          if (data.approveRejectMessage) {
+            body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
           }
           this.sendEmail(req.user.email,
           'DFA: Rule Not Approved',

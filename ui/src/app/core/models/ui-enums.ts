@@ -5,6 +5,11 @@ export enum DialogType {
   yesNo
 }
 
+export enum DialogInputType {
+  input = 1,
+  textarea
+}
+
 export enum DialogSize {
   small = '500px',
   medium = '600px',

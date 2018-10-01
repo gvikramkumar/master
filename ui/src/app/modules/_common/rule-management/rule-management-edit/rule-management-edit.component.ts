@@ -7,7 +7,7 @@ import {Observable, of} from 'rxjs';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {AppStore} from '../../../../app/app-store';
 import * as _ from 'lodash';
-import {DialogType} from '../../../../core/models/ui-enums';
+import {DialogInputType, DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {ValidationInputOptions} from '../../../../shared/components/validation-input/validation-input.component';
@@ -227,14 +227,19 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   reject() {
     this.uiUtil.confirmReject()
-      .subscribe(result => {
-        if (result !== undefined) {
-          this.rule.approveRejectMessage = result;
-          this.cleanUp();
-          this.ruleService.reject(this.rule)
-            .subscribe(rule => {
-              this.toastService.showAutoHideToast('Approval Rejected', 'Rule has been rejected, user notified.');
-              this.router.navigateByUrl('/prof/rule-management');
+      .subscribe(resultConfirm => {
+        if (resultConfirm) {
+          this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
+            .subscribe(resultPrompt => {
+              if (resultPrompt !== undefined) {
+                this.rule.approveRejectMessage = resultPrompt;
+                this.cleanUp();
+                this.ruleService.reject(this.rule)
+                  .subscribe(rule => {
+                    this.toastService.showAutoHideToast('Approval Rejected', 'Rule has been rejected, user notified.');
+                    this.router.navigateByUrl('/prof/rule-management');
+                  });
+              }
             });
         }
       });
@@ -246,14 +251,19 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       .then(() => {
         if (this.form.valid) {
           this.uiUtil.confirmApprove()
-            .subscribe(result => {
-              if (result !== undefined) {
-                this.rule.approveRejectMessage = result;
-                this.cleanUp();
-                this.ruleService.approve(this.rule)
-                  .subscribe(() => {
-                    this.toastService.showAutoHideToast('Approval Approved', 'Rule approved, user notified.');
-                    this.router.navigateByUrl('/prof/rule-management');
+            .subscribe(resultConfirm => {
+              if (resultConfirm) {
+                this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
+                  .subscribe(resultPrompt => {
+                    if (resultPrompt !== undefined) {
+                      this.rule.approveRejectMessage = resultPrompt;
+                      this.cleanUp();
+                      this.ruleService.approve(this.rule)
+                        .subscribe(() => {
+                          this.toastService.showAutoHideToast('Approval Approved', 'Rule approved, user notified.');
+                          this.router.navigateByUrl('/prof/rule-management');
+                        });
+                    }
                   });
               }
             });
