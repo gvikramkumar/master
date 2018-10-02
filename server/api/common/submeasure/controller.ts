@@ -13,6 +13,9 @@ import {filterLevelMap} from '../../../../shared/models/filter-level-map';
 import DfaUser from '../../../../shared/models/dfa-user';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
 import {ApprovalMode} from '../../../../shared/enums';
+import {svrUtil} from '../../../lib/common/svr-util';
+import LookupRepo from '../lookup/repo';
+import {sendHtmlMail} from '../../../lib/common/mail';
 
 
 interface FilterLevel {
@@ -29,7 +32,8 @@ export default class SubmeasureController extends ApprovalController {
   constructor(
     protected repo: SubmeasureRepo,
     protected pgRepo: SubmeasurePgRepo,
-    protected inputLevelPgRepo: InputLevelPgRepo
+    protected inputLevelPgRepo: InputLevelPgRepo,
+    private lookupRepo: LookupRepo
 ) {
     super(repo);
   }
@@ -133,39 +137,44 @@ export default class SubmeasureController extends ApprovalController {
       .then(docs => res.json(docs));
   }
 
-  sendApprovalEmail(req, mode: ApprovalMode, smId) {
+  sendApprovalEmail(req, mode: ApprovalMode, sm) {
+    this.verifyProperties(req.query, ['moduleId']);
     const data = req.body;
-    const url = `${req.headers.origin}/prof/submeasure/edit/${smId};mode=edit`;
+    const moduleId = req.query.moduleId;
+    const url = `${req.headers.origin}/prof/submeasure/edit/${sm.id};mode=edit`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
-    switch (mode) {
-      case ApprovalMode.submit:
-        if (data.approvedOnce === 'Y') {
-          body = `The "${data.name}" DFA submeasure has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
-        } else {
-          body = `A new DFA submeasure has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
-        }
-        this.sendEmail(req.user.email, 'DFA: Submeasure Submitted for Approval', body);
-        break;
-      case ApprovalMode.approve:
-        body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
-        if (data.approveRejectMessage) {
-          body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
-        }
-        this.sendEmail(req.user.email,
-          'DFA: Submeasure Approved',
-          body);
-        break;
-      case ApprovalMode.reject:
-        body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
-        if (data.approveRejectMessage) {
-          body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
-        }
-        this.sendEmail(req.user.email,
-          'DFA: Submeasure Not Approved',
-          body);
-        break;
+    const adminEmail = svrUtil.getAdminEmail(moduleId, req.user.email);
+    const promises = [];
+    if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
+      promises.push(this.repo.getOneByQuery({moduleId: req.query.moduleId, name: data.name, updatedDate: data.updatedDate}));
     }
+    return Promise.all(promises)
+      .then(results => {
+        switch (mode) {
+          case ApprovalMode.submit:
+            if (data.approvedOnce === 'Y') {
+              body = `The "${data.name}" DFA submeasure has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
+              const oldObj = results[0];
+              body += svrUtil.getObjectDifferences(oldObj, sm, '<br>');
+            } else {
+              body = `A new DFA submeasure has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
+            }
+            return sendHtmlMail(req.user.email, adminEmail,   'DFA: Submeasure Submitted for Approval', body);
+          case ApprovalMode.approve:
+            body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
+            if (data.approveRejectMessage) {
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+            }
+            return sendHtmlMail(adminEmail, req.user.email, 'DFA: Submeasure Approved', body);
+          case ApprovalMode.reject:
+            body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
+            if (data.approveRejectMessage) {
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+            }
+            return sendHtmlMail(adminEmail, req.user.email, 'DFA: Submeasure Not Approved', body);
+        }
+      });
   }
 
 }

@@ -88,17 +88,22 @@ export default class ControllerBase {
   }
 
   // post /
-  addOne(req, res, next) {
+  addOnePromise(req, res, next) {
     const data = req.body;
-    this.repo.addOne(data, req.user.id)
+    return this.repo.addOne(data, req.user.id)
       .then(item => {
         if (this.pgRepo && this.isMirrorRepo) {
           this.pgRepo.addOne(_.clone(item), req.user.id)
-            .then(() => res.json(item));
+            .then(() => item);
         } else {
-          res.json(item);
+          return item;
         }
-      })
+      });
+  }
+
+  addOne(req, res, next) {
+    this.addOnePromise(res, req, next)
+      .then(item => res.json(item))
       .catch(next);
   }
 
@@ -117,6 +122,25 @@ export default class ControllerBase {
 
   addOneNoValidate(req, res, next) {
     this.addOneNoValidatePromise(req, res, next)
+      .then(item => res.json(item))
+      .catch(next);
+  }
+
+  copyOnePromise(req, res, next) {
+    const data = req.body;
+    return this.repo.copyOne(data, req.user.id)
+      .then(item => {
+        if (this.pgRepo && this.isMirrorRepo) {
+          return this.pgRepo.addOne(_.clone(item), req.user.id)
+            .then(() => item);
+        } else {
+          return item;
+        }
+      });
+  }
+
+  copyOne(req, res, next) {
+    this.copyOnePromise(req, res, next)
       .then(item => res.json(item))
       .catch(next);
   }
@@ -271,20 +295,26 @@ export default class ControllerBase {
   }
 
   // put /:id
-  update(req, res, next) {
+  updatePromise(req, res, next) {
     const data = req.body;
-    this.repo.update(data, req.user.id)
+    return this.repo.update(data, req.user.id)
       .then(item => {
         if (this.pgRepo && this.isMirrorRepo) {
           // we have to clone item as prRepo will change the updatedDate and we'll fail concurrency check
           // we need the same mongo updatedDate to pass concurrency check. We turn off pg's concurrency
           // check as we can't have both.
           this.pgRepo.updateOneById(_.clone(item), req.user.id, false)
-            .then(() => res.json(item));
+            .then(() => item);
         } else {
-          res.json(item);
+          return item;
         }
       })
+      .catch(next);
+  }
+
+  update(req, res, next) {
+    this.updatePromise(req, res, next)
+      .then(item => res.json(item))
       .catch(next);
   }
 

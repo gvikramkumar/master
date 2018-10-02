@@ -2,8 +2,12 @@ import {Duplex} from 'stream';
 import {Buffer} from 'buffer';
 import _ from 'lodash';
 import {ApiError} from './api-error';
+import {DfaModuleIds} from '../../../shared/enums';
 
 export const svrUtil = {
+  isLocalEnv,
+  getObjectDifferences,
+  getAdminEmail,
   trimStringProperties,
   getMemoryUsage,
   cleanCsv,
@@ -17,6 +21,21 @@ export const svrUtil = {
   setSchemaAdditions,
   sortedListNotExists
 };
+
+function isLocalEnv() {
+  return !process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV);
+}
+
+function getObjectDifferences(oldObj, newObj, delimiter = '\n'): string {
+  return `getObjectDifferences ${delimiter} not implemented yet`;
+}
+
+function getAdminEmail(moduleId, userId) {
+  if (isLocalEnv()) {
+    return userId;
+  }
+  return `DFA-${DfaModuleIds[moduleId].toUpperCase()}-ADMIN@cisco.com`;
+}
 
 function sortedListNotExists(values, value) {
   return _.sortedIndexOf(values, value) === -1;
@@ -34,8 +53,7 @@ function trimStringProperties(obj) {
     if (typeof obj[key] === 'string') {
       obj[key] = obj[key].trim();
     }
-  })
-
+  });
 }
 
 function getMemoryUsage() {

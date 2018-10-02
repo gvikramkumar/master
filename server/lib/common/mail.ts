@@ -12,12 +12,13 @@ const transporter = nodemailer.createTransport({
   port: config.port
 });
 
-export default {
-  send
-};
+export function sendTextMail(from, to, subject, body) {
+  const mailOptions = {from, to, subject, text: body};
+  return Q.ninvoke(transporter, 'sendMail', mailOptions);
+}
 
-function send(from, to, subject, text, html) {
-  const mailOptions = {from, to, subject, text, html};
+export function sendHtmlMail(from, to, subject, body) {
+  const mailOptions = {from, to, subject, html: body};
   return Q.ninvoke(transporter, 'sendMail', mailOptions);
 }
 

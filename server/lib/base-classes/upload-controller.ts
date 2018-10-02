@@ -2,7 +2,7 @@ import xlsx from 'node-xlsx';
 import {NamedApiError} from '../common/named-api-error';
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
-import mail from '../common/mail';
+import {sendHtmlMail} from '../common/mail';
 import UserRoleRepo from '../database/repos/user-role-repo';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
 import Q from 'q';
@@ -186,12 +186,11 @@ export default class UploadController {
     return Promise.resolve();
   }
 
-  sendEmail(title, body) {
-    return mail.send(
+  sendEmail(subject, body) {
+    return sendHtmlMail(
+      'DFA Uploads',
       this.req.user.email,
-      this.req.user.email,
-      title,
-      null,
+      subject,
       body
     );
   }
