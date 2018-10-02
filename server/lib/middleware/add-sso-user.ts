@@ -4,6 +4,7 @@ import LookupRepo from '../../api/common/lookup/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
 import {shUtil} from '../../../shared/shared-util';
 import {ApiError} from '../common/api-error';
+import {svrUtil} from '../common/svr-util';
 
 export function addSsoUser() {
 
@@ -21,7 +22,7 @@ export function addSsoUser() {
     const headers = req.headers;
     const lookupRepo = new LookupRepo();
     const moduleRepo = new ModuleRepo();
-    const localEnv = !process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV);
+    const localEnv = svrUtil.isLocalEnv();
     let roles, modules;
     const userId = localEnv ? 'jodoe' : req.headers['auth-user'];
 

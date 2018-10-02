@@ -11,6 +11,7 @@ import {UiUtil} from '../core/services/ui-util';
 import {uiConst} from '../core/models/ui-const';
 import {BreakpointChange} from '../core/services/breakpoint.service';
 import DfaUser from '../../../../shared/models/dfa-user';
+import {shUtil} from '../../../../shared/shared-util';
 
 /* tslint:disable:member-ordering*/
 
@@ -99,6 +100,16 @@ export class AppStore extends StoreBase {
       throw new Error(`repoModule doesn\'t exist for ${endpointName}`);
     }
     return this.module;
+  }
+  getNonAdminModuleId() {
+    const moduleId = this.module && this.module.moduleId;
+    if (!moduleId) {
+      throw new Error(`No moduleId`);
+    }
+    if (shUtil.isAdminModuleId(moduleId)) {
+      throw new Error(`No moduleId for itAdmin call.`);
+    }
+    return moduleId;
   }
   module$ = new BehaviorSubject<DfaModule>(undefined);
   subModule = this.module$.subscribe.bind(this.module$);

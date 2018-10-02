@@ -17,30 +17,38 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
       super(endpointName, httpClient, store, isModuleRepo);
   }
 
-  saveToDraft(data, params = {}) {
-    this.addModuleId(data);
+  saveToDraft(data, params: AnyObj = {}) {
+    params.moduleId = this.store.getNonAdminModuleId();
     return this.callMethod('saveToDraft', data, params);
   }
 
-  submitForApproval(data, params = {}) {
-    this.addModuleId(data);
+  submitForApproval(data, params: AnyObj = {}) {
+    params.moduleId = this.store.getNonAdminModuleId();
     return this.callMethod('submitForApproval', data, params);
   }
 
   approve(data) {
-    return this.callMethod('approve', data);
+    const params: AnyObj = {};
+    params.moduleId = this.store.getNonAdminModuleId();
+    return this.callMethod('approve', data, params);
   }
 
   reject(data) {
-    return this.callMethod('reject', data);
+    const params: AnyObj = {};
+    params.moduleId = this.store.getNonAdminModuleId();
+    return this.callMethod('reject', data, params);
   }
 
   activate(data) {
-    this.callMethod('activate', data);
+    const params: AnyObj = {};
+    params.moduleId = this.store.getNonAdminModuleId();
+    this.callMethod('activate', data, params);
   }
 
   inactivate(data) {
-    this.callMethod('inactivate', data);
+    const params: AnyObj = {};
+    params.moduleId = this.store.getNonAdminModuleId();
+    this.callMethod('inactivate', data, params);
   }
 
 }
