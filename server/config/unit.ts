@@ -1,6 +1,16 @@
 export default {
-  ssl: false,
   port: 3001,
-  mongoUri: 'mongodb://localhost/fin-dfa',
-  corsOrigin: ['http://localhost:4201']
-}
+  corsOrigin: ['http://localhost:4201'],
+  mongo: {
+    uri: 'mongodb://localhost/fin-dfa-unit',
+    host: 'localhost',
+    port: 27017,
+    db: 'fin-dfa'
+  },
+  postgres: {
+    host: 'localhost',
+    port: 5432,
+    database: 'postgres',
+  }
+};
+

@@ -1,6 +1,7 @@
-import config from '../../config/get-config';
+import _config from '../../config/get-config';
 import mg from 'mongoose';
 import AnyObj from '../../../shared/models/any-obj';
+const config = _config.mongo;
 
 const options = {
   autoIndex: false,
@@ -14,16 +15,16 @@ const options = {
 
 export const mgc: {promise: Promise<AnyObj>, db: AnyObj, mongo: AnyObj} = <any>{};
 
-mgc.promise = mg.connect(config.mongoUri, options)
+mgc.promise = mg.connect(config.uri, options)
   .then(() => {
-    console.log(`mongoose connected on: ${config.mongoUri}`);
+    console.log(`mongoose connected on: ${config.uri}`);
     mg.connection.on('disconnected', () => console.log('mongoose disconnected'));
     mgc.db = mg.connection.db;
     mgc.mongo = mg.mongo;
     return mgc;
   })
   .catch(err => {
-    console.error(`mongoose connection error: ${config.mongoUri}`, err);
+    console.error(`mongoose connection error: ${config.uri}`, err);
     return Promise.reject(err);
   });
 

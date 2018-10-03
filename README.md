@@ -27,7 +27,7 @@ ui config is located in /ui/src/environment directory, with dev (default) in env
   
 #### database setup
 You can either use an existing database:  
- /server/config/env.js will have a mongoUri property each environment will use or, initialize a local or remote database
+ /server/config/env.js will have a mongo.uri property each environment will use or, initialize a local or remote database
 
 ##### initializing a database
 <code>npm run seedbat/seedsh</code> will run a shell script that initializes a local or remote database, bat for windows, sh for unix.  
