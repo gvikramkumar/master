@@ -139,11 +139,12 @@ export default class AllocationRuleController extends ApprovalController {
               body = `The "${data.name}" DFA rule has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
               const oldObj = results[0];
               // body += svrUtil.getObjectDifferences(oldObj, rule, '<br>');
-              if (rule.toObject) {
-                rule = rule.toObject();
-              }
-
+              if (oldObj) {
+                if (rule.toObject) {
+                  rule = rule.toObject();
+                }
                 body += '<br><br>' + svrUtil.getObjectDifferences(oldObj.toObject(), rule);
+              }
             } else {
               body = `A new DFA rule has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
