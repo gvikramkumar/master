@@ -44,7 +44,7 @@ export function addSsoUser() {
             'jodoe',
             'John',
             'Doe',
-            'dakahle@cisco.com',
+            'moltman@cisco.com',
             roles,
             modules
           );
