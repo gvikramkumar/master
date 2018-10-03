@@ -129,7 +129,7 @@ export default class AllocationRuleController extends ApprovalController {
     const adminEmail = svrUtil.getAdminEmail(moduleId, req.user.email);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
-      promises.push(this.repo.getOneByQuery({moduleId: req.query.moduleId, name: data.name, updatedDate: data.updatedDate}));
+      promises.push(this.repo.getOneLatest({moduleId: req.query.moduleId, name: data.name, status: {$in: ['A', 'I']}}));
     }
     return Promise.all(promises)
       .then(results => {
