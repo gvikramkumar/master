@@ -27,24 +27,37 @@ const objectChangeFinder = function() {
     VALUE_CREATED: 'ADDED: ',
     VALUE_UPDATED: 'UPDATED: ',
     VALUE_DELETED: 'REMOVED: ',
-    // VALUE_UNCHANGED: 'unchanged',
+    VALUE_UNCHANGED: 'unchanged',
     getFormattedChangeString: function(obj1, obj2) {
       const initialResult = this.map(obj1, obj2);
-      let finalResult = '';
-      const lines = JSON.stringify(initialResult, null, 2).split('\n');
+      let tempResult = '';
+      let lines = JSON.stringify(initialResult, null, 2).split('\n');
       for (let i = 0; i < lines.length; i++) {
         // code here using lines[i] which will give you each line
         // <span style="color:blue">blue</span>
-        if (lines[i].includes('"old":')) {
-          finalResult += '<span style="color:darkred">' + lines[i] + '</span>' + '\n';
+        if (lines[i].includes('PROPERTY_IGNORE')) {
+          // skip this line since it is an unchanged property
+        } else if (lines[i].includes('"old":')) {
+          tempResult += '<span style="color:darkred">' + lines[i] + '</span>' + '\n';
         } else if (lines[i].includes('"new":')) {
-          finalResult += '<span style="color:green">' + lines[i] + '</span>' + '\n';
+          tempResult += '<span style="color:green">' + lines[i] + '</span>' + '\n';
         } else if (lines[i].includes('"ADDED: "')) {
-          finalResult += lines[i] + '\n';
+          tempResult += lines[i] + '\n';
           lines[i + 1] = '<span style="color:green">' + lines[i + 1] + '</span>';
         } else if (lines[i].includes('"REMOVED: "')) {
-          finalResult += lines[i] + '\n';
+          tempResult += lines[i] + '\n';
           lines[i + 1] = '<span style="color:darkred">' + lines[i + 1] + '</span>';
+        } else {
+          tempResult += lines[i] + '\n';
+        }
+      }
+
+      lines = tempResult.split('\n');
+      let finalResult = '';
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].trim().endsWith('{') && lines[i + 1].trim().startsWith('}')) {
+          // skip this object since it only contains unchanged properties
+          i++;
         } else {
           finalResult += lines[i] + '\n';
         }
@@ -53,7 +66,10 @@ const objectChangeFinder = function() {
       finalResult = finalResult.replace(/"UPDATED: ",/g, 'UPDATED:')
         .replace(/"ADDED: ",/g, 'ADDED:')
         .replace(/"REMOVED: ",/g, 'REMOVED:')
-        .replace(/"type": /g, '');
+        .replace(/"type": /g, '')
+        .replace(/"data": /g, '')
+        // .replace(/\n/g, '<br>')
+        .replace(/  /g, 'xx');
 
       return finalResult;
     },
@@ -63,12 +79,7 @@ const objectChangeFinder = function() {
       }
       if (this.isValue(obj1) || this.isValue(obj2)) {
         if (this.compareValues(obj1, obj2) === this.VALUE_UNCHANGED) {
-          return;
-        } else if (this.compareValues(obj1, obj2) === this.VALUE_UPDATED) {
-          return {
-            type: this.VALUE_UPDATED,
-            data: { old: obj1, new: obj2 }
-          };
+          return 'PROPERTY_IGNORE';
         } else if (this.compareValues(obj1, obj2) === this.VALUE_CREATED) {
           return {
             type: this.VALUE_CREATED,
@@ -79,11 +90,15 @@ const objectChangeFinder = function() {
             type: this.VALUE_DELETED,
             data: obj1
           };
+        } else if (this.compareValues(obj1, obj2) === this.VALUE_UPDATED) {
+          return {
+            type: this.VALUE_UPDATED,
+            data: { old: obj1, new: obj2 }
+          };
         }
       }
 
       let diff = {};
-
       for (let key in obj1) {
         if (this.isFunction(obj1[key])) {
           continue;
@@ -101,7 +116,7 @@ const objectChangeFinder = function() {
           continue;
         }
 
-        diff[key] = this.map(undefined, obj2[key]);
+        diff[key] = this.map(undefined, obj2[key]) || 'PROPERTY_IGNORE';
       }
 
       return diff;
@@ -114,10 +129,10 @@ const objectChangeFinder = function() {
       if (this.isDate(value1) && this.isDate(value2) && value1.getTime() === value2.getTime()) {
         return this.VALUE_UNCHANGED;
       }
-      if ('undefined' === typeof(value1)) {
+      if ('undefined' === typeof(value1) || value1 === '') {
         return this.VALUE_CREATED;
       }
-      if ('undefined' === typeof(value2)) {
+      if ('undefined' === typeof(value2) || value2 === '') {
         return this.VALUE_DELETED;
       }
       return this.VALUE_UPDATED;
@@ -142,18 +157,66 @@ const objectChangeFinder = function() {
 
 
 const result = objectChangeFinder.getFormattedChangeString({
-    a: 'i am unchanged',
-    b: 'i am deleted',
-    e: { ea: 1, eb: false, ec: null},
-    f: [1, { fa: 'same', fb: [{fa: 'same'}, { fd: 'delete'}]}],
-    g: new Date('2017.11.25')
+    "_id" : "5ba94a196bde00fea67363e6",
+    "moduleId" : 2,
+    "name" : "REVPOS-SL2-NOWWDISTI-NOSCMS-ROLL3",
+    "period" : "ROLL3",
+    "driverName" : "REVPOS",
+    "salesMatch" : "SL2",
+    "productMatch" : "",
+    "scmsMatch" : "",
+    "legalEntityMatch" : "",
+    "beMatch" : "",
+    "sl1Select" : "NOT IN ( 'WW Distribution' )",
+    "scmsSelect" : "NOT IN ( 'NOT REQUIRED','OTHER','UNKNOWN' )",
+    "beSelect" : "",
+    "createdBy" : "system",
+    "createdDate" : "2018-09-24T20:33:30.295Z",
+    "updatedBy" : "system",
+    "updatedDate" : "2018-09-24T20:33:30.295Z",
+    "status" : "A",
+    "salesCritCond" : "NOT IN",
+    "salesCritChoices" : [
+      "WW Distribution"
+    ],
+    "scmsCritCond" : "NOT IN",
+    "scmsCritChoices" : [
+      "NOT REQUIRED",
+      "OTHER",
+      "UNKNOWN"
+    ],
+    "approvedOnce" : "Y"
   },
   {
-    a: 'i am unchanged',
-    c: 'i am created',
-    e: { ea: '1', eb: '', ed: 'created'},
-    f: [{fa: 'same', fb: [{fb: 'same'}, { fc: 'create'}]}, 1],
-    g: new Date('2017.11.25')
+    "_id" : "5ba94a196bde00fea67363e6",
+    "moduleId" : 1,
+    "name" : "REVPOS-SL2-NOWWDISTI-NOSCMS-ROLL3",
+    "period" : "ROLL3",
+    "driverName" : "REVPOS",
+    "salesMatch" : "SL2",
+    "productMatch" : "",
+    "scmsMatch" : "",
+    "legalEntityMatch" : "",
+    "beMatch" : "",
+    "sl1Select" : "NOT IN ( 'WW Distribution' )",
+    "scmsSelect" : "NOT IN ( 'NOT REQUIRED','OTHER','UNKNOWN' )",
+    "beSelect" : "123",
+    "createdBy" : "system",
+    "createdDate" : "2018-09-24T20:33:30.295Z",
+    "updatedBy" : "system",
+    "updatedDate" : "2018-09-24T20:33:30.295Z",
+    "status" : "A",
+    "salesCritCond" : "NOT IN",
+    "salesCritChoices" : [
+      "WW Distribution"
+    ],
+    "scmsCritCond" : "NOT IN",
+    "scmsCritChoices" : [
+      "NOT REQUIRED",
+      "OTHERS",
+      "UNKNOWN"
+    ],
+    "approvedOnce" : "Y"
   });
 
   /*let finalResult = '';

@@ -156,7 +156,7 @@ export default class SubmeasureController extends ApprovalController {
             if (data.approvedOnce === 'Y') {
               body = `The "${data.name}" DFA submeasure has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
               const oldObj = results[0];
-              body += svrUtil.getObjectDifferences(oldObj, sm, '<br>');
+              body += svrUtil.getObjectDifferences(oldObj, sm);
             } else {
               body = `A new DFA submeasure has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
