@@ -63,6 +63,7 @@ Promise.all([mgc.promise, pgc.promise])
     mg.connection.close();
     if (pgc.pgdb) {
       pgc.pgdb.end();
+      console.log('postgres disconnected');
     }
     process.exit(0);
   });
