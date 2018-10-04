@@ -149,19 +149,19 @@ export default class AllocationRuleController extends ApprovalController {
             } else {
               body = `A new DFA rule has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(req.user.email, adminEmail,   `DFA: ${_.find(req.dfaData.modules, {moduleId}).name} - Submeasure Submitted for Approval`, body);
+            return sendHtmlMail(req.user.email, adminEmail,   `DFA - ${_.find(req.dfaData.modules, {moduleId}).name} - Rule Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, 'DFA: Rule Approved', body);
+            return sendHtmlMail(adminEmail, req.user.email, `DFA - ${_.find(req.dfaData.modules, {moduleId}).name} - Rule Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, 'DFA: Rule Not Approved', body);
+            return sendHtmlMail(adminEmail, req.user.email, `DFA - ${_.find(req.dfaData.modules, {moduleId}).name} - Rule Not Approved`, body);
         }
       });
 
