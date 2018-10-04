@@ -23,7 +23,7 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <fin-input name="name" [(ngModel)]="sm.name" [disabled]="this.editMode" type="text" label="Sub-Measure Name"
+        <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name"
                    [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true"></fin-input>
       </div>
       <div class="col-lg-6">
