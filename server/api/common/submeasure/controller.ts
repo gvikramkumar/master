@@ -140,14 +140,14 @@ export default class SubmeasureController extends ApprovalController {
   sendApprovalEmail(req, mode: ApprovalMode, sm) {
     this.verifyProperties(req.query, ['moduleId']);
     const data = req.body;
-    const moduleId = req.query.moduleId;
+    const moduleId = Number(req.query.moduleId);
     const url = `${req.headers.origin}/prof/submeasure/edit/${sm.id};mode=edit`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
     const adminEmail = svrUtil.getAdminEmail(moduleId, req.user.email);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
-      promises.push(this.repo.getOneByQuery({moduleId: req.query.moduleId, name: data.name, updatedDate: data.updatedDate}));
+      promises.push(this.repo.getOneByQuery({moduleId, name: data.name, updatedDate: data.updatedDate}));
     }
     return Promise.all(promises)
       .then(results => {
@@ -156,11 +156,20 @@ export default class SubmeasureController extends ApprovalController {
             if (data.approvedOnce === 'Y') {
               body = `The "${data.name}" DFA submeasure has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
               const oldObj = results[0];
-              body += svrUtil.getObjectDifferences(oldObj, sm);
+              if (oldObj) {
+                if (sm.toObject) {
+                  sm = sm.toObject();
+                }
+                body += '<br><br><b>Summary of changes:</b><br><br>' + svrUtil.getObjectDifferences(
+                  oldObj.toObject(),
+                  sm, [
+                    '_id', 'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
+                    'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v']);
+              }
             } else {
               body = `A new DFA submeasure has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(req.user.email, adminEmail,   'DFA: Submeasure Submitted for Approval', body);
+            return sendHtmlMail(req.user.email, adminEmail,   `DFA: ${_.find(req.dfaData.modules, {moduleId}).name} - Submeasure Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {

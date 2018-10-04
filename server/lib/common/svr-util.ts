@@ -27,7 +27,7 @@ function isLocalEnv() {
 }
 
 // function getObjectDifferences(oldObj, newObj, delimiter = '\n'): string {
-function getObjectDifferences(oldObj, newObj): string {
+function getObjectDifferences(oldObj, newObj, omitProperties: string[]): string {
   // return `getObjectDifferences ${delimiter} not implemented yet`;
   const objectChangeFinder = function() {
     return {
@@ -139,7 +139,7 @@ function getObjectDifferences(oldObj, newObj): string {
         if ('undefined' === typeof(value1) || value1 === '') {
           return this.VALUE_CREATED;
         }
-        if ('undefined' === typeof(value2) || value2 === '') {
+        if ('undefined' === typeof(value2) || value2 === null || value2 === '') {
           return this.VALUE_DELETED;
         }
         return this.VALUE_UPDATED;
@@ -162,7 +162,11 @@ function getObjectDifferences(oldObj, newObj): string {
     };
   }();
 
-  return objectChangeFinder.getFormattedChangeString(_.cloneDeep(oldObj), _.cloneDeep(newObj));
+  /*console.log('OLDOBJ:' + JSON.stringify(_.omit(_.cloneDeep(oldObj), omitProperties),null,2));
+  console.log('NEWOBJ:' + JSON.stringify(_.omit(_.cloneDeep(newObj), omitProperties),null,2));*/
+
+  return objectChangeFinder.getFormattedChangeString
+  (_.omit(_.cloneDeep(oldObj), omitProperties), _.omit(_.cloneDeep(newObj), omitProperties));
 }
 
 function getAdminEmail(moduleId, userId) {

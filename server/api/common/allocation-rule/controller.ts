@@ -8,6 +8,7 @@ import {ApprovalMode} from '../../../../shared/enums';
 import {sendHtmlMail} from '../../../lib/common/mail';
 import LookupRepo from '../lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
+import * as _ from 'lodash';
 
 @injectable()
 export default class AllocationRuleController extends ApprovalController {
@@ -122,14 +123,14 @@ export default class AllocationRuleController extends ApprovalController {
   sendApprovalEmail(req, mode: ApprovalMode, rule): Promise<any> {
     this.verifyProperties(req.query, ['moduleId']);
     const data = req.body;
-    const moduleId = req.query.moduleId;
+    const moduleId = Number(req.query.moduleId);
     const url = `${req.headers.origin}/prof/rule-management/edit/${rule.id};mode=edit`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
     const adminEmail = svrUtil.getAdminEmail(moduleId, req.user.email);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
-      promises.push(this.repo.getOneLatest({moduleId: req.query.moduleId, name: data.name, status: {$in: ['A', 'I']}}));
+      promises.push(this.repo.getOneLatest({moduleId, name: data.name, status: {$in: ['A', 'I']}}));
     }
     return Promise.all(promises)
       .then(results => {
@@ -138,17 +139,17 @@ export default class AllocationRuleController extends ApprovalController {
             if (data.approvedOnce === 'Y') {
               body = `The "${data.name}" DFA rule has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
               const oldObj = results[0];
-              // body += svrUtil.getObjectDifferences(oldObj, rule, '<br>');
               if (oldObj) {
                 if (rule.toObject) {
                   rule = rule.toObject();
                 }
-                body += '<br><br>' + svrUtil.getObjectDifferences(oldObj.toObject(), rule);
+                body += '<br><br><b>Summary of changes:</b><br><br>' + svrUtil.getObjectDifferences
+                (oldObj.toObject(), rule, ['createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v']);
               }
             } else {
               body = `A new DFA rule has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(req.user.email, adminEmail,   'DFA: Rule Submitted for Approval', body);
+            return sendHtmlMail(req.user.email, adminEmail,   `DFA: ${_.find(req.dfaData.modules, {moduleId}).name} - Submeasure Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {

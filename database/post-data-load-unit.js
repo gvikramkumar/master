@@ -38,6 +38,7 @@ db.dfa_submeasure.insertMany([
       service: 'N'
     },
     rules: ["TEST_RULE_1", "TEST_RULE_2"],
+    activeStatus: "A",
     status: "A",
     approvedOnce: "Y",
   },
@@ -77,6 +78,7 @@ db.dfa_submeasure.insertMany([
       service: 'N'
     },
     rules: ["TEST_RULE_3", "TEST_RULE_4"],
+    activeStatus: "A",
     status: "A",
     approvedOnce: "Y",
   }
