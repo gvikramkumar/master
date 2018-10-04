@@ -61,18 +61,6 @@ export class RestBase<T extends AnyObj> {
     return this.getMany(filter);
   }
 
-  getApprovalVersionedListByNameAndUserType() {
-    const moduleId = this.store.module.moduleId;
-    const user = this.store.user;
-    if (user.isModuleEndUser()) {
-      return this.getLatestByName({status: 'A'});
-    } else if (user.isModuleSuperUser()) {
-      return this.callMethod('getManyLatestByNameActiveConcatDraftPendingOfUser');
-    } else if (user.isModuleAdminOrGreater()) {
-      return this.getLatestByName();
-    }
-  }
-
   // skip/limit required, sort optional, but surely needed to line up in pages. params become find(filter)
   getManySortAndPage(skip, limit, sort = null, _params = <any>{}) {
     const params = Object.assign(_params, {setSkip: skip, setLimit: limit});
