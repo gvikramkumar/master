@@ -51,4 +51,16 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
     this.callMethod('inactivate', data, params);
   }
 
+  getApprovalVersionedListByNameAndUserType() {
+    const moduleId = this.store.module.moduleId;
+    const user = this.store.user;
+    if (user.isModuleEndUser()) {
+      return this.getLatestByName({status: 'A'});
+    } else if (user.isModuleSuperUser()) {
+      return this.callMethod('getManyLatestByNameActiveConcatDraftPendingOfUser');
+    } else if (user.isModuleAdminOrGreater()) {
+      return this.callMethod('getManyLatestByNameActiveConcatDraftPending');
+    }
+  }
+
 }

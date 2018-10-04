@@ -88,6 +88,22 @@ export default class ApprovalController extends ControllerBase {
     return Promise.reject(new ApiError('sendApprovalEmail not defined for approval controller'));
   }
 
+  getManyLatestByNameActiveConcatDraftPending(req, res, next) {
+    return Promise.all([
+      this.repo.getManyByGroupLatest({
+        groupField: 'name',
+        status: 'A',
+        moduleId: req.body.moduleId}),
+      this.repo.getMany({
+        status: {$in: ['D', 'P']},
+        moduleId: req.body.moduleId}),
+    ])
+      .then(results => {
+        res.json(results[0].concat(results[1]));
+      })
+      .catch(next);
+  }
+
   getManyLatestByNameActiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
       this.repo.getManyByGroupLatest({
