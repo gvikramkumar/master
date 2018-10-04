@@ -59,7 +59,6 @@ export function databaseUpdate() {
         console.log(`Database already on latest version: ${databaseVersion}`);
         return Promise.resolve();
       }
-      return Promise.resolve();
     });
 
 
