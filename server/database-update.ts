@@ -3,20 +3,22 @@ import * as fs from 'fs';
 import * as _ from 'lodash';
 import LookupRepo from './api/common/lookup/repo';
 import {ApiError} from './lib/common/api-error';
+import {exec} from 'child_process';
+import {nfcall} from 'q';
 
 interface DatabaseUpdate {
   fileName: string;
   version: number;
 }
 
-const config = _.config.mongo;
+const config = _config.mongo;
+const lookupRepo = new LookupRepo();
 
 export function databaseUpdate() {
   if (process.env.NODE_ENV === 'unit') {
     return Promise.resolve();
   }
 
-  const lookupRepo = new LookupRepo();
   /*
   1. get version
   2. get files.map >> (fileName, version) and sort by version number
@@ -36,31 +38,38 @@ export function databaseUpdate() {
   lookupRepo.getValue('database-version')
     .then(version => {
       const databaseVersion = version;
-      const dbUpdateIndex = _.findIndex(updates, {version: databaseVersion});
-      if (dbUpdateIndex === -1) {
-        throw new ApiError(`databaseUpdate: couldn't find dbUpdateIndex.`);
+      let dbUpdateIndex = _.findIndex(updates, {version: databaseVersion});
+      dbUpdateIndex = dbUpdateIndex === -1 ? 0 : dbUpdateIndex + 1;
+      if (dbUpdateIndex !== 0) {
+        updates = dbUpdateIndex >= updates.length ? [] : updates.slice(dbUpdateIndex);
       }
-      updates = updates.slice(dbUpdateIndex + 1);
       if (updates.length > 0) {
-        console.log(`Database requires updates: ${databaseVersion}`);
+        console.log(`Database requires updates, current version: ${databaseVersion}`);
         let chain = <Promise<any>>Promise.resolve();
         updates.forEach(update => {
           chain = chain.then(() => doUpdate(update));
         });
-        return chain;
+        chain.then(() => {
+          return   lookupRepo.getValue('database-version')
+            .then(endVersion => console.log(`database update complete, has been updated to version: ${endVersion}`));
+        })
       } else {
         console.log(`Database already on latest version: ${databaseVersion}`);
-        return Promise.resolve();
+        return Promise.reject();
       }
+      return Promise.reject();
     });
 
 
 }
 
 function doUpdate(update) {
-  return new Promise((resolve, reject) => {
-    let str = `mongo --nodb  --eval "var host='${config.host}', port='${config.port}', _db='${config.db}'" database/updates/${update.fileName}`;
-    console.log(str);
-    resolve();
+  const str = `mongo --nodb  --eval "var host='${config.host}', port='${config.port}', _db='${config.db}'" database/updates/${update.fileName}`;
+  return nfcall(exec, str)
+    .then(() => {
+    return lookupRepo.upsert({key: 'database-version', value: update.version})
+      .then(() => {
+        console.log(`database updated to version: ${update.version}`);
+      });
   });
 }

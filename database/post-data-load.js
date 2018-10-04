@@ -122,6 +122,10 @@ db.dfa_open_period.insertMany([
 
 db.dfa_lookup.insertMany([
   {
+    key: 'database-version',
+    value: 0
+  },
+  {
     key: 'revenue_classification',
     value: ["Recurring Deferred", "Recurring Non Deferred", "Recurring Other", "Non Recurring"]
   },
@@ -232,6 +236,7 @@ function parseSelect(str) {
   rtn.arr = str.substr(idx).replace(/(\(|\)|'|")/g, '').trim().split(',');
   return rtn;
 }
+
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
