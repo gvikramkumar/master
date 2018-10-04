@@ -144,7 +144,7 @@ export default class AllocationRuleController extends ApprovalController {
                   rule = rule.toObject();
                 }
                 body += '<br><br><b>Summary of changes:</b><br><br>' + svrUtil.getObjectDifferences
-                (oldObj.toObject(), rule, ['createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v']);
+                (oldObj.toObject(), rule, ['_id', 'id', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v']);
               }
             } else {
               body = `A new DFA rule has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;

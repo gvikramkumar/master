@@ -163,7 +163,7 @@ export default class SubmeasureController extends ApprovalController {
                 body += '<br><br><b>Summary of changes:</b><br><br>' + svrUtil.getObjectDifferences(
                   oldObj.toObject(),
                   sm, [
-                    '_id', 'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
+                    '_id', 'id', 'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
                     'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v']);
               }
             } else {
