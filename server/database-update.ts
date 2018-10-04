@@ -53,6 +53,7 @@ export function databaseUpdate() {
           return   lookupRepo.getValue('database-version')
             .then(endVersion => console.log(`database update complete, has been updated to version: ${endVersion}`));
         })
+          .catch(err => console.log(err));
       } else {
         console.log(`Database already on latest version: ${databaseVersion}`);
         return Promise.reject();
