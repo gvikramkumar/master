@@ -4,11 +4,258 @@ import {shUtil} from '../shared/shared-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-const x = 'update_4.js';
+/*const x = 'update_4.js';
 // console.log(Number(x.substr(x.indexOf('_') + 1)));
 console.log(x.match(/^.*_(\d{1,3}).js$/ig));
-console.log(/^.*_(\d{1,3}).js$/i.exec(x));
+console.log(/^.*_(\d{1,3}).js$/i.exec(x));*/
 
+
+// getUpdateChanges(oldObj, newObj) {
+  /*let result = '';
+  const oldObj = {a: 'one', b: {c: 'two', d: 'four'}};
+  const newObj= {a: 'one', b: {c: 'three', d: 'three'}};
+  _.mergeWith(oldObj, newObj, function (objectValue, sourceValue, key, object, source) {
+    if ( !(_.isEqual(objectValue, sourceValue)) && (Object(objectValue) !== objectValue)) {
+      console.log('\n    Expected: ' + sourceValue + '\n    Actual: ' + objectValue);
+      // result += '\n    Expected: ' + sourceValue + '\n    Actual: ' + objectValue;
+    }
+  });*/
+// }
+
+const objectChangeFinder = function() {
+  return {
+    VALUE_CREATED: 'ADDED: ',
+    VALUE_UPDATED: 'UPDATED: ',
+    VALUE_DELETED: 'REMOVED: ',
+    VALUE_UNCHANGED: 'unchanged',
+    getFormattedChangeString: function(obj1, obj2) {
+      const initialResult = this.map(obj1, obj2);
+      let tempResult = '';
+      let lines = JSON.stringify(initialResult, null, 2).split('\n');
+      for (let i = 0; i < lines.length; i++) {
+        // code here using lines[i] which will give you each line
+        // <span style="color:blue">blue</span>
+        if (lines[i].includes('PROPERTY_IGNORE')) {
+          // skip this line since it is an unchanged property
+        } else if (lines[i].includes('"old":')) {
+          tempResult += '<span style="color:darkred">' + lines[i] + '</span>' + '\n';
+        } else if (lines[i].includes('"new":')) {
+          tempResult += '<span style="color:green">' + lines[i] + '</span>' + '\n';
+        } else if (lines[i].includes('"ADDED: "')) {
+          tempResult += lines[i] + '\n';
+          lines[i + 1] = '<span style="color:green">' + lines[i + 1] + '</span>';
+        } else if (lines[i].includes('"REMOVED: "')) {
+          tempResult += lines[i] + '\n';
+          lines[i + 1] = '<span style="color:darkred">' + lines[i + 1] + '</span>';
+        } else {
+          tempResult += lines[i] + '\n';
+        }
+      }
+
+      lines = tempResult.split('\n');
+      let finalResult = '';
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].trim().endsWith('{') && lines[i + 1].trim().startsWith('}')) {
+          // skip this object since it only contains unchanged properties
+          i++;
+        } else {
+          finalResult += lines[i] + '\n';
+        }
+      }
+
+      finalResult = finalResult.replace(/"UPDATED: ",/g, 'UPDATED:')
+        .replace(/"ADDED: ",/g, 'ADDED:')
+        .replace(/"REMOVED: ",/g, 'REMOVED:')
+        .replace(/"type": /g, '')
+        .replace(/"data": /g, '')
+        // .replace(/\n/g, '<br>')
+        .replace(/  /g, 'xx');
+
+      return finalResult;
+    },
+    map: function(obj1, obj2) {
+      if (this.isFunction(obj1) || this.isFunction(obj2)) {
+        throw 'Invalid argument. Function given, object expected.';
+      }
+      if (this.isValue(obj1) || this.isValue(obj2)) {
+        if (this.compareValues(obj1, obj2) === this.VALUE_UNCHANGED) {
+          return 'PROPERTY_IGNORE';
+        } else if (this.compareValues(obj1, obj2) === this.VALUE_CREATED) {
+          return {
+            type: this.VALUE_CREATED,
+            data: obj2
+          };
+        } else if (this.compareValues(obj1, obj2) === this.VALUE_DELETED) {
+          return {
+            type: this.VALUE_DELETED,
+            data: obj1
+          };
+        } else if (this.compareValues(obj1, obj2) === this.VALUE_UPDATED) {
+          return {
+            type: this.VALUE_UPDATED,
+            data: { old: obj1, new: obj2 }
+          };
+        }
+      }
+
+      let diff = {};
+      for (let key in obj1) {
+        if (this.isFunction(obj1[key])) {
+          continue;
+        }
+
+        let value2 = undefined;
+        if ('undefined' !== typeof(obj2[key])) {
+          value2 = obj2[key];
+        }
+
+        diff[key] = this.map(obj1[key], value2);
+      }
+      for (let key in obj2) {
+        if (this.isFunction(obj2[key]) || ('undefined' !== typeof(diff[key]))) {
+          continue;
+        }
+
+        diff[key] = this.map(undefined, obj2[key]) || 'PROPERTY_IGNORE';
+      }
+
+      return diff;
+
+    },
+    compareValues: function(value1, value2) {
+      if (value1 === value2) {
+        return this.VALUE_UNCHANGED;
+      }
+      if (this.isDate(value1) && this.isDate(value2) && value1.getTime() === value2.getTime()) {
+        return this.VALUE_UNCHANGED;
+      }
+      if ('undefined' === typeof(value1) || value1 === '') {
+        return this.VALUE_CREATED;
+      }
+      if ('undefined' === typeof(value2) || value2 === '') {
+        return this.VALUE_DELETED;
+      }
+      return this.VALUE_UPDATED;
+    },
+    isFunction: function(obj) {
+      return {}.toString.apply(obj) === '[object Function]';
+    },
+    isArray: function(obj) {
+      return {}.toString.apply(obj) === '[object Array]';
+    },
+    isObject: function(obj) {
+      return {}.toString.apply(obj) === '[object Object]';
+    },
+    isDate: function(obj) {
+      return {}.toString.apply(obj) === '[object Date]';
+    },
+    isValue: function(obj) {
+      return !this.isObject(obj) && !this.isArray(obj);
+    }
+  };
+}();
+
+
+const result = objectChangeFinder.getFormattedChangeString({
+    "_id" : "5ba94a196bde00fea67363e6",
+    "moduleId" : 2,
+    "name" : "REVPOS-SL2-NOWWDISTI-NOSCMS-ROLL3",
+    "period" : "ROLL3",
+    "driverName" : "REVPOS",
+    "salesMatch" : "SL2",
+    "productMatch" : "",
+    "scmsMatch" : "",
+    "legalEntityMatch" : "",
+    "beMatch" : "",
+    "sl1Select" : "NOT IN ( 'WW Distribution' )",
+    "scmsSelect" : "NOT IN ( 'NOT REQUIRED','OTHER','UNKNOWN' )",
+    "beSelect" : "",
+    "createdBy" : "system",
+    "createdDate" : "2018-09-24T20:33:30.295Z",
+    "updatedBy" : "system",
+    "updatedDate" : "2018-09-24T20:33:30.295Z",
+    "status" : "A",
+    "salesCritCond" : "NOT IN",
+    "salesCritChoices" : [
+      "WW Distribution"
+    ],
+    "scmsCritCond" : "NOT IN",
+    "scmsCritChoices" : [
+      "NOT REQUIRED",
+      "OTHER",
+      "UNKNOWN"
+    ],
+    "approvedOnce" : "Y"
+  },
+  {
+    "_id" : "5ba94a196bde00fea67363e6",
+    "moduleId" : 1,
+    "name" : "REVPOS-SL2-NOWWDISTI-NOSCMS-ROLL3",
+    "period" : "ROLL3",
+    "driverName" : "REVPOS",
+    "salesMatch" : "SL2",
+    "productMatch" : "",
+    "scmsMatch" : "",
+    "legalEntityMatch" : "",
+    "beMatch" : "",
+    "sl1Select" : "NOT IN ( 'WW Distribution' )",
+    "scmsSelect" : "NOT IN ( 'NOT REQUIRED','OTHER','UNKNOWN' )",
+    "beSelect" : "123",
+    "createdBy" : "system",
+    "createdDate" : "2018-09-24T20:33:30.295Z",
+    "updatedBy" : "system",
+    "updatedDate" : "2018-09-24T20:33:30.295Z",
+    "status" : "A",
+    "salesCritCond" : "NOT IN",
+    "salesCritChoices" : [
+      "WW Distribution"
+    ],
+    "scmsCritCond" : "NOT IN",
+    "scmsCritChoices" : [
+      "NOT REQUIRED",
+      "OTHERS",
+      "UNKNOWN"
+    ],
+    "approvedOnce" : "Y"
+  });
+
+  /*let finalResult = '';
+
+  const lines = JSON.stringify(result, null, 2).split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    // code here using lines[i] which will give you each line
+    // <span style="color:blue">blue</span>
+    if (lines[i].includes('"old":')) {
+      finalResult += '<span style="color:darkred">' + lines[i] + '</span>' + '\n';
+    } else if (lines[i].includes('"new":')) {
+      finalResult += '<span style="color:green">' + lines[i] + '</span>' + '\n';
+    } else if (lines[i].includes('"ADDED: "')) {
+      finalResult += lines[i] + '\n';
+      lines[i + 1] = '<span style="color:green">' + lines[i + 1] + '</span>';
+    } else if (lines[i].includes('"REMOVED: "')) {
+      finalResult += lines[i] + '\n';
+      lines[i + 1] = '<span style="color:darkred">' + lines[i + 1] + '</span>';
+    } else {
+      finalResult += lines[i] + '\n';
+    }
+  }
+
+  finalResult = finalResult.replace(/"UPDATED: ",/g, 'UPDATED:')
+    .replace(/"ADDED: ",/g, 'ADDED:')
+    .replace(/"REMOVED: ",/g, 'REMOVED:')
+    .replace(/"type": /g, '');*/
+
+  console.log(result);
+
+/*let obj1 = {
+  a: 'i am unchanged',
+  b: 'i am deleted',
+  e: { ea: 1, eb: false, ec: null},
+  f: [1, { fa: 'same', fb: [{fa: 'same'}, { fd: 'delete'}]}],
+  g: new Date('2017.11.25')
+};
+console.log();
+console.log(JSON.stringify(obj1,  null, 2));*/
 
 
 // console.log(shUtil.getFiscalMonthListForCurYearAndLast());

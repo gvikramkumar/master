@@ -227,7 +227,7 @@ db.dfa_allocation_rule.find({}).forEach(rule => {
 });
 db.dfa_allocation_rule.deleteMany({})
 db.dfa_allocation_rule.insertMany(rules);
-db.dfa_allocation_rule.update({}, {$set: {approvedOnce: 'Y'}});
+db.dfa_allocation_rule.updateMany({}, {$set: {approvedOnce: 'Y', activeStatus: 'A'}});
 
 function parseSelect(str) {
   rtn = {};
