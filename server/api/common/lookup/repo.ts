@@ -23,6 +23,11 @@ Model: Model<any>;
     return this.Model.find({key: {$in: keys}}).exec();
   }
 
+  getValues(keys: string[]) {
+    return this.getMany(keys)
+      .then(docs => docs.map(doc => doc && doc.value));
+  }
+
   // would rather have getValue, but controller needs to be able to error if nothing is found. Something
   // "could" be found and have an undefined value, so only way to know is to return the doc itself
   getDoc(key) {

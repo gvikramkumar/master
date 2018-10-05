@@ -36,6 +36,7 @@ import * as _ from 'lodash';
 import AnyObj from '../shared/models/any-obj';
 import {ApiError} from './lib/common/api-error';
 import {siteRestriction} from './lib/middleware/site-restriction';
+import {addGlobalData} from './lib/middleware/add-global-data';
 
 export default function () {
 
@@ -56,6 +57,7 @@ export default function () {
   }
   app.use(cors(corsOptions));
   app.use(addSsoUser())
+  app.use(addGlobalData());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());
