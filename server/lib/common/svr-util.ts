@@ -174,14 +174,14 @@ function getItadminEmail(dfa) {
   if (isLocalEnv()) {
     return dfa.user.email;
   }
-  return dfa.itAdminEmail;
+  return dfa.itadminEmail;
 }
 
 function getAdminEmail(dfa) {
   if (isLocalEnv()) {
     return dfa.user.email;
   }
-  return dfa.itAdminEmail; // hack until we get the real module admin email groups
+  return dfa.itadminEmail; // hack until we get the real module admin email groups
   // return `DFA-${DfaModuleIds[dfa.moduleId].toUpperCase()}-ADMIN@cisco.com`;
 }
 
