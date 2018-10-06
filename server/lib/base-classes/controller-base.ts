@@ -102,7 +102,7 @@ export default class ControllerBase {
   }
 
   addOne(req, res, next) {
-    this.addOnePromise(res, req, next)
+    this.addOnePromise(req, res, next)
       .then(item => res.json(item))
       .catch(next);
   }
@@ -201,7 +201,8 @@ export default class ControllerBase {
         } else {
           this.addOne(req, res, next);
         }
-      });
+      })
+      .catch(next);
   }
 
   // post /query-post

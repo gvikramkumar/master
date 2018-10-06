@@ -28,7 +28,7 @@ export function addSsoUser() {
 
     Promise.all([
       lookupRepo.getValue(userId),
-      moduleRepo.getActiveNonAdminSortedByModuleId()
+      moduleRepo.getManyActive()
     ])
       .then(results => {
         roles = results[0] ? results[0] : ['itadmin'];
@@ -67,6 +67,7 @@ export function addSsoUser() {
           res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`User access required.`));
         } else {
           req.user = user;
+          console.log('addssouser', req.url, req.user && req.user.id, req.body && req.body.moduleId);
           next();
         }
       })

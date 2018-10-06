@@ -2,6 +2,7 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest} from '
 import {Observable} from 'rxjs';
 import {AppStore} from '../../app/app-store';
 import {Injectable} from '@angular/core';
+import {shUtil} from '../../../../../shared/shared-util';
 
 @Injectable()
 export class ModifyRequestInterceptor implements HttpInterceptor {
@@ -11,7 +12,7 @@ export class ModifyRequestInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let params = req.params ? req.params : new HttpParams();
     const moduleId = this.store.module && this.store.module.moduleId;
-    if (moduleId) {
+    if (moduleId && !params.get('moduleId') && !shUtil.isAdminModuleId(moduleId)) {
       params = params.set('moduleId', moduleId.toString());
     }
 
