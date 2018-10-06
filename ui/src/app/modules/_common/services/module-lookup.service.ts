@@ -65,7 +65,7 @@ export class ModuleLookupService {
     if (!moduleId) {
       moduleId = this.store.getRepoModule(this.endpointName).moduleId;
       if (shUtil.isAdminModuleId(moduleId)) {
-        throw new Error(`No moduleId for itAdmin call to ${this.endpointName}`);
+        throw new Error(`No moduleId for itadmin call to ${this.endpointName}`);
       }
     }
     return moduleId;
