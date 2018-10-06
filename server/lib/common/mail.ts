@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import Q from 'q';
 import _config from '../../config/get-config';
+import AnyObj from '../../../shared/models/any-obj';
 const config = _config.mail;
 
 // keeps nodemailer from complaining about self signed cert
@@ -12,13 +13,27 @@ const transporter = nodemailer.createTransport({
   port: config.port
 });
 
-export function sendTextMail(from, to, subject, body) {
-  const mailOptions = {from, to, subject, text: body};
-  return Q.ninvoke(transporter, 'sendMail', mailOptions);
+export function sendTextMail(from, to, cc, subject, body) {
+  const mailOptions: AnyObj = {from, to, subject, text: body};
+  if (cc) {
+    mailOptions.cc = cc;
+  }
+  return Q.ninvoke(transporter, 'sendMail', mailOptions)
+    .catch(err => {
+      err.mailOptions = mailOptions;
+      throw(err);
+    });
 }
 
-export function sendHtmlMail(from, to, subject, body) {
-  const mailOptions = {from, to, subject, html: body};
-  return Q.ninvoke(transporter, 'sendMail', mailOptions);
+export function sendHtmlMail(from, to, cc, subject, body) {
+  const mailOptions: AnyObj = {from, to, subject, html: body};
+  if (cc) {
+    mailOptions.cc = cc;
+  }
+  return Q.ninvoke(transporter, 'sendMail', mailOptions)
+    .catch(err => {
+      err.mailOptions = mailOptions;
+      throw(err);
+    });
 }
 

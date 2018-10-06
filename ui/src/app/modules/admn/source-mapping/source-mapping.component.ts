@@ -73,6 +73,9 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
           this.refresh();
           this.toastService.showAutoHideToast('Submitted',
             'Module-to-source mapping has been submitted successfully.', ToastSeverity.success);
+        })
+        .catch(err => {
+          const i = 5;
         });
     }
   }

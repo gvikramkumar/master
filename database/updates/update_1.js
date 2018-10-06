@@ -6,3 +6,4 @@ const db = conn.getDB(_db);
 print('update 1');
 load('database/updates/files/update_1_1.js');
 db.dfa_lookup.insertOne({key: 'database-update-test', value: arr});
+

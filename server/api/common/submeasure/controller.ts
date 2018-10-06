@@ -1,16 +1,10 @@
 import {injectable} from 'inversify';
-import ControllerBase from '../../../lib/base-classes/controller-base';
 import SubmeasureRepo from './repo';
 import {ApiError} from '../../../lib/common/api-error';
-import {GroupingSubmeasure} from './grouping-submeasure';
 import SubmeasurePgRepo from './pgrepo';
-import SubmeasureInputLvlPgRepo, {SubmeasureInputLvl} from './input-level-pgrepo';
+import InputLevelPgRepo, {SubmeasureInputLvl} from './input-level-pgrepo';
 import * as _ from 'lodash';
-import InputLevelPgRepo from './input-level-pgrepo';
-import AnyObj from '../../../../shared/models/any-obj';
-import Any = jasmine.Any;
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
-import DfaUser from '../../../../shared/models/dfa-user';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
 import {ApprovalMode} from '../../../../shared/enums';
 import {svrUtil} from '../../../lib/common/svr-util';
@@ -144,7 +138,7 @@ export default class SubmeasureController extends ApprovalController {
     const url = `${req.headers.origin}/prof/submeasure/edit/${sm.id};mode=edit`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
-    const adminEmail = svrUtil.getAdminEmail(moduleId, req.user.email);
+    const adminEmail = svrUtil.getAdminEmail(req.dfa);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
       promises.push(this.repo.getOneByQuery({moduleId, name: data.name, updatedDate: data.updatedDate}));
@@ -160,28 +154,30 @@ export default class SubmeasureController extends ApprovalController {
                 if (sm.toObject) {
                   sm = sm.toObject();
                 }
+                const omitProperties = [
+                  '_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
+                  'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
+                  ];
                 body += '<br><br><b>Summary of changes:</b><br><br>' + svrUtil.getObjectDifferences(
                   oldObj.toObject(),
-                  sm, [
-                    '_id', 'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
-                    'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v']);
+                  sm, omitProperties);
               }
             } else {
               body = `A new DFA submeasure has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(req.user.email, adminEmail,   `DFA - ${_.find(req.dfaData.modules, {moduleId}).name} - Submeasure Submitted for Approval`, body);
+            return sendHtmlMail(req.user.email, adminEmail, svrUtil.getItadminEmail(req.dfa),   `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Submeasure Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, `DFA - ${_.find(req.dfaData.modules, {moduleId}).name} - Submeasure Approved`, body);
+            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Submeasure Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, `DFA - ${_.find(req.dfaData.modules, {moduleId}).name} - Submeasure Not Approved`, body);
+            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Submeasure Not Approved`, body);
         }
       });
   }

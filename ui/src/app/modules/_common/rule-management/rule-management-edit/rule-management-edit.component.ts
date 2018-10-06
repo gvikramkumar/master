@@ -73,11 +73,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   public ngOnInit(): void {
-    const promises = [
-      this.pgLookupService.getRuleCriteriaChoicesSalesLevel1().toPromise(),
-      this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
-      this.pgLookupService.getRuleCriteriaChoicesScms().toPromise(),
-      this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
+    const promises: Promise<any>[] = [
       this.ruleService.getDistinctRuleNames().toPromise()
     ];
     if (this.editMode || this.copyMode) {
@@ -87,21 +83,17 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       .then(results => {
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
-        this.salesChoices = results[0].map(x => ({name: x}));
-        this.prodTgChoices = results[1].map(x => ({name: x}));
-        this.scmsChoices = results[2].map(x => ({name: x}));
-        this.internalBeChoices = results[3].map(x => ({name: x}));
-        this.ruleNames = results[4].map(x => x.toUpperCase());
+        this.ruleNames = results[0].map(x => x.toUpperCase());
 
         if (this.copyMode) {
-          this.rule = results[5];
+          this.rule = results[1];
           this.rule.approvedOnce = 'N';
           delete this.rule.createdBy;
           delete this.rule.createdDate;
           this.orgRule = _.cloneDeep(this.rule);
         }
         if (this.editMode) {
-          this.rule = results[5];
+          this.rule = results[1];
           if (_.includes(['A', 'I'], this.rule.status)) {
             delete this.rule.createdBy;
             delete this.rule.createdDate;
@@ -111,26 +103,40 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         }
         this.init();
 
-        this.prodPFChoiceOptions = {
-          asyncValidations: [
-            {
-              name: 'prodPFChoices',
-              message: 'Some product PF select fields don\'t exist',
-              fcn: this.prodPFChoicesValidator()
-            }
-          ]
-        };
+        // this page was loading too slow, it was these pg queries, so we'll get the rule and init, "then" get the pg stuff
+        Promise.all([
+          this.pgLookupService.getRuleCriteriaChoicesSalesLevel1().toPromise(),
+          this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
+          this.pgLookupService.getRuleCriteriaChoicesScms().toPromise(),
+          this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
+        ])
+          .then(results2 => {
+            this.salesChoices = results2[0].map(x => ({name: x}));
+            this.prodTgChoices = results2[1].map(x => ({name: x}));
+            this.scmsChoices = results2[2].map(x => ({name: x}));
+            this.internalBeChoices = results2[3].map(x => ({name: x}));
 
-        this.prodBUChoiceOptions = {
-          asyncValidations: [
-            {
-              name: 'prodBUChoices',
-              message: 'Some product BU select fields don\'t exist',
-              fcn: this.prodBUChoicesValidator()
-            }
-          ]
-        };
+            this.prodPFChoiceOptions = {
+              asyncValidations: [
+                {
+                  name: 'prodPFChoices',
+                  message: 'Some product PF select fields don\'t exist',
+                  fcn: this.prodPFChoicesValidator()
+                }
+              ]
+            };
 
+            this.prodBUChoiceOptions = {
+              asyncValidations: [
+                {
+                  name: 'prodBUChoices',
+                  message: 'Some product BU select fields don\'t exist',
+                  fcn: this.prodBUChoicesValidator()
+                }
+              ]
+            };
+
+          });
       });
   }
 

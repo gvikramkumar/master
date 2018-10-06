@@ -7,6 +7,7 @@ import {DfaModuleIds} from '../../../shared/enums';
 export const svrUtil = {
   isLocalEnv,
   getObjectDifferences,
+  getItadminEmail,
   getAdminEmail,
   trimStringProperties,
   getMemoryUsage,
@@ -169,11 +170,19 @@ function getObjectDifferences(oldObj, newObj, omitProperties: string[]): string 
   (_.omit(_.cloneDeep(oldObj), omitProperties), _.omit(_.cloneDeep(newObj), omitProperties));
 }
 
-function getAdminEmail(moduleId, userId) {
+function getItadminEmail(dfa) {
   if (isLocalEnv()) {
-    return userId;
+    return dfa.user.email;
   }
-  return `DFA-${DfaModuleIds[moduleId].toUpperCase()}-ADMIN@cisco.com`;
+  return dfa.itAdminEmail;
+}
+
+function getAdminEmail(dfa) {
+  if (isLocalEnv()) {
+    return dfa.user.email;
+  }
+  return dfa.itAdminEmail; // hack until we get the real module admin email groups
+  // return `DFA-${DfaModuleIds[dfa.moduleId].toUpperCase()}-ADMIN@cisco.com`;
 }
 
 function sortedListNotExists(values, value) {

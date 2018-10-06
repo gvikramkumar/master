@@ -122,6 +122,10 @@ db.dfa_open_period.insertMany([
 
 db.dfa_lookup.insertMany([
   {
+    key: 'itadmin-email',
+    value: 'dfa-admin@cisco.com'
+  },
+  {
     key: 'database-version',
     value: 0
   },

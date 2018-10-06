@@ -36,6 +36,7 @@ import * as _ from 'lodash';
 import AnyObj from '../shared/models/any-obj';
 import {ApiError} from './lib/common/api-error';
 import {siteRestriction} from './lib/middleware/site-restriction';
+import {addGlobalData} from './lib/middleware/add-global-data';
 
 export default function () {
 
@@ -55,17 +56,13 @@ export default function () {
     credentials: true
   }
   app.use(cors(corsOptions));
-  app.use(addSsoUser())
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({extended: true}));
-  app.use(cookieParser());
 
-/*
-  app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} ${req['user'].id} ${req.method} ${req.url}`);
-    next();
-  });
-*/
+  /*
+    app.use((req, res, next) => {
+      console.log(`${new Date().toISOString()} ${req['user'].id} ${req.method} ${req.url}`);
+      next();
+    });
+  */
 
   app.use(morgan(function (tokens, req, res) {
     return [
@@ -78,6 +75,15 @@ export default function () {
       tokens['response-time'](req, res), 'ms'
     ].join(' ');
   }));
+
+  app.use(addSsoUser())
+  app.use(addGlobalData());
+  app.use(siteRestriction());
+
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(cookieParser());
+
 
 /*
   app.get('/cause-error', function (req, res, next) {
@@ -96,8 +102,6 @@ export default function () {
     }
   })
 */
-
-  app.use(siteRestriction());
 
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/database', databaseRouter);

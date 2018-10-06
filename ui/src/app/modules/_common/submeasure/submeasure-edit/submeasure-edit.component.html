@@ -13,7 +13,7 @@
             <fin-checkbox label="Active" [(model)]="sm.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
           <div *ngIf="UiUtil.statusIsPending(sm.status)" finAuth="bizadmin" class="form-group-button">
-            <button type="button" cuiButton color="primary" (click)="approve()">Approve</button>
+            <button type="submit" finErrorFlash cuiButton color="primary" (click)="approve()">Approve</button>
             <button type="button" cuiButton color="primary" (click)="reject()">Reject</button>
           </div>
         </div>
@@ -27,7 +27,7 @@
                    [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true"></fin-input>
       </div>
       <div class="col-lg-6">
-        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="sources" label="Source" empty="true"
+        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source" empty="true"
                     optionsKey="name" optionsValue="sourceId" [required]="true" (selectChange)=sourceChange()></cui-select>
       </div>
     </div>
