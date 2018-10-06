@@ -149,7 +149,7 @@ export default class AllocationRuleController extends ApprovalController {
                 if (rule.toObject) {
                   rule = rule.toObject();
                 }
-                const omitProperties = ['_id', 'id', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
+                const omitProperties = ['_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
                   'prodPFCritCond', 'prodPFCritChoices', 'prodBUCritCond', 'prodBUCritChoices', 'prodTGCritCond', 'prodTGCritChoices',
                   'scmsCritCond', 'scmsCritChoices', 'beCritCond', 'beCritChoices'
                 ];
@@ -163,13 +163,13 @@ export default class AllocationRuleController extends ApprovalController {
           case ApprovalMode.approve:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Not Approved`, body);
         }

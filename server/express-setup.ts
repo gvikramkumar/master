@@ -77,7 +77,7 @@ export default function () {
   }));
 
   app.use(addSsoUser())
-  // app.use(addGlobalData());
+  app.use(addGlobalData());
   app.use(siteRestriction());
 
   app.use(bodyParser.json());
@@ -102,9 +102,6 @@ export default function () {
     }
   })
 */
-
-
-
 
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/database', databaseRouter);

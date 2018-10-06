@@ -16,7 +16,7 @@
             <fin-checkbox name="status" label="Active" [(model)]="rule.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
           <div *ngIf="UiUtil.statusIsPending(rule.status)" finAuth="bizadmin" class="form-group-button">
-            <button type="button" cuiButton color="primary" (click)="approve()">Approve</button>
+            <button type="submit" finErrorFlash cuiButton color="primary" (click)="approve()">Approve</button>
             <button type="button" cuiButton color="primary" (click)="reject()">Reject</button>
           </div>
         </div>

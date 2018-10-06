@@ -155,8 +155,9 @@ export default class SubmeasureController extends ApprovalController {
                   sm = sm.toObject();
                 }
                 const omitProperties = [
-                  '_id', 'id', 'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
-                  'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce'];
+                  '_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
+                  'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
+                  ];
                 body += '<br><br><b>Summary of changes:</b><br><br>' + svrUtil.getObjectDifferences(
                   oldObj.toObject(),
                   sm, omitProperties);
@@ -168,13 +169,13 @@ export default class SubmeasureController extends ApprovalController {
           case ApprovalMode.approve:
             body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Submeasure Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA submeasure submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Submeasure Not Approved`, body);
         }
