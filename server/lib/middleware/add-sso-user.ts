@@ -67,6 +67,7 @@ export function addSsoUser() {
           res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`User access required.`));
         } else {
           req.user = user;
+          req.dfaData = {modules};
           next();
         }
       })
