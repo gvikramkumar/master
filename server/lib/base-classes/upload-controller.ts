@@ -13,6 +13,8 @@ import AnyObj from '../../../shared/models/any-obj';
 import PgLookupRepo from '../../api/common/pg-lookup/repo';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
 import DfaUser from '../../../shared/models/dfa-user';
+import {svrUtil} from '../common/svr-util';
+import {ApiDfaData} from '../middleware/add-global-data';
 
 
 export default class UploadController {
@@ -37,6 +39,7 @@ export default class UploadController {
   startedSheet2;
   user: DfaUser;
   moduleId: number;
+  dfa: ApiDfaData;
 
   constructor(
     protected repo: RepoBase,
@@ -47,6 +50,7 @@ export default class UploadController {
   }
 
   upload(req, res, next) {
+    this.dfa = req.dfa;
     this.moduleId = Number(req.body.moduleId);
     this.user = req.user;
     this.startUpload = Date.now();
@@ -188,8 +192,9 @@ export default class UploadController {
 
   sendEmail(subject, body) {
     return sendHtmlMail(
-      'DFA Uploads',
+      svrUtil.getItadminEmail(this.dfa),
       this.req.user.email,
+      null,
       subject,
       body
     );

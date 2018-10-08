@@ -107,7 +107,7 @@ export class AppStore extends StoreBase {
       throw new Error(`No moduleId`);
     }
     if (shUtil.isAdminModuleId(moduleId)) {
-      throw new Error(`No moduleId for itAdmin call.`);
+      throw new Error(`No moduleId for itadmin call.`);
     }
     return moduleId;
   }

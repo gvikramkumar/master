@@ -1,5 +1,6 @@
 
 export class OpenPeriod {
+  id?: string;
   moduleId: number;
   fiscalMonth: number;
   openFlag = 'Y';

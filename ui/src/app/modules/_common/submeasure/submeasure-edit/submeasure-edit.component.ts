@@ -36,7 +36,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
   groupingSubmeasures: GroupingSubmeasure[] = [];
-  sources: Source[] = [];
+  sources: Source[];
+  measureSources: Source[] = [];
   rules: AllocationRule[] = [];
   errs: string[] = [];
   yearmos: { fiscalMonthName: string, fiscalMonth: number }[];
@@ -318,6 +319,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       return;
     }
 
+
     if (this.isCogsMeasure()) {
       this.disableCategories = false;
     } else {
@@ -334,6 +336,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       });
 
     this.currentMeasure = _.find(this.measures, {measureId: this.sm.measureId});
+    this.measureSources = this.sources.filter(source => _.includes(this.currentMeasure.sources, source.sourceId));
     this.disableReportingLevels[0] = !this.currentMeasure.reportingLevel1Enabled;
     this.disableReportingLevels[1] = !this.currentMeasure.reportingLevel2Enabled;
     this.disableReportingLevels[2] = !this.currentMeasure.reportingLevel3Enabled;

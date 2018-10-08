@@ -128,6 +128,9 @@ export default class DfaUser {
       throw new Error(`getRolesFromGenericRoles: all roles must be generic or actual.`);
     }
     const rtn = [];
+    if (shUtil.isAdminModuleId(this.getModuleId())) {
+      return [];
+    }
     roles.forEach(role => {
       switch (role) {
         case 'bizadmin':
@@ -158,6 +161,9 @@ export default class DfaUser {
       throw new Error(`getRolesFromGenericRoles: all roles must be generic or actual.`);
     }
     const rtn = [];
+    if (shUtil.isAdminModuleId(this.getModuleId())) {
+      return [];
+    }
     roles.forEach(role => {
       switch (role) {
         case 'bizadmin':

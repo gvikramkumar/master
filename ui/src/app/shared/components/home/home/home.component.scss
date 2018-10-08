@@ -80,6 +80,8 @@ $padding: 20px;
         .module {
           height: 320px;
           width: 320px;
+          min-height: 320px;
+          min-width: 320px;
           background-color: $vibrant-blue;
           border-radius: 50%;
           display: inline-flex;

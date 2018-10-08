@@ -1,5 +1,6 @@
 
 export class ModuleSource {
+  id?: string;
   moduleId: number;
   sources: number[] = [];
   createdBy: string;

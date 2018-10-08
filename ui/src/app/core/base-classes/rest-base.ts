@@ -156,7 +156,7 @@ export class RestBase<T extends AnyObj> {
     if (this.isModuleRepo && !params.moduleId) {
       const moduleId = this.store.getRepoModule(this.endpointName).moduleId;
       if (shUtil.isAdminModuleId(moduleId)) {
-        throw new Error(`No moduleId for itAdmin call to ${this.endpointName}`);
+        throw new Error(`No moduleId for itadmin call to ${this.endpointName}`);
       }
       params.moduleId = moduleId;
     }

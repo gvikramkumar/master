@@ -5,7 +5,7 @@ export class Measure {
   moduleId?: number;
   name: string;
   typeCode: string;
-  sources: number[];
+  sources: number[] = [];
   hierarchies: string[] = [];
   approvalRequired?: boolean;
   reportingLevel1?: string;

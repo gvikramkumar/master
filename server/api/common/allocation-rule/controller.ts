@@ -1,6 +1,5 @@
 import AllocationRuleRepo from './repo';
 import {injectable} from 'inversify';
-import {AllocationRule} from '../../../../shared/models/allocation-rule';
 import PgLookupRepo from '../pg-lookup/repo';
 import {ApiError} from '../../../lib/common/api-error';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
@@ -28,8 +27,19 @@ export default class AllocationRuleController extends ApprovalController {
     return sql;
   }
 
-  addOne(req, res, next) {
-    const rule: AllocationRule = req.body;
+  submitForApproval(req, res, next) {
+    this.validateConditionalsAndUpdateSelects(req.body)
+      .then(() => super.submitForApproval(req, res, next))
+      .catch(next);
+  }
+
+  approve(req, res, next) {
+    this.validateConditionalsAndUpdateSelects(req.body)
+      .then(() => super.approve(req, res, next))
+      .catch(next);
+  }
+
+  validateConditionalsAndUpdateSelects(rule) {
     if (rule.salesMatch && rule.salesCritCond && rule.salesCritChoices.length) {
       rule.sl1Select = this.createSelect(rule.salesCritCond, rule.salesCritChoices);
     } else {
@@ -67,13 +77,11 @@ export default class AllocationRuleController extends ApprovalController {
       rule.beSelect = undefined;
     }
 
-    Promise.all([
-      this.validateNameDoesntExist(rule.name, true, rule.moduleId),
+    return Promise.all([
       this._validateProdPFCritChoices(rule.prodPFCritChoices),
       this._validateProdBUCritChoices(rule.prodBUCritChoices)
     ]).then(results => {
       const errors = [
-        {message: 'Name already exists'},
         {message: 'Some product PF select fields don\'t exist.'},
         {message: 'Some product BU select fields don\'t exist.'}
       ];
@@ -85,10 +93,8 @@ export default class AllocationRuleController extends ApprovalController {
         }
       });
       if (errs.length) {
-        next(new ApiError('Add rule errors', errs, 400));
-        return;
+        throw new ApiError('Add rule errors', errs, 400);
       }
-      super.addOne(req, res, next);
     });
   }
 
@@ -123,11 +129,11 @@ export default class AllocationRuleController extends ApprovalController {
   sendApprovalEmail(req, mode: ApprovalMode, rule): Promise<any> {
     this.verifyProperties(req.query, ['moduleId']);
     const data = req.body;
-    const moduleId = Number(req.query.moduleId);
+    const moduleId = req.dfa.moduleId;
     const url = `${req.headers.origin}/prof/rule-management/edit/${rule.id};mode=edit`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
-    const adminEmail = svrUtil.getAdminEmail(moduleId, req.user.email);
+    const adminEmail = svrUtil.getAdminEmail(req.dfa);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
       promises.push(this.repo.getOneLatest({moduleId, name: data.name, status: {$in: ['A', 'I']}}));
@@ -143,25 +149,29 @@ export default class AllocationRuleController extends ApprovalController {
                 if (rule.toObject) {
                   rule = rule.toObject();
                 }
+                const omitProperties = ['_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
+                  'prodPFCritCond', 'prodPFCritChoices', 'prodBUCritCond', 'prodBUCritChoices', 'prodTGCritCond', 'prodTGCritChoices',
+                  'scmsCritCond', 'scmsCritChoices', 'beCritCond', 'beCritChoices'
+                ];
                 body += '<br><br><b>Summary of changes:</b><br><br>' + svrUtil.getObjectDifferences
-                (oldObj.toObject(), rule, ['createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v']);
+                (oldObj.toObject(), rule, omitProperties);
               }
             } else {
               body = `A new DFA rule has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(req.user.email, adminEmail,   `DFA - ${_.find(req.dfaData.modules, {moduleId}).name} - Rule Submitted for Approval`, body);
+            return sendHtmlMail(req.user.email, adminEmail, svrUtil.getItadminEmail(req.dfa),  `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, `DFA - ${_.find(req.dfaData.modules, {moduleId}).name} - Rule Approved`, body);
+            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage}`;
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, `DFA - ${_.find(req.dfaData.modules, {moduleId}).name} - Rule Not Approved`, body);
+            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Not Approved`, body);
         }
       });
 
