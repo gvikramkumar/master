@@ -11,37 +11,37 @@ interface DiffVal {
   newVal: any;
 }
 
-function showObjChanges(obj1, obj2) {
+function showObjectChanges(obj1, obj2) {
   let arr: DiffVal[] = [];
   const obj = _.merge({}, obj1, obj2);
 
   Object.keys(obj).forEach(path => {
-    recursion(arr, path, obj, obj1, obj2);
+    recurseObject(arr, path, obj, obj1, obj2);
   });
 
   arr = arr.filter(x => x.val1 !== x.val2);
   return arr;
 }
 
-function recursion(arr, path, obj, obj1, obj2) {
+function recurseObject(arr, path, obj, obj1, obj2) {
   // console.log('recur', path);
   const val = _.get(obj1, path) || _.get(obj2, path);
-  if (!isLeaf(arr, path, _.get(obj1, path), _.get(obj2, path))) {
+  if (!isLeafProperty(arr, path, _.get(obj1, path), _.get(obj2, path))) {
     if (typeof val === 'object' && val instanceof Array) {
       _.range(0, _.get(obj, path).length).forEach(idx => {
         const path3 = `${path}[${idx}]`;
-        recursion(arr, path3, obj, obj1, obj2);
+        recurseObject(arr, path3, obj, obj1, obj2);
       });
     } else if (typeof val === 'object') {
       Object.keys(_.get(obj, path)).forEach(path2 => {
         const path3 = `${path}.${path2}`;
-        recursion(arr, path3, obj, obj1, obj2);
+        recurseObject(arr, path3, obj, obj1, obj2);
       });
     }
   }
 }
 
-function isLeaf(arr, path, val1, val2) {
+function isLeafProperty(arr, path, val1, val2) {
   let rtn = false;
   const val = val1 || val2;
   if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
@@ -87,7 +87,7 @@ const obj2 = {
   ]
 };
 
-const arr = showObjChanges(obj1, obj2);
+const arr = showObjectChanges(obj1, obj2);
 console.log(arr);
 
 
