@@ -50,7 +50,9 @@ function recurseObject(arr, path, obj, obj1, obj2) {
 function isLeafProperty(arr, path, val1, val2) {
   let rtn = false;
   const val = val1 || val2;
-  if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
+  if (!val) {
+    return true;
+  } else if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
     arr.push({path, val1: val1 && val1.toString(), val2: val2 && val2.toString()});
     rtn = true;
   } else if (typeof val === 'object' && val instanceof Date) {
