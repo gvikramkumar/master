@@ -2,6 +2,7 @@
 import * as _ from 'lodash';
 
 export const shUtil = {
+  showObjectChanges,
   isAdminModuleId,
   stringToArray,
   isManualUploadSource,
@@ -9,6 +10,57 @@ export const shUtil = {
   getFiscalMonthListForCurYearAndLast,
   getHtmlForLargeSingleMessage
 };
+
+export interface ObjectDiffVal {
+  path: string;
+  oldVal: any;
+  newVal: any;
+}
+
+function showObjectChanges(obj1, obj2) {
+  let arr: ObjectDiffVal[] = [];
+  const obj = _.merge({}, obj1, obj2);
+
+  Object.keys(obj).forEach(path => {
+    recurseObject(arr, path, obj, obj1, obj2);
+  });
+
+  arr = arr.filter(x => x.val1 !== x.val2);
+  return arr;
+}
+
+function recurseObject(arr, path, obj, obj1, obj2) {
+  // console.log('recur', path);
+  const val = _.get(obj1, path) || _.get(obj2, path);
+  if (!isLeafProperty(arr, path, _.get(obj1, path), _.get(obj2, path))) {
+    if (typeof val === 'object' && val instanceof Array) {
+      _.range(0, _.get(obj, path).length).forEach(idx => {
+        const path3 = `${path}[${idx}]`;
+        recurseObject(arr, path3, obj, obj1, obj2);
+      });
+    } else if (typeof val === 'object') {
+      Object.keys(_.get(obj, path)).forEach(path2 => {
+        const path3 = `${path}.${path2}`;
+        recurseObject(arr, path3, obj, obj1, obj2);
+      });
+    }
+  }
+}
+
+function isLeafProperty(arr, path, val1, val2) {
+  let rtn = false;
+  const val = val1 || val2;
+  if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
+    arr.push({path, val1: val1 && val1.toString(), val2: val2 && val2.toString()});
+    rtn = true;
+  } else if (typeof val === 'object' && val instanceof Date) {
+    arr.push({path, val1: val1 && val1.toISOString(), val2: val2 && val2.toISOString()});
+    rtn = true;
+  }
+  // console.log('isleaf', val, rtn);
+  return rtn;
+}
+
 
 function getHtmlForLargeSingleMessage(msg) {
   return `<div style="text-align: center; margin-top: 200px;"><h1>${msg}</h1></div>`;
