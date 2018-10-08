@@ -4,24 +4,94 @@ import {shUtil} from '../shared/shared-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-/*const x = 'update_4.js';
-// console.log(Number(x.substr(x.indexOf('_') + 1)));
-console.log(x.match(/^.*_(\d{1,3}).js$/ig));
-console.log(/^.*_(\d{1,3}).js$/i.exec(x));*/
 
+interface DiffVal {
+  path: string;
+  oldVal: any;
+  newVal: any;
+}
 
-// getUpdateChanges(oldObj, newObj) {
-  /*let result = '';
-  const oldObj = {a: 'one', b: {c: 'two', d: 'four'}};
-  const newObj= {a: 'one', b: {c: 'three', d: 'three'}};
-  _.mergeWith(oldObj, newObj, function (objectValue, sourceValue, key, object, source) {
-    if ( !(_.isEqual(objectValue, sourceValue)) && (Object(objectValue) !== objectValue)) {
-      console.log('\n    Expected: ' + sourceValue + '\n    Actual: ' + objectValue);
-      // result += '\n    Expected: ' + sourceValue + '\n    Actual: ' + objectValue;
+function showObjChanges(obj1, obj2) {
+  let arr: DiffVal[] = [];
+  const obj = _.merge({}, obj1, obj2);
+
+  Object.keys(obj).forEach(path => {
+    recursion(arr, path, obj, obj1, obj2);
+  });
+
+  arr = arr.filter(x => x.val1 !== x.val2);
+  return arr;
+}
+
+function recursion(arr, path, obj, obj1, obj2) {
+  // console.log('recur', path);
+  const val = _.get(obj1, path) || _.get(obj2, path);
+  if (!isLeaf(arr, path, _.get(obj1, path), _.get(obj2, path))) {
+    if (typeof val === 'object' && val instanceof Array) {
+      _.range(0, _.get(obj, path).length).forEach(idx => {
+        const path3 = `${path}[${idx}]`;
+        recursion(arr, path3, obj, obj1, obj2);
+      });
+    } else if (typeof val === 'object') {
+      Object.keys(_.get(obj, path)).forEach(path2 => {
+        const path3 = `${path}.${path2}`;
+        recursion(arr, path3, obj, obj1, obj2);
+      });
     }
-  });*/
-// }
+  }
+}
 
+function isLeaf(arr, path, val1, val2) {
+  let rtn = false;
+  const val = val1 || val2;
+  if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
+    arr.push({path, val1: val1 && val1.toString(), val2: val2 && val2.toString()});
+    rtn = true;
+  } else if (typeof val === 'object' && val instanceof Date) {
+    arr.push({path, val1: val1 && val1.toISOString(), val2: val2 && val2.toISOString()});
+    rtn = true;
+  }
+  // console.log('isleaf', val, rtn);
+  return rtn;
+}
+
+const obj1 = {
+  name: 'dank',
+  age: 50,
+  addr: {
+    num: 952,
+    street: 'lovell'
+  },
+  rules: [
+    1, 2, 3
+  ],
+  tags: [
+    {key: 'kone', val: true, created: new Date()},
+    {key: 'ktwo', val: true, created: new Date()},
+  ]
+};
+
+const obj2 = {
+  name: 'dank2',
+  age: 50,
+  addr: {
+    num: 374,
+    street: 'pinecrest'
+  },
+  rules: [
+    4, 5, 6
+  ],
+  tags: [
+    {key: 'kone2', val: false, created: new Date(2018, 1, 2)},
+    {key: 'ktwo2', val: true, created: new Date()},
+  ]
+};
+
+const arr = showObjChanges(obj1, obj2);
+console.log(arr);
+
+
+/*
 const objectChangeFinder = function() {
   return {
     VALUE_CREATED: 'ADDED: ',
@@ -218,34 +288,56 @@ const result = objectChangeFinder.getFormattedChangeString({
     ],
     "approvedOnce" : "Y"
   });
+*/
 
-  /*let finalResult = '';
 
-  const lines = JSON.stringify(result, null, 2).split('\n');
-  for (let i = 0; i < lines.length; i++) {
-    // code here using lines[i] which will give you each line
-    // <span style="color:blue">blue</span>
-    if (lines[i].includes('"old":')) {
-      finalResult += '<span style="color:darkred">' + lines[i] + '</span>' + '\n';
-    } else if (lines[i].includes('"new":')) {
-      finalResult += '<span style="color:green">' + lines[i] + '</span>' + '\n';
-    } else if (lines[i].includes('"ADDED: "')) {
-      finalResult += lines[i] + '\n';
-      lines[i + 1] = '<span style="color:green">' + lines[i + 1] + '</span>';
-    } else if (lines[i].includes('"REMOVED: "')) {
-      finalResult += lines[i] + '\n';
-      lines[i + 1] = '<span style="color:darkred">' + lines[i + 1] + '</span>';
-    } else {
-      finalResult += lines[i] + '\n';
-    }
+/*const x = 'update_4.js';
+// console.log(Number(x.substr(x.indexOf('_') + 1)));
+console.log(x.match(/^.*_(\d{1,3}).js$/ig));
+console.log(/^.*_(\d{1,3}).js$/i.exec(x));*/
+
+
+// getUpdateChanges(oldObj, newObj) {
+/*let result = '';
+const oldObj = {a: 'one', b: {c: 'two', d: 'four'}};
+const newObj= {a: 'one', b: {c: 'three', d: 'three'}};
+_.mergeWith(oldObj, newObj, function (objectValue, sourceValue, key, object, source) {
+  if ( !(_.isEqual(objectValue, sourceValue)) && (Object(objectValue) !== objectValue)) {
+    console.log('\n    Expected: ' + sourceValue + '\n    Actual: ' + objectValue);
+    // result += '\n    Expected: ' + sourceValue + '\n    Actual: ' + objectValue;
   }
+});*/
+// }
 
-  finalResult = finalResult.replace(/"UPDATED: ",/g, 'UPDATED:')
-    .replace(/"ADDED: ",/g, 'ADDED:')
-    .replace(/"REMOVED: ",/g, 'REMOVED:')
-    .replace(/"type": /g, '');*/
+
+/*let finalResult = '';
+
+const lines = JSON.stringify(result, null, 2).split('\n');
+for (let i = 0; i < lines.length; i++) {
+  // code here using lines[i] which will give you each line
+  // <span style="color:blue">blue</span>
+  if (lines[i].includes('"old":')) {
+    finalResult += '<span style="color:darkred">' + lines[i] + '</span>' + '\n';
+  } else if (lines[i].includes('"new":')) {
+    finalResult += '<span style="color:green">' + lines[i] + '</span>' + '\n';
+  } else if (lines[i].includes('"ADDED: "')) {
+    finalResult += lines[i] + '\n';
+    lines[i + 1] = '<span style="color:green">' + lines[i + 1] + '</span>';
+  } else if (lines[i].includes('"REMOVED: "')) {
+    finalResult += lines[i] + '\n';
+    lines[i + 1] = '<span style="color:darkred">' + lines[i + 1] + '</span>';
+  } else {
+    finalResult += lines[i] + '\n';
+  }
+}
+
+finalResult = finalResult.replace(/"UPDATED: ",/g, 'UPDATED:')
+  .replace(/"ADDED: ",/g, 'ADDED:')
+  .replace(/"REMOVED: ",/g, 'REMOVED:')
+  .replace(/"type": /g, '');
 
   console.log(result);
+*/
 
 /*let obj1 = {
   a: 'i am unchanged',
@@ -364,7 +456,6 @@ console.log(str.split(',').map(x => x.trim()).join('\n'));
 */
 
 
-
 /*
 let init = false;
 const init$ = new BehaviorSubject<boolean>(init);
@@ -414,10 +505,6 @@ setTimeout(() => {
 }, 1000);
 
 */
-
-
-
-
 
 
 /*
