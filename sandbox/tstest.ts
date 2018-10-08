@@ -19,7 +19,7 @@ function showObjectChanges(obj1, obj2) {
     recurseObject(arr, path, obj, obj1, obj2);
   });
 
-  arr = arr.filter(x => x.val1 !== x.val2);
+  arr = arr.filter(x => x.oldVal !== x.newVal);
   return arr;
 }
 

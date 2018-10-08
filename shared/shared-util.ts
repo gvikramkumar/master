@@ -2,7 +2,8 @@
 import * as _ from 'lodash';
 
 export const shUtil = {
-  showObjectChanges,
+  getUpdateTable,
+  getObjectChanges,
   isAdminModuleId,
   stringToArray,
   isManualUploadSource,
@@ -17,15 +18,39 @@ export interface ObjectDiffVal {
   newVal: any;
 }
 
-function showObjectChanges(obj1, obj2) {
+function getUpdateTable(updates: ObjectDiffVal[]): string {
+  let result = `  <style>
+                          table, td, tr {border: 1px solid black;}
+                          td {padding-right: 70px;}
+                        </style>
+                       <table>
+                        <tr>
+                          <th><b>Property</b></th>
+                          <th><b>Old</b></th> 
+                          <th><b>New</b></th>
+                        </tr>`;
+  for (let i = 0; i < updates.length; i++) {
+    result += `<tr>
+                      <td>${updates[i].path}</td>
+                      <td>${updates[i].oldVal}</td> 
+                      <td>${updates[i].newVal}</td>
+                     </tr>`;
+  }
+  result += `</table>`;
+  return result;
+}
+
+function getObjectChanges(_obj1, _obj2, omitProperties: string[]): ObjectDiffVal[] {
   let arr: ObjectDiffVal[] = [];
+  const obj1 = _.omit(_.cloneDeep(_obj1), omitProperties);
+  const obj2 = _.omit(_.cloneDeep(_obj2), omitProperties);
   const obj = _.merge({}, obj1, obj2);
 
   Object.keys(obj).forEach(path => {
     recurseObject(arr, path, obj, obj1, obj2);
   });
 
-  arr = arr.filter(x => x.val1 !== x.val2);
+  arr = arr.filter(x => x.oldVal !== x.newVal);
   return arr;
 }
 
@@ -53,10 +78,10 @@ function isLeafProperty(arr, path, val1, val2) {
   if (!val) {
     return true;
   } else if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
-    arr.push({path, val1: val1 && val1.toString(), val2: val2 && val2.toString()});
+    arr.push({path, oldVal: val1 ? val1.toString() : '', newVal: val2 ? val2.toString() : ''});
     rtn = true;
   } else if (typeof val === 'object' && val instanceof Date) {
-    arr.push({path, val1: val1 && val1.toISOString(), val2: val2 && val2.toISOString()});
+    arr.push({path, oldVal: val1 ? val1.toISOString() : '', newVal: val2 ? val2.toISOString() : ''});
     rtn = true;
   }
   // console.log('isleaf', val, rtn);
@@ -101,7 +126,7 @@ function getFiscalMonthListFromDate(date, numMonths) {
     fisDate.setMonth(fisMonths[i]);
     const fisYear = fisDate.getFullYear();
     const fisMonth = fisDate.getMonth() + 1;
-    const fisYearMoStr = '' + fisYear + (fisMonth < 10 ? '0' + fisMonth : fisMonth)
+    const fisYearMoStr = '' + fisYear + (fisMonth < 10 ? '0' + fisMonth : fisMonth);
     const fisYearMoNum = Number(fisYearMoStr);
     const yearMoMoYear = `${fisYearMoStr} ${curMonthName} FY${fisYear}`;
     yearmos.push({
