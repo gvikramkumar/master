@@ -44,7 +44,7 @@ export function addSsoUser() {
             'jodoe',
             'John',
             'Doe',
-            'dakahle@cisco.com',
+            'moltman@cisco.com',
             roles,
             modules
           );
@@ -67,6 +67,7 @@ export function addSsoUser() {
           res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`User access required.`));
         } else {
           req.user = user;
+          req.dfaData = {modules};
           console.log('addssouser', req.url, req.user && req.user.id, req.body && req.body.moduleId);
           next();
         }

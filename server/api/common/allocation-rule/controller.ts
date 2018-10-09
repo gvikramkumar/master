@@ -7,6 +7,7 @@ import {ApprovalMode} from '../../../../shared/enums';
 import {sendHtmlMail} from '../../../lib/common/mail';
 import LookupRepo from '../lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
+import {shUtil} from '../../../../shared/shared-util';
 import * as _ from 'lodash';
 
 @injectable()
@@ -150,28 +151,32 @@ export default class AllocationRuleController extends ApprovalController {
                   rule = rule.toObject();
                 }
                 const omitProperties = ['_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
+                  'salesCritCond', 'salesCritChoices',
                   'prodPFCritCond', 'prodPFCritChoices', 'prodBUCritCond', 'prodBUCritChoices', 'prodTGCritCond', 'prodTGCritChoices',
                   'scmsCritCond', 'scmsCritChoices', 'beCritCond', 'beCritChoices'
                 ];
-                body += '<br><br><b>Summary of changes:</b><br><br>' + svrUtil.getObjectDifferences
-                (oldObj.toObject(), rule, omitProperties);
+                body += '<br><br><b>Summary of changes:</b><br><br>' +
+                  shUtil.getUpdateTable(shUtil.getObjectChanges(oldObj.toObject(), rule, omitProperties));
               }
             } else {
               body = `A new DFA rule has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(req.user.email, adminEmail, svrUtil.getItadminEmail(req.dfa),  `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Submitted for Approval`, body);
+            return sendHtmlMail(req.user.email, adminEmail, svrUtil.getItadminEmail(req.dfa),
+              `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Approved`, body);
+            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa),
+              `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa), `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Not Approved`, body);
+            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa),
+              `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Not Approved`, body);
         }
       });
 

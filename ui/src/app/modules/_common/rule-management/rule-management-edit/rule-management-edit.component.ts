@@ -176,7 +176,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   cleanUp() {
-    // clear out cond/choices if no match selected:
+    // clear out condition/choices if no match selected:
     // this should be handled via match selectChange events (which it's wired to), but they
     // don't trigger currently on empty click so do it here for now
     this.matchChange('sales');

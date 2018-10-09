@@ -10,6 +10,7 @@ import {ApprovalMode} from '../../../../shared/enums';
 import {svrUtil} from '../../../lib/common/svr-util';
 import LookupRepo from '../lookup/repo';
 import {sendHtmlMail} from '../../../lib/common/mail';
+import {shUtil} from '../../../../shared/shared-util';
 
 
 interface FilterLevel {
@@ -141,7 +142,7 @@ export default class SubmeasureController extends ApprovalController {
     const adminEmail = svrUtil.getAdminEmail(req.dfa);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
-      promises.push(this.repo.getOneByQuery({moduleId, name: data.name, updatedDate: data.updatedDate}));
+      promises.push(this.repo.getOneLatest({moduleId, name: data.name, approvedOnce: 'Y', status: {$in: ['A', 'I']}}));
     }
     return Promise.all(promises)
       .then(results => {
@@ -158,9 +159,8 @@ export default class SubmeasureController extends ApprovalController {
                   '_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
                   'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
                   ];
-                body += '<br><br><b>Summary of changes:</b><br><br>' + svrUtil.getObjectDifferences(
-                  oldObj.toObject(),
-                  sm, omitProperties);
+                body += '<br><br><b>Summary of changes:</b><br><br>' +
+                  shUtil.getUpdateTable(shUtil.getObjectChanges(oldObj.toObject(), sm, omitProperties));
               }
             } else {
               body = `A new DFA submeasure has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
