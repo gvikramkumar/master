@@ -49,30 +49,38 @@ export default class PgLookupRepo {
   }
   getSubmeasureGroupingReport() {
     return pgc.pgdb.query(`
-            select 
-            a.sub_measure_name as sub_measure_name,
-            b.sub_measure_name as group_sub_measure_name,
-            c.create_user,
-            c.create_datetime,
-            c.update_user,
-            c.update_datetime
-            from fpadfa.dfa_sub_measure a, fpadfa.dfa_sub_measure b, fpadfa.dfa_submeasure_group c
-            where a.sub_measure_key = c.sub_measure_key
-            and b.sub_measure_key = c.group_sub_measure_key
+            select
+            sbm.sub_measure_name,
+            group1.group_sub_measure_name,
+            sbm.create_owner,
+            sbm.create_datetimestamp,
+            sbm.update_owner,
+            sbm.update_datetimestamp
+            from fpadfa.dfa_sub_measure sbm,
+              (select a.grouped_by_smeasure_key as groupkey,
+                  b.sub_measure_name as group_sub_measure_name
+                  from fpadfa.dfa_sub_measure a, fpadfa.dfa_sub_measure b
+                  where 1=1
+                  and a.grouped_by_smeasure_key is not null
+                  and a.grouped_by_smeasure_key = b.sub_measure_key) group1
+            where 1=1
+            and sbm.grouped_by_smeasure_key is not null
+            and sbm.grouped_by_smeasure_key=group1.groupkey
           `);
   }
 
   get2TSebmeasureListReport() {
     return pgc.pgdb.query(`
             select 
-            submeasure_name, 
-            fiscal_month_id, 
-            create_user,
-            create_datetime,
-            update_user,
-            update_datetime
-            from fpadfa.dfa_2t_submeasure_list
-            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+            a.sub_measure_name, 
+            b.fiscal_month_id, 
+            a.create_owner,
+            a.create_datetimestamp,
+            a.update_owner,
+            a.update_datetimestamp
+            from fpadfa.dfa_sub_measure a, fpadfa.dfa_open_period b
+            where b.fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')    
+            and a.twotier_flag = 'Y'
           `);
   }
 
@@ -131,17 +139,17 @@ export default class PgLookupRepo {
   getSalesSplitPercentageReport() {
     return pgc.pgdb.query(`
             select 
-            account_id, 
+            account_code, 
             company_code, 
             sub_account_code,
             sales_territory_code,
             split_percentage,
             fiscal_month_id,
-            create_user,
-            create_datetime,
-            update_user,
-            update_datetime
-            from fpadfa.dfa_sales_split_percentage
+            create_owner,
+            create_datetimestamp,
+            update_owner,
+            update_datetimestamp
+            from fpadfa.dfa_prof_sales_split_pctmap_upld
             where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
           `);
   }
