@@ -50,7 +50,12 @@ function getObjectChanges(_obj1, _obj2, omitProperties: string[]): ObjectDiffVal
     recurseObject(arr, path, obj, obj1, obj2);
   });
 
-  arr = arr.filter(x => x.oldVal !== x.newVal);
+  arr = arr.filter(x => {
+    if (typeof x.oldVal === 'string' && typeof x.newVal === 'string') {
+      return x.oldVal.trim() !== x.newVal.trim();
+    }
+    return x.oldVal !== x.newVal;
+  });
   return arr;
 }
 

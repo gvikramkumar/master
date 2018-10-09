@@ -142,7 +142,7 @@ export default class SubmeasureController extends ApprovalController {
     const adminEmail = svrUtil.getAdminEmail(req.dfa);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
-      promises.push(this.repo.getOneByQuery({moduleId, name: data.name, updatedDate: data.updatedDate}));
+      promises.push(this.repo.getOneLatest({moduleId, name: data.name, approvedOnce: 'Y', status: {$in: ['A', 'I']}}));
     }
     return Promise.all(promises)
       .then(results => {
