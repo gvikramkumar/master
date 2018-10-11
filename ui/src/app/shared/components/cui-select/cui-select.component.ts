@@ -234,13 +234,13 @@ export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAcc
    * Focuses on the input element
    */
   focusOnInput() {
-    try {
       setTimeout(() => {
-        const element = this.renderer.selectRootElement(`#select-${this.guid}`);
-        element.focus();
+        try {
+          const element = this.renderer.selectRootElement(`#select-${this.guid}`);
+          element.focus();
+        } catch (err) {
+        }
       }, 5);
-    } catch (err) {
-    }
   }
 
   /**
