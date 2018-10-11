@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   CuiButtonModule, CuiDialogModule,
   CuiFooterModule,
-  CuiHeaderModule, CuiInputModule,
+  CuiHeaderModule, CuiInputModule, CuiMultiselectModule,
   CuiProgressbarModule,
   CuiSearchModule, CuiSelectModule, CuiSpinnerModule,
   CuiTableModule, CuiToastModule
@@ -17,7 +17,8 @@ import {FromNowPipeModule} from '@cisco-ngx/cui-pipes';
     CuiFooterModule,
     CuiSearchModule,
     CuiInputModule,
-    CuiSelectModule,
+    // CuiSelectModule,
+    // CuiMultiselectModule,
     CuiTableModule,
     CuiToastModule,
     CuiSpinnerModule,
@@ -30,7 +31,8 @@ import {FromNowPipeModule} from '@cisco-ngx/cui-pipes';
     CuiFooterModule,
     CuiSearchModule,
     CuiInputModule,
-    CuiSelectModule,
+    // CuiSelectModule,
+    // CuiMultiselectModule,
     CuiTableModule,
     CuiToastModule,
     CuiSpinnerModule,

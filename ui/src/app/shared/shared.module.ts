@@ -31,6 +31,8 @@ import {InListValidator} from './validators/in-list.validator';
 import {NumberValidator} from './validators/number.validator';
 import {AuthDisableDirective} from './directives/auth-disable.directive';
 import {AuthOnlyDirective} from './directives/auth-only.directive';
+import {CuiSelectModule} from './components/cui-select/cui-select.module';
+import {CuiMultiselectModule} from './components/cui-multiselect/cui-multiselect.module';
 
 @NgModule({
   imports: [
@@ -45,6 +47,8 @@ import {AuthOnlyDirective} from './directives/auth-only.directive';
     //     FlexLayoutModule.withConfig({disableDefaultBps: true}),
     FlexLayoutModule,
     FormsModule,
+    CuiSelectModule,
+    CuiMultiselectModule,
   ],
   exports: [
     CoreModule,
@@ -72,6 +76,8 @@ import {AuthOnlyDirective} from './directives/auth-only.directive';
     NumberValidator,
     AuthDisableDirective,
     AuthOnlyDirective,
+    CuiSelectModule,
+    CuiMultiselectModule,
   ],
 
   declarations: [

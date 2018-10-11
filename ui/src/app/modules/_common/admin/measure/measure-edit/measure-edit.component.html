@@ -24,12 +24,12 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <cui-select name="sources" [(ngModel)]="measure.sources" [items]="moduleSources" label="Sources" [tabIndex]="0"
-                    [multiSelect]="true" optionsKey="name" optionsValue="sourceId" [required]="true"></cui-select>
+        <cui-multiselect name="sources" [(model)]="measure.sources" [items]="moduleSources" label="Sources"
+                    optionsKey="name" optionsValue="sourceId" [required]="true"></cui-multiselect>
       </div>
       <div class="col-lg-6">
-        <cui-select name="hier" [(ngModel)]="measure.hierarchies" [items]="hierarchies" empty="true" label="Hierarchies"
-                    optionsKey="name" optionsValue="name" [multiSelect]="true" [required]="true" [tabIndex]="0"></cui-select>
+        <cui-multiselect name="hier" [(model)]="measure.hierarchies" [items]="hierarchies" empty="true" label="Hierarchies"
+                    optionsKey="name" optionsValue="name" [required]="true"></cui-multiselect>
       </div>
     </div>
 

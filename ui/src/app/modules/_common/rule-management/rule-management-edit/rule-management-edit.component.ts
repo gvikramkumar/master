@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import {RuleService} from '../../services/rule.service';
@@ -40,13 +40,19 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     {name: 'Shipped Revenue', value: 'SHIPREV'},
     {name: 'VIP Rebates', value: 'VIP'},
   ];
-  periods = ['MTD', 'ROLL6', 'ROLL3'];
-  conditionalOperators = ['IN', 'NOT IN'];
-  salesMatches = ['SL1', 'SL2', 'SL3', 'SL4', 'SL5', 'SL6'];
-  productMatches = ['BU', 'PF', 'TG']; // no PID
-  scmsMatches = ['SCMS'];
-  legalEntityMatches = ['Business Entity'];
-  beMatches = ['BE', 'Sub BE'];
+  periods = [{period: 'MTD'}, {period: 'ROLL6'}, {period: 'ROLL3'}];
+  conditionalOperators = [{operator: 'IN'}, {operator: 'NOT IN'}];
+  salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
+  productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
+  scmsMatches = [{match: 'SCMS'}];
+  legalEntityMatches = [{match: 'Business Entity'}];
+  beMatches = [{match: 'BE'}, {match: 'Sub BE'}];
+  sl1CondRequired = false;
+  pfCondRequired = false;
+  buCondRequired = false;
+  tgCondRequired = false;
+  scmsCondRequired = false;
+  beCondRequired = false;
 
   // SELECT options to be taken from Postgres
   salesChoices: {name: string}[] = [];
@@ -61,7 +67,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private pgLookupService: PgLookupService,
     private store: AppStore,
     public uiUtil: UiUtil,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -74,7 +81,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   public ngOnInit(): void {
     const promises: Promise<any>[] = [
-      this.ruleService.getDistinctRuleNames().toPromise()
+      this.pgLookupService.getRuleCriteriaChoicesSalesLevel1().toPromise(),
+      this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
+      this.pgLookupService.getRuleCriteriaChoicesScms().toPromise(),
+      this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
+      this.ruleService.getDistinctRuleNames().toPromise(),
     ];
     if (this.editMode || this.copyMode) {
       promises.push(this.ruleService.getOneById(this.route.snapshot.params.id).toPromise());
@@ -83,17 +94,21 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       .then(results => {
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
-        this.ruleNames = results[0].map(x => x.toUpperCase());
+        this.salesChoices = results[0].map(x => ({name: x}));
+        this.prodTgChoices = results[1].map(x => ({name: x}));
+        this.scmsChoices = results[2].map(x => ({name: x}));
+        this.internalBeChoices = results[3].map(x => ({name: x}));
+        this.ruleNames = results[4].map(x => x.toUpperCase());
 
         if (this.copyMode) {
-          this.rule = results[1];
+          this.rule = results[5];
           this.rule.approvedOnce = 'N';
           delete this.rule.createdBy;
           delete this.rule.createdDate;
           this.orgRule = _.cloneDeep(this.rule);
         }
         if (this.editMode) {
-          this.rule = results[1];
+          this.rule = results[5];
           if (_.includes(['A', 'I'], this.rule.status)) {
             delete this.rule.createdBy;
             delete this.rule.createdDate;
@@ -101,42 +116,29 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.orgRule = _.cloneDeep(this.rule);
           this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
         }
+        this.setConditionalRequireds();
+
+        this.prodPFChoiceOptions = {
+          asyncValidations: [
+            {
+              name: 'prodPFChoices',
+              message: 'Some product PF select fields don\'t exist',
+              fcn: this.prodPFChoicesValidator()
+            }
+          ]
+        };
+
+        this.prodBUChoiceOptions = {
+          asyncValidations: [
+            {
+              name: 'prodBUChoices',
+              message: 'Some product BU select fields don\'t exist',
+              fcn: this.prodBUChoicesValidator()
+            }
+          ]
+        };
+
         this.init();
-
-        // this page was loading too slow, it was these pg queries, so we'll get the rule and init, "then" get the pg stuff
-        Promise.all([
-          this.pgLookupService.getRuleCriteriaChoicesSalesLevel1().toPromise(),
-          this.pgLookupService.getRuleCriteriaChoicesProdTg().toPromise(),
-          this.pgLookupService.getRuleCriteriaChoicesScms().toPromise(),
-          this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
-        ])
-          .then(results2 => {
-            this.salesChoices = results2[0].map(x => ({name: x}));
-            this.prodTgChoices = results2[1].map(x => ({name: x}));
-            this.scmsChoices = results2[2].map(x => ({name: x}));
-            this.internalBeChoices = results2[3].map(x => ({name: x}));
-
-            this.prodPFChoiceOptions = {
-              asyncValidations: [
-                {
-                  name: 'prodPFChoices',
-                  message: 'Some product PF select fields don\'t exist',
-                  fcn: this.prodPFChoicesValidator()
-                }
-              ]
-            };
-
-            this.prodBUChoiceOptions = {
-              asyncValidations: [
-                {
-                  name: 'prodBUChoices',
-                  message: 'Some product BU select fields don\'t exist',
-                  fcn: this.prodBUChoicesValidator()
-                }
-              ]
-            };
-
-          });
       });
   }
 
@@ -298,41 +300,32 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       });
   }
 
-  requiredCond(select) {
-    switch (select) {
-      case 'sl1':
-        if (this.rule.salesMatch && this.rule.salesCritChoices.length) {
-          return true;
-        }
-        break;
-      case 'pf':
-        if (this.rule.productMatch && this.rule.prodPFCritChoices.length) {
-          return true;
-        }
-        break;
-      case 'bu':
-        if (this.rule.productMatch && this.rule.prodBUCritChoices.length) {
-          return true;
-        }
-        break;
-      case 'tg':
-        if (this.rule.productMatch && this.rule.prodTGCritChoices.length) {
-          return true;
-        }
-        break;
-      case 'scms':
-        if (this.rule.scmsMatch && this.rule.scmsCritChoices.length) {
-          return true;
-        }
-        break;
-      case 'be':
-        if (this.rule.beMatch && this.rule.beCritChoices.length) {
-          return true;
-        }
-        break;
-    }
+  setConditionalRequireds() {
+    this.sl1CondRequired = false;
+    this.pfCondRequired = false;
+    this.buCondRequired = false;
+    this.tgCondRequired = false;
+    this.scmsCondRequired = false;
+    this.beCondRequired = false;
 
-    return false;
+    if (this.rule.salesMatch && this.rule.salesCritChoices.length) {
+      this.sl1CondRequired = true;
+    }
+    if (this.rule.productMatch && this.rule.prodPFCritChoices.length) {
+      this.pfCondRequired = true;
+    }
+    if (this.rule.productMatch && this.rule.prodBUCritChoices.length) {
+      this.buCondRequired = true;
+    }
+    if (this.rule.productMatch && this.rule.prodTGCritChoices.length) {
+      this.tgCondRequired = true;
+    }
+    if (this.rule.scmsMatch && this.rule.scmsCritChoices.length) {
+      this.scmsCondRequired = true;
+    }
+    if (this.rule.beMatch && this.rule.beCritChoices.length) {
+      this.beCondRequired = true;
+    }
   }
 
   prodPFChoicesValidator(): AsyncValidatorFn {
@@ -398,6 +391,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.rule.beCritCond = undefined;
       this.rule.beCritChoices = [];
     }
+    this.setConditionalRequireds();
   }
 
 }

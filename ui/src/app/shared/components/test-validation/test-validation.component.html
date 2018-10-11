@@ -64,7 +64,7 @@
 -->
 <!--
     <cui-input name="age" label="age" #age="ngModel" [(ngModel)]="user.age"></cui-input>
-  <cui-select name="gender" label="gender" #gender="ngModel" [(ngModel)]="user.gender" [items]="genders"
+  <cui-select name="gender" label="gender" #gender="ngModel" [(model)]="user.gender" [items]="genders"
   optionsKey="name" optionsValue="value" required></cui-select>
 -->
   <button type="submit" finErrorFlash cuiButton (click)="submit()">Submit</button>

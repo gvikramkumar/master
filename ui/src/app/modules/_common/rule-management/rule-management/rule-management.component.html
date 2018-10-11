@@ -2,8 +2,8 @@
 <div class="fin-container">
 
   <div class="text-center status-filter">
-    <cui-select [items]="statuses" [(ngModel)]="showStatuses" label="Show only:" [multiSelect]="true"
-                (ngModelChange)="changeFilter()" optionsKey="name" optionsValue="value"></cui-select>
+    <cui-multiselect [items]="statuses" [(model)]="showStatuses" label="Show only:"
+                (modelChange)="changeFilter()" optionsKey="name" optionsValue="value"></cui-multiselect>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="space-between center">

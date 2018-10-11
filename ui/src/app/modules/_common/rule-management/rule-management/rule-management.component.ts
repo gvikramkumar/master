@@ -19,7 +19,7 @@ import {UiUtil} from '../../../../core/services/ui-util';
 })
 export class RuleManagementComponent extends RoutingComponentBase implements OnInit {
   moment = moment;
-  rules: AllocationRule[];
+  rules: AllocationRule[] = [];
   filteredRules: AllocationRule[] = [];
   rulesCount: Number = 0;
   formControl = new FormControl();

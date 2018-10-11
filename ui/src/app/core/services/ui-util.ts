@@ -5,9 +5,8 @@ import {DialogInputType, DialogSize, DialogType} from '../models/ui-enums';
 import {AppStore} from '../../app/app-store';
 import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-components';
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
-import {Observable} from 'rxjs/Observable';
-import {CuiDialogRole} from '@cisco-ngx/cui-components/dist/cui-dialog/cui-dialog-config';
 import {PromptDialogComponent} from '../../shared/dialogs/prompt-dialog/prompt-dialog.component';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
