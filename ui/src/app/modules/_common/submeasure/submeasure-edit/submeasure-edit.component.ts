@@ -28,6 +28,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   UiUtil = UiUtil;
   @ViewChild('form') form: NgForm;
   addMode = false;
+  viewMode = false;
   editMode = false;
   copyMode = false;
   submeasureNames: string[] = [];
@@ -245,7 +246,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinctSubmeasureNames().toPromise()
     ];
-    if (this.editMode || this.copyMode) {
+    if (this.viewMode || this.editMode || this.copyMode) {
       promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
     }
     Promise.all(promises)
@@ -255,15 +256,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.sources = _.sortBy(results[2], 'name');
         this.submeasureNames = results[3].map(x => x.toUpperCase());
 
-        if (this.copyMode) {
+        if (this.viewMode || this.editMode || this.copyMode) {
           this.sm = results[4];
+        }
+        if (this.copyMode) {
           this.sm.approvedOnce = 'N';
           delete this.sm.createdBy;
           delete this.sm.createdDate;
           this.orgSubmeasure = _.cloneDeep(this.sm);
         }
         if (this.editMode) {
-          this.sm = results[4];
           if (_.includes(['A', 'I'], this.sm.status)) {
             delete this.sm.createdBy;
             delete this.sm.createdDate;
