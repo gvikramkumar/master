@@ -79,8 +79,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       excelSheetname: 'Submeasure Grouping',
       excelHeaders: 'Submeasure Name, Group Submeasure Name, Created By, Create Time, ' +
       'Updated By, Update Time',
-      excelProperties: 'sub_measure_name, group_sub_measure_name, create_user,' +
-      'create_datetime, update_user, update_datetime'
+      excelProperties: 'sub_measure_name, group_sub_measure_name, create_owner,' +
+      'create_datetimestamp, update_owner, update_datetimestamp'
     },
     {
       type: '2t-submeasure-list', text: '2T Submeasure List Report', disabled: false,
@@ -88,8 +88,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       excelSheetname: '2t Submeasure List',
       excelHeaders: 'Submeasure Name, Fiscal Month Id, Created By, Created Date, ' +
       'Last Modified By, Last Modified Date',
-      excelProperties: 'submeasure_name, fiscal_month_id, create_user,' +
-      'create_datetime, update_user, update_datetime'
+      excelProperties: 'submeasure_name, fiscal_month_id, create_owner,' +
+      'create_datetimestamp, update_owner, update_datetimestamp'
     },
     {
       type: 'disti-to-direct', text: 'Disti To Direct Mapping Report', disabled: false,
@@ -124,8 +124,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       excelSheetname: 'Sales Split Percentage',
       excelHeaders: 'Account Id, Company Code, Sub Account Code, Sales Territory Code, Percentage Value, ' +
       'Fiscal Month Id, Created By, Created Date, Last Modified By, Last Modified Date',
-      excelProperties: 'account_id, company_code, sub_account_code, sales_territory_code, split_percentage,' +
-      'fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
+      excelProperties: 'account_code, company_code, sub_account_code, sales_territory_code, split_percentage,' +
+      'fiscal_month_id, create_owner, create_datetimestamp, update_owner, update_datetimestamp'
     },
     {
       type: 'valid-driver', text: 'Valid Driver Report', disabled: false,
