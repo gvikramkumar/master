@@ -118,14 +118,16 @@ function getDateRangeFromFiscalYearMo(_yearmo) {
   return {startDate, endDate};
 }
 
+const mongooseSchemaOptions = {
+  getters: true,
+  transform: (doc, ret, options) => {
+    delete ret._id;
+    return ret;
+  }
+};
 function setSchemaAdditions(schema) {
-  schema.set('toObject', {
-    getters: true,
-    transform: (doc, ret, options) => {
-      delete ret._id;
-      return ret;
-    }
-  });
+  schema.set('toObject', mongooseSchemaOptions);
+  schema.set('toJSON', mongooseSchemaOptions);
 }
 
 function streamToBuffer(stream) {

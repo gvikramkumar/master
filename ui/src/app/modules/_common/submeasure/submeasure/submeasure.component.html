@@ -59,9 +59,6 @@
       <ng-container matColumnDef="icons">
         <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <div>
-            <div>row.id: {{row.id}}</div>
-          </div>
           <div class="fin-table-icon-list">
             <i class="icon-view-preview-telepresence icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'view'}]"
                matTooltip="view" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
