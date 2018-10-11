@@ -234,6 +234,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       throw new Error('Edit page called with no add/edit/copy mode');
     }
     this.addMode = this.route.snapshot.params.mode === 'add';
+    this.viewMode = this.route.snapshot.params.mode === 'view';
     this.editMode = this.route.snapshot.params.mode === 'edit';
     this.copyMode = this.route.snapshot.params.mode === 'copy';
   }
