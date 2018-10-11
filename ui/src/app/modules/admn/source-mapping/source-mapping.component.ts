@@ -19,7 +19,7 @@ import {ModuleSourceService} from '../../_common/services/module-source.service'
 export class SourceMappingComponent extends RoutingComponentBase implements OnInit {
 
   modules: DfaModule[];
-  sources: Source[][] = [];
+  sources: Source[] = [];
   selectedSources: number[][] = [];
   orgSelectedSources: number[][] = [];
 
@@ -39,12 +39,10 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
     this.modules = this.store.nonAdminModules;
 
     this.sourceService.getManyActive().toPromise()
-      .then(activeSources => {
-        this.modules.forEach(module => {
-          this.sources.push(_.cloneDeep(activeSources));
-        });
+      .then(sources => {
+        this.sources = sources;
+        this.refresh();
       });
-    this.refresh();
   }
 
   refresh() {

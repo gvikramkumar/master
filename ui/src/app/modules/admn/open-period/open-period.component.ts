@@ -24,7 +24,7 @@ import {OpenPeriod} from '../../_common/models/open-period';
 export class OpenPeriodComponent  extends RoutingComponentBase {
 
   modules: DfaModule[];
-  fiscalMonths: FiscalMonth[][] = [];
+  fiscalMonths: FiscalMonth[] = [];
   openPeriods: OpenPeriod[];
   selFiscalMonths: number[] = [];
   orgSelFiscalMonths: number[];
@@ -43,10 +43,7 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
 
   ngOnInit() {
     this.modules = this.store.nonAdminModules;
-    const fiscalMonthList = shUtil.getFiscalMonthListForCurYearAndLast();
-    this.modules.forEach((module, idx) => {
-      this.fiscalMonths.push(_.cloneDeep(fiscalMonthList));
-    });
+    this.fiscalMonths = shUtil.getFiscalMonthListForCurYearAndLast();
     this.refresh();
   }
 

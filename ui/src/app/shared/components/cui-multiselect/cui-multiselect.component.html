@@ -1,0 +1,16 @@
+<div class="form-group" [tabindex]="tabindex" (mouseover)="over = true" (mouseleave)="over = false" [ngClass]="{'input--compressed': compressed}">
+	<div class="form-group__text">
+		<input type="text" name="searchText" autocomplete="off" [(ngModel)]="searchText" [placeholder]="placeholder" [disabled]="disabled" [required]="required" (mousedown)="toggleActive()" (keydown)="onKeydown($event)" (ngModelChange)="onSearch()" [ngClass]="{'input-size-compressed': compressed}">
+		<label *ngIf="label">{{label}}</label>
+		<span class="dropdown-chevron" [ngClass]="{'icon-chevron-down': !active, 'icon-chevron-up': active, 'has-label': label, 'disabled': disabled}" (mousedown)="toggleActive()" *ngIf="!empty || !model || !model.length"></span>
+		<span class="icon-close" [ngClass]="{'has-label': label, 'disabled': disabled}" (mousedown)="clearModel()" *ngIf="empty && model && model.length"></span>
+	</div>
+	<div class="dropdown active" *ngIf="active">
+		<div class="dropdown__menu">
+			<span *ngFor="let group of items; let i = index">
+				<div class="dropdown__divider" *ngIf="i > 0"></div>
+				<a *ngFor="let item of group" [ngClass]="{selected: item.selected, 'keyboard-hover': !item.selected && item.hovered}" (mousedown)="selectItem(item[optionsValue])">{{item[optionsKey]}}</a>
+			</span>
+		</div>
+	</div>
+</div>
