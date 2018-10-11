@@ -55,6 +55,7 @@ export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAcc
   hoverIndex = 0;
   guid = Guid.generate();
   private globalClick: any;
+  private selectItemCalled = false;
 
   /**
    * Event emitted when the input's value is changed
@@ -83,7 +84,7 @@ export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAcc
     }
 
     if (changes.model && !_.isEqual(changes.model.previousValue, changes.model.currentValue)) {
-      if (this.model) {
+      if (this.model && !this.selectItemCalled) {
         this.selectItem(this.model);
       }
     }
@@ -114,6 +115,7 @@ export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAcc
    * @param selection The selected value
    */
   selectItem(selection: any) {
+    this.selectItemCalled = true;
     const originalValue = _.cloneDeep(this.model);
     this.model = _.reduce(_.flatten(this.items), (memo, item: any) => {
       item.selected = _.isEqual(item[this.optionsValue], selection);
