@@ -27,6 +27,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   @ViewChild('form') form: NgForm;
   UiUtil = UiUtil;
   addMode = false;
+  viewMode = false;
   editMode = false;
   copyMode = false;
   rule = new AllocationRule();
@@ -87,7 +88,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getRuleCriteriaChoicesInternalBeBe().toPromise(),
       this.ruleService.getDistinctRuleNames().toPromise(),
     ];
-    if (this.editMode || this.copyMode) {
+    if (this.viewMode || this.editMode || this.copyMode) {
       promises.push(this.ruleService.getOneById(this.route.snapshot.params.id).toPromise());
     }
       Promise.all(promises)
@@ -100,15 +101,17 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.internalBeChoices = results[3].map(x => ({name: x}));
         this.ruleNames = results[4].map(x => x.toUpperCase());
 
-        if (this.copyMode) {
+        if (this.viewMode || this.editMode || this.copyMode) {
           this.rule = results[5];
+        }
+
+        if (this.copyMode) {
           this.rule.approvedOnce = 'N';
           delete this.rule.createdBy;
           delete this.rule.createdDate;
           this.orgRule = _.cloneDeep(this.rule);
         }
         if (this.editMode) {
-          this.rule = results[5];
           if (_.includes(['A', 'I'], this.rule.status)) {
             delete this.rule.createdBy;
             delete this.rule.createdDate;
