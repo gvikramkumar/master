@@ -28,7 +28,7 @@ const routes: Routes = [
                 path: '', component: MeasureComponent,
                 canActivate: [AuthorizationGuard],
                 data: {
-                  authorization: 'prof:admin',
+                  authorization: 'Profitability Allocations:Business Admin',
                   hero: {
                     title: 'Measures',
                     desc: 'Create and update measures'
@@ -40,7 +40,7 @@ const routes: Routes = [
                 path: 'add', component: MeasureEditComponent,
                 canActivate: [AuthorizationGuard],
                 data: {
-                  authorization: 'prof:admin',
+                  authorization: 'Profitability Allocations:Business Admin',
                   hero: {
                     title: 'Add a New Measure',
                     desc: 'Add new measure'
@@ -53,7 +53,7 @@ const routes: Routes = [
                 path: 'edit/:id', component: MeasureEditComponent,
                 canActivate: [AuthorizationGuard],
                 data: {
-                  authorization: 'prof:admin',
+                  authorization: 'Profitability Allocations:Business Admin',
                   hero: {
                     title: 'Update Measure',
                     desc: 'Update the selected measure'
@@ -73,7 +73,7 @@ const routes: Routes = [
             path: '', component: SubmeasureComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'prof:admin, prof:super-user, prof:end-user',
+              authorization: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User, Profitability Allocations:End User',
               hero: {
                 title: 'Sub-Measures',
                 desc: 'Create and update sub-measures'
@@ -85,7 +85,7 @@ const routes: Routes = [
             path: 'add', component: SubmeasureEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'prof:admin, prof:super-user',
+              authorization: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User',
               hero: {
                 title: 'Add a New Sub-Measure',
                 desc: 'Add new sub-measure'
@@ -97,7 +97,7 @@ const routes: Routes = [
             path: 'edit/:id', component: SubmeasureEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'prof:admin, prof:super-user, prof:end-user',
+              authorization: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User, Profitability Allocations:End User',
               hero: {
                 title: 'Update Sub-Measure',
                 desc: 'Update the selected sub-measure'
@@ -114,7 +114,7 @@ const routes: Routes = [
             path: '', component: RuleManagementComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'prof:admin, prof:super-user, prof:end-user',
+              authorization: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User, Profitability Allocations:End User',
               hero: {
                 title: 'Rule Management',
                 desc: 'Create and update rules'
@@ -126,7 +126,7 @@ const routes: Routes = [
             path: 'add', component: RuleManagementEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'prof:admin, prof:super-user',
+              authorization: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User',
               hero: {
                 title: 'Create New Rule',
                 desc: 'Create a new rule'
@@ -139,7 +139,7 @@ const routes: Routes = [
             path: 'edit/:id', component: RuleManagementEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'prof:admin, prof:super-user, prof:end-user',
+              authorization: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User, Profitability Allocations:End User',
               hero: {
                 title: 'Update Rule',
                 desc: 'Update the selected rule'
@@ -154,7 +154,7 @@ const routes: Routes = [
         path: 'business-upload', component: BusinessUploadComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof:admin, prof:super-user',
+          authorization: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User',
           hero: {
             title: 'Business Uploads',
             desc: 'Perform bulk uploads'
@@ -166,7 +166,7 @@ const routes: Routes = [
         path: 'reports', component: ReportsComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'prof:admin, prof:super-user, prof:end-user',
+          authorization: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User, Profitability Allocations:End User',
           hero: {
             title: 'Reports',
             desc: 'Allow users to download a report'

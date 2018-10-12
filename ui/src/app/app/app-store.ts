@@ -27,6 +27,7 @@ import {shUtil} from '../../../../shared/shared-util';
 export class AppStore extends StoreBase {
   initialBreakpoint: string;
   showSpinner = false;
+  isLocalEnv = false;
 
   user: DfaUser;
   user$ = new Subject<DfaUser>();

@@ -1,6 +1,6 @@
 moduleId,displayOrder,abbrev,name, roles, desc
 99,99,admn,Administration,itadmin,
-1,1,prof,Profitability Allocations,"prof:admin,prof:super-user,prof:end-user","This capability performs allocations at the multiple dimensions/hierarchies such as Sales Theater Level and Product Family Level used for Company's Profit/Loss (P/L) reporting to drive profitable growth."
+1,1,prof,Profitability Allocations,"Profitability Allocations:Business Admin,Profitability Allocations:Super User,Profitability Allocations:End User","This capability performs allocations at the multiple dimensions/hierarchies such as Sales Theater Level and Product Family Level used for Company's Profit/Loss (P/L) reporting to drive profitable growth."
 2,2,bkgm,Bookings Misc Allocation,"bkgm:admin,bkgm:user","This business capability automates the manual process of Customer Solutions Finance (CSF) team re-classifying Miscellaneous TG amounts to valid Product Technology Groups based on pre-defined business rules on WD-2 & WD-1"
 3,3,svct,Service Triangulation,"svct:admin,svct:user","This allows the business users to report Final Sales Theater & Market Segment View for Service Revenue on WD+1 by allocating SCMS Market Segment (OTHER) to valid SCMS such as Public Sector, Service Provider, Enterprise, Commercial."
 4,4,tsct,TSS Cogs Triangulation,"tsct:admin,tsct:user","This provides the automated way of reporting Technical Support Services (TSS) Cogs at valid theater and segment in Core Finance Reporting applications by allocating invalid segments to valid segments using business mapping rules."

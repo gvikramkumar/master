@@ -22,14 +22,14 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
   selectedModule: DfaModule;
   adminModule: DfaModule;
   roles = [
-    {generic: 'itadmin', actual: 'itadmin'},
-    {generic: 'bizadmin', actual: 'prof:admin'},
-    {generic: 'super-user', actual: 'prof:super-user'},
-    {generic: 'end-user', actual: 'prof:end-user'},
+    {generic: 'itadmin', actual: 'IT Administrator'},
+    {generic: 'bizadmin', actual: 'Profitability Allocations:Business Admin'},
+    {generic: 'super-user', actual: 'Profitability Allocations:Super User'},
+    {generic: 'end-user', actual: 'Profitability Allocations:End User'},
     ];
   selectedRole: string;
 
-  constructor(private store: AppStore, route: ActivatedRoute, private lookupService: LookupService) {
+  constructor(public store: AppStore, route: ActivatedRoute, private lookupService: LookupService) {
     super(store, route);
     this.selectedRole = this.store.user.roles[0]; // assuming one role for this operation
   }
@@ -50,7 +50,7 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
   }
 
   roleChange() {
-    this.lookupService.upsert(this.store.user.id, [this.selectedRole])
+    this.lookupService.upsert('localenv-roles', [this.selectedRole])
       .subscribe(() => window.location.reload());
   }
 

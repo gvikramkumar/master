@@ -68,9 +68,11 @@ export class InitializationGuard implements CanActivate {
     return Promise.all([
       this.moduleService.refreshStore(),
       this.userService.refreshUser(),
+      this.userService.isLocalEnv().toPromise()
     ])
       .then(results => {
         this.afterInit();
+        this.store.isLocalEnv = results[2];
         this.store.pubInitialized();
         console.log('app initialized');
         return true;
