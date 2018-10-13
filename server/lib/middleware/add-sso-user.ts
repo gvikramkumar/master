@@ -7,13 +7,14 @@ import {ApiError} from '../common/api-error';
 import {svrUtil} from '../common/svr-util';
 import config from '../../config/get-config';
 import {finRequest} from '../common/fin-request';
+import UserListRepo from '../../api/user-list/repo';
+import {UserList} from '../../../shared/models/user-list';
 
 export function addSsoUser() {
 
   /*
     const roles = [
       'it administrator',
-      'prof:measure',
       'profitability allocations:business admin',
       'profitability allocations:super user',
       'profitability allocations:end user',
@@ -24,8 +25,9 @@ export function addSsoUser() {
     const headers = req.headers;
     const lookupRepo = new LookupRepo();
     const moduleRepo = new ModuleRepo();
+    const userListRepo = new UserListRepo();
     const isLocalEnv = svrUtil.isLocalEnv();
-    let localRoles, modules, genericUsers;
+    let localRoles, modules, genericUsers, updateUserList = false;
 
     Promise.all([
       lookupRepo.getValues(['localenv-roles', 'generic-users']),
@@ -47,7 +49,16 @@ export function addSsoUser() {
           );
         } else {
           const userId = headers['auth-user'];
-          return getArtRoles(userId)
+          return userListRepo.getOneByQuery({userId})
+            .then(userList => {
+              // we'll cache the users in database and if less than one minute old, we'll get the roles from there
+              if (userList && Date.now() - userList.updatedDate.getTime() < 60000) {
+                return userList.roles;
+              } else {
+                updateUserList = true;
+                return getArtRoles(userId);
+              }
+            })
             .then(roles => {
               return new DfaUser(
                 userId,
@@ -66,7 +77,13 @@ export function addSsoUser() {
         } else {
           req.user = user;
           req.dfaData = {modules};
-          next();
+          if (updateUserList) {
+            const userList = new UserList(user.id, user.fullName, user.email, user.roles, new Date());
+            return userListRepo.upsertQueryOne({userId: user.id}, userList, user.id, false)
+              .then(() => next());
+          } else {
+            next();
+          }
         }
       })
       .catch(next);

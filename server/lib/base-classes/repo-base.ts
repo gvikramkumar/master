@@ -257,7 +257,7 @@ export default class RepoBase {
         if (!doc) {
           return this.addOne(data, userId);
         } else {
-          return this.updateQueryOne(filter, data, userId);
+          return this.updateQueryOne(filter, data, userId, concurrencyCheck);
         }
       });
   }

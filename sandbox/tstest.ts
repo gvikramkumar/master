@@ -5,6 +5,15 @@ import {shUtil} from '../shared/shared-util';
 // import {take, first} from 'rxjs/operators';
 
 
+const start = new Date();
+setTimeout(() => {
+  console.log(Date.now() - start.getTime() < 1000);
+}, 1200);
+
+
+
+/*
+
 interface DiffVal {
   path: string;
   oldVal: any;
@@ -92,6 +101,7 @@ const obj2 = {
 
 const arr = showObjectChanges(obj1, obj2);
 console.log(arr);
+*/
 
 
 /*

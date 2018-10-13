@@ -5,7 +5,6 @@ import PgLookupRepo from '../../../common/pg-lookup/repo';
 import SalesSplitUploadTemplate from './template';
 import * as _ from 'lodash';
 import SalesSplitUploadImport from './import';
-import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import DollarUploadImport from '../dollar/import';
@@ -17,14 +16,12 @@ export default class SalesSplitUploadUploadController extends UploadController {
     repo: SalesSplitUploadRepo,
     private pgRepo: PgLookupRepo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo,
-    userRoleRepo: UserRoleRepo
+    submeasureRepo: SubmeasureRepo
   ) {
     super(
       repo,
       openPeriodRepo,
-      submeasureRepo,
-      userRoleRepo
+      submeasureRepo
     );
     this.uploadName = 'Sales Level Split Upload';
 

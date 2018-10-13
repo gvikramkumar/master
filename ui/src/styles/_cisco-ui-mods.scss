@@ -37,12 +37,13 @@
 // header and hero the same height looks clean, this value affects both
 .fin.cui .hero.main-comp {
   height: $hero-header-height;
+  padding: 0;
 
   h1 {
     font-size: 28px;
   }
   .hero__content {
-    padding-top: 9px;
+    padding-top: 7px;
     padding-bottom: 1px;
     padding-left: $padding-base;
   }

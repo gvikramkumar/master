@@ -3,7 +3,6 @@ import {NamedApiError} from '../common/named-api-error';
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
 import {sendHtmlMail} from '../common/mail';
-import UserRoleRepo from '../database/repos/user-role-repo';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
 import Q from 'q';
 import RepoBase from './repo-base';
@@ -44,8 +43,7 @@ export default class UploadController {
   constructor(
     protected repo: RepoBase,
     protected openPeriodRepo: OpenPeriodRepo,
-    protected submeasureRepo: SubmeasureRepo,
-    protected userRoleRepo: UserRoleRepo
+    protected submeasureRepo: SubmeasureRepo
     ) {
   }
 
