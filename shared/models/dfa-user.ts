@@ -7,7 +7,7 @@ import {shUtil} from '../shared-util';
 export default class DfaUser {
   moduleId?: number;
   store?: AnyObj;
-  genericRoles = ['bizadmin', 'super-user', 'end-user'];
+  genericRoles = ['itadmin', 'bizadmin', 'super-user', 'end-user'];
 
   // have to pass in either moduleId (api) or store (ui). This value can change in ui but is same for each request in api
   constructor(
@@ -102,7 +102,7 @@ export default class DfaUser {
     let allowedRoles = shUtil.stringToArray(_allowedRoles);
     this.verifyAllRolesAreGenericOrActualRoles(allowedRoles);
     allowedRoles = this.getRolesFromGenericRolesAndAbove(allowedRoles);
-    return intersection(this.roles, allowedRoles.concat(['IT Administrator'])).length > 0;
+    return intersection(this.roles, allowedRoles.concat(['it administrator'])).length > 0;
   }
 
   verifyAllRolesAreGenericRoles(roles) {
@@ -112,7 +112,7 @@ export default class DfaUser {
   }
 
   verifyAllRolesAreGenericOrActualRoles(roles) {
-    if (!(difference(roles, this.genericRoles.concat(['IT Administrator']).concat(flatten(this.modules.map(m => shUtil.stringToArray(m.roles))))).length === 0)) {
+    if (!(difference(roles, this.genericRoles.concat(['it administrator']).concat(flatten(this.modules.map(m => shUtil.stringToArray(m.roles))))).length === 0)) {
       throw new Error(`Some roles don't exist: ${roles.join(',')}`);
     }
   }
@@ -133,6 +133,9 @@ export default class DfaUser {
     }
     roles.forEach(role => {
       switch (role) {
+        case 'itadmin':
+          rtn.push(this.getItadminRole());
+          break;
         case 'bizadmin':
           rtn.push(this.getModuleAdminRole());
           break;
@@ -166,6 +169,9 @@ export default class DfaUser {
     }
     roles.forEach(role => {
       switch (role) {
+        case 'itadmin':
+          rtn.push(this.getItadminRole());
+          break;
         case 'bizadmin':
           rtn.push(this.getModuleAdminRole());
           break;
@@ -183,6 +189,10 @@ export default class DfaUser {
       }
     });
     return rtn;
+  }
+
+  getItadminRole() {
+    return 'it administrator';
   }
 
   getModuleAdminRole() {

@@ -10,8 +10,8 @@ export default class ModuleController extends ControllerBase {
     super(repo, pgRepo);
   }
 
-  getActiveSortedByDisplayOrder(req, res, next) {
-    this.repo.getActiveSortedByDisplayOrder()
+  getActiveSortedByDisplayOrderWithRoles(req, res, next) {
+    this.repo.getActiveSortedByDisplayOrderWithRoles()
       .then(docs => res.json(docs))
       .catch(next);
   }

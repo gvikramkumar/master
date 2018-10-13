@@ -22,10 +22,10 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
   selectedModule: DfaModule;
   adminModule: DfaModule;
   roles = [
-    {generic: 'itadmin', actual: 'IT Administrator'},
-    {generic: 'bizadmin', actual: 'Profitability Allocations:Business Admin'},
-    {generic: 'super-user', actual: 'Profitability Allocations:Super User'},
-    {generic: 'end-user', actual: 'Profitability Allocations:End User'},
+    {generic: 'itadmin', actual: 'it administrator'},
+    {generic: 'bizadmin', actual: 'profitability allocations:business admin'},
+    {generic: 'super-user', actual: 'profitability allocations:super user'},
+    {generic: 'end-user', actual: 'profitability allocations:end user'},
     ];
   selectedRole: string;
 
@@ -50,6 +50,7 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
   }
 
   roleChange() {
+    // this.store.showSpinner = true;
     this.lookupService.upsert('localenv-roles', [this.selectedRole])
       .subscribe(() => window.location.reload());
   }

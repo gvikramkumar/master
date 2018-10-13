@@ -36,23 +36,23 @@ export class LeftnavComponent {
     switch (this.module.abbrev) {
       case 'admn':
         this.links = [
-          {route: '/admn/module', text: 'Module', roles: 'IT Administrator'},
-          {route: '/admn/open-period', text: 'Open Period', roles: 'IT Administrator'},
-          {route: '/admn/source', text: 'Source', roles: 'IT Administrator'},
-          {route: '/admn/source-mapping', text: 'Source Mapping', roles: 'IT Administrator'},
+          {route: '/admn/module', text: 'Module', roles: 'it administrator'},
+          {route: '/admn/open-period', text: 'Open Period', roles: 'it administrator'},
+          {route: '/admn/source', text: 'Source', roles: 'it administrator'},
+          {route: '/admn/source-mapping', text: 'Source Mapping', roles: 'it administrator'},
         ];
         this.alinks = [];
         break;
 
       case 'prof':
         this.links = [
-          {route: '/prof/rule-management', text: 'Rule Management', roles: 'Profitability Allocations:Business Admin,Profitability Allocations:Super User, Profitability Allocations:End User'},
-          {route: '/prof/submeasure', text: 'Sub-Measure', roles: 'Profitability Allocations:Business Admin,Profitability Allocations:Super User, Profitability Allocations:End User'},
-          {route: '/prof/business-upload', text: 'Business Upload', roles: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User'},
-          {route: '/prof/reports', text: 'Report', roles: 'Profitability Allocations:Business Admin, Profitability Allocations:Super User, Profitability Allocations:End User'},
+          {route: '/prof/rule-management', text: 'Rule Management', roles: 'profitability allocations:business admin,profitability allocations:super user, profitability allocations:end user'},
+          {route: '/prof/submeasure', text: 'Sub-Measure', roles: 'profitability allocations:business admin,profitability allocations:super user, profitability allocations:end user'},
+          {route: '/prof/business-upload', text: 'Business Upload', roles: 'profitability allocations:business admin, profitability allocations:super user'},
+          {route: '/prof/reports', text: 'Report', roles: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user'},
         ];
         this.alinks = [
-          {route: '/prof/admin/measure', text: 'Measure', roles: 'Profitability Allocations:Business Admin'},
+          {route: '/prof/admin/measure', text: 'Measure', roles: 'profitability allocations:business admin'},
         ];
         break;
       default:

@@ -25,7 +25,13 @@ Model: Model<any>;
 
   getValues(keys: string[]) {
     return this.getMany(keys)
-      .then(docs => docs.map(doc => doc && doc.value));
+      .then(docs => {
+        // these can come in any order, so reorder by keys
+        return keys.map(key => {
+          const doc = _.find(docs, {key});
+          return doc && doc.value;
+        });
+      });
   }
 
   // would rather have getValue, but controller needs to be able to error if nothing is found. Something

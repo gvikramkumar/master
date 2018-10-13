@@ -9,7 +9,6 @@ const schema = new Schema(
     displayOrder: {type: Number, required: true},
     abbrev: {type: String, required: true},
     name: {type: String, required: true},
-    roles: {type: String, required: true},
     desc: String,
     status: {type: String, enum: ['A', 'I'], required: true},
     createdBy: {type: String, required: true},
@@ -28,9 +27,16 @@ export class ModuleRepo extends RepoBase {
     super(schema, 'Module');
   }
 
-  getActiveSortedByDisplayOrder() {
+  getActiveSortedByDisplayOrderWithRoles() {
     return this.Model.find({status: 'A'})
-      .sort({displayOrder: 1});
+      .sort({displayOrder: 1})
+      .then(modules => {
+        return modules;
+      })
+      .then(modules => this.addRoles(modules))
+      .then(modules => {
+        return modules;
+      });
   }
 
   getActiveNonAdminSortedByDisplayOrder() {
@@ -48,4 +54,12 @@ export class ModuleRepo extends RepoBase {
       .sort({displayOrder: 1});
   }
 
+  addRoles(modules) {
+    return modules.map(module => {
+      const mod = module.toObject ? module.toObject() : module;
+      mod.roles = `${module.name}:Business Admin, ${module.name}:Super User, ${module.name}:End User`.toLowerCase();
+      return mod;
+    });
+
+  }
 }

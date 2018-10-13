@@ -12,11 +12,11 @@ export function addSsoUser() {
 
   /*
     const roles = [
-      'IT Administrator',
+      'it administrator',
       'prof:measure',
-      'Profitability Allocations:Business Admin',
-      'Profitability Allocations:Super User',
-      'Profitability Allocations:End User',
+      'profitability allocations:business admin',
+      'profitability allocations:super user',
+      'profitability allocations:end user',
     ];
   */
 
@@ -29,17 +29,12 @@ export function addSsoUser() {
 
     Promise.all([
       lookupRepo.getValues(['localenv-roles', 'generic-users']),
-      moduleRepo.getManyActive()
+      moduleRepo.getActiveSortedByDisplayOrderWithRoles()
     ])
       .then(results => {
         localRoles = results[0][0] ? results[0][0] : ['it administrator'];
         genericUsers = results[0][1];
-        modules = results[1];
-
-        const roleList = modules.filter(m => !m.roles || !m.roles.trim());
-        if (roleList.length > 0) {
-          throw new ApiError(`The following modules don't have roles: ${roleList.map(r => r.name).join(', ')}`);
-        }
+        modules = results[1]
 
         if (isLocalEnv) {
           return new DfaUser(
@@ -66,7 +61,7 @@ export function addSsoUser() {
         }
       })
       .then(user => {
-        if (!user.hasAdminOrUserRole() && !_.includes(genericUsers, user.id)) {
+        if (!isLocalEnv && !user.hasAdminOrUserRole() && !_.includes(genericUsers, user.id)) {
           res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`User access required.`));
         } else {
           req.user = user;
