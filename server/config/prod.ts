@@ -6,14 +6,15 @@ export default {
   },
   corsOrigin: [],
   showStack: false,
+  artUrl: 'xxx',
   mongo: {
-    uri: 'mongodb://localhost/fin-dfa',
-    host: 'localhost',
+    uri: 'mongodb://xxx/fin-dfa',
+    host: 'xxx',
     port: 27017,
     db: 'fin-dfa'
   },
   postgres: {
-    host: 'finpg-dev-01',
+    host: 'xxx',
     port: 5432,
     database: 'fpadev',
   }

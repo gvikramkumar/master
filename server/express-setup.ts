@@ -64,6 +64,10 @@ export default function () {
     });
   */
 
+  app.use(addSsoUser())
+  app.use(addGlobalData());
+  // app.use(siteRestriction());
+
   app.use(morgan(function (tokens, req, res) {
     return [
       new Date().toISOString(),
@@ -75,10 +79,6 @@ export default function () {
       tokens['response-time'](req, res), 'ms'
     ].join(' ');
   }));
-
-  app.use(addSsoUser())
-  app.use(addGlobalData());
-  app.use(siteRestriction());
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));

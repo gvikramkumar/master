@@ -143,22 +143,6 @@ db.dfa_lookup.insertMany([
       'akmehrot', 'kalaissu', 'heyeung', 'myjagade', // bizadmin only
     ]
   },
-  {
-    key: 'akmehrot',
-    value: ['prof:admin']
-  },
-  {
-    key: 'kalaissu',
-    value: ['prof:admin']
-  },
-  {
-    key: 'heyeung',
-    value: ['prof:admin']
-  },
-  {
-    key: 'myjagade',
-    value: ['prof:admin']
-  },
 ]);
 
 db.dfa_module_data_source.insertMany([

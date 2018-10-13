@@ -26,7 +26,15 @@ import {shUtil} from '../../../../shared/shared-util';
  */
 export class AppStore extends StoreBase {
   initialBreakpoint: string;
-  showSpinner = false;
+  isLocalEnv = false;
+
+  showProgress$: Subject<boolean> = new Subject();
+  showProgressBar(val = true) {
+    this.showProgress$.next(val);
+  }
+  hideProgressBar() {
+    this.showProgress$.next(false);
+  }
 
   user: DfaUser;
   user$ = new Subject<DfaUser>();

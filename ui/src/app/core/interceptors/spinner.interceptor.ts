@@ -11,16 +11,16 @@ export class SpinnerInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.params.get('showSpinner') === 'true') {
-      this.store.showSpinner = true;
+    if (req.params.get('showProgress') === 'true') {
+      this.store.showProgressBar();
     }
-    const nextReq = req.clone({params: req.params.delete('showSpinner')});
+    const nextReq = req.clone({params: req.params.delete('showProgress')});
 
     return next
       .handle(nextReq).pipe(
         tap(event => {
           if (event instanceof HttpResponse) {
-            this.store.showSpinner = false;
+            this.store.hideProgressBar();
           }
         })
       )

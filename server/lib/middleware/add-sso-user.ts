@@ -5,16 +5,18 @@ import {ModuleRepo} from '../../api/common/module/repo';
 import {shUtil} from '../../../shared/shared-util';
 import {ApiError} from '../common/api-error';
 import {svrUtil} from '../common/svr-util';
+import config from '../../config/get-config';
+import {finRequest} from '../common/fin-request';
 
 export function addSsoUser() {
 
   /*
     const roles = [
-      'itadmin',
+      'it administrator',
       'prof:measure',
-      'prof:admin',
-      'prof:super-user',
-      'prof:end-user',
+      'profitability allocations:business admin',
+      'profitability allocations:super user',
+      'profitability allocations:end user',
     ];
   */
 
@@ -22,37 +24,33 @@ export function addSsoUser() {
     const headers = req.headers;
     const lookupRepo = new LookupRepo();
     const moduleRepo = new ModuleRepo();
-    const localEnv = svrUtil.isLocalEnv();
-    let roles, modules;
-    const userId = localEnv ? 'jodoe' : req.headers['auth-user'];
+    const isLocalEnv = svrUtil.isLocalEnv();
+    let localRoles, modules, genericUsers;
 
     Promise.all([
-      lookupRepo.getValue(userId),
-      moduleRepo.getManyActive()
+      lookupRepo.getValues(['localenv-roles', 'generic-users']),
+      moduleRepo.getActiveSortedByDisplayOrderWithRoles()
     ])
       .then(results => {
-        roles = results[0] ? results[0] : ['itadmin'];
-        modules = results[1];
+        localRoles = results[0][0] ? results[0][0] : ['it administrator'];
+        genericUsers = results[0][1];
+        modules = results[1]
 
-        const roleList = modules.filter(m => !m.roles || !m.roles.trim());
-        if (roleList.length > 0) {
-          throw new ApiError(`The following modules don't have roles: ${roleList.map(r => r.name).join(', ')}`);
-        }
-
-        if (localEnv) {
+        if (isLocalEnv) {
           return new DfaUser(
             'jodoe',
             'John',
             'Doe',
             'moltman@cisco.com',
-            roles,
+            localRoles,
             modules
           );
         } else {
-          return Promise.resolve() // get roles from onramp table here
-            .then(usersRoles => {
+          const userId = headers['auth-user'];
+          return getArtRoles(userId)
+            .then(roles => {
               return new DfaUser(
-                headers['auth-user'],
+                userId,
                 headers['givenname'],
                 headers['familyname'],
                 headers['email'],
@@ -63,12 +61,11 @@ export function addSsoUser() {
         }
       })
       .then(user => {
-        if (!user.hasAdminOrUserRole()) {
+        if (!isLocalEnv && !user.hasAdminOrUserRole() && !_.includes(genericUsers, user.id)) {
           res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`User access required.`));
         } else {
           req.user = user;
           req.dfaData = {modules};
-          console.log('addssouser', req.url, req.user && req.user.id, req.body && req.body.moduleId);
           next();
         }
       })
@@ -77,3 +74,33 @@ export function addSsoUser() {
 
 }
 
+function getArtRoles(userId) {
+  const artUser = process.env.ART_USER;
+  const artPassword = process.env.ART_PASSWORD;
+  if (!artUser || !artPassword) {
+    throw new ApiError('No ART_USER or ART_PASSWORD');
+  }
+  const options = {
+    url: config.artUrl,
+    method: 'post',
+    auth: {
+      user: artUser,
+      pass: artPassword,
+      sendImmediately: false
+    },
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    json: {
+      methodType: 'SUBJECT_RESOURCE_MAP_ROLEBUNDLES_CONTEXT',
+      methodName: 'getPermissibleResourcesForUser',
+      subject: userId,
+      resourceFQN: 'Finance:Financial Performance Planning and Analysis:Digitized Financial Allocations (DFA)',
+      context: 'Global Context:Global Context',
+      roleBundles: { 'roleBundle': ['Default'] }
+    }
+  };
+  return finRequest(options)
+    .then(result => _.get(result, 'body.resources.resourceFQN') || [])
+    .then(roles => roles.map(x => x.toLowerCase()));
+}

@@ -36,23 +36,23 @@ export class LeftnavComponent {
     switch (this.module.abbrev) {
       case 'admn':
         this.links = [
-          {route: '/admn/module', text: 'Module', roles: 'itadmin'},
-          {route: '/admn/open-period', text: 'Open Period', roles: 'itadmin'},
-          {route: '/admn/source', text: 'Source', roles: 'itadmin'},
-          {route: '/admn/source-mapping', text: 'Source Mapping', roles: 'itadmin'},
+          {route: '/admn/module', text: 'Module', roles: 'it administrator'},
+          {route: '/admn/open-period', text: 'Open Period', roles: 'it administrator'},
+          {route: '/admn/source', text: 'Source', roles: 'it administrator'},
+          {route: '/admn/source-mapping', text: 'Source Mapping', roles: 'it administrator'},
         ];
         this.alinks = [];
         break;
 
       case 'prof':
         this.links = [
-          {route: '/prof/rule-management', text: 'Rule Management', roles: 'prof:admin,prof:super-user, prof:end-user'},
-          {route: '/prof/submeasure', text: 'Sub-Measure', roles: 'prof:admin,prof:super-user, prof:end-user'},
-          {route: '/prof/business-upload', text: 'Business Upload', roles: 'prof:admin, prof:super-user'},
-          {route: '/prof/reports', text: 'Report', roles: 'prof:admin, prof:super-user, prof:end-user'},
+          {route: '/prof/rule-management', text: 'Rule Management', roles: 'profitability allocations:business admin,profitability allocations:super user, profitability allocations:end user'},
+          {route: '/prof/submeasure', text: 'Sub-Measure', roles: 'profitability allocations:business admin,profitability allocations:super user, profitability allocations:end user'},
+          {route: '/prof/business-upload', text: 'Business Upload', roles: 'profitability allocations:business admin, profitability allocations:super user'},
+          {route: '/prof/reports', text: 'Report', roles: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user'},
         ];
         this.alinks = [
-          {route: '/prof/admin/measure', text: 'Measure', roles: 'prof:admin'},
+          {route: '/prof/admin/measure', text: 'Measure', roles: 'profitability allocations:business admin'},
         ];
         break;
       default:

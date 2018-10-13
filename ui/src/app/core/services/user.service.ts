@@ -33,4 +33,8 @@ export class UserService extends RestBase<DfaUser> {
       });
   }
 
+  isLocalEnv() {
+    return this.callMethod('isLocalEnv');
+  }
+
 }

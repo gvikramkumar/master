@@ -14,7 +14,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     data: {
-      authorization: 'prof:admin, prof:super-user, prof:end-user',
+      authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
       breadcrumbs: [{label: 'Home'}]
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
@@ -23,7 +23,7 @@ const routes: Routes = [
     path: 'admn',
     loadChildren: 'app/modules/admn/admn.module#AdmnModule',
     data: {
-      authorization: 'itadmin'
+      authorization: 'it administrator'
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },
@@ -31,7 +31,7 @@ const routes: Routes = [
     path: 'prof',
     loadChildren: 'app/modules/prof/prof.module#ProfModule',
     data: {
-      authorization: 'prof:admin, prof:super-user, prof:end-user'
+      authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user'
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },

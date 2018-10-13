@@ -7,6 +7,7 @@ export default {
     fileSizeMax: 10000000, // 10mb
     fileCountMax: 1, // limit file count and size for dos attacks
   },
+  artUrl: ' https://wsgi-stage.cisco.com/cepm/pdpservices/authorizationmanagerservice',
   mail: {
     host: 'mail.cisco.com',
     secure: false,

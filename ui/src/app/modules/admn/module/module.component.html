@@ -65,7 +65,6 @@
                        [notInList]="formModules" notInListProperty="abbrev" [minLength]="4" [maxLength]="4"></fin-input>
             <fin-input name="order" type="text" [(ngModel)]="module.displayOrder" label="Display Order" [required]="true"
                        [isNumber]="true" [notInList]="formModules" notInListProperty="displayOrder"></fin-input>
-            <fin-input name="roles" type="text" [(ngModel)]="module.roles" label="Roles" [required]="true"></fin-input>
             <fin-input name="desc" [textarea]="true" [(ngModel)]="module.desc" [rows]="4" label="Description"></fin-input>
             <div style="padding-top:15px;">
               <fin-checkbox label="Active" [(model)]="module.status" trueVal="A" falseVal="I"></fin-checkbox>
