@@ -24,6 +24,7 @@ import {FromNowPipeModule} from '@cisco-ngx/cui-pipes';
     CuiSpinnerModule,
     FromNowPipeModule,
     CuiDialogModule,
+    CuiProgressbarModule,
   ],
   exports: [
     CuiButtonModule,
@@ -38,6 +39,7 @@ import {FromNowPipeModule} from '@cisco-ngx/cui-pipes';
     CuiSpinnerModule,
     FromNowPipeModule,
     CuiDialogModule,
+    CuiProgressbarModule,
   ],
 })
 export class CuiIndexModule { }

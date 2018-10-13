@@ -61,7 +61,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     const formData: FormData = new FormData();
     formData.append('fileUploadField', file, file.name);
     formData.append('moduleId', this.store.module.moduleId.toString())
-    const params = new HttpParams().set('showSpinner', 'true')
+    const params = new HttpParams().set('showProgress', 'true')
     const options = {headers: {Accept: 'application/json'}, params};
     const url = `${apiUrl}/api/prof/upload/${this.uploadType.type}`;
     this.httpClient.post<{ status: string, numRows?: number }>(url, formData, options)

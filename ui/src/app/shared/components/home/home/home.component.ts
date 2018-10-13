@@ -50,7 +50,7 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
   }
 
   roleChange() {
-    // this.store.showSpinner = true;
+    this.store.showProgressBar();
     this.lookupService.upsert('localenv-roles', [this.selectedRole])
       .subscribe(() => window.location.reload());
   }

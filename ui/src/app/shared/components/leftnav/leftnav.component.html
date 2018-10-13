@@ -10,7 +10,7 @@
 
     <h5 class="title" *ngIf="alinks.length">Admin</h5>
     <div class="links">
-      <div *ngFor="let alink of alinks"><a [routerLink]="alink.route">{{alink.text}}</a></div>
+      <div class="alink" *ngFor="let alink of alinks"><a [routerLink]="alink.route">{{alink.text}}</a></div>
     </div>
 
   </div>

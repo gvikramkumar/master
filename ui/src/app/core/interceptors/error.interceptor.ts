@@ -36,7 +36,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           const a = event;
         }),
         catchError(resp => {
-          this.store.showSpinner = false;
+          this.store.hideProgressBar();
 
           const error = resp.error;
           let err;
