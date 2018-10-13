@@ -6,7 +6,6 @@ import UploadController from '../../../../lib/base-classes/upload-controller';
 import DeptUploadDeptTemplate from './dept-template';
 import DeptUploadExludeAcctTemplate from './exclude-acct-template';
 import SubmeasureRepo from '../../../common/submeasure/repo';
-import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 import PgLookupRepo from '../../../common/pg-lookup/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 
@@ -18,14 +17,12 @@ export default class DeptUploadUploadController extends UploadController {
     repo: DeptUploadRepo,
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
-    userRoleRepo: UserRoleRepo,
     private pgRepo: PgLookupRepo
   ) {
     super(
       repo,
       openPeriodRepo,
-      submeasureRepo,
-      userRoleRepo
+      submeasureRepo
     );
     this.uploadName = 'Department Upload';
     this.hasTwoSheets = true;

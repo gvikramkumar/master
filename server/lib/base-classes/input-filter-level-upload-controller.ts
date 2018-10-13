@@ -3,7 +3,6 @@ import PgLookupRepo from '../../api/common/pg-lookup/repo';
 import LookupRepo from '../../api/common/lookup/repo';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
-import UserRoleRepo from '../database/repos/user-role-repo';
 
 const pgRepo = new PgLookupRepo();
 const lookupRepo = new LookupRepo();
@@ -14,14 +13,12 @@ data;
   constructor(
     repo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo,
-    userRoleRepo: UserRoleRepo
+    submeasureRepo: SubmeasureRepo
   ) {
     super(
       repo,
       openPeriodRepo,
-      submeasureRepo,
-      userRoleRepo
+      submeasureRepo
       );
   }
 

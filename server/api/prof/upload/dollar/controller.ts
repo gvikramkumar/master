@@ -5,7 +5,6 @@ import InputFilterLevelUploadController from '../../../../lib/base-classes/input
 import DollarUploadTemplate from './template';
 import DollarUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
-import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 import SourceRepo from '../../../common/source/repo';
 import {Source} from '../../../../../shared/models/source';
 import {ApiError} from '../../../../lib/common/api-error';
@@ -20,14 +19,12 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
     repo: DollarUploadRepo,
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
-    userRoleRepo: UserRoleRepo,
     private sourceRepo: SourceRepo
   ) {
     super(
       repo,
       openPeriodRepo,
-      submeasureRepo,
-      userRoleRepo
+      submeasureRepo
     );
     this.uploadName = 'Dollar Upload';
 

@@ -8,7 +8,6 @@ import {NamedApiError} from '../../../../lib/common/named-api-error';
 import AnyObj from '../../../../../shared/models/any-obj';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
-import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 
 @injectable()
 export default class ProductClassUploadUploadController extends UploadController {
@@ -17,14 +16,12 @@ export default class ProductClassUploadUploadController extends UploadController
   constructor(
     repo: ProductClassUploadRepo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo,
-    userRoleRepo: UserRoleRepo
+    submeasureRepo: SubmeasureRepo
   ) {
     super(
       repo,
       openPeriodRepo,
-      submeasureRepo,
-      userRoleRepo
+      submeasureRepo
     );
     this.uploadName = 'Product Classification Upload';
 

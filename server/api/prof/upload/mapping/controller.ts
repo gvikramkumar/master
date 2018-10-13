@@ -5,7 +5,6 @@ import MappingUploadTemplate from './template';
 import MappingUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
-import UserRoleRepo from '../../../../lib/database/repos/user-role-repo';
 
 @injectable()
 export default class MappingUploadUploadController extends InputFilterLevelUploadController {
@@ -13,14 +12,12 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
   constructor(
     repo: MappingUploadRepo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo,
-    userRoleRepo: UserRoleRepo
+    submeasureRepo: SubmeasureRepo
   ) {
     super(
       repo,
       openPeriodRepo,
-      submeasureRepo,
-      userRoleRepo
+      submeasureRepo
     );
     this.uploadName = 'Mapping Upload';
 
