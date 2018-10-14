@@ -44,12 +44,20 @@ export default function () {
   const app = express();
   module.exports = app;
 
-  /*
+/*
   app.use(function tap(req, res, next) {
     console.log(req.method, req.url);
     next();
   })
-  */
+*/
+
+  app.use(express.static(path.resolve(__dirname, '../../ui/dist')));
+
+  app.get(['/', '/admn/*', '/prof/*', '/prdt/*', '/bkgm/*', '/svct/*', '/tsct/*', '/ascg/*',
+    '/cisc/*', '/opex/*', '/defr/*', '/gubr/*', '/bkir/*', '/rrev/*'], (req, res) => {
+    console.log('>>>>>> served index.html');
+    res.sendFile(path.resolve(__dirname, '../../ui/dist/index.html'));
+  });
 
   const corsOptions = {
     origin: config.corsOrigin,
@@ -126,14 +134,6 @@ export default function () {
   app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
   app.use('/api/prof/upload', profUploadRouter);
 
-
-  app.use(express.static(path.resolve(__dirname, '../../ui/dist')));
-
-  app.get(['/', '/admn/*', '/prof/*', '/prdt/*', '/bkgm/*', '/svct/*', '/tsct/*', '/ascg/*',
-    '/cisc/*', '/opex/*', '/defr/*', '/gubr/*', '/bkir/*', '/rrev/*'], (req, res) => {
-    console.log('>>>>>> served index.html');
-    res.sendFile(path.resolve(__dirname, '../../ui/dist/index.html'));
-  });
 
   app.use(notFound());
   app.use(errorHandler({showStack: config.showStack}));
