@@ -1,6 +1,7 @@
 import {injectable} from 'inversify';
 import {Schema} from 'mongoose';
 import RepoBase from '../../../lib/base-classes/repo-base';
+import AnyObj from '../../../../shared/models/any-obj';
 
 
 const schema = new Schema(
@@ -27,31 +28,17 @@ export class ModuleRepo extends RepoBase {
     super(schema, 'Module');
   }
 
-  getActiveSortedByDisplayOrderWithRoles() {
-    return this.Model.find({status: 'A'})
-      .sort({displayOrder: 1})
-      .then(modules => {
-        return modules;
-      })
-      .then(modules => this.addRoles(modules))
-      .then(modules => {
-        return modules;
-      });
+  getMany(filter: AnyObj = {}) {
+    return super.getMany(filter)
+      .then(modules => this.addRoles(modules));
   }
 
-  getActiveNonAdminSortedByDisplayOrder() {
-    return this.Model.find({status: 'A', moduleId: {$ne: 99}})
-      .sort({displayOrder: 1});
-  }
-
-  getActiveNonAdminSortedByModuleId() {
-    return this.Model.find({status: 'A', moduleId: {$ne: 99}})
-      .sort({moduleId: 1});
+  getActiveSortedByDisplayOrder() {
+    return this.getMany({status: 'A', setSort: 'displayOrder'});
   }
 
   getNonAdminSortedByDisplayOrder() {
-    return this.Model.find({moduleId: {$ne: 99}})
-      .sort({displayOrder: 1});
+    return this.getMany({moduleId: {$ne: 99}, setSort: 'displayOrder'});
   }
 
   addRoles(modules) {

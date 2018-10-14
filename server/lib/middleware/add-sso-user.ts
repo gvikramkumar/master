@@ -31,7 +31,7 @@ export function addSsoUser() {
 
     Promise.all([
       lookupRepo.getValues(['localenv-roles', 'generic-users']),
-      moduleRepo.getActiveSortedByDisplayOrderWithRoles()
+      moduleRepo.getActiveSortedByDisplayOrder()
     ])
       .then(results => {
         localRoles = results[0][0] ? results[0][0] : ['it administrator'];
