@@ -79,7 +79,6 @@ export function addSsoUser() {
           req.dfaData = {modules};
           // this is the ui's init call to get user, with each ui app load, we'll store the user's details in database
           if (req.url === '/api/user/call-method/getUser' && updateUserList) {
-            console.log('updating user list', req.url);
             const userList = new UserList(user.id, user.fullName, user.email, user.roles, new Date());
             return userListRepo.upsertQueryOne({userId: user.id}, userList, user.id, false)
               .then(() => next());
