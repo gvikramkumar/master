@@ -6,20 +6,21 @@ const db = conn.getDB(_db);
 
 
 const collections = [
-  'dfa_lookup',
-  'dfa_module_lookup',
   'dfa_allocation_rule',
+  'dfa_data_source',
+  'dfa_lookup',
   'dfa_measure',
   'dfa_module',
-  'dfa_open_period',
-  'dfa_data_source',
   'dfa_module_data_source',
-  'dfa_submeasure',
+  'dfa_module_lookup',
+  'dfa_open_period',
   'dfa_prof_dept_acct_map_upld',
   'dfa_prof_input_amnt_upld',
   'dfa_prof_manual_map_upld',
   'dfa_prof_sales_split_pctmap_upld',
   'dfa_prof_swalloc_manualmix_upld',
+  'dfa_submeasure',
+  'dfa_user'
 ];
 
 collections.forEach(coll => {
