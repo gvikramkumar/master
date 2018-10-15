@@ -16,11 +16,16 @@ export default class DfaUser {
     public lastName: string,
     public email: string,
     public roles: string[],
+    public genericUsers,
     public modules: DfaModule[]) {
   }
 
   get fullName() {
     return this.firstName + ' ' + this.lastName;
+  }
+
+  isGenericUser() {
+    return _.includes(this.genericUsers, this.id);
   }
 
   // todo: make all these type checks for art roles

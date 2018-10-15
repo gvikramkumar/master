@@ -14,11 +14,11 @@ export class DatabaseService {
   }
 
   mongoToPgSync() {
-    return this.httpClient.post<any>(`${endpointUrl}/mongoToPgSync`, null);
+    return this.httpClient.get<any>(`${endpointUrl}/mongoToPgSync`);
   }
 
   pgToMongoSync() {
-    return this.httpClient.post<any>(`${endpointUrl}/pgToMongoSync`, null);
+    return this.httpClient.get<any>(`${endpointUrl}/pgToMongoSync`);
   }
 
 
