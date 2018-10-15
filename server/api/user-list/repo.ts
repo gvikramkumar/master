@@ -11,7 +11,7 @@ const schema = new Schema(
     roles: {type: [String], required: true},
     updatedDate: {type: Date, required: true}
   },
-  {collection: 'dfa_user_list'}
+  {collection: 'dfa_user'}
 );
 
 @injectable()
