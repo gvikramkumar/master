@@ -6,5 +6,5 @@ import {authAdmin} from '../../lib/middleware/auth-admin';
 const ctrl = injector.get(DatabaseController);
 
 export const databaseRouter = Router()
-  .post('/mongoToPgSync', authAdmin(), ctrl.mongoToPgSync.bind(ctrl))
-  .post('/pgToMongoSync', authAdmin(), ctrl.pgToMongoSync.bind(ctrl))
+  .get('/mongoToPgSync', authAdmin(), ctrl.mongoToPgSync.bind(ctrl))
+  .get('/pgToMongoSync', authAdmin(), ctrl.pgToMongoSync.bind(ctrl))

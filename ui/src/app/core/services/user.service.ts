@@ -26,6 +26,7 @@ export class UserService extends RestBase<DfaUser> {
           user.lastName,
           user.email,
           user.roles,
+          user.genericUsers,
           user.modules
         );
         usr.store = this.store;

@@ -45,6 +45,7 @@ export function addSsoUser() {
             'Doe',
             'dakahle@cisco.com',
             localRoles,
+            genericUsers,
             modules
           );
         } else {
@@ -66,13 +67,14 @@ export function addSsoUser() {
                 headers['familyname'],
                 headers['email'],
                 roles,
+                genericUsers,
                 modules
               );
             });
         }
       })
       .then(user => {
-        if (!isLocalEnv && !user.hasAdminOrUserRole() && !_.includes(genericUsers, user.id)) {
+        if (!(isLocalEnv || user.hasAdminOrUserRole() || user.isGenericUser())) {
           res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`User access required.`));
         } else {
           req.user = user;
