@@ -1,18 +1,22 @@
+/*
 import {Component, Inject} from '@angular/core';
+import {CUI_DIALOG_DATA, CuiDialogRef} from '@cisco-ngx/cui-components';
 import {DialogInputType} from '../../../core/models/ui-enums';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'fin-prompt-dialog',
   templateUrl: './prompt-dialog.component.html',
   styleUrls: ['./prompt-dialog.component.scss']
 })
-export class PromptDialogComponent {
+export class PromptDialogCuiComponent {
   messageText = '';
   DialogInputType = DialogInputType;
 
-  constructor(public dialogRef: MatDialogRef<PromptDialogComponent>, @Inject(MAT_DIALOG_DATA)public  data: any) {
+  constructor(
+    public dialogRef: CuiDialogRef<PromptDialogCuiComponent>,
+    @Inject(CUI_DIALOG_DATA) public data: any) {
   }
 
 }
 
+*/

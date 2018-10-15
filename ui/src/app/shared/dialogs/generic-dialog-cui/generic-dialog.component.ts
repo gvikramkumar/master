@@ -1,17 +1,20 @@
+/*
 import {Component, Inject, OnInit} from '@angular/core';
+import {CUI_DIALOG_DATA, CuiDialogRef} from '@cisco-ngx/cui-components';
 import {DialogType} from '../../../core/models/ui-enums';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'fin-generic-dialog',
   templateUrl: './generic-dialog.component.html',
   styleUrls: ['./generic-dialog.component.scss']
 })
-export class GenericDialogComponent implements OnInit {
+export class GenericDialogCuiComponent implements OnInit {
 cancelText: string;
 submitText: string;
 
-  constructor(public dialogRef: MatDialogRef<GenericDialogComponent>, @Inject(MAT_DIALOG_DATA)public  data: any) {
+  constructor(
+    public dialogRef: CuiDialogRef<GenericDialogCuiComponent>,
+    @Inject(CUI_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {
@@ -36,16 +39,17 @@ submitText: string;
     }
 
     // this allows us to use html in message and data sections
-/*
+/!*
     setTimeout(() => {
       document.querySelector('.modal__body .message').innerHTML = this.data.message;
       if (this.data.data) {
         document.querySelector('.modal__body .data').innerHTML = this.data.data;
       }
     });
-*/
+*!/
 
   }
 
 }
 
+*/

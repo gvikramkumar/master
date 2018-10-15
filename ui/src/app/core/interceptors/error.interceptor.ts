@@ -67,6 +67,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             } catch (e) {
             }
           }
+
           this.uiUtil.genericDialog(err.message, data, 'Error', DialogType.ok, DialogSize.large);
           return throwError(err);
         }));
