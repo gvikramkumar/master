@@ -7,13 +7,14 @@ import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-co
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
 import {PromptDialogComponent} from '../../shared/dialogs/prompt-dialog/prompt-dialog.component';
 import {Observable} from 'rxjs';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UiUtil {
 
-  constructor(private store: AppStore, private dialogService: CuiDialogService) {
+  constructor(private store: AppStore, private dialogService: CuiDialogService, public dialog: MatDialog) {
   }
 
   /*
@@ -170,6 +171,35 @@ export class UiUtil {
 
   // instance methods (must be after static methods)
 
+  genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
+    if (this.dialog.openDialogs.length) {
+      console.log('genericDialog: dialog already open');
+      return;
+    }
+
+    const config = <MatDialogConfig> {
+      data: {message, title, mode, data},
+      width: size,
+      backdropClass: 'bg-modal-backdrop'
+    };
+    return this.dialog.open(GenericDialogComponent, config)
+      .afterClosed();
+  }
+
+  promptDialog(message: string, title = null, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
+    if (this.dialog.openDialogs.length) {
+      console.log('genericDialog: dialog already open');
+      return;
+    }
+
+    const config = <MatDialogConfig> {
+      data: {message, title, inputType, rows},
+      width: size,
+      backdropClass: 'bg-modal-backdrop'
+    };
+    return this.dialog.open(PromptDialogComponent, config)
+      .afterClosed();
+  }
 
   /*
   export declare class CuiDialogConfig<D = any> {
@@ -189,11 +219,13 @@ export class UiUtil {
   hostClass?: string;
   }
    */
+
   // can be with or without title, defaults to "OK"
   // returns true if submit button hit, undefined if not. Have to subscribe, THEN check for response,
   // no response, then canceled, if true (truthy) then they hit ok/yes. so:
   // this.uiUtil.genericDialog(message).subscribe(resp => {if (resp) { they hit ok, do your work}
-  genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
+/*
+  genericDialogCui(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
     const config = {
       width: size,
       hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
@@ -205,7 +237,7 @@ export class UiUtil {
       .afterCuiDialogClosed();
   }
 
-  promptDialog(message: string, title = null, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
+  promptDialogCui(message: string, title = null, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
     const config = {
       width: size,
       hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
@@ -216,6 +248,7 @@ export class UiUtil {
     return this.dialogService.open(PromptDialogComponent, <CuiDialogConfig>config)
       .afterCuiDialogClosed();
   }
+*/
 
   validationErrorsDialog(errors) {
     return this.genericDialog('Validation Errors', errors.join('\n'));

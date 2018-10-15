@@ -19,6 +19,9 @@ export interface ObjectDiffVal {
 }
 
 function getUpdateTable(updates: ObjectDiffVal[]): string {
+  if (!updates.length) {
+    return 'No changes';
+  }
   let result = `  <style>
                           table, td, tr {border: 1px solid black;}
                           td {padding-right: 70px;}

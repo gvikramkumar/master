@@ -43,7 +43,7 @@ export function addSsoUser() {
             'jodoe',
             'John',
             'Doe',
-            'moltman@cisco.com',
+            'dakahle@cisco.com',
             localRoles,
             modules
           );

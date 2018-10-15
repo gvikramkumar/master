@@ -1,17 +1,13 @@
-<div class="modal__content">
+<h1 mat-dialog-title>{{data.title}}</h1>
+<h4 class="fin-dialog-title">{{data.message}}</h4>
+<div mat-dialog-content>
   <form>
-    <div *ngIf="data.title" class="modal__header">
-      <h1>{{data.title}}</h1>
-    </div>
-    <div class="modal__body">
-      <h5 class="message">{{data.message}}:</h5>
-      <br>
-      <fin-input name="prompt" [textarea]="data.inputType === DialogInputType.textarea" [(ngModel)]="messageText"
-                 [rows]="data.rows"></fin-input>
-    </div>
-    <div class="modal__footer">
-      <button type="button" cuiButton color="secondary" (click)="dialogRef.close()">Cancel</button>
-      <button type="submit" cuiButton color="primary" (click)="dialogRef.close(messageText)">OK</button>
-    </div>
+    <fin-input name="prompt" [textarea]="data.inputType === DialogInputType.textarea" [(ngModel)]="messageText"
+               [rows]="data.rows"></fin-input>
   </form>
 </div>
+<div mat-dialog-actions>
+  <button type="button" cuiButton color="secondary" mat-dialog-close="">Cancel</button>
+  <button type="submit" cuiButton color="primary" [mat-dialog-close]="messageText">OK</button>
+</div>
+

@@ -1,0 +1,21 @@
+<div class="modal__content">
+  <form>
+    <div *ngIf="data.title" class="modal__header">
+      <h1>{{data.title}}</h1>
+    </div>
+    <div class="modal__body">
+      <h5 class="message">{{data.message}}:</h5>
+      <br>
+      lala
+      <input>
+<!--
+      <fin-input name="prompt" [textarea]="false" [(ngModel)]="messageText"
+                 [rows]="data.rows"></fin-input>
+-->
+    </div>
+    <div class="modal__footer">
+      <button type="button" cuiButton color="secondary" (click)="dialogRef.close()">Cancel</button>
+      <button type="submit" cuiButton color="primary" (click)="dialogRef.close(messageText)">OK</button>
+    </div>
+  </form>
+</div>
