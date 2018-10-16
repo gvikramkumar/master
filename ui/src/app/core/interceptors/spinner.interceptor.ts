@@ -11,7 +11,7 @@ export class SpinnerInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.params.get('showProgress') === 'true') {
+    if (req.params.get('showProgress') && req.params.get('showProgress').toString() === 'true') {
       this.store.showProgressBar();
     }
     const nextReq = req.clone({params: req.params.delete('showProgress')});
