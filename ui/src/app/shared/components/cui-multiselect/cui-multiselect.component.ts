@@ -80,7 +80,7 @@ export class CuiMultiselectComponent implements OnInit, OnChanges, OnDestroy, Co
     }
 
     if (changes.model && !_.isEqual(changes.model.previousValue, changes.model.currentValue)) {
-      if (this.model && !this.selectItemCalled) {
+      if (this.model.length && !this.selectItemCalled) {
         this.model = _.castArray(this.model);
         _.each(this.model, (item: any) => {
           this.selectItem(item);
@@ -114,7 +114,6 @@ export class CuiMultiselectComponent implements OnInit, OnChanges, OnDestroy, Co
    * @param selection The selected value
    */
   selectItem(selection: any) {
-    this.selectItemCalled = true;
     const originalValue = _.cloneDeep(this.model);
     _.each(_.flatten(this.items), (item: any) => {
       if (_.isEqual(item[this.optionsValue], selection)) {
@@ -132,6 +131,11 @@ export class CuiMultiselectComponent implements OnInit, OnChanges, OnDestroy, Co
     if (this.model && !_.isEqual(originalValue, this.model)) {
       this.modelChange.emit(this.model);
     }
+  }
+
+  selectItemOnClick(selection) {
+    this.selectItemCalled = true;
+    this.selectItem(selection);
   }
 
   /**
