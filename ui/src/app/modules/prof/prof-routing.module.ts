@@ -11,6 +11,7 @@ import {DfaModuleIds} from '../../../../../shared/enums';
 import {AuthorizationGuard} from '../../core/guards/authorization.guard';
 import {MeasureComponent} from '../_common/admin/measure/measure/measure.component';
 import {MeasureEditComponent} from '../_common/admin/measure/measure-edit/measure-edit.component';
+import {ApprovalComponent} from '../_common/admin/approval/approval.component';
 
 const routes: Routes = [
   {
@@ -64,6 +65,18 @@ const routes: Routes = [
               }
             ]
           },
+          {
+            path: 'approval', component: ApprovalComponent,
+            canActivate: [AuthorizationGuard],
+            data: {
+              authorization: 'profitability allocations:business admin',
+              hero: {
+                title: 'Approval',
+                desc: 'Handle Rule and Submeasure items submitted for approval'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Approval'}]
+            }
+          }
         ]
       },
       {

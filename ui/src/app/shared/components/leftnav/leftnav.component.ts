@@ -53,6 +53,7 @@ export class LeftnavComponent {
         ];
         this.alinks = [
           {route: '/prof/admin/measure', text: 'Measure', roles: 'profitability allocations:business admin'},
+          {route: '/prof/admin/approval', text: 'Approval', roles: 'profitability allocations:business admin'},
         ];
         break;
       default:
