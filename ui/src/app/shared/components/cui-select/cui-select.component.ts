@@ -115,7 +115,6 @@ export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAcc
    * @param selection The selected value
    */
   selectItem(selection: any) {
-    this.selectItemCalled = true;
     const originalValue = _.cloneDeep(this.model);
     this.model = _.reduce(_.flatten(this.items), (memo, item: any) => {
       item.selected = _.isEqual(item[this.optionsValue], selection);
@@ -133,6 +132,11 @@ export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAcc
       this.active = false;
       this.focusOnInput();
     }
+  }
+
+  selectItemOnClick(selection) {
+    this.selectItemCalled = true;
+    this.selectItem(selection);
   }
 
   /**

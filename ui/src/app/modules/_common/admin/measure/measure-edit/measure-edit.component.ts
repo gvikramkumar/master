@@ -14,6 +14,7 @@ import {ModuleLookupService} from '../../../services/module-lookup.service';
 import {shUtil} from '../../../../../../../../shared/shared-util';
 import {NgForm} from '@angular/forms';
 import {ModuleSourceService} from '../../../services/module-source.service';
+import AnyObj from '../../../../../../../../shared/models/any-obj';
 
 @Component({
   selector: 'fin-measure-create',
@@ -28,9 +29,9 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   measureNames: string[] = [];
   moduleSourceIds: number[] = [];
   moduleSources: Source[] = [];
-  hierarchies: { name: string, selected?: boolean }[] = [
-    {name: 'Product'},
-    {name: 'Sales'},
+  hierarchies: AnyObj[] = [
+    {name: 'Product', value: 'PRODUCT'},
+    {name: 'Sales', value: 'SALES'}
   ];
 
   shUtil = shUtil;
@@ -69,25 +70,15 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     this.getData()
       .then(() => {
         if (this.editMode) {
-          this.measureService.getOneById(this.route.snapshot.params.id)
+          return this.measureService.getOneById(this.route.snapshot.params.id)
             .subscribe(measure => {
               this.measure = measure;
               this.measureNames = this.measureNames.filter(name => name !== this.measure.name);
               this.orgMeasure = _.cloneDeep(this.measure);
-              this.init();
             });
         } else {
-          this.init();
         }
       });
-  }
-
-  init() {
-    this.hierarchies.forEach(h => {
-      h.selected = this.measure.hierarchies.indexOf(h.name) !== -1 ? true : false;
-      return h;
-    });
-
   }
 
   hasChanges() {
@@ -120,7 +111,6 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
           } else {
             this.measure = new Measure();
           }
-          this.init();
         }
       });
   }
@@ -146,12 +136,6 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
       }
     }
   */
-
-  cleanUp() {
-    this.measure.hierarchies = this.hierarchies
-      .filter(h => h.selected)
-      .map(h => h.name);
-  }
 
   public save() {
     UiUtil.triggerBlur('');
