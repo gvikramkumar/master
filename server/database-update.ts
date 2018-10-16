@@ -27,11 +27,14 @@ export function databaseUpdate() {
   5. walk array building promise chain of updateFunction(fileName, version) >> Q.npInvoke(cp.exec).then(updatedbVersion)
    */
 
-  const files = fs.readdirSync('database/updates').filter(file => /^update_\d{1,3}.js$/i.test(file));
-  // files = _.sortBy(files, x => Number(/^.*_(\d{1,3}).js$/i.exec(x)[1]));
+  const files = fs.readdirSync('database/updates').filter(file => /^update_\d{1,4}.js$/i.test(file));
+  // files = _.sortBy(files, x => Number(/^.*_(\d{1,4}).js$/i.exec(x)[1]));
+  // console.log(files);
+  // return Promise.reject();
+
   let updates: DatabaseUpdate[] = files.map(fileName => ({
     fileName,
-    version: Number(/^.*_(\d{1,3}).js$/i.exec(fileName)[1])
+    version: Number(/^.*_(\d{1,4}).js$/i.exec(fileName)[1])
   }));
   updates = _.sortBy(updates, 'version');
   const latestVersion = updates.length === 0 ? 0 : updates[updates.length - 1].version;
