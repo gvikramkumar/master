@@ -13,3 +13,5 @@ collections.forEach(coll => {
   // this collation makes our indexes and find() calls case insensitive, search for john and get John as well
   db.createCollection(coll, {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});
 });
+
+db.dfa_measure.updateMany({}, {$set: {sources: [Number(1), Number(2), Number(3), Number(4)]}});

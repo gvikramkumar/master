@@ -8,8 +8,8 @@ db.dfa_submeasure.insertMany([
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment",
     desc: "2 Tier Adjustment",
-    sourceId: NumberInt(1),
-    measureId: NumberInt(1),
+    sourceId: NumberInt(4),
+    measureId: NumberInt(1), // for manual upload
     startFiscalMonth: NumberInt(201810),
     endFiscalMonth: NumberInt(204012),
     processingTime: "Monthly",
@@ -48,8 +48,8 @@ db.dfa_submeasure.insertMany([
     moduleId: NumberInt(1),
     name: "2 Tier Adjustment2",
     desc: "2 Tier Adjustment2",
-    sourceId: NumberInt(2),
-    measureId: NumberInt(2),
+    sourceId: NumberInt(4),
+    measureId: NumberInt(2), // for manual upload
     startFiscalMonth: NumberInt(201810),
     endFiscalMonth: NumberInt(204012),
     processingTime: "Monthly",

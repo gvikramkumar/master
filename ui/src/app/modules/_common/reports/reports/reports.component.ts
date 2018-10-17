@@ -32,7 +32,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   fiscalMonth: number;
   measures: Measure[] = [];
   submeasures: Submeasure[] = [];
-  fiscalMonths: number[] = [];
+  fiscalMonths: {fiscalMonth: number}[] = [];
   disableDownload = true;
 
   reports: any[] = [
@@ -202,10 +202,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           break;
       }
       obs.subscribe(fiscalMonths => {
-        this.fiscalMonths = fiscalMonths.sort().reverse().slice(0, 24).map(fiscalMonth => ({fiscalMonth}) )
-          .map(fiscalMonth => {
-            return {fiscalMonth};
-          });
+        this.fiscalMonths = fiscalMonths.sort().reverse().slice(0, 24).map(fiscalMonth => ({fiscalMonth}));
       });
     } else {
       this.disableDownload = false;
