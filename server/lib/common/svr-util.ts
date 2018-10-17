@@ -19,8 +19,18 @@ export const svrUtil = {
   bufferToStream,
   checkParams,
   setSchemaAdditions,
-  sortedListNotExists
+  sortedListNotExists,
+  asciiToBase64,
+  base64toAscii
 };
+
+function asciiToBase64(ascii) {
+  return Buffer.from(ascii).toString('base64');
+}
+
+function base64toAscii(base64) {
+  return Buffer.from(base64).toString('ascii');
+}
 
 function isLocalEnv() {
   return !process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV);

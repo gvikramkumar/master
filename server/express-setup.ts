@@ -64,6 +64,9 @@ export default function () {
     credentials: true
   }
   app.use(cors(corsOptions));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(cookieParser());
 
   /*
     app.use((req, res, next) => {
@@ -88,9 +91,6 @@ export default function () {
     ].join(' ');
   }));
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({extended: true}));
-  app.use(cookieParser());
 
 
 /*
