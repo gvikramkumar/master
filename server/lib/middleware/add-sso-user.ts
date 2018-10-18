@@ -9,7 +9,6 @@ import config from '../../config/get-config';
 import {finRequest} from '../common/fin-request';
 import UserListRepo from '../../api/user-list/repo';
 import {UserList} from '../../../shared/models/user-list';
-import {FinDfaCookie} from '../../api/cookie/fin-dfa.cookie';
 
 export function addSsoUser() {
 
@@ -29,7 +28,6 @@ export function addSsoUser() {
     const userListRepo = new UserListRepo();
     const isLocalEnv = svrUtil.isLocalEnv();
     let localRoles, modules, genericUsers, updateUserList;
-    const findfa = new FinDfaCookie(req, res);
 
     Promise.all([
       lookupRepo.getValues(['localenv-roles', 'generic-users']),
@@ -57,18 +55,12 @@ export function addSsoUser() {
           headers['email'] = 'dakahle@cisco.com';
 
           const userId = headers['auth-user'];
-          return Promise.resolve()
-            .then(() => {
-              const cookie = findfa.cookie;
+          return userListRepo.getOneLatest({userId})
+            .then(userList => {
               // we'll cache the users in database and if less than one minute old, we'll get the roles from there
-              if (cookie && Date.now() - new Date(cookie.rolesUpdatedDate).getTime() > config.art.timeout) {
-                console.log(`cookie timed out ${req.url} - ${req.method}`);
-              }
-              if (cookie && Date.now() - new Date(cookie.rolesUpdatedDate).getTime() <= config.art.timeout) {
-                console.log(`using cookie ${req.url} - ${req.method}`);
-                return cookie.roles;
+              if (userList && Date.now() - userList.updatedDate.getTime() <= config.art.timeout) {
+                return userList.roles;
               } else {
-                console.log(`using art ${req.url} - ${req.method}`);
                 updateUserList = true;
                 return getArtRoles(userId);
               }
@@ -94,7 +86,6 @@ export function addSsoUser() {
           req.dfaData = {modules};
           // this is the ui's init call to get user, with each ui app load, we'll store the user's details in database
           if (updateUserList) {
-            findfa.updateCookie({roles: user.roles, rolesUpdatedDate: new Date()});
             const userList = new UserList(user.id, user.fullName, user.email, user.roles, new Date());
             return userListRepo.upsertQueryOne({userId: user.id}, userList, user.id, false, true)
               .then(() => next());

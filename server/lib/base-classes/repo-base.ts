@@ -255,10 +255,8 @@ export default class RepoBase {
     return this.getOneByQuery(filter)
       .then(doc => {
         if (!doc) {
-          console.log('add');
           return this.addOne(data, userId);
         } else {
-          console.log('update');
           return this.updateQueryOne(filter, data, userId, concurrencyCheck, cleanDuplicates);
         }
       });
@@ -285,11 +283,8 @@ export default class RepoBase {
           if (!this.hasUpdatedDate()) {
             throw new ApiError('cleanDuplicates used on repo with no updatedDate');
           }
-          console.log('ids before', docs.map(x => ({id: x.id, date: x.updatedDate})));
           const latestId = _.sortBy(docs, 'updatedDate').reverse()[0].id;
-          console.log('latestid', latestId);
-          promise = this.Model.deleteMany({_id: {$ne: latestId}})
-            .then(results => console.log('del results', results));
+          promise = this.Model.deleteMany({_id: {$ne: latestId}});
         } else {
           promise = Promise.resolve();
         }
