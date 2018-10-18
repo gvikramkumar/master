@@ -2,12 +2,11 @@ import {CookieBase} from '../../lib/base-classes/cookie-base';
 
 
 export class FinDfaCookie extends CookieBase {
-  name = 'fin-dfa';
+  roles: string[];
   rolesUpdatedDate: Date;
-  secureProps = 'rolesUpdatedDate';
 
-  create() {
-    this.rolesUpdatedDate = new Date();
+  constructor(req, res) {
+    super(req, res, 'fin-dfa', 'roles, rolesUpdatedDate');
   }
 
 }

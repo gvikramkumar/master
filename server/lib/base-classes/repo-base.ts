@@ -248,7 +248,7 @@ export default class RepoBase {
     return this.Model.findOne(filter).exec();
   }
 
-  upsertQueryOne(filter, data, userId, concurrencyCheck?) {
+  upsertQueryOne(filter, data, userId, concurrencyCheck = true) {
     if (Object.keys(filter).length === 0) {
       throw new ApiError('upsertQueryOne called with no filter', null, 400);
     }
