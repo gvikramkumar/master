@@ -38,7 +38,7 @@ export function addSsoUser() {
         genericUsers = results[0][1];
         modules = results[1]
 
-        if (false) { // isLocalEnv) {
+        if (isLocalEnv) {
           return new DfaUser(
             'jodoe',
             'John',
@@ -49,11 +49,12 @@ export function addSsoUser() {
             modules
           );
         } else {
+/*
           headers['auth-user'] = 'dakahle';
           headers['givenname'] = 'Dan';
           headers['familyname'] = 'Kahle';
           headers['email'] = 'dakahle@cisco.com';
-
+*/
           const userId = headers['auth-user'];
           return userListRepo.getOneLatest({userId})
             .then(userList => {
