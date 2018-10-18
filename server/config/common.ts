@@ -9,7 +9,7 @@ export default {
   },
   art: {
     url: ' https://wsgi-stage.cisco.com/cepm/pdpservices/authorizationmanagerservice',
-    timeout: 5000// 5 * 60000 // 5 min
+    timeout: 30000// 5 * 60000 // 5 min
   },
   mail: {
     host: 'mail.cisco.com',

@@ -61,7 +61,10 @@ export function addSsoUser() {
             .then(() => {
               const cookie = findfa.cookie;
               // we'll cache the users in database and if less than one minute old, we'll get the roles from there
-              if (cookie && Date.now() - new Date(cookie.rolesUpdatedDate).getTime() < config.art.timeout) {
+              if (cookie && Date.now() - new Date(cookie.rolesUpdatedDate).getTime() > config.art.timeout) {
+                console.log(`cookie timed out ${req.url} - ${req.method}`);
+              }
+              if (cookie && Date.now() - new Date(cookie.rolesUpdatedDate).getTime() <= config.art.timeout) {
                 console.log(`using cookie ${req.url} - ${req.method}`);
                 return cookie.roles;
               } else {
@@ -91,10 +94,9 @@ export function addSsoUser() {
           req.dfaData = {modules};
           // this is the ui's init call to get user, with each ui app load, we'll store the user's details in database
           if (updateUserList) {
-            console.log('updating userlist');
             findfa.updateCookie({roles: user.roles, rolesUpdatedDate: new Date()});
             const userList = new UserList(user.id, user.fullName, user.email, user.roles, new Date());
-            return userListRepo.upsertQueryOne({userId: user.id}, userList, user.id, false)
+            return userListRepo.upsertQueryOne({userId: user.id}, userList, user.id, false, true)
               .then(() => next());
           } else {
             next();

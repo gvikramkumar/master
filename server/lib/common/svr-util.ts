@@ -21,15 +21,15 @@ export const svrUtil = {
   setSchemaAdditions,
   sortedListNotExists,
   asciiToBase64,
-  base64toAscii
+  base64ToAscii
 };
 
 function asciiToBase64(ascii) {
   return Buffer.from(ascii).toString('base64');
 }
 
-function base64toAscii(base64) {
-  return Buffer.from(base64).toString('ascii');
+function base64ToAscii(base64) {
+  return Buffer.from(base64, 'base64').toString('ascii');
 }
 
 function isLocalEnv() {

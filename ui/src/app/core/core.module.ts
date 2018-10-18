@@ -20,7 +20,6 @@ import {FIN_DEFAULT_BREAKPOINTS} from './services/default-breakpoints';
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ModifyRequestInterceptor, multi: true},
     {provide : BREAKPOINTS, useValue: FIN_DEFAULT_BREAKPOINTS}

@@ -1,8 +1,8 @@
 import AnyObj from '../../../shared/models/any-obj';
 import {shUtil} from '../../../shared/shared-util';
 import * as _ from 'lodash';
-import {svrUtil} from '../common/svr-util';
 import {ApiError} from '../common/api-error';
+import {svrUtil} from '../common/svr-util';
 
 export class CookieBase {
   cookie: AnyObj;
@@ -10,8 +10,8 @@ export class CookieBase {
 
   constructor(protected req: AnyObj, protected res: AnyObj, protected name, protected secureProps = '') {
     try {
-      if (req.cookie && req.cookie[this.name]) {
-        const cookie = req.cookie[this.name] && JSON.parse(svrUtil.base64toAscii(req.cookie[this.name]));
+      if (req.cookies[this.name]) {
+        const cookie = req.cookies[this.name] && JSON.parse(svrUtil.base64ToAscii(req.cookies[this.name]));
         this.cookie = cookie;
       }
     } catch (err) {
@@ -26,8 +26,8 @@ export class CookieBase {
   }
 
   updateCookie(updates) {
-    this.cookie = Object.assign(this.cookie || {}, updates);
-    this.res.cookie(this.name, svrUtil.asciiToBase64(JSON.stringify(this.cookie)), this.getOptions());
+    const values = Object.assign(this.cookie || {}, updates);
+    this.setCookie(values);
   }
 
   // called from api put endpoint, cleans out any secure properties

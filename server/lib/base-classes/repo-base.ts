@@ -248,21 +248,23 @@ export default class RepoBase {
     return this.Model.findOne(filter).exec();
   }
 
-  upsertQueryOne(filter, data, userId, concurrencyCheck = true) {
+  upsertQueryOne(filter, data, userId, concurrencyCheck = true, cleanDuplicates = false) {
     if (Object.keys(filter).length === 0) {
       throw new ApiError('upsertQueryOne called with no filter', null, 400);
     }
     return this.getOneByQuery(filter)
       .then(doc => {
         if (!doc) {
+          console.log('add');
           return this.addOne(data, userId);
         } else {
-          return this.updateQueryOne(filter, data, userId, concurrencyCheck);
+          console.log('update');
+          return this.updateQueryOne(filter, data, userId, concurrencyCheck, cleanDuplicates);
         }
       });
   }
 
-  updateQueryOne(filter, data, userId, concurrencyCheck = true) {
+  updateQueryOne(filter, data, userId, concurrencyCheck = true, cleanDuplicates = false) {
     if (Object.keys(filter).length === 0) {
       throw new ApiError('updateQueryOne called with no filter', null, 400);
     }
@@ -272,17 +274,34 @@ export default class RepoBase {
     }
     return query.exec()
       .then(docs => {
-        if (docs.length > 1) {
+        if (docs.length > 1 && !cleanDuplicates) {
           throw new ApiError('updateQueryOne refers to more than one item.', null, 400);
         } else if (!docs.length) {
           throw new ApiError('updateQueryOne item not found', null, 400);
         }
-        this.addUpdatedBy(data, userId);
-        this.validate(data);
-        // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
-        // we'll just replace the doc in entirety and be done with it
-        return this.Model.replaceOne(filter, data)
-          .then(results => data);
+
+        let promise;
+        if (docs.length > 1 && cleanDuplicates) {
+          if (!this.hasUpdatedDate()) {
+            throw new ApiError('cleanDuplicates used on repo with no updatedDate');
+          }
+          console.log('ids before', docs.map(x => ({id: x.id, date: x.updatedDate})));
+          const latestId = _.sortBy(docs, 'updatedDate').reverse()[0].id;
+          console.log('latestid', latestId);
+          promise = this.Model.deleteMany({_id: {$ne: latestId}})
+            .then(results => console.log('del results', results));
+        } else {
+          promise = Promise.resolve();
+        }
+
+        return promise.then(() => {
+          this.addUpdatedBy(data, userId);
+          this.validate(data);
+          // we're not using doc.save() cause it won't update arrays or mixed types without doc.markModified(path)
+          // we'll just replace the doc in entirety and be done with it
+          return this.Model.replaceOne(filter, data)
+            .then(results => data);
+        });
       });
   }
 
@@ -471,6 +490,10 @@ export default class RepoBase {
 
   hasCreatedBy() {
     return !!this.schema.path('createdBy');
+  }
+
+  hasUpdatedDate() {
+    return !!this.schema.path('updatedDate');
   }
 
   hasFiscalMonth() {

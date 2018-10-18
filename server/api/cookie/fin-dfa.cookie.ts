@@ -6,7 +6,7 @@ export class FinDfaCookie extends CookieBase {
   rolesUpdatedDate: Date;
 
   constructor(req, res) {
-    super(req, res, 'fin-dfa', 'roles, rolesUpdatedDate');
+    super(req, res, 'fin_dfa', 'roles, rolesUpdatedDate');
   }
 
 }
