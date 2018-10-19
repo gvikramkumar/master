@@ -188,7 +188,7 @@ export class UiUtil {
     const options: MatSnackBarConfig = {
       horizontalPosition: 'center',
       verticalPosition: 'top',
-      duration: 10000000,// 5000,
+      duration: 5000,
       panelClass: 'mat-snack-bar-override'
     };
     this.matToast.open(message, action, options);

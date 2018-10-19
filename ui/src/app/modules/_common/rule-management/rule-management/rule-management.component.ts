@@ -80,6 +80,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
             .subscribe(() => {
               this.rules.splice(this.rules.indexOf(rule), 1);
               this.changeFilter();
+              this.uiUtil.toast('Rule deleted.');
             });
         }
       });
