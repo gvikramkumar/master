@@ -1,5 +1,15 @@
 
 
+.fin .mat-snack-bar-container {
+  background-color: $light-gray-3;
+  color: $dark-gray-2;
+  font-weight: 400;
+}
+
+.fin .mat-simple-snackbar-action .mat-button {
+  color: darken($cisco-blue, 5%);
+}
+
 .bg-modal-backdrop {
   background-color: rgba(0,0,0,.1);
   //background-color: transparent;

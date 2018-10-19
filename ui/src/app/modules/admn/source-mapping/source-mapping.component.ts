@@ -5,7 +5,7 @@ import {AppStore} from '../../../app/app-store';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {DfaModule} from '../../../modules/_common/models/module';
 import {SourceService} from '../../_common/services/source.service';
-import {ToastService, ToastSeverity} from '../../../core/services/toast.service';
+import {ToastSeverity} from '../../../core/services/toast.service';
 import {Source} from '../../../../../../shared/models/source';
 import * as _ from 'lodash';
 import {ModuleSource} from '../../_common/models/module_source';
@@ -28,7 +28,6 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
     private router: Router,
     private route: ActivatedRoute,
     private sourceService: SourceService,
-    private toastService: ToastService,
     private uiUtil: UiUtil,
     private moduleSourceService: ModuleSourceService
   ) {
@@ -69,8 +68,7 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
       Promise.all(promises)
         .then(() => {
           this.refresh();
-          this.toastService.showAutoHideToast('Submitted',
-            'Module-to-source mapping has been submitted successfully.', ToastSeverity.success);
+          this.uiUtil.toast('Module-to-source mapping saved.');
         })
         .catch(err => {
           const i = 5;

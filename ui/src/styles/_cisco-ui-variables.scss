@@ -1,7 +1,5 @@
 
 
-// see these here:
-// http://swtg-rtp-dev-7/styleguide/section-color.html#color
 // -----------------------------------------------------------------------------
 // Colors
 
@@ -9,6 +7,7 @@
 $cisco-blue: #00bceb !default;
 $cisco-indigo: #005073 !default;
 $cisco-green: #6ebe4a !default;
+$cisco-logo: #1BA0D7 !default;
 
 // Accent Palette
 $accent-orange: #fbab18 !default;
@@ -94,3 +93,21 @@ $base-color-disabled: $dark-gray-3 !default;
 
 $base-background-color: $light-gray-4 !default;
 $alt-background-color: $white !default;
+
+
+// -----------------------------------------------------------------------------
+// Text Colors
+
+$header-font-color: $dark-gray-2 !default;
+$base-font-color: $dark-gray-2 !default;
+$base-form-label-color: $base-font-color !default;
+$base-muted-color: $med-gray-2 !default;
+$base-disabled-color: $light-gray-2 !default;
+$base-disabled-background: $light-gray-5 !default;
+$base-accent-color: $cisco-blue !default;
+
+$base-link-color: #007493 !default;
+$base-link-color-pressed: #6f53bc !default;     // From Dave Ngo cisco.com
+$hover-link-color: #005073 !default;            // From Dave Ngo cisco.com
+$base-link-color-invert: $white !default;
+
