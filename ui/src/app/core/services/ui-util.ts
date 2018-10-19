@@ -7,14 +7,26 @@ import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-co
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
 import {PromptDialogComponent} from '../../shared/dialogs/prompt-dialog/prompt-dialog.component';
 import {Observable} from 'rxjs';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MatSnackBar,
+  MatSnackBarConfig,
+  MatSnackBarHorizontalPosition
+} from '@angular/material';
+import {ToastSeverity} from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UiUtil {
 
-  constructor(private store: AppStore, private dialogService: CuiDialogService, public dialog: MatDialog) {
+  constructor(
+    private store: AppStore,
+    private dialogService:
+      CuiDialogService,
+    public dialog: MatDialog,
+    private matToast: MatSnackBar) {
   }
 
   /*
@@ -54,7 +66,7 @@ export class UiUtil {
       elem.dispatchEvent(new Event('blur'));
     });
   }
-  
+
   static getStatusText(status) {
     switch (status) {
       case 'A':
@@ -72,7 +84,7 @@ export class UiUtil {
       throw new Error(`getStatusText: status doesn't exist: ${status}`);
     }
   }
-  
+
   static statusIsActive(val) {
     return val === 'A';
   }
@@ -171,6 +183,27 @@ export class UiUtil {
 
   // instance methods (must be after static methods)
 
+  toast(message, action = '') {
+
+    const options: MatSnackBarConfig = {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 10000000,// 5000,
+      panelClass: 'mat-snack-bar-override'
+    };
+    this.matToast.open(message, action, options);
+  }
+
+/*
+  showPermToast(title, message, severity = ToastSeverity.info) {
+    // this.permToast.addToast(severity, title, message);
+  }
+
+  showAutoHideToast(message, severity = ToastSeverity.info) {
+    // this.autoHideToast.addToast(severity, title, message);
+  }
+*/
+
   genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
     if (this.dialog.openDialogs.length) {
       console.log('genericDialog: dialog already open');
@@ -224,31 +257,31 @@ export class UiUtil {
   // returns true if submit button hit, undefined if not. Have to subscribe, THEN check for response,
   // no response, then canceled, if true (truthy) then they hit ok/yes. so:
   // this.uiUtil.genericDialog(message).subscribe(resp => {if (resp) { they hit ok, do your work}
-/*
-  genericDialogCui(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
-    const config = {
-      width: size,
-      hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
-      // Not sure why, cdk or cui? Could be material messing it up? Added an issue in cui-components
-      animated: false,
-      data: {message, title, mode, data},
-    };
-    return this.dialogService.open(GenericDialogComponent, <CuiDialogConfig>config)
-      .afterCuiDialogClosed();
-  }
+  /*
+    genericDialogCui(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
+      const config = {
+        width: size,
+        hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
+        // Not sure why, cdk or cui? Could be material messing it up? Added an issue in cui-components
+        animated: false,
+        data: {message, title, mode, data},
+      };
+      return this.dialogService.open(GenericDialogComponent, <CuiDialogConfig>config)
+        .afterCuiDialogClosed();
+    }
 
-  promptDialogCui(message: string, title = null, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
-    const config = {
-      width: size,
-      hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
-      // Not sure why, cdk or cui? Could be material messing it up? Added an issue in cui-components
-      animated: false,
-      data: {message, title, inputType, rows},
-    };
-    return this.dialogService.open(PromptDialogComponent, <CuiDialogConfig>config)
-      .afterCuiDialogClosed();
-  }
-*/
+    promptDialogCui(message: string, title = null, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
+      const config = {
+        width: size,
+        hasBackdrop: false, // we get a gray film over all if hasBackdrop=true(default).
+        // Not sure why, cdk or cui? Could be material messing it up? Added an issue in cui-components
+        animated: false,
+        data: {message, title, inputType, rows},
+      };
+      return this.dialogService.open(PromptDialogComponent, <CuiDialogConfig>config)
+        .afterCuiDialogClosed();
+    }
+  */
 
   validationErrorsDialog(errors) {
     return this.genericDialog('Validation Errors', errors.join('\n'));

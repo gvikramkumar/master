@@ -5,7 +5,7 @@ import {AppStore} from '../../../../app/app-store';
 import {RuleService} from '../../services/rule.service';
 import {SubmeasureService} from '../../services/submeasure.service';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
-import {Observable, of} from 'rxjs';
+import {of} from 'rxjs';
 import {MeasureService} from '../../services/measure.service';
 import {Measure} from '../../models/measure';
 import * as _ from 'lodash';
@@ -14,10 +14,9 @@ import {SourceService} from '../../services/source.service';
 import {Source} from '../../../../../../../shared/models/source';
 import {DialogInputType, DialogSize, DialogType} from '../../../../core/models/ui-enums';
 import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeasure/grouping-submeasure';
-import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {NgForm} from '@angular/forms';
 import {Submeasure} from '../../models/submeasure';
 import {shUtil} from '../../../../../../../shared/shared-util';
-import {ToastService} from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -227,7 +226,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     private measureService: MeasureService,
     private sourceService: SourceService,
     private uiUtil: UiUtil,
-    private toastService: ToastService
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -601,7 +599,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
       this.submeasureService.saveToDraft(this.sm, {saveMode})
         .subscribe(sm => {
-          this.toastService.showAutoHideToast('Save To Draft', 'Submeasure saved to draft.');
+          this.uiUtil.toast('Submeasure saved to draft.');
           this.sm = sm;
         });
     }
@@ -618,7 +616,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                 this.cleanUp();
                 this.submeasureService.reject(this.sm)
                   .subscribe(sm => {
-                    this.toastService.showAutoHideToast('Approval Rejected', 'Submeasure has been rejected, user notified.');
+                    this.uiUtil.toast('Submeasure has been rejected, user notified.');
                     this.router.navigateByUrl('/prof/submeasure');
                   });
               }
@@ -647,7 +645,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                       } else {
                         this.submeasureService.approve(this.sm)
                           .subscribe(() => {
-                            this.toastService.showAutoHideToast('Approval Approved', 'Submeasure approved, user notified.');
+                            this.uiUtil.toast('Submeasure approved, user notified.');
                             this.router.navigateByUrl('/prof/submeasure');
                           });
                       }
@@ -676,7 +674,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                   const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
                   this.submeasureService.submitForApproval(this.sm, {saveMode})
                     .subscribe(() => {
-                      this.toastService.showAutoHideToast('Approval Submitted', 'Submeasure submitted for approval.');
+                      this.uiUtil.toast('Submeasure submitted for approval.');
                       this.router.navigateByUrl('/prof/submeasure');
                     });
                 }

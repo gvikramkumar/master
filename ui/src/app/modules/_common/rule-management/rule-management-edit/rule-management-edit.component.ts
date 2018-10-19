@@ -9,11 +9,9 @@ import {AppStore} from '../../../../app/app-store';
 import * as _ from 'lodash';
 import {DialogInputType, DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
-import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors} from '@angular/forms';
 import {ValidationInputOptions} from '../../../../shared/components/validation-input/validation-input.component';
 import {map} from 'rxjs/operators';
-import {notInListValidator} from '../../../../shared/validators/not-in-list.validator';
-import {ToastService} from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -68,7 +66,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private pgLookupService: PgLookupService,
     private store: AppStore,
     public uiUtil: UiUtil,
-    private toastService: ToastService,
     private changeDetectorRef: ChangeDetectorRef
   ) {
     super(store, route);
@@ -231,7 +228,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
       this.ruleService.saveToDraft(this.rule, {saveMode})
         .subscribe(rule => {
-          this.toastService.showAutoHideToast('Save To Draft', 'Rule saved to draft.');
+          this.uiUtil.toast('Rule saved to draft.');
           this.rule = rule;
         });
     }
@@ -248,7 +245,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 this.cleanUp();
                 this.ruleService.reject(this.rule)
                   .subscribe(rule => {
-                    this.toastService.showAutoHideToast('Approval Rejected', 'Rule has been rejected, user notified.');
+                    this.uiUtil.toast('Rule has been rejected, user notified.');
                     this.router.navigateByUrl('/prof/rule-management');
                   });
               }
@@ -272,7 +269,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                       this.cleanUp();
                       this.ruleService.approve(this.rule)
                         .subscribe(() => {
-                          this.toastService.showAutoHideToast('Approval Approved', 'Rule approved, user notified.');
+                          this.uiUtil.toast('Rule approved, user notified.');
                           this.router.navigateByUrl('/prof/rule-management');
                         });
                     }
@@ -295,7 +292,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
                 this.ruleService.submitForApproval(this.rule, {saveMode})
                   .subscribe(() => {
-                  this.toastService.showAutoHideToast('Approval Submitted', 'Rule submitted for approval.');
+                  this.uiUtil.toast('Rule submitted for approval.');
                   this.router.navigateByUrl('/prof/rule-management');
                 });
               }

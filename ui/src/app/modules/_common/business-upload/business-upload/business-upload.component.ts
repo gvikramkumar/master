@@ -6,9 +6,9 @@ import {FsFile} from '../../models/fsfile';
 import {FsFileService} from '../../../../core/services/fsfile.service';
 import * as _ from 'lodash';
 import {environment} from '../../../../../environments/environment';
-import {ToastService} from '../../../../core/services/toast.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BusinessUploadFileType, Directory} from '../../../../../../../shared/enums';
+import {UiUtil} from '../../../../core/services/ui-util';
 
 const apiUrl = environment.apiUrl;
 
@@ -41,7 +41,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     public store: AppStore,
     private route: ActivatedRoute,
     private fsFileService: FsFileService,
-    private toastService: ToastService) {
+    private uiUtil: UiUtil) {
     super(store, route);
   }
 
@@ -70,13 +70,15 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
         let title;
         let message;
         if (result.status === 'success') {
-          title = `${result.uploadName} - success`;
+          // title = `${result.uploadName} - success`; // for cui toasts
+          title = 'Success';
           message = `${result.rowCount} rows have been processed.`;
         } else if (result.status === 'failure') {
-          title = `${result.uploadName} - failure`;
+          // title = `${result.uploadName} - failure`;
+          title = 'Failure';
           message = 'Errors have been emailed to your email account.';
         }
-        this.toastService.showPermToast(title, message);
+        this.uiUtil.toast(message, title);
       })
   }
 

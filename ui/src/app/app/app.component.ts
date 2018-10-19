@@ -4,8 +4,8 @@ import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
 import {Title} from '@angular/platform-browser';
 import {AppStore} from './app-store';
-import {ToastService} from '../core/services/toast.service';
 import * as _ from 'lodash';
+import {UiUtil} from '../core/services/ui-util';
 
 @Component({
   selector: 'fin-root',
@@ -22,11 +22,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private titleService: Title,
     public store: AppStore,
-    private toastService: ToastService
+    private uiUtil: UiUtil
   ) {
   }
 
   public ngOnInit() {
+    this.uiUtil.toast('45 rows have been processed', 'success');
     this.titleService.setTitle('FIN-DFA');
     this.store.routeDataSub(data => {
       this.store.headerOptions = _.clone(this.store.headerOptions);
@@ -35,8 +36,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
+/* cui toast
     this.toastService.permToast = this.permToast;
     this.toastService.autoHideToast = this.autoHideToast;
+*/
   }
 
 }

@@ -1,14 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RuleService} from '../../_common/services/rule.service';
-import {SourceService} from '../../_common/services/source.service';
 import {UiUtil} from '../../../core/services/ui-util';
-import {ToastService, ToastSeverity} from '../../../core/services/toast.service';
+import {ToastSeverity} from '../../../core/services/toast.service';
 import {DfaModule} from '../../_common/models/module';
-import {Source} from '../../../../../../shared/models/source';
-import {ModuleLookupService} from '../../_common/services/module-lookup.service';
 import {shUtil} from '../../../../../../shared/shared-util';
 import {OpenPeriodService} from '../../_common/services/open-period.service';
 import {FiscalMonth} from '../../_common/models/fiscalMonth';
@@ -35,7 +31,6 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
     private route: ActivatedRoute,
     private openPeriodService: OpenPeriodService,
     private pgLookupService: PgLookupService,
-    private toastService: ToastService,
     private uiUtil: UiUtil
   ) {
     super(store, route);
@@ -78,8 +73,7 @@ export class OpenPeriodComponent  extends RoutingComponentBase {
       Promise.all(promiseArr)
         .then(results => {
           this.refresh();
-          this.toastService.showAutoHideToast('Submitted',
-            'Module open periods have been submitted successfully.', ToastSeverity.success);
+          this.uiUtil.toast('Module open periods saved.');
         });
     }
   }
