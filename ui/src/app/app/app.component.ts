@@ -27,7 +27,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit() {
-    this.uiUtil.toast('45 rows have been processed', 'success');
     this.titleService.setTitle('FIN-DFA');
     this.store.routeDataSub(data => {
       this.store.headerOptions = _.clone(this.store.headerOptions);
