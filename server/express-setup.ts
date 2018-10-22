@@ -53,17 +53,14 @@ export default function () {
 
   app.use(express.static(path.resolve(__dirname, '../../ui/dist')));
 
-  app.get(['/', '/admn/*', '/prof/*', '/prdt/*', '/bkgm/*', '/svct/*', '/tsct/*', '/ascg/*',
-    '/cisc/*', '/opex/*', '/defr/*', '/gubr/*', '/bkir/*', '/rrev/*'], (req, res) => {
-    console.log('>>>>>> served index.html');
-    res.sendFile(path.resolve(__dirname, '../../ui/dist/index.html'));
-  });
-
   const corsOptions = {
     origin: config.corsOrigin,
     credentials: true
   }
   app.use(cors(corsOptions));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(cookieParser());
 
   /*
     app.use((req, res, next) => {
@@ -75,6 +72,13 @@ export default function () {
   app.use(addSsoUser())
   app.use(addGlobalData());
   // app.use(siteRestriction());
+
+  // need this below security so we can show friendly message on page (instead of an error dialog)
+  app.get(['/', '/admn/*', '/prof/*', '/prdt/*', '/bkgm/*', '/svct/*', '/tsct/*', '/ascg/*',
+    '/cisc/*', '/opex/*', '/defr/*', '/gubr/*', '/bkir/*', '/rrev/*'], (req, res) => {
+    // console.log('>>>>>> served index.html');
+    res.sendFile(path.resolve(__dirname, '../../ui/dist/index.html'));
+  });
 
   app.use(morgan(function (tokens, req, res) {
     return [
@@ -88,9 +92,6 @@ export default function () {
     ].join(' ');
   }));
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({extended: true}));
-  app.use(cookieParser());
 
 
 /*
@@ -133,7 +134,6 @@ export default function () {
   app.use('/api/prof/report', reportRouter);
   app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
   app.use('/api/prof/upload', profUploadRouter);
-
 
   app.use(notFound());
   app.use(errorHandler({showStack: config.showStack}));

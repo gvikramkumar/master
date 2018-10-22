@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {AppStore} from '../../../app/app-store';
-import {ActivatedRoute, Router} from '@angular/router';
-import {SourceService} from '../../_common/services/source.service';
-import {ToastService} from '../../../core/services/toast.service';
+import {ActivatedRoute} from '@angular/router';
 import {UiUtil} from '../../../core/services/ui-util';
-import {ModuleSourceService} from '../../_common/services/module-source.service';
 import {DatabaseService} from '../../_common/services/database.service';
 import {DialogType} from '../../../core/models/ui-enums';
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {AppStore} from '../../app/app-store';
 import {CuiToastComponent} from '@cisco-ngx/cui-components';
+import {MatDialog, MatSnackBar} from '@angular/material';
 
 export enum ToastSeverity {
   info = 'info',
@@ -23,15 +24,28 @@ export class ToastService {
   autoHideToast: CuiToastComponent;
 
 
-  constructor(private store: AppStore) {
+  constructor(private store: AppStore, toast: MatSnackBar) {
   }
 
+/*
   showPermToast(title, message, severity = ToastSeverity.info) {
     this.permToast.addToast(severity, title, message);
   }
 
   showAutoHideToast(title, message, severity = ToastSeverity.info) {
     this.autoHideToast.addToast(severity, title, message);
-  }
+*/
+
+
+
+    /* cui toast
+      showPermToast(title, message, severity = ToastSeverity.info) {
+        this.permToast.addToast(severity, title, message);
+      }
+
+      showAutoHideToast(title, message, severity = ToastSeverity.info) {
+        this.autoHideToast.addToast(severity, title, message);
+      }
+    */
 
 }

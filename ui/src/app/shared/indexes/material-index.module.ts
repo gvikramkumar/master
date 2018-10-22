@@ -9,7 +9,7 @@ import {
   MatMenuModule, MatPaginatorModule,
   MatProgressBarModule,
   MatRadioModule,
-  MatSelectModule, MatSortModule, MatTable, MatTableModule,
+  MatSelectModule, MatSnackBarModule, MatSortModule, MatTable, MatTableModule,
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
@@ -17,44 +17,27 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
-    MatButtonModule,
     MatProgressBarModule,
     MatDialogModule,
     MatInputModule,
-    MatExpansionModule,
-    MatToolbarModule,
-    MatDialogModule,
-    MatRadioModule,
     MatAutocompleteModule,
-    MatCheckboxModule,
-    MatMenuModule,
     MatTooltipModule,
-    MatMenuModule,
-    MatSelectModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatSnackBarModule,
   ],
   exports: [
-    MatButtonModule,
     MatProgressBarModule,
     MatDialogModule,
     MatInputModule,
-    MatExpansionModule,
-    MatToolbarModule,
-    MatDialogModule,
-    MatRadioModule,
     MatAutocompleteModule,
-    MatCheckboxModule,
-    MatMenuModule,
     MatTooltipModule,
-    MatMenuModule,
-    MatSelectModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
-  ],
-  providers: []
+    MatSortModule,
+    MatSnackBarModule,
+  ]
 })
 export class MaterialIndexModule {
 }

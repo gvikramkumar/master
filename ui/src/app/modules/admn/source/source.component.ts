@@ -140,7 +140,10 @@ export class SourceComponent extends RoutingComponentBase implements OnInit {
       } else {
         obs = this.sourceService.add(this.source);
       }
-      obs.subscribe(() => this.refresh());
+      obs.subscribe(() => {
+        this.refresh();
+        this.uiUtil.toast('Source saved.');
+      });
     } else {
       this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
     }

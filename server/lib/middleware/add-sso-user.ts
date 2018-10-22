@@ -27,7 +27,7 @@ export function addSsoUser() {
     const moduleRepo = new ModuleRepo();
     const userListRepo = new UserListRepo();
     const isLocalEnv = svrUtil.isLocalEnv();
-    let localRoles, modules, genericUsers, updateUserList = false;
+    let localRoles, modules, genericUsers, updateUserList;
 
     Promise.all([
       lookupRepo.getValues(['localenv-roles', 'generic-users']),
@@ -49,11 +49,17 @@ export function addSsoUser() {
             modules
           );
         } else {
+/*
+          headers['auth-user'] = 'dakahle';
+          headers['givenname'] = 'Dan';
+          headers['familyname'] = 'Kahle';
+          headers['email'] = 'dakahle@cisco.com';
+*/
           const userId = headers['auth-user'];
-          return userListRepo.getOneByQuery({userId})
+          return userListRepo.getOneLatest({userId})
             .then(userList => {
               // we'll cache the users in database and if less than one minute old, we'll get the roles from there
-              if (userList && Date.now() - userList.updatedDate.getTime() < 60000) {
+              if (userList && Date.now() - userList.updatedDate.getTime() <= config.art.timeout) {
                 return userList.roles;
               } else {
                 updateUserList = true;
@@ -80,9 +86,9 @@ export function addSsoUser() {
           req.user = user;
           req.dfaData = {modules};
           // this is the ui's init call to get user, with each ui app load, we'll store the user's details in database
-          if (req.url === '/api/user/call-method/getUser' && updateUserList) {
+          if (updateUserList) {
             const userList = new UserList(user.id, user.fullName, user.email, user.roles, new Date());
-            return userListRepo.upsertQueryOne({userId: user.id}, userList, user.id, false)
+            return userListRepo.upsertQueryOne({userId: user.id}, userList, user.id, false, true)
               .then(() => next());
           } else {
             next();
@@ -101,7 +107,7 @@ function getArtRoles(userId) {
     throw new ApiError('No ART_USER or ART_PASSWORD');
   }
   const options = {
-    url: config.artUrl,
+    url: config.art.url,
     method: 'post',
     auth: {
       user: artUser,

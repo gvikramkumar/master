@@ -1,15 +1,29 @@
 import * as _ from 'lodash';
 import AnyObj from '../shared/models/any-obj';
 import {shUtil} from '../shared/shared-util';
+import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
 
+const base = svrUtil.asciiToBase64('lala');
+console.log(base);
+const asc = svrUtil.base64ToAscii(base);
+console.log(asc);
+
+
+
+
+
+
+
+/*
 const start = new Date();
 setTimeout(() => {
   console.log(Date.now() - start.getTime() < 1000);
 }, 1200);
 
+*/
 
 
 /*
