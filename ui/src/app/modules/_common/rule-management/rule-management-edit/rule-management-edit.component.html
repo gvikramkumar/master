@@ -41,9 +41,17 @@
                     empty="true" optionsKey="match" optionsValue="match"></cui-select>
       </div>
 
-      <div class="col-lg-6">
+      <div class="col-lg-6 conditional-div">
         <div class="right text-center half-margin-bottom">Selection Criteria</div>
         <div class="row">
+          <div class="col-1">
+            <div class="form-group-text">SL1:</div>
+            <div class="form-group-text">PF:</div>
+            <div class="form-group-text" [fxShow]="!!rule.productMatch">BU:</div>
+            <div class="form-group-text" [fxShow]="!!rule.productMatch">TG:</div>
+            <div class="form-group-text">SCMS:</div>
+            <div class="form-group-text">BE:</div>
+          </div>
           <div class="col-4">
             <cui-select name="salesCond" class="replace-label-space" [(model)]="rule.salesCritCond" [items]="conditionalOperators"
                         empty="true" [disabled]="!rule.salesMatch" [required]="sl1CondRequired" optionsKey="operator" optionsValue="operator"></cui-select>
@@ -58,23 +66,23 @@
             <cui-select name="beCond" class="replace-label-space" [(model)]="rule.beCritCond" [items]="conditionalOperators"
                         empty="true" [disabled]="!rule.beMatch" [required]="beCondRequired" optionsKey="operator" optionsValue="operator"></cui-select>
           </div>
-          <div class="col-8">
+          <div class="col-7">
             <cui-multiselect name="salesChoice" [(model)]="rule.salesCritChoices" [items]="salesChoices" [disabled]="!rule.salesMatch"
-                        optionsKey="name" optionsValue="name" label="SL1"empty="true"></cui-multiselect>
-            <fin-input name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}" label="PF"
-                       [disabled]="!rule.productMatch" placeholder="comma separated values"
+                             class="replace-label-space" optionsKey="name" optionsValue="name" empty="true"></cui-multiselect>
+            <fin-input name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                       class="replace-label-space" [disabled]="!rule.productMatch" placeholder="comma separated values"
                        [stringToArray]="true" [options]="prodPFChoiceOptions"></fin-input>
-            <fin-input name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" label="BU" [ngModelOptions]="{updateOn: 'blur'}"
-                       [fxShow]="!!rule.productMatch" placeholder="comma separated values"
+            <fin-input name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                       class="replace-label-space" [fxShow]="!!rule.productMatch" placeholder="comma separated values"
                        [stringToArray]="true" [options]="prodBUChoiceOptions"></fin-input>
             <cui-multiselect name="prodTGChoice" [(model)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
-                        [fxShow]="!!rule.productMatch"optionsValue="name" dropdownMaxHeight="300" label="TG"
+                             class="replace-label-space" [fxShow]="!!rule.productMatch"optionsValue="name" dropdownMaxHeight="300"
                         empty="true"></cui-multiselect>
             <cui-multiselect name="scmsChoice" [(model)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name"
-                        [disabled]="!rule.scmsMatch"optionsValue="name" label="SCMS" empty="true"></cui-multiselect>
+                             class="replace-label-space" [disabled]="!rule.scmsMatch"optionsValue="name" empty="true"></cui-multiselect>
             <cui-multiselect name="beChoice" [(model)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
-                        [disabled]="!rule.beMatch"optionsValue="name" dropdownMaxHeight="300" label="BE"
-                        empty="true"></cui-multiselect>
+                        [disabled]="!rule.beMatch"optionsValue="name" dropdownMaxHeight="300"
+                             class="replace-label-space" empty="true"></cui-multiselect>
           </div>
         </div>
       </div>

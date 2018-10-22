@@ -45,7 +45,7 @@ export default class DatabaseController {
         openPeriods = results[0];
         openPeriods.forEach(op => {
           if (op.fiscalMonth !== curFiscalMonth) {
-            throw new ApiError('Some modules not set to current fiscal month', null, 400);
+            throw new ApiError('open-period sync: some modules not set to current fiscal month', null, 400);
           }
         });
       })
@@ -54,7 +54,7 @@ export default class DatabaseController {
           // common
           this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', req.user.id, log, elog),
           this.measureCtrl.mongoToPgSync('dfa_measure', req.user.id, log, elog, {moduleId: -1}),
-          this.moduleCtrl.mongoToPgSync('dfa_module', req.user.id, log, elog),
+          this.moduleCtrl.mongoToPgSync('dfa_module', req.user.id, log, elog, {abbrev: {$ne: 'admn'}}),
           this.openPeriodCtrl.mongoToPgSync('dfa_open_period', req.user.id, log, elog),
           this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog, {moduleId: -1, status: {$in: ['A', 'I']}}),
           // prof
