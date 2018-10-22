@@ -273,7 +273,13 @@ export default class ControllerBase {
           elog.push(`mongoToPgSync: ${this.repo.modelName} isModuleRepo but doesn't have mgGetFilter.moduleId set to -1.`);
       }
       return this.repo.getMany(mgGetFilter)
-        .then(docs => docs.map(doc => doc.toObject()))
+        .then(docs => {
+          if (docs.length && docs[0].toObject) {
+            return docs.map(doc => doc.toObject());
+          } else {
+            return docs;
+          }
+        })
         .then(objs => {
           if (tableName === 'dfa_sub_measure' && objs.length < 100) {
             // this is a safety if we forget to pgToMongoSync before mongoToPgSync, if we do, we could wipe
