@@ -1,4 +1,4 @@
-moduleId,displayOrder,abbrev,name, roles, desc
+moduleId,displayOrder,abbrev,name, desc
 99,99,admn,Administration,
 1,1,prof,Profitability Allocations,"This capability performs allocations at the multiple dimensions/hierarchies such as Sales Theater Level and Product Family Level used for Company's Profit/Loss (P/L) reporting to drive profitable growth."
 2,2,bkgm,Bookings Misc Allocation,"This business capability automates the manual process of Customer Solutions Finance (CSF) team re-classifying Miscellaneous TG amounts to valid Product Technology Groups based on pre-defined business rules on WD-2 & WD-1"
