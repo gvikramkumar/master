@@ -97,7 +97,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     this.verifyLosingChanges()
       .subscribe(resp => {
         if (resp) {
-          this.router.navigateByUrl('/prof/measure');
+          this.router.navigateByUrl('/prof/admin/measure');
         }
       });
   }
