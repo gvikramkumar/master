@@ -115,7 +115,7 @@ export default class DatabaseController {
           })
           .catch(err => {
             const data = {success: log, errors: elog};
-            next(Object.assign(err, data));
+            next(new ApiError(err.message, {error: err, syncResults: data}));
             return;
             // this is how we'd not stop for errors (below) along with try/catch in controllerBase.mongoToPgSync()
             // but if we do this, we don't get stack trace from error. Need that stack trace to find the issue

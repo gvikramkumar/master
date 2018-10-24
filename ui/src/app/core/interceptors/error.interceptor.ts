@@ -59,16 +59,11 @@ export class ErrorInterceptor implements HttpInterceptor {
                   }
           */
 
-          let data;
           if (err.data) {
-            try {
-              delete err.data.stack;
-              data = JSON.stringify(err.data, null, 2);
-            } catch (e) {
-            }
+            delete err.data.stack;
           }
 
-          this.uiUtil.genericDialog(err.message, data, 'Error', DialogType.ok, DialogSize.large);
+          this.uiUtil.genericDialog(err.message, err && err.data, 'Error', DialogType.ok, DialogSize.large);
           return throwError(err);
         }));
   }
