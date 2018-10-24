@@ -6,15 +6,36 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {take, first} from 'rxjs/operators';
 
 
+class SyncMap {
+  // common
+  dfa_data_sources = false;
+  dfa_measure = false;
+  dfa_module = false;
+  dfa_open_period = false;
+  dfa_sub_measure = false;
+  // module based
+  dfa_prof_dept_acct_map_upld = false;
+  dfa_prof_input_amnt_upld = false;
+  dfa_prof_manual_map_upld = false;
+  dfa_prof_swalloc_manualmix_upld = false;
+  dfa_prof_sales_split_pctmap_upld = false;
+}
+
+Object.keys(new SyncMap()).forEach(key => console.log(key));
+
+
+
+
+
+
+
+
+/*
 const base = svrUtil.asciiToBase64('lala');
 console.log(base);
 const asc = svrUtil.base64ToAscii(base);
 console.log(asc);
-
-
-
-
-
+*/
 
 
 /*

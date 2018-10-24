@@ -18,6 +18,10 @@ export default class RepoBase {
     this.Model = mg.model(modelName, schema);
   }
 
+  getCount(filter = {}) {
+    return this.Model.count(filter);
+  }
+
   // get all that match filter, if yearmo/upperOnly exists, sets date constraints
   getMany(_filter: AnyObj = {}) {
     let filter = _.clone(_filter);
