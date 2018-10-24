@@ -21,7 +21,7 @@ class SyncMap {
   dfa_prof_sales_split_pctmap_upld = false;
 }
 
-Object.keys(new SyncMap()).forEach(key => console.log(key));
+console.log(JSON.stringify(new SyncMap(), null, 2));
 
 
 
