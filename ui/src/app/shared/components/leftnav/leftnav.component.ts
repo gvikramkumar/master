@@ -41,7 +41,14 @@ export class LeftnavComponent {
           {route: '/admn/source', text: 'Source', roles: 'it administrator'},
           {route: '/admn/source-mapping', text: 'Source Mapping', roles: 'it administrator'},
         ];
-        this.alinks = [];
+        if (this.store.user.isGenericUser()) {
+          this.alinks = [
+            {route: '/admn/database-sync', text: 'Database Sync', roles: 'it administrator'}
+          ];
+
+        } else {
+          this.alinks = [];
+        }
         break;
 
       case 'prof':
