@@ -1,6 +1,21 @@
 
-
 .fin-container {
+
+  .error-text {
+    margin: 10px 0;
+  }
+
+  .checkboxes {
+    margin-top: 20px;
+  }
+
+  .separator {
+    width: 90%;
+    height: 1px;
+    border-top: 1px solid #888;
+    box-sizing: border-box;
+    margin: 30px 0 40px 0;
+  }
 
   .results {
     text-align: left;
