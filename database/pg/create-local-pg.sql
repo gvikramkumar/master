@@ -7,12 +7,11 @@ DROP TABLE fpadfa.dfa_open_period;
 DROP TABLE fpadfa.dfa_prof_dept_acct_map_upld;
 DROP TABLE fpadfa.dfa_prof_input_amnt_upld;
 DROP TABLE fpadfa.dfa_prof_manual_map_upld;
-DROP TABLE fpadfa.dfa_prof_sales_split_pctmap_upld
-DROP TABLE fpadfa.dfa_prof_swalloc_manualmix_upld
+DROP TABLE fpadfa.dfa_prof_sales_split_pctmap_upld;
+DROP TABLE fpadfa.dfa_prof_swalloc_manualmix_upld;
 DROP TABLE fpadfa.dfa_sub_measure;
 DROP TABLE fpadfa.dfa_submeasure_input_lvl;
 */
-
 
 CREATE TABLE fpadfa.dfa_data_sources (
 	source_system_id numeric(22) NULL,
@@ -37,7 +36,8 @@ CREATE TABLE fpadfa.dfa_measure (
 	create_owner varchar(30) NULL,
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
-	update_datetimestamp timestamp NULL
+	update_datetimestamp timestamp NULL,
+	CONSTRAINT dfa_measure_pkey PRIMARY KEY (measure_id)
 );
 
 CREATE TABLE fpadfa.dfa_module (
@@ -69,7 +69,12 @@ CREATE TABLE fpadfa.dfa_prof_dept_acct_map_upld (
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
 	update_datetimestamp timestamp NULL
-);
+)
+WITH (
+	OIDS=FALSE
+) ;
+CREATE INDEX ndx_dfa_deptact_sub_msr_key ON fpadfa.dfa_prof_dept_acct_map_upld USING btree (sub_measure_key) ;
+CREATE INDEX ndx_dfa_gl_account ON fpadfa.dfa_prof_dept_acct_map_upld USING btree (gl_account) ;
 
 CREATE TABLE fpadfa.dfa_prof_input_amnt_upld (
 	fiscal_month_id numeric(22) NOT NULL,
@@ -101,7 +106,12 @@ CREATE TABLE fpadfa.dfa_prof_input_amnt_upld (
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
 	update_datetimestamp timestamp NULL
-);
+)
+WITH (
+	OIDS=FALSE
+) ;
+CREATE INDEX ndx_dollupld_fiscal_month_id ON fpadfa.dfa_prof_input_amnt_upld USING btree (fiscal_month_id) ;
+CREATE INDEX ndx_dollupld_sub_measure_key ON fpadfa.dfa_prof_input_amnt_upld USING btree (sub_measure_key) ;
 
 CREATE TABLE fpadfa.dfa_prof_manual_map_upld (
 	fiscal_month_id numeric(22) NOT NULL,
@@ -131,7 +141,12 @@ CREATE TABLE fpadfa.dfa_prof_manual_map_upld (
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
 	update_datetimestamp timestamp NULL
-);
+)
+WITH (
+	OIDS=FALSE
+) ;
+CREATE INDEX ndx_mmap_fiscal_month_id ON fpadfa.dfa_prof_manual_map_upld USING btree (fiscal_month_id) ;
+CREATE INDEX ndx_mmap_sub_measure_key ON fpadfa.dfa_prof_manual_map_upld USING btree (sub_measure_key) ;
 
 CREATE TABLE fpadfa.dfa_prof_sales_split_pctmap_upld (
 	fiscal_month_id numeric(22) NOT NULL,
@@ -144,7 +159,12 @@ CREATE TABLE fpadfa.dfa_prof_sales_split_pctmap_upld (
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
 	update_datetimestamp timestamp NULL
+)
+WITH (
+	OIDS=FALSE
 ) ;
+CREATE INDEX ndx_fisc_mthid_pctmap ON fpadfa.dfa_prof_sales_split_pctmap_upld USING btree (fiscal_month_id) ;
+CREATE INDEX ndx_sls_pctmap ON fpadfa.dfa_prof_sales_split_pctmap_upld USING btree (sales_territory_code) ;
 
 CREATE TABLE fpadfa.dfa_prof_swalloc_manualmix_upld (
 	fiscal_month_id numeric(22) NOT NULL,
@@ -155,22 +175,27 @@ CREATE TABLE fpadfa.dfa_prof_swalloc_manualmix_upld (
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
 	update_datetimestamp timestamp NULL
+)
+WITH (
+	OIDS=FALSE
 ) ;
+CREATE INDEX ndx_swalc_fiscal_mthid ON fpadfa.dfa_prof_swalloc_manualmix_upld USING btree (fiscal_month_id) ;
+CREATE INDEX ndx_swalc_submsr_key ON fpadfa.dfa_prof_swalloc_manualmix_upld USING btree (sub_measure_key) ;
 
 
 CREATE TABLE fpadfa.dfa_sub_measure (
 	module_id numeric(10) NOT NULL,
-	sub_measure_key float8 NOT NULL,
-	sub_measure_id float8 NOT NULL,
+	sub_measure_key numeric(22) NOT NULL,
+	sub_measure_id numeric(22) NOT NULL,
 	sub_measure_name varchar(70) NOT NULL,
 	sub_measure_description varchar(250) NULL,
 	category_type varchar(20) NULL,
-	grouped_by_smeasure_key float8 NULL,
-	measure_id float8 NOT NULL,
-	source_system_id float8 NOT NULL,
-	source_system_adj_type_id float8 NULL,
-	start_fiscal_period_id float8 NULL,
-	end_fiscal_period_id float8 NULL,
+	grouped_by_smeasure_key numeric(22) NULL,
+	measure_id numeric(22) NOT NULL,
+	source_system_id numeric(22) NOT NULL,
+	source_system_adj_type_id numeric(22) NULL,
+	start_fiscal_period_id numeric(10) NULL,
+	end_fiscal_period_id numeric(10) NULL,
 	processing_frequency varchar(15) NULL,
 	pnlnode_grouping varchar(60) NULL,
 	dollar_upld_flag bpchar(1) NULL,
@@ -183,34 +208,42 @@ CREATE TABLE fpadfa.dfa_sub_measure (
 	transition_flag bpchar(1) NULL DEFAULT 'N'::bpchar,
 	corporate_revenue_flag bpchar(1) NULL DEFAULT 'Y'::bpchar,
 	dual_gaap_flag bpchar(1) NULL DEFAULT 'N'::bpchar,
-	twotier_flag bpchar(1) NULL,
+	twotier_flag bpchar(1) NULL DEFAULT 'N'::bpchar,
+	service_flag bpchar(1) NULL,
 	gross_mgn_rollup1 varchar(50) NULL,
 	gross_mgn_rollup2 varchar(50) NULL,
 	gross_mgn_rollup3 varchar(70) NULL,
-	gl_acct_number numeric(10) NULL,
-	create_owner varchar(30) NULL,
-	create_datetimestamp timestamp NULL,
-	update_owner varchar(30) NULL,
-	update_datetimestamp timestamp NULL,
+	gl_acct_number varchar(5) NULL,
 	rule1 varchar(100) NULL,
 	rule2 varchar(100) NULL,
 	rule3 varchar(100) NULL,
 	rule4 varchar(100) NULL,
 	rule5 varchar(100) NULL,
-	service_flag bpchar(1) NULL,
+	create_owner varchar(30) NULL,
+	create_datetimestamp timestamp NULL,
+	update_owner varchar(30) NULL,
+	update_datetimestamp timestamp NULL,
 	CONSTRAINT dfa_sub_measure_pkey PRIMARY KEY (sub_measure_key)
-);
+)
+WITH (
+	OIDS=FALSE
+) ;
+CREATE INDEX ndx_dfa_grpby_msr_key ON fpadfa.dfa_sub_measure USING btree (grouped_by_smeasure_key) ;
+CREATE INDEX ndx_dfa_sub_measure_id ON fpadfa.dfa_sub_measure USING btree (sub_measure_id) ;
 
 CREATE TABLE fpadfa.dfa_submeasure_input_lvl (
-	module_id float8 NULL,
-	sub_measure_key float8 NOT NULL,
-	hierarchy_id float8 NOT NULL,
+	module_id numeric(10) NULL,
+	sub_measure_key numeric(22) NOT NULL,
+	hierarchy_id numeric(10) NOT NULL,
 	input_level_flag varchar(3) NOT NULL,
-	level_id float8 NULL,
+	level_id numeric(10) NULL,
 	level_name varchar(30) NULL,
 	create_owner varchar(30) NULL,
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
 	update_datetimestamp timestamp NULL,
 	CONSTRAINT dfa_submeasure_input_lvl_pkey PRIMARY KEY (sub_measure_key, hierarchy_id, input_level_flag)
-);
+)
+WITH (
+	OIDS=FALSE
+) ;

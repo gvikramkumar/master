@@ -23,7 +23,7 @@
 
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+        <mat-cell *matCellDef="let row"> <a href="" [routerLink]="['edit', row.id, {mode: 'view'}]">{{row.name}}</a> </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="sourceId">
@@ -53,15 +53,13 @@
 
       <ng-container matColumnDef="updatedDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{moment(row.updatedDate).fromNow()}}</mat-cell>
+        <mat-cell *matCellDef="let row"> {{moment(row.updatedDate).format('MM/DD/YYYY hh:mm A')}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="icons">
-        <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <div class="fin-table-icon-list">
-            <i class="icon-view-preview-telepresence icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'view'}]"
-               matTooltip="view" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
+        <mat-header-cell *matHeaderCellDef style="flex: 0 0 auto; width:70px;"></mat-header-cell>
+        <mat-cell *matCellDef="let row" style="flex: 0 0 auto;">
+          <div style="width:70px;whitespace: nowrap;">
             <i finAuth="super-user" class="icon-edit icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'edit'}]"
                matTooltip="edit" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
             <i finAuth="super-user" class="icon-applications icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'copy'}]"

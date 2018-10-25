@@ -18,6 +18,10 @@ export default class RepoBase {
     this.Model = mg.model(modelName, schema);
   }
 
+  getCount(filter = {}) {
+    return this.Model.count(filter);
+  }
+
   // get all that match filter, if yearmo/upperOnly exists, sets date constraints
   getMany(_filter: AnyObj = {}) {
     let filter = _.clone(_filter);
@@ -62,7 +66,7 @@ export default class RepoBase {
   }
 
   // group by groupField and get latest of each group
-  getManyByGroupLatest(_filter: AnyObj = {}) {
+  private getManyByGroupLatestOrEaliest(_filter: AnyObj = {}, updatedDateSort: number) {
     let filter = _filter;
     this.verifyModuleId(filter);
     const groupField = filter.groupField;
@@ -70,7 +74,7 @@ export default class RepoBase {
     filter = this.addDateRangeToFilter(filter);
     return this.Model.aggregate([
       {$match: filter},
-      {$sort: {updatedDate: -1}},
+      {$sort: {updatedDate: updatedDateSort}},
       {$group: {_id: '$' + groupField, id: {$first: '$_id'}}},
       {$project: {_id: '$id'}}
     ])
@@ -78,6 +82,28 @@ export default class RepoBase {
         const ids = arr.map(obj => obj._id);
         return this.Model.find({_id: {$in: ids}}).exec();
       });
+  }
+
+  getManyByGroupLatest(filter) {
+    return this.getManyByGroupLatestOrEaliest(filter, -1);
+  }
+
+  getManyByGroupEarliest(filter) {
+    return this.getManyByGroupLatestOrEaliest(filter, 1);
+  }
+
+  getManyLatestGroupByNameActive(moduleId) {
+    return this.getManyByGroupLatest({
+      groupField: 'name',
+      status: 'A',
+      moduleId});
+  }
+
+  getManyEarliestGroupByNameActive(moduleId) {
+    return this.getManyByGroupEarliest({
+      groupField: 'name',
+      status: 'A',
+      moduleId});
   }
 
   getOneById(id) {
