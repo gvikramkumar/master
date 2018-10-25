@@ -83,7 +83,8 @@ export default class DatabaseController {
           promises.push(this.openPeriodCtrl.mongoToPgSync('dfa_open_period', req.user.id, log, elog));
         }
         if (syncMap.dfa_sub_measure) {
-          promises.push(this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog, {moduleId: -1, status: {$in: ['A', 'I']}}));
+          promises.push(this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog,
+            this.submeasureRepo.getManyLatestGroupByNameActive(-1)));
         }
         if (syncMap.dfa_prof_dept_acct_map_upld) {
           promises.push(this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog)); // deletes all on upload and pgsync

@@ -38,5 +38,15 @@ export class SyncMap {
     return found;
   }
 
+  hasSelections() {
+    let found = false;
+    Object.keys(this).forEach(key => {
+      if (this[key]) {
+        found = true;
+      }
+    })
+    return found;
+  }
+
 }
 

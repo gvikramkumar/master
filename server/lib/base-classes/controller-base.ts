@@ -269,10 +269,12 @@ export default class ControllerBase {
   mongoToPgSync(tableName: string, userId: string, log: string[], elog: string[],
                 mgGetFilter: AnyObj = {}, pgRemoveFilter: AnyObj = {}) {
     // try {
-      if (this.repo.isModuleRepo && mgGetFilter.moduleId !== -1) {
+      if (this.repo.isModuleRepo && !mgGetFilter.then && mgGetFilter.moduleId !== -1) {
           elog.push(`mongoToPgSync: ${this.repo.modelName} isModuleRepo but doesn't have mgGetFilter.moduleId set to -1.`);
       }
-      return this.repo.getMany(mgGetFilter)
+
+      const mongoGetPromise = mgGetFilter.then ? mgGetFilter : this.repo.getMany(mgGetFilter);
+      return mongoGetPromise
         .then(docs => {
           if (docs.length && docs[0].toObject) {
             return docs.map(doc => doc.toObject());

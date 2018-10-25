@@ -90,10 +90,7 @@ export default class ApprovalController extends ControllerBase {
 
   getManyLatestByNameActiveConcatDraftPending(req, res, next) {
     return Promise.all([
-      this.repo.getManyByGroupLatest({
-        groupField: 'name',
-        status: 'A',
-        moduleId: req.body.moduleId}),
+      this.repo.getManyLatestGroupByNameActive(req.body.moduleId),
       this.repo.getMany({
         status: {$in: ['D', 'P']},
         moduleId: req.body.moduleId}),
@@ -106,10 +103,7 @@ export default class ApprovalController extends ControllerBase {
 
   getManyLatestByNameActiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
-      this.repo.getManyByGroupLatest({
-        groupField: 'name',
-        status: 'A',
-        moduleId: req.body.moduleId}),
+      this.repo.getManyLatestGroupByNameActive(req.body.moduleId),
       this.repo.getMany({
         status: {$in: ['D', 'P']},
         createdBy: req.user.id,

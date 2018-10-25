@@ -1,12 +1,18 @@
-
-
 <div class="fin-container">
   <br>
-  <div class="fin-flex-center text-center ">
+  <div class="col-lg-6">
     <button cuiButton color="primary" (click)="mongoToPgSync()">Mongo To Postgres Sync</button>
+    <div *ngIf="noChoices">No choices made for sync.</div>
+    <div>
+      <fin-checkbox [(model)]="allValue" (modelChange)="changeAll()" label="Set All"></fin-checkbox>
+    </div>
+    <div *ngFor="let key of keys">
+      <fin-checkbox [(model)]="syncMap[key]" [label]="key" (modelChange)="change()"></fin-checkbox>
+    </div>
+    <br><br>
     <button cuiButton color="secondary" (click)="pgToMongoSync()">Postgres To Mongo Sync</button>
-    <br><br><br>
-    <pre *ngIf="results" class="results">{{results | json}}</pre>
   </div>
 
-</div>
+  <div class="col-lg-6">
+    <pre *ngIf="results" class="results">{{results | json}}</pre>
+  </div>
