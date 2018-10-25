@@ -9,6 +9,8 @@ import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'node-xlsx';
 import ControllerBase from '../../../lib/base-classes/controller-base';
 import {shUtil} from '../../../../shared/shared-util';
+import SubmeasureController from "../../common/submeasure/controller";
+import SubmeasureRepo from "../../common/submeasure/repo";
 
 @injectable()
 export default class ReportController extends ControllerBase {
@@ -17,7 +19,8 @@ export default class ReportController extends ControllerBase {
     private dollarUploadCtrl: DollarUploadController,
     private mappingUploadCtrl: MappingUploadController,
     private deptUploadCtrl: DeptUploadController,
-    private postgresRepo: PgLookupRepo
+    private postgresRepo: PgLookupRepo,
+    private subMeasureRepo: SubmeasureRepo
   ) {
     super(null);
   }
@@ -94,6 +97,14 @@ export default class ReportController extends ControllerBase {
           promise = this.postgresRepo.getDriverSL3Report(),
           promise = this.postgresRepo.getShipmentDriverPFReport(),
           promise = this.postgresRepo.getRoll3DriverWithBEReport()
+        ];
+        break;
+      case 'submeasure':
+        promise = [
+          promise = this.subMeasureRepo.getManyEarliestGroupByNameActive(-1).then(docs => _.sortBy(docs, 'name')),
+          promise = this.subMeasureRepo.getMany({setSort: 'name', moduleId: -1}),
+          //promise = this.subMeasureRepo.getManyEarliestGroupByNameActive(-1).then(docs => _.sortBy(docs, 'name')),
+          promise = this.subMeasureRepo.getManyLatestGroupByNameActive(-1).then(docs => _.sortBy(docs, 'name'))
         ];
         break;
       default:

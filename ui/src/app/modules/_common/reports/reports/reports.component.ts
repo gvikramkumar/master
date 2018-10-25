@@ -139,6 +139,17 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         'driver_type, l1_sales_territory_name_code, l1_sales_territory_descr, l2_sales_territory_name_code, l2_sales_territory_descr, l3_sales_territory_name_code, l3_sales_territory_descr',
         'technology_group_id, business_unit_id, product_family_id',
         'driver_type, technology_group_id, business_unit_id, product_family_id, bk_business_entity_name, sub_business_entity_name']
+    },
+    {
+      type: 'submeasure', text: 'Sub Measure Updates', disabled: false,
+      filename: 'Sub_Measure_Updates_Report.xlsx',
+      excelSheetname: ['Original', 'History', 'As Of Now'],
+      excelHeaders: ['Measure Name, Sub Measure Name, Description, Effective Month, End Month',
+        'Measure Name, Sub Measure Name, Description, Effective Month, End Month',
+        'Measure Name, Sub Measure Name, Description, Effective Month, End Month'],
+      excelProperties: ['name, name, desc, startFiscalMonth, endFiscalMonth',
+        'name, name, desc, startFiscalMonth, endFiscalMonth',
+        'name, name, desc, startFiscalMonth, endFiscalMonth']
     }
   ];
   report = this.reports[0];
