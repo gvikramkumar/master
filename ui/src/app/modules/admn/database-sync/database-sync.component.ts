@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {UiUtil} from '../../../core/services/ui-util';
 import {DatabaseService} from '../../_common/services/database.service';
 import {DialogType} from '../../../core/models/ui-enums';
+import {SyncMap} from '../../../../../../shared/models/sync-map';
 
 @Component({
   selector: 'fin-database-sync',
@@ -13,6 +14,10 @@ import {DialogType} from '../../../core/models/ui-enums';
 })
 export class DatabaseSyncComponent extends RoutingComponentBase {
   results = null;
+  syncMap = new SyncMap();
+  allValue = false;
+  keys = Object.keys(this.syncMap);
+  noChoices = false;
 
   constructor(
     private store: AppStore,
@@ -24,6 +29,11 @@ export class DatabaseSyncComponent extends RoutingComponentBase {
   }
 
   mongoToPgSync() {
+    if (!this.syncMap.hasSelections()) {
+      this.noChoices = true;
+      return;
+    }
+
     this.results = null;
     this.uiUtil.genericDialog('Are you sure you want to sync data from Mongo to Postgres?',
       null, 'Database Sync', DialogType.yesNo)
@@ -45,6 +55,14 @@ export class DatabaseSyncComponent extends RoutingComponentBase {
             .subscribe(results => this.results = results);
         }
       });
+  }
+
+  changeAll() {
+    this.keys.forEach(key => this.syncMap[key] = this.allValue);
+  }
+
+  change() {
+    this.noChoices = false;
   }
 
 }
