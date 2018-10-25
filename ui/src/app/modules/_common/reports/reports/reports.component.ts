@@ -19,6 +19,7 @@ interface ReportSettings {
   excelFilename: string;
   excelProperties: string;
   excelHeaders: string;
+  moduleId: number;
 }
 
 @Component({
@@ -144,12 +145,12 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       type: 'submeasure', text: 'Sub Measure Updates', disabled: false,
       filename: 'Sub_Measure_Updates_Report.xlsx',
       excelSheetname: ['Original', 'History', 'As Of Now'],
-      excelHeaders: ['Measure Name, Sub Measure Name, Description, Effective Month, End Month',
-        'Measure Name, Sub Measure Name, Description, Effective Month, End Month',
-        'Measure Name, Sub Measure Name, Description, Effective Month, End Month'],
-      excelProperties: ['name, name, desc, startFiscalMonth, endFiscalMonth',
-        'name, name, desc, startFiscalMonth, endFiscalMonth',
-        'name, name, desc, startFiscalMonth, endFiscalMonth']
+      excelHeaders: ['Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time',
+        'Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time',
+        'Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time'],
+      excelProperties: ['name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
+        'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
+        'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate']
     }
   ];
   report = this.reports[0];
@@ -249,6 +250,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     if (this.report.hasFiscalMonth) {
       params.fiscalMonth = this.fiscalMonth;
     }
+    params.moduleId = this.store.module.moduleId;
     const url = `${environment.apiUrl}/api/prof/report/${this.report.type}`;
     UiUtil.submitForm(url, params);
   }

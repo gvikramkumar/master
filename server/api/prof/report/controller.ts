@@ -49,6 +49,7 @@ export default class ReportController extends ControllerBase {
   // we push headers, convert json to csv using properties, concat csv, join with line terminator and send
   getExcelReport(req, res, next) {
     const body = req.body; // post request, params are in the body
+    const moduleId = req.body.moduleId;
     req.query = _.omit(body, ['excelFilename', 'excelSheetname', 'excelProperties', 'excelHeaders']);
 
     if (!body.excelFilename || !body.excelSheetname || !body.excelProperties) {
@@ -93,18 +94,17 @@ export default class ReportController extends ControllerBase {
         break;
       case 'valid-driver':
         promise = [
-          promise = this.postgresRepo.getAdjustmentPFReport(),
-          promise = this.postgresRepo.getDriverSL3Report(),
-          promise = this.postgresRepo.getShipmentDriverPFReport(),
-          promise = this.postgresRepo.getRoll3DriverWithBEReport()
+          this.postgresRepo.getAdjustmentPFReport(),
+          this.postgresRepo.getDriverSL3Report(),
+          this.postgresRepo.getShipmentDriverPFReport(),
+          this.postgresRepo.getRoll3DriverWithBEReport()
         ];
         break;
       case 'submeasure':
         promise = [
-          promise = this.subMeasureRepo.getManyEarliestGroupByNameActive(-1).then(docs => _.sortBy(docs, 'name')),
-          promise = this.subMeasureRepo.getMany({setSort: 'name', moduleId: -1}),
-          //promise = this.subMeasureRepo.getManyEarliestGroupByNameActive(-1).then(docs => _.sortBy(docs, 'name')),
-          promise = this.subMeasureRepo.getManyLatestGroupByNameActive(-1).then(docs => _.sortBy(docs, 'name'))
+          this.subMeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
+          this.subMeasureRepo.getMany({setSort: 'name', moduleId}),
+          this.subMeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
         ];
         break;
       default:

@@ -164,7 +164,7 @@ export class UiUtil {
     const form = document.createElement('form');
     form.setAttribute('method', 'post');
     form.setAttribute('action', url);
-    form.setAttribute('target', '_blank');
+    // form.setAttribute('target', '_blank');
 
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
