@@ -9,6 +9,8 @@ import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'node-xlsx';
 import ControllerBase from '../../../lib/base-classes/controller-base';
 import {shUtil} from '../../../../shared/shared-util';
+import SubmeasureRepo from "../../common/submeasure/repo";
+import AllocationRuleRepo from "../../common/allocation-rule/repo";
 
 @injectable()
 export default class ReportController extends ControllerBase {
@@ -17,7 +19,9 @@ export default class ReportController extends ControllerBase {
     private dollarUploadCtrl: DollarUploadController,
     private mappingUploadCtrl: MappingUploadController,
     private deptUploadCtrl: DeptUploadController,
-    private postgresRepo: PgLookupRepo
+    private postgresRepo: PgLookupRepo,
+    private subMeasureRepo: SubmeasureRepo,
+    private allocationRuleRepo: AllocationRuleRepo
   ) {
     super(null);
   }
@@ -46,6 +50,7 @@ export default class ReportController extends ControllerBase {
   // we push headers, convert json to csv using properties, concat csv, join with line terminator and send
   getExcelReport(req, res, next) {
     const body = req.body; // post request, params are in the body
+    const moduleId = req.body.moduleId;
     req.query = _.omit(body, ['excelFilename', 'excelSheetname', 'excelProperties', 'excelHeaders']);
 
     if (!body.excelFilename || !body.excelSheetname || !body.excelProperties) {
@@ -90,10 +95,24 @@ export default class ReportController extends ControllerBase {
         break;
       case 'valid-driver':
         promise = [
-          promise = this.postgresRepo.getAdjustmentPFReport(),
-          promise = this.postgresRepo.getDriverSL3Report(),
-          promise = this.postgresRepo.getShipmentDriverPFReport(),
-          promise = this.postgresRepo.getRoll3DriverWithBEReport()
+          this.postgresRepo.getAdjustmentPFReport(),
+          this.postgresRepo.getDriverSL3Report(),
+          this.postgresRepo.getShipmentDriverPFReport(),
+          this.postgresRepo.getRoll3DriverWithBEReport()
+        ];
+        break;
+      case 'submeasure':
+        promise = [
+          this.subMeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
+          this.subMeasureRepo.getMany({setSort: 'name', moduleId}),
+          this.subMeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
+        ];
+        break;
+      case 'allocation-rule':
+        promise = [
+          this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
+          this.allocationRuleRepo.getMany({setSort: 'name', moduleId}),
+          this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
         ];
         break;
       default:
