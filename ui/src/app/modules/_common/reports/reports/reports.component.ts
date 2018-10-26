@@ -151,6 +151,17 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       excelProperties: ['name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
         'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
         'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate']
+    },
+    {
+      type: 'allocation-rule', text: 'Measure & Sub Measure Hierarchy View', disabled: false,
+      filename: 'Hierarchy_View_Report.xlsx',
+      excelSheetname: ['Original', 'History', 'As Of Now'],
+      excelHeaders: ['Rule Name, Driver Name, Period, Sales Match, Product Match, Update Time',
+        'Rule Name, Driver Name, Period, Sales Match, Product Match, Update Time',
+        'Rule Name, Driver Name, Period, Sales Match, Product Match, Update Time'],
+      excelProperties: ['name, driverName, period, salesMatch, productMatch, updatedDate',
+        'name, driverName, period, salesMatch, productMatch, updatedDate',
+        'name, driverName, period, salesMatch, productMatch, updatedDate']
     }
   ];
   report = this.reports[0];

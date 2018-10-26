@@ -9,8 +9,8 @@ import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'node-xlsx';
 import ControllerBase from '../../../lib/base-classes/controller-base';
 import {shUtil} from '../../../../shared/shared-util';
-import SubmeasureController from "../../common/submeasure/controller";
 import SubmeasureRepo from "../../common/submeasure/repo";
+import AllocationRuleRepo from "../../common/allocation-rule/repo";
 
 @injectable()
 export default class ReportController extends ControllerBase {
@@ -20,7 +20,8 @@ export default class ReportController extends ControllerBase {
     private mappingUploadCtrl: MappingUploadController,
     private deptUploadCtrl: DeptUploadController,
     private postgresRepo: PgLookupRepo,
-    private subMeasureRepo: SubmeasureRepo
+    private subMeasureRepo: SubmeasureRepo,
+    private allocationRuleRepo: AllocationRuleRepo
   ) {
     super(null);
   }
@@ -105,6 +106,13 @@ export default class ReportController extends ControllerBase {
           this.subMeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
           this.subMeasureRepo.getMany({setSort: 'name', moduleId}),
           this.subMeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
+        ];
+        break;
+      case 'allocation-rule':
+        promise = [
+          this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
+          this.allocationRuleRepo.getMany({setSort: 'name', moduleId}),
+          this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
         ];
         break;
       default:
