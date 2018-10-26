@@ -1,4 +1,10 @@
 <div class="fin-edit-container">
+
+  <div class="approval-buttons" *ngIf="viewMode && UiUtil.statusIsPending(rule.status)" finAuth="bizadmin">
+    <button type="button" cuiButton color="primary" (click)="approve()">Approve</button>
+    <button type="button" cuiButton color="primary" (click)="reject()">Reject</button>
+  </div>
+
   <form #form="ngForm" [class.disabled]="viewMode">
 
     <div class="row">
@@ -11,14 +17,11 @@
                     [required]="true" optionsKey="period" optionsValue="period"></cui-select>
       </div>
       <div class="col-lg-6">
-        <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxLayout="row" fxLayoutAlign="end start">
           <div *ngIf="rule.approvedOnce === 'Y'" class="form-group-check">
             <fin-checkbox name="status" label="Active" [(model)]="rule.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
-          <div *ngIf="UiUtil.statusIsPending(rule.status)" finAuth="bizadmin" class="form-group-button">
-            <button type="submit" finErrorFlash cuiButton color="primary" (click)="approve()">Approve</button>
-            <button type="button" cuiButton color="primary" (click)="reject()">Reject</button>
-          </div>
+          <div class="form-group-text" style="margin-left:30px;">Status: {{UiUtil.getStatusText(rule.status)}}</div>
         </div>
       </div>
     </div>
@@ -89,12 +92,14 @@
 
     </div>
 
-    <div finAuth="super-user" class="fin-footer-buttons">
+    <div *ngIf="!viewMode" finAuth="super-user" class="fin-footer-buttons">
       <button type="submit" finErrorFlash cuiButton color="primary" (click)="submitForApproval()">Submit</button>
       <button type="button" finErrorFlash cuiButton color="primary" (click)="saveToDraft()">Save as Draft</button>
       <button type="button" cuiButton color="secondary" (click)="cancel()">Cancel</button>
       <button type="button" cuiButton color="secondary" (click)="reset()">Reset</button>
     </div>
+
+    <div *ngIf="viewMode"><br><br></div>
 
 <!--
     <div>form.valid: {{form.valid}}</div>
