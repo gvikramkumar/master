@@ -136,7 +136,7 @@ export default class SubmeasureController extends ApprovalController {
     this.verifyProperties(req.query, ['moduleId']);
     const data = req.body;
     const moduleId = Number(req.query.moduleId);
-    const url = `${req.headers.origin}/prof/submeasure/edit/${sm.id};mode=edit`;
+    const url = `${req.headers.origin}/prof/submeasure/edit/${sm.id};mode=view`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
     const adminEmail = svrUtil.getAdminEmail(req.dfa);

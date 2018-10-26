@@ -599,8 +599,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
       this.submeasureService.saveToDraft(this.sm, {saveMode})
         .subscribe(sm => {
-          this.uiUtil.toast('Submeasure saved to draft.');
+          // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
+          this.addMode = false;
+          this.copyMode = false;
+          this.editMode = true;
           this.sm = sm;
+          this.uiUtil.toast('Submeasure saved to draft.');
         });
     }
   }
@@ -626,31 +630,25 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   approve() {
-    UiUtil.triggerBlur('.fin-edit-container form');
-    UiUtil.waitForAsyncValidations(this.form)
-      .then(() => {
-        if (this.form.valid) {
-          this.uiUtil.confirmApprove()
-            .subscribe(resultConfirm => {
-              if (resultConfirm) {
-                this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
-                  .subscribe(resultPrompt => {
-                    if (resultPrompt !== undefined) {
-                      this.sm.approveRejectMessage = resultPrompt;
-                      this.cleanUp();
-                      const errs = this.validate();
-                      if (errs) {
-                        this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
-                        return;
-                      } else {
-                        this.submeasureService.approve(this.sm)
-                          .subscribe(() => {
-                            this.uiUtil.toast('Submeasure approved, user notified.');
-                            this.router.navigateByUrl('/prof/submeasure');
-                          });
-                      }
-                    }
-                  });
+    this.uiUtil.confirmApprove()
+      .subscribe(resultConfirm => {
+        if (resultConfirm) {
+          this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
+            .subscribe(resultPrompt => {
+              if (resultPrompt !== undefined) {
+                this.sm.approveRejectMessage = resultPrompt;
+                this.cleanUp();
+                const errs = this.validate();
+                if (errs) {
+                  this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
+                  return;
+                } else {
+                  this.submeasureService.approve(this.sm)
+                    .subscribe(() => {
+                      this.uiUtil.toast('Submeasure approved, user notified.');
+                      this.router.navigateByUrl('/prof/submeasure');
+                    });
+                }
               }
             });
         }

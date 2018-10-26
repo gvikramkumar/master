@@ -228,8 +228,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
       this.ruleService.saveToDraft(this.rule, {saveMode})
         .subscribe(rule => {
-          this.uiUtil.toast('Rule saved to draft.');
+          // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
+          this.addMode = false;
+          this.copyMode = false;
+          this.editMode = true;
           this.rule = rule;
+          this.uiUtil.toast('Rule saved to draft.');
         });
     }
   }
@@ -255,24 +259,18 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   approve() {
-    UiUtil.triggerBlur('.fin-edit-container form');
-    UiUtil.waitForAsyncValidations(this.form)
-      .then(() => {
-        if (this.form.valid) {
-          this.uiUtil.confirmApprove()
-            .subscribe(resultConfirm => {
-              if (resultConfirm) {
-                this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
-                  .subscribe(resultPrompt => {
-                    if (resultPrompt !== undefined) {
-                      this.rule.approveRejectMessage = resultPrompt;
-                      this.cleanUp();
-                      this.ruleService.approve(this.rule)
-                        .subscribe(() => {
-                          this.uiUtil.toast('Rule approved, user notified.');
-                          this.router.navigateByUrl('/prof/rule-management');
-                        });
-                    }
+    this.uiUtil.confirmApprove()
+      .subscribe(resultConfirm => {
+        if (resultConfirm) {
+          this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
+            .subscribe(resultPrompt => {
+              if (resultPrompt !== undefined) {
+                this.rule.approveRejectMessage = resultPrompt;
+                this.cleanUp();
+                this.ruleService.approve(this.rule)
+                  .subscribe(() => {
+                    this.uiUtil.toast('Rule approved, user notified.');
+                    this.router.navigateByUrl('/prof/rule-management');
                   });
               }
             });
