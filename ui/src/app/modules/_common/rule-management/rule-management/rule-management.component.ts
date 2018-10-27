@@ -22,7 +22,6 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   rules: AllocationRule[] = [];
   rulesCount: Number = 0;
   formControl = new FormControl();
-  nameFilter: Subject<string> = new Subject<string>();
   tableColumns = ['name', 'period', 'driverName', 'status', 'updatedBy', 'updatedDate', 'icons'];
   dataSource: MatTableDataSource<AllocationRule>;
   UiUtil = UiUtil;
@@ -57,10 +56,6 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
-    this.formControl.valueChanges.pipe(debounceTime(300))
-      .subscribe(name => {
-      this.nameFilter.next(name);
-    });
     this.ruleService.getApprovalVersionedListByNameAndUserType()
       .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
