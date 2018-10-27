@@ -75,7 +75,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
         this.submeasures = _.orderBy(results[1], ['updatedDate'], ['desc']);
         this.sources = results[2];
         this.measureId = this.measures[0].measureId;
-        this.changeStatusFilter(true);
+        this.refresh();
       });
   }
 
@@ -86,21 +86,20 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     }
   }
 
-  changeStatusFilter(init = false) {
+  refresh() {
     this.filteredSubmeasures = this.submeasures.filter(sm => {
-      return sm.measureId === this.measureId && _.includes(this.showStatuses, sm.status);
+      return sm.measureId === this.measureId;
     });
 
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    if (init && this.filterValue) {
-      this.dataSource.filter = this.filterValue.trim().toLowerCase();
-    }
+    this.dataSource.filter = this.filterValue;
     this.paginator.pageIndex = this.pageIndex;
   }
 
-  applyFilter(filterValue: string) {
+  applyFilter(_filterValue: string) {
+    const filterValue = _filterValue.trim().toLowerCase();
     this.dataSource.filter = filterValue.trim().toLowerCase();
     this.pageIndex = 0;
     this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
@@ -114,7 +113,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
           this.submeasureService.remove(submeasure.id)
             .subscribe(() => {
               this.submeasures.splice(this.submeasures.indexOf(submeasure), 1);
-              this.changeStatusFilter();
+              this.refresh();
             });
         }
       });

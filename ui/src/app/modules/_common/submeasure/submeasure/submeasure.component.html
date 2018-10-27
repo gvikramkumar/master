@@ -3,9 +3,7 @@
 
   <div class="text-center measure-select">
     <cui-select [items]="measures" [(model)]="measureId" label="Measure"
-                (modelChange)="changeStatusFilter()" optionsKey="name" optionsValue="measureId"></cui-select>
-    <cui-multiselect [items]="statuses" [(model)]="showStatuses" label="Show only:"
-                 optionsKey="name" optionsValue="value"></cui-multiselect>
+                (modelChange)="refresh()" optionsKey="name" optionsValue="measureId"></cui-select>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="space-between center">
