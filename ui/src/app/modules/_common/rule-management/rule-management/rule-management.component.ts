@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatSort, MatTableDataSource, PageEvent, Sort} from '@angular/material';
 import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
 import {Subject, Subscription} from 'rxjs';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import * as moment from 'moment';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import * as _ from 'lodash';
@@ -34,18 +34,28 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     {name: 'Draft', value: 'D'}];
   showStatuses = ['A', 'I', 'P', 'D'];
   filterValue = '';
+  sortProperty: string;
+  sortDirection: string;
+  pageIndex: number;
+  pageSize: number;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private ruleService: RuleService,
     private store: AppStore,
-    private route: ActivatedRoute,
-    private uiUtil: UiUtil
+    public route: ActivatedRoute,
+    private uiUtil: UiUtil,
+    private router: Router
   ) {
     super(store, route);
-  }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+    this.sortProperty = this.route.snapshot.queryParams.sortProperty;
+    this.sortDirection = this.route.snapshot.queryParams.sortDirection;
+    this.pageIndex = this.route.snapshot.queryParams.pageIndex;
+    this.pageSize = this.route.snapshot.queryParams.pageSize;
+    this.filterValue = this.route.snapshot.queryParams.filterValue;
+  }
 
   ngOnInit() {
     this.formControl.valueChanges.pipe(debounceTime(300))
@@ -55,21 +65,27 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     this.ruleService.getApprovalVersionedListByNameAndUserType()
       .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
-        this.changeFilter();
+        this.changeStatusFilter(true);
       });
   }
 
-  changeFilter() {
+  changeStatusFilter(init = false) {
     this.filteredRules = this.rules.filter(rule =>
       _.includes(this.showStatuses, rule.status) );
     this.dataSource = new MatTableDataSource<AllocationRule>(this.filteredRules);
-    this.filterValue = '';
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    if (init && this.filterValue) {
+      this.dataSource.filter = this.filterValue.trim().toLowerCase();
+    }
+    this.paginator.pageIndex = this.pageIndex;
   }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.pageIndex = 0;
+    this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
+      queryParams: {pageIndex: this.pageIndex, filterValue}});
   }
 
   remove(rule) {
@@ -79,7 +95,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
           this.ruleService.remove(rule.id)
             .subscribe(() => {
               this.rules.splice(this.rules.indexOf(rule), 1);
-              this.changeFilter();
+              this.changeStatusFilter();
               this.uiUtil.toast('Rule deleted.');
             });
         }
@@ -89,6 +105,17 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   showDeleteIcon(rule) {
     return _.includes(['D', 'P'], rule.status);
   }
+
+  sortChange(sort: Sort) {
+    this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
+      queryParams: {sortProperty: sort.active, sortDirection: sort.direction}});
+  }
+
+  pageChange(page: PageEvent) {
+    this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
+      queryParams: {pageIndex: page.pageIndex, pageSize: page.pageSize}});
+  }
+
 }
 
 

@@ -3,7 +3,7 @@
 
   <div class="text-center status-filter">
     <cui-multiselect [items]="statuses" [(model)]="showStatuses" label="Show only:"
-                (modelChange)="changeFilter()" optionsKey="name" optionsValue="value"></cui-multiselect>
+                (modelChange)="changeStatusFilter()" optionsKey="name" optionsValue="value"></cui-multiselect>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -17,7 +17,7 @@
 
   <div class="mat-elevation-z8">
 
-    <mat-table [dataSource]="dataSource" matSort>
+    <mat-table [dataSource]="dataSource" matSort [matSortActive]="sortProperty" [matSortDirection]="sortDirection" (matSortChange)="sortChange($event)">
 
       <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
@@ -73,9 +73,10 @@
 
     <mat-paginator #paginator
                    [length]="filteredRules.length"
-                   [pageIndex]="0"
-                   [pageSize]="5"
-                   [pageSizeOptions]="[5, 10, 25, 100]">
+                   [pageIndex]="pageIndex"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   (page)="pageChange($event)">
     </mat-paginator>
   </div>
 

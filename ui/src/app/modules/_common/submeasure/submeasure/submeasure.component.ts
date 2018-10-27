@@ -1,11 +1,11 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatSort, MatTableDataSource, PageEvent, Sort} from '@angular/material';
 import {Subject} from 'rxjs';
 import {SubmeasureService} from '../../services/submeasure.service';
 import {Submeasure} from '../../models/submeasure';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
 import {Measure} from '../../models/measure';
 import {MeasureService} from '../../services/measure.service';
@@ -35,11 +35,15 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   showStatuses = ['A', 'I', 'P', 'D'];
   submeasures: Submeasure[] = [];
   filteredSubmeasures: Submeasure[] = [];
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
   filterValue = '';
   UiUtil = UiUtil;
   moment = moment;
+  sortProperty: string;
+  sortDirection: string;
+  pageIndex: number;
+  pageSize: number;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private submeasureService: SubmeasureService,
@@ -47,9 +51,16 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     private route: ActivatedRoute,
     private measureService: MeasureService,
     private sourceService: SourceService,
-    private uiUtil: UiUtil
+    private uiUtil: UiUtil,
+    private router: Router
     ) {
     super(store, route);
+
+    this.sortProperty = this.route.snapshot.queryParams.sortProperty;
+    this.sortDirection = this.route.snapshot.queryParams.sortDirection;
+    this.pageIndex = this.route.snapshot.queryParams.pageIndex;
+    this.pageSize = this.route.snapshot.queryParams.pageSize;
+    this.filterValue = this.route.snapshot.queryParams.filterValue;
   }
 
   ngOnInit() {
@@ -64,7 +75,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
         this.submeasures = _.orderBy(results[1], ['updatedDate'], ['desc']);
         this.sources = results[2];
         this.measureId = this.measures[0].measureId;
-        this.changeFilter();
+        this.changeStatusFilter(true);
       });
   }
 
@@ -75,19 +86,25 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     }
   }
 
-  changeFilter() {
+  changeStatusFilter(init = false) {
     this.filteredSubmeasures = this.submeasures.filter(sm => {
       return sm.measureId === this.measureId && _.includes(this.showStatuses, sm.status);
     });
 
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);
-    this.filterValue = '';
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    if (init && this.filterValue) {
+      this.dataSource.filter = this.filterValue.trim().toLowerCase();
+    }
+    this.paginator.pageIndex = this.pageIndex;
   }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.pageIndex = 0;
+    this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
+      queryParams: {pageIndex: this.pageIndex, filterValue}});
   }
 
   remove(submeasure) {
@@ -97,7 +114,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
           this.submeasureService.remove(submeasure.id)
             .subscribe(() => {
               this.submeasures.splice(this.submeasures.indexOf(submeasure), 1);
-              this.changeFilter();
+              this.changeStatusFilter();
             });
         }
       });
@@ -105,6 +122,16 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
 
   showDeleteIcon(rule) {
     return _.includes(['D', 'P'], rule.status);
+  }
+
+  sortChange(sort: Sort) {
+    this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
+      queryParams: {sortProperty: sort.active, sortDirection: sort.direction}});
+  }
+
+  pageChange(page: PageEvent) {
+    this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
+      queryParams: {pageIndex: page.pageIndex, pageSize: page.pageSize}});
   }
 
 }

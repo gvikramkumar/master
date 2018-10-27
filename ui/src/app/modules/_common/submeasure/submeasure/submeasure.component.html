@@ -3,7 +3,7 @@
 
   <div class="text-center measure-select">
     <cui-select [items]="measures" [(model)]="measureId" label="Measure"
-                (modelChange)="changeFilter()" optionsKey="name" optionsValue="measureId"></cui-select>
+                (modelChange)="changeStatusFilter()" optionsKey="name" optionsValue="measureId"></cui-select>
     <cui-multiselect [items]="statuses" [(model)]="showStatuses" label="Show only:"
                  optionsKey="name" optionsValue="value"></cui-multiselect>
   </div>
@@ -19,7 +19,7 @@
 
   <div class="mat-elevation-z8">
 
-    <mat-table [dataSource]="dataSource" matSort>
+    <mat-table [dataSource]="dataSource" matSort [matSortActive]="sortProperty" [matSortDirection]="sortDirection" (matSortChange)="sortChange($event)">
 
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
@@ -77,9 +77,10 @@
 
     <mat-paginator #paginator
                    [length]="filteredSubmeasures.length"
-                   [pageIndex]="0"
-                   [pageSize]="5"
-                   [pageSizeOptions]="[5, 10, 25, 100]">
+                   [pageIndex]="pageIndex"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   (page)="pageChange($event)">
     </mat-paginator>
   </div>
 
