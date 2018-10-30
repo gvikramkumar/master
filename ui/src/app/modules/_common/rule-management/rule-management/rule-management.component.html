@@ -1,9 +1,8 @@
 
 <div class="fin-container">
 
-  <div class="text-center status-filter">
-    <cui-multiselect [items]="statuses" [(model)]="showStatuses" label="Show only:"
-                (modelChange)="changeStatusFilter()" optionsKey="name" optionsValue="value"></cui-multiselect>
+  <div style="margin-top: 20px;">
+    <fin-status-choice [choices]="showStatuses" (choiceChange)="changeStatusFilter()"></fin-status-choice>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -23,8 +22,8 @@
             The actual rendered columns are set as a property on the row definition" -->
 
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Rule Name</mat-header-cell>
-        <mat-cell *matCellDef="let row"> <a href="" [routerLink]="['edit', row.id, {mode: 'view'}]">{{row.name}}</a> </mat-cell>
+        <mat-header-cell style="min-width:400px;" *matHeaderCellDef mat-sort-header> Rule Name</mat-header-cell>
+        <mat-cell style="min-width:400px;" *matCellDef="let row"> <a href="" [routerLink]="['edit', row.id, {mode: 'view'}]">{{row.name}}</a> </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="period">
@@ -48,8 +47,8 @@
       </ng-container>
 
       <ng-container matColumnDef="updatedDate">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{moment(row.updatedDate).format('MM/DD/YYYY hh:mm A')}}</mat-cell>
+        <mat-header-cell style="min-width:140px;" *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
+        <mat-cell style="min-width:140px;" *matCellDef="let row">{{moment(row.updatedDate).format('MM/DD/YYYY hh:mm A')}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="icons">

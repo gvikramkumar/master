@@ -1,7 +1,5 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, PageEvent, Sort} from '@angular/material';
-import {Subject} from 'rxjs';
 import {SubmeasureService} from '../../services/submeasure.service';
 import {Submeasure} from '../../models/submeasure';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
@@ -15,6 +13,7 @@ import {SourceService} from '../../services/source.service';
 import {UiUtil} from '../../../../core/services/ui-util';
 import * as moment from 'moment';
 import AnyObj from '../../../../../../../shared/models/any-obj';
+import {shUtil} from '../../../../../../../shared/shared-util';
 
 @Component({
   selector: 'fin-submeasure',
@@ -27,12 +26,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   measureId: number;
   measures: Measure[] = [];
   sources: Source[] = [];
-  statuses = [
-    {name: 'Active', value: 'A'},
-    {name: 'Inactive', value: 'I'},
-    {name: 'Pending', value: 'P'},
-    {name: 'Draft', value: 'D'}];
-  showStatuses = ['A', 'I', 'P', 'D'];
+  showStatuses: string[];
   submeasures: Submeasure[] = [];
   filteredSubmeasures: Submeasure[] = [];
   filterValue = '';
@@ -61,6 +55,8 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     this.pageIndex = this.route.snapshot.queryParams.pageIndex || 0;
     this.pageSize = this.route.snapshot.queryParams.pageSize || 25;
     this.filterValue = this.route.snapshot.queryParams.filterValue || '';
+    this.showStatuses = (this.route.snapshot.queryParams.showStatuses &&
+      shUtil.stringToArray(this.route.snapshot.queryParams.showStatuses)) || ['A', 'I', 'P', 'D'];
   }
 
   ngOnInit() {
@@ -96,6 +92,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     this.dataSource.sort = this.sort;
     this.dataSource.filter = this.filterValue;
     this.paginator.pageIndex = this.pageIndex;
+    UiUtil.updateUrl(this.router, this.route, {showStatuses: this.showStatuses.join(',')});
   }
 
   applyFilter(_filterValue: string) {
