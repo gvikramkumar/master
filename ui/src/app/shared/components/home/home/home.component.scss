@@ -20,6 +20,7 @@ $padding: 20px;
 
   .leftnav-wrap {
     padding: 20px 0 0 10px;
+    border-right: 2px solid darken(white, 10%);
   }
 
   /deep/ fin-leftnav {
