@@ -26,12 +26,8 @@ export class RuleService extends ApprovalRestBase<AllocationRule> {
     return this.getManyLatest('name', {status: 'A'});
   }
 
-  getDistinctRuleNamesActive() {
-    return this.getDistinct('name', {status: 'A'});
-  }
-
   getDistinctRuleNames() {
-    return this.getDistinct('name', {status: 'A'});
+    return this.getDistinct('name');
   }
 
   validateProdPFCritChoices(arr) {

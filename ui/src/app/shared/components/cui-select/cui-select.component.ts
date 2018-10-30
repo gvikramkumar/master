@@ -75,16 +75,22 @@ export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAcc
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.items && !_.isEqual(changes.items.previousValue, changes.items.currentValue)) {
+    const itemsChange = changes.items && !_.isEqual(changes.items.previousValue, changes.items.currentValue);
+    if (itemsChange) {
       this.items = _.cloneDeep(this.items);
       if (!_.isArray(_.head(this.items))) {
         this.items = [this.items];
       }
       this.allItems = _.cloneDeep(this.items);
+      // we need to reselect things once we have new items
+      if (this.model) {
+        this.selectItem(this.model);
+      }
     }
 
-    if (changes.model && !_.isEqual(changes.model.previousValue, changes.model.currentValue)) {
-      if (this.model && !this.selectItemCalled) {
+    if (!itemsChange && changes.model && !_.isEqual(changes.model.previousValue, changes.model.currentValue)) {
+      // this gets hit when they select things, we don't want that
+      if (this.items && this.model && !this.selectItemCalled) {
         this.selectItem(this.model);
       }
     }

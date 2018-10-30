@@ -99,6 +99,13 @@ export default class RepoBase {
       moduleId});
   }
 
+  getManyLatestGroupByNameInactive(moduleId) {
+    return this.getManyByGroupLatest({
+      groupField: 'name',
+      status: 'I',
+      moduleId});
+  }
+
   getManyEarliestGroupByNameActive(moduleId) {
     return this.getManyByGroupEarliest({
       groupField: 'name',
@@ -213,6 +220,12 @@ export default class RepoBase {
     const item = new this.Model(data);
     this.addCreatedByAndUpdatedBy(item, userId);
     return item.save({validateBeforeSave: validate});
+  }
+
+  // update via $set commands
+  updateMany(filter, setObj) {
+    this.verifyModuleId(filter);
+    return this.Model.updateMany(filter, setObj).exec();
   }
 
   update(data, userId, concurrencyCheck = true, validate = true) {

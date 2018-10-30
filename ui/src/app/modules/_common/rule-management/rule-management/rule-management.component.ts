@@ -48,17 +48,17 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   ) {
     super(store, route);
 
-    this.sortProperty = this.route.snapshot.queryParams.sortProperty;
-    this.sortDirection = this.route.snapshot.queryParams.sortDirection;
-    this.pageIndex = this.route.snapshot.queryParams.pageIndex;
-    this.pageSize = this.route.snapshot.queryParams.pageSize;
-    this.filterValue = this.route.snapshot.queryParams.filterValue;
+    this.sortProperty = this.route.snapshot.queryParams.sortProperty || 'updatedDate';
+    this.sortDirection = this.route.snapshot.queryParams.sortDirection || 'desc';
+    this.pageIndex = this.route.snapshot.queryParams.pageIndex || 0;
+    this.pageSize = this.route.snapshot.queryParams.pageSize || 25;
+    this.filterValue = this.route.snapshot.queryParams.filterValue || '';
   }
 
   ngOnInit() {
     this.ruleService.getApprovalVersionedListByNameAndUserType()
       .subscribe(rules => {
-        this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
+        this.rules = rules;
         this.refresh();
       });
   }
@@ -75,8 +75,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     const filterValue = _filterValue.trim().toLowerCase();
     this.dataSource.filter = filterValue;
     this.pageIndex = 0;
-    this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
-      queryParams: {pageIndex: this.pageIndex, filterValue}});
+    UiUtil.updateUrl(this.router, this.route, {pageIndex: this.pageIndex, filterValue});
   }
 
   remove(rule) {
@@ -98,13 +97,12 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   }
 
   sortChange(sort: Sort) {
-    this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
-      queryParams: {sortProperty: sort.active, sortDirection: sort.direction}});
+    UiUtil.updateUrl(this.router, this.route, {sortProperty: sort.active, sortDirection: sort.direction});
   }
 
+  
   pageChange(page: PageEvent) {
-    this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge',
-      queryParams: {pageIndex: page.pageIndex, pageSize: page.pageSize}});
+    UiUtil.updateUrl(this.router, this.route, {pageIndex: page.pageIndex, pageSize: page.pageSize});
   }
 
 }
