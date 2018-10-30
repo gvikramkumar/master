@@ -1,8 +1,8 @@
 import RepoBase from './repo-base';
 import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
-import DfaUser from '../../../shared/models/dfa-user';
 import {ApprovalMode} from '../../../shared/enums';
+import * as _ from 'lodash';
 
 export default class ApprovalController extends ControllerBase {
 
@@ -48,20 +48,25 @@ export default class ApprovalController extends ControllerBase {
 
   approve(req, res, next) {
     const data = req.body;
+    let promise: Promise<any> = Promise.resolve();
     this.repo.validate(data);
     if (data.approvedOnce === 'Y') {
-     data.status = data.activeStatus;
+      data.status = data.activeStatus;
+      if (data.activeStatus === 'I') {
+        promise = this.repo.updateMany({moduleId: data.moduleId, name: data.name}, {$set: {status: 'I', activeStatus: 'I'}});
+      }
     } else if (data.approvedOnce === 'N' && data.status === 'P') {
       data.status = 'A';
       data.activeStatus = 'A';
       data.approvedOnce = 'Y';
     }
-
-    this.repo.update(data, req.user.id)
-      .then(item => {
-        return this.sendApprovalEmail(req, ApprovalMode.approve, item)
-          .then(() => res.json(item));
-      })
+    promise.then(() => {
+      this.repo.update(data, req.user.id)
+        .then(item => {
+          return this.sendApprovalEmail(req, ApprovalMode.approve, item)
+            .then(() => res.json(item));
+        });
+    })
       .catch(next);
   }
 
@@ -88,29 +93,36 @@ export default class ApprovalController extends ControllerBase {
     return Promise.reject(new ApiError('sendApprovalEmail not defined for approval controller'));
   }
 
-  getManyLatestByNameActiveConcatDraftPending(req, res, next) {
-    return Promise.all([
-      this.repo.getManyLatestGroupByNameActive(req.body.moduleId),
-      this.repo.getMany({
-        status: {$in: ['D', 'P']},
-        moduleId: req.body.moduleId}),
-    ])
-      .then(results => {
-        res.json(results[0].concat(results[1]));
-      })
-      .catch(next);
-  }
-
   getManyLatestByNameActiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
       this.repo.getManyLatestGroupByNameActive(req.body.moduleId),
+      this.repo.getManyLatestGroupByNameInactive(req.body.moduleId),
       this.repo.getMany({
         status: {$in: ['D', 'P']},
         createdBy: req.user.id,
-        moduleId: req.body.moduleId}),
+        moduleId: req.body.moduleId})
     ])
       .then(results => {
-        res.json(results[0].concat(results[1]));
+        const actives = results[0];
+        const inactives = results[1];
+        const draftPending = results[2];
+        const names = _.uniq(actives.concat(inactives).map(x => x.name.toLowerCase()));
+        const ailist = [];
+        names.forEach(name => {
+          const a = _.find(actives, x => x.name.toLowerCase() === name);
+          const i = _.find(inactives, x => x.name.toLowerCase() === name);
+          if (a && !i) {
+            ailist.push(a);
+          } else if (i && !a) {
+            ailist.push(i);
+          } else if (a.updatedDate >= i.updatedDate) {
+            ailist.push(a);
+          } else if (i.updatedDate > a.updatedDate) {
+            ailist.push(i);
+          }
+        });
+
+        res.json(ailist.concat(draftPending));
       })
       .catch(next);
   }

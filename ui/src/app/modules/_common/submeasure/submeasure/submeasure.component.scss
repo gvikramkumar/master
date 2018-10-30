@@ -1,8 +1,7 @@
 
 
  .measure-select {
-   width: 50%;
-   margin: 20px auto 25px auto;
+   max-width: 500px;
  }
 
 
@@ -10,7 +9,3 @@
 	  background: #64bbe3;
    }
 
-  .mat-table {
-    overflow: auto;
-    max-height: 500px;
-  }

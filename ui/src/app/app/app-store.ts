@@ -1,17 +1,14 @@
 import {Injectable} from '@angular/core';
-import {Subject, BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {StoreBase} from '../core/base-classes/store-base';
 import {ObservableMedia} from '@angular/flex-layout';
-import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
+import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
 import {first} from 'rxjs/operators';
 import * as _ from 'lodash';
-import AnyObj from '../../../../shared/models/any-obj';
 import {DfaModule} from '../modules/_common/models/module';
-import {UiUtil} from '../core/services/ui-util';
-import {uiConst} from '../core/models/ui-const';
-import {BreakpointChange} from '../core/services/breakpoint.service';
 import DfaUser from '../../../../shared/models/dfa-user';
 import {shUtil} from '../../../../shared/shared-util';
+import {Location} from '@angular/common';
 
 /* tslint:disable:member-ordering*/
 
@@ -27,6 +24,7 @@ import {shUtil} from '../../../../shared/shared-util';
 export class AppStore extends StoreBase {
   initialBreakpoint: string;
   isLocalEnv = false;
+  location: Location;
 
   showProgress$: Subject<boolean> = new Subject();
   showProgressBar(val = true) {

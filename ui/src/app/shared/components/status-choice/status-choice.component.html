@@ -1,0 +1,9 @@
+
+
+<div class="wrap">
+  <fin-checkbox label="All:" [(model)]="all" (modelChange)="allChange()" [inline]="true" style="margin-right: 15px;"></fin-checkbox>
+  <fin-checkbox label="Active" [(model)]="choiceArr[0]" trueVal="A" falseVal="" (modelChange)="checkChange()" [inline]="true"></fin-checkbox>
+  <fin-checkbox label="Inactive" [(model)]="choiceArr[1]" trueVal="I" falseVal="" (modelChange)="checkChange()" [inline]="true"></fin-checkbox>
+  <fin-checkbox label="Pending" [(model)]="choiceArr[2]" trueVal="P" falseVal="" (modelChange)="checkChange()" [inline]="true"></fin-checkbox>
+  <fin-checkbox label="Draft" [(model)]="choiceArr[3]" trueVal="D" falseVal="" (modelChange)="checkChange()" [inline]="true"></fin-checkbox>
+</div>

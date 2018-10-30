@@ -35,6 +35,11 @@ export class UiUtil {
     edit >> I/A and editMode >> add
     edit >> D/P and editMode >> update
   */
+
+  static updateUrl(router, route, queryParams) {
+    router.navigate([], {relativeTo: route, queryParamsHandling: 'merge', queryParams});
+  }
+
   static getApprovalSaveMode(status, add, edit, copy) {
     if ((add || copy)) {
       return 'add';
