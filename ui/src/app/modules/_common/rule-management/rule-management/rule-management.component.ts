@@ -20,6 +20,7 @@ import {UiUtil} from '../../../../core/services/ui-util';
 export class RuleManagementComponent extends RoutingComponentBase implements OnInit {
   moment = moment;
   rules: AllocationRule[] = [];
+  filteredRules: AllocationRule[] = [];
   rulesCount: Number = 0;
   formControl = new FormControl();
   tableColumns = ['name', 'period', 'driverName', 'status', 'updatedBy', 'updatedDate', 'icons'];
@@ -59,12 +60,14 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     this.ruleService.getApprovalVersionedListByNameAndUserType()
       .subscribe(rules => {
         this.rules = rules;
-        this.refresh();
+        this.changeStatusFilter();
       });
   }
 
-  refresh() {
-    this.dataSource = new MatTableDataSource<AllocationRule>(this.rules);
+  changeStatusFilter() {
+    this.filteredRules = this.rules.filter(rule =>
+      _.includes(this.showStatuses, rule.status) );
+    this.dataSource = new MatTableDataSource<AllocationRule>(this.filteredRules);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.filter = this.filterValue;
@@ -85,7 +88,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
           this.ruleService.remove(rule.id)
             .subscribe(() => {
               this.rules.splice(this.rules.indexOf(rule), 1);
-              this.refresh();
+              this.changeStatusFilter();
               this.uiUtil.toast('Rule deleted.');
             });
         }

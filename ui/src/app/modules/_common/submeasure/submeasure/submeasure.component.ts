@@ -75,7 +75,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
         this.submeasures = results[1];
         this.sources = results[2];
         this.measureId = this.measures[0].measureId;
-        this.refresh();
+        this.changeStatusFilter();
       });
   }
 
@@ -86,9 +86,9 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     }
   }
 
-  refresh() {
+  changeStatusFilter() {
     this.filteredSubmeasures = this.submeasures.filter(sm => {
-      return sm.measureId === this.measureId;
+      return sm.measureId === this.measureId && _.includes(this.showStatuses, sm.status);
     });
 
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);
@@ -112,7 +112,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
           this.submeasureService.remove(submeasure.id)
             .subscribe(() => {
               this.submeasures.splice(this.submeasures.indexOf(submeasure), 1);
-              this.refresh();
+              this.changeStatusFilter();
             });
         }
       });
