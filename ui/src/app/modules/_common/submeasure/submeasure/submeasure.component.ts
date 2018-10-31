@@ -55,8 +55,8 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     this.pageIndex = this.route.snapshot.queryParams.pageIndex || 0;
     this.pageSize = this.route.snapshot.queryParams.pageSize || 25;
     this.filterValue = this.route.snapshot.queryParams.filterValue || '';
-    this.showStatuses = (this.route.snapshot.queryParams.showStatuses &&
-      shUtil.stringToArray(this.route.snapshot.queryParams.showStatuses)) || ['A', 'I', 'P', 'D'];
+    const qsShowStatuses = shUtil.stringToArray(this.route.snapshot.queryParams.showStatuses);
+    this.showStatuses = qsShowStatuses.length ? qsShowStatuses : ['A', 'I', 'P', 'D'];
   }
 
   ngOnInit() {

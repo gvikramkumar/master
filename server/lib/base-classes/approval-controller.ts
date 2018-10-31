@@ -93,7 +93,7 @@ export default class ApprovalController extends ControllerBase {
     return Promise.reject(new ApiError('sendApprovalEmail not defined for approval controller'));
   }
 
-  getManyLatestByNameActiveConcatDraftPendingOfUser(req, res, next) {
+  getManyLatestByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
       this.repo.getManyLatestGroupByNameActive(req.body.moduleId),
       this.repo.getManyLatestGroupByNameInactive(req.body.moduleId),
@@ -109,6 +109,8 @@ export default class ApprovalController extends ControllerBase {
         const names = _.uniq(actives.concat(inactives).map(x => x.name.toLowerCase()));
         const ailist = [];
         names.forEach(name => {
+          // what we want is the lastest active, BUT... if there's a later inactive, or inactive and no active... then
+          // we want the latest inactive, so they can make it active again if needed.
           const a = _.find(actives, x => x.name.toLowerCase() === name);
           const i = _.find(inactives, x => x.name.toLowerCase() === name);
           if (a && !i) {
