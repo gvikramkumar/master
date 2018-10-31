@@ -42,7 +42,7 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
     this.temp = new MappingUploadTemplate(row);
     return Promise.all([
       this.getSubmeasure(),
-      this.validateSubmeasureName(),
+      this.validateSubmeasure(),
     ])
       .then(() => this.lookForErrors())
       .then(() => Promise.all([

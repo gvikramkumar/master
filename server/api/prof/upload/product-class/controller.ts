@@ -42,7 +42,7 @@ export default class ProductClassUploadUploadController extends UploadController
     this.temp = new ProductClassUploadTemplate(row);
     return Promise.all([
       this.getSubmeasure(),
-      this.validateSubmeasureName(),
+      this.validateSubmeasure(),
     ])
       .then(() => this.lookForErrors())
       .then(() => Promise.all([

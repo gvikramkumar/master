@@ -76,10 +76,8 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   }
 
   getSourceName(sourceId) {
-    // todo: REMOVE THIS IF BEFORE CHECK IN
-    if (sourceId > 0 && sourceId <= 4) {
-      return (<AnyObj>_.find(this.sources, {sourceId: sourceId})).name;
-    }
+    const source = _.find(this.sources, {sourceId: sourceId});
+    return source && source.name || sourceId;
   }
 
   measureChange() {

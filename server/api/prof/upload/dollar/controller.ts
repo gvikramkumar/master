@@ -56,7 +56,7 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
     this.temp = new DollarUploadTemplate(row);
     return Promise.all([
       this.getSubmeasure(),
-      this.validateSubmeasureName(),
+      this.validateSubmeasure(),
     ])
       .then(() => this.lookForErrors())
       .then(() => Promise.all([
