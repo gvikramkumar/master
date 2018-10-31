@@ -61,9 +61,14 @@ export default class ReportController extends ControllerBase {
     let promise;
     switch (req.params.report) {
       case 'dollar-upload':
+        // we need moduleId for some reports (hit collections will multiple module data),
+        // but for module specific collections like these, having a moduleId will
+        // get no results as it's not included in the collection, so we need to remove it from filter
+        delete req.query.moduleId;
         promise = this.dollarUploadCtrl.getManyPromise(req);
         break;
       case 'mapping-upload':
+        delete req.query.moduleId;
         promise = this.mappingUploadCtrl.getManyPromise(req);
         break;
       case 'product-hierarchy':
@@ -73,6 +78,7 @@ export default class ReportController extends ControllerBase {
         promise = this.postgresRepo.getSalesHierarchyReport();
         break
       case 'dept-upload':
+        delete req.query.moduleId;
         promise = this.deptUploadCtrl.getManyPromise(req);
         break
       case 'submeasure-grouping':
@@ -192,11 +198,16 @@ export default class ReportController extends ControllerBase {
 
   }
 
+  // CSV REPORT: once we moved to multiple sheet reports, the csv report was replaced by excel report.
+  // this code continues to stagnate and would need considerably update to be current, but we'll
+  // leave it for reverence in case we need a csv output for some reason.
+
   // for Csv reports we expect:
   // * excelFilename: name of file it will download to
   // * excelProperties: an array of property names to determine the properties downloaded and order
   // * excelHeaders (optional) an array of header names for the first row of download
   // we push headers, convert json to csv using properties, concat csv, join with line terminator and send
+  /*
   getCsvReport(req, res, next) {
     const body = req.body; // post request, params are in the body
     req.query = _.omit(body, ['excelFilename', 'excelProperties', 'excelHeaders']);
@@ -213,9 +224,11 @@ export default class ReportController extends ControllerBase {
     let promise;
     switch (req.params.report) {
       case 'dollar-upload':
+        delete req.query.moduleId;
         promise = this.dollarUploadCtrl.getManyPromise(req);
         break;
       case 'mapping-upload':
+        delete req.query.moduleId;
         promise = this.mappingUploadCtrl.getManyPromise(req);
         break;
       case 'product-hierarchy':
@@ -225,6 +238,7 @@ export default class ReportController extends ControllerBase {
         promise = this.postgresRepo.getSalesHierarchyReport();
         break
       case 'dept-upload':
+        delete req.query.moduleId;
         promise = this.deptUploadCtrl.getManyPromise(req);
         break
       case 'submeasure-grouping':
@@ -261,6 +275,7 @@ export default class ReportController extends ControllerBase {
       })
       .catch(next);
   }
+*/
 
 }
 
