@@ -3,7 +3,7 @@
 
   <div class="measure-select">
     <cui-select [items]="measures" [(model)]="measureId" label="Measure"
-                (modelChange)="changeStatusFilter()" optionsKey="name" optionsValue="measureId"></cui-select>
+                (modelChange)="measureChange()" optionsKey="name" optionsValue="measureId"></cui-select>
     <div style="margin-top: 36px;">
       <fin-status-choice [choices]="showStatuses" (choiceChange)="changeStatusFilter()"></fin-status-choice>
     </div>

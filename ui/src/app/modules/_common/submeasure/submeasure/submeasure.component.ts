@@ -70,7 +70,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
         this.measures = _.sortBy(results[0], 'name');
         this.submeasures = results[1];
         this.sources = results[2];
-        this.measureId = this.measures[0].measureId;
+        this.measureId = (this.route.snapshot.queryParams.measureId && Number(this.route.snapshot.queryParams.measureId)) || this.measures[0].measureId;
         this.changeStatusFilter();
       });
   }
@@ -80,6 +80,11 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     if (sourceId > 0 && sourceId <= 4) {
       return (<AnyObj>_.find(this.sources, {sourceId: sourceId})).name;
     }
+  }
+
+  measureChange() {
+    this.changeStatusFilter();
+    UiUtil.updateUrl(this.router, this.route, {measureId: this.measureId});
   }
 
   changeStatusFilter() {
