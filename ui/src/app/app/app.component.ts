@@ -6,11 +6,13 @@ import {Title} from '@angular/platform-browser';
 import {AppStore} from './app-store';
 import * as _ from 'lodash';
 import {UiUtil} from '../core/services/ui-util';
+import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
 @Component({
   selector: 'fin-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [Location, {provide: LocationStrategy, useClass: PathLocationStrategy}]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @HostBinding('@.disabled') animationsDisabled = environment.disableAnimations;
@@ -22,8 +24,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private titleService: Title,
     public store: AppStore,
-    private uiUtil: UiUtil
+    private uiUtil: UiUtil,
+    private location: Location
   ) {
+    this.store.location = location;
   }
 
   public ngOnInit() {

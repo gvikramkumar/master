@@ -19,6 +19,7 @@ interface ReportSettings {
   excelFilename: string;
   excelProperties: string;
   excelHeaders: string;
+  moduleId: number;
 }
 
 @Component({
@@ -139,6 +140,28 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         'driver_type, l1_sales_territory_name_code, l1_sales_territory_descr, l2_sales_territory_name_code, l2_sales_territory_descr, l3_sales_territory_name_code, l3_sales_territory_descr',
         'technology_group_id, business_unit_id, product_family_id',
         'driver_type, technology_group_id, business_unit_id, product_family_id, bk_business_entity_name, sub_business_entity_name']
+    },
+    {
+      type: 'submeasure', text: 'Sub Measure Updates', disabled: false,
+      filename: 'Sub_Measure_Updates_Report.xlsx',
+      excelSheetname: ['Original', 'History', 'As Of Now'],
+      excelHeaders: ['Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time',
+        'Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time',
+        'Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time'],
+      excelProperties: ['name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
+        'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
+        'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate']
+    },
+    {
+      type: 'allocation-rule', text: 'Measure & Sub Measure Hierarchy View', disabled: false,
+      filename: 'Hierarchy_View_Report.xlsx',
+      excelSheetname: ['Original', 'History', 'As Of Now'],
+      excelHeaders: ['Rule Name, Driver Name, Period, Sales Match, Product Match, Update Time',
+        'Rule Name, Driver Name, Period, Sales Match, Product Match, Update Time',
+        'Rule Name, Driver Name, Period, Sales Match, Product Match, Update Time'],
+      excelProperties: ['name, driverName, period, salesMatch, productMatch, updatedDate',
+        'name, driverName, period, salesMatch, productMatch, updatedDate',
+        'name, driverName, period, salesMatch, productMatch, updatedDate']
     }
   ];
   report = this.reports[0];
@@ -238,6 +261,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     if (this.report.hasFiscalMonth) {
       params.fiscalMonth = this.fiscalMonth;
     }
+    params.moduleId = this.store.module.moduleId;
     const url = `${environment.apiUrl}/api/prof/report/${this.report.type}`;
     UiUtil.submitForm(url, params);
   }

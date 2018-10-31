@@ -34,6 +34,7 @@ import {AuthOnlyDirective} from './directives/auth-only.directive';
 import {CuiSelectModule} from './components/cui-select/cui-select.module';
 import {CuiMultiselectModule} from './components/cui-multiselect/cui-multiselect.module';
 import {ProgressComponent} from './components/progress/progress.component';
+import { StatusChoiceComponent } from './components/status-choice/status-choice.component';
 
 @NgModule({
   imports: [
@@ -80,6 +81,7 @@ import {ProgressComponent} from './components/progress/progress.component';
     CuiSelectModule,
     CuiMultiselectModule,
     ProgressComponent,
+    StatusChoiceComponent,
   ],
 
   declarations: [
@@ -109,6 +111,7 @@ import {ProgressComponent} from './components/progress/progress.component';
     AuthDisableDirective,
     AuthOnlyDirective,
     ProgressComponent,
+    StatusChoiceComponent,
   ],
   entryComponents: [
     ErrorModalComponent,

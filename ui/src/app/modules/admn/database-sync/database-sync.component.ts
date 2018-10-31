@@ -32,6 +32,8 @@ export class DatabaseSyncComponent extends RoutingComponentBase {
     if (!this.syncMap.hasSelections()) {
       this.noChoices = true;
       return;
+    } else {
+      this.noChoices = false;
     }
 
     this.results = null;
@@ -39,13 +41,14 @@ export class DatabaseSyncComponent extends RoutingComponentBase {
       null, 'Database Sync', DialogType.yesNo)
       .subscribe(resp => {
         if (resp) {
-          this.databaseService.mongoToPgSync()
+          this.databaseService.mongoToPgSync(this.syncMap)
             .subscribe(results => this.results = results);
         }
       });
   }
 
   pgToMongoSync() {
+    this.noChoices = false;
     this.results = null;
     this.uiUtil.genericDialog('Are you sure you want to sync data from Postgres to Mongo?',
       null, 'Database Sync', DialogType.yesNo)
@@ -58,6 +61,7 @@ export class DatabaseSyncComponent extends RoutingComponentBase {
   }
 
   changeAll() {
+    this.noChoices = false;
     this.keys.forEach(key => this.syncMap[key] = this.allValue);
   }
 

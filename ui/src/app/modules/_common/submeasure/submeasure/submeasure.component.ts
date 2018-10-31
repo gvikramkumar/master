@@ -1,11 +1,9 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {Subject} from 'rxjs';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator, MatSort, MatTableDataSource, PageEvent, Sort} from '@angular/material';
 import {SubmeasureService} from '../../services/submeasure.service';
 import {Submeasure} from '../../models/submeasure';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
 import {Measure} from '../../models/measure';
 import {MeasureService} from '../../services/measure.service';
@@ -15,6 +13,7 @@ import {SourceService} from '../../services/source.service';
 import {UiUtil} from '../../../../core/services/ui-util';
 import * as moment from 'moment';
 import AnyObj from '../../../../../../../shared/models/any-obj';
+import {shUtil} from '../../../../../../../shared/shared-util';
 
 @Component({
   selector: 'fin-submeasure',
@@ -27,19 +26,18 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   measureId: number;
   measures: Measure[] = [];
   sources: Source[] = [];
-  statuses = [
-    {name: 'Active', value: 'A'},
-    {name: 'Inactive', value: 'I'},
-    {name: 'Pending', value: 'P'},
-    {name: 'Draft', value: 'D'}];
-  showStatuses = ['A', 'I', 'P', 'D'];
+  showStatuses: string[];
   submeasures: Submeasure[] = [];
   filteredSubmeasures: Submeasure[] = [];
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
   filterValue = '';
   UiUtil = UiUtil;
   moment = moment;
+  sortProperty: string;
+  sortDirection: string;
+  pageIndex: number;
+  pageSize: number;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private submeasureService: SubmeasureService,
@@ -47,9 +45,18 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     private route: ActivatedRoute,
     private measureService: MeasureService,
     private sourceService: SourceService,
-    private uiUtil: UiUtil
+    private uiUtil: UiUtil,
+    private router: Router
     ) {
     super(store, route);
+
+    this.sortProperty = this.route.snapshot.queryParams.sortProperty || 'updatedDate';
+    this.sortDirection = this.route.snapshot.queryParams.sortDirection || 'desc';
+    this.pageIndex = this.route.snapshot.queryParams.pageIndex || 0;
+    this.pageSize = this.route.snapshot.queryParams.pageSize || 25;
+    this.filterValue = this.route.snapshot.queryParams.filterValue || '';
+    const qsShowStatuses = shUtil.stringToArray(this.route.snapshot.queryParams.showStatuses);
+    this.showStatuses = qsShowStatuses.length ? qsShowStatuses : ['A', 'I', 'P', 'D'];
   }
 
   ngOnInit() {
@@ -61,33 +68,41 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     ])
       .then(results => {
         this.measures = _.sortBy(results[0], 'name');
-        this.submeasures = _.orderBy(results[1], ['updatedDate'], ['desc']);
+        this.submeasures = results[1];
         this.sources = results[2];
-        this.measureId = this.measures[0].measureId;
-        this.changeFilter();
+        this.measureId = (this.route.snapshot.queryParams.measureId && Number(this.route.snapshot.queryParams.measureId)) || this.measures[0].measureId;
+        this.changeStatusFilter();
       });
   }
 
   getSourceName(sourceId) {
-    // todo: REMOVE THIS IF BEFORE CHECK IN
-    if (sourceId > 0 && sourceId <= 4) {
-      return (<AnyObj>_.find(this.sources, {sourceId: sourceId})).name;
-    }
+    const source = _.find(this.sources, {sourceId: sourceId});
+    return source && source.name || sourceId;
   }
 
-  changeFilter() {
+  measureChange() {
+    this.changeStatusFilter();
+    UiUtil.updateUrl(this.router, this.route, {measureId: this.measureId});
+  }
+
+  changeStatusFilter() {
     this.filteredSubmeasures = this.submeasures.filter(sm => {
       return sm.measureId === this.measureId && _.includes(this.showStatuses, sm.status);
     });
 
     this.dataSource = new MatTableDataSource<Submeasure>(this.filteredSubmeasures);
-    this.filterValue = '';
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSource.filter = this.filterValue;
+    this.paginator.pageIndex = this.pageIndex;
+    UiUtil.updateUrl(this.router, this.route, {showStatuses: this.showStatuses.join(',')});
   }
 
-  applyFilter(filterValue: string) {
+  applyFilter(_filterValue: string) {
+    const filterValue = _filterValue.trim().toLowerCase();
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.pageIndex = 0;
+    UiUtil.updateUrl(this.router, this.route, {pageIndex: this.pageIndex, filterValue});
   }
 
   remove(submeasure) {
@@ -97,7 +112,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
           this.submeasureService.remove(submeasure.id)
             .subscribe(() => {
               this.submeasures.splice(this.submeasures.indexOf(submeasure), 1);
-              this.changeFilter();
+              this.changeStatusFilter();
             });
         }
       });
@@ -105,6 +120,14 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
 
   showDeleteIcon(rule) {
     return _.includes(['D', 'P'], rule.status);
+  }
+
+  sortChange(sort: Sort) {
+    UiUtil.updateUrl(this.router, this.route, {sortProperty: sort.active, sortDirection: sort.direction});
+  }
+
+  pageChange(page: PageEvent) {
+    UiUtil.updateUrl(this.router, this.route, {pageIndex: page.pageIndex, pageSize: page.pageSize});
   }
 
 }

@@ -6,6 +6,20 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {take, first} from 'rxjs/operators';
 
 
+
+
+let arr = [false, false, false, false];
+arr = arr.map(x => true);
+arr.forEach((x, i) => console.log(i, x));
+
+
+
+
+
+
+
+
+/*
 class SyncMap {
   // common
   dfa_data_sources = false;
@@ -23,6 +37,7 @@ class SyncMap {
 
 console.log(JSON.stringify(new SyncMap(), null, 2));
 
+*/
 
 
 

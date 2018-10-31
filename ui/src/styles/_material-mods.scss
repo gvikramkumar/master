@@ -1,5 +1,18 @@
 
 
+.fin.cui .mat-header-row {
+  min-height: 48px;
+}
+
+.fin.cui .mat-row {
+  min-height: 44px;
+}
+
+.fin.cui .mat-paginator-container {
+  // this won't work, there's padding and margins going on in there
+  //min-height: 44px;
+}
+
 .fin .mat-snack-bar-container {
   background-color: $light-gray-3;
   color: $dark-gray-2;

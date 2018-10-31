@@ -52,7 +52,7 @@ export default class DeptUploadUploadController extends UploadController {
     this.sheet1SubmeasureNames.push(this.temp.submeasureName);
     return Promise.all([
       this.getSubmeasure(),
-      this.validateSubmeasureName()
+      this.validateSubmeasure()
     ])
       .then(() => this.lookForErrors())
       .then(() => Promise.all([
@@ -74,7 +74,7 @@ export default class DeptUploadUploadController extends UploadController {
     }
     return Promise.all([
       this.getSubmeasure(),
-      this.validateSubmeasureName(),
+      this.validateSubmeasure(),
     ])
       .then(() => this.lookForErrors())
       .then(() => Promise.all([

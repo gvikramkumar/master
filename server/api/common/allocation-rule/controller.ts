@@ -131,7 +131,7 @@ export default class AllocationRuleController extends ApprovalController {
     this.verifyProperties(req.query, ['moduleId']);
     const data = req.body;
     const moduleId = req.dfa.moduleId;
-    const url = `${req.headers.origin}/prof/rule-management/edit/${rule.id};mode=edit`;
+    const url = `${req.headers.origin}/prof/rule-management/edit/${rule.id};mode=view`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
     const adminEmail = svrUtil.getAdminEmail(req.dfa);
