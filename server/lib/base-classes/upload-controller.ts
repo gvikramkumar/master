@@ -338,11 +338,13 @@ export default class UploadController {
     return Promise.resolve();
   }
 
-  validateSubmeasureName() {
+  validateSubmeasure() {
     if (!this.temp.submeasureName) {
       this.addErrorRequired(this.PropNames.submeasureName);
     } else if (!this.submeasure) {
       this.addError(this.PropNames.submeasureName, 'No Sub Measure exists by this name', this.temp.submeasureName);
+    } else if (this.submeasure.indicators.groupFlag === 'Y') {
+      this.addError(this.PropNames.submeasureName, 'Submeasure is a grouping submeasure', this.temp.submeasureName);
     }
     return Promise.resolve();
   }
