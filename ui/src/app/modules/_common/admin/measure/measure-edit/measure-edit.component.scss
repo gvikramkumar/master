@@ -1,9 +1,15 @@
+@import '../../../../../../styles/_comp-index.scss';
+
+
+
 button {
   margin: 5px;
 }
 
 
-
+.status-section {
+  max-width: $max-width-form-group;
+}
 
 .selectionCriteria {
   padding: 12px;

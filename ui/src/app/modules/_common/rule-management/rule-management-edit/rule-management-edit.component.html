@@ -17,7 +17,7 @@
                     [required]="true" optionsKey="period" optionsValue="period"></cui-select>
       </div>
       <div class="col-lg-6">
-        <div fxLayout="row" fxLayoutAlign="end start">
+        <div fxLayout="row" fxLayoutAlign="end start" class="status-section">
           <div *ngIf="rule.approvedOnce === 'Y'" class="form-group-check">
             <fin-checkbox name="status" label="Active" [(model)]="rule.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
@@ -69,7 +69,7 @@
             <cui-select name="beCond" class="replace-label-space" [(model)]="rule.beCritCond" [items]="conditionalOperators"
                         empty="true" [disabled]="!rule.beMatch" [required]="beCondRequired" optionsKey="operator" optionsValue="operator"></cui-select>
           </div>
-          <div class="col-7">
+          <div class="col-7" style="padding-right: 0px;">
             <cui-multiselect name="salesChoice" [(model)]="rule.salesCritChoices" [items]="salesChoices" [disabled]="!rule.salesMatch"
                              class="replace-label-space" optionsKey="name" optionsValue="name" empty="true"></cui-multiselect>
             <fin-input name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}"

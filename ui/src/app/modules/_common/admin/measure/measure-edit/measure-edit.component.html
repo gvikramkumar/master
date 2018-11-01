@@ -8,7 +8,7 @@
                    [notInList]="measureNames" notInListMessage="Measure name already exists"></fin-input>
       </div>
       <div class="col-lg-6">
-        <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxLayout="row" fxLayoutAlign="end start" class="status-section">
           <div class="form-group-check">
             <fin-checkbox name="status" label="Active" [(model)]="measure.status" trueVal="A" falseVal="I"></fin-checkbox>
           </div>

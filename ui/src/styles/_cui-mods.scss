@@ -1,4 +1,15 @@
 
+
+/*
+fin-input, cui-input, cui-select, cui-multiselect, texarea {
+  max-width: 450px;
+}
+*/
+
+.fin.cui .form-group {
+  max-width: $max-width-form-group
+}
+
 .fin.cui .form-group.form-group--inline + .form-group.form-group--inline {
   margin: 0 0 0 25px;
 }

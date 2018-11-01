@@ -14,7 +14,7 @@
       </div>
 
       <div class="col-lg-6">
-        <div fxLayout="row" fxLayoutAlign="end start">
+        <div fxLayout="row" fxLayoutAlign="end start" class="status-section">
           <div *ngIf="sm.approvedOnce === 'Y'" class="form-group-check form-group-inline-30">
             <fin-checkbox label="Active" [(model)]="sm.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
           </div>

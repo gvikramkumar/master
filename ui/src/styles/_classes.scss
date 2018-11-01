@@ -19,11 +19,13 @@
 
 .fin-container {
   width: 90%;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
 .fin-edit-container {
   width: 90%;
+  max-width: 1400px;
   margin: 0 auto;
 
   @media (min-width: $breakpoint-lg) {
