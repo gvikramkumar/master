@@ -30,6 +30,8 @@ export default class ApprovalController extends ControllerBase {
     this.verifyProperties(req.query, ['saveMode']);
     const saveMode = req.query.saveMode;
     data.status = 'P';
+    data.submittedBy = req.user.id;
+    data.submittedDate = new Date();
     let promise;
     if (saveMode === 'add') {
       promise = this.addOnePromise(req, res, next);
@@ -52,6 +54,8 @@ export default class ApprovalController extends ControllerBase {
     this.repo.validate(data);
     if (data.approvedOnce === 'Y') {
       data.status = data.activeStatus;
+      data.approvedBy = req.user.id;
+      data.approvedDate = new Date();
       if (data.activeStatus === 'I') {
         promise = this.repo.updateMany({moduleId: data.moduleId, name: data.name}, {$set: {status: 'I', activeStatus: 'I'}});
       }
@@ -59,6 +63,8 @@ export default class ApprovalController extends ControllerBase {
       data.status = 'A';
       data.activeStatus = 'A';
       data.approvedOnce = 'Y';
+      data.approvedBy = req.user.id;
+      data.approvedDate = new Date();
     }
     promise.then(() => {
       this.repo.update(data, req.user.id)
