@@ -8,15 +8,15 @@ export default {
   showStack: false,
   artUrl: 'https://wsgi-stage.cisco.com/cepm/pdpservices/authorizationmanagerservice',
   mongo: {
-    uri: 'mongodb://xxx/fin-dfa',
-    host: 'xxx',
+    uri: 'mongodb://findp-stg-01.cisco.com/fin-dfa',
+    host: 'findp-stg-01.cisco.com',
     port: 27017,
     db: 'fin-dfa'
   },
   postgres: {
-    host: 'xxx',
+    host: 'finpg-stg-01',
     port: 5432,
-    database: 'fpadev',
+    database: 'fpastg',
   }
 };
 
