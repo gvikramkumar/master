@@ -1,15 +1,15 @@
 
-<div class="fin-container">
+<div class="fin-wide-container">
 
   <div class="measure-select">
     <cui-select [items]="measures" [(model)]="measureId" label="Measure"
                 (modelChange)="measureChange()" optionsKey="name" optionsValue="measureId"></cui-select>
-    <div style="margin-top: 36px;">
+    <div finAuth="super-user" style="margin-top: 36px; margin-bottom: -3px;">
       <fin-status-choice [choices]="showStatuses" (choiceChange)="changeStatusFilter()"></fin-status-choice>
     </div>
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="half-margin-top">
     <mat-form-field>
       <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
     </mat-form-field>

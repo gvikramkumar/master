@@ -37,7 +37,7 @@ export class UiUtil {
   */
 
   static updateUrl(router, route, queryParams) {
-    router.navigate([], {relativeTo: route, queryParamsHandling: 'merge', queryParams});
+    router.navigate([], {relativeTo: route, queryParamsHandling: 'merge', queryParams, replaceUrl: true});
   }
 
   static getApprovalSaveMode(status, add, edit, copy) {

@@ -89,13 +89,12 @@ function isLeafProperty(arr, path, val1, val2) {
     arr.push({path, oldVal: val1 ? val1.toString() : '', newVal: val2 ? val2.toString() : ''});
     rtn = true;
   } else if (typeof val === 'object' && val instanceof Date) {
-    arr.push({path, oldVal: val1 ? val1.toISOString() : '', newVal: val2 ? val2.toISOString() : ''});
+    arr.push({path, oldVal: val1 ? val1.toISOString() : '', newVal: val2 ? (val2.toISOString ? val2.toISOString() : val2) : ''});
     rtn = true;
   }
   // console.log('isleaf', val, rtn);
   return rtn;
 }
-
 
 function getHtmlForLargeSingleMessage(msg) {
   return `<div style="text-align: center; margin-top: 200px;"><h1>${msg}</h1></div>`;

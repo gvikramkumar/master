@@ -656,7 +656,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   submitForApproval() {
-    UiUtil.triggerBlur('.fin-edit-container form');
+    UiUtil.triggerBlur('.fin-container form');
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {

@@ -17,13 +17,15 @@
   padding: 25px 0;
 }
 
-.fin-container {
+.fin-wide-container {
   width: 90%;
+  max-width: 1500px;
   margin: 0 auto;
 }
 
-.fin-edit-container {
+.fin-container {
   width: 90%;
+  max-width: 1300px;
   margin: 0 auto;
 
   @media (min-width: $breakpoint-lg) {
@@ -56,6 +58,10 @@
   margin-right: 25px !important;
 }
 
+.form-group-max-width {
+  max-width: $form-group-max-width;
+}
+
 .form-group-inline-20 {
   margin-right: 20px;
 }
@@ -69,6 +75,7 @@
   padding-top: 20px;
   line-height: 40px;
   margin-bottom: 10px;
+  max-width: $form-group-max-width;
 }
 
 .form-group-switch {
@@ -93,6 +100,7 @@
   height: 40px;
   margin-bottom: 10px;
   line-height: 40px;
+  max-width: $form-group-max-width;
 }
 
 .form-group-switch-no-title {
