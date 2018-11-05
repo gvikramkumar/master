@@ -1,4 +1,4 @@
-<div class="fin-edit-container">
+<div class="fin-container">
 
   <div class="approval-buttons" *ngIf="viewMode && UiUtil.statusIsPending(sm.status)" finAuth="bizadmin">
     <button type="button" cuiButton color="primary" (click)="approve()">Approve</button>
@@ -14,7 +14,7 @@
       </div>
 
       <div class="col-lg-6">
-        <div fxLayout="row" fxLayoutAlign="end start">
+        <div fxLayout="row" fxLayoutAlign="center start" class="status-section">
           <div *ngIf="sm.approvedOnce === 'Y'" class="form-group-check form-group-inline-30">
             <fin-checkbox label="Active" [(model)]="sm.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
           </div>

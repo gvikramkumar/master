@@ -71,7 +71,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
         this.submeasures = results[1];
         this.sources = results[2];
         this.measureId = (this.route.snapshot.queryParams.measureId && Number(this.route.snapshot.queryParams.measureId)) || this.measures[0].measureId;
-        this.changeStatusFilter();
+        this.refresh();
       });
   }
 
@@ -81,11 +81,16 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   }
 
   measureChange() {
-    this.changeStatusFilter();
+    this.refresh();
     UiUtil.updateUrl(this.router, this.route, {measureId: this.measureId});
   }
 
   changeStatusFilter() {
+    UiUtil.updateUrl(this.router, this.route, {showStatuses: this.showStatuses.join(',')});
+    this.refresh();
+  }
+
+  refresh() {
     this.filteredSubmeasures = this.submeasures.filter(sm => {
       return sm.measureId === this.measureId && _.includes(this.showStatuses, sm.status);
     });
@@ -95,7 +100,6 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
     this.dataSource.sort = this.sort;
     this.dataSource.filter = this.filterValue;
     this.paginator.pageIndex = this.pageIndex;
-    UiUtil.updateUrl(this.router, this.route, {showStatuses: this.showStatuses.join(',')});
   }
 
   applyFilter(_filterValue: string) {
@@ -112,7 +116,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
           this.submeasureService.remove(submeasure.id)
             .subscribe(() => {
               this.submeasures.splice(this.submeasures.indexOf(submeasure), 1);
-              this.changeStatusFilter();
+              this.refresh();
             });
         }
       });

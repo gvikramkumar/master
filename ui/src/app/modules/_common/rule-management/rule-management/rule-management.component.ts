@@ -58,11 +58,11 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     this.ruleService.getApprovalVersionedListByNameAndUserType()
       .subscribe(rules => {
         this.rules = rules;
-        this.changeStatusFilter();
+        this.refresh();
       });
   }
 
-  changeStatusFilter() {
+  refresh() {
     this.filteredRules = this.rules.filter(rule =>
       _.includes(this.showStatuses, rule.status) );
     this.dataSource = new MatTableDataSource<AllocationRule>(this.filteredRules);
@@ -70,7 +70,11 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     this.dataSource.sort = this.sort;
     this.dataSource.filter = this.filterValue;
     this.paginator.pageIndex = this.pageIndex;
+  }
+
+  changeStatusFilter() {
     UiUtil.updateUrl(this.router, this.route, {showStatuses: this.showStatuses.join(',')});
+    this.refresh();
   }
 
   applyFilter(_filterValue: string) {
@@ -87,7 +91,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
           this.ruleService.remove(rule.id)
             .subscribe(() => {
               this.rules.splice(this.rules.indexOf(rule), 1);
-              this.changeStatusFilter();
+              this.refresh();
               this.uiUtil.toast('Rule deleted.');
             });
         }

@@ -30,6 +30,14 @@ export class RuleService extends ApprovalRestBase<AllocationRule> {
     return this.getDistinct('name');
   }
 
+  validateSalesSL2CritChoices(arr) {
+    return this.callMethod('validateSalesSL2CritChoices', arr);
+  }
+
+  validateSalesSL3CritChoices(arr) {
+    return this.callMethod('validateSalesSL3CritChoices', arr);
+  }
+
   validateProdPFCritChoices(arr) {
     return this.callMethod('validateProdPFCritChoices', arr);
   }
