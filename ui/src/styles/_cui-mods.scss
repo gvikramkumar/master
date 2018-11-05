@@ -1,7 +1,9 @@
 
 
+
 .fin.cui .form-group {
-  max-width: $max-width-form-group
+  max-height: 60px;
+  max-width: $form-group-max-width
 }
 
 .fin.cui .form-group.form-group--inline + .form-group.form-group--inline {

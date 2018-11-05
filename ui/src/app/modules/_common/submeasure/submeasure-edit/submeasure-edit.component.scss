@@ -1,18 +1,18 @@
 @import '../../../../../styles/_comp-index.scss';
 
 
-.fin-edit-container {
+.fin-container {
 
   .approval-buttons {
     margin: 12px 0 30px 0;
   }
 
   .status-section {
-    max-width: $max-width-form-group;
+    max-width: $form-group-max-width;
   }
 
   .input-filter-level {
-    max-width: $max-width-form-group;
+    max-width: $form-group-max-width;
 
 
     .ifl-section {

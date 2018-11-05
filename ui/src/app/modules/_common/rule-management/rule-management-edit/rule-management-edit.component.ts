@@ -20,6 +20,8 @@ import {map} from 'rxjs/operators';
 })
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
   ruleNames: string[] = [];
+  salesSL2ChoiceOptions: ValidationInputOptions;
+  salesSL3ChoiceOptions: ValidationInputOptions;
   prodPFChoiceOptions: ValidationInputOptions;
   prodBUChoiceOptions: ValidationInputOptions;
   @ViewChild('form') form: NgForm;
@@ -47,6 +49,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   legalEntityMatches = [{match: 'Business Entity'}];
   beMatches = [{match: 'BE'}, {match: 'Sub BE'}];
   sl1CondRequired = false;
+  sl2CondRequired = false;
+  sl3CondRequired = false;
   pfCondRequired = false;
   buCondRequired = false;
   tgCondRequired = false;
@@ -54,7 +58,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   beCondRequired = false;
 
   // SELECT options to be taken from Postgres
-  salesChoices: {name: string}[] = [];
+  salesSL1Choices: {name: string}[] = [];
   prodTgChoices: {name: string}[] = [];
   scmsChoices: {name: string}[] = [];
   internalBeChoices: {name: string}[] = [];
@@ -93,7 +97,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       .then(results => {
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
-        this.salesChoices = results[0].map(x => ({name: x}));
+        this.salesSL1Choices = results[0].map(x => ({name: x}));
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
@@ -117,7 +121,36 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.orgRule = _.cloneDeep(this.rule);
           this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
         }
-        this.setConditionalRequireds();
+
+        this.salesSL2ChoiceOptions = {
+          asyncValidations: [
+            {
+              name: 'salesSL2Choices',
+              message: 'Some sales SL2 select fields don\'t exist',
+              fcn: this.salesSL2ChoicesValidator()
+            }
+          ]
+        };
+
+        this.salesSL3ChoiceOptions = {
+          asyncValidations: [
+            {
+              name: 'salesSL3Choices',
+              message: 'Some sales SL3 select fields don\'t exist',
+              fcn: this.salesSL3ChoicesValidator()
+            }
+          ]
+        };
+
+        this.prodPFChoiceOptions = {
+          asyncValidations: [
+            {
+              name: 'prodPFChoices',
+              message: 'Some product PF select fields don\'t exist',
+              fcn: this.prodPFChoicesValidator()
+            }
+          ]
+        };
 
         this.prodPFChoiceOptions = {
           asyncValidations: [
@@ -179,17 +212,15 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   cleanUp() {
-    // clear out condition/choices if no match selected:
-    // this should be handled via match selectChange events (which it's wired to), but they
-    // don't trigger currently on empty click so do it here for now
-    this.matchChange('sales');
-    this.matchChange('product');
-    this.matchChange('scms');
-    this.matchChange('be');
-
     // if match selected and cond selected and not choices, clear out cond
-    if (!this.rule.salesCritChoices.length) {
-      this.rule.salesCritCond = undefined;
+    if (!this.rule.salesSL1CritChoices.length) {
+      this.rule.salesSL1CritCond = undefined;
+    }
+    if (!this.rule.salesSL2CritChoices.length) {
+      this.rule.salesSL2CritCond = undefined;
+    }
+    if (!this.rule.salesSL3CritChoices.length) {
+      this.rule.salesSL3CritCond = undefined;
     }
     if (!this.rule.prodPFCritChoices.length) {
       this.rule.prodPFCritCond = undefined;
@@ -279,7 +310,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   submitForApproval() {
-    UiUtil.triggerBlur('.fin-edit-container form');
+    UiUtil.triggerBlur('.fin-container form');
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
@@ -299,32 +330,42 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       });
   }
 
-  setConditionalRequireds() {
-    this.sl1CondRequired = false;
-    this.pfCondRequired = false;
-    this.buCondRequired = false;
-    this.tgCondRequired = false;
-    this.scmsCondRequired = false;
-    this.beCondRequired = false;
+  salesSL2ChoicesValidator(): AsyncValidatorFn {
+    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+      if (!control.value || !control.value.length) {
+        return Promise.resolve(null);
+      }
+      return this.ruleService.validateSalesSL2CritChoices(control.value)
+        .pipe(map(results => {
+          if (!results.exist) {
+            return {salesSL2Choices: {value: control.value}};
+          } else {
+            if (!_.isEqual(this.rule.salesSL2CritChoices, results.values)) {
+              this.rule.salesSL2CritChoices = results.values;
+            }
+            return null;
+          }
+        }));
+    });
+  }
 
-    if (this.rule.salesMatch && this.rule.salesCritChoices.length) {
-      this.sl1CondRequired = true;
-    }
-    if (this.rule.productMatch && this.rule.prodPFCritChoices.length) {
-      this.pfCondRequired = true;
-    }
-    if (this.rule.productMatch && this.rule.prodBUCritChoices.length) {
-      this.buCondRequired = true;
-    }
-    if (this.rule.productMatch && this.rule.prodTGCritChoices.length) {
-      this.tgCondRequired = true;
-    }
-    if (this.rule.scmsMatch && this.rule.scmsCritChoices.length) {
-      this.scmsCondRequired = true;
-    }
-    if (this.rule.beMatch && this.rule.beCritChoices.length) {
-      this.beCondRequired = true;
-    }
+  salesSL3ChoicesValidator(): AsyncValidatorFn {
+    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+      if (!control.value || !control.value.length) {
+        return Promise.resolve(null);
+      }
+      return this.ruleService.validateSalesSL3CritChoices(control.value)
+        .pipe(map(results => {
+          if (!results.exist) {
+            return {salesSL3Choices: {value: control.value}};
+          } else {
+            if (!_.isEqual(this.rule.salesSL3CritChoices, results.values)) {
+              this.rule.salesSL3CritChoices = results.values;
+            }
+            return null;
+          }
+        }));
+    });
   }
 
   prodPFChoicesValidator(): AsyncValidatorFn {
@@ -363,34 +404,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           }
         }));
     });
-  }
-
-  // this is what we want to do, i.e. clear out cond/choices when they clear match, but we don't get a
-  // selectChange event on cui-select clear, even when setting emitSelection=true
-  // we'll have to clear the fields on save() instead for now
-  matchChange(type) {
-
-    if (type === 'sales' && !this.rule.salesMatch) {
-      this.rule.salesCritCond = undefined;
-      this.rule.salesCritChoices = [];
-    }
-    if (type === 'product' && !this.rule.productMatch) {
-      this.rule.prodPFCritCond = undefined;
-      this.rule.prodBUCritCond = undefined;
-      this.rule.prodTGCritCond = undefined;
-      this.rule.prodPFCritChoices = [];
-      this.rule.prodBUCritChoices = [];
-      this.rule.prodTGCritChoices = [];
-    }
-    if (type === 'scms' && !this.rule.scmsMatch) {
-      this.rule.scmsCritCond = undefined;
-      this.rule.scmsCritChoices = [];
-    }
-    if (type === 'be' && !this.rule.beMatch) {
-      this.rule.beCritCond = undefined;
-      this.rule.beCritChoices = [];
-    }
-    this.setConditionalRequireds();
   }
 
 }

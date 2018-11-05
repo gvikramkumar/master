@@ -11,8 +11,12 @@ export class AllocationRule {
   legalEntityMatch?: string;
   beMatch?: string;
   sl1Select?: string;
-  salesCritCond?: string;
-  salesCritChoices: string[] = [];
+  salesSL1CritCond?: string;
+  salesSL1CritChoices: string[] = [];
+  salesSL2CritCond?: string;
+  salesSL2CritChoices: string[] = [];
+  salesSL3CritCond?: string;
+  salesSL3CritChoices: string[] = [];
   prodPFSelect?: string;
   prodPFCritCond?: string;
   prodPFCritChoices: string[] = [];

@@ -198,8 +198,8 @@ const rules = [];
 db.dfa_allocation_rule.find({}).forEach(rule => {
   if (rule.sl1Select && rule.sl1Select.trim().length) {
     const parse = parseSelect(rule.sl1Select);
-    rule.salesCritCond = parse.cond;
-    rule.salesCritChoices = parse.arr;
+    rule.salesSL1CritCond = parse.cond;
+    rule.salesSL1CritChoices = parse.arr;
   }
   if (rule.scmsSelect && rule.scmsSelect.trim().length) {
     const parse = parseSelect(rule.scmsSelect);
