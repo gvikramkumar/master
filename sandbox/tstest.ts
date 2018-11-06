@@ -8,11 +8,7 @@ import {svrUtil} from '../server/lib/common/svr-util';
 
 
 
-let arr = [false, false, false, false];
-arr = arr.map(x => true);
-arr.forEach((x, i) => console.log(i, x));
-
-
+console.log([undefined].length);
 
 
 

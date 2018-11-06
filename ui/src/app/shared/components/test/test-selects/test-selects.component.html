@@ -1,0 +1,11 @@
+
+
+<form>
+
+  <cui-select  [(model)]="selectedValue" [items]="items"
+              empty="true" [required]="true" optionsKey="name" optionsValue="value"></cui-select>
+  valid:
+
+  <button color="primary" cuiButton type="submit" (click)="submit()">Submit</button>
+</form>
+
