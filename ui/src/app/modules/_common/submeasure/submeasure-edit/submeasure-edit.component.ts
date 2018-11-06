@@ -610,7 +610,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   reject() {
-    this.uiUtil.confirmReject()
+    this.uiUtil.confirmReject('submeasure')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
@@ -630,7 +630,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   approve() {
-    this.uiUtil.confirmApprove()
+    this.uiUtil.confirmApprove('submeasure')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)

@@ -20,6 +20,7 @@ import {CuiIndexModule} from './indexes/cui-index.module';
 import { TestComponent } from './components/test/test.component';
 import { GenericDialogComponent } from './dialogs/generic-dialog/generic-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
+import { ApprovalDialogComponent } from './dialogs/approval-dialog/approval-dialog.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import {SwitchComponent} from './components/switch/switch.component';
 import { TestValidationComponent } from './components/test-validation/test-validation.component';
@@ -99,6 +100,7 @@ import { StatusChoiceComponent } from './components/status-choice/status-choice.
     TestComponent,
     GenericDialogComponent,
     PromptDialogComponent,
+    ApprovalDialogComponent,
     CheckboxComponent,
     SwitchComponent,
     TestValidationComponent,
@@ -117,7 +119,8 @@ import { StatusChoiceComponent } from './components/status-choice/status-choice.
     ErrorModalComponent,
     NotImplementedComponent,
     GenericDialogComponent,
-    PromptDialogComponent
+    PromptDialogComponent,
+    ApprovalDialogComponent
   ]
 })
 export class SharedModule {

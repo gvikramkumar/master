@@ -52,13 +52,13 @@ export class RestBase<T extends AnyObj> {
     return this.getMany(filter);
   }
 
-  getLatestByName(params = {}) {
-    return this.getManyLatest('name', params);
-  }
-
   getManyPending(filter: AnyObj = {}) {
     filter.status = 'P';
     return this.getMany(filter);
+  }
+
+  getLatestByName(params = {}) {
+    return this.getManyLatest('name', params);
   }
 
   // skip/limit required, sort optional, but surely needed to line up in pages. params become find(filter)
@@ -91,6 +91,8 @@ export class RestBase<T extends AnyObj> {
   getOneById(id: string): Observable<T> {
     return this.httpClient.get<T>(`${this.endpointUrl}/${id}`);
   }
+
+
 
   callMethod(method, data = {}, params = {}) {
     this.addModuleId(data);

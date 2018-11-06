@@ -1,16 +1,20 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatSort, MatTableDataSource, MatCheckbox} from '@angular/material';
 import {FormControl} from '@angular/forms';
 import {Subject, Subscription} from 'rxjs';
 import * as moment from 'moment';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as _ from 'lodash';
 import {debounceTime} from 'rxjs/operators';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
-import {Measure} from '../../models/measure';
-import {MeasureService} from '../../services/measure.service';
+import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
+import {Submeasure} from '../../models/submeasure';
+import {RuleService} from '../../services/rule.service';
+import {SubmeasureService} from '../../services/submeasure.service';
 import {AppStore} from '../../../../app/app-store';
 import {UiUtil} from '../../../../core/services/ui-util';
+import {SelectionModel} from '@angular/cdk/collections';
+import {DialogInputType} from '../../../../core/models/ui-enums';
 
 @Component({
   selector: 'fin-approval',
@@ -19,25 +23,38 @@ import {UiUtil} from '../../../../core/services/ui-util';
 })
 export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   moment = moment;
-  measures: Measure[];
-  measuresCount: Number = 0;
+  submeasures: Submeasure[];
+  rules: AllocationRule[];
+  // submeasuresCount: Number = 0;
+  // rulesCount: Number = 0;
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
-  tableColumns = ['name', 'typeCode', 'status', 'updatedBy', 'updatedDate'];
-  dataSource: MatTableDataSource<Measure>;
+  tableColumns = ['select', 'name', 'typeCode', 'status', 'updatedBy', 'updatedDate'];
+  ruleDataSource: MatTableDataSource<AllocationRule>;
+  submeasureDataSource: MatTableDataSource<Submeasure>;
+  showRules = true;
+  showSubmeasures = true;
   UiUtil = UiUtil;
 
+  ruleSelection = new SelectionModel<AllocationRule>(false, null);
+  submeasureSelection = new SelectionModel<Submeasure>(false, null);
+
   constructor(
-    private measureService: MeasureService,
+    private ruleService: RuleService,
+    private submeasureService: SubmeasureService,
     private store: AppStore,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private uiUtil: UiUtil
   ) {
     super(store, route);
-
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) rulePaginator: MatPaginator;
+  @ViewChild(MatSort) ruleSort: MatSort;
+
+  @ViewChild(MatPaginator) submeasurePaginator: MatPaginator;
+  @ViewChild(MatSort) submeasureSort: MatSort;
 
   ngOnInit() {
     this.formControl.valueChanges.pipe(debounceTime(300))
@@ -45,13 +62,22 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
         this.nameFilter.next(name);
       });
 
-    this.measureService.getManyLatest('name')
-      .subscribe(measures => {
-        this.measures = _.orderBy(measures, ['updatedDate'], ['desc']);
-        this.measuresCount = measures.length;
-        this.dataSource = new MatTableDataSource(this.measures);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+    this.ruleService.getManyPending()
+      .subscribe(rules => {
+        this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
+        // this.rulesCount = rules.length;
+        this.ruleDataSource = new MatTableDataSource(this.rules);
+        this.ruleDataSource.paginator = this.rulePaginator;
+        this.ruleDataSource.sort = this.ruleSort;
+      });
+
+    this.submeasureService.getManyPending()
+      .subscribe(submeasures => {
+        this.submeasures = _.orderBy(submeasures, ['updatedDate'], ['desc']);
+        // this.submeasuresCount = submeasures.length;
+        this.submeasureDataSource = new MatTableDataSource(this.submeasures);
+        this.submeasureDataSource.paginator = this.submeasurePaginator;
+        this.submeasureDataSource.sort = this.submeasureSort;
       });
 
   }
@@ -61,13 +87,100 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
     // this.dataSource.sort = this.sort;
   }
 
-  applyFilter(filterValue: string) {
+  applyRuleFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+    this.ruleDataSource.filter = filterValue;
+  }
+
+  applySubmeasureFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.submeasureDataSource.filter = filterValue;
+  }
+
+  approveRule() {
+    this.uiUtil.confirmApprove('rule')
+      .subscribe(resultConfirm => {
+        if (resultConfirm) {
+          this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
+            .subscribe(resultPrompt => {
+              if (resultPrompt !== undefined) {
+                this.ruleSelection.selected[0].approveRejectMessage = resultPrompt;
+                this.ruleService.approve(this.ruleSelection.selected[0])
+                  .subscribe(() => {
+                    this.uiUtil.toast('Rule approved, user notified.');
+                    this.ngOnInit(); // refreshes data
+                  });
+              }
+            });
+        }
+      });
+  }
+
+  approveSubmeasure() {
+    this.uiUtil.confirmApprove('submeasure')
+      .subscribe(resultConfirm => {
+        if (resultConfirm) {
+          this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
+            .subscribe(resultPrompt => {
+              if (resultPrompt !== undefined) {
+                this.submeasureSelection.selected[0].approveRejectMessage = resultPrompt;
+                this.submeasureService.approve(this.submeasureSelection.selected[0])
+                  .subscribe(() => {
+                    this.uiUtil.toast('Submeasure approved, user notified.');
+                    this.ngOnInit(); // refreshes data
+                  });
+              }
+            });
+        }
+      });
+  }
+
+  rejectRule() {
+    this.uiUtil.confirmReject('rule')
+      .subscribe(resultConfirm => {
+        if (resultConfirm) {
+          this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
+            .subscribe(resultPrompt => {
+              if (resultPrompt !== undefined) {
+                this.ruleSelection.selected[0].approveRejectMessage = resultPrompt;
+                this.ruleService.reject(this.ruleSelection.selected[0])
+                  .subscribe(sm => {
+                    this.uiUtil.toast('Rule has been rejected, user notified.');
+                    this.ngOnInit(); // refreshes data
+                  });
+              }
+            });
+        }
+      });
+  }
+
+  rejectSubmeasure() {
+    this.uiUtil.confirmReject('submeasure')
+      .subscribe(resultConfirm => {
+        if (resultConfirm) {
+          this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
+            .subscribe(resultPrompt => {
+              if (resultPrompt !== undefined) {
+                this.submeasureSelection.selected[0].approveRejectMessage = resultPrompt;
+                this.submeasureService.reject(this.submeasureSelection.selected[0])
+                  .subscribe(sm => {
+                    this.uiUtil.toast('Submeasure has been rejected, user notified.');
+                    this.ngOnInit(); // refreshes data
+                  });
+              }
+            });
+        }
+      });
+  }
+
+  inspectItem(type: string, id: string) {
+    window.open(`/prof/${type}/edit/${id};mode=view`);
   }
 
 }
+
 
 
 

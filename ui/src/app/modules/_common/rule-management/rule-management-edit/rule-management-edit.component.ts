@@ -270,7 +270,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   reject() {
-    this.uiUtil.confirmReject()
+    this.uiUtil.confirmReject('rule')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
@@ -290,7 +290,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   approve() {
-    this.uiUtil.confirmApprove()
+    this.uiUtil.confirmApprove('rule')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)

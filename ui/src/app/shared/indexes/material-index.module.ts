@@ -9,7 +9,7 @@ import {
   MatMenuModule, MatPaginatorModule,
   MatProgressBarModule,
   MatRadioModule,
-  MatSelectModule, MatSnackBarModule, MatSortModule, MatTable, MatTableModule,
+  MatSelectModule, MatSnackBarModule, MatSortModule, MatTable, MatTableModule, MatCheckbox,
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
@@ -26,6 +26,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatPaginatorModule,
     MatSortModule,
     MatSnackBarModule,
+    MatCheckboxModule
   ],
   exports: [
     MatProgressBarModule,
@@ -37,6 +38,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatPaginatorModule,
     MatSortModule,
     MatSnackBarModule,
+    MatCheckboxModule
   ]
 })
 export class MaterialIndexModule {
