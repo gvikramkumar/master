@@ -26,7 +26,7 @@ import { TestValidationComponent } from './components/test/test-validation/test-
 import {NotInListValidator} from './validators/not-in-list.validator';
 import {AsyncNotInListValidator} from './validators/async-not-in-list.validator';
 import { ErrorFlashDirective } from './directives/error-flash.directive';
-import { ValidationInputComponent } from './components/test/validation-input/validation-input.component';
+import { ValidationInputComponent } from './components/validation-input/validation-input.component';
 import {InListValidator} from './validators/in-list.validator';
 import {NumberValidator} from './validators/number.validator';
 import {AuthDisableDirective} from './directives/auth-disable.directive';
