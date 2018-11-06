@@ -17,12 +17,12 @@ import {MainComponent} from './components/main/main.component';
 import {AuthDirective} from './directives/auth.directive';
 import { LeftnavComponent } from './components/leftnav/leftnav.component';
 import {CuiIndexModule} from './indexes/cui-index.module';
-import { TestComponent } from './components/test/test.component';
+import { TestComponent } from './components/test/test/test.component';
 import { GenericDialogComponent } from './dialogs/generic-dialog/generic-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import {SwitchComponent} from './components/switch/switch.component';
-import { TestValidationComponent } from './components/test-validation/test-validation.component';
+import { TestValidationComponent } from './components/test/test-validation/test-validation.component';
 import {NotInListValidator} from './validators/not-in-list.validator';
 import {AsyncNotInListValidator} from './validators/async-not-in-list.validator';
 import { ErrorFlashDirective } from './directives/error-flash.directive';
@@ -31,10 +31,11 @@ import {InListValidator} from './validators/in-list.validator';
 import {NumberValidator} from './validators/number.validator';
 import {AuthDisableDirective} from './directives/auth-disable.directive';
 import {AuthOnlyDirective} from './directives/auth-only.directive';
-import {CuiSelectModule} from './components/cui-select/cui-select.module';
-import {CuiMultiselectModule} from './components/cui-multiselect/cui-multiselect.module';
+// import {CuiSelectModule} from './components/cui-select/cui-select.module';
+// import {CuiMultiselectModule} from './components/cui-multiselect/cui-multiselect.module';
 import {ProgressComponent} from './components/progress/progress.component';
 import { StatusChoiceComponent } from './components/status-choice/status-choice.component';
+import { TestSelectsComponent } from './components/test/test-selects/test-selects.component';
 
 @NgModule({
   imports: [
@@ -49,8 +50,8 @@ import { StatusChoiceComponent } from './components/status-choice/status-choice.
     //     FlexLayoutModule.withConfig({disableDefaultBps: true}),
     FlexLayoutModule,
     FormsModule,
-    CuiSelectModule,
-    CuiMultiselectModule,
+    // CuiSelectModule,
+    // CuiMultiselectModule,
   ],
   exports: [
     CoreModule,
@@ -78,10 +79,11 @@ import { StatusChoiceComponent } from './components/status-choice/status-choice.
     NumberValidator,
     AuthDisableDirective,
     AuthOnlyDirective,
-    CuiSelectModule,
-    CuiMultiselectModule,
     ProgressComponent,
     StatusChoiceComponent,
+    TestSelectsComponent,
+    // CuiSelectModule,
+    // CuiMultiselectModule,
   ],
 
   declarations: [
@@ -112,6 +114,7 @@ import { StatusChoiceComponent } from './components/status-choice/status-choice.
     AuthOnlyDirective,
     ProgressComponent,
     StatusChoiceComponent,
+    TestSelectsComponent,
   ],
   entryComponents: [
     ErrorModalComponent,

@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {CuiInputOptions} from '@cisco-ngx/cui-components';
 import {NgForm, NgModel} from '@angular/forms';
-import {UiUtil} from '../../../core/services/ui-util';
-import {notInListValidator} from '../../validators/not-in-list.validator';
-import {asyncNotInListValidator} from '../../validators/async-not-in-list.validator';
+import {UiUtil} from '../../../../core/services/ui-util';
+import {notInListValidator} from '../../../validators/not-in-list.validator';
+import {asyncNotInListValidator} from '../../../validators/async-not-in-list.validator';
 
 class User {
   name: string;

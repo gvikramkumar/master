@@ -1,276 +1,336 @@
-import {
-  Component, OnInit, OnDestroy, Input,
-  Output, EventEmitter, forwardRef, Renderer2, OnChanges, ChangeDetectorRef, SimpleChanges
-} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import { Component, OnInit, OnChanges, OnDestroy, Input,
+	Output, EventEmitter, forwardRef, Renderer2 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import * as _ from 'lodash';
 
-import {Guid} from '@cisco-ngx/cui-utils';
+import { Guid } from '@cisco-ngx/cui-utils';
+
+const ROW_SIZE = 35;
+const PADDING = 2;
+const DYNAMIC_DROPDOWN_MAX_HEIGHT_KEY = 'initial';
 
 @Component({
-  selector: 'cui-select',
-  templateUrl: './cui-select.component.html',
-  styleUrls: ['./cui-select.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CuiSelectComponent),
-      multi: true,
-    },
-  ],
+	selector: 'cui-select',
+	templateUrl: './cui-select.component.html',
+	styleUrls: ['./cui-select.component.scss'],
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: forwardRef(() => CuiSelectComponent),
+			multi: true,
+		},
+	],
 })
-export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAccessor {
-  /** The currently selected value */
-  @Input() model: any;
-  /** All options, unfiltered */
-  @Input() allItems: any[] = [];
-  /** The currently displayed options */
-  @Input() items: any[] = [];
-  /** The input label */
-  @Input() label: string;
-  /** Whether the select is compressed */
-  @Input() compressed = false;
-  /** Search input value */
-  @Input() searchText: string;
-  /** Search input placeholder */
-  @Input() placeholder = '';
-  /** Component tab index */
-  @Input() tabindex = -1;
-  /** Whether to display an empty selection button */
-  @Input() empty = false;
-  /** Whether the component is disabled */
-  @Input() disabled = false;
-  /** Error message to display on the component */
-  @Input() errorMessage: string;
-  /** Whether the input is required */
-  @Input() required = false;
-  /** The key in items that holds the display name */
-  @Input() optionsKey = 'name';
-  /** The key in items that holds the value */
-  @Input() optionsValue = 'value';
+export class CuiSelectComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+	/** The currently selected value */
+	@Input() model: any;
+	/** All options, unfiltered */
+	@Input() allItems: any[] = [];
+	/** The currently displayed options */
+	@Input() items: any[] = [];
+	/** The names of the optional groups */
+	@Input() groupNames: string[];
+	/** The input label */
+	@Input() label: string;
+	/** Whether the select is compressed */
+	@Input() compressed = false;
+	/** Search input value */
+	@Input() searchText: string;
+	/** Search input placeholder */
+	@Input() placeholder = '';
+	/** Component tab index */
+	@Input() tabindex = -1;
+	/** Whether to display an empty selection button */
+	@Input() empty = false;
+	/** Whether the component is disabled */
+	@Input() disabled = false;
+	/** Error message to display on the component */
+	@Input() errorMessage: string;
+	/** Whether the input is required */
+	@Input() required = false;
+	/** The key in items that holds the display name */
+	@Input() optionsKey = 'name';
+	/** The key in items that holds the value */
+	@Input() optionsValue = 'value';
+	/** The property in the items used for the title attribute */
+	@Input() titleKey = 'title';
+	/** Set the max-height of the dropdown */
+	@Input() dropdownMaxHeight = '170px';
+	/** Allow for assignment of the data-auto-id attribute */
+	@Input() dataAutoId = 'cui-select';
+	/** Allow for optionsValue to be null so that the model will be the item Object */
+	@Input() modelAsObject: boolean;
 
-  active = false;
-  over = false;
-  hoverIndex = 0;
-  guid = Guid.generate();
-  private globalClick: any;
-  private selectItemCalled = false;
+	active = false;
+	over = false;
+	hoverIndex = 0;
+	allFlatItems: any[];
+	flatItems: any[];
+	guid = Guid.generate();
+	private globalClick: any;
 
-  /**
-   * Event emitted when the input's value is changed
-   * @Deprecated use ngModelChange
-   */
-  @Output() modelChange: EventEmitter<any> = new EventEmitter();
+	/**
+	 * Event emitted when the input's value is changed
+	 * @Deprecated use ngModelChange
+	 */
+	@Output() modelChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(private renderer: Renderer2) {
-  }
+	constructor (private renderer: Renderer2) {}
 
-  init() {
-    this.globalClick = this.renderer.listen('document', 'click', () => {
-      if (!this.over) {
-        this.active = false;
-      }
-    });
-  }
+	ngOnInit () {
+		if (this.modelAsObject) {
+			this.optionsValue = null;
+		}
+		if (isFinite(Number(this.dropdownMaxHeight))) {
+			this.dropdownMaxHeight = `${this.dropdownMaxHeight}px`;
+		} else if (
+			this.dropdownMaxHeight !== DYNAMIC_DROPDOWN_MAX_HEIGHT_KEY
+			&& isNaN(parseInt(this.dropdownMaxHeight, 10))
+		) {
+			this.dropdownMaxHeight = '170px';
+		}
 
-  ngOnChanges(changes: SimpleChanges) {
-    const itemsChange = changes.items && !_.isEqual(changes.items.previousValue, changes.items.currentValue);
-    if (itemsChange) {
-      this.items = _.cloneDeep(this.items);
-      if (!_.isArray(_.head(this.items))) {
-        this.items = [this.items];
-      }
-      this.allItems = _.cloneDeep(this.items);
-      // we need to reselect things once we have new items
-      if (this.model) {
-        this.selectItem(this.model);
-      }
-    }
+		this.formatItems();
 
-    if (!itemsChange && changes.model && !_.isEqual(changes.model.previousValue, changes.model.currentValue)) {
-      // this gets hit when they select things, we don't want that
-      if (this.items && this.model && !this.selectItemCalled) {
-        this.selectItem(this.model);
-      }
-    }
-  }
+		this.globalClick = this.renderer.listen('document', 'click', () => {
+			if (!this.over) {
+				this.active = false;
+				const selectedItem = _.find(this.flatItems, { selected: true });
+				this.searchText = _.get(selectedItem, this.optionsKey, '');
+			}
+		});
+	}
 
-  ngOnDestroy() {
-    if (this.globalClick) {
-      this.globalClick();
-    }
-  }
+	ngOnChanges (changes) {
+		this.formatItems();
+	}
 
-  propagateChange: Function = (changes: any) => {
-  };
+	ngOnDestroy () {
+		if (this.globalClick) {
+			this.globalClick();
+		}
+	}
 
-  writeValue(value: any) {
-    this.model = value;
-  }
+	propagateChange: Function = (changes: any) => {};
+	writeValue (value: any) {
+		this.model = value;
+		this.selectItem(this.model);
+	}
+	registerOnChange (fn: Function) {
+		this.propagateChange = fn;
+	}
+	registerOnTouched () {}
 
-  registerOnChange(fn: Function) {
-    this.propagateChange = fn;
-  }
+	/**
+	 * Formats items when initialized or updated
+	 */
+	formatItems () {
+		this.items = _.cloneDeep(this.items);
+		this.allItems = _.cloneDeep(this.items);
+		this.parseGroups();
+		if (this.model) {
+			this.selectItem(this.model);
+		}
+		if (this.dropdownMaxHeight === DYNAMIC_DROPDOWN_MAX_HEIGHT_KEY) {
+			this.dropdownMaxHeight = `${(this.allFlatItems.length) * ROW_SIZE + PADDING}px`;
+		}
+	}
 
-  registerOnTouched() {
-  }
+	/**
+	 * Selects an item
+	 * @param selection The selected value
+	 */
+	selectItem (selection: any) {
+		const originalValue = _.cloneDeep(this.model);
+		this.model = _.reduce(this.flatItems, (memo, item: any) => {
+			const omitFields = ['hidden', 'hovered', 'selected'];
+			item.selected = this.optionsValue
+				? _.isEqual(item[this.optionsValue], selection)
+				: _.isEqual(_.omit(item, omitFields), _.omit(selection, omitFields));
+			item.hovered = false;
+			item.hidden = false;
 
-  /**
-   * Selects an item
-   * @param selection The selected value
-   */
-  selectItem(selection: any) {
-    const originalValue = _.cloneDeep(this.model);
-    this.model = _.reduce(_.flatten(this.items), (memo, item: any) => {
-      item.selected = _.isEqual(item[this.optionsValue], selection);
-      item.hovered = false;
-      item.hidden = false;
+			if (item.selected) {
+				return this.optionsValue ? item[this.optionsValue] : _.omit(item, omitFields);
+			}
 
-      return item.selected ? item[this.optionsValue] : memo;
-    }, null);
+			return memo;
+		}, null);
 
-    const selectedItem = _.find(_.flatten(this.items), {selected: true});
-    this.searchText = _.get(selectedItem, this.optionsKey, '');
-    this.hoverIndex = _.indexOf(_.flatten(this.items), selectedItem);
-    if (this.model && this.model !== originalValue) {
-      this.modelChange.emit(this.model);
-      this.active = false;
-      this.focusOnInput();
-    }
-  }
+		const selectedItem = _.find(this.flatItems, { selected: true });
+		this.searchText = _.get(selectedItem, this.optionsKey, '');
+		this.hoverIndex = _.indexOf(this.flatItems, selectedItem);
+		if (this.model && !_.isEqual(this.model, originalValue)) {
+			this.modelChange.emit(this.model);
+			this.propagateChange(this.model);
+			this.active = false;
+			this.focusOnInput();
+		}
+	}
 
-  selectItemOnClick(selection) {
-    this.selectItemCalled = true;
-    this.selectItem(selection);
-  }
+	/**
+	 * Moves the keyboard controlled hover index
+	 * @param amount The amount to move
+	 */
+	moveHoverIndex (amount: number) {
+		if (!this.active) {
+			this.active = true;
 
-  /**
-   * Moves the keyboard controlled hover index
-   * @param amount The amount to move
-   */
-  moveHoverIndex(amount: number) {
-    if (!this.active) {
-      this.active = true;
+			return;
+		}
+		this.hoverIndex += amount;
+		if (this.hoverIndex < 0) {
+			this.hoverIndex = 0;
+		}
+		if (_.get(this.flatItems[this.hoverIndex], 'groupName')) {
+			// if landed on a group header, move one more
+			if (amount < 0) {
+				this.hoverIndex -= 1;
+			} else {
+				this.hoverIndex += 1;
+			}
+		}
+		if (this.hoverIndex > this.flatItems.length) {
+			this.hoverIndex = 0;
+		} else if (this.hoverIndex < 0) {
+			this.hoverIndex = this.flatItems.length - 1;
+		}
 
-      return;
-    }
+		for (let ii = 0; ii < this.flatItems.length; ii += 1) {
+			this.flatItems[ii].hovered = ii === this.hoverIndex;
+		}
+	}
 
-    const flatItems: any[] = _.flatten(this.items);
-    this.hoverIndex += amount;
-    if (this.hoverIndex > flatItems.length) {
-      this.hoverIndex = 0;
-    } else if (this.hoverIndex < 0) {
-      this.hoverIndex = flatItems.length - 1;
-    }
+	/**
+	 * Handles keyboard input
+	 * @param event The keyboard event
+	 */
+	onKeydown (event: KeyboardEvent) {
+		switch (event.key) {
+		case 'ArrowDown':
+			this.moveHoverIndex(1);
+			break;
+		case 'ArrowUp':
+			this.moveHoverIndex(-1);
+			break;
+		case 'Enter':
+			if (this.active) {
+				const itemToSelect = this.optionsValue
+					? this.flatItems[this.hoverIndex][this.optionsValue]
+					: this.flatItems[this.hoverIndex];
+				this.selectItem(itemToSelect);
+				this.active = false;
+				this.focusOnInput();
+			} else {
+				this.active = true;
+			}
+			event.stopPropagation();
+			break;
+		case 'Escape':
+			this.active = false;
+			const selectedItem = _.find(this.flatItems, { selected: true });
+			this.searchText = _.get(selectedItem, this.optionsKey, '');
+			this.focusOnInput();
+			break;
+		default:
+			break;
+		}
+	}
 
-    for (let ii = 0; ii < flatItems.length; ii += 1) {
-      flatItems[ii].hovered = ii === this.hoverIndex;
-    }
-  }
+	/**
+	 * Triggered on search text change
+	 */
+	onSearch () {
+		this.active = true;
+		this.hoverIndex = 0;
+		const lcSearch = this.searchText.replace(/[\s\u202F\u00A0]+/g, '').toLowerCase();
+		const activeItem = _.find(this.flatItems, { selected: true });
+		if (activeItem) {
+			// set selected on the active item in allFlatItems
+			_.set(_.find(
+				this.allFlatItems,
+				{ [this.optionsKey]: activeItem[this.optionsKey] },
+			), 'selected', true);
+		}
+		if (_.isEmpty(lcSearch)) {
+			// if search is empty, set back to all items
+			this.flatItems = _.cloneDeep(this.allFlatItems);
+		} else {
+			// filter by search matches
+			this.flatItems = _.filter(_.cloneDeep(this.allFlatItems), item => {
+				return item.lcName.indexOf(lcSearch) !== -1;
+			});
+		}
+	}
 
-  /**
-   * Handles keyboard input
-   * @param event The keyboard event
-   */
-  onKeydown(event: KeyboardEvent) {
-    switch (event.key) {
-      case 'ArrowDown':
-        this.moveHoverIndex(1);
-        break;
-      case 'ArrowUp':
-        this.moveHoverIndex(-1);
-        break;
-      case 'Enter':
-        if (this.active) {
-          this.selectItem(_.flatten(this.items)[this.hoverIndex][this.optionsValue]);
-          this.active = false;
-          this.focusOnInput();
-        } else {
-          this.active = true;
-        }
-        event.stopPropagation();
-        break;
-      case 'Escape':
-        this.active = false;
-        const selectedItem = _.find(_.flatten(this.items), {selected: true});
-        this.searchText = _.get(selectedItem, this.optionsKey, '');
-        this.focusOnInput();
-        break;
-      default:
-        break;
-    }
-  }
+	/**
+	 * Toggles active state
+	 */
+	toggleActive () {
+		if (!this.disabled) {
+			this.active = !this.active;
+			this.focusOnInput();
+		}
+	}
 
-  /**
-   * Triggered on search text change
-   */
-  onSearch() {
-    this.active = true;
-    const lcSearch = this.searchText.replace(/[\s\u202F\u00A0]+/g, '').toLowerCase();
-    _.each(_.flatten(this.allItems), (item: any) => {
-      const activeItem = _.find(_.flatten(this.items), (testItem: any) => {
-        return testItem[this.optionsKey] === item[this.optionsKey];
-      });
-      item.selected = activeItem && activeItem.selected;
+	/**
+	 * Focuses on the input element
+	 */
+	focusOnInput () {
+		try {
+			setTimeout(() => {
+				const element = this.renderer.selectRootElement(`#select-${this.guid}`);
+				element.focus();
+			}, 5);
+		} catch (err) {}
+	}
 
-      if (_.isEmpty(lcSearch)) {
-        item.hidden = false;
+	/**
+	 * Clears the selection
+	 */
+	clearModel () {
+		if (this.disabled) {
+			return;
+		}
 
-        return;
-      }
+		this.model = null,
+		this.searchText = '';
+		_.each(this.flatItems, (item: any) => {
+			item.selected = false;
+		});
+		this.onSearch();
+		this.modelChange.emit(this.model);
+		this.propagateChange(this.model);
+		this.active = false;
+		this.focusOnInput();
+	}
 
-      const lcName = _.get(item, this.optionsKey, '')
-        .replace(/[\s\u202F\u00A0]+/g, '').toLowerCase();
-      item.hidden = lcName.indexOf(lcSearch) === -1;
-    });
+	/**
+	 * Parse groups to flat array
+	 */
+	parseGroups () {
+		const itemsCopy = _.cloneDeep(this.items);
+		if (this.groupNames && !_.find(this.items, item => _.has(item, 'groupName'))) {
+			_.each(this.groupNames, (groupName, idx) => {
+				itemsCopy.splice(idx * 2, 0, { groupName });
+			});
+		}
+		_.each(itemsCopy, item => {
+			item.lcName = _.get(item, this.optionsKey, '')
+				.replace(/[\s\u202F\u00A0]+/g, '').toLowerCase();
+		});
+		this.allFlatItems = _.flatten(itemsCopy);
+		this.flatItems = _.cloneDeep(this.allFlatItems);
+	}
 
-    this.items = _.reduce(_.cloneDeep(this.allItems), (memo: any, group: any[]) => {
-      memo.push(_.filter(group, {hidden: false}));
+	getDropdownHeight () {
+		const numItems = _.get(this, 'flatItems.length', 0);
+		let height = this.dropdownMaxHeight;
+		if (numItems * ROW_SIZE < _.parseInt(this.dropdownMaxHeight)) {
+			height = `${numItems * ROW_SIZE + PADDING}px`;
+		}
 
-      return memo;
-    }, []);
-  }
-
-  /**
-   * Toggles active state
-   */
-  toggleActive() {
-    if (!this.disabled) {
-      this.active = !this.active;
-      this.focusOnInput();
-    }
-  }
-
-  /**
-   * Focuses on the input element
-   */
-  focusOnInput() {
-      setTimeout(() => {
-        try {
-          const element = this.renderer.selectRootElement(`#select-${this.guid}`);
-          element.focus();
-        } catch (err) {
-        }
-      }, 5);
-  }
-
-  /**
-   * Clears the selection
-   */
-  clearModel() {
-    if (this.disabled) {
-      return;
-    }
-
-    this.model = null,
-      this.searchText = '';
-    _.each(_.flatten(this.items), (item: any) => {
-      item.selected = false;
-    });
-    this.onSearch();
-    this.modelChange.emit(this.model);
-    this.active = false;
-    this.focusOnInput();
-  }
+		return height;
+	}
 }

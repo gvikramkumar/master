@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -133,34 +133,33 @@ describe('CuiMultiselectComponent', () => {
 		expect(de).toBeFalsy();
 	});
 
-	it('should display items', () => {
+	it('should display items', fakeAsync(() => {
 		component.items = items;
 		fixture.detectChanges();
 		// the following section opens dropdown and triggers change detection
 		de = fixture.debugElement.query(By.css('input'));
 		el = de.nativeElement;
 		el.dispatchEvent(new Event('input'));
-		fixture.detectChanges();
+		finishInit(fixture);
 		// end section
-		de = fixture.debugElement.query(By.css('a'));
+		de = fixture.debugElement.query(By.css('.checkbox__label'));
 		el = de.nativeElement;
 		expect(el.innerHTML).toEqual('Item One');
-	});
+	}));
 
-	it('should select items', done => {
+	it('should select items', fakeAsync(done => {
 		component.items = items;
-		component.modelChange.subscribe((selection: any) => {
-			expect(selection).toEqual([1]);
-			done();
-		});
 		component.active = true;
-		fixture.detectChanges();
+		finishInit(fixture);
 		event = document.createEvent('Events');
-		de = fixture.debugElement.query(By.css('a'));
+		de = fixture.debugElement.query(By.css('.checkbox__label'));
 		el = de.nativeElement;
-		event.initEvent('mousedown', true, false);
-		el.dispatchEvent(event);
-	});
+		event.initEvent('click', true, false);
+		el.click();
+		fixture.detectChanges();
+		flush();
+		expect(component.model).toEqual([1]);
+	}));
 
 	it('should filter items by search', () => {
 		component.items = items;
@@ -170,16 +169,16 @@ describe('CuiMultiselectComponent', () => {
 		el['value'] = 'One';
 		el.dispatchEvent(new Event('input'));
 		fixture.detectChanges();
-		expect(component.items.length).toEqual(1);
+		expect(component.flatItems.length).toEqual(1);
 	});
 
 	it('should clear the search', () => {
 		component.items = items;
 		component.empty = true;
 		component.model = items[0].value;
+		component.searchText = 'Item One';
 		event = document.createEvent('Events');
 		fixture.detectChanges();
-		expect(component.searchText).toEqual('Item One');
 
 		component.clearModel();
 		expect(component.searchText).toEqual('');
@@ -225,3 +224,14 @@ describe('CuiMultiselectComponent', () => {
 		fixture.detectChanges();
 	});
 });
+
+/** Finish initializing the virtual scroll component at the beginning of a test. */
+function finishInit (fixture: ComponentFixture<any>) {
+  // On the first cycle we render and measure the viewport.
+  fixture.detectChanges();
+  flush();
+
+  // On the second cycle we render the items.
+  fixture.detectChanges();
+  flush();
+}
