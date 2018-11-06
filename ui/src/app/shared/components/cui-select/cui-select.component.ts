@@ -75,7 +75,7 @@ export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAcc
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const itemsChange = changes.items && !_.isEqual(changes.items.previousValue, changes.items.currentValue);
+    const itemsChange = changes.items && !_.isEqual(changes.items.previousValue, changes.items.currentValue && changes.items.currentValue.length);
     if (itemsChange) {
       this.items = _.cloneDeep(this.items);
       if (!_.isArray(_.head(this.items))) {
@@ -88,11 +88,9 @@ export class CuiSelectComponent implements OnChanges, OnDestroy, ControlValueAcc
       }
     }
 
-    if (!itemsChange && changes.model && !_.isEqual(changes.model.previousValue, changes.model.currentValue)) {
-      // this gets hit when they select things, we don't want that
-      if (this.items && this.model && !this.selectItemCalled) {
+    if (!itemsChange && changes.model && !_.isEqual(changes.model.previousValue, changes.model.currentValue) &&
+      this.items && this.items.length && this.items[0].length && this.model && !this.selectItemCalled) {
         this.selectItem(this.model);
-      }
     }
   }
 

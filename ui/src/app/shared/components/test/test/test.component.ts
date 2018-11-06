@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {UiUtil} from '../../../core/services/ui-util';
-import {DialogType} from '../../../core/models/ui-enums';
-import {environment} from '../../../../environments/environment';
+import {UiUtil} from '../../../../core/services/ui-util';
+import {DialogType} from '../../../../core/models/ui-enums';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
   selector: 'fin-test',

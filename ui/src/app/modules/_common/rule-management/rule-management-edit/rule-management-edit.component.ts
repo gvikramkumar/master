@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 import {DialogInputType, DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors} from '@angular/forms';
-import {ValidationInputOptions} from '../../../../shared/components/validation-input/validation-input.component';
+import {ValidationInputOptions} from '../../../../shared/components/test/validation-input/validation-input.component';
 import {map} from 'rxjs/operators';
 
 @Component({

@@ -10,7 +10,7 @@ import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
 import * as _ from 'lodash';
 import {DfaModule} from '../../_common/models/module';
-import {ValidationInputComponent} from '../../../shared/components/validation-input/validation-input.component';
+import {ValidationInputComponent} from '../../../shared/components/test/validation-input/validation-input.component';
 import {NgForm} from '@angular/forms';
 import {ModuleSourceService} from '../../_common/services/module-source.service';
 

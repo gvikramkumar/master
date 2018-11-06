@@ -71,7 +71,7 @@ export class CuiMultiselectComponent implements OnInit, OnChanges, OnDestroy, Co
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const itemsChange = changes.items && !_.isEqual(changes.items.previousValue, changes.items.currentValue);
+    const itemsChange = changes.items && !_.isEqual(changes.items.previousValue, changes.items.currentValue && changes.items.currentValue.length);
     if (itemsChange) {
       this.items = _.cloneDeep(this.items);
       if (!_.isArray(_.head(this.items))) {
@@ -87,14 +87,13 @@ export class CuiMultiselectComponent implements OnInit, OnChanges, OnDestroy, Co
       }
     }
 
-    if (!itemsChange && changes.model && !_.isEqual(changes.model.previousValue, changes.model.currentValue)) {
-      // this gets hit when they select things, we don't want that
-      if (this.items && this.model.length && !this.selectItemCalled) {
-        this.model = _.castArray(this.model);
-        _.each(this.model, (item: any) => {
-          this.selectItem(item);
-        });
-      }
+    if (!itemsChange && changes.model && !_.isEqual(changes.model.previousValue, changes.model.currentValue) &&
+      this.items && this.items.length && this.items[0].length && this.model && this.model.length && !this.selectItemCalled) {
+      // this gets hit when they select things, we don't want that, so we use this.selectItemCalled to track that
+      this.model = _.castArray(this.model);
+      _.each(this.model, (item: any) => {
+        this.selectItem(item);
+      });
     }
   }
 
