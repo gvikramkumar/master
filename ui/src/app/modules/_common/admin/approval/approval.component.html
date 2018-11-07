@@ -49,28 +49,28 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="typeCode">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Abbrev</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.typeCode}}</mat-cell>
+        <ng-container matColumnDef="driver">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Driver</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.driverName}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="status">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{UiUtil.getStatusText(row.status)}}</mat-cell>
+        <ng-container matColumnDef="period">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Period</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.period}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="updatedBy">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.updatedBy}}</mat-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Updated By</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.updatedBy}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="updatedDate">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{moment(row.updatedDate).fromNow()}}</mat-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Updated</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{moment(row.updatedDate).fromNow()}}</mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+        <mat-header-row *matHeaderRowDef="ruleColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ruleColumns;"></mat-row>
       </mat-table>
 
       <mat-paginator #rulePaginator
@@ -123,28 +123,28 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="typeCode">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Abbrev</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.typeCode}}</mat-cell>
+        <ng-container matColumnDef="measure">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Measure</mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.measureId}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="status">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{UiUtil.getStatusText(row.status)}}</mat-cell>
+        <ng-container matColumnDef="rulelist">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Associated Rules</mat-header-cell><mat-cell *matCellDef="let row">
+            <div class="text-ellipsis" matTooltip="{{getRuleListString(row.rules)}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{row.rules}}</div></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="updatedBy">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.updatedBy}}</mat-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Updated By</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.updatedBy}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="updatedDate">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{moment(row.updatedDate).fromNow()}}</mat-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Updated</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{moment(row.updatedDate).fromNow()}}</mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+        <mat-header-row *matHeaderRowDef="submeasureColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: submeasureColumns;"></mat-row>
       </mat-table>
 
       <mat-paginator #subPaginator

@@ -29,7 +29,8 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   // rulesCount: Number = 0;
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
-  tableColumns = ['select', 'name', 'typeCode', 'status', 'updatedBy', 'updatedDate'];
+  ruleColumns = ['select', 'name', 'driver', 'period', 'updatedBy', 'updatedDate'];
+  submeasureColumns = ['select', 'name', 'measure', 'rulelist', 'updatedBy', 'updatedDate'];
   ruleDataSource: MatTableDataSource<AllocationRule>;
   submeasureDataSource: MatTableDataSource<Submeasure>;
   showRules = true;
@@ -177,6 +178,18 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
 
   getUrl(type: string, id: string) {
     return`/prof/${type}/edit/${id};mode=view`;
+  }
+
+  getRuleListString(rules: string[]) {
+    if (rules.length === 0) {
+      return '';
+    }
+    let result = '';
+    for (let i = 0; i < rules.length - 1; i++) {
+      result += rules[i] + '\n';
+    }
+    result += rules[rules.length - 1];
+    return result;
   }
 
 }
