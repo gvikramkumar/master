@@ -50,10 +50,10 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
     super(store, route);
   }
 
-  @ViewChild(MatPaginator) rulePaginator: MatPaginator;
+  @ViewChild('rulePaginator') rulePaginator: MatPaginator;
   @ViewChild(MatSort) ruleSort: MatSort;
 
-  @ViewChild(MatPaginator) submeasurePaginator: MatPaginator;
+  @ViewChild('subPaginator') submeasurePaginator: MatPaginator;
   @ViewChild(MatSort) submeasureSort: MatSort;
 
   ngOnInit() {
@@ -175,8 +175,8 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
       });
   }
 
-  inspectItem(type: string, id: string) {
-    window.open(`/prof/${type}/edit/${id};mode=view`);
+  getUrl(type: string, id: string) {
+    return`/prof/${type}/edit/${id};mode=view`;
   }
 
 }

@@ -15,7 +15,7 @@
       </mat-form-field>
       <div>
         <button cuiButton color="primary" (click)="approveRule()" [disabled]="this.ruleSelection.isEmpty()">Approve</button>
-        <button cuiButton color="primary" (click)="rejectRule()" [disabled]="this.ruleSelection.isEmpty()">Reject</button>
+        <button cuiButton color="secondary" (click)="rejectRule()" [disabled]="this.ruleSelection.isEmpty()">Reject</button>
       </div>
     </div>
 
@@ -44,7 +44,8 @@
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let row" (click)="inspectItem('rule-management', row.id)"><a> {{row.name}} </a>
+          <mat-cell *matCellDef="let row">
+            <a [href]="getUrl('rule-management', row.id)" target="_blank">{{row.name}}</a>
           </mat-cell>
         </ng-container>
 
@@ -72,7 +73,9 @@
         <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
       </mat-table>
 
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <mat-paginator #rulePaginator
+                     [length]="rules?.length"
+                     [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
     <br>
     <br>
@@ -86,7 +89,7 @@
       </mat-form-field>
       <div>
         <button cuiButton color="primary" (click)="approveSubmeasure()" [disabled]="this.submeasureSelection.isEmpty()">Approve</button>
-        <button cuiButton color="primary" (click)="rejectSubmeasure()" [disabled]="this.submeasureSelection.isEmpty()">Reject</button>
+        <button cuiButton color="secondary" (click)="rejectSubmeasure()" [disabled]="this.submeasureSelection.isEmpty()">Reject</button>
 
       </div>
     </div>
@@ -115,7 +118,8 @@
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let row" (click)="inspectItem('submeasure', row.id)"><a> {{row.name}} </a>
+          <mat-cell *matCellDef="let row">
+            <a [href]="getUrl('submeasure', row.id)" target="_blank">{{row.name}}</a>
           </mat-cell>
         </ng-container>
 
@@ -143,7 +147,9 @@
         <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
       </mat-table>
 
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <mat-paginator #subPaginator
+                     [length]="submeasures?.length"
+                     [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
   </div>
 </div>
