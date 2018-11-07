@@ -51,7 +51,7 @@ export default function () {
   })
 */
 
-  app.use(express.static(path.resolve(__dirname, '../../ui/dist')));
+  app.use(express.static(path.resolve(__dirname, '../../ui/dist'), {index: false}));
 
   const corsOptions = {
     origin: config.corsOrigin,
