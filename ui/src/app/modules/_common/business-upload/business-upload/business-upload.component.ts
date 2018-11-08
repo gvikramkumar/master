@@ -9,13 +9,16 @@ import {environment} from '../../../../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BusinessUploadFileType, Directory} from '../../../../../../../shared/enums';
 import {UiUtil} from '../../../../core/services/ui-util';
+import {OpenPeriodService} from '../../services/open-period.service';
+import {OpenPeriod} from '../../models/open-period';
+import {shUtil} from '../../../../../../../shared/shared-util';
 
 const apiUrl = environment.apiUrl;
 
 interface UploadResults {
-  status: string,
-  uploadName?: string,
-  rowCount?: number
+  status: string;
+  uploadName?: string;
+  rowCount?: number;
 }
 
 @Component({
@@ -27,6 +30,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   files: FsFile[];
   selectedFileName = '';
   templates: FsFile[];
+  openPeriod: OpenPeriod;
   uploadTypes = [
     {type: 'dollar-upload', text: 'Adjustments - Dollar Upload', disabled: false},
     {type: 'mapping-upload', text: 'Manual Mapping Split Percentage Upload', disabled: false},
@@ -41,16 +45,24 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     public store: AppStore,
     private route: ActivatedRoute,
     private fsFileService: FsFileService,
-    private uiUtil: UiUtil) {
+    private uiUtil: UiUtil,
+    private openPeriodService: OpenPeriodService) {
     super(store, route);
   }
 
   ngOnInit() {
-    this.fsFileService.getInfoMany({
-      directory: Directory.businessUpload,
-      buFileType: BusinessUploadFileType.template,
-      groupField: 'buUploadType'
-    }).subscribe(templates => this.templates = templates)
+    Promise.all([
+      this.fsFileService.getInfoMany({
+        directory: Directory.businessUpload,
+        buFileType: BusinessUploadFileType.template,
+        groupField: 'buUploadType'
+      }).toPromise(),
+      this.openPeriodService.getQueryOne({moduleId: this.store.module.moduleId}).toPromise()
+    ])
+      .then(results => {
+        this.templates = results[0];
+        this.openPeriod = shUtil.getFiscalMonthLongNameFromNumber(results[1].fiscalMonth);
+      });
   }
 
   uploadFile(fileInput) {
@@ -79,7 +91,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
           message = 'Errors have been emailed to your email account.';
         }
         this.uiUtil.toast(message, title);
-      })
+      });
   }
 
   getDownloadUri() {

@@ -9,6 +9,7 @@ export const shUtil = {
   isManualUploadSource,
   getFiscalMonthListFromDate,
   getFiscalMonthListForCurYearAndLast,
+  getFiscalMonthLongNameFromNumber,
   getHtmlForLargeSingleMessage
 };
 
@@ -110,6 +111,17 @@ function stringToArray(str) {
 
 function isAdminModuleId(moduleId) {
   return moduleId === 99;
+}
+
+function getFiscalMonthLongNameFromNumber(fiscalMonthNum) {
+  const year = fiscalMonthNum.toString().substr(0, 4);
+  const date = new Date(Number(year), 11);
+  const fimos = getFiscalMonthListFromDate(date, 24);
+  const fimo = _.find(fimos, {fiscalMonth: fiscalMonthNum});
+  if (!fimo) {
+    throw new Error(`getFiscalMonthLongNameFromNumber: fiscalmonth not found for: ${fiscalMonthNum}`);
+  }
+  return fimo.fiscalMonthName;
 }
 
 function getFiscalMonthListForCurYearAndLast() {
