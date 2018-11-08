@@ -9,6 +9,7 @@ import {debounceTime} from 'rxjs/operators';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import {Submeasure} from '../../models/submeasure';
+import {MeasureService} from '../../services/measure.service';
 import {RuleService} from '../../services/rule.service';
 import {SubmeasureService} from '../../services/submeasure.service';
 import {AppStore} from '../../../../app/app-store';
@@ -25,8 +26,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   moment = moment;
   submeasures: Submeasure[];
   rules: AllocationRule[];
-  // submeasuresCount: Number = 0;
-  // rulesCount: Number = 0;
+  measureNameMap: Map<number, string> = new Map();
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
   ruleColumns = ['select', 'name', 'driver', 'period', 'updatedBy', 'updatedDate'];
@@ -43,6 +43,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   constructor(
     private ruleService: RuleService,
     private submeasureService: SubmeasureService,
+    private measureService: MeasureService,
     private store: AppStore,
     private route: ActivatedRoute,
     private router: Router,
@@ -61,6 +62,13 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
     this.formControl.valueChanges.pipe(debounceTime(300))
       .subscribe(name => {
         this.nameFilter.next(name);
+      });
+
+    this.measureService.getManyLatest('name')
+      .subscribe(measures => {
+        for (let i = 0; i < measures.length; i++) {
+          this.measureNameMap.set(measures[i].measureId, measures[i].name);
+        }
       });
 
     this.ruleService.getManyPending()

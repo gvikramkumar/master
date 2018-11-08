@@ -125,7 +125,7 @@
 
         <ng-container matColumnDef="measure">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Measure</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.measureId}}</mat-cell>
+          <mat-cell *matCellDef="let row">{{measureNameMap.get(row.measureId)}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="rulelist">
