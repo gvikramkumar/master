@@ -8,7 +8,7 @@ import {svrUtil} from '../server/lib/common/svr-util';
 
 
 
-console.log([undefined].length);
+console.log(shUtil.getFiscalMonthLongNameFromNumber(201901));
 
 
 

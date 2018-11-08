@@ -1,10 +1,15 @@
 
 <div class="fin-container business-upload-comp">
 
+  <div class="row">
+    <div class="col-md-12 open-period">
+      <span style="margin-right: 10px;">Uploading For Open Period:</span> {{openPeriod}}
+    </div>
+  </div>
 
   <div class="row">
 
-    <div class="col-md-6 col-xl-5 base-padding-top left-side">
+    <div class="col-md-auto col-xl-5 base-padding-top left-side">
 
       <div class="form-group radio-list"  *ngFor="let utype of uploadTypes">
         <label class="radio" [class.disabled]="utype.disabled">
@@ -43,7 +48,12 @@
 
         </div>
       </div>
+
+
     </div>
+
+
+
   </div>
 
 </div>
