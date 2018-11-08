@@ -6,6 +6,7 @@ import {AppStore} from '../../app/app-store';
 import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-components';
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
 import {PromptDialogComponent} from '../../shared/dialogs/prompt-dialog/prompt-dialog.component';
+// import {ApprovalDialogComponent} from '../../shared/dialogs/prompt-dialog/approval-dialog.component';
 import {Observable} from 'rxjs';
 import {
   MatDialog,
@@ -239,6 +240,22 @@ export class UiUtil {
       .afterClosed();
   }
 
+/*  approvalDialog(message: string, title = null, inputType = DialogInputType.input, size = DialogSize.large) {
+    if (this.dialog.openDialogs.length) {
+      console.log('genericDialog: dialog already open');
+      return;
+    }
+
+    const config = <MatDialogConfig> {
+      data: {message, title, inputType},
+      width: size,
+      backdropClass: 'bg-modal-backdrop'
+    };
+
+    return this.dialog.open(ApprovalDialogComponent, config)
+      .afterClosed();
+  }*/
+
   /*
   export declare class CuiDialogConfig<D = any> {
   viewContainerRef?: ViewContainerRef;
@@ -304,12 +321,12 @@ export class UiUtil {
     return this.genericDialog('Are you sure you want to submit for approval?', null, null, DialogType.yesNo);
   }
 
-  confirmApprove() {
-    return this.genericDialog('Are you sure you want to approve?', null, null, DialogType.yesNo);
+  confirmApprove(type: string) {
+    return this.genericDialog(`Are you sure you want to approve the ${type}?`, null, null, DialogType.yesNo);
   }
 
-  confirmReject() {
-    return this.genericDialog('Are you sure you want to reject?', null, null, DialogType.yesNo);
+  confirmReject(type: string) {
+    return this.genericDialog(`Are you sure you want to approve the ${type}?`, null, null, DialogType.yesNo);
   }
 
   errorDialog(errors) {
