@@ -29,16 +29,16 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   measureNameMap: Map<number, string> = new Map();
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
-  ruleColumns = ['select', 'name', 'driver', 'period', 'updatedBy', 'updatedDate'];
-  submeasureColumns = ['select', 'name', 'measure', 'rulelist', 'updatedBy', 'updatedDate'];
+  ruleColumns = ['select', 'name', 'driver', 'period', 'submittedBy', 'submittedDate'];
+  submeasureColumns = ['select', 'name', 'measure', 'rulelist', 'submittedBy', 'submittedDate'];
   ruleDataSource: MatTableDataSource<AllocationRule>;
   submeasureDataSource: MatTableDataSource<Submeasure>;
   showRules = true;
   showSubmeasures = true;
   UiUtil = UiUtil;
 
-  ruleSelection = new SelectionModel<AllocationRule>(false, null);
-  submeasureSelection = new SelectionModel<Submeasure>(false, null);
+  ruleSelection = new SelectionModel<AllocationRule>(true, []);
+  submeasureSelection = new SelectionModel<Submeasure>(true, []);
 
   constructor(
     private ruleService: RuleService,
@@ -108,17 +108,21 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
     this.submeasureDataSource.filter = filterValue;
   }
 
-  approveRule() {
+  approveRules() {
     this.uiUtil.confirmApprove('rule')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
               if (resultPrompt !== undefined) {
-                this.ruleSelection.selected[0].approveRejectMessage = resultPrompt;
-                this.ruleService.approve(this.ruleSelection.selected[0])
-                  .subscribe(() => {
-                    this.uiUtil.toast('Rule approved, user notified.');
+                let promises: Promise<any>[] = [];
+                for (let i = 0; i < this.ruleSelection.selected.length; i++) {
+                  this.ruleSelection.selected[i].approveRejectMessage = '[BULK APPROVAL] ' + resultPrompt;
+                  promises.push(this.ruleService.approve(this.ruleSelection.selected[i]).toPromise());
+                }
+                Promise.all(promises)
+                  .then(result => {
+                    this.uiUtil.toast('Rule(s) approved, user(s) notified.');
                     this.ngOnInit(); // refreshes data
                   });
               }
@@ -127,17 +131,21 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
       });
   }
 
-  approveSubmeasure() {
+  approveSubmeasures() {
     this.uiUtil.confirmApprove('submeasure')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
               if (resultPrompt !== undefined) {
-                this.submeasureSelection.selected[0].approveRejectMessage = resultPrompt;
-                this.submeasureService.approve(this.submeasureSelection.selected[0])
-                  .subscribe(() => {
-                    this.uiUtil.toast('Submeasure approved, user notified.');
+                let promises: Promise<any>[] = [];
+                for (let i = 0; i < this.submeasureSelection.selected.length; i++) {
+                  this.submeasureSelection.selected[i].approveRejectMessage = '[BULK APPROVAL] ' + resultPrompt;
+                  promises.push(this.submeasureService.approve(this.submeasureSelection.selected[i]).toPromise());
+                }
+                Promise.all(promises)
+                  .then(result => {
+                    this.uiUtil.toast('Submeasure(s) approved, user(s) notified.');
                     this.ngOnInit(); // refreshes data
                   });
               }
@@ -146,17 +154,21 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
       });
   }
 
-  rejectRule() {
+  rejectRules() {
     this.uiUtil.confirmReject('rule')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
               if (resultPrompt !== undefined) {
-                this.ruleSelection.selected[0].approveRejectMessage = resultPrompt;
-                this.ruleService.reject(this.ruleSelection.selected[0])
-                  .subscribe(sm => {
-                    this.uiUtil.toast('Rule has been rejected, user notified.');
+                let promises: Promise<any>[] = [];
+                for (let i = 0; i < this.ruleSelection.selected.length; i++) {
+                  this.ruleSelection.selected[i].approveRejectMessage = '[BULK REJECT] ' + resultPrompt;
+                  promises.push(this.ruleService.reject(this.ruleSelection.selected[i]).toPromise());
+                }
+                Promise.all(promises)
+                  .then(result => {
+                    this.uiUtil.toast('Rule(s) rejected, user(s) notified.');
                     this.ngOnInit(); // refreshes data
                   });
               }
@@ -165,17 +177,21 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
       });
   }
 
-  rejectSubmeasure() {
+  rejectSubmeasures() {
     this.uiUtil.confirmReject('submeasure')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
               if (resultPrompt !== undefined) {
-                this.submeasureSelection.selected[0].approveRejectMessage = resultPrompt;
-                this.submeasureService.reject(this.submeasureSelection.selected[0])
-                  .subscribe(sm => {
-                    this.uiUtil.toast('Submeasure has been rejected, user notified.');
+                let promises: Promise<any>[]= [];
+                for (let i = 0; i < this.submeasureSelection.selected.length; i++) {
+                  this.submeasureSelection.selected[i].approveRejectMessage = '[BULK REJECT] ' + resultPrompt;
+                  promises.push(this.submeasureService.reject(this.submeasureSelection.selected[i]).toPromise());
+                }
+                Promise.all(promises)
+                  .then(result => {
+                    this.uiUtil.toast('Submeasure(s) rejected, user(s) notified.');
                     this.ngOnInit(); // refreshes data
                   });
               }
@@ -198,6 +214,32 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
     }
     result += rules[rules.length - 1];
     return result;
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  allRulesSelected(): boolean {
+    const numSelected = this.ruleSelection.selected.length;
+    const numRows = this.ruleDataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  allSubmeasuresSelected(): boolean {
+    const numSelected = this.submeasureSelection.selected.length;
+    const numRows = this.submeasureDataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  ruleMasterToggle() {
+    this.allRulesSelected() ?
+      this.ruleSelection.clear() :
+      this.ruleDataSource.data.forEach(row => this.ruleSelection.select(row));
+  }
+
+  submeasureMasterToggle() {
+    this.allSubmeasuresSelected() ?
+      this.submeasureSelection.clear() :
+      this.submeasureDataSource.data.forEach(row => this.submeasureSelection.select(row));
   }
 
 }
