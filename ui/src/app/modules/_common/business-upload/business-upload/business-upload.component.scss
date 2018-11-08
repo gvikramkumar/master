@@ -2,21 +2,23 @@
 
 .business-upload-comp {
 
+  .open-period {
+    margin-top: 6px;
+    margin-bottom: 16px;
+  }
   .left-side {
     min-width: 370px;
+  }
+
+  .selected-value {
+    font-size: 16px;
+    margin: 18px 0 10px 0;
   }
 
   .file-upload {
     max-width: 460px;
 
     .fin-content {
-
-      .selected-value {
-        font-size: 16px;
-        margin: 18px 0 10px 0;
-      }
-
-
     }
 
     button#choose-file {
