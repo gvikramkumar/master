@@ -20,7 +20,8 @@ import {CuiIndexModule} from './indexes/cui-index.module';
 import { TestComponent } from './components/test/test/test.component';
 import { GenericDialogComponent } from './dialogs/generic-dialog/generic-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
-import { ApprovalDialogComponent } from './dialogs/approval-dialog/approval-dialog.component';
+import { RuleDetailDialogComponent } from './dialogs/rule-detail-dialog/rule-detail-dialog.component';
+import { SubmeasureDetailDialogComponent } from './dialogs/submeasure-detail-dialog/submeasure-detail-dialog.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import {SwitchComponent} from './components/switch/switch.component';
 import { TestValidationComponent } from './components/test/test-validation/test-validation.component';
@@ -102,7 +103,8 @@ import { TestSelectsComponent } from './components/test/test-selects/test-select
     TestComponent,
     GenericDialogComponent,
     PromptDialogComponent,
-    ApprovalDialogComponent,
+    RuleDetailDialogComponent,
+    SubmeasureDetailDialogComponent,
     CheckboxComponent,
     SwitchComponent,
     TestValidationComponent,
@@ -123,7 +125,8 @@ import { TestSelectsComponent } from './components/test/test-selects/test-select
     NotImplementedComponent,
     GenericDialogComponent,
     PromptDialogComponent,
-    ApprovalDialogComponent
+    RuleDetailDialogComponent,
+    SubmeasureDetailDialogComponent
   ]
 })
 export class SharedModule {

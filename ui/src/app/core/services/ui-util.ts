@@ -6,7 +6,8 @@ import {AppStore} from '../../app/app-store';
 import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-components';
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
 import {PromptDialogComponent} from '../../shared/dialogs/prompt-dialog/prompt-dialog.component';
-// import {ApprovalDialogComponent} from '../../shared/dialogs/prompt-dialog/approval-dialog.component';
+import {RuleDetailDialogComponent} from '../../shared/dialogs/rule-detail-dialog/rule-detail-dialog.component';
+import {SubmeasureDetailDialogComponent} from '../../shared/dialogs/submeasure-detail-dialog/submeasure-detail-dialog.component';
 import {Observable} from 'rxjs';
 import {
   MatDialog,
@@ -237,6 +238,36 @@ export class UiUtil {
       backdropClass: 'bg-modal-backdrop'
     };
     return this.dialog.open(PromptDialogComponent, config)
+      .afterClosed();
+  }
+
+  ruleDetailDialog(rule, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
+    if (this.dialog.openDialogs.length) {
+      console.log('genericDialog: dialog already open');
+      return;
+    }
+
+    const config = <MatDialogConfig> {
+      data: rule,
+      width: size,
+      backdropClass: 'bg-modal-backdrop'
+    };
+    return this.dialog.open(RuleDetailDialogComponent, config)
+      .afterClosed();
+  }
+
+  submeasureDetailDialog(rule, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
+    if (this.dialog.openDialogs.length) {
+      console.log('genericDialog: dialog already open');
+      return;
+    }
+
+    const config = <MatDialogConfig> {
+      data: rule,
+      width: size,
+      backdropClass: 'bg-modal-backdrop'
+    };
+    return this.dialog.open(SubmeasureDetailDialogComponent, config)
       .afterClosed();
   }
 

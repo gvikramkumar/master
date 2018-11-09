@@ -1,0 +1,11 @@
+<div mat-dialog-title>Submeasure Detail:</div>
+
+  <div mat-dialog-content>
+    <div *ngIf="data"  class="fin-dialog-data">
+      <pre>{{formatSubmeasure(data)}}</pre>
+    </div>
+  </div>
+
+<div mat-dialog-actions>
+  <button cuiButton color="secondary" type="button" mat-dialog-close="true">Close</button>
+</div>
