@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApprovalDialogComponent } from './approval-dialog.component';
+import { RuleDetailDialogComponent } from './generic-dialog.component';
 
-describe('ApprovalDialogComponent', () => {
-  let component: ApprovalDialogComponent;
-  let fixture: ComponentFixture<ApprovalDialogComponent>;
+describe('RuleDetailDialogComponent', () => {
+  let component: RuleDetailDialogComponent;
+  let fixture: ComponentFixture<RuleDetailDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApprovalDialogComponent ]
+      declarations: [ RuleDetailDialogComponent ]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApprovalDialogComponent);
+    fixture = TestBed.createComponent(RuleDetailDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

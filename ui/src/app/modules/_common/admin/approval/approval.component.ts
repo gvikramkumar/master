@@ -15,7 +15,7 @@ import {SubmeasureService} from '../../services/submeasure.service';
 import {AppStore} from '../../../../app/app-store';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {SelectionModel} from '@angular/cdk/collections';
-import {DialogInputType} from '../../../../core/models/ui-enums';
+import {DialogInputType, DialogSize} from '../../../../core/models/ui-enums';
 
 @Component({
   selector: 'fin-approval',
@@ -240,6 +240,14 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
     this.allSubmeasuresSelected() ?
       this.submeasureSelection.clear() :
       this.submeasureDataSource.data.forEach(row => this.submeasureSelection.select(row));
+  }
+
+  openRuleDialog(rule) {
+    this.uiUtil.ruleDetailDialog(rule, null, DialogSize.large, DialogInputType.textarea);
+  }
+
+  openSubmeasureDialog(submeasure) {
+    this.uiUtil.submeasureDetailDialog(submeasure, null, DialogSize.large, DialogInputType.textarea);
   }
 
 }
