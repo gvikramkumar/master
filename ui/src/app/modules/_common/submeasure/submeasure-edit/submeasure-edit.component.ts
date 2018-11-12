@@ -41,7 +41,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   rules: AllocationRule[] = [];
   errs: string[] = [];
   yearmos: { fiscalMonthName: string, fiscalMonth: number }[];
-  COGS = ' Cogs '; // todo: move to lookup
   disableReportingLevels = [];
   disableCategories = false;
   BeIflDisabled = false;
@@ -311,8 +310,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   isCogsMeasure() {
-    return _.find(this.measures, {measureId: this.sm.measureId})
-      .name.indexOf(this.COGS) !== -1;
+    const measure = _.find(this.measures, {measureId: this.sm.measureId});
+    return measure && measure.isCogsMeasure === 'Y';
   }
 
   measureChange(init = false) {

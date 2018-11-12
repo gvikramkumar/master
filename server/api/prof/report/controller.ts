@@ -51,12 +51,12 @@ export default class ReportController extends ControllerBase {
   getExcelReport(req, res, next) {
     const body = req.body; // post request, params are in the body
     const moduleId = req.body.moduleId;
-    req.query = _.omit(body, ['excelFilename', 'excelSheetname', 'excelProperties', 'excelHeaders']);
+    req.query = _.omit(body, ['excelFilename']);
+    let excelSheetname;
+    let excelHeaders;
+    let excelProperties;
 
-    if (!body.excelFilename || !body.excelSheetname || !body.excelProperties) {
-      next(new ApiError('Missing properties for excelDownload. Require: excelFilename, excelSheetname, excelProperties.', null, 400));
-      return;
-    }
+    this.verifyProperties(body, ['excelFilename']);
 
     let promise;
     switch (req.params.report) {
@@ -65,41 +65,78 @@ export default class ReportController extends ControllerBase {
         // but for module specific collections like these, having a moduleId will
         // get no results as it's not included in the collection, so we need to remove it from filter
         delete req.query.moduleId;
+        excelSheetname = ['Manual Uploaded Data'];
+        excelHeaders = ['Fiscal Month', 'Sub Measure Name', 'Input Product Value', 'Input Sales Value', 'Legal Entity', 'Int Business Entity', 'SCMS', 'Amount'];
+        excelProperties = ['fiscalMonth', 'submeasureName', 'product', 'sales', 'legalEntity', 'intBusinessEntity', 'scms', 'amount'];
         promise = this.dollarUploadCtrl.getManyPromise(req);
         break;
       case 'mapping-upload':
         delete req.query.moduleId;
+        excelSheetname = ['Manual Mapping Data'];
+        excelHeaders = ['Fiscal Month', 'Sub Measure Name', 'Input Product Value', 'Input Sales Value', 'Legal Entity', 'Int Business Entity', 'SCMS', 'Percentage'];
+        excelProperties = ['fiscalMonth', 'submeasureName', 'product', 'sales', 'legalEntity', 'intBusinessEntity', 'scms', 'percentage'];
         promise = this.mappingUploadCtrl.getManyPromise(req);
         break;
       case 'product-hierarchy':
+        excelSheetname = ['Product Hierarchy'];
+        excelHeaders = ['Technology Group', 'Business Unit', 'Product Family'];
+        excelProperties = ['technology_group_id', 'business_unit_id', 'product_family_id'];
         promise = this.postgresRepo.getProductHierarchyReport();
-        break
+        break;
       case 'sales-hierarchy':
+        excelSheetname = ['Sales Hierarchy'];
+        excelHeaders = ['Sales Territory 1', 'Sales Territory 2', 'Sales Territory 3', 'Sales Territory 4', 'Sales Territory 5', 'Sales Territory 6'];
+        excelProperties = ['l1_sales_territory_descr', 'l2_sales_territory_descr', 'l3_sales_territory_descr', 'l4_sales_territory_descr',
+          'l5_sales_territory_descr', 'l6_sales_territory_descr'];
         promise = this.postgresRepo.getSalesHierarchyReport();
-        break
+        break;
       case 'dept-upload':
         delete req.query.moduleId;
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = this.deptUploadCtrl.getManyPromise(req);
         break
       case 'submeasure-grouping':
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = this.postgresRepo.getSubmeasureGroupingReport();
-        break
+        break;
       case '2t-submeasure-list':
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = this.postgresRepo.get2TSebmeasureListReport();
-        break
+        break;
       case 'disti-to-direct':
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = this.postgresRepo.getDistiToDirectMappingReport();
-        break
+        break;
       case 'alternate-sl2':
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = this.postgresRepo.getAlternateSL2Report();
-        break
+        break;
       case 'corp-adjustment':
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = this.postgresRepo.getCorpAdjustmentReport();
-        break
+        break;
       case 'sales-split-percentage':
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = this.postgresRepo.getSalesSplitPercentageReport();
         break;
       case 'valid-driver':
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = [
           this.postgresRepo.getAdjustmentPFReport(),
           this.postgresRepo.getDriverSL3Report(),
@@ -108,6 +145,9 @@ export default class ReportController extends ControllerBase {
         ];
         break;
       case 'submeasure':
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = [
           this.subMeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
           this.subMeasureRepo.getMany({setSort: 'name', moduleId}),
@@ -115,6 +155,9 @@ export default class ReportController extends ControllerBase {
         ];
         break;
       case 'allocation-rule':
+        excelSheetname = [];
+        excelHeaders = [];
+        excelProperties = [];
         promise = [
           this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
           this.allocationRuleRepo.getMany({setSort: 'name', moduleId}),
@@ -127,13 +170,8 @@ export default class ReportController extends ControllerBase {
     }
 
     if (promise instanceof Array) { // multiple sheets
-      if (body.excelHeaders) {
-        body.excelHeaders = body.excelHeaders.split(';;');
-      }
-      body.excelSheetname = body.excelSheetname.split(';;');
-      body.excelProperties = body.excelProperties.split(';;');
-      if ((body.excelHeaders && body.excelHeaders.length !== promise.length) || body.excelSheetname.length !== promise.length
-        || body.excelProperties.length !== promise.length) {
+      if ((excelHeaders && excelHeaders.length !== promise.length) || excelSheetname.length !== promise.length
+        || excelProperties.length !== promise.length) {
         next(new ApiError(`excelHeaders, excelProperties, excelSheetname array lengths not equal to report sheet length: ${promise.length}`, body, 400));
         return;
       }
@@ -142,7 +180,7 @@ export default class ReportController extends ControllerBase {
           const sheetArr = [];
           resultArr.forEach((results, idx) => {
             let records = results.rows || results;
-            records = records.map(record => shUtil.stringToArray(body.excelProperties[idx])
+            records = records.map(record => excelProperties[idx]
               .map(prop => {
                 const val = record[prop];
                 if (val instanceof Date) {
@@ -154,11 +192,11 @@ export default class ReportController extends ControllerBase {
               }));
 
             let data = [];
-            if (body.excelHeaders && body.excelHeaders[idx]) {
-              data.push(shUtil.stringToArray(body.excelHeaders[idx]));
+            if (excelHeaders && excelHeaders[idx]) {
+              data.push(excelHeaders[idx]);
             }
             data = data.concat(records);
-            sheetArr.push({name: body.excelSheetname[idx], data});
+            sheetArr.push({name: excelSheetname[idx], data});
           });
           const buffer = xlsx.build(sheetArr);
           res.set('Content-Type', 'application/vnd.ms-excel');
@@ -169,8 +207,7 @@ export default class ReportController extends ControllerBase {
       promise
         .then(results => results.rows || results)
         .then(records => {
-          return records.map(record => shUtil.stringToArray(body.excelProperties)
-            .map(prop => {
+          return records.map(record => excelProperties.map(prop => {
               const val = record[prop];
               if (val instanceof Date) {
                 const str = val.toISOString();
@@ -182,11 +219,11 @@ export default class ReportController extends ControllerBase {
         })
         .then(records => {
           let data = [];
-          if (body.excelHeaders) {
-            data.push(shUtil.stringToArray(body.excelHeaders));
+          if (excelHeaders) {
+            data.push(excelHeaders);
           }
           data = data.concat(records);
-          const buffer = xlsx.build([{name: body.excelSheetname, data}]);
+          const buffer = xlsx.build([{name: excelSheetname, data}]);
           res.set('Content-Type', 'application/vnd.ms-excel');
           res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
           svrUtil.bufferToStream(buffer).pipe(res);
@@ -212,13 +249,13 @@ export default class ReportController extends ControllerBase {
     const body = req.body; // post request, params are in the body
     req.query = _.omit(body, ['excelFilename', 'excelProperties', 'excelHeaders']);
 
-    if (!body.excelFilename || !body.excelProperties) {
+    if (!excelFilename || !excelProperties) {
       next(new ApiError('Missing properties for excelDownload. Require: excelFilename, excelProperties.', null, 400));
       return;
     }
     let arrRtn = [];
-    if (body.excelHeaders) {
-      arrRtn.push(svrUtil.cleanCsv(body.excelHeaders));
+    if (excelHeaders) {
+      arrRtn.push(svrUtil.cleanCsv(excelHeaders));
     }
 
     let promise;
@@ -266,11 +303,11 @@ export default class ReportController extends ControllerBase {
 
     promise
       .then(results => results.rows || results)
-      .then(docs => svrUtil.convertJsonToCsv(docs, svrUtil.cleanCsvArr(body.excelProperties)))
+      .then(docs => svrUtil.convertJsonToCsv(docs, svrUtil.cleanCsvArr(excelProperties)))
       .then(arrCsv => {
         arrRtn = arrRtn.concat(arrCsv);
         res.set('Content-Type', 'text/csv');
-        res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
+        res.set('Content-Disposition', 'attachment; filename="' + excelFilename + '"');
         res.send(arrRtn.join('\n'));
       })
       .catch(next);

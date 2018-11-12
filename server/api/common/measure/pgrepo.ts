@@ -9,6 +9,7 @@ const ormMap: OrmMap[] = [
   {prop: 'typeCode', field: 'measure_type_code'},
   {prop: 'approvalRequired', field: 'sub_measure_approval_flag'},
   {prop: null, field: 'sub_measure_notification_flag', pgDefault: 'Y'},
+  {prop: 'isCogsMeasure', field: null},
   {prop: 'status', field: 'status_flag'},
   {prop: 'createdBy', field: 'create_owner'},
   {prop: 'createdDate', field: 'create_datetimestamp', type: OrmTypes.date},

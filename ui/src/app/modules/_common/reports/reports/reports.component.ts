@@ -11,6 +11,7 @@ import {MappingUploadService} from '../../../prof/services/mapping-upload.servic
 import {environment} from '../../../../../environments/environment';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
+import {shUtil} from '../../../../../../../shared/shared-util';
 
 interface ReportSettings {
   submeasureName: string;
@@ -39,33 +40,19 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   reports: any[] = [
     {
       type: 'dollar-upload', hasFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
-      filename: 'manual_uploaded_data',
-      excelSheetname: 'Manual Uploaded Data',
-      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Amount',
-      excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, amount'
+      filename: 'manual_uploaded_data'
     },
     {
       type: 'mapping-upload', hasFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
-      filename: 'manual_mapping_data',
-      excelSheetname: 'Manual Mapping Data',
-      excelHeaders: 'Fiscal Month, Sub Measure Name, Input Product Value, Input Sales Value, Legal Entity, Int Business Entity, SCMS, Percentage',
-      excelProperties: 'fiscalMonth, submeasureName, product, sales, legalEntity, intBusinessEntity, scms, percentage'
+      filename: 'manual_mapping_data'
     },
     {
       type: 'product-hierarchy', text: 'Valid Product Hierarchy', disabled: false,
-      filename: 'product_hierarchy.xlsx',
-      excelSheetname: 'Product Hierarchy',
-      excelHeaders: 'Technology Group, Business Unit, Product Family',
-      excelProperties: 'technology_group_id, business_unit_id, product_family_id'
+      filename: 'product_hierarchy.xlsx'
     },
     {
       type: 'sales-hierarchy', text: 'Valid Sales Hierarchy', disabled: false,
-      filename: 'sales_hierarchy.xlsx',
-      excelSheetname: 'Sales Hierarchy',
-      excelHeaders: 'Sales Territory 1, Sales Territory 2, Sales Territory 3, Sales Territory 4, ' +
-      'Sales Territory 5, Sales Territory 6',
-      excelProperties: 'l1_sales_territory_descr, l2_sales_territory_descr, l3_sales_territory_descr,' +
-      'l4_sales_territory_descr, l5_sales_territory_descr, l6_sales_territory_descr'
+      filename: 'sales_hierarchy.xlsx'
     },
     {
       type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping Report', disabled: false,
@@ -200,18 +187,18 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   measureSelected() {
     this.disableDownload = true;
-    this.submeasureName = undefined;
+    // this.submeasureName = undefined;
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
-    this.subMeasureService.getMany({measureId: this.measureId})
+    this.subMeasureService.getManyLatest('name', {measureId: this.measureId, status: 'A'})
       .subscribe(submeasures => this.submeasures = _.sortBy(submeasures, 'name'));
   }
 
   submeasureSelected() {
     if (this.report.hasFiscalMonth) {
       this.disableDownload = true;
-      this.fiscalMonth = undefined;
+      // this.fiscalMonth = undefined;
       this.fiscalMonths = [];
       let obs;
       switch (this.report.type) {
@@ -225,7 +212,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           break;
       }
       obs.subscribe(fiscalMonths => {
-        this.fiscalMonths = fiscalMonths.sort().reverse().slice(0, 24).map(fiscalMonth => ({fiscalMonth}));
+        this.fiscalMonths = fiscalMonths.sort().reverse().slice(0, 24).map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
       });
     } else {
       this.disableDownload = false;
@@ -248,10 +235,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   downloadReport() {
     const params = <ReportSettings>{
-      excelFilename: this.getFilename(),
-      excelSheetname: this.report.excelSheetname instanceof Array ? this.report.excelSheetname.join(';;') : this.report.excelSheetname,
-      excelHeaders: this.report.excelHeaders instanceof Array ? this.report.excelHeaders.join(';;') : this.report.excelHeaders,
-      excelProperties: this.report.excelProperties instanceof Array ? this.report.excelProperties.join(';;') : this.report.excelProperties,
+      excelFilename: this.getFilename()
     };
 
     if (this.report.hasSubmeasure || this.report.hasFiscalMonth) {
