@@ -68,7 +68,7 @@ db.dfa_submeasure.insertMany([
       manualMapping: "Y",
       expenseSSOT: "Y",
       manualMix: "Y",
-      groupFlag: 'Y',
+      groupFlag: 'N',
       retainedEarnings: 'N',
       transition: 'N',
       corpRevenue: 'Y',

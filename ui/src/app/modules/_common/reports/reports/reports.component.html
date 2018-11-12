@@ -28,7 +28,7 @@
           </div>
           <div *ngIf="report.hasFiscalMonth">
             <cui-select label="Fiscal Month" [items]="fiscalMonths" [(model)]="fiscalMonth"
-                        (modelChange)="fiscalMonthSelected()" optionsKey="fiscalMonth"
+                        (modelChange)="fiscalMonthSelected()" optionsKey="name"
                         optionsValue="fiscalMonth"></cui-select>
           </div>
 

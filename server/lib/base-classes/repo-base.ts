@@ -26,6 +26,7 @@ export default class RepoBase {
   getMany(_filter: AnyObj = {}) {
     let filter = _.clone(_filter);
     this.verifyModuleId(filter);
+    this.convertPropsToNumbers(filter);
     let query;
     const distinct = filter.getDistinct,
       limit = filter.setLimit,
@@ -67,7 +68,8 @@ export default class RepoBase {
 
   // group by groupField and get latest of each group
   private getManyByGroupLatestOrEaliest(_filter: AnyObj = {}, updatedDateSort: number) {
-    let filter = _filter;
+    let filter = _.clone(_filter);
+    this.convertPropsToNumbers(filter);
     this.verifyModuleId(filter);
     const groupField = filter.groupField;
     delete filter.groupField;
@@ -544,6 +546,23 @@ export default class RepoBase {
         (a[prop] !== undefined && b[prop] !== undefined && a[prop] === b[prop]));
       return bool;
     };
+  }
+
+  convertPropsToNumbers(filter) {
+    const props = ['moduleId', 'measureId', 'sourceId', 'submeasureId', 'submeasureKey', 'fiscalMonth'];
+    props.forEach(prop => {
+      const filterProp = filter[prop];
+      if (filterProp !== undefined && filterProp !== null) {
+        if (!(typeof filterProp === 'string' || typeof filterProp === 'number')) {
+          throw new ApiError(`convertPropsToNumbers: not string or number ${prop}: ${filterProp}`);
+        }
+        const val = Number(filterProp);
+        if (isNaN(val)) {
+          throw new ApiError(`convertPropsToNumbers: isNaN ${prop}: ${filterProp}`);
+        }
+        filter[prop] = val;
+      }
+    });
   }
 
 }

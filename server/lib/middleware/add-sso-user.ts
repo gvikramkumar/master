@@ -39,6 +39,7 @@ export function addSsoUser() {
         modules = results[1]
 
         if (isLocalEnv) {
+          genericUsers.push('jodoe');
           return new DfaUser(
             'jodoe',
             'John',
