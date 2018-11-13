@@ -34,7 +34,7 @@
     <label>{{label}}</label>
 
   </div>
-  <div class="help-block text-danger" role="alert">
+  <div *ngIf="ngc.errors" class="help-block text-danger" role="alert">
     <div *ngFor="let v of validations">
       <span *ngIf="ngc.errors && ngc.errors[v.name] && v.message && (form.submitted || ngc.touched || ngc.dirty)">
         {{v.message}}</span>
