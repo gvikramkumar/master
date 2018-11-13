@@ -2,8 +2,13 @@
 
 
 .fin.cui .form-group {
-  max-height: 60px;
+  //max-height: 60px; // this is messing up textarea's margin bottom. The problem is: rule edit fin-input inputs are 42px high instead of 40 for some reason
+  // on rule edit, they veer away from the conditional selects vertically. Need to figure out why. This hack isn't working.
   max-width: $form-group-max-width
+}
+
+.fin.cui [textarea] .form-group {
+  max-height: unset;
 }
 
 .fin.cui .form-group.form-group--inline + .form-group.form-group--inline {
