@@ -7,7 +7,6 @@ export class Measure {
   typeCode: string;
   sources: number[] = [];
   hierarchies: string[] = [];
-  approvalRequired?: string;
   reportingLevel1?: string;
   reportingLevel2?: string;
   reportingLevel3?: string;

@@ -7,7 +7,7 @@ const ormMap: OrmMap[] = [
   {prop: 'measureId', field: 'measure_id', type: OrmTypes.number},
   {prop: 'name', field: 'measure_name'},
   {prop: 'typeCode', field: 'measure_type_code'},
-  {prop: 'approvalRequired', field: 'sub_measure_approval_flag'},
+  {prop: 'null', field: 'sub_measure_approval_flag'},
   {prop: null, field: 'sub_measure_notification_flag', pgDefault: 'Y'},
   {prop: 'isCogsMeasure', field: null},
   {prop: 'status', field: 'status_flag'},

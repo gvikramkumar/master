@@ -11,7 +11,6 @@ const schema = new Schema(
     typeCode: {type: String, required: true, trim: true},
     sources: {type: [Number], required: true},
     hierarchies: {type: [String], required: true},
-    approvalRequired: {type: String, enum: ['Y', 'N']},
     reportingLevel1: String,
     reportingLevel2: String,
     reportingLevel3: String,
