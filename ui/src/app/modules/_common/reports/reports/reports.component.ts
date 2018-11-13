@@ -187,7 +187,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   measureSelected() {
     this.disableDownload = true;
-    // this.submeasureName = undefined;
+    this.submeasureName = undefined;
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
@@ -198,7 +198,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   submeasureSelected() {
     if (this.report.hasFiscalMonth) {
       this.disableDownload = true;
-      // this.fiscalMonth = undefined;
+      this.fiscalMonth = undefined;
       this.fiscalMonths = [];
       let obs;
       switch (this.report.type) {
