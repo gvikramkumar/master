@@ -8,7 +8,7 @@
     </div>
 
     <div class="col-6 col-lg-4" style="min-width:360px">
-      <cui-multiselect [items]="sources" [(model)]="selectedSources[i]"
+      <cui-multiselect [items]="sources" [(ngModel)]="selectedSources[i]"
                   optionsKey="name" optionsValue="sourceId"></cui-multiselect>
       <!--<pre>{{selectedSources[i]|json}}</pre>-->
     </div>

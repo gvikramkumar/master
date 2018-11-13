@@ -2,7 +2,7 @@
 
 <form>
 
-  <cui-select  [(model)]="selectedValue" [items]="items"
+  <cui-select  [(ngModel)]="selectedValue" [items]="items"
               empty="true" [required]="true" optionsKey="name" optionsValue="value"></cui-select>
   valid:
 

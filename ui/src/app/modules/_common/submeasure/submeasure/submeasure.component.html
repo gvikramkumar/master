@@ -2,8 +2,8 @@
 <div class="fin-wide-container">
 
   <div class="measure-select">
-    <cui-select [items]="measures" [(model)]="measureId" label="Measure"
-                (modelChange)="measureChange()" optionsKey="name" optionsValue="measureId"></cui-select>
+    <cui-select [items]="measures" [(ngModel)]="measureId" label="Measure"
+                (ngModelChange)="measureChange()" optionsKey="name" optionsValue="measureId"></cui-select>
     <div finAuth="super-user" style="margin-top: 36px; margin-bottom: -3px;">
       <fin-status-choice [choices]="showStatuses" (choiceChange)="changeStatusFilter()"></fin-status-choice>
     </div>
