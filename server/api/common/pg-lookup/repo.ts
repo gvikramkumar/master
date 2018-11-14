@@ -99,7 +99,7 @@ export default class PgLookupRepo {
             create_datetime,
             update_user,
             update_datetime
-            from fpadfa.dfa_disti_to_direct_mapping
+            from fpadfa.dfa_prof_disti_to_direct_map_upld
             where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
           `);
   }
@@ -111,11 +111,11 @@ export default class PgLookupRepo {
             alternate_sl2_code, 
             alternate_country_name,
             fiscal_month_id,
-            create_user,
+            create_owner,
             create_datetime,
-            update_user,
+            update_owner,
             update_datetime
-            from fpadfa.dfa_scms_triang_altsl2_map
+            from fpadfa.dfa_prof_scms_triang_altsl2_map_upld
             where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
           `);
   }
@@ -127,11 +127,11 @@ export default class PgLookupRepo {
             sales_territory_code, 
             scms_value,
             fiscal_month_id,
-            create_user,
+            create_owner,
             create_datetime,
-            update_user,
+            update_owner,
             update_datetime
-            from fpadfa.dfa_scms_triang_corpadj_map
+            from fpadfa.dfa_prof_scms_triang_corpadj_map_upld
             where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
           `);
   }
