@@ -130,14 +130,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'submeasure', text: 'Sub Measure Updates', disabled: false,
-      filename: 'Sub_Measure_Updates_Report.xlsx',
-      excelSheetname: ['Original', 'History', 'As Of Now'],
-      excelHeaders: ['Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time',
-        'Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time',
-        'Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time'],
-      excelProperties: ['name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
-        'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
-        'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate']
+      filename: 'Sub_Measure_Updates_Report.xlsx'
     },
     {
       type: 'allocation-rule', text: 'Measure & Sub Measure Hierarchy View', disabled: false,

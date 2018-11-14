@@ -145,13 +145,20 @@ export default class ReportController extends ControllerBase {
         ];
         break;
       case 'submeasure':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = [['Original'], ['History'], ['As Of Now']];
+        excelHeaders = [['Measure Name', 'Sub Measure Name', 'Description', 'Effective Month', 'End Month', 'Update Time'],
+        ['Measure Name', 'Sub Measure Name', 'Description', 'Effective Month', 'End Month', 'Update Time'],
+        ['Measure Name', 'Sub Measure Name', 'Description', 'Effective Month', 'End Month', 'Update Time']];
+        excelProperties = [['name', 'name', 'desc', 'startFiscalMonth', 'endFiscalMonth', 'updatedDate'],
+        ['name', 'name', 'desc', 'startFiscalMonth', 'endFiscalMonth', 'updatedDate'],
+        ['name', 'name', 'desc', 'startFiscalMonth', 'endFiscalMonth', 'updatedDate']]
         promise = [
-          this.subMeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
-          this.subMeasureRepo.getMany({setSort: 'name', moduleId}),
+          this.subMeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
+            .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
+          this.subMeasureRepo.getMany({setSort: 'name', moduleId})
+            .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
           this.subMeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
+            .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
         ];
         break;
       case 'allocation-rule':
@@ -159,9 +166,12 @@ export default class ReportController extends ControllerBase {
         excelHeaders = [];
         excelProperties = [];
         promise = [
-          this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
-          this.allocationRuleRepo.getMany({setSort: 'name', moduleId}),
+          this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
+            .then(docs => docs.map(doc => this.transformRule(doc))),
+          this.allocationRuleRepo.getMany({setSort: 'name', moduleId})
+            .then(docs => docs.map(doc => this.transformRule(doc))),
           this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
+            .then(docs => docs.map(doc => this.transformRule(doc))),
         ];
         break;
       default:
@@ -179,10 +189,10 @@ export default class ReportController extends ControllerBase {
         .then(resultArr => {
           const sheetArr = [];
           resultArr.forEach((results, idx) => {
-            let records = results.rows || results;
-            records = records.map(record => excelProperties[idx]
+            let objs = results.rows || results;
+            objs = objs.map(obj => excelProperties[idx]
               .map(prop => {
-                const val = record[prop];
+                const val = _.get(obj, prop);
                 if (val instanceof Date) {
                   const str = val.toISOString();
                   return str.substr(0, str.length - 5).replace('T', '  ');
@@ -195,7 +205,7 @@ export default class ReportController extends ControllerBase {
             if (excelHeaders && excelHeaders[idx]) {
               data.push(excelHeaders[idx]);
             }
-            data = data.concat(records);
+            data = data.concat(objs);
             sheetArr.push({name: excelSheetname[idx], data});
           });
           const buffer = xlsx.build(sheetArr);
@@ -206,9 +216,9 @@ export default class ReportController extends ControllerBase {
     } else { // single sheet
       promise
         .then(results => results.rows || results)
-        .then(records => {
-          return records.map(record => excelProperties.map(prop => {
-              const val = record[prop];
+        .then(objs => {
+          return objs.map(obj => excelProperties.map(prop => {
+              const val = _.get(obj, prop);
               if (val instanceof Date) {
                 const str = val.toISOString();
                 return str.substr(0, str.length - 5).replace('T', '  ');
@@ -217,12 +227,12 @@ export default class ReportController extends ControllerBase {
               }
             }));
         })
-        .then(records => {
+        .then(objs => {
           let data = [];
           if (excelHeaders) {
             data.push(excelHeaders);
           }
-          data = data.concat(records);
+          data = data.concat(objs);
           const buffer = xlsx.build([{name: excelSheetname, data}]);
           res.set('Content-Type', 'application/vnd.ms-excel');
           res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
@@ -234,6 +244,17 @@ export default class ReportController extends ControllerBase {
 
 
   }
+
+  transformSubmeasure(sm) {
+    sm.ruleNames = sm.rules.join(', ');
+    return sm;
+  }
+
+  transformRule(rule) {
+    return rule;
+  }
+
+
 
   // CSV REPORT: once we moved to multiple sheet reports, the csv report was replaced by excel report.
   // this code continues to stagnate and would need considerably update to be current, but we'll
