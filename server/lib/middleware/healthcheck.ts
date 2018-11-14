@@ -15,8 +15,8 @@ export function healthcheck () {
     ])
       .then(results => {
         const rtn = {
-          api: results[0],
-          mongo: results[1].version,
+          api: `build ${(results[0] && results[0].toString()) || ''}`,
+          mongo: `version ${results[1].version}`,
           pg: results[2]
         };
         res.json(rtn);
