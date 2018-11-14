@@ -37,6 +37,7 @@ import AnyObj from '../shared/models/any-obj';
 import {ApiError} from './lib/common/api-error';
 import {siteRestriction} from './lib/middleware/site-restriction';
 import {addGlobalData} from './lib/middleware/add-global-data';
+import {healthcheck} from './lib/middleware/healthcheck';
 
 export default function () {
 
@@ -69,6 +70,7 @@ export default function () {
     });
   */
 
+  app.get('/healthcheck', healthcheck());
   app.use(addSsoUser())
   app.use(addGlobalData());
   // app.use(siteRestriction());

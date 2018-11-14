@@ -5,6 +5,7 @@ import LookupRepo from './api/common/lookup/repo';
 import {ApiError} from './lib/common/api-error';
 import {exec} from 'child_process';
 import {nfcall} from 'q';
+import {svrUtil} from './lib/common/svr-util';
 
 interface DatabaseUpdate {
   fileName: string;
@@ -13,10 +14,15 @@ interface DatabaseUpdate {
 
 const config = _config.mongo;
 const lookupRepo = new LookupRepo();
+const build_number = process.env.BUILD_NUMBER;
 
 export function databaseUpdate() {
   if (process.env.NODE_ENV === 'unit') {
     return Promise.resolve();
+  }
+
+  if (!svrUtil.isLocalEnv && !build_number) {
+    throw new ApiError('No BUILD_NUMBER environment variable');
   }
 
   /*
@@ -54,17 +60,26 @@ export function databaseUpdate() {
         });
         chain.then(() => {
           return   lookupRepo.getValue('database-version')
-            .then(endVersion => console.log(`database update complete, has been updated to version: ${endVersion}`));
+            .then(endVersion => {
+              console.log(`database update complete, has been updated to version: ${endVersion}`);
+              return updateBuildNumber();
+            });
         })
           .catch(err => Promise.reject(err));
         return chain;
       } else {
         console.log(`Database already on latest version: ${databaseVersion}`);
-        return Promise.resolve();
+        return updateBuildNumber();
       }
     });
 
+}
 
+function updateBuildNumber() {
+  if (svrUtil.isLocalEnv() && !build_number) {
+    return;
+  }
+  return lookupRepo.upsert({key: 'build-number', value: build_number});
 }
 
 function doUpdate(update) {

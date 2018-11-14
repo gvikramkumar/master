@@ -12,6 +12,11 @@ export default class PgLookupRepo {
   constructor() {
   }
 
+  getDbVersion() {
+    return pgc.pgdb.query('select version()')
+      .then(results => results.rows[0].version);
+  }
+
   getFiscalMonths() {
     return pgc.pgdb.query(`
             select fiscal_month_name, fiscal_year_month_int from
