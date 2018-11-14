@@ -56,99 +56,43 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping Report', disabled: false,
-      filename: 'department_mapping_data',
-      excelSheetname: 'Dept Upload',
-      excelHeaders: 'Sub-Measure Name, Department Code, Start Account Code, End Account Code',
-      excelProperties: 'submeasureName, departmentCode, startAccountCode, endAccountCode'
+      filename: 'department_mapping_data'
     },
     {
       type: 'submeasure-grouping', text: 'Submeasure Grouping Report', disabled: false,
-      filename: 'Submeasure_Grouping_Report.xlsx',
-      excelSheetname: 'Submeasure Grouping',
-      excelHeaders: 'Submeasure Name, Group Submeasure Name, Created By, Create Time, ' +
-      'Updated By, Update Time',
-      excelProperties: 'sub_measure_name, group_sub_measure_name, create_owner,' +
-      'create_datetimestamp, update_owner, update_datetimestamp'
+      filename: 'Submeasure_Grouping_Report.xlsx'
     },
     {
       type: '2t-submeasure-list', text: '2T Submeasure List Report', disabled: false,
-      filename: 'Sub_Measure_List_Report.xlsx',
-      excelSheetname: '2t Submeasure List',
-      excelHeaders: 'Submeasure Name, Fiscal Month Id, Created By, Created Date, ' +
-      'Last Modified By, Last Modified Date',
-      excelProperties: 'submeasure_name, fiscal_month_id, create_owner,' +
-      'create_datetimestamp, update_owner, update_datetimestamp'
+      filename: 'Sub_Measure_List_Report.xlsx'
     },
     {
       type: 'disti-to-direct', text: 'Disti To Direct Mapping Report', disabled: false,
-      filename: 'Disti_to_Direct_Mapping_Report.xlsx',
-      excelSheetname: 'Disti to Direct',
-      excelHeaders: 'Group ID, Node Type, Sales Finance Hierarchy, Node Code, ' +
-      'Fiscal Month Id, Created By, Created Date, Last Modified By, Last Modified Date',
-      excelProperties: 'group_id, node_type, sales_finance_hierarchy,' +
-      'node_code, fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
+      filename: 'Disti_to_Direct_Mapping_Report.xlsx'
     },
     {
       type: 'alternate-sl2', text: 'Alternate SL2 Report', disabled: false,
-      filename: 'Alternate_SL2_Report.xlsx',
-      excelSheetname: 'Alternate SL2',
-      excelHeaders: 'Actual SL2, Alternate SL2, Alternate Country, Fiscal Month Id, ' +
-      'Created By, Created Date, Last Modified By, Last Modified Date',
-      excelProperties: 'actual_sl2_code, alternate_sl2_code, alternate_country_name,' +
-      'fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
+      filename: 'Alternate_SL2_Report.xlsx'
     },
     {
       type: 'corp-adjustment', text: 'Corp Adjustment Report', disabled: false,
-      filename: 'Corp_Adjustment_Report.xlsx',
-      excelSheetname: 'Corp Adjustment',
-      excelHeaders: 'Country Name, Sales Territory Code, SCMS Value, Fiscal Month Id, ' +
-      'Created By, Created Date, Last Modified By, Last Modified Date',
-      excelProperties: 'sales_country_name, sales_territory_code, scms_value,' +
-      'fiscal_month_id, create_user, create_datetime, update_user, update_datetime'
+      filename: 'Corp_Adjustment_Report.xlsx'
     },
     {
       type: 'sales-split-percentage', text: 'Sales Split Percentage Report', disabled: false,
-      filename: 'Sales_Split_Percentage_Report.xlsx',
-      excelSheetname: 'Sales Split Percentage',
-      excelHeaders: 'Account Id, Company Code, Sub Account Code, Sales Territory Code, Percentage Value, ' +
-      'Fiscal Month Id, Created By, Created Date, Last Modified By, Last Modified Date',
-      excelProperties: 'account_code, company_code, sub_account_code, sales_territory_code, split_percentage,' +
-      'fiscal_month_id, create_owner, create_datetimestamp, update_owner, update_datetimestamp'
+      filename: 'Sales_Split_Percentage_Report.xlsx'
     },
     {
       type: 'valid-driver', text: 'Valid Driver Report', disabled: false,
-      filename: 'Valid_Driver_Report.xlsx',
-      excelSheetname: ['Adjustment PF Report', 'Driver SL3 Report', 'Shipment Driver PF Report', 'Roll3 Driver With BE'],
-      excelHeaders: ['Tech Group, Business Unit, Product Family',
-        'Driver Type, Sales Level1 Code, Sales Level1 Description, Sales Level2 Code, Sales Level2 Description, Sales Level3 Code, Sales Level3 Description',
-        'Tech Group, Business Unit, Product Family',
-        'Driver Type, Tech Group, Business Unit, Product Family, Business Entity, Sub Business Entity'],
-      excelProperties: ['technology_group_id, business_unit_id, product_family_id',
-        'driver_type, l1_sales_territory_name_code, l1_sales_territory_descr, l2_sales_territory_name_code, l2_sales_territory_descr, l3_sales_territory_name_code, l3_sales_territory_descr',
-        'technology_group_id, business_unit_id, product_family_id',
-        'driver_type, technology_group_id, business_unit_id, product_family_id, bk_business_entity_name, sub_business_entity_name']
+      filename: 'Valid_Driver_Report.xlsx'
     },
     {
       type: 'submeasure', text: 'Sub Measure Updates', disabled: false,
-      filename: 'Sub_Measure_Updates_Report.xlsx',
-      excelSheetname: ['Original', 'History', 'As Of Now'],
-      excelHeaders: ['Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time',
-        'Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time',
-        'Measure Name, Sub Measure Name, Description, Effective Month, End Month, Update Time'],
-      excelProperties: ['name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
-        'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate',
-        'name, name, desc, startFiscalMonth, endFiscalMonth, updatedDate']
+      filename: 'Sub_Measure_Updates_Report.xlsx'
     },
     {
       type: 'allocation-rule', text: 'Measure & Sub Measure Hierarchy View', disabled: false,
-      filename: 'Hierarchy_View_Report.xlsx',
-      excelSheetname: ['Original', 'History', 'As Of Now'],
-      excelHeaders: ['Rule Name, Driver Name, Period, Sales Match, Product Match, Update Time',
-        'Rule Name, Driver Name, Period, Sales Match, Product Match, Update Time',
-        'Rule Name, Driver Name, Period, Sales Match, Product Match, Update Time'],
-      excelProperties: ['name, driverName, period, salesMatch, productMatch, updatedDate',
-        'name, driverName, period, salesMatch, productMatch, updatedDate',
-        'name, driverName, period, salesMatch, productMatch, updatedDate']
+      filename: 'Hierarchy_View_Report.xlsx'
     }
   ];
   report = this.reports[0];

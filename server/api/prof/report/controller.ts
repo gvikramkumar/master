@@ -92,51 +92,57 @@ export default class ReportController extends ControllerBase {
         break;
       case 'dept-upload':
         delete req.query.moduleId;
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['Dept Upload'];
+        excelHeaders = ['Sub-Measure Name', 'Department Code', 'Start Account Code', 'End Account Code'];
+        excelProperties = ['submeasureName', 'departmentCode', 'startAccountCode', 'endAccountCode'];
         promise = this.deptUploadCtrl.getManyPromise(req);
         break
       case 'submeasure-grouping':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['Submeasure Grouping'];
+        excelHeaders = ['Submeasure Name', 'Group Submeasure Name', 'Created By', 'Create Time', 'Updated By', 'Update Time'];
+        excelProperties = ['sub_measure_name', 'group_sub_measure_name', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         promise = this.postgresRepo.getSubmeasureGroupingReport();
         break;
       case '2t-submeasure-list':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['2t Submeasure List'];
+        excelHeaders = ['Submeasure Name', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
+        excelProperties = ['submeasure_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         promise = this.postgresRepo.get2TSebmeasureListReport();
         break;
       case 'disti-to-direct':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['Disti to Direct'];
+        excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
+        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'fiscal_month_id', 'create_user', 'create_datetime', 'update_user', 'update_datetime'];
         promise = this.postgresRepo.getDistiToDirectMappingReport();
         break;
       case 'alternate-sl2':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['Alternate SL2'];
+        excelHeaders = ['Actual SL2', 'Alternate SL2', 'Alternate Country', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
+        excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'create_user', 'create_datetime', 'update_user', 'update_datetime'];
         promise = this.postgresRepo.getAlternateSL2Report();
         break;
       case 'corp-adjustment':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['Corp Adjustment'];
+        excelHeaders = ['Country Name', 'Sales Territory Code', 'SCMS Value', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
+        excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'create_user', 'create_datetime', 'update_user', 'update_datetime'];
         promise = this.postgresRepo.getCorpAdjustmentReport();
         break;
       case 'sales-split-percentage':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['Sales Split Percentage'];
+        excelHeaders = ['Account Id', 'Company Code', 'Sub Account Code', 'Sales Territory Code', 'Percentage Value', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
+        excelProperties = ['account_code', 'company_code', 'sub_account_code', 'sales_territory_code', 'split_percentage', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         promise = this.postgresRepo.getSalesSplitPercentageReport();
         break;
       case 'valid-driver':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['Adjustment PF Report', 'Driver SL3 Report', 'Shipment Driver PF Report', 'Roll3 Driver With BE'];
+        excelHeaders = [['Tech Group', 'Business Unit', 'Product Family'],
+                        ['Driver Type', 'Sales Level1 Code', 'Sales Level1 Description', 'Sales Level2 Code', 'Sales Level2 Description', 'Sales Level3 Code', 'Sales Level3 Description'],
+                        ['Tech Group', 'Business Unit', 'Product Family'],
+                        ['Driver Type', 'Tech Group', 'Business Unit', 'Product Family', 'Business Entity', 'Sub Business Entity']];
+        excelProperties = [['technology_group_id', 'business_unit_id', 'product_family_id'],
+                           ['driver_type', 'l1_sales_territory_name_code', 'l1_sales_territory_descr', 'l2_sales_territory_name_code', 'l2_sales_territory_descr', 'l3_sales_territory_name_code', 'l3_sales_territory_descr'],
+                           ['technology_group_id', 'business_unit_id', 'product_family_id'],
+                           ['driver_type', 'technology_group_id', 'business_unit_id', 'product_family_id', 'bk_business_entity_name', 'sub_business_entity_name']];
         promise = [
           this.postgresRepo.getAdjustmentPFReport(),
           this.postgresRepo.getDriverSL3Report(),
@@ -145,9 +151,13 @@ export default class ReportController extends ControllerBase {
         ];
         break;
       case 'submeasure':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['Original', 'History', 'As Of Now'];
+        excelHeaders = [['Measure Name', 'Sub Measure Name', 'Description', 'Effective Month', 'End Month', 'Update Time'],
+                        ['Measure Name', 'Sub Measure Name', 'Description', 'Effective Month', 'End Month', 'Update Time'],
+                        ['Measure Name', 'Sub Measure Name', 'Description', 'Effective Month', 'End Month', 'Update Time']];
+        excelProperties = [['name', 'name', 'desc', 'startFiscalMonth', 'endFiscalMonth', 'updatedDate'],
+                           ['name', 'name', 'desc', 'startFiscalMonth', 'endFiscalMonth', 'updatedDate'],
+                           ['name', 'name', 'desc', 'startFiscalMonth', 'endFiscalMonth', 'updatedDate']];
         promise = [
           this.subMeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
           this.subMeasureRepo.getMany({setSort: 'name', moduleId}),
@@ -155,9 +165,13 @@ export default class ReportController extends ControllerBase {
         ];
         break;
       case 'allocation-rule':
-        excelSheetname = [];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = ['Original', 'History', 'As Of Now'];
+        excelHeaders = [['Rule Name', 'Driver Name', 'Period', 'Sales Match', 'Product Match', 'Update Time'],
+                        ['Rule Name', 'Driver Name', 'Period', 'Sales Match', 'Product Match', 'Update Time'],
+                        ['Rule Name', 'Driver Name', 'Period', 'Sales Match', 'Product Match', 'Update Time']];
+        excelProperties = [['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'updatedDate'],
+                           ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'updatedDate'],
+                           ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'updatedDate']];
         promise = [
           this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name')),
           this.allocationRuleRepo.getMany({setSort: 'name', moduleId}),
