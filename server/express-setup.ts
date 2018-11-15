@@ -38,6 +38,7 @@ import {ApiError} from './lib/common/api-error';
 import {siteRestriction} from './lib/middleware/site-restriction';
 import {addGlobalData} from './lib/middleware/add-global-data';
 import {healthcheck} from './lib/middleware/healthcheck';
+import {svrUtil} from './lib/common/svr-util';
 
 export default function () {
 
@@ -98,20 +99,21 @@ export default function () {
 
 /*
   app.get('/cause-error', function (req, res, next) {
-    if (process.env.NODE_ENV === 'unit') {
-      const err = new NamedApiError('CauseError', 'api error with data', {some: 'thing'});
+    if (svrUtil.isLocalEnv()) {
+      const err = new NamedApiError('CauseError', 'api error with data');
       throw err;
     } else {
       next();
     }
   })
-  app.get('/crash-site', function (req, res, next) {
-    if (process.env.NODE_ENV === 'unit') {
-      process.exit(666);
-    } else {
-      next();
-    }
-  })
+
+    app.get('/crash-site', function (req, res, next) {
+      if (svrUtil.isLocalEnv()) {
+        process.exit(666);
+      } else {
+        next();
+      }
+    })
 */
 
   app.use('/api/allocation-rule', allocationRuleRouter);

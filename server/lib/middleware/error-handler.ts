@@ -20,31 +20,22 @@ export function errorHandler (options) {
   const truncateLength = 66;
 
   return function (err, req, res, next) {
-    let obj: AnyObj = {}, statusCode;
-    const urlInfo = `${req.method}  ${req.url}`;
+    const obj: AnyObj = {};
+    let statusCode;
+    const data = {
+      user: req.user && req.user.id,
+      timestamp: new Date().toISOString(),
+      url: `${req.method}  ${req.url}`,
+      message: err.message
+    };
     // mongoose validation error
     if (err.name === 'ValidationError' && err.errors) {
       obj.name = 'MongooseValidationError';
       if (err.message.length > truncateLength) {
         obj.message = err.message.substr(0, truncateLength) + '...'; // full message in data
       }
-      const data = {
-        url: urlInfo,
-        message: err.message
-      }
       obj.data = Object.assign(data, err.errors);
       statusCode = 400;
-    } else if (err.message === 'Cannot read property \'query\' of undefined' && !pgc.pgdb) {
-      statusCode = 500;
-      const data = _.clone(err);
-      data.url = urlInfo;
-      if (err && err.message) {
-        data.message = err.message;
-      }
-      if (err && err.stack && opts.showStack) {
-        data.stack = err.stack;
-      }
-      obj = new ApiError('Postgres is down', data, 500);
     } else {
       Object.assign(obj, err);
       statusCode = err.statusCode || 500;
@@ -57,10 +48,6 @@ export function errorHandler (options) {
         obj.stack = err.stack;
       }
       if (!obj.data) {
-        const data = {
-          url: urlInfo,
-          message: err.message
-        }
         const rest = _.clone(obj);
         delete rest.message; // getting url, message first
         obj.data = Object.assign(data, rest);
@@ -68,7 +55,7 @@ export function errorHandler (options) {
           obj.message = obj.message.substr(0, truncateLength) + '...'; // full message in data
         }
       } else {
-        obj.data = Object.assign({url: urlInfo}, obj.data);
+        obj.data = Object.assign(data, obj.data);
       }
     }
     console.error(obj);
