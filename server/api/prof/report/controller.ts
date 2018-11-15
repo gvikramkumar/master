@@ -1,3 +1,4 @@
+/*tslint:disable max-line-length  */
 import {injectable} from 'inversify';
 import * as _ from 'lodash';
 import DollarUploadController from '../dollar-upload/controller';
@@ -9,19 +10,26 @@ import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'node-xlsx';
 import ControllerBase from '../../../lib/base-classes/controller-base';
 import {shUtil} from '../../../../shared/shared-util';
-import SubmeasureRepo from "../../common/submeasure/repo";
-import AllocationRuleRepo from "../../common/allocation-rule/repo";
+import SubmeasureRepo from '../../common/submeasure/repo';
+import AllocationRuleRepo from '../../common/allocation-rule/repo';
+import MeasureRepo from '../../common/measure/repo';
+import SourceRepo from '../../common/source/repo';
+import AnyObj from '../../../../shared/models/any-obj';
 
 @injectable()
 export default class ReportController extends ControllerBase {
-
+  measures: AnyObj[];
+  sources: AnyObj[];
+  
   constructor(
     private dollarUploadCtrl: DollarUploadController,
     private mappingUploadCtrl: MappingUploadController,
     private deptUploadCtrl: DeptUploadController,
     private postgresRepo: PgLookupRepo,
     private subMeasureRepo: SubmeasureRepo,
-    private allocationRuleRepo: AllocationRuleRepo
+    private allocationRuleRepo: AllocationRuleRepo,
+    private measureRepo: MeasureRepo,
+    private sourceRepo: SourceRepo
   ) {
     super(null);
   }
@@ -34,7 +42,7 @@ export default class ReportController extends ControllerBase {
     // const option = {'!merges': [ range ]};
 
     // const buffer = xlsx.build([{name: "mySheetName", data: data}], option);
-    const buffer = xlsx.build([{name: "mySheetName", data: data1}, {name: "sheet2", data: data2}]);
+    const buffer = xlsx.build([{name: 'mySheetName', data: data1}, {name: 'sheet2', data: data2}]);
     res.set('Content-Type', 'application/vnd.ms-excel');
     res.set('Content-Disposition', 'attachment; filename="' + 'myFileName.xlsx' + '"');
     svrUtil.bufferToStream(buffer).pipe(res);
@@ -55,10 +63,11 @@ export default class ReportController extends ControllerBase {
     let excelSheetname;
     let excelHeaders;
     let excelProperties;
-
+    
     this.verifyProperties(body, ['excelFilename']);
 
     let promise;
+    const dataPromises = [];
     switch (req.params.report) {
       case 'dollar-upload':
         // we need moduleId for some reports (hit collections will multiple module data),
@@ -136,13 +145,13 @@ export default class ReportController extends ControllerBase {
       case 'valid-driver':
         excelSheetname = [['Adjustment PF Report'], ['Driver SL3 Report'], ['Shipment Driver PF Report'], ['Roll3 Driver With BE']],
           excelHeaders = [['Tech Group', 'Business Unit', 'Product Family'],
-        ['Driver Type', 'Sales Level1 Code', 'Sales Level1 Description', 'Sales Level2 Code', 'Sales Level2 Description', 'Sales Level3 Code', 'Sales Level3 Description'],
-        ['Tech Group', 'Business Unit', 'Product Family'],
-        ['Driver Type', 'Tech Group', 'Business Unit', 'Product Family', 'Business Entity', 'Sub Business Entity']];
+                          ['Driver Type', 'Sales Level1 Code', 'Sales Level1 Description', 'Sales Level2 Code', 'Sales Level2 Description', 'Sales Level3 Code', 'Sales Level3 Description'],
+                          ['Tech Group', 'Business Unit', 'Product Family'],
+                          ['Driver Type', 'Tech Group', 'Business Unit', 'Product Family', 'Business Entity', 'Sub Business Entity']];
         excelProperties = [['technology_group_id', 'business_unit_id', 'product_family_id'],
-        ['driver_type', 'l1_sales_territory_name_code', 'l1_sales_territory_descr', 'l2_sales_territory_name_code', 'l2_sales_territory_descr', 'l3_sales_territory_name_code', 'l3_sales_territory_descr'],
-        ['technology_group_id', 'business_unit_id', 'product_family_id'],
-        ['driver_type', 'technology_group_id', 'business_unit_id', 'product_family_id', 'bk_business_entity_name', 'sub_business_entity_name']];
+                          ['driver_type', 'l1_sales_territory_name_code', 'l1_sales_territory_descr', 'l2_sales_territory_name_code', 'l2_sales_territory_descr', 'l3_sales_territory_name_code', 'l3_sales_territory_descr'],
+                          ['technology_group_id', 'business_unit_id', 'product_family_id'],
+                          ['driver_type', 'technology_group_id', 'business_unit_id', 'product_family_id', 'bk_business_entity_name', 'sub_business_entity_name']];
         promise = [
           this.postgresRepo.getAdjustmentPFReport(),
           this.postgresRepo.getDriverSL3Report(),
@@ -152,12 +161,31 @@ export default class ReportController extends ControllerBase {
         break;
       case 'submeasure':
         excelSheetname = [['Original'], ['History'], ['As Of Now']];
-        excelHeaders = [['Measure Name', 'Sub Measure Name', 'Description', 'Effective Month', 'End Month', 'Update Time'],
-                        ['Measure Name', 'Sub Measure Name', 'Description', 'Effective Month', 'End Month', 'Update Time'],
-                        ['Measure Name', 'Sub Measure Name', 'Description', 'Effective Month', 'End Month', 'Update Time']];
-        excelProperties = [['name', 'name', 'desc', 'startFiscalMonth', 'endFiscalMonth', 'updatedDate'],
-                           ['name', 'name', 'desc', 'startFiscalMonth', 'endFiscalMonth', 'updatedDate'],
-                           ['name', 'name', 'desc', 'startFiscalMonth', 'endFiscalMonth', 'updatedDate']];
+        excelHeaders = [['Measure Name', 'Sub Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Input Filter Hierarchy', 'Input Filter Hierarchy Level', 'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing',
+                        'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3', 'Manual Mapping Hierarchy', 'Manual Mapping Hierarchy Level', 'Status', 'Approval Status', 'Approval Date', 'Created By', 'Created Date', 'Last Modified By',
+                        'Last Modified Date', 'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Grouping Submeasure', 'Submeasure Type', 'Submeasure category type', 'approved by'],
+
+                        ['Measure Name', 'Sub Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Input Filter Hierarchy', 'Input Filter Hierarchy Level', 'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing',
+                          'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3', 'Manual Mapping Hierarchy', 'Manual Mapping Hierarchy Level', 'Status', 'Approval Status', 'Approval Date', 'Created By', 'Created Date', 'Last Modified By',
+                          'Last Modified Date', 'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Grouping Submeasure', 'Submeasure Type', 'Submeasure category type', 'approved by'],
+
+                        ['Measure Name', 'Sub Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Input Filter Hierarchy', 'Input Filter Hierarchy Level', 'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing',
+                          'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3', 'Manual Mapping Hierarchy', 'Manual Mapping Hierarchy Level', 'Status', 'Approval Status', 'Approval Date', 'Created By', 'Created Date', 'Last Modified By',
+                          'Last Modified Date', 'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Grouping Submeasure', 'Submeasure Type', 'Submeasure category type', 'approved by']];
+
+        excelProperties = [['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', '', '', 'startFiscalMonth', 'endFiscalMonth', 'processingTime',
+                          'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]', '', '', 'status', 'approvedOnce', 'updatedDate', 'createdBy', 'createdDate', 'updatedBy',
+                          'updatedDate', 'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'pnlnodeGrouping', 'categoryType', '', 'updatedBy'],
+
+                          ['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', '', '', 'startFiscalMonth', 'endFiscalMonth', 'processingTime',
+                            'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]', '', '', 'status', 'approvedOnce', 'updatedDate', 'createdBy', 'createdDate', 'updatedBy',
+                            'updatedDate', 'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'pnlnodeGrouping', 'categoryType', '', 'updatedBy'],
+
+                          ['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', '', '', 'startFiscalMonth', 'endFiscalMonth', 'processingTime',
+                            'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]', '', '', 'status', 'approvedOnce', 'updatedDate', 'createdBy', 'createdDate', 'updatedBy',
+                            'updatedDate', 'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'pnlnodeGrouping', 'categoryType', '', 'updatedBy']];
+        dataPromises.push(this.measureRepo.getManyActive({moduleId}));
+        dataPromises.push(this.sourceRepo.getManyActive());
         promise = [
           this.subMeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
             .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
@@ -168,40 +196,65 @@ export default class ReportController extends ControllerBase {
         ];
         break;
       case 'allocation-rule':
-        excelSheetname = [['Original'], ['History'], ['As Of Now']];
-        excelHeaders = [['Rule Name', 'Driver Name', 'Period', 'Sales Match', 'Product Match', 'Update Time'],
-                        ['Rule Name', 'Driver Name', 'Period', 'Sales Match', 'Product Match', 'Update Time'],
-                        ['Rule Name', 'Driver Name', 'Period', 'Sales Match', 'Product Match', 'Update Time']];
-        excelProperties = [['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'updatedDate'],
-                           ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'updatedDate'],
-                           ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'updatedDate']];
-        promise = [
-          this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
-            .then(docs => docs.map(doc => this.transformRule(doc))),
-          this.allocationRuleRepo.getMany({setSort: 'name', moduleId})
-            .then(docs => docs.map(doc => this.transformRule(doc))),
-          this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
-            .then(docs => docs.map(doc => this.transformRule(doc))),
-        ];
+        excelSheetname = ['History'];
+        excelHeaders = ['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'INPUT_HIER_LEVEL', 'INPUT_FILTER_HIER_NAME', 'RuleName'];
+        excelProperties = ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureId', 'sourceId', '', '', ''];
+        promise = this.allocationRuleRepo.getMany({setSort: 'name', moduleId})
+            .then(docs => docs.map(doc => this.transformRule(doc)));
         break;
       default:
         next(new ApiError('Bad report type', null, 400));
         return;
     }
 
-    if (promise instanceof Array) { // multiple sheets
-      if ((excelHeaders && excelHeaders.length !== promise.length) || excelSheetname.length !== promise.length
-        || excelProperties.length !== promise.length) {
-        next(new ApiError(`excelHeaders, excelProperties, excelSheetname array lengths not equal to report sheet length: ${promise.length}`, body, 400));
-        return;
-      }
-      Promise.all(promise)
-        .then(resultArr => {
-          const sheetArr = [];
-          resultArr.forEach((results, idx) => {
-            let objs = results.rows || results;
-            objs = objs.map(obj => excelProperties[idx]
-              .map(prop => {
+    Promise.all(dataPromises)
+      .then(dataResults => {
+        switch (req.params.report) {
+          case 'submeasure':
+            this.measures = dataResults[0];
+            this.sources = dataResults[1];
+            break;
+        }
+
+        if (promise instanceof Array) { // multiple sheets
+          if ((excelHeaders && excelHeaders.length !== promise.length) || excelSheetname.length !== promise.length
+            || excelProperties.length !== promise.length) {
+            next(new ApiError(`excelHeaders, excelProperties, excelSheetname array lengths not equal to report sheet length: ${promise.length}`, body, 400));
+            return;
+          }
+          Promise.all(promise)
+            .then(resultArr => {
+              const sheetArr = [];
+              resultArr.forEach((results, idx) => {
+                let objs = results.rows || results;
+                objs = objs.map(obj => excelProperties[idx]
+                  .map(prop => {
+                    const val = _.get(obj, prop);
+                    if (val instanceof Date) {
+                      const str = val.toISOString();
+                      return str.substr(0, str.length - 5).replace('T', '  ');
+                    } else {
+                      return val;
+                    }
+                  }));
+
+                let data = [];
+                if (excelHeaders && excelHeaders[idx]) {
+                  data.push(excelHeaders[idx]);
+                }
+                data = data.concat(objs);
+                sheetArr.push({name: excelSheetname[idx], data});
+              });
+              const buffer = xlsx.build(sheetArr);
+              res.set('Content-Type', 'application/vnd.ms-excel');
+              res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
+              svrUtil.bufferToStream(buffer).pipe(res);
+            });
+        } else { // single sheet
+          promise
+            .then(results => results.rows || results)
+            .then(objs => {
+              return objs.map(obj => excelProperties.map(prop => {
                 const val = _.get(obj, prop);
                 if (val instanceof Date) {
                   const str = val.toISOString();
@@ -210,53 +263,31 @@ export default class ReportController extends ControllerBase {
                   return val;
                 }
               }));
-
-            let data = [];
-            if (excelHeaders && excelHeaders[idx]) {
-              data.push(excelHeaders[idx]);
-            }
-            data = data.concat(objs);
-            sheetArr.push({name: excelSheetname[idx], data});
-          });
-          const buffer = xlsx.build(sheetArr);
-          res.set('Content-Type', 'application/vnd.ms-excel');
-          res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
-          svrUtil.bufferToStream(buffer).pipe(res);
-        });
-    } else { // single sheet
-      promise
-        .then(results => results.rows || results)
-        .then(objs => {
-          return objs.map(obj => excelProperties.map(prop => {
-              const val = _.get(obj, prop);
-              if (val instanceof Date) {
-                const str = val.toISOString();
-                return str.substr(0, str.length - 5).replace('T', '  ');
-              } else {
-                return val;
+            })
+            .then(objs => {
+              let data = [];
+              if (excelHeaders) {
+                data.push(excelHeaders);
               }
-            }));
-        })
-        .then(objs => {
-          let data = [];
-          if (excelHeaders) {
-            data.push(excelHeaders);
-          }
-          data = data.concat(objs);
-          const buffer = xlsx.build([{name: excelSheetname, data}]);
-          res.set('Content-Type', 'application/vnd.ms-excel');
-          res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
-          svrUtil.bufferToStream(buffer).pipe(res);
+              data = data.concat(objs);
+              const buffer = xlsx.build([{name: excelSheetname, data}]);
+              res.set('Content-Type', 'application/vnd.ms-excel');
+              res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
+              svrUtil.bufferToStream(buffer).pipe(res);
 
-        })
-        .catch(next);
-    }
+            })
+            .catch(next);
+        }
 
+      });
 
   }
 
   transformSubmeasure(sm) {
-    sm.ruleNames = sm.rules.join(', ');
+    const measure = _.find(this.measures, {measureId: sm.measureId});
+    const source = _.find(this.sources, {sourceId: sm.sourceId});
+    sm.measureName = measure && measure.name;
+    sm.sourceName = source && source.name;
     return sm;
   }
 
