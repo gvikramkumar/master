@@ -20,7 +20,9 @@ mg.connect(uri)
       {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload'},
       {fileName: 'department_upload_template.xlsx', buUploadType: 'dept-upload'},
       {fileName: 'sales_level_split_upload_template.xlsx', buUploadType: 'sales-split-upload'},
-      {fileName: 'product_classification_upload_template.xlsx', buUploadType: 'product-class-upload'}
+      {fileName: 'product_classification_upload_template.xlsx', buUploadType: 'product-class-upload'},
+      {fileName: 'alternate_sl2_template.xlsx', buUploadType: 'alternate-sl2-upload'},
+      {fileName: 'corp_adjustments_template.xlsx', buUploadType: 'corp-adjustments-upload'}
     ]
 
     buTemplates.forEach(template => {
