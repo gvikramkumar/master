@@ -20,7 +20,7 @@ import AnyObj from '../../../../shared/models/any-obj';
 export default class ReportController extends ControllerBase {
   measures: AnyObj[];
   sources: AnyObj[];
-  
+
   constructor(
     private dollarUploadCtrl: DollarUploadController,
     private mappingUploadCtrl: MappingUploadController,
@@ -63,7 +63,7 @@ export default class ReportController extends ControllerBase {
     let excelSheetname;
     let excelHeaders;
     let excelProperties;
-    
+
     this.verifyProperties(body, ['excelFilename']);
 
     let promise;
@@ -161,29 +161,29 @@ export default class ReportController extends ControllerBase {
         break;
       case 'submeasure':
         excelSheetname = [['Original'], ['History'], ['As Of Now']];
-        excelHeaders = [['Measure Name', 'Sub Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Input Filter Hierarchy', 'Input Filter Hierarchy Level', 'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing',
-                        'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3', 'Manual Mapping Hierarchy', 'Manual Mapping Hierarchy Level', 'Status', 'Approval Status', 'Approval Date', 'Created By', 'Created Date', 'Last Modified By',
-                        'Last Modified Date', 'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Grouping Submeasure', 'Submeasure Type', 'Submeasure category type', 'approved by'],
+        excelHeaders = [['Measure Name', 'Sub Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level', 'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing',
+                        'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3', 'Manual Sales Level', 'Manual Product Level', 'Manual SCMS Level', 'Manual Legal Entity Level', 'Manual BE Level', 'Status', 'Approval Status', 'Approval Date', 'Created By', 'Created Date', 'Last Modified By',
+                        'Last Modified Date', 'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Grouping Submeasure', 'Submeasure Type', 'Retained Earnings', 'Transition', 'CorpRevenue', 'DualGapp', '2Tier', 'approved by'],
 
-                        ['Measure Name', 'Sub Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Input Filter Hierarchy', 'Input Filter Hierarchy Level', 'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing',
-                          'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3', 'Manual Mapping Hierarchy', 'Manual Mapping Hierarchy Level', 'Status', 'Approval Status', 'Approval Date', 'Created By', 'Created Date', 'Last Modified By',
-                          'Last Modified Date', 'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Grouping Submeasure', 'Submeasure Type', 'Submeasure category type', 'approved by'],
+                        ['Measure Name', 'Sub Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level', 'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing',
+                          'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3', 'Manual Sales Level', 'Manual Product Level', 'Manual SCMS Level', 'Manual Legal Entity Level', 'Manual BE Level', 'Status', 'Approval Status', 'Approval Date', 'Created By', 'Created Date', 'Last Modified By',
+                          'Last Modified Date', 'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Grouping Submeasure', 'Submeasure Type', 'Retained Earnings', 'Transition', 'CorpRevenue', 'DualGapp', '2Tier', 'approved by'],
 
-                        ['Measure Name', 'Sub Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Input Filter Hierarchy', 'Input Filter Hierarchy Level', 'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing',
-                          'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3', 'Manual Mapping Hierarchy', 'Manual Mapping Hierarchy Level', 'Status', 'Approval Status', 'Approval Date', 'Created By', 'Created Date', 'Last Modified By',
-                          'Last Modified Date', 'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Grouping Submeasure', 'Submeasure Type', 'Submeasure category type', 'approved by']];
+                        ['Measure Name', 'Sub Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level', 'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing',
+                          'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3', 'Manual Sales Level', 'Manual Product Level', 'Manual SCMS Level', 'Manual Legal Entity Level', 'Manual BE Level', 'Status', 'Approval Status', 'Approval Date', 'Created By', 'Created Date', 'Last Modified By',
+                          'Last Modified Date', 'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Grouping Submeasure', 'Submeasure Type', 'Retained Earnings', 'Transition', 'CorpRevenue', 'DualGapp', '2Tier', 'approved by']];
 
-        excelProperties = [['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', '', '', 'startFiscalMonth', 'endFiscalMonth', 'processingTime',
-                          'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]', '', '', 'status', 'approvedOnce', 'updatedDate', 'createdBy', 'createdDate', 'updatedBy',
-                          'updatedDate', 'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'pnlnodeGrouping', 'categoryType', '', 'updatedBy'],
+        excelProperties = [['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', 'salesLevelInput', 'productLevelInput', 'scmsLevelInput', 'legalEntityLevelInput', 'beLevelInput', 'startFiscalMonth', 'endFiscalMonth', 'processingTime',
+                          'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]', 'salesLevelManual', 'productLevelManual', 'scmsLevelManual', 'legalEntityLevelManual', 'beLevelManual', 'status', 'approvedOnce', 'updatedDate', 'createdBy', 'createdDate', 'updatedBy',
+                          'updatedDate', 'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'pnlnodeGrouping', 'categoryType', 'retainedEarnings', 'transition', 'corpRevenue', 'dualGaap', 'twoTier', 'updatedBy'],
 
-                          ['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', '', '', 'startFiscalMonth', 'endFiscalMonth', 'processingTime',
-                            'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]', '', '', 'status', 'approvedOnce', 'updatedDate', 'createdBy', 'createdDate', 'updatedBy',
-                            'updatedDate', 'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'pnlnodeGrouping', 'categoryType', '', 'updatedBy'],
+                          ['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', 'salesLevelInput', 'productLevelInput', 'scmsLevelInput', 'legalEntityLevelInput', 'beLevelInput', 'startFiscalMonth', 'endFiscalMonth', 'processingTime',
+                            'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]', 'salesLevelManual', 'productLevelManual', 'scmsLevelManual', 'legalEntityLevelManual', 'beLevelManual', 'status', 'approvedOnce', 'updatedDate', 'createdBy', 'createdDate', 'updatedBy',
+                            'updatedDate', 'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'pnlnodeGrouping', 'categoryType', 'retainedEarnings', 'transition', 'corpRevenue', 'dualGaap', 'twoTier', 'updatedBy'],
 
-                          ['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', '', '', 'startFiscalMonth', 'endFiscalMonth', 'processingTime',
-                            'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]', '', '', 'status', 'approvedOnce', 'updatedDate', 'createdBy', 'createdDate', 'updatedBy',
-                            'updatedDate', 'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'pnlnodeGrouping', 'categoryType', '', 'updatedBy']];
+                          ['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', 'salesLevelInput', 'productLevelInput', 'scmsLevelInput', 'legalEntityLevelInput', 'beLevelInput', 'startFiscalMonth', 'endFiscalMonth', 'processingTime',
+                            'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]', 'salesLevelManual', 'productLevelManual', 'scmsLevelManual', 'legalEntityLevelManual', 'beLevelManual', 'status', 'approvedOnce', 'updatedDate', 'createdBy', 'createdDate', 'updatedBy',
+                            'updatedDate', 'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'pnlnodeGrouping', 'categoryType', 'retainedEarnings', 'transition', 'corpRevenue', 'dualGaap', 'twoTier', 'updatedBy']];
         dataPromises.push(this.measureRepo.getManyActive({moduleId}));
         dataPromises.push(this.sourceRepo.getManyActive());
         promise = [
@@ -288,6 +288,23 @@ export default class ReportController extends ControllerBase {
     const source = _.find(this.sources, {sourceId: sm.sourceId});
     sm.measureName = measure && measure.name;
     sm.sourceName = source && source.name;
+    sm.salesLevelInput = _.get(sm, 'inputFilterLevel.salesLevel', '');
+    sm.productLevelInput = _.get(sm, 'inputFilterLevel.productLevel', '');
+    sm.scmsLevelInput = _.get(sm, 'inputFilterLevel.scmsLevel', '');
+    sm.legalEntityLevelInput = _.get(sm, 'inputFilterLevel.entityLevel', '');
+    sm.beLevelInput = _.get(sm, 'inputFilterLevel.internalBELevel', '');
+    sm.salesLevelManual = _.get(sm, 'manualMapping.salesLevel', '');
+    sm.productLevelManual = _.get(sm, 'manualMapping.productLevel', '');
+    sm.scmsLevelManual = _.get(sm, 'manualMapping.scmsLevel', '');
+    sm.legalEntityLevelManual = _.get(sm, 'manualMapping.entityLevel', '');
+    sm.beLevelManual = _.get(sm, 'manualMapping.internalBELevel', '');
+
+    sm.retainedEarnings = _.get(sm, 'indicators.retainedEarnings', '');
+    sm.transition = _.get(sm, 'indicators.transition', '');
+    sm.corpRevenue = _.get(sm, 'indicators.corpRevenue', '');
+    sm.dualGaap = _.get(sm, 'indicators.dualGaap', '');
+    sm.twoTier = _.get(sm, 'indicators.twoTier', '');
+
     return sm;
   }
 
