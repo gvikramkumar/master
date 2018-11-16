@@ -20,6 +20,10 @@ export class PgLookupService extends RestBase<any> {
     super('pg-lookup', httpClient, store);
   }
 
+  getSortedListFromColumn(table, column) {
+    return this.callMethod('getSortedListFromColumn', {table, column});
+  }
+
   getFiscalMonths() {
     return this.callMethod('getFiscalMonths');
   }

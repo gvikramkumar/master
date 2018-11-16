@@ -15,18 +15,23 @@ import AllocationRuleRepo from '../../common/allocation-rule/repo';
 import MeasureRepo from '../../common/measure/repo';
 import SourceRepo from '../../common/source/repo';
 import AnyObj from '../../../../shared/models/any-obj';
+import DollarUploadRepo from '../dollar-upload/repo';
+import MappingUploadRepo from '../mapping-upload/repo';
+import DeptUploadRepo from '../dept-upload/repo';
+import {DollarUploadPgRepo} from '../dollar-upload/pgrepo';
 
 @injectable()
 export default class ReportController extends ControllerBase {
+  submeasures: AnyObj[];
   measures: AnyObj[];
   sources: AnyObj[];
   
   constructor(
-    private dollarUploadCtrl: DollarUploadController,
-    private mappingUploadCtrl: MappingUploadController,
-    private deptUploadCtrl: DeptUploadController,
+    private dollarUploadPgRepo: DollarUploadPgRepo,
+    private mappingUploadRepo: MappingUploadRepo,
+    private deptUploadRepo: DeptUploadRepo,
     private postgresRepo: PgLookupRepo,
-    private subMeasureRepo: SubmeasureRepo,
+    private submeasureRepo: SubmeasureRepo,
     private allocationRuleRepo: AllocationRuleRepo,
     private measureRepo: MeasureRepo,
     private sourceRepo: SourceRepo
@@ -57,14 +62,14 @@ export default class ReportController extends ControllerBase {
   // * excelHeaders (optional) an array of header names for the first row of download
   // we push headers, convert json to csv using properties, concat csv, join with line terminator and send
   getExcelReport(req, res, next) {
-    const body = req.body; // post request, params are in the body
+    this.verifyProperties(req.body, ['excelFilename']);
     const moduleId = req.body.moduleId;
-    req.query = _.omit(body, ['excelFilename']);
+    const excelFilename = req.body.excelFilename;
+    const body = _.omit(req.body, ['moduleId', 'excelFilename']);
     let excelSheetname;
     let excelHeaders;
     let excelProperties;
     
-    this.verifyProperties(body, ['excelFilename']);
 
     let promise;
     const dataPromises = [];
@@ -73,18 +78,19 @@ export default class ReportController extends ControllerBase {
         // we need moduleId for some reports (hit collections will multiple module data),
         // but for module specific collections like these, having a moduleId will
         // get no results as it's not included in the collection, so we need to remove it from filter
-        delete req.query.moduleId;
         excelSheetname = ['Manual Uploaded Data'];
         excelHeaders = ['Fiscal Month', 'Sub Measure Name', 'Input Product Value', 'Input Sales Value', 'Legal Entity', 'Int Business Entity', 'SCMS', 'Amount'];
-        excelProperties = ['fiscalMonth', 'submeasureName', 'product', 'sales', 'legalEntity', 'intBusinessEntity', 'scms', 'amount'];
-        promise = this.dollarUploadCtrl.getManyPromise(req);
+        excelProperties = ['fiscal_month_id', 'submeasureName', 'input_product_hier_level_name', 'input_sales_hier_level_name', 'input_entity_hier_level_name',
+          'input_internal_be_hier_level_name', 'input_scms_hier_level_name', 'amount_value'];
+        dataPromises.push(this.submeasureRepo.getManyActive({moduleId}));
+        promise = this.dollarUploadPgRepo.getMany(body)
+          .then(docs => docs.map(doc => this.transformDollarUpload(doc)))
         break;
       case 'mapping-upload':
-        delete req.query.moduleId;
         excelSheetname = ['Manual Mapping Data'];
         excelHeaders = ['Fiscal Month', 'Sub Measure Name', 'Input Product Value', 'Input Sales Value', 'Legal Entity', 'Int Business Entity', 'SCMS', 'Percentage'];
         excelProperties = ['fiscalMonth', 'submeasureName', 'product', 'sales', 'legalEntity', 'intBusinessEntity', 'scms', 'percentage'];
-        promise = this.mappingUploadCtrl.getManyPromise(req);
+        promise = this.mappingUploadRepo.getMany(body);
         break;
       case 'product-hierarchy':
         excelSheetname = ['Product Hierarchy'];
@@ -100,11 +106,10 @@ export default class ReportController extends ControllerBase {
         promise = this.postgresRepo.getSalesHierarchyReport();
         break;
       case 'dept-upload':
-        delete req.query.moduleId;
         excelSheetname = ['Dept Upload'];
         excelHeaders = ['Sub-Measure Name', 'Department Code', 'Start Account Code', 'End Account Code'];
         excelProperties = ['submeasureName', 'departmentCode', 'startAccountCode', 'endAccountCode'];
-        promise = this.deptUploadCtrl.getManyPromise(req);
+        promise = this.deptUploadRepo.getMany(body);
         break
       case 'submeasure-grouping':
         excelSheetname = ['Submeasure Grouping'];
@@ -187,11 +192,11 @@ export default class ReportController extends ControllerBase {
         dataPromises.push(this.measureRepo.getManyActive({moduleId}));
         dataPromises.push(this.sourceRepo.getManyActive());
         promise = [
-          this.subMeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
+          this.submeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
             .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
-          this.subMeasureRepo.getMany({setSort: 'name', moduleId})
+          this.submeasureRepo.getMany({setSort: 'name', moduleId})
             .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
-          this.subMeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
             .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
         ];
         break;
@@ -209,6 +214,12 @@ export default class ReportController extends ControllerBase {
 
     Promise.all(dataPromises)
       .then(dataResults => {
+
+        switch (req.params.report) {
+          case 'dollar-upload':
+            this.submeasures = dataResults[0];
+            break;
+        }
         switch (req.params.report) {
           case 'submeasure':
             this.measures = dataResults[0];
@@ -247,7 +258,7 @@ export default class ReportController extends ControllerBase {
               });
               const buffer = xlsx.build(sheetArr);
               res.set('Content-Type', 'application/vnd.ms-excel');
-              res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
+              res.set('Content-Disposition', 'attachment; filename="' + excelFilename + '"');
               svrUtil.bufferToStream(buffer).pipe(res);
             });
         } else { // single sheet
@@ -272,7 +283,7 @@ export default class ReportController extends ControllerBase {
               data = data.concat(objs);
               const buffer = xlsx.build([{name: excelSheetname, data}]);
               res.set('Content-Type', 'application/vnd.ms-excel');
-              res.set('Content-Disposition', 'attachment; filename="' + body.excelFilename + '"');
+              res.set('Content-Disposition', 'attachment; filename="' + excelFilename + '"');
               svrUtil.bufferToStream(buffer).pipe(res);
 
             })
@@ -283,7 +294,17 @@ export default class ReportController extends ControllerBase {
 
   }
 
+
+
+  transformDollarUpload(du) {
+    du = svrUtil.docToObject(du);
+    const sm = _.find(this.submeasures, {submeasureId: du.submeasureId});
+    du.submeasureName = sm && sm.name;
+    return du;
+  }
+  
   transformSubmeasure(sm) {
+    sm = svrUtil.docToObject(sm);
     const measure = _.find(this.measures, {measureId: sm.measureId});
     const source = _.find(this.sources, {sourceId: sm.sourceId});
     sm.measureName = measure && measure.name;
@@ -292,6 +313,7 @@ export default class ReportController extends ControllerBase {
   }
 
   transformRule(rule) {
+    rule = svrUtil.docToObject(rule);
     return rule;
   }
 

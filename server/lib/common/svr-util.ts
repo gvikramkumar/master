@@ -21,8 +21,16 @@ export const svrUtil = {
   setSchemaAdditions,
   sortedListNotExists,
   asciiToBase64,
-  base64ToAscii
+  base64ToAscii,
+  docToObject
 };
+
+function docToObject(doc) {
+  if (doc.toObject) {
+    return doc.toObject();
+  }
+  return doc;
+}
 
 function asciiToBase64(ascii) {
   return Buffer.from(ascii).toString('base64');

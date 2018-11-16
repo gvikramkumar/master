@@ -3,8 +3,6 @@ import DollarUploadRepo from './repo';
 import ControllerBase from '../../../lib/base-classes/controller-base';
 import {DfaModuleIds} from '../../../../shared/enums';
 import {ApiError} from '../../../lib/common/api-error';
-import DeptUploadRepo from '../dept-upload/repo';
-import {DeptUploadPgRepo} from '../dept-upload/pgrepo';
 import SubmeasureRepo from '../../common/submeasure/repo';
 import {DollarUploadPg, DollarUploadPgRepo} from './pgrepo';
 import * as _ from 'lodash';
