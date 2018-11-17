@@ -12,9 +12,10 @@ import {environment} from '../../../../../environments/environment';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {shUtil} from '../../../../../../../shared/shared-util';
+import {PgLookupService} from '../../services/pg-lookup.service';
 
 interface ReportSettings {
-  submeasureName: string;
+  submeasureKey: number;
   fiscalMonth?: number;
   excelSheetname: string;
   excelFilename: string;
@@ -33,6 +34,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   submeasureName: string;
   fiscalMonth: number;
   measures: Measure[] = [];
+  submeasuresAll: Submeasure[] = [];
   submeasures: Submeasure[] = [];
   fiscalMonths: {fiscalMonth: number}[] = [];
   disableDownload = true;
@@ -101,17 +103,21 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private measureService: MeasureService,
-    private subMeasureService: SubmeasureService,
-    private dollarUploadService: DollarUploadService,
-    private mappingUploadService: MappingUploadService,
+    private submeasureService: SubmeasureService,
+    private pgLookupService: PgLookupService,
     private store: AppStore
   ) {
     super(store, route);
   }
 
   ngOnInit() {
-    this.measureService.getMany().subscribe(measures => {
-      this.measures = _.sortBy(measures, 'name');
+    Promise.all([
+      this.measureService.getManyActive().toPromise(),
+      this.submeasureService.getManyActive().toPromise()
+    ])
+    .then(results => {
+      this.measures = _.sortBy(results[0], 'name');
+      this.submeasuresAll = _.sortBy(results[1], 'name');
     });
     this.reset();
   }
@@ -135,8 +141,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
-    this.subMeasureService.getManyLatest('name', {measureId: this.measureId, status: 'A'})
-      .subscribe(submeasures => this.submeasures = _.sortBy(submeasures, 'name'));
+    this.submeasures = _.filter(this.submeasuresAll, {measureId: this.measureId});
   }
 
   submeasureSelected() {
@@ -147,16 +152,16 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       let obs;
       switch (this.report.type) {
         case 'dollar-upload':
-          obs = this.dollarUploadService.getDistinct('fiscalMonth',
-            {submeasureName: this.submeasureName});
+          obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
+            `sub_measure_key = ${_.find(this.submeasures, {name: this.submeasureName}).submeasureKey}`);
           break;
         case 'mapping-upload':
-          obs = this.mappingUploadService.getDistinct('fiscalMonth',
-            {submeasureName: this.submeasureName});
+          obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
+            `sub_measure_key = ${_.find(this.submeasures, {name: this.submeasureName}).submeasureKey}`);
           break;
       }
       obs.subscribe(fiscalMonths => {
-        this.fiscalMonths = fiscalMonths.sort().reverse().slice(0, 24).map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
+        this.fiscalMonths = fiscalMonths.map(fm => Number(fm)).sort().reverse().slice(0, 24).map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
       });
     } else {
       this.disableDownload = false;
@@ -183,7 +188,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     };
 
     if (this.report.hasSubmeasure || this.report.hasFiscalMonth) {
-      params.submeasureName = this.submeasureName;
+      params.submeasureKey = _.find(this.submeasuresAll, {name: this.submeasureName}).submeasureKey;
     }
 
     if (this.report.hasFiscalMonth) {

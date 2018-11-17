@@ -9,6 +9,7 @@ import {RestBase} from '../../../core/base-classes/rest-base';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../core/services/ui-util';
 import {shUtil} from '../../../../../../shared/shared-util';
+import AnyObj from '../../../../../../shared/models/any-obj';
 
 const apiUrl = environment.apiUrl;
 
@@ -18,6 +19,14 @@ const apiUrl = environment.apiUrl;
 export class PgLookupService extends RestBase<any> {
   constructor(httpClient: HttpClient, store: AppStore) {
     super('pg-lookup', httpClient, store);
+  }
+
+  getSortedListFromColumn(table, column, whereClause?) {
+    const params: AnyObj = {table, column};
+    if (whereClause) {
+      params.where = whereClause;
+    }
+    return this.callMethod('getSortedListFromColumn', params);
   }
 
   getFiscalMonths() {

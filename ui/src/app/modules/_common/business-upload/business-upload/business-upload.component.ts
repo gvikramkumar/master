@@ -36,7 +36,9 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     {type: 'mapping-upload', text: 'Manual Mapping Split Percentage Upload', disabled: false},
     {type: 'dept-upload', text: 'Department / Excluded Account Upload', disabled: false},
     {type: 'sales-split-upload', text: 'Sales Level Split Percentage Upload', disabled: false},
-    {type: 'product-class-upload', text: 'Product Classification (SW/HW Mix) Upload', disabled: false}
+    {type: 'product-class-upload', text: 'Product Classification (SW/HW Mix) Upload', disabled: false},
+    {type: 'alternate-sl2-upload', text: 'Alternate SL2 Upload', disabled: false},
+    {type: 'corp-adjustments-upload', text: 'Corp Adjustments Upload', disabled: false},
   ];
   uploadType = this.uploadTypes[0];
 

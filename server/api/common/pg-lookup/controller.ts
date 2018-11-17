@@ -20,6 +20,12 @@ export class PgLookupController {
     method.call(this, req, res, next);
   }
 
+  getSortedListFromColumn(req, res, next) {
+    this.repo.getSortedListFromColumn(req.body.table, req.body.column, req.body.where)
+      .then(list => res.json(list))
+      .catch(next);
+  }
+
   getFiscalMonths(req, res, next) {
     const maps: OrmMap[] = [
       {prop: 'fiscalMonthName', field: 'fiscal_month_name'},
