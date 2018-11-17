@@ -29,24 +29,16 @@ export class PgLookupService extends RestBase<any> {
     return this.callMethod('getSortedListFromColumn', params);
   }
 
+  getSortedUpperListFromColumn(table, column, whereClause?) {
+    const params: AnyObj = {table, column};
+    if (whereClause) {
+      params.where = whereClause;
+    }
+    return this.callMethod('getSortedUpperListFromColumn', params);
+  }
+
   getFiscalMonths() {
     return this.callMethod('getFiscalMonths');
-  }
-
-  getRuleCriteriaChoicesSalesLevel1() {
-    return this.callMethod('getRuleCriteriaChoicesSalesLevel1');
-  }
-
-  getRuleCriteriaChoicesProdTg() {
-    return this.callMethod('getRuleCriteriaChoicesProdTg');
-  }
-
-  getRuleCriteriaChoicesScms() {
-    return this.callMethod('getRuleCriteriaChoicesScms');
-  }
-
-  getRuleCriteriaChoicesInternalBeBe() {
-    return this.callMethod('getRuleCriteriaChoicesInternalBeBe');
   }
 
 }

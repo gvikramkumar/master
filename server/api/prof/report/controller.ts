@@ -19,6 +19,8 @@ import DollarUploadRepo from '../dollar-upload/repo';
 import MappingUploadRepo from '../mapping-upload/repo';
 import DeptUploadRepo from '../dept-upload/repo';
 import {DollarUploadPgRepo} from '../dollar-upload/pgrepo';
+import {MappingUploadPgRepo} from '../mapping-upload/pgrepo';
+import {DeptUploadPgRepo} from '../dept-upload/pgrepo';
 
 @injectable()
 export default class ReportController extends ControllerBase {
@@ -28,8 +30,8 @@ export default class ReportController extends ControllerBase {
   
   constructor(
     private dollarUploadPgRepo: DollarUploadPgRepo,
-    private mappingUploadRepo: MappingUploadRepo,
-    private deptUploadRepo: DeptUploadRepo,
+    private mappingUploadPgRepo: MappingUploadPgRepo,
+    private deptUploadPgRepo: DeptUploadPgRepo,
     private postgresRepo: PgLookupRepo,
     private submeasureRepo: SubmeasureRepo,
     private allocationRuleRepo: AllocationRuleRepo,
@@ -83,13 +85,15 @@ export default class ReportController extends ControllerBase {
         excelProperties = ['fiscalMonth', 'submeasureName', 'productValue', 'salesValue', 'leValue', 'beValue', 'scmsValue', 'amount'];
         dataPromises.push(this.submeasureRepo.getManyActive({moduleId}));
         promise = this.dollarUploadPgRepo.getMany(body)
-          .then(docs => docs.map(doc => this.transformDollarUpload(doc)))
+          .then(docs => docs.map(doc => this.transformAddSubmeasureName(doc)))
         break;
       case 'mapping-upload':
         excelSheetname = ['Manual Mapping Data'];
         excelHeaders = ['Fiscal Month', 'Sub Measure Name', 'Input Product Value', 'Input Sales Value', 'Legal Entity', 'Int Business Entity', 'SCMS', 'Percentage'];
-        excelProperties = ['fiscalMonth', 'submeasureName', 'product', 'sales', 'legalEntity', 'intBusinessEntity', 'scms', 'percentage'];
-        promise = this.mappingUploadRepo.getMany(body);
+        excelProperties = ['fiscalMonth', 'submeasureName', 'productValue', 'salesValue', 'leValue', 'beValue', 'scmsValue', 'percentage'];
+        dataPromises.push(this.submeasureRepo.getManyActive({moduleId}));
+        promise = this.mappingUploadPgRepo.getMany(body)
+          .then(docs => docs.map(doc => this.transformAddSubmeasureName(doc)))
         break;
       case 'product-hierarchy':
         excelSheetname = ['Product Hierarchy'];
@@ -106,9 +110,11 @@ export default class ReportController extends ControllerBase {
         break;
       case 'dept-upload':
         excelSheetname = ['Dept Upload'];
-        excelHeaders = ['Sub-Measure Name', 'Department Code', 'Start Account Code', 'End Account Code'];
-        excelProperties = ['submeasureName', 'departmentCode', 'startAccountCode', 'endAccountCode'];
-        promise = this.deptUploadRepo.getMany(body);
+        excelHeaders = ['Sub-Measure Name', 'Node Value', 'GL Account'];
+        excelProperties = ['submeasureName', 'nodeValue', 'glAccount'];
+        dataPromises.push(this.submeasureRepo.getManyActive({moduleId}));
+        promise = this.deptUploadPgRepo.getMany(body)
+          .then(docs => docs.map(doc => this.transformAddSubmeasureName(doc)))
         break
       case 'submeasure-grouping':
         excelSheetname = ['Submeasure Grouping'];
@@ -216,6 +222,8 @@ export default class ReportController extends ControllerBase {
 
         switch (req.params.report) {
           case 'dollar-upload':
+          case 'mapping-upload':
+          case 'dept-upload':
             this.submeasures = dataResults[0];
             break;
         }
@@ -293,13 +301,11 @@ export default class ReportController extends ControllerBase {
 
   }
 
-
-
-  transformDollarUpload(du) {
-    du = svrUtil.docToObject(du);
-    const sm = _.find(this.submeasures, {submeasureKey: du.submeasureKey});
-    du.submeasureName = sm && sm.name;
-    return du;
+  transformAddSubmeasureName(obj) {
+    obj = svrUtil.docToObject(obj);
+    const sm = _.find(this.submeasures, {submeasureKey: obj.submeasureKey});
+    obj.submeasureName = sm && sm.name;
+    return obj;
   }
 
   transformSubmeasure(sm) {

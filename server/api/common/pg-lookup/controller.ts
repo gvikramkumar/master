@@ -26,6 +26,12 @@ export class PgLookupController {
       .catch(next);
   }
 
+  getSortedUpperListFromColumn(req, res, next) {
+    this.repo.getSortedUpperListFromColumn(req.body.table, req.body.column, req.body.where)
+      .then(list => res.json(list))
+      .catch(next);
+  }
+
   getFiscalMonths(req, res, next) {
     const maps: OrmMap[] = [
       {prop: 'fiscalMonthName', field: 'fiscal_month_name'},
@@ -44,30 +50,6 @@ legal entity??
 internal be be/sub be (not sure page will work well with 100 choices in dropdown)
 
    */
-
-  getRuleCriteriaChoicesSalesLevel1(req, res, next) {
-    this.repo.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l1_sales_territory_descr')
-      .then(arr => res.json(arr))
-      .catch(next);
-  }
-
-  getRuleCriteriaChoicesProdTg(req, res, next) {
-    this.repo.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id')
-      .then(arr => res.json(arr))
-      .catch(next);
-  }
-
-  getRuleCriteriaChoicesScms(req, res, next) {
-    this.repo.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code')
-      .then(arr => res.json(arr))
-      .catch(next);
-  }
-
-  getRuleCriteriaChoicesInternalBeBe(req, res, next) {
-    this.repo.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr')
-      .then(arr => res.json(arr))
-      .catch(next);
-  }
 
   verifyProperties(data, arr) {
     arr.forEach(prop => {
