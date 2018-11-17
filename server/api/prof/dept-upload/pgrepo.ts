@@ -3,7 +3,6 @@ import {PgRepoBase} from '../../../lib/base-classes/pg-repo-base';
 import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 
 const ormMap: OrmMap[] = [
-  {prop: 'submeasureName', field: ''},
   {prop: 'submeasureKey', field: 'sub_measure_key', type: OrmTypes.number},
   {prop: 'nodeValue', field: 'node_value'},
   {prop: 'glAccount', field: 'gl_account', type: OrmTypes.number},
