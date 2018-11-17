@@ -21,7 +21,7 @@ export class PgLookupController {
   }
 
   getSortedListFromColumn(req, res, next) {
-    this.repo.getSortedListFromColumn(req.body.table, req.body.column)
+    this.repo.getSortedListFromColumn(req.body.table, req.body.column, req.body.where)
       .then(list => res.json(list))
       .catch(next);
   }

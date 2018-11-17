@@ -152,10 +152,12 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       let obs;
       switch (this.report.type) {
         case 'dollar-upload':
-          obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id');
+          obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
+            `sub_measure_key = ${_.find(this.submeasures, {name: this.submeasureName}).submeasureKey}`);
           break;
         case 'mapping-upload':
-          obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id');
+          obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
+            `sub_measure_key = ${_.find(this.submeasures, {name: this.submeasureName}).submeasureKey}`);
           break;
       }
       obs.subscribe(fiscalMonths => {

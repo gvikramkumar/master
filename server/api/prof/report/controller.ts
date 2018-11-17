@@ -80,8 +80,7 @@ export default class ReportController extends ControllerBase {
         // get no results as it's not included in the collection, so we need to remove it from filter
         excelSheetname = ['Manual Uploaded Data'];
         excelHeaders = ['Fiscal Month', 'Sub Measure Name', 'Input Product Value', 'Input Sales Value', 'Legal Entity', 'Int Business Entity', 'SCMS', 'Amount'];
-        excelProperties = ['fiscal_month_id', 'submeasureName', 'input_product_hier_level_name', 'input_sales_hier_level_name', 'input_entity_hier_level_name',
-          'input_internal_be_hier_level_name', 'input_scms_hier_level_name', 'amount_value'];
+        excelProperties = ['fiscalMonth', 'submeasureName', 'productValue', 'salesValue', 'leValue', 'beValue', 'scmsValue', 'amount'];
         dataPromises.push(this.submeasureRepo.getManyActive({moduleId}));
         promise = this.dollarUploadPgRepo.getMany(body)
           .then(docs => docs.map(doc => this.transformDollarUpload(doc)))
@@ -298,7 +297,7 @@ export default class ReportController extends ControllerBase {
 
   transformDollarUpload(du) {
     du = svrUtil.docToObject(du);
-    const sm = _.find(this.submeasures, {submeasureId: du.submeasureId});
+    const sm = _.find(this.submeasures, {submeasureKey: du.submeasureKey});
     du.submeasureName = sm && sm.name;
     return du;
   }
