@@ -10,4 +10,4 @@ export const salesSplitUploadRouter = Router()
   .post('/', ctrl.addOne.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))
   .put('/:id', ctrl.update.bind(ctrl))
-  .delete('/:id', authorize('api:admin'), ctrl.remove.bind(ctrl));
+  .delete('/:id', ctrl.remove.bind(ctrl));

@@ -11,7 +11,26 @@ DROP TABLE fpadfa.dfa_prof_sales_split_pctmap_upld;
 DROP TABLE fpadfa.dfa_prof_swalloc_manualmix_upld;
 DROP TABLE fpadfa.dfa_sub_measure;
 DROP TABLE fpadfa.dfa_submeasure_input_lvl;
+DROP TABLE fpadfa.dfa_prof_scms_triang_altsl2_map_upld
 */
+
+
+CREATE TABLE fpadfa.dfa_prof_scms_triang_altsl2_map_upld (
+	fiscal_month_id numeric(22) NOT NULL,
+	actual_sl2_code varchar(32) NULL,
+	alternate_sl2_code varchar(32) NULL,
+	alternate_country_name varchar(255) NULL,
+	create_owner varchar(30) NULL,
+	create_datetime timestamp NULL,
+	update_owner varchar(30) NULL,
+	update_datetime timestamp NULL
+)
+WITH (
+	OIDS=FALSE
+) ;
+CREATE INDEX ndx_actsl2_altsl2_map ON fpadfa.dfa_prof_scms_triang_altsl2_map_upld USING btree (actual_sl2_code) ;
+CREATE INDEX ndx_fisc_mthid_altsl2_map ON fpadfa.dfa_prof_scms_triang_altsl2_map_upld USING btree (fiscal_month_id) ;
+
 
 CREATE TABLE fpadfa.dfa_data_sources (
 	source_system_id numeric(22) NULL,
