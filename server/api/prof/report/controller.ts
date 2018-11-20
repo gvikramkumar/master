@@ -125,7 +125,7 @@ export default class ReportController extends ControllerBase {
       case '2t-submeasure-list':
         excelSheetname = ['2t Submeasure List'];
         excelHeaders = ['Submeasure Name', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['submeasure_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
+        excelProperties = ['sub_measure_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         promise = this.postgresRepo.get2TSebmeasureListReport();
         break;
       case 'disti-to-direct':
