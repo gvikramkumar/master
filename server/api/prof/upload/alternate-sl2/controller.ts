@@ -36,14 +36,14 @@ export default class AlternateSl2UploadUploadController extends UploadController
 
   getValidationAndImportData() {
     return Promise.all([
-      super.getValidationAndImportData(),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_iso_country', 'iso_country_name'),
-      this.repo.getMany({fiscalMonth: this.fiscalMonth});
+      this.repo.getMany({fiscalMonth: this.fiscalMonth})
     ])
       .then(results => {
-        this.data.salesTerritoryNameCodes = results[1];
-        this.data.alternateCountryNames = results[2];
+        this.data.salesTerritoryNameCodes = results[0];
+        this.data.alternateCountryNames = results[1];
+        this.data.alternateSl2Uploads = results[2];
       });
   }
 
@@ -58,26 +58,48 @@ export default class AlternateSl2UploadUploadController extends UploadController
   }
 
   validate() {
-    // sort by submeasureName, add up splitPercentage, error if not 1.0
-    this.imports =
-      _.sortBy(this.rows1.map(row => new AlternateSl2UploadImport(row, this.fiscalMonth)), 'submeasureName');
+    // first check if duplicates in the data they're uploading
+    const NO_COUNTRY_VALUE = 'NO_COUNTRY_VALUE';
+    this.imports = this.rows1.map(row => new AlternateSl2UploadImport(row, this.fiscalMonth));
     const obj = {};
-    this.imports.forEach(val => {
-      if (obj[val.submeasureName]) {
-        obj[val.submeasureName] += val.splitPercentage;
+    this.imports.forEach((val: AlternateSl2UploadImport) => {
+      const arr = _.get(obj, `${val.actualSl2Code}.${val.alternateSl2Code}`);
+      const entry = (val.alternateCountryName && val.alternateCountryName.toUpperCase()) || NO_COUNTRY_VALUE;
+      if (arr) {
+        if (arr.indexOf(entry) !== -1) {
+          this.addErrorMessageOnly(`${val.actualSl2Code} / ${val.alternateSl2Code} / ${val.alternateCountryName}`);
+        } else {
+          arr.push(entry);
+        }
       } else {
-        obj[val.submeasureName] = val.splitPercentage;
-      }
-    });
-    _.forEach(obj, (val, key) => {
-      if (val !== 1.0) {
-        this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
+        _.set(obj, `${val.actualSl2Code}.${val.alternateSl2Code}`, [entry]);
       }
     });
 
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Submeasure percentage values not 100%', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Actual SL2/Alternate SL2/Alternate Country entries in your upload', this.errors));
     }
+
+    // second check if duplicates in upload that are already in the database
+    const dbVals = this.data.alternateSl2Uploads.map(doc => new AlternateSl2UploadImport([doc.actualSl2Code, doc.alternateSl2Code, doc.alternateCountryName], this.fiscalMonth));
+    dbVals.forEach((val: AlternateSl2UploadImport) => {
+      const arr = _.get(obj, `${val.actualSl2Code}.${val.alternateSl2Code}`);
+      const entry = (val.alternateCountryName && val.alternateCountryName.toUpperCase()) || NO_COUNTRY_VALUE;
+      if (arr) {
+        if (arr.indexOf(entry) !== -1) {
+          this.addErrorMessageOnly(`${val.actualSl2Code} / ${val.alternateSl2Code} / ${val.alternateCountryName}`);
+        } else {
+          arr.push(entry);
+        }
+      } else {
+        _.set(obj, `${val.actualSl2Code}.${val.alternateSl2Code}`, [entry]);
+      }
+    });
+
+    if (this.errors.length) {
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Actual SL2/Alternate SL2/Alternate Country entries already in the database', this.errors));
+    }
+
     return Promise.resolve();
   }
 

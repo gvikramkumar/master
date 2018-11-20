@@ -67,8 +67,9 @@ export default class UploadController {
       return;
     }
 
-    this.getValidationAndImportData()
-      // .then(() => Q().delay(3000))
+    this.getInitialData()
+      .then(() => this.removeOtherFiscalMonthUploads())
+      .then(() => this.getValidationAndImportData())
       .then(() => this.validateRows(1, this.rows1))
       .then(() => this.lookForTotalErrors())
       .then(() => this.validateRows(2, this.rows2))
@@ -99,7 +100,7 @@ export default class UploadController {
       });
   }
 
-  getValidationAndImportData(): Promise<any> {
+  getInitialData(): Promise<any> {
     return Promise.all([
       this.openPeriodRepo.getOneByQuery({moduleId: this.moduleId}),
       this.submeasureRepo.getManyActive({moduleId: this.moduleId})
@@ -108,7 +109,23 @@ export default class UploadController {
         this.fiscalMonth = results[0].fiscalMonth;
         this.data.submeasures = results[1];
       });
+  }
 
+  removeOtherFiscalMonthUploads() {
+    if (this.repo.hasFiscalMonth()) {
+      return this.repo.removeMany({fiscalMonth: {$ne: this.fiscalMonth}});
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  getValidationAndImportData() {
+    return Promise.resolve();
+  }
+
+  importRows(userId) {
+    return this.getImportArray()
+      .then(imports => this.repo.addManyTransaction(imports, userId));
   }
 
   validateRows(sheet, rows) {
@@ -157,15 +174,6 @@ export default class UploadController {
           return Promise.reject(err); // send error email
         }
       });
-  }
-
-  importRows(userId) {
-    let fiscalMonth;
-    if (this.repo.hasFiscalMonth()) {
-      fiscalMonth = this.fiscalMonth;
-    }
-    return this.getImportArray()
-      .then(imports => this.repo.importUploadRecords(imports, userId, fiscalMonth || -1));
   }
 
   // message is only used by validateOther where it's used to title the error list

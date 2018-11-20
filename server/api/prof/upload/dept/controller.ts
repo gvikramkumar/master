@@ -39,11 +39,10 @@ export default class DeptUploadUploadController extends UploadController {
   getValidationAndImportData() {
     this.data = {};
     return Promise.all([
-      super.getValidationAndImportData(),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_account', 'financial_account_code'),
     ])
       .then(results => {
-        this.data.glAccounts = results[1];
+        this.data.glAccounts = results[0];
       });
   }
 
