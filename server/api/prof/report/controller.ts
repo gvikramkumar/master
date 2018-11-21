@@ -27,7 +27,6 @@ export default class ReportController extends ControllerBase {
   submeasures: AnyObj[];
   measures: AnyObj[];
   sources: AnyObj[];
-  allocationRules: AnyObj[];
 
   constructor(
     private dollarUploadPgRepo: DollarUploadPgRepo,
@@ -207,25 +206,30 @@ export default class ReportController extends ControllerBase {
         ];
         break;
       case 'allocation-rule':
-        excelSheetname = [['History'], ['As Of Now']];
-        excelHeaders = [['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
-          'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Updated By', 'Updated Date'],
+        excelSheetname = [['Original'], ['History'], ['As Of Now']];
+        excelHeaders = [['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match',
+                          'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
-          ['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
-            'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Updated By', 'Updated Date']];
+                        ['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match',
+                          'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
-        excelProperties = [['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.legalEntityLevel', 'inputFilterLevel.beLevel',
-          'rules', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate'],
+                        ['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match',
+                          'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Created By', 'Created Date', 'Updated By', 'Updated Date']];
 
-          ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.legalEntityLevel', 'inputFilterLevel.beLevel',
-            'rules', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate']];
-        dataPromises.push(this.measureRepo.getManyActive({moduleId}));
-        dataPromises.push(this.sourceRepo.getManyActive());
-        dataPromises.push(this.allocationRuleRepo.getManyActive({moduleId}));
+        excelProperties = [['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch',
+                          'sl1Select', 'scmsSelect', 'beSelect', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
+
+                            ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch',
+                              'sl1Select', 'scmsSelect', 'beSelect', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
+
+                            ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch',
+                              'sl1Select', 'scmsSelect', 'beSelect', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate']];
         promise = [
-          this.submeasureRepo.getMany({setSort: 'name', moduleId})
+          this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
             .then(docs => docs.map(doc => this.transformRule(doc))),
-          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
+          this.allocationRuleRepo.getMany({setSort: 'name', moduleId})
+            .then(docs => docs.map(doc => this.transformRule(doc))),
+          this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
             .then(docs => docs.map(doc => this.transformRule(doc))),
         ];
         break;
@@ -248,11 +252,6 @@ export default class ReportController extends ControllerBase {
           case 'submeasure':
             this.measures = dataResults[0];
             this.sources = dataResults[1];
-            break;
-          case 'allocation-rule':
-            this.measures = dataResults[0];
-            this.sources = dataResults[1];
-            this.allocationRules = dataResults[2];
             break;
         }
 
@@ -342,22 +341,6 @@ export default class ReportController extends ControllerBase {
 
   transformRule(rule) {
     rule = svrUtil.docToObject(rule);
-    const measure = _.find(this.measures, {measureId: rule.measureId});
-    const source = _.find(this.sources, {sourceId: rule.sourceId});
-    const allocationRule = _.find(this.allocationRules, {name: rule.rules[0]});
-    rule.measureName = measure && measure.name;
-    rule.sourceName = source && source.name;
-    rule.driverName = allocationRule && allocationRule.driverName;
-    rule.period = allocationRule && allocationRule.period;
-    rule.salesMatch = allocationRule && allocationRule.salesMatch;
-    rule.productMatch = allocationRule && allocationRule.productMatch;
-    rule.scmsMatch = allocationRule && allocationRule.scmsMatch;
-    rule.legalEntityMatch = allocationRule && allocationRule.legalEntityMatch;
-    rule.beMatch = allocationRule && allocationRule.beMatch;
-    rule.sl1Select = allocationRule && allocationRule.sl1Select;
-    rule.scmsSelect = allocationRule && allocationRule.scmsSelect;
-    rule.beSelect = allocationRule && allocationRule.beSelect;
-    rule.status = allocationRule && allocationRule.status;
 
     return rule;
   }
