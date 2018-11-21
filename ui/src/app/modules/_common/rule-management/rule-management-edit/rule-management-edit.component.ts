@@ -41,7 +41,14 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     {name: 'Shipped Revenue', value: 'SHIPREV'},
     {name: 'VIP Rebates', value: 'VIP'},
   ];
-  periods = [{period: 'MTD'}, {period: 'ROLL6'}, {period: 'ROLL3'}];
+  periods = [
+    {period: 'MTD'},
+    {period: 'QTD'},
+    {period: 'ROLL3'},
+    {period: 'ROLL6'},
+    {period: 'PRIOR ROLL3'},
+    {period: 'PRIOR ROLL6'},
+  ];
   conditionalOperators = [{operator: 'IN'}, {operator: 'NOT IN'}];
   salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
   productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
