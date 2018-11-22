@@ -93,8 +93,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Sub_Measure_Updates_Report.xlsx'
     },
     {
-      type: 'allocation-rule', text: 'Measure & Sub Measure Hierarchy View', disabled: false,
-      filename: 'Hierarchy_View_Report.xlsx'
+      type: 'allocation-rule', text: 'Rule Updates', disabled: false,
+      filename: 'Rule_Updates_Report.xlsx'
     }
   ];
   report = this.reports[0];
