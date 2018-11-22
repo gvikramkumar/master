@@ -12,6 +12,8 @@ import {UiUtil} from '../../../../core/services/ui-util';
 import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors} from '@angular/forms';
 import {ValidationInputOptions} from '../../../../shared/components/validation-input/validation-input.component';
 import {map} from 'rxjs/operators';
+import {LookupService} from '../../services/lookup.service';
+import AnyObj from '../../../../../../../shared/models/any-obj';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -32,23 +34,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   copyMode = false;
   rule = new AllocationRule();
   orgRule = _.cloneDeep(this.rule);
-  driverNames = [
-    {name: 'GL Revenue Mix', value: 'GLREVMIX'},
-    {name: 'Manual Mapping', value: 'MANUALMAP'},
-    {name: 'POS Revenue', value: 'REVPOS'},
-    {name: 'Service Map', value: 'SERVMAP'},
-    {name: 'Shipment', value: 'SHIPMENT'},
-    {name: 'Shipped Revenue', value: 'SHIPREV'},
-    {name: 'VIP Rebates', value: 'VIP'},
-  ];
-  periods = [
-    {period: 'MTD'},
-    {period: 'QTD'},
-    {period: 'ROLL3'},
-    {period: 'ROLL6'},
-    {period: 'PRIOR ROLL3'},
-    {period: 'PRIOR ROLL6'},
-  ];
+  drivers: {name: string, value: string}[];
+  periods: {period: string}[];
+
   conditionalOperators = [{operator: 'IN'}, {operator: 'NOT IN'}];
   salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
   productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
@@ -65,10 +53,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   beCondRequired = false;
 
   // SELECT options to be taken from Postgres
-  salesSL1Choices: {name: string}[] = [];
-  prodTgChoices: {name: string}[] = [];
-  scmsChoices: {name: string}[] = [];
-  internalBeChoices: {name: string}[] = [];
+  salesSL1Choices: { name: string }[] = [];
+  prodTgChoices: { name: string }[] = [];
+  scmsChoices: { name: string }[] = [];
+  internalBeChoices: { name: string }[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -77,7 +65,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private pgLookupService: PgLookupService,
     private store: AppStore,
     public uiUtil: UiUtil,
-    private changeDetectorRef: ChangeDetectorRef
+    private lookupService: LookupService
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -96,11 +84,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
       this.ruleService.getDistinctRuleNames().toPromise(),
+      this.lookupService.getValues(['drivers', 'periods']).toPromise()
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
       promises.push(this.ruleService.getOneById(this.route.snapshot.params.id).toPromise());
     }
-      Promise.all(promises)
+    Promise.all(promises)
       .then(results => {
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
@@ -109,9 +98,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
         this.ruleNames = results[4].map(x => x.toUpperCase());
+        this.drivers = results[5][0];
+        this.periods = results[5][1];
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.rule = results[5];
+          this.rule = results[6];
         }
 
         if (this.copyMode) {
@@ -328,9 +319,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
                 this.ruleService.submitForApproval(this.rule, {saveMode})
                   .subscribe(() => {
-                  this.uiUtil.toast('Rule submitted for approval.');
-                  this.router.navigateByUrl('/prof/rule-management');
-                });
+                    this.uiUtil.toast('Rule submitted for approval.');
+                    this.router.navigateByUrl('/prof/rule-management');
+                  });
               }
             });
         }

@@ -8,7 +8,7 @@ import {NamedApiError} from '../../../../lib/common/named-api-error';
 import AnyObj from '../../../../../shared/models/any-obj';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
-import PgLookupRepo from '../../../common/pg-lookup/repo';
+import PgLookupRepo from '../../../pg-lookup/repo';
 
 @injectable()
 export default class AlternateSl2UploadUploadController extends UploadController {
@@ -63,7 +63,7 @@ export default class AlternateSl2UploadUploadController extends UploadController
     this.imports = this.rows1.map(row => new AlternateSl2UploadImport(row, this.fiscalMonth));
     const obj = {};
     this.imports.forEach((val: AlternateSl2UploadImport) => {
-      const arr = _.get(obj, `${val.actualSl2Code}.${val.alternateSl2Code}`);
+      const arr = _.get(obj, `${val.actualSl2Code.toUpperCase()}.${val.alternateSl2Code.toUpperCase()}`);
       const entry = (val.alternateCountryName && val.alternateCountryName.toUpperCase()) || NO_COUNTRY_VALUE;
       if (arr) {
         if (arr.indexOf(entry) !== -1) {
@@ -72,7 +72,7 @@ export default class AlternateSl2UploadUploadController extends UploadController
           arr.push(entry);
         }
       } else {
-        _.set(obj, `${val.actualSl2Code}.${val.alternateSl2Code}`, [entry]);
+        _.set(obj, `${val.actualSl2Code.toUpperCase()}.${val.alternateSl2Code.toUpperCase()}`, [entry]);
       }
     });
 
@@ -83,7 +83,7 @@ export default class AlternateSl2UploadUploadController extends UploadController
     // second check if duplicates in upload that are already in the database
     const dbVals = this.data.alternateSl2Uploads.map(doc => new AlternateSl2UploadImport([doc.actualSl2Code, doc.alternateSl2Code, doc.alternateCountryName], this.fiscalMonth));
     dbVals.forEach((val: AlternateSl2UploadImport) => {
-      const arr = _.get(obj, `${val.actualSl2Code}.${val.alternateSl2Code}`);
+      const arr = _.get(obj, `${val.actualSl2Code.toUpperCase()}.${val.alternateSl2Code.toUpperCase()}`);
       const entry = (val.alternateCountryName && val.alternateCountryName.toUpperCase()) || NO_COUNTRY_VALUE;
       if (arr) {
         if (arr.indexOf(entry) !== -1) {
@@ -92,7 +92,7 @@ export default class AlternateSl2UploadUploadController extends UploadController
           arr.push(entry);
         }
       } else {
-        _.set(obj, `${val.actualSl2Code}.${val.alternateSl2Code}`, [entry]);
+        _.set(obj, `${val.actualSl2Code.toUpperCase()}.${val.alternateSl2Code.toUpperCase()}`, [entry]);
       }
     });
 

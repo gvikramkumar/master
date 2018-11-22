@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import DollarUploadController from '../dollar-upload/controller';
 import MappingUploadController from '../mapping-upload/controller';
 import DeptUploadController from '../dept-upload/controller';
-import PgLookupRepo from '../../common/pg-lookup/repo';
+import PgLookupRepo from '../../pg-lookup/repo';
 import {ApiError} from '../../../lib/common/api-error';
 import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'node-xlsx';
@@ -131,19 +131,19 @@ export default class ReportController extends ControllerBase {
       case 'disti-to-direct':
         excelSheetname = ['Disti to Direct'];
         excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'fiscal_month_id', 'create_user', 'create_datetime', 'update_user', 'update_datetime'];
+        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
         promise = this.postgresRepo.getDistiToDirectMappingReport();
         break;
       case 'alternate-sl2':
         excelSheetname = ['Alternate SL2'];
         excelHeaders = ['Actual SL2', 'Alternate SL2', 'Alternate Country', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'create_user', 'create_datetime', 'update_user', 'update_datetime'];
+        excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
         promise = this.postgresRepo.getAlternateSL2Report();
         break;
       case 'corp-adjustment':
         excelSheetname = ['Corp Adjustment'];
         excelHeaders = ['Country Name', 'Sales Territory Code', 'SCMS Value', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'create_user', 'create_datetime', 'update_user', 'update_datetime'];
+        excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
         promise = this.postgresRepo.getCorpAdjustmentReport();
         break;
       case 'sales-split-percentage':

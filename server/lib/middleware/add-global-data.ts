@@ -1,4 +1,4 @@
-import LookupRepo from '../../api/common/lookup/repo';
+import LookupRepo from '../../api/lookup/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
 import * as _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';

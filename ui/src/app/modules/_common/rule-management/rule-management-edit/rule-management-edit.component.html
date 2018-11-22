@@ -11,7 +11,7 @@
       <div class="col-lg-6">
         <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [notInList]="ruleNames"
                    notInListMessage="Rule name already exists" [required]="true" [disabled]="editMode"></fin-input>
-        <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="driverNames" label="Driver"
+        <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="drivers" label="Driver"
                     optionsKey="name" optionsValue="value" [required]="true"></cui-select>
       </div>
       <div class="col-lg-6">

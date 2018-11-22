@@ -1,4 +1,4 @@
-import {injector} from '../../../lib/common/inversify.config';
+import {injector} from '../../lib/common/inversify.config';
 import {Router} from 'express';
 import {PgLookupController} from './controller';
 

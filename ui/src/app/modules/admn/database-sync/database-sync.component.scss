@@ -1,3 +1,4 @@
+@import '../../../../styles/_comp-index.scss';
 
 .fin-container {
 
@@ -9,18 +10,11 @@
     margin-top: 20px;
   }
 
-  .separator {
-    width: 90%;
-    height: 1px;
-    border-top: 1px solid #888;
-    box-sizing: border-box;
-    margin: 30px 0 40px 0;
-  }
-
   .results {
+    margin-top: 34px;
     text-align: left;
-    width: 90%;
     max-width: 800px;
+    overflow: auto;
   }
 
 }

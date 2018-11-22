@@ -1,8 +1,7 @@
-import {injector} from '../../../lib/common/inversify.config';
+import {injector} from '../../lib/common/inversify.config';
 import {Router} from 'express';
 import FileController from './controller';
-import upload from '../../../lib/middleware/multer-gridfs';
-import {authorize} from '../../../lib/middleware/authorize';
+import upload from '../../lib/middleware/multer-gridfs';
 
 
 const ctrl = injector.get(FileController);

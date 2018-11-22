@@ -7,9 +7,9 @@ const schema = new Schema(
   {
     transactionId: {type: SchemaTypes.ObjectId, required: true},
     fiscalMonth: {type: Number, required: true},
-    actualSl2Code: {type: String, required: true},
-    corpAdjustmentsCode: {type: String, required: true},
-    alternateCountryName: String,
+    salesCountryName: {type: String, required: true},
+    salesTerritoryCode: {type: String, required: true},
+    scmsValue: {type: String, required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},

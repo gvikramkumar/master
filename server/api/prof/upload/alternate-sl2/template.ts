@@ -6,9 +6,9 @@ export default class AlternateSl2UploadTemplate {
   alternateCountryName: string;
 
   constructor(row) {
-    this.actualSl2Code = String(row[0]);
-    this.alternateSl2Code = String(row[1]);
-    this.alternateCountryName = String(row[2]);
+    this.actualSl2Code = row[0] && String(row[0]);
+    this.alternateSl2Code = row[1] && String(row[1]);
+    this.alternateCountryName = row[2] && String(row[2]);
 
     svrUtil.trimStringProperties(this);
   }

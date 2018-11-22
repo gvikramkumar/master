@@ -6,7 +6,7 @@ import UploadController from '../../../../lib/base-classes/upload-controller';
 import DeptUploadDeptTemplate from './dept-template';
 import DeptUploadExludeAcctTemplate from './exclude-acct-template';
 import SubmeasureRepo from '../../../common/submeasure/repo';
-import PgLookupRepo from '../../../common/pg-lookup/repo';
+import PgLookupRepo from '../../../pg-lookup/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 
 

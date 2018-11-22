@@ -5,9 +5,9 @@ import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 
 const ormMap: OrmMap[] = [
   {prop: 'fiscalMonth', field: 'fiscal_month_id', type: OrmTypes.number},
-  {prop: 'actualSl2Code', field: 'actual_sl2_code'},
-  {prop: 'corpAdjustmentsCode', field: 'alternate_sl2_code'},
-  {prop: 'alternateCountryName', field: 'alternate_country_name'},
+  {prop: 'salesCountryName', field: 'sales_country_name'},
+  {prop: 'salesTerritoryCode', field: 'sales_territory_code'},
+  {prop: 'scmsValue', field: 'scms_value'},
   {prop: 'createdBy', field: 'create_owner'},
   {prop: 'createdDate', field: 'create_datetimestamp', type: OrmTypes.date},
   {prop: 'updatedBy', field: 'update_owner'},

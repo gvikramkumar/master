@@ -1,7 +1,6 @@
 import CorpAdjustmentsUploadController from './controller';
 import {injector} from '../../../lib/common/inversify.config';
 import {Router} from 'express';
-import {authorize} from '../../../lib/middleware/authorize';
 
 const ctrl = injector.get(CorpAdjustmentsUploadController);
 

@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
-import {ApiError} from '../../../lib/common/api-error';
-import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
-import {PgRepoBase} from '../../../lib/base-classes/pg-repo-base';
+import {ApiError} from '../../lib/common/api-error';
+import {Orm, OrmMap, OrmTypes} from '../../lib/base-classes/Orm';
+import {PgRepoBase} from '../../lib/base-classes/pg-repo-base';
 import PgLookupRepo from './repo';
 
 

@@ -73,11 +73,7 @@ function sortedListNotExistsUpper(values, value) {
 function trimStringProperties(obj) {
   Object.keys(obj).forEach(key => {
     if (typeof obj[key] === 'string') {
-      if (obj[key] === 'undefined') {
-        obj[key] = undefined;
-      } else {
-        obj[key] = obj[key].trim();
-      }
+      obj[key] = obj[key].trim();
     }
   });
 }

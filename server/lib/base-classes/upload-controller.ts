@@ -9,7 +9,7 @@ import RepoBase from './repo-base';
 import {Request} from 'express';
 import ApiRequest from '../models/api-request';
 import AnyObj from '../../../shared/models/any-obj';
-import PgLookupRepo from '../../api/common/pg-lookup/repo';
+import PgLookupRepo from '../../api/pg-lookup/repo';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
 import DfaUser from '../../../shared/models/dfa-user';
 import {svrUtil} from '../common/svr-util';

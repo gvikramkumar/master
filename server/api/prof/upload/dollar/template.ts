@@ -13,16 +13,16 @@ export default class DollarUploadTemplate {
   revenueClassification: string;
 
   constructor(row) {
-    this.submeasureName = row[0];
-    this.inputProductValue = row[1];
-    this.inputSalesValue = row[2];
-    this.grossUnbilledAccruedRevenueFlag = row[3];
-    this.inputLegalEntityValue = row[4];
-    this.inputBusinessEntityValue = row[5];
-    this.scmsSegment = row[6];
-    this.amount = row[7];
-    this.dealId = row[8];
-    this.revenueClassification = row[9];
+    this.submeasureName = row[0] && String(row[0]);
+    this.inputProductValue = row[1] && String(row[1]);
+    this.inputSalesValue = row[2] && String(row[2]);
+    this.grossUnbilledAccruedRevenueFlag = row[3] && String(row[3]);
+    this.inputLegalEntityValue = row[4] && String(row[4]);
+    this.inputBusinessEntityValue = row[5] && String(row[5]);
+    this.scmsSegment = row[6] && String(row[6]);
+    this.amount = row[7] && Number(row[7]);
+    this.dealId = row[8] && String(row[8]);
+    this.revenueClassification = row[9] && String(row[9]);
 
     svrUtil.trimStringProperties(this);
   }

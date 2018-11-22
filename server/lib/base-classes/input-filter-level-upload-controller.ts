@@ -1,6 +1,6 @@
 import UploadController from './upload-controller';
-import PgLookupRepo from '../../api/common/pg-lookup/repo';
-import LookupRepo from '../../api/common/lookup/repo';
+import PgLookupRepo from '../../api/pg-lookup/repo';
+import LookupRepo from '../../api/lookup/repo';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
 

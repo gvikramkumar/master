@@ -5,8 +5,8 @@ export default class DeptUploadDeptTemplate {
   nodeValue: string;
 
   constructor(row) {
-    this.submeasureName = row[0];
-    this.nodeValue = row[1];
+    this.submeasureName = row[0] && String(row[0]);
+    this.nodeValue = row[1] && String(row[1]);
 
     svrUtil.trimStringProperties(this);
   }
