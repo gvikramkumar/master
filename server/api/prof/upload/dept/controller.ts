@@ -6,7 +6,7 @@ import UploadController from '../../../../lib/base-classes/upload-controller';
 import DeptUploadDeptTemplate from './dept-template';
 import DeptUploadExludeAcctTemplate from './exclude-acct-template';
 import SubmeasureRepo from '../../../common/submeasure/repo';
-import PgLookupRepo from '../../../common/pg-lookup/repo';
+import PgLookupRepo from '../../../pg-lookup/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 
 
@@ -39,11 +39,10 @@ export default class DeptUploadUploadController extends UploadController {
   getValidationAndImportData() {
     this.data = {};
     return Promise.all([
-      super.getValidationAndImportData(),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_account', 'financial_account_code'),
     ])
       .then(results => {
-        this.data.glAccounts = results[1];
+        this.data.glAccounts = results[0];
       });
   }
 

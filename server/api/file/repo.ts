@@ -1,6 +1,6 @@
 import {Schema, model, Model} from 'mongoose';
 import * as _ from 'lodash';
-import {svrUtil} from '../../../lib/common/svr-util';
+import {svrUtil} from '../../lib/common/svr-util';
 import {injectable} from 'inversify';
 
 const schema = new Schema({

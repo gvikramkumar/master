@@ -14,6 +14,8 @@ import OpenPeriodRepo from '../common/open-period/repo';
 import {shUtil} from '../../../shared/shared-util';
 import {SyncMap} from '../../../shared/models/sync-map';
 import SubmeasureRepo from '../common/submeasure/repo';
+import AlternateSl2UploadController from '../prof/alternate-sl2-upload/controller';
+import CorpAdjustmentsUploadController from '../prof/corp-adjustments-upload/controller';
 
 @injectable()
 export default class DatabaseController {
@@ -29,7 +31,9 @@ export default class DatabaseController {
     private dollarUploadCtrl: DollarUploadController,
     private mappingUploadCtrl: MappingUploadController,
     private productClassUploadCtrl: ProductClassUploadController,
-    private salesSplitUploadCtrl: SalesSplitUploadController
+    private salesSplitUploadCtrl: SalesSplitUploadController,
+    private alternateSl2UploadCtrl: AlternateSl2UploadController,
+    private corpAdjustmentsUploadCtrl: CorpAdjustmentsUploadController,
     ) {
   }
 
@@ -94,6 +98,14 @@ export default class DatabaseController {
         }
         if (syncMap.dfa_prof_manual_map_upld) {
           promises.push(this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', req.user.id, log, elog,
+            {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}));
+        }
+        if (syncMap.dfa_prof_scms_triang_altsl2_map_upld) {
+          promises.push(this.alternateSl2UploadCtrl.mongoToPgSync('dfa_prof_scms_triang_altsl2_map_upld', req.user.id, log, elog,
+            {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}));
+        }
+        if (syncMap.dfa_prof_scms_triang_corpadj_map_upld) {
+          promises.push(this.corpAdjustmentsUploadCtrl.mongoToPgSync('dfa_prof_scms_triang_corpadj_map_upld', req.user.id, log, elog,
             {fiscalMonth: curFiscalMonth}, {fiscalMonth: curFiscalMonth}));
         }
         if (syncMap.dfa_prof_swalloc_manualmix_upld) {

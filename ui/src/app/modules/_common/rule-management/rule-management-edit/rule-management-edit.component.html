@@ -11,7 +11,7 @@
       <div class="col-lg-6">
         <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [notInList]="ruleNames"
                    notInListMessage="Rule name already exists" [required]="true" [disabled]="editMode"></fin-input>
-        <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="driverNames" label="Driver"
+        <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="drivers" label="Driver"
                     optionsKey="name" optionsValue="value" [required]="true"></cui-select>
       </div>
       <div class="col-lg-6">
@@ -21,7 +21,7 @@
           </div>
           <div class="form-group-text" style="margin-left:30px;">Status: {{UiUtil.getStatusText(rule.status)}}</div>
         </div>
-        <cui-select name="period" [(ngModel)]="rule.period" [items]="periods" label="Driver Period"
+        <cui-select name="period" [(ngModel)]="rule.period" [items]="periods" label="Driver Period" dropdownMaxHeight="220px"
                     [required]="true" optionsKey="period" optionsValue="period"></cui-select>
       </div>
     </div>

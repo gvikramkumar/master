@@ -1,36 +1,35 @@
 <div class="fin-container">
   <br>
+
+  <div class="row">
+    <div class="col-12" fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <button cuiButton color="primary" (click)="mongoToPgSync()">Mongo To Postgres Sync</button>
+      </div>
+      <div>
+        <div><button cuiButton color="secondary" (click)="pgToMongoSync()">Postgres To Mongo Sync</button></div>
+        <div class="half-margin-top" style="text-align: center;">(Only submeasures currently)</div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
 
-    <div class="col-lg-6">
-      <button cuiButton color="primary" (click)="mongoToPgSync()">Mongo To Postgres Sync</button>
+    <div class="col-lg-5">
       <div class="error-text">
         <span [style.visibility]="noChoices?'visible':'hidden'">No choices made for sync.</span>
       </div>
       <div>
         <fin-checkbox [(model)]="allValue" (modelChange)="changeAll()" label="Set All"></fin-checkbox>
       </div>
-      <div class="row checkboxes">
-        <div class="col-lg-5">
-          <div *ngFor="let key of keys.slice(0, (keys.length / 2) + 1)">
-            <fin-checkbox [(model)]="syncMap[key]" [label]="key" (modelChange)="change()"></fin-checkbox>
-          </div>
-        </div>
-        <div class="col-lg-5 offset-lg-1-1">
-          <div *ngFor="let key of keys.slice((keys.length / 2) + 1)">
-            <fin-checkbox [(model)]="syncMap[key]" [label]="key" (modelChange)="change()"></fin-checkbox>
-          </div>
-        </div>
+      <div *ngFor="let key of keys">
+        <fin-checkbox [(model)]="syncMap[key]" [label]="key" (modelChange)="change()"></fin-checkbox>
       </div>
 
-      <div class="separator">&nbsp;</div>
-
-      <div><button cuiButton color="secondary" (click)="pgToMongoSync()">Postgres To Mongo Sync</button></div>
-      <div class="half-margin-top">(Only submeasures currently)</div>
     </div>
 
-    <div class="col-lg-6">
-      <pre *ngIf="results" class="results">{{results | json}}</pre>
+    <div class="col-lg-7">
+      <pre *ngIf="results" class="results panel panel--mdgray panel--loose">{{results | json}}</pre>
     </div>
 
   </div>

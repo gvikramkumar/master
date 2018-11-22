@@ -32,12 +32,6 @@ export default class ProductClassUploadUploadController extends UploadController
     }
   }
 
-  getValidationAndImportData() {
-    return Promise.all([
-      super.getValidationAndImportData()
-    ]);
-  }
-
   validateRow1(row) {
     this.temp = new ProductClassUploadTemplate(row);
     return Promise.all([

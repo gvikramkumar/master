@@ -1,6 +1,6 @@
 import {injectable} from 'inversify';
 import LookupRepo from './repo';
-import {ApiError} from '../../../lib/common/api-error';
+import {ApiError} from '../../lib/common/api-error';
 
 
 @injectable()
@@ -9,15 +9,14 @@ export default class LookupController {
   constructor(private repo: LookupRepo) {
   }
 
-  // we get all in array and put as properties of an object
-  getMany(req, res, next) {
-    this.repo.getMany(req.query.keys.split(','))
-      .then(docs => {
-        const obj = {};
-        docs.forEach(doc => obj[doc.key] = doc.value);
-        res.json(obj);
-      });
+  getValues(req, res, next) {
+    this.repo.getValues(req.query.keys.split(','))
+      .then(values => {
+        res.json(values);
+      })
+      .catch(next);
   }
+
 
   getValue(req, res, next) {
     return this.repo.getDoc(req.params.key)

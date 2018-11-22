@@ -14,7 +14,7 @@ export class LookupService {
   constructor(protected httpClient: HttpClient) {
   }
 
-  getMany(keys: string[]) {
+  getValues(keys: string[]) {
     keys = keys.map(key => key.trim());
     const params = new HttpParams().set('keys', keys.join(','));
     return this.httpClient.get<any>(`${apiUrl}/api/${this.endpointName}`, {params});

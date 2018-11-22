@@ -101,20 +101,24 @@ db.dfa_measure.insertMany([
 ])
 
 db.dfa_open_period.insertMany([
-  {moduleId: NumberInt(1), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(2), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(3), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(4), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(5), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(6), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(7), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(8), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(9), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(10), fiscalMonth: NumberInt(201903), openFlag: "Y"},
-  {moduleId: NumberInt(11), fiscalMonth: NumberInt(201903), openFlag: "Y"},
+  {moduleId: NumberInt(1), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(2), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(3), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(4), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(5), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(6), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(7), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(8), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(9), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(10), fiscalMonth: NumberInt(201904), openFlag: "Y"},
+  {moduleId: NumberInt(11), fiscalMonth: NumberInt(201904), openFlag: "Y"},
 ]);
 
 db.dfa_lookup.insertMany([
+  {
+    key: 'build-number',
+    value: "0"
+  },
   {
     key: 'itadmin-email',
     value: 'dfa-admin@cisco.com'

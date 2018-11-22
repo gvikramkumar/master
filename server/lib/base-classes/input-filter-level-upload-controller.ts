@@ -1,6 +1,6 @@
 import UploadController from './upload-controller';
-import PgLookupRepo from '../../api/common/pg-lookup/repo';
-import LookupRepo from '../../api/common/lookup/repo';
+import PgLookupRepo from '../../api/pg-lookup/repo';
+import LookupRepo from '../../api/lookup/repo';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
 
@@ -29,7 +29,6 @@ data;
   // which probably speeds things up immensely.
   getValidationAndImportData(): Promise<any> {
     return Promise.all([
-      super.getValidationAndImportData(),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'product_family_id'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'business_unit_id'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'technology_group_id'),
@@ -47,25 +46,25 @@ data;
     ])
       .then(results => {
         this.data.product = {
-          productFamilies: results[1],
-          businessUnits: results[2],
-          techGroups: results[3]
+          productFamilies: results[0],
+          businessUnits: results[1],
+          techGroups: results[2]
         };
         this.data.sales = {
-          level1s: results[4],
-          level2s: results[5],
-          level3s: results[6],
-          level4s: results[7],
-          level5s: results[8],
-          level6s: results[9]
+          level1s: results[3],
+          level2s: results[4],
+          level3s: results[5],
+          level4s: results[6],
+          level5s: results[7],
+          level6s: results[8]
         };
-        this.data.legalEntities = results[10];
+        this.data.legalEntities = results[9];
         this.data.businessEntity = {
-          internalBe: results[11],
-          internalSubBe: results[12]
+          internalBe: results[10],
+          internalSubBe: results[11]
         };
-        this.data.revClassifications = results[13];
-        this.data.scms = results[14];
+        this.data.revClassifications = results[12];
+        this.data.scms = results[13];
       });
   }
 

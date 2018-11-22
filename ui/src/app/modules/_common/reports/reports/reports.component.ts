@@ -57,35 +57,35 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'sales_hierarchy.xlsx'
     },
     {
-      type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping Report', disabled: false,
+      type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping', disabled: false,
       filename: 'department_mapping_data'
     },
     {
-      type: 'submeasure-grouping', text: 'Submeasure Grouping Report', disabled: false,
+      type: 'submeasure-grouping', text: 'Submeasure Grouping', disabled: false,
       filename: 'Submeasure_Grouping_Report.xlsx'
     },
     {
-      type: '2t-submeasure-list', text: '2T Submeasure List Report', disabled: false,
+      type: '2t-submeasure-list', text: '2T Submeasure List', disabled: false,
       filename: 'Sub_Measure_List_Report.xlsx'
     },
     {
-      type: 'disti-to-direct', text: 'Disti To Direct Mapping Report', disabled: false,
+      type: 'disti-to-direct', text: 'Disti To Direct Mapping', disabled: false,
       filename: 'Disti_to_Direct_Mapping_Report.xlsx'
     },
     {
-      type: 'alternate-sl2', text: 'Alternate SL2 Report', disabled: false,
+      type: 'alternate-sl2', text: 'Alternate SL2', disabled: false,
       filename: 'Alternate_SL2_Report.xlsx'
     },
     {
-      type: 'corp-adjustment', text: 'Corp Adjustment Report', disabled: false,
+      type: 'corp-adjustment', text: 'Corp Adjustment', disabled: false,
       filename: 'Corp_Adjustment_Report.xlsx'
     },
     {
-      type: 'sales-split-percentage', text: 'Sales Split Percentage Report', disabled: false,
+      type: 'sales-split-percentage', text: 'Sales Split Percentage', disabled: false,
       filename: 'Sales_Split_Percentage_Report.xlsx'
     },
     {
-      type: 'valid-driver', text: 'Valid Driver Report', disabled: false,
+      type: 'valid-driver', text: 'Valid Driver', disabled: false,
       filename: 'Valid_Driver_Report.xlsx'
     },
     {

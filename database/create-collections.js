@@ -4,23 +4,9 @@ print('host: ' + host + ', port: ' + port + ', db: ' + _db);
 const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
-
-const uploads = [
-  'dfa_prof_dept_acct_map_upld',
-  'dfa_prof_input_amnt_upld',
-  'dfa_prof_manual_map_upld',
-  'dfa_prof_sales_split_pctmap_upld',
-  'dfa_prof_swalloc_manualmix_upld',
-  'dfa_prof_scms_triang_altsl2_map_upld',
-  'dfa_prof_scms_triang_corpadj_map_upld'
-]
-
-uploads.forEach(coll => {
-  db.getCollection(coll).drop();
-  db.createCollection(coll);
-});
-
-const collections = [
+// this is a case INsensitive database because of this collation setting we do. All collections
+// have to be added to this and go through this collation setting, either here or in an update.
+const collationCollections = [
   'dfa_allocation_rule',
   'dfa_data_source',
   'dfa_lookup',
@@ -29,11 +15,18 @@ const collections = [
   'dfa_module_data_source',
   'dfa_module_lookup',
   'dfa_open_period',
+  'dfa_prof_dept_acct_map_upld',
+  'dfa_prof_input_amnt_upld',
+  'dfa_prof_manual_map_upld',
+  'dfa_prof_sales_split_pctmap_upld',
+  'dfa_prof_swalloc_manualmix_upld',
+  'dfa_prof_scms_triang_altsl2_map_upld',
+  'dfa_prof_scms_triang_corpadj_map_upld'
   'dfa_submeasure',
   'dfa_user'
 ];
 
-collections.forEach(coll => {
+collationCollections.forEach(coll => {
   db.getCollection(coll).drop();
   // this collation makes our indexes and find() calls case insensitive, search for john and get John as well
   db.createCollection(coll, {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});

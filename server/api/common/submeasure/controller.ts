@@ -8,7 +8,7 @@ import {filterLevelMap} from '../../../../shared/models/filter-level-map';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
 import {ApprovalMode} from '../../../../shared/enums';
 import {svrUtil} from '../../../lib/common/svr-util';
-import LookupRepo from '../lookup/repo';
+import LookupRepo from '../../lookup/repo';
 import {sendHtmlMail} from '../../../lib/common/mail';
 import {shUtil} from '../../../../shared/shared-util';
 

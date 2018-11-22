@@ -5,10 +5,18 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+const a = undefined;
+const b = null;
+
+// const s = a && Number(a);
+// const t = b && Number(b);
+
+const s = Number(a);
+const t = Number(b);
 
 
-
-console.log(shUtil.getFiscalMonthLongNameFromNumber(201901));
+console.log(typeof s, typeof t);
+console.log(s, t);
 
 
 
@@ -31,7 +39,7 @@ class SyncMap {
   dfa_prof_sales_split_pctmap_upld = false;
 }
 
-console.log(JSON.stringify(new SyncMap(), null, 2));
+console.log(JSON.Numberify(new SyncMap(), null, 2));
 
 */
 
@@ -61,7 +69,7 @@ setTimeout(() => {
 /*
 
 interface DiffVal {
-  path: string;
+  path: Number;
   oldVal: any;
   newVal: any;
 }
@@ -101,11 +109,11 @@ function isLeafProperty(arr, path, val1, val2) {
   const val = val1 || val2;
   if (!val) {
     return true;
-  } else if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
-    arr.push({path, val1: val1 && val1.toString(), val2: val2 && val2.toString()});
+  } else if (typeof val === 'Number' || typeof val === 'number' || typeof val === 'boolean') {
+    arr.push({path, val1: val1 && val1.toNumber(), val2: val2 && val2.toNumber()});
     rtn = true;
   } else if (typeof val === 'object' && val instanceof Date) {
-    arr.push({path, val1: val1 && val1.toISOString(), val2: val2 && val2.toISOString()});
+    arr.push({path, val1: val1 && val1.toISONumber(), val2: val2 && val2.toISONumber()});
     rtn = true;
   }
   // console.log('isleaf', val, rtn);
@@ -157,10 +165,10 @@ const objectChangeFinder = function() {
     VALUE_UPDATED: 'UPDATED: ',
     VALUE_DELETED: 'REMOVED: ',
     VALUE_UNCHANGED: 'unchanged',
-    getFormattedChangeString: function(obj1, obj2) {
+    getFormattedChangeNumber: function(obj1, obj2) {
       const initialResult = this.map(obj1, obj2);
       let tempResult = '';
-      let lines = JSON.stringify(initialResult, null, 2).split('\n');
+      let lines = JSON.Numberify(initialResult, null, 2).split('\n');
       for (let i = 0; i < lines.length; i++) {
         // code here using lines[i] which will give you each line
         // <span style="color:blue">blue</span>
@@ -267,16 +275,16 @@ const objectChangeFinder = function() {
       return this.VALUE_UPDATED;
     },
     isFunction: function(obj) {
-      return {}.toString.apply(obj) === '[object Function]';
+      return {}.toNumber.apply(obj) === '[object Function]';
     },
     isArray: function(obj) {
-      return {}.toString.apply(obj) === '[object Array]';
+      return {}.toNumber.apply(obj) === '[object Array]';
     },
     isObject: function(obj) {
-      return {}.toString.apply(obj) === '[object Object]';
+      return {}.toNumber.apply(obj) === '[object Object]';
     },
     isDate: function(obj) {
-      return {}.toString.apply(obj) === '[object Date]';
+      return {}.toNumber.apply(obj) === '[object Date]';
     },
     isValue: function(obj) {
       return !this.isObject(obj) && !this.isArray(obj);
@@ -285,7 +293,7 @@ const objectChangeFinder = function() {
 }();
 
 
-const result = objectChangeFinder.getFormattedChangeString({
+const result = objectChangeFinder.getFormattedChangeNumber({
     "_id" : "5ba94a196bde00fea67363e6",
     "moduleId" : 2,
     "name" : "REVPOS-SL2-NOWWDISTI-NOSCMS-ROLL3",
@@ -371,7 +379,7 @@ _.mergeWith(oldObj, newObj, function (objectValue, sourceValue, key, object, sou
 
 /*let finalResult = '';
 
-const lines = JSON.stringify(result, null, 2).split('\n');
+const lines = JSON.Numberify(result, null, 2).split('\n');
 for (let i = 0; i < lines.length; i++) {
   // code here using lines[i] which will give you each line
   // <span style="color:blue">blue</span>
@@ -406,7 +414,7 @@ finalResult = finalResult.replace(/"UPDATED: ",/g, 'UPDATED:')
   g: new Date('2017.11.25')
 };
 console.log();
-console.log(JSON.stringify(obj1,  null, 2));*/
+console.log(JSON.Numberify(obj1,  null, 2));*/
 
 
 // console.log(shUtil.getFiscalMonthListForCurYearAndLast());
@@ -622,7 +630,7 @@ console.log(matches);
 /*
 const repo = new OpenPeriodPgRepo();
 
-const date = new Date().toISOString();
+const date = new Date().toISONumber();
 
 const one = {
   moduleId: 5,
@@ -662,7 +670,7 @@ pgc.promise.then(db => {
       });
 
   } catch (e) {
-    console.log(JSON.stringify(e));
+    console.log(JSON.Numberify(e));
     process.exit(1);
   }
 

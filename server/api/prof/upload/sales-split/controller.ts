@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import SalesSplitUploadRepo from '../../sales-split-upload/repo';
-import PgLookupRepo from '../../../common/pg-lookup/repo';
+import PgLookupRepo from '../../../pg-lookup/repo';
 import SalesSplitUploadTemplate from './template';
 import * as _ from 'lodash';
 import SalesSplitUploadImport from './import';
@@ -36,17 +36,16 @@ export default class SalesSplitUploadUploadController extends UploadController {
 
   getValidationAndImportData() {
     return Promise.all([
-      super.getValidationAndImportData(),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_account_sub_account', 'bk_financial_account_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_department', 'company_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_account_sub_account', 'bk_subaccount_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name')
     ])
       .then(results => {
-        this.data.accountIds = results[1];
-        this.data.companyCodes = results[2];
-        this.data.subaccountCodes = results[3];
-        this.data.salesTerritoryCodes = results[4];
+        this.data.accountIds = results[0];
+        this.data.companyCodes = results[1];
+        this.data.subaccountCodes = results[2];
+        this.data.salesTerritoryCodes = results[3];
       });
   }
 

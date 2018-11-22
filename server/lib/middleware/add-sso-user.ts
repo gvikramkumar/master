@@ -1,6 +1,6 @@
 import DfaUser from '../../../shared/models/dfa-user';
 import * as _ from 'lodash';
-import LookupRepo from '../../api/common/lookup/repo';
+import LookupRepo from '../../api/lookup/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
 import {shUtil} from '../../../shared/shared-util';
 import {ApiError} from '../common/api-error';

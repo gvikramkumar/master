@@ -1,7 +1,7 @@
-import {pgc} from '../../../lib/database/postgres-conn';
+import {pgc} from '../../lib/database/postgres-conn';
 import _ from 'lodash';
 import {injectable} from 'inversify';
-import {ApiError} from '../../../lib/common/api-error';
+import {ApiError} from '../../lib/common/api-error';
 
 
 
@@ -101,9 +101,9 @@ export default class PgLookupRepo {
             node_code,
             fiscal_month_id,
             create_user,
-            create_datetime,
+            create_datetimestamp,
             update_user,
-            update_datetime
+            update_datetimestamp
             from fpadfa.dfa_prof_disti_to_direct_map_upld
             where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
           `);
@@ -117,9 +117,9 @@ export default class PgLookupRepo {
             alternate_country_name,
             fiscal_month_id,
             create_owner,
-            create_datetime,
+            create_datetimestamp,
             update_owner,
-            update_datetime
+            update_datetimestamp
             from fpadfa.dfa_prof_scms_triang_altsl2_map_upld
             where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
           `);
@@ -133,9 +133,9 @@ export default class PgLookupRepo {
             scms_value,
             fiscal_month_id,
             create_owner,
-            create_datetime,
+            create_datetimestamp,
             update_owner,
-            update_datetime
+            update_datetimestamp
             from fpadfa.dfa_prof_scms_triang_corpadj_map_upld
             where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
           `);

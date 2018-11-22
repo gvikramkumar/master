@@ -12,8 +12,10 @@ export class SyncMap {
   dfa_prof_dept_acct_map_upld = false;
   dfa_prof_input_amnt_upld = false;
   dfa_prof_manual_map_upld = false;
-  dfa_prof_swalloc_manualmix_upld = false;
   dfa_prof_sales_split_pctmap_upld = false;
+  dfa_prof_scms_triang_altsl2_map_upld = false;
+  dfa_prof_scms_triang_corpadj_map_upld = false;
+  dfa_prof_swalloc_manualmix_upld = false;
 
   constructor(data?: AnyObj) {
     if (data) {

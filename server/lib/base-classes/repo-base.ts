@@ -170,21 +170,6 @@ export default class RepoBase {
     return promise.then(() => this.Model.insertMany(docs));
   }
 
-  importUploadRecords(imports, userId, fiscalMonth) {
-    if (!fiscalMonth) {
-      throw new ApiError(`importUploadRecords: no fiscalMonth`);
-    }
-    // for fiscalMonth repos we remove all but the current fiscalMonth, then insert. In not fiscalMonth
-    // repo, we remove all (dept upload)
-    let filter = {};
-    if (fiscalMonth && fiscalMonth !== -1) {
-      filter = {fiscalMonth: {$ne: fiscalMonth}};
-    }
-
-    return this.removeMany(filter)
-      .then(() => this.addManyTransaction(imports, userId));
-  }
-
   // no autoincrement on this
   addManyTransaction(_docs, userId) {
     if (!_docs.length) {
