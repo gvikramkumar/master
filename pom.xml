@@ -82,7 +82,7 @@
 						${project.build.directory}/../package/deployments
 					</outputDirectory>
 					<!-- <warSourceDirectory>${project.build.directory}/sqauicae-1.4.0-RELEASE</warSourceDirectory> -->
-					<warName>cool-pkg</warName>
+					<warName>cool</warName>
 
 				</configuration>
 			</plugin>

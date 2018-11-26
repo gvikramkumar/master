@@ -76,7 +76,7 @@ spec:
                   fieldPath: metadata.annotations
       restartPolicy: "Always"
       dnsPolicy: "ClusterFirst"
-  replicas: 1
+  replicas: 2
   selector:
     name: "cool"
   triggers:
@@ -87,4 +87,4 @@ spec:
     rollingParams:
       updatePeriodSeconds: 1
       intervalSeconds: 1
-      timeoutSeconds: 120
+      timeoutSeconds: 300
