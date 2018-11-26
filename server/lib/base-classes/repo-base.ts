@@ -98,21 +98,24 @@ export default class RepoBase {
     return this.getManyByGroupLatest({
       groupField: 'name',
       status: 'A',
-      moduleId});
+      moduleId
+    });
   }
 
   getManyLatestGroupByNameInactive(moduleId) {
     return this.getManyByGroupLatest({
       groupField: 'name',
       status: 'I',
-      moduleId});
+      moduleId
+    });
   }
 
   getManyEarliestGroupByNameActive(moduleId) {
     return this.getManyByGroupEarliest({
       groupField: 'name',
       status: 'A',
-      moduleId});
+      moduleId
+    });
   }
 
   getOneById(id) {
@@ -352,11 +355,11 @@ export default class RepoBase {
         updates = _.intersectionWith(records, docs, predicate);
         adds = _.differenceWith(records, docs, predicate);
         deletes = _.differenceWith(docs, records, predicate);
-/*
-        console.log('updates', updates);
-        console.log('adds', adds);
-        console.log('deletes', deletes);
-*/
+        /*
+                console.log('updates', updates);
+                console.log('adds', adds);
+                console.log('deletes', deletes);
+        */
         return {updates, adds, deletes};
       });
   }
@@ -522,7 +525,7 @@ export default class RepoBase {
   }
 
   createPredicateFromProperties(props) {
-    return function(a, b) {
+    return function (a, b) {
       if (!props.length) {
         return false;
       }
@@ -537,10 +540,10 @@ export default class RepoBase {
     const props = ['moduleId', 'measureId', 'sourceId', 'submeasureId', 'submeasureKey', 'fiscalMonth'];
     props.forEach(prop => {
       const filterProp = filter[prop];
-      if (filterProp !== undefined && filterProp !== null) {
-        if (!(typeof filterProp === 'string' || typeof filterProp === 'number')) {
-          throw new ApiError(`convertPropsToNumbers: not string or number ${prop}: ${filterProp}`);
-        }
+      // this prop can be: {$ne: 99}, so have to make sure it's a string or number
+      // we shouldn't need this with mongoose, but are having issues either in reports or pgsync so started doing this
+      // maybe could replace === with == to get around it? Would have to investigate the use case
+      if (filterProp !== undefined && filterProp !== null && (typeof filterProp === 'string' || typeof filterProp === 'number')) {
         const val = Number(filterProp);
         if (isNaN(val)) {
           throw new ApiError(`convertPropsToNumbers: isNaN ${prop}: ${filterProp}`);
