@@ -7,7 +7,7 @@ import {DfaModuleIds} from '../../../shared/enums';
 export const svrUtil = {
   isLocalEnv,
   getItadminEmail,
-  getAdminEmail,
+  getPpmtEmail,
   trimStringProperties,
   getMemoryUsage,
   cleanCsv,
@@ -51,11 +51,11 @@ function getItadminEmail(dfa) {
   return dfa.itadminEmail;
 }
 
-function getAdminEmail(dfa) {
+function getPpmtEmail(dfa) {
   if (isLocalEnv()) {
     return dfa.user.email;
   }
-  return dfa.itadminEmail; // hack until we get the real module admin email groups
+  return dfa.ppmtEmail; // hack until we get the real module admin email groups
   // return `DFA-${DfaModuleIds[dfa.moduleId].toUpperCase()}-ADMIN@cisco.com`;
 }
 

@@ -98,7 +98,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
         this.ruleNames = results[4].map(x => x.toUpperCase());
-        this.drivers = results[5][0];
+        this.drivers = _.sortBy(results[5][0], 'name');
         this.periods = results[5][1];
 
         if (this.viewMode || this.editMode || this.copyMode) {

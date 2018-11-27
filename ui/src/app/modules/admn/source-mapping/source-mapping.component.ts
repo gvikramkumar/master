@@ -10,6 +10,7 @@ import {Source} from '../../../../../../shared/models/source';
 import * as _ from 'lodash';
 import {ModuleSource} from '../../_common/models/module_source';
 import {ModuleSourceService} from '../../_common/services/module-source.service';
+import {OpenPeriod} from '../../_common/models/open-period';
 
 @Component({
   selector: 'fin-source-mapping',
@@ -19,13 +20,13 @@ import {ModuleSourceService} from '../../_common/services/module-source.service'
 export class SourceMappingComponent extends RoutingComponentBase implements OnInit {
 
   modules: DfaModule[];
+  moduleSources: ModuleSource[];
   sources: Source[] = [];
   selectedSources: number[][] = [];
   orgSelectedSources: number[][] = [];
 
   constructor(
-    private store: AppStore,
-    private router: Router,
+    private store: AppStore,    private router: Router,
     private route: ActivatedRoute,
     private sourceService: SourceService,
     private uiUtil: UiUtil,
@@ -47,9 +48,10 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
   refresh() {
     const promiseArr = [];
     this.moduleSourceService.getManySortByModuleId()
-      .subscribe(modSourceArr => {
+      .subscribe(arr => {
+        this.moduleSources = arr;
         this.selectedSources = this.modules.map(module => {
-          const moduleSource = _.find(modSourceArr, {moduleId: module.moduleId});
+          const moduleSource = _.find(this.moduleSources, {moduleId: module.moduleId});
           return moduleSource ? moduleSource.sources : [];
         })
         this.orgSelectedSources = _.cloneDeep(this.selectedSources);
@@ -60,7 +62,13 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
     const promises = [];
     this.modules.forEach((module, idx) => {
       if (!_.isEqual(this.selectedSources[idx], this.orgSelectedSources[idx])) {
-        promises.push(this.moduleSourceService.upsert(new ModuleSource(module.moduleId, this.selectedSources[idx])).toPromise());
+        let moduleSource = _.find(this.moduleSources, {moduleId: module.moduleId});
+        if (moduleSource) {
+          moduleSource.sources = this.selectedSources[idx];
+        } else {
+          moduleSource = new ModuleSource(module.moduleId, this.selectedSources[idx]);
+        }
+        promises.push(this.moduleSourceService.upsert(moduleSource).toPromise());
       }
     });
 

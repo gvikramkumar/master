@@ -11,6 +11,7 @@ export class ApiDfaData {
   _module?: DfaModule;
   modules: DfaModule[];
   itadminEmail: string;
+  ppmtEmail: string;
   user: DfaUser;
   req: IncomingMessage
 
@@ -40,7 +41,7 @@ export function addGlobalData() {
 
   return function (req, res, next) {
     Promise.all([
-      lookupRepo.getValues(['itadmin-email']),
+      lookupRepo.getValues(['itadmin-email', 'ppmt-email']),
       moduleRepo.getManyActive()
     ])
       .then(results => {
@@ -50,6 +51,7 @@ export function addGlobalData() {
           req: req,
           user: req.user,
           itadminEmail: lookups[0],
+          ppmtEmail: lookups[1],
           modules
         });
         if (req.query.moduleId) {

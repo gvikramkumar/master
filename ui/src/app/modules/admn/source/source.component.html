@@ -59,7 +59,7 @@
             <fin-input name="desc" [textarea]="true" [(ngModel)]="source.desc" [rows]="2" label="Description"></fin-input>
             <div style="padding-top:15px;">
               <fin-checkbox name="status" label="Active" [(model)]="source.status" trueVal="A" falseVal="I"
-                            [disabled]="usingModuleNames.length" [inline]="true"></fin-checkbox>
+                            [disabled]="!!usingModuleNames.length" [inline]="true"></fin-checkbox>
               <span class="in-use text--danger cursor-pointer" [fxShow]="usingModuleNames.length"
                     [matTooltip]="usingModuleNamesTooltip">in use</span>
             </div>
