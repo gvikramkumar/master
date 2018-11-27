@@ -20,10 +20,8 @@ import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfigurat
  *
  */
  
-
 @Configuration
-@SpringBootApplication
-@EnableAutoConfiguration(exclude = { MongoAutoConfiguration.class, MongoDataAutoConfiguration.class}) 
+@SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
 public class Application extends SpringBootServletInitializer{
 
 	/**
