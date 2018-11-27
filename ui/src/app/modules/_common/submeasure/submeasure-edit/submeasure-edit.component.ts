@@ -239,7 +239,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   ngOnInit() {
     this.yearmos = shUtil.getFiscalMonthListFromDate(new Date(), 6);
     const promises: Promise<any>[] = [
-      this.measureService.getMany().toPromise(),
+      this.measureService.getManyActive().toPromise(),
       this.ruleService.getManyActive().toPromise(),
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinctSubmeasureNames().toPromise()

@@ -30,7 +30,7 @@
                    [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true"></fin-input>
       </div>
       <div class="col-lg-6">
-        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source" empty="true"
+        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source" empty="true" [disabled]="!sm.measureId"
                     optionsKey="name" optionsValue="sourceId" [required]="true" (ngModelChange)=sourceChange()></cui-select>
       </div>
     </div>

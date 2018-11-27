@@ -62,7 +62,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   ngOnInit() {
 
     Promise.all([
-      this.measureService.getMany().toPromise(),
+      this.measureService.getManyActive().toPromise(),
       this.submeasureService.getApprovalVersionedListByNameAndUserType().toPromise(),
       this.sourceService.getMany().toPromise()
     ])
