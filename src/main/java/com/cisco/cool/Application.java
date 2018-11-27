@@ -15,8 +15,11 @@ import org.springframework.context.annotation.Configuration;
  * Nov 26, 2018
  *
  */
+ 
+
 @Configuration
 @SpringBootApplication
+@EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
 public class Application extends SpringBootServletInitializer{
 
 	/**
