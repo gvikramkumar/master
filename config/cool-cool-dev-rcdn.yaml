@@ -28,7 +28,7 @@ spec:
       containers:
         -
           name: "cool"
-          image: "gitscm.cisco.com/scm/it-cvc-supplychain-cooldevsdaas/cool-container:__IMAGETAG__"
+          image: "containers.cisco.com/it_cvc_supply_chain/cooldev-sdaas_cool:__IMAGETAG__"
           ports:
             -
               containerPort: 8080
@@ -87,4 +87,4 @@ spec:
     rollingParams:
       updatePeriodSeconds: 1
       intervalSeconds: 1
-      timeoutSeconds: 300
+      timeoutSeconds: 120
