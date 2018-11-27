@@ -176,7 +176,8 @@ export default class AllocationRuleController extends ApprovalController {
     const url = `${req.headers.origin}/prof/rule-management/edit/${rule.id};mode=view`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
-    const adminEmail = svrUtil.getAdminEmail(req.dfa);
+    const adminEmail = svrUtil.getItadminEmail(req.dfa);
+    const ppmtEmail = svrUtil.getPpmtEmail(req.dfa);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
       promises.push(this.repo.getOneLatest({moduleId, name: data.name, approvedOnce: 'Y', status: {$in: ['A', 'I']}}));
@@ -203,21 +204,21 @@ export default class AllocationRuleController extends ApprovalController {
             } else {
               body = `A new DFA rule has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(req.user.email, adminEmail, svrUtil.getItadminEmail(req.dfa),
+            return sendHtmlMail(req.user.email, ppmtEmail, adminEmail,
               `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa),
+            return sendHtmlMail(ppmtEmail, req.user.email, adminEmail,
               `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA rule submitted by ${req.user.fullName} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(adminEmail, req.user.email, svrUtil.getItadminEmail(req.dfa),
+            return sendHtmlMail(ppmtEmail, req.user.email, adminEmail,
               `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Rule Not Approved`, body);
         }
       });
