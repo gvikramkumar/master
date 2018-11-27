@@ -9,6 +9,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
+
 
 /**
  * Application.java - <Describe the intent of this class>
@@ -20,7 +23,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 @Configuration
 @SpringBootApplication
-@EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = { MongoAutoConfiguration.class, MongoDataAutoConfiguration.class}) 
 public class Application extends SpringBootServletInitializer{
 
 	/**
