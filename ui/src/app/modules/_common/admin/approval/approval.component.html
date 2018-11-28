@@ -79,6 +79,7 @@
 
       <mat-paginator #rulePaginator
                      [length]="rules?.length"
+                     [pageSize]="10"
                      [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
     <br>
@@ -153,6 +154,7 @@
 
       <mat-paginator #subPaginator
                      [length]="submeasures?.length"
+                     [pageSize]="10"
                      [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
   </div>

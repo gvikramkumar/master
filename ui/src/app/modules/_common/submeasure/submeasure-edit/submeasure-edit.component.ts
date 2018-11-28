@@ -15,7 +15,7 @@ import {Source} from '../../../../../../../shared/models/source';
 import {DialogInputType, DialogSize, DialogType} from '../../../../core/models/ui-enums';
 import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeasure/grouping-submeasure';
 import {NgForm} from '@angular/forms';
-import {Submeasure} from '../../models/submeasure';
+import {Submeasure} from '../../../../../../../shared/models/submeasure';
 import {shUtil} from '../../../../../../../shared/shared-util';
 
 @Component({
@@ -239,7 +239,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   ngOnInit() {
     this.yearmos = shUtil.getFiscalMonthListFromDate(new Date(), 6);
     const promises: Promise<any>[] = [
-      this.measureService.getMany().toPromise(),
+      this.measureService.getManyActive().toPromise(),
       this.ruleService.getManyActive().toPromise(),
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinctSubmeasureNames().toPromise()

@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, PageEvent, Sort} from '@angular/material';
 import {SubmeasureService} from '../../services/submeasure.service';
-import {Submeasure} from '../../models/submeasure';
+import {Submeasure} from '../../../../../../../shared/models/submeasure';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
@@ -62,7 +62,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   ngOnInit() {
 
     Promise.all([
-      this.measureService.getMany().toPromise(),
+      this.measureService.getManyActive().toPromise(),
       this.submeasureService.getApprovalVersionedListByNameAndUserType().toPromise(),
       this.sourceService.getMany().toPromise()
     ])

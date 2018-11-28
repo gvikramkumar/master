@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
 import {MeasureService} from '../../services/measure.service';
 import {Measure} from '../../models/measure';
-import {Submeasure} from '../../models/submeasure';
+import {Submeasure} from '../../../../../../../shared/models/submeasure';
 import {SubmeasureService} from '../../services/submeasure.service';
 import {DollarUploadService} from '../../../prof/services/dollar-upload.service';
 import {MappingUploadService} from '../../../prof/services/mapping-upload.service';
