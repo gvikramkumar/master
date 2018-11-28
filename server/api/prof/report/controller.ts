@@ -233,6 +233,39 @@ export default class ReportController extends ControllerBase {
             .then(docs => docs.map(doc => this.transformRule(doc))),
         ];
         break;
+
+      case 'rule-master':
+        // finish these headers etc
+        excelSheetname = ['???'];
+        excelHeaders = [];
+        excelProperties = [];
+        promise = Promise.all([
+          this.submeasureRepo.getManyActive({setSort: 'name'}),
+          this.allocationRuleRepo.getManyActive()
+        ])
+          .then(results => {
+            const rows: AnyObj[] = [];
+            const sms = results[0].map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
+            const rules = results[1].map(rule => this.transformRule(rule)); // update this for more props if needed
+            sms.forEach(sm => {
+              sm.rules.forEach(ruleName => {
+                const rule = _.find(rules, {name: ruleName});
+                if (!rule) {
+                  throw new ApiError(`rulemaster report: rule not found: ${ruleName}`);
+                }
+                rows.push({
+                  startFiscalPeriod: sm.startFiscalMonth,
+                  endFiscalPeriod: sm.endFiscalMonth,
+                  ruleName: rule.name
+                  // etc, etc,
+
+                });
+              });
+            });
+
+
+          })
+        break;
       default:
         next(new ApiError('Bad report type', null, 400));
         return;

@@ -15,7 +15,7 @@ import {Source} from '../../../../../../../shared/models/source';
 import {DialogInputType, DialogSize, DialogType} from '../../../../core/models/ui-enums';
 import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeasure/grouping-submeasure';
 import {NgForm} from '@angular/forms';
-import {Submeasure} from '../../models/submeasure';
+import {Submeasure} from '../../../../../../../shared/models/submeasure';
 import {shUtil} from '../../../../../../../shared/shared-util';
 
 @Component({

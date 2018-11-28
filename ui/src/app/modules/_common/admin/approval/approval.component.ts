@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import {debounceTime} from 'rxjs/operators';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
-import {Submeasure} from '../../models/submeasure';
+import {Submeasure} from '../../../../../../../shared/models/submeasure';
 import {MeasureService} from '../../services/measure.service';
 import {RuleService} from '../../services/rule.service';
 import {SubmeasureService} from '../../services/submeasure.service';

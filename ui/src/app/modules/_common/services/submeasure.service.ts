@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Submeasure} from '../models/submeasure';
+import {Submeasure} from '../../../../../../shared/models/submeasure';
 import {environment} from '../../../../environments/environment';
 import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
