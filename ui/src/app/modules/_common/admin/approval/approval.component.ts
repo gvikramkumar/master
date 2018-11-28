@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource, MatCheckbox} from '@angular/material';
+import {MatPaginator, MatSort, MatTableDataSource, MatCheckbox, MatDialogConfig, MatDialog} from '@angular/material';
 import {FormControl} from '@angular/forms';
 import {Subject, Subscription} from 'rxjs';
 import * as moment from 'moment';
@@ -16,6 +16,8 @@ import {AppStore} from '../../../../app/app-store';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {SelectionModel} from '@angular/cdk/collections';
 import {DialogInputType, DialogSize} from '../../../../core/models/ui-enums';
+import {RuleDetailDialogComponent} from '../../dialogs/rule-detail-dialog/rule-detail-dialog.component';
+import {SubmeasureDetailDialogComponent} from '../../dialogs/submeasure-detail-dialog/submeasure-detail-dialog.component';
 
 @Component({
   selector: 'fin-approval',
@@ -47,7 +49,8 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
     private store: AppStore,
     private route: ActivatedRoute,
     private router: Router,
-    private uiUtil: UiUtil
+    private uiUtil: UiUtil,
+    public dialog: MatDialog
   ) {
     super(store, route);
   }
@@ -161,7 +164,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
               if (resultPrompt !== undefined) {
-                let promises: Promise<any>[] = [];
+                const promises: Promise<any>[] = [];
                 for (let i = 0; i < this.ruleSelection.selected.length; i++) {
                   this.ruleSelection.selected[i].approveRejectMessage = '[BULK REJECT] ' + resultPrompt;
                   promises.push(this.ruleService.reject(this.ruleSelection.selected[i]).toPromise());
@@ -243,11 +246,23 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   }
 
   openRuleDialog(rule) {
-    this.uiUtil.ruleDetailDialog(rule, null, DialogSize.large, DialogInputType.textarea);
+    const config = <MatDialogConfig> {
+      data: rule,
+      width: DialogSize.large,
+      backdropClass: 'bg-modal-backdrop'
+    };
+    return this.dialog.open(RuleDetailDialogComponent, config)
+      .afterClosed();
   }
 
   openSubmeasureDialog(submeasure) {
-    this.uiUtil.submeasureDetailDialog(submeasure, null, DialogSize.large, DialogInputType.textarea);
+    const config = <MatDialogConfig> {
+      data: submeasure,
+      width: DialogSize.large,
+      backdropClass: 'bg-modal-backdrop'
+    };
+    return this.dialog.open(SubmeasureDetailDialogComponent, config)
+      .afterClosed();
   }
 
 }
