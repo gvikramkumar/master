@@ -24,6 +24,7 @@ import {DeptUploadPgRepo} from '../dept-upload/pgrepo';
 
 @injectable()
 export default class ReportController extends ControllerBase {
+  rules: AnyObj[];
   submeasures: AnyObj[];
   measures: AnyObj[];
   sources: AnyObj[];
@@ -239,10 +240,12 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['???'];
         excelHeaders = [];
         excelProperties = [];
-        promise = Promise.all([
-          this.submeasureRepo.getManyActive({setSort: 'name'}),
-          this.allocationRuleRepo.getManyActive()
-        ])
+        dataPromises.push(this.measureRepo.getManyActive({moduleId}));
+        dataPromises.push(this.sourceRepo.getManyActive());
+        dataPromises.push(this.submeasureRepo.getManyActive({setSort: 'name'}));
+        dataPromises.push(this.allocationRuleRepo.getManyActive());
+
+        promise = Promise.resolve()
           .then(results => {
             const rows: AnyObj[] = [];
             const sms = results[0].map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
@@ -280,11 +283,15 @@ export default class ReportController extends ControllerBase {
           case 'dept-upload':
             this.submeasures = dataResults[0];
             break;
-        }
-        switch (req.params.report) {
           case 'submeasure':
             this.measures = dataResults[0];
             this.sources = dataResults[1];
+            break;
+          case 'rule-master':
+            this.measures = dataResults[0];
+            this.sources = dataResults[1];
+            this.submeasures = dataResults[2];
+            this.rules = dataResults[3];
             break;
         }
 
