@@ -1,0 +1,53 @@
+<header class="header">
+  <div class="header-bar container">
+    <a href="javascript:;" class="header-bar__logo">
+      <span class="icon-cisco"></span>
+    </a>
+    <div class="header-bar__main">
+      <div class="header-heading">
+        <h1 class="page-title">Cisco Orchestrated Offer Lifecycle</h1>
+      </div>
+      <div class="header-menus">
+        <ul class="nav nav-tabs">
+          <li routerLinkActive="active">
+            <a routerLink="/dashboard"><div class="tab__heading" title="Basic">Dashboard</div></a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/cool"><div class="tab__heading" title="Wide">Offers</div></a>
+          </li>
+          <li routerLinkActive="active">
+            <a><div class="tab__heading" title="Sidebar">Analytics</div></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="header-toolbar">
+        <a href="javascript:;" class="avatar">{{userFirstName}} {{userLastName}} <span class="icon-chevron-down icon-small"></span><span class="role userIdSpacing">BUPM</span></a>
+        <a href="javascript:;" class="btn btn--icon">
+            <span class="icon-search"></span>
+        </a>
+        <a href="javascript:;" class="btn btn--icon">
+            <span class="icon-alert"></span>
+        </a>
+        <a href="javascript:;" class="btn btn--icon">
+            <span class="icon-cog"></span>
+        </a>
+    </div>
+  </div>
+</header>
+<div class="row">
+    <div class="col-md-12">
+        <div class="coolHeader panel panel--vibblue panel--loose header-bar base-margin-top">
+            <div class="header-bar__main">
+                    <div class="header-heading">
+                        <h1 class="page-title"><span class="action--value header-headings">8</span> <span class="action--value-label header-headings">Pending Actions</span></h1>
+                        <span class="vertical-divider"></span>
+                        <h1 class="page-title"><span class="action--value header-headings">4</span> <span class="action--value-label header-headings">Need Immediate Action</span></h1>
+                    </div>
+                </div>
+            <div class="header-toolbar">
+                    <button (click)="createNewOffer()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span> <span class="button--label">New Offer</span></button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,237 @@
+<span class="pull-right panel-right mb-10" *ngIf="!portfolioFlag">
+    <button class="btn btn--primary btn--small">Export</button>
+    <button class="btn btn--primary-ghost btn--small" [ngClass]="{'btn--gray-ghost': !aligned}" (click)="onProceedBtnClicked()">Proceed to Stakeholder Identification</button>
+    <!-- <button class="btn btn--primary-ghost btn--small" *ngIf="proceedFlag"  (click)="onOfferClick()"  >Proceed to Offer Portfolio</button> -->
+  </span>
+  <span class="pull-right panel-right mb-10" *ngIf="portfolioFlag">        
+      <button class="btn btn--primary btn--small">Export</button>
+      <button class="btn btn--primary-ghost btn--small">Submit for Final Approval</button>
+  </span>
+<div class="boxContent  mb-10">
+    <h6 class="boxHeading bold">Offer Phase</h6>
+    <div class="progressBar">
+       <div [ngClass]="{'dot':true,
+        'dotFirst':i == 0,
+        'dotSecond':i == 1,
+        'dotThird':i == 2,
+        'dotFourth':i == 3,
+        'dotFifth':i == 4,
+        'dotSixth':i == 5,
+        'active': offerData.offerObj.progress == phaseName}" 
+        *ngFor="let phaseName of phaseList; let i = index">
+        <span>{{phaseName}}</span>
+        <div class="hoverBox animated fadeIn">
+          <h5 class="text-center mt-5 mb-10" style="font-weight: 400">{{phaseName}}</h5>
+          <div class="ui-steps stepsBox">
+            <div class="ui-step ui-step--alt" *ngFor="let task of phaseTaskMap[phaseName]; let i = index">
+              <div [ngClass]="{
+                    'completed'  : offerData.offerObj.offerPhaseTaskDetail[phaseName][task] == 'Completed',
+                    'inprogress'  : offerData.offerObj.offerPhaseTaskDetail[phaseName][task] == 'In Progress',
+                    'pending'  : offerData.offerObj.offerPhaseTaskDetail[phaseName][task] == 'Pending'
+                    }">
+                {{offerData.offerObj.offerPhaseTaskDetail[phaseName][task]}}
+              </div>
+               <div class="step__icon mt-5" [ngClass]="{
+                  'iconCompleted':offerData.offerObj.offerPhaseTaskDetail[phaseName][task] == 'Completed',
+                  'iconInprogress':offerData.offerObj.offerPhaseTaskDetail[phaseName][task] == 'In Progress',
+                  'iconPending':offerData.offerObj.offerPhaseTaskDetail[phaseName][task] == 'Pending'
+                }"> </div> 
+              <div class="step__label stepColor"> {{ task }} </div> 
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>
+
+  <div class="boxContent mb-10">
+      <h6 class="boxHeading bold">Estimated Lead Time</h6>
+      <div class="row mt-10">
+        <div class="col-md-4">
+          <h3 class="largeDigit d-inline bold">{{offerData?.offerObj.estimatedLeadTime}}</h3>
+          <span class="d-inline">Weeks</span>
+        </div>
+        <div class="col-md-8">
+          <span class="d-inline pt-15">
+            <a href="javascript:void(0)">Lead Time Calculation?</a>
+          </span>
+          <span class="pull-right" data-balloon="Info" data-balloon-pos="up">
+            <span class="icon-info-outline icon-medium pt-5 pull-right curPointer iconInfo"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="boxContent mb-10 p-0" style="position: relative;">
+
+
+        <div class="row notificationMessage" *ngIf="notiFication" >
+            <div class="col-md-12">
+                <div class="toast">
+                    <div class="toast__icon text-success icon-check"></div>
+                    <div class="toast__body">
+                        <div class="toast__title">Success</div>
+                        <div class="toast__message">Stakeholder added Successfully.</div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
+        <h6 class="boxHeading bold groupHeader" style="padding: 9px 12px 10px 10px">People Involved
+          <span class="pull-right" data-balloon="Add" data-balloon-pos="up">
+            <!-- (click)="show_deliveryDesc()" -->
+            <span class="icon-add-outline icon-small " disabled="disabled"></span>
+          </span>
+        </h6>
+        <div class="panel-wrapper  mt-10">
+          <div class="panel-heading">
+            <h6 class="text-left pl-10">
+              <span class="icon-small ico-blue v-small curPointer mr-5 icon-chevron-down" (click)="userPanels.panel1 = !userPanels.panel1"
+                [ngClass]="{'icon-chevron-up':userPanels.panel1,'icon-chevron-down':!userPanels.panel1}"></span>
+              <span class="acc-title acc-title-right">Offer Owner - {{OfferOwners != null ? OfferOwners.length:0}}</span>
+            </h6>
+          </div>
+
+          <div *ngIf="userPanels.panel1">
+            <div class="mailBox" *ngFor="let owner of OfferOwners">
+              <span class="o-status circle green">{{owner.caption}}</span>
+              <div>
+                <span class="d-block mailerName">{{owner.firstName}}  {{owner.lastName}}</span>
+                <span class="d-block mailerId font-small">{{owner.email}}</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="panel-wrapper  mt-10">
+          <div class="panel-heading">
+            <h6 class="text-left pl-10">
+              <span class="icon-small ico-blue v-small curPointer mr-5 icon-chevron-down" (click)="userPanels.panel2 = !userPanels.panel2"
+                [ngClass]="{'icon-chevron-up':userPanels.panel2,'icon-chevron-down':!userPanels.panel2}"></span>
+              <span class="acc-title acc-title-right">Offer Approver -{{approvars != null ? approvars.length:0}}</span>
+            </h6>
+          </div>
+          <!--bindings={}-->
+
+          <div *ngIf="userPanels.panel2">
+            <div class="mailBox" *ngFor="let approver of approvars">
+              <span class="o-status circle orange">{{approver.caption}}</span>
+              <div>
+                <span class="d-block mailerName">{{approver.firstName}} {{approver.lastName}}</span>
+                <span class="d-block mailerId font-small">{{approver.email}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="icon-need-assistent" data-balloon="Need Assistance?" data-balloon-pos="up"></div>
+
+      <!-- Collaborators custom popup -->
+<div class="custom-modal delivery_desc_popup" *ngIf="backdropCustom">
+    <h5 class="headerTittle arrowBack">
+      Add Collaborators
+      <span class="pull-right curPointer icon-close icon-medium" (click)="backdropCustom = false"> </span>
+    </h5>
+    <div class="custom-modal-body">
+      <div class="txtDesc searchSec">
+        <div class="panel-wrapper">
+          <h6 class="innerTittle">
+            Search Collaborators
+          </h6>
+          <div class="panel-body">
+            <div class="row mt-10 width100">
+              <div class="d-inline col-md-6">
+                <input id="typeahead-basic" type="text" class="form-control autocomplete" [(ngModel)]="model" [ngbTypeahead]="search" placeholder="Search by name, email or function "
+                />
+                <span class="icon-search icon-small v-small curPointer"></span>
+              </div>
+              <div class="d-inline col-md-4">
+                  
+                      <div class="form-group cus_dropdown" [ngClass]="{'open': flagFunction}" (click)="(flagFunction = !flagFunction)">
+                        <div class="form-group__text">
+                          <input placeholder="Select An Option" readonly=""  [value]="ddFunction" style="cursor: pointer;">
+                          <span class="icon-small v-small icon-chevron-down"></span>
+                        </div>
+                        <div class="cus_dropdown_menu">
+                          <a (click)="ddFunction = 'Select Function'" class="selected">Select Function</a>
+                          <a (click)="ddFunction = 'Pricing'">Pricing </a>
+                          <a (click)="ddFunction = 'Finance'">Finance </a>
+                        </div>
+                      </div>
+                      <!-- <label class="l-blue">Business Entity</label> -->
+                    
+  
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn--small btn--primary btn-analytic">Search</button>
+              </div>
+            </div>
+  
+  
+  
+          </div>
+        </div>
+        <div class="panel-wrapper mt-10">
+          <h6 class="innerTittle">
+            Search Results
+          </h6>
+          <table class="table table-cool table-modal mt-10 ">
+            <thead>
+              <tr>
+                <th style="width:6%">
+                  <label class="checkbox">
+                    <input type="checkbox">
+                    <span class="checkbox__input"></span>
+                  </label>
+                </th>
+                <th>Name</th>
+                <th>Email Id</th>
+                <th>Function</th>
+                <th>Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let x of resultTable">
+                <td>
+                  <label class="checkbox">
+                    <input type="checkbox">
+                    <span class="checkbox__input"></span>
+                  </label>
+                </td>
+                <td>{{x.name}}</td>
+                <td>{{x.id}}</td>
+                <td>{{x.function}}</td>
+                <td class="visible-tooltip">
+                    <div class="form-group cus_dropdown" [ngClass]="{'open': x.flagFunction}" (click)="(x.flagFunction = !x.flagFunction)">
+                        <div class="form-group__text">
+                          <input placeholder="Select An Option" readonly=""  [value]="x.selectedOwenr" style="cursor: pointer;">
+                          <span class="icon-small v-small icon-chevron-down"></span>
+                        </div>
+                        <div class="cus_dropdown_menu">
+                          <a (click)="x.selectedOwenr = 'Select Owner'" class="selected">Select Owner</a>
+                          <a (click)="x.selectedOwenr = 'Pricing'">Pricing </a>
+                          <a (click)="x.selectedOwenr = 'Finance'">Finance </a>
+                        </div>
+                      </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <div class="pull-right">
+            <button class="btn btn--small" (click)="onCancelClick()">Cancel</button>
+            <button class="btn btn--small btn--primary" (click)="onSaveClick()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  
+  <div class="backdrop-custom" *ngIf="backdropCustom"></div>
+  <!--// -->

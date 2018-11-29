@@ -1,0 +1,178 @@
+<div class="panel-wrapper mt-15">
+  <ul class="breadcrumb">
+    <li>
+      <a routerLink="/dashboard">Dashboard</a>
+    </li>
+    <!--<li>
+      <a (click)="backToOfferPage()">Edit Offer</a>
+    </li> -->
+    <li>
+      <span>Offer Dimension & MM Assessment</span>
+    </li>
+  </ul>
+  <h5 class="mt-10 mainTitle">
+    <span  (click)="backToOfferPage()" class="icon-chevron-left icon-small ico-blue mr-10 curPointer"></span>CISCO DATA PLATFORM - {{offerData.offerObj.offerName}}
+  </h5>
+  <div class="contentBox mt-10">
+    <div class="leftContent">
+      <div class="panel-wrapper">
+        <div class="panel-heading mt-10">
+          <h6 class="text-left">
+            <span class="icon-small ico-blue curPointer mr-10" [ngClass]="{'icon-chevron-up':panels.panel1,'icon-chevron-down':!panels.panel1}"
+              (click)="panels.panel1 = !panels.panel1"></span>
+
+            <span class="acc-title">Offer Dimension & MM Assessment</span>
+
+          </h6>
+        </div>
+        <div class="panel-body mt-15 offerData" *ngIf="panels.panel1">
+          <div class="row mt-10">
+            <div class="col-md-4 labelBlue">
+              <label>Offer Name</label>
+              <p>{{offerData?.offerObj.offerName}}</p>
+            </div>
+            <div class="col-md-8 labelBlue">
+
+              <label>Offer Description</label>
+              <p>{{offerData?.offerObj.offerDesc}}</p>
+
+            </div>
+          </div>
+
+          <div class="row mt-20 offerData">
+            <div class="col-md-4 labelBlue">
+              <label>Expected Launch Date</label>
+              <p>{{offerData?.offerObj.expectedLaunchDate |date:'MM/dd/yyyy'}}</p>
+            </div>
+            <div class="col-md-4 labelBlue">
+
+              <label>Business Unit</label>
+              <p>{{offerData?.offerObj.businessUnit}}</p>
+
+            </div>
+            <div class="col-md-4 labelBlue">
+              <label>Business Entity</label>
+              <p>{{offerData?.offerObj.businessEntity}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Dimension View -->
+      <div class="panel-wrapper">
+        <div class="panel-heading mt-10">
+          <h6 class="text-left">
+            <span class="icon-small ico-blue curPointer mr-10" [ngClass]="{'icon-chevron-up':panels.panel2,'icon-chevron-down':!panels.panel2}"
+              (click)="panels.panel2 = !panels.panel2"></span>
+            <span class="acc-title">{{offerData?.offerObj.mmId}} - {{offerData?.offerObj.mmName}}</span>
+            <span style="opacity:0.8;font-size:14px;margin-left:10px;" *ngIf="offerData?.offerObj.mmMapperStatus == 'Not Aligned'">
+              <span class="icon-exclamation-triangle icon-small v-small"></span>
+              <span [ngClass]=
+              "{'aligned-error':offerData.offerObj.mmMapperStatus=='Not Aligned'}"> {{offerData?.offerObj.mmMapperStatus}}</span>
+            </span>
+            <span style="opacity:0.8;font-size:14px;margin-left:10px;" *ngIf="offerData?.offerObj.mmMapperStatus == 'Aligned'">
+                <span class="icon-check icon-small v-small"></span>
+                <span [ngClass]=
+                "{'aligned-success':offerData.offerObj.mmMapperStatus=='Aligned'}"> {{offerData?.offerObj.mmMapperStatus}}</span>
+            </span>
+
+
+            <span class="pull-right panel-right" style="opacity:0.8;margin-left:10px;">
+              <a *ngIf="tabView" (click)="setFlagValue()"> View Full Offer Characteristics </a>
+              <a *ngIf="!tabView" (click)="setFlagValue()">Tab View</a>
+            </span>
+            <span class="pull-right panel-right" style="opacity:0.8;margin-left:10px;">
+                <a *ngIf="tabView" (click)="validateMM()">Re-Validate <span style="color:#58585B">|</span> </a>
+            </span>
+          </h6>
+        </div>
+        <div class="panel-body mt-5" *ngIf="panels.panel2">
+          <!-- Tabs start here -->
+          <div class="secondary-tabs tab" *ngIf="tabView">
+            <ul class="tabs">
+              <li class="tab" [ngClass]="{ 'active' : tabindex == i }" (click)="tabindex = i"  *ngFor="let tabData of offerData.offerObj.groups; let i = index">
+                <a tabindex="i">
+                  <div class="tab__heading" title="tabData.name">{{ tabData.groupName}}</div>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tab-content" *ngIf="tabView">
+            <div id="tab-offer-content" class="tab-pane active" [ngClass]="{ 'active' : tabindex == i }" *ngFor="let x of offerData.offerObj.groups; let i =  index">
+              <table class="grouptable" style="width:100%">
+                <tr *ngFor="let y of x.subGroup">
+                  <td style="width: 15%;">
+                    <span class="bold"> {{y.subGroupName}}</span>
+                    <div class="xs-small" [ngClass]="{'aligned-success': y.subGroupStatus === 'Aligned', 'aligned-error': y.subGroupStatus === 'Not Aligned'} ">
+                      <span class="icon-exclamation-triangle icon-small v-small" *ngIf="y.subGroupStatus === 'Not Aligned'"></span>
+                      <span class="icon-check icon-small v-small"  *ngIf="y.subGroupStatus === 'Aligned'"></span>{{ y.subGroupStatus }}
+                    </div>
+                  </td>
+                  <td style="width:85%;">
+
+                    <span class="chips mb-10" *ngFor="let z of y.choices;" 
+                    [ngClass]="{ 
+                      'selected':( y.selected != null && y.selected.indexOf(z) > -1),
+                      'not-aligned':( y.failed != null && y.failed.indexOf(z) > -1)
+                    }"
+                        (click) = "selectMMChoice(z,y.selected,y.failed)">
+                        <span class="icon-exclamation-triangle icon-small v-small" *ngIf="y.failed != null && y.failed.indexOf(z) > -1"></span>
+                      <span style="text-align: center;"
+                        data-balloon-pos="up" data-balloon-length="xlarge" 
+                        *ngIf="!z.isAligned; else isTooltip">
+                        <span class="icon-small v-small"></span>
+                        <span> {{z}}
+                        </span>
+                      </span>
+                     </span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <!--GroupTable Start Here-->
+
+          <div *ngIf="!tabView" class="half-margin-top">
+            <div *ngFor="let x of offerData.offerObj.groups">
+              <h5 class="groupHeader">{{x.groupName}}</h5>
+              <table class="grouptable" style="width:100%">
+                <tr *ngFor="let y of x.subGroup">
+                  <td style="width: 15%;">
+                    <span class="bold"> {{y.subGroupName}}</span>
+                    <div class="xs-small" [ngClass]="{'aligned-success': y.subGroupStatus === 'Aligned', 'aligned-error': y.subGroupStatus === 'Not Aligned'}">
+                      <span class="icon-exclamation-triangle icon-small v-small" *ngIf="y.subGroupStatus === 'Not Aligned'"></span>
+                      <span class="icon-check icon-small v-small" *ngIf="y.subGroupStatus === 'Aligned'"></span>{{ y.subGroupStatus }}
+                    </div>
+                  </td>
+                  <td style="width:85%;">
+                      <span class="chips mb-10" 
+                        [ngClass]="{ 
+                            'selected':( y.selected != null && y.selected.indexOf(z) > -1),
+                            'not-aligned':( y.failed != null && y.failed.indexOf(z) > -1)
+                          }"
+                        *ngFor="let z of y.choices; let i = index">
+                        <span class="icon-exclamation-triangle icon-small v-small" *ngIf="y.failed != null && y.failed.indexOf(z) > -1"></span> 
+                    {{ z }}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <!--GroupTable End Here-->
+        </div>
+      </div>
+    </div>
+    <div class="rightContent" style="margin-top: -5px;">
+        
+      <app-right-panel></app-right-panel>      
+      
+    </div>
+    
+  </div>
+</div>
+
+
