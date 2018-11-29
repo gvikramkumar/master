@@ -1,48 +1,48 @@
 @import '~cisco-ui/src/scss/utilities/_variables.scss';
 
 .form-group:focus {
-	outline: 0;
+  outline: 0;
 }
 
 .form-group__text input {
-	padding-right: 35px;
+  padding-right: 35px;
 }
 
 .dropdown {
-	&__menu {
-		height: 170px;
-		max-width: none;
-		width: 100%;
-		top: 0;
-		overflow-y: auto;
-		overflow-x: hidden;
+  &__menu {
+    height: 170px;
+    max-width: none;
+    width: 100%;
+    top: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
 
-		a {
-			&.keyboard-hover {
-				color: $base-dropdown-menu-hover-color;
-				background-color: $base-dropdown-menu-hover-background;
-				text-decoration: none !important;
-			}
-		}
-	}
+    a {
+      &.keyboard-hover {
+        color: $base-dropdown-menu-hover-color;
+        background-color: $base-dropdown-menu-hover-background;
+        text-decoration: none !important;
+      }
+    }
+  }
 }
 
 .dropdown-chevron, .icon-close, .icon-error {
-	display: block !important;
-	position: absolute;
-	right: 10px;
-	top: 10px;
-	cursor: pointer;
+  display: block !important;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
 
-	&.has-label {
-		top: 30px;
-	}
+  &.has-label {
+    top: 30px;
+  }
 }
 
 .input--compressed .dropdown-chevron, .input--compressed .icon-close, .input--compressed .icon-error {
-	top: 5px;
+  top: 5px;
 
-	&.has-label {
-		top: 25px;
-	}
+  &.has-label {
+    top: 25px;
+  }
 }
