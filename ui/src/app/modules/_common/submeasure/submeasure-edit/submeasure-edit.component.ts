@@ -551,7 +551,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   cleanUp() {
     this.cleanIflSwitchChoices();
     this.cleanMMSwitchChoices();
-    this.sm.rules.forEach((rule, idx) => this.arrRules[idx] = rule);
+    // the list size is governed by arrRules, BUT, the values are in sm.rules
+    this.arrRules.forEach((x, idx) => this.arrRules[idx] = this.sm.rules[idx]);
     this.arrRules = this.arrRules.filter(r => !!r);
     this.sm.rules = _.cloneDeep(this.arrRules);
   }
