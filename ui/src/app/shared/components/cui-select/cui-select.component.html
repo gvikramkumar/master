@@ -1,30 +1,34 @@
 <div class="form-group" [tabindex]="tabindex" (mouseover)="over = true" (mouseleave)="over = false" [ngClass]="{'input--compressed': compressed, 'form-group--error': errorMessage}">
-	<div class="form-group__text">
-		<input type="text" name="select-{{guid}}" id="select-{{guid}}" autocomplete="off" [(ngModel)]="searchText" [placeholder]="placeholder" [disabled]="disabled" [required]="required" (mousedown)="toggleActive()" (keydown)="onKeydown($event)" (ngModelChange)="onSearch()" [ngClass]="{'input-size-compressed': compressed}" [attr.data-auto-id]="dataAutoId">
-		<label *ngIf="label" for="select-{{guid}}">{{label}}</label>
-		<span class="dropdown-chevron" [ngClass]="{'icon-chevron-down': !active, 'icon-chevron-up': active, 'has-label': label, 'disabled': disabled}" (mousedown)="toggleActive()" *ngIf="(!empty || !model) && !errorMessage"></span>
-		<span class="icon-close" [ngClass]="{'has-label': label, 'disabled': disabled}" (mousedown)="clearModel()" *ngIf="empty && model && !errorMessage"></span>
-		<span class="icon-error text-danger" [ngClass]="{'has-label': label, 'disabled': disabled}" *ngIf="errorMessage"></span>
-	</div>
-	<div class="dropdown" [ngClass]="{'active': active}">
-		<cui-vscroll-viewport itemSize="35"
-			class="dropdown__menu"
-			[ngStyle]="{ 'height': getDropdownHeight() }"
-			*ngIf="active">
-			<div *cuiVirtualFor="let item of flatItems; let i = index">
-				<div class="dropdown__group-header" *ngIf="item.groupName">{{item.groupName}}</div>
-				<div class="divider no-margin-top qtr-margin-bottom" *ngIf="item.groupName"></div>
-				<a *ngIf="!item.groupName"
-					[ngClass]="{
+  <div class="form-group__text">
+    <div *ngIf="label === 'test'">
+      guid: {{guid}}
+    </div>
+
+    <input type="text" name="select-{{guid}}" id="select-{{guid}}" autocomplete="off" [(ngModel)]="searchText" [placeholder]="placeholder" [disabled]="disabled" [required]="required" (mousedown)="toggleActive()" (keydown)="onKeydown($event)" (ngModelChange)="onSearch()" [ngClass]="{'input-size-compressed': compressed}" [attr.data-auto-id]="dataAutoId">
+    <label *ngIf="label" for="select-{{guid}}">{{label}}</label>
+    <span class="dropdown-chevron" [ngClass]="{'icon-chevron-down': !active, 'icon-chevron-up': active, 'has-label': label, 'disabled': disabled}" (mousedown)="toggleActive()" *ngIf="(!empty || !model) && !errorMessage"></span>
+    <span class="icon-close" [ngClass]="{'has-label': label, 'disabled': disabled}" (mousedown)="clearModel()" *ngIf="empty && model && !errorMessage"></span>
+    <span class="icon-error text-danger" [ngClass]="{'has-label': label, 'disabled': disabled}" *ngIf="errorMessage"></span>
+  </div>
+  <div class="dropdown" [ngClass]="{'active': active}">
+    <cui-vscroll-viewport itemSize="35"
+                          class="dropdown__menu"
+                          [ngStyle]="{ 'height': getDropdownHeight() }"
+                          *ngIf="active">
+      <div *cuiVirtualFor="let item of flatItems; let i = index">
+        <div class="dropdown__group-header" *ngIf="item.groupName">{{item.groupName}}</div>
+        <div class="divider no-margin-top qtr-margin-bottom" *ngIf="item.groupName"></div>
+        <a *ngIf="!item.groupName"
+           [ngClass]="{
 						selected: item.selected,
 						'keyboard-hover': !item.selected && item.hovered
 					}"
-					(mousedown)="selectItem(optionsValue ? item[optionsValue] : item)"
-					[title]="item[titleKey] || item[optionsKey]">
-					{{item[optionsKey]}}
-				</a>
-			</div>
-		</cui-vscroll-viewport>
-	</div>
-	<div class="help-block text-danger" *ngIf="errorMessage">{{errorMessage}}</div>
+           (mousedown)="selectItem(optionsValue ? item[optionsValue] : item)"
+           [title]="item[titleKey] || item[optionsKey]">
+          {{item[optionsKey]}}
+        </a>
+      </div>
+    </cui-vscroll-viewport>
+  </div>
+  <div class="help-block text-danger" *ngIf="errorMessage">{{errorMessage}}</div>
 </div>
