@@ -95,6 +95,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     {
       type: 'allocation-rule', text: 'Rule Updates', disabled: false,
       filename: 'Rule_Updates_Report.xlsx'
+    },
+    {
+      type: 'rule-master', text: 'Rule Master', disabled: false,
+      filename: 'Rule_Master_Report.xlsx'
     }
   ];
   report = this.reports[0];

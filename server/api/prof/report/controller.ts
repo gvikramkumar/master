@@ -236,20 +236,29 @@ export default class ReportController extends ControllerBase {
         break;
 
       case 'rule-master':
-        // finish these headers etc
-        excelSheetname = ['???'];
-        excelHeaders = [];
-        excelProperties = [];
+        excelSheetname = [['History'], ['As Of Now']];
+        excelHeaders = [['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
+          'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Updated By', 'Updated Date'],
+
+          ['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
+            'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Updated By', 'Updated Date']];
+
+        excelProperties = [['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.legalEntityLevel', 'inputFilterLevel.beLevel',
+          'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate'],
+
+          ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.legalEntityLevel', 'inputFilterLevel.beLevel',
+            'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate']];
+
         dataPromises.push(this.measureRepo.getManyActive({moduleId}));
         dataPromises.push(this.sourceRepo.getManyActive());
-        dataPromises.push(this.submeasureRepo.getManyActive({setSort: 'name'}));
-        dataPromises.push(this.allocationRuleRepo.getManyActive());
+        dataPromises.push(this.submeasureRepo.getManyActive({setSort: 'name', moduleId}));
+        dataPromises.push(this.allocationRuleRepo.getManyActive({moduleId}));
 
-        promise = Promise.resolve()
+        promise = Promise.resolve(dataPromises)
           .then(results => {
             const rows: AnyObj[] = [];
-            const sms = results[0].map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
-            const rules = results[1].map(rule => this.transformRule(rule)); // update this for more props if needed
+            const sms = results[2].then(docs => docs.map(sm => this.transformSubmeasure(sm)));
+            const rules = results[3].then(docs => docs.map(rule => this.transformRule(rule)));
             sms.forEach(sm => {
               sm.rules.forEach(ruleName => {
                 const rule = _.find(rules, {name: ruleName});
@@ -257,9 +266,27 @@ export default class ReportController extends ControllerBase {
                   throw new ApiError(`rulemaster report: rule not found: ${ruleName}`);
                 }
                 rows.push({
-                  startFiscalPeriod: sm.startFiscalMonth,
-                  endFiscalPeriod: sm.endFiscalMonth,
-                  ruleName: rule.name
+                  startFiscalMonth: sm.startFiscalMonth,
+                  endFiscalMonth: sm.endFiscalMonth,
+                  submeasureKey: sm.submeasureKey,
+                  name: sm.name,
+                  measureName: sm.measureName,
+                  sourceName: sm.sourceName,
+
+                  ruleName: rule.name,
+                  driverName: rule.driverName,
+                  period: rule.period,
+                  salesMatch: rule.salesMatch,
+                  productMatch: rule.productMatch,
+                  scmsMatch: rule.scmsMatch,
+                  legalEntityMatch: rule.legalEntityMatch,
+                  beMatch: rule.beMatch,
+                  sl1Select: rule.sl1Select,
+                  scmsSelect: rule.scmsSelect,
+                  beSelect: rule.beSelect,
+                  status: rule.status,
+                  updatedBy: rule.updatedBy,
+                  updatedDate: rule.updatedDate
                   // etc, etc,
 
                 });
