@@ -61,7 +61,7 @@ export function addSsoUser() {
 */
           const userId = headers['auth-user'];
           if (!userId) {
-            const msg = `No userId from SSO`;
+            const msg = `No user ID`;
             console.error(msg);
             res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
             return Promise.reject(new DisregardError());
@@ -76,7 +76,7 @@ export function addSsoUser() {
                 return getArtRoles(userId)
                   .then(roles => {
                     if (!roles || roles.length === 0) {
-                      const msg = `No ART roles for user: ${userId}`;
+                      const msg = `No user roles set up for user: ${userId}`;
                       console.error(msg);
                       res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
                       return Promise.reject(new DisregardError());
