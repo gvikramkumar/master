@@ -95,6 +95,9 @@ export default class RepoBase {
   }
 
   getManyLatestGroupByNameActive(moduleId) {
+    if (!moduleId) {
+      throw new ApiError('getManyLatestGroupByNameActive: no moduleId');
+    }
     return this.getManyByGroupLatest({
       groupField: 'name',
       status: 'A',

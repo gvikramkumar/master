@@ -37,7 +37,6 @@ export default class DeptUploadUploadController extends UploadController {
   }
 
   getValidationAndImportData() {
-    this.data = {};
     return Promise.all([
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_account', 'financial_account_code'),
     ])
@@ -49,10 +48,8 @@ export default class DeptUploadUploadController extends UploadController {
   validateRow1(row) {
     this.temp = new DeptUploadDeptTemplate(row);
     this.sheet1SubmeasureNames.push(this.temp.submeasureName);
-    return Promise.all([
-      this.getSubmeasure(),
-      this.validateSubmeasure()
-    ])
+    return this.getSubmeasure()
+      .then(() => this.validateSubmeasure())
       .then(() => this.lookForErrors())
       .then(() => Promise.all([
         // this.validateMeasureAccess(),
@@ -71,10 +68,8 @@ export default class DeptUploadUploadController extends UploadController {
       this.startedSheet2 = true;
       this.sheet1SubmeasureNames = _.sortBy(_.uniq(this.sheet1SubmeasureNames), _.identity);
     }
-    return Promise.all([
-      this.getSubmeasure(),
-      this.validateSubmeasure(),
-    ])
+    return this.getSubmeasure()
+      .then(() => this.validateSubmeasure())
       .then(() => this.lookForErrors())
       .then(() => Promise.all([
         this.validateSubmeasureNameInSheet1(),
