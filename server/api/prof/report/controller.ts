@@ -236,18 +236,12 @@ export default class ReportController extends ControllerBase {
         break;
 
       case 'rule-master':
-        excelSheetname = [['History'], ['As Of Now']];
-        excelHeaders = [['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
-          'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Updated By', 'Updated Date'],
+        excelSheetname = ['History'];
+        excelHeaders = ['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
+          'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Updated By', 'Updated Date'];
 
-          ['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
-            'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Updated By', 'Updated Date']];
-
-        excelProperties = [['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.legalEntityLevel', 'inputFilterLevel.beLevel',
-          'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate'],
-
-          ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.legalEntityLevel', 'inputFilterLevel.beLevel',
-            'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate']];
+        excelProperties = ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.legalEntityLevel', 'inputFilterLevel.beLevel',
+          'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate'];
 
         dataPromises.push(this.measureRepo.getManyActive({moduleId}));
         dataPromises.push(this.sourceRepo.getManyActive());
@@ -257,8 +251,8 @@ export default class ReportController extends ControllerBase {
         promise = Promise.resolve(dataPromises)
           .then(results => {
             const rows: AnyObj[] = [];
-            const sms = results[2].then(docs => docs.map(sm => this.transformSubmeasure(sm)));
-            const rules = results[3].then(docs => docs.map(rule => this.transformRule(rule)));
+            const sms = results[2].map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
+            const rules = results[3].map(rule => this.transformRule(rule)); // update this for more props if needed
             sms.forEach(sm => {
               sm.rules.forEach(ruleName => {
                 const rule = _.find(rules, {name: ruleName});
