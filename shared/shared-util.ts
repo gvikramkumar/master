@@ -98,7 +98,7 @@ function isLeafProperty(arr, path, val1, val2) {
 }
 
 function getHtmlForLargeSingleMessage(msg) {
-  return `<div style="text-align: center; margin-top: 200px;"><h1>${msg}</h1></div>`;
+  return `<div style="text-align: center; margin-top: 200px;"><h2>${msg}</h2></div>`;
 }
 
 function isManualUploadSource(sourceId: number) {

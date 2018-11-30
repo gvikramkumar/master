@@ -9,6 +9,8 @@ import config from '../../config/get-config';
 import {finRequest} from '../common/fin-request';
 import UserListRepo from '../../api/user-list/repo';
 import {UserList} from '../../../shared/models/user-list';
+import {NamedApiError} from '../common/named-api-error';
+import {DisregardError} from '../common/disregard-error';
 
 export function addSsoUser() {
 
@@ -27,6 +29,7 @@ export function addSsoUser() {
     const moduleRepo = new ModuleRepo();
     const userListRepo = new UserListRepo();
     const isLocalEnv = svrUtil.isLocalEnv();
+    // const isLocalEnv = false;
     let localRoles, modules, genericUsers, updateUserList;
 
     Promise.all([
@@ -57,6 +60,12 @@ export function addSsoUser() {
           headers['email'] = 'dakahle@cisco.com';
 */
           const userId = headers['auth-user'];
+          if (!userId) {
+            const msg = `No user ID`;
+            console.error(msg);
+            res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
+            return Promise.reject(new DisregardError());
+          }
           return userListRepo.getOneLatest({userId})
             .then(userList => {
               // we'll cache the users in database and if less than one minute old, we'll get the roles from there
@@ -64,7 +73,16 @@ export function addSsoUser() {
                 return userList.roles;
               } else {
                 updateUserList = true;
-                return getArtRoles(userId);
+                return getArtRoles(userId)
+                  .then(roles => {
+                    if (!roles || roles.length === 0) {
+                      const msg = `No user roles set up for user: ${userId}`;
+                      console.error(msg);
+                      res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
+                      return Promise.reject(new DisregardError());
+                    }
+                    return roles;
+                  });
               }
             })
             .then(roles => {
@@ -82,7 +100,10 @@ export function addSsoUser() {
       })
       .then(user => {
         if (!(isLocalEnv || user.hasAdminOrUserRole() || user.isGenericUser())) {
-          res.status(401).send(shUtil.getHtmlForLargeSingleMessage(`User access required.`));
+          const msg = `User access required for user: ${req.headers['auth-user']}`;
+          console.error(msg);
+          res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
+          return Promise.reject(new DisregardError());
         } else {
           req.user = user;
           req.dfaData = {modules};
@@ -129,5 +150,9 @@ function getArtRoles(userId) {
   };
   return finRequest(options)
     .then(result => _.get(result, 'body.resources.resourceFQN') || [])
-    .then(roles => roles.map(x => x.toLowerCase()));
+    .then(roles => roles.map(x => x.toLowerCase()))
+    .catch(err => {
+      throw new ApiError('art request failure', err);
+    });
+
 }

@@ -6,8 +6,8 @@ import {AppStore} from '../../app/app-store';
 import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-components';
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
 import {PromptDialogComponent} from '../../shared/dialogs/prompt-dialog/prompt-dialog.component';
-import {RuleDetailDialogComponent} from '../../shared/dialogs/rule-detail-dialog/rule-detail-dialog.component';
-import {SubmeasureDetailDialogComponent} from '../../shared/dialogs/submeasure-detail-dialog/submeasure-detail-dialog.component';
+import {RuleDetailDialogComponent} from '../../modules/_common/dialogs/rule-detail-dialog/rule-detail-dialog.component';
+import {SubmeasureDetailDialogComponent} from '../../modules/_common/dialogs/submeasure-detail-dialog/submeasure-detail-dialog.component';
 import {Observable} from 'rxjs';
 import {
   MatDialog,
@@ -240,52 +240,6 @@ export class UiUtil {
     return this.dialog.open(PromptDialogComponent, config)
       .afterClosed();
   }
-
-  ruleDetailDialog(rule, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
-    if (this.dialog.openDialogs.length) {
-      console.log('genericDialog: dialog already open');
-      return;
-    }
-
-    const config = <MatDialogConfig> {
-      data: rule,
-      width: size,
-      backdropClass: 'bg-modal-backdrop'
-    };
-    return this.dialog.open(RuleDetailDialogComponent, config)
-      .afterClosed();
-  }
-
-  submeasureDetailDialog(rule, inputType = DialogInputType.input, size = DialogSize.small, rows = 4): Observable<any> {
-    if (this.dialog.openDialogs.length) {
-      console.log('genericDialog: dialog already open');
-      return;
-    }
-
-    const config = <MatDialogConfig> {
-      data: rule,
-      width: size,
-      backdropClass: 'bg-modal-backdrop'
-    };
-    return this.dialog.open(SubmeasureDetailDialogComponent, config)
-      .afterClosed();
-  }
-
-/*  approvalDialog(message: string, title = null, inputType = DialogInputType.input, size = DialogSize.large) {
-    if (this.dialog.openDialogs.length) {
-      console.log('genericDialog: dialog already open');
-      return;
-    }
-
-    const config = <MatDialogConfig> {
-      data: {message, title, inputType},
-      width: size,
-      backdropClass: 'bg-modal-backdrop'
-    };
-
-    return this.dialog.open(ApprovalDialogComponent, config)
-      .afterClosed();
-  }*/
 
   /*
   export declare class CuiDialogConfig<D = any> {
