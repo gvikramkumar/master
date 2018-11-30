@@ -21,6 +21,7 @@ import DeptUploadRepo from '../dept-upload/repo';
 import {DollarUploadPgRepo} from '../dollar-upload/pgrepo';
 import {MappingUploadPgRepo} from '../mapping-upload/pgrepo';
 import {DeptUploadPgRepo} from '../dept-upload/pgrepo';
+import {Submeasure} from '../../../../shared/models/submeasure';
 
 @injectable()
 export default class ReportController extends ControllerBase {
@@ -278,16 +279,14 @@ export default class ReportController extends ControllerBase {
             this.measures = results[0];
             this.sources = results[1];
             this.submeasures = results[2];
-            this.rules = results[3];
+            this.rules = _.sortBy(results[3], 'name');
             const rows: AnyObj[] = [];
             const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
             const rules = this.rules.map(rule => this.transformRule(rule)); // update this for more props if needed
-            sms.forEach(sm => {
-              sm.rules.forEach(ruleName => {
-                const rule = _.find(rules, {name: ruleName});
-                if (!rule) {
-                  throw new ApiError(`rulemaster report: rule not found: ${ruleName}`);
-                }
+            let ruleSms: AnyObj[];
+            rules.forEach(rule => {
+              ruleSms = _.sortBy(sms.filter(sm => _.includes(sm.rules, rule.name)), 'name');
+              ruleSms.forEach(sm => {
                 rows.push({
                   startFiscalMonth: sm.startFiscalMonth,
                   endFiscalMonth: sm.endFiscalMonth,
