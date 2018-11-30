@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {DialogType} from '../../../core/models/ui-enums';
+import {DialogType} from '../../../../core/models/ui-enums';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 @Component({
@@ -8,27 +8,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
   styleUrls: ['./rule-detail-dialog.component.scss']
 })
 export class RuleDetailDialogComponent implements OnInit {
-  // cancelText: string;
-  // submitText: string;
 
   constructor(public dialogRef: MatDialogRef<RuleDetailDialogComponent>, @Inject(MAT_DIALOG_DATA) public  data: any) {
   }
 
   ngOnInit() {
-    /*switch (this.data.mode) {
-      case DialogType.yesNo:
-        this.cancelText = 'No';
-        this.submitText = 'Yes';
-        break;
-      case DialogType.okCancel:
-        this.cancelText = 'Cancel';
-        this.submitText = 'OK';
-        break;
-      default:
-        this.submitText = 'OK';
-        break;
-    }*/
-
     if (this.data.data === null || (typeof this.data.data === 'object' && !Object.keys(this.data.data).length)) {
       this.data.data = undefined;
     } else if (this.data.data instanceof Date) {
@@ -40,21 +24,6 @@ export class RuleDetailDialogComponent implements OnInit {
         console.log('rule detail dialog: json.stringify failure');
       }
     }
-
-    // this allows us to use html in message and data sections
-    /*
-        setTimeout(() => {
-          document.querySelector('.modal__body .message').innerHTML = this.data.message;
-          if (this.data.data) {
-            document.querySelector('.modal__body .data').innerHTML = this.data.data;
-          }
-        });
-    */
-
-  }
-
-  formatRule(rule): string {
-    return  JSON.stringify(rule, null, 2);
   }
 
 }
