@@ -243,16 +243,20 @@ export default class ReportController extends ControllerBase {
         excelProperties = ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.legalEntityLevel', 'inputFilterLevel.beLevel',
           'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate'];
 
-        dataPromises.push(this.measureRepo.getManyActive({moduleId}));
-        dataPromises.push(this.sourceRepo.getManyActive());
-        dataPromises.push(this.submeasureRepo.getManyActive({setSort: 'name', moduleId}));
-        dataPromises.push(this.allocationRuleRepo.getManyActive({moduleId}));
-
-        promise = Promise.resolve(dataPromises)
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+        this.sourceRepo.getManyActive(),
+        this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+        this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId),
+        ])
           .then(results => {
+            this.measures = results[0];
+            this.sources = results[1];
+            this.submeasures = results[2];
+            this.rules = results[3];
             const rows: AnyObj[] = [];
-            const sms = results[2].map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
-            const rules = results[3].map(rule => this.transformRule(rule)); // update this for more props if needed
+            const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
+            const rules = this.rules.map(rule => this.transformRule(rule)); // update this for more props if needed
             sms.forEach(sm => {
               sm.rules.forEach(ruleName => {
                 const rule = _.find(rules, {name: ruleName});
@@ -286,8 +290,7 @@ export default class ReportController extends ControllerBase {
                 });
               });
             });
-
-
+            return rows;
           })
         break;
       default:
@@ -307,12 +310,6 @@ export default class ReportController extends ControllerBase {
           case 'submeasure':
             this.measures = dataResults[0];
             this.sources = dataResults[1];
-            break;
-          case 'rule-master':
-            this.measures = dataResults[0];
-            this.sources = dataResults[1];
-            this.submeasures = dataResults[2];
-            this.rules = dataResults[3];
             break;
         }
 
