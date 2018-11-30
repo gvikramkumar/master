@@ -103,7 +103,7 @@ export default class UploadController {
   getInitialData(): Promise<any> {
     return Promise.all([
       this.openPeriodRepo.getOneByQuery({moduleId: this.moduleId}),
-      this.submeasureRepo.getManyActive({moduleId: this.moduleId})
+      this.submeasureRepo.getManyLatestGroupByNameActive(this.moduleId)
     ])
       .then(results => {
         this.fiscalMonth = results[0].fiscalMonth;

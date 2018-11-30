@@ -61,6 +61,12 @@ export class RestBase<T extends AnyObj> {
     return this.getManyLatest('name', params);
   }
 
+  getManyLatestGroupByNameActive(moduleId?) {
+      const data = moduleId ? {moduleId: moduleId} : {};
+    this.addModuleId(data);
+    return this.callMethod('getManyLatestGroupByNameActive', data);
+  }
+
   // skip/limit required, sort optional, but surely needed to line up in pages. params become find(filter)
   getManySortAndPage(skip, limit, sort = null, _params = <any>{}) {
     const params = Object.assign(_params, {setSkip: skip, setLimit: limit});
@@ -91,8 +97,6 @@ export class RestBase<T extends AnyObj> {
   getOneById(id: string): Observable<T> {
     return this.httpClient.get<T>(`${this.endpointUrl}/${id}`);
   }
-
-
 
   callMethod(method, data = {}, params = {}) {
     this.addModuleId(data);

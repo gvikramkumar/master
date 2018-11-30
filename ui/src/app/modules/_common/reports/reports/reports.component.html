@@ -21,14 +21,14 @@
           <div *ngIf="report.hasSubmeasure || report.hasFiscalMonth">
 
               <cui-select label="Measure" [items]="measures" [(ngModel)]="measureId"
-                          optionsKey="name" optionsValue="measureId" (ngModelChange)="measureSelected()"></cui-select>
+                          optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
 
               <cui-select label="Sub Measure" [items]="submeasures" [(ngModel)]="submeasureName"
-                          optionsKey="name" optionsValue="name" (ngModelChange)="submeasureSelected()"></cui-select>
+                          optionsKey="name" optionsValue="name" (ngModelChange)="submeasureChange()"></cui-select>
           </div>
           <div *ngIf="report.hasFiscalMonth">
             <cui-select label="Fiscal Month" [items]="fiscalMonths" [(ngModel)]="fiscalMonth"
-                        (ngModelChange)="fiscalMonthSelected()" optionsKey="name"
+                        (ngModelChange)="fiscalMonthChange()" optionsKey="name"
                         optionsValue="fiscalMonth"></cui-select>
           </div>
 

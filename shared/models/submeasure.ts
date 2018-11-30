@@ -2,6 +2,7 @@
 export class Submeasure {
   id?: string;
   submeasureId: number;
+  submeasureKey: number;
   name: string;
   desc: string;
   sourceId: number;

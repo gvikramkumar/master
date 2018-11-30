@@ -95,6 +95,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     {
       type: 'allocation-rule', text: 'Rule Updates', disabled: false,
       filename: 'Rule_Updates_Report.xlsx'
+    },
+    {
+      type: 'rule-master', text: 'Rule Master', disabled: false,
+      filename: 'Rule_Master_Report.xlsx'
     }
   ];
   report = this.reports[0];
@@ -113,7 +117,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   ngOnInit() {
     Promise.all([
       this.measureService.getManyActive().toPromise(),
-      this.submeasureService.getManyActive().toPromise()
+      this.submeasureService.getManyLatestGroupByNameActive().toPromise()
     ])
     .then(results => {
       this.measures = _.sortBy(results[0], 'name');
@@ -135,7 +139,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     }
   }
 
-  measureSelected() {
+  measureChange() {
     this.disableDownload = true;
     this.submeasureName = undefined;
     this.fiscalMonth = undefined;
@@ -144,7 +148,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.submeasures = _.filter(this.submeasuresAll, {measureId: this.measureId});
   }
 
-  submeasureSelected() {
+  submeasureChange() {
     if (this.report.hasFiscalMonth) {
       this.disableDownload = true;
       this.fiscalMonth = undefined;
@@ -161,14 +165,15 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           break;
       }
       obs.subscribe(fiscalMonths => {
-        this.fiscalMonths = fiscalMonths.map(fm => Number(fm)).sort().reverse().slice(0, 24).map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
+        this.fiscalMonths = fiscalMonths.map(fm => Number(fm)).sort().reverse().slice(0, 24)
+          .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
       });
     } else {
       this.disableDownload = false;
     }
   }
 
-  fiscalMonthSelected() {
+  fiscalMonthChange() {
     this.disableDownload = false;
   }
 
