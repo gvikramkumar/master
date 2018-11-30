@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import {pgc} from '../database/postgres-conn';
 import {ApiError} from '../common/api-error';
 import AnyObj from '../../../shared/models/any-obj';
+import {DisregardError} from '../common/disregard-error';
 
 /**
  * errorHandler
@@ -28,8 +29,9 @@ export function errorHandler (options) {
       url: `${req.method}  ${req.url}`,
       message: err.message
     };
-    // mongoose validation error
-    if (err.name === 'ValidationError' && err.errors) {
+    if (err instanceof DisregardError) {
+      return;
+    } else if (err.name === 'ValidationError' && err.errors) {
       obj.name = 'MongooseValidationError';
       if (err.message.length > truncateLength) {
         obj.message = err.message.substr(0, truncateLength) + '...'; // full message in data

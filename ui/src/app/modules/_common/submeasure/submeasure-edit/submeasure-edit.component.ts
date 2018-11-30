@@ -24,6 +24,7 @@ import {shUtil} from '../../../../../../../shared/shared-util';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  arrRules: string[] = [];
   UiUtil = UiUtil;
   @ViewChild('form') form: NgForm;
   addMode = false;
@@ -276,8 +277,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   init() {
-    if (this.sm.rules.length === 0) {
-      this.sm.rules[0] = '';
+    /*
+    why arrRules and not just use sm.rules in ngFor and everywhere else instead?
+    There's a couple bugs when we do this.
+    1. if first rule chosen, then plus sign hit, clears out first entry, even though it's still in array
+    2. everytime you pick in one, it creates a new cuiSelect, then crashes on it's focusOnInput I think, as it can no longer find the old id=select-{{guid}}
+    Not sure what's going on, just that having separate arrays for ngModel and ngFor fixes it.
+     */
+    this.arrRules = _.cloneDeep(this.sm.rules);
+    if (this.arrRules.length === 0) {
+      this.arrRules[0] = '';
     }
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
@@ -289,19 +298,19 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   showDeleteRuleIcon() {
-    return this.sm.rules.length > 1;
+    return this.arrRules.length > 1;
   }
 
   showAddRuleIcon() {
-    return this.sm.rules.length < 5;
+    return this.arrRules.length < 5;
   }
 
   removeRule(i) {
-    this.sm.rules.splice(i, 1);
+    this.arrRules.splice(i, 1);
   }
 
   addRule(i) {
-    this.sm.rules.splice(i + 1, 0, '');
+    this.arrRules.splice(i + 1, 0, '');
   }
 
   // todo: make sure this hasn't changed, it's 4 currently
@@ -542,7 +551,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   cleanUp() {
     this.cleanIflSwitchChoices();
     this.cleanMMSwitchChoices();
-    this.sm.rules = this.sm.rules.filter(r => !!r);
+    // the list size is governed by arrRules, BUT, the values are in sm.rules
+    this.arrRules.forEach((x, idx) => this.arrRules[idx] = this.sm.rules[idx]);
+    this.arrRules = this.arrRules.filter(r => !!r);
+    this.sm.rules = _.cloneDeep(this.arrRules);
   }
 
   hasChanges() {
@@ -683,8 +695,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   validate() {
     this.errs = [];
-    const sm = this.sm;
-    if (sm.rules.length > _.uniq(sm.rules).length) {
+    if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
       this.errs.push('Duplicate rules entered');
     }
     if (this.noIflMmSelected()) {

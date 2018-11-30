@@ -8,7 +8,6 @@ import {SourceComponent} from './source/source.component';
 import {SourceMappingComponent} from './source-mapping/source-mapping.component';
 import {ModuleComponent} from './module/module.component';
 import {DatabaseSyncComponent} from './database-sync/database-sync.component';
-import {UserAuthorizationGuard} from '../../core/guards/user-authorization.guard';
 
 const routes: Routes = [
   {

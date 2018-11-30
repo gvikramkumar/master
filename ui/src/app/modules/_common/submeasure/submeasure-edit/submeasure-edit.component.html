@@ -205,8 +205,8 @@
             Rule Association
           </legend>
 
-          <div class="rule" *ngFor="let rule of sm.rules; let idx = index;">
-            <cui-select name="rule" [(ngModel)]="sm.rules[idx]" class="rule-select" [items]="rules" empty="true" dropdownMaxHeight="300"
+          <div class="rule" *ngFor="let rule of arrRules; let idx = index;">
+            <cui-select name="rule{{idx}}" [(ngModel)]="sm.rules[idx]" class="rule-select" [items]="rules" empty="true" dropdownMaxHeight="300"
                         optionsKey="name" optionsValue="name"></cui-select>
 
             <i class="delete icon-exit-outline icon-small" [fxShow]="showDeleteRuleIcon()" (click)="removeRule(idx)"></i>
