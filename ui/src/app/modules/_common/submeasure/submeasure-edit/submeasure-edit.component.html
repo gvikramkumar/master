@@ -11,108 +11,110 @@
       <div class="col-lg-6">
         <cui-select name="measure" [(ngModel)]="sm.measureId" [items]="measures" label="Measure" empty="true" [required]="true"
                     optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
+        <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name"
+                   [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true"></fin-input>
+        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source" empty="true" [disabled]="!sm.measureId"
+                    optionsKey="name" optionsValue="sourceId" [required]="true" (ngModelChange)=sourceChange()></cui-select>
+        <fin-input name="desc" [textarea]="true" [(ngModel)]="sm.desc" label="Description" [rows]="2" [required]="true"></fin-input>
       </div>
 
-      <div class="col-lg-6">
+      <div class="col-lg-6 form-group-max-width">
         <div fxLayout="row" fxLayoutAlign="center start" class="status-section">
           <div *ngIf="sm.approvedOnce === 'Y'" class="form-group-check form-group-inline-30">
             <fin-checkbox label="Active" [(model)]="sm.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
           </div>
           <div class="form-group-text" style="margin-left:30px;">Status: {{UiUtil.getStatusText(sm.status)}}</div>
         </div>
-      </div>
-
-    </div>
-
-    <div class="row">
-      <div class="col-lg-6">
-        <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name"
-                   [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true"></fin-input>
-      </div>
-      <div class="col-lg-6">
-        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source" empty="true" [disabled]="!sm.measureId"
-                    optionsKey="name" optionsValue="sourceId" [required]="true" (ngModelChange)=sourceChange()></cui-select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-lg-6">
-        <fin-input name="desc" [textarea]="true" [(ngModel)]="sm.desc" label="Description" [rows]="2" [required]="true"></fin-input>
-        <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
-                    label="Grouping Submeasure" empty="true" optionsKey="submeasureName"
-                    optionsValue="submeasureId" [disabled]="sm.indicators.groupFlag === 'Y'"></cui-select>
-      </div>
-      <div class="col-lg-6" style="padding-top:14px;">
         <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes"
                     label="Submeasure Category Type" empty="true" optionsKey="name" optionsValue="value" [required]="true"></cui-select>
-        <div class="form-group-check">
-          <fin-checkbox label="Is Group" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N" [inline]="true"
-                        [disabled]="!!sm.groupingSubmeasureId"></fin-checkbox>
-          <fin-checkbox label="Is Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N" [inline]="true"></fin-checkbox>
+        <div class="margin-top:15px; height: 0px;">&nbsp;</div>
+        <div class="border-outline">
+          <div style="margin-bottom:-10px;">
+            <div class="row">
+              <div class="col-6">
+                <fin-checkbox label="Is Group Submeasure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N" [inline]="true"
+                              [disabled]="!!sm.groupingSubmeasureId"></fin-checkbox>
+              </div>
+              <div class="col-6">
+                <fin-checkbox label="Is Service Submeasure" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
+                              [inline]="true"></fin-checkbox>
+              </div>
+            </div>
+            <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
+                        label="Is Group Submeasure" empty="true" optionsKey="submeasureName"
+                        optionsValue="submeasureId" [disabled]="sm.indicators.groupFlag === 'Y'"></cui-select>
+          </div>
         </div>
       </div>
     </div>
+
     <br>
 
-    <div class="row half-padding-top">
+    <div class="row" style="margin-top:1px;">
 
       <div class="col-lg-6  ifl-left-side">
-        <fieldset class="input-filter-level">
-          <legend>Business Input Level*</legend>
-          <div class="row half-padding">
-            <div class="col-6">
-              <div class="left text-center">Hierarchy</div>
-            </div>
-            <div class="col-6">
-              <div class="right text-center">Level</div>
-            </div>
+        <div class="form-group-max-width">
+          <div class="border-outline">
+              <fieldset class="input-filter-level">
+                <legend>Business Input Level*</legend>
+                <div class="row half-padding">
+                  <div class="col-6">
+                    <div class="left text-center">Hierarchy</div>
+                  </div>
+                  <div class="col-6">
+                    <div class="right text-center">Level</div>
+                  </div>
+                </div>
+                <div class="row ifl-section">
+                  <div class="col-6">
+                    <div class="check-wrap">
+                      <fin-checkbox [(model)]="ifl_switch_ibe" label="Internal Business Entity"
+                                    (modelChange)="iflChange('ibe')" [disabled]="BeIflDisabled"></fin-checkbox>
+                    </div>
+                    <div class="check-wrap">
+                      <fin-checkbox [(model)]="ifl_switch_p" label="Product" (modelChange)="iflChange('p')" [disabled]="ProductIflDisabled"></fin-checkbox>
+                    </div>
+                    <div class="check-wrap">
+                      <fin-checkbox [(model)]="ifl_switch_le" label="Legal Entity" (modelChange)="iflChange('le')" [disabled]="LegalIflDisabled"></fin-checkbox>
+                    </div>
+                    <div class="check-wrap">
+                      <fin-checkbox [(model)]="ifl_switch_s" label="Sales" (modelChange)="iflChange('s')" [disabled]="SalesIflDisabled"></fin-checkbox>
+                    </div>
+                    <div class="check-wrap">
+                      <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')" [disabled]="ScmsIflDisabled"></fin-checkbox>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="sel-wrap">
+                      <cui-select name="ibeLevel" [(ngModel)]="sm.inputFilterLevel.internalBELevel" [fxShow]="ifl_switch_ibe" class="option"
+                                  [items]="ibe_items" optionsKey="name"optionsValue="value" empty="true"></cui-select>
+                    </div>
+                    <div class="sel-wrap">
+                      <cui-select name="productLevel" [(ngModel)]="sm.inputFilterLevel.productLevel" [fxShow]="ifl_switch_p" class="option"
+                                  [items]="p_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                    </div>
+                    <div class="sel-wrap">
+                      <cui-select name="entityLevel" [(ngModel)]="sm.inputFilterLevel.entityLevel" [fxShow]="ifl_switch_le" class="option"
+                                  [items]="le_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                    </div>
+                    <div class="sel-wrap">
+                      <cui-select name="salesLevel" [(ngModel)]="sm.inputFilterLevel.salesLevel" [fxShow]="ifl_switch_s" class="option"
+                                  [items]="s_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                    </div>
+                    <div class="sel-wrap">
+                      <cui-select name="scmsLevel" [(ngModel)]="sm.inputFilterLevel.scmsLevel" [fxShow]="ifl_switch_scms" class="option"
+                                  [items]="scms_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
           </div>
-          <div class="row ifl-section">
-            <div class="col-6">
-              <div class="check-wrap">
-                <fin-checkbox [(model)]="ifl_switch_ibe" label="Internal Business Entity"
-                              (modelChange)="iflChange('ibe')" [disabled]="BeIflDisabled"></fin-checkbox>
-              </div>
-              <div class="check-wrap">
-                <fin-checkbox [(model)]="ifl_switch_p" label="Product" (modelChange)="iflChange('p')" [disabled]="ProductIflDisabled"></fin-checkbox>
-              </div>
-              <div class="check-wrap">
-                <fin-checkbox [(model)]="ifl_switch_le" label="Legal Entity" (modelChange)="iflChange('le')" [disabled]="LegalIflDisabled"></fin-checkbox>
-              </div>
-              <div class="check-wrap">
-                <fin-checkbox [(model)]="ifl_switch_s" label="Sales" (modelChange)="iflChange('s')" [disabled]="SalesIflDisabled"></fin-checkbox>
-              </div>
-              <div class="check-wrap">
-                <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')" [disabled]="ScmsIflDisabled"></fin-checkbox>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="sel-wrap">
-                <cui-select name="ibeLevel" [(ngModel)]="sm.inputFilterLevel.internalBELevel" [fxShow]="ifl_switch_ibe" class="option"
-                             [items]="ibe_items" optionsKey="name"optionsValue="value" empty="true"></cui-select>
-              </div>
-              <div class="sel-wrap">
-                <cui-select name="productLevel" [(ngModel)]="sm.inputFilterLevel.productLevel" [fxShow]="ifl_switch_p" class="option"
-                            [items]="p_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
-              </div>
-              <div class="sel-wrap">
-                <cui-select name="entityLevel" [(ngModel)]="sm.inputFilterLevel.entityLevel" [fxShow]="ifl_switch_le" class="option"
-                            [items]="le_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
-              </div>
-              <div class="sel-wrap">
-                <cui-select name="salesLevel" [(ngModel)]="sm.inputFilterLevel.salesLevel" [fxShow]="ifl_switch_s" class="option"
-                            [items]="s_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
-              </div>
-              <div class="sel-wrap">
-                <cui-select name="scmsLevel" [(ngModel)]="sm.inputFilterLevel.scmsLevel" [fxShow]="ifl_switch_scms" class="option"
-                            [items]="scms_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
-              </div>
-            </div>
-          </div>
-        </fieldset>
+        </div>
       </div>
 
       <div class="col-lg-6 mm-right-side">
+        <div class="form-group-max-width">
+          <div class="border-outline">
         <fieldset class="input-filter-level mm-fieldset">
           <legend>
             <fin-checkbox class="legend-checkbox" [(model)]="sm.indicators.manualMapping"
@@ -120,7 +122,7 @@
             Manual Mapping
           </legend>
 
-          <div [fxShow]="isManualMapping()">
+          <div>
             <div class="row half-padding">
               <div class="col-6">
                 <div class="left text-center">Hierarchy</div>
@@ -129,7 +131,7 @@
                 <div class="right text-center">Level</div>
               </div>
             </div>
-            <div class="row ifl-section">
+            <div class="row ifl-section"  [class.disabled]="!isManualMapping()">
               <div class="col-6">
                 <div class="check-wrap">
                   <fin-checkbox [(model)]="mm_switch_ibe" label="Internal Business Entity"
@@ -174,10 +176,12 @@
           </div>
         </fieldset>
       </div>
+    </div>
+      </div>
 
     </div>
 
-    <div class="row">
+    <div class="row" style="margin-top:30px;">
       <div class="col-lg-6">
         <cui-select name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos" label="Effective Month" empty="true"
                     [required]="true" optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
