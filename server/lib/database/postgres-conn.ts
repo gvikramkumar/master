@@ -1,9 +1,9 @@
-import { Client } from 'pg';
+import { Pool } from 'pg';
 import _config from '../../config/get-config';
 import AnyObj from '../../../shared/models/any-obj';
 const config = _config.postgres;
 
-const client = new Client({
+const pool = new Pool({
   host: config.host,
   database: config.database,
   port: config.port,
@@ -12,7 +12,7 @@ const client = new Client({
   password: process.env.POSTGRES_PASSWORD
 })
 
-export const pgc: AnyObj = {pgdb: client};
+export const pgc: AnyObj = {pgdb: pool};
 
 if (process.env.NO_POSTGRES === 'true') {
   pgc.promise = Promise.resolve()
@@ -22,7 +22,7 @@ if (process.env.NO_POSTGRES === 'true') {
       return pgc;
     });
 } else {
-  pgc.promise = client.connect()
+  pgc.promise = pool.connect()
     .then(() => {
       console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}`)
       return pgc;
