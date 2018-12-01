@@ -3,6 +3,7 @@
 @import 'cui-variables';
 
 
+
 .fin-flex-center {
   margin: auto;
 }
@@ -194,6 +195,20 @@ i {
   color: red;
 }
 
+.border-outline {
+  margin: -14px;
+  padding: 14px;
+  border: 2px solid $med-gray-4;
+  border-radius: 5px;
+}
+
+.box-shadow-gray-3-2 {
+  box-shadow: 0 0 3pt 2pt $med-gray-4;
+  //outline: 2px solid $med-gray-4;
+  //outline-offset: 3px;
+}
+
+// debug outlines
 .outline {
   @include outline;
 }
