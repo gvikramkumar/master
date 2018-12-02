@@ -1,4 +1,4 @@
-import {ObservableMedia} from '@angular/flex-layout';
+import {MediaObserver} from '@angular/flex-layout';
 import {BehaviorSubject} from 'rxjs';
 import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
@@ -26,10 +26,10 @@ export class BreakpointService {
   initialBreakpoint;
   initialized = false;
 
-  constructor(private media: ObservableMedia) {
-    // ObservableMedia calls us 10 times initially, which breaks out handleBreakpoints as it only expects to be
+  constructor(private mediaObserver: MediaObserver) {
+    // MediaObserver calls us 10 times initially, which breaks out handleBreakpoints as it only expects to be
     // called once initially. We have to do some gymnastics to get it down to one...
-    media.asObservable()
+    mediaObserver.media$
       .subscribe(change => {
         // console.log('breakpoint', change.mqAlias);
         if (!this.initialBreakpoint) {
@@ -48,12 +48,12 @@ export class BreakpointService {
   }
 
   isActive(val) {
-    return this.media.isActive(val);
+    return this.mediaObserver.isActive(val);
   }
 
   /**
    * handleBreakpoints
-   * @desc - this function is broken for repeated initial calls, which is what ObservableMedia does to us and why
+   * @desc - this function is broken for repeated initial calls, which is what MediaObserver does to us and why
    * we throttle that down to one (instead of 10) initial calls, say lg >> lg >> lg, then the directions will be:
    * initial, above, above, etc, which isn't true at all, but with our throttling all will work fine, why we do it.
    * @param breakpoint
