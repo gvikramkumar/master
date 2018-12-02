@@ -1,0 +1,316 @@
+<div class="panel-wrapper mt-15">
+
+  <div class=row>
+    <div class="col-md-6">
+      <h1 class="display-4">Create New Offer</h1>
+      <h4>Offer Builder</h4>
+    </div>
+    <div class="col-md-6">
+      <div class="btn-group btn-group--wide pull-right base-margin-top">
+        <button class="btn btn--primary-ghost">
+          <div class="flex-center" style="width:48px;height:48px" data-balloon="Save" data-balloon-pos="down"
+            data-balloon-length="fit-content" data-balloon-indigo>
+            <span class="icon-save icon-medium"></span>
+          </div>
+        </button>
+        <button class="btn btn--primary-ghost">
+          <div class="flex-center" style="width:48px;height:48px" data-balloon="Export" data-balloon-pos="down"
+            data-balloon-length="fit-content" data-balloon-indigo>
+            <span class="icon-export icon-medium"></span>
+          </div>
+        </button>
+        <button class="btn btn--primary-ghost selected">Proceed <span class="icon-chevron-right"></span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="contentBox mt-10">
+    <div class="leftContent">
+      <div class="panel-wrapper">
+       
+        <!-- <div class="panel-body mt-10 offerData" *ngIf="panels.panel1"> -->
+          <div class="offer-header card card--raised base-margin-top">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="flex-fluid text-left half-margin-left">
+                  <div class="text-bold">Offer Description</div>
+                  <div>Provides award-winning technical support along with entitlement to smart capabilities</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <div class="flex-fluid text-left half-margin-left">
+                  <div class="text-bold">Expected Launch Date</div>
+                  <div>30-Aug-2018</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="flex-fluid text-left half-margin-left">
+                  <div class="text-bold">Business Entity</div>
+                  <div>Networking, Cloud Computing, Internet of Things (IOT), Wireless and Mobility, +1 more</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="flex-fluid text-left half-margin-left">
+                  <div class="text-bold">Business Unit</div>
+                  <div>Digital Solution, Data Center Services</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        
+        <!-- </div> -->
+      </div>
+
+      <div class="alert base-margin-top half-margin-bottom">
+        <div class="alert__icon icon-info-outline mm_alert_icon"></div>
+        <div class="alert__message" [ngStyle]="{'color': message['color']}"><b>{{message['contentHead']}}</b>{{message['content']}}</div>
+      </div>
+
+
+      <div class="panel-wrapper mt-20">
+        <ul id="tabsv6" class="tabs tabs--bordered base-margin-top">
+          <li id="tabsv6-1" class="tab active">
+            <a tabindex="0">
+              <div class="tab__heading">Offer Characteristics</div>
+            </a>
+          </li>
+          <li id="tabsv6-2" class="tab">
+            <a tabindex="0">
+              <div class="tab__heading">Offer Dimensions</div>
+            </a>
+          </li>
+          <li id="tabsv6-3" class="tab">
+            <a tabindex="0">
+              <div class="tab__heading">Sales Dimensions</div>
+            </a>
+          </li>
+          <li id="tabsv6-4" class="tab">
+            <a tabindex="0">
+              <div class="tab__heading">Pricing Dimensions</div>
+            </a>
+          </li>
+          <li id="tabsv6-4" class="tab">
+            <a tabindex="0">
+              <div class="tab__heading">Delivery Dimensions</div>
+            </a>
+          </li>
+          <li id="tabsv6-4" class="tab">
+            <a tabindex="0">
+              <div class="tab__heading">Financial Dimensions</div>
+            </a>
+          </li>
+        </ul>
+        <div class="card card--raised">
+          <h4>Offer Dimensions</h4>
+          <div class="panel">
+            <div id="tabsv6-content" class="tab-content">
+              <div id="tabsv6-1-content" class="tab-pane active">
+                <ul class="list dimensions--toggle">
+                  <li *ngFor="let subGroup of groupKeys ">
+                    <div class="row">
+                      <div class="col-md-2">{{subGroup}}</div>
+              
+                      <div class="col-md-10">
+            
+                        <button *ngFor="let attribute of groups[subGroup]"
+                        [ngClass]="{
+                          'gray-button':attribute.type===1 && attribute.status===-1,
+                          'btn--primary':attribute.status===1||attribute.type===2,
+                          'btn--secondary':attribute.status===-1 && attribute.type ===0
+                        }" class="btn btn--small" style="max-width: none; margin: 10px auto;"
+                        (click)="toggleSelected(attribute)" >{{attribute.name}}</button> 
+                      </div>
+                    </div>
+                    <div class="divider"></div>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+            <div class="panel-footer base-margin-top">
+              <div class="btn-group btn-group--wide" style="margin: auto;width: 100%;">
+                <button class="btn btn--gray-ghost disabled"><span class="icon-chevron-left"></span></button>
+                <button (click)="toNextStep()"
+                [ngClass]="{
+                  'btn--gray':!canClickNextStep,
+                  'btn--gray-ghost':canClickNextStep
+                }" class="btn"><span class="icon-chevron-right"></span></button>
+              </div>
+            </div>
+         
+
+          </div>
+        </div>
+
+        <!-- <div class="panel-heading mt-10 noBorder">
+            <h6 class="text-left">
+                <span class="acc-title">Strategy Review Status</span>
+                <span class="pull-right fontSmall" style="padding-top: 8px;"><a href="javascript:void(0)">+ Add New</a></span>
+              </h6>
+            </div> -->
+
+        <!-- <div class="panel-body mt-5" *ngIf="panels.panel1">
+          <table class="table table-cool table-modal addSpace">
+            <thead>
+              <tr>
+                <th class="noBorderBottom" style="width:25%">Function</th>
+                <th class="noBorderBottom" style="width:25%">Approval Status</th>
+                <th class="noBorderBottom" style="width:25%">Approved On</th>
+                <th class="noBorderBottom" style="width:25%"></th>
+              </tr>
+              <tr>
+                <th class="noBorderTop" style="padding-top: 0 !important;padding-bottom: 0 !important"></th>
+                <th class="noBorderTop" style="padding-top: 0 !important;padding-bottom: 0 !important">
+                  <div class="form-group">
+                    <div class="form-group__text select">
+                      <select name="select1">
+                        <option value="0" selected>Filter</option>
+                        <option value="option1">Approver</option>
+                        <option value="option2">Pending</option>
+                        <option value="option3">Conditionally Approved</option>
+                      </select>
+                    </div>
+                  </div>
+                </th>
+                <th class="noBorderTop" style="padding-top: 0 !important;padding-bottom: 0 !important"></th>
+                <th class="noBorderTop" style="padding-top: 0 !important;padding-bottom: 0 !important"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of strategyReviewData; let i =index;">
+                <td>{{item.functionaName}}</td>
+                <td>
+                  <span class="d-inline" style="line-height: 26px;">
+                    <span class="icons" [ngClass]="{'iconCompleted': item.approvalStatus==='Auto Approved'|| item.approvalStatus==='Approved','iconError': item.approvalStatus==='Pending'|| item.approvalStatus==='Conditionally Approved'}"></span>
+                    {{item.approvalStatus}}
+                  </span>
+                </td>
+                <td>{{item.approvedOn}}</td>
+                <td>{{item.owner}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="mt-20 mb-20">
+            <a href="javascript:void(0)"><span class="icon-download icon-medium mr-10"> </span> Download B-View Deck
+            </a>
+          </div>
+
+        </div> -->
+      </div>
+
+    </div>
+
+    <div class="rightContent" style="margin-top: -5px;">
+
+
+
+      <app-right-panel [portfolioFlag]="setFlag" [stakeData]="stakeData"></app-right-panel>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- Roles description custom popup -->
+<div class="custom-modal delivery_desc_popup" *ngIf="backdropCustom">
+  <h5 class="headerTittle arrowBack">
+    Add Collaborators
+    <span class="TOESprite close-icon pull-right curPointer" (click)="backdropCustom = false"> </span>
+  </h5>
+  <div class="custom-modal-body">
+    <div class="txtDesc searchSec">
+      <div class="panel-wrapper">
+        <h6 class="innerTittle">
+          Search Collaborators
+        </h6>
+        <div class="panel-body">
+          <div class="row mt-10 width100">
+            <div class="d-inline col-md-6">
+              <input id="typeahead-basic" type="text" class="form-control autocomplete" [(ngModel)]="model"
+                [ngbTypeahead]="search" placeholder="Search by name, email or function " />
+              <span class="icon-search icon-small v-small curPointer"></span>
+            </div>
+            <div class="d-inline col-md-4">
+              <div class="form-group">
+                <div class="form-group__text select">
+                  <select name="select1">
+                    <option value="0" selected>Select Function</option>
+                    <option value="option1">Pricing</option>
+                    <option value="option2">Finance</option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn--small btn--primary btn-analytic">Search</button>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+      <div class="panel-wrapper mt-10">
+        <h6 class="innerTittle">
+          Search Results
+        </h6>
+        <table class="table table-cool table-modal mt-10">
+          <thead>
+            <tr>
+              <th style="width:6%">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  <span class="checkbox__input"></span>
+                </label>
+              </th>
+              <th>Name</th>
+              <th>Email Id</th>
+              <th>Function</th>
+              <th>Position</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of resultTable">
+              <td>
+                <label class="checkbox">
+                  <input type="checkbox">
+                  <span class="checkbox__input"></span>
+                </label>
+              </td>
+              <td>{{x.name}}</td>
+              <td>{{x.id}}</td>
+              <td>{{x.function}}</td>
+              <td>
+                <div class="form-group">
+                  <div class="form-group__text select">
+                    <select name="select1">
+                      <option value="0" selected>Select Owner</option>
+                      <option value="option1">Owner</option>
+                      <option value="option2">Co-Owner</option>
+                    </select>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <div class="pull-right">
+          <button class="btn btn--small" (click)="onCancelClick()">Cancel</button>
+          <button class="btn btn--small btn--primary" (click)="onSaveClick()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="backdrop-custom" *ngIf="backdropCustom"></div>
+<!--// -->

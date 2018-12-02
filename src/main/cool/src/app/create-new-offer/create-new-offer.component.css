@@ -1,0 +1,36 @@
+.contentBox {
+  display: inline-block;
+  width: 100%;
+}
+
+.leftContent,
+.rightContent {
+  float: left;
+}
+
+.leftContent {
+  width: calc(100% - 400px);
+  padding-right: 15px;
+}
+
+.rightContent {
+  width: 400px;
+}
+
+/**Modal CSS Start**/
+
+.table-modal td, .table-modal th{
+  padding: 0 9px !important;
+  border: #dfdfdf 1px solid;
+}
+
+.addSpace th, .addSpace td {
+  padding-top: 9px !important;
+  padding-bottom: 9px !important;
+}
+
+/**Modal CSS End**/
+
+.partial-aligned {
+  color: rgb(249, 189, 79);
+}

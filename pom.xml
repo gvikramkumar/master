@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.cisco.cool</groupId>
-	<artifactId>cool</artifactId>
+	<groupId>it.cvc.supplychain.cooldev</groupId>
+	<artifactId>coolContainer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
@@ -23,8 +23,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<angular.project.location>src/main/webapp/cool</angular.project.location>
-		<angular.project.nodeinstallation>node_installation</angular.project.nodeinstallation>
+		<angular.project.location>src/main/cool</angular.project.location>
+	<!-- 	<angular.project.nodeinstallation>node_installation</angular.project.nodeinstallation> -->
 	</properties>
 
 
@@ -105,9 +105,9 @@
 							</includes>
 						</fileset>
 						<fileset>
-							<directory>temp</directory>
+							<directory>webapp</directory>
 							<includes>
-								<include>**/*</include>
+								<include>*</include>
 							</includes>
 						</fileset>
 					</filesets>
@@ -123,7 +123,7 @@
 			<version>1.0</version>
 			<configuration>
 				<workingDirectory>${angular.project.location}</workingDirectory>
-				<installDirectory>${angular.project.nodeinstallation}</installDirectory>
+				<!-- <installDirectory>${angular.project.nodeinstallation}</installDirectory> -->
 			</configuration>
 			<executions>
 				<!-- It will install nodejs and npm -->
@@ -158,32 +158,44 @@
 				</executions>
 			</plugin>
 			<plugin>
+			<artifactId>maven-resources-plugin</artifactId>
+			<executions>
+			      <execution>
+			          <id>copy-resources</id>
+			          <phase>validate</phase>
+			          <goals><goal>copy-resources</goal></goals>
+			          <configuration>
+			              <outputDirectory>${project.basedir}/src/main/webapp</outputDirectory >
+			              <resources>
+			                  <resource>
+			                      <directory>${project.basedir}/src/main/cool/dist/</directory >
+			                  </resource>
+			              </resources>
+			          </configuration>
+			      </execution>
+			</executions>
+			</plugin>
+			<!-- <plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
 				<configuration>
 					<outputDirectory>
 						${project.build.directory}/../package/deployments
 					</outputDirectory>
-					<!-- <warSourceDirectory>${project.build.directory}/sqauicae-1.4.0-RELEASE</warSourceDirectory> -->
+					
 					<warName>cool</warName>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-					<encoding>UTF-8</encoding>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<webResources>
-					   <resource>
-							<directory>${project.basedir}/src/main/webapp/src/main/resources/public</directory>
-						</resource>
-					</webResources>
+			</plugin> -->
+			 <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-war-plugin</artifactId>
+		        <configuration>
+					<outputDirectory>
+						${project.build.directory}/../package/deployments
+					</outputDirectory>					
+					<warName>cool</warName>
 				</configuration>
-			</plugin>
+      		</plugin>
 		</plugins>
 	</build>
 

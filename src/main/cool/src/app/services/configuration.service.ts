@@ -1,0 +1,33 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { UserService } from './user.service';
+import 'rxjs/add/operator/toPromise';
+
+@Injectable()
+export class ConfigurationService {
+    url = environment.REST_API_URL + "userInfo";
+    
+    constructor(private httpClient: HttpClient, private userService: UserService) {
+    }
+
+    init(): Promise<any> {
+        return new Promise((resolve,reject) => {
+            this.httpClient.get(this.url).toPromise().then((res:any) => {
+               console.log(res);
+               this.userService.setUserId(res.userId);
+               resolve(true);
+            }).catch(this.handleError());
+            
+        })
+    }
+    private handleError(data?: any){
+        return (error: any) => {
+            console.log(error);
+        }
+    }
+    /*assignUserId(data) {
+        this.userService.userId = data.userId;
+    }*/
+
+}

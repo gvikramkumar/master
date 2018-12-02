@@ -1,0 +1,198 @@
+<div class="container">
+  <div class="section">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <div class="card card--raised base-margin-top">
+          <div class="panel">
+            <div class="card__header">
+              <h4 class="card__title">Create New Offer</h4>
+              <div class="card__subtitle">Offer Info</div>
+            </div>
+            <form [formGroup]="offerCreateForm" (ngSubmit)="createOffer()">
+              <div class="row base-margin-top">
+                <div class="col-md-6">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <label for="offerName">Offer Name</label>
+                      <input
+                        id="offerName"
+                        type="text"
+                        class="form-control"
+                        formControlName="offerName"
+                        (focusout)="createOfferId(offerName)"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <label for="offerDesc">Offer Description</label>
+                      <input
+                        id="offerDesc"
+                        type="text"
+                        class="form-control"
+                        formControlName="offerDesc">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row base-margin-top">
+                <div class="col-md-6">
+                  <div class="form-group half-margin-bottom">
+                    <label for="selectedValue">Primary Business Unit</label>
+                    <p-multiSelect
+                      id="selectedValue"
+                      class="form-control"
+                      formControlName="primaryBUList"
+                      [options]="primaryBusinessUnits"
+                      [panelStyle]="{minWidth:'25em'}">
+                    </p-multiSelect>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group half-margin-bottom">
+                    <label for="selectedBeValue">Primary Business Entity</label>
+                    <p-multiSelect
+                      id="selectedBeValue"
+                      class="form-control"
+                      formControlName="primaryBEList"
+                      [options]="primaryBusinessEntities"
+                      [panelStyle]="{minWidth:'25em'}">
+                    </p-multiSelect>
+                  </div>
+                </div>
+              </div>
+              <div class="row base-margin-top">
+                <div class="col-md-6">
+                  <div class="form-group half-margin-bottom">
+                    <label for="selectedSValue">Secondary Business Unit</label>
+                    <p-multiSelect
+                      id="selectedSValue"
+                      class="form-control"
+                      formControlName="secondaryBUList"
+                      [options]="secondaryBusinessUnits"
+                      (onChange)="getSecondaryBusinessEntity($event.value)"
+                      [panelStyle]="{minWidth:'25em'}">
+                    </p-multiSelect>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group half-margin-bottom">
+                    <label for="selectedSeValue">Secondary Business Entity</label>
+                    <p-multiSelect
+                      id="selectedSeValue"
+                      class="form-control"
+                      formControlName="secondaryBEList"
+                      [options]="secondaryBusinessEntities"
+                      [panelStyle]="{minWidth:'25em'}">
+                    </p-multiSelect>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div
+                    class="form-group label--floated input--icon half-margin-bottom">
+                    <div class="form-group__text">
+                      <input
+                        required
+                        class="form-control"
+                        formControlName="strategyReviewDate"
+                        #dp1="bsDatepicker"
+                        bsDatepicker
+                        placement="bottom"
+                        containerClass="custome-date"
+                        [bsConfig]="dpConfig"
+                        [(ngModel)]="expectedStrategyReviewDate"
+                        (focusout)="updateOffer('expectedStrategyReviewDate')">
+                      <label id="strategyReviewDate" for="strategyReviewDate">Strategy Review Date</label>
+                      <button type="button" class="link" tabindex="-1">
+                        <span class="icon-month"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div
+                    class="form-group label&#45;&#45;floated input&#45;&#45;icon half-margin-bottom">
+                    <div class="form-group__text">
+                      <input
+                        required
+                        class="form-control"
+                        formControlName="designReviewDate"
+                        id="designReviewDate"
+                        #dp2="bsDatepicker"
+                        bsDatepicker
+                        placement="bottom"
+                        containerClass="custome-date"
+                        [bsConfig]="dpConfig"
+                        [(ngModel)]="expectedDesignReviewDate"
+                        (focusout)="updateOffer('expectedDesignReviewDate')">
+                      <label for="designReviewDate">Design Review Date</label>
+                      <button type="button" class="link" tabindex="-1">
+                        <span class="icon-month"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div
+                    class="form-group label--floated input--icon half-margin-bottom">
+                    <div class="form-group__text">
+                      <input
+                        required
+                        class="form-control"
+                        formControlName="readinessReviewDate"
+                        id="readinessReviewDate"
+                        #dp3="bsDatepicker"
+                        bsDatepicker
+                        placement="bottom" containerClass="custome-date"
+                        [bsConfig]="dpConfig"
+                        [(ngModel)]="expectedReadinessReviewDate"
+                        (focusout)="updateOffer('expectedReadinessReviewDate')">
+                      <label for="readinessReviewDate">Readiness Review Date</label>
+                      <button type="button" class="link" tabindex="-1">
+                        <span class="icon-month"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div
+                    class="form-group label--floated input--icon half-margin-bottom">
+                    <div class="form-group__text">
+                      <input
+                        required
+                        class="form-control"
+                        formControlName="expectedLaunchDate"
+                        id="launchDate"
+                        #dp4="bsDatepicker"
+                        bsDatepicker
+                        placement="bottom"
+                        containerClass="custome-date"
+                        [bsConfig]="dpConfig"
+                        [(ngModel)]="expectedLaunchDate"
+                        (focusout)="updateOffer('expectedLaunchDate')">
+                      <label for="launchDate">Launch Date</label>
+                      <button type="button" class="link" tabindex="-1">
+                        <span class="icon-month"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn base-margin-top" type="submit">Save</button>
+                <button class="btn btn--primary base-margin-top" type="button" (click)="mModelAssesment()">Proceed to Offer Builder</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,253 @@
+<div class="panel-wrapper mt-15">
+    <ul class="breadcrumb">
+        <li><a routerLink="/dashboard">Dashboard</a></li>
+        <li><a [routerLink]="['/coolOffer']">Create New Offer</a></li>
+        <li><a [routerLink]="['/mmassesment']" >Offer Dimension & MM Assessment</a></li>
+        <li><span>Offer Portfolio</span></li>
+      </ul>
+    <h5 class="mt-10 mainTitle">  <span class="icon-chevron-left icon-small ico-blue mr-10 curPointer" [routerLink]="['/mmassesment']"></span> Create New Offer (Offer ID T-SNS-324232)</h5>
+
+    <div class="contentBox mt-10">
+        <div class="leftContent">
+          <div class="panel-wrapper">
+            <div class="panel-heading mt-10">
+              <h6 class="text-left">
+                <span class="icon-small ico-blue curPointer mr-10" [ngClass]="{'icon-chevron-up':panels.panel1,'icon-chevron-down':!panels.panel1}"
+                  (click)="panels.panel1 = !panels.panel1"></span>
+    
+                <span class="acc-title">Offer Portfolio</span>
+    
+              </h6>
+            </div>
+            <div class="panel-body mt-10 offerData" *ngIf="panels.panel1">
+                <div class="row mt-5">
+                  <div class="col-md-4 labelBlue">
+                    <label>Offer Name</label>
+                    <p>{{offerData.offname}}</p>
+                  </div>
+                  <div class="col-md-8 labelBlue">
+      
+                    <label>Offer Description</label>
+                    <p>{{offerData.desc}}</p>
+      
+                  </div>
+                </div>
+      
+                <div class="row mt-15 offerData">
+                  <div class="col-md-4 labelBlue">
+                    <label>Expected Launch Date</label>
+                    <p>{{offerData.launch_date}}</p>
+                  </div>
+                  <div class="col-md-4 labelBlue">
+      
+                    <label>Business Unit</label>
+                    <p>{{offerData.busunit}}</p>
+      
+                  </div>
+                  <div class="col-md-4 labelBlue">
+                    <label>Business Entity</label>
+                    <p>{{offerData.busentity}}</p>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+
+
+          <div class="panel-wrapper mt-20">
+              <div class="panel-heading mt-10">
+                <h6 class="text-left">
+                    <span class="icon-small ico-blue curPointer mr-10" [ngClass]="{'icon-chevron-up':panels.panel2,'icon-chevron-down':!panels.panel2}"></span>
+                  <span class="acc-title">MM4- SAAS</span>
+                </h6>
+              </div>
+              
+            </div>
+
+
+
+          <!-- <div class="panel-wrapper searchBox mt-10 mb-10" style="padding-bottom: 12px;">
+            <h5 class="d-inline" style="font-weight: 400">SAAS
+                <span class="partial-aligned" style="opacity:0.8;font-size:12px;margin-left:10px;">
+                    <span class="icon-exclamation-triangle icon-small v-small"></span>
+                    <span> PARTIALLY ALIGNED </span>
+                  </span>
+            </h5>
+            <span class="pull-right"><button class="btn btn--primary btn--small">Export</button></span>
+          </div> -->
+
+          <div class="panel-wrapper mt-20">
+              <div class="panel-heading mt-10 noBorder">
+                <h6 class="text-left">
+                  
+      
+                  <span class="acc-title">Strategy Review Status</span>
+                  <span class="pull-right fontSmall" style="padding-top: 8px;"><a href="javascript:void(0)">+ Add New</a></span>
+      
+                </h6>
+              </div>
+              <div class="panel-body mt-5" *ngIf="panels.panel1">
+                  <table class="table table-cool table-modal addSpace">
+                      <thead>
+                        <tr>
+                          <th class="noBorderBottom" style="width:25%">Function</th>
+                          <th class="noBorderBottom" style="width:25%">Approval Status</th>
+                          <th class="noBorderBottom" style="width:25%">Approved On</th>
+                          <th class="noBorderBottom" style="width:25%"></th>
+                        </tr>
+                        <tr>
+                          <th class="noBorderTop" style="padding-top: 0 !important;padding-bottom: 0 !important"></th>
+                          <th class="noBorderTop" style="padding-top: 0 !important;padding-bottom: 0 !important">
+                              <div class="form-group">
+                                  <div class="form-group__text select">
+                                    <select name="select1">
+                                      <option value="0" selected>Filter</option>
+                                      <option value="option1">Approver</option>
+                                      <option value="option2">Pending</option>
+                                      <option value="option3">Conditionally Approved</option>
+                                    </select>
+                                  </div>
+                                </div>
+                          </th>
+                          <th class="noBorderTop" style="padding-top: 0 !important;padding-bottom: 0 !important"></th>
+                          <th class="noBorderTop" style="padding-top: 0 !important;padding-bottom: 0 !important"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let item of strategyReviewData; let i =index;">
+                              <td>{{item.functionaName}}</td>
+                              <td>
+                               <span class="d-inline" style="line-height: 26px;">
+                                 <span class="icons"  [ngClass]="{'iconCompleted': item.approvalStatus==='Auto Approved'|| item.approvalStatus==='Approved','iconError': item.approvalStatus==='Pending'|| item.approvalStatus==='Conditionally Approved'}"></span>
+                                 {{item.approvalStatus}}
+                                </span>
+                              </td>                              
+                              <td>{{item.approvedOn}}</td>
+                              <td>{{item.owner}}</td>
+                            </tr>
+                      </tbody>
+                      </table>
+
+                      <div class="mt-20 mb-20">
+                        <a href="javascript:void(0)"><span class="icon-download icon-medium mr-10"> </span>     Download B-View Deck </a>
+                      </div>
+                
+              </div>
+            </div>
+
+          </div>
+
+          <div class="rightContent" style="margin-top: -5px;">
+              
+                      
+                
+              <app-right-panel [portfolioFlag]="setFlag"></app-right-panel>
+
+          </div>
+          
+          </div>
+</div>
+
+<!-- Roles description custom popup -->
+<div class="custom-modal delivery_desc_popup" *ngIf="backdropCustom" >
+    <h5 class="headerTittle arrowBack">
+        Add Collaborators 
+           <span class="TOESprite close-icon pull-right curPointer" (click)="backdropCustom = false" > </span>
+    </h5>
+    <div class="custom-modal-body">
+            <div class="txtDesc searchSec">
+                <div class="panel-wrapper">
+                    <h6 class="innerTittle">
+                        Search Collaborators
+                     </h6> 
+                     <div class="panel-body">
+                        <div class="row mt-10 width100">
+                            <div class="d-inline col-md-6">
+                                <input id="typeahead-basic"
+                                type="text" 
+                                class="form-control autocomplete"                                          
+                                 [(ngModel)]="model"
+                                  [ngbTypeahead]="search"
+                                  placeholder="Search by name, email or function " 
+                                  />
+                                  <span class="icon-search icon-small v-small curPointer"></span>
+                            </div>
+                            <div class="d-inline col-md-4">
+                                <div class="form-group">
+                                    <div class="form-group__text select">
+                                        <select name="select1">
+                                            <option value="0" selected>Select Function</option>
+                                            <option value="option1">Pricing</option>
+                                            <option value="option2">Finance</option>
+                                          </select>
+                                    </div>
+                                  </div>
+                                
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn--small btn--primary btn-analytic">Search</button>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                     </div>
+                    </div>
+                <div class="panel-wrapper mt-10">
+                    <h6 class="innerTittle">
+                        Search Results
+                     </h6>  
+                      <table class="table table-cool table-modal mt-10">
+                       <thead>
+                         <tr>
+                           <th style="width:6%">
+                               <label class="checkbox">
+                                   <input type="checkbox">
+                                   <span class="checkbox__input"></span>
+                               </label>
+                           </th>
+                           <th>Name</th>
+                           <th>Email Id</th>
+                           <th>Function</th>
+                           <th>Position</th>
+                         </tr>
+                       </thead>
+                       <tbody>
+                         <tr *ngFor="let x of resultTable">
+                           <td>
+                               <label class="checkbox">
+                                   <input type="checkbox">
+                                   <span class="checkbox__input"></span>
+                               </label>
+                           </td>
+                           <td>{{x.name}}</td>
+                           <td>{{x.id}}</td>
+                           <td>{{x.function}}</td>
+                           <td>
+                              <div class="form-group">
+                                  <div class="form-group__text select">
+                                    <select name="select1">
+                                      <option value="0" selected>Select Owner</option>
+                                      <option value="option1">Owner</option>
+                                      <option value="option2">Co-Owner</option>
+                                    </select>
+                                  </div>
+                                </div>
+                           </td>
+                         </tr>
+                       </tbody>
+                     </table> 
+                </div>
+                <div class="modal-footer">
+                  <div class="pull-right">
+                      <button class="btn btn--small" (click)="onCancelClick()">Cancel</button>
+                      <button class="btn btn--small btn--primary" (click)="onSaveClick()">Save</button>
+                  </div>
+                </div>
+            </div>
+    </div>
+  
+  </div>  
+  
+  <div class="backdrop-custom" *ngIf="backdropCustom" ></div>
+  <!--// -->
