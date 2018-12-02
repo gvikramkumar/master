@@ -1,7 +1,6 @@
 import {AppStore} from './app-store';
-import {FlexLayoutModule, ObservableMedia} from '@angular/flex-layout';
+import {FlexLayoutModule, MediaObserver} from '@angular/flex-layout';
 import {TestBed} from '@angular/core/testing';
-import {StoreModule} from '../store/store.module';
 import * as _ from 'lodash';
 
 class MediaChange {
@@ -10,14 +9,14 @@ class MediaChange {
 /*
 describe('AppStore tests', () => {
   let store: AppStore;
-  let observableMedia: ObservableMedia;
+  let mediaObserver: MediaObserver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [StoreModule, FlexLayoutModule]
     });
-    observableMedia = TestBed.get(ObservableMedia);
-    store = new AppStore(observableMedia);
+    mediaObserver = TestBed.get(MediaObserver);
+    store = new AppStore(mediaObserver);
   })
 
   it('should set initial breakpoint', () => {
