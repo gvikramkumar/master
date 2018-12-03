@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
 
-  REST_API_URL:'http://10.24.56.206:8085/cooloffer/',
+  REST_API_URL:'https://pdaf-api-dev.cisco.com/pdafapp/user/1.0/getLdapUserInfo/',
   REST_API_PRIMARY_URL:'https://cool-srv-dev.cisco.com/coolsrv/primaryBusiness/',
   
   REST_API_OFFER_CREATE_URL: 'https://cool-srv-dev.cisco.com/coolsrv/offer/create/',
