@@ -21,8 +21,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  *
  */
  
-
-@SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
+@SpringBootApplication
 public class Application extends SpringBootServletInitializer{
 
 	/**
