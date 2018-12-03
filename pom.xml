@@ -98,14 +98,14 @@
 				<version>2.5</version>
 				<configuration>
 					<filesets>
-						<fileset>
+						<!-- <fileset>
 							<directory>dist</directory>
 							<includes>
 								<include>**/*</include>
 							</includes>
-						</fileset>
+						</fileset> -->
 						<fileset>
-							<directory>webapp</directory>
+							<directory>${project.basedir}/src/main/webapp</directory>
 							<includes>
 								<include>**/*</include>
 							</includes>
@@ -157,7 +157,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
+			<!-- <plugin>
 			<artifactId>maven-resources-plugin</artifactId>
 			<executions>
 			      <execution>
@@ -174,7 +174,7 @@
 			          </configuration>
 			      </execution>
 			</executions>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>

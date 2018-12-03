@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --deploy-url=./",
+    "build": "ng build --output-hashing=bundles --deploy-url=/cool/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
