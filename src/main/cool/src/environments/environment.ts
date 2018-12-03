@@ -6,15 +6,15 @@
 export const environment = {
   production: false,
 
-  REST_API_URL_GET_CURRENT_USER: 'http://pdaf-api-stg.cisco.com/pdafapp/system/1.0/get/currentUser',
+  REST_API_URL_GET_CURRENT_USER: 'https://pdaf-api-stg.cisco.com/pdafapp/system/1.0/get/currentUser',
   REST_API_URL:'https://pdaf-api-dev.cisco.com/pdafapp/user/1.0/getLdapUserInfo/',
   REST_API_PRIMARY_URL:'https://cool-srv-dev.cisco.com/coolsrv/primaryBusiness/',
   
   REST_API_OFFER_CREATE_URL: 'https://cool-srv-dev.cisco.com/coolsrv/offer/create/',
   
   
-  REST_API_SECONDARY_BUSINESS_UNIT_URL: 'http://pdaf-api.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true',
-  REST_API_SECONDARY_BUSINESS_ENTITY_URL: 'http://pdaf-api.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?business_unit=',
+  REST_API_SECONDARY_BUSINESS_UNIT_URL: 'https://pdaf-api.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true',
+  REST_API_SECONDARY_BUSINESS_ENTITY_URL: 'https://pdaf-api.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?business_unit=',
  
  
  
