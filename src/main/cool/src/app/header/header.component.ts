@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   userInfo;
   userFirstName;
   userLastName;
+  userId;
 
   ngOnInit() {
   }
@@ -24,6 +25,10 @@ export class HeaderComponent implements OnInit {
     this.headerService.getUserInfo().subscribe((data:any) => {
       this.userFirstName = data.firstName;
       this.userLastName = data.lastName;
+    });
+    
+    this.headerService.getCurrentUser().subscribe((data:any) => {
+      this.userId = data.firstName;
     });
   }
 
