@@ -262,11 +262,11 @@ export default class ReportController extends ControllerBase {
 
       case 'rule-master':
         // multiSheetReport = true; ?? if multisheet report uncomment this line
-        excelSheetname = ['History'];
+        excelSheetname = ['As Of Now'];
         excelHeaders = ['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
           'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Updated By', 'Updated Date'];
 
-        excelProperties = ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.legalEntityLevel', 'inputFilterLevel.beLevel',
+        excelProperties = ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'salesLevel', 'productLevel', 'scmsLevel', 'legalEntityLevel', 'beLevel',
           'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate'];
 
         promise = Promise.all([
@@ -294,6 +294,11 @@ export default class ReportController extends ControllerBase {
                   name: sm.name,
                   measureName: sm.measureName,
                   sourceName: sm.sourceName,
+                  salesLevel: sm.inputFilterLevel.salesLevel,
+                  productLevel: sm.inputFilterLevel.productLevel,
+                  scmsLevel: sm.inputFilterLevel.scmsLevel,
+                  legalEntityLevel: sm.inputFilterLevel.legalEntityLevel,
+                  beLevel: sm.inputFilterLevel.beLevel,
 
                   ruleName: rule.name,
                   driverName: rule.driverName,
