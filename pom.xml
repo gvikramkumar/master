@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>it.cvc.supplychain.cooldev</groupId>
-	<artifactId>coolContainer</artifactId>
+	<groupId>com.cisco.cool</groupId>
+	<artifactId>cool</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
@@ -24,7 +24,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<angular.project.location>src/main/cool</angular.project.location>
-	<!-- 	<angular.project.nodeinstallation>node_installation</angular.project.nodeinstallation> -->
+		<angular.project.nodeinstallation>node_installation</angular.project.nodeinstallation>
 	</properties>
 
 
@@ -36,11 +36,11 @@
 			<scope>provided</scope>
 		</dependency> -->
 
-		 <!-- <dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
-		</dependency> --> 
-
+		</dependency>
+ -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
@@ -99,15 +99,15 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>dist</directory>
+							<directory>${basedir}/src/main/cool/dist</directory>
 							<includes>
-								<include>*</include>
+								<include>**/*</include>
 							</includes>
 						</fileset>
 						<fileset>
-							<directory>webapp</directory>
+							<directory>${basedir}/src/main/webapp/</directory>
 							<includes>
-								<include>*</include>
+								<include>**/*</include>
 							</includes>
 						</fileset>
 					</filesets>
@@ -123,7 +123,7 @@
 			<version>1.0</version>
 			<configuration>
 				<workingDirectory>${angular.project.location}</workingDirectory>
-				<!-- <installDirectory>${angular.project.nodeinstallation}</installDirectory> -->
+				<installDirectory>${angular.project.nodeinstallation}</installDirectory>
 			</configuration>
 			<executions>
 				<!-- It will install nodejs and npm -->
@@ -147,7 +147,7 @@
 					</configuration>
 				</execution>
 				<execution>
-					<id>npm build --prod</id>
+					<id>npm build -prod</id>
 						<goals>
 							<goal>npm</goal>
 						</goals>
@@ -175,7 +175,7 @@
 			      </execution>
 			</executions>
 			</plugin>
-			<!-- <plugin>
+			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
 				<configuration>
@@ -185,16 +185,10 @@
 					
 					<warName>cool</warName>
 				</configuration>
-			</plugin> -->
+			</plugin>
 			 <plugin>
 		        <groupId>org.apache.maven.plugins</groupId>
 		        <artifactId>maven-war-plugin</artifactId>
-		        <configuration>
-					<outputDirectory>
-						${project.build.directory}/../package/deployments
-					</outputDirectory>					
-					<warName>cool</warName>
-				</configuration>
       		</plugin>
 		</plugins>
 	</build>
