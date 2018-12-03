@@ -99,13 +99,13 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>${basedir}/src/main/cool/dist</directory>
+							<directory>dist</directory>
 							<includes>
 								<include>**/*</include>
 							</includes>
 						</fileset>
 						<fileset>
-							<directory>${basedir}/src/main/webapp/</directory>
+							<directory>webapp</directory>
 							<includes>
 								<include>**/*</include>
 							</includes>
