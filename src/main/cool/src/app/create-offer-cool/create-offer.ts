@@ -12,8 +12,12 @@ export class CreateOffer {
   designReviewDate: string;
   readinessReviewDate: string;
   expectedLaunchDate: string;
+  offerOwner:string;
+  offerCreatedBy:string;
+  offerCreationDate:string;
 
   constructor(userId: string,
+              offerOwner:string,
               offerName: string,
               offerDesc: string,
               primaryBUList: string,
@@ -25,8 +29,11 @@ export class CreateOffer {
               strategyReviewDate: string,
               designReviewDate: string,
               readinessReviewDate: string,
-              expectedLaunchDate: string) {
-    this.userId = userId;           
+              expectedLaunchDate: string,
+              offerCreatedBy: string,
+              offerCreationDate: string) {
+    this.userId = userId;
+    this.offerOwner = offerOwner;         
     this.offerName = offerName;
     this.offerDesc = offerDesc;
     this.primaryBUList = primaryBUList;
@@ -39,5 +46,7 @@ export class CreateOffer {
     this.designReviewDate = designReviewDate;
     this.readinessReviewDate = readinessReviewDate;
     this.expectedLaunchDate = expectedLaunchDate;
+    this.offerCreationDate = offerCreationDate;
+    this.offerCreatedBy = offerCreatedBy;
   }
 }

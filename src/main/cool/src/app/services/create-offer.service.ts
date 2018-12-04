@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Response } from '@angular/http';
+import { Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -15,6 +15,8 @@ export class CreateOfferService {
   basePrimaryUrl: string = environment.REST_API_PRIMARY_URL;
   secondaryBusinessUnitUrl: string = environment.REST_API_SECONDARY_BUSINESS_UNIT_URL;
   secondaryBusinessEntityUrl: string = environment.REST_API_SECONDARY_BUSINESS_ENTITY_URL;
+  secondaryPrimaryBusinessEntityUrl: string = environment.REST_API_PRIMARY_BUSINESS_ENTITY_URL;
+
   coolOffer;
   coolOfferCopy;
   currenTOffer = new BehaviorSubject<any>('');
@@ -61,7 +63,7 @@ export class CreateOfferService {
     return this.httpClient.get(url);
   }
 
-  getBusinessUnitAndEntity(): Observable<any> {
+  getPrimaryBusinessUnits(): Observable<any> {
     let url = this.basePrimaryUrl + this.userService.getUserId();
     return this.httpClient.get(url);
   }
@@ -76,6 +78,12 @@ export class CreateOfferService {
     return this.httpClient.get(url);
   }
 
+  getPrimaryBusinessEntity(bus: string): Observable<any> {
+    // debugger;
+    let url = this.secondaryPrimaryBusinessEntityUrl + bus;
+    return this.httpClient.get(url);
+  }
+
   getQuestionsBox(): Observable<any> {
     let url = this.baseUrl + 'question';
     return this.httpClient.get(url);
@@ -83,11 +91,6 @@ export class CreateOfferService {
 
   getOfferBox(): Observable<any> {
     return this.httpClient.get(this.baseUrl + 'mm');
-  }
-
-  postDataForOfferId(data) {
-    let url = this.baseUrl + 'offer'
-    return this.httpClient.post(url, data);
   }
 
   postDataofMmMapper(obj) {
@@ -115,9 +118,12 @@ export class CreateOfferService {
     return this.httpClient.get(url);
   }
 
-  registerOffer(createoffer: CreateOffer): Observable<Response> {
-    return this.httpClient.post(this.offerCreateUrl, createoffer)
-      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+  registerOffer(createoffer: CreateOffer): Observable<any> {
+    createoffer.userId = this.userService.getUserId();
+    createoffer.offerCreatedBy = this.userService.getUserId();
+    createoffer.offerOwner = this.userService.getUserId();
+    console.log(createoffer);
+    return this.httpClient.post(this.offerCreateUrl, createoffer,{responseType: 'text'});
   }
 
 }

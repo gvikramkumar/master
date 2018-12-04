@@ -28,6 +28,7 @@ import {SearchCollaboratorService} from './services/search-collaborator.service'
 import {TableModule} from 'primeng/table';
 import {UserService} from './services/user.service';
 import { ConfigurationService } from './services/configuration.service';
+import {CalendarModule} from 'primeng/calendar';
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -61,7 +62,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     BrowserAnimationsModule,
     DataTableModule,
     DropdownModule,
-    TableModule
+    TableModule,
+    CalendarModule
   ],
   providers: 
   [
@@ -75,7 +77,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
        provide: APP_INITIALIZER,
        multi: true,
        useFactory: app_init,
-       deps: [ConfigurationService, UserService]
+       deps: [ConfigurationService]
      }
   ],
   bootstrap: [AppComponent]

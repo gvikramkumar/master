@@ -161,6 +161,10 @@ span.badge-wrapper.base-margin-left:hover:after {
   }
 }
 
+.header-headings {
+  color: #ffffff;
+}
+
 .Green{
  color: green; 
 }
@@ -182,4 +186,12 @@ font-weight: 100;
 
  .offerDesc{
   font-size: 12px;
+ }
+
+ .notifications {
+  color:blue;
+ }
+
+ .actions {
+  color: blue;
  }

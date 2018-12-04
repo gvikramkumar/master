@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { Router } from '@angular/router';
 import { CreateOfferService } from '../services/create-offer.service';
 import { HeaderService } from './header.service';
+import { UserService } from '../services/user.service'
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -15,20 +16,15 @@ export class HeaderComponent implements OnInit {
   userInfo;
   userFirstName;
   userLastName;
-  userId;
 
   ngOnInit() {
   }
 
-  constructor(private headerService: HeaderService, private router: Router, private createOfferService: CreateOfferService) {
+  constructor(private headerService: HeaderService, private router: Router, private createOfferService: CreateOfferService, private userService : UserService) {
     // this.selectedIndex = 2;
     this.headerService.getUserInfo().subscribe((data:any) => {
       this.userFirstName = data.firstName;
       this.userLastName = data.lastName;
-    });
-    
-    this.headerService.getCurrentUser().subscribe((data:any) => {
-      this.userId = data.firstName;
     });
   }
 
@@ -38,11 +34,5 @@ export class HeaderComponent implements OnInit {
 
   onClickedOutside() {
     this.toggleLogout=false;
-  }
-  
-  createNewOffer() {
-    this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
-    this.createOfferService.currenTOffer.next('')
-    this.router.navigate(['/coolOffer']);
   }
 }

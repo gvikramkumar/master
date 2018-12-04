@@ -20,10 +20,11 @@ export class SearchCollaboratorService {
     const data = {'name': addEditCollaborator.name,
       'businessEntity': addEditCollaborator.businessEntity,
       'functionName': addEditCollaborator.functionName};
-    return this.httpClient.get(this.baseUrl,{params: data});
+    return this.httpClient.post(environment.REST_API_MM_STAKEHOLDERS_SEARCH_URL,data);
   }
 
   addCollaborators(saveCollaborator: any): Observable<any> {
-    return this.httpClient.post(this.baseUrl, saveCollaborator);
+    // debugger;
+    return this.httpClient.post("http://localhost:8080/coolsrv/offer/getMyOffers/ekuruva", saveCollaborator);
   }
 }

@@ -28,12 +28,25 @@
   border-right: solid 1px #d8d8d8;
   padding: 10px;
 }
-
-.mm_alert_icon {
+.mm-page-alert{
+  color: #58585b;
   position: relative;
-  left: 0;
-  top: 0;
-  font-size: 2.4rem !important;
+  background: transparent !important;
+  box-shadow: none;
+  border: 1px solid #00bceb !important;
+  border-left-width: 48px !important;
+  padding: 10px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.mm-alert-icon{
+  position: absolute !important;
+  left: -37px !important;
+  top: 3px !important ;
 }
 
 .cui .alert__message {
@@ -155,6 +168,48 @@
   color: #e87127;
 }
 
+.mm-model-btn-active {
+  border: 1px solid transparent;
+    background: #017CAD;
+    color: #ffffff;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent
+
+}
+.mm-model-btn-active:hover {
+  background: #04adf1;
+}
+
+.mm-model-btn-inactive {
+  border: 1px solid transparent;
+    background: white;
+    color: #017CAD;
+    text-decoration: none;
+    box-shadow: inset 0 0 0 1px #017CAD;
+    -webkit-tap-highlight-color: transparent
+}
+.mm-model-btn-inactive:hover {
+  background: #04adf1;
+}
+
+.cui .alert__icon {
+  color: #ffffff;
+  position: absolute;
+  left: -36px;
+  top: 10px;
+  font-size: 2.4rem;
+}
+
+.mm-alert-icon {
+  position: relative;
+  left: 0;
+  top: 0;
+  font-size: 2.4rem !important;
+}
+
+.padding-5-20 {
+  padding: 5px 20px
+}
 /**Group Table CSS End Here**/
 
 

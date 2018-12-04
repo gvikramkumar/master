@@ -9,7 +9,7 @@
               <h4 class="card__title">Create New Offer</h4>
               <div class="card__subtitle">Offer Info</div>
             </div>
-            <form [formGroup]="offerCreateForm" (ngSubmit)="createOffer()">
+            <form autocomplete="off" [formGroup]="offerCreateForm" (ngSubmit)="createOffer()">
               <div class="row base-margin-top">
                 <div class="col-md-6">
                   <div class="form-group half-margin-bottom">
@@ -19,8 +19,7 @@
                         id="offerName"
                         type="text"
                         class="form-control"
-                        formControlName="offerName"
-                        (focusout)="createOfferId(offerName)"/>
+                        formControlName="offerName"/>
                     </div>
                   </div>
                 </div>
@@ -46,6 +45,7 @@
                       class="form-control"
                       formControlName="primaryBUList"
                       [options]="primaryBusinessUnits"
+                      (onChange)="getPrimaryBusinessEntity($event.value)"
                       [panelStyle]="{minWidth:'25em'}">
                     </p-multiSelect>
                   </div>
@@ -91,7 +91,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6">
+              <div class="col-md-6">
                   <div
                     class="form-group label--floated input--icon half-margin-bottom">
                     <div class="form-group__text">
@@ -99,13 +99,14 @@
                         required
                         class="form-control"
                         formControlName="strategyReviewDate"
+                        id="strategyReviewDate"
                         #dp1="bsDatepicker"
                         bsDatepicker
-                        placement="bottom"
+                        placement="top"
+                        [minDate]="minDate"
                         containerClass="custome-date"
                         [bsConfig]="dpConfig"
-                        [(ngModel)]="expectedStrategyReviewDate"
-                        (focusout)="updateOffer('expectedStrategyReviewDate')">
+                        [(ngModel)]="expectedStrategyReviewDate">
                       <label id="strategyReviewDate" for="strategyReviewDate">Strategy Review Date</label>
                       <button type="button" class="link" tabindex="-1">
                         <span class="icon-month"></span>
@@ -124,11 +125,11 @@
                         id="designReviewDate"
                         #dp2="bsDatepicker"
                         bsDatepicker
-                        placement="bottom"
-                        containerClass="custome-date"
+                        placement="top"
+                        [minDate]="minDate"
+                        containerClass="custome-date"                       
                         [bsConfig]="dpConfig"
-                        [(ngModel)]="expectedDesignReviewDate"
-                        (focusout)="updateOffer('expectedDesignReviewDate')">
+                        [(ngModel)]="expectedDesignReviewDate">
                       <label for="designReviewDate">Design Review Date</label>
                       <button type="button" class="link" tabindex="-1">
                         <span class="icon-month"></span>
@@ -149,10 +150,11 @@
                         id="readinessReviewDate"
                         #dp3="bsDatepicker"
                         bsDatepicker
-                        placement="bottom" containerClass="custome-date"
+                        placement="top"
+                        [minDate]="minDate" 
+                        containerClass="custome-date"
                         [bsConfig]="dpConfig"
-                        [(ngModel)]="expectedReadinessReviewDate"
-                        (focusout)="updateOffer('expectedReadinessReviewDate')">
+                        [(ngModel)]="expectedReadinessReviewDate">
                       <label for="readinessReviewDate">Readiness Review Date</label>
                       <button type="button" class="link" tabindex="-1">
                         <span class="icon-month"></span>
@@ -168,15 +170,15 @@
                         required
                         class="form-control"
                         formControlName="expectedLaunchDate"
-                        id="launchDate"
+                        id="expectedLaunchDate"
                         #dp4="bsDatepicker"
                         bsDatepicker
-                        placement="bottom"
+                        placement="top"
+                        [minDate]="minDate"
                         containerClass="custome-date"
                         [bsConfig]="dpConfig"
-                        [(ngModel)]="expectedLaunchDate"
-                        (focusout)="updateOffer('expectedLaunchDate')">
-                      <label for="launchDate">Launch Date</label>
+                        [(ngModel)]="expectedLaunchDate">
+                      <label for="expectedLaunchDate">Launch Date</label>
                       <button type="button" class="link" tabindex="-1">
                         <span class="icon-month"></span>
                       </button>
@@ -184,15 +186,17 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
               <div class="form-actions">
                 <button class="btn base-margin-top" type="submit">Save</button>
-                <button class="btn btn--primary base-margin-top" type="button" (click)="mModelAssesment()">Proceed to Offer Builder</button>
+                <button class="btn btn--primary base-margin-top" type="button" [disabled]="isOffrBldrbtnDisabled" 
+                (click)="mModelAssesment()">Proceed to Offer Builder</button>
+              </div>
               </div>
             </form>
           </div>
         </div>
       </div>
-      <div class="col-md-2"></div>
     </div>
   </div>
 </div>

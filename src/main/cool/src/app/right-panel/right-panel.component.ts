@@ -21,7 +21,7 @@ export class RightPanelComponent implements OnInit {
   notiFication: boolean = false;
   @Input() portfolioFlag: boolean = false;
   @Input() stakeData: Object;
-  @Input() stakeData2: Object;
+  @Input() offerOwner: String;
   backdropCustom: boolean = false;
   proceedFlag: boolean;
   subscription: Subscription;
@@ -34,41 +34,6 @@ export class RightPanelComponent implements OnInit {
   addEditCollaboratorsForm: FormGroup;
   selectedCollabs;
   entityList;
-  myCollaborators = [
-    {
-      'Function': 'OLE',
-      'Roles': [
-        { label: 'Owner', value: 'owner' },
-        { label: 'Co-owner', value: 'coowner' },
-        { label: 'Reviewer', value: 'reviewer' }
-      ],
-      'Name': 'Scott Collins',
-      'Email': 'scollins@altus.com',
-      'BusinessEntity': 'Data Center'
-    },
-    {
-      'Function': 'SOE',
-      'Roles': [
-        { label: 'Owner2', value: 'owner2' },
-        { label: 'Co-owner2', value: 'coowner2' },
-        { label: 'Reviewer2', value: 'reviewer2' }
-      ],
-      'Name': 'John Smith',
-      'Email': 'jsmith@altus.com',
-      'BusinessEntity': 'Collaboration'
-    },
-    {
-      'Function': 'CPS',
-      'Roles': [
-        { label: 'Owner1', value: 'owner1' },
-        { label: 'Co-owner1', value: 'coowner1' },
-        { label: 'Reviewer1', value: 'reviewer1' }
-      ],
-      'Name': 'Ian Flemming',
-      'Email': 'iflemming@altus.com',
-      'BusinessEntity': 'Security'
-    }
-  ];
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
@@ -139,7 +104,7 @@ export class RightPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.createOfferService.getBusinessUnitAndEntity()
+    this.createOfferService.getPrimaryBusinessUnits()
       .subscribe(data => {
         this.entityList = data.primaryBE;
       });
@@ -191,23 +156,44 @@ export class RightPanelComponent implements OnInit {
   }
 
   onSearch() {
+    // debugger;
     const searchCollaborator: AddEditCollaborator = new AddEditCollaborator(
       this.addEditCollaboratorsForm.controls['name'].value,
       this.addEditCollaboratorsForm.controls['businessEntity'].value,
       this.addEditCollaboratorsForm.controls['functionName'].value);
     this.searchCollaboratorService.searchCollaborator(searchCollaborator)
       .subscribe(data => {
+        // debugger;
         this.collaboratorsList = data;
       },
         error => {
           console.log('error occured');
-          this.collaboratorsList = this.myCollaborators;
+          alert("Sorry, but something went wrong.")
+          this.collaboratorsList = [];
         });
   }
 
+  updateStakeData(res) {
+    this.stakeData = {};
+    // console.log(res);
+    let keyUsers = res[0]['coolRoleKeyUser'];
+    keyUsers.forEach(user => {
+      if (this.stakeData[user['offerRole']] == null) {
+        this.stakeData[user['offerRole']] = [];
+      }
+      this.stakeData[user['offerRole']].push({name: user['keyUser'], email: user['email']});
+    })
+  }
+
   addCollaborator() {
+  
     console.log(this.selectedCollabs);
-    this.searchCollaboratorService.addCollaborators(this.selectedCollabs).subscribe();
+    let that = this;
+    this.searchCollaboratorService.addCollaborators(this.selectedCollabs).subscribe(data => {
+      // update stakeData from data
+      that.updateStakeData(data);
+    });
+    
   }
 
   show_deliveryDesc() {
@@ -246,5 +232,24 @@ export class RightPanelComponent implements OnInit {
       document.location.href = "http://owb1-stage.cloudapps.cisco.com/owb/owb/showHome#/manageOffer/editPlanReview/" + this.currentOfferId;
 
     }
+  }
+
+  getInitialChar(name) {
+    if (name == null) return ""
+    let names = name.split(' ');
+    let initials = "";
+    initials += names[0].charAt(0).toUpperCase();
+    if (names.length > 1) {
+      initials += names[1].charAt(0).toUpperCase();
+    }
+    return initials;
+  }
+
+  arrToOptions(arr) {
+    let res = [];
+    arr.forEach(a => {
+      res.push({'label': a, 'value': a});
+    })
+    return res;
   }
 }
