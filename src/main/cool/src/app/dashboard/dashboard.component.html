@@ -38,11 +38,10 @@
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="gb" #dt>
                 <p-column field="offerId" sortable= "true" header="OFFER ID">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span *ngIf="actionData.alertType == 1"> <span class="icon-alert
-                      icon-small"
-                        style="margin:0px 5px 0 0"></span>{{actionData.offerId}}</span>
+                   <span *ngIf="actionData.alertType == 1"> <span class="icon-clock icon-small" style="margin:0px 5px 0 0">
+                      </span>{{actionData.offerId}}</span>
                     <span *ngIf="actionData.alertType == 2">
-                      <span class="icon-clock icon-small" style="margin:0px 5px 0 0"></span>
+                      <span class="icon-alert icon-small" style="margin:0px 5px 0 0"></span>
                       {{actionData.offerId}}
                     </span>
                   </ng-template>
