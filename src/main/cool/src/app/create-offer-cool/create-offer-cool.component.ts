@@ -109,16 +109,16 @@ export class CreateOfferCoolComponent implements OnInit {
   getPrimaryBusinessEntity(event) {
     console.log(111);
     console.log(event);
-    this.createOfferService.getPrimaryBusinessEntity(event[0])
+    this.createOfferService.getPrimaryBusinessEntity(event.toString())
     
       .subscribe(data => {
         console.log(data);
         const primaryBeArry = [];
         data.forEach(element => {
-          primaryBeArry.push({ label: element.BE, value: "Security" });
+          primaryBeArry.push({ label: element.BE, value:  element.BE});
         });
         
-        this.primaryBusinessEntities = primaryBeArry;
+        this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
       });
       
     
