@@ -25,6 +25,6 @@ export class SearchCollaboratorService {
 
   addCollaborators(saveCollaborator: any): Observable<any> {
     // debugger;
-    return this.httpClient.post("http://localhost:8080/coolsrv/offer/getMyOffers/ekuruva", saveCollaborator);
+    return this.httpClient.post(environment.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL, saveCollaborator);
   }
 }

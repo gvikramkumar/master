@@ -8,7 +8,7 @@ export const environment = {
 
   REST_API_URL_GET_CURRENT_USER: 'https://pdaf-api-stg.cisco.com/pdafapp/system/1.0/get/currentUser',
   REST_API_URL:'https://pdaf-api-dev.cisco.com/pdafapp/user/1.0/getLdapUserInfo/',
-
+  // REST_API_URL:'http://localhost:8085/cool/',
   REST_API_PRIMARY_URL:'https://cool-srv-dev.cisco.com/coolsrv/primaryBusiness/',
   
   REST_API_OFFER_CREATE_URL: 'https://cool-srv-dev.cisco.com/coolsrv/offer/create/',
@@ -30,6 +30,6 @@ export const environment = {
   REST_API_MM_STAKEHOLDERS_GET_URL:'https://cool-srv-dev.cisco.com/coolsrv/stakeholder/getStakeHolderMgnt/',
   REST_API_MM_OFFER_BUILDER_GET_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/getOffersDetails/',
   REST_API_MM_STAKEHOLDERS_SEARCH_URL: 'https://cool-srv-dev.cisco.com/coolsrv/collabrators/searchCollabrators',
-  REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/getMyOffers/ekuruva'
+  REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/updateStakeHolderdata'
   // change with localhost:8080 in local dev
 };

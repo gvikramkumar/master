@@ -9,6 +9,9 @@ import { CreateOfferService } from '../services/create-offer.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { AddEditCollaborator } from '../create-offer-cool/add-edit-collaborator';
+import { StakeHolder } from '../models/stakeholder';
+import { StakeHolderDTO } from '../models/stakeholderdto';
+import { Collaborators } from '../models/collaborator';
 // import { Hash } from 'crypto';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
@@ -150,21 +153,37 @@ export class RightPanelComponent implements OnInit {
     this.display = true;
   }
 
+  onHide() {
+    this.display = false;
+    this.collaboratorsList = [];
+    this.addEditCollaboratorsForm.reset();
+  }
+
   closeDailog() {
     this.display = false;
+    this.collaboratorsList = [];
     this.addEditCollaboratorsForm.reset();
   }
 
   onSearch() {
-    // debugger;
+    let tempCollaboratorList: Collaborators[] = [];
     const searchCollaborator: AddEditCollaborator = new AddEditCollaborator(
       this.addEditCollaboratorsForm.controls['name'].value,
       this.addEditCollaboratorsForm.controls['businessEntity'].value,
       this.addEditCollaboratorsForm.controls['functionName'].value);
     this.searchCollaboratorService.searchCollaborator(searchCollaborator)
       .subscribe(data => {
-        // debugger;
-        this.collaboratorsList = data;
+        data.forEach(element => {
+          let collaborator = new Collaborators();
+          collaborator.applicationRole = element.applicationRole;
+          collaborator.businessEntity = element.businessEntity;
+          collaborator.email = element.email;
+          collaborator.functionalRole = element.functionalRole;
+          collaborator.name = element.name;
+          collaborator.offerRole = element.applicationRole[0];
+          tempCollaboratorList.push(collaborator);
+        });
+        this.collaboratorsList = tempCollaboratorList;
       },
         error => {
           console.log('error occured');
@@ -181,19 +200,36 @@ export class RightPanelComponent implements OnInit {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
-      this.stakeData[user['offerRole']].push({name: user['keyUser'], email: user['email']});
+      this.stakeData[user['offerRole']].push({ name: user['keyUser'], email: user['email'] });
     })
   }
 
+  getUserIdFromEmail(email): any {
+    var arrayOfStrings = email.split('@');
+    return arrayOfStrings[0];
+  }
+
   addCollaborator() {
-  
-    console.log(this.selectedCollabs);
+    const listOfStakeHolders: StakeHolder[] = [];
+    const stakeHolderDto = new StakeHolderDTO();
+
+    this.selectedCollabs.forEach(element => {
+      let stakeHolder = new StakeHolder();
+      stakeHolder.businessEntity = element.businessEntity;
+      stakeHolder.functionalRole = element.functionalRole;
+      stakeHolder.offerRole = element.offerRole;
+      stakeHolder._id = this.getUserIdFromEmail(element.email);
+      listOfStakeHolders.push(stakeHolder);
+    });
+
+    stakeHolderDto.offerId = this.currentOfferId;
+    stakeHolderDto.stakeholders = listOfStakeHolders;
+    console.log(stakeHolderDto);
     let that = this;
-    this.searchCollaboratorService.addCollaborators(this.selectedCollabs).subscribe(data => {
+    this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
       // update stakeData from data
       that.updateStakeData(data);
     });
-    
   }
 
   show_deliveryDesc() {
@@ -248,7 +284,7 @@ export class RightPanelComponent implements OnInit {
   arrToOptions(arr) {
     let res = [];
     arr.forEach(a => {
-      res.push({'label': a, 'value': a});
+      res.push({ 'label': a, 'value': a });
     })
     return res;
   }
