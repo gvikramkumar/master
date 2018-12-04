@@ -33,9 +33,9 @@
             <div class="responsive-table">
               <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
                 <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+                <input #gbforactions type="text" pInputText size="50" placeholder="Global Filter">
               </div>
-              <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="gb" #dt>
+              <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="gbforactions" #dt>
                 <p-column field="offerId" sortable= "true" header="OFFER ID">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                    <span *ngIf="actionData.alertType == 1"> <span class="icon-clock icon-small" style="margin:0px 5px 0 0">
@@ -102,9 +102,9 @@
             <div class="responsive-table">
               <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
                 <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+                <input #gbforoffer type="text" pInputText size="50" placeholder="Global Filter">
               </div>
-              <p-dataTable [value]="myOffersList" [rows]="10" [paginator]="true" [globalFilter]="gb" [responsive]="true"
+              <p-dataTable [value]="myOffersList" [rows]="10" [paginator]="true" [globalFilter]="gbforoffer" [responsive]="true"
                 #dt>
                 <p-headerColumnGroup>
                   <p-row>
