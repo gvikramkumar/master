@@ -17,16 +17,23 @@ export class HeaderComponent implements OnInit {
   userFirstName;
   userLastName;
   functionalRole;
+   userId;
 
   ngOnInit() {
   }
 
   constructor(private headerService: HeaderService, private router: Router, private createOfferService: CreateOfferService, private userService : UserService) {
     // this.selectedIndex = 2;
+    
+    this.headerService.getCurrentUser().subscribe((data:any) => {
+      this.userId = data.firstName;
+      });
+      
     this.headerService.getUserInfo().subscribe((data:any) => {
       this.userFirstName = data.firstName;
       this.userLastName = data.lastName;
-    });
+    });   
+     
 	
 	this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       this.functionalRole = data.functionalAppRoleList[0].fnalRole;

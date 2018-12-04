@@ -6,7 +6,8 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class ConfigurationService {
-    url = environment.REST_API_URL + "userInfo";
+    //url = environment.REST_API_URL + "userInfo";
+    urlCurrentUser = environment.REST_API_URL_GET_CURRENT_USER;
     
     constructor(private httpClient: HttpClient, private userService: UserService) {
     }
@@ -14,12 +15,12 @@ export class ConfigurationService {
     init(): Promise<any> {
         // debugger;
         return new Promise((resolve,reject) => {
-            this.httpClient.get(this.url).toPromise().then((res:any) => {
+            this.httpClient.get(this.urlCurrentUser).toPromise().then((res:any) => {
                console.log(res);
                this.userService.setUserId(res.userId);
-               this.userService.setFirstName(res.firstName);
-               this.userService.setLastName(res.lastName);
-               console.log(this.userService.getUserId());
+               //this.userService.setFirstName(res.firstName);
+               //this.userService.setLastName(res.lastName);
+               //console.log(this.userService.getUserId());
                resolve(true);
             }).catch(this.handleError());
             
