@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   userInfo;
   userFirstName;
   userLastName;
+  functionalRole;
 
   ngOnInit() {
   }
@@ -26,6 +27,11 @@ export class HeaderComponent implements OnInit {
       this.userFirstName = data.firstName;
       this.userLastName = data.lastName;
     });
+	
+	this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+      this.functionalRole = data.functionalAppRoleList[0].fnalRole;
+    });
+
   }
 
   getPage(p) {
