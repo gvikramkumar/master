@@ -36,7 +36,7 @@
                 <input #gb type="text" pInputText size="50" placeholder="Global Filter">
               </div>
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="gb" #dt>
-                <p-column field="offerId" header="OFFER ID" [filter]="true" filterPlaceholder="Search">
+                <p-column field="offerId" sortable= "true" header="OFFER ID">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span *ngIf="actionData.alertType == 1"> <span class="icon-alert
                       icon-small"
@@ -47,17 +47,17 @@
                     </span>
                   </ng-template>
                 </p-column>
-                <p-column field="actions" header="ACTIONS AND NOTIFICATIONS" [filter]="true" filterMatchMode="equals">
+                <p-column field="actions" sortable= "true" header="ACTIONS AND NOTIFICATIONS" >
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span class="offerName">{{actionData.actiontTitle}} <br /></span>
                     <span class="offerDesc">{{actionData.actionDesc}}</span>
                   </ng-template>
                 </p-column>
-                <p-column field="offerName" header="OFFER NAME" [filter]="true" filterMatchMode="equals">
+                <p-column field="offerName" sortable= "true" header="OFFER NAME" >
                 </p-column>
-                <p-column field="assigneeId" header="OFFER OWNER" [filter]="true" filterMatchMode="in">
+                <p-column field="assigneeId" sortable= "true" header="OFFER OWNER" >
                 </p-column>
-                <p-column field="status" header="STATUS">
+                <p-column field="status" sortable= "true" header="STATUS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                       <span *ngIf="actionData.alertType == 1">
                           <div style="text-align:center">
@@ -73,12 +73,12 @@
                       </span>
                   </ng-template>
                 </p-column>
-                <p-column field="triggerDate" header="TRIGGER DATE" [filter]="true" filterMatchMode="equals">
+                <p-column field="triggerDate" sortable= "true" header="TRIGGER DATE" >
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.triggerDate}} <br /></span>
                   </ng-template>
                 </p-column>
-                <p-column field="dueDate" header="DUE DATE" [filter]="true" filterMatchMode="equals">
+                <p-column field="dueDate" header="DUE DATE" sortable= "true">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.dueDate}} <br /></span>
                   </ng-template>
@@ -109,17 +109,17 @@
                 #dt>
                 <p-headerColumnGroup>
                   <p-row>
-                    <p-column header="OFFER ID" [filter]="true" filterPlaceholder="Search" rowspan="2" [style]="{'width': '150px'}">
+                    <p-column header="OFFER ID" sortable= "true" rowspan="2" [style]="{'width': '150px'}">
                     </p-column>
-                    <p-column header="OFFER NAME" [filter]="true" filterMatchMode="equals" rowspan="2" [style]="{'width': '300px'}">
+                    <p-column header="OFFER NAME"  sortable= "true" rowspan="2" [style]="{'width': '300px'}">
                     </p-column>
-                    <p-column header="OFFER OWNER" [filter]="true" filterMatchMode="in" rowspan="2" [style]="{'width': '200px'}">
+                    <p-column header="OFFER OWNER" sortable= "true" rowspan="2" [style]="{'width': '200px'}">
                     </p-column>
-                    <p-column header="LAUNCH DATE" [filter]="true" filterMatchMode="equals" [style]="{'width': '200px'}"
+                    <p-column header="LAUNCH DATE"  sortable= "true" [style]="{'width': '200px'}"
                       rowspan="2">
                     </p-column>
                     <p-column header="LIFE CYCLE STATUS" colspan="1"></p-column>
-                    <p-column header="ACTIONS" [filter]="true" filterMatchMode="equals" rowspan="2" [style]="{'width': '200px'}">
+                    <p-column header="ACTIONS"  filterMatchMode="equals" sortable= "true" rowspan="2" [style]="{'width': '200px'}">
                     </p-column>
                   </p-row>
                   <p-row>
