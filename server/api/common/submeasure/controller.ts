@@ -11,6 +11,7 @@ import {svrUtil} from '../../../lib/common/svr-util';
 import LookupRepo from '../../lookup/repo';
 import {sendHtmlMail} from '../../../lib/common/mail';
 import {shUtil} from '../../../../shared/shared-util';
+import ProductClassUploadRepo from '../../prof/product-class-upload/repo';
 
 
 interface FilterLevel {
@@ -28,7 +29,8 @@ export default class SubmeasureController extends ApprovalController {
     protected repo: SubmeasureRepo,
     protected pgRepo: SubmeasurePgRepo,
     protected inputLevelPgRepo: InputLevelPgRepo,
-    private lookupRepo: LookupRepo
+    private lookupRepo: LookupRepo,
+    private productClassUploadRepo: ProductClassUploadRepo
 ) {
     super(repo);
   }
@@ -181,6 +183,21 @@ export default class SubmeasureController extends ApprovalController {
             return sendHtmlMail(ppmtEmail, req.user.email, adminEmail, `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - Submeasure Not Approved`, body);
         }
       });
+  }
+
+  postApproveStep(sm, req) {
+    // remove product class uploads for this submeasure and add new ones
+    if (sm.categoryType === 'MM') {
+      return this.productClassUploadRepo.removeMany({submeasureName: sm.name})
+        .then(() => {
+          return this.productClassUploadRepo.addManyTransaction([
+            {fiscalMonth: req.dfa.module.openPeriod, submeasureName: sm.name, splitCategory: 'HARDWARE', splitPercentage: sm.manualMixHw},
+            {fiscalMonth: req.dfa.module.openPeriod, submeasureName: sm.name, splitCategory: 'SOFTWARE', splitPercentage: sm.manualMixSw}
+          ], req.user.id);
+        });
+    } else {
+      return Promise.resolve();
+    }
   }
 
 }

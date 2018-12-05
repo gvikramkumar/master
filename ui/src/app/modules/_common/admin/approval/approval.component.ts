@@ -31,8 +31,8 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   measureNameMap: Map<number, string> = new Map();
   formControl = new FormControl();
   nameFilter: Subject<string> = new Subject<string>();
-  ruleColumns = ['select', 'name', 'driver', 'period', 'submittedBy', 'submittedDate'];
-  submeasureColumns = ['select', 'name', 'measure', 'rulelist', 'submittedBy', 'submittedDate'];
+  ruleColumns = ['select', 'name', 'driver', 'period', 'updatedBy', 'updatedDate'];
+  submeasureColumns = ['select', 'name', 'measure', 'rulelist', 'updatedBy', 'updatedDate'];
   ruleDataSource: MatTableDataSource<AllocationRule>;
   submeasureDataSource: MatTableDataSource<Submeasure>;
   showRules = true;

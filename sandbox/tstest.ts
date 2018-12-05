@@ -5,22 +5,11 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-const a = undefined;
-const b = null;
-
-// const s = a && Number(a);
-// const t = b && Number(b);
-
-const s = Number(a);
-const t = Number(b);
 
 
-console.log(typeof s, typeof t);
-console.log(s, t);
+const arr = [{id: 4, fimo: 5}];
 
-
-
-
+console.log(_.get(_.find(arr, {id: 4}), 'fimo'));
 
 
 /*

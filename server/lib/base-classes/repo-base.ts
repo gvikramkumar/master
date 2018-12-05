@@ -221,7 +221,7 @@ export default class RepoBase {
     return this.Model.updateMany(filter, setObj).exec();
   }
 
-  update(data, userId, concurrencyCheck = true, validate = true) {
+  update(data, userId, concurrencyCheck = true, validate = true, addUpdatedBy = true) {
     let promise: Promise<any>;
     if (concurrencyCheck) {
       promise = this.getOneWithTimestamp(data);
@@ -233,7 +233,9 @@ export default class RepoBase {
         if (!item) {
           throw new ApiError(`Measure doesn't exist.`);
         }
-        this.addUpdatedBy(data, userId);
+        if (addUpdatedBy) {
+          this.addUpdatedBy(data, userId);
+        }
         if (validate) {
           this.validate(data);
         }

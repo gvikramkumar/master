@@ -24,6 +24,8 @@ import {shUtil} from '../../../../../../../shared/shared-util';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  flashCategories: {name: string, value: number}[] = [];
+  adjCategories: {name: string, value: number}[] = [];
   arrRules: string[] = [];
   UiUtil = UiUtil;
   @ViewChild('form') form: NgForm;
@@ -257,6 +259,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
         if (this.viewMode || this.editMode || this.copyMode) {
           this.sm = results[4];
+        }
+        if (this.editMode || this.copyMode) {
+          // we'll reset these for each edit
+          this.sm.manualMixHw = undefined;
+          this.sm.manualMixSw = undefined;
         }
         if (this.copyMode) {
           this.sm.approvedOnce = 'N';
@@ -573,7 +580,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.verifyLosingChanges()
       .subscribe(resp => {
         if (resp) {
-          this.router.navigateByUrl('/prof/submeasure');
+          history.go(-1);
         }
       });
   }
@@ -632,7 +639,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                 this.submeasureService.reject(this.sm)
                   .subscribe(sm => {
                     this.uiUtil.toast('Submeasure has been rejected, user notified.');
-                    this.router.navigateByUrl('/prof/submeasure');
+                    history.go(-1);
                   });
               }
             });
@@ -649,17 +656,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               if (resultPrompt !== undefined) {
                 this.sm.approveRejectMessage = resultPrompt;
                 this.cleanUp();
-                const errs = this.validate();
-                if (errs) {
-                  this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'));
-                  return;
-                } else {
-                  this.submeasureService.approve(this.sm)
-                    .subscribe(() => {
-                      this.uiUtil.toast('Submeasure approved, user notified.');
-                      this.router.navigateByUrl('/prof/submeasure');
-                    });
-                }
+                this.submeasureService.approve(this.sm)
+                  .subscribe(() => {
+                    this.uiUtil.toast('Submeasure approved, user notified.');
+                    history.go(-1);
+                  });
               }
             });
         }
@@ -671,22 +672,21 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
+          const errs = this.validate();
+          if (errs) {
+            this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'), null, DialogType.ok, DialogSize.medium);
+            return;
+          }
           this.uiUtil.confirmSubmitForApproval()
             .subscribe(result => {
               if (result) {
                 this.cleanUp();
-                const errs = this.validate();
-                if (errs) {
-                  this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'), null, DialogType.ok, DialogSize.medium);
-                  return;
-                } else {
-                  const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
-                  this.submeasureService.submitForApproval(this.sm, {saveMode})
-                    .subscribe(() => {
-                      this.uiUtil.toast('Submeasure submitted for approval.');
-                      this.router.navigateByUrl('/prof/submeasure');
-                    });
-                }
+                const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
+                this.submeasureService.submitForApproval(this.sm, {saveMode})
+                  .subscribe(() => {
+                    this.uiUtil.toast('Submeasure submitted for approval.');
+                    history.go(-1);
+                  });
               }
             });
         }
@@ -698,9 +698,29 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
       this.errs.push('Duplicate rules entered');
     }
+    // this shouldn't have to be here, but currently we have a bug where form.valid === true even though this control
+    // is highlighted red with required: true error
+    if (!this.sm.startFiscalMonth) {
+      this.errs.push(`No "Effective Month" value`);
+    }
     if (this.noIflMmSelected()) {
       this.errs.push('No value entered for Input Filter Level or Manual Mapping');
     }
+    if (this.sm.categoryType === 'MM') {
+      const hw = Number(this.sm.manualMixHw);
+      const sw = Number(this.sm.manualMixSw);
+      if (isNaN(hw)) {
+        this.errs.push(`Manual Mix HW value, not a number: ${this.sm.manualMixHw}`);
+      }
+      if (isNaN(sw)) {
+        this.errs.push(`Manual Mix SW value, not a number: ${this.sm.manualMixSw}`);
+      }
+      if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
+        this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
+      }
+    }
+
+    this.errs = this.errs.map(err => `* ${err}`)
     return this.errs.length ? this.errs : null;
   }
 

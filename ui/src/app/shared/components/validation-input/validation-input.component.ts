@@ -65,6 +65,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   @Input() email = false;
   @Input() pattern: string | RegExp;
   @Input() compressed = false;
+  @Input() inline = false;
   @Input() stringToArray = false; // you have an array in model and comma sep values in textbox
   @Input() requiredMessage: string;
   @Input() minLengthMessage: string;
