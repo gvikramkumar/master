@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
 
-  REST_API_URL_GET_CURRENT_USER: "http://pdaf-api-stg.cisco.com/pdafapp/system/1.0/get/currentUser",
+  REST_API_URL_GET_CURRENT_USER: "https://pdaf-api-stg.cisco.com/pdafapp/system/1.0/get/currentUser",
   
   //REST_API_NEW_CALL:"https://cool-srv-dev.cisco.com/coolsrvdev/userInfo",
   
