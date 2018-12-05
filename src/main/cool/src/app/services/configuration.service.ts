@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class ConfigurationService {
-    //url = environment.REST_API_URL + "userInfo";
-    urlCurrentUser = environment.REST_API_URL_GET_CURRENT_USER;
+    url = environment.REST_API_URL + "userInfo";
+    // urlCurrentUser = environment.REST_API_URL_GET_CURRENT_USER;
     
     constructor(private httpClient: HttpClient, private userService: UserService) {
     }
@@ -15,11 +15,12 @@ export class ConfigurationService {
     init(): Promise<any> {
         // debugger;
         return new Promise((resolve,reject) => {
-            this.httpClient.get(this.urlCurrentUser).toPromise().then((res:any) => {
+        	const headers = new HttpHeaders({'Access-Control-Allow-Origin':'*'});
+            this.httpClient.get(this.url,{headers: headers, withCredentials:true}).toPromise().then((res:any) => {
                console.log(res);
-               this.userService.setUserId(res.userId);
-               //this.userService.setFirstName(res.firstName);
-               //this.userService.setLastName(res.lastName);
+               //this.userService.setUserId(res.userId);
+               this.userService.setFirstName(res.firstName);
+               this.userService.setLastName(res.lastName);
                //console.log(this.userService.getUserId());
                resolve(true);
             }).catch(this.handleError());

@@ -26,15 +26,14 @@ export class HeaderComponent implements OnInit {
     // this.selectedIndex = 2;
     
     this.headerService.getCurrentUser().subscribe((data:any) => {
-      this.userId = data.firstName;
-      });
+     this.userId = data;
+     });
       
     this.headerService.getUserInfo().subscribe((data:any) => {
       this.userFirstName = data.firstName;
       this.userLastName = data.lastName;
     });   
      
-	
 	this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       this.functionalRole = data.functionalAppRoleList[0].fnalRole;
     });
