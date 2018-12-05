@@ -17,12 +17,12 @@ export const environment = {
   
   REST_API_OFFER_CREATE_URL: 'https://cool-srv-dev.cisco.com/coolsrv/offer/create/',
   
-  REST_API_PRIMARY_BUSINESS_ENTITY_URL: 'https://pdaf-api.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?business_unit=',
+  REST_API_PRIMARY_BUSINESS_ENTITY_URL: 'https://pdaf-api-stg.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?business_unit=',
   
-  REST_API_SECONDARY_BUSINESS_UNIT_URL: 'https://pdaf-api.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true',
+  REST_API_SECONDARY_BUSINESS_UNIT_URL: 'https://pdaf-api-stg.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true',
 
 
-  REST_API_SECONDARY_BUSINESS_ENTITY_URL: 'https://pdaf-api.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?business_unit=',
+  REST_API_SECONDARY_BUSINESS_ENTITY_URL: 'https://pdaf-api-stg.cisco.com/pdafapp/mdm/1.0/hierarchy/getBUhierarchy?business_unit=',
  
  
  REST_API_MMEDIT_SEARCH_URL:'https://cool-srv-dev.cisco.com/coolsrv/collabrators/searchCollabrators',
