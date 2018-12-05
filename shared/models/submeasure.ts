@@ -18,6 +18,9 @@ export class Submeasure {
   indicators = new Indicators();
   rules: string[] = [];
   groupingSubmeasureId: number;
+  sourceSystemAdjTypeId: number;
+  manualMixHw: number;
+  manualMixSw: number;
   activeStatus = 'I';
   status = 'D';
   approvedOnce = 'N';

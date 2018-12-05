@@ -170,12 +170,11 @@ export default class ControllerBase {
       .catch(next);
   }
 
-  updateOneNoValidatePromise(req, res, next) {
-    const data = req.body;
-    return this.repo.update(data, req.user.id, true, false)
+  updateOneNoValidatePromise(data, userId, addUpdatedBy = true) {
+    return this.repo.update(data, userId, true, false, addUpdatedBy)
       .then(item => {
         if (this.pgRepo && this.isMirrorRepo) {
-          return this.pgRepo.addOne(_.clone(item), req.user.id)
+          return this.pgRepo.addOne(_.clone(item), userId)
             .then(() => item);
         } else {
           return item;
@@ -184,7 +183,7 @@ export default class ControllerBase {
   }
 
   updateOneNoValidate(req, res, next) {
-    this.updateOneNoValidatePromise(req, res, next)
+    this.updateOneNoValidatePromise(req.body, req.user.id)
       .then(item => res.json(item))
       .catch(next);
   }

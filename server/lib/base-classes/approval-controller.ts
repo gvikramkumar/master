@@ -30,8 +30,6 @@ export default class ApprovalController extends ControllerBase {
     this.verifyProperties(req.query, ['saveMode']);
     const saveMode = req.query.saveMode;
     data.status = 'P';
-    data.submittedBy = req.user.id;
-    data.submittedDate = new Date();
     let promise;
     if (saveMode === 'add') {
       promise = this.addOnePromise(req, res, next);
@@ -67,7 +65,11 @@ export default class ApprovalController extends ControllerBase {
       data.approvedDate = new Date();
     }
     promise.then(() => {
-      this.repo.update(data, req.user.id)
+      this.repo.update(data, req.user.id, true, true, false)
+        .then(item => {
+          return this.postApproveStep(item, req)
+            .then(() => item);
+        })
         .then(item => {
           return this.sendApprovalEmail(req, ApprovalMode.approve, item)
             .then(() => res.json(item));
@@ -78,7 +80,7 @@ export default class ApprovalController extends ControllerBase {
 
   reject(req, res, next) {
     req.body.status = 'D';
-    this.updateOneNoValidatePromise(req, res, next)
+    this.updateOneNoValidatePromise(req.body, req.user.id, false)
       .then(item => {
         return this.sendApprovalEmail(req, ApprovalMode.reject, item)
           .then(() => res.json(item));
@@ -133,6 +135,10 @@ export default class ApprovalController extends ControllerBase {
         res.json(ailist.concat(draftPending));
       })
       .catch(next);
+  }
+
+  postApproveStep(item, req) {
+    return Promise.resolve();
   }
 
 }

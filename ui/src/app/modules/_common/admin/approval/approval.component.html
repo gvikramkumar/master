@@ -63,14 +63,14 @@
           <mat-cell *matCellDef="let row">{{row.period}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="submittedBy">
+        <ng-container matColumnDef="updatedBy">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Submitted By</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.submittedBy}}</mat-cell>
+          <mat-cell *matCellDef="let row">{{row.updatedBy}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="submittedDate">
+        <ng-container matColumnDef="updatedDate">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Submitted</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{moment(row.submittedDate).format('MM/DD/YYYY hh:mm A')}}</mat-cell>
+          <mat-cell *matCellDef="let row">{{moment(row.updatedDate).format('MM/DD/YYYY hh:mm A')}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="ruleColumns"></mat-header-row>
@@ -138,14 +138,14 @@
             <div class="text-ellipsis" matTooltip="{{getRuleListString(row.rules)}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{row.rules}}</div></mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="submittedBy">
+        <ng-container matColumnDef="updatedBy">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Submitted By</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.submittedBy}}</mat-cell>
+          <mat-cell *matCellDef="let row">{{row.updatedBy}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="submittedDate">
+        <ng-container matColumnDef="updatedDate">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Submitted</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{moment(row.submittedDate).format('MM/DD/YYYY hh:mm A')}}</mat-cell>
+          <mat-cell *matCellDef="let row">{{moment(row.updatedDate).format('MM/DD/YYYY hh:mm A')}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="submeasureColumns"></mat-header-row>

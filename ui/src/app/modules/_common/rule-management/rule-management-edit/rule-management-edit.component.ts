@@ -194,7 +194,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     this.verifyLosingChanges()
       .subscribe(resp => {
         if (resp) {
-          this.router.navigateByUrl('/prof/rule-management');
+          history.go(-1);
         }
       });
   }
@@ -279,7 +279,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 this.ruleService.reject(this.rule)
                   .subscribe(rule => {
                     this.uiUtil.toast('Rule has been rejected, user notified.');
-                    this.router.navigateByUrl('/prof/rule-management');
+                    history.go(-1);
                   });
               }
             });
@@ -299,7 +299,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 this.ruleService.approve(this.rule)
                   .subscribe(() => {
                     this.uiUtil.toast('Rule approved, user notified.');
-                    this.router.navigateByUrl('/prof/rule-management');
+                    history.go(-1);
                   });
               }
             });
@@ -320,7 +320,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 this.ruleService.submitForApproval(this.rule, {saveMode})
                   .subscribe(() => {
                     this.uiUtil.toast('Rule submitted for approval.');
-                    this.router.navigateByUrl('/prof/rule-management');
+                    history.go(-1);
                   });
               }
             });

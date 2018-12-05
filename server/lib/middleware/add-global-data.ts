@@ -6,6 +6,7 @@ import {DfaModule} from '../../../ui/src/app/modules/_common/models/module';
 import DfaUser from '../../../shared/models/dfa-user';
 import {ApiError} from '../common/api-error';
 import {IncomingMessage} from 'http';
+import OpenPeriodRepo from '../../api/common/open-period/repo';
 
 export class ApiDfaData {
   _module?: DfaModule;
@@ -36,17 +37,21 @@ export class ApiDfaData {
 
 const lookupRepo = new LookupRepo();
 const moduleRepo = new ModuleRepo();
+const openPeriodRepo = new OpenPeriodRepo();
 
 export function addGlobalData() {
 
   return function (req, res, next) {
     Promise.all([
       lookupRepo.getValues(['itadmin-email', 'ppmt-email']),
-      moduleRepo.getManyActive()
+      moduleRepo.getNonAdminSortedByDisplayOrder(),
+      openPeriodRepo.getMany()
     ])
       .then(results => {
         const lookups = results[0];
         const modules = results[1];
+        const openPeriods = results[2];
+        modules.forEach(mod => mod.openPeriod = _.get(_.find(openPeriods, {moduleId: mod.moduleId}), 'fiscalMonth'));
         const dfa = new ApiDfaData({
           req: req,
           user: req.user,
@@ -54,7 +59,7 @@ export function addGlobalData() {
           ppmtEmail: lookups[1],
           modules
         });
-        if (req.query.moduleId) {
+        if (req.query.moduleId || req.body.moduleId) {
           dfa.module = _.find(modules, {moduleId: Number(req.query.moduleId)});
         }
         req.dfa = dfa;
