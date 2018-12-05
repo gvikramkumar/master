@@ -3,6 +3,7 @@
   <div class="approval-buttons" *ngIf="viewMode && UiUtil.statusIsPending(sm.status)" finAuth="bizadmin">
     <button type="button" cuiButton color="primary" (click)="approve()">Approve</button>
     <button type="button" cuiButton color="primary" (click)="reject()">Reject</button>
+    <button type="button" cuiButton color="secondary" (click)="cancel()">Cancel</button>
   </div>
 
   <form #form="ngForm" [class.disabled]="viewMode">

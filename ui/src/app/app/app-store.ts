@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {StoreBase} from '../core/base-classes/store-base';
-import {MediaObserver} from '@angular/flex-layout';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
 import {first} from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -52,17 +51,19 @@ export class AppStore extends StoreBase {
   });
 
 
-  constructor(private mediaObserver: MediaObserver) {
+  constructor() {
     super();
     this.init();
   }
 
   init() {
+/*
     this.mediaObserver.media$
       .pipe(first())
       .subscribe(change => {
         this.initialBreakpoint = change.mqAlias;
       });
+*/
     this.subUser(user => {
       this.headerOptions.username = user.fullName;
       // this.headerOptions = Object.assign({}, this.headerOptions);

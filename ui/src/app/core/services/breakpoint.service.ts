@@ -1,4 +1,3 @@
-import {MediaObserver} from '@angular/flex-layout';
 import {BehaviorSubject} from 'rxjs';
 import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
@@ -26,9 +25,10 @@ export class BreakpointService {
   initialBreakpoint;
   initialized = false;
 
-  constructor(private mediaObserver: MediaObserver) {
+  constructor() {
     // MediaObserver calls us 10 times initially, which breaks out handleBreakpoints as it only expects to be
     // called once initially. We have to do some gymnastics to get it down to one...
+/*
     mediaObserver.media$
       .subscribe(change => {
         // console.log('breakpoint', change.mqAlias);
@@ -45,10 +45,11 @@ export class BreakpointService {
         }
         this.handleBreakpoints(change.mqAlias);
       });
+*/
   }
 
   isActive(val) {
-    return this.mediaObserver.isActive(val);
+    // return this.mediaObserver.isActive(val);
   }
 
   /**
