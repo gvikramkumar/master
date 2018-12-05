@@ -1,5 +1,5 @@
 import {AppStore} from './app-store';
-import {FlexLayoutModule, MediaObserver} from '@angular/flex-layout';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import {TestBed} from '@angular/core/testing';
 import * as _ from 'lodash';
 
