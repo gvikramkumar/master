@@ -70,18 +70,18 @@ export class CreateOfferService {
 
   getSecondaryBusinessUnit() {
     let url = this.secondaryBusinessUnitUrl;
-    return this.httpClient.get(url);
+    return this.httpClient.get(url, {withCredentials:true});
   }
 
   getSecondaryBusinessEntity(bus: string): Observable<any> {
     let url = this.secondaryBusinessEntityUrl + bus;
-    return this.httpClient.get(url);
+    return this.httpClient.get(url, {withCredentials:true});
   }
 
   getPrimaryBusinessEntity(bus: string): Observable<any> {
     // debugger;
     let url = this.secondaryPrimaryBusinessEntityUrl + bus;
-    return this.httpClient.get(url);
+    return this.httpClient.get(url, {withCredentials:true});
   }
 
   getQuestionsBox(): Observable<any> {
