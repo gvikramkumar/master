@@ -17,6 +17,7 @@ const schema = new Schema(
     reportingLevel1Enabled: Boolean,
     reportingLevel2Enabled: Boolean,
     reportingLevel3Enabled: Boolean,
+    reportingLevel3SetToSubmeasureName: Boolean,
     isCogsMeasure: {type: String, default: 'Y'},
     status: {type: String, enum: ['A', 'I'], required: true},
     createdBy: {type: String, required: true},

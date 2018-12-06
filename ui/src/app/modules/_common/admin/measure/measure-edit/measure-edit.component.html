@@ -56,7 +56,9 @@
         <fin-input name="repLvl3" [(ngModel)]="measure.reportingLevel3" label="Reporting Level 3"></fin-input>
       </div>
       <div class="col-6 form-group-check">
-        <fin-checkbox name="repLvl1-enabled" [(model)]="measure.reportingLevel3Enabled" label="Enabled"></fin-checkbox>
+        <fin-checkbox name="repLvl1-enabled" [(model)]="measure.reportingLevel3Enabled" label="Enabled" [inline]="true"></fin-checkbox>
+        <fin-checkbox name="repLvl1-sm-name" [(model)]="measure.reportingLevel3SetToSubmeasureName" label="Set To Submeasure Name" [inline]="true"
+                      (modelChange)="reportingLevel3SetToSubmeasureNameChange()"></fin-checkbox>
       </div>
     </div>
 

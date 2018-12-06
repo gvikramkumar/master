@@ -13,7 +13,7 @@ export class Measure {
   reportingLevel1Enabled?: boolean;
   reportingLevel2Enabled?: boolean;
   reportingLevel3Enabled?: boolean;
-  isCogsMeasure?: string;
+  reportingLevel3SetToSubmeasureName?: boolean;
   status = 'I';
   createdBy?: string;
   createdDate?: string;

@@ -153,4 +153,10 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     }
   }
 
+  reportingLevel3SetToSubmeasureNameChange() {
+    if (this.measure.reportingLevel3SetToSubmeasureName) {
+      this.measure.reportingLevel3 = undefined;
+    }
+  }
+
 }
