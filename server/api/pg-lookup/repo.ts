@@ -109,7 +109,7 @@ export default class PgLookupRepo {
           `);
   }
 
-  getAlternateSL2Report() {
+  getAlternateSL2Report(fiscalMonth) {
     return pgc.pgdb.query(`
             select 
             actual_sl2_code, 
@@ -121,11 +121,11 @@ export default class PgLookupRepo {
             update_owner,
             update_datetimestamp
             from fpadfa.dfa_prof_scms_triang_altsl2_map_upld
-            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+            where fiscal_month_id = ${fiscalMonth}
           `);
   }
 
-  getCorpAdjustmentReport() {
+  getCorpAdjustmentReport(fiscalMonth) {
     return pgc.pgdb.query(`
             select 
             sales_country_name, 
@@ -137,11 +137,11 @@ export default class PgLookupRepo {
             update_owner,
             update_datetimestamp
             from fpadfa.dfa_prof_scms_triang_corpadj_map_upld
-            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+            where fiscal_month_id = ${fiscalMonth}
           `);
   }
 
-  getSalesSplitPercentageReport() {
+  getSalesSplitPercentageReport(fiscalMonth) {
     return pgc.pgdb.query(`
             select 
             account_code, 
@@ -155,7 +155,7 @@ export default class PgLookupRepo {
             update_owner,
             update_datetimestamp
             from fpadfa.dfa_prof_sales_split_pctmap_upld
-            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+            where fiscal_month_id = ${fiscalMonth}
           `);
   }
 
