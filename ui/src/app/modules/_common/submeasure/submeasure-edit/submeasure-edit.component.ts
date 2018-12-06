@@ -356,16 +356,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       throw new Error(`Measure not found for measureId: ${this.sm.measureId}`);
     }
     this.measureSources = this.sources.filter(source => _.includes(this.currentMeasure.sources, source.sourceId));
-    this.disableReportingLevels[0] = !this.currentMeasure.reportingLevel1Enabled;
-    this.disableReportingLevels[1] = !this.currentMeasure.reportingLevel2Enabled;
-    this.disableReportingLevels[2] = !this.currentMeasure.reportingLevel3Enabled;
 
-    this.sm.reportingLevels[0] = this.currentMeasure.reportingLevel1 ? this.currentMeasure.reportingLevel1 : this.sm.reportingLevels[0];
-    this.sm.reportingLevels[1] = this.currentMeasure.reportingLevel2 ? this.currentMeasure.reportingLevel2 : this.sm.reportingLevels[1];
+    this.sm.reportingLevels[0] = this.currentMeasure.reportingLevels[0] ? this.currentMeasure.reportingLevels[0] : this.sm.reportingLevels[0];
+    this.sm.reportingLevels[1] = this.currentMeasure.reportingLevels[1] ? this.currentMeasure.reportingLevels[1] : this.sm.reportingLevels[1];
     if (this.currentMeasure.reportingLevel3SetToSubmeasureName) {
       this.sm.reportingLevels[2] = this.sm.name;
     } else {
-      this.sm.reportingLevels[2] = this.currentMeasure.reportingLevel3 ? this.currentMeasure.reportingLevel3 : this.sm.reportingLevels[2];
+      this.sm.reportingLevels[2] = this.currentMeasure.reportingLevels[2] ? this.currentMeasure.reportingLevels[2] : this.sm.reportingLevels[2];
     }
 
   }

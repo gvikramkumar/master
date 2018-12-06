@@ -10,13 +10,13 @@ db.dfa_measure.insertMany([
     sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
     hierarchies: ['PRODUCT', 'SALES'],
     status: "A",
-    reportingLevel1: 'measure val',
-    reportingLevel2: null,
+    reportingLevel1: 'indirect1',
+    reportingLevel2: 'indirect2',
     reportingLevel3: null,
-    reportingLevel1Enabled: true,
-    reportingLevel2Enabled: true,
+    reportingLevel1Enabled: false,
+    reportingLevel2Enabled: false,
     reportingLevel3Enabled: false,
-
+    reportingLevel3SetToSubmeasureName: true
   },
   {
     measureId: NumberInt(2),

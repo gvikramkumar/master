@@ -24,6 +24,7 @@ import AnyObj from '../../../../../../../../shared/models/any-obj';
 export class MeasureEditComponent extends RoutingComponentBase implements OnInit {
   editMode = false;
   measure = new Measure();
+  measures: Measure[];
   orgMeasure = _.cloneDeep(this.measure);
   sources: Source[] = [];
   measureNames: string[] = [];
@@ -59,7 +60,8 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
       .then(data => {
         this.sources = data[0];
         this.moduleSourceIds = data[1].sources;
-        this.measureNames = data[2].map(measure => measure.name);
+        this.measures = data[2];
+        this.measureNames = this.measures.map(measure => measure.name);
 
         // filter sources by current module
         this.moduleSources = this.sources.filter(source => _.includes(this.moduleSourceIds, source.sourceId));
@@ -70,13 +72,9 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     this.getData()
       .then(() => {
         if (this.editMode) {
-          return this.measureService.getOneById(this.route.snapshot.params.id)
-            .subscribe(measure => {
-              this.measure = measure;
-              this.measureNames = this.measureNames.filter(name => name !== this.measure.name);
-              this.orgMeasure = _.cloneDeep(this.measure);
-            });
-        } else {
+          this.measure = _.find(this.measures, {id: this.route.snapshot.params.id});
+          this.measureNames = this.measureNames.filter(name => name !== this.measure.name);
+          this.orgMeasure = _.cloneDeep(this.measure);
         }
       });
   }
@@ -155,7 +153,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
 
   reportingLevel3SetToSubmeasureNameChange() {
     if (this.measure.reportingLevel3SetToSubmeasureName) {
-      this.measure.reportingLevel3 = undefined;
+      this.measure.reportingLevels[2] = undefined;
     }
   }
 

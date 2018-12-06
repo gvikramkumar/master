@@ -205,9 +205,9 @@
                     optionsKey="name" optionsValue="value"></cui-select>
       </div>
       <div class="col-lg-6">
-        <fin-input name="reportingLevel{{idx}}" type="text" *ngFor="let level of [1,2,3]; let idx=index;"
+        <fin-input name="reportingLevel{{level}}" type="text" *ngFor="let level of [1,2,3]; let idx=index;"
                    [(ngModel)]="sm.reportingLevels[idx]"
-                   [disabled]="disableReportingLevels[idx]" label="Reporting Level {{level}}"></fin-input>
+                   [disabled]="!currentMeasure.reportingLevelEnableds[idx]" label="Reporting Level {{level}}"></fin-input>
       </div>
     </div>
 

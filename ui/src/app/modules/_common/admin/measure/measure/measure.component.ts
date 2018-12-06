@@ -45,7 +45,7 @@ export class MeasureComponent extends RoutingComponentBase implements OnInit {
       this.nameFilter.next(name);
     });
 
-    this.measureService.getManyLatest('name')
+    this.measureService.getMany()
       .subscribe(measures => {
         this.measures = _.orderBy(measures, ['updatedDate'], ['desc']);
         this.measuresCount = measures.length;
