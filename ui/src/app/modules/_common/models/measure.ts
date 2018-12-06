@@ -7,13 +7,9 @@ export class Measure {
   typeCode: string;
   sources: number[] = [];
   hierarchies: string[] = [];
-  reportingLevel1?: string;
-  reportingLevel2?: string;
-  reportingLevel3?: string;
-  reportingLevel1Enabled?: boolean;
-  reportingLevel2Enabled?: boolean;
-  reportingLevel3Enabled?: boolean;
-  isCogsMeasure?: string;
+  reportingLevels: string[] = [];
+  reportingLevelEnableds: boolean[] = [];
+  reportingLevel3SetToSubmeasureName?: boolean;
   status = 'I';
   createdBy?: string;
   createdDate?: string;

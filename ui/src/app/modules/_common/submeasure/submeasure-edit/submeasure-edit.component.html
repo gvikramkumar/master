@@ -13,7 +13,7 @@
         <cui-select name="measure" [(ngModel)]="sm.measureId" [items]="measures" label="Measure" empty="true" [required]="true"
                     optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
         <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name"
-                   [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true"></fin-input>
+                   [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true" (blur)="updateReportingLevel3()"></fin-input>
         <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source" empty="true" [disabled]="!sm.measureId"
                     optionsKey="name" optionsValue="sourceId" [required]="true" (ngModelChange)=sourceChange()></cui-select>
         <fin-input name="desc" [textarea]="true" [(ngModel)]="sm.desc" label="Description" [rows]="2" [required]="true"></fin-input>
@@ -205,9 +205,9 @@
                     optionsKey="name" optionsValue="value"></cui-select>
       </div>
       <div class="col-lg-6">
-        <fin-input name="reportingLevel{{idx}}" type="text" *ngFor="let level of this.sm.reportingLevels; let idx=index;"
+        <fin-input name="reportingLevel{{level}}" type="text" *ngFor="let level of [1,2,3]; let idx=index;"
                    [(ngModel)]="sm.reportingLevels[idx]"
-                   [disabled]="disableReportingLevels[idx]" label="Reporting Level {{idx+1}}"></fin-input>
+                   [disabled]="!currentMeasure.reportingLevelEnableds[idx]" label="Reporting Level {{level}}"></fin-input>
       </div>
     </div>
 

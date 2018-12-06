@@ -33,30 +33,14 @@
       </div>
     </div>
 
-    <div class="row">
+    <div *ngFor="let level of [1,2,3];let idx=index;" class="row">
       <div class="col-6">
-        <fin-input name="repLvl1" [(ngModel)]="measure.reportingLevel1" label="Reporting Level 1"></fin-input>
+        <fin-input name="repLvl{{level}}" [(ngModel)]="measure.reportingLevels[idx]" label="Reporting Level 1"></fin-input>
       </div>
       <div class="col-6 form-group-check">
-        <fin-checkbox name="repLvl1=enabled" [(model)]="measure.reportingLevel1Enabled" label="Enabled"></fin-checkbox>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-6">
-        <fin-input name="repLvl2" [(ngModel)]="measure.reportingLevel2" label="Reporting Level 2"></fin-input>
-      </div>
-      <div class="col-6 form-group-check">
-        <fin-checkbox name="repLvl2-enabled" [(model)]="measure.reportingLevel2Enabled" label="Enabled"></fin-checkbox>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-6">
-        <fin-input name="repLvl3" [(ngModel)]="measure.reportingLevel3" label="Reporting Level 3"></fin-input>
-      </div>
-      <div class="col-6 form-group-check">
-        <fin-checkbox name="repLvl1-enabled" [(model)]="measure.reportingLevel3Enabled" label="Enabled"></fin-checkbox>
+        <fin-checkbox name="repLvl-enabled{{level}}" [(model)]="measure.reportingLevelEnableds[idx]" label="Enabled" [inline]="true"></fin-checkbox>
+        <fin-checkbox *ngIf="idx === 2" name="repLvl1-sm-name" [(model)]="measure.reportingLevel3SetToSubmeasureName" label="Set To Submeasure Name" [inline]="true"
+                      (modelChange)="reportingLevel3SetToSubmeasureNameChange()"></fin-checkbox>
       </div>
     </div>
 

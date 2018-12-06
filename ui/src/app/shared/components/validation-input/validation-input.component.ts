@@ -1,10 +1,10 @@
 import {
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   Input,
   OnChanges,
-  Optional,
+  Optional, Output,
   Renderer2,
   Self,
   ViewChild
@@ -80,6 +80,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   @Input() notInListProperty: string;
   @Input() isNumber: boolean;
   @Input() isNumberMessage: string;
+  @Output() blur = new EventEmitter();
 
   /*
     @Output() change = new EventEmitter();
@@ -163,6 +164,7 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
   onBlur(event) {
     this.handleChange();
     this._onTouched();
+    this.blur.emit();
   }
 
   init() {
