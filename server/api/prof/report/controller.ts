@@ -153,19 +153,19 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['Alternate SL2'];
         excelHeaders = ['Actual SL2', 'Alternate SL2', 'Alternate Country', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
         excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
-        promise = this.postgresRepo.getAlternateSL2Report();
+        promise = this.postgresRepo.getAlternateSL2Report(body.fiscalMonth);
         break;
       case 'corp-adjustment':
         excelSheetname = ['Corp Adjustment'];
         excelHeaders = ['Country Name', 'Sales Territory Code', 'SCMS Value', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
         excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
-        promise = this.postgresRepo.getCorpAdjustmentReport();
+        promise = this.postgresRepo.getCorpAdjustmentReport(body.fiscalMonth);
         break;
       case 'sales-split-percentage':
         excelSheetname = ['Sales Split Percentage'];
         excelHeaders = ['Account Id', 'Company Code', 'Sub Account Code', 'Sales Territory Code', 'Percentage Value', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
         excelProperties = ['account_code', 'company_code', 'sub_account_code', 'sales_territory_code', 'split_percentage', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
-        promise = this.postgresRepo.getSalesSplitPercentageReport();
+        promise = this.postgresRepo.getSalesSplitPercentageReport(body.fiscalMonth);
         break;
       case 'valid-driver':
         multiSheetReport = true;

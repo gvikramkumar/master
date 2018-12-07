@@ -151,66 +151,21 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   ];
   timings = [
-    {
-      name: 'Daily',
-      value: 1,
-    },
-    {
-      name: 'Weekly',
-      value: 2,
-    },
-    {
-      name: 'Monthly',
-      value: 3,
-    },
-    {
-      name: 'Quarterly',
-      value: 4,
-    },
-    {
-      name: 'WD-5',
-      value: 5,
-    },
-    {
-      name: 'WD-4',
-      value: 6,
-    },
-    {
-      name: 'WD-3',
-      value: 7,
-    },
-    {
-      name: 'WD-2',
-      value: 8,
-    },
-    {
-      name: 'WD-1',
-      value: 9,
-    },
-    {
-      name: 'WD0',
-      value: 10,
-    },
-    {
-      name: 'WD+1',
-      value: 11,
-    },
-    {
-      name: 'WD+2',
-      value: 12,
-    },
-    {
-      name: 'WD+3',
-      value: 13,
-    },
-    {
-      name: 'WD+4',
-      value: 14,
-    },
-    {
-      name: 'WD+5',
-      value: 15,
-    }
+    {name: 'Daily'},
+    {name: 'Weekly'},
+    {name: 'Monthly'},
+    {name: 'Quarter'},
+    {name: 'WD-5'},
+    {name: 'WD-4'},
+    {name: 'WD-3'},
+    {name: 'WD-2'},
+    {name: 'WD-1'},
+    {name: 'WD0'},
+    {name: 'WD+1'},
+    {name: 'WD+2'},
+    {name: 'WD+3'},
+    {name: 'WD+4'},
+    {name: 'WD+5'},
   ];
   groupings = [
     {
@@ -709,9 +664,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.sm.startFiscalMonth) {
       this.errs.push(`No "Effective Month" value`);
     }
-    if (this.noIflMmSelected()) {
-      this.errs.push('No value entered for Input Filter Level or Manual Mapping');
-    }
     if (this.sm.categoryType === 'MM') {
       const hw = Number(this.sm.manualMixHw);
       const sw = Number(this.sm.manualMixSw);
@@ -728,23 +680,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
     this.errs = this.errs.map(err => `* ${err}`)
     return this.errs.length ? this.errs : null;
-  }
-
-  noIflMmSelected(): boolean {
-    if (this.ifl_switch_ibe ||
-      this.ifl_switch_p ||
-      this.ifl_switch_le ||
-      this.ifl_switch_s ||
-      this.ifl_switch_scms ||
-      this.mm_switch_ibe ||
-      this.mm_switch_p ||
-      this.mm_switch_le ||
-      this.mm_switch_s ||
-      this.mm_switch_scms) {
-      return false;
-    } else {
-      return true;
-    }
   }
 
   ngOnDestroy() {

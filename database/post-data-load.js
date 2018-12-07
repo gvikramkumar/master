@@ -69,8 +69,8 @@ db.dfa_measure.insertMany([
   {
     measureId: NumberInt(5),
     moduleId: NumberInt(1),
-    name: "Warranty",
-    typeCode: "WAREX",
+    name: "Manufacturing V&O",
+    typeCode: "MOCOGS",
     sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
     hierarchies: ['PRODUCT', 'SALES'],
     status: "A",
@@ -85,8 +85,8 @@ db.dfa_measure.insertMany([
   {
     measureId: NumberInt(6),
     moduleId: NumberInt(1),
-    name: "Manufacturing V&O",
-    typeCode: "MOCOGS",
+    name: "Warranty",
+    typeCode: "WAREX",
     sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
     hierarchies: ['PRODUCT', 'SALES'],
     status: "A",
@@ -97,7 +97,7 @@ db.dfa_measure.insertMany([
     reportingLevel2Enabled: true,
     reportingLevel3Enabled: true,
 
-  }
+  },
 ])
 
 db.dfa_open_period.insertMany([

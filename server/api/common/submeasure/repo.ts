@@ -75,12 +75,5 @@ export default class SubmeasureRepo extends RepoBase {
     super(schema, 'Submeasure');
   }
 
-  getGroupingSubmeasures(measureId): Promise<GroupingSubmeasure[]> {
-    return this.Model.find({measureId, 'indicators.groupFlag': 'Y'}, {_id: 0, submeasureId: 1, name: 1})
-      .then(docs => docs.map(doc => {
-        return {submeasureName: doc.name, submeasureId: doc.submeasureId};
-      }));
-  }
-
 }
 

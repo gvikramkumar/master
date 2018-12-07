@@ -52,7 +52,7 @@ db.dfa_submeasure.insertMany([
     measureId: NumberInt(2), // for manual upload
     startFiscalMonth: NumberInt(201810),
     endFiscalMonth: NumberInt(204012),
-    processingTime: "Monthly",
+    processingTime: "Daily",
     pnlnodeGrouping: "Indirect Adjustments",
     categoryType: "SW",
     inputFilterLevel: {
