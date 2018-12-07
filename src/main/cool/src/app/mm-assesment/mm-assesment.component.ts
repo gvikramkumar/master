@@ -33,6 +33,8 @@ export class MmAssesmentComponent implements OnInit {
   stakeData = {};
   offerBuilderdata = {};
   canClickNextStep: boolean = false;
+  currentMMModel:any;
+  currentPrimaryBE:any;
   constructor(private router: Router,
     private sharedService: SharedServiceService,
     private createOfferService: CreateOfferService,
@@ -117,7 +119,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   changeSubGroupType() {
-    debugger;
+    // debugger;
     let selectedAttrs = this.getSubgroupAttributes('Offer Components');
     this.clearSubGroupType();
     if (selectedAttrs.length == 1 && selectedAttrs.indexOf("SW - SaaS") != -1) {
@@ -258,7 +260,6 @@ export class MmAssesmentComponent implements OnInit {
 
 
   toNextStep() {
-
     // let processedgroups = {};
     var index = 0;
     this.groupKeys.forEach((key) => {
@@ -292,16 +293,39 @@ export class MmAssesmentComponent implements OnInit {
         this.message = { contentHead: data['mmMapperStatus'], content: "  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.", color: 'red' };
       }
 
+      this.currentMMModel = data['mmModel'];
+      this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
       this.MonetizationModelService.showStakeholders(data['mmModel'], this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
         this.stakeData = {};
         // console.log(res);
-        let keyUsers = res[0]['coolRoleKeyUser'];
+        let keyUsers = [];
+        if (res != null && res[0] != null) {
+          keyUsers = res[0]['coolRoleKeyUser'];
+        }
         keyUsers.forEach(user => {
           if (this.stakeData[user['offerRole']] == null) {
             this.stakeData[user['offerRole']] = [];
           }
           this.stakeData[user['offerRole']].push({name: user['keyUser'], email: user['email']});
         })
+      })
+    })
+  }
+
+  updateStakeData(data) {
+    // debugger;
+    this.MonetizationModelService.showStakeholders(this.currentMMModel, this.currentPrimaryBE).subscribe(res => {
+      this.stakeData = {};
+      // console.log(res);
+      let keyUsers = [];
+      if (res != null && res[0] != null) {
+        keyUsers = res[0]['coolRoleKeyUser'];
+      }
+      keyUsers.forEach(user => {
+        if (this.stakeData[user['offerRole']] == null) {
+          this.stakeData[user['offerRole']] = [];
+        }
+        this.stakeData[user['offerRole']].push({name: user['keyUser'], email: user['email']});
       })
     })
   }
