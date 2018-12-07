@@ -357,7 +357,7 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
-  getSortedListFromColumn(table, column, whereClause?) {
+  getSortedListFromColumn(table, column, whereClause?, isNumber?) {
     let query = `select distinct ${column} as col from ${table}`;
     if (whereClause) {
       query += ' where ' + whereClause;
@@ -366,6 +366,7 @@ export default class PgLookupRepo {
 
     return pgc.pgdb.query(query)
       .then(results => results.rows.map(obj => obj.col))
+      .then(vals => isNumber ? vals.map(val => Number(val)) : vals)
       .then(vals => _.sortBy(vals, _.identity));
   }
 

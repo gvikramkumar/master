@@ -21,10 +21,13 @@ export class PgLookupService extends RestBase<any> {
     super('pg-lookup', httpClient, store);
   }
 
-  getSortedListFromColumn(table, column, whereClause?) {
+  getSortedListFromColumn(table, column, whereClause?, isNumber?) {
     const params: AnyObj = {table, column};
     if (whereClause) {
       params.where = whereClause;
+    }
+    if (isNumber) {
+      params.isNumber = true;
     }
     return this.callMethod('getSortedListFromColumn', params);
   }

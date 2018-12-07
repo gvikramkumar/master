@@ -24,12 +24,12 @@
                           optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
 
               <cui-select label="Sub Measure" [items]="submeasures" [(ngModel)]="submeasureName"
-                          optionsKey="name" optionsValue="name" (ngModelChange)="submeasureChange()"></cui-select>
+                          optionsKey="name" optionsValue="name" (ngModelChange)="submeasureChange()" [disabled]="!this.measureId"></cui-select>
           </div>
           <div *ngIf="report.hasSmAndFiscalMonth || report.hasFiscalMonthOnly">
             <cui-select label="Fiscal Month" [items]="fiscalMonths" [(ngModel)]="fiscalMonth"
                         (ngModelChange)="fiscalMonthChange()" optionsKey="name"
-                        optionsValue="fiscalMonth"></cui-select>
+                        optionsValue="fiscalMonth" [disabled]="disableFiscalMonth()"></cui-select>
           </div>
 
 

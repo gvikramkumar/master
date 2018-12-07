@@ -34,7 +34,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   submeasureName: string;
   fiscalMonth: number;
   measures: Measure[] = [];
+  measuresAll: Measure[] = [];
   submeasuresAll: Submeasure[] = [];
+  submeasuresInData: Submeasure[] = [];
   submeasures: Submeasure[] = [];
   fiscalMonths: {fiscalMonth: number}[] = [];
   disableDownload = true;
@@ -120,7 +122,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       this.submeasureService.getManyLatestGroupByNameActive().toPromise()
     ])
     .then(results => {
-      this.measures = _.sortBy(results[0], 'name');
+      this.measuresAll = _.sortBy(results[0], 'name');
       this.submeasuresAll = _.sortBy(results[1], 'name');
     });
     this.reset();
@@ -163,6 +165,25 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         }
       });
     }
+
+    let obsMeasure;
+    switch (this.report.type) {
+      case 'dollar-upload':
+        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', null, true);
+        break;
+      case 'mapping-upload':
+        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', null, true);
+        break;
+      case 'dept-upload':
+        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', null, true);
+        break;
+    }
+    if (obsMeasure) {
+      obsMeasure.subscribe(smKeys => {
+        this.submeasuresInData = this.submeasuresAll.filter(sm => _.includes(smKeys, sm.submeasureKey));
+        this.measures = this.measuresAll.filter(m => _.includes(this.submeasuresInData.map(sm => sm.measureId), m.measureId));
+      });
+    }
   }
 
   measureChange() {
@@ -171,7 +192,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
-    this.submeasures = _.filter(this.submeasuresAll, {measureId: this.measureId});
+    this.submeasures = _.filter(this.submeasuresInData, {measureId: this.measureId});
   }
 
   submeasureChange() {
@@ -206,6 +227,12 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   fiscalMonthChange() {
   }
 
+  disableFiscalMonth() {
+    if (this.report.hasSmAndFiscalMonth) {
+      return !this.submeasureName;
+    }
+  }
+
   getFilename() {
     if (this.report.hasSmAndFiscalMonth) {
       return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${this.fiscalMonth}.xlsx`;
@@ -224,7 +251,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     };
 
     if (this.report.hasSubmeasure || this.report.hasSmAndFiscalMonth) {
-      params.submeasureKey = _.find(this.submeasuresAll, {name: this.submeasureName}).submeasureKey;
+      params.submeasureKey = _.find(this.submeasuresInData, {name: this.submeasureName}).submeasureKey;
     }
 
     if (this.report.hasSmAndFiscalMonth || this.report.hasFiscalMonthOnly) {
