@@ -260,7 +260,7 @@ export default class ReportController extends ControllerBase {
         ]);
         break;
 
-      case 'rule-master':
+      case 'rule-submeasure':
         // multiSheetReport = true; ?? if multisheet report uncomment this line
         excelSheetname = ['History'];
         excelHeaders = ['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',

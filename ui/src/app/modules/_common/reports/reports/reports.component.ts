@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {shUtil} from '../../../../../../../shared/shared-util';
 import {PgLookupService} from '../../services/pg-lookup.service';
+import * as moment from 'moment';
 
 interface ReportSettings {
   submeasureKey: number;
@@ -44,63 +45,63 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   reports: any[] = [
     {
       type: 'dollar-upload', hasSmAndFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
-      filename: 'manual_uploaded_data'
+      filename: 'Manual_Uploaded_Data_Report'
     },
     {
       type: 'mapping-upload', hasSmAndFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
-      filename: 'manual_mapping_data'
+      filename: 'Manual_Mapping_Data_Report'
     },
     {
       type: 'product-hierarchy', text: 'Valid Product Hierarchy', disabled: false,
-      filename: 'product_hierarchy.xlsx'
+      filename: 'Product_Hierarchy_Report'
     },
     {
       type: 'sales-hierarchy', text: 'Valid Sales Hierarchy', disabled: false,
-      filename: 'sales_hierarchy.xlsx'
+      filename: 'Sales_Hierarchy_Report'
     },
     {
-      type: 'dept-upload', hasSubmeasure: true, text: 'Department Mapping', disabled: false,
-      filename: 'department_mapping_data'
+      type: 'dept-upload', hasSubmeasureOnly: true, text: 'Department Mapping', disabled: false,
+      filename: 'Department_Mapping_Data_Report'
     },
     {
       type: 'submeasure-grouping', text: 'Submeasure Grouping', disabled: false,
-      filename: 'Submeasure_Grouping_Report.xlsx'
+      filename: 'Submeasure_Grouping_Report'
     },
     {
       type: '2t-submeasure-list', text: '2T Submeasure List', disabled: false,
-      filename: 'Sub_Measure_List_Report.xlsx'
+      filename: 'Sub_Measure_List_Report'
     },
     {
       type: 'disti-to-direct', text: 'Disti To Direct Mapping', disabled: false,
-      filename: 'Disti_to_Direct_Mapping_Report.xlsx'
+      filename: 'Disti_to_Direct_Mapping_Report'
     },
     {
       type: 'alternate-sl2', hasFiscalMonthOnly: true, text: 'Alternate SL2', disabled: false,
-      filename: 'Alternate_SL2_Report.xlsx'
+      filename: 'Alternate_SL2_Report'
     },
     {
       type: 'corp-adjustment', hasFiscalMonthOnly: true, text: 'Corp Adjustment', disabled: false,
-      filename: 'Corp_Adjustment_Report.xlsx'
+      filename: 'Corp_Adjustment_Report'
     },
     {
       type: 'sales-split-percentage', hasFiscalMonthOnly: true, text: 'Sales Split Percentage', disabled: false,
-      filename: 'Sales_Split_Percentage_Report.xlsx'
+      filename: 'Sales_Split_Percentage_Report'
     },
     {
       type: 'valid-driver', text: 'Valid Driver', disabled: false,
-      filename: 'Valid_Driver_Report.xlsx'
+      filename: 'Valid_Driver_Report'
     },
     {
       type: 'submeasure', text: 'Sub Measure Updates', disabled: false,
-      filename: 'Sub_Measure_Updates_Report.xlsx'
+      filename: 'Submeasure_Update_Report'
     },
     {
       type: 'allocation-rule', text: 'Rule Updates', disabled: false,
-      filename: 'Rule_Updates_Report.xlsx'
+      filename: 'Rule_Update_Report'
     },
     {
-      type: 'rule-master', text: 'Rule Master', disabled: false,
-      filename: 'Rule_Master_Report.xlsx'
+      type: 'rule-submeasure', text: 'Rule-Submeasure History', disabled: false,
+      filename: 'Rule_Submeasure_Report'
     }
   ];
   report = this.reports[0];
@@ -134,7 +135,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
-    if (this.report.hasSubmeasure || this.report.hasSmAndFiscalMonth || this.report.hasFiscalMonthOnly) {
+    if (this.report.hasSubmeasureOnly || this.report.hasSmAndFiscalMonth || this.report.hasFiscalMonthOnly) {
       this.disableDownload = true;
     } else {
       this.disableDownload = false;
@@ -234,14 +235,15 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   getFilename() {
+    const dateStr = new Date().toISOString().substr(0, 10);
     if (this.report.hasSmAndFiscalMonth) {
       return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${this.fiscalMonth}.xlsx`;
-    } else if (this.report.hasSubmeasure) {
-      return this.report.filename + `_${_.snakeCase(this.submeasureName)}.xlsx`;
+    } else if (this.report.hasSubmeasureOnly) {
+      return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${dateStr}.xlsx`;
     } else if (this.report.hasFiscalMonthOnly) {
       return this.report.filename + `_${this.fiscalMonth}.xlsx`;
     } else {
-      return this.report.filename;
+      return this.report.filename + `_${dateStr}.xlsx`;
     }
   }
 
@@ -250,7 +252,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       excelFilename: this.getFilename()
     };
 
-    if (this.report.hasSubmeasure || this.report.hasSmAndFiscalMonth) {
+    if (this.report.hasSubmeasureOnly || this.report.hasSmAndFiscalMonth) {
       params.submeasureKey = _.find(this.submeasuresInData, {name: this.submeasureName}).submeasureKey;
     }
 

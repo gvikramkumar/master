@@ -18,7 +18,7 @@
 
         <br>
         <div>
-          <div *ngIf="report.hasSubmeasure || report.hasSmAndFiscalMonth">
+          <div *ngIf="report.hasSubmeasureOnly || report.hasSmAndFiscalMonth">
 
               <cui-select label="Measure" [items]="measures" [(ngModel)]="measureId"
                           optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
@@ -37,7 +37,7 @@
             <button (click)="downloadReport()" [disabled]="disableDownload"
                     cuiButton color="primary">Download Report
             </button>
-            <button *ngIf="report.hasSubmeasure || report.hasSmAndFiscalMonth" (click)="reset()"
+            <button *ngIf="report.hasSubmeasureOnly || report.hasSmAndFiscalMonth" (click)="reset()"
                     cuiButton color="secondary">Reset
             </button>
           </div>
