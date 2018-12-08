@@ -1,0 +1,17 @@
+---
+kind: "Route"
+apiVersion: "v1"
+metadata:
+  name: "cool-stg"
+  labels:
+     component: "cool-stg"
+spec:
+   host: "cool-stg.cisco.com"
+   to:
+     kind: "Service"
+     name: "cool-stg"
+   port:
+     targetPort: "web"
+   tls:
+     insecureEdgeTerminationPolicy: Allow
+     termination: edge
