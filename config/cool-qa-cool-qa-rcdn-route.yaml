@@ -1,0 +1,17 @@
+---
+kind: "Route"
+apiVersion: "v1"
+metadata:
+  name: "cool-qa"
+  labels:
+     component: "cool-qa"
+spec:
+   host: "cool-qa.cisco.com"
+   to:
+     kind: "Service"
+     name: "cool-qa"
+   port:
+     targetPort: "web"
+   tls:
+     insecureEdgeTerminationPolicy: Allow
+     termination: edge
