@@ -1,14 +1,12 @@
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { CreateOfferService } from '../services/create-offer.service';
-import {FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
-import {CreateOffer} from './create-offer';
-import {SelectItem} from 'primeng/api';
-import {AddEditCollaborator} from './add-edit-collaborator';
-import {SearchCollaboratorService} from '../services/search-collaborator.service';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { CreateOffer } from './create-offer';
+import { SelectItem } from 'primeng/api';
+import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { UserService } from '../services/user.service';
-import { now } from 'moment';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -19,57 +17,32 @@ import { now } from 'moment';
 export class CreateOfferCoolComponent implements OnInit {
   @ViewChild('createOfferForm') offerForm: NgForm;
   offerCreateForm: FormGroup;
-  panels = {
-    'panel1': true,
-    'panel2': true
-  }
   Obj;
-  disableOfferName;
-  questionBox:any[];
-  offerBox:any[];
-  businessUnitList;
-  businessEntityList;
   secondaryBusinessUnitList;
   secondaryBusinessEntityList;
-  primaryBusinessUnitList;
+  primaryBuList: string[] = [];
+  primaryBeList: string[] = [];
   offerId: number;
   offerName: string;
-  expectedStrategyReviewDate: Date;
-  expectedDesignReviewDate: Date;
-  expectedReadinessReviewDate: Date;
   expectedLaunchDate: Date;
-  offerDesc:string;
-  businessUnit:string;
-  businessEntity:string;
-  secondaryBusinessUnit: string;
-  secondaryBusinessEntity:string;
-  selectedQuestionAnswer= {};
-  mmMapperUserChoice:string;
-  mmId:string;
+  offerDesc: string;
+  mmMapperUserChoice: string;
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
-  primaryBusinessUnits: SelectItem[];
-  primaryBusinessEntities: SelectItem[];
   secondaryBusinessUnits: SelectItem[];
   secondaryBusinessEntities: SelectItem[];
   minDate: Date;
-  isOffrBldrbtnDisabled: boolean = true;
+  isOffrBldrbtnDisabled: Boolean = true;
+  primaryBusinessUnit: string;
+  primaryBusinessEntitiy: string;
   constructor(private createOfferService: CreateOfferService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private searchCollaboratorService: SearchCollaboratorService,
     private userService: UserService) {
- 
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      console.log(data);
-      this.primaryBusinessUnitList = <any>data;
-      const primaryBuArry = [];
-
-      this.primaryBusinessUnitList.primaryBU.forEach(element => {
-        primaryBuArry.push({ label: element, value: element });
-      });
-      this.primaryBusinessUnits = primaryBuArry;
-      
+      this.primaryBusinessUnit = data.primaryBU[0];
+      this.getPrimaryBusinessEntity(data.primaryBU[0]);
     });
 
     this.createOfferService.getSecondaryBusinessUnit().subscribe(data => {
@@ -93,8 +66,6 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getSecondaryBusinessEntity(event) {
-    console.log(111);
-    console.log(event);
     this.createOfferService.getSecondaryBusinessEntity(event.toString())
       .subscribe(data => {
         this.secondaryBusinessEntityList = <any>data;
@@ -107,21 +78,10 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getPrimaryBusinessEntity(event) {
-    console.log(111);
-    console.log(event);
     this.createOfferService.getPrimaryBusinessEntity(event.toString())
-    
       .subscribe(data => {
-        console.log(data);
-        const primaryBeArry = [];
-        data.forEach(element => {
-          primaryBeArry.push({ label: element.BE, value:  element.BE});
-        });
-        
-        this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
+        this.primaryBusinessEntitiy = data[0].BE;
       });
-      
-    
   }
 
   mModelAssesment() {
@@ -129,8 +89,7 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dpConfig = Object.assign({}, { containerClass: "theme-blue", showWeekNumbers:false});
-
+    this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.offerCreateForm = new FormGroup({
       offerName: new FormControl('', Validators.required),
       offerDesc: new FormControl('', Validators.required),
@@ -150,19 +109,19 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   createOffer() {
-    // this.offerId = this.createOfferService.coolOffer.offerId;
-    let loggedInUserId;
-    let offerOwner;
-    let offerCreatedBy;
-    let offerCreationDate = new Date().toDateString();
-    console.log(offerCreationDate);
-    let createoffer: CreateOffer = new CreateOffer(
+    const loggedInUserId = '';
+    const offerOwner = '';
+    const offerCreatedBy = '';
+    this.primaryBuList.push(this.offerCreateForm.controls['primaryBUList'].value);
+    this.primaryBeList.push(this.offerCreateForm.controls['primaryBEList'].value);
+    const offerCreationDate = new Date().toDateString();
+    const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
       offerOwner,
       this.offerCreateForm.controls['offerName'].value,
       this.offerCreateForm.controls['offerDesc'].value,
-      this.offerCreateForm.controls['primaryBUList'].value,
-      this.offerCreateForm.controls['primaryBEList'].value,
+      this.primaryBuList,
+      this.primaryBeList,
       this.offerCreateForm.controls['BUSINESS_UNIT'].value,
       this.offerCreateForm.controls['BE'].value,
       this.offerCreateForm.controls['secondaryBUList'].value,
@@ -173,15 +132,12 @@ export class CreateOfferCoolComponent implements OnInit {
       this.offerCreateForm.controls['expectedLaunchDate'].value,
       offerCreatedBy,
       offerCreationDate);
-
-      console.log(createoffer);
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.isOffrBldrbtnDisabled = false;
-      console.log(data);
       this.offerId = data;
     },
       (err) => {
-        console.log(err)
+        console.log(err);
       });
   }
 }

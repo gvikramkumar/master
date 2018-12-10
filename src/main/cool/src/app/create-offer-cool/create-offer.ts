@@ -2,8 +2,8 @@ export class CreateOffer {
   userId: string;
   offerName: string;
   offerDesc: string;
-  primaryBUList: string;
-  primaryBEList: string;
+  primaryBUList: string[];
+  primaryBEList: string[];
   BUSINESS_UNIT: string;
   BE: string;
   secondaryBUList: string;
@@ -20,8 +20,8 @@ export class CreateOffer {
               offerOwner:string,
               offerName: string,
               offerDesc: string,
-              primaryBUList: string,
-              primaryBEList: string,
+              primaryBUList: string[],
+              primaryBEList: string[],
               BUSINESS_UNIT: string,
               BE: string,
               secondaryBUList: string,

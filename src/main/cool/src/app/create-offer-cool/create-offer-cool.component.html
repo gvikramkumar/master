@@ -39,27 +39,30 @@
               <div class="row base-margin-top">
                 <div class="col-md-6">
                   <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
                     <label for="selectedValue">Primary Business Unit</label>
-                    <p-multiSelect
-                      id="selectedValue"
-                      class="form-control"
-                      formControlName="primaryBUList"
-                      [options]="primaryBusinessUnits"
-                      (onChange)="getPrimaryBusinessEntity($event.value)"
-                      [panelStyle]="{minWidth:'25em'}">
-                    </p-multiSelect>
+                    <input
+                       disabled
+                       id="selectedValue"
+                       type="text"
+                       class="form-control"
+                       formControlName="primaryBUList"
+                       [(ngModel)]="primaryBusinessUnit">
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
                     <label for="selectedBeValue">Primary Business Entity</label>
-                    <p-multiSelect
-                      id="selectedBeValue"
+                    <input
+                      disabled
+                      id="selectedValue"
+                      type="text"
                       class="form-control"
                       formControlName="primaryBEList"
-                      [options]="primaryBusinessEntities"
-                      [panelStyle]="{minWidth:'25em'}">
-                    </p-multiSelect>
+                      [(ngModel)]="primaryBusinessEntitiy">
+                    </div>
                   </div>
                 </div>
               </div>
