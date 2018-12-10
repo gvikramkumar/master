@@ -122,7 +122,6 @@ export class CreateOfferService {
     createoffer.userId = this.userService.getUserId();
     createoffer.offerCreatedBy = this.userService.getUserId();
     createoffer.offerOwner = this.userService.getUserId();
-    console.log(createoffer);
     return this.httpClient.post(this.offerCreateUrl, createoffer,{responseType: 'text'});
   }
 
