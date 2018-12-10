@@ -11,6 +11,8 @@ export const environment = {
   //REST_API_NEW_CALL:"https://cool-srv-dev.cisco.com/coolsrvdev/userInfo",
   
   REST_API_URL:'https://pdaf-api-stg.cisco.com/pdafapp/user/1.0/getLdapUserInfo/',
+
+  REST_API_USER_INFO_URL:'https://pdaf-api-dev.cisco.com/pdafapp/user/1.0/getLdapUserInfo',
   
   // REST_API_URL:'http://localhost:8085/cool/',
   REST_API_PRIMARY_URL:'https://cool-srv-dev.cisco.com/coolsrv/primaryBusiness/',

@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CreateOfferCoolComponent } from './create-offer-cool/create-offer-cool.component';
 import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
 import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.component';
+import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'createNewOffer',
     component: CreateNewOfferComponent
+  },
+  {
+    path: 'offerDetailView',
+    component: OfferDetailViewComponent
   }
 ];
 

@@ -8,7 +8,7 @@ export class HeaderService {
   constructor(private httpClient: HttpClient) { }
 
   public getUserInfo(user: String) {
-    var url = environment.REST_API_URL;
+    var url = environment.REST_API_USER_INFO_URL;
     return this.httpClient.post(url, { userId: user }, { withCredentials: true });
   }
   public getCurrentUser() {

@@ -21,7 +21,7 @@ import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
 import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { CreateOfferService } from './services/create-offer.service';
-import { DataTableModule, DropdownModule, MultiSelectModule} from 'primeng/primeng';
+import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule} from 'primeng/primeng';
 import {DialogModule} from 'primeng/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SearchCollaboratorService} from './services/search-collaborator.service';
@@ -29,6 +29,8 @@ import {TableModule} from 'primeng/table';
 import {UserService} from './services/user.service';
 import { ConfigurationService } from './services/configuration.service';
 import {CalendarModule} from 'primeng/calendar';
+import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
+import { OfferDetailViewService } from './services/offer-detail-view.service';
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -43,7 +45,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     CreateOfferCoolComponent,
     MmAssesmentComponent,
     CreateNewOfferComponent,
-    RightPanelComponent
+    RightPanelComponent,
+    OfferDetailViewComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +66,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     DataTableModule,
     DropdownModule,
     TableModule,
-    CalendarModule
+    CalendarModule,
+    AccordionModule
   ],
   providers: 
   [
@@ -72,6 +76,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     SearchCollaboratorService, 
     ConfigurationService,
     MonetizationModelService,
+    OfferDetailViewService,
     UserService,
      {
        provide: APP_INITIALIZER,

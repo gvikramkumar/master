@@ -14,8 +14,7 @@ export class HeaderComponent implements OnInit {
   toggleLogout = false;
 
   userInfo;
-  userFirstName;
-  userLastName;
+  userName;
   functionalRole;
   userId;
 
@@ -28,8 +27,7 @@ export class HeaderComponent implements OnInit {
     this.headerService.getCurrentUser().subscribe((user: any) => {
       this.userId = user;
       this.headerService.getUserInfo(user).subscribe((data: any) => {
-        this.userFirstName = data.firstName;
-        this.userLastName = data.lastName;
+        this.userName = data[0].cn;
       });
     });
 
