@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -12,6 +12,7 @@ import { AddEditCollaborator } from '../create-offer-cool/add-edit-collaborator'
 import { StakeHolder } from '../models/stakeholder';
 import { StakeHolderDTO } from '../models/stakeholderdto';
 import { Collaborators } from '../models/collaborator';
+import { MonetizationModelService } from '../services/monetization-model.service'
 // import { Hash } from 'crypto';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
@@ -25,6 +26,7 @@ export class RightPanelComponent implements OnInit {
   @Input() portfolioFlag: boolean = false;
   @Input() stakeData: Object;
   @Input() offerOwner: String;
+  @Output() updateStakeData = new EventEmitter<string>();
   backdropCustom: boolean = false;
   proceedFlag: boolean;
   subscription: Subscription;
@@ -97,7 +99,9 @@ export class RightPanelComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private createOfferService: CreateOfferService,
-    private searchCollaboratorService: SearchCollaboratorService) {
+    private searchCollaboratorService: SearchCollaboratorService,
+    private MonetizationModelService: MonetizationModelService,
+    ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
     });
@@ -192,15 +196,18 @@ export class RightPanelComponent implements OnInit {
         });
   }
 
-  updateStakeData(res) {
-    this.stakeData = {};
-    // console.log(res);
-    let keyUsers = res[0]['coolRoleKeyUser'];
+  getKeys(obj) {
+    return Object.keys(obj);
+  }
+//哟可能问题
+  addToStakeData(res) {
+    console.log(res);
+    let keyUsers = res['stakeholders'];
     keyUsers.forEach(user => {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
-      this.stakeData[user['offerRole']].push({ name: user['keyUser'], email: user['email'] });
+      this.stakeData[user['offerRole']].push({ name: user['_id'], email: "sample@sample.com" });
     })
   }
 
@@ -210,6 +217,7 @@ export class RightPanelComponent implements OnInit {
   }
 
   addCollaborator() {
+    // debugger
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
 
@@ -219,17 +227,23 @@ export class RightPanelComponent implements OnInit {
       stakeHolder.functionalRole = element.functionalRole;
       stakeHolder.offerRole = element.offerRole;
       stakeHolder._id = this.getUserIdFromEmail(element.email);
+      // stakeHolder.email = element.email; //add email for post
       listOfStakeHolders.push(stakeHolder);
     });
 
     stakeHolderDto.offerId = this.currentOfferId;
     stakeHolderDto.stakeholders = listOfStakeHolders;
     console.log(stakeHolderDto);
-    let that = this;
+    console.log('before service call');
+   
+    let that = this; 
     this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
-      // update stakeData from data
-      that.updateStakeData(data);
+      // update stakeData from data posted response
+      that.addToStakeData(data);
     });
+    // this.updateStakeData.next("");
+    this.display  = false;
+
   }
 
   show_deliveryDesc() {

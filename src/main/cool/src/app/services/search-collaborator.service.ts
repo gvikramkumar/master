@@ -25,6 +25,7 @@ export class SearchCollaboratorService {
 
   addCollaborators(saveCollaborator: any): Observable<any> {
     // debugger;
+    console.log('in service');
     return this.httpClient.post(environment.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL, saveCollaborator);
   }
 }
