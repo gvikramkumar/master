@@ -2,14 +2,14 @@
 kind: "Route"
 apiVersion: "v1"
 metadata:
-  name: "cool-stg"
+  name: "cool"
   labels:
-     component: "cool-stg"
+     component: "cool"
 spec:
    host: "cool-stg.cisco.com"
    to:
      kind: "Service"
-     name: "cool-stg"
+     name: "cool"
    port:
      targetPort: "web"
    tls:
