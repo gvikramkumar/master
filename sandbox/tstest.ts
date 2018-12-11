@@ -6,12 +6,12 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {take, first} from 'rxjs/operators';
 
 
+// console.log(new Date(2019, 5).toISOString());
+// console.log(new Date(2019, 5).toString());
 
-const arr = [{id: 4, fimo: 5}];
-
-console.log(_.get(_.find(arr, {id: 4}), 'fimo'));
-
-
+// console.log(shUtil.getFiscalMonthListFromDate(new Date(), 12));
+console.log(shUtil.getCutoffDateStrFromFiscalMonth(201905
+));
 /*
 class SyncMap {
   // common

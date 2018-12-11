@@ -19,10 +19,10 @@
     "seedtest": "cd database && dir",
     "seedbat": "cd database && seed.bat localhost 27017 fin-dfa",
     "seedsh": "cd database && ./seed.sh localhost 27017 fin-dfa",
-    "seedlocalbat": "cd database && seed-local.bat localhost 27017 fin-dfa",
-    "seedlocalsh": "cd database && ./seed-local.sh localhost 27017 fin-dfa",
-    "seedunitbat": "cd database && seed-unit.bat localhost 27017 fin-dfa-unit",
-    "seedunitsh": "cd database && ./seed-unit.sh localhost 27017 fin-dfa-unit"
+    "seedbatlocal": "cd database && seed-local.bat localhost 27017 fin-dfa",
+    "seedshlocal": "cd database && ./seed-local.sh localhost 27017 fin-dfa",
+    "seedbatunit": "cd database && seed-unit.bat localhost 27017 fin-dfa-unit",
+    "seedshunit": "cd database && ./seed-unit.sh localhost 27017 fin-dfa-unit"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
