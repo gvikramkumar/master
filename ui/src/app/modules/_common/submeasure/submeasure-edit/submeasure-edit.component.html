@@ -10,11 +10,11 @@
     <div class="row">
 
       <div class="col-lg-6">
-        <cui-select name="measure" [(ngModel)]="sm.measureId" [items]="measures" label="Measure" empty="true" [required]="true"
+        <cui-select name="measure" [(ngModel)]="sm.measureId" [items]="measures" label="Measure*" empty="true" [required]="true"
                     optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
         <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name"
                    [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true" (blur)="updateReportingLevel3()"></fin-input>
-        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source" empty="true" [disabled]="!sm.measureId"
+        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source*" empty="true" [disabled]="!sm.measureId"
                     optionsKey="name" optionsValue="sourceId" [required]="true" (ngModelChange)=sourceChange()></cui-select>
         <fin-input name="desc" [textarea]="true" [(ngModel)]="sm.desc" label="Description" [rows]="2" [required]="true"></fin-input>
       </div>
@@ -195,7 +195,7 @@
 
     <div class="row" style="margin-top:30px;">
       <div class="col-lg-6">
-        <cui-select name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos" label="Effective Month" empty="true"
+        <cui-select name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos" label="Effective Month*" empty="true"
                     [required]="true" optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
 
         <cui-select name="processingTime" [(ngModel)]="sm.processingTime" [items]="timings" label="Processing Timing" empty="true"

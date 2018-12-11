@@ -47,7 +47,7 @@ export function addSsoUser() {
           }
           genericUsers.push('jodoe');
           return new DfaUser(
-            'jodoe',
+            'dakahle',
             'John',
             'Doe',
             'dakahle@cisco.com',
