@@ -2,7 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { CreateOfferService } from '../services/create-offer.service';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { CreateOffer } from './create-offer';
 import { SelectItem } from 'primeng/api';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
@@ -15,8 +15,7 @@ import { UserService } from '../services/user.service';
   providers: [UserService]
 })
 export class CreateOfferCoolComponent implements OnInit {
-  @ViewChild('createOfferForm') offerForm: NgForm;
-  offerCreateForm: FormGroup;
+  @ViewChild('offerCreateForm') offerCreateForm: NgForm;
   Obj;
   secondaryBusinessUnitList;
   secondaryBusinessEntityList;
@@ -31,9 +30,16 @@ export class CreateOfferCoolComponent implements OnInit {
   secondaryBusinessUnits: SelectItem[];
   secondaryBusinessEntities: SelectItem[];
   minDate: Date;
-  isOffrBldrbtnDisabled: Boolean = true;
-  primaryBusinessUnit: string;
-  primaryBusinessEntitiy: string;
+  primaryBusinessUnit: any;
+  primaryBusinessEntitiy: any;
+  offerNameValue: string;
+  offerDescValue: string;
+  secondaryBusinessUnitsValue: string;
+  secondaryBusinessEntitiesValue: string;
+  strategyReviewDateValue: string;
+  designReviewDateValue: string;
+  readinessReviewDateValue: string;
+  expectedLaunchDateValue: string;
   constructor(private createOfferService: CreateOfferService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -90,20 +96,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
   ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
-    this.offerCreateForm = new FormGroup({
-      offerName: new FormControl('', Validators.required),
-      offerDesc: new FormControl('', Validators.required),
-      primaryBUList: new FormControl(null, Validators.required),
-      primaryBEList: new FormControl(null, Validators.required),
-      BUSINESS_UNIT: new FormControl(null, Validators.required),
-      BE: new FormControl(null, Validators.required),
-      secondaryBUList: new FormControl(null, Validators.required),
-      secondaryBEList: new FormControl(null, Validators.required),
-      strategyReviewDate: new FormControl('', Validators.required),
-      designReviewDate: new FormControl('', Validators.required),
-      readinessReviewDate: new FormControl('', Validators.required),
-      expectedLaunchDate: new FormControl('', Validators.required)
-    });
+
     this.mmMapperUserChoice = 'DO';
     this.minDate = new Date();
   }
@@ -112,29 +105,27 @@ export class CreateOfferCoolComponent implements OnInit {
     const loggedInUserId = '';
     const offerOwner = '';
     const offerCreatedBy = '';
-    this.primaryBuList.push(this.offerCreateForm.controls['primaryBUList'].value);
-    this.primaryBeList.push(this.offerCreateForm.controls['primaryBEList'].value);
+    this.primaryBuList.push(this.primaryBusinessUnit);
+    this.primaryBeList.push(this.primaryBusinessEntitiy);
     const offerCreationDate = new Date().toDateString();
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
       offerOwner,
-      this.offerCreateForm.controls['offerName'].value,
-      this.offerCreateForm.controls['offerDesc'].value,
+      this.offerNameValue,
+      this.offerDescValue,
       this.primaryBuList,
       this.primaryBeList,
-      this.offerCreateForm.controls['BUSINESS_UNIT'].value,
-      this.offerCreateForm.controls['BE'].value,
-      this.offerCreateForm.controls['secondaryBUList'].value,
-      this.offerCreateForm.controls['secondaryBEList'].value,
-      this.offerCreateForm.controls['strategyReviewDate'].value,
-      this.offerCreateForm.controls['designReviewDate'].value,
-      this.offerCreateForm.controls['readinessReviewDate'].value,
-      this.offerCreateForm.controls['expectedLaunchDate'].value,
+      this.secondaryBusinessUnitsValue,
+      this.secondaryBusinessEntitiesValue,
+      this.strategyReviewDateValue,
+      this.designReviewDateValue,
+      this.readinessReviewDateValue,
+      this.expectedLaunchDateValue,
       offerCreatedBy,
       offerCreationDate);
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
-      this.isOffrBldrbtnDisabled = false;
       this.offerId = data;
+      this.router.navigate(['/mmassesment', this.offerId]);
     },
       (err) => {
         console.log(err);
