@@ -1,7 +1,7 @@
 kind: "Service"
 apiVersion: "v1"
 metadata:
-  name: "cool-stg"
+  name: "cool"
 spec:
   ports:
     -
@@ -9,25 +9,25 @@ spec:
       protocol: "TCP"
       port: 8080
   selector:
-    name: "cool-stg"
+    name: "cool"
   type: "ClusterIP"
   sessionAffinity: "None"
 ---
 kind: "DeploymentConfig"
 apiVersion: "v1"
 metadata:
-  name: "cool-stg"
+  name: "cool"
 spec:
   template:
     metadata:
       labels:
-        name: "cool-stg"
+        name: "cool"
       annotations:
         app_version: 'latest'
     spec:
       containers:
         -
-          name: "cool-stg"
+          name: "cool"
           image: "containers.cisco.com/it_cvc_supply_chain/cooldev-sdaas_cool:__IMAGETAG__"
           ports:
             -
@@ -36,7 +36,7 @@ spec:
           env:
             -
               name: "APP_NAME"
-              value: "cool-stg"
+              value: "cool"
             -
               name: "CISCO_LC"
               value: "dev"
@@ -78,7 +78,7 @@ spec:
       dnsPolicy: "ClusterFirst"
   replicas: 2
   selector:
-    name: "cool-stg"
+    name: "cool"
   triggers:
     -
       type: "ConfigChange"
