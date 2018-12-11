@@ -10,6 +10,7 @@ export const shUtil = {
   getFiscalMonthListFromDate,
   getFiscalMonthListForCurYearAndLast,
   getFiscalMonthLongNameFromNumber,
+  getCutoffDateStrFromFiscalMonth,
   getHtmlForLargeSingleMessage
 };
 
@@ -105,12 +106,27 @@ function isManualUploadSource(sourceId: number) {
   return sourceId === 4;
 }
 
-function stringToArray(str) {
-  return str && str.trim() ? str.split(',').map(x => x.trim()).filter(x => !!x) : [];
+function stringToArray(str, type?) {
+  let arr = str && str.trim() ? str.split(',').map(x => x.trim()).filter(x => !!x) : [];
+  if (type === 'number') {
+    arr = arr.map(x => Number(x));
+  }
+  return arr;
 }
 
 function isAdminModuleId(moduleId) {
   return moduleId === 99;
+}
+
+function getCutoffDateStrFromFiscalMonth(fiscalMonthNum) {
+  const year = fiscalMonthNum.toString().substr(0, 4);
+  const date = new Date(Number(year), 11);
+  const fimos = getFiscalMonthListFromDate(date, 24);
+  const fimo = _.find(fimos, {fiscalMonth: fiscalMonthNum});
+  if (!fimo) {
+    throw new Error(`getCutoffDateStrFromFiscalMonth: fiscalmonth not found for: ${fiscalMonthNum}`);
+  }
+  return fimo.cutoffDateIsoStr;
 }
 
 function getFiscalMonthLongNameFromNumber(fiscalMonthNum) {
@@ -139,6 +155,8 @@ function getFiscalMonthListFromDate(date, numMonths) {
     const curDate = new Date(date.getTime());
     const fisDate = new Date(date.getTime());
     curDate.setMonth(curMonths[i]);
+    const cutoffDate = new Date(curDate.getFullYear(), curDate.getMonth());
+    cutoffDate.setMonth(cutoffDate.getMonth() + 1);
     const curYear = curDate.getFullYear();
     const curMonthNum = curDate.getMonth() + 1;
     const curMonthName = getMonthNameFromNum(curMonthNum);
@@ -154,6 +172,8 @@ function getFiscalMonthListFromDate(date, numMonths) {
       // curMonthName,
       // fisYear,
       // fisMonth,
+      cutoffDate: cutoffDate,
+      cutoffDateIsoStr: cutoffDate.toISOString(),
       fiscalMonthStr: fisYearMoStr,
       fiscalMonth: fisYearMoNum,
       fiscalMonthName: yearMoMoYear

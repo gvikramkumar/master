@@ -32,7 +32,7 @@
           </div>
           <div *ngIf="report.hasMultiFiscalMonthOnly">
             <cui-multiselect label="Fiscal Month" [items]="fiscalMonthMultis" [(ngModel)]="fiscalMonthMultiSels"
-                        optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-multiselect>
+                        (ngModelChange)="fiscalMonthMultiChange()"  optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-multiselect>
           </div>
 
 

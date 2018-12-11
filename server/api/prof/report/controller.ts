@@ -272,45 +272,58 @@ export default class ReportController extends ControllerBase {
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.sourceRepo.getManyActive(),
-          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId),
         ])
           .then(results => {
             this.measures = results[0];
             this.sources = results[1];
-            this.submeasures = results[2];
-            this.rules = _.sortBy(results[3], 'name');
+            const promises = [];
+            const fiscalMonthMultiSels = shUtil.stringToArray(body.fiscalMonthMultiSels, 'number').sort().reverse();
+            fiscalMonthMultiSels.forEach(fimo => {
+              // get upper date for filter
+              // refactor getManyLatestGroupByNameActive to take filter or do new function or just use getmanyLatest
+              promises.push(Promise.all([
+                this.submeasureRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
+                this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
+              ]));
+            });
+            return Promise.all(promises);
+          })
+          .then(results => {
             const rows: AnyObj[] = [];
-            const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
-            const rules = this.rules.map(rule => this.transformRule(rule)); // update this for more props if needed
-            let ruleSms: AnyObj[];
-            rules.forEach(rule => {
-              ruleSms = _.sortBy(sms.filter(sm => _.includes(sm.rules, rule.name)), 'name');
-              ruleSms.forEach(sm => {
-                rows.push({
-                  startFiscalMonth: sm.startFiscalMonth,
-                  endFiscalMonth: sm.endFiscalMonth,
-                  submeasureKey: sm.submeasureKey,
-                  name: sm.name,
-                  measureName: sm.measureName,
-                  sourceName: sm.sourceName,
+            results.forEach(result => {
+              this.submeasures = result[0];
+              this.rules = _.sortBy(result[1], 'name');
+              const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
+              const rules = this.rules.map(rule => this.transformRule(rule)); // update this for more props if needed
+              let ruleSms: AnyObj[];
+              rules.forEach(rule => {
+                ruleSms = _.sortBy(sms.filter(sm => _.includes(sm.rules, rule.name)), 'name');
+                ruleSms.forEach(sm => {
+                  rows.push({
+                    startFiscalMonth: sm.startFiscalMonth,
+                    endFiscalMonth: sm.endFiscalMonth,
+                    submeasureKey: sm.submeasureKey,
+                    name: sm.name,
+                    measureName: sm.measureName,
+                    sourceName: sm.sourceName,
 
-                  ruleName: rule.name,
-                  driverName: rule.driverName,
-                  period: rule.period,
-                  salesMatch: rule.salesMatch,
-                  productMatch: rule.productMatch,
-                  scmsMatch: rule.scmsMatch,
-                  legalEntityMatch: rule.legalEntityMatch,
-                  beMatch: rule.beMatch,
-                  sl1Select: rule.sl1Select,
-                  scmsSelect: rule.scmsSelect,
-                  beSelect: rule.beSelect,
-                  status: rule.status,
-                  updatedBy: rule.updatedBy,
-                  updatedDate: rule.updatedDate
-                  // etc, etc,
+                    ruleName: rule.name,
+                    driverName: rule.driverName,
+                    period: rule.period,
+                    salesMatch: rule.salesMatch,
+                    productMatch: rule.productMatch,
+                    scmsMatch: rule.scmsMatch,
+                    legalEntityMatch: rule.legalEntityMatch,
+                    beMatch: rule.beMatch,
+                    sl1Select: rule.sl1Select,
+                    scmsSelect: rule.scmsSelect,
+                    beSelect: rule.beSelect,
+                    status: rule.status,
+                    updatedBy: rule.updatedBy,
+                    updatedDate: rule.updatedDate
+                    // etc, etc,
 
+                  });
                 });
               });
             });

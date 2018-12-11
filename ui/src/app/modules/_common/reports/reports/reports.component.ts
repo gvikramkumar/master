@@ -223,6 +223,14 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     }
   }
 
+  fiscalMonthMultiChange() {
+    if (this.fiscalMonthMultiSels.length > 0) {
+      this.disableDownload = false;
+    } else {
+      this.disableDownload = true;
+    }
+  }
+
   getFilename() {
     const dateStr = new Date().toISOString().substr(0, 10);
     if (this.report.hasSmAndFiscalMonth) {

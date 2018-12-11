@@ -66,7 +66,7 @@ export default class RepoBase {
     return this.Model.find({_id: {$in: ids}}).exec();
   }
 
-  // group by groupField and get latest of each group
+  // group by groupField and get latest or earliest of each group (updatedDateSort = 1: earliest, = -1: lastest)
   private getManyByGroupLatestOrEaliest(_filter: AnyObj = {}, updatedDateSort: number) {
     let filter = _.clone(_filter);
     this.convertPropsToNumbers(filter);
@@ -94,31 +94,40 @@ export default class RepoBase {
     return this.getManyByGroupLatestOrEaliest(filter, 1);
   }
 
-  getManyLatestGroupByNameActive(moduleId) {
+  getManyLatestGroupByNameActive(moduleId, _filter = {}) {
     if (!moduleId) {
       throw new ApiError('getManyLatestGroupByNameActive: no moduleId');
     }
-    return this.getManyByGroupLatest({
+    const filter = Object.assign(_filter, {
       groupField: 'name',
       status: 'A',
       moduleId
     });
+    return this.getManyByGroupLatest(filter);
   }
 
-  getManyLatestGroupByNameInactive(moduleId) {
-    return this.getManyByGroupLatest({
+  getManyLatestGroupByNameInactive(moduleId, _filter = {}) {
+    if (!moduleId) {
+      throw new ApiError('getManyLatestGroupByNameInactive: no moduleId');
+    }
+    const filter = Object.assign(_filter, {
       groupField: 'name',
       status: 'I',
       moduleId
     });
+    return this.getManyByGroupLatest(filter);
   }
 
-  getManyEarliestGroupByNameActive(moduleId) {
-    return this.getManyByGroupEarliest({
+  getManyEarliestGroupByNameActive(moduleId, _filter = {}) {
+    if (!moduleId) {
+      throw new ApiError('getManyEarliestGroupByNameActive: no moduleId');
+    }
+    const filter = Object.assign(_filter, {
       groupField: 'name',
       status: 'A',
       moduleId
-    });
+    })
+    return this.getManyByGroupEarliest(filter);
   }
 
   getOneById(id) {

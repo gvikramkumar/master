@@ -42,6 +42,9 @@ export function addSsoUser() {
         modules = results[1]
 
         if (isLocalEnv) {
+          if (!genericUsers) {
+            throw new ApiError('Localenv has no genericUsers. Need to run database updates.');
+          }
           genericUsers.push('jodoe');
           return new DfaUser(
             'jodoe',
