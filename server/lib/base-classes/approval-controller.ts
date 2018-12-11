@@ -3,6 +3,10 @@ import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
 import {ApprovalMode} from '../../../shared/enums';
 import * as _ from 'lodash';
+import {svrUtil} from '../common/svr-util';
+import {shUtil} from '../../../shared/shared-util';
+import {sendHtmlMail} from '../common/mail';
+import AnyObj from '../../../shared/models/any-obj';
 
 export default class ApprovalController extends ControllerBase {
 
@@ -97,10 +101,6 @@ export default class ApprovalController extends ControllerBase {
     this.updateOneNoValidate(req, res, next);
   }
 
-  sendApprovalEmail(req, mode: ApprovalMode, item): Promise<any> {
-    return Promise.reject(new ApiError('sendApprovalEmail not defined for approval controller'));
-  }
-
   getManyLatestByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
       this.repo.getManyLatestGroupByNameActive(req.body.moduleId),
@@ -140,6 +140,62 @@ export default class ApprovalController extends ControllerBase {
   postApproveStep(item, req) {
     return Promise.resolve();
   }
+
+  sendApprovalEmail(req, mode: ApprovalMode, item: AnyObj): Promise<any> {
+    throw new ApiError(`sendApprovalEmail not implemented`);
+  }
+
+  sendApprovalEmailBase(req, mode: ApprovalMode, item: AnyObj, type: string, endpoint: string, omitProperties): Promise<any> {
+    this.verifyProperties(req.query, ['moduleId']);
+    const data = req.body;
+    const moduleId = req.dfa.moduleId;
+    const url = `${req.headers.origin}/prof/${endpoint}/edit/${item.id};mode=view`;
+    const link = `<a href="${url}">${url}</a>`;
+    let body;
+    const adminEmail = svrUtil.getItadminEmail(req.dfa);
+    const ppmtEmail = svrUtil.getPpmtEmail(req.dfa);
+    const promises = [];
+    if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
+      promises.push(this.repo.getOneLatest({moduleId, name: data.name, approvedOnce: 'Y', status: {$in: ['A', 'I']}}));
+    }
+    return Promise.all(promises)
+      .then(results => {
+        switch (mode) {
+          case ApprovalMode.submit:
+            if (data.approvedOnce === 'Y') {
+              body = `The "${data.name}" DFA ${type} has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
+              const oldObj = results[0];
+              if (oldObj) {
+                if (item.toObject) {
+                  item = item.toObject();
+                }
+                body += '<br><br><b>Summary of changes:</b><br><br>' +
+                  shUtil.getUpdateTable(shUtil.getObjectChanges(oldObj.toObject(), item, omitProperties));
+              }
+            } else {
+              body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
+            }
+            return sendHtmlMail(req.user.email, ppmtEmail, adminEmail,
+              `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`, body);
+          case ApprovalMode.approve:
+            body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
+            if (data.approveRejectMessage) {
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
+            }
+            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, adminEmail,
+              `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`, body);
+          case ApprovalMode.reject:
+            body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
+            if (data.approveRejectMessage) {
+              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
+            }
+            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, adminEmail,
+              `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
+        }
+      });
+
+  }
+
 
 }
 
