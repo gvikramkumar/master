@@ -9,7 +9,7 @@
               <h4 class="card__title">Create New Offer</h4>
               <div class="card__subtitle">Offer Info</div>
             </div>
-            <form autocomplete="off" [formGroup]="offerCreateForm" (ngSubmit)="createOffer()">
+            <form autoComplete="off" #offerCreateForm="ngForm" (ngSubmit)="createOffer()">
               <div class="row base-margin-top">
                 <div class="col-md-6">
                   <div class="form-group half-margin-bottom">
@@ -19,7 +19,11 @@
                         id="offerName"
                         type="text"
                         class="form-control"
-                        formControlName="offerName"/>
+                        name="offerName"
+                        required
+                        [(ngModel)]="offerNameValue"
+                        #offerName="ngModel"
+                        ngModel>
                     </div>
                   </div>
                 </div>
@@ -31,7 +35,11 @@
                         id="offerDesc"
                         type="text"
                         class="form-control"
-                        formControlName="offerDesc">
+                        name="offerDesc"
+                        ngModel
+                        required
+                        [(ngModel)]="offerDescValue"
+                        #offerDesc="ngModel">
                     </div>
                   </div>
                 </div>
@@ -46,7 +54,10 @@
                        id="selectedValue"
                        type="text"
                        class="form-control"
-                       formControlName="primaryBUList"
+                       name="primaryBUList"
+                       ngModel
+                       required
+                       #primaryBUList="ngModel"
                        [(ngModel)]="primaryBusinessUnit">
                     </div>
                   </div>
@@ -60,7 +71,10 @@
                       id="selectedValue"
                       type="text"
                       class="form-control"
-                      formControlName="primaryBEList"
+                      name="primaryBEList"
+                      ngModel
+                      required
+                      #primaryBEList="ngModel"
                       [(ngModel)]="primaryBusinessEntitiy">
                     </div>
                   </div>
@@ -73,9 +87,10 @@
                     <p-multiSelect
                       id="selectedSValue"
                       class="form-control"
-                      formControlName="secondaryBUList"
+                      name="secondaryBUList"
                       [options]="secondaryBusinessUnits"
                       (onChange)="getSecondaryBusinessEntity($event.value)"
+                      [(ngModel)]="secondaryBusinessUnitsValue"
                       [panelStyle]="{minWidth:'25em'}">
                     </p-multiSelect>
                   </div>
@@ -86,8 +101,9 @@
                     <p-multiSelect
                       id="selectedSeValue"
                       class="form-control"
-                      formControlName="secondaryBEList"
+                      name="secondaryBEList"
                       [options]="secondaryBusinessEntities"
+                      [(ngModel)]="secondaryBusinessEntitiesValue"
                       [panelStyle]="{minWidth:'25em'}">
                     </p-multiSelect>
                   </div>
@@ -99,9 +115,8 @@
                     class="form-group label--floated input--icon half-margin-bottom">
                     <div class="form-group__text">
                       <input
-                        required
                         class="form-control"
-                        formControlName="strategyReviewDate"
+                        name="strategyReviewDate"
                         id="strategyReviewDate"
                         #dp1="bsDatepicker"
                         bsDatepicker
@@ -109,7 +124,10 @@
                         [minDate]="minDate"
                         containerClass="custome-date"
                         [bsConfig]="dpConfig"
-                        [(ngModel)]="expectedStrategyReviewDate">
+                        ngModel
+                        required
+                        [(ngModel)]="strategyReviewDateValue"
+                        #strategyReviewDate="ngModel">
                       <label id="strategyReviewDate" for="strategyReviewDate">Strategy Review Date</label>
                       <button type="button" class="link" tabindex="-1">
                         <span class="icon-month"></span>
@@ -122,9 +140,8 @@
                     class="form-group label&#45;&#45;floated input&#45;&#45;icon half-margin-bottom">
                     <div class="form-group__text">
                       <input
-                        required
                         class="form-control"
-                        formControlName="designReviewDate"
+                        name="designReviewDate"
                         id="designReviewDate"
                         #dp2="bsDatepicker"
                         bsDatepicker
@@ -132,7 +149,10 @@
                         [minDate]="minDate"
                         containerClass="custome-date"                       
                         [bsConfig]="dpConfig"
-                        [(ngModel)]="expectedDesignReviewDate">
+                        ngModel
+                        required
+                        [(ngModel)]="designReviewDateValue"
+                        #designReviewDate="ngModel">
                       <label for="designReviewDate">Design Review Date</label>
                       <button type="button" class="link" tabindex="-1">
                         <span class="icon-month"></span>
@@ -147,9 +167,8 @@
                     class="form-group label--floated input--icon half-margin-bottom">
                     <div class="form-group__text">
                       <input
-                        required
                         class="form-control"
-                        formControlName="readinessReviewDate"
+                        name="readinessReviewDate"
                         id="readinessReviewDate"
                         #dp3="bsDatepicker"
                         bsDatepicker
@@ -157,7 +176,10 @@
                         [minDate]="minDate" 
                         containerClass="custome-date"
                         [bsConfig]="dpConfig"
-                        [(ngModel)]="expectedReadinessReviewDate">
+                        ngModel
+                        required
+                        [(ngModel)]="readinessReviewDateValue"
+                        #readinessReviewDate="ngModel">
                       <label for="readinessReviewDate">Readiness Review Date</label>
                       <button type="button" class="link" tabindex="-1">
                         <span class="icon-month"></span>
@@ -170,9 +192,8 @@
                     class="form-group label--floated input--icon half-margin-bottom">
                     <div class="form-group__text">
                       <input
-                        required
                         class="form-control"
-                        formControlName="expectedLaunchDate"
+                        name="expectedLaunchDate"
                         id="expectedLaunchDate"
                         #dp4="bsDatepicker"
                         bsDatepicker
@@ -180,7 +201,10 @@
                         [minDate]="minDate"
                         containerClass="custome-date"
                         [bsConfig]="dpConfig"
-                        [(ngModel)]="expectedLaunchDate">
+                        ngModel
+                        required
+                        [(ngModel)]="expectedLaunchDateValue"
+                        #expectedLaunchDate="ngModel">
                       <label for="expectedLaunchDate">Launch Date</label>
                       <button type="button" class="link" tabindex="-1">
                         <span class="icon-month"></span>
@@ -191,9 +215,9 @@
               </div>
               <div class="row">
               <div class="form-actions">
-                <button class="btn base-margin-top" type="submit">Save</button>
-                <button class="btn btn--primary base-margin-top" type="button" [disabled]="isOffrBldrbtnDisabled" 
-                (click)="mModelAssesment()">Proceed to Offer Builder</button>
+                <button 
+                class="btn btn--primary base-margin-top"
+                [disabled]="!offerCreateForm.valid" type="submit">Proceed…</button>
               </div>
               </div>
             </form>
