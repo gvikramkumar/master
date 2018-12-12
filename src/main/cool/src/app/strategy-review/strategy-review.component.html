@@ -1,0 +1,279 @@
+<div class="content">
+  <div class="container">
+    <div class="row base-margin-top">
+      <div class="col-md-6">
+        <h1 class="display-4">Cisco Data Platform</h1>
+        <h4>Strategy Review</h4>
+      </div>
+      <div class="col-md-6">
+        <div class="btn-group btn-group--wide pull-right base-margin-top">
+
+          <button class="btn btn--secondary" (click)="offerDetailOverView()">Offer Detail View <span class="icon-chevron-right"></span></button>
+        </div>
+      </div>
+
+      <div class="col-md-9">
+        <div class="offer-header card card--raised base-margin-top">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="flex-fluid text-left half-margin-left">
+                <div class="text-bold">Offer Description</div>
+                <div>{{offerBuilderdata['offerDesc']}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="flex-fluid text-left half-margin-left">
+                <div class="text-bold">Expected Launch Date</div>
+                <div>{{offerBuilderdata['expectedLaunchDate'] | date:'MM/dd/yyyy'}}</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="flex-fluid text-left half-margin-left">
+                <div class="text-bold">Business Entity</div>
+                <div>{{offerBuilderdata['BEList'] != null ? offerBuilderdata['BEList'].join(', ') : ""}}</div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="flex-fluid text-left half-margin-left">
+                <div class="text-bold">Business Unit</div>
+                <div>{{offerBuilderdata['BUList'] != null ? offerBuilderdata['BUList'].join(', ') : ""}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="list list--highlight base-margin-top">
+          <li>
+            <div class="panel panel--bordered">MM4-SAAS <span class="text-success"><span class="icon-check-outline icon-medium"></span>
+                Aligned</span></div>
+          </li>
+        </ul>
+        <div class="accordion base-margin-top" id="accordion">
+          <div class="col-md-12">
+            <div class="panel cta base-margin-top half-margin-bottom">
+
+              <div class="row">
+                <div class="col-md-2">
+                  <h1 class="page-title"><span class="action--value">6</span> <span class="action--value-label">Total
+                      Approvals</span></h1>
+                  <div class="progressbar progressbar--default" data-percentage="66">
+                    <div class="progressbar__fill"></div>
+                  </div>
+                </div>
+                <span class="vertical-divider"></span>
+                <div class="col-md-2">
+                  <h1 class="page-title"><span class="action--value">1</span> <span class="action--value-label">Approved</span></h1>
+
+                  <div class="progressbar progressbar--success" data-percentage="66">
+                    <div class="progressbar__fill"></div>
+                  </div>
+                </div>
+                <span class="vertical-divider"></span>
+                <div class="col-md-3">
+                  <h1 class="page-title"><span class="action--value">2</span> <span class="action--value-label">Conditionally
+                      Approved</span></h1>
+                  <div class="progressbar progressbar--warning" data-percentage="66">
+                    <div class="progressbar__fill"></div>
+                  </div>
+                </div>
+                <span class="vertical-divider"></span>
+                <div class="col-md-2">
+                  <h1 class="page-title"><span class="action--value">2</span> <span class="action--value-label">Not
+                      Approved</span></h1>
+                  <div class="progressbar progressbar--danger" data-percentage="66">
+                    <div class="progressbar__fill"></div>
+                  </div>
+                </div>
+                <span class="vertical-divider"></span>
+                <div class="col-md-2">
+                  <h1 class="page-title"><span class="action--value">1</span> <span class="action--value-label">Not
+                      Reviewed</span></h1>
+                  <div class="progressbar progressbar--warning" data-percentage="66">
+                    <div class="progressbar__fill"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h5 class="mb-0">
+                Strategy Review Status
+              </h5>
+            </div>
+            <div id="collapseTwo" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body">
+                <div class="responsive-table">
+                  <table class="table table--nostripes table--highlight table--hover table--selectable">
+                    <thead>
+                      <tr>
+                        <th>Function </th>
+                        <th>Approval Status </th>
+                        <th>Reviewed On </th>
+                        <th>Reviewed By</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                <ul class="list list--highlight base-margin-top">
+                <li>
+                  <div class="responsive-table">
+                    <table class="table table--nostripes table--highlight table--hover table--selectable">
+                      <tr>
+                        <td>
+                          <p-accordion>
+                            <p-accordionTab>
+                              <p-header>
+                                <div class="row">
+                                  <div class="col"><span class="icon-check-outline icon-medium text-success"></span>CSPP</div>
+                                  <div class="col">Approved</div>
+                                  <div class="col">06-Aug-2018</div>
+                                  <div class="col">Sean Parker (OPS)</div>
+                                  <div class="col">Comment</div>
+                                </div>
+                              </p-header>
+                            </p-accordionTab>
+                          </p-accordion>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </li>
+                  <li>
+                    <div class="responsive-table">
+                      <table class="table table--nostripes table--highlight table--hover table--selectable">
+                        <tr>
+                          <td>
+                            <p-accordion>
+                              <p-accordionTab>
+                                <p-header>
+                                  <div class="row">
+                                    <div class="col"><span class="icon-error-outline icon-medium text-danger"></span>CPS</div>
+                                    <div class="col">Approved</div>
+                                    <div class="col">11-Aug-2018</div>
+                                    <div class="col">Sean Parker (OPS)</div>
+                                    <div class="col">Comment</div>
+                                  </div>
+                                </p-header>
+                              </p-accordionTab>
+                            </p-accordion>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="responsive-table">
+                      <table class="table table--nostripes table--highlight table--hover table--selectable">
+                        <tr>
+                          <td>
+                            <p-accordion>
+                              <p-accordionTab>
+                                <p-header>
+                                  <div class="row">
+                                    <div class="col"><span class="icon-error-outline icon-medium text-danger"></span>Compensation
+                                      Ops</div>
+                                    <div class="col">Approved</div>
+                                    <div class="col">16-Aug-2018</div>
+                                    <div class="col">Thomas Price</div>
+                                    <div class="col">Comment</div>
+                                  </div>
+                                </p-header>
+                              </p-accordionTab>
+                            </p-accordion>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="responsive-table">
+                      <table class="table table--nostripes table--highlight table--hover table--selectable">
+                        <tr>
+                          <td>
+                            <p-accordion>
+                              <p-accordionTab>
+                                <p-header>
+                                  <div class="row">
+                                    <div class="col"><span class="icon-warning-outline icon-medium text-warning"></span>Compensation
+                                      Ops</div>
+                                    <div class="col">Conditionally Approved</div>
+                                    <div class="col">21-Aug-2018</div>
+                                    <div class="col">Jessica Lara</div>
+                                    <div class="col">Comment</div>
+                                  </div>
+                                </p-header>
+                              </p-accordionTab>
+                            </p-accordion>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="responsive-table">
+                      <table class="table table--nostripes table--highlight table--hover table--selectable">
+                        <tr>
+                          <td>
+                            <p-accordion>
+                              <p-accordionTab>
+                                <p-header>
+                                  <div class="row">
+                                    <div class="col"><span class="icon-check-outline icon-eye-closed icon-medium"></span>Compensation
+                                      Ops</div>
+                                    <div class="col">Not Reviewed</div>
+                                    <div class="col"></div>
+                                    <div class="col"></div>
+                                  </div>
+                                </p-header>
+                                <div class="panel panel--bordered not-reviewed">
+                                  <p>This is the strategy review milestone and the content is a placeholder for
+                                    milestone summary.
+                                    This is the strategy review milestone and the content is ... </p>
+                                  <button class="btn btn--secondary">Escalate</button>
+                                </div>
+                              </p-accordionTab>
+                            </p-accordion>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="responsive-table">
+                      <table class="table table--nostripes table--highlight table--hover table--selectable">
+                        <tr>
+                          <td>
+                            <p-accordion>
+                              <p-accordionTab>
+                                <p-header>
+                                  <div class="row">
+                                    <div class="col"><span class="icon-warning-outline icon-medium text-warning"></span>Service
+                                      Info</div>
+                                    <div class="col">Conditionally Approved</div>
+                                    <div class="col">16-Aug-2018</div>
+                                    <div class="col">Jessica Lara</div>
+                                    <div class="col">Comment</div>
+                                  </div>
+                                </p-header>
+                              </p-accordionTab>
+                            </p-accordion>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <app-right-panel [portfolioFlag]="setFlag" [offerOwner]="offerBuilderdata['offerOwner']" [stakeData]="stakeData"
+          (updateStakeData)="updateStakeData($event)"></app-right-panel>
+      </div>
+    </div>
+  </div>
+</div>
