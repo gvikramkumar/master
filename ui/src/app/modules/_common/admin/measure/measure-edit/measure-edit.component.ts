@@ -140,13 +140,15 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     if (this.form.valid) {
       this.uiUtil.confirmSave()
         .subscribe(resp => {
-          let obs: Observable<Measure>;
-          if (this.editMode) {
-            obs = this.measureService.update(this.measure);
-          } else {
-            obs = this.measureService.add(this.measure);
+          if (resp) {
+            let obs: Observable<Measure>;
+            if (this.editMode) {
+              obs = this.measureService.update(this.measure);
+            } else {
+              obs = this.measureService.add(this.measure);
+            }
+            obs.subscribe(measure => this.router.navigateByUrl('/prof/admin/measure'));
           }
-          obs.subscribe(measure => this.router.navigateByUrl('/prof/admin/measure'));
         });
     }
   }

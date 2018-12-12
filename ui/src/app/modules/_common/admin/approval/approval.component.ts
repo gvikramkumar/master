@@ -77,7 +77,6 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
     this.ruleService.getManyPending()
       .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
-        // this.rulesCount = rules.length;
         this.ruleDataSource = new MatTableDataSource(this.rules);
         this.ruleDataSource.paginator = this.rulePaginator;
         this.ruleDataSource.sort = this.ruleSort;
@@ -86,17 +85,11 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
     this.submeasureService.getManyPending()
       .subscribe(submeasures => {
         this.submeasures = _.orderBy(submeasures, ['updatedDate'], ['desc']);
-        // this.submeasuresCount = submeasures.length;
         this.submeasureDataSource = new MatTableDataSource(this.submeasures);
         this.submeasureDataSource.paginator = this.submeasurePaginator;
         this.submeasureDataSource.sort = this.submeasureSort;
       });
 
-  }
-
-  ngAfterViewInit() {
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
   }
 
   applyRuleFilter(filterValue: string) {
@@ -117,10 +110,10 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
-              if (resultPrompt !== undefined) {
-                let promises: Promise<any>[] = [];
+              if (resultPrompt !== 'DIALOG_CANCEL') {
+                const promises = [];
                 for (let i = 0; i < this.ruleSelection.selected.length; i++) {
-                  this.ruleSelection.selected[i].approveRejectMessage = '[BULK APPROVAL] ' + resultPrompt;
+                  this.ruleSelection.selected[i].approveRejectMessage = resultPrompt;
                   promises.push(this.ruleService.approve(this.ruleSelection.selected[i]).toPromise());
                 }
                 Promise.all(promises)
@@ -140,10 +133,10 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
-              if (resultPrompt !== undefined) {
-                let promises: Promise<any>[] = [];
+              if (resultPrompt !== 'DIALOG_CANCEL') {
+                const promises = [];
                 for (let i = 0; i < this.submeasureSelection.selected.length; i++) {
-                  this.submeasureSelection.selected[i].approveRejectMessage = '[BULK APPROVAL] ' + resultPrompt;
+                  this.submeasureSelection.selected[i].approveRejectMessage = resultPrompt;
                   promises.push(this.submeasureService.approve(this.submeasureSelection.selected[i]).toPromise());
                 }
                 Promise.all(promises)
@@ -163,10 +156,10 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
-              if (resultPrompt !== undefined) {
-                const promises: Promise<any>[] = [];
+              if (resultPrompt !== 'DIALOG_CANCEL') {
+                const promises = [];
                 for (let i = 0; i < this.ruleSelection.selected.length; i++) {
-                  this.ruleSelection.selected[i].approveRejectMessage = '[BULK REJECT] ' + resultPrompt;
+                  this.ruleSelection.selected[i].approveRejectMessage = resultPrompt;
                   promises.push(this.ruleService.reject(this.ruleSelection.selected[i]).toPromise());
                 }
                 Promise.all(promises)
@@ -186,10 +179,10 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
-              if (resultPrompt !== undefined) {
-                let promises: Promise<any>[]= [];
+              if (resultPrompt !== 'DIALOG_CANCEL') {
+                const promises = [];
                 for (let i = 0; i < this.submeasureSelection.selected.length; i++) {
-                  this.submeasureSelection.selected[i].approveRejectMessage = '[BULK REJECT] ' + resultPrompt;
+                  this.submeasureSelection.selected[i].approveRejectMessage = resultPrompt;
                   promises.push(this.submeasureService.reject(this.submeasureSelection.selected[i]).toPromise());
                 }
                 Promise.all(promises)
@@ -201,22 +194,6 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
             });
         }
       });
-  }
-
-  getUrl(type: string, id: string) {
-    return`/prof/${type}/edit/${id};mode=view`;
-  }
-
-  getRuleListString(rules: string[]) {
-    if (rules.length === 0) {
-      return '';
-    }
-    let result = '';
-    for (let i = 0; i < rules.length - 1; i++) {
-      result += rules[i] + '\n';
-    }
-    result += rules[rules.length - 1];
-    return result;
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

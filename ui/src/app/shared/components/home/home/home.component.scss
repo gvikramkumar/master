@@ -23,7 +23,7 @@ $padding: 20px;
     border-right: 2px solid darken(white, 10%);
   }
 
-  /deep/ fin-leftnav {
+  ::ng-deep fin-leftnav {
     .title {
       font-weight: 300;
     }
