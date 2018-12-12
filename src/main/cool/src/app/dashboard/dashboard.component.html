@@ -41,9 +41,23 @@
                    <span *ngIf="actionData.alertType == 1"> <span class="icon-clock icon-small" style="margin:0px 5px 0 0">
                       </span>{{actionData.offerId}}</span>
                     <span *ngIf="actionData.alertType == 2">
-                      <span class="icon-alert icon-small" style="margin:0px 5px 0 0"></span>
+                      <span class="icon-alert icon-small " style="margin:0px 5px 0 0" [ngbPopover]="popContent" (click)="displayPop()"></span>
                       {{actionData.offerId}}
                     </span>
+                    <ng-template  #popContent ptemplate="body">
+                        <div *ngIf="displayPopOver== true" class="popover">
+                        <h4 class="popover__title">Offer ID <span>  {{actionData.offerId}}</span> </h4>
+                        <div class="popover__body">
+                          <h5>Notification Details</h5><a class="modal__close" id="popover_close"><span class="icon-close" (click)="closeNotification()"></span></a>
+                          <p>{{actionData.actionDesc}}</p>
+                          <button class="btn btn--secondary base-margin-top" >View Offer</button>
+                          <button class="btn btn--secondary base-margin-top">Notification Page</button>
+                          </div>
+                          <div class="popover__footer">
+                              <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="dismissNotification()">Dismiss Notification</button>  
+                          </div>
+                        </div>
+                       </ng-template>
                   </ng-template>
                 </p-column>
                 <p-column field="actions" sortable= "true" header="ACTIONS AND NOTIFICATIONS" >
@@ -108,11 +122,11 @@
                 #dt>
                 <p-headerColumnGroup>
                   <p-row>
-                    <p-column header="OFFER ID" sortable= "true" rowspan="2" [style]="{'width': '150px'}">
+                    <p-column header="OFFER ID" sortable= "true" rowspan="2" [style]="{'width': '100px'}">
                     </p-column>
-                    <p-column header="OFFER NAME"  sortable= "true" rowspan="2" [style]="{'width': '300px'}">
+                    <p-column header="OFFER NAME"  sortable= "true" rowspan="2" [style]="{'width': '150px'}">
                     </p-column>
-                    <p-column header="OFFER OWNER" sortable= "true" rowspan="2" [style]="{'width': '200px'}">
+                    <p-column header="OFFER OWNER" sortable= "true" rowspan="2" [style]="{'width': '150px'}">
                     </p-column>
                     <p-column header="LAUNCH DATE"  sortable= "true" [style]="{'width': '200px'}"
                       rowspan="2">
@@ -124,8 +138,9 @@
                   <p-row>
                     <p-column [style]="{'width': '400px'}">
                       <ng-template pTemplate="header">
-                        <span style="padding: 0px 20px 0px 0px">PRE-LAUNCH</span> <span style="padding: 0px 20px 0px 0px">IN
-                          MARKET</span> <span>END OF LIFE</span>
+                        <span style="padding: 0px 20px 0px 0px">PRE-LAUNCH</span> 
+                        <span style="padding: 0px 20px 0px 0px">IN MARKET</span> 
+                          <span>END OF LIFE</span>
                       </ng-template>
                     </p-column>
                   </p-row>

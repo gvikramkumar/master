@@ -8,7 +8,6 @@ import { HttpClient } from '@angular/common/http';
 import { ActionsAndNotifcations } from './action';
 import * as moment from 'moment';
 
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -23,6 +22,8 @@ export class DashboardComponent implements OnInit {
   myOfferArray: ActionsAndNotifcations[] = [];
   pendingActnCount:number = 0;
   needImmActnCount:number = 0;
+  display: boolean = false;
+  displayPopOver: boolean = true;
 
   constructor(private dashboardService: DashboardService,
     private router: Router, private createOfferService: CreateOfferService,
@@ -41,6 +42,7 @@ export class DashboardComponent implements OnInit {
         this.myOffersList = data;
         console.log(this.myOffersList);
       });
+
   }
 
   processMyActionsList() {
@@ -91,10 +93,10 @@ export class DashboardComponent implements OnInit {
   }
   determineStatus(triggerDate, dueDate): string {
 
-  /* Status – Status’ should be editable by Owner / Co-Owner within “My Offers” View. 
+  /* Status ï¿½ Statusï¿½ should be editable by Owner / Co-Owner within ï¿½My Offersï¿½ View. 
   Notifications will not have a Status
   Green = up to 12 hours from the trigger date
-  Yellow = (Trigger date + 12 hours) up to (Due date – 24 hours)
+  Yellow = (Trigger date + 12 hours) up to (Due date ï¿½ 24 hours)
   Red = Less than 24 hours from Due date
   */
 
@@ -133,5 +135,22 @@ export class DashboardComponent implements OnInit {
     this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
     this.createOfferService.currenTOffer.next('')
     this.router.navigate(['/coolOffer']);
+  }
+
+  showDialog() {
+    this.display = true;
+  }
+
+  dismissNotification() {
+    this.displayPopOver = false;
+    console.log("dismissed");
+  }
+
+  closeNotification() {
+    this.displayPopOver = false;
+  }
+
+  displayPop() {
+    this.displayPopOver = true;
   }
 }
