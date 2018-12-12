@@ -62,13 +62,10 @@
           </div>
 
         
-        <!-- </div> -->
+    
       </div>
 
-      <!-- <div class="alert base-margin-top half-margin-bottom mm-page-alert">
-        <div class="alert__icon icon-info-outline mm-alert-icon"></div>
-        <div class="alert__message" [ngStyle]="{'color': message['color']}"><b>{{message['contentHead']}}</b>{{message['content']}}</div>
-      </div> -->
+    
       <div class="alert base-margin-top half-margin-bottom" [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
         <div class="alert__icon mm-alert-icon" [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}"></div>
         <div class="alert__message" [ngStyle]="{'color': message['color']}"><b>{{message['contentHead']}}</b>{{message['content']}}</div>
@@ -258,4 +255,3 @@
 </div>
 
 <div class="backdrop-custom" *ngIf="backdropCustom"></div>
-<!--// -->

@@ -7,6 +7,7 @@ import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
 import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.component';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
+import {ExitCriteriaValidationComponent} from './exit-criteria-validation/exit-criteria-validation.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: 'offerDetailView',
     component: OfferDetailViewComponent
+  },
+  {
+    path: 'exitCriteriaValidation',
+    component: ExitCriteriaValidationComponent
   },
   {
     path: 'strategyReview/:id',
