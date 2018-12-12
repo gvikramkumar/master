@@ -260,7 +260,7 @@ export class UiUtil {
   }
 
   confirmReject(type: string) {
-    return this.genericDialog(`Are you sure you want to approve the ${type}?`, null, null, DialogType.yesNo);
+    return this.genericDialog(`Are you sure you want to reject the ${type}?`, null, null, DialogType.yesNo);
   }
 
   errorDialog(errors) {

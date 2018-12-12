@@ -45,9 +45,6 @@
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <!--<mat-cell *matCellDef="let row">-->
-            <!--<a [href]="getUrl('rule-management', row.id)" target="_blank">{{row.name}}</a>-->
-          <!--</mat-cell>-->
           <mat-cell (click)="openRuleDialog(row)" *matCellDef="let row">
             <a>{{row.name}}</a>
           </mat-cell>
@@ -135,7 +132,7 @@
 
         <ng-container matColumnDef="rulelist">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Associated Rules</mat-header-cell><mat-cell *matCellDef="let row">
-            <div class="text-ellipsis" matTooltip="{{getRuleListString(row.rules)}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{row.rules}}</div></mat-cell>
+            <div class="text-ellipsis" matTooltip="{{row.rules.join('\n')}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{row.rules}}</div></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="updatedBy">

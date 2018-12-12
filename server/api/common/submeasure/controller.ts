@@ -140,6 +140,13 @@ export default class SubmeasureController extends ApprovalController {
       .then(docs => res.json(docs));
   }
 
+  approve(req, res, next) {
+    if (!req.body.rules.length) {
+      next(new ApiError(`No rules specified in submeasure: ${req.body.name}`));
+    }
+    super.approve(req, res, next);
+  }
+
   sendApprovalEmail(req, mode: ApprovalMode, item): Promise<any> {
     const omitProperties = [
       '_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',

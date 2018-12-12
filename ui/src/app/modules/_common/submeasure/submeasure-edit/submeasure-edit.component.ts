@@ -594,7 +594,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
-              if (resultPrompt !== undefined) {
+              if (resultPrompt !== 'DIALOG_CANCEL') {
                 this.sm.approveRejectMessage = resultPrompt;
                 this.cleanUp();
                 this.submeasureService.reject(this.sm)
@@ -614,7 +614,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
-              if (resultPrompt !== undefined) {
+              if (resultPrompt !== 'DIALOG_CANCEL') {
                 this.sm.approveRejectMessage = resultPrompt;
                 this.cleanUp();
                 this.submeasureService.approve(this.sm)
@@ -633,6 +633,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
+          this.cleanUp();
           const errs = this.validate();
           if (errs) {
             this.uiUtil.genericDialog('Validation Errors', this.errs.join('\n'), null, DialogType.ok, DialogSize.medium);
@@ -641,7 +642,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.uiUtil.confirmSubmitForApproval()
             .subscribe(result => {
               if (result) {
-                this.cleanUp();
                 const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
                 this.submeasureService.submitForApproval(this.sm, {saveMode})
                   .subscribe(() => {

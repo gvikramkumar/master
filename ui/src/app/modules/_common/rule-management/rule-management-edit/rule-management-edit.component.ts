@@ -273,7 +273,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
-              if (resultPrompt !== undefined) {
+              if (resultPrompt !== 'DIALOG_CANCEL') {
                 this.rule.approveRejectMessage = resultPrompt;
                 this.cleanUp();
                 this.ruleService.reject(this.rule)
@@ -293,7 +293,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
-              if (resultPrompt !== undefined) {
+              if (resultPrompt !== 'DIALOG_CANCEL') {
                 this.rule.approveRejectMessage = resultPrompt;
                 this.cleanUp();
                 this.ruleService.approve(this.rule)
