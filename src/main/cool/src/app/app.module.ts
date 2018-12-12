@@ -31,6 +31,7 @@ import { ConfigurationService } from './services/configuration.service';
 import {CalendarModule} from 'primeng/calendar';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { OfferDetailViewService } from './services/offer-detail-view.service';
+import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
 import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
@@ -48,6 +49,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     CreateNewOfferComponent,
     RightPanelComponent,
     OfferDetailViewComponent,
+    StrategyReviewComponent,
     ExitCriteriaValidationComponent
   ],
   imports: [
