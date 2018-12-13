@@ -43,6 +43,20 @@ export class PgLookupController {
       .catch(next);
   }
 
+  getSubmeasureFlashCategories(req, res, next) {
+    this.repo.getSubmeasureFlashCategories()
+      .then(resp => res.json(resp))
+      .catch(next);
+
+  }
+
+  getSubmeasureAdjustmentTypes(req, res, next) {
+    this.repo.getSubmeasureAdjustmentTypes()
+      .then(resp => res.json(resp))
+      .catch(next);
+
+  }
+
   /*
   sales >> sl1 only
 product >> tg only

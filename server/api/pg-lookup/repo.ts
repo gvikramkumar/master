@@ -277,6 +277,52 @@ export default class PgLookupRepo {
           `);
   }
 
+  getSubmeasureFlashCategories() {
+    return pgc.pgdb.query(`
+        select a.adj_type_id_name||' - '||a.adj_type_id as mrap_category_id, a.adj_type_id::integer
+        from
+        (
+        select 
+         ds.source_system_id source_system_id
+        ,ds.source_system_name source_system_name
+        ,ds.source_system_type_code source_system_type_code
+        ,adj.adj_type_id adj_type_id
+        ,adj.adj_type_id_name adj_type_id_name
+        from
+        fpadfa.dfa_data_sources ds
+        ,fpadfa.dfa_prof_source_adj_type_all adj
+        where 
+            ds.module_id=1
+        and ds.source_system_id=2 /*MRAP*/
+        and ds.source_system_id=adj.source_system_id) a
+        order by a.adj_type_id_name||' - '||a.adj_type_id
+    `)
+      .then(resp => resp.rows);
+  }
+
+  getSubmeasureAdjustmentTypes() {
+    return pgc.pgdb.query(`
+        select a.adj_type_id_name||' - '||a.adj_type_id as rrr_category_id, a.adj_type_id::integer
+        from
+        (
+        select 
+         ds.source_system_id source_system_id
+        ,ds.source_system_name source_system_name
+        ,ds.source_system_type_code source_system_type_code
+        ,adj.adj_type_id adj_type_id
+        ,adj.adj_type_id_name adj_type_id_name
+        from
+        fpadfa.dfa_data_sources ds
+        ,fpadfa.dfa_prof_source_adj_type_all adj
+        where 
+            ds.module_id=1
+        and ds.source_system_id=1 /*RRR*/
+        and ds.source_system_id=adj.source_system_id) a
+        order by a.adj_type_id_name||' - '||a.adj_type_id
+    `)
+      .then(resp => resp.rows);
+  }
+
 
   checkForExistenceAndReturnValue(table, column, value, upper = true) {
     if (!value && value !== 0) {
