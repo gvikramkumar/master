@@ -35,6 +35,7 @@ import { StrategyReviewComponent } from './strategy-review/strategy-review.compo
 import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
 import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
 import { ActionsComponent } from './actions/actions.component';
+import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -54,7 +55,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     StrategyReviewComponent,
     ExitCriteriaValidationComponent,
     CreateNewActionComponent,
-    ActionsComponent
+    ActionsComponent,
+    OfferCreateDetailComponent
   ],
   imports: [
     BrowserModule,

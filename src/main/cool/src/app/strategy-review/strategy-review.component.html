@@ -13,36 +13,7 @@
       </div>
 
       <div class="col-md-9">
-        <div class="offer-header card card--raised base-margin-top">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="flex-fluid text-left half-margin-left">
-                <div class="text-bold">Offer Description</div>
-                <div>{{offerBuilderdata['offerDesc']}}</div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-3">
-              <div class="flex-fluid text-left half-margin-left">
-                <div class="text-bold">Expected Launch Date</div>
-                <div>{{offerBuilderdata['expectedLaunchDate'] | date:'MM/dd/yyyy'}}</div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="flex-fluid text-left half-margin-left">
-                <div class="text-bold">Business Entity</div>
-                <div>{{offerBuilderdata['BEList'] != null ? offerBuilderdata['BEList'].join(', ') : ""}}</div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="flex-fluid text-left half-margin-left">
-                <div class="text-bold">Business Unit</div>
-                <div>{{offerBuilderdata['BUList'] != null ? offerBuilderdata['BUList'].join(', ') : ""}}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <app-offer-create-detail></app-offer-create-detail>
         <ul class="list list--highlight base-margin-top">
           <li>
             <div class="panel panel--bordered">MM4-SAAS <span class="text-success"><span class="icon-check-outline icon-medium"></span>

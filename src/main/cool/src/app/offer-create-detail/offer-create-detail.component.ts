@@ -3,11 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 
 @Component({
-  selector: 'app-strategy-review',
-  templateUrl: './strategy-review.component.html',
-  styleUrls: ['./strategy-review.component.css']
+  selector: 'app-offer-create-detail',
+  templateUrl: './offer-create-detail.component.html',
+  styleUrls: ['./offer-create-detail.component.css']
 })
-export class StrategyReviewComponent implements OnInit {
+export class OfferCreateDetailComponent implements OnInit {
   offerData: any;
   currentOfferId;
   bviewDeckData: any[];
@@ -55,10 +55,6 @@ export class StrategyReviewComponent implements OnInit {
         this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
       }
     });
-  }
-
-  offerDetailOverView() {
-    this.router.navigate(['/offerDetailView', this.currentOfferId]);
   }
 
 }
