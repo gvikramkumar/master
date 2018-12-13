@@ -41,7 +41,7 @@ const routes: Routes = [
     component: CreateNewActionComponent
   },
   {
-    path: 'offerDetailView',
+    path: 'offerDetailView/:id',
     component: OfferDetailViewComponent
   },
   {
