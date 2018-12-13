@@ -17,6 +17,7 @@ import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeas
 import {NgForm} from '@angular/forms';
 import {Submeasure} from '../../../../../../../shared/models/submeasure';
 import {shUtil} from '../../../../../../../shared/shared-util';
+import {PgLookupService} from '../../services/pg-lookup.service';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -24,8 +25,11 @@ import {shUtil} from '../../../../../../../shared/shared-util';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
-  flashCategories: {name: string, value: number}[] = [];
-  adjCategories: {name: string, value: number}[] = [];
+  flashCategories: string[];
+  adjustmentTypes: string[];
+  flashCategory: number;
+  adjustmentType: number;
+  sourceAdjCategories: {name: string, value: number}[] = [];
   arrRules: string[] = [];
   UiUtil = UiUtil;
   @ViewChild('form') form: NgForm;
@@ -183,6 +187,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     private measureService: MeasureService,
     private sourceService: SourceService,
     private uiUtil: UiUtil,
+    private pgLookupService: PgLookupService
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -200,7 +205,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.measureService.getManyActive().toPromise(),
       this.ruleService.getManyLatestGroupByNameActive().toPromise(),
       this.sourceService.getMany().toPromise(),
-      this.submeasureService.getDistinctSubmeasureNames().toPromise()
+      this.submeasureService.getDistinctSubmeasureNames().toPromise(),
+      this.pgLookupService.getSubmeasureFlashCategories().toPromise(),
+      this.pgLookupService.getSubmeasureAdjustmentTypes().toPromise(),
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
       promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
@@ -211,9 +218,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.rules = _.sortBy(results[1], 'name');
         this.sources = _.sortBy(results[2], 'name');
         this.submeasureNames = results[3].map(x => x.toUpperCase());
+        this.flashCategories = results[4];
+        this.adjustmentTypes = results[5];
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.sm = results[4];
+          this.sm = results[6];
         }
         if (this.editMode || this.copyMode) {
           // we'll reset these for each edit
@@ -253,6 +262,20 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
     this.measureChange(true);
+    if (this.hasFlashCategory()) {
+      this.flashCategory = this.sm.sourceSystemAdjTypeId;
+    } else
+    if (this.hasAdjustmentType()) {
+      this.adjustmentType = this.sm.sourceSystemAdjTypeId;
+    }
+  }
+
+  hasFlashCategory() {
+    return this.sm.measureId === 5 && this.sm.sourceId === 2;
+  }
+
+  hasAdjustmentType() {
+    return this.sm.measureId === 1 && this.sm.sourceId === 1;
   }
 
   isManualMapping() {
@@ -523,6 +546,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.arrRules.forEach((x, idx) => this.arrRules[idx] = this.sm.rules[idx]);
     this.arrRules = this.arrRules.filter(r => !!r);
     this.sm.rules = _.cloneDeep(this.arrRules);
+    if (this.hasFlashCategory()) {
+      this.sm.sourceSystemAdjTypeId = this.flashCategory;
+    } else if (this.hasAdjustmentType()) {
+      this.sm.sourceSystemAdjTypeId = this.adjustmentType;
+    } else {
+      this.sm.sourceSystemAdjTypeId = undefined;
+    }
   }
 
   hasChanges() {

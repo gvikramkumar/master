@@ -27,10 +27,6 @@
           <div class="form-group-text" style="margin-left:30px;">Status: {{UiUtil.getStatusText(sm.status)}}</div>
         </div>
 
-        <cui-select *ngIf="sm.sourceId === 2" name="flashCategory" [(ngModel)]="sm.sourceSystemAdjTypeId" [items]="flashCategories" label="Flash Category" empty="true" [required]="false"
-                    optionsKey="name" optionsValue="value"></cui-select>
-        <cui-select *ngIf="sm.sourceId === 1" name="adjCategory" [(ngModel)]="sm.sourceSystemAdjTypeId" [items]="adjCategories" label="Adjustment Category" empty="true" [required]="false"
-                    optionsKey="name" optionsValue="value"></cui-select>
         <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes"
                     label="Submeasure Category Type" empty="true" optionsKey="name" optionsValue="value" [required]="true"></cui-select>
         <div *ngIf="sm.categoryType === 'MM'" fxLayout="row" fxLayoutAlign="start start">
@@ -38,6 +34,9 @@
           <fin-input name="manualMixHw" label="HW" [(ngModel)]="sm.manualMixHw" [required]="true" [inline]="true" class="hwsw-inputs"></fin-input>
           <fin-input name="manualMixSw" label="SW" [(ngModel)]="sm.manualMixSw" [required]="true" [inline]="true" class="hwsw-inputs"></fin-input>
         </div>
+
+        <cui-select *ngIf="sm.measureId === 5" [disabled]="sm.sourceId !== 2" name="flashCategory" [(ngModel)]="flashCategory" [items]="flashCategories" label="MRAP - Flash Category Id*" empty="true" [required]="true" optionsKey="mrap_category_id" optionsValue="adj_type_id"></cui-select>
+        <cui-select *ngIf="sm.measureId === 1"  [disabled]="sm.sourceId !== 1" name="adjustmentType" [(ngModel)]="adjustmentType" [items]="adjustmentTypes" label="Adjustment Type*" empty="true" [required]="true" optionsKey="rrr_category_id" optionsValue="adj_type_id"></cui-select>
 
         <div class="margin-top:15px; height: 0px;">&nbsp;</div>
         <div class="border-outline">

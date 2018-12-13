@@ -44,4 +44,12 @@ export class PgLookupService extends RestBase<any> {
     return this.callMethod('getFiscalMonths');
   }
 
+  getSubmeasureFlashCategories() {
+    return this.callMethod('getSubmeasureFlashCategories');
+  }
+
+  getSubmeasureAdjustmentTypes() {
+    return this.callMethod('getSubmeasureAdjustmentTypes');
+  }
+
 }
