@@ -24,10 +24,19 @@ function getUpdateTable(updates: ObjectDiffVal[]): string {
   if (!updates.length) {
     return 'No changes';
   }
-  let result = `  <style>
-                          table, td, tr {border: 1px solid black;}
-                          td {padding-right: 70px;}
-                        </style>
+  let result = `  
+      <style>
+          table {
+            border-collapse: collapse;
+          }
+          
+          th, td {
+            padding: 8px;
+            padding-right: 150px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+          }
+       </style>
                        <table>
                         <tr>
                           <th><b>Property</b></th>
