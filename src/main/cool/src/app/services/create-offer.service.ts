@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
+
 import { Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
@@ -65,7 +66,12 @@ export class CreateOfferService {
 
   getPrimaryBusinessUnits(): Observable<any> {
     let url = this.basePrimaryUrl + this.userService.getUserId();
-    return this.httpClient.get(url, { withCredentials: true });
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Access-Control-Allow-Headers', 'Content-Type')
+      .append('Access-Control-Allow-Methods', 'GET')
+      .append('Access-Control-Allow-Origin', '*');
+    return this.httpClient.get(url, { headers:headers,withCredentials: true });
   }
 
   getSecondaryBusinessUnit() {
