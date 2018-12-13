@@ -13,12 +13,12 @@ export class DashboardService {
 
   getMyActionsList(): Observable<any> {
     let url = this.baseMyActionsUrl+this.userService.getUserId();
-    return this.http.get(url,  { withCredentials: true });
+    return this.http.get(url);
   }
 
   getMyOffersList(): Observable<any> {
     let url = this.baseMyOfferssUrl+this.userService.getUserId();
-    return this.http.get(url,  { withCredentials: true });
+    return this.http.get(url);
   }
 
 
