@@ -66,7 +66,7 @@ export class CreateOfferService {
 
   getPrimaryBusinessUnits(): Observable<any> {
     let url = this.basePrimaryUrl + this.userService.getUserId();
-        return this.httpClient.get(url);
+        return this.httpClient.get(url,{ withCredentials: true });
   }
 
   getSecondaryBusinessUnit() {
