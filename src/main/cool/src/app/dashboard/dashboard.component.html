@@ -15,6 +15,10 @@
             </div>
           </div>
           <div class="header-toolbar">
+              <button (click)="createNewAction()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
+                <span class="button--label">New Actions</span></button>
+            </div>
+          <div class="header-toolbar">
             <button (click)="createNewOffer()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
               <span class="button--label">New Offer</span></button>
           </div>
@@ -29,6 +33,7 @@
               <div class="col-md-8">
                 <h1 class="display-4">My Actions & Notifications</h1>
               </div>
+              
             </div>
             <div class="responsive-table">
               <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
@@ -41,9 +46,11 @@
                    <span *ngIf="actionData.alertType == 1"> <span class="icon-clock icon-small" style="margin:0px 5px 0 0">
                       </span>{{actionData.offerId}}</span>
                     <span *ngIf="actionData.alertType == 2">
-                      <span class="icon-alert icon-small " style="margin:0px 5px 0 0" [ngbPopover]="popContent" (click)="displayPop()"></span>
+                      <span class="icon-alert icon-small hints" style="margin:0px 5px 0 0" [ngbPopover]="popContent" (click)="displayPop()"></span>
                       {{actionData.offerId}}
                     </span>
+
+      
                     <ng-template  #popContent ptemplate="body">
                         <div *ngIf="displayPopOver== true" class="popover">
                         <h4 class="popover__title">Offer ID <span>  {{actionData.offerId}}</span> </h4>

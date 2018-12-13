@@ -8,6 +8,7 @@ import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.com
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
 import {ExitCriteriaValidationComponent} from './exit-criteria-validation/exit-criteria-validation.component';
+import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
   {
     path: 'createNewOffer',
     component: CreateNewOfferComponent
+  },
+  {
+    path: 'createNewAction',
+    component: CreateNewActionComponent
   },
   {
     path: 'offerDetailView',

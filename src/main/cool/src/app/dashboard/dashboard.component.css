@@ -205,7 +205,7 @@ font-weight: 100;
   background-color:#fff;
   z-index:99;
   position:absolute;
-  max-width:100%;
+  width:100%;
   box-shadow: 0 2px 20px rgba(0,0,0,.45);
   padding:1em;
   left:0;

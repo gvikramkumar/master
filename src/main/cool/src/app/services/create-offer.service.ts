@@ -55,17 +55,17 @@ export class CreateOfferService {
 
   getAllBusinessUnit() {
     let url = this.baseUrl + 'lov/businessUnit';
-    return this.httpClient.get(url);
+    return this.httpClient.get(url,  { withCredentials: true });
   }
 
   getAllBusinessEntity(): Observable<any> {
     let url = this.baseUrl + 'lov/businessEntity';
-    return this.httpClient.get(url);
+    return this.httpClient.get(url, { withCredentials: true });
   }
 
   getPrimaryBusinessUnits(): Observable<any> {
     let url = this.basePrimaryUrl + this.userService.getUserId();
-    return this.httpClient.get(url);
+    return this.httpClient.get(url, { withCredentials: true });
   }
 
   getSecondaryBusinessUnit() {

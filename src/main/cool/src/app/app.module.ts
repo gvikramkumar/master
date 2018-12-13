@@ -33,6 +33,8 @@ import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.
 import { OfferDetailViewService } from './services/offer-detail-view.service';
 import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
 import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
+import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
+import { ActionsComponent } from './actions/actions/actions.component';
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -50,7 +52,9 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     RightPanelComponent,
     OfferDetailViewComponent,
     StrategyReviewComponent,
-    ExitCriteriaValidationComponent
+    ExitCriteriaValidationComponent,
+    CreateNewActionComponent,
+    ActionsComponent
   ],
   imports: [
     BrowserModule,

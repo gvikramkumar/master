@@ -137,6 +137,10 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/coolOffer']);
   }
 
+  createNewAction() {
+    this.router.navigate(['/createNewAction']);
+  }
+
   showDialog() {
     this.display = true;
   }
