@@ -182,14 +182,14 @@ export default class ApprovalController extends ControllerBase {
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, adminEmail,
+            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, `${ppmtEmail},${adminEmail}`,
               `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, adminEmail,
+            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, `${ppmtEmail},${adminEmail}`,
               `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
         }
       });
