@@ -54,7 +54,7 @@
     .rule {
       position: relative;
       margin-top: -5px;
-
+      max-width: $form-group-max-width;
       i {
         position: absolute;
         top: 11px;

@@ -13,7 +13,28 @@ DROP TABLE fpadfa.dfa_sub_measure;
 DROP TABLE fpadfa.dfa_submeasure_input_lvl;
 DROP TABLE fpadfa.dfa_prof_scms_triang_altsl2_map_upld;
 DROP TABLE fpadfa.dfa_prof_scms_triang_corpadj_map_upld;
+DROP TABLE fpadfa.dfa_prof_disti_to_direct_map_upld;
 */
+
+
+CREATE TABLE fpadfa.dfa_prof_disti_to_direct_map_upld (
+	fiscal_month_id numeric(22) NOT NULL,
+	group_id numeric(4) NULL,
+	node_type varchar(20) NULL,
+	sales_finance_hierarchy varchar(100) NULL,
+	node_code varchar(100) NULL,
+	ext_theater_name varchar(50) NULL,
+	create_user varchar(30) NULL,
+	create_datetime timestamp NULL,
+	update_user varchar(30) NULL,
+	update_datetime timestamp NULL
+)
+WITH (
+	OIDS=FALSE
+) ;
+CREATE INDEX ndx_d2d_map_fismthid ON fpadfa.dfa_prof_disti_to_direct_map_upld USING btree (fiscal_month_id) ;
+CREATE INDEX ndx_d2d_map_grpid ON fpadfa.dfa_prof_disti_to_direct_map_upld USING btree (group_id) ;
+
 
 CREATE TABLE fpadfa.dfa_prof_scms_triang_corpadj_map_upld (
 	fiscal_month_id numeric(22) NULL,
@@ -219,6 +240,10 @@ CREATE INDEX ndx_swalc_fiscal_mthid ON fpadfa.dfa_prof_swalloc_manualmix_upld US
 CREATE INDEX ndx_swalc_submsr_key ON fpadfa.dfa_prof_swalloc_manualmix_upld USING btree (sub_measure_key) ;
 
 
+-- Drop table
+
+-- DROP TABLE fpadfa.dfa_sub_measure
+
 CREATE TABLE fpadfa.dfa_sub_measure (
 	module_id numeric(10) NOT NULL,
 	sub_measure_key numeric(22) NOT NULL,
@@ -255,6 +280,16 @@ CREATE TABLE fpadfa.dfa_sub_measure (
 	rule3 varchar(100) NULL,
 	rule4 varchar(100) NULL,
 	rule5 varchar(100) NULL,
+	rule6 varchar(100) NULL,
+	rule7 varchar(100) NULL,
+	rule8 varchar(100) NULL,
+	rule9 varchar(100) NULL,
+	rule10 varchar(100) NULL,
+	rule11 varchar(100) NULL,
+	rule12 varchar(100) NULL,
+	rule13 varchar(100) NULL,
+	rule14 varchar(100) NULL,
+	rule15 varchar(100) NULL,
 	create_owner varchar(30) NULL,
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
