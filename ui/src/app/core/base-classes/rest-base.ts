@@ -103,6 +103,11 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.post<any>(`${this.endpointUrl}/call-method/${method}`, data, {params});
   }
 
+  callRepoMethod(method, data = {}, params = {}) {
+    this.addModuleId(data);
+    return this.httpClient.post<any>(`${this.endpointUrl}/call-repo-method/${method}`, data, {params});
+  }
+
   // same as getMany(params) just uses POST body instead of querystrings. The post body uses
   // bodyParser.urlEncoded extended version so can accept objects as well. Remains to be tested, but
   // could possibly be used to project via mongos's {prop1: 1, prop2: 1} syntax

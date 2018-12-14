@@ -28,19 +28,19 @@ export default class AllocationRuleController extends ApprovalController {
     return sql;
   }
 
+  saveToDraft(req, res, next) {
+    this.updateSelects(req.body);
+    super.saveToDraft(req, res, next);
+  }
+
   submitForApproval(req, res, next) {
-    this.validateConditionalsAndUpdateSelects(req.body)
+    this.updateSelects(req.body);
+    this.validateChoices(req.body)
       .then(() => super.submitForApproval(req, res, next))
       .catch(next);
   }
 
-  approve(req, res, next) {
-    this.validateConditionalsAndUpdateSelects(req.body)
-      .then(() => super.approve(req, res, next))
-      .catch(next);
-  }
-
-  validateConditionalsAndUpdateSelects(rule) {
+  updateSelects(rule) {
     if (rule.salesSL1CritCond && rule.salesSL1CritChoices.length) {
       rule.sl1Select = this.createSelect(rule.salesSL1CritCond, rule.salesSL1CritChoices);
     } else {
@@ -88,6 +88,20 @@ export default class AllocationRuleController extends ApprovalController {
       rule.beSelect = undefined;
     }
 
+    if (rule.countryCritCond && rule.countryCritChoice.trim()) {
+      rule.countrySelect = this.createSelect(rule.countryCritCond, [rule.countryCritChoice]);
+    } else {
+      rule.countrySelect = undefined;
+    }
+
+    if (rule.extTheaterCritCond && rule.extTheaterCritChoice.trim()) {
+      rule.extTheaterSelect = this.createSelect(rule.extTheaterCritCond, [rule.extTheaterCritChoice]);
+    } else {
+      rule.extTheaterSelect = undefined;
+    }
+  }
+
+  validateChoices(rule) {
     return Promise.all([
       this._validateSalesSL2CritChoices(rule.salesSL2CritChoices),
       this._validateSalesSL3CritChoices(rule.salesSL3CritChoices),

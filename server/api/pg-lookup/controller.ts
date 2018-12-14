@@ -20,6 +20,16 @@ export class PgLookupController {
     method.call(this, req, res, next);
   }
 
+  callRepoMethod(req, res, next) {
+    const method = this.repo[req.params.method];
+    if (!method) {
+      throw new ApiError(`PgLookupController: no method found for ${req.params.method}`)
+    }
+    method.call(this.repo, req)
+      .then(docs => res.json(docs))
+      .catch(next);
+  }
+
   getSortedListFromColumn(req, res, next) {
     this.repo.getSortedListFromColumn(req.body.table, req.body.column, req.body.where, req.body.isNumber)
       .then(list => res.json(list))
@@ -41,20 +51,6 @@ export class PgLookupController {
     this.repo.getFiscalMonths()
       .then(resp => res.json(resp.rows.map(record => orm.recordToObject(record))))
       .catch(next);
-  }
-
-  getSubmeasureFlashCategories(req, res, next) {
-    this.repo.getSubmeasureFlashCategories()
-      .then(resp => res.json(resp))
-      .catch(next);
-
-  }
-
-  getSubmeasureAdjustmentTypes(req, res, next) {
-    this.repo.getSubmeasureAdjustmentTypes()
-      .then(resp => res.json(resp))
-      .catch(next);
-
   }
 
   /*

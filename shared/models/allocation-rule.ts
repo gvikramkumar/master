@@ -32,6 +32,12 @@ export class AllocationRule {
   beSelect?: string;
   beCritCond?: string;
   beCritChoices: string[] = [];
+  countrySelect?: string;
+  countryCritCond?: string;
+  countryCritChoice: string;
+  extTheaterSelect?: string;
+  extTheaterCritCond?: string;
+  extTheaterCritChoice: string;
   activeStatus = 'I';
   status = 'D';
   approvedOnce = 'N';
