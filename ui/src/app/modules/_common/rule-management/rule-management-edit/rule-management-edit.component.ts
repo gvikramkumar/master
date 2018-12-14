@@ -100,7 +100,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.periods = results[7][1];
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.rule = results[6];
+          this.rule = results[8];
         }
 
         if (this.copyMode) {
