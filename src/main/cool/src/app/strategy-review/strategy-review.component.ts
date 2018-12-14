@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-strategy-review',
@@ -17,6 +18,9 @@ export class StrategyReviewComponent implements OnInit {
   message = {};
   stakeData = {};
   offerBuilderdata = {};
+  minDate: Date;
+  public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+  formTitle: any = ' ';
 
   constructor(private router: Router, private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute) {
@@ -26,6 +30,8 @@ export class StrategyReviewComponent implements OnInit {
      }
 
   ngOnInit() {
+    this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
+    this.minDate = new Date();
     this.monetizationModelService.getAttributes().subscribe(data => {
       this.offerData = data;
       const defaultOfferDataGroups = this.offerData['groups'][0];
@@ -59,6 +65,23 @@ export class StrategyReviewComponent implements OnInit {
 
   offerDetailOverView() {
     this.router.navigate(['/offerDetailView', this.currentOfferId]);
+  }
+
+  doNotApprove() {
+    this.formTitle = 'Do Not Approve';
+    document.getElementById('formSection').style.visibility = 'visible';
+    document.getElementById('buttonSection').style.visibility = 'hidden';
+  }
+
+  conditionalApprove() {
+    this.formTitle = 'Conditional Approval';
+    document.getElementById('formSection').style.visibility = 'visible';
+    document.getElementById('buttonSection').style.visibility = 'hidden';
+  }
+
+  closeForm() {
+    document.getElementById('formSection').style.visibility = 'hidden';
+    document.getElementById('buttonSection').style.visibility = 'visible';
   }
 
 }
