@@ -55,7 +55,7 @@
             <div style="margin-bottom:-10px;">
                 <div class="right text-center half-margin-bottom form-group-max-width">Selection Criteria</div>
                 <div class="row">
-                  <div class="col-1">
+                  <div class="col-2">
                     <div class="form-group-text">SL1</div>
                     <div class="form-group-text">SL2</div>
                     <div class="form-group-text">SL3</div>
@@ -64,6 +64,8 @@
                     <div class="form-group-text">PF</div>
                     <div class="form-group-text">SCMS</div>
                     <div class="form-group-text">BE</div>
+                    <div class="form-group-text">Country</div>
+                    <div class="form-group-text">Ext Theater</div>
                   </div>
                   <div class="col-3">
                     <cui-select name="salesSL1Cond" class="replace-label-space" [(ngModel)]="rule.salesSL1CritCond" [items]="conditionalOperators"
@@ -82,8 +84,12 @@
                                 empty="true" [required]="!!rule.scmsCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
                     <cui-select name="beCond" class="replace-label-space" [(ngModel)]="rule.beCritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!rule.beCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="cntryCond" class="replace-label-space" [(ngModel)]="rule.countryCritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!rule.countryCritChoice" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="extTheaterCond" class="replace-label-space" [(ngModel)]="rule.extTheaterCritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!rule.extTheaterCritChoice" optionsKey="operator" optionsValue="operator"></cui-select>
                   </div>
-                  <div class="col-8">
+                  <div class="col-7">
                     <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices"
                                      class="replace-label-space" optionsKey="name" optionsValue="name" empty="true"></cui-multiselect>
                     <fin-input name="sl2SalesChoice" [(ngModel)]="rule.salesSL2CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
@@ -104,8 +110,12 @@
                     <cui-multiselect name="scmsChoice" [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name"
                                      class="replace-label-space" optionsValue="name" empty="true"></cui-multiselect>
                     <cui-multiselect name="beChoice" [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
-                                 optionsValue="name" dropdownMaxHeight="300"
+                                     optionsValue="name" dropdownMaxHeight="300"
                                      class="replace-label-space" empty="true"></cui-multiselect>
+                    <cui-select name="cntryChoice" [(ngModel)]="rule.countryCritChoice" [items]="countryChoices" dropdownMaxHeight="300"
+                                optionsKey="name" optionsValue="name" class="replace-label-space" empty="true"></cui-select>
+                    <cui-select name="extTheaterChoice" [(ngModel)]="rule.extTheaterCritChoice" [items]="extTheaterChoices"
+                                optionsKey="name" optionsValue="name" class="replace-label-space" empty="true"></cui-select>
                   </div>
                 </div>
             </div>

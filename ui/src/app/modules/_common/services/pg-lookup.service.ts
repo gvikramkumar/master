@@ -45,11 +45,15 @@ export class PgLookupService extends RestBase<any> {
   }
 
   getSubmeasureFlashCategories() {
-    return this.callMethod('getSubmeasureFlashCategories');
+    return this.callRepoMethod('getSubmeasureFlashCategories');
   }
 
   getSubmeasureAdjustmentTypes() {
-    return this.callMethod('getSubmeasureAdjustmentTypes');
+    return this.callRepoMethod('getSubmeasureAdjustmentTypes');
+  }
+
+  getCountryNamesFromSalesHierarchy() {
+    return this.callRepoMethod('getCountryNamesFromSalesHierarchy');
   }
 
 }

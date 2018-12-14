@@ -287,7 +287,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   showAddRuleIcon() {
-    return this.arrRules.length < 5;
+    return this.arrRules.length < 15;
   }
 
   removeRule(i) {

@@ -7,3 +7,4 @@ const ctrl = injector.get(PgLookupController)
 
 export const pgLookupRouter = Router()
   .post('/call-method/:method', ctrl.callMethod.bind(ctrl))
+  .post('/call-repo-method/:method', ctrl.callRepoMethod.bind(ctrl))

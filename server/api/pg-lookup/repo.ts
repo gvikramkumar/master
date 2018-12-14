@@ -37,6 +37,19 @@ export default class PgLookupRepo {
           `);
   }
 
+  getCountryNamesFromSalesHierarchy() {
+    return pgc.pgdb.query(`
+            select cntry.iso_country_name
+            from fpacon.vw_fpa_iso_country cntry
+            ,fpacon.vw_fpa_sales_hierarchy dsh
+            where 1=1
+            and dsh.iso_country_code=cntry.bk_iso_country_code
+            group by 1;
+          `)
+      .then(resp => resp.rows.map(x => x.iso_country_name));
+  }
+
+
   getSalesHierarchyReport() {
     return pgc.pgdb.query(`
             select 
@@ -406,7 +419,9 @@ export default class PgLookupRepo {
   getSortedListFromColumn(table, column, whereClause?, isNumber?) {
     let query = `select distinct ${column} as col from ${table}`;
     if (whereClause) {
-      query += ' where ' + whereClause;
+      query += ` where ${whereClause} and ${column} is not null `;
+    } else {
+      query += ` where ${column} is not null `;
     }
     query += ` order by ${column}`;
 
@@ -419,7 +434,9 @@ export default class PgLookupRepo {
   getSortedUpperListFromColumn(table, column, whereClause?) {
     let query = `select distinct upper(${column}) as col from ${table}`;
     if (whereClause) {
-      query += ' where ' + whereClause;
+      query += ` where ${whereClause} and ${column} is not null `;
+    } else {
+      query += ` where ${column} is not null `;
     }
     query += ` order by upper(${column})`;
 

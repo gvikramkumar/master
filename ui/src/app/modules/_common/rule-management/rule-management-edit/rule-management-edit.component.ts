@@ -43,20 +43,14 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   scmsMatches = [{match: 'SCMS'}];
   legalEntityMatches = [{match: 'Business Entity'}];
   beMatches = [{match: 'BE'}, {match: 'Sub BE'}];
-  sl1CondRequired = false;
-  sl2CondRequired = false;
-  sl3CondRequired = false;
-  pfCondRequired = false;
-  buCondRequired = false;
-  tgCondRequired = false;
-  scmsCondRequired = false;
-  beCondRequired = false;
 
   // SELECT options to be taken from Postgres
   salesSL1Choices: { name: string }[] = [];
   prodTgChoices: { name: string }[] = [];
   scmsChoices: { name: string }[] = [];
   internalBeChoices: { name: string }[] = [];
+  countryChoices: { name: string }[] = [];
+  extTheaterChoices: { name: string }[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -83,6 +77,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
+      this.pgLookupService.getCountryNamesFromSalesHierarchy().toPromise(),
+      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'dd_external_theater_name').toPromise(),
       this.ruleService.getDistinctRuleNames().toPromise(),
       this.lookupService.getValues(['drivers', 'periods']).toPromise()
     ];
@@ -97,12 +93,14 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
-        this.ruleNames = results[4].map(x => x.toUpperCase());
-        this.drivers = _.sortBy(results[5][0], 'name');
-        this.periods = results[5][1];
+        this.countryChoices = results[4].map(x => ({name: x}));
+        this.extTheaterChoices = results[5].map(x => ({name: x}));
+        this.ruleNames = results[6].map(x => x.toUpperCase());
+        this.drivers = _.sortBy(results[7][0], 'name');
+        this.periods = results[7][1];
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.rule = results[6];
+          this.rule = results[8];
         }
 
         if (this.copyMode) {
