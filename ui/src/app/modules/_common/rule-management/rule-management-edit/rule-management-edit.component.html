@@ -44,6 +44,10 @@
                             empty="true" optionsKey="match" optionsValue="match"></cui-select>
                 <cui-select name="leMatch" [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
                             empty="true" optionsKey="match" optionsValue="match"></cui-select>
+                <cui-select name="cntyMatch" [(ngModel)]="rule.countryMatch" [items]="countryMatches" dropdownMaxHeight="300"
+                            optionsKey="name" optionsValue="name" class="replace-label-space" empty="true" label="Country"></cui-select>
+                <cui-select name="extTheaterMatch" [(ngModel)]="rule.extTheaterMatch" [items]="extTheaterMatches"
+                            optionsKey="name" optionsValue="name" class="replace-label-space" empty="true" label="External Theater"></cui-select>
             </div>
           </div>
         </div>

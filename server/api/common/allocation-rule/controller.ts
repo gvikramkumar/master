@@ -88,17 +88,6 @@ export default class AllocationRuleController extends ApprovalController {
       rule.beSelect = undefined;
     }
 
-    if (rule.countryCritCond && rule.countryCritChoice.trim()) {
-      rule.countrySelect = this.createSelect(rule.countryCritCond, [rule.countryCritChoice]);
-    } else {
-      rule.countrySelect = undefined;
-    }
-
-    if (rule.extTheaterCritCond && rule.extTheaterCritChoice.trim()) {
-      rule.extTheaterSelect = this.createSelect(rule.extTheaterCritCond, [rule.extTheaterCritChoice]);
-    } else {
-      rule.extTheaterSelect = undefined;
-    }
   }
 
   validateChoices(rule) {
