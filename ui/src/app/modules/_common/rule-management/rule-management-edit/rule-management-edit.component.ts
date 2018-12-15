@@ -21,6 +21,22 @@ import AnyObj from '../../../../../../../shared/models/any-obj';
   styleUrls: ['./rule-management-edit.component.scss']
 })
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
+  salesSL1CritCond: string;
+  salesSL2CritCond: string;
+  salesSL3CritCond: string;
+  prodPFCritCond: string;
+  prodBUCritCond: string;
+  prodTGCritCond: string;
+  scmsCritCond: string;
+  beCritCond: string;
+  salesSL1CritChoices: string[] = [];
+  salesSL2CritChoices: string[] = [];
+  salesSL3CritChoices: string[] = [];
+  prodPFCritChoices: string[] = [];
+  prodBUCritChoices: string[] = [];
+  prodTGCritChoices: string[] = [];
+  scmsCritChoices: string[] = [];
+  beCritChoices: string[] = [];
   ruleNames: string[] = [];
   salesSL2ChoiceOptions: ValidationInputOptions;
   salesSL3ChoiceOptions: ValidationInputOptions;
@@ -173,7 +189,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   init() {
-    // called to prepare ui for new rule, in onInit/reset
+    this.createSelectArrays();
   }
 
   hasChanges() {
@@ -209,30 +225,32 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   cleanUp() {
     // if match selected and cond selected and not choices, clear out cond
-    if (!this.rule.salesSL1CritChoices.length) {
-      this.rule.salesSL1CritCond = undefined;
+    if (!this.salesSL1CritChoices.length) {
+      this.salesSL1CritCond = undefined;
     }
-    if (!this.rule.salesSL2CritChoices.length) {
-      this.rule.salesSL2CritCond = undefined;
+    if (!this.salesSL2CritChoices.length) {
+      this.salesSL2CritCond = undefined;
     }
-    if (!this.rule.salesSL3CritChoices.length) {
-      this.rule.salesSL3CritCond = undefined;
+    if (!this.salesSL3CritChoices.length) {
+      this.salesSL3CritCond = undefined;
     }
-    if (!this.rule.prodPFCritChoices.length) {
-      this.rule.prodPFCritCond = undefined;
+    if (!this.prodPFCritChoices.length) {
+      this.prodPFCritCond = undefined;
     }
-    if (!this.rule.prodBUCritChoices.length) {
-      this.rule.prodBUCritCond = undefined;
+    if (!this.prodBUCritChoices.length) {
+      this.prodBUCritCond = undefined;
     }
-    if (!this.rule.prodTGCritChoices.length) {
-      this.rule.prodTGCritCond = undefined;
+    if (!this.prodTGCritChoices.length) {
+      this.prodTGCritCond = undefined;
     }
-    if (!this.rule.scmsCritChoices.length) {
-      this.rule.scmsCritCond = undefined;
+    if (!this.scmsCritChoices.length) {
+      this.scmsCritCond = undefined;
     }
-    if (!this.rule.beCritChoices.length) {
-      this.rule.beCritCond = undefined;
+    if (!this.beCritChoices.length) {
+      this.beCritCond = undefined;
     }
+
+    this.updateSelectStatements();
   }
 
   validateSaveToDraft() {
@@ -336,8 +354,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (!results.exist) {
             return {salesSL2Choices: {value: control.value}};
           } else {
-            if (!_.isEqual(this.rule.salesSL2CritChoices, results.values)) {
-              this.rule.salesSL2CritChoices = results.values;
+            if (!_.isEqual(this.salesSL2CritChoices, results.values)) {
+              this.salesSL2CritChoices = results.values;
             }
             return null;
           }
@@ -355,8 +373,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (!results.exist) {
             return {salesSL3Choices: {value: control.value}};
           } else {
-            if (!_.isEqual(this.rule.salesSL3CritChoices, results.values)) {
-              this.rule.salesSL3CritChoices = results.values;
+            if (!_.isEqual(this.salesSL3CritChoices, results.values)) {
+              this.salesSL3CritChoices = results.values;
             }
             return null;
           }
@@ -374,8 +392,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (!results.exist) {
             return {prodPFChoices: {value: control.value}};
           } else {
-            if (!_.isEqual(this.rule.prodPFCritChoices, results.values)) {
-              this.rule.prodPFCritChoices = results.values;
+            if (!_.isEqual(this.prodPFCritChoices, results.values)) {
+              this.prodPFCritChoices = results.values;
             }
             return null;
           }
@@ -393,13 +411,137 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (!results.exist) {
             return {prodBUChoices: {value: control.value}};
           } else {
-            if (!_.isEqual(this.rule.prodBUCritChoices, results.values)) {
-              this.rule.prodBUCritChoices = results.values;
+            if (!_.isEqual(this.prodBUCritChoices, results.values)) {
+              this.prodBUCritChoices = results.values;
             }
             return null;
           }
         }));
     });
   }
+
+  updateSelectStatements() {
+    if (this.salesSL1CritCond && this.salesSL1CritChoices.length) {
+      this.rule.sl1Select = this.createSelect(this.salesSL1CritCond, this.salesSL1CritChoices);
+    } else {
+      this.rule.sl1Select = undefined;
+    }
+
+    if (this.salesSL2CritCond && this.salesSL2CritChoices.length) {
+      this.rule.sl2Select = this.createSelect(this.salesSL2CritCond, this.salesSL2CritChoices);
+    } else {
+      this.rule.sl2Select = undefined;
+    }
+
+    if (this.salesSL3CritCond && this.salesSL3CritChoices.length) {
+      this.rule.sl3Select = this.createSelect(this.salesSL3CritCond, this.salesSL3CritChoices);
+    } else {
+      this.rule.sl3Select = undefined;
+    }
+
+    if (this.prodPFCritCond && this.prodPFCritChoices.length) {
+      this.rule.prodPFSelect = this.createSelect(this.prodPFCritCond, this.prodPFCritChoices);
+    } else {
+      this.rule.prodPFSelect = undefined;
+    }
+    if (this.prodBUCritCond && this.prodBUCritChoices.length) {
+      // validate BU choices and gen sql
+      this.rule.prodBUSelect = this.createSelect(this.prodBUCritCond, this.prodBUCritChoices);
+    } else {
+      this.rule.prodBUSelect = undefined;
+    }
+    if (this.prodTGCritCond && this.prodTGCritChoices.length) {
+      this.rule.prodTGSelect = this.createSelect(this.prodTGCritCond, this.prodTGCritChoices);
+    } else {
+      this.rule.prodTGSelect = undefined;
+    }
+
+    if (this.scmsCritCond && this.scmsCritChoices.length) {
+      this.rule.scmsSelect = this.createSelect(this.scmsCritCond, this.scmsCritChoices);
+    } else {
+      this.rule.scmsSelect = undefined;
+    }
+
+    if (this.beCritCond && this.beCritChoices.length) {
+      this.rule.beSelect = this.createSelect(this.beCritCond, this.beCritChoices);
+    } else {
+      this.rule.beSelect = undefined;
+    }
+
+  }
+
+  createSelect(cond, choices) {
+    let sql = ` ${cond} ( `;
+    choices.forEach((choice, idx) => {
+      sql += `'${choice.trim()}'`;
+      if (idx < choices.length - 1) {
+        sql += ', ';
+      }
+    });
+    sql += ` ) `;
+    return sql;
+  }
+
+  createSelectArrays() {
+    if (this.rule.sl1Select && this.rule.sl1Select.trim().length) {
+      const parse = this.parseSelect(this.rule.sl1Select);
+      this.salesSL1CritCond = parse.cond;
+      this.salesSL1CritChoices = parse.arr;
+    }
+
+    if (this.rule.sl2Select && this.rule.sl2Select.trim().length) {
+      const parse = this.parseSelect(this.rule.sl2Select);
+      this.salesSL2CritCond = parse.cond;
+      this.salesSL2CritChoices = parse.arr;
+    }
+
+    if (this.rule.sl3Select && this.rule.sl3Select.trim().length) {
+      const parse = this.parseSelect(this.rule.sl3Select);
+      this.salesSL3CritCond = parse.cond;
+      this.salesSL3CritChoices = parse.arr;
+    }
+
+    if (this.rule.prodPFSelect && this.rule.prodPFSelect.trim().length) {
+      const parse = this.parseSelect(this.rule.prodPFSelect);
+      this.prodPFCritCond = parse.cond;
+      this.prodPFCritChoices = parse.arr;
+    }
+
+    if (this.rule.prodBUSelect && this.rule.prodBUSelect.trim().length) {
+      const parse = this.parseSelect(this.rule.prodBUSelect);
+      this.prodBUCritCond = parse.cond;
+      this.prodBUCritChoices = parse.arr;
+    }
+
+    if (this.rule.prodTGSelect && this.rule.prodTGSelect.trim().length) {
+      const parse = this.parseSelect(this.rule.prodTGSelect);
+      this.prodTGCritCond = parse.cond;
+      this.prodTGCritChoices = parse.arr;
+    }
+
+    if (this.rule.scmsSelect && this.rule.scmsSelect.trim().length) {
+      const parse = this.parseSelect(this.rule.scmsSelect);
+      this.scmsCritCond = parse.cond;
+      this.scmsCritChoices = parse.arr;
+    }
+
+    if (this.rule.beSelect && this.rule.beSelect.trim().length) {
+      const parse = this.parseSelect(this.rule.beSelect);
+      this.beCritCond = parse.cond;
+      this.beCritChoices = parse.arr;
+    }
+
+  }
+
+  parseSelect(str) {
+    const rtn: AnyObj = {};
+    const idx = str.indexOf('(');
+    rtn.cond = str.substr(0, idx).trim();
+    rtn.arr = str.substr(idx).replace(/(\(|\)|'|")/g, '').trim().split(',');
+    rtn.arr = rtn.arr.map(x => x.trim());
+    return rtn;
+  }
+
+
 
 }
