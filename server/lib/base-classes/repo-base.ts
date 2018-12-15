@@ -130,6 +130,40 @@ export default class RepoBase {
     return this.getManyByGroupEarliest(filter);
   }
 
+  // get lastest active or inactive version, whichever is later
+  getManyLatestByNameActiveInactive(moduleId, filter = {}) {
+    if (!moduleId) {
+      throw new ApiError('getManyLatestByNameActiveInactive: no moduleId');
+    }
+    return Promise.all([
+      this.getManyLatestGroupByNameActive(moduleId, filter),
+      this.getManyLatestGroupByNameInactive(moduleId, filter),
+    ])
+      .then(results => {
+        const actives = results[0];
+        const inactives = results[1];
+        const names = _.uniq(actives.concat(inactives).map(x => x.name.toLowerCase()));
+        const ailist = [];
+        names.forEach(name => {
+          // what we want is the lastest active, BUT... if there's a later inactive, or inactive and no active... then
+          // we want the latest inactive, so they can make it active again if needed.
+          const a = _.find(actives, x => x.name.toLowerCase() === name);
+          const i = _.find(inactives, x => x.name.toLowerCase() === name);
+          if (a && !i) {
+            ailist.push(a);
+          } else if (i && !a) {
+            ailist.push(i);
+          } else if (a.updatedDate >= i.updatedDate) {
+            ailist.push(a);
+          } else if (i.updatedDate > a.updatedDate) {
+            ailist.push(i);
+          }
+        });
+        return ailist;
+      });
+
+  }
+
   getOneById(id) {
     return this.Model.findById(id).exec();
   }

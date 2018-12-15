@@ -43,14 +43,14 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   scmsMatches = [{match: 'SCMS'}];
   legalEntityMatches = [{match: 'Business Entity'}];
   beMatches = [{match: 'BE'}, {match: 'Sub BE'}];
+  countryMatches: { name: string }[] = [];
+  extTheaterMatches: { name: string }[] = [];
 
   // SELECT options to be taken from Postgres
   salesSL1Choices: { name: string }[] = [];
   prodTgChoices: { name: string }[] = [];
   scmsChoices: { name: string }[] = [];
   internalBeChoices: { name: string }[] = [];
-  countryChoices: { name: string }[] = [];
-  extTheaterChoices: { name: string }[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -93,8 +93,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
-        this.countryChoices = results[4].map(x => ({name: x}));
-        this.extTheaterChoices = results[5].map(x => ({name: x}));
+        this.countryMatches = results[4].map(x => ({name: x}));
+        this.extTheaterMatches = results[5].map(x => ({name: x}));
         this.ruleNames = results[6].map(x => x.toUpperCase());
         this.drivers = _.sortBy(results[7][0], 'name');
         this.periods = results[7][1];

@@ -10,6 +10,8 @@ export class AllocationRule {
   scmsMatch?: string;
   legalEntityMatch?: string;
   beMatch?: string;
+  countryMatch?: string;
+  extTheaterMatch?: string;
   sl1Select?: string;
   salesSL1CritCond?: string;
   salesSL1CritChoices: string[] = [];
@@ -32,12 +34,6 @@ export class AllocationRule {
   beSelect?: string;
   beCritCond?: string;
   beCritChoices: string[] = [];
-  countrySelect?: string;
-  countryCritCond?: string;
-  countryCritChoice: string;
-  extTheaterSelect?: string;
-  extTheaterCritCond?: string;
-  extTheaterCritChoice: string;
   activeStatus = 'I';
   status = 'D';
   approvedOnce = 'N';

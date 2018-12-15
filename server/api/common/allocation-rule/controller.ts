@@ -88,17 +88,6 @@ export default class AllocationRuleController extends ApprovalController {
       rule.beSelect = undefined;
     }
 
-    if (rule.countryCritCond && rule.countryCritChoice.trim()) {
-      rule.countrySelect = this.createSelect(rule.countryCritCond, [rule.countryCritChoice]);
-    } else {
-      rule.countrySelect = undefined;
-    }
-
-    if (rule.extTheaterCritCond && rule.extTheaterCritChoice.trim()) {
-      rule.extTheaterSelect = this.createSelect(rule.extTheaterCritCond, [rule.extTheaterCritChoice]);
-    } else {
-      rule.extTheaterSelect = undefined;
-    }
   }
 
   validateChoices(rule) {
@@ -188,7 +177,7 @@ export default class AllocationRuleController extends ApprovalController {
     const omitProperties = ['_id', 'id', '__v', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', 'approvedOnce',
       'salesSL1CritCond', 'salesSL1CritChoices', 'salesSL2CritCond', 'salesSL2CritChoices', 'salesSL3CritCond', 'salesSL3CritChoices',
       'prodPFCritCond', 'prodPFCritChoices', 'prodBUCritCond', 'prodBUCritChoices', 'prodTGCritCond', 'prodTGCritChoices',
-      'scmsCritCond', 'scmsCritChoices', 'beCritCond', 'beCritChoices', 'countryCritCond', 'countryCritChoice', 'extTheaterCritCond', 'extTheaterCritChoice'
+      'scmsCritCond', 'scmsCritChoices', 'beCritCond', 'beCritChoices'
     ];
     return this.sendApprovalEmailBase(req, mode, item, 'rule', 'rule-management', omitProperties);
   }

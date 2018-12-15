@@ -103,35 +103,15 @@ export default class ApprovalController extends ControllerBase {
 
   getManyLatestByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
-      this.repo.getManyLatestGroupByNameActive(req.body.moduleId),
-      this.repo.getManyLatestGroupByNameInactive(req.body.moduleId),
+      this.repo.getManyLatestByNameActiveInactive(req.body.moduleId),
       this.repo.getMany({
         status: {$in: ['D', 'P']},
         createdBy: req.user.id,
         moduleId: req.body.moduleId})
     ])
       .then(results => {
-        const actives = results[0];
-        const inactives = results[1];
-        const draftPending = results[2];
-        const names = _.uniq(actives.concat(inactives).map(x => x.name.toLowerCase()));
-        const ailist = [];
-        names.forEach(name => {
-          // what we want is the lastest active, BUT... if there's a later inactive, or inactive and no active... then
-          // we want the latest inactive, so they can make it active again if needed.
-          const a = _.find(actives, x => x.name.toLowerCase() === name);
-          const i = _.find(inactives, x => x.name.toLowerCase() === name);
-          if (a && !i) {
-            ailist.push(a);
-          } else if (i && !a) {
-            ailist.push(i);
-          } else if (a.updatedDate >= i.updatedDate) {
-            ailist.push(a);
-          } else if (i.updatedDate > a.updatedDate) {
-            ailist.push(i);
-          }
-        });
-
+        const ailist = results[0];
+        const draftPending = results[1];
         res.json(ailist.concat(draftPending));
       })
       .catch(next);

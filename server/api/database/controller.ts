@@ -88,7 +88,7 @@ export default class DatabaseController {
         }
         if (syncMap.dfa_sub_measure) {
           promises.push(this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', req.user.id, log, elog,
-            this.submeasureRepo.getManyLatestGroupByNameActive(-1)));
+            this.submeasureRepo.getManyLatestByNameActiveInactive(-1)));
         }
         if (syncMap.dfa_prof_dept_acct_map_upld) {
           promises.push(this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', req.user.id, log, elog)); // deletes all on upload and pgsync
