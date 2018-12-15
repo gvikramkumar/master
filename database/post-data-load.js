@@ -192,36 +192,16 @@ collectionsWithStatus.forEach(coll => {
   });
 });
 
-const rules = [];
-db.dfa_allocation_rule.find({}).forEach(rule => {
-  if (rule.sl1Select && rule.sl1Select.trim().length) {
-    const parse = parseSelect(rule.sl1Select);
-    rule.salesSL1CritCond = parse.cond;
-    rule.salesSL1CritChoices = parse.arr;
-  }
-  if (rule.scmsSelect && rule.scmsSelect.trim().length) {
-    const parse = parseSelect(rule.scmsSelect);
-    rule.scmsCritCond = parse.cond;
-    rule.scmsCritChoices = parse.arr;
-  }
-  if (rule.beSelect && rule.beSelect.trim().length) {
-    const parse = parseSelect(rule.beSelect);
-    rule.beCritCond = parse.cond;
-    rule.beCritChoices = parse.arr;
-  }
-  rules.push(rule);
-});
-db.dfa_allocation_rule.deleteMany({})
-db.dfa_allocation_rule.insertMany(rules);
 db.dfa_allocation_rule.updateMany({}, {$set: {approvedOnce: 'Y', activeStatus: 'A'}});
 
-function parseSelect(str) {
-  rtn = {};
-  const idx = str.indexOf('(');
-  rtn.cond = str.substr(0, idx).trim();
-  rtn.arr = str.substr(idx).replace(/(\(|\)|'|")/g, '').trim().split(',');
-  return rtn;
-}
+db.dfa_allocation_rule.updateMany({salesMatch: ''}, {$unset: {salesMatch: ''}});
+db.dfa_allocation_rule.updateMany({productMatch: ''}, {$unset: {productMatch: ''}});
+db.dfa_allocation_rule.updateMany({scmsMatch: ''}, {$unset: {scmsMatch: ''}});
+db.dfa_allocation_rule.updateMany({legalEntityMatch: ''}, {$unset: {legalEntityMatch: ''}});
+db.dfa_allocation_rule.updateMany({beMatch: ''}, {$unset: {beMatch: ''}});
+db.dfa_allocation_rule.updateMany({sl1Select: ''}, {$unset: {sl1Select: ''}});
+db.dfa_allocation_rule.updateMany({scmsSelect: ''}, {$unset: {scmsSelect: ''}});
+db.dfa_allocation_rule.updateMany({beSelect: ''}, {$unset: {beSelect: ''}});
 
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED

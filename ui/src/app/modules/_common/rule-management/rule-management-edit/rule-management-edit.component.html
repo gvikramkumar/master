@@ -70,44 +70,44 @@
                     <div class="form-group-text">BE</div>
                   </div>
                   <div class="col-3">
-                    <cui-select name="salesSL1Cond" class="replace-label-space" [(ngModel)]="rule.salesSL1CritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.salesSL1CritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
-                    <cui-select name="salesSL2Cond" class="replace-label-space" [(ngModel)]="rule.salesSL2CritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.salesSL2CritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
-                    <cui-select name="salesSL3Cond" class="replace-label-space" [(ngModel)]="rule.salesSL3CritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.salesSL3CritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
-                    <cui-select name="prodTGCond" class="replace-label-space" [(ngModel)]="rule.prodTGCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.prodTGCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
-                    <cui-select name="prodBUCond" class="replace-label-space" [(ngModel)]="rule.prodBUCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.prodBUCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
-                    <cui-select name="prodPFCond" class="replace-label-space" [(ngModel)]="rule.prodPFCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.prodPFCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
-                    <cui-select name="scmsCond" class="replace-label-space" [(ngModel)]="rule.scmsCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.scmsCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
-                    <cui-select name="beCond" class="replace-label-space" [(ngModel)]="rule.beCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.beCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="salesSL1Cond" class="replace-label-space" [(ngModel)]="salesSL1CritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!salesSL1CritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="salesSL2Cond" class="replace-label-space" [(ngModel)]="salesSL2CritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!salesSL2CritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="salesSL3Cond" class="replace-label-space" [(ngModel)]="salesSL3CritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!salesSL3CritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="prodTGCond" class="replace-label-space" [(ngModel)]="prodTGCritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!prodTGCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="prodBUCond" class="replace-label-space" [(ngModel)]="prodBUCritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!prodBUCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="prodPFCond" class="replace-label-space" [(ngModel)]="prodPFCritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!prodPFCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="scmsCond" class="replace-label-space" [(ngModel)]="scmsCritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!scmsCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                    <cui-select name="beCond" class="replace-label-space" [(ngModel)]="beCritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!beCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
                   </div>
                   <div class="col-8">
-                    <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices"
+                    <cui-multiselect name="sl1SalesChoice" [(ngModel)]="salesSL1CritChoices" [items]="salesSL1Choices"
                                      class="replace-label-space" optionsKey="name" optionsValue="name" empty="true"></cui-multiselect>
-                    <fin-input name="sl2SalesChoice" [(ngModel)]="rule.salesSL2CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                    <fin-input name="sl2SalesChoice" [(ngModel)]="salesSL2CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
                                [stringToArray]="true" [options]="salesSL2ChoiceOptions"></fin-input>
-                    <fin-input name="sl3SalesChoice" [(ngModel)]="rule.salesSL3CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                    <fin-input name="sl3SalesChoice" [(ngModel)]="salesSL3CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
                                [stringToArray]="true" [options]="salesSL3ChoiceOptions"></fin-input>
-                    <cui-multiselect name="prodTGChoice" [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
+                    <cui-multiselect name="prodTGChoice" [(ngModel)]="prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
                                      class="replace-label-space" optionsValue="name" dropdownMaxHeight="300"
                                      empty="true"></cui-multiselect>
-                    <fin-input name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                    <fin-input name="prodBUChoice" [(ngModel)]="prodBUCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
                                [stringToArray]="true" [options]="prodBUChoiceOptions"></fin-input>
-                    <fin-input name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                    <fin-input name="prodPFChoice" [(ngModel)]="prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
                                [stringToArray]="true" [options]="prodPFChoiceOptions"></fin-input>
-                    <cui-multiselect name="scmsChoice" [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name"
+                    <cui-multiselect name="scmsChoice" [(ngModel)]="scmsCritChoices" [items]="scmsChoices" optionsKey="name"
                                      class="replace-label-space" optionsValue="name" empty="true"></cui-multiselect>
-                    <cui-multiselect name="beChoice" [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
+                    <cui-multiselect name="beChoice" [(ngModel)]="beCritChoices" [items]="internalBeChoices" optionsKey="name"
                                  optionsValue="name" dropdownMaxHeight="300"
                                      class="replace-label-space" empty="true"></cui-multiselect>
                   </div>
