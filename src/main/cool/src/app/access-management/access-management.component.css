@@ -1,0 +1,169 @@
+.cui .table td.hints {
+    overflow: visible;
+}
+
+.panel.panel--bordered.panel--raised-small {
+    margin: 15px auto;
+}
+.content .card:last-of-type {
+margin-bottom: 25px;
+}
+.cui table td .ui-steps {
+margin: 0 auto 0px auto;
+padding: 0px 0;
+}
+table .date {
+    width:10%;
+}
+table .other {
+    width:15%;
+}
+table .desc {
+    width:20%;
+}
+table .steps {
+    width:20%;
+}
+.cui .inline-icon {
+    margin-left: 5px;
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+span.icon-chevron-right.inline-icon {
+    padding: 10px 0 10px;
+}
+.cui .panel h1.display-4 {
+    display: inline;
+}
+.header-link {
+    display: inline-block;
+    margin: auto auto auto 15px;
+}
+.cui .pagination .form-group.label--inline .form-group__text {
+    width: 150px;
+    flex-direction: row;
+    align-items: center;
+}
+.cui .pagination {
+
+    font-size: 12px;
+}
+.cui .pagination .form-group.dropdown {
+    display: inline-block;
+}
+.cui .pagination span {
+    display: inline-block;
+    margin: auto 10px;
+}
+.cui .pagination .btn.btn--small {
+    width:40px;
+}
+.cui .panel.header-bar {
+    height:70px;
+}
+.header-bar__main span {
+    vertical-align: middle;
+}
+.header-bar__main span.vertical-divider {
+    opacity: .5;
+    display: inline-block;
+    border-left: solid 1px white;
+    height: 50px;
+    margin: 10px 20px;
+}
+span.table--description {
+    font-size: 80%;
+    display: block;
+}
+.action--value {
+    font-size:1.5em;
+    display:block;
+    text-align: center;
+}
+.action--value-label {
+    font-size:50%;
+    display:block;
+    text-align: center;
+}
+.header-toolbar button span.button--label {
+    display: none;
+}
+.cui .panel .header-toolbar .btn {
+    padding: 0 10px;
+}
+.cui .avatar span.role {
+    font-size:75%;
+    display: block;
+    text-align: right;
+    margin-right: 24px;
+}
+.cui a:not(.btn):active, .cui a:not(.btn):hover, .cui a:not(.btn):focus, .cui .link:active, .cui .link:hover, .cui .link:focus {
+    text-decoration: none;
+}
+td a span.icon-small {
+    margin-right: 10px;
+}
+span.badge-wrapper.base-margin-left:hover:after {
+    content: "";
+    position: absolute;
+    right: -30px;
+    top: -8px;
+    font-family: "cui-font";
+}
+.cui .table--selectable > tbody > tr > td {
+    border-bottom: solid 1px #f2f2f2;
+}
+.row.card-table-header {
+    border-bottom: 1px solid #f2f2f2;
+    padding-bottom: 10px;
+}
+.cui [data-balloon][data-balloon-pos='right']:before{
+    margin-left: 2px;
+}
+.cui [data-balloon][data-balloon-pos='right']:after {
+    margin-left: 5px;
+}
+
+.cui td .progressbar {
+    width: 33%;
+    display: inline-block;
+}
+td.emphasis {
+    font-style: italic;
+}
+@media only screen and (max-width: 768px) {
+body.cui {
+    overflow-y: scroll;
+    height: auto;
+}
+.cui .panel.header-bar .header-bar__main {
+    margin: 0;
+}
+}
+@media only screen and (min-width: 768px) {
+.cui .pagination {
+    text-align: right;
+}
+.header-bar__main span.vertical-divider {
+    margin: 10px 40px;
+}
+.header-toolbar button span.button--label {
+    display: inline-block;
+}
+.cui .panel .header-toolbar .btn {
+    padding: 0 35px;
+}
+.action--value-label {
+    font-size: 60%;
+    display: inline-block;
+    margin-top: 5px;
+}
+.action--value {
+    font-size: 1.5em;
+    display: inline-block;
+}
+}
+
+#formSection{
+    visibility: hidden;
+}
