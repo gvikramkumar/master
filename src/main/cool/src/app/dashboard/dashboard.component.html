@@ -14,10 +14,7 @@
                   Immediate Action</span></h1>
             </div>
           </div>
-          <div class="header-toolbar">
-              <button (click)="createNewAction()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
-                <span class="button--label">New Actions</span></button>
-            </div>
+          
           <div class="header-toolbar">
             <button (click)="createNewOffer()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
               <span class="button--label">New Offer</span></button>
@@ -57,11 +54,11 @@
                         <div class="popover__body">
                           <h5>Notification Details</h5><a class="modal__close" id="popover_close"><span class="icon-close" (click)="closeNotification()"></span></a>
                           <p>{{actionData.actionDesc}}</p>
-                          <button class="btn btn--secondary base-margin-top" >View Offer</button>
-                          <button class="btn btn--secondary base-margin-top">Notification Page</button>
+                          <button class="btn btn--secondary base-margin-top" (click)="offerDetailOverView(actionData.offerId)" >View Offer</button>
+                         
                           </div>
                           <div class="popover__footer">
-                              <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="dismissNotification()">Dismiss Notification</button>  
+                              <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="dismissNotification(actionData.offerId)">Dismiss Notification</button>  
                           </div>
                         </div>
                        </ng-template>
@@ -84,6 +81,7 @@
                               <span class="{{actionData.styleColor}}">
                                 <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
                               </span>
+                              
                           </div>
                       </span>
                       <span *ngIf="actionData.alertType == 2">
@@ -160,15 +158,21 @@
                         <span>{{dateFormat(offerData.expectedLaunchDate)}} <br /></span>
                       </ng-template>
                 </p-column>
-                <p-column field="status" [style]="{'width': '400px'}">
+                <p-column field="overallStatus" [style]="{'width': '400px'}">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                       <div class="row no-gutters">
                           <div class="col-md-12">
                             <div class="progressbar__label">Launch In Progress</div>
-                            <div class="progressbar progressbar--warning" data-percentage="33">
+                            <div class="progressbar progressbar--warning" data-percentage="66">
                                 <div class="progressbar__fill"></div>
                             </div>                     
-                          </div>                   
+                          </div>     
+                            <!-- <div class="col-md-12">
+                                <div class="progressbar__label">Launch In Progress</div>
+                                <div class="progressbar progressbar--warning" data-percentage="66">
+                                    <div class="progressbar__fill"></div>
+                                </div>                     
+                              </div>                   -->
                         </div>
                   </ng-template>
                 </p-column>

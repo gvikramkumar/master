@@ -95,8 +95,8 @@
                 </div>
             <div class="modal__footer">
                 <div class="card__footer form-actions">
-                    <button class="btn base-margin-top" onclick="window.location.href='add-edit-contacts.html'">Cancel</button>
-                    <button onclick="window.location.href='add-edit-contacts-added.html'" class="btn btn--primary base-margin-top">Create an Action</button>
+                    <button class="btn base-margin-top" (click)="cancel()">Cancel</button>
+                    <button (click)="createAction()" class="btn btn--primary base-margin-top">Create an Action</button>
                 </div>
             </div>
 
