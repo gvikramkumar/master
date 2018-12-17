@@ -37,6 +37,7 @@ import { CreateNewActionComponent } from './create-new-action/create-new-action.
 import { ActionsComponent } from './actions/actions.component';
 import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
 import { AccessManagementComponent } from './access-management/access-management.component';
+import { AvatarComponent } from './directives/avatar/avatar.component';
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -58,7 +59,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     CreateNewActionComponent,
     ActionsComponent,
     OfferCreateDetailComponent,
-    AccessManagementComponent
+    AccessManagementComponent,
+    AvatarComponent
   ],
   imports: [
     BrowserModule,
