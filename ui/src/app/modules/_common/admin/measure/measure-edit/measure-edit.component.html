@@ -35,7 +35,7 @@
 
     <div *ngFor="let level of [1,2,3];let idx=index;" class="row">
       <div class="col-6">
-        <fin-input name="repLvl{{level}}" [(ngModel)]="measure.reportingLevels[idx]" label="Reporting Level 1"></fin-input>
+        <fin-input name="repLvl{{level}}" [(ngModel)]="measure.reportingLevels[idx]" label="Reporting Level {{level}}"></fin-input>
       </div>
       <div class="col-6 form-group-check">
         <fin-checkbox name="repLvl-enabled{{level}}" [(model)]="measure.reportingLevelEnableds[idx]" label="Enabled" [inline]="true"></fin-checkbox>
