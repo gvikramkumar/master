@@ -1,20 +1,30 @@
 <div mat-dialog-title>Submeasure Detail:</div>
 
 <div mat-dialog-content>
-  <div class="row"> <!--Top row-->
+  <div class="row"> <!--First row-->
 
     <div class="col-lg-6"> <!--First column-->
       <!--Top row-->
       <div class="row">
-        <div class="col-lg-6">Name:</div>
+        <div class="col-lg-6">Measure:</div>
         <div class="col-lg-6 text-ellipsis" matTooltip="{{data.name}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.name}}</div>
       </div>
 
       <div class="row">
-        <div class="col-lg-6">Driver:</div>
-        <div class="col-lg-6">{{data.driverName}}</div>
+        <div class="col-lg-6">Sub-Measure Name:</div>
+        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.name}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.name}}</div>
       </div>
-    </div> <!--End of top row first column-->
+
+      <div class="row">
+        <div class="col-lg-6">Source:</div>
+        <div class="col-lg-6">{{data.name}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Description:</div>
+        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.desc}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.desc}}</div>
+      </div>
+    </div> <!--End of first row first column-->
 
 
     <div class="col-lg-6"> <!--Second column-->
@@ -23,95 +33,154 @@
       </div>
 
       <div class="row">
-        <div class="col-lg-6">Driver Period:</div>
-        <div class="col-lg-6">{{data.period}}</div>
+        <!--Empty row-->
       </div>
-    </div> <!--End of top row second column-->
-  </div> <!--End of top row-->
+
+      <div class="row">
+        <div class="col-lg-6">Submeasure Category Type:</div>
+        <div class="col-lg-6">{{data.categoryType}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Grouping Submeasure:</div>
+        <div class="col-lg-6">{{data.name}}</div>
+      </div>
+    </div> <!--End of first row second column-->
+  </div> <!--End of first row-->
 
 
-  <div class = "row"> <!--Bottom row-->
+  <div class = "row"> <!--Second row-->
 
     <div class="col-lg-6"> <!--First column-->
       <div class="row heading">
-        <div class="col">Matching Criteria:</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">Sales:</div>
-        <div class="col-lg-6" >{{data.salesMatch}}</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">Product:</div>
-        <div class="col-lg-6">{{data.productMatch}}</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">SCMS:</div>
-        <div class="col-lg-6">{{data.scmsMatch}}</div>
+        <div class="col">Business Input Level:</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Internal Business Entity:</div>
-        <div class="col-lg-6">{{data.beMatch}}</div>
+        <div class="col-lg-6" >{{data.inputFilterLevel.internalBELevel}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Product:</div>
+        <div class="col-lg-6">{{data.inputFilterLevel.productLevel}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Legal Entity:</div>
-        <div class="col-lg-6">{{data.legalEntityMatch}}</div>
+        <div class="col-lg-6">{{data.inputFilterLevel.entityLevel}}</div>
       </div>
-    </div> <!--End of bottom row first column-->
+
+      <div class="row">
+        <div class="col-lg-6">Sales:</div>
+        <div class="col-lg-6">{{data.inputFilterLevel.salesLevel}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">SCMS:</div>
+        <div class="col-lg-6">{{data.inputFilterLevel.scmsLevel}}</div>
+      </div>
+    </div> <!--End of Second row first column-->
 
     <div class="col-lg-6"> <!--Second column-->
 
 
       <div class="row heading">
-        <div class="col">Selection Criteria:</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">Sales Level 1:</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.sl1Select}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.sl1Select}}</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">Sales Level 2:</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.sl2Select}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.sl2Select}}</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">Sales Level 3:</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.sl3Select}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.sl3Select}}</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">Product (PF):</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.prodPFSelect}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.prodPFSelect}}</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">Product (BU):</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.prodBUSelect}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.prodBUSelect}}</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">Product (TG):</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.prodTGSelect}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.prodTGSelect}}</div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">SCMS:</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.scmsSelect}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.scmsSelect}}</div>
+        <div class="col">Manual Mapping:</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Internal Business Entity:</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.beSelect}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.beSelect}}</div>
+        <div class="col-lg-6" >{{data.manualMapping.internalBELevel}}</div>
       </div>
 
-    </div>
-  </div>
+      <div class="row">
+        <div class="col-lg-6">Product:</div>
+        <div class="col-lg-6">{{data.manualMapping.productLevel}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Legal Entity:</div>
+        <div class="col-lg-6">{{data.manualMapping.entityLevel}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Sales:</div>
+        <div class="col-lg-6">{{data.manualMapping.salesLevel}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">SCMS:</div>
+        <div class="col-lg-6">{{data.manualMapping.scmsLevel}}</div>
+      </div>
+
+    </div> <!--End of Second row Second column-->
+  </div> <!--End of Second row-->
+
+  <div class="row"> <!--Third row-->
+
+    <div class="col-lg-6"> <!--First column-->
+      <div class="line-break">
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Effective Month:</div>
+        <div class="col-lg-6">{{data.startFiscalMonth}}</div>      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Processing Timing:</div>
+        <div class="col-lg-6">{{data.processingTime}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">P&L Node Grouping:</div>
+        <div class="col-lg-6">{{data.pnlnodeGrouping}}</div>
+      </div>
+
+    </div> <!--End of third row first column-->
+
+
+    <div class="col-lg-6"> <!--Second column-->
+      <div class="line-break">
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Reporting Level 1:</div>
+        <div class="col-lg-6">{{data.reportingLevels[0]}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Reporting Level 2:</div>
+        <div class="col-lg-6">{{data.reportingLevels[1]}}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Reporting Level 3:</div>
+        <div class="col-lg-6">{{data.reportingLevels[2]}}</div>
+      </div>
+    </div> <!--End of third row second column-->
+  </div> <!--End of third row-->
+
+  <div class="row"> <!--Bottom row-->
+
+    <div class="col-lg-6"> <!--First column-->
+      <div class="line-break">
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">Rule Association:</div>
+        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.rules}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.rules}}</div>
+      </div>
+
+    </div> <!--End of bottom row first column-->
+
+
+    <div class="col-lg-6"> <!--Second column-->
+      <div class="line-break">
+      </div>
+
+    </div> <!--End of bottom row second column-->
+  </div> <!--End of bottom row-->
 </div>
 
 <div mat-dialog-actions>
