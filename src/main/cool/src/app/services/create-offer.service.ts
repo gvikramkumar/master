@@ -111,19 +111,19 @@ export class CreateOfferService {
 
   getOfferById(offerId) {
     let url = this.baseUrl + 'offer/'+offerId;
-    return this.httpClient.get(url);
+    return this.httpClient.get(url, { withCredentials: true });
   }
 
   getMMMapperById(offerId) {
     let url = this.baseUrl + 'mmMapping/'+offerId;
-    return this.httpClient.get(url);
+    return this.httpClient.get(url, { withCredentials: true });
   }
 
   registerOffer(createoffer: CreateOffer): Observable<any> {
     createoffer.userId = this.userService.getUserId();
     createoffer.offerCreatedBy = this.userService.getUserId();
     createoffer.offerOwner = this.userService.getUserId();
-    return this.httpClient.post(this.offerCreateUrl, createoffer,{responseType: 'text'});
+    return this.httpClient.post(this.offerCreateUrl, createoffer, { withCredentials: true });
   }
 
 }

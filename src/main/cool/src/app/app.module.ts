@@ -9,7 +9,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-
+import { DashboardService } from './services/dashboard.service';
 import { SharedServiceService } from './shared-service.service';
 import {MonetizationModelService} from './services/monetization-model.service';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -36,8 +36,10 @@ import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit
 import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
 import { ActionsComponent } from './actions/actions.component';
 import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
+import {MenuModule} from 'primeng/menu';
 import { AccessManagementComponent } from './access-management/access-management.component';
 import { AvatarComponent } from './directives/avatar/avatar.component';
+
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -68,6 +70,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
+    MenuModule,
     AppRoutingModule,
     ClickOutsideModule,
     PerfectScrollbarModule,
@@ -91,6 +94,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     ConfigurationService,
     MonetizationModelService,
     OfferDetailViewService,
+    DashboardService,
     UserService,
      {
        provide: APP_INITIALIZER,
