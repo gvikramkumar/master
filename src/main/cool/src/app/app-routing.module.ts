@@ -10,6 +10,8 @@ import { StrategyReviewComponent } from './strategy-review/strategy-review.compo
 import {ExitCriteriaValidationComponent} from './exit-criteria-validation/exit-criteria-validation.component';
 import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
 import { ActionsComponent } from './actions/actions.component';
+import { AccessManagementComponent } from './access-management/access-management.component';
+
 
 const routes: Routes = [
   {
@@ -56,6 +58,10 @@ const routes: Routes = [
   {
     path: 'strategyReview/:id',
     component: StrategyReviewComponent
+  },
+  {
+    path: 'accessManagement',
+    component: AccessManagementComponent
   }
 ];
 

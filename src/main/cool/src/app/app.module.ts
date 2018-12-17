@@ -37,6 +37,8 @@ import { CreateNewActionComponent } from './create-new-action/create-new-action.
 import { ActionsComponent } from './actions/actions.component';
 import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
 import {MenuModule} from 'primeng/menu';
+import { AccessManagementComponent } from './access-management/access-management.component';
+
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -57,7 +59,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     ExitCriteriaValidationComponent,
     CreateNewActionComponent,
     ActionsComponent,
-    OfferCreateDetailComponent
+    OfferCreateDetailComponent,
+    AccessManagementComponent
   ],
   imports: [
     BrowserModule,
