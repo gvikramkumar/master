@@ -143,6 +143,7 @@ export default class SubmeasureController extends ApprovalController {
   approve(req, res, next) {
     if (!req.body.rules.length) {
       next(new ApiError(`No rules specified in submeasure: ${req.body.name}`));
+      return;
     }
     super.approve(req, res, next);
   }

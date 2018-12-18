@@ -224,7 +224,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         if (this.viewMode || this.editMode || this.copyMode) {
           this.sm = results[6];
         }
-        if (this.editMode || this.copyMode) {
+        if (this.copyMode) {
           // we'll reset these for each edit
           this.sm.manualMixHw = undefined;
           this.sm.manualMixSw = undefined;
