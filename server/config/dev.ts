@@ -1,5 +1,6 @@
 export default {
   corsOrigin: ['http://localhost:4200'],
-  showStack: true
+  showStack: true,
+  autoSyncOn: true
 };
 

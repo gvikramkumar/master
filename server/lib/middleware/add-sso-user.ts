@@ -109,7 +109,7 @@ export function addSsoUser() {
           return Promise.reject(new DisregardError());
         } else {
           req.user = user;
-          req.dfaData = {modules};
+          req.dfa = {modules};
           // this is the ui's init call to get user, with each ui app load, we'll store the user's details in database
           if (updateUserList) {
             const userList = new UserList(user.id, user.fullName, user.email, user.roles, new Date());
@@ -133,7 +133,7 @@ function getArtRoles(userId) {
   }
   const options = {
     url: config.art.url,
-    method: 'post',
+    method: 'POST',
     auth: {
       user: artUser,
       pass: artPassword,

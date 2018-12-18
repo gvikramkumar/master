@@ -39,9 +39,12 @@ select * from fpadfa.dfa_prof_dept_acct_map_upld;
 
 
 
-select * from fpadfa.dfa_sub_measure where sub_measure_key = 129233;
+select * from fpadfa.dfa_sub_measure where sub_measure_name = 'dank4sm';
 select * from fpadfa.dfa_sub_measure where sub_measure_key = 1006132;
 select * from fpadfa.dfa_submeasure_input_lvl where sub_measure_key = 1006132;
 select * from fpadfa.dfa_submeasure_input_lvl where input_level_flag = 'M';
 
 select create_owner, create_datetimestamp, update_owner, update_datetimestamp from fpadfa.dfa_sub_measure;
+
+select * from fpadfa.dfa_data_sources;
+
