@@ -11,6 +11,7 @@ import OpenPeriodRepo from '../../api/common/open-period/repo';
 export class ApiDfaData {
   _module?: DfaModule;
   modules: DfaModule[];
+  fiscalMonths: AnyObj;
   itadminEmail: string;
   ppmtEmail: string;
   user: DfaUser;
@@ -51,13 +52,17 @@ export function addGlobalData() {
         const lookups = results[0];
         const modules = results[1];
         const openPeriods = results[2];
-        modules.forEach(mod => mod.openPeriod = _.get(_.find(openPeriods, {moduleId: mod.moduleId}), 'fiscalMonth'));
+        modules.forEach(mod => mod.fiscalMonth = _.find(openPeriods, {moduleId: mod.moduleId}).fiscalMonth);
+        const fiscalMonths: AnyObj = {};
+        modules.forEach(mod => fiscalMonths[mod.abbrev] = mod.fiscalMonth);
+
         const dfa = new ApiDfaData({
           req: req,
           user: req.user,
           itadminEmail: lookups[0],
           ppmtEmail: lookups[1],
-          modules
+          modules,
+          fiscalMonths
         });
         if (req.query.moduleId || req.body.moduleId) {
           dfa.module = _.find(modules, {moduleId: Number(req.query.moduleId)});

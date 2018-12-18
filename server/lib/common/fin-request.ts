@@ -20,6 +20,19 @@ export function finRequest(options) {
 
 }
 
+export function finJsonRequest(url, method, json, _options = {}) {
+  const options = {
+    url,
+    method,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    json
+  };
+  Object.assign(options, _options);
+
+  return finRequest(options);
+}
 
 
 
