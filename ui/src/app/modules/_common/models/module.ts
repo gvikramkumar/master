@@ -1,3 +1,4 @@
+import {OpenPeriod} from './open-period';
 
 export class DfaModule {
   id?: string;
@@ -8,6 +9,7 @@ export class DfaModule {
   status = 'I';
   desc?: string;
   roles?: string;
+  fiscalMonth?: number;
   constructor(status?) {
     this.status = status || 'I';
   }

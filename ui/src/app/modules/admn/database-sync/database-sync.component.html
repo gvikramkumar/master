@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-12" fxLayout="row" fxLayoutAlign="space-between center">
       <div>
-        <button cuiButton color="primary" (click)="mongoToPgSync()">Mongo To Postgres Sync</button>
+        <button cuiButton color="primary" (click)="mongoToPgSync()" [disabled]="!syncMap.hasSelections()">Mongo To Postgres Sync</button>
       </div>
       <div>
         <div><button cuiButton color="secondary" (click)="pgToMongoSync()">Postgres To Mongo Sync</button></div>

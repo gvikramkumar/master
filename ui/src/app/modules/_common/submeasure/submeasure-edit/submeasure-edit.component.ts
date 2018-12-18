@@ -224,7 +224,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         if (this.viewMode || this.editMode || this.copyMode) {
           this.sm = results[6];
         }
-        if (this.editMode || this.copyMode) {
+        if (this.copyMode) {
           // we'll reset these for each edit
           this.sm.manualMixHw = undefined;
           this.sm.manualMixSw = undefined;
@@ -301,6 +301,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   // todo: make sure this hasn't changed, it's 4 currently
   sourceChange() {
     this.sm.indicators.dollarUploadFlag = shUtil.isManualUploadSource(this.sm.sourceId) ? 'Y' : 'N';
+
+    if (!this.hasFlashCategory()) {
+      this.flashCategory = undefined;
+    }
+    if (!this.hasAdjustmentType()) {
+      this.adjustmentType = undefined;
+    }
   }
 
   isCogsMeasure() {
@@ -312,7 +319,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.sm.measureId) { // no measure in "add" mode
       return;
     }
-
 
     if (this.isCogsMeasure()) {
       this.disableCategories = false;

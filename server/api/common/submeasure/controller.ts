@@ -143,6 +143,7 @@ export default class SubmeasureController extends ApprovalController {
   approve(req, res, next) {
     if (!req.body.rules.length) {
       next(new ApiError(`No rules specified in submeasure: ${req.body.name}`));
+      return;
     }
     super.approve(req, res, next);
   }
@@ -161,8 +162,8 @@ export default class SubmeasureController extends ApprovalController {
       return this.productClassUploadRepo.removeMany({submeasureName: sm.name})
         .then(() => {
           return this.productClassUploadRepo.addManyTransaction([
-            {fiscalMonth: req.dfa.module.openPeriod, submeasureName: sm.name, splitCategory: 'HARDWARE', splitPercentage: sm.manualMixHw},
-            {fiscalMonth: req.dfa.module.openPeriod, submeasureName: sm.name, splitCategory: 'SOFTWARE', splitPercentage: sm.manualMixSw}
+            {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'HARDWARE', splitPercentage: sm.manualMixHw},
+            {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'SOFTWARE', splitPercentage: sm.manualMixSw}
           ], req.user.id);
         });
     } else {

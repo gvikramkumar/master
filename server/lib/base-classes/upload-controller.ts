@@ -4,19 +4,21 @@ import {ApiError} from '../common/api-error';
 import _ from 'lodash';
 import {sendHtmlMail} from '../common/mail';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
-import Q from 'q';
 import RepoBase from './repo-base';
-import {Request} from 'express';
 import ApiRequest from '../models/api-request';
 import AnyObj from '../../../shared/models/any-obj';
-import PgLookupRepo from '../../api/pg-lookup/repo';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
 import DfaUser from '../../../shared/models/dfa-user';
 import {svrUtil} from '../common/svr-util';
 import {ApiDfaData} from '../middleware/add-global-data';
+import {SyncMap} from '../../../shared/models/sync-map';
+import DatabaseController from '../../api/database/controller';
+import config from '../../config/get-config';
+import {injector} from '../common/inversify.config';
 
 
 export default class UploadController {
+  uploadType: string;
   UploadValidationError = 'UploadValidationError';
   data: AnyObj = {};
   startUpload: number;
@@ -48,9 +50,11 @@ export default class UploadController {
   }
 
   upload(req, res, next) {
+    this.verifyProperties(req.query, ['moduleId']);
     this.dfa = req.dfa;
-    this.moduleId = Number(req.body.moduleId);
+    this.moduleId = Number(req.query.moduleId);
     this.user = req.user;
+    this.uploadType = this.getUploadType(req);
     this.startUpload = Date.now();
     this.req = req;
     this.userId = req.user.id;
@@ -77,6 +81,7 @@ export default class UploadController {
       .then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
       .then(() => this.importRows(req.user.id))
+      .then(() => this.autoSyncOnStaging(req, res, next))
       .then(() => {
         this.sendSuccessEmail();
         res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
@@ -227,7 +232,7 @@ export default class UploadController {
     <div>${err.message}</div>
     <pre>
       ${JSON.stringify(err.data, null, 2)}
-    </pre>`
+    </pre>`;
   }
 
   buildValidationEmailBody() {
@@ -246,15 +251,15 @@ export default class UploadController {
           let append = `<tr><td style="width: 300px; margin-right: 30px">${err.property}:</td>
                 <td style="width: 300px; margin-right: 30px">${err.error}</td>`;
           if (err.value) {
-            append += `<td style="width: 300px;">${err.value}</td>`
+            append += `<td style="width: 300px;">${err.value}</td>`;
           }
           append += '</tr>';
           body += append;
         } else {
-          body += `<tr><td colspan="2" style="width:630px">* ${err.error}</td></tr>`
+          body += `<tr><td colspan="2" style="width:630px">* ${err.error}</td></tr>`;
         }
       })
-      body += '</table>'
+      body += '</table>';
     });
     return body;
   }
@@ -382,6 +387,56 @@ export default class UploadController {
     return Promise.resolve();
   }
 
+  getUploadType(req) {
+    const uploadType = req.path.substr(req.path.lastIndexOf('/') + 1);
+    if (uploadType.length < 3) {
+      throw new ApiError(`autoSyncOnStaging: no uploadType: ${uploadType}`);
+    }
+    return uploadType;
+  }
+
+  getSyncMapFromUploadType(req) {
+    const uploadTypes = {
+      prof: [
+        {type: 'dollar-upload', syncMapProp: 'dfa_prof_input_amnt_upld'},
+        {type: 'mapping-upload', syncMapProp: 'dfa_prof_manual_map_upld'},
+        {type: 'dept-upload', syncMapProp: 'dfa_prof_dept_acct_map_upld'},
+        {type: 'sales-split-upload', syncMapProp: 'dfa_prof_sales_split_pctmap_upld'},
+        {type: 'product-class-upload', syncMapProp: 'dfa_prof_swalloc_manualmix_upld'},
+        {type: 'alternate-sl2-upload', syncMapProp: 'dfa_prof_scms_triang_altsl2_map_upld'},
+        {type: 'corp-adjustments-upload', syncMapProp: 'dfa_prof_scms_triang_corpadj_map_upld'},
+      ]
+    };
+    const syncMap = new SyncMap();
+    const syncProp = _.find(uploadTypes[req.dfa.module.abbrev], {type: this.uploadType}).syncMapProp;
+    if (!syncProp) {
+      throw new ApiError(`getSyncMapFromUploadType: no syncProp`);
+    }
+    syncMap[syncProp] = true;
+    return syncMap;
+  }
+
+  autoSyncOnStaging(req, res, next): Promise<any> {
+    if (config.autoSyncOn) {
+      const syncMap = this.getSyncMapFromUploadType(req);
+      const databaseCtrl = injector.get(DatabaseController);
+      return databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id)
+        .catch(err => {
+          throw new ApiError('AutoSync error', err);
+        });
+    } else {
+      return Promise.resolve();
+    }
+
+  }
+
+  verifyProperties(data, arr) {
+    arr.forEach(prop => {
+      if (!data[prop]) {
+        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+      }
+    });
+  }
 
 }
 

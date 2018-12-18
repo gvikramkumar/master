@@ -118,7 +118,7 @@ export class UiUtil {
   static submitForm(url, params) {
 
     const form = document.createElement('form');
-    form.setAttribute('method', 'post');
+    form.setAttribute('method', 'POST');
     form.setAttribute('action', url);
     // form.setAttribute('target', '_blank');
 

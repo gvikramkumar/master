@@ -499,6 +499,11 @@ export default class RepoBase {
       } else if (filter.moduleId === -1) {
         delete filter.moduleId; // get all modules
       }
+    } else {
+      // they might accidently get sent on a non-isModuleRepo repo
+      if (filter.moduleId === -1) {
+        delete filter.moduleId;
+      }
     }
   }
 
