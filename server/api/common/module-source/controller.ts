@@ -46,7 +46,11 @@ export class ModuleSourceController extends ControllerBase {
       sourceId: source.sourceId,
       sourceName: source.name,
       sourceTypeCode: source.typeCode,
-      sourceStatus: source.status
+      sourceStatus: source.status,
+      createdBy: source.createdBy,
+      createdDate: source.createdDate,
+      updatedBy: source.updatedBy,
+      updatedDate: source.updatedDate
     };
   }
 
