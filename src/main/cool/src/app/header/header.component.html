@@ -16,11 +16,16 @@
             <a routerLink="/coolOffer"><div class="tab__heading" title="Wide">Offers</div></a>
           </li>
           <li routerLinkActive="active">
-            <a routerLink="/offerDetailView"><div class="tab__heading" title="Sidebar">OfferDetailView</div></a>
-          </li>
-          <li routerLinkActive="active">
             <a><div class="tab__heading" title="Sidebar">Analytics</div></a>
           </li>
+          <li routerLinkActive="active">
+
+              <a routerLink="/action"><div class="tab__heading" title="Sidebar">Actions</div></a>
+            </li>
+          <li routerLinkActive="active">
+              <a routerLink="/accessManagement"><div class="tab__heading" title="Sidebar">Access Management</div></a>
+          </li>
+
         </ul>
       </div>
     </div>
@@ -32,10 +37,23 @@
         <a href="javascript:;" class="btn btn--icon">
             <span class="icon-alert"></span>
         </a>
+        <a href="javascript:;" class="btn btn--icon" [ngbPopover]="popContent">
+            <span class="icon-email"></span>
+        </a>
         <a href="javascript:;" class="btn btn--icon">
             <span class="icon-cog"></span>
         </a>
     </div>
+    <ng-template  #popContent ptemplate="body">
+        <p-accordionTab>
+            <p-header>
+              <div class="row">
+                <div class="col"><span class="icon-check-outline icon-medium text-success"></span>CSPP</div>
+                
+              </div>
+            </p-header>
+          </p-accordionTab>
+       </ng-template>
   </div>
 </header>
 

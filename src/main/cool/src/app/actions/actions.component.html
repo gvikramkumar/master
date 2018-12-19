@@ -1,0 +1,108 @@
+<div class="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="coolHeader panel panel--vibblue panel--loose header-bar base-margin-top">
+                <div class="header-bar__main">
+                  <div class="header-heading">
+                    <h1 class="page-title"><span class="action--value header-headings">{{pendingActnCount}}</span> <span
+                        class="action--value-label header-headings">Pending
+                        Actions</span></h1>
+                    <span class="vertical-divider"></span>
+                    <h1 class="page-title"><span class="action--value header-headings">{{needImmActnCount}}</span> <span
+                        class="action--value-label header-headings">Need
+                        Immediate Action</span></h1>
+                  </div>
+                </div>
+                
+                <div class="header-toolbar">
+                        <button (click)="createNewAction()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
+                            <span class="button--label">New Actions</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+                <div class="col-md-12">
+                  <div class="card card--raised base-margin-top">
+                    <div class="panel">
+                      <div class="row card-table-header">
+                        <div class="col-md-8">
+                          <h1 class="display-4">ACTION ITEM TRACKER</h1>
+                        </div>
+                        <div class="col-md-8">
+                                <span class="icon-filter"></span>
+                              </div>
+                        
+                      </div>
+                      <div class="responsive-table">
+                        <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                          <input #gbforactions type="text" pInputText size="50" placeholder="Global Filter">
+                        </div>
+                        <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="gbforactions" #dt>
+                          <p-column field="offerId" sortable= "true" header="Offer">
+                            <ng-template let-col let-actionData="rowData" pTemplate="body">
+                             <span *ngIf="actionData.alertType == 1"> <span class="icon-clock icon-small" style="margin:0px 5px 0 0">
+                                </span>{{actionData.offerId}}</span>
+                              <span *ngIf="actionData.alertType == 2">
+                                <span class="icon-alert icon-small" style="margin:0px 5px 0 0" ></span>
+                                {{actionData.offerId}}
+                              </span>
+          
+        
+                            </ng-template>
+                          </p-column>
+                          <p-column field="actions" sortable= "true" header="Action" >
+                            <ng-template let-col let-actionData="rowData" pTemplate="body">
+                              <span class="offerName">{{actionData.actiontTitle}} <br /></span>
+                              <span class="offerDesc">{{actionData.actionDesc}}</span>
+                            </ng-template>
+                          </p-column>
+                          <p-column field="offerName" sortable= "true" header="Created By" >
+                          </p-column>
+                          <p-column field="assigneeId" sortable= "true" header="Function" >
+                          </p-column>
+                          <p-column field="status" sortable= "true" header="Assigned User">
+                            
+                          </p-column>
+                          <p-column field="triggerDate" sortable= "true" header="Due Date" >
+                            <ng-template let-col let-actionData="rowData" pTemplate="body">
+                              <span>{{actionData.dueDate}} <br /></span>
+                            </ng-template>
+                          </p-column>
+                          <p-column field="dueDate" header="Status" sortable= "true">
+                                <ng-template let-col let-actionData="rowData" pTemplate="body">
+                                        <span *ngIf="actionData.alertType == 1">
+                                            <div style="text-align:center">
+                                                <span class="{{actionData.styleColor}}">
+                                                  <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
+                                                </span>
+                                                
+                                            </div>
+                                        </span>
+                                        <span *ngIf="actionData.alertType == 2">
+                                            <div style="text-align:center">
+                                              <span>--</span>
+                                            </div>
+                                        </span>
+                                    </ng-template>
+                          </p-column>
+                        </p-dataTable>
+                      </div>
+                    </div>
+     </div>          
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

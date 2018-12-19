@@ -125,6 +125,7 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreationDate);
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.offerId = data;
+      console.log(this.offerId);
       this.router.navigate(['/mmassesment', this.offerId]);
     },
       (err) => {

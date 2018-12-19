@@ -1,332 +1,470 @@
 <div class="content">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="coolHeader panel panel--vibblue panel--loose header-bar base-margin-top">
-          <div class="header-bar__main">
-            <div class="header-heading">
-              <h1 class="page-title"><span class="action--value-label header-headings">Offer Detailed Overview</span></h1>
-            </div>
-          </div>
+  <div class="container-fluid">
+    <div class="row base-margin-top">
+      <div class="col-md-6">
+        <h1 class="display-4">Offer Detail Overview</h1>
+        <h4>Offer Phase Detail</h4>
+      </div>
+      <div class="col-md-6">
+        <div class="dropdown active pull-right">
           <div class="header-toolbar">
-            <button class="btn btn--white cta--action">
+            <button class="btn btn--primary-ghost">
               <span class="button--label" (click)="onExportPdf()">Export</span>&nbsp;<span class="icon-right-arrow"></span></button>
           </div>
         </div>
       </div>
-    </div><br>
-    <h5>Offer Phase Detail</h5><br>
-    <p-accordion [multiple]="true">
-      <p-accordionTab header="Ideate">
-        <p-accordionTab header="OFFER CREATION">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">OFFER NAME</div>
-                <div>Test Offer</div>
+      <div class="col-md-12">
+        <div class="card">
+          <p-accordion [multiple]="true">
+            <p-accordionTab header="Ideate">
+              <div class="card">
+                <p-accordionTab header="Offer Creation">
+                  <app-offer-create-detail></app-offer-create-detail>
+                </p-accordionTab>
+                <p-accordionTab header="Offer Model Evaluation">
+                  <div class="offer-header card card--raised base-margin-top">               
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="flex-fluid text-left half-margin-left">
+                          <div class="text-bold">Who takes ownership of the asset(s)?</div>
+                          <div>Customer- End Customer</div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="flex-fluid text-left half-margin-left">
+                          <div class="text-bold">What will be the offer services strategies?</div>
+                          <div>SW minimum M&S</div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="flex-fluid text-left half-margin-left">
+                          <div class="text-bold">What medium will be leveraged for selling the offer?</div>
+                          <div>Transactional</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="flex-fluid text-left half-margin-left">
+                          <div class="text-bold">In what way will the offer be priced?</div>
+                          <div>Utility Pricing</div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="flex-fluid text-left half-margin-left">
+                          <div class="text-bold">What will be the offer Licensing type?</div>
+                          <div>Subscription - Utility/Usage</div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="flex-fluid text-left half-margin-left">
+                          <div class="text-bold">Will Cisco host the product set-up?</div>
+                          <div>Cloud</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </p-accordionTab>
+                <p-accordionTab header="Stakeholder Identification">
+                  <div class="offer-header card card--raised base-margin-top">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="flex-fluid text-left half-margin-left">
+                          <div class="text-bold">Owner</div>
+                          <div>
+                            <div class="ui-accordion-content">
+                              <div class="flex-center-vertical">
+                                <!-- Team Member Name Avatar -->
+                                <span class="avatar-ico">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin"
+                                    role="img">
+                                    <title id="fwt-profile-button-loggedin-title"></title>
+                                    <g fill="none" fill-rule="evenodd">
+                                      <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
+                                        x="0" y="0"></path>
+                                      <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300"
+                                        font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">WM</text>
+                                    </g>
+                                  </svg>
+                                </span>
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="text-bold">{{stakeName}}</div>
+                                  <div>{{email}}@altus.com</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="flex-fluid text-left half-margin-left">
+                          <div class="text-bold">Co-Owner</div>
+                          <div>
+                            <div class="ui-accordion-content">
+                              <app-avatar [stakeholderName]="stakeName" [email]="email"></app-avatar>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="flex-fluid text-left half-margin-left">
+                          <div class="text-bold">Stakeholders</div>
+                          <div>
+                            <div class="ui-accordion-content">
+                                <app-avatar [stakeholderName]="stakeName" [email]="email" [functionalRole]="functionalRole"></app-avatar>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </p-accordionTab>
+                <p-accordionTab header="Strtegy Review">
+                  <div class="offer-header card card--raised base-margin-top">
+                    <div class="responsive-table">
+                      <table class="table table--nostripes table--highlight table--hover table--selectable">
+                        <thead>
+                          <tr>
+                            <th class="sortable">Function <span class="sort-indicator icon-chevron-down"></span></th>
+                            <th class="sortable">Approval Status <span class="sort-indicator icon-chevron-down"></span></th>
+                            <th class="sortable">Reviewed On <span class="sort-indicator icon-chevron-down"></span></th>
+                            <th class="sortable">Reviewed By <span class="sort-indicator icon-chevron-down"></span></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><span class="icon-check-outline icon-medium"></span> CSPP</td>
+                            <td>Approved</td>
+                            <td>06-Aug-2018</td>
+                            <td>Sean Parker (OPS)</td>
+                          </tr>
+                          <tr>
+                            <td><span class="icon-check-outline icon-medium"></span> CPS</td>
+                            <td>Approved</td>
+                            <td>11-Aug-2018</td>
+                            <td>Sean Parker (OPS)</td>
+                          </tr>
+                          <tr>
+                            <td><span class="icon-check-outline icon-medium"></span> Compensation Ops</td>
+                            <td>Approved</td>
+                            <td>16-Aug-2018</td>
+                            <td>Thomas</td>
+                          </tr>
+                          <tr>
+                            <td><span class="icon-check-outline icon-medium"></span> Royalty</td>
+                            <td>Conditionally Approved</td>
+                            <td>21-Aug-2018</td>
+                            <td>Jessica Lara</td>
+                          </tr>
+                          <tr>
+                            <td><span class="icon-check-outline icon-medium"></span> I2C/Credit</td>
+                            <td>Approved</td>
+                            <td>05-Dec-2018</td>
+                            <td>Jessica Lara</td>
+                          </tr>
+                          <tr>
+                            <td><span class="icon-check-outline icon-medium"></span> Service Info</td>
+                            <td>Conditionally Approved</td>
+                            <td>16-Dec-2018</td>
+                            <td>Jessica Lara</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </p-accordionTab>
               </div>
-            </div>
-            <div class="col-md-8">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">OFFER DESCRIPTION</div>
-                <div>Some Offer Description</div>
+            </p-accordionTab>
+            <p-accordionTab header="Plan">
+              <div class="card">
+                <p-accordionTab header="Offer Dimension Completion">
+                  <div class="offer-header card card--raised base-margin-top">
+                    <table class="responsive-table">
+                      <table class="table table--nostripes offer-dimensions">
+                        <thead>
+                          <tr>
+                            <th class="status"></th>
+                            <th class="sortable">Offering </th>
+                            <th class="sortable">Offer Characteristics </th>
+                            <th class="sortable">Commerce SKU </th>
+                            <th class="sortable">Royalty </th>
+                            <th class="sortable">Royalty </th>
+                          </tr>
+                        </thead>
+                      </table>
+                      <table class="table table--nostripes offer-dimensions">
+                        <tbody>
+                          <tr>
+                            <td class="status" rowspan="3">Offer Dimensions <span class="status_label"><span class="icon-check icon-small"></span>
+                                Perfectly Aligned</span></td>
+                            <td>Hardware</td>
+                            <td>High Touch / High Volume</td>
+                            <td>ATO</td>
+                            <td>Perp SW</td>
+                            <td>Paid Upfront</td>
+                          </tr>
+                          <tr>
+                            <td>Appliances</td>
+                            <td>High Touch / Low Volume</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td>Low Touch / Low Volume</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table class="table table--nostripes offer-dimensions">
+                        <tbody>
+                          <tr>
+                            <td class="status" rowspan="3">Sales Dimensions <span class="status_label"><span class="icon-check icon-small"></span>
+                                Perfectly Aligned</span></td>
+                            <td>Hardware</td>
+                            <td>High Touch / High Volume</td>
+                            <td>ATO</td>
+                            <td>Perp SW</td>
+                            <td>Paid Upfront</td>
+                          </tr>
+                          <tr>
+                            <td>Appliances</td>
+                            <td>High Touch / Low Volume</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td>Low Touch / Low Volume</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table class="table table--nostripes offer-dimensions">
+                        <tbody>
+                          <tr>
+                            <td class="status" rowspan="3">Pricing Dimensions <span class="status_label"><span class="icon-check icon-small"></span>
+                                Perfectly Aligned</span></td>
+                            <td>Hardware</td>
+                            <td>High Touch / High Volume</td>
+                            <td>ATO</td>
+                            <td>Perp SW</td>
+                            <td>Paid Upfront</td>
+                          </tr>
+                          <tr>
+                            <td>Appliances</td>
+                            <td>High Touch / Low Volume</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td>Low Touch / Low Volume</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table class="table table--nostripes offer-dimensions">
+                        <tbody>
+                          <tr>
+                            <td class="status" rowspan="3">Delivery Dimensions <span class="status_label"><span class="icon-check icon-small"></span>
+                                Perfectly Aligned</span></td>
+                            <td>Hardware</td>
+                            <td>High Touch / High Volume</td>
+                            <td>ATO</td>
+                            <td>Perp SW</td>
+                            <td>Paid Upfront</td>
+                          </tr>
+                          <tr>
+                            <td>Appliances</td>
+                            <td>High Touch / Low Volume</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td>Low Touch / Low Volume</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </table>
+                  </div>
+                </p-accordionTab>
+                <p-accordionTab header="Offer Solutioning">
+                  <div class="offer-header card card--raised base-margin-top">
+                    <div class="responsive-table">
+                      <table class="table table--nostripes table--highlight table--hover table--selectable">
+                        <thead>
+                          <tr>
+                            <th class="sortable">Dimensions Group </th>
+                            <th class="sortable date">Functions </th>
+                            <th class="sortable date">Status </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Royalty</td>
+                            <td>OPS</td>
+                            <td class="solutioning__status">Completed</td>
+                          </tr>
+                          <tr>
+                            <td>I2C/Credit</td>
+                            <td>OPS</td>
+                            <td class="solutioning__status">Completed</td>
+                          </tr>
+                          <tr>
+                            <td>Provisioning</td>
+                            <td>Finance</td>
+                            <td class="solutioning__status">Completed</td>
+                          </tr>
+                          <tr>
+                            <td>Service Info</td>
+                            <td>CXPM</td>
+                            <td class="solutioning__status">Completed</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </p-accordionTab>
+                <p-accordionTab header="Offer Construct">
+                  <div class="offer-header card card--raised base-margin-top">
+
+
+
+                    <div class="responsive-table">
+                      <table class="table table--nostripes table--highlight table--hover table--selectable">
+                        <thead>
+                          <tr>
+                            <th class="sortable"> </th>
+                            <th class="sortable">Items </th>
+                            <th class="sortable">Qty </th>
+                            <th class="sortable other">Unit List Price <span class="units">(USD)</span> </th>
+                            <th class="sortable">Discount <span class="units">(%)</span> </th>
+                            <th class="sortable date">Unit Net Price <span class="units">(USD)</span> </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="hints">
+                              <span class="icon-add-outline icon-medium"></span>
+                            </td>
+                            <td><a href="javascript:;"><span class="number">1.0 </span>CON-AS-WLAN-PD</a>
+                              <span class="table--description">
+                                Visibility to control and defeat advance attacks. Get global threat intelligence,…
+                              </span>
+                            </td>
+                            <td>1</td>
+                            <td>1,956.25</td>
+                            <td>0.00</td>
+                            <td>23,475.00 <span class="total__unit">Total of MRC</span></td>
+                          </tr>
+                          <tr>
+                            <td class="hints">
+                              <span class="icon-add-outline icon-medium"></span>
+                            </td>
+                            <td><a href="javascript:;"><span class="number">2.0 </span>CON-AS-WLAN-PD</a>
+                              <span class="table--description">
+                                Visibility to control and defeat advance attacks. Get global threat intelligence,…
+                              </span>
+                            </td>
+                            <td>1</td>
+                            <td>1,956.25</td>
+                            <td>0.00</td>
+                            <td>23,475.00 <span class="total__unit">Total of MRC</span></td>
+                          </tr>
+                          <tr>
+                            <td class="hints">
+                              <span class="icon-add-outline icon-medium"></span>
+                            </td>
+                            <td><a href="javascript:;"><span class="number">3.0 </span>CON-AS-WLAN-PD</a>
+                              <span class="table--description">
+                                Visibility to control and defeat advance attacks. Get global threat intelligence,…
+                              </span>
+                            </td>
+                            <td>1</td>
+                            <td>1,956.25</td>
+                            <td>0.00</td>
+                            <td>23,475.00 <span class="total__unit">Total of MRC</span></td>
+                          </tr>
+                          <tr>
+                            <td class="hints">
+                              <span class="icon-add-outline icon-medium"></span>
+                            </td>
+                            <td><a href="javascript:;"><span class="number">4.0 </span>CON-AS-WLAN-PD</a>
+                              <span class="table--description">
+                                Visibility to control and defeat advance attacks. Get global threat intelligence,…
+                              </span>
+                            </td>
+                            <td>1</td>
+                            <td>1,956.25</td>
+                            <td>0.00</td>
+                            <td>23,475.00 <span class="total__unit">Total of MRC</span></td>
+                          </tr>
+                          <tr>
+                            <td class="hints">
+                              <span class="icon-add-outline icon-medium"></span>
+                            </td>
+                            <td><a href="javascript:;"><span class="number">5.0 </span>CON-AS-WLAN-PD</a>
+                              <span class="table--description">
+                                Visibility to control and defeat advance attacks. Get global threat intelligence,…
+                              </span>
+                            </td>
+                            <td>1</td>
+                            <td>1,956.25</td>
+                            <td>0.00</td>
+                            <td>23,475.00 <span class="total__unit">Total of MRC</span></td>
+                          </tr>
+                          <tr>
+                            <td class="hints"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                              Subtotal (Monthly)
+                            </td>
+                            <td>23,475.00 </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </p-accordionTab>
+                <p-accordionTab header="Offer Contract Details">
+                  Offer Contract Details
+                </p-accordionTab>
+                <p-accordionTab header="Design Review">
+                  Design Review
+                </p-accordionTab>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">EXPECTED LAUNCH DATE</div>
-                <div>Some Expected Lunchdate</div>
+            </p-accordionTab>
+            <p-accordionTab header="Excute">
+              <div class="card">
+                Excute
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">BUSINES UNIT</div>
-                <div>Some Business Unit</div>
+            </p-accordionTab>
+            <p-accordionTab header="Launch">
+              <div class="card">
+                Launch
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">BUSINES ENTITY</div>
-                <div>Test Business Entity</div>
-              </div>
-            </div>
-          </div>
-        </p-accordionTab>
-        <p-accordionTab header="OFFER MODEL EVALUATION">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">WHO TAKES OWENERSHIP OF THE SECTION</div>
-                <div>Customer-Ent Customer</div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">Offer Description</div>
-                <div>Some Offer Description</div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">Offer Description</div>
-                <div>Some Offer Description</div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">Expected Launch Date</div>
-                <div>Some Expected Lunchdate</div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">Business Unit</div>
-                <div>Some Business Unit</div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">Business Entity</div>
-                <div>Test Business Entity</div>
-              </div>
-            </div>
-          </div>
-        </p-accordionTab>
-        <p-accordionTab header="Stakeholder Identification">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">OWNER(1)</div>
-                <div>William Mendies</div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">CO-OWNER(3)</div><br>
-                <div>Scott Colmns</div>
-                <hr><br>
-                <div>Join Smith</div>
-                <hr><br>
-                <div>STAKEHOLDER(3)</div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="panel panel--loose panel--bordered">
-                <div class="text-bold">Offer Description</div><br>
-                <div>Scott Colmns(France)</div>
-                <hr><br>
-                <div>Join Smith(Pricing)</div>
-                <hr><br>
-                <div>Ioin Fleming(CPS)</div>
-              </div>
-            </div>
-          </div>
-        </p-accordionTab>
-        <p-accordionTab header="Strtegy Review">
-          <div class="responsive-table">
-            <table class="table table--bordered table--selectable">
-              <thead>
-                <tr>
-                  <th>FUNCTION</th>
-                  <th>APPRISAL STATUS</th>
-                  <th>REVIEWED ON</th>
-                  <th>REVIEWED BY</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>CSPP</td>
-                  <td>Approved</td>
-                  <td>9-Aug-2018</td>
-                  <td>Scan porter</td>
-                </tr>
-                <tr>
-                  <td>CSPP</td>
-                  <td>Approved</td>
-                  <td>9-Aug-2018</td>
-                  <td>Scan porter</td>
-                </tr>
-                <tr>
-                  <td>CSPP</td>
-                  <td>Approved</td>
-                  <td>9-Aug-2018</td>
-                  <td>Scan porter</td>
-                </tr>
-                <tr>
-                  <td>CSPP</td>
-                  <td>Approved</td>
-                  <td>9-Aug-2018</td>
-                  <td>Scan porter</td>
-                </tr>
-                <tr>
-                  <td>CSPP</td>
-                  <td>Approved</td>
-                  <td>9-Aug-2018</td>
-                  <td>Scan porter</td>
-                </tr>
-                <tr>
-                  <td>CSPP</td>
-                  <td>Approved</td>
-                  <td>9-Aug-2018</td>
-                  <td>Scan porter</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </p-accordionTab>
-      </p-accordionTab>
-      <p-accordionTab header="Plan">
-        <p-accordionTab header="Offer Dimension Completion">
-            <div class="responsive-table">
-                <h5 class="section">MM4-SAAS</h5>
-                <table class="table table--bordered table--selectable">
-                    <thead>
-                        <tr> 
-                            <th></th>                         
-                            <th>Header 2</th>
-                            <th>Header 3</th>
-                            <th>Header 4</th>
-                            <th>Header 5</th>
-                            <th>Header 6</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                            <td>Row 1, Column 4</td>
-                            <td>Row 1, Column 5</td>
-                            <td>Row 1, Column 6</td>
-                        </tr>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                            <td>Row 1, Column 4</td>
-                            <td>Row 1, Column 5</td>
-                            <td>Row 1, Column 6</td>
-                        </tr>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                            <td>Row 1, Column 4</td>
-                            <td>Row 1, Column 5</td>
-                            <td>Row 1, Column 6</td>
-                        </tr>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                            <td>Row 1, Column 4</td>
-                            <td>Row 1, Column 5</td>
-                            <td>Row 1, Column 6</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </p-accordionTab>
-        <p-accordionTab header="Offer Scheduling">
-            <div class="responsive-table">
-                <table class="table table--bordered table--selectable">
-                    <thead>
-                        <tr>
-                            <th>Header 1</th>
-                            <th>Header 2</th>
-                            <th>Header 3</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                        </tr>
-                        <tr>
-                            <td>Row 2, Column 1</td>
-                            <td>Row 2, Column 2</td>
-                            <td>Row 2, Column 3</td>
-                        </tr>
-                        <tr>
-                            <td>Row 3, Column 1</td>
-                            <td>Row 3, Column 2</td>
-                            <td>Row 3, Column 3</td>
-                        </tr>
-                        <tr>
-                            <td>Row 4, Column 1</td>
-                            <td>Row 4, Column 2</td>
-                            <td>Row 4, Column 3</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </p-accordionTab>
-        <p-accordionTab header="Offer Conduct">
-            <div class="responsive-table">
-                <table class="table table--bordered table--selectable">
-                    <thead>
-                        <tr>
-                            <th>Header 1</th>
-                            <th>Header 2</th>
-                            <th>Header 3</th>
-                            <th>Header 4</th>
-                            <th>Header 5</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                            <td>Row 1, Column 4</td>
-                            <td>Row 1, Column 5</td>
-                        </tr>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                            <td>Row 1, Column 4</td>
-                            <td>Row 1, Column 5</td>
-                        </tr>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                            <td>Row 1, Column 4</td>
-                            <td>Row 1, Column 5</td>
-                        </tr>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                            <td>Row 1, Column 4</td>
-                            <td>Row 1, Column 5</td>
-                        </tr>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                            <td>Row 1, Column 3</td>
-                            <td>Row 1, Column 4</td>
-                            <td>Row 1, Column 5</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </p-accordionTab>
-        <p-accordionTab header="Offer Contract Details">
-            Offer Contract Details
-        </p-accordionTab>
-        <p-accordionTab header="Design Review">
-            Design Review
-        </p-accordionTab>
-      </p-accordionTab>
-      <p-accordionTab header="Excute">
-        Excute
-      </p-accordionTab>
-      <p-accordionTab header="Launch">
-        Launch
-      </p-accordionTab>
-    </p-accordion>
+            </p-accordionTab>
+          </p-accordion>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

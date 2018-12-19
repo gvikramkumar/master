@@ -35,9 +35,10 @@ export const environment = {
   
   REST_API_MM_OFFER_BUILDER_GET_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/getOffersDetails/',
   REST_API_MM_STAKEHOLDERS_SEARCH_URL: 'https://cool-srv-dev.cisco.com/coolsrv/collabrators/searchCollabrators',
-  // REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/updateOfferDetails',
   REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/updateOfferDetails'
-
-  
+  REST_API_DISMISS_NOTIFICATION: 'https://cool-srv-dev.cisco.com/coolsrv/action/updateMyAction',
+  REST_API_ACCESS_MANAGEMENT_GETALL_URL: 'https://cool-srv-dev.cisco.com/coolsrv/access/getAll',
+  REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL: 'https://cool-srv-dev.cisco.com/coolsrv/access/createNewUser',
+  REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL: 'https://cool-srv-dev.cisco.com/coolsrv/access/updateUser'
   // change with localhost:8080 in local dev
 };

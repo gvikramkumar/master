@@ -1,0 +1,172 @@
+<div class="content">
+  <div class="container">
+    <!-- My Actions & Notifications Section -->
+    <div class="row base-margin-top">
+      <div class="col-md-12">
+        <h1 class="display-4">Access Management
+          <button class="btn btn--secondary pull-right" (click)="registerNewUser()"><span class="icon-add-contain icon-small"></span>
+            Register New
+            User</button>
+        </h1>
+        <div class="card card--raised base-margin-top">
+          <div class="panel">
+            <div class="row card-table-header">
+              <div class="col-md-8">
+                <h4>Assign User Access</h4>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group input--icon half-margin-bottom">
+                  <div class="form-group__text">
+                    <input id="input-type-search" type="search" value="Search all users by name or ID">
+                    <button type="button" class="link">
+                      <span class="icon-search"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="responsive-table">
+              <p-table [columns]="cols" [value]="accessManagementData">
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th *ngFor="let col of columns">
+                      {{col.header}}
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-car>
+                  <tr>
+                    <td>{{car.emailId}}</td>
+                    <td>{{car.userName}}</td>
+                    <td>{{car.userMapping[0].functionalRole}}</td>
+                    <td>{{car.userMapping[0].businessEntity}}</td>
+                    <td>
+                      <p-multiSelect 
+                        [options]="arrToOptions(car.buList)" 
+                        (onChange)="updatedAceessManagement($event.value)"
+                        [(ngModel)]="car.buList" 
+                        [style]="{'width':'100%'}">
+                      </p-multiSelect>
+                    </td>
+                    <td>
+                      <div *ngIf="car.userMapping[0].functionalAdmin">
+                        <span>Admin</span>
+                      </div>
+                      <div *ngIf="car.userMapping[0].keyPOC">
+                        <span>KeyPOC</span>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+        <section id="formSection">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card--raised base-margin-top">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="pull-right base-margin-top">
+                      <span class="icon-close" (click)="closeForm()"></span>                      
+                    </div>
+                  </div>
+                </div>
+                <div class="panel">
+                  <div class="card__header">
+                    <h5 class="card__title">Register User</h5>            
+                  </div><br>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="panel panel--mdgray panel--loose">
+                        <span class="text-uppercase">New User</span>
+                      </div>
+                    </div>
+                  </div>
+                  <form #registerUserForm="ngForm" (ngSubmit)="createUser()">
+                    <div class="row base-margin-top">
+                      <div class="col-md-4">
+                        <div class="form-group half-margin-bottom">
+                          <div class="form-group__text">
+                            <label for="selectedSValue">UserId</label>
+                            <input id="userId" type="text" class="form-control" name="userId" [(ngModel)]="userIdValue"
+                              ngModel>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <div class="form-group__text select">
+                            <label for="functionName">Function</label>
+                            <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
+                              ngModel>
+                              <option value="BUPM" selected="">BUPM</option>
+                              <option value="SOE">SOE</option>
+                              <option value="BUPM">BUPM</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4" style="margin-top: 1%">
+                        <div class="form-group">
+                          <div class="form-group__text select">
+                            <label class="checkbox">
+                              <input id="admin" type="checkbox" class="form-control" name="admin" [(ngModel)]="adminValue" ngModel>
+                              <span class="checkbox__input"></span>
+                              <span class="checkbox__label hidden-xs">Make Admin</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div><br>
+                    <div class="row base-margin-top">
+                      <div class="col-md-4">
+                        <div class="form-group half-margin-bottom">
+                          <label for="selectedSValue">Business Unit</label>
+                          <p-multiSelect id="selectedSValue" class="form-control" name="secondaryBUList" [options]="secondaryBusinessUnits"
+                            (onChange)="getSecondaryBusinessEntity($event.value)" [(ngModel)]="businessUnitValue"
+                            [panelStyle]="{minWidth:'25em'}">
+                          </p-multiSelect>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group half-margin-bottom">
+                          <label for="selectedSeValue">Business Entity</label>
+                          <p-multiSelect id="selectedSeValue" class="form-control" name="secondaryBEList" [options]="secondaryBusinessEntities"
+                            [(ngModel)]="businessEntityValue" [panelStyle]="{minWidth:'25em'}">
+                          </p-multiSelect>
+                        </div>
+                      </div>
+                      <div class="col-md-4" style="margin-top: 1%">
+                          <div class="form-group">
+                            <div class="form-group__text select">
+                              <label class="checkbox">
+                                <input id="keyPoc" type="checkbox" class="form-control" name="keyPocValue" [(ngModel)]="keyPocValue" ngModel>
+                                <span class="checkbox__input"></span>
+                                <span class="checkbox__label hidden-xs">Make Key POC</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="btn-group btn-group--wide pull-right base-margin-top">
+                          <div class="panel--footer">
+                            <button class="btn btn--secondary" (click)="closeForm()">Cancel</button>
+                            <button class="btn btn--primary" type="submit">Save</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

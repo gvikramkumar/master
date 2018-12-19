@@ -49,7 +49,9 @@ export class MmAssesmentComponent implements OnInit {
 
   }
 
-
+  onStrategyReview() {
+    this.router.navigate(['/strategyReview', this.currentOfferId]);
+  }
 
   ngOnInit() {
 

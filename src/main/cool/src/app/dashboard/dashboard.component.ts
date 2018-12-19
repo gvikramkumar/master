@@ -7,7 +7,7 @@ import { UserService } from '../services/user.service';
 import { HttpClient } from '@angular/common/http';
 import { ActionsAndNotifcations } from './action';
 import * as moment from 'moment';
-
+import { MenuItem } from 'primeng/components/common/menuitem';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,8 +21,12 @@ export class DashboardComponent implements OnInit {
   myOffersList;
   myActions;
   myOfferArray: ActionsAndNotifcations[] = [];
+  myOffers: ActionsAndNotifcations[] = [];
   pendingActnCount:number = 0;
   needImmActnCount:number = 0;
+  display: boolean = false;
+  displayPopOver: boolean = true;
+  currentOfferId;
 
   constructor(private dashboardService: DashboardService,
     private router: Router, private createOfferService: CreateOfferService,
@@ -39,8 +43,10 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getMyOffersList()
       .subscribe(data => {
         this.myOffersList = data;
+        this.processMyOffersList();
         console.log(this.myOffersList);
       });
+
   }
 
   processMyActionsList() {
@@ -48,6 +54,7 @@ export class DashboardComponent implements OnInit {
       let obj = new ActionsAndNotifcations();
       obj.setOfferId(element.offerId);
       obj.setOfferName(element.offerName);
+      obj.setStyleColor(element.status);
 
       // Set Actions
       let actionList = element.actionList;
@@ -58,7 +65,7 @@ export class DashboardComponent implements OnInit {
           obj.setTriggerDate(this.dateFormat(element.triggerDate));
           obj.setDueDate(this.dateFormat(element.dueDate));
           obj.setActionDesc(element.actionDesc);
-          obj.setStyleColor(this.determineStatus( element.triggerDate,element.dueDate));
+          //obj.setStyleColor(element.Status);
           obj.setAlertType(1);
           this.myOfferArray.push(obj);
         });
@@ -67,7 +74,7 @@ export class DashboardComponent implements OnInit {
       let obj2 = new ActionsAndNotifcations();
       obj2.setOfferId(element.offerId);
       obj2.setOfferName(element.offerName);
-
+      obj2.setStyleColor(element.status);
       // Set Notifications
       let notificationList = element.notificationList;
       if (notificationList!= undefined && notificationList.length > 0) {
@@ -86,52 +93,92 @@ export class DashboardComponent implements OnInit {
     this.myActionsList = this.myOfferArray;
   }
 
+  processMyOffersList() {
+    this.myOffersList.forEach(element => {
+      let obj = new ActionsAndNotifcations();
+      obj.setOfferId(element.offerId);
+      this.currentOfferId = element.offerId;
+      obj.setOfferName(element.offerName);
+      obj.setStyleColor(element.status);
+
+      // Set Actions
+      let actionList = element.actionList;
+      if (actionList != undefined && actionList.length > 0) {
+        actionList.forEach(element => {
+          obj.setActiontTitle(element.actiontTitle);
+          obj.setAssigneeId(element.assigneeId);
+          obj.setTriggerDate(this.dateFormat(element.triggerDate));
+          obj.setDueDate(this.dateFormat(element.dueDate));
+          obj.setActionDesc(element.actionDesc);
+          //obj.setStyleColor(element.Status);
+          obj.setAlertType(1);
+          this.myOffers.push(obj);
+        });
+      }
+
+      let obj2 = new ActionsAndNotifcations();
+      obj2.setOfferId(element.offerId);
+      obj2.setOfferName(element.offerName);
+      obj2.setStyleColor(element.status);
+      // Set Notifications
+      let notificationList = element.notificationList;
+      if (notificationList!= undefined && notificationList.length > 0) {
+        notificationList.forEach(element => {
+          obj2.setActiontTitle(element.notifcationTitle);
+          obj2.setAssigneeId(element.assigneeId);
+          obj2.setTriggerDate(this.dateFormat(element.triggerDate));
+          obj2.setDueDate("--");
+          obj2.setStyleColor("--");
+          obj2.setAlertType(2);
+          obj2.setActionDesc(element.notificationDesc);
+          this.myOffers.push(obj2);
+        });
+      }
+    });
+    this.myOffersList = this.myOffers;
+  }
+
   dateFormat(inputDate:string){
     return moment(inputDate).format('DD-MMM-YYYY');
-  }
-  determineStatus(triggerDate, dueDate): string {
-
-  /* Status – Status’ should be editable by Owner / Co-Owner within “My Offers” View. 
-  Notifications will not have a Status
-  Green = up to 12 hours from the trigger date
-  Yellow = (Trigger date + 12 hours) up to (Due date – 24 hours)
-  Red = Less than 24 hours from Due date
-  */
-
-    // get current time using momentjs
-    var now = moment(new Date());
-    var alertTriggerDate = moment(triggerDate);
-    var alertDueDate = moment(dueDate);
-
-    // Return Green
-    var triggerDatePlus12Hrs = moment(alertTriggerDate).add(12, 'hours');
-    var diffTime = triggerDatePlus12Hrs.diff(now);
-
-    // Return Yellow
-    var triggerDateTime = alertTriggerDate.add(moment.duration(12, 'hours'));
-    var dueDateTime = alertDueDate.subtract(moment.duration(24, 'hours'));
-    var betweenDate = now.isBetween(triggerDateTime, dueDateTime);
-
-    // Return Red
-    var redDateTime = moment.duration(now.diff(alertDueDate)).asHours();
-    
-    if (redDateTime < 24) {
-      this.needImmActnCount = this.needImmActnCount + 1;
-      return 'Red';
-    } else if (betweenDate) {
-      this.pendingActnCount = this.pendingActnCount + 1;
-      return 'Yellow';
-    } else if (diffTime <= 12) {
-      this.pendingActnCount = this.pendingActnCount + 1;
-      return 'Green';
-    } else{
-      console.log('--')
-    }
   }
 
   createNewOffer() {
     this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
     this.createOfferService.currenTOffer.next('')
     this.router.navigate(['/coolOffer']);
+  }
+
+  showDialog() {
+    this.display = true;
+  }
+
+  dismissNotification(offerId) {
+    let userId = this.userService.getUserId();
+    let postData = {
+      "userId": userId,
+      "offerId": offerId,
+      "dismissedNotification": true
+  };
+    this.dashboardService.postDismissNotification(postData)
+    this.displayPopOver = false;
+    console.log("dismissed");
+
+    this.dashboardService.getMyActionsList()
+      .subscribe(data => {
+        this.myActions = data;
+        this.processMyActionsList();
+      });
+  }
+
+  closeNotification() {
+    this.displayPopOver = false;
+  }
+
+  displayPop() {
+    this.displayPopOver = true;
+  }
+
+  offerDetailOverView(Id) {
+    this.router.navigate(['/offerDetailView', Id]);
   }
 }

@@ -1,5 +1,6 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import {environment} from '../../environments/environment';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class OfferDetailViewService {
@@ -13,7 +14,7 @@ export class OfferDetailViewService {
     // npm install @types/file-saver --save
 
     // "@types/filesaver": "0.0.30",
-    
+
     // "file-saver": "^1.3.2"
 
     export() {
@@ -21,4 +22,7 @@ export class OfferDetailViewService {
             // {responseType: 'blob'});
     }
 
+    offerDetailView(offerId):any {
+        return this.httpClient.get(environment.REST_API_MM_OFFER_BUILDER_GET_URL + offerId);
+      }
 }

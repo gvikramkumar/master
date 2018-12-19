@@ -9,7 +9,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-
+import { DashboardService } from './services/dashboard.service';
 import { SharedServiceService } from './shared-service.service';
 import {MonetizationModelService} from './services/monetization-model.service';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -31,6 +31,7 @@ import { ConfigurationService } from './services/configuration.service';
 import {CalendarModule} from 'primeng/calendar';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { OfferDetailViewService } from './services/offer-detail-view.service';
+import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
 import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
 import {ExitCriteriaValidationService} from './services/exit-criteria-validation.service';
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
@@ -41,6 +42,13 @@ import {TieredMenuModule} from 'primeng/tieredmenu';
 import {MenuItem} from 'primeng/api';
 
 
+import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
+import { ActionsComponent } from './actions/actions.component';
+import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
+import {MenuModule} from 'primeng/menu';
+import { AccessManagementComponent } from './access-management/access-management.component';
+import { AvatarComponent } from './directives/avatar/avatar.component';
+import { AccessManagementService } from './services/access-management.service';
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -61,6 +69,13 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     StakeholderFullComponent,
   
     MenuBarComponent
+    StrategyReviewComponent,
+    ExitCriteriaValidationComponent,
+    CreateNewActionComponent,
+    ActionsComponent,
+    OfferCreateDetailComponent,
+    AccessManagementComponent,
+    AvatarComponent
   ],
   imports: [
     BrowserModule,
@@ -68,6 +83,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
+    MenuModule,
     AppRoutingModule,
     ClickOutsideModule,
     PerfectScrollbarModule,
@@ -91,8 +107,13 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     ConfigurationService,
     MonetizationModelService,
     OfferDetailViewService,
+<<<<<<< HEAD
     ExitCriteriaValidationService,
 
+=======
+    DashboardService,
+    AccessManagementService,
+>>>>>>> 860cbc190ba866717c06370113db6af6b113b4cb
     UserService,
      {
        provide: APP_INITIALIZER,

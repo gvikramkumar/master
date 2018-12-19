@@ -8,18 +8,22 @@ import {UserService} from './user.service';
 export class DashboardService {
   baseMyActionsUrl: string = environment.REST_API_MYACTIONS_URL;
   baseMyOfferssUrl: string = environment.REST_API_MYOFFERS_URL;
+  baseDismissNotificationUrl: string = environment.REST_API_DISMISS_NOTIFICATION;
 
   constructor(private http:HttpClient, private userService: UserService) { }
 
   getMyActionsList(): Observable<any> {
     let url = this.baseMyActionsUrl+this.userService.getUserId();
-    return this.http.get(url);
+    return this.http.get(url,{ withCredentials: true });
   }
 
   getMyOffersList(): Observable<any> {
     let url = this.baseMyOfferssUrl+this.userService.getUserId();
-    return this.http.get(url);
+    return this.http.get(url,{ withCredentials: true });
   }
 
-
+  postDismissNotification(data): Observable<any> {
+    let url = this.baseDismissNotificationUrl;
+    return this.http.post(url, data, { withCredentials: true });
+}
 }

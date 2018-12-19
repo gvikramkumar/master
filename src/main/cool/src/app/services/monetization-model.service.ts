@@ -16,13 +16,13 @@ export class MonetizationModelService {
  
   getAttributes(){
     let url =environment.REST_API_MMOFFER_ATTRIBUTES_URL;
-    return this.http.get(url);
+    return this.http.get(url,{ withCredentials: true });
   }
 
   getOfferBuilderData(offerId) {
   
     let url =environment.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
-    return this.http.get(url);
+    return this.http.get(url,{ withCredentials: true });
   }
 
   toNextSetp(data):Observable<any> {

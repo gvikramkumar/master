@@ -9,6 +9,12 @@ import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.
 import{ExitCriteriaValidationComponent} from './exit-criteria-validation/exit-criteria-validation.component';
 import{StakeholderFullComponent} from './stakeholder-full/stakeholder-full.component';
 import{MenuBarComponent} from './menu-bar/menu-bar.component';
+import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
+
+import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
+import { ActionsComponent } from './actions/actions.component';
+import { AccessManagementComponent } from './access-management/access-management.component';
+
 
 const routes: Routes = [
   {
@@ -37,7 +43,15 @@ const routes: Routes = [
     component: CreateNewOfferComponent
   },
   {
-    path: 'offerDetailView',
+    path: 'createNewAction',
+    component: CreateNewActionComponent
+  },
+  {
+    path: 'action',
+    component: ActionsComponent
+  },
+  {
+    path: 'offerDetailView/:id',
     component: OfferDetailViewComponent
   },
   {
@@ -45,12 +59,21 @@ const routes: Routes = [
     component: ExitCriteriaValidationComponent
   },
   {
+<<<<<<< HEAD
     path: 'stakeholderFull/:id',
     component: StakeholderFullComponent
   },
   {
     path: 'menu',
     component: MenuBarComponent
+=======
+    path: 'strategyReview/:id',
+    component: StrategyReviewComponent
+  },
+  {
+    path: 'accessManagement',
+    component: AccessManagementComponent
+>>>>>>> 860cbc190ba866717c06370113db6af6b113b4cb
   }
 ];
 
