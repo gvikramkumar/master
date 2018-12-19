@@ -24,14 +24,14 @@ export class SubmeasureDetailDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<SubmeasureDetailDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public  data: any,
+    @Inject(MAT_DIALOG_DATA) data: any,
     private measureService: MeasureService,
     private sourceService: SourceService,
     private submeasureService: SubmeasureService,
     private ruleService: RuleService,
     private store: AppStore
   ) {
-    this.sm = this.data;
+    this.sm = data;
   }
 
   ngOnInit() {
@@ -57,13 +57,14 @@ export class SubmeasureDetailDialogComponent {
   }
 
   hasFlashCategory() {
+    // Manufacturing V&O and MRAP
     return this.sm.measureId === 5 && this.sm.sourceId === 2;
   }
 
   hasAdjustmentType() {
+    // Indirect Revenue Adjustments AND RRR
     return this.sm.measureId === 1 && this.sm.sourceId === 1;
   }
-
 
 }
 

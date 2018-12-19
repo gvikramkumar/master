@@ -39,6 +39,11 @@
       </div>
 -->
 
+      <div class="row">
+        <div class="col-lg-6">Category Type:</div>
+        <div class="col-lg-6">{{sm.categoryType}}</div>
+      </div>
+
       <div *ngIf="sm.categoryType === 'MM'" class="row">
         <div class="col-lg-6">Manual Mix:</div>
         <div class="col-lg-6">HW: {{sm.manualMixHw}} SW: {{sm.manualMixSw}}</div>
@@ -54,12 +59,6 @@
         <div class="col-lg-6">{{sm.sourceSystemAdjTypeId}}</div>
       </div>
 
-      <div *ngIf="sm.categoryType === 'MM'" fxLayout="row" fxLayoutAlign="start start">
-        <div class="form-group-text form-group-inline-30">Manual Mix HW/SW:</div>
-        <fin-input name="manualMixHw" label="HW" [(ngModel)]="sm.manualMixHw" [required]="true" [inline]="true" class="hwsw-inputs"></fin-input>
-        <fin-input name="manualMixSw" label="SW" [(ngModel)]="sm.manualMixSw" [required]="true" [inline]="true" class="hwsw-inputs"></fin-input>
-      </div>
-
       <div class="row">
         <div class="col-lg-6">Is Group Submeasure:</div>
         <div class="col-lg-6">{{sm.indicators.groupFlag}}</div>
@@ -69,7 +68,7 @@
         <div class="col-lg-6">{{sm.indicators.service}}</div>
       </div>
 
-      <div class="row">
+      <div *ngIf="sm.groupingSubmeasureId" class="row">
         <div class="col-lg-6">Grouping Submeasure:</div>
         <div class="col-lg-6">{{groupingSubmeasureName}}</div>
       </div>

@@ -271,10 +271,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   hasFlashCategory() {
+    // Manufacturing V&O and MRAP
     return this.sm.measureId === 5 && this.sm.sourceId === 2;
   }
 
   hasAdjustmentType() {
+    // Indirect Revenue Adjustments AND RRR
     return this.sm.measureId === 1 && this.sm.sourceId === 1;
   }
 
