@@ -321,6 +321,7 @@ export default class RepoBase {
    */
   getOneByQuery(_filter = {}) {
     let filter = _filter;
+    this.convertPropsToNumbers(filter);
     filter = this.addDateRangeToFilter(filter);
     return this.Model.findOne(filter).exec();
   }
