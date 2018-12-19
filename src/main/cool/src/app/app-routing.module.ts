@@ -7,6 +7,7 @@ import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
 import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.component';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import{ExitCriteriaValidationComponent} from './exit-criteria-validation/exit-criteria-validation.component';
+import{StakeholderFullComponent} from './stakeholder-full/stakeholder-full.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
   {
     path: 'exitCriteriaValidation',
     component: ExitCriteriaValidationComponent
+  },
+  {
+    path: 'stakeholderFull',
+    component: StakeholderFullComponent
   }
 ];
 

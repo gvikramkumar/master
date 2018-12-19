@@ -32,6 +32,7 @@ import {CalendarModule} from 'primeng/calendar';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { OfferDetailViewService } from './services/offer-detail-view.service';
 import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
+import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -48,7 +49,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     CreateNewOfferComponent,
     RightPanelComponent,
     OfferDetailViewComponent,
-    ExitCriteriaValidationComponent
+    ExitCriteriaValidationComponent,
+    StakeholderFullComponent
   ],
   imports: [
     BrowserModule,
