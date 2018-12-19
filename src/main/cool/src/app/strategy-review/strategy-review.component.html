@@ -13,7 +13,7 @@
       </div>
 
       <div class="col-md-9">
-          <app-offer-create-detail></app-offer-create-detail>
+        <app-offer-create-detail></app-offer-create-detail>
         <ul class="list list--highlight base-margin-top">
           <li>
             <div class="panel panel--bordered">MM4-SAAS <span class="text-success"><span class="icon-check-outline icon-medium"></span>
@@ -26,7 +26,7 @@
 
               <div class="row">
                 <div class="col-md-2">
-                  <h1 class="page-title"><span class="action--value">6</span> <span class="action--value-label">Total
+                  <h1 class="page-title"><span class="action--value">{{totalApprovalsCount}}</span> <span class="action--value-label">Total
                       Approvals</span></h1>
                   <div class="progressbar progressbar--default" data-percentage="66">
                     <div class="progressbar__fill"></div>
@@ -34,7 +34,7 @@
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-2">
-                  <h1 class="page-title"><span class="action--value">1</span> <span class="action--value-label">Approved</span></h1>
+                  <h1 class="page-title"><span class="action--value">{{approvedCount}}</span> <span class="action--value-label">Approved</span></h1>
 
                   <div class="progressbar progressbar--success" data-percentage="66">
                     <div class="progressbar__fill"></div>
@@ -42,7 +42,7 @@
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-3">
-                  <h1 class="page-title"><span class="action--value">2</span> <span class="action--value-label">Conditionally
+                  <h1 class="page-title"><span class="action--value">{{conditionallyApprovedCount}}</span> <span class="action--value-label">Conditionally
                       Approved</span></h1>
                   <div class="progressbar progressbar--warning" data-percentage="66">
                     <div class="progressbar__fill"></div>
@@ -50,7 +50,7 @@
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-2">
-                  <h1 class="page-title"><span class="action--value">2</span> <span class="action--value-label">Not
+                  <h1 class="page-title"><span class="action--value">{{notApprovedCount}}</span> <span class="action--value-label">Not
                       Approved</span></h1>
                   <div class="progressbar progressbar--danger" data-percentage="66">
                     <div class="progressbar__fill"></div>
@@ -58,7 +58,7 @@
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-2">
-                  <h1 class="page-title"><span class="action--value">1</span> <span class="action--value-label">Not
+                  <h1 class="page-title"><span class="action--value">{{notReviewedCount}}</span> <span class="action--value-label">Not
                       Reviewed</span></h1>
                   <div class="progressbar progressbar--warning" data-percentage="66">
                     <div class="progressbar__fill"></div>
@@ -71,7 +71,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="panel panel--ltgray panel--loose">
-                    <h5 class="mb-0">Strategy Review Status</h5>
+                  <h5 class="mb-0">Strategy Review Status</h5>
                 </div>
               </div>
             </div>
@@ -95,158 +95,43 @@
                   </table>
                 </div>
                 <ul class="list list--highlight base-margin-top">
-                <li>
-                  <div class="responsive-table">
-                    <table class="table table--nostripes table--highlight table--hover table--selectable">
-                      <tr>
-                        <td>
-                          <p-accordion>
-                            <p-accordionTab>
-                              <p-header style="color:black">
-                                <div class="row" style="text-decoration: none !important;">
-                                  <div class="col"><span class="icon-check-outline icon-medium text-success"></span>CSPP</div>
-                                  <div class="col">Approved</div>
-                                  <div class="col">06-Aug-2018</div>
-                                  <div class="col">Sean Parker (OPS)</div>
-                                  <div class="col">Comment</div>
+                  <li>
+                    <div class="responsive-table">
+                      <table>
+                        <tr>
+                          <td>
+                            <p-accordion *ngFor="let strategyReviewData of strategyReviewList">
+                              <p-accordionTab>
+                                <p-header style="color:black">
+                                  <div class="row">
+                                    <div class="col">{{strategyReviewData.function}}</div>
+                                    <div class="col">{{strategyReviewData.approvalStatus}}</div>
+                                    <div class="col">{{strategyReviewData.reviewedOn}}</div>
+                                    <div class="col">{{strategyReviewData.reviewedBy}}</div>
+                                    <div class="col">{{strategyReviewData.comment}}</div>
+                                  </div>
+                                </p-header>
+                                <div class="panel panel--bordered not-reviewed" *ngIf="strategyReviewData.approvalStatus=='Not Reviewed'; then reviewRequiredPlaceHolder">
                                 </div>
-                              </p-header>
-                            </p-accordionTab>
-                          </p-accordion>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                </li>
-                  <li>
-                    <div class="responsive-table">
-                      <table class="table table--nostripes table--highlight table--hover table--selectable">
-                        <tr>
-                          <td>
-                            <p-accordion>
-                              <p-accordionTab>
-                                <p-header style="color:black">
-                                  <div class="row">
-                                    <div class="col"><span class="icon-error-outline icon-medium text-danger"></span>CPS</div>
-                                    <div class="col">Approved</div>
-                                    <div class="col">11-Aug-2018</div>
-                                    <div class="col">Sean Parker (OPS)</div>
-                                    <div class="col">Comment</div>
+                                <ng-template #reviewRequiredPlaceHolder>
+                                  <div class="panel panel--bordered not-reviewed">
+                                    <p>This is the strategy review milestone and the content is a placeholder for
+                                      milestone summary.
+                                      This is the strategy review milestone and the content is ... </p>
+                                    <button class="btn btn--secondary">Escalate</button><br><br>
                                   </div>
-                                </p-header>
-                              </p-accordionTab>
-                            </p-accordion>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="responsive-table">
-                      <table class="table table--nostripes table--highlight table--hover table--selectable">
-                        <tr>
-                          <td>
-                            <p-accordion>
-                              <p-accordionTab>
-                                <p-header style="color:black">
-                                  <div class="row">
-                                    <div class="col"><span class="icon-error-outline icon-medium text-danger"></span>Compensation
-                                      Ops</div>
-                                    <div class="col">Approved</div>
-                                    <div class="col">16-Aug-2018</div>
-                                    <div class="col">Thomas Price</div>
-                                    <div class="col">Comment</div>
+                                  <div class="panel panel--bordered not-reviewed" id="buttonSection">
+                                    <div class="panel--header">
+                                      <h5>Approval Decision</h5>
+                                    </div><br>
+                                    <div class="panel--footer">
+                                      <button class="btn btn--secondary" (click)="doNotApprove()">Do Not Approve</button>
+                                      <button class="btn btn--secondary" (click)="conditionalApprove()">Conditional
+                                        Approval</button>
+                                      <button class="btn btn--secondary">Approve</button>
+                                    </div>
                                   </div>
-                                </p-header>
-                              </p-accordionTab>
-                            </p-accordion>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="responsive-table">
-                      <table class="table table--nostripes table--highlight table--hover table--selectable">
-                        <tr>
-                          <td>
-                            <p-accordion>
-                              <p-accordionTab>
-                                <p-header style="color:black">
-                                  <div class="row">
-                                    <div class="col"><span class="icon-warning-outline icon-medium text-warning"></span>Compensation
-                                      Ops</div>
-                                    <div class="col">Conditionally Approved</div>
-                                    <div class="col">21-Aug-2018</div>
-                                    <div class="col">Jessica Lara</div>
-                                    <div class="col">Comment</div>
-                                  </div>
-                                </p-header>  
-                              </p-accordionTab>
-                            </p-accordion>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="responsive-table">
-                      <table class="table table--nostripes table--highlight table--hover table--selectable">
-                        <tr>
-                          <td>
-                            <p-accordion>
-                              <p-accordionTab>
-                                <p-header style="color:black">
-                                  <div class="row">
-                                    <div class="col"><span class="icon-check-outline icon-eye-closed icon-medium"></span>Compensation
-                                      Ops</div>
-                                    <div class="col">Not Reviewed</div>
-                                    <div class="col"></div>
-                                    <div class="col"></div>
-                                    <div class="col"></div>
-                                  </div>
-                                </p-header>
-                                <div class="panel panel--bordered not-reviewed">
-                                  <p>This is the strategy review milestone and the content is a placeholder for
-                                    milestone summary.
-                                    This is the strategy review milestone and the content is ... </p>
-                                  <button class="btn btn--secondary">Escalate</button>
-                                </div>
-                              </p-accordionTab>
-                            </p-accordion>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="responsive-table">
-                      <table class="table table--nostripes table--highlight table--hover table--selectable">
-                        <tr>
-                          <td>
-                            <p-accordion>
-                              <p-accordionTab>
-                                <p-header style="color:black">
-                                  <div class="row">
-                                    <div class="col"><span class="icon-warning-outline icon-medium text-warning"></span>Service
-                                      Info</div>
-                                    <div class="col">Conditionally Approved</div>
-                                    <div class="col">16-Aug-2018</div>
-                                    <div class="col">Jessica Lara</div>
-                                    <div class="col">Comment</div>
-                                  </div>
-                                </p-header>
-                                <div class="panel panel--bordered not-reviewed" id="buttonSection">
-                                  <div class="panel--header">
-                                    <h5>Approval Decision</h5>
-                                  </div><br>
-                                  <div class="panel--footer">
-                                    <button class="btn btn--secondary" (click)="doNotApprove()">Do Not Approve</button>
-                                    <button class="btn btn--secondary" (click)="conditionalApprove()">Conditional Approval</button>
-                                    <button class="btn btn--secondary">Approve</button>
-                                  </div>
-                                </div>  
-                                <section id="formSection">
+                                  <section id="formSection">
                                     <div class="container">
                                       <div class="row">
                                         <div class="col-md-12">
@@ -258,7 +143,7 @@
                                                 </div>
                                               </div>
                                             </div>
-                                            <div class="panel">       
+                                            <div class="panel">
                                               <div class="card__header">
                                                 <h5 class="card__title">{{formTitle}}</h5>
                                               </div>
@@ -313,29 +198,24 @@
                                                   </div>
                                                 </div>
                                                 <div class="row base-margin-top">
-                                                    <div class="col-md-4">
-                                                     <div class="form-group label--floated input--icon half-margin-bottom">
-                                                       <div class="form-group__text">
-                                                         <input
-                                                             class="form-control"
-                                                             placeholder="DUE DATE"
-                                                             #dp4="bsDatepicker"
-                                                             bsDatepicker
-                                                             placement="top"
-                                                             [minDate]="minDate"
-                                                             containerClass="custome-date"
-                                                            [bsConfig]="dpConfig">
-                                                       <button type="button" class="link" tabindex="-1">
-                                                         <span class="icon-month"></span>
-                                                       </button>
-                                                       </div>
-                                                     </div>
+                                                  <div class="col-md-4">
+                                                    <div class="form-group label--floated input--icon half-margin-bottom">
+                                                      <div class="form-group__text">
+                                                        <input class="form-control" placeholder="DUE DATE" #dp4="bsDatepicker"
+                                                          bsDatepicker placement="top" [minDate]="minDate"
+                                                          containerClass="custome-date" [bsConfig]="dpConfig">
+                                                        <button type="button" class="link" tabindex="-1">
+                                                          <span class="icon-month"></span>
+                                                        </button>
+                                                      </div>
                                                     </div>
+                                                  </div>
                                                 </div>
                                                 <div class="row">
                                                   <div class="form-actions">
                                                     <button class="btn btn--primary base-margin-top" (click)="closeForm()">Cancel</button>
-                                                    <button class="btn btn--primary base-margin-top" type="submit">Create an Action</button>
+                                                    <button class="btn btn--primary base-margin-top" type="submit">Create
+                                                      an Action</button>
                                                   </div>
                                                 </div>
                                               </form>
@@ -344,20 +224,21 @@
                                         </div>
                                       </div>
                                     </div>
-                                  </section>                   
-                              </p-accordionTab>                             
-                            </p-accordion>                           
+                                  </section>
+                                </ng-template>
+                              </p-accordionTab>
+                            </p-accordion>
                           </td>
                         </tr>
                       </table>
                     </div>
-                  </li>               
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
-      </div>   
+      </div>
       <div class="col-md-3">
         <app-right-panel [portfolioFlag]="setFlag" [offerOwner]="offerBuilderdata['offerOwner']" [stakeData]="stakeData"
           (updateStakeData)="updateStakeData($event)"></app-right-panel>

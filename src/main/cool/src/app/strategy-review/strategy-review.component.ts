@@ -21,6 +21,52 @@ export class StrategyReviewComponent implements OnInit {
   minDate: Date;
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   formTitle: any = ' ';
+  totalApprovalsCount: any = 0;
+  approvedCount: any = 0;
+  conditionallyApprovedCount: any = 0;
+  notApprovedCount: any = 0;
+  notReviewedCount: any = 0;
+  strategyReviewList = [
+    {
+      function : 'CSPP',
+      approvalStatus : 'Approved',
+      reviewedOn : '06-Aug-2018',
+      reviewedBy : 'Sean Parker (OPS)',
+      comment : 'Comment'
+    },
+    {
+      function : 'CPS',
+      approvalStatus : 'Approved',
+      reviewedOn : '11-Aug-2018',
+      reviewedBy : 'Sean Parker (OPS)',
+      comment : 'Comment'
+    },
+    {
+      function : 'Compensation Ops',
+      approvalStatus : 'Approved',
+      reviewedOn : '06-Aug-2018',
+      reviewedBy : 'Thomas Price',
+      comment : 'Comment'
+    },
+    {
+      function : 'Compensation Ops',
+      approvalStatus : 'Not Approved',
+      reviewedOn : '08-Aug-2018',
+      reviewedBy : 'Thomas Price',
+      comment : 'Comment'
+    },
+    {
+      function : 'Compensation Ops',
+      approvalStatus : 'Conditionally Approved',
+      reviewedOn : '06-Aug-2018',
+      reviewedBy : 'Jessica Lara',
+      comment : 'Comment'
+    },
+    {
+      function : 'Compensation Ops',
+      approvalStatus : 'Not Reviewed'
+    }
+  ];
 
   constructor(private router: Router, private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute) {
@@ -30,6 +76,13 @@ export class StrategyReviewComponent implements OnInit {
      }
 
   ngOnInit() {
+    this.totalApprovalsCount = this.strategyReviewList.length;
+    let i;
+    for (i=0; i<=this.strategyReviewList.length; i++) {
+      if (this.strategyReviewList[0].approvalStatus === 'Approved') {
+        this.approvedCount = this.approvedCount + 1;
+      }
+    }
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
     this.monetizationModelService.getAttributes().subscribe(data => {
