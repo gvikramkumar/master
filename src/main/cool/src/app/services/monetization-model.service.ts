@@ -34,15 +34,9 @@ export class MonetizationModelService {
     //     'Accept' : 'application/json'
     //   })
      
-<<<<<<< HEAD
-    // };
-    let url = environment.REST_API_MMATTRIBUTES_POST_URL;
-    return this.http.post(url, data,{ withCredentials: true });
-=======
     };
     let url = this.environmentService.REST_API_MMATTRIBUTES_POST_URL;
     return this.http.post(url, data,httpOptions);
->>>>>>> 781b9d3d04e53186c7eca770f357ed2504e9059a
     
     
   }
