@@ -13,6 +13,7 @@ export enum DialogInputType {
 export enum DialogSize {
   small = '500px',
   medium = '600px',
-  large = '700px'
+  large = '700px',
+  xlarge = '800px'
 }
 

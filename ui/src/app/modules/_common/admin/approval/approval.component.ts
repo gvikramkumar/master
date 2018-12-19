@@ -225,7 +225,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   openRuleDialog(rule) {
     const config = <MatDialogConfig> {
       data: rule,
-      width: DialogSize.large,
+      width: DialogSize.xlarge,
       backdropClass: 'bg-modal-backdrop'
     };
     return this.dialog.open(RuleDetailDialogComponent, config)
@@ -235,7 +235,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   openSubmeasureDialog(submeasure) {
     const config = <MatDialogConfig> {
       data: submeasure,
-      width: DialogSize.large,
+      width: DialogSize.xlarge,
       backdropClass: 'bg-modal-backdrop'
     };
     return this.dialog.open(SubmeasureDetailDialogComponent, config)

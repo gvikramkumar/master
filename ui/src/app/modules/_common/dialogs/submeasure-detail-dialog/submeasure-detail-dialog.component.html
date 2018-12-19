@@ -7,43 +7,71 @@
       <!--Top row-->
       <div class="row">
         <div class="col-lg-6">Measure:</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.name}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.name}}</div>
+        <div class="col-lg-6 text-ellipsis" [matTooltip]="measureName" matTooltipPosition="above"
+             [matTooltipDisabled]="measureName?.length < 15">{{measureName}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Sub-Measure Name:</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.name}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.name}}</div>
+        <div class="col-lg-6 text-ellipsis" [matTooltip]="sm.name" matTooltipPosition="above"
+             [matTooltipDisabled]="sm.name?.length < 15">{{sm.name}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Source:</div>
-        <div class="col-lg-6">{{data.name}}</div>
+        <div class="col-lg-6 text-ellipsis" [matTooltip]="sourceName" matTooltipPosition="above"
+             [matTooltipDisabled]="sourceName?.length < 15">{{sourceName}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Description:</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.desc}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.desc}}</div>
+        <div class="col-lg-6 text-ellipsis" [matTooltip]="sm.desc" matTooltipPosition="above"
+             [matTooltipDisabled]="sm.desc?.length < 15">{{sm.desc}}</div>
       </div>
     </div> <!--End of first row first column-->
 
 
     <div class="col-lg-6"> <!--Second column-->
+<!--
       <div class="row">
-        <!--Empty row-->
+        <div class="col-lg-6">:</div>
+        <div class="col-lg-6">{{}}</div>
+      </div>
+-->
+
+      <div *ngIf="sm.categoryType === 'MM'" class="row">
+        <div class="col-lg-6">Manual Mix:</div>
+        <div class="col-lg-6">HW: {{sm.manualMixHw}} SW: {{sm.manualMixSw}}</div>
+      </div>
+
+      <div *ngIf="hasFlashCategory()" class="row">
+        <div class="col-lg-6">Flash Category:</div>
+        <div class="col-lg-6">{{sm.sourceSystemAdjTypeId}}</div>
+      </div>
+
+      <div *ngIf="hasAdjustmentType()" class="row">
+        <div class="col-lg-6">Adjustment Type:</div>
+        <div class="col-lg-6">{{sm.sourceSystemAdjTypeId}}</div>
+      </div>
+
+      <div *ngIf="sm.categoryType === 'MM'" fxLayout="row" fxLayoutAlign="start start">
+        <div class="form-group-text form-group-inline-30">Manual Mix HW/SW:</div>
+        <fin-input name="manualMixHw" label="HW" [(ngModel)]="sm.manualMixHw" [required]="true" [inline]="true" class="hwsw-inputs"></fin-input>
+        <fin-input name="manualMixSw" label="SW" [(ngModel)]="sm.manualMixSw" [required]="true" [inline]="true" class="hwsw-inputs"></fin-input>
       </div>
 
       <div class="row">
-        <!--Empty row-->
+        <div class="col-lg-6">Is Group Submeasure:</div>
+        <div class="col-lg-6">{{sm.indicators.groupFlag}}</div>
       </div>
-
       <div class="row">
-        <div class="col-lg-6">Submeasure Category Type:</div>
-        <div class="col-lg-6">{{data.categoryType}}</div>
+        <div class="col-lg-6">Is Service Submeasure:</div>
+        <div class="col-lg-6">{{sm.indicators.service}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Grouping Submeasure:</div>
-        <div class="col-lg-6">{{data.name}}</div>
+        <div class="col-lg-6">{{groupingSubmeasureName}}</div>
       </div>
     </div> <!--End of first row second column-->
   </div> <!--End of first row-->
@@ -58,27 +86,27 @@
 
       <div class="row">
         <div class="col-lg-6">Internal Business Entity:</div>
-        <div class="col-lg-6" >{{data.inputFilterLevel.internalBELevel}}</div>
+        <div class="col-lg-6" >{{sm.inputFilterLevel.internalBELevel}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Product:</div>
-        <div class="col-lg-6">{{data.inputFilterLevel.productLevel}}</div>
+        <div class="col-lg-6">{{sm.inputFilterLevel.productLevel}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Legal Entity:</div>
-        <div class="col-lg-6">{{data.inputFilterLevel.entityLevel}}</div>
+        <div class="col-lg-6">{{sm.inputFilterLevel.entityLevel}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Sales:</div>
-        <div class="col-lg-6">{{data.inputFilterLevel.salesLevel}}</div>
+        <div class="col-lg-6">{{sm.inputFilterLevel.salesLevel}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">SCMS:</div>
-        <div class="col-lg-6">{{data.inputFilterLevel.scmsLevel}}</div>
+        <div class="col-lg-6">{{sm.inputFilterLevel.scmsLevel}}</div>
       </div>
     </div> <!--End of Second row first column-->
 
@@ -91,27 +119,27 @@
 
       <div class="row">
         <div class="col-lg-6">Internal Business Entity:</div>
-        <div class="col-lg-6" >{{data.manualMapping.internalBELevel}}</div>
+        <div class="col-lg-6" >{{sm.manualMapping.internalBELevel}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Product:</div>
-        <div class="col-lg-6">{{data.manualMapping.productLevel}}</div>
+        <div class="col-lg-6">{{sm.manualMapping.productLevel}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Legal Entity:</div>
-        <div class="col-lg-6">{{data.manualMapping.entityLevel}}</div>
+        <div class="col-lg-6">{{sm.manualMapping.entityLevel}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Sales:</div>
-        <div class="col-lg-6">{{data.manualMapping.salesLevel}}</div>
+        <div class="col-lg-6">{{sm.manualMapping.salesLevel}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">SCMS:</div>
-        <div class="col-lg-6">{{data.manualMapping.scmsLevel}}</div>
+        <div class="col-lg-6">{{sm.manualMapping.scmsLevel}}</div>
       </div>
 
     </div> <!--End of Second row Second column-->
@@ -125,16 +153,16 @@
 
       <div class="row">
         <div class="col-lg-6">Effective Month:</div>
-        <div class="col-lg-6">{{data.startFiscalMonth}}</div>      </div>
+        <div class="col-lg-6">{{sm.startFiscalMonth}}</div>      </div>
 
       <div class="row">
         <div class="col-lg-6">Processing Timing:</div>
-        <div class="col-lg-6">{{data.processingTime}}</div>
+        <div class="col-lg-6">{{sm.processingTime}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">P&L Node Grouping:</div>
-        <div class="col-lg-6">{{data.pnlnodeGrouping}}</div>
+        <div class="col-lg-6">{{sm.pnlnodeGrouping}}</div>
       </div>
 
     </div> <!--End of third row first column-->
@@ -146,41 +174,55 @@
 
       <div class="row">
         <div class="col-lg-6">Reporting Level 1:</div>
-        <div class="col-lg-6">{{data.reportingLevels[0]}}</div>
+        <div class="col-lg-6">{{sm.reportingLevels[0]}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Reporting Level 2:</div>
-        <div class="col-lg-6">{{data.reportingLevels[1]}}</div>
+        <div class="col-lg-6">{{sm.reportingLevels[1]}}</div>
       </div>
 
       <div class="row">
         <div class="col-lg-6">Reporting Level 3:</div>
-        <div class="col-lg-6">{{data.reportingLevels[2]}}</div>
+        <div class="col-lg-6">{{sm.reportingLevels[2]}}</div>
       </div>
     </div> <!--End of third row second column-->
   </div> <!--End of third row-->
 
-  <div class="row"> <!--Bottom row-->
-
-    <div class="col-lg-6"> <!--First column-->
-      <div class="line-break">
-      </div>
-
+  <div class="row"> <!-- 4th row -->
+    <div class="col-lg-6">
       <div class="row">
-        <div class="col-lg-6">Rule Association:</div>
-        <div class="col-lg-6 text-ellipsis" matTooltip="{{data.rules}}" matTooltipPosition="above" [matTooltipClass]="'my-tooltip'">{{data.rules}}</div>
+        <div class="col-lg-6">Retained Earnings:</div>
+        <div class="col-lg-6">{{sm.indicators.retainedEarnings}}</div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">Transition:</div>
+        <div class="col-lg-6">{{sm.indicators.transition}}</div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">Corporate Revenue:</div>
+        <div class="col-lg-6">{{sm.indicators.corpRevenue}}</div>
       </div>
 
-    </div> <!--End of bottom row first column-->
-
-
-    <div class="col-lg-6"> <!--Second column-->
-      <div class="line-break">
+    </div>
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="col-lg-6">2 Tier:</div>
+        <div class="col-lg-6">{{sm.indicators.twoTier}}</div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">Dual Gaap:</div>
+        <div class="col-lg-6">{{sm.indicators.dualGaap}}</div>
       </div>
 
-    </div> <!--End of bottom row second column-->
-  </div> <!--End of bottom row-->
+    </div>
+  </div> <!-- end 4th row -->
+
+  <div class="row heading">
+    <div class="col-6">Rule Association:</div>
+  </div>
+  <div *ngFor="let rule of rules"  [matTooltip]="rule.desc" matTooltipPosition="above">{{rule.name}}</div>
+
 </div>
 
 <div mat-dialog-actions>
