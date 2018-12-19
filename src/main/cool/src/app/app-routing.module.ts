@@ -59,21 +59,18 @@ const routes: Routes = [
     component: ExitCriteriaValidationComponent
   },
   {
-<<<<<<< HEAD
     path: 'stakeholderFull/:id',
     component: StakeholderFullComponent
   },
   {
     path: 'menu',
     component: MenuBarComponent
-=======
     path: 'strategyReview/:id',
     component: StrategyReviewComponent
   },
   {
     path: 'accessManagement',
     component: AccessManagementComponent
->>>>>>> 860cbc190ba866717c06370113db6af6b113b4cb
   }
 ];
 

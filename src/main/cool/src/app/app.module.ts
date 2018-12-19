@@ -107,13 +107,10 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     ConfigurationService,
     MonetizationModelService,
     OfferDetailViewService,
-<<<<<<< HEAD
     ExitCriteriaValidationService,
 
-=======
     DashboardService,
     AccessManagementService,
->>>>>>> 860cbc190ba866717c06370113db6af6b113b4cb
     UserService,
      {
        provide: APP_INITIALIZER,
