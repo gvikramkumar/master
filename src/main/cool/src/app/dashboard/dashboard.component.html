@@ -39,29 +39,75 @@
               </div>
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="gbforactions" #dt>
                 <p-column field="offerId" sortable= "true" header="OFFER ID">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                   <span *ngIf="actionData.alertType == 1"> <span class="icon-clock icon-small" style="margin:0px 5px 0 0">
-                      </span>{{actionData.offerId}}</span>
-                    <span *ngIf="actionData.alertType == 2">
-                      <span class="icon-alert icon-small hints" style="margin:0px 5px 0 0" [ngbPopover]="popContent" (click)="displayPop()"></span>
-                      {{actionData.offerId}}
-                    </span>
+                  <ng-template let-col let-actionData="rowData" pTemplate="body" >
+                   <span *ngIf="actionData.alertType == 1"> 
+                      <ng-template  #popActionContent ptemplate="body">
+                          <div *ngIf="displayActionPopOver== true" class="popover">
+                          <h4 class="popover__title">Offer ID <span>  {{actionData.offerId}}</span> </h4>
+                          <div class="popover__body">
+                                                            
+                                  <div class="responsive-table half-margin-bottom">
+                                      <table class="table table--nostripes">
+                                          <thead>
+                                              <tr>
+                                                  <th>Offer Name </th>
+                                                  <th>Action Title </th>
+                                                  <th>Offer Owner </th>
+                                                  <th>Due Date </th>
+                                                  <th>Action Completion Phase </th>
+                                                  
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              <tr>
+                                                  <td>AMP (Advanced Malware Protection)</td>
+                                                  <td>Provide Requested Feedback</td>
+                                                  <td>John Smith</td>
+                                                  <td>23-Dec-2018</td>
+                                                  <td>Design Review</td>
+                                              </tr>
+                                          </tbody>
+                                      </table>
+                                  </div>
 
-      
-                    <ng-template  #popContent ptemplate="body">
-                        <div *ngIf="displayPopOver== true" class="popover">
-                        <h4 class="popover__title">Offer ID <span>  {{actionData.offerId}}</span> </h4>
-                        <div class="popover__body">
-                          <h5>Notification Details</h5><a class="modal__close" id="popover_close"><span class="icon-close" (click)="closeNotification()"></span></a>
-                          <p>{{actionData.actionDesc}}</p>
-                          <button class="btn btn--secondary base-margin-top" (click)="offerDetailOverView(actionData.offerId)" >View Offer</button>
-                         
+                          <h5>Action Description</h5><a class="modal__close" id="popover_close"><span class="icon-close" (click)="closeActionNotification()"></span></a>
+                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                          <button class="btn btn--secondary base-margin-top">View Offer</button>
                           </div>
                           <div class="popover__footer">
-                              <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="dismissNotification(actionData.offerId)">Dismiss Notification</button>  
+                              <button class="btn btn--primary base-margin-top" id="popover_close_btn">Complete</button>  
+                              <button class="btn btn--primary base-margin-top" id="popover_close_btn">Provide Feedback</button>  
                           </div>
-                        </div>
-                       </ng-template>
+                          </div>
+                         </ng-template>   
+                       
+                         <span [ngbPopover]="popActionContent" (click)="displayActionPop()"> 
+                         <span class="icon-clock icon-small" style="margin:0px 5px 0 0"></span>
+                  {{actionData.offerId}}
+                </span>
+                   </span>
+                    <span *ngIf="actionData.alertType == 2">
+                        <ng-template  #popNotificationContent ptemplate="body">
+                            <div *ngIf="displayPopOver== true" class="popover">
+                            <h4 class="popover__title">Offer ID <span>  {{actionData.offerId}}</span> </h4>
+                            <div class="popover__body">
+                              <h5>Notification Details</h5><a class="modal__close" id="popover_close"><span class="icon-close" (click)="closeNotification()"></span></a>
+                              <p>{{actionData.actionDesc}}</p>
+                              <button class="btn btn--secondary base-margin-top" (click)="offerDetailOverView(actionData.offerId)" >View Offer</button>
+                             
+                              </div>
+                              <div class="popover__footer">
+                                  <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="dismissNotification(actionData.offerId)">Dismiss Notification</button>  
+                              </div>
+                            </div>
+                           </ng-template>
+                       <span [ngbPopover]="popNotificationContent" (click)="displayPop()">
+                      <span class="icon-alert icon-small" style="margin:0px 5px 0 0" ></span>
+                      {{actionData.offerId}}
+                    </span>
+                  </span>
+      
+                   
                   </ng-template>
                 </p-column>
                 <p-column field="actions" sortable= "true" header="ACTIONS AND NOTIFICATIONS" >
@@ -158,22 +204,89 @@
                         <span>{{dateFormat(offerData.expectedLaunchDate)}} <br /></span>
                       </ng-template>
                 </p-column>
-                <p-column field="overallStatus" [style]="{'width': '400px'}">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                      <div class="row no-gutters">
+                <p-column field="status" [style]="{'width': '400px'}">
+                  <ng-template let-col let-offerData="rowData" pTemplate="body">
+                      <div *ngIf="offerData.overallStatus == 'Launch in Progress'" class="row no-gutters">
                           <div class="col-md-12">
-                            <div class="progressbar__label">Launch In Progress</div>
-                            <div class="progressbar progressbar--warning" data-percentage="66">
+                            <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="progressbar progressbar--warning" data-percentage="100">
                                 <div class="progressbar__fill"></div>
-                            </div>                     
-                          </div>     
-                            <!-- <div class="col-md-12">
-                                <div class="progressbar__label">Launch In Progress</div>
-                                <div class="progressbar progressbar--warning" data-percentage="66">
-                                    <div class="progressbar__fill"></div>
-                                </div>                     
-                              </div>                   -->
+                                </div>
+                              </div>
+                            <div class="col-md-4">
+                            <div class="progressbar progressbar--warning" data-percentage="0">
+                                <div class="progressbar__fill"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="progressbar progressbar--success" data-percentage="0">
+                                <div class="progressbar__fill"></div>
+                            </div>                 
+                          </div>
                         </div>
+                        <div *ngIf="offerData.overallStatus == 'Cancelled'" class="row no-gutters">
+                            <div class="col-md-12">
+                              <div class="progressbar__label progressbarLabel-cancelled">Cancelled</div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="progressbar progressbar--warning" data-percentage="0">
+                                  <div class="progressbar__fill"></div>
+                                  </div>
+                                </div>
+                              <div class="col-md-4">
+                              <div class="progressbar progressbar--warning" data-percentage="0">
+                                  <div class="progressbar__fill"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="progressbar progressbar--success" data-percentage="0">
+                                  <div class="progressbar__fill"></div>
+                              </div>                 
+                            </div>
+                          </div>
+                          <div *ngIf="offerData.overallStatus == 'In Market'" class="row no-gutters">
+                              <div class="col-md-12">
+                                <div class="progressbar__label progressbarLabel-inMarket">In Market</div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="progressbar progressbar--success" data-percentage="100">
+                                    <div class="progressbar__fill"></div>
+                                    </div>
+                                  </div>
+                                <div class="col-md-4">
+                                <div class="progressbar progressbar--success" data-percentage="100">
+                                    <div class="progressbar__fill"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="progressbar progressbar--success" data-percentage="0">
+                                    <div class="progressbar__fill"></div>
+                                </div>                 
+                              </div>
+                            </div>
+
+                            <div *ngIf="offerData.overallStatus == 'Update in progress'" class="row no-gutters">
+                                <div class="col-md-12">
+                                  <div class="progressbar__label progressbarLabel-warning">Update in progress</div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="progressbar progressbar--success" data-percentage="100">
+                                      <div class="progressbar__fill"></div>
+                                      </div>
+                                    </div>
+                                  <div class="col-md-4">
+                                  <div class="progressbar progressbar--warning" data-percentage="100">
+                                      <div class="progressbar__fill"></div>
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="progressbar progressbar--success" data-percentage="0">
+                                      <div class="progressbar__fill"></div>
+                                  </div>                 
+                                </div>
+                              </div>
                   </ng-template>
                 </p-column>
                 <p-column field="actions" [style]="{'width': '200px'}"></p-column>

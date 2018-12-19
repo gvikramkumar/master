@@ -37,9 +37,27 @@
         <a href="javascript:;" class="btn btn--icon">
             <span class="icon-alert"></span>
         </a>
-        <a href="javascript:;" class="btn btn--icon" [ngbPopover]="popContent">
-            <span class="icon-email"></span>
+        <a href="javascript:;" class="btn btn--icon" >
+            <span [ngbPopover]="popNotificationContent" placement="bottom">
+           <span class="icon-email">
+             </span>
+           </span>
         </a>
+        <ng-template  #popNotificationContent ptemplate="body" placement="bottom">
+          <div class="emailPrefSpacing"> 
+              
+                 <p-multiSelect
+                  id="selectedSValue"
+                  class="form-control"
+                  name="secondaryBUList"
+                  [options]="emailPrefOptions"
+                  (onChange)="getSecondaryBusinessEntity($event.value)"
+                  [(ngModel)]="secondaryBusinessUnitsValue"
+                  [panelStyle]="{minWidth:'25em'}">
+                </p-multiSelect>
+                  
+        </div>
+      </ng-template>
         <a href="javascript:;" class="btn btn--icon">
             <span class="icon-cog"></span>
         </a>

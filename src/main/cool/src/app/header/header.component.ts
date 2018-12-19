@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CreateOfferService } from '../services/create-offer.service';
 import { HeaderService } from './header.service';
 import { UserService } from '../services/user.service'
+import { SelectItem } from 'primeng/api';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit {
   userName;
   functionalRole;
   userId;
+  emailPrefOptions: SelectItem[];
 
   ngOnInit() {
   }
@@ -35,6 +37,11 @@ export class HeaderComponent implements OnInit {
       this.functionalRole = data.functionalAppRoleList[0].fnalRole;
     });
 
+    this.emailPrefOptions= [
+      {label: 'Realtime', value: 'Realtime' },
+      {label: 'Once Weekly', value: 'Once Weekly' },
+      {label: 'Once Daily', value: 'Once Daily' }
+    ]
   }
 
   getPage(p) {

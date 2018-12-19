@@ -267,3 +267,12 @@ h4.popover__title {
   overflow: visible;
 }
 
+.progressbarLabel-warning {
+color: #fbab18;
+}
+.progressbarLabel-cancelled {
+  color: red;
+}
+.progressbarLabel-inMarket {
+  color: green;
+}

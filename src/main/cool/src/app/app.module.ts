@@ -40,8 +40,9 @@ import {MenuModule} from 'primeng/menu';
 import { AccessManagementComponent } from './access-management/access-management.component';
 import { AvatarComponent } from './directives/avatar/avatar.component';
 import { AccessManagementService } from './services/access-management.service';
+import { EnvironmentService } from '../environments/environment.service';
 
-export function app_init(configService: ConfigurationService,userService: UserService ){
+export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
 }
 
@@ -92,6 +93,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     CreateOfferService, 
     SearchCollaboratorService, 
     ConfigurationService,
+    EnvironmentService,
     MonetizationModelService,
     OfferDetailViewService,
     DashboardService,

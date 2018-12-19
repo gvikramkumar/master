@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
   needImmActnCount:number = 0;
   display: boolean = false;
   displayPopOver: boolean = true;
+  displayActionPopOver: boolean = true;
   currentOfferId;
 
   constructor(private dashboardService: DashboardService,
@@ -43,7 +44,6 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getMyOffersList()
       .subscribe(data => {
         this.myOffersList = data;
-        this.processMyOffersList();
         console.log(this.myOffersList);
       });
 
@@ -92,52 +92,6 @@ export class DashboardComponent implements OnInit {
     });
     this.myActionsList = this.myOfferArray;
   }
-
-  processMyOffersList() {
-    this.myOffersList.forEach(element => {
-      let obj = new ActionsAndNotifcations();
-      obj.setOfferId(element.offerId);
-      this.currentOfferId = element.offerId;
-      obj.setOfferName(element.offerName);
-      obj.setStyleColor(element.status);
-
-      // Set Actions
-      let actionList = element.actionList;
-      if (actionList != undefined && actionList.length > 0) {
-        actionList.forEach(element => {
-          obj.setActiontTitle(element.actiontTitle);
-          obj.setAssigneeId(element.assigneeId);
-          obj.setTriggerDate(this.dateFormat(element.triggerDate));
-          obj.setDueDate(this.dateFormat(element.dueDate));
-          obj.setActionDesc(element.actionDesc);
-          //obj.setStyleColor(element.Status);
-          obj.setAlertType(1);
-          this.myOffers.push(obj);
-        });
-      }
-
-      let obj2 = new ActionsAndNotifcations();
-      obj2.setOfferId(element.offerId);
-      obj2.setOfferName(element.offerName);
-      obj2.setStyleColor(element.status);
-      // Set Notifications
-      let notificationList = element.notificationList;
-      if (notificationList!= undefined && notificationList.length > 0) {
-        notificationList.forEach(element => {
-          obj2.setActiontTitle(element.notifcationTitle);
-          obj2.setAssigneeId(element.assigneeId);
-          obj2.setTriggerDate(this.dateFormat(element.triggerDate));
-          obj2.setDueDate("--");
-          obj2.setStyleColor("--");
-          obj2.setAlertType(2);
-          obj2.setActionDesc(element.notificationDesc);
-          this.myOffers.push(obj2);
-        });
-      }
-    });
-    this.myOffersList = this.myOffers;
-  }
-
   dateFormat(inputDate:string){
     return moment(inputDate).format('DD-MMM-YYYY');
   }
@@ -162,20 +116,25 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.postDismissNotification(postData)
     this.displayPopOver = false;
     console.log("dismissed");
+    this.router.navigate(['/dashboard']);
 
-    this.dashboardService.getMyActionsList()
-      .subscribe(data => {
-        this.myActions = data;
-        this.processMyActionsList();
-      });
+    
   }
 
   closeNotification() {
     this.displayPopOver = false;
   }
 
+  closeActionNotification() {
+    this.displayActionPopOver = false;
+  }
+
   displayPop() {
     this.displayPopOver = true;
+  }
+
+  displayActionPop() {
+    this.displayActionPopOver = true;
   }
 
   offerDetailOverView(Id) {
