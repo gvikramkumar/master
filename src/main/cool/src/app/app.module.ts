@@ -39,7 +39,7 @@ import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-d
 import {MenuModule} from 'primeng/menu';
 import { AccessManagementComponent } from './access-management/access-management.component';
 import { AvatarComponent } from './directives/avatar/avatar.component';
-
+import { AccessManagementService } from './services/access-management.service';
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -95,6 +95,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     MonetizationModelService,
     OfferDetailViewService,
     DashboardService,
+    AccessManagementService,
     UserService,
      {
        provide: APP_INITIALIZER,
