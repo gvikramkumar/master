@@ -64,7 +64,8 @@ const routes: Routes = [
   },
   {
     path: 'menu',
-    component: MenuBarComponent
+    component: MenuBarComponent},
+    {
     path: 'strategyReview/:id',
     component: StrategyReviewComponent
   },

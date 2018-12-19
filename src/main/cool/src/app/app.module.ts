@@ -35,13 +35,9 @@ import { StrategyReviewComponent } from './strategy-review/strategy-review.compo
 import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
 import {ExitCriteriaValidationService} from './services/exit-criteria-validation.service';
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
-
-
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import {TieredMenuModule} from 'primeng/tieredmenu';
 import {MenuItem} from 'primeng/api';
-
-
 import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
 import { ActionsComponent } from './actions/actions.component';
 import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
@@ -68,10 +64,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     OfferDetailViewComponent,
     ExitCriteriaValidationComponent,
     StakeholderFullComponent,
-  
-    MenuBarComponent
+    MenuBarComponent,
     StrategyReviewComponent,
-    ExitCriteriaValidationComponent,
     CreateNewActionComponent,
     ActionsComponent,
     OfferCreateDetailComponent,
