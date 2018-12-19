@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
+import { EnvironmentService } from '../../environments/environment.service';
 
 
 @Injectable()
@@ -10,18 +11,18 @@ export class MonetizationModelService {
 
   constructor(
     private http: HttpClient,
-   
+    private environmentService: EnvironmentService
     ) { }
 
  
   getAttributes(){
-    let url =environment.REST_API_MMOFFER_ATTRIBUTES_URL;
+    let url =this.environmentService.REST_API_MMOFFER_ATTRIBUTES_URL;
     return this.http.get(url,{ withCredentials: true });
   }
 
   getOfferBuilderData(offerId) {
-  
-    let url =environment.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
+    // debugger;
+    let url =this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
     return this.http.get(url,{ withCredentials: true });
   }
 
@@ -33,15 +34,21 @@ export class MonetizationModelService {
     //     'Accept' : 'application/json'
     //   })
      
+<<<<<<< HEAD
     // };
     let url = environment.REST_API_MMATTRIBUTES_POST_URL;
     return this.http.post(url, data,{ withCredentials: true });
+=======
+    };
+    let url = this.environmentService.REST_API_MMATTRIBUTES_POST_URL;
+    return this.http.post(url, data,httpOptions);
+>>>>>>> 781b9d3d04e53186c7eca770f357ed2504e9059a
     
     
   }
 
   showStakeholders(model, be){
-    let url = environment.REST_API_MM_STAKEHOLDERS_GET_URL;
+    let url = this.environmentService.REST_API_MM_STAKEHOLDERS_GET_URL;
     url += model;
     url += "/" + be;
     return this.http.get(url);

@@ -168,4 +168,9 @@
                 font-size: 1.5em;
                 display: inline-block;
             }
+
+            .emailPrefSpacing {
+                position:relative;
+                top:25px;
+            }
             }

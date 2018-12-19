@@ -2,14 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
+
 import 'rxjs/add/operator/toPromise';
+import { EnvironmentService } from '../../environments/environment.service';
 
 @Injectable()
 export class ConfigurationService {
     urlGetUserInfo = environment.REST_API_URL;
     urlGetCurrentUser = environment.REST_API_URL_GET_CURRENT_USER;
-
-    constructor(private httpClient: HttpClient, private userService: UserService) {
+    
+    constructor(private httpClient: HttpClient, 
+        private userService: UserService, 
+        private environmentService: EnvironmentService) {
     }
 
     init(): Promise<any> {

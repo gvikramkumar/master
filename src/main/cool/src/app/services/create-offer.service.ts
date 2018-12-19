@@ -7,13 +7,14 @@ import { environment } from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {CreateOffer} from '../create-offer-cool/create-offer';
 import { UserService } from './user.service';
+import { EnvironmentService } from '../../environments/environment.service';
 
 @Injectable()
 export class CreateOfferService {
 
   baseUrl: string = environment.REST_API_URL;
-  offerCreateUrl: string = environment.REST_API_OFFER_CREATE_URL;
-  basePrimaryUrl: string = environment.REST_API_PRIMARY_URL;
+  offerCreateUrl: string = this.environmentService.REST_API_OFFER_CREATE_URL;
+  basePrimaryUrl: string = this.environmentService.REST_API_PRIMARY_URL;
   secondaryBusinessUnitUrl: string = environment.REST_API_SECONDARY_BUSINESS_UNIT_URL;
   secondaryBusinessEntityUrl: string = environment.REST_API_SECONDARY_BUSINESS_ENTITY_URL;
   secondaryPrimaryBusinessEntityUrl: string = environment.REST_API_PRIMARY_BUSINESS_ENTITY_URL;
@@ -23,7 +24,7 @@ export class CreateOfferService {
   currenTOffer = new BehaviorSubject<any>('');
   routeFlag  = new BehaviorSubject<boolean>(false);
 
-  constructor(private httpClient: HttpClient, private userService: UserService) {
+  constructor(private httpClient: HttpClient, private userService: UserService, private environmentService: EnvironmentService) {
     this.coolOffer = {
       'offerId': null,
       'offerName': null,
