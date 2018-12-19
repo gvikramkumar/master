@@ -32,9 +32,11 @@ export const environment = {
   REST_API_MMOFFER_ATTRIBUTES_URL:'https://cool-srv-dev.cisco.com/coolsrv/getOfferDefaults?type=offerdimensions',
   REST_API_MMATTRIBUTES_POST_URL:'https://cool-srv-dev.cisco.com/coolsrv/validateOfferDim',
   REST_API_MM_STAKEHOLDERS_GET_URL:'https://cool-srv-dev.cisco.com/coolsrv/stakeholder/getStakeHolderMgnt/',
+  
   REST_API_MM_OFFER_BUILDER_GET_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/getOffersDetails/',
   REST_API_MM_STAKEHOLDERS_SEARCH_URL: 'https://cool-srv-dev.cisco.com/coolsrv/collabrators/searchCollabrators',
-  REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/updateStakeHolderdata'
+  // REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/updateOfferDetails',
+  REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL:'https://cool-srv-dev.cisco.com/coolsrv/offer/updateOfferDetails'
 
   
   // change with localhost:8080 in local dev

@@ -32,7 +32,15 @@ import {CalendarModule} from 'primeng/calendar';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { OfferDetailViewService } from './services/offer-detail-view.service';
 import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
+import {ExitCriteriaValidationService} from './services/exit-criteria-validation.service';
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
+
+
+import { MenuBarComponent } from './menu-bar/menu-bar.component';
+import {TieredMenuModule} from 'primeng/tieredmenu';
+import {MenuItem} from 'primeng/api';
+
+
 
 export function app_init(configService: ConfigurationService,userService: UserService ){
   return () => {return configService.init();};
@@ -50,7 +58,9 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     RightPanelComponent,
     OfferDetailViewComponent,
     ExitCriteriaValidationComponent,
-    StakeholderFullComponent
+    StakeholderFullComponent,
+  
+    MenuBarComponent
   ],
   imports: [
     BrowserModule,
@@ -81,6 +91,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     ConfigurationService,
     MonetizationModelService,
     OfferDetailViewService,
+    ExitCriteriaValidationService,
+
     UserService,
      {
        provide: APP_INITIALIZER,

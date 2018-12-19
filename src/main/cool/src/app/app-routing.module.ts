@@ -8,6 +8,7 @@ import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.com
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import{ExitCriteriaValidationComponent} from './exit-criteria-validation/exit-criteria-validation.component';
 import{StakeholderFullComponent} from './stakeholder-full/stakeholder-full.component';
+import{MenuBarComponent} from './menu-bar/menu-bar.component';
 
 const routes: Routes = [
   {
@@ -40,12 +41,16 @@ const routes: Routes = [
     component: OfferDetailViewComponent
   },
   {
-    path: 'exitCriteriaValidation',
+    path: 'exitCriteriaValidation/:id',
     component: ExitCriteriaValidationComponent
   },
   {
     path: 'stakeholderFull',
     component: StakeholderFullComponent
+  },
+  {
+    path: 'menu',
+    component: MenuBarComponent
   }
 ];
 

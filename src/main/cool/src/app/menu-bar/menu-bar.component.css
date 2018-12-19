@@ -1,0 +1,33 @@
+/* Base CSS */
+#flyoutmenu{
+    padding:0;
+    margin:0;
+    border:0;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    text-align: left;
+    font-size: 16px;
+}
+
+
+#flyoutmenu ul,#flyoutmenu ul li,#flyoutmenu ul ul{list-style:none;margin:0;padding:0;border:0;}
+#flyoutmenu ul{position:relative;z-index:397;}
+#flyoutmenu ul li{min-height:1px;line-height:2em;vertical-align:middle;}
+#flyoutmenu ul li:hover{position:relative;z-index:399;cursor:default;}
+#flyoutmenu ul ul{visibility:hidden;position:absolute;top:100%;left:0;z-index:398;width:100%;}
+#flyoutmenu ul ul ul{top:0px;left:99%;}
+#flyoutmenu ul li:hover > ul{visibility:visible;}
+#flyoutmenu ul ul{top:0px;left:99%;}
+
+/* Custom CSS Styles */
+#flyoutmenu ul{width:200px}
+#flyoutmenu ul ul{width:250px;}
+#flyoutmenu ul li{padding:7px 10px;}
+#flyoutmenu ul li.hover,#flyoutmenu ul li:hover{    background-color: rgba(0,0,0,.1); color:#fff;}
+#flyoutmenu ul a:link,#flyoutmenu ul a:visited{color:#fff;text-decoration:none;}
+#flyoutmenu ul a:hover{color:#fff}
+#flyoutmenu ul a:active{color:#000;background:white;    display: block;
+    margin: -7px -10px;
+    padding: 7px 10px;}

@@ -65,7 +65,7 @@
                                                         Exit Criteria
                                                     
                                                 
-                                                <button class="btn pull-right" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                <button [disabled]="!requestApprovalAvailable" class="btn pull-right" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                         Request Approval
                                                 </button></h5>
                                                 </div>
@@ -76,49 +76,19 @@
                                                                         <table class="table table--nostripes offer-dimensions">
                                                                                 <thead>
                                                                                     <tr>
-                                                                                        <th class="key"></th>
                                                                                         <th class="sortable">Exit Criteria </th>
                                                                                         <th class="sortable">Status </th>
-                                                                                       
                                                                                     </tr>
                                                                                 </thead>
                                                                         </table>
                                                                     <table class="table table--nostripes offer-dimensions">
                                                                             
                                                                             <tbody>
-                                                                                <tr>
-                                                                                    <td class="key" rowspan="5">
-                                                                                    <ul>
-                                                                                        <li><span class="icon-view-feed-single icon-medium dependancy"></span> External Dependency </li>
-                                                                                        <li><span class="icon-view-feed-single icon-medium milestone"></span> Milestone</li>
-                                                                                    </ul>
-
-                                                                                    </td>
-                                                                                    <td><span class="icon-view-feed-single icon-medium milestone"></span> Offer Creation</td>
-                                                                                    <td class="status">Completed</td>
+                                                            
+                                                                                <tr  *ngFor="let action of ideate">
+                                                                                <td><span class="icon-view-feed-single icon-medium dependancy"></span> {{action['subMilestone']}}</td>
+                                                                                    <td class="status" [ngStyle]="{'color': actionStatusColor(action['status'])}">{{action['status']}}</td>
                                                                                 </tr>
-                                                                                <tr>
-                                                                                    <td><span class="icon-view-feed-single icon-medium dependancy"></span> Dependancy-1</td>
-                                                                                    <td class="status">Completed</td>
-                                                                                 
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td><span class="icon-view-feed-single icon-medium milestone"></span> Offer Model Evaluation</td>
-                                                                                    <td class="status">Completed</td>
-                                                                                  
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td><span class="icon-view-feed-single icon-medium dependancy"></span> Dependancy-2</td>
-                                                                                    <td class="status">Completed</td>
-                                                                                   
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td><span class="icon-view-feed-single icon-medium milestone"></span> Stakeholder Identification</td>
-                                                                                    <td class="status">Completed</td>
-                                                                                    
-                                                                                </tr>
-                                                                                
-                                                                                
                                                                                 
                                                                             </tbody>
                                                                         </table>
@@ -308,121 +278,7 @@
                                       
                                 </div>
                                 <div class="col-md-3">
-                                    <!-- Offer Phase Steps -->
-                                    <div class="card card--raised base-margin-top">
-                                                <h5 class="half-margin-bottom">Offer Phase
-                                                </h5>
-                                                <div class="divider divider--compressed"></div>
-                                                <div class="ui-steps ui-steps--success ui-steps--tiny">
-                                                        <div class="ui-step visited">
-                                                            <div class="step__icon"><span class="icon-check"></span></div>
-                                                            <div class="step__label">Ideate</div>
-                                                        </div>
-                                                        <div class="ui-step active">
-                                                            <div class="step__icon">2</div>
-                                                            <div class="step__label">Plan</div>
-                                                        </div>
-                                                        <div class="ui-step">
-                                                            <div class="step__icon">3</div>
-                                                            <div class="step__label">Execute</div>
-                                                        </div>
-                                                        <div class="ui-step">
-                                                            <div class="step__icon">4</div>
-                                                            <div class="step__label">Launch</div>
-                                                        </div>
-                                                    </div>
-                                               
-                                    </div>
-                                    <!-- Estimated Lead Time -->
-                                    <div class="card card--raised base-margin-top">
-                                            <h5 class="half-margin-bottom">Estimated Lead Time</h5>
-                                            <span class="label label--warning-alt">3 weeks</span>
-                                    </div>
-                                    <!-- People Involved -->
-                                    <div class="card card--raised base-margin-top">
-                                           
-                                                <h5 class="half-margin-bottom">People Involved <a href="javascript:;" onclick="window.location.href='add-edit-contacts.html'" class="pull-right"><span class="icon-pencil icon-small"></span> Edit</a></h5>
-                                                <div class="divider divider--compressed"></div>    
-                                                <ul class="list">
-                                                            <li><div class="ui-accordion-header">Owner (1)<span class="icon-chevron-up icon-small pull-right"></span></div>
-                                                                <div class="ui-accordion-content">
-                                                                    <div class="flex-center-vertical">
-                                                                        <!-- Team Member Name Avatar -->
-                                                                        <span class="avatar-ico">
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
-                                                                            <title id="fwt-profile-button-loggedin-title"></title>
-                                                                            <g fill="none" fill-rule="evenodd">
-                                                                                <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
-                                                                                <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">WM</text>
-                                                                            </g> 
-                                                                            </svg>
-                                                                        </span>
-                                                                        <div class="flex-fluid text-left half-margin-left">
-                                                                            <div class="text-bold">William Mendoza</div>
-                                                                            <div>wmendoza@altus.com</div>
-                                                                        </div>
-                                                                </div></div>
-                                                            
-                                                            </li>
-                                                            
-                                                            <li><div class="ui-accordion-header">Co-Owner (3)<span class="icon-chevron-up icon-small pull-right"></span></div>
-                                                               <div class="ui-accordion-content">
-                                                                <div class="flex-center-vertical">
-                                                                    <!-- Team Member Name Avatar -->
-                                                                    <span class="avatar-ico">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
-                                                                            <title id="fwt-profile-button-loggedin-title"></title>
-                                                                            <g fill="none" fill-rule="evenodd">
-                                                                                <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
-                                                                                <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">SC</text>
-                                                                            </g> 
-                                                                        </svg>
-                                                                    </span>
-                                                                        <div class="flex-fluid text-left half-margin-left">
-                                                                            <div class="text-bold">Scott Collins</div>
-                                                                            <div>scollins@altus.com</div>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="divider divider--compressed"></div>
-                                                                <div class="flex-center-vertical">
-                                                                    <!-- Team Member Name Avatar -->
-                                                                    <span class="avatar-ico">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
-                                                                            <title id="fwt-profile-button-loggedin-title"></title>
-                                                                            <g fill="none" fill-rule="evenodd">
-                                                                                <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
-                                                                                <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">JS</text>
-                                                                            </g> 
-                                                                        </svg>
-                                                                    </span>
-                                                                        <div class="flex-fluid text-left half-margin-left">
-                                                                            <div class="text-bold">John Smith</div>
-                                                                            <div>jsmith@altus.com</div>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="divider divider--compressed"></div>
-                                                                <div class="flex-center-vertical">
-                                                                    <!-- Team Member Name Avatar -->
-                                                                    <span class="avatar-ico">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
-                                                                            <title id="fwt-profile-button-loggedin-title"></title>
-                                                                            <g fill="none" fill-rule="evenodd">
-                                                                                <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
-                                                                                <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">IF</text>
-                                                                            </g> 
-                                                                        </svg>
-                                                                    </span>
-                           
-                                                                        <div class="flex-fluid text-left half-margin-left">
-                                                                            <div class="text-bold">Ian Flemming</div>
-                                                                            <div>iflemming@altus.com</div>
-                                                                        </div>
-                                                                </div>
-                                                            </div>
-                                                            </li>
-                                                        </ul>
-                                            
-                                    </div>
+                                        <app-right-panel [portfolioFlag]="setFlag" [offerOwner]="offerOwner" [stakeData]="stakeData" (updateStakeData)="updateStakeData($event)"></app-right-panel>
                                 </div>
                         </div>
 

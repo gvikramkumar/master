@@ -184,7 +184,7 @@ export class RightPanelComponent implements OnInit {
           collaborator.email = element.email;
           collaborator.functionalRole = element.functionalRole;
           collaborator.name = element.name;
-          collaborator.offerRole = element.applicationRole[0];
+          collaborator.offerRole = element.applicationRole[0]; 
           tempCollaboratorList.push(collaborator);
         });
         this.collaboratorsList = tempCollaboratorList;
@@ -199,7 +199,7 @@ export class RightPanelComponent implements OnInit {
   getKeys(obj) {
     return Object.keys(obj);
   }
-//哟可能问题
+
   addToStakeData(res) {
     console.log(res);
     let keyUsers = res['stakeholders'];

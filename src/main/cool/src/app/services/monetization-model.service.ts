@@ -20,22 +20,22 @@ export class MonetizationModelService {
   }
 
   getOfferBuilderData(offerId) {
-    // debugger;
+  
     let url =environment.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
     return this.http.get(url);
   }
 
   toNextSetp(data):Observable<any> {
     // console.log(data);
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Accept' : 'application/json'
-      })
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Content-Type': 'application/json',
+    //     'Accept' : 'application/json'
+    //   })
      
-    };
+    // };
     let url = environment.REST_API_MMATTRIBUTES_POST_URL;
-    return this.http.post(url, data,httpOptions);
+    return this.http.post(url, data,{ withCredentials: true });
     
     
   }

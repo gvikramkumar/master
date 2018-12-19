@@ -3,9 +3,22 @@
   <div class=row>
     <div class="col-md-6">
       <h1 class="display-4">Create New Offer</h1>
-      <h4>Offer Builder</h4>
+      <div class="panel panel--indigo panel--loose">
+        <div class="row">
+            <div class="col-md-6">
+                <h4><button class="btn btn--icon btn--white"><span class="icon-back"></span></button> Offer Builder</h4>
+            </div>
+            <div class="col-md-6 text-right">
+                <button class="btn btn--white">Save <span class="icon-save"></span></button>
+                <button class="btn btn--white">Export <span class="icon-export"></span></button>
+                <button class="btn btn--white btn--wide">Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6">
+
+    </div>
+    
+    <!-- <div class="col-md-6">
       <div class="btn-group btn-group--wide pull-right base-margin-top">
         <button class="btn btn--primary-ghost">
           <div class="flex-center" style="width:48px;height:48px" data-balloon="Save" data-balloon-pos="down"
@@ -21,7 +34,7 @@
         </button>
         <button class="btn btn--primary-ghost selected">Proceed <span class="icon-chevron-right"></span></button>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div class="contentBox mt-10">
@@ -74,39 +87,15 @@
 
       <div class="panel-wrapper mt-20">
         <ul id="tabsv6" class="tabs tabs--bordered base-margin-top">
-          <li id="tabsv6-1" class="tab active">
+          <li class="tab active" *ngFor="let groupName of groupNames">
             <a tabindex="0" class="padding-5-20" style="padding: 5px 20px">
-              <div class="tab__heading">Offer Characteristics</div>
-            </a>
-          </li>
-          <li id="tabsv6-2" class="tab">
-            <a tabindex="0">
-              <div class="tab__heading">Offer Dimensions</div>
-            </a>
-          </li>
-          <li id="tabsv6-3" class="tab">
-            <a tabindex="0">
-              <div class="tab__heading">Sales Dimensions</div>
-            </a>
-          </li>
-          <li id="tabsv6-4" class="tab">
-            <a tabindex="0">
-              <div class="tab__heading">Pricing Dimensions</div>
-            </a>
-          </li>
-          <li id="tabsv6-4" class="tab">
-            <a tabindex="0">
-              <div class="tab__heading">Delivery Dimensions</div>
-            </a>
-          </li>
-          <li id="tabsv6-4" class="tab">
-            <a tabindex="0">
-              <div class="tab__heading">Financial Dimensions</div>
+              <div class="tab__heading">{{groupName}}</div>
             </a>
           </li>
         </ul>
+
         <div class="card card--raised">
-          <h4>Offer Dimensions</h4>
+          <h4>Offer Characteristics</h4>
           <div class="panel">
             <div id="tabsv6-content" class="tab-content">
               <div id="tabsv6-1-content" class="tab-pane active">
@@ -117,7 +106,7 @@
               
                       <div class="col-md-10">
             
-                        <button *ngFor="let attribute of groups[subGroup]"
+                        <button *ngFor="let attribute of offerCharacteristicsGroup[subGroup]"
                         [ngClass]="{
                           'gray-button':attribute.type===1 && attribute.status===-1,
                           'mm-model-btn-active':attribute.status===1||attribute.type===2,
