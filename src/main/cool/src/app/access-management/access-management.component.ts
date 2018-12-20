@@ -3,7 +3,6 @@ import { AccessManagementService } from '../services/access-management.service';
 import { CreateOfferService } from '../services/create-offer.service';
 import { SelectItem } from 'primeng/api';
 import { NgForm } from '@angular/forms';
-import { AccessManagement } from '../models/accessmanagement';
 import { NewUser } from '../models/newuser';
 import { UserMapping } from '../models/usermapping';
 
@@ -15,10 +14,9 @@ import { UserMapping } from '../models/usermapping';
 export class AccessManagementComponent implements OnInit {
   @ViewChild('registerUserForm') offerCreateForm: NgForm;
   accessManagementData;
-  secondaryBusinessUnitList;
-  secondaryBusinessEntityList;
-  secondaryBusinessUnits: SelectItem[];
-  secondaryBusinessEntities: SelectItem[];
+  primaryBusinessUnitList;
+  primaryBusinessUnits: SelectItem[];
+  primaryBusinessEntities: SelectItem[];
   userIdValue: string;
   functionNameValue: string;
   adminValue: Boolean = false;
@@ -38,32 +36,29 @@ export class AccessManagementComponent implements OnInit {
       { field: 'userMapping', header: 'Business Entity' },
       { field: 'buList', header: 'Business Unit' },
       { field: 'functionalAdmin', header: 'Access' }
-  ];
+    ];
     this.accessManagementService.accessManagementAll()
       .subscribe(data => {
         this.accessManagementData = data;
-        console.log(this.accessManagementData);
       });
-
-      this.createOfferService.getSecondaryBusinessUnit().subscribe(data => {
-        this.secondaryBusinessUnitList = <any>data;
-        const secondaryBuArry = [];
-        this.secondaryBusinessUnitList.forEach(element => {
-          secondaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
-        });
-        this.secondaryBusinessUnits = secondaryBuArry;
+    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+      this.primaryBusinessUnitList = <any>data;
+      const primaryBuArry = [];
+      this.primaryBusinessUnitList.primaryBU.forEach(element => {
+        primaryBuArry.push({ label: element, value: element });
       });
+      this.primaryBusinessUnits = primaryBuArry;
+    });
   }
 
-  getSecondaryBusinessEntity(event) {
-    this.createOfferService.getSecondaryBusinessEntity(event.toString())
+  getPrimaryBusinessEntity(event) {
+    this.createOfferService.getPrimaryBusinessEntity(event.toString())
       .subscribe(data => {
-        this.secondaryBusinessEntityList = <any>data;
-        const secondaryBeArry = [];
-        this.secondaryBusinessEntityList.forEach(element => {
-          secondaryBeArry.push({ label: element.BE, value: element.BE });
+        const primaryBeArry = [];
+        data.forEach(element => {
+          primaryBeArry.push({ label: element.BE, value: element.BE });
         });
-        this.secondaryBusinessEntities = this.removeDuplicates(secondaryBeArry, 'label');
+        this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
       });
   }
 
@@ -77,7 +72,6 @@ export class AccessManagementComponent implements OnInit {
     this.accessManagementService.accessManagementAll()
       .subscribe(data => {
         this.accessManagementData = data;
-        console.log(this.accessManagementData);
       });
   }
 
@@ -90,23 +84,21 @@ export class AccessManagementComponent implements OnInit {
       this.keyPocValue
     );
     userMappings.push(userMapping);
-    console.log(userMappings);
     this.newUser = new NewUser(
       this.userIdValue,
       this.businessUnitValue,
       userMappings
     );
-    console.log(this.newUser);
     this.accessManagementService.registerUser(this.newUser).subscribe((data) => {
       this.getAllUpdate();
     },
       (err) => {
         console.log(err);
-      });
+    });
+    this.offerCreateForm.reset();
   }
 
   updatedAceessManagement(event) {
-    console.log(event);
     this.accessManagementService.updateAccessManagement(event)
       .subscribe(data => {
         console.log('updated successfully');
