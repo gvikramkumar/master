@@ -4,6 +4,8 @@ import { CreateOfferService } from '../services/create-offer.service';
 import { SelectItem } from 'primeng/api';
 import { NgForm } from '@angular/forms';
 import { AccessManagement } from '../models/accessmanagement';
+import { NewUser } from '../models/newuser';
+import { UserMapping } from '../models/usermapping';
 
 @Component({
   selector: 'app-access-management',
@@ -19,13 +21,13 @@ export class AccessManagementComponent implements OnInit {
   secondaryBusinessEntities: SelectItem[];
   userIdValue: string;
   functionNameValue: string;
-  adminValue: boolean;
+  adminValue: Boolean = false;
   businessUnitValue: string[];
   businessEntityValue: string[];
-  keyPocValue: boolean;
+  keyPocValue: Boolean = false;
   Obj;
   cols: any[];
-
+  newUser;
   constructor(private accessManagementService: AccessManagementService, private createOfferService: CreateOfferService) { }
 
   ngOnInit() {
@@ -80,21 +82,27 @@ export class AccessManagementComponent implements OnInit {
   }
 
   createUser() {
-   const accessManagement: AccessManagement = new AccessManagement(
-    this.userIdValue,
-    this.functionNameValue,
-    this.businessUnitValue,
-    this.businessEntityValue,
-    this.adminValue,
-    this.keyPocValue
-   );
-   console.log(accessManagement);
-   this.accessManagementService.registerUser(accessManagement).subscribe((data) => {
-    this.getAllUpdate();
-  },
-    (err) => {
-      console.log(err);
-    });
+    const userMappings: UserMapping[] = [];
+    const userMapping = new UserMapping(
+      this.businessEntityValue,
+      this.functionNameValue,
+      this.adminValue,
+      this.keyPocValue
+    );
+    userMappings.push(userMapping);
+    console.log(userMappings);
+    this.newUser = new NewUser(
+      this.userIdValue,
+      this.businessUnitValue,
+      userMappings
+    );
+    console.log(this.newUser);
+    this.accessManagementService.registerUser(this.newUser).subscribe((data) => {
+      this.getAllUpdate();
+    },
+      (err) => {
+        console.log(err);
+      });
   }
 
   updatedAceessManagement(event) {
