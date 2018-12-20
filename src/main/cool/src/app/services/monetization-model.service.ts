@@ -29,7 +29,7 @@ export class MonetizationModelService {
   toNextSetp(data):Observable<any> {
  
     let url = this.environmentService.REST_API_MMATTRIBUTES_POST_URL;
-    return this.http.post(url, data);
+    return this.http.post(url, data, { withCredentials: true });
     };
  
     
