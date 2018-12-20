@@ -9,6 +9,7 @@ import SourceRepo from '../../../common/source/repo';
 import {Source} from '../../../../../shared/models/source';
 import {ApiError} from '../../../../lib/common/api-error';
 import OpenPeriodRepo from '../../../common/open-period/repo';
+import AnyObj from '../../../../../shared/models/any-obj';
 
 
 @injectable()
@@ -84,6 +85,10 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
   getImportArray() {
     const imports = this.rows1.map(row => new DollarUploadImport(row, this.fiscalMonth));
     return Promise.resolve(imports);
+  }
+
+  removeDuplicatesFromDatabase(imports) {
+    return this.removeSubmeasureNameDuplicatesFromDatabase(imports);
   }
 
   validateSubmeasureCanManualUpload() {

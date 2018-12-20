@@ -5,6 +5,7 @@ import {svrUtil} from '../common/svr-util';
 import {ApiError} from '../common/api-error';
 import AnyObj from '../../../shared/models/any-obj';
 import {mgc} from '../database/mongoose-conn';
+import * as Q from 'q';
 
 export default class RepoBase {
   protected Model: Model<any>;
@@ -454,6 +455,13 @@ export default class RepoBase {
   syncRecordsReplaceAll(filter, records, userId, bypassAutoInc = false, bypassCreatedUpdated = false) {
     return this.removeMany(filter)
       .then(() => this.addMany(records, userId, bypassAutoInc, bypassCreatedUpdated));
+  }
+
+  bulkRemove(filters: AnyObj[]) {
+    const coll = mgc.db.collection(this.Model.collection.collectionName);
+    const bulk = coll.initializeUnorderedBulkOp();
+    filters.forEach(filter => bulk.find(filter).remove())
+    return bulk.execute();
   }
 
   // a way to validate using mongoose outside of save(). If errs, then throw errs

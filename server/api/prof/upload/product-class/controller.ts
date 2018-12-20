@@ -78,6 +78,10 @@ export default class ProductClassUploadUploadController extends UploadController
     return Promise.resolve(this.imports);
   }
 
+  removeDuplicatesFromDatabase(imports) {
+    return this.removeSubmeasureNameDuplicatesFromDatabase(imports);
+  }
+
   validateCanProductClassUpload() {
     if (this.submeasure.indicators.manualMix.toUpperCase() !== 'Y') {
       this.addErrorMessageOnly(`Sub Measure doesn't allow product classification upload`);

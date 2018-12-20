@@ -8,6 +8,7 @@ import SalesSplitUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import DollarUploadImport from '../dollar/import';
+import DeptUploadImport from '../dept/import';
 
 @injectable()
 export default class SalesSplitUploadUploadController extends UploadController {
@@ -112,6 +113,17 @@ export default class SalesSplitUploadUploadController extends UploadController {
   getImportArray() {
     const imports = this.rows1.map(row => new SalesSplitUploadImport(row, this.fiscalMonth));
     return Promise.resolve(imports);
+  }
+
+  removeDuplicatesFromDatabase(imports: SalesSplitUploadImport[]) {
+    const duplicates = _.uniqWith(imports, (a, b) => {
+      return a.accountId === b.accountId &&
+        a.companyCode === b.companyCode &&
+        a.subaccountCode === b.subaccountCode &&
+        a.salesTerritoryCode === b.salesTerritoryCode;
+    })
+      .map(x => _.pick(x, ['accountId', 'companyCode', 'subaccountCode', 'salesTerritoryCode']))
+    return this.repo.bulkRemove(duplicates);
   }
 
   validateAccountId() {

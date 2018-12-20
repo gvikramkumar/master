@@ -64,12 +64,12 @@ export default function () {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());
 
-  /*
+/*
     app.use((req, res, next) => {
-      console.log(`${new Date().toISOString()} ${req['user'].id} ${req.method} ${req.url}`);
+      console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
       next();
     });
-  */
+*/
 
   app.get('/healthcheck', healthcheck());
   app.use(addSsoUser())

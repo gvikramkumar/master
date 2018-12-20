@@ -9,6 +9,7 @@ import AnyObj from '../../../../../shared/models/any-obj';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import PgLookupRepo from '../../../pg-lookup/repo';
+import DeptUploadImport from '../dept/import';
 
 @injectable()
 export default class AlternateSl2UploadUploadController extends UploadController {
@@ -77,27 +78,7 @@ export default class AlternateSl2UploadUploadController extends UploadController
     });
 
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Actual SL2/Alternate SL2/Alternate Country entries in your upload', this.errors));
-    }
-
-    // second check if duplicates in upload that are already in the database
-    const dbVals = this.data.alternateSl2Uploads.map(doc => new AlternateSl2UploadImport([doc.actualSl2Code, doc.alternateSl2Code, doc.alternateCountryName], this.fiscalMonth));
-    dbVals.forEach((val: AlternateSl2UploadImport) => {
-      const arr = _.get(obj, `${val.actualSl2Code.toUpperCase()}.${val.alternateSl2Code.toUpperCase()}`);
-      const entry = (val.alternateCountryName && val.alternateCountryName.toUpperCase()) || NO_COUNTRY_VALUE;
-      if (arr) {
-        if (arr.indexOf(entry) !== -1) {
-          this.addErrorMessageOnly(`${val.actualSl2Code} / ${val.alternateSl2Code} / ${val.alternateCountryName}`);
-        } else {
-          arr.push(entry);
-        }
-      } else {
-        _.set(obj, `${val.actualSl2Code.toUpperCase()}.${val.alternateSl2Code.toUpperCase()}`, [entry]);
-      }
-    });
-
-    if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Actual SL2/Alternate SL2/Alternate Country entries already in the database', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Actual SL2/Alternate SL2/Alternate Country entries', this.errors));
     }
 
     return Promise.resolve();
@@ -106,6 +87,12 @@ export default class AlternateSl2UploadUploadController extends UploadController
   getImportArray() {
     // we already put the imports together in validate() so just use them
     return Promise.resolve(this.imports);
+  }
+
+  removeDuplicatesFromDatabase(imports: AlternateSl2UploadImport[]) {
+    const duplicates = _.uniqWith(imports, (a, b) => a.actualSl2Code === b.actualSl2Code && a.alternateSl2Code === b.alternateSl2Code)
+      .map(x => _.pick(x, ['actualSl2Code', 'alternateSl2Code']))
+    return this.repo.bulkRemove(duplicates);
   }
 
   validateActualSl2Code() {

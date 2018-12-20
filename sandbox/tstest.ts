@@ -5,13 +5,32 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+const imports = [
+  {submeasureName: 'one', nodeValue: 1},
+  {submeasureName: 'one', nodeValue: 1},
+  {submeasureName: 'two', nodeValue: 1},
+  {submeasureName: 'two', nodeValue: 1},
+]
+
+const duplicates = _.uniqWith(imports, (a, b) => a.submeasureName === b.submeasureName && a.nodeValue === b.nodeValue);
+console.log(duplicates);
+
+
+
+
+
+
+
+
+
+
+
 
 // console.log(new Date(2019, 5).toISOString());
 // console.log(new Date(2019, 5).toString());
 
 // console.log(shUtil.getFiscalMonthListFromDate(new Date(), 12));
-console.log(shUtil.getCutoffDateStrFromFiscalMonth(201905
-));
+// console.log(shUtil.getCutoffDateStrFromFiscalMonth(201905));
 /*
 class SyncMap {
   // common
