@@ -204,11 +204,11 @@
                         <span>{{dateFormat(offerData.expectedLaunchDate)}} <br /></span>
                       </ng-template>
                 </p-column>
-                <p-column *ngFor="let data of myOffersList" field="status" [style]="{'width': '400px'}">
-                  <ng-template let-col let-myOffersListProps="rowData" pTemplate="body">
-                      <div *ngIf="myOffersListProps['offerMilestone'] == 'Launch In Progress'" class="row no-gutters">
+                <p-column field="status" [style]="{'width': '400px'}">
+                  <ng-template let-col let-offerData="rowData" pTemplate="body">
+                      <div *ngIf="offerData.overallStatus == 'Launch In Progress'" class="row no-gutters">
                           <div class="col-md-12">
-                            <div class="progressbar__label progressbarLabel-warning">Launch in Progress Mili</div>
+                            <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>
                           </div>
                           <div class="col-md-4">
                             <div class="progressbar progressbar--warning" data-percentage="100">
