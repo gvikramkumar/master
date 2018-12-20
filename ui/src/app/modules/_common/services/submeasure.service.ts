@@ -23,8 +23,4 @@ export class SubmeasureService extends ApprovalRestBase<Submeasure> {
     return <any>super.callMethod('getGroupingSubmeasures', {measureId});
   }
 
-  getDistinctSubmeasureNames() {
-    return this.getDistinct('name', {status: 'A'});
-  }
-
 }

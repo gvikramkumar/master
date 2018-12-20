@@ -18,10 +18,6 @@ export class RuleService extends ApprovalRestBase<AllocationRule> {
     super('allocation-rule', httpClient, store, true);
   }
 
-  getDistinctRuleNames() {
-    return this.getDistinct('name');
-  }
-
   validateSalesSL2CritChoices(arr) {
     return this.callMethod('validateSalesSL2CritChoices', arr);
   }

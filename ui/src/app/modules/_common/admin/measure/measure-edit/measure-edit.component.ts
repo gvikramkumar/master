@@ -55,13 +55,14 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     return Promise.all([
       this.sourceService.getMany().toPromise(),
       this.moduleSourceService.getQueryOne({moduleId: this.store.module.moduleId}).toPromise(),
-      this.measureService.getMany().toPromise()
+      this.measureService.getMany().toPromise(),
+      this.measureService.getDistinct('name', {moduleId: -1}).toPromise(),
     ])
-      .then(data => {
-        this.sources = data[0];
-        this.moduleSourceIds = data[1].sources;
-        this.measures = data[2];
-        this.measureNames = this.measures.map(measure => measure.name);
+      .then(results => {
+        this.sources = results[0];
+        this.moduleSourceIds = results[1].sources;
+        this.measures = results[2];
+        this.measureNames = results[3]
 
         // filter sources by current module
         this.moduleSources = this.sources.filter(source => _.includes(this.moduleSourceIds, source.sourceId));
