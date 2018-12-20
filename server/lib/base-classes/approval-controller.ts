@@ -117,6 +117,21 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
+  getManyLatestByNameActiveInactiveConcatDraftPending(req, res, next) {
+    return Promise.all([
+      this.repo.getManyLatestByNameActiveInactive(req.body.moduleId),
+      this.repo.getMany({
+        status: {$in: ['D', 'P']},
+        moduleId: req.body.moduleId})
+    ])
+      .then(results => {
+        const ailist = results[0];
+        const draftPending = results[1];
+        res.json(ailist.concat(draftPending));
+      })
+      .catch(next);
+  }
+
   postApproveStep(item, req) {
     return Promise.resolve();
   }
