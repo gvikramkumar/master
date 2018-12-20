@@ -201,6 +201,10 @@ font-weight: 100;
   padding: .25em;
 }
 
+.actionPop th{
+width: 25px;
+}
+
 .popover{
   background-color:#fff;
   z-index:99;

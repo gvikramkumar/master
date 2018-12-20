@@ -47,7 +47,7 @@
                           <div class="popover__body">
                                                             
                                   <div class="responsive-table half-margin-bottom">
-                                      <table class="table table--nostripes">
+                                      <table class="table table--nostripes actionPop">
                                           <thead>
                                               <tr>
                                                   <th>Offer Name </th>
@@ -60,10 +60,10 @@
                                           </thead>
                                           <tbody>
                                               <tr>
-                                                  <td>AMP (Advanced Malware Protection)</td>
-                                                  <td>Provide Requested Feedback</td>
-                                                  <td>John Smith</td>
-                                                  <td>23-Dec-2018</td>
+                                                  <td>{{actionData.offerName}}</td>
+                                                  <td>{{actionData.actiontTitle}}</td>
+                                                  <td>{{actionData.assigneeId}}</td>
+                                                  <td>{{actionData.dueDate}}</td>
                                                   <td>Design Review</td>
                                               </tr>
                                           </tbody>
@@ -71,8 +71,8 @@
                                   </div>
 
                           <h5>Action Description</h5><a class="modal__close" id="popover_close"><span class="icon-close" (click)="closeActionNotification()"></span></a>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                          <button class="btn btn--secondary base-margin-top">View Offer</button>
+                          <p>{{actionData.actionDesc}}</p>
+                          <button class="btn btn--secondary base-margin-top" (click)="offerDetailOverView(actionData.offerId)">View Offer</button>
                           </div>
                           <div class="popover__footer">
                               <button class="btn btn--primary base-margin-top" id="popover_close_btn">Complete</button>  
@@ -204,11 +204,11 @@
                         <span>{{dateFormat(offerData.expectedLaunchDate)}} <br /></span>
                       </ng-template>
                 </p-column>
-                <p-column field="status" [style]="{'width': '400px'}">
-                  <ng-template let-col let-offerData="rowData" pTemplate="body">
-                      <div *ngIf="offerData.overallStatus == 'Launch in Progress'" class="row no-gutters">
+                <p-column *ngFor="let data of myOffersList" field="status" [style]="{'width': '400px'}">
+                  <ng-template let-col let-myOffersListProps="rowData" pTemplate="body">
+                      <div *ngIf="myOffersListProps['offerMilestone'] == 'Launch In Progress'" class="row no-gutters">
                           <div class="col-md-12">
-                            <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>
+                            <div class="progressbar__label progressbarLabel-warning">Launch in Progress Mili</div>
                           </div>
                           <div class="col-md-4">
                             <div class="progressbar progressbar--warning" data-percentage="100">

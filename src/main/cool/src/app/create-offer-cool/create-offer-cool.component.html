@@ -91,7 +91,7 @@
                       [options]="secondaryBusinessUnits"
                       (onChange)="getSecondaryBusinessEntity($event.value)"
                       [(ngModel)]="secondaryBusinessUnitsValue"
-                      [panelStyle]="{minWidth:'25em'}">
+                      [style]="{'width':'100%'}">
                     </p-multiSelect>
                   </div>
                 </div>
@@ -104,7 +104,7 @@
                       name="secondaryBEList"
                       [options]="secondaryBusinessEntities"
                       [(ngModel)]="secondaryBusinessEntitiesValue"
-                      [panelStyle]="{minWidth:'25em'}">
+                      [style]="{'width':'100%'}">
                     </p-multiSelect>
                   </div>
                 </div>
