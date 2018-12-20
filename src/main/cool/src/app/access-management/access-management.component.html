@@ -26,7 +26,7 @@
               </div>
             </div>
             <div class="responsive-table">
-              <p-table [columns]="cols" [value]="accessManagementData">
+              <p-table [columns]="cols" [value]="accessManagementData" [paginator]="true" [rows]="10">
                 <ng-template pTemplate="header" let-columns>
                   <tr>
                     <th *ngFor="let col of columns">
@@ -41,11 +41,8 @@
                     <td>{{car.userMapping[0].functionalRole}}</td>
                     <td>{{car.userMapping[0].businessEntity}}</td>
                     <td>
-                      <p-multiSelect 
-                        [options]="arrToOptions(car.buList)" 
-                        (onChange)="updatedAceessManagement($event.value)"
-                        [(ngModel)]="car.buList" 
-                        [style]="{'width':'100%'}">
+                      <p-multiSelect [options]="arrToOptions(car.buList)" (onChange)="updatedAceessManagement($event.value)"
+                        [(ngModel)]="car.buList" [style]="{'width':'100%'}">
                       </p-multiSelect>
                     </td>
                     <td>
@@ -66,102 +63,94 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card card--raised base-margin-top">
-                <div class="row">
+                <div class="pull-right base-margin-top">
+                  <a class="modal__close" (click)="closeForm()" style="margin-right: 1%"><span class="icon-close"></span></a>
+                </div>
+                <div class="card__header">
+                  <h5 class="card__title">Register User</h5>
+                </div>
+                <div class="row base-margin-top">
                   <div class="col-md-12">
-                    <div class="pull-right base-margin-top">
-                      <span class="icon-close" (click)="closeForm()"></span>                      
+                    <div class="panel panel--mdgray">
+                      <span class="text-uppercase">New User</span>
                     </div>
                   </div>
                 </div>
-                <div class="panel">
-                  <div class="card__header">
-                    <h5 class="card__title">Register User</h5>            
+                <form #registerUserForm="ngForm" (ngSubmit)="createUser()">
+                  <div class="row base-margin-top">
+                    <div class="col-md-4">
+                      <div class="form-group half-margin-bottom">
+                        <div class="form-group__text">
+                          <label for="selectedSValue">UserId</label>
+                          <input id="userId" type="text" class="form-control" name="userId" [(ngModel)]="userIdValue"
+                            ngModel>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <div class="form-group__text select">
+                          <label for="functionName">Function</label>
+                          <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
+                            ngModel>
+                            <option value="BUPM" selected="">BUPM</option>
+                            <option value="SOE">SOE</option>
+                            <option value="BUPM">BUPM</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4" style="margin-top: 2%">
+                      <div class="form-group">
+                        <label class="checkbox">
+                          <input id="admin" type="checkbox" class="form-control" name="admin" [(ngModel)]="adminValue"
+                            ngModel>
+                          <span class="checkbox__input"></span>
+                          <span class="checkbox__label hidden-xs">Make Admin</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div><br>
+                  <div class="row base-margin-top">
+                    <div class="col-md-4">
+                      <div class="form-group half-margin-bottom">
+                        <label for="selectedSValue">Business Unit</label>
+                        <p-multiSelect id="selectedSValue" class="form-control" name="secondaryBUList" [options]="secondaryBusinessUnits"
+                          (onChange)="getSecondaryBusinessEntity($event.value)" [(ngModel)]="businessUnitValue"
+                          [panelStyle]="{minWidth:'25em'}">
+                        </p-multiSelect>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group half-margin-bottom">
+                        <label for="selectedSeValue">Business Entity</label>
+                        <p-multiSelect id="selectedSeValue" class="form-control" name="secondaryBEList" [options]="secondaryBusinessEntities"
+                          [(ngModel)]="businessEntityValue" [panelStyle]="{minWidth:'25em'}">
+                        </p-multiSelect>
+                      </div>
+                    </div>
+                    <div class="col-md-4" style="margin-top: 2%">
+                      <div class="form-group">
+                        <label class="checkbox">
+                          <input id="keyPoc" type="checkbox" class="form-control" name="keyPocValue" [(ngModel)]="keyPocValue"
+                            ngModel>
+                          <span class="checkbox__input"></span>
+                          <span class="checkbox__label hidden-xs">Make Key POC</span>
+                        </label>
+                      </div>
+                    </div>
                   </div><br>
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="panel panel--mdgray panel--loose">
-                        <span class="text-uppercase">New User</span>
+                      <div class="btn-group btn-group--wide pull-right base-margin-top">
+                        <div class="panel--footer">
+                          <button class="btn btn--secondary" (click)="closeForm()">Cancel</button>
+                          <button class="btn btn--primary" type="submit">Save</button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <form #registerUserForm="ngForm" (ngSubmit)="createUser()">
-                    <div class="row base-margin-top">
-                      <div class="col-md-4">
-                        <div class="form-group half-margin-bottom">
-                          <div class="form-group__text">
-                            <label for="selectedSValue">UserId</label>
-                            <input id="userId" type="text" class="form-control" name="userId" [(ngModel)]="userIdValue"
-                              ngModel>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <div class="form-group__text select">
-                            <label for="functionName">Function</label>
-                            <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
-                              ngModel>
-                              <option value="BUPM" selected="">BUPM</option>
-                              <option value="SOE">SOE</option>
-                              <option value="BUPM">BUPM</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4" style="margin-top: 1%">
-                        <div class="form-group">
-                          <div class="form-group__text select">
-                            <label class="checkbox">
-                              <input id="admin" type="checkbox" class="form-control" name="admin" [(ngModel)]="adminValue" ngModel>
-                              <span class="checkbox__input"></span>
-                              <span class="checkbox__label hidden-xs">Make Admin</span>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div><br>
-                    <div class="row base-margin-top">
-                      <div class="col-md-4">
-                        <div class="form-group half-margin-bottom">
-                          <label for="selectedSValue">Business Unit</label>
-                          <p-multiSelect id="selectedSValue" class="form-control" name="secondaryBUList" [options]="secondaryBusinessUnits"
-                            (onChange)="getSecondaryBusinessEntity($event.value)" [(ngModel)]="businessUnitValue"
-                            [panelStyle]="{minWidth:'25em'}">
-                          </p-multiSelect>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="form-group half-margin-bottom">
-                          <label for="selectedSeValue">Business Entity</label>
-                          <p-multiSelect id="selectedSeValue" class="form-control" name="secondaryBEList" [options]="secondaryBusinessEntities"
-                            [(ngModel)]="businessEntityValue" [panelStyle]="{minWidth:'25em'}">
-                          </p-multiSelect>
-                        </div>
-                      </div>
-                      <div class="col-md-4" style="margin-top: 1%">
-                          <div class="form-group">
-                            <div class="form-group__text select">
-                              <label class="checkbox">
-                                <input id="keyPoc" type="checkbox" class="form-control" name="keyPocValue" [(ngModel)]="keyPocValue" ngModel>
-                                <span class="checkbox__input"></span>
-                                <span class="checkbox__label hidden-xs">Make Key POC</span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                    </div><br>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="btn-group btn-group--wide pull-right base-margin-top">
-                          <div class="panel--footer">
-                            <button class="btn btn--secondary" (click)="closeForm()">Cancel</button>
-                            <button class="btn btn--primary" type="submit">Save</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
+                </form>
               </div>
             </div>
           </div>
