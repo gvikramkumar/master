@@ -96,6 +96,14 @@ export class DashboardComponent implements OnInit {
     return moment(inputDate).format('DD-MMM-YYYY');
   }
 
+  getMyActions() {
+  this.dashboardService.getMyActionsList()
+      .subscribe(data => {
+        this.myActions = data;
+        this.processMyActionsList();
+      });
+  }
+
   createNewOffer() {
     this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
     this.createOfferService.currenTOffer.next('')
@@ -116,9 +124,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.postDismissNotification(postData)
     this.displayPopOver = false;
     console.log("dismissed");
-    this.router.navigate(['/dashboard']);
-
-    
+   this.getMyActions();
   }
 
   closeNotification() {
