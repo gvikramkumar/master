@@ -15,10 +15,12 @@ export class AccessManagementService {
     }
 
     registerUser(accessManagement: AccessManagement): Observable<any> {
-        return this.httpClient.post(this.environmentService.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL, accessManagement, { withCredentials: true });
+        return this.httpClient.post(this.environmentService.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL,
+                                    accessManagement, { withCredentials: true });
     }
 
     updateAccessManagement(accessManagement: AccessManagement) {
-        return this.httpClient.post(this.environmentService.REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL, accessManagement, { withCredentials: true });
+        return this.httpClient.post(this.environmentService.REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL,
+                                    accessManagement, { withCredentials: true });
     }
 }
