@@ -9,6 +9,7 @@ import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import CorpAdjustmentsUploadRepo from '../../corp-adjustments-upload/repo';
+import DeptUploadImport from '../dept/import';
 
 @injectable()
 export default class CorpAdjustmentsUploadUploadController extends UploadController {
@@ -81,32 +82,22 @@ export default class CorpAdjustmentsUploadUploadController extends UploadControl
       return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Country Name/Sales Territory Code/SCMS Value entries in your upload', this.errors));
     }
 
-    // second check if duplicates in upload that are already in the database
-    const dbVals = this.data.corpAdjustmentsUploads.map(doc => new CorpAdjustmentsUploadImport([doc.salesCountryName, doc.salesTerritoryCode, doc.scmsValue], this.fiscalMonth));
-    dbVals.forEach((val: CorpAdjustmentsUploadImport) => {
-      const arr = _.get(obj, `${val.salesCountryName.toUpperCase()}.${val.salesTerritoryCode.toUpperCase()}`);
-      const entry = val.scmsValue && val.scmsValue.toUpperCase();
-      if (arr) {
-        if (arr.indexOf(entry) !== -1) {
-          this.addErrorMessageOnly(`${val.salesCountryName} / ${val.salesTerritoryCode} / ${val.scmsValue}`);
-        } else {
-          arr.push(entry);
-        }
-      } else {
-        _.set(obj, `${val.salesCountryName.toUpperCase()}.${val.salesTerritoryCode.toUpperCase()}`, [entry]);
-      }
-    });
-
-    if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Country Name/Sales Territory Code/SCMS Value entries already in the database', this.errors));
-    }
-
     return Promise.resolve();
   }
 
   getImportArray() {
     // we already put the imports together in validate() so just use them
     return Promise.resolve(this.imports);
+  }
+
+  removeDuplicatesFromDatabase(imports: CorpAdjustmentsUploadImport[]) {
+    const duplicates = _.uniqWith(imports, (a, b) => {
+      return a.salesCountryName === b.salesCountryName &&
+        a.salesTerritoryCode === b.salesTerritoryCode &&
+        a.scmsValue === b.scmsValue;
+    })
+      .map(x => _.pick(x, ['salesCountryName', 'salesTerritoryCode', 'scmsValue']))
+    return this.repo.bulkRemove(duplicates);
   }
 
   validateCountryName() {

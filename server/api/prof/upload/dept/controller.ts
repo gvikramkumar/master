@@ -8,6 +8,8 @@ import DeptUploadExludeAcctTemplate from './exclude-acct-template';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
+import AnyObj from '../../../../../shared/models/any-obj';
+import {mgc} from '../../../../lib/database/mongoose-conn';
 
 
 @injectable()
@@ -127,6 +129,12 @@ export default class DeptUploadUploadController extends UploadController {
     })
 
     return Promise.resolve(imports);
+  }
+
+  removeDuplicatesFromDatabase(imports: DeptUploadImport[]) {
+    const duplicates = _.uniqWith(imports, (a, b) => a.submeasureName === b.submeasureName && a.nodeValue === b.nodeValue)
+      .map(x => _.pick(x, ['submeasureName', 'nodeValue']))
+    return this.repo.bulkRemove(duplicates);
   }
 
   validateCanDeptUpload() {

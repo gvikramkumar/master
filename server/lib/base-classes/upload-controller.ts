@@ -128,8 +128,21 @@ export default class UploadController {
     return Promise.resolve();
   }
 
+  removeDuplicatesFromDatabase(imports: AnyObj[]): Promise<any> {
+    return Promise.reject(new ApiError('removeDuplicatesFromDatabase not implemented'));
+  }
+
+  removeSubmeasureNameDuplicatesFromDatabase(imports: AnyObj[]) {
+    const submeasureNames = _.uniq(imports.map(imp => imp.submeasureName));
+    return this.repo.removeMany({submeasureName: {$in: submeasureNames}});
+  }
+
   importRows(userId) {
     return this.getImportArray()
+      .then(imports => {
+        return this.removeDuplicatesFromDatabase(imports)
+          .then(() => imports);
+      })
       .then(imports => this.repo.addManyTransaction(imports, userId));
   }
 

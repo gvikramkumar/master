@@ -68,6 +68,10 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
     return Promise.resolve(imports);
   }
 
+  removeDuplicatesFromDatabase(imports) {
+    return this.removeSubmeasureNameDuplicatesFromDatabase(imports);
+  }
+
   validateCanMappingUpload() {
     if (this.submeasure.indicators.manualMapping.toUpperCase() !== 'Y') {
       this.addErrorMessageOnly(`Sub Measure doesn't allow mapping upload`);
