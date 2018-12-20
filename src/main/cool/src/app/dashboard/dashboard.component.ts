@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   recentOfferList: Offer[];
   myActionsList;
   myOffersList;
+  myOffersListProps: any;
   myActions;
   myOfferArray: ActionsAndNotifcations[] = [];
   myOffers: ActionsAndNotifcations[] = [];
@@ -44,6 +45,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getMyOffersList()
       .subscribe(data => {
         this.myOffersList = data;
+        this.myOffersListProps = Object.keys(this.myOffersList);
         console.log(this.myOffersList);
       });
 
