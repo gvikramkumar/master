@@ -10,6 +10,7 @@ import {MenuItem} from 'primeng/api';
 export class MenuBarComponent implements OnInit {
    
   items: MenuItem[];
+  display: boolean = false;
 
   constructor() { }
 
@@ -57,6 +58,10 @@ export class MenuBarComponent implements OnInit {
     ]
 }
     ]
+  }
+
+  toggleMenu(){
+      this.display = !this.display;
   }
 
 }
