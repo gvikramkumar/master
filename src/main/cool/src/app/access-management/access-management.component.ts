@@ -22,7 +22,6 @@ export class AccessManagementComponent implements OnInit {
   adminValue: Boolean = false;
   businessUnitValue: string[];
   businessEntityValue: string[];
-  BEFormatteddata:string;
   keyPocValue: Boolean = false;
   Obj;
   cols: any[];
@@ -77,23 +76,24 @@ export class AccessManagementComponent implements OnInit {
   }
 
   createUser() {
-    if(this.businessEntityValue !== undefined) {
-    this.BEFormatteddata = this.businessEntityValue[0];
-    }
     const userMappings: UserMapping[] = [];
-    const userMapping = new UserMapping(
-      this.BEFormatteddata,
-      this.functionNameValue,
-      this.adminValue,
-      this.keyPocValue
-    );
 
-    userMappings.push(userMapping);
+    this.businessEntityValue.forEach(element => {
+      const userMapping = new UserMapping(
+        element,
+        this.functionNameValue,
+        this.adminValue,
+        this.keyPocValue
+      );
+      userMappings.push(userMapping);
+    });
+
     this.newUser = new NewUser(
       this.userIdValue,
       this.businessUnitValue,
       userMappings
     );
+
     this.accessManagementService.registerUser(this.newUser).subscribe((data) => {
       this.getAllUpdate();
     },
