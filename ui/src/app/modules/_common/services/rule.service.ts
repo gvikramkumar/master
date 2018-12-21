@@ -18,18 +18,6 @@ export class RuleService extends ApprovalRestBase<AllocationRule> {
     super('allocation-rule', httpClient, store, true);
   }
 
-  getLatestByName() {
-    return this.getManyLatest('name');
-  }
-
-  getLatestByNameActive() {
-    return this.getManyLatest('name', {status: 'A'});
-  }
-
-  getDistinctRuleNames() {
-    return this.getDistinct('name');
-  }
-
   validateSalesSL2CritChoices(arr) {
     return this.callMethod('validateSalesSL2CritChoices', arr);
   }

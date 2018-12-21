@@ -205,7 +205,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.measureService.getManyActive().toPromise(),
       this.ruleService.getManyLatestGroupByNameActive().toPromise(),
       this.sourceService.getMany().toPromise(),
-      this.submeasureService.getDistinctSubmeasureNames().toPromise(),
+      this.submeasureService.getDistinct('name', {moduleId: -1}).toPromise(),
       this.pgLookupService.getSubmeasureFlashCategories().toPromise(),
       this.pgLookupService.getSubmeasureAdjustmentTypes().toPromise(),
     ];
@@ -217,7 +217,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.measures = _.sortBy(results[0], 'name');
         this.rules = _.sortBy(results[1], 'name');
         this.sources = _.sortBy(results[2], 'name');
-        this.submeasureNames = results[3].map(x => x.toUpperCase());
+        this.submeasureNames = results[3];
         this.flashCategories = results[4];
         this.adjustmentTypes = results[5];
 
