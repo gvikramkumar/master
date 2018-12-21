@@ -143,7 +143,7 @@ export default class ReportController extends ControllerBase {
         excelProperties = ['sub_measure_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         promise = this.postgresRepo.get2TSebmeasureListReport();
         break;
-      case 'disti-to-direct':
+      case 'disty-to-direct':
         excelSheetname = ['Disti to Direct'];
         excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
         excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
@@ -478,7 +478,7 @@ export default class ReportController extends ControllerBase {
       case '2t-submeasure-list':
         promise = this.postgresRepo.get2TSebmeasureListReport();
         break
-      case 'disti-to-direct':
+      case 'disty-to-direct':
         promise = this.postgresRepo.getDistiToDirectMappingReport();
         break
       case 'alternate-sl2':

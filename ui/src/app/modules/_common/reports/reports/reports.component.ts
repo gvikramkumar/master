@@ -44,14 +44,6 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   reports: any[] = [
     {
-      type: 'dollar-upload', hasSmAndFiscalMonth: true, text: 'Manual Uploaded Data', disabled: false,
-      filename: 'Manual_Uploaded_Data_Report'
-    },
-    {
-      type: 'mapping-upload', hasSmAndFiscalMonth: true, text: 'Manual Mapping Data', disabled: false,
-      filename: 'Manual_Mapping_Data_Report'
-    },
-    {
       type: 'product-hierarchy', text: 'Valid Product Hierarchy', disabled: false,
       filename: 'Product_Hierarchy_Report'
     },
@@ -60,48 +52,56 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Sales_Hierarchy_Report'
     },
     {
-      type: 'dept-upload', hasSubmeasureOnly: true, text: 'Department Mapping', disabled: false,
-      filename: 'Department_Mapping_Data_Report'
-    },
-    {
-      type: 'submeasure-grouping', text: 'Submeasure Grouping', disabled: false,
-      filename: 'Submeasure_Grouping_Report'
-    },
-    {
-      type: '2t-submeasure-list', text: '2T Submeasure List', disabled: false,
-      filename: 'Sub_Measure_List_Report'
-    },
-    {
-      type: 'disti-to-direct', text: 'Disti To Direct Mapping', disabled: false,
-      filename: 'Disti_to_Direct_Mapping_Report'
-    },
-    {
-      type: 'alternate-sl2', hasFiscalMonthOnly: true, text: 'Alternate SL2', disabled: false,
-      filename: 'Alternate_SL2_Report'
-    },
-    {
-      type: 'corp-adjustment', hasFiscalMonthOnly: true, text: 'Corp Adjustment', disabled: false,
-      filename: 'Corp_Adjustment_Report'
-    },
-    {
-      type: 'sales-split-percentage', hasFiscalMonthOnly: true, text: 'Sales Split Percentage', disabled: false,
-      filename: 'Sales_Split_Percentage_Report'
-    },
-    {
       type: 'valid-driver', text: 'Valid Driver', disabled: false,
       filename: 'Valid_Driver_Report'
     },
     {
-      type: 'submeasure', text: 'Sub Measure Updates', disabled: false,
+      type: 'submeasure', text: 'Sub-Measure Updates', disabled: false,
       filename: 'Submeasure_Update_Report'
+    },
+    {
+      type: 'submeasure-grouping', text: 'Sub-Measure Grouping', disabled: false,
+      filename: 'Submeasure_Grouping_Report'
+    },
+    {
+      type: '2t-submeasure-list', text: '2T Sub-Measure List', disabled: false,
+      filename: 'Sub_Measure_List_Report'
     },
     {
       type: 'allocation-rule', text: 'Rule Updates', disabled: false,
       filename: 'Rule_Update_Report'
     },
     {
-      type: 'rule-submeasure', hasMultiFiscalMonthOnly: true,  text: 'Rule-Submeasure History', disabled: false,
+      type: 'rule-submeasure', hasMultiFiscalMonthOnly: true,  text: 'Rule to Sub-Measure History', disabled: false,
       filename: 'Rule_Submeasure_Report'
+    },
+    {
+      type: 'dollar-upload', hasSmAndFiscalMonth: true, text: 'Input Dollar Adjustments Data', disabled: false,
+      filename: 'Manual_Uploaded_Data_Report'
+    },
+    {
+      type: 'mapping-upload', hasSmAndFiscalMonth: true, text: 'Manual Mapping Split Percentage', disabled: false,
+      filename: 'Manual_Mapping_Data_Report'
+    },
+    {
+      type: 'dept-upload', hasSubmeasureOnly: true, text: 'Department/Account Exclusion Mapping', disabled: false,
+      filename: 'Department_Mapping_Data_Report'
+    },
+    {
+      type: 'sales-split-percentage', hasFiscalMonthOnly: true, text: 'Sales Level Split Percentage', disabled: false,
+      filename: 'Sales_Split_Percentage_Report'
+    },
+    {
+      type: 'alternate-sl2', hasFiscalMonthOnly: true, text: 'Alternate SL2 Mapping', disabled: false,
+      filename: 'Alternate_SL2_Report'
+    },
+    {
+      type: 'corp-adjustment', hasFiscalMonthOnly: true, text: 'Corp Adjustments Mapping', disabled: false,
+      filename: 'Corp_Adjustment_Report'
+    },
+    {
+      type: 'disty-to-direct', text: 'Disty to Direct Mapping', disabled: false,
+      filename: 'Disty_to_Direct_Mapping_Report'
     }
   ];
   report = this.reports[0];
