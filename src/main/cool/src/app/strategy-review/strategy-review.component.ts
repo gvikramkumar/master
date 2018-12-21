@@ -64,6 +64,13 @@ export class StrategyReviewComponent implements OnInit {
     },
     {
       function : 'Compensation Ops',
+      approvalStatus : 'Conditionally Approved',
+      reviewedOn : '06-Aug-2018',
+      reviewedBy : 'Jessica Lara',
+      comment : 'Comment'
+    },
+    {
+      function : 'Compensation Ops',
       approvalStatus : 'Not Reviewed'
     }
   ];
@@ -73,14 +80,19 @@ export class StrategyReviewComponent implements OnInit {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
       });
-     }
+    }
 
   ngOnInit() {
     this.totalApprovalsCount = this.strategyReviewList.length;
-    let i;
-    for (i=0; i<=this.strategyReviewList.length; i++) {
+    for (let i = 0; i <= this.strategyReviewList.length; i++) {
       if (this.strategyReviewList[0].approvalStatus === 'Approved') {
         this.approvedCount = this.approvedCount + 1;
+      } else if (this.strategyReviewList[0].approvalStatus === 'Not Approved') {
+        this.notApprovedCount = this.notApprovedCount + 1;
+      } else if (this.strategyReviewList[0].approvalStatus === 'Conditionally Approved') {
+        this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
+      } else if (this.strategyReviewList[0].approvalStatus === 'Not Reviewed') {
+        this.notReviewedCount = this.notReviewedCount + 1;
       }
     }
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
