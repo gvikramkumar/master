@@ -77,18 +77,23 @@ export class AccessManagementComponent implements OnInit {
 
   createUser() {
     const userMappings: UserMapping[] = [];
-    const userMapping = new UserMapping(
-      this.businessEntityValue,
-      this.functionNameValue,
-      this.adminValue,
-      this.keyPocValue
-    );
-    userMappings.push(userMapping);
+
+    this.businessEntityValue.forEach(element => {
+      const userMapping = new UserMapping(
+        element,
+        this.functionNameValue,
+        this.adminValue,
+        this.keyPocValue
+      );
+      userMappings.push(userMapping);
+    });
+
     this.newUser = new NewUser(
       this.userIdValue,
       this.businessUnitValue,
       userMappings
     );
+
     this.accessManagementService.registerUser(this.newUser).subscribe((data) => {
       this.getAllUpdate();
     },

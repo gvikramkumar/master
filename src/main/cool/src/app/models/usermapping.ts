@@ -1,9 +1,9 @@
 export class UserMapping {
-    businessEntity: string[];
+    businessEntity: string;
     functionalRole: string;
     functionalAdmin: Boolean = false;
     keyPOC: Boolean = false;
-    constructor(businessEntity: string[],
+    constructor(businessEntity: string,
         functionalRole: string,
         functionalAdmin: Boolean,
         keyPOC: Boolean) {
