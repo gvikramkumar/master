@@ -310,7 +310,7 @@ export class MmAssesmentComponent implements OnInit {
       console.log(postData);
   
   
-      this.MonetizationModelService.toNextSetp(JSON.stringify(postData)).subscribe(data => {
+      this.MonetizationModelService.toNextSetp(postData).subscribe(data => {
         console.log(data);
         if (data['mmMapperStatus'] === 'Aligned') {
           this.message = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`,mmModel: data['mmModel'] };
