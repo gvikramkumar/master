@@ -57,6 +57,13 @@ export class StrategyReviewComponent implements OnInit {
     },
     {
       function : 'Compensation Ops',
+      approvalStatus : 'Not Approved',
+      reviewedOn : '08-Aug-2018',
+      reviewedBy : 'Thomas Price',
+      comment : 'Comment'
+    },
+    {
+      function : 'Compensation Ops',
       approvalStatus : 'Conditionally Approved',
       reviewedOn : '06-Aug-2018',
       reviewedBy : 'Jessica Lara',
@@ -84,17 +91,18 @@ export class StrategyReviewComponent implements OnInit {
 
   ngOnInit() {
     this.totalApprovalsCount = this.strategyReviewList.length;
-    for (let i = 0; i <= this.strategyReviewList.length; i++) {
-      if (this.strategyReviewList[0].approvalStatus === 'Approved') {
+    this.strategyReviewList.forEach(element => {
+      if (element.approvalStatus === 'Approved') {
         this.approvedCount = this.approvedCount + 1;
-      } else if (this.strategyReviewList[0].approvalStatus === 'Not Approved') {
+      } else if (element.approvalStatus === 'Not Approved') {
         this.notApprovedCount = this.notApprovedCount + 1;
-      } else if (this.strategyReviewList[0].approvalStatus === 'Conditionally Approved') {
+      } else if (element.approvalStatus === 'Conditionally Approved') {
         this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
-      } else if (this.strategyReviewList[0].approvalStatus === 'Not Reviewed') {
+      } else if (element.approvalStatus === 'Not Reviewed') {
         this.notReviewedCount = this.notReviewedCount + 1;
       }
-    }
+    });
+
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
     this.monetizationModelService.getAttributes().subscribe(data => {
