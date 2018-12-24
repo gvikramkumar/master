@@ -19,11 +19,13 @@ export class HeaderComponent implements OnInit {
   functionalRole;
   userId;
   emailPrefOptions: SelectItem[];
+  isBupmUser: Boolean = false;
 
   ngOnInit() {
   }
 
-  constructor(private headerService: HeaderService, private router: Router, private createOfferService: CreateOfferService, private userService: UserService) {
+  constructor(private headerService: HeaderService, private router: Router,
+    private createOfferService: CreateOfferService, private userService: UserService) {
     // this.selectedIndex = 2;
 
     this.headerService.getCurrentUser().subscribe((user: any) => {
@@ -35,6 +37,9 @@ export class HeaderComponent implements OnInit {
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       this.functionalRole = data.functionalAppRoleList[0].fnalRole;
+      if (this.functionalRole === 'BUPM') {
+        this.isBupmUser = true;
+      }
     });
 
     this.emailPrefOptions= [
