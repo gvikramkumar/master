@@ -46,6 +46,8 @@ import { AccessManagementComponent } from './access-management/access-management
 import { AvatarComponent } from './directives/avatar/avatar.component';
 import { AccessManagementService } from './services/access-management.service';
 import { EnvironmentService } from '../environments/environment.service';
+import { BupmGuard } from './auth/gaurds/bupm-guard';
+import { AuthErrorComponent } from './auth-error/auth-error.component';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -70,7 +72,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     ActionsComponent,
     OfferCreateDetailComponent,
     AccessManagementComponent,
-    AvatarComponent
+    AvatarComponent,
+    AuthErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -94,19 +97,19 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     CalendarModule,
     AccordionModule
   ],
-  providers: 
+  providers:
   [
-    SharedServiceService, 
-    CreateOfferService, 
-    SearchCollaboratorService, 
+    SharedServiceService,
+    CreateOfferService,
+    SearchCollaboratorService,
     ConfigurationService,
     EnvironmentService,
     MonetizationModelService,
     OfferDetailViewService,
     ExitCriteriaValidationService,
-
     DashboardService,
     AccessManagementService,
+    BupmGuard,
     UserService,
      {
        provide: APP_INITIALIZER,
