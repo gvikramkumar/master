@@ -35,7 +35,8 @@
                 <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
                 <input #gbforactions type="text" pInputText size="50" placeholder="Global Filter">
               </div>
-              <p-dataTable [value]="myActionsList" scrollable="true" scrollHeight="300px" [globalFilter]="gbforactions" #dt>
+              <p-dataTable [value]="myActionsList" scrollable="true" scrollHeight="300px" [globalFilter]="gbforactions"
+                #dt>
                 <p-column field="offerId" sortable="true" header="OFFER ID">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span *ngIf="actionData.alertType == 1">
@@ -78,7 +79,7 @@
                         </div>
                       </ng-template>
                       <span [ngbPopover]="popActionContent" (click)="displayActionPop()" data-balloon="My Actions"
-                        data-balloon-pos="down" data-balloon-length="fit-content" data-balloon-indigo>
+                        data-balloon-pos="center" data-balloon-length="fit-content" data-balloon-indigo>
                         <span class="icon-clock icon-small" style="margin:0px 5px 0 0"></span>
                         {{actionData.offerId}}
                       </span>
@@ -101,7 +102,7 @@
                         </div>
                       </ng-template>
                       <span [ngbPopover]="popNotificationContent" (click)="displayPop()" data-balloon="Notifications"
-                        data-balloon-pos="down" data-balloon-length="fit-content" data-balloon-indigo>
+                        data-balloon-pos="center" data-balloon-length="fit-content" data-balloon-indigo>
                         <span class="icon-alert icon-small" style="margin:0px 5px 0 0"></span>
                         {{actionData.offerId}}
                       </span>
@@ -167,7 +168,7 @@
                 <input #gbforoffer type="text" pInputText size="50" placeholder="Global Filter">
               </div>
               <p-dataTable [value]="myOffersList" scrollable="true" scrollHeight="300px" [globalFilter]="gbforoffer"
-                [responsive]="true" #dt>
+                #dt>
                 <p-headerColumnGroup>
                   <p-row>
                     <p-column field="offerId" header="OFFER ID" sortable="true" rowspan="2" [style]="{'width': '100px'}">
@@ -179,7 +180,7 @@
                     <p-column field="expectedLaunchDate" header="LAUNCH DATE" sortable="true" [style]="{'width': '200px'}"
                       rowspan="2">
                     </p-column>
-                    <p-column field="status" header="LIFE CYCLE STATUS" colspan="1"></p-column>
+                    <p-column field="status" header="LIFE CYCLE STATUS" colspan="1" [style]="{'width': '400px'}"></p-column>
                     <p-column field="actions" header="ACTIONS" filterMatchMode="equals" sortable="true" rowspan="2"
                       [style]="{'width': '200px'}">
                     </p-column>
@@ -195,8 +196,8 @@
                   </p-row>
                 </p-headerColumnGroup>
                 <p-column field="offerId" [style]="{'width': '100px'}"></p-column>
-                <p-column field="offerName" [style]="{'width': '200px'}"></p-column>
-                <p-column field="offerOwner" [style]="{'width': '300px'}"></p-column>
+                <p-column field="offerName" [style]="{'width': '150px'}"></p-column>
+                <p-column field="offerOwner" [style]="{'width': '150px'}"></p-column>
                 <p-column field="expectedLaunchDate" [style]="{'width': '200px'}">
                   <ng-template let-col let-offerData="rowData" pTemplate="body">
                     <span>{{dateFormat(offerData.expectedLaunchDate)}} <br /></span>
