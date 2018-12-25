@@ -185,6 +185,7 @@ export class RightPanelComponent implements OnInit {
       this.createOfferService.getMMMapperById(this.currentOfferId).subscribe(data => {
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
+        console.log(this.offerData);
         this.OfferOwners = this.offerData.offerObj.owners;
         this.approvars = this.offerData.offerObj.approvars;
 
@@ -230,6 +231,10 @@ export class RightPanelComponent implements OnInit {
     this.display = false;
     this.collaboratorsList = [];
     this.addEditCollaboratorsForm.reset();
+  }
+
+  closeOfferPhaseDailog() {
+    this.displayOfferPhase = false;
   }
 
   onSearch() {
