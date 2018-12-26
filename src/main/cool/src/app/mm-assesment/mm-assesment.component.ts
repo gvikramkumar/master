@@ -54,6 +54,11 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.MonetizationModelService.testnewapi().subscribe(data => {
+     console.log(data);
+     debugger;
+    })
+
 
 
     this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monitization Model best aligns to your requirements.", color: "black" };

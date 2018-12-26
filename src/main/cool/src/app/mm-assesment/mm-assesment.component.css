@@ -212,6 +212,77 @@
 }
 /**Group Table CSS End Here**/
 
+/*UI revise*/
+
+.cui .card.card--raised, .cui a.card.card--raised {
+            box-shadow: 0 5px 14px -8px rgba(0, 0, 0, 0.25);
+        }
+        .tabs + .card {
+            margin-top:-2px;
+            z-index: 0;
+        }
+        .tabs {
+            z-index: 1;
+        }
+        .ui-accordion-header {
+            text-transform: uppercase;
+            background-color:transparent;
+            padding: 10px;
+            color: #58585b;
+            border: 0px solid #dfdfdf;
+            font-size: 1.6rem;
+        }
+        .ui-accordion-content {
+            margin: 10px auto;
+        }
+        .ui-accordion-content .flex-center-vertical {
+            margin-left: .5em;
+        }
+        span.avatar-ico {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+        } 
+        .list.dimensions--toggle li{
+            padding:10px 0;
+         
+        }
+        .dimensions--toggle button.btn.btn--small {
+            margin: 10px auto;
+        }
+       .cui .btn.btn--small, .cui .btn.btn--wide {
+            max-width: fit-content;
+        }
+       .cui .task--bar .btn {
+            border-radius: 6px !important;
+        }
+        .btn span.icon-chevron-right {
+            margin-left: 15px;
+        }
+        .offerID {
+            text-transform: uppercase;
+            color:#666666;
+            font-size: 18px;
+        }
+        /* For tab's Space */
+        .cui ul.tabs.tabs--bordered > li, .cui .nav-tabs.tabs--bordered > li {
+            margin: 0 5px;
+        } 
+
+        .cui ul.tabs.tabs--bordered  {
+          margin: 0 5px;
+      }
+        .offer-header.card *[class^='col-'] {
+            border-bottom: solid 1px #d8d8d8;
+            border-collapse: collapse;
+            border-right: solid 1px #d8d8d8;
+            padding: 10px;
+        }
+        .offer-header.card {
+            padding: 0;
+            overflow: hidden;
+        }
+
 
 
 
