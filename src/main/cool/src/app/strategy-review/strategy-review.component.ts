@@ -26,26 +26,14 @@ export class StrategyReviewComponent implements OnInit {
   conditionallyApprovedCount: any = 0;
   notApprovedCount: any = 0;
   notReviewedCount: any = 0;
+  showButtonSection = false;
+  showFormSection = false;
   strategyReviewList = [
-    {
-      function : 'CSPP',
-      approvalStatus : 'Approved',
-      reviewedOn : '06-Aug-2018',
-      reviewedBy : 'Sean Parker (OPS)',
-      comment : 'Comment'
-    },
     {
       function : 'CPS',
       approvalStatus : 'Approved',
       reviewedOn : '11-Aug-2018',
       reviewedBy : 'Sean Parker (OPS)',
-      comment : 'Comment'
-    },
-    {
-      function : 'Compensation Ops',
-      approvalStatus : 'Approved',
-      reviewedOn : '06-Aug-2018',
-      reviewedBy : 'Thomas Price',
       comment : 'Comment'
     },
     {
@@ -57,6 +45,10 @@ export class StrategyReviewComponent implements OnInit {
     },
     {
       function : 'Compensation Ops',
+      approvalStatus : 'Not Reviewed'
+    },
+    {
+      function : 'Compensation Ops',
       approvalStatus : 'Conditionally Approved',
       reviewedOn : '06-Aug-2018',
       reviewedBy : 'Jessica Lara',
@@ -64,7 +56,10 @@ export class StrategyReviewComponent implements OnInit {
     },
     {
       function : 'Compensation Ops',
-      approvalStatus : 'Not Reviewed'
+      approvalStatus : 'Conditionally Approved',
+      reviewedOn : '06-Aug-2018',
+      reviewedBy : 'Jessica Lara',
+      comment : 'Comment'
     }
   ];
 
@@ -73,16 +68,24 @@ export class StrategyReviewComponent implements OnInit {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
       });
-     }
+    }
 
   ngOnInit() {
+    this.showButtonSection = true;
+    this.showFormSection = false;
     this.totalApprovalsCount = this.strategyReviewList.length;
-    let i;
-    for (i=0; i<=this.strategyReviewList.length; i++) {
-      if (this.strategyReviewList[0].approvalStatus === 'Approved') {
+    this.strategyReviewList.forEach(element => {
+      if (element.approvalStatus === 'Approved') {
         this.approvedCount = this.approvedCount + 1;
+      } else if (element.approvalStatus === 'Not Approved') {
+        this.notApprovedCount = this.notApprovedCount + 1;
+      } else if (element.approvalStatus === 'Conditionally Approved') {
+        this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
+      } else if (element.approvalStatus === 'Not Reviewed') {
+        this.notReviewedCount = this.notReviewedCount + 1;
       }
-    }
+    });
+
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
     this.monetizationModelService.getAttributes().subscribe(data => {
@@ -122,19 +125,19 @@ export class StrategyReviewComponent implements OnInit {
 
   doNotApprove() {
     this.formTitle = 'Do Not Approve';
-    document.getElementById('formSection').style.visibility = 'visible';
-    document.getElementById('buttonSection').style.visibility = 'hidden';
+    this.showButtonSection = false;
+    this.showFormSection = true;
   }
 
   conditionalApprove() {
     this.formTitle = 'Conditional Approval';
-    document.getElementById('formSection').style.visibility = 'visible';
-    document.getElementById('buttonSection').style.visibility = 'hidden';
+    this.showFormSection = true;
+    this.showButtonSection = false;
   }
 
   closeForm() {
-    document.getElementById('formSection').style.visibility = 'hidden';
-    document.getElementById('buttonSection').style.visibility = 'visible';
+    this.showButtonSection = true;
+    this.showFormSection = false;
   }
 
 }
