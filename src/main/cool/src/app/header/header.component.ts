@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
     });
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      this.functionalRole = data.functionalAppRoleList[0].fnalRole;
+      this.functionalRole = data.userMappings[0].functionalRole;
       if (this.functionalRole === 'BUPM') {
         this.isBupmUser = true;
       }

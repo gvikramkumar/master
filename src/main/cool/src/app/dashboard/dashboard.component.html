@@ -78,8 +78,8 @@
                           </div>
                         </div>
                       </ng-template>
-                      <span [ngbPopover]="popActionContent" (click)="displayActionPop()" data-balloon="My Actions"
-                        data-balloon-pos="center" data-balloon-length="fit-content" data-balloon-indigo>
+                      <span [ngbPopover]="popActionContent" (click)="displayActionPop()" data-balloon="Action"
+                        data-balloon-pos="right" data-balloon-length="fit-content">
                         <span class="icon-clock icon-small" style="margin:0px 5px 0 0"></span>
                         {{actionData.offerId}}
                       </span>
@@ -101,8 +101,8 @@
                           </div>
                         </div>
                       </ng-template>
-                      <span [ngbPopover]="popNotificationContent" (click)="displayPop()" data-balloon="Notifications"
-                        data-balloon-pos="center" data-balloon-length="fit-content" data-balloon-indigo>
+                      <span [ngbPopover]="popNotificationContent" (click)="displayPop()" data-balloon="Notification"
+                        data-balloon-pos="right" data-balloon-length="fit-content">
                         <span class="icon-alert icon-small" style="margin:0px 5px 0 0"></span>
                         {{actionData.offerId}}
                       </span>

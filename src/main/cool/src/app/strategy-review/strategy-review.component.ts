@@ -26,14 +26,9 @@ export class StrategyReviewComponent implements OnInit {
   conditionallyApprovedCount: any = 0;
   notApprovedCount: any = 0;
   notReviewedCount: any = 0;
+  showButtonSection = false;
+  showFormSection = false;
   strategyReviewList = [
-    {
-      function : 'CSPP',
-      approvalStatus : 'Approved',
-      reviewedOn : '06-Aug-2018',
-      reviewedBy : 'Sean Parker (OPS)',
-      comment : 'Comment'
-    },
     {
       function : 'CPS',
       approvalStatus : 'Approved',
@@ -43,42 +38,28 @@ export class StrategyReviewComponent implements OnInit {
     },
     {
       function : 'Compensation Ops',
-      approvalStatus : 'Approved',
-      reviewedOn : '06-Aug-2018',
-      reviewedBy : 'Thomas Price',
-      comment : 'Comment'
-    },
-    {
-      function : 'Compensation Ops',
       approvalStatus : 'Not Approved',
       reviewedOn : '08-Aug-2018',
       reviewedBy : 'Thomas Price',
-      comment : 'Comment'
-    },
-    {
-      function : 'Compensation Ops',
-      approvalStatus : 'Not Approved',
-      reviewedOn : '08-Aug-2018',
-      reviewedBy : 'Thomas Price',
-      comment : 'Comment'
-    },
-    {
-      function : 'Compensation Ops',
-      approvalStatus : 'Conditionally Approved',
-      reviewedOn : '06-Aug-2018',
-      reviewedBy : 'Jessica Lara',
-      comment : 'Comment'
-    },
-    {
-      function : 'Compensation Ops',
-      approvalStatus : 'Conditionally Approved',
-      reviewedOn : '06-Aug-2018',
-      reviewedBy : 'Jessica Lara',
       comment : 'Comment'
     },
     {
       function : 'Compensation Ops',
       approvalStatus : 'Not Reviewed'
+    },
+    {
+      function : 'Compensation Ops',
+      approvalStatus : 'Conditionally Approved',
+      reviewedOn : '06-Aug-2018',
+      reviewedBy : 'Jessica Lara',
+      comment : 'Comment'
+    },
+    {
+      function : 'Compensation Ops',
+      approvalStatus : 'Conditionally Approved',
+      reviewedOn : '06-Aug-2018',
+      reviewedBy : 'Jessica Lara',
+      comment : 'Comment'
     }
   ];
 
@@ -90,6 +71,8 @@ export class StrategyReviewComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.showButtonSection = true;
+    this.showFormSection = false;
     this.totalApprovalsCount = this.strategyReviewList.length;
     this.strategyReviewList.forEach(element => {
       if (element.approvalStatus === 'Approved') {
@@ -142,19 +125,19 @@ export class StrategyReviewComponent implements OnInit {
 
   doNotApprove() {
     this.formTitle = 'Do Not Approve';
-    document.getElementById('formSection').style.visibility = 'visible';
-    document.getElementById('buttonSection').style.visibility = 'hidden';
+    this.showButtonSection = false;
+    this.showFormSection = true;
   }
 
   conditionalApprove() {
     this.formTitle = 'Conditional Approval';
-    document.getElementById('formSection').style.visibility = 'visible';
-    document.getElementById('buttonSection').style.visibility = 'hidden';
+    this.showFormSection = true;
+    this.showButtonSection = false;
   }
 
   closeForm() {
-    document.getElementById('formSection').style.visibility = 'hidden';
-    document.getElementById('buttonSection').style.visibility = 'visible';
+    this.showButtonSection = true;
+    this.showFormSection = false;
   }
 
 }
