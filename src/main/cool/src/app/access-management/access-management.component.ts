@@ -26,9 +26,11 @@ export class AccessManagementComponent implements OnInit {
   Obj;
   cols: any[];
   newUser;
+  showFormSection = false;
   constructor(private accessManagementService: AccessManagementService, private createOfferService: CreateOfferService) { }
 
   ngOnInit() {
+    this.showFormSection = false;
     this.cols = [
       { field: 'emailId', header: 'Cisco ID' },
       { field: 'userName', header: 'Name' },
@@ -111,11 +113,11 @@ export class AccessManagementComponent implements OnInit {
   }
 
   registerNewUser() {
-    document.getElementById('formSection').style.visibility = 'visible';
+    this.showFormSection = true;
   }
 
   closeForm() {
-    document.getElementById('formSection').style.visibility = 'hidden';
+    this.showFormSection = false;
   }
 
   arrToOptions(arr) {
