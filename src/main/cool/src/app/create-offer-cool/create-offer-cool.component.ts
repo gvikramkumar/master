@@ -7,6 +7,7 @@ import { CreateOffer } from './create-offer';
 import { SelectItem } from 'primeng/api';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { UserService } from '../services/user.service';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -17,11 +18,12 @@ import { UserService } from '../services/user.service';
 export class CreateOfferCoolComponent implements OnInit {
   @ViewChild('offerCreateForm') offerCreateForm: NgForm;
   Obj;
+  primaryBusinessUnitList;
   secondaryBusinessUnitList;
   secondaryBusinessEntityList;
   primaryBuList: string[] = [];
   primaryBeList: string[] = [];
-  offerId: number;
+  offerId: string;
   offerName: string;
   expectedLaunchDate: Date;
   offerDesc: string;
@@ -30,16 +32,20 @@ export class CreateOfferCoolComponent implements OnInit {
   secondaryBusinessUnits: SelectItem[];
   secondaryBusinessEntities: SelectItem[];
   minDate: Date;
-  primaryBusinessUnit: any;
-  primaryBusinessEntitiy: any;
+  primaryBusinessUnits: SelectItem[];
+  primaryBusinessEntities: SelectItem[];
   offerNameValue: string;
   offerDescValue: string;
+  primaryBusinessUnitsValue: string;
+  primaryBusinessEntitiesValue: string;
   secondaryBusinessUnitsValue: string;
   secondaryBusinessEntitiesValue: string;
   strategyReviewDateValue: string;
   designReviewDateValue: string;
   readinessReviewDateValue: string;
   expectedLaunchDateValue: string;
+  caseId:string;
+
   constructor(private createOfferService: CreateOfferService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -47,8 +53,12 @@ export class CreateOfferCoolComponent implements OnInit {
     private userService: UserService) {
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      this.primaryBusinessUnit = data.primaryBU[0];
-      this.getPrimaryBusinessEntity(data.primaryBU[0]);
+      this.primaryBusinessUnitList = <any>data;
+      const primaryBuArry = [];
+      this.primaryBusinessUnitList.businessUnits.forEach(element => {
+        primaryBuArry.push({ label: element, value: element });
+      });
+      this.primaryBusinessUnits = primaryBuArry;
     });
 
     this.createOfferService.getSecondaryBusinessUnit().subscribe(data => {
@@ -86,7 +96,11 @@ export class CreateOfferCoolComponent implements OnInit {
   getPrimaryBusinessEntity(event) {
     this.createOfferService.getPrimaryBusinessEntity(event.toString())
       .subscribe(data => {
-        this.primaryBusinessEntitiy = data[0].BE;
+        const primaryBeArry = [];
+        data.forEach(element => {
+          primaryBeArry.push({ label: element.BE, value: element.BE });
+        });
+        this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
       });
   }
 
@@ -105,16 +119,16 @@ export class CreateOfferCoolComponent implements OnInit {
     const loggedInUserId = '';
     const offerOwner = '';
     const offerCreatedBy = '';
-    this.primaryBuList.push(this.primaryBusinessUnit);
-    this.primaryBeList.push(this.primaryBusinessEntitiy);
+    // this.primaryBuList.push(this.primaryBusinessUnit);
+    // this.primaryBeList.push(this.primaryBusinessEntitiy);
     const offerCreationDate = new Date().toDateString();
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
       offerOwner,
       this.offerNameValue,
       this.offerDescValue,
-      this.primaryBuList,
-      this.primaryBeList,
+      this.primaryBusinessUnitsValue,
+      this.primaryBusinessEntitiesValue,
       this.secondaryBusinessUnitsValue,
       this.secondaryBusinessEntitiesValue,
       this.strategyReviewDateValue,
@@ -123,8 +137,10 @@ export class CreateOfferCoolComponent implements OnInit {
       this.expectedLaunchDateValue,
       offerCreatedBy,
       offerCreationDate);
+      console.log(createoffer);
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
-      this.offerId = data;
+      this.offerId = data.offerId;
+      this.caseId = data.case_ID;
       console.log(this.offerId);
       this.router.navigate(['/mmassesment', this.offerId]);
     },

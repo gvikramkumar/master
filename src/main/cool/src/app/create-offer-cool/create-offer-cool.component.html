@@ -47,36 +47,29 @@
               <div class="row base-margin-top">
                 <div class="col-md-6">
                   <div class="form-group half-margin-bottom">
-                    <div class="form-group__text">
                     <label for="selectedValue">Primary Business Unit</label>
-                    <input
-                       disabled
-                       id="selectedValue"
-                       type="text"
-                       class="form-control"
-                       name="primaryBUList"
-                       ngModel
-                       required
-                       #primaryBUList="ngModel"
-                       [(ngModel)]="primaryBusinessUnit">
-                    </div>
+                    <p-multiSelect
+                      id="selectedBuValue"
+                      class="form-control"
+                      name="primaryBUList"
+                      [options]="primaryBusinessUnits"
+                      (onChange)="getPrimaryBusinessEntity($event.value)"
+                      [(ngModel)]="primaryBusinessUnitsValue"
+                      [style]="{'width':'100%'}">
+                    </p-multiSelect>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group half-margin-bottom">
-                    <div class="form-group__text">
                     <label for="selectedBeValue">Primary Business Entity</label>
-                    <input
-                      disabled
-                      id="selectedValue"
-                      type="text"
-                      class="form-control"
-                      name="primaryBEList"
-                      ngModel
-                      required
-                      #primaryBEList="ngModel"
-                      [(ngModel)]="primaryBusinessEntitiy">
-                    </div>
+                    <p-multiSelect
+                    id="selectedBeValue"
+                    class="form-control"
+                    name="primaryBEList"
+                    [options]="primaryBusinessEntities"
+                    [(ngModel)]="primaryBusinessEntitiesValue"
+                    [style]="{'width':'100%'}">
+                  </p-multiSelect>
                   </div>
                 </div>
               </div>
