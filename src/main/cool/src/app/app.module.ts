@@ -48,6 +48,7 @@ import { AccessManagementService } from './services/access-management.service';
 import { EnvironmentService } from '../environments/environment.service';
 import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
+import { CreateActionService } from './services/create-action.service';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -110,6 +111,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     DashboardService,
     AccessManagementService,
     BupmGuard,
+    CreateActionService,
     UserService,
      {
        provide: APP_INITIALIZER,
