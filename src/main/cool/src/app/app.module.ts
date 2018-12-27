@@ -112,11 +112,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     ExitCriteriaValidationService,
     DashboardService,
     AccessManagementService,
-<<<<<<< HEAD
-=======
     BupmGuard,
     CreateActionService,
->>>>>>> a9a47e57c8c72f29744889ff5e5ffa32765d9342
     UserService,
     MenuBarService,
      {
