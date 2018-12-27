@@ -14,7 +14,10 @@ export class MonetizationModelService {
     private environmentService: EnvironmentService
     ) { }
 
- 
+ testnewapi(){
+ let url = "https://cool-srv-dev.cisco.com/coolsrv/stakeholder/getStakeHolderMgnt/MM6/Security";
+ return this.http.get(url,{ withCredentials: true });
+ }
   getAttributes(){
     let url =this.environmentService.REST_API_MMOFFER_ATTRIBUTES_URL;
     return this.http.get(url,{ withCredentials: true });
@@ -30,12 +33,13 @@ export class MonetizationModelService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Accept' : 'application/json'
+        'Accept' : 'application/json',
+        'withCredentials': 'true'
       })
     };
  
     let url = this.environmentService.REST_API_MMATTRIBUTES_POST_URL;
-    return this.http.post(url,data,{ withCredentials: true });
+    return this.http.post( url, data, httpOptions );
     };
  
     
