@@ -3,50 +3,78 @@
 <div class="mb-10">
     <!-- Offer Phase Steps -->
     <div class="card card--raised base-margin-top">
-        <h5 class="half-margin-bottom">Offer Phase
-            <a href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
-                <span class="icon-pencil icon-small"></span> Edit</a>
-        </h5>
-        <div class="divider divider--compressed"></div>
-        <div class="ui-steps ui-steps--success ui-steps--tiny">
-            <div class="ui-step visited">
-                <div class="step__icon"><span class="icon-check"></span></div>
-                <div class="step__label">Ideate</div>
-            </div>
-            <div class="ui-step active">
-                <div class="step__icon">2</div>
-                <div class="step__label">Plan</div>
-            </div>
-            <div class="ui-step">
-                <div class="step__icon">3</div>
-                <div class="step__label">Execute</div>
-            </div>
-            <div class="ui-step">
-                <div class="step__icon">4</div>
-                <div class="step__label">Launch</div>
-            </div>
-        </div>
+            <h5 class="half-margin-bottom">Offer Phase
+            </h5>
+            <div class="divider divider--compressed"></div>
+            <div class="ui-steps ui-steps--success ui-steps--tiny">
+                    <div class="ui-step visited">
+                        <div class="step__icon"><span class="icon-check"></span></div>
+                        <div class="step__label">Ideate</div>
+                    </div>
+                    <div class="ui-step active">
+                        <div class="step__icon">2</div>
+                        <div class="step__label">Plan</div>
+                    </div>
+                    <div class="ui-step">
+                        <div class="step__icon">3</div>
+                        <div class="step__label">Execute</div>
+                    </div>
+                    <div class="ui-step">
+                        <div class="step__icon">4</div>
+                        <div class="step__label">Launch</div>
+                    </div>
+                </div>
+           
     </div>
+    
 
-    <!-- Estimated Lead Time -->
-    <div class="card card--raised base-margin-top">
-        <h5 class="half-margin-bottom">Estimated Lead Time</h5>
-        <span class="label label--warning-alt">3 weeks</span>
-    </div>
+<!-- Estimated Lead Time -->
+<div class="card card--raised base-margin-top">
+    <h5 class="half-margin-bottom">Estimated Lead Time</h5>
+    <span class="label label--warning-alt">3 weeks</span>
+</div>
 
-    <!-- People Involved -->
-    <div class="card card--raised base-margin-top">
+<!-- People Involved -->
+<div class="card card--raised base-margin-top">
 
-        <h5 class="half-margin-bottom">People Involved
-            <a href="javascript:;" class="pull-right" (click)="showDialog()">
-                <span class="icon-pencil icon-small"></span> Edit</a>
-        </h5>
-        <div class="divider divider--compressed"></div>
+    <h5 class="half-margin-bottom">People Involved
+        <a href="javascript:;" class="pull-right" (click)="showDialog()">
+            <span class="icon-pencil icon-small"></span> Edit</a>
+    </h5>
+    <div class="divider divider--compressed"></div>
 
-        <ul class="list">
-            <li>
-                <div class="ui-accordion-header">Owner<span class="icon-chevron-up icon-small pull-right"></span></div>
-                <div class="ui-accordion-content">
+    <ul class="list">
+        <li>
+            <div class="ui-accordion-header">Owner<span class="icon-chevron-up icon-small pull-right"></span></div>
+            <div class="ui-accordion-content">
+                <div class="flex-center-vertical">
+                    <!-- Team Member Name Avatar -->
+                    <span class="avatar-ico">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin"
+                            role="img">
+                            <title id="fwt-profile-button-loggedin-title"></title>
+                            <g fill="none" fill-rule="evenodd">
+                                <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
+                                    x="0" y="0"></path>
+                                <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300"
+                                    font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">{{getInitialChar(offerOwner)}}</text>
+                            </g>
+                        </svg>
+                    </span>
+                    <div class="flex-fluid text-left half-margin-left">
+                        <div class="text-bold">{{offerOwner}}</div>
+                      
+                    </div>
+                </div>
+            </div>
+
+        </li>
+
+        <li *ngFor="let key of getKeys(stakeData)">
+            <div class="ui-accordion-header">{{key}} ({{stakeData[key].length}})<span class="icon-chevron-up icon-small pull-right"></span></div>
+            <div class="ui-accordion-content">
+                <div *ngFor="let coOwners of stakeData[key]">
                     <div class="flex-center-vertical">
                         <!-- Team Member Name Avatar -->
                         <span class="avatar-ico">
@@ -58,208 +86,76 @@
                                         d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
                                         x="0" y="0"></path>
                                     <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300"
-                                        font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">{{getInitialChar(offerOwner)}}</text>
+                                        font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">{{getInitialChar(coOwners['name'])}}</text>
                                 </g>
                             </svg>
                         </span>
                         <div class="flex-fluid text-left half-margin-left">
-                            <div class="text-bold">{{offerOwner}}</div>
-
+                            <div class="text-bold">{{coOwners['name']}}</div>
+                            <div>{{coOwners['email']}}</div>
                         </div>
                     </div>
+                    <div class="divider divider--compressed"></div>
                 </div>
-
-            </li>
-
-            <li *ngFor="let key of getKeys(stakeData)">
-                <div class="ui-accordion-header">{{key}} ({{stakeData[key].length}})<span class="icon-chevron-up icon-small pull-right"></span></div>
-                <div class="ui-accordion-content">
-                    <div *ngFor="let coOwners of stakeData[key]">
-                        <div class="flex-center-vertical">
-                            <!-- Team Member Name Avatar -->
-                            <span class="avatar-ico">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin"
-                                    role="img">
-                                    <title id="fwt-profile-button-loggedin-title"></title>
-                                    <g fill="none" fill-rule="evenodd">
-                                        <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
-                                            x="0" y="0"></path>
-                                        <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300"
-                                            font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">{{getInitialChar(coOwners['name'])}}</text>
-                                    </g>
-                                </svg>
-                            </span>
-                            <div class="flex-fluid text-left half-margin-left">
-                                <div class="text-bold">{{coOwners['name']}}</div>
-                                <div>{{coOwners['email']}}</div>
-                            </div>
-                        </div>
-                        <div class="divider divider--compressed"></div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-
-        <p-dialog [showHeader]="false" [responsive]="true" [width]="800" [minWidth]="400" [height]="700"
-            [minY]="70" [(visible)]="displayOfferPhase" [closable]="true">
-            <div class="pull-right base-margin-top">
-                <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
             </div>
+        </li>
+    </ul>
+
+    <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
+        [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">
+        <form [formGroup]="addEditCollaboratorsForm" (ngSubmit)="onSearch()">
             <div class="row">
-                <div class="col-md-6">
-                    <h6>AMP (Advanced Malware Protection) <span style="color: blue"><h6>573493</h6></span></h6>
-                    <h6 style="color: blue">View Offer Details</h6>
-                </div>
-                <div class="col-md-6">
-                    <h5 class="half-margin-bottom">Offer Phase</h5>
-                    <div class="ui-steps ui-steps--success ui-steps--tiny">
-                        <div class="ui-step visited">
-                            <div class="step__icon"><span class="icon-check"></span></div>
-                            <div class="step__label">Ideate</div>
-                        </div>
-                        <div class="ui-step active">
-                            <div class="step__icon">2</div>
-                            <div class="step__label">Plan</div>
-                        </div>
-                        <div class="ui-step">
-                            <div class="step__icon">3</div>
-                            <div class="step__label">Execute</div>
-                        </div>
-                        <div class="ui-step">
-                            <div class="step__icon">4</div>
-                            <div class="step__label">Launch</div>
+                <div class="col-md-3">
+                    <div class="form-group half-margin-bottom">
+                        <div class="form-group__text">
+                            <input id="name" placeholder="Search by Name, Email" class="form-control" formControlName="name">
                         </div>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="form-group half-margin-bottom">
+                        <div class="form-group__text select">
+                            <select id="selectedSearchBe" class="form-control" formControlName="businessEntity">
+                                <option [ngValue]="null">Business Entity</option>
+                                <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
+                                    {{businessEntity}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group half-margin-bottom">
+                        <div class="form-group__text select">
+                            <select id="selectedFunction" class="form-control" formControlName="functionName">
+                                <option [ngValue]="null">Function</option>
+                                <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
+                                    {{businessEntity}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn&#45;&#45;secondary" type="submit">Search</button>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h4>Offer Phase Details</h4>
-                </div>
+        </form>
+        <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="Function" #dt>
+            <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
+            <p-column field="functionalRole" header="Function"></p-column>
+            <p-column field="applicationRole" header="Roles">
+                <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
+                    <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
+                        [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
+                    </p-dropdown>
+                </ng-template>
+            </p-column>
+            <p-column field="name" header="Name"></p-column>
+            <p-column field="email" header="Email"></p-column>
+            <p-column field="businessEntity" header="BusinessEntity"></p-column>
+        </p-dataTable>
+        <div class="modal__footer">
+            <div class="card__footer form-actions">
+                <button class="btn base-margin-top" (click)="closeDailog()">Cancel</button>
+                <button class="btn btn&#45;&#45;primary base-margin-top" (click)="addCollaborator()">Add</button>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <p-accordion>
-                            <p-accordionTab header="Ideate">
-                                <div class="responsive-table">
-                                    <table class="table table--nostripes">
-                                        <thead>
-                                            <tr>
-                                                <th>Ideate - <span class="text-success"> 4 of 4 <span class="icon-check-outline icon-medium"></span></span></th>
-                                                <th>STATUS</th>
-                                                <th>TARGET DATE</th>
-                                                <th>COMPLETION DATE</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let ideateData of ideatePhaseDetailsList">
-                                                <td><span style="color: blue">{{ideateData.ideate}}</span></td>
-                                                <td>{{ideateData.status}}</td>
-                                                <td>{{ideateData.targetDate}}</td>
-                                                <td>{{ideateData.completionDate}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </p-accordionTab>
-                            <p-accordionTab header="Plan">
-                                <div class="responsive-table">
-                                    <table class="table table--nostripes">
-                                        <thead>
-                                            <tr>
-                                                <th>Plan - 1 of 5</th>
-                                                <th>STATUS</th>
-                                                <th>TARGET DATE</th>
-                                                <th>COMPLETION DATE</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let planData of planPhaseDetailsList">
-                                                <td><span style="color: blue">{{planData.plan}}</span></td>
-                                                <td>{{planData.status}}</td>
-                                                <td>{{planData.targetDate}}</td>
-                                                <td>{{planData.completionDate}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </p-accordionTab>
-                            <p-accordionTab header="Excute">
-                                <div class="responsive-table">
-                                    <table class="table table--nostripes">
-                                    </table>
-                                </div>
-                            </p-accordionTab>
-                            <p-accordionTab header="Launch">
-                                <div class="responsive-table">
-                                    <table class="table table--nostripes">
-                                    </table>
-                                </div>
-                            </p-accordionTab>
-                        </p-accordion>
-                    </div>
-                </div>
-            </div>
-        </p-dialog>
-
-        <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
-            [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">
-            <form [formGroup]="addEditCollaboratorsForm" (ngSubmit)="onSearch()">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group half-margin-bottom">
-                            <div class="form-group__text">
-                                <input id="name" placeholder="Search by Name, Email" class="form-control"
-                                    formControlName="name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group half-margin-bottom">
-                            <div class="form-group__text select">
-                                <select id="selectedSearchBe" class="form-control" formControlName="businessEntity">
-                                    <option [ngValue]="null">Business Entity</option>
-                                    <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
-                                        {{businessEntity}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group half-margin-bottom">
-                            <div class="form-group__text select">
-                                <select id="selectedFunction" class="form-control" formControlName="functionName">
-                                    <option [ngValue]="null">Function</option>
-                                    <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
-                                        {{businessEntity}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn&#45;&#45;secondary" type="submit">Search</button>
-                </div>
-            </form>
-            <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="Function" #dt>
-                <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
-                <p-column field="functionalRole" header="Function"></p-column>
-                <p-column field="applicationRole" header="Roles">
-                    <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
-                        <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
-                            [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
-                        </p-dropdown>
-                    </ng-template>
-                </p-column>
-                <p-column field="name" header="Name"></p-column>
-                <p-column field="email" header="Email"></p-column>
-                <p-column field="businessEntity" header="BusinessEntity"></p-column>
-            </p-dataTable>
-            <div class="modal__footer">
-                <div class="card__footer form-actions">
-                    <button class="btn base-margin-top" (click)="closeDailog()">Cancel</button>
-                    <button class="btn btn&#45;&#45;primary base-margin-top" (click)="addCollaborator()">Add</button>
-                </div>
-            </div>
-        </p-dialog>
-    </div>
+        </div>
+    </p-dialog>
+</div>

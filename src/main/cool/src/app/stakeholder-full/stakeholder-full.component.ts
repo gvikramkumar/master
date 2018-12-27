@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stakeholder-full',
@@ -7,25 +6,10 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./stakeholder-full.component.css']
 })
 export class StakeholderFullComponent implements OnInit {
-  currentOfferId;
-  offerId;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-    this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.offerId = params['id'];
-    });
-   }
+  constructor() { }
 
   ngOnInit() {
-  }
-
-  onStrategyReview() {
-    this.router.navigate(['/strategyReview', this.currentOfferId]);
-  }
-
-  offerDetailOverView() {
-    this.router.navigate(['/offerDetailView', this.offerId]);
   }
 
 }

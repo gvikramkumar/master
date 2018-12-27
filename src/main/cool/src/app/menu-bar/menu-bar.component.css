@@ -1,4 +1,10 @@
 /* Base CSS */
+
+.offerID {
+    text-transform: uppercase;
+    color: #666666;
+    font-size: 18px;
+}
 #flyoutmenu{
     padding:0;
     margin:0;
@@ -11,6 +17,15 @@
     font-size: 16px;
 }
 
+#flyOut:hover > #flyoutmenu{
+    visibility: visible;
+}
+#flyoutmenu {
+    visibility: hidden;
+}
+#flyoutmenu:hover {
+    visibility: visible;
+}
 
 #flyoutmenu ul,#flyoutmenu ul li,#flyoutmenu ul ul{list-style:none;margin:0;padding:0;border:0;}
 #flyoutmenu ul{position:relative;z-index:397;}
@@ -31,3 +46,10 @@
 #flyoutmenu ul a:active{color:#000;background:white;    display: block;
     margin: -7px -10px;
     padding: 7px 10px;}
+
+.disable-item {
+    background: lightgray;
+}
+.disable-item:hover{
+    background: lightgray !important;
+}

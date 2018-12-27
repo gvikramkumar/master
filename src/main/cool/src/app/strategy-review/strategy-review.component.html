@@ -7,6 +7,7 @@
       </div>
       <div class="col-md-6">
         <div class="btn-group btn-group--wide pull-right base-margin-top">
+
           <button class="btn btn--secondary" (click)="offerDetailOverView()">Offer Detail View <span class="icon-chevron-right"></span></button>
         </div>
       </div>
@@ -20,39 +21,45 @@
           </li>
         </ul>
         <div class="accordion base-margin-top" id="accordion">
-          <div class="card">
-            <div class="panel panel--ltgray">
+          <div class="col-md-12">
+            <div class="panel cta base-margin-top half-margin-bottom">
+
               <div class="row">
                 <div class="col-md-2">
-                  <h5><span>{{totalApprovalsCount}}</span> <span> Total Approvals</span></h5>
+                  <h1 class="page-title"><span class="action--value">{{totalApprovalsCount}}</span> <span class="action--value-label">Total
+                      Approvals</span></h1>
                   <div class="progressbar progressbar--default" data-percentage="66">
                     <div class="progressbar__fill"></div>
                   </div>
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-2">
-                  <h5><span>{{approvedCount}}</span> <span>Approved</span></h5>
+                  <h1 class="page-title"><span class="action--value">{{approvedCount}}</span> <span class="action--value-label">Approved</span></h1>
+
                   <div class="progressbar progressbar--success" data-percentage="66">
                     <div class="progressbar__fill"></div>
                   </div>
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-3">
-                  <h5><span>{{conditionallyApprovedCount}}</span> <span>Conditionally Approved</span></h5>
+                  <h1 class="page-title"><span class="action--value">{{conditionallyApprovedCount}}</span> <span class="action--value-label">Conditionally
+                      Approved</span></h1>
                   <div class="progressbar progressbar--warning" data-percentage="66">
                     <div class="progressbar__fill"></div>
                   </div>
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-2">
-                  <h5><span>{{notApprovedCount}}</span> <span>Not Approved</span></h5>
+                  <h1 class="page-title"><span class="action--value">{{notApprovedCount}}</span> <span class="action--value-label">Not
+                      Approved</span></h1>
                   <div class="progressbar progressbar--danger" data-percentage="66">
                     <div class="progressbar__fill"></div>
                   </div>
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-2">
-                  <h5><span>{{notReviewedCount}}</span> <span>Not Reviewed</span></h5>
+                  <h1 class="page-title"><span class="action--value">{{notReviewedCount}}</span> <span class="action--value-label">Not
+                      Reviewed</span></h1>
                   <div class="progressbar progressbar--warning" data-percentage="66">
                     <div class="progressbar__fill"></div>
                   </div>
@@ -60,162 +67,173 @@
               </div>
             </div>
           </div>
-          <div class="row base-margin-top">
-            <div class="col-md-12">
-              <div class="panel">
-                <div class="panel panel--ltgray">
-                  <h5>Strategy Review Status</h5>
+          <div class="card">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel--ltgray panel--loose">
+                  <h5 class="mb-0">Strategy Review Status</h5>
                 </div>
-                <div class="row base-margin-top">
-                  <div class="col">Function</div>
-                  <div class="col">Approval Status</div>
-                  <div class="col">Reviewed On</div>
-                  <div class="col">Reviewed By</div>
-                  <div class="col">Comments</div>
+              </div>
+            </div>
+            <div id="collapseTwo" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body">
+                <div class="responsive-table">
+                  <table class="table table--nostripes table--highlight table--hover table--selectable">
+                    <thead>
+                      <tr>
+                        <td>
+                          <div class="row">
+                            <div class="col">Function</div>
+                            <div class="col">Approval Status</div>
+                            <div class="col">Reviewed On</div>
+                            <div class="col">Reviewed By</div>
+                            <div class="col"></div>
+                          </div>
+                        </td>
+                      </tr>
+                    </thead>
+                  </table>
                 </div>
-                <p-accordion>
-                  <p-accordionTab *ngFor="let strategyReviewData of strategyReviewList">
-                    <p-header style="color:black">
-                      <div class="row" style="vertical-align: middle;">
-                        <div class="col">
-                          <span class="icon-check-outline icon-eye-closed icon-medium" *ngIf="strategyReviewData.approvalStatus == 'Not Reviewed'"></span>
-                          <span class="icon-warning-outline icon-medium text-warning" *ngIf="strategyReviewData.approvalStatus == 'Conditionally Approved'"></span>
-                          <span class="icon-error-outline icon-medium text-danger" *ngIf="strategyReviewData.approvalStatus == 'Not Approved'"></span>
-                          <span class="icon-check-outline icon-medium text-success" *ngIf="strategyReviewData.approvalStatus == 'Approved'"></span>
-                          {{strategyReviewData.function}}</div>
-                        <div class="col">{{strategyReviewData.approvalStatus}}</div>
-                        <div class="col">{{strategyReviewData.reviewedOn}}</div>
-                        <div class="col">{{strategyReviewData.reviewedBy}}</div>
-                        <div class="col">{{strategyReviewData.comment}}</div>
-                      </div>
-                    </p-header>
-                    <div *ngIf="strategyReviewData.approvalStatus=='Not Reviewed'; then reviewRequiredPlaceHolder">
+                <ul class="list list--highlight base-margin-top">
+                  <li>
+                    <div class="responsive-table">
+                      <table>
+                        <tr>
+                          <td>
+                            <p-accordion *ngFor="let strategyReviewData of strategyReviewList">
+                              <p-accordionTab>
+                                <p-header style="color:black">
+                                  <div class="row">
+                                    <div class="col">{{strategyReviewData.function}}</div>
+                                    <div class="col">{{strategyReviewData.approvalStatus}}</div>
+                                    <div class="col">{{strategyReviewData.reviewedOn}}</div>
+                                    <div class="col">{{strategyReviewData.reviewedBy}}</div>
+                                    <div class="col">{{strategyReviewData.comment}}</div>
+                                  </div>
+                                </p-header>
+                                <div class="panel panel--bordered not-reviewed" *ngIf="strategyReviewData.approvalStatus=='Not Reviewed'; then reviewRequiredPlaceHolder">
+                                </div>
+                                <ng-template #reviewRequiredPlaceHolder>
+                                  <div class="panel panel--bordered not-reviewed">
+                                    <p>This is the strategy review milestone and the content is a placeholder for
+                                      milestone summary.
+                                      This is the strategy review milestone and the content is ... </p>
+                                    <button class="btn btn--secondary">Escalate</button><br><br>
+                                  </div>
+                                  <div class="panel panel--bordered not-reviewed" id="buttonSection">
+                                    <div class="panel--header">
+                                      <h5>Approval Decision</h5>
+                                    </div><br>
+                                    <div class="panel--footer">
+                                      <button class="btn btn--secondary" (click)="doNotApprove()">Do Not Approve</button>
+                                      <button class="btn btn--secondary" (click)="conditionalApprove()">Conditional
+                                        Approval</button>
+                                      <button class="btn btn--secondary">Approve</button>
+                                    </div>
+                                  </div>
+                                  <section id="formSection">
+                                    <div class="container">
+                                      <div class="row">
+                                        <div class="col-md-12">
+                                          <div class="card card--raised base-margin-top">
+                                            <div class="row">
+                                              <div class="col-md-12">
+                                                <div class="pull-right base-margin-top">
+                                                  <span class="icon-close" (click)="closeForm()"></span>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="panel">
+                                              <div class="card__header">
+                                                <h5 class="card__title">{{formTitle}}</h5>
+                                              </div>
+                                              <form>
+                                                <div class="row base-margin-top">
+                                                  <div class="col-md-12">
+                                                    <div class="form-group half-margin-bottom">
+                                                      <div class="form-group__text">
+                                                        <input type="text" class="form-control" placeholder="ADD A COMMENT">
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div><br>
+                                                <h5 class="card__title">Create an Action Item</h5>
+                                                <div class="row base-margin-top">
+                                                  <div class="col-md-4">
+                                                    <div class="form-group half-margin-bottom">
+                                                      <div class="form-group__text">
+                                                        <input type="text" class="form-control" placeholder="ACTION TITLE">
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-md-8">
+                                                    <div class="form-group half-margin-bottom">
+                                                      <div class="form-group__text">
+                                                        <input type="text" class="form-control" placeholder="ACTION DESCRIPTION">
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row base-margin-top">
+                                                  <div class="col-md-4">
+                                                    <div class="form-group half-margin-bottom">
+                                                      <div class="form-group__text">
+                                                        <input type="text" class="form-control" placeholder="STRATEGY REVIEW">
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                    <div class="form-group half-margin-bottom">
+                                                      <div class="form-group__text">
+                                                        <input type="text" class="form-control" placeholder="SELECT FUNCTION">
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                    <div class="form-group half-margin-bottom">
+                                                      <div class="form-group__text">
+                                                        <input type="text" class="form-control" placeholder="ASSIGNEE">
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row base-margin-top">
+                                                  <div class="col-md-4">
+                                                    <div class="form-group label--floated input--icon half-margin-bottom">
+                                                      <div class="form-group__text">
+                                                        <input class="form-control" placeholder="DUE DATE" #dp4="bsDatepicker"
+                                                          bsDatepicker placement="top" [minDate]="minDate"
+                                                          containerClass="custome-date" [bsConfig]="dpConfig">
+                                                        <button type="button" class="link" tabindex="-1">
+                                                          <span class="icon-month"></span>
+                                                        </button>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <div class="form-actions">
+                                                    <button class="btn btn--primary base-margin-top" (click)="closeForm()">Cancel</button>
+                                                    <button class="btn btn--primary base-margin-top" type="submit">Create
+                                                      an Action</button>
+                                                  </div>
+                                                </div>
+                                              </form>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </section>
+                                </ng-template>
+                              </p-accordionTab>
+                            </p-accordion>
+                          </td>
+                        </tr>
+                      </table>
                     </div>
-                    <ng-template #reviewRequiredPlaceHolder>
-                      <div class="panel panel--bordered not-reviewed">
-                        <p>This is the strategy review milestone and the content is a placeholder for
-                          milestone summary.
-                          This is the strategy review milestone and the content is ... </p>
-                        <button class="btn btn--secondary">Escalate</button>
-                        <hr>
-                        <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
-                          <div class="panel--header">
-                            <h5>Approval Decision</h5>
-                          </div>
-                          <div class="panel--footer">
-                            <button class="btn btn--secondary" (click)="doNotApprove()">Do Not
-                              Approve</button>
-                            <button class="btn btn--secondary" (click)="conditionalApprove()">Conditional
-                              Approval</button>
-                            <button class="btn btn--secondary">Approve</button>
-                          </div>
-                        </div>
-                      </div>
-                      <section id="formSection" *ngIf="showFormSection">
-                        <div class="card card--raised base-margin-top">
-                          <div class="panel">
-                            <div class="pull-right base-margin-top">
-                              <span class="icon-close" (click)="closeForm()"></span>
-                            </div>
-                            <div class="card__header">
-                              <h5 class="card__title">{{formTitle}}</h5>
-                            </div>
-                            <form>
-                              <div class="row base-margin-top">
-                                <div class="col-md-12">
-                                  <div class="form-group half-margin-bottom">
-                                    <div class="form-group__text">
-                                      <label for="action">ADD A COMMENT</label>
-                                      <input type="text" class="form-control">
-                                    </div>
-                                  </div>
-                                </div>
-                              </div><br>
-                              <h5 class="card__title">Create an Action Item</h5>
-                              <div class="row base-margin-top">
-                                <div class="col-md-4">
-                                  <div class="form-group half-margin-bottom">
-                                    <div class="form-group__text">
-                                      <label for="action">ACTION TITLE</label>
-                                      <input type="text" class="form-control">
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-8">
-                                  <div class="form-group half-margin-bottom">
-                                    <div class="form-group__text">
-                                      <label for="action">ACTION DESCRIPTION</label>
-                                      <input type="text" class="form-control">
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row base-margin-top">
-                                <div class="col-md-4">
-                                  <div class="form-group half-margin-bottom">
-                                    <div class="form-group__text">
-                                      <label for="functionName">MILESTONE</label>
-                                      <input type="text" class="form-control" placeholder="Strategy Review">
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="form-group half-margin-bottom">
-                                    <div class="form-group__text">
-                                      <div class="form-group__text select">
-                                        <label for="functionName">SELECT FUNCTION</label>
-                                        <select id="functionName" class="form-control" name="functionName">
-                                          <option value="BUPM" selected="">BUPM</option>
-                                          <option value="SOE">SOE</option>
-                                          <option value="BUPM">BUPM</option>
-                                        </select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="form-group half-margin-bottom">
-                                    <div class="form-group__text">
-                                      <div class="form-group__text select">
-                                        <label for="functionName">ASSIGNEE</label>
-                                        <select id="functionName" class="form-control" name="functionName">
-                                          <option value="BUPM" selected="">BUPM</option>
-                                          <option value="SOE">SOE</option>
-                                          <option value="BUPM">BUPM</option>
-                                        </select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row base-margin-top">
-                                <div class="col-md-4">
-                                  <div class="form-group label--floated input--icon half-margin-bottom">
-                                    <label for="dueDate">DUE DATE</label>
-                                    <div class="form-group__text">
-                                      <input class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
-                                        [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig">
-                                      <button type="button" class="link" tabindex="-1">
-                                        <span class="icon-month"></span>
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="form-actions">
-                                  <button class="btn btn--secondary" (click)="closeForm()">Cancel</button>
-                                  <button class="btn btn--primary" type="submit">Create
-                                    an Action</button>
-                                </div>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </section>
-                    </ng-template>
-                  </p-accordionTab>
-                </p-accordion>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

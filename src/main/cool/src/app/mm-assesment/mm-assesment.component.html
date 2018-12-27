@@ -1,13 +1,10 @@
 <div class="content">
     <div class="container-fluid">
+      <app-menu-bar></app-menu-bar>
 <div class="panel-wrapper mt-15">
-  <div class="row">
-      <div class="col-md-12">
-        <h1 class="display-4">Cisco Data Platform<span class="offerID">(Offer ID  T-SNS-324232)</span></h1>
-      </div>
-  </div>
-      <!-- Blue bar -->
-      <div class="panel panel--indigo panel--compressed task--bar">
+
+    <!-- Blue bar -->
+    <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
             <div class="col-md-4">
                 <h4><button class="btn btn--icon btn--white"><span class="icon-back"></span></button> Offer Builder</h4>
@@ -19,7 +16,6 @@
             </div>
         </div>
     </div>
-   
 
     <div class="contentBox mt-10">
       <div class="leftContent">
@@ -106,8 +102,8 @@
               [ngClass]="{ active: i == activeTabIndex }"
               (click)="changeTab(i)"
             >
-              <a tabindex="0" class="padding-5-20" style="padding: 5px 20px">
-                <div class="tab__heading">{{ groupName }}</div>
+              <a tabindex="0" class="padding-5-20 margin-right-10" style="padding: 5px 0; width:175px;">
+                <div class="tab__heading" style="margin:auto">{{ groupName }}</div>
               </a>
             </li>
           </ul>
@@ -120,7 +116,7 @@
                       <ul class="list dimensions--toggle">
                         <li *ngFor="let subGroup of getGroupKeys(groupData[activeTabIndex]) ">
                           <div class="row">
-                            <div class="col-md-2">{{subGroup}}</div>
+                            <div class="col-md-2 margin-auto">{{subGroup}}</div>
                     
                             <div class="col-md-10">
                   
