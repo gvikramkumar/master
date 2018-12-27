@@ -46,7 +46,7 @@ export class AccessManagementComponent implements OnInit {
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       this.primaryBusinessUnitList = <any>data;
       const primaryBuArry = [];
-      this.primaryBusinessUnitList.primaryBU.forEach(element => {
+      this.primaryBusinessUnitList.businessUnits.forEach(element => {
         primaryBuArry.push({ label: element, value: element });
       });
       this.primaryBusinessUnits = primaryBuArry;
