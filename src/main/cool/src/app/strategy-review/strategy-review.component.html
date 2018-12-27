@@ -152,129 +152,6 @@
                                 </p-header>
                                 <div class="panel panel--bordered not-reviewed" *ngIf="strategyReviewData.approvalStatus=='Not Reviewed'; then reviewRequiredPlaceHolder">
                                 </div>
-<<<<<<< HEAD
-                                <ng-template #reviewRequiredPlaceHolder>
-                                  <div class="panel panel--bordered not-reviewed">
-                                    <p>This is the strategy review milestone and the content is a placeholder for
-                                      milestone summary.
-                                      This is the strategy review milestone and the content is ... </p>
-                                    <button class="btn btn--secondary">Escalate</button><br><br>
-                                  </div>
-                                  <div class="panel panel--bordered not-reviewed" id="buttonSection">
-                                    <div class="panel--header">
-                                      <h5>Approval Decision</h5>
-                                    </div><br>
-                                    <div class="panel--footer">
-                                      <button class="btn btn--secondary" (click)="doNotApprove()">Do Not Approve</button>
-                                      <button class="btn btn--secondary" (click)="conditionalApprove()">Conditional
-                                        Approval</button>
-                                      <button class="btn btn--secondary">Approve</button>
-                                    </div>
-                                  </div>
-                                  <section id="formSection">
-                                    <div class="container">
-                                      <div class="row">
-                                        <div class="col-md-12">
-                                          <div class="card card--raised base-margin-top">
-                                            <div class="row">
-                                              <div class="col-md-12">
-                                                <div class="pull-right base-margin-top">
-                                                  <span class="icon-close" (click)="closeForm()"></span>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div class="panel">
-                                              <div class="card__header">
-                                                <h5 class="card__title">{{formTitle}}</h5>
-                                              </div>
-                                              <form>
-                                                <div class="row base-margin-top">
-                                                  <div class="col-md-12">
-                                                    <div class="form-group half-margin-bottom">
-                                                      <div class="form-group__text">
-                                                        <input type="text" class="form-control" placeholder="ADD A COMMENT">
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div><br>
-                                                <h5 class="card__title">Create an Action Item</h5>
-                                                <div class="row base-margin-top">
-                                                  <div class="col-md-4">
-                                                    <div class="form-group half-margin-bottom">
-                                                      <div class="form-group__text">
-                                                        <input type="text" class="form-control" placeholder="ACTION TITLE">
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                  <div class="col-md-8">
-                                                    <div class="form-group half-margin-bottom">
-                                                      <div class="form-group__text">
-                                                        <input type="text" class="form-control" placeholder="ACTION DESCRIPTION">
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div class="row base-margin-top">
-                                                  <div class="col-md-4">
-                                                    <div class="form-group half-margin-bottom">
-                                                      <div class="form-group__text">
-                                                        <input type="text" class="form-control" placeholder="STRATEGY REVIEW">
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                  <div class="col-md-4">
-                                                    <div class="form-group half-margin-bottom">
-                                                      <div class="form-group__text">
-                                                        <input type="text" class="form-control" placeholder="SELECT FUNCTION">
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                  <div class="col-md-4">
-                                                    <div class="form-group half-margin-bottom">
-                                                      <div class="form-group__text">
-                                                        <input type="text" class="form-control" placeholder="ASSIGNEE">
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div class="row base-margin-top">
-                                                  <div class="col-md-4">
-                                                    <div class="form-group label--floated input--icon half-margin-bottom">
-                                                      <div class="form-group__text">
-                                                        <input class="form-control" placeholder="DUE DATE" #dp4="bsDatepicker"
-                                                          bsDatepicker placement="top" [minDate]="minDate"
-                                                          containerClass="custome-date" [bsConfig]="dpConfig">
-                                                        <button type="button" class="link" tabindex="-1">
-                                                          <span class="icon-month"></span>
-                                                        </button>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div class="row">
-                                                  <div class="form-actions">
-                                                    <button class="btn btn--primary base-margin-top" (click)="closeForm()">Cancel</button>
-                                                    <button class="btn btn--primary base-margin-top" type="submit">Create
-                                                      an Action</button>
-                                                  </div>
-                                                </div>
-                                              </form>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </section>
-                                </ng-template>
-                              </p-accordionTab>
-                            </p-accordion>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </li>
-                </ul>
-=======
                               </div>
                               <div class="row base-margin-top">
                                 <div class="col-md-4">
@@ -351,7 +228,6 @@
                     </ng-template>
                   </p-accordionTab>
                 </p-accordion>
->>>>>>> a9a47e57c8c72f29744889ff5e5ffa32765d9342
               </div>
             </div>
           </div>

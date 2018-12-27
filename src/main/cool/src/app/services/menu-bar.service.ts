@@ -15,12 +15,12 @@ export class MenuBarService {
     }
 
     holdOffer(offerId):any {
-      debugger;
+      // debugger;
       return this.httpClient.post(this.environmentService.REST_API_HOLD_OFFER + offerId, {});
     }
 
     cancelOffer(offerId):any {
-      debugger;
+      // debugger;
       return this.httpClient.post(this.environmentService.REST_API_CANCEL_OFFER + offerId, {});
     }
 
