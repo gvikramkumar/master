@@ -13,10 +13,10 @@ export class OfferDetailViewComponent implements OnInit {
   currentOfferId;
   offerViewData;
   offerRole;
-  offerOwnerList: StakeHolder[] = [];
+  offerOwner;
   offerCoOwnerList: StakeHolder[] = [];
   offerStakeHolderList: StakeHolder[] = [];
-  stakeName = 'John Smith';
+  stakeName;
   email;
   functionalRole;
   constructor(private activatedRoute: ActivatedRoute, private offerDetailViewService: OfferDetailViewService) {
@@ -26,13 +26,27 @@ export class OfferDetailViewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getOfferOVerviewDetails();
+  }
+
+  getOfferOVerviewDetails() {
     this.offerDetailViewService.offerDetailView(this.currentOfferId)
       .subscribe(data => {
         this.offerViewData = data;
-        this.offerRole = data.stakeholders[0].offerRole;
-        this.email = data.stakeholders[0]._id;
-        this.functionalRole = data.stakeholders[0].functionalRole;
-        console.log(this.offerViewData);
+        let stakeholdersInfo = null;
+        this.offerOwner = data.offerOwner;
+        this.offerViewData.stakeholders.forEach(element => {
+          stakeholdersInfo = new StakeHolder();
+          stakeholdersInfo._id = element._id;
+          stakeholdersInfo.offerRole = element.offerRole;
+          stakeholdersInfo.email = element.email;
+          stakeholdersInfo.functionalRole = element.functionalRole;
+          if (element.offerRole === 'coowner') {
+            this.offerCoOwnerList.push(stakeholdersInfo);
+          } else {
+            this.offerStakeHolderList.push(stakeholdersInfo);
+          }
+        });
       });
   }
 

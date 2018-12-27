@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { NgForm } from '@angular/forms';
+import { CreateAction } from '../models/create-action';
+import { CreateActionService } from '../services/create-action.service';
 
 @Component({
   selector: 'app-strategy-review',
@@ -9,6 +12,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
   styleUrls: ['./strategy-review.component.css']
 })
 export class StrategyReviewComponent implements OnInit {
+  @ViewChild('createActionForm') createActionForm: NgForm;
   offerData: any;
   currentOfferId;
   bviewDeckData: any[];
@@ -26,6 +30,15 @@ export class StrategyReviewComponent implements OnInit {
   conditionallyApprovedCount: any = 0;
   notApprovedCount: any = 0;
   notReviewedCount: any = 0;
+  showButtonSection = false;
+  showFormSection = false;
+  commentValue: string;
+  titleValue: string;
+  descriptionValue: string;
+  milestoneValue: string;
+  functionNameValue: string;
+  assigneeValue: string;
+  dueDateValue: string;
   strategyReviewList = [
     {
       function : 'CSPP',
@@ -69,7 +82,7 @@ export class StrategyReviewComponent implements OnInit {
   ];
 
   constructor(private router: Router, private monetizationModelService: MonetizationModelService,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute, private createActionService: CreateActionService) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
       });
@@ -135,6 +148,24 @@ export class StrategyReviewComponent implements OnInit {
   closeForm() {
     document.getElementById('formSection').style.visibility = 'hidden';
     document.getElementById('buttonSection').style.visibility = 'visible';
+  }
+
+  createAction() {
+    const createAction: CreateAction = new CreateAction(
+      this.commentValue,
+      this.titleValue,
+      this.descriptionValue,
+      this.milestoneValue,
+      this.functionNameValue,
+      this.assigneeValue,
+      this.dueDateValue
+    );
+    console.log(createAction);
+    this.createActionService.registerOffer(createAction).subscribe((data) => {
+    },
+      (err) => {
+        console.log(err);
+    });
   }
 
 }

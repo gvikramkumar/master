@@ -48,6 +48,9 @@ import { AccessManagementService } from './services/access-management.service';
 import { EnvironmentService } from '../environments/environment.service';
 import { MenuBarPopupComponent } from './menu-bar-popup/menu-bar-popup.component';
 import { MenuBarService } from './services/menu-bar.service'
+import { BupmGuard } from './auth/gaurds/bupm-guard';
+import { AuthErrorComponent } from './auth-error/auth-error.component';
+import { CreateActionService } from './services/create-action.service';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -109,6 +112,11 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     ExitCriteriaValidationService,
     DashboardService,
     AccessManagementService,
+<<<<<<< HEAD
+=======
+    BupmGuard,
+    CreateActionService,
+>>>>>>> a9a47e57c8c72f29744889ff5e5ffa32765d9342
     UserService,
     MenuBarService,
      {

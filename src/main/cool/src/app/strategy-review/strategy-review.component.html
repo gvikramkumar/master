@@ -89,30 +89,70 @@
                             <div class="col">Reviewed By</div>
                             <div class="col"></div>
                           </div>
-                        </td>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-                <ul class="list list--highlight base-margin-top">
-                  <li>
-                    <div class="responsive-table">
-                      <table>
-                        <tr>
-                          <td>
-                            <p-accordion *ngFor="let strategyReviewData of strategyReviewList">
-                              <p-accordionTab>
-                                <p-header style="color:black">
-                                  <div class="row">
-                                    <div class="col">{{strategyReviewData.function}}</div>
-                                    <div class="col">{{strategyReviewData.approvalStatus}}</div>
-                                    <div class="col">{{strategyReviewData.reviewedOn}}</div>
-                                    <div class="col">{{strategyReviewData.reviewedBy}}</div>
-                                    <div class="col">{{strategyReviewData.comment}}</div>
+                        </div>
+                      </div>
+                      <section id="formSection" *ngIf="showFormSection">
+                        <div class="card card--raised base-margin-top">
+                          <div class="panel">
+                            <div class="pull-right base-margin-top">
+                              <span class="icon-close" (click)="closeForm()"></span>
+                            </div>
+                            <div class="card__header">
+                              <h5 class="card__title">{{formTitle}}</h5>
+                            </div>
+                            <form autoComplete="off" #createActionForm="ngForm" (ngSubmit)="createAction()">
+                              <div class="row base-margin-top">
+                                <div class="col-md-12">
+                                  <div class="form-group half-margin-bottom">
+                                    <div class="form-group__text">
+                                      <label for="action">ADD A COMMENT</label>
+                                      <input 
+                                        type="text" 
+                                        class="form-control"
+                                        name="commentName"
+                                        [(ngModel)]="commentValue"
+                                        required
+                                        ngModel
+                                        #commentName="ngModel">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div><br>
+                              <h5 class="card__title">Create an Action Item</h5>
+                              <div class="row base-margin-top">
+                                <div class="col-md-4">
+                                  <div class="form-group half-margin-bottom">
+                                    <div class="form-group__text">
+                                      <label for="action">ACTION TITLE</label>
+                                      <input 
+                                        type="text" 
+                                        class="form-control"
+                                        name="titleName"
+                                        [(ngModel)]="titleValue"
+                                        required
+                                        ngModel
+                                        #titleName="ngModel">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-8">
+                                  <div class="form-group half-margin-bottom">
+                                    <div class="form-group__text">
+                                      <label for="action">ACTION DESCRIPTION</label>
+                                      <input 
+                                        type="text" 
+                                        class="form-control"
+                                        name="descriptionName"
+                                        [(ngModel)]="descriptionValue"
+                                        required
+                                        ngModel
+                                        #descriptionName="ngModel">
+                                    </div>
                                   </div>
                                 </p-header>
                                 <div class="panel panel--bordered not-reviewed" *ngIf="strategyReviewData.approvalStatus=='Not Reviewed'; then reviewRequiredPlaceHolder">
                                 </div>
+<<<<<<< HEAD
                                 <ng-template #reviewRequiredPlaceHolder>
                                   <div class="panel panel--bordered not-reviewed">
                                     <p>This is the strategy review milestone and the content is a placeholder for
@@ -234,6 +274,84 @@
                     </div>
                   </li>
                 </ul>
+=======
+                              </div>
+                              <div class="row base-margin-top">
+                                <div class="col-md-4">
+                                  <div class="form-group half-margin-bottom">
+                                    <div class="form-group__text">
+                                      <label for="functionName">MILESTONE</label>
+                                      <input 
+                                        type="text" 
+                                        class="form-control"
+                                        name="milestoneName" 
+                                        [(ngModel)]="milestoneValue"
+                                        required
+                                        ngModel
+                                        #milestoneName="ngModel">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="form-group half-margin-bottom">
+                                    <div class="form-group__text">
+                                      <div class="form-group__text select">
+                                        <label for="functionName">SELECT FUNCTION</label>
+                                        <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue" ngModel>
+                                          <option value="BUPM" selected="">BUPM</option>
+                                          <option value="SOE">SOE</option>
+                                          <option value="BUPM">BUPM</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="form-group half-margin-bottom">
+                                    <div class="form-group__text">
+                                      <div class="form-group__text select">
+                                        <label for="functionName">ASSIGNEE</label>
+                                        <select id="functionName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue" ngModel>
+                                          <option value="BUPM" selected="">BUPM</option>
+                                          <option value="SOE">SOE</option>
+                                          <option value="BUPM">BUPM</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row base-margin-top">
+                                <div class="col-md-4">
+                                  <div class="form-group label--floated input--icon half-margin-bottom">
+                                    <label for="dueDate">DUE DATE</label>
+                                    <div class="form-group__text">
+                                      <input name="dueDateName" class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
+                                        [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                                        [(ngModel)]="dueDateValue" ngModel
+                                        #dueDateName="ngModel">
+                                      <button type="button" class="link" tabindex="-1">
+                                        <span class="icon-month"></span>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="form-actions">
+                                  <button class="btn btn--secondary" (click)="closeForm()">Cancel</button>
+                                  <button class="btn btn--primary" type="submit">Create
+                                    an Action</button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </section>
+                    </ng-template>
+                  </p-accordionTab>
+                </p-accordion>
+>>>>>>> a9a47e57c8c72f29744889ff5e5ffa32765d9342
               </div>
             </div>
           </div>
