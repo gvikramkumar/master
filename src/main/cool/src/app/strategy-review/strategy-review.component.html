@@ -120,13 +120,20 @@
                             <div class="card__header">
                               <h5 class="card__title">{{formTitle}}</h5>
                             </div>
-                            <form>
+                            <form autoComplete="off" #createActionForm="ngForm" (ngSubmit)="createAction()">
                               <div class="row base-margin-top">
                                 <div class="col-md-12">
                                   <div class="form-group half-margin-bottom">
                                     <div class="form-group__text">
                                       <label for="action">ADD A COMMENT</label>
-                                      <input type="text" class="form-control">
+                                      <input 
+                                        type="text" 
+                                        class="form-control"
+                                        name="commentName"
+                                        [(ngModel)]="commentValue"
+                                        required
+                                        ngModel
+                                        #commentName="ngModel">
                                     </div>
                                   </div>
                                 </div>
@@ -137,7 +144,14 @@
                                   <div class="form-group half-margin-bottom">
                                     <div class="form-group__text">
                                       <label for="action">ACTION TITLE</label>
-                                      <input type="text" class="form-control">
+                                      <input 
+                                        type="text" 
+                                        class="form-control"
+                                        name="titleName"
+                                        [(ngModel)]="titleValue"
+                                        required
+                                        ngModel
+                                        #titleName="ngModel">
                                     </div>
                                   </div>
                                 </div>
@@ -145,7 +159,14 @@
                                   <div class="form-group half-margin-bottom">
                                     <div class="form-group__text">
                                       <label for="action">ACTION DESCRIPTION</label>
-                                      <input type="text" class="form-control">
+                                      <input 
+                                        type="text" 
+                                        class="form-control"
+                                        name="descriptionName"
+                                        [(ngModel)]="descriptionValue"
+                                        required
+                                        ngModel
+                                        #descriptionName="ngModel">
                                     </div>
                                   </div>
                                 </div>
@@ -155,7 +176,14 @@
                                   <div class="form-group half-margin-bottom">
                                     <div class="form-group__text">
                                       <label for="functionName">MILESTONE</label>
-                                      <input type="text" class="form-control" placeholder="Strategy Review">
+                                      <input 
+                                        type="text" 
+                                        class="form-control"
+                                        name="milestoneName" 
+                                        [(ngModel)]="milestoneValue"
+                                        required
+                                        ngModel
+                                        #milestoneName="ngModel">
                                     </div>
                                   </div>
                                 </div>
@@ -164,7 +192,7 @@
                                     <div class="form-group__text">
                                       <div class="form-group__text select">
                                         <label for="functionName">SELECT FUNCTION</label>
-                                        <select id="functionName" class="form-control" name="functionName">
+                                        <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue" ngModel>
                                           <option value="BUPM" selected="">BUPM</option>
                                           <option value="SOE">SOE</option>
                                           <option value="BUPM">BUPM</option>
@@ -178,7 +206,7 @@
                                     <div class="form-group__text">
                                       <div class="form-group__text select">
                                         <label for="functionName">ASSIGNEE</label>
-                                        <select id="functionName" class="form-control" name="functionName">
+                                        <select id="functionName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue" ngModel>
                                           <option value="BUPM" selected="">BUPM</option>
                                           <option value="SOE">SOE</option>
                                           <option value="BUPM">BUPM</option>
@@ -193,8 +221,10 @@
                                   <div class="form-group label--floated input--icon half-margin-bottom">
                                     <label for="dueDate">DUE DATE</label>
                                     <div class="form-group__text">
-                                      <input class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
-                                        [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig">
+                                      <input name="dueDateName" class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
+                                        [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                                        [(ngModel)]="dueDateValue" ngModel
+                                        #dueDateName="ngModel">
                                       <button type="button" class="link" tabindex="-1">
                                         <span class="icon-month"></span>
                                       </button>
