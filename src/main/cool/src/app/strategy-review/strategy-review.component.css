@@ -327,11 +327,3 @@ body.cui {
   padding: 0 35px;
 }
 }
-
-#formSection{
-  visibility: hidden;
-}
-
-#buttonSection{
-  visibility: visible;
-}
