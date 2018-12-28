@@ -8,14 +8,22 @@
             </div>
             <div class="modal__body">
                 <div class="row">
-                        <div class="col-md-6">
+                    <form [formGroup]="addManualAction" #registerUserForm="ngForm">
+                        <div class="row base-margin-top">
+                            <div class="col-md-6">
                                 <div class="form-group half-margin-bottom">
                                         <div class="form-group__text select">
-                                            <select id="input-type-select">
+                                                
+                                                <select id="offerName" class="form-control" formControlName="offerName" [(ngModel)]="selectedOfferName">
+                                                        <option value="null" selected="">Select Offer Name</option>
+                                                            <option *ngFor="let x of myOfferList" [value]="x.offerName">
+                                                                {{x.offerName}}</option>
+                                                    </select>
+                                            <!-- <select id="input-type-select">
                                                 <option value="first" selected="">Select Offer Name</option>
                                                 <option value="second">Second Value</option>
                                                 <option value="third">Third Value</option>
-                                            </select>
+                                            </select> -->
                                             
                                         </div>
                                 </div>
@@ -52,47 +60,57 @@
                                 </div>
                         </div>
                     </div>
-                <div class="col-md-6">
-                        <div class="form-group half-margin-bottom">
-                                <div class="form-group__text select">
-                                    <select id="input-type-select">
-                                        <option value="first" selected="">Select Function</option>
-                                        <option value="second">Second Value</option>
-                                        <option value="third">Third Value</option>
-                                    </select>
-                                    
-                                </div>
-                        </div>
-                    </div>
-                <div class="col-md-6">
-                        <div class="form-group base-margin-top half-margin-bottom">
-                                <div class="form-group__text select">
-                                    <select id="input-type-select">
-                                        <option value="first" selected="">Assignee</option>
-                                        <option value="second">Second Value</option>
-                                        <option value="third">Third Value</option>
-                                    </select>
-                                    
-                                </div>
-                        </div>
-                    </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <div class="form-group__text select">
+                                <label for="functionName">Function</label>
+                                
+                                   
+                                <!-- <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
+                                  ngModel>
+                                  <option value="BUPM" selected="">BUPM</option>
+                                  <option value="SOE">SOE</option>
+                                  <option value="BUPM">BUPM</option>
+                                </select> -->
 
-
-                    <div class="col-md-6">
-                            <div class="form-group label--floated input--icon half-margin-bottom">
-                                <div class="form-group__text">
-                                    <input required>
-                                    <label>Due Date</label>
-                                    <button type="button" class="link" tabindex="-1">
-                                        <span class="icon-month"></span>
-                                    </button>
-                                </div>
+                                <select id="functionName" class="form-control" formControlName="functionName" [(ngModel)]="functionNameValue">
+                                    <option value={{manualactionList}}>
+                                        {{manualactionList}}</option>
+                                </select>
+                               </div>
+                                
+                              </div>
+                            </div>
+                          
+                        
+                          <div class="col-md-6">
+                            <div class="form-group base-margin-top half-margin-bottom">
+                                    <div class="form-group__text select">
+                                        <select id="input-type-select">
+                                            <option value="first" selected="">Assignee</option>
+                                            <option value="second">Second Value</option>
+                                            <option value="third">Third Value</option>
+                                        </select>
+                                        
+                                    </div>
                             </div>
                         </div>
+    
+    
+                        <div class="col-md-6">
+                                <div class="form-group label--floated input--icon half-margin-bottom">
+                                    <div class="form-group__text">
+                                        <input required>
+                                        <label>Due Date</label>
+                                        <button type="button" class="link" tabindex="-1">
+                                            <span class="icon-month"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                          
                         </div>
-
-
-                </div>
+                      </form>
             <div class="modal__footer">
                 <div class="card__footer form-actions">
                     <button class="btn base-margin-top" (click)="cancel()">Cancel</button>

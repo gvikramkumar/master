@@ -41,53 +41,25 @@
                           <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
                           <input #gbforactions type="text" pInputText size="50" placeholder="Global Filter">
                         </div>
-                        <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="gbforactions" #dt>
+                        <p-dataTable [value]="myActions" [rows]="10" [paginator]="true" [globalFilter]="gbforactions" #dt>
                           <p-column field="offerId" sortable= "true" header="Offer">
-                            <ng-template let-col let-actionData="rowData" pTemplate="body">
-                             <span *ngIf="actionData.alertType == 1"> <span class="icon-clock icon-small" style="margin:0px 5px 0 0">
-                                </span>{{actionData.offerId}}</span>
-                              <span *ngIf="actionData.alertType == 2">
-                                <span class="icon-alert icon-small" style="margin:0px 5px 0 0" ></span>
-                                {{actionData.offerId}}
-                              </span>
-          
-        
-                            </ng-template>
+                           
                           </p-column>
                           <p-column field="actions" sortable= "true" header="Action" >
-                            <ng-template let-col let-actionData="rowData" pTemplate="body">
-                              <span class="offerName">{{actionData.actiontTitle}} <br /></span>
-                              <span class="offerDesc">{{actionData.actionDesc}}</span>
-                            </ng-template>
+                        
                           </p-column>
-                          <p-column field="offerName" sortable= "true" header="Created By" >
+                          <p-column field="createdBy" sortable= "true" header="Created By" >
                           </p-column>
-                          <p-column field="assigneeId" sortable= "true" header="Function" >
+                          <p-column field="function" sortable= "true" header="Function" >
                           </p-column>
-                          <p-column field="status" sortable= "true" header="Assigned User">
+                          <p-column field="assigned user" sortable= "true" header="Assigned User">
                             
                           </p-column>
-                          <p-column field="triggerDate" sortable= "true" header="Due Date" >
-                            <ng-template let-col let-actionData="rowData" pTemplate="body">
-                              <span>{{actionData.dueDate}} <br /></span>
-                            </ng-template>
+                          <p-column field="dueDate" sortable= "true" header="Due Date" >
+                            
                           </p-column>
-                          <p-column field="dueDate" header="Status" sortable= "true">
-                                <ng-template let-col let-actionData="rowData" pTemplate="body">
-                                        <span *ngIf="actionData.alertType == 1">
-                                            <div style="text-align:center">
-                                                <span class="{{actionData.styleColor}}">
-                                                  <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
-                                                </span>
-                                                
-                                            </div>
-                                        </span>
-                                        <span *ngIf="actionData.alertType == 2">
-                                            <div style="text-align:center">
-                                              <span>--</span>
-                                            </div>
-                                        </span>
-                                    </ng-template>
+                          <p-column field="status" header="Status" sortable= "true">
+                               
                           </p-column>
                         </p-dataTable>
                       </div>

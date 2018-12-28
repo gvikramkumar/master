@@ -20,7 +20,7 @@ export class OfferDetailViewComponent implements OnInit {
   email;
   functionalRole;
   obj = {
-    ;
+
   };
   offerOverviewDetailsList = {
       'ideate': [

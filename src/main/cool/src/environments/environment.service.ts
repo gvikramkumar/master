@@ -25,6 +25,7 @@ export class EnvironmentService {
     REST_API_TURBO_TAX_MENU;
     REST_API_HOLD_OFFER;
     REST_API_CANCEL_OFFER;
+    REST_API_ACTIONSTRACKER_URL;
 
     constructor() {
         let windowUrl = location.href;
@@ -48,6 +49,7 @@ export class EnvironmentService {
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
           this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/offer/hold/';
           this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/offer/Cancel/';
+          this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
           console.log("EnvironmentService: set env vars for dev environment");
         } else if(windowUrl.includes('stg')) {
             this.baseapi = 'https://cool-srv-stg.cisco.com';
@@ -69,6 +71,7 @@ export class EnvironmentService {
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
           this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/offer/hold/';
           this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/offer/Cancel/';
+          this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
             console.log("EnvironmentService: set env vars for stg environment");
         } else if(windowUrl.includes('prd')) {
             this.baseapi = 'https://cool-srv-prd.cisco.com';
@@ -90,9 +93,10 @@ export class EnvironmentService {
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
           this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/offer/hold/';
           this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/offer/Cancel/';
+          this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
             console.log("EnvironmentService: set env vars for prd environment");
         } else {
-            this.baseapi = 'https://cool-srv-dev.cisco.com';
+            this.baseapi = 'https://cool-srv-stg.cisco.com';
             this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
           this.REST_API_PRIMARY_URL = this.baseapi+'/coolsrv/primaryBusiness/';
           this.REST_API_OFFER_CREATE_URL = this.baseapi+'/coolsrv/offer/create/';
@@ -112,6 +116,7 @@ export class EnvironmentService {
             this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
             this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/offer/hold/';
             this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/offer/Cancel/';
+            this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
             console.log("EnvironmentService: set env vars for dev environment");
         }
     }

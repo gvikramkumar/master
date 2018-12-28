@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { DashboardService } from './services/dashboard.service';
+import { ActionsService } from './services/actions.service';
 import { SharedServiceService } from './shared-service.service';
 import {MonetizationModelService} from './services/monetization-model.service';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -111,6 +112,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     OfferDetailViewService,
     ExitCriteriaValidationService,
     DashboardService,
+    ActionsService,
     AccessManagementService,
     BupmGuard,
     CreateActionService,
