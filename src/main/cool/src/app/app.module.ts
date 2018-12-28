@@ -46,6 +46,8 @@ import { AccessManagementComponent } from './access-management/access-management
 import { AvatarComponent } from './directives/avatar/avatar.component';
 import { AccessManagementService } from './services/access-management.service';
 import { EnvironmentService } from '../environments/environment.service';
+import { MenuBarPopupComponent } from './menu-bar-popup/menu-bar-popup.component';
+import { MenuBarService } from './services/menu-bar.service'
 import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { CreateActionService } from './services/create-action.service';
@@ -74,7 +76,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     OfferCreateDetailComponent,
     AccessManagementComponent,
     AvatarComponent,
-    AuthErrorComponent
+    MenuBarPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -98,11 +100,11 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     CalendarModule,
     AccordionModule
   ],
-  providers:
+  providers: 
   [
-    SharedServiceService,
-    CreateOfferService,
-    SearchCollaboratorService,
+    SharedServiceService, 
+    CreateOfferService, 
+    SearchCollaboratorService, 
     ConfigurationService,
     EnvironmentService,
     MonetizationModelService,
@@ -113,6 +115,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     BupmGuard,
     CreateActionService,
     UserService,
+    MenuBarService,
      {
        provide: APP_INITIALIZER,
        multi: true,

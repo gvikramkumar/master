@@ -1,10 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { NgForm } from '@angular/forms';
-import { CreateAction } from '../models/create-action';
-import { CreateActionService } from '../services/create-action.service';
 
 @Component({
   selector: 'app-strategy-review',
@@ -12,7 +9,6 @@ import { CreateActionService } from '../services/create-action.service';
   styleUrls: ['./strategy-review.component.css']
 })
 export class StrategyReviewComponent implements OnInit {
-  @ViewChild('createActionForm') createActionForm: NgForm;
   offerData: any;
   currentOfferId;
   bviewDeckData: any[];
@@ -32,13 +28,6 @@ export class StrategyReviewComponent implements OnInit {
   notReviewedCount: any = 0;
   showButtonSection = false;
   showFormSection = false;
-  commentValue: string;
-  titleValue: string;
-  descriptionValue: string;
-  milestoneValue: string;
-  functionNameValue: string;
-  assigneeValue: string;
-  dueDateValue: string;
   strategyReviewList = [
     {
       function : 'CPS',
@@ -75,7 +64,7 @@ export class StrategyReviewComponent implements OnInit {
   ];
 
   constructor(private router: Router, private monetizationModelService: MonetizationModelService,
-    private activatedRoute: ActivatedRoute, private createActionService: CreateActionService) {
+    private activatedRoute: ActivatedRoute) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
       });
@@ -149,24 +138,6 @@ export class StrategyReviewComponent implements OnInit {
   closeForm() {
     this.showButtonSection = true;
     this.showFormSection = false;
-  }
-
-  createAction() {
-    const createAction: CreateAction = new CreateAction(
-      this.commentValue,
-      this.titleValue,
-      this.descriptionValue,
-      this.milestoneValue,
-      this.functionNameValue,
-      this.assigneeValue,
-      this.dueDateValue
-    );
-    console.log(createAction);
-    this.createActionService.registerOffer(createAction).subscribe((data) => {
-    },
-      (err) => {
-        console.log(err);
-    });
   }
 
 }

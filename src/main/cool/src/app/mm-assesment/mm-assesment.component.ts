@@ -54,11 +54,6 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.MonetizationModelService.testnewapi().subscribe(data => {
-     console.log(data);
-     debugger;
-    })
-
 
 
     this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monitization Model best aligns to your requirements.", color: "black" };
@@ -315,7 +310,7 @@ export class MmAssesmentComponent implements OnInit {
       console.log(postData);
   
   
-      this.MonetizationModelService.toNextSetp(postData).subscribe(data => {
+      this.MonetizationModelService.toNextSetp(JSON.stringify(postData)).subscribe(data => {
         console.log(data);
         if (data['mmMapperStatus'] === 'Aligned') {
           this.message = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`,mmModel: data['mmModel'] };
@@ -371,7 +366,11 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   getGroupKeys(obj) {
-    return Object.keys(obj);
+    if (typeof obj === 'object') {
+      return Object.keys(obj);
+    } else {
+      return [];
+    }
   }
   changeTab(index) {
     if (this.canClickNextStep == true && this.currentMMModel != null) {
