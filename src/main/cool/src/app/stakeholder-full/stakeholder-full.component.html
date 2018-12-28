@@ -1,6 +1,10 @@
 
 
+
+
+
         <div class="content-fluid">
+               
           <main>
               <div class="content">
                   <div class="container">
@@ -13,12 +17,14 @@
                                   <div class="col-md-6 text-right">
                                         
                                                   <button class="btn btn--wide btn--primary-ghost">
-                                                     
+                                                        <!-- <button class="btn btn--primary-ghost selected"> -->
                                                       Offer Detail View
                                                       
                                                       </button>
                                                  
-                                                  <button class="btn btn--primary-ghost selected">Proceed <span class="icon-chevron-right"></span></button>
+                                                  <!-- <button class="btn btn--primary-ghost selected"> -->
+                                                        <button class="btn btn--wide btn--primary-ghost" (click)="goToStrategyReview()">
+                                                      Proceed to Strategy Review<span class="icon-chevron-right"></span></button>
                                       
                                   </div>
                                   
@@ -33,11 +39,12 @@
 <!-- People Involved -->
 <div class="card card--raised base-margin-top">
                                          
-      <h5 class="half-margin-bottom">People Involved <a href="javascript:;" onclick="window.location.href='add-edit-contacts.html'" class="pull-right"><span class="icon-pencil icon-small"></span> Edit</a></h5>
-      <div class="divider divider--compressed"></div>    
+      <!-- <h5 class="half-margin-bottom">People Involved <a href="javascript:;" onclick="window.location.href='add-edit-contacts.html'" class="pull-right"><span class="icon-pencil icon-small"></span> Edit</a></h5>
+      <div class="divider divider--compressed"></div>     -->
       <ul class="list">
                   <li><div class="ui-accordion-header">Owner (1)<span class="icon-chevron-up icon-small pull-right"></span></div>
                       <div class="ui-accordion-content">
+                          <div *ngFor="let d of data">
                           <div class="flex-center-vertical">
                               <!-- Team Member Name Avatar -->
                               <span class="avatar-ico">
@@ -45,183 +52,112 @@
                                   <title id="fwt-profile-button-loggedin-title"></title>
                                   <g fill="none" fill-rule="evenodd">
                                       <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
-                                      <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">WM</text>
+                                      <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">{{getInitialChar(d['userName'])}}</text>
                                   </g> 
                                   </svg>
                               </span>
                               <div class="flex-fluid text-left half-margin-left">
-                                  <div class="text-bold">William Mendoza</div>
-                                  <div>wmendoza@altus.com</div>
+                                  <div class="text-bold">{{d.userName}}</div>
+                                  <div>{{d.emailId}}</div>
                               </div>
-                      </div></div>
+                      </div>
+                      <div class="divider divider--compressed"></div>
+                      </div>
+                    </div>
                   
                   </li>
-                  
-                  <li><div class="ui-accordion-header">Co-Owner (3)<span class="icon-chevron-up icon-small pull-right"></span></div>
-                     <div class="ui-accordion-content">
-                      <div class="flex-center-vertical">
-                          <!-- Team Member Name Avatar -->
-                          <span class="avatar-ico">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
-                                  <title id="fwt-profile-button-loggedin-title"></title>
-                                  <g fill="none" fill-rule="evenodd">
-                                      <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
-                                      <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">SC</text>
-                                  </g> 
-                              </svg>
-                          </span>
-                              <div class="flex-fluid text-left half-margin-left">
-                                  <div class="text-bold">Scott Collins</div>
-                                  <div>scollins@altus.com</div>
-                              </div>
-                      </div>
-                      <div class="divider divider--compressed"></div>
-                      <div class="flex-center-vertical">
-                          <!-- Team Member Name Avatar -->
-                          <span class="avatar-ico">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
-                                  <title id="fwt-profile-button-loggedin-title"></title>
-                                  <g fill="none" fill-rule="evenodd">
-                                      <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
-                                      <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">JS</text>
-                                  </g> 
-                              </svg>
-                          </span>
-                              <div class="flex-fluid text-left half-margin-left">
-                                  <div class="text-bold">John Smith</div>
-                                  <div>jsmith@altus.com</div>
-                              </div>
-                      </div>
-                      <div class="divider divider--compressed"></div>
-                      <div class="flex-center-vertical">
-                          <!-- Team Member Name Avatar -->
-                          <span class="avatar-ico">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
-                                  <title id="fwt-profile-button-loggedin-title"></title>
-                                  <g fill="none" fill-rule="evenodd">
-                                      <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
-                                      <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">IF</text>
-                                  </g> 
-                              </svg>
-                          </span>
-
-                              <div class="flex-fluid text-left half-margin-left">
-                                  <div class="text-bold">Ian Flemming</div>
-                                  <div>iflemming@altus.com</div>
-                              </div>
-                      </div>
+                      <li><div class="ui-accordion-header"></div>
+                    <div class="ui-accordion-content">
+                        <div *ngFor="let d of temporaryList">
+                        <div class="flex-center-vertical">
+                            <!-- Team Member Name Avatar -->
+                           <span class="avatar-ico">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
+                                <title id="fwt-profile-button-loggedin-title"></title>
+                                <g fill="none" fill-rule="evenodd">
+                                    <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
+                                    <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">{{getInitialChar(d['userName'])}}</text>
+                                </g> 
+                                </svg>
+                            </span>
+                            <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">{{d.userName}}</div>
+                                <div>{{d.emailId}}</div>
+                            </div>
+                    </div>
+                    <div class="divider divider--compressed"></div>
+                    </div>
                   </div>
-                  </li>
+                
+                </li>
+                  
+                
 
                   <li><div class="ui-accordion-header">Stakeholders (4)<span class="icon-chevron-up icon-small pull-right"></span></div>
                       <div class="ui-accordion-content">
-                     
+                             <form [formGroup]="stakeholderForm" (ngSubmit)="onSearch()">
                               <div class="row">
-                                      <div class="col-md-6">
-                                              <div class="form-group input--icon half-margin-bottom">
-                                                      <div class="form-group__text">
-                                                          <input id="input-type-search" type="search" value="Mar"  autofocus>
-                                                          <button type="button" class="link">
-                                                              <span class="icon-search"></span>
-                                                          </button>
-                                                      </div>
-                                              </div>
+                                      <div class="col-md-4">
+                                            <div class="form-group half-margin-bottom">
+                                                    <div class="form-group__text">
+                                                        <input id="name" placeholder="Search by Name, Email" class="form-control" formControlName="name">
+                                                    </div>
+                                                </div>
+                                      </div>
+                                     
+                                      <div class="col-md-3">
+                                            <div class="form-group half-margin-bottom">
+                                                    <div class="form-group__text select">
+                                                        <select id="selectedFunction" class="form-control" formControlName="businessEntity">
+                                                            <option [ngValue]="null">Function</option>
+                                                            <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
+                                                                {{businessEntity}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                       </div>
                                       <div class="col-md-3">
-                                              <div class="form-group half-margin-bottom">
-                                                      <div class="form-group__text select">
-                                                          <select id="input-type-select">
-                                                              <option value="first" selected="">Business Entity</option>
-                                                              <option value="second">Second Value</option>
-                                                              <option value="third">Third Value</option>
-                                                          </select>
-                                                          
-                                                      </div>
-                                              </div>
+                                            <div class="form-group half-margin-bottom">
+                                                    <div class="form-group__text select">
+                                                        <select id="selectedFunction" class="form-control" formControlName="functionName">
+                                                            <option [ngValue]="null">Function</option>
+                                                            <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
+                                                                {{businessEntity}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                       </div>
-                                      <div class="col-md-3">
-                                              <div class="form-group half-margin-bottom">
-                                                      <div class="form-group__text select">
-                                                          <select id="input-type-select">
-                                                              <option value="first" selected="">Function</option>
-                                                              <option value="second">Second Value</option>
-                                                              <option value="third">Third Value</option>
-                                                          </select>
-                                                          
-                                                      </div>
-                                              </div>
+                                      <div class="col-md-1">
+                                            <!-- <div class="form-group half-margin-bottom">
+                                                    <div class="form-group__text select"> -->
+                                                            <button class="btn btn&#45;&#45;" (click)="addCollaborator()">Add</button>
+                                                    <!-- </div>
+                                                </div> -->
                                       </div>
+
                                    
                               </div>
+                              </form>
                               <div class="divider divider--compressed"></div>
                               <h4>Search Results</h4>
-                              <div class="responsive-table">
-                                      <table class="table table--nostripes table--highlight table--hover table--selectable">
-                                              <thead>
-                                                  <tr>
-                                                      <th>
-                                                          <label class="checkbox">
-                                                              <input type="checkbox"/>
-                                                              <span class="checkbox__input"></span>
-                                                          </label>
-                                                      </th>
-                                                      <th class="sortable">Function<span class="sort-indicator icon-chevron-down"></span></th>
-                                                     
-                                                      <th>Name</th>
-                                                      <th>Email</th>
-                                                      <th>Business Entity</th>
-                                                  </tr>
-                                              </thead>
-                                              <tbody>
-                                                  <tr>
-                                                      <td>
-                                                          <label class="checkbox">
-                                                              <input type="checkbox"/>
-                                                              <span class="checkbox__input"></span>
-                                                          </label>
-                                                      </td>
-                                                      <td>OLE</td>
-                                                      
-                                                      <td>Malon James</td>
-                                                      <td><a href="javascript:;">mjames@cisco.com</a></td>
-                                                      <td>Data Center</td>
-                                                  </tr>
-                                                  <tr>
-                                                      <td>
-                                                          <label class="checkbox">
-                                                              <input type="checkbox">
-                                                              <span class="checkbox__input"></span>
-                                                          </label>
-                                                      </td>
-                                                      <td>SOE</td>
-                                                      
-                                                      <td>Mark Smith</td>
-                                                      <td><a href="javascript:;">msmith@cisco.com</a></td>
-                                                      <td>Collaboration</td>
-                                                  </tr>
-                                                  <tr>
-                                                      <td>
-                                                          <label class="checkbox">
-                                                              <input type="checkbox"/>
-                                                              <span class="checkbox__input"></span>
-                                                          </label>
-                                                      </td>
-                                                      <td>CPS</td>
-                                                     
-                                                      <td>Mary Watkins</td>
-                                                      <td><a href="javascript:;">mwatkins@cisco.com</a></td>
-                                                      <td>Security</td>
-                                                  </tr>
-                                              </tbody>
-                                      </table>
-                                      <div class="row">
-                                          <div class="col-md-12 base-margin-top">
-                                              
-                                              <span>Showing 3 of 3 Results</span>
-                                                 
-                                          </div>
-                                          </div>
-                              </div>
+                             
+                              <p-dataTable [value]="collaboratorsList"  dataKey="Function" #dt (mouseover)="onEvent($event, _id)">
+                                    <p-column [style]="{'width': '50px'}" (click)="onselectCollaboratorsList(_id)" selectionMode="multiple"></p-column>
+                                    <p-column field="functionalRole" header="Function"></p-column>
+                                    <p-column field="applicationRole" header="Roles">
+                                        <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
+                                            <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
+                                                [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
+                                            </p-dropdown>
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column field="name" header="Name"></p-column>
+                                    <p-column field="email" header="Email"></p-column>
+                                    <p-column field="businessEntity" header="BusinessEntity"></p-column>
+                                    <button type="button" pButton *ngIf="_id==selectedUser" (click)="deleteCollaborator(_id)" icon="fa-delete"></button>
+                                </p-dataTable>
+                                 <button class="btn btn&#45;&#45;" (click)="deleteCollaborator()">Remove</button> 
+
 
                       </div>
                   </li>

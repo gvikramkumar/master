@@ -52,6 +52,7 @@ import { MenuBarService } from './services/menu-bar.service'
 import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { CreateActionService } from './services/create-action.service';
+import { StakeholderfullService } from './services/stakeholderfull.service';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -113,6 +114,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     ExitCriteriaValidationService,
     DashboardService,
     ActionsService,
+    StakeholderfullService,
     AccessManagementService,
     BupmGuard,
     CreateActionService,
