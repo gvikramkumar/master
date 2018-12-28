@@ -1,17 +1,19 @@
 <div class="content">
-  <div class="container">
-    <div class="row base-margin-top">
-      <div class="col-md-6">
-        <h1 class="display-4">Cisco Data Platform</h1>
-        <h4>Strategy Review</h4>
-      </div>
-      <div class="col-md-6">
-        <div class="btn-group btn-group--wide pull-right base-margin-top">
-          <button class="btn btn--secondary" (click)="offerDetailOverView()">Offer Detail View <span class="icon-chevron-right"></span></button>
+  <div class="container-fluid">
+      <app-menu-bar></app-menu-bar>
+    <div class="panel-wrapper mt-15">
+      <div class="panel panel--indigo panel--compressed task--bar">
+        <div class="row">
+          <div class="col-md-4">
+            <h2 class="page--subheading">Strategy Review</h2>
+          </div>
+          <div class="col-md-8 text-right">
+            <button class="btn btn--white" (click)="offerDetailOverView()">Offer Detail View<span class="icon-chevron-right"></span></button>
+          </div>
         </div>
       </div>
-
-      <div class="col-md-9">
+      <div class="contentBox mt-10">
+          <div class="leftContent">
         <app-offer-create-detail></app-offer-create-detail>
         <ul class="list list--highlight base-margin-top">
           <li>
@@ -221,9 +223,14 @@
           </div>
         </div>
       </div>
-      <div class="col-md-3">
-        <app-right-panel [portfolioFlag]="setFlag" [offerOwner]="offerBuilderdata['offerOwner']" [stakeData]="stakeData"
-          (updateStakeData)="updateStakeData($event)"></app-right-panel>
+      <div class="rightContent" style="margin-top: -5px;">
+          <app-right-panel
+            [portfolioFlag]="setFlag"
+            [offerOwner]="offerBuilderdata['offerOwner']"
+            [stakeData]="stakeData"
+            (updateStakeData)="updateStakeData($event)"
+          ></app-right-panel>
+        </div>
       </div>
     </div>
   </div>
