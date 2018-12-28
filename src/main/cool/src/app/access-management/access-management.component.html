@@ -1,13 +1,17 @@
 <div class="content">
   <div class="container">
-    <!-- My Actions & Notifications Section -->
     <div class="row base-margin-top">
       <div class="col-md-12">
-        <h1 class="display-4">Access Management
-          <button class="btn btn--secondary pull-right" (click)="registerNewUser()"><span class="icon-add-contain icon-small"></span>
-            Register New
-            User</button>
-        </h1>
+        <div class="panel panel--indigo panel--compressed task--bar">
+          <div class="row">
+            <div class="col-md-4">
+              <h2 class="page--subheading">Access Management</h2>
+            </div>
+            <div class="col-md-8 text-right">
+              <button class="btn btn--white" (click)="registerNewUser()"><span class="icon-add-contain icon-small"></span>&nbsp;Register New Users</button>
+            </div>
+          </div>
+        </div>
         <div class="card card--raised base-margin-top">
           <div class="panel">
             <div class="row card-table-header">
@@ -60,7 +64,7 @@
             </div>
           </div>
         </div>
-        <section id="formSection">
+        <section id="formSection" *ngIf="showFormSection">
           <div class="card card--raised base-margin-top">
             <div class="panel">
               <div class="pull-right base-margin-top">
