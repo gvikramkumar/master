@@ -25,6 +25,7 @@ export class MmAssesmentComponent implements OnInit {
   subscription: Subscription;
   offerData: any;
   currentOfferId;
+  caseId;
   bviewDeckData: any[];
   choiceSelected;
   groupData = [];
@@ -45,6 +46,7 @@ export class MmAssesmentComponent implements OnInit {
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
     });
 
   }

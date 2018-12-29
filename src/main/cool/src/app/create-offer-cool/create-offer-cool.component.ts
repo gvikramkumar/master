@@ -7,7 +7,6 @@ import { CreateOffer } from './create-offer';
 import { SelectItem } from 'primeng/api';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { UserService } from '../services/user.service';
-import { element } from 'protractor';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -45,6 +44,7 @@ export class CreateOfferCoolComponent implements OnInit {
   readinessReviewDateValue: string;
   expectedLaunchDateValue: string;
   caseId:string;
+  userSelectedAllUnits;
 
   constructor(private createOfferService: CreateOfferService,
     private router: Router,
@@ -94,9 +94,18 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getPrimaryBusinessEntity(event) {
+    if( event.toString() === 'All') {
+      this.userSelectedAllUnits = true;
+    }
     this.createOfferService.getPrimaryBusinessEntity(event.toString())
       .subscribe(data => {
         const primaryBeArry = [];
+        // When primary business unit is selected as 'All'
+        // then entities are displayed as 'all
+        if (data.length === 0 && this.userSelectedAllUnits) {
+          primaryBeArry.push({ label: 'All', value: 'All' });
+        }
+
         data.forEach(element => {
           primaryBeArry.push({ label: element.BE, value: element.BE });
         });
@@ -140,9 +149,8 @@ export class CreateOfferCoolComponent implements OnInit {
       console.log(createoffer);
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.offerId = data.offerId;
-      this.caseId = data.case_ID;
-      console.log(this.offerId);
-      this.router.navigate(['/mmassesment', this.offerId]);
+      this.caseId = data['case-ID'];
+      this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
     },
       (err) => {
         console.log(err);
