@@ -38,7 +38,7 @@ const routes: Routes = [
     component: CreateOfferCoolComponent
   },
   {
-    path: 'mmassesment/:id',
+    path: 'mmassesment/:id/:id2',
     component: MmAssesmentComponent
   },
   {
