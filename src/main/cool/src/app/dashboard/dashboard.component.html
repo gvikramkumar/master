@@ -206,7 +206,7 @@
                 </p-column>
                 <p-column field="status" [style]="{'width': '400px'}">
                   <ng-template let-col let-offerData="rowData" pTemplate="body">
-                      <div *ngIf="offerData.overallStatus == 'Launch In Progress'" class="row no-gutters">
+                      <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'" class="row no-gutters">
                           <div class="col-md-12">
                             <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>
                           </div>
@@ -226,7 +226,7 @@
                             </div>                 
                           </div>
                         </div>
-                        <div *ngIf="offerData.overallStatus == 'Cancelled'" class="row no-gutters">
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Cancelled'" class="row no-gutters">
                             <div class="col-md-12">
                               <div class="progressbar__label progressbarLabel-cancelled">Cancelled</div>
                             </div>
@@ -246,7 +246,7 @@
                               </div>                 
                             </div>
                           </div>
-                          <div *ngIf="offerData.overallStatus == 'In Market'" class="row no-gutters">
+                          <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'In Market'" class="row no-gutters">
                               <div class="col-md-12">
                                 <div class="progressbar__label progressbarLabel-inMarket">In Market</div>
                               </div>
@@ -267,7 +267,7 @@
                               </div>
                             </div>
 
-                            <div *ngIf="offerData.overallStatus == 'Update in progress'" class="row no-gutters">
+                            <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Update in progress'" class="row no-gutters">
                                 <div class="col-md-12">
                                   <div class="progressbar__label progressbarLabel-warning">Update in progress</div>
                                 </div>
@@ -287,6 +287,47 @@
                                   </div>                 
                                 </div>
                               </div>
+
+                              <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL In Progress'" class="row no-gutters">
+                                                        <div class="col-md-12">
+                                                          <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL in progress</div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                          <div class="progressbar progressbar--success" data-percentage="100">
+                                                            <div class="progressbar__fill"></div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                          <div class="progressbar progressbar--success" data-percentage="100">
+                                                            <div class="progressbar__fill"></div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                          <div class="progressbar progressbar--warning" data-percentage="0">
+                                                            <div class="progressbar__fill"></div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL'" class="row no-gutters">
+                                                        <div class="col-md-12">
+                                                          <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL</div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                          <div class="progressbar progressbar--success" data-percentage="100">
+                                                            <div class="progressbar__fill"></div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                          <div class="progressbar progressbar--success" data-percentage="100">
+                                                            <div class="progressbar__fill"></div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                          <div class="progressbar progressbar--success" data-percentage="0">
+                                                            <div class="progressbar__fill"></div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
                   </ng-template>
                 </p-column>
                 <p-column field="actions" [style]="{'width': '200px'}"></p-column>

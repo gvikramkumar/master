@@ -242,6 +242,14 @@ width: 25px;
   border-width: 23px;
   margin-left: -23px;
 }
+.inMarketStyle {
+  margin-left: 150px;
+}
+
+.inMarketStyle {
+  margin-left: 150px;
+}
+
 .popover:after {
   border-color: rgba(136, 183, 213, 0);
   border-bottom-color: #fff;
