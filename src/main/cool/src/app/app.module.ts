@@ -78,7 +78,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     OfferCreateDetailComponent,
     AccessManagementComponent,
     AvatarComponent,
-    MenuBarPopupComponent
+    MenuBarPopupComponent,
+    AuthErrorComponent
   ],
   imports: [
     BrowserModule,
