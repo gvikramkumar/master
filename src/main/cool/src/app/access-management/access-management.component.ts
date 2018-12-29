@@ -15,20 +15,19 @@ export class AccessManagementComponent implements OnInit {
   @ViewChild('registerUserForm') offerCreateForm: NgForm;
   accessManagementData;
   primaryBusinessUnitList;
-  primaryBusinessUnits: SelectItem[];
-  primaryBusinessEntities: SelectItem[];
+  businessUnits;
+  businessEntities;
   userIdValue: string;
   functionNameValue: string;
   adminValue: Boolean = false;
   businessUnitValue: string[];
   businessEntityValue: string[];
-  BEFormatteddata:string;
   keyPocValue: Boolean = false;
   showFormSection = false;
   Obj;
   cols: any[];
-  newUser;
-  constructor(private accessManagementService: AccessManagementService, private createOfferService: CreateOfferService) { }
+  newUser:NewUser [] = [];
+  constructor(private accessManagementService: AccessManagementService) { }
 
   ngOnInit() {
     this.showFormSection = false;
@@ -40,28 +39,31 @@ export class AccessManagementComponent implements OnInit {
       { field: 'buList', header: 'Business Unit' },
       { field: 'functionalAdmin', header: 'Access' }
     ];
+
     this.accessManagementService.accessManagementAll()
       .subscribe(data => {
         this.accessManagementData = data;
       });
-    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      this.primaryBusinessUnitList = <any>data;
-      const primaryBuArry = [];
-      this.primaryBusinessUnitList.businessUnits.forEach(element => {
-        primaryBuArry.push({ label: element, value: element });
+
+    this.accessManagementService.getBusinessUnit().subscribe(data => {
+      this.businessUnits = <any>data;
+      const buArry = [];
+      this.businessUnits.forEach(element => {
+        buArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
       });
-      this.primaryBusinessUnits = primaryBuArry;
+      this.businessUnits = buArry;
     });
   }
 
-  getPrimaryBusinessEntity(event) {
-    this.createOfferService.getPrimaryBusinessEntity(event.toString())
+  getbusinessEntity(event) {
+    this.accessManagementService.getBusinessEntity(event.toString())
       .subscribe(data => {
-        const primaryBeArry = [];
-        data.forEach(element => {
-          primaryBeArry.push({ label: element.BE, value: element.BE });
+        this.businessEntities = <any>data;
+        const beArry = [];
+        this.businessEntities.forEach(element => {
+          beArry.push({ label: element.BE, value: element.BE });
         });
-        this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
+        this.businessEntities = this.removeDuplicates(beArry, 'label');
       });
   }
 
@@ -79,29 +81,36 @@ export class AccessManagementComponent implements OnInit {
   }
 
   createUser() {
-    if(this.businessEntityValue !== undefined) {
-    this.BEFormatteddata = this.businessEntityValue[0];
-    }
     const userMappings: UserMapping[] = [];
-    const userMapping = new UserMapping(
-      this.BEFormatteddata,
-      this.functionNameValue,
-      this.adminValue,
-      this.keyPocValue
-    );
 
-    userMappings.push(userMapping);
-    this.newUser = new NewUser(
+    if (this.businessEntityValue !== undefined) {
+      this.businessEntityValue.forEach(element => {
+        const userMapping = new UserMapping(
+          element,
+          this.functionNameValue,
+          this.adminValue,
+          this.keyPocValue
+        );
+        userMappings.push(userMapping);
+      });
+    }
+
+    const user = new NewUser(
       this.userIdValue,
       this.businessUnitValue,
       userMappings
     );
+
+    this.newUser.push(user);
+
+    console.log(this.newUser);
+
     this.accessManagementService.registerUser(this.newUser).subscribe((data) => {
       this.getAllUpdate();
     },
       (err) => {
         console.log(err);
-    });
+      });
     this.offerCreateForm.reset();
   }
 
