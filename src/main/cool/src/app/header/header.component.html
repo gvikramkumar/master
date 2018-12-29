@@ -13,7 +13,7 @@
             <a routerLink="/dashboard"><div class="tab__heading" title="Basic">Dashboard</div></a>
           </li>
           <li routerLinkActive="active">
-            <a routerLink="/coolOffer"><div class="tab__heading" title="Wide">Offers</div></a>
+            <a routerLink="/coolOffer"><div class="tab__heading" title="Wide" *ngIf="isBupmUser">Offers</div></a>
           </li>
           <li routerLinkActive="active">
             <a><div class="tab__heading" title="Sidebar">Analytics</div></a>
