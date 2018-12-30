@@ -262,8 +262,13 @@ span.avatar-ico {
 .dimensions--toggle button.btn.btn--small {
   margin: 10px auto;
 }
+
+.btn--wide {
+  padding:0 !important;
+
+}
 .cui .btn.btn--small, .cui .btn.btn--wide {
-  max-width: fit-content;
+  max-width: fit-content !important;
 }
 .cui .task--bar .btn {
   border-radius: 6px !important;
