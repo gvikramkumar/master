@@ -11,6 +11,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 export class StrategyReviewComponent implements OnInit {
   offerData: any;
   currentOfferId;
+  caseId;
   bviewDeckData: any[];
   choiceSelected;
   groups = {};
@@ -67,6 +68,7 @@ export class StrategyReviewComponent implements OnInit {
     private activatedRoute: ActivatedRoute) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
+        this.caseId = params['id2'];
       });
     }
 

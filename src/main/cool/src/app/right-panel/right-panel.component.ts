@@ -12,8 +12,6 @@ import { AddEditCollaborator } from '../create-offer-cool/add-edit-collaborator'
 import { StakeHolder } from '../models/stakeholder';
 import { StakeHolderDTO } from '../models/stakeholderdto';
 import { Collaborators } from '../models/collaborator';
-import { MonetizationModelService } from '../services/monetization-model.service'
-// import { Hash } from 'crypto';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -22,23 +20,81 @@ const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
   styleUrls: ['./right-panel.component.css']
 })
 export class RightPanelComponent implements OnInit {
-  notiFication: boolean = false;
-  @Input() portfolioFlag: boolean = false;
+  notiFication: Boolean = false;
+  @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
   @Input() offerOwner: String;
   @Output() updateStakeData = new EventEmitter<string>();
-  backdropCustom: boolean = false;
+  backdropCustom: Boolean = false;
   proceedFlag: boolean;
   subscription: Subscription;
   aligned: boolean;
   currentOfferId;
   phaseTaskMap: object;
   phaseList: string[];
-  display: boolean = false;
+  display: Boolean = false;
+  displayOfferPhase: Boolean = false;
   collaboratorsList;
   addEditCollaboratorsForm: FormGroup;
   selectedCollabs;
   entityList;
+  caseId;
+  offerPhaseDetailsList;
+  ideateCount: any = 0;
+  ideateCompletedCount = 0;
+  planCount = 0;
+  planCompletedCount= 0;
+
+  ddFunction = 'Select Function';
+  flagFunction = false;
+
+  ddOwner1 = 'Select Owner';
+  flagOwner1 = false;
+
+  ddOwner2 = 'Select Owner';
+  flagOwner2 = false;
+
+  ddOwner3 = 'Select Owner';
+  flagOwner3 = false;
+
+  offerData;
+  dotBox = [
+    {
+      status: 'Completed',
+      statuscontent: 'Initial MM Assesment'
+    },
+    {
+      status: 'Completed',
+      statuscontent: 'Initial offer Dimension'
+    }
+    ,
+    {
+      status: 'In Progress',
+      statuscontent: 'Stakeholders Identified'
+    },
+    {
+      status: 'Completed',
+      statuscontent: 'Offer Portfolio'
+    },
+    {
+      status: 'In Progress',
+      statuscontent: 'Strategy Review Completion'
+    },
+    {
+      status: 'Pending',
+      statuscontent: 'Offer Construct Details'
+    }
+  ];
+
+  OfferOwners;
+  approvars;
+
+
+  userPanels = {
+    'panel1': false,
+    'panel2': true
+  };
+
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
@@ -46,71 +102,33 @@ export class RightPanelComponent implements OnInit {
       .map(term => term.length < 0 ? []
         : searchOptions.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
 
-  ddFunction = "Select Function";
-  flagFunction = false;
-
-  ddOwner1 = "Select Owner";
-  flagOwner1 = false;
-
-  ddOwner2 = "Select Owner";
-  flagOwner2 = false;
-
-  ddOwner3 = "Select Owner";
-  flagOwner3 = false;
-
-  offerData;
-  dotBox = [
-    {
-      status: "Completed",
-      statuscontent: "Initial MM Assesment"
-    },
-    {
-      status: "Completed",
-      statuscontent: "Initial offer Dimension"
-    }
-    ,
-    {
-      status: "In Progress",
-      statuscontent: "Stakeholders Identified"
-    },
-    {
-      status: "Completed",
-      statuscontent: "Offer Portfolio"
-    },
-    {
-      status: "In Progress",
-      statuscontent: "Strategy Review Completion"
-    },
-    {
-      status: "Pending",
-      statuscontent: "Offer Construct Details"
-    }
-  ]
-
-  OfferOwners;
-  approvars;
-
-
-  userPanels = {
-    "panel1": false,
-    "panel2": true
-  }
-
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private createOfferService: CreateOfferService,
-    private searchCollaboratorService: SearchCollaboratorService,
-    private MonetizationModelService: MonetizationModelService,
-    ) {
+    private searchCollaboratorService: SearchCollaboratorService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
     });
     if (!this.currentOfferId) {
-      this.currentOfferId = this.createOfferService.coolOffer.offerId
+      this.currentOfferId = this.createOfferService.coolOffer.offerId;
     }
+    this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
   }
 
   ngOnInit() {
+    this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
+    this.planCount = this.offerPhaseDetailsList['plan'].length;
+    this.offerPhaseDetailsList.ideate.forEach(element => {
+      if (element.status === 'Completed') {
+        this.ideateCompletedCount = this.ideateCompletedCount + 1;
+      }
+    });
+    this.offerPhaseDetailsList.plan.forEach(element => {
+      if (element.status === 'Completed') {
+        this.planCompletedCount = this.ideateCompletedCount + 1;
+      }
+    });
     this.createOfferService.getPrimaryBusinessUnits()
       .subscribe(data => {
         this.entityList = data.primaryBE;
@@ -124,7 +142,6 @@ export class RightPanelComponent implements OnInit {
 
     if (this.currentOfferId) {
       this.createOfferService.getMMMapperById(this.currentOfferId).subscribe(data => {
-        debugger;
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
         this.OfferOwners = this.offerData.offerObj.owners;
@@ -158,6 +175,10 @@ export class RightPanelComponent implements OnInit {
     this.display = true;
   }
 
+  showOfferPhaseDailog() {
+    this.displayOfferPhase = true;
+  }
+
   onHide() {
     this.display = false;
     this.collaboratorsList = [];
@@ -168,6 +189,10 @@ export class RightPanelComponent implements OnInit {
     this.display = false;
     this.collaboratorsList = [];
     this.addEditCollaboratorsForm.reset();
+  }
+
+  closeOfferPhaseDailog() {
+    this.displayOfferPhase = false;
   }
 
   onSearch() {

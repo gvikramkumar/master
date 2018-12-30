@@ -9,7 +9,7 @@ import { NewUser } from '../models/newuser';
 @Injectable()
 export class AccessManagementService {
     businessUnitUrl: string = environment.REST_API_SECONDARY_BUSINESS_UNIT_URL;
-    businessEntityUrl: string = environment.REST_API_SECONDARY_BUSINESS_ENTITY_URL;
+    businessEntityUrl: string = environment.PDAF_API+'?columns=BE&distinct=true';
 
     constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) {}
 
@@ -40,8 +40,8 @@ export class AccessManagementService {
      * pdaf service
      * @param bus
      */
-    getBusinessEntity(bus: string): Observable<any> {
-        const url = this.businessEntityUrl + bus;
+    getBusinessEntity(): Observable<any> {
+        const url = this.businessEntityUrl;
         return this.httpClient.get(url, {withCredentials:true});
     }
 }

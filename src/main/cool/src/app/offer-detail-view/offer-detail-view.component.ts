@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StakeHolder } from '../models/stakeholder';
+import {Location} from '@angular/common';
 
 
 @Component({
@@ -19,46 +20,10 @@ export class OfferDetailViewComponent implements OnInit {
   stakeName;
   email;
   functionalRole;
+  caseId;
   obj = {
-
   };
-  offerOverviewDetailsList = {
-      'ideate': [
-        {
-          'subMilestone': 'Offer Creation',
-          'status': 'completed',
-          'completionDate': '2018-12-23T19:30:01.000+0000'
-        },
-        {
-          'subMilestone': 'Offer Model Evaluation',
-          'status': 'completed',
-          'completionDate': '2018-12-23T19:30:01.000+0000'
-        },
-        {
-          'subMilestone': 'Stakeholder Identification',
-          'status': 'completed',
-          'completionDate': '2018-12-23T19:30:01.000+0000'
-        },
-        {
-          'subMilestone': 'Strategy Review',
-          'status': 'completed',
-          'completionDate': '2018-12-23T19:30:01.000+0000'
-        }
-      ],
-      'plan' : [
-        {
-          'subMilestone': 'Offer Dimension Completion',
-          'status': 'completed',
-          'completionDate': '2018-12-23T19:30:01.000+0000'
-        },
-        {
-          'subMilestone': 'Offer Solutioning',
-          'status': 'completed',
-          'completionDate': '2018-12-23T19:30:01.000+0000'
-        }
-      ]
-  };
-
+  offerOverviewDetailsList;
   strategyReviewList = [
     {
       function : 'CPS',
@@ -90,14 +55,23 @@ export class OfferDetailViewComponent implements OnInit {
     }
   ];
 
-  constructor(private activatedRoute: ActivatedRoute, private offerDetailViewService: OfferDetailViewService) {
+  constructor(private activatedRoute: ActivatedRoute,
+    private _route:Router,
+    private offerDetailViewService: OfferDetailViewService,
+    private _location: Location) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
+       this.currentOfferId = params['id'];
+       this.caseId = params['id2'];
+     });
+    this.activatedRoute.data.subscribe((data) => {
+    console.log(data);
     });
+    this.offerOverviewDetailsList = this.activatedRoute.snapshot.data['offerData'];
+    console.log(this.offerOverviewDetailsList);
   }
 
   ngOnInit() {
-    this.getOfferOVerviewDetails();
+      this.getOfferOVerviewDetails();
   }
 
   getOfferOVerviewDetails() {
@@ -119,6 +93,10 @@ export class OfferDetailViewComponent implements OnInit {
           }
         });
       });
+  }
+
+  goBack() {
+    this._location.back();
   }
 
   onExportPdf() {

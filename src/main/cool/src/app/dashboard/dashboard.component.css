@@ -209,15 +209,16 @@ width: 25px;
   background-color:#fff;
   z-index:99;
   position:absolute;
-  width:100%;
+  width:99%;
   box-shadow: 0 2px 20px rgba(0,0,0,.45);
   padding:1em;
   left:0;
-  bottom: 4em;
+  /* bottom: 4em; */
   display:none;
   -webkit-transition: all 2s; /* Safari */
   transition: all 2s;
   border-radius: 4px;
+  margin: 5px;
 }
 .popover p {
   white-space: normal;
@@ -258,7 +259,7 @@ width: 25px;
 }
 .popover__footer {
   border-top: solid 1px #dfdfdf;
-  margin-top: 2em;
+  margin-top: 1em;
   text-align: right;
 }
 .popover a.modal__close {
@@ -287,4 +288,8 @@ color: #fbab18;
 }
 .progressbarLabel-inMarket {
   color: green;
+}
+
+.test-class {
+  padding-left: 10%;
 }

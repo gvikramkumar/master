@@ -9,7 +9,7 @@ import { EnvironmentService } from '../../environments/environment.service';
 export class DashboardService {
   // baseMyActionsUrl: string = environment.REST_API_MYACTIONS_URL;
   // baseMyOfferssUrl: string = environment.REST_API_MYOFFERS_URL;
-  //baseDismissNotificationUrl: string = environment.REST_API_DISMISS_NOTIFICATION;
+  // baseDismissNotificationUrl: string = environment.REST_API_DISMISS_NOTIFICATION;
 
   constructor(private http:HttpClient, private userService: UserService, private environmentService: EnvironmentService) { }
 

@@ -7,6 +7,7 @@ import { CreateOffer } from './create-offer';
 import { SelectItem } from 'primeng/api';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { UserService } from '../services/user.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -49,8 +50,7 @@ export class CreateOfferCoolComponent implements OnInit {
   constructor(private createOfferService: CreateOfferService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private searchCollaboratorService: SearchCollaboratorService,
-    private userService: UserService) {
+    private _location: Location) {
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       this.primaryBusinessUnitList = <any>data;
@@ -122,6 +122,10 @@ export class CreateOfferCoolComponent implements OnInit {
 
     this.mmMapperUserChoice = 'DO';
     this.minDate = new Date();
+  }
+
+  goBack() {
+    this._location.back();
   }
 
   createOffer() {
