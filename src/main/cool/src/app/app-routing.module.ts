@@ -16,6 +16,7 @@ import { ActionsComponent } from './actions/actions.component';
 import { AccessManagementComponent } from './access-management/access-management.component';
 import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
+import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 
 
 const routes: Routes = [
@@ -39,7 +40,8 @@ const routes: Routes = [
   },
   {
     path: 'mmassesment/:id/:id2',
-    component: MmAssesmentComponent
+    component: MmAssesmentComponent,
+    resolve:{ offerData: OfferOverViewResolver }
   },
   {
     path: 'createNewOffer',
@@ -55,7 +57,8 @@ const routes: Routes = [
   },
   {
     path: 'offerDetailView/:id',
-    component: OfferDetailViewComponent
+    component: OfferDetailViewComponent,
+    resolve:{ offerData: OfferOverViewResolver }
   },
   {
     path: 'exitCriteriaValidation/:id',
@@ -70,7 +73,8 @@ const routes: Routes = [
     component: MenuBarComponent},
     {
     path: 'strategyReview/:id',
-    component: StrategyReviewComponent
+    component: StrategyReviewComponent,
+    resolve:{ offerData: OfferOverViewResolver }
   },
   {
     path: 'accessManagement',

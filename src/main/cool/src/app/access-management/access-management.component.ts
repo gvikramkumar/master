@@ -53,10 +53,12 @@ export class AccessManagementComponent implements OnInit {
       });
       this.businessUnits = buArry;
     });
+
+    this.getbusinessEntity();
   }
 
-  getbusinessEntity(event) {
-    this.accessManagementService.getBusinessEntity(event.toString())
+  getbusinessEntity() {
+    this.accessManagementService.getBusinessEntity()
       .subscribe(data => {
         this.businessEntities = <any>data;
         const beArry = [];

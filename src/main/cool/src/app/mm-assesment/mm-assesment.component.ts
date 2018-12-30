@@ -100,9 +100,8 @@ export class MmAssesmentComponent implements OnInit {
   }
 
 
-  //Go to Next Page
+  // Go to Next Page
   fullStakeHolder() {
-    debugger;
     this.router.navigate(['/stakeholderFull', this.currentOfferId]);
   }
 

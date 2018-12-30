@@ -4,6 +4,8 @@
     <!-- Offer Phase Steps -->
     <div class="card card--raised base-margin-top">
             <h5 class="half-margin-bottom">Offer Phase
+                <a href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
+                    <span class="icon-pencil icon-small"></span> Edit</a>
             </h5>
             <div class="divider divider--compressed"></div>
             <div class="ui-steps ui-steps--success ui-steps--tiny">
@@ -100,6 +102,109 @@
             </div>
         </li>
     </ul>
+
+    <p-dialog [showHeader]="false" [responsive]="true" [width]="1000" [minWidth]="400" [height]="700" [minY]="70"
+        [(visible)]="displayOfferPhase" [closable]="true">
+        <div class="pull-right base-margin-top">
+            <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>AMP (Advanced Malware Protection) <span style="color: blue">573493</span></h4>
+                <h5 style="color: blue">View Offer Details</h5>
+            </div>
+            <div class="col-md-6">
+                <h5 class="half-margin-bottom">Offer Phase</h5>
+                <div class="ui-steps ui-steps--success ui-steps--tiny">
+                    <div class="ui-step visited">
+                        <div class="step__icon"><span class="icon-check"></span></div>
+                        <div class="step__label">Ideate</div>
+                    </div>
+                    <div class="ui-step active">
+                        <div class="step__icon">2</div>
+                        <div class="step__label">Plan</div>
+                    </div>
+                    <div class="ui-step">
+                        <div class="step__icon">3</div>
+                        <div class="step__label">Execute</div>
+                    </div>
+                    <div class="ui-step">
+                        <div class="step__icon">4</div>
+                        <div class="step__label">Launch</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Offer Phase Details</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <p-accordion>
+                            <p-accordionTab header="Ideate">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                        <thead>
+                                            <tr>
+                                                <th>Ideate - <span [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'"> {{ideateCompletedCount}} of {{ideateCount}} <span class="icon-check-outline icon-medium"></span></span></th>
+                                                <th>STATUS</th>
+                                                <th>TARGET DATE</th>
+                                                <th>COMPLETION DATE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
+                                                <td><span style="color: blue">{{ideateData.subMilestone}}</span></td>
+                                                <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
+                                                <td>{{ideateData.completionDate}}</td>
+                                                <td>{{ideateData.completionDate}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Plan">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                        <thead>
+                                            <tr>
+                                                <th>Plan - <span class="text-success"> {{planCompletedCount}} of {{planCount}} <span class="icon-check-outline icon-medium"></span></span></th>
+                                                <th>STATUS</th>
+                                                <th>TARGET DATE</th>
+                                                <th>COMPLETION DATE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let planData of offerPhaseDetailsList.plan">
+                                                <td><span style="color: blue">{{planData.subMilestone}}</span></td>
+                                                <td [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">{{planData.status}}</td>
+                                                <td>{{planData.completionDate}}</td>
+                                                <td>{{planData.completionDate}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Excute">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Launch">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                        </p-accordion>
+                    </div>
+                </div>
+            </div>
+        </p-dialog>
 
     <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
         [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">

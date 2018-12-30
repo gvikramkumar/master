@@ -53,6 +53,8 @@ import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { CreateActionService } from './services/create-action.service';
 import { StakeholderfullService } from './services/stakeholderfull.service';
+import { OfferPhaseService } from './services/offer-phase.service';
+import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -120,6 +122,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     BupmGuard,
     CreateActionService,
     UserService,
+    OfferPhaseService,
+    OfferOverViewResolver,
     MenuBarService,
      {
        provide: APP_INITIALIZER,
