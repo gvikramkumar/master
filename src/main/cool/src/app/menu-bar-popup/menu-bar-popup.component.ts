@@ -41,11 +41,11 @@ export class MenuBarPopupComponent implements OnInit {
   }
 
   submit() {
-    debugger;
+    // debugger;
     if (this.popupType == 'hold') {
-      this.menuBarService.holdOffer(this.currentOfferId);
+      this.menuBarService.holdOffer(this.currentOfferId,).subscribe();
     } else if (this.popupType == 'cancel') {
-      this.menuBarService.cancelOffer(this.currentOfferId);
+      this.menuBarService.cancelOffer(this.currentOfferId,).subscribe();
     }
     this.closePopup.next("");
   }
