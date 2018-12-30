@@ -149,7 +149,7 @@ export class CreateOfferCoolComponent implements OnInit {
       console.log(createoffer);
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.offerId = data.offerId;
-      this.caseId = data['case-ID'];
+      this.caseId = data.caseId;
       this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
     },
       (err) => {
