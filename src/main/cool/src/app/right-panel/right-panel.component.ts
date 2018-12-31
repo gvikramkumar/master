@@ -247,8 +247,8 @@ export class RightPanelComponent implements OnInit {
           element.userMappings[0].appRoleList.forEach(appRole => {
             collaborator.applicationRole.push(appRole);
           });
-
-          collaborator.offerRole = element.applicationRole[0];
+          console.log(collaborator.applicationRole);
+          collaborator.offerRole = collaborator.applicationRole[0];
 
           tempCollaboratorList.push(collaborator);
         });
