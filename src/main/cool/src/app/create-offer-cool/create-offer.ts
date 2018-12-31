@@ -1,3 +1,5 @@
+import { Status } from './status';
+
 export class CreateOffer {
   userId: string;
   offerName: string;
@@ -13,7 +15,7 @@ export class CreateOffer {
   offerOwner:string;
   offerCreatedBy:string;
   offerCreationDate:string;
-
+  status:Status;
   constructor(userId: string,
               offerOwner:string,
               offerName: string,
@@ -27,7 +29,8 @@ export class CreateOffer {
               readinessReviewDate: string,
               expectedLaunchDate: string,
               offerCreatedBy: string,
-              offerCreationDate: string) {
+              offerCreationDate: string,
+              status: Status) {
     this.userId = userId;
     this.offerOwner = offerOwner;
     this.offerName = offerName;
@@ -42,5 +45,6 @@ export class CreateOffer {
     this.expectedLaunchDate = expectedLaunchDate;
     this.offerCreationDate = offerCreationDate;
     this.offerCreatedBy = offerCreatedBy;
+    this.status = status;
   }
 }
