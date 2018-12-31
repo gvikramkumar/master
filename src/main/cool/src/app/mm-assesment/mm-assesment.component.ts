@@ -467,11 +467,10 @@ proceedToStakeholder(){
     })
   })
 
+ }
 
+goBackToOffercreation(){
+  this.router.navigate(['/coolOffer/']);
 }
-
-
-
-
 }
 
