@@ -102,7 +102,7 @@ export class MmAssesmentComponent implements OnInit {
 
   // Go to Next Page
   fullStakeHolder() {
-    this.router.navigate(['/stakeholderFull', this.currentOfferId]);
+    this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
   }
 
 
@@ -329,15 +329,15 @@ export class MmAssesmentComponent implements OnInit {
         this.MonetizationModelService.showStakeholders(data['mmModel'], this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
           this.stakeData = {};
           // console.log(res);
-          let keyUsers = [];
-          if (res != null && res[0] != null) {
-            keyUsers = res[0]['coolRoleKeyUser'];
+          let keyUsers;
+          if (res != null) {
+            keyUsers = res;
           }
           keyUsers.forEach(user => {
-            if (this.stakeData[user['offerRole']] == null) {
-              this.stakeData[user['offerRole']] = [];
+            if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
+              this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
             }
-            this.stakeData[user['offerRole']].push({name: user['keyUser'], email: user['email']});
+            this.stakeData[user['userMappings'][0]['appRoleList'][0]].push({name: user['_id'], email: user['emailId']});
           })
         })
       })

@@ -65,7 +65,7 @@ const routes: Routes = [
     component: ExitCriteriaValidationComponent
   },
   {
-    path: 'stakeholderFull/:id',
+    path: 'stakeholderFull/:id/:id2',
     component: StakeholderFullComponent
   },
   {

@@ -40,12 +40,25 @@ export class StakeholderFullComponent implements OnInit {
    selectedCollabs;
    currentOfferId;
    temporaryList;
+   lists;
+    //new update
+    public tempcoll:any[];
+    public lstcoll:any[];
+    public showtemp:boolean;
+    public showdel:boolean;
+    public tempvalue:boolean;
+    public lastvalue:boolean;
+    public coll:any[];
+    public selectedColl:any[];
+
+   test:any;
+    duplicateList: any;
+    displayData: any;
 
   constructor( private stakeholderfullService:StakeholderfullService ,
      private createOfferService:CreateOfferService,
      private searchCollaboratorService:SearchCollaboratorService ,
-     private activatedRoute: ActivatedRoute,
-     private router: Router) { 
+     private activatedRoute: ActivatedRoute,) { 
 
         this.activatedRoute.params.subscribe(params => {
             this.currentOfferId = params['id'];
@@ -77,6 +90,25 @@ export class StakeholderFullComponent implements OnInit {
         businessEntity: new FormControl(null, Validators.required),
         functionName: new FormControl(null, Validators.required)
       });
+
+
+    this.showtemp=false;
+    this.tempcoll=[];
+    this.lstcoll=[];
+    this.lastvalue=false;
+    this.tempvalue=true;
+   }
+
+   selectList(event){
+       this.showtemp=false;
+       this.showdel=false;
+       if(this.tempvalue==true){
+           this.tempcoll=this.selectedColl;
+       }
+       if(this.lastvalue == true){
+           this.lstcoll=this.selectedColl;
+           console.log('lstcoll',this.lstcoll);
+       }
    }
 
    getUserIdFromEmail(email): any {
@@ -115,34 +147,64 @@ export class StakeholderFullComponent implements OnInit {
          });
   }
 
-  onselectCollaboratorsList(_id){
-      this.collaboratorsList.forEach(element=>{
-        element.id=_id;
-          for(let i=0;i<=this.temporaryList.length-1;i++){
-              let val;
-              if(this.temporaryList[i].id==_id){
-                  alert("the same person already exit")
-              }
-              else {
-                  (element.id===_id)
-              }
-          }
-         
-          this.temporaryList.push(element)
-      }
-          
-      )
-  }
 
-  ondeleteCollaboratorsList(_id){
-      for(let i=0;i<=this.temporaryList;i++){
-          let val;
-          if(this.temporaryList[i].id==_id){
-              val=i;
+onselectCollaboratorsList(_id){
+   this.collaboratorsList.forEach(element=>{
+      if(_id==element._id){
+          if(this.temporaryList.length==0){
+              this.temporaryList.push(element)
+              this.test=1;
+              console.log("temporary list"+ this.temporaryList[0].userName);
           }
-          this.temporaryList.splice(1,val);
+          else{
+              this.onDuplicateHandler(element);
+          }
       }
-  }
+       })
+}
+onDuplicateHandler(element){
+    if(this.temporaryList.includes(element)){
+    this.duplicateList.push(element);
+    this.test=1;
+    }
+    else{
+        this.temporaryList.push(element);
+        this.test=1;
+    }
+}
+
+
+addAll(){
+ this.showtemp=true;
+ this.selectedColl=[];
+ this.lastvalue=true;
+ this.showdel=false;
+ this.tempvalue=false;
+}
+multideleteCollaborator(){
+console.log("lstcoll",this.lstcoll);
+console.log("tempcoll",this.tempcoll);
+if(this.lstcoll.length>0){
+    for( var i=0;i<this.lstcoll.length;i++){
+        var arrlen=this.tempcoll.length;
+        for(var j=0;j<arrlen;j++){
+            if(this.lstcoll[i]==this.tempcoll[j]){
+                this.tempcoll=this.tempcoll.slice(0,j).concat(this.tempcoll.slice(j+1,arrlen));
+            }
+        }
+    }
+    this.showdel=true;
+    this.showtemp=false;
+    this.data=this.tempcoll;
+    this.selectedColl=[];
+    this.tempvalue=true;
+}
+
+
+}
+
+  
+
 
   
 
@@ -157,9 +219,29 @@ export class StakeholderFullComponent implements OnInit {
     })
   }
 
-  goToStrategyReview() {
-    this.router.navigate(['/strategyReview', this.currentOfferId]);
+  addCollaborator() {
+    // debugger
+    const listOfStakeHolders: StakeHolder[] = [];
+    const stakeHolderDto = new StakeHolderDTO();
+
+
+    stakeHolderDto.offerId = this.currentOfferId;
+   // stakeHolderDto.stakeholders = listOfStakeHolders;
+   stakeHolderDto.stakeholders = this.data;
+    console.log(stakeHolderDto);
+    console.log('before service call');
+   
+    let that = this; 
+    this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
+      // update (data);
+    });
+    // this.updateStakeData.next("");stakeData from data posted response
+      that.addToStakeData
+   // this.display  = false;
+
   }
+
+ 
 
    getInitialChar(name) {
     if (name == null) return ""
