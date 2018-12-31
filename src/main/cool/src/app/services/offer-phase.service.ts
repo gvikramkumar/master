@@ -18,7 +18,7 @@ export class OfferPhaseService {
 
     proceedToStakeHolders(data){
         let url = this.environmentService.REST_API_HOLD_OFFER;
-        return this.httpClient.post(url,data);
+        return this.httpClient.post(url, data, { withCredentials: true });
     }
 
 }
