@@ -1,42 +1,24 @@
+<div class="content">
+    <div class="container-fluid">
+        <app-menu-bar [caseId]="caseId">
+        </app-menu-bar> 
+<div class="panel-wrapper mt-15">
 
+    <!-- Blue bar -->
+    <div class="panel panel--indigo panel--compressed task--bar">
+        <div class="row">
+            <div class="col-md-4">
+                <h4><button class="btn btn--icon btn--white"><span class="icon-back"></span></button> Stakeholders</h4>
+            </div>
+            <div class="col-md-8 text-right">
+                <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
+                <!-- <button class="btn btn--white"><span class="icon-export"></span> Export </button> -->
+                <button class="btn btn--white btn--wide" (click)=' addCollaborator()'>Proceed to Strategy Review <span class="icon-chevron-right"></span></button>
+            </div>
+        </div>
+    </div>
 
-
-
-
-        <div class="content-fluid">
-               
-            <main>
-                <div class="content">
-                    <div class="container">
-                        <div class="row base-margin-top">
-                                
-                                    <div class="col-md-6">
-                                        <h1 class="display-4">Cisco Data Platform</h1>
-                                        
-                                    </div>
-                                   
-                                    <div class="col-md-12 text-right" >
-                                          <h4 style="float:left">Stakeholders</h4>
-                                                    <button class="btn btn--wide btn--primary-ghost">
-                                  
-                                                        Offer Detail View
-                                                        
-                                                        </button>
-                                                   
-                                                    
-                                                          <button class="btn btn--wide btn--primary-ghost" (click)="addCollaborator()">
-                                                        Proceed to Strategy Review<span class="icon-chevron-right"></span></button>
-                                        
-                                    </div>
-  
-  
-                                <div class="col-md-12">
-                                        
-                                     
-                                        <div class="card card--raised">
-                                            
-                                            <div class="panel">
-                                                
+    <div class="contentBox mt-10"> 
   <!-- People Involved -->
   <div class="card card--raised base-margin-top">
                                            
@@ -116,10 +98,11 @@
                   
                   </li>
                     
-                  
+                    
   
                     <li><div class="ui-accordion-header">Stakeholders<span class="icon-chevron-up icon-small pull-right"></span></div>
                         <div class="ui-accordion-content">
+                            
                                <form [formGroup]="stakeholderForm" (ngSubmit)="onSearch()">
                                 <div class="row">
                                         <div class="col-md-4">
@@ -146,7 +129,7 @@
                                                       <div class="form-group__text select">
                                                           <select id="selectedFunction" class="form-control" formControlName="functionName">
                                                               <option [ngValue]="null">Function</option>
-                                                              <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
+                                                              <option *ngFor="let businessEntity of funcionalRoleList" value={{businessEntity}}>
                                                                   {{businessEntity}}</option>
                                                           </select>
                                                       </div>
@@ -155,7 +138,7 @@
                                         <div class="col-md-1">
                                               <!-- <div class="form-group half-margin-bottom">
                                                       <div class="form-group__text select"> -->
-                                                              <button class="btn btn--primary" (click)="addAll()">Add</button>
+                                                              <button class="btn btn--primary" (click)="onSearch()">Search</button>
                                                       <!-- </div>
                                                   </div> -->
                                         </div>
@@ -166,64 +149,37 @@
                                 <div class="divider divider--compressed"></div>
                                 <h4>Search Results</h4>
                                
-                                <p-dataTable [value]="collaboratorsList"
-                                  dataKey="Function" 
-                                  #dt [(selection)]="selectedColl"
-                                  (selectionChange)="selectList($event)"
-                                >
-                                      <p-column [style]="{'width': '50px'}"  selectionMode="multiple"></p-column>
-                                      <p-column field="functionalRole" header="Function"></p-column>
-                                      <p-column field="applicationRole" header="Roles">
-                                          <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
-                                              <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
-                                                  [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
-                                              </p-dropdown>
-                                          </ng-template>
-                                      </p-column>
-                                      <p-column field="userName" header="Name"></p-column>
-                                      <p-column field="emailId" header="Email"></p-column>
-                                      <p-column field="businessEntity" header="BusinessEntity"></p-column>
-                                     
-                                  </p-dataTable>
+                                <p-dataTable [value]="collaboratorsList" [(selection)]="selectedColl"
+                                (selectionChange) = "selectList($event)" dataKey="email" #dt>
+                                        <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
+                                        <p-column field="functionalRole" header="Function"></p-column>
+                                        <p-column field="applicationRole" header="Roles">
+                                            <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
+                                                <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
+                                                    [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
+                                                </p-dropdown>
+                                            </ng-template>
+                                        </p-column>
+                                        <p-column field="name" header="Name"></p-column>
+                                        <p-column field="email" header="Email"></p-column>
+                                        <p-column field="businessEntity" header="BusinessEntity"></p-column>
+                                    </p-dataTable>
+                                  <br>
                                    <button class="btn btn--primary" (click)="multideleteCollaborator()">Remove</button> 
-  
+                                   <button class="btn btn--primary" (click)="addAll()">Add</button> 
   
                         </div>
                     </li>
         </ul>
     
+ 
+  
+             
+    </div>
   </div>
-  
-                                            </div>
-                                        </div>
-                                </div>
-                                
-                        </div>
+
   
   
-                    </div>
-                </div>
+
   
-              
-            </main>
-        </div>
-  
-  
-  <!---end of this page-->
-  
-  
-  <!-- <p-dataTable [value]="lists"  dataKey="Function">
-          <p-column [style]="{'width': '50px'}"  selectionMode="multiple"></p-column>
-          <p-column field="functionalRole" header="Function"></p-column>
-          <p-column field="applicationRole" header="Roles">
-              <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
-                  <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
-                      [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
-                  </p-dropdown>
-              </ng-template>
-          </p-column>
-          <p-column field="name" header="Name"></p-column>
-          <p-column field="email" header="Email"></p-column>
-          <p-column field="businessEntity" header="BusinessEntity"></p-column>
-         
-      </p-dataTable> -->
+</div>
