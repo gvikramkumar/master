@@ -38,12 +38,13 @@ export class RightPanelComponent implements OnInit {
   addEditCollaboratorsForm: FormGroup;
   selectedCollabs;
   entityList;
+  funcionalRoleList;
   caseId;
   offerPhaseDetailsList;
   ideateCount: any = 0;
   ideateCompletedCount = 0;
   planCount = 0;
-  planCompletedCount= 0;
+  planCompletedCount = 0;
 
   ddFunction = 'Select Function';
   flagFunction = false;
@@ -131,7 +132,10 @@ export class RightPanelComponent implements OnInit {
     });
     this.createOfferService.getPrimaryBusinessUnits()
       .subscribe(data => {
-        this.entityList = data.primaryBE;
+        console.log(data);
+        // this.entityList = data.primaryBE;
+        this.entityList = ['Security', 'IOT', 'Data Center', 'Enterprise'];
+        this.funcionalRoleList = ['BUPM','SOE'];
       });
 
     this.addEditCollaboratorsForm = new FormGroup({
@@ -197,27 +201,62 @@ export class RightPanelComponent implements OnInit {
 
   onSearch() {
     let tempCollaboratorList: Collaborators[] = [];
-    const searchCollaborator: AddEditCollaborator = new AddEditCollaborator(
-      this.addEditCollaboratorsForm.controls['name'].value,
-      this.addEditCollaboratorsForm.controls['businessEntity'].value,
-      this.addEditCollaboratorsForm.controls['functionName'].value);
-    this.searchCollaboratorService.searchCollaborator(searchCollaborator)
+
+    const userName = this.addEditCollaboratorsForm.controls['name'].value;
+    const businessEntity = this.addEditCollaboratorsForm.controls['businessEntity'].value;
+    const functionalRole = this.addEditCollaboratorsForm.controls['functionName'].value;
+
+    const payLoad = {
+    };
+
+    if (userName !== undefined && userName != null) {
+      payLoad['userName'] = userName;
+    }
+
+    if (businessEntity !== undefined && businessEntity != null) {
+      payLoad['userMappings'] = [{
+        'businessEntity': businessEntity
+      }];
+    }
+
+    if (functionalRole !== undefined && functionalRole != null) {
+      payLoad['userMappings'] = [{
+        'functionalRole': functionalRole
+      }];
+    }
+
+    if ((businessEntity !== undefined && businessEntity != null) &&
+      (functionalRole !== undefined && functionalRole != null)) {
+      payLoad['userMappings'] = [{
+        'businessEntity': businessEntity,
+        'functionalRole': functionalRole
+      }];
+    }
+
+    console.log(payLoad);
+
+    this.searchCollaboratorService.searchCollaborator(payLoad)
       .subscribe(data => {
         data.forEach(element => {
-          let collaborator = new Collaborators();
-          collaborator.applicationRole = element.applicationRole;
-          collaborator.businessEntity = element.businessEntity;
-          collaborator.email = element.email;
-          collaborator.functionalRole = element.functionalRole;
-          collaborator.name = element.name;
-          collaborator.offerRole = element.applicationRole[0]; 
+          const collaborator = new Collaborators();
+          collaborator.email = element.emailId;
+          collaborator.name = element.userName;
+          collaborator.functionalRole = element.userMappings[0].functionalRole;
+          collaborator.businessEntity = element.userMappings[0].businessEntity;
+
+          element.userMappings[0].applicationRole.forEach(appRole => {
+            collaborator.applicationRole.push(appRole);
+          });
+
+          collaborator.offerRole = element.applicationRole[0];
+
           tempCollaboratorList.push(collaborator);
         });
         this.collaboratorsList = tempCollaboratorList;
       },
         error => {
           console.log('error occured');
-          alert("Sorry, but something went wrong.")
+          alert('Sorry, but something went wrong.')
           this.collaboratorsList = [];
         });
   }
@@ -265,14 +304,14 @@ export class RightPanelComponent implements OnInit {
     stakeHolderDto.stakeholders = listOfStakeHolders;
     console.log(stakeHolderDto);
     console.log('before service call');
-   
-    let that = this; 
+
+    let that = this;
     this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
       // update stakeData from data posted response
       that.addToStakeData(data);
     });
     this.updateStakeData.next("");
-    this.display  = false;
+    this.display = false;
 
   }
 

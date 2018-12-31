@@ -1,8 +1,8 @@
-export class Collaborators{
+export class Collaborators {
     functionalRole:string;
     applicationRole:string[];
     email:string;
     businessEntity:string;
-    offerRole:string; 
+    offerRole:string;
     name:string;
 }
