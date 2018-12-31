@@ -221,7 +221,7 @@
                     <div class="form-group half-margin-bottom">
                         <div class="form-group__text select">
                             <select id="selectedSearchBe" class="form-control" formControlName="businessEntity">
-                                <option [ngValue]="null">Business Entity</option>
+                                <!-- <option [ngValue]="null">Business Entity</option> -->
                                 <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
                                     {{businessEntity}}</option>
                             </select>
@@ -232,9 +232,9 @@
                     <div class="form-group half-margin-bottom">
                         <div class="form-group__text select">
                             <select id="selectedFunction" class="form-control" formControlName="functionName">
-                                <option [ngValue]="null">Function</option>
-                                <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
-                                    {{businessEntity}}</option>
+                                <!-- <option [ngValue]="null">Function</option> -->
+                                <option *ngFor="let functionalRole of funcionalRoleList" value={{functionalRole}}>
+                                    {{functionalRole}}</option>
                             </select>
                         </div>
                     </div>
@@ -242,7 +242,7 @@
                 <button class="btn btn&#45;&#45;secondary" type="submit">Search</button>
             </div>
         </form>
-        <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="Function" #dt>
+        <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="email" #dt>
             <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
             <p-column field="functionalRole" header="Function"></p-column>
             <p-column field="applicationRole" header="Roles">

@@ -35,7 +35,7 @@ export class MonetizationModelService {
     };
  
     let url = this.environmentService.REST_API_MMATTRIBUTES_POST_URL;
-    return this.http.post( url, data, httpOptions );
+    return this.http.post( url, data,{ withCredentials: true });
     };
 
   showStakeholders(model, be){

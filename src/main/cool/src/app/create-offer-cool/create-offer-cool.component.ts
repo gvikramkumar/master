@@ -8,6 +8,7 @@ import { SelectItem } from 'primeng/api';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { UserService } from '../services/user.service';
 import {Location} from '@angular/common';
+import { Status } from './status';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -132,8 +133,14 @@ export class CreateOfferCoolComponent implements OnInit {
     const loggedInUserId = '';
     const offerOwner = '';
     const offerCreatedBy = '';
-    // this.primaryBuList.push(this.primaryBusinessUnit);
-    // this.primaryBeList.push(this.primaryBusinessEntitiy);
+
+    // Set the status for offer creation
+    const status =  new Status();
+    status.offerPhase = 'PreLaunch';
+    status.offerMilestone = 'Launch In Progress';
+    status.phaseMilestone =  'Ideate';
+    status.subMilestone = 'Offer Creation';
+
     const offerCreationDate = new Date().toDateString();
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
@@ -149,7 +156,8 @@ export class CreateOfferCoolComponent implements OnInit {
       this.readinessReviewDateValue,
       this.expectedLaunchDateValue,
       offerCreatedBy,
-      offerCreationDate);
+      offerCreationDate,
+      status);
       console.log(createoffer);
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.offerId = data.offerId;
