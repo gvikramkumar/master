@@ -4,7 +4,7 @@ import { SharedServiceService } from '../shared-service.service';
 import { Subscription } from 'rxjs/Subscription';
 import { CreateOfferService } from '../services/create-offer.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
-import { post } from 'selenium-webdriver/http';
+import {OfferPhaseService} from '../services/offer-phase.service';
 
 
 
@@ -42,7 +42,8 @@ export class MmAssesmentComponent implements OnInit {
     private sharedService: SharedServiceService,
     private createOfferService: CreateOfferService,
     private activatedRoute: ActivatedRoute,
-    private MonetizationModelService: MonetizationModelService
+    private MonetizationModelService: MonetizationModelService,
+    private offerPhaseService: OfferPhaseService
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -97,12 +98,6 @@ export class MmAssesmentComponent implements OnInit {
       }
     })
 
-  }
-
-
-  // Go to Next Page
-  fullStakeHolder() {
-    this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
   }
 
 
@@ -337,7 +332,9 @@ export class MmAssesmentComponent implements OnInit {
             if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
               this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
             }
-            this.stakeData[user['userMappings'][0]['appRoleList'][0]].push({name: user['_id'], email: user['emailId']});
+            let curUser = user;
+            curUser['stakeholderDefaults'] = true;
+            this.stakeData[user['userMappings'][0]['appRoleList'][0]].push(curUser);
           })
         })
       })
@@ -349,7 +346,6 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   updateStakeData(data) {
-    // debugger;
     this.MonetizationModelService.showStakeholders(this.currentMMModel, this.currentPrimaryBE).subscribe(res => {
       this.stakeData = {};
       // console.log(res);
@@ -380,6 +376,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
 proceedToStakeholder(){
+  debugger;
   let proceedToStakeholderPostData = {};
   proceedToStakeholderPostData['offerId'] = this.currentOfferId;
   proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'];
@@ -390,6 +387,86 @@ proceedToStakeholder(){
   proceedToStakeholderPostData['clonedOfferId'] = this.offerBuilderdata['clonedOfferId'];
   proceedToStakeholderPostData['primaryBUList'] = this.offerBuilderdata['primaryBUList'];
   proceedToStakeholderPostData['primaryBEList'] = this.offerBuilderdata['primaryBEList'];
+  proceedToStakeholderPostData['strategyReviewDate'] = this.offerBuilderdata['strategyReviewDate'];
+  proceedToStakeholderPostData['designReviewDate'] = this.offerBuilderdata['designReviewDate'];
+  proceedToStakeholderPostData['readinessReviewDate'] = this.offerBuilderdata['readinessReviewDate'];
+
+  var selectedCharacteristics = [];
+  var additionalCharacteristics = []
+  this.groupData.forEach((group, index) => {
+    for (var prop in group) {
+      var subselectedCharacteristics = {}
+      var notSubselectedCharacteristics = {}
+      subselectedCharacteristics['group'] = this.groupNames[index];
+      subselectedCharacteristics['subgroup'] = prop;
+      subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
+      subselectedCharacteristics['characteristics'] = [];
+
+      notSubselectedCharacteristics['group'] = this.groupNames[index];
+      notSubselectedCharacteristics['subgroup'] = prop;
+      notSubselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
+      notSubselectedCharacteristics['characteristics'] = [];
+      group[prop].forEach((characters) => {
+        if (characters['status'] === 1 || characters['type'] === 2) {
+          subselectedCharacteristics['characteristics'].push(characters['name']);
+        } else {
+          notSubselectedCharacteristics['characteristics'].push(characters['name']);
+        }
+      })
+      selectedCharacteristics.push(subselectedCharacteristics);
+      additionalCharacteristics.push(notSubselectedCharacteristics);
+    }
+  })
+  proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
+  proceedToStakeholderPostData['derivedMM'] = this.currentMMModel;
+  proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
+
+  let stakeHolders = [];
+  for (var prop in this.stakeData) {
+    this.stakeData[prop].forEach(sh => {
+      stakeHolders.push({
+        "_id" : sh['_id'], 
+        "businessEntity" : sh['userMappings']['businessEntity'], 
+        "functionalRole" : sh['userMappings']['functionalRole'],
+        "offerRole" : sh['userMappings']['appRoleList'][0],
+        "stakeholderDefaults" : sh['stakeholderDefaults']
+      })
+    });
+  }
+  proceedToStakeholderPostData['stakeholders'] = stakeHolders;
+
+  proceedToStakeholderPostData['expectedLaunchDate'] = this.offerBuilderdata['expectedLaunchDate'];
+  proceedToStakeholderPostData['status'] = {   
+  "offerPhase" : "PreLaunch", 
+  "offerMilestone" : "Launch In Progress", 
+  "phaseMilestone" : "ideate", 
+  "subMilestone" : "Offer Model Evaluation"
+  };
+  proceedToStakeholderPostData['ideate'] = {
+    "subMilestone" : "Offer Model Evaluation", 
+    "status" : "completed", 
+    "completionDate" : new Date(),
+  };
+  proceedToStakeholderPostData['secondaryBUList'] = this.offerBuilderdata['secondaryBUList']
+  proceedToStakeholderPostData['secondaryBEList'] = this.offerBuilderdata['secondaryBEList']
+
+  console.log(proceedToStakeholderPostData)
+  let that = this;
+  this.MonetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
+    let proceedPayload = {
+      "taskId": "",
+      "userId": this.offerBuilderdata['offerOwner'],
+      "caseId": that.caseId,
+      "offerId": that.currentOfferId,
+      "taskName": "Offer MM", 
+      "action": "",
+      "comment": ""
+    };
+    that.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(result => {
+      that.router.navigate(['/stakeholderFull', that.currentOfferId, that.caseId]);
+    })
+  })
+
 
 }
 

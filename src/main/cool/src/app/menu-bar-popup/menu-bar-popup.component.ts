@@ -10,44 +10,63 @@ import { MenuBarService } from '../services/menu-bar.service'
 })
 export class MenuBarPopupComponent implements OnInit {
   @Input() show: boolean = false;
-  @Input() popupType: String = "";
+  @Input() popupType: String = '';
   @Output() closePopup = new EventEmitter<string>();
   currentOfferId: String;
+ 
 
   constructor(private activatedRoute: ActivatedRoute,
     private menuBarService: MenuBarService
-    ) { 
+    ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
     });
   }
 
-  ngOnInit() { 
+  ngOnInit() {
   }
-  
+
 
   getPopupTitle() {
-    if (this.popupType == "hold") {
-      return "Add a Reason to place the Offer on Hold"
-    } else if (this.popupType == "cancel") {
-      return "Add a Reason for Cancellation"
+    if (this.popupType === 'hold') {
+      return 'Add a Reason to place the Offer on Hold';
+    } else if (this.popupType === 'cancel') {
+      return 'Add a Reason for Cancellation';
     } else {
-      return "Popup Title";
+      return 'Popup Title';
     }
   }
 
   close() {
-    this.closePopup.next("");
+    this.closePopup.next('');
   }
 
   submit() {
-    // debugger;
-    if (this.popupType == 'hold') {
+    let holdData={};
+    holdData['taskId'] = '';
+    holdData['userId'] = '';
+    holdData['caseId'] = '';
+    holdData['offerId'] = this.currentOfferId;
+    holdData['taskName'] = 'Hold';
+    holdData['action'] = 'Hold';
+    holdData['comment'] = '';
+
+    let cancelData={};
+    cancelData['taskId'] = '';
+    cancelData['userId'] = '';
+    cancelData['caseId'] = '';
+    cancelData['offerId'] = this.currentOfferId;
+    cancelData['taskNamed'] = 'Hold';
+    cancelData['action'] = 'Hold';
+    cancelData['comment'] = '';
+
+
+    if (this.popupType === 'hold') {
       this.menuBarService.holdOffer(this.currentOfferId,).subscribe();
-    } else if (this.popupType == 'cancel') {
+    } else if (this.popupType === 'cancel') {
       this.menuBarService.cancelOffer(this.currentOfferId,).subscribe();
     }
-    this.closePopup.next("");
+    this.closePopup.next('');
   }
 
 }

@@ -21,7 +21,6 @@ export class MonetizationModelService {
   }
 
   getOfferBuilderData(offerId) {
-    // debugger;
     let url =this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
     return this.http.get(url,{ withCredentials: true });
   }
@@ -38,15 +37,17 @@ export class MonetizationModelService {
     let url = this.environmentService.REST_API_MMATTRIBUTES_POST_URL;
     return this.http.post( url, data, httpOptions );
     };
- 
-    
-    
-
 
   showStakeholders(model, be){
     let url = this.environmentService.REST_API_MM_STAKEHOLDERS_GET_URL;
     url += model;
     url += "/" + be;
     return this.http.get(url);
+  };
+
+  proceedToStakeholder(data) {
+    let url = this.environmentService.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL;
+    
+    return this.http.post(url,data);
   }
 }

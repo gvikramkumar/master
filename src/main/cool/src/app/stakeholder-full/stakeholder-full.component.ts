@@ -220,7 +220,6 @@ if(this.lstcoll.length>0){
   }
 
   addCollaborator() {
-    // debugger
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
 
@@ -230,8 +229,7 @@ if(this.lstcoll.length>0){
    stakeHolderDto.stakeholders = this.data;
     console.log(stakeHolderDto);
     console.log('before service call');
-   
-    let that = this; 
+    let that = this;
     this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
       // update (data);
     });

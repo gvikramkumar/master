@@ -14,14 +14,14 @@ export class MenuBarService {
       return this.httpClient.get(this.environmentService.REST_API_TURBO_TAX_MENU + caseId + '/true');
     }
 
-    holdOffer(offerId):any {
-      // debugger;
-      return this.httpClient.put(this.environmentService.REST_API_HOLD_OFFER + offerId, {});
+    holdOffer(data):any {
+
+      return this.httpClient.put(this.environmentService.REST_API_HOLD_OFFER, data);
     }
 
-    cancelOffer(offerId):any {
-      // debugger;
-      return this.httpClient.put(this.environmentService.REST_API_CANCEL_OFFER + offerId, {});
+    cancelOffer(data):any {
+
+      return this.httpClient.put(this.environmentService.REST_API_CANCEL_OFFER, data);
     }
 
 }
