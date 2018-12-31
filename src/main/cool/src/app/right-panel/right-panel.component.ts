@@ -244,7 +244,7 @@ export class RightPanelComponent implements OnInit {
           collaborator.functionalRole = element.userMappings[0].functionalRole;
           collaborator.businessEntity = element.userMappings[0].businessEntity;
 
-          element.userMappings[0].applicationRole.forEach(appRole => {
+          element.userMappings[0].appRoleList.forEach(appRole => {
             collaborator.applicationRole.push(appRole);
           });
 
