@@ -445,7 +445,7 @@ proceedToStakeholder(){
   proceedToStakeholderPostData['ideate'] = {
     "subMilestone" : "Offer Model Evaluation", 
     "status" : "completed", 
-    "completionDate" : new Date(),
+    "completionDate" : new Date().toDateString(),
   };
   proceedToStakeholderPostData['secondaryBUList'] = this.offerBuilderdata['secondaryBUList']
   proceedToStakeholderPostData['secondaryBEList'] = this.offerBuilderdata['secondaryBEList']
@@ -470,7 +470,7 @@ proceedToStakeholder(){
  }
 
 goBackToOffercreation(){
-  this.router.navigate(['/coolOffer/']);
+  this.router.navigate(['/coolOffer']);
 }
 }
 
