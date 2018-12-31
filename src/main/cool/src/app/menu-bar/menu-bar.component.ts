@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import {TieredMenuModule} from 'primeng/tieredmenu';
 import {MenuItem} from 'primeng/api';
-import { MenuBarService } from '../services/menu-bar.service'
+import { MenuBarService } from '../services/menu-bar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 
@@ -12,13 +12,14 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./menu-bar.component.css']
 })
 export class MenuBarComponent implements OnInit {
-   
+
+  @Input() caseId; 
   items: MenuItem[];
   showPopup: boolean = false;
-  popupType: String = "";
+  popupType: String = '';
   itemShow: Object = {};
   navigateHash: Object = {};
-  currentOfferId: String = "";
+  currentOfferId: String = '';
 
   constructor(private menuBarService: MenuBarService,
     private router: Router,
@@ -29,16 +30,19 @@ export class MenuBarComponent implements OnInit {
      }
 
   ngOnInit() {
-    this.navigateHash['Offer Registration'] = ["/coolOffer"];
-    this.navigateHash['Offer Model Evaluation'] = ["/mmassesment", this.currentOfferId];
-    this.navigateHash['Stakeholder Identification'] = ["/stakeholderFull", this.currentOfferId];
-    this.navigateHash['Strategy Review'] = ["/strategyReview", this.currentOfferId];
+    this.navigateHash['Offer Creation'] = ['/coolOffer'];
+    this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
+    this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
+    this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
 
-    this.menuBarService.getRubboTaxMenu('case-0000000009').subscribe(data => {
+    this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
+        debugger;
         if (data != null) {
             if (data['ideate'] != null) {
-                data['ideate'].array.forEach(element => {
-                    this.itemShow[element['subMilestone']] = true;
+                data['ideate'].forEach(element => {
+                    if (element['status'] == 'Completed' || element['status'] == 'In progress' ) {
+                        this.itemShow[element['subMilestone']] = true;
+                    }
                 });
             }
         }
@@ -48,9 +52,9 @@ export class MenuBarComponent implements OnInit {
     this.items = [
       {
           label: 'Ideate',
-          items: [{label: 'Offer Registration'},
+          items: [{label: 'Offer Creation'},
               {label: 'Offer Model Evaluation'},
-              {label: 'Stakeholder Identification'},
+              {label: 'StakeHolder Identification'},
               {label: 'Strategy Review'}
           ]
       },

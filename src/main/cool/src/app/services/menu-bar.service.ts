@@ -11,17 +11,17 @@ export class MenuBarService {
     ) { }
 
     getRubboTaxMenu(caseId):any {
-      return this.httpClient.get(this.environmentService.REST_API_TURBO_TAX_MENU + caseId + "/false");
+      return this.httpClient.get(this.environmentService.REST_API_TURBO_TAX_MENU + caseId + '/true');
     }
 
     holdOffer(offerId):any {
       // debugger;
-      return this.httpClient.post(this.environmentService.REST_API_HOLD_OFFER + offerId, {});
+      return this.httpClient.put(this.environmentService.REST_API_HOLD_OFFER + offerId, {});
     }
 
     cancelOffer(offerId):any {
       // debugger;
-      return this.httpClient.post(this.environmentService.REST_API_CANCEL_OFFER + offerId, {});
+      return this.httpClient.put(this.environmentService.REST_API_CANCEL_OFFER + offerId, {});
     }
 
 }
