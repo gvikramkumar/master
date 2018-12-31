@@ -35,7 +35,7 @@ export class MmAssesmentComponent implements OnInit {
   stakeData = {};
   offerBuilderdata = {};
   canClickNextStep: boolean = false;
-  currentMMModel:any;
+  currentMMModel:'';
   currentPrimaryBE:any;
 
   constructor(private router: Router,
