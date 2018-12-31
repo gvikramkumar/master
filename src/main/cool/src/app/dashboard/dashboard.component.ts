@@ -46,7 +46,6 @@ export class DashboardComponent implements OnInit {
         this.myOffersList = data;
         this.myOffersListProps = Object.keys(this.myOffersList);
       });
-
   }
 
   processMyActionsList() {
@@ -102,6 +101,10 @@ export class DashboardComponent implements OnInit {
   }
 
   getMyActions() {
+    // reset pending count
+    this.pendingActnCount = 0;
+    this.needImmActnCount = 0;
+
     this.dashboardService.getMyActionsList()
       .subscribe(data => {
         this.myActions = data;
