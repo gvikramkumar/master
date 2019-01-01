@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { MenuBarService } from '../services/menu-bar.service'
+import { MenuBarService } from '../services/menu-bar.service';
+import { UserService } from '../services/user.service';
+
 
 
 @Component({
@@ -10,44 +12,71 @@ import { MenuBarService } from '../services/menu-bar.service'
 })
 export class MenuBarPopupComponent implements OnInit {
   @Input() show: boolean = false;
-  @Input() popupType: String = "";
+  @Input() popupType: String = '';
   @Output() closePopup = new EventEmitter<string>();
   currentOfferId: String;
+  caseId: String;
+  reason: String = "";
+ 
 
   constructor(private activatedRoute: ActivatedRoute,
-    private menuBarService: MenuBarService
-    ) { 
+    private menuBarService: MenuBarService,
+    private userService: UserService,
+    ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
     });
   }
 
-  ngOnInit() { 
+  ngOnInit() {
   }
-  
+
 
   getPopupTitle() {
-    if (this.popupType == "hold") {
-      return "Add a Reason to place the Offer on Hold"
-    } else if (this.popupType == "cancel") {
-      return "Add a Reason for Cancellation"
+    if (this.popupType === 'hold') {
+      return 'Add a Reason to place the Offer on Hold';
+    } else if (this.popupType === 'cancel') {
+      return 'Add a Reason for Cancellation';
     } else {
-      return "Popup Title";
+      return 'Popup Title';
     }
   }
 
   close() {
-    this.closePopup.next("");
+    this.closePopup.next('');
   }
 
   submit() {
-    // debugger;
-    if (this.popupType == 'hold') {
-      this.menuBarService.holdOffer(this.currentOfferId,).subscribe();
-    } else if (this.popupType == 'cancel') {
-      this.menuBarService.cancelOffer(this.currentOfferId,).subscribe();
-    }
-    this.closePopup.next("");
+    let holdData={};
+    holdData['taskId'] = '';
+    holdData['userId'] = this.userService.getUserId();
+    holdData['caseId'] = this.caseId;
+    holdData['offerId'] = this.currentOfferId;
+    holdData['taskName'] = 'discard';
+    holdData['action'] = 'hold';
+    holdData['comment'] = this.reason;
+
+    let cancelData={};
+    cancelData['taskId'] = '';
+    cancelData['userId'] = this.userService.getUserId();
+    cancelData['caseId'] = this.caseId;
+    cancelData['offerId'] = this.currentOfferId;
+    cancelData['taskNamed'] = 'discard';
+    cancelData['action'] = 'cancel ';
+    cancelData['comment'] = this.reason;
+
+    // console.log(holdData);
+    // console.log(cancelData);
+    if (this.popupType === 'hold') {
+      this.menuBarService.holdOffer(holdData).subscribe(res => {
+        this.closePopup.next('hold');
+      });
+    } else if (this.popupType === 'cancel') {
+      this.menuBarService.cancelOffer(cancelData).subscribe(res => {
+        this.closePopup.next('cancel');
+      });
+    }    
   }
 
 }

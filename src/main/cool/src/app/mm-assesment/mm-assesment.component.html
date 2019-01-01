@@ -1,6 +1,7 @@
 <div class="content">
     <div class="container-fluid">
-      <app-menu-bar [caseId]="caseId">
+      <app-menu-bar [caseId]="caseId"
+      (updateMessage)="updateMessage($event)">
       </app-menu-bar>
 <div class="panel-wrapper mt-15">
 
@@ -8,12 +9,12 @@
     <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
             <div class="col-md-4">
-                <h4><button class="btn btn--icon btn--white"><span class="icon-back"></span></button> Offer Builder</h4>
+                <h4><button class="btn btn--icon btn--white"><span class="icon-back" (click)='goBackToOffercreation()'></span></button> Offer Builder</h4>
             </div>
             <div class="col-md-8 text-right">
                 <button class="btn btn--white"><span class="icon-save"></span> Save </button>
                 <button class="btn btn--white"><span class="icon-export"></span> Export </button>
-                <button class="btn btn--white btn--wide" (click)='fullStakeHolder()'>Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
+                <button class="btn btn--white btn--wide" (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
             </div>
         </div>
     </div>

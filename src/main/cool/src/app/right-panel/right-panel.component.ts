@@ -319,7 +319,6 @@ export class RightPanelComponent implements OnInit {
   }
 
   addCollaborator() {
-    // debugger
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
 

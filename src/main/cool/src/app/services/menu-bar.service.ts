@@ -14,14 +14,29 @@ export class MenuBarService {
       return this.httpClient.get(this.environmentService.REST_API_TURBO_TAX_MENU + caseId + '/true');
     }
 
-    holdOffer(offerId):any {
-      // debugger;
-      return this.httpClient.put(this.environmentService.REST_API_HOLD_OFFER + offerId, {});
+    holdOffer(data):any {
+
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Accept' : 'application/json'
+        }),
+        withCredentials: true,
+      };
+
+      return this.httpClient.post(this.environmentService.REST_API_HOLD_OFFER, data, httpOptions);
     }
 
-    cancelOffer(offerId):any {
-      // debugger;
-      return this.httpClient.put(this.environmentService.REST_API_CANCEL_OFFER + offerId, {});
+    cancelOffer(data):any {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Accept' : 'application/json'
+        }),
+        withCredentials: true,
+      };
+
+      return this.httpClient.post(this.environmentService.REST_API_CANCEL_OFFER, data, httpOptions );
     }
 
 }
