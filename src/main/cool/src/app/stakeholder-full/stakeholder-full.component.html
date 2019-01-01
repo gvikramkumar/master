@@ -1,7 +1,11 @@
+
+
+
+
 <div class="content">
     <div class="container-fluid">
-        <app-menu-bar [caseId]="caseId">
-        </app-menu-bar> 
+        <!-- <app-menu-bar [caseId]="caseId">
+        </app-menu-bar>  -->
 <div class="panel-wrapper mt-15">
 
     <!-- Blue bar -->
@@ -25,7 +29,7 @@
         <!-- <h5 class="half-margin-bottom">People Involved <a href="javascript:;" onclick="window.location.href='add-edit-contacts.html'" class="pull-right"><span class="icon-pencil icon-small"></span> Edit</a></h5>
         <div class="divider divider--compressed"></div>     -->
         <ul class="list">
-                    <li><div class="ui-accordion-header">Owner (1)<span class="icon-chevron-up icon-small pull-right"></span></div>
+                    <li><div class="ui-accordion-header"><span class="icon-chevron-up icon-small pull-right"></span></div>
                         <div class="ui-accordion-content">
                             <div *ngFor="let d of data">
                             <div class="flex-center-vertical">
@@ -40,8 +44,8 @@
                                     </svg>
                                 </span>
                                 <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">{{d.userName}}</div>
-                                    <div>{{d.emailId}}</div>
+                                    <div class="text-bold">{{d._id}}</div>
+                                    <!-- <div>{{d.emailId}}</div> -->
                                 </div>
                         </div>
                         <div class="divider divider--compressed"></div>
@@ -49,7 +53,7 @@
                       </div>
                     
                     </li>
-                        <li *ngIf="showtemp"><div class="ui-accordion-header"></div>
+                        <li *ngIf="showtemp"><div class="ui-accordion-header" ></div>
                       <div class="ui-accordion-content">
                           <div *ngFor="let d of tempcoll">
                           <div class="flex-center-vertical">
@@ -149,21 +153,20 @@
                                 <div class="divider divider--compressed"></div>
                                 <h4>Search Results</h4>
                                
-                                <p-dataTable [value]="collaboratorsList" [(selection)]="selectedColl"
-                                (selectionChange) = "selectList($event)" dataKey="email" #dt>
-                                        <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
-                                        <p-column field="functionalRole" header="Function"></p-column>
-                                        <p-column field="applicationRole" header="Roles">
-                                            <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
-                                                <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
-                                                    [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
-                                                </p-dropdown>
-                                            </ng-template>
-                                        </p-column>
-                                        <p-column field="name" header="Name"></p-column>
-                                        <p-column field="email" header="Email"></p-column>
-                                        <p-column field="businessEntity" header="BusinessEntity"></p-column>
-                                    </p-dataTable>
+                                <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="email" #dt>
+                                    <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
+                                    <p-column field="functionalRole" header="Function"></p-column>
+                                    <p-column field="applicationRole" header="Roles">
+                                        <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
+                                            <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
+                                                [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
+                                            </p-dropdown>
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column field="name" header="Name"></p-column>
+                                    <p-column field="email" header="Email"></p-column>
+                                    <p-column field="businessEntity" header="BusinessEntity"></p-column>
+                                </p-dataTable>
                                   <br>
                                    <button class="btn btn--primary" (click)="multideleteCollaborator()">Remove</button> 
                                    <button class="btn btn--primary" (click)="addAll()">Add</button> 
