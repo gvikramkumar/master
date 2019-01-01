@@ -49,51 +49,46 @@ export class DashboardComponent implements OnInit {
   }
 
   processMyActionsList() {
-    this.myActions.forEach(element => {
-      const obj = new ActionsAndNotifcations();
-      obj.setOfferId(element.offerId);
-      obj.setOfferName(element.offerName);
-      obj.setStyleColor(element.status);
-      if (element.status === 'Red') {
-        this.needImmActnCount = this.needImmActnCount + 1;
-      } else {
-        this.pendingActnCount = this.pendingActnCount + 1;
-      }
+    // Process Actions
+    if (this.myActions.actionList !== undefined) {
+      this.myActions['actionList'].forEach(element => {
+        const obj = new ActionsAndNotifcations();
+        obj.setOfferId(element.offerId);
+        obj.setOfferName(element.offerName);
+        obj.setStyleColor(element.status);
+        obj.setAssigneeId(element.assigneeId);
+        obj.setTriggerDate(this.dateFormat(element.triggerDate));
+        obj.setDueDate(this.dateFormat(element.dueDate));
+        obj.setActionDesc(element.actionDesc);
+        obj.setAlertType(1);
+        obj.setCaseId(element.caseId);
+        // Set the status color
+        if (element.status === 'Red') {
+          this.needImmActnCount = this.needImmActnCount + 1;
+        } else {
+          this.pendingActnCount = this.pendingActnCount + 1;
+        }
+        this.myOfferArray.push(obj);
+      });
 
-      // Set Actions
-      const actionList = element.actionList;
-      if (actionList !== undefined && actionList.length > 0) {
-        actionList.forEach(element => {
-          obj.setActiontTitle(element.actiontTitle);
-          obj.setAssigneeId(element.assigneeId);
-          obj.setTriggerDate(this.dateFormat(element.triggerDate));
-          obj.setDueDate(this.dateFormat(element.dueDate));
-          obj.setActionDesc(element.actionDesc);
-          obj.setAlertType(1);
-          this.myOfferArray.push(obj);
-        });
-      }
-
-      const obj2 = new ActionsAndNotifcations();
-      obj2.setOfferId(element.offerId);
-      obj2.setOfferName(element.offerName);
-      obj2.setStyleColor(element.status);
-      // Set Notifications
-      const notificationList = element.notificationList;
-      if (notificationList !== undefined && notificationList.length > 0) {
-        notificationList.forEach(element => {
-          obj2.setActiontTitle(element.notifcationTitle);
+      // Process Notifications
+      if (this.myActions.notificationList !== undefined) {
+        this.myActions['notificationList'].forEach(element => {
+          const obj2 = new ActionsAndNotifcations();
+          obj2.setOfferId(element.offerId);
+          obj2.setOfferName(element.offerName);
           obj2.setAssigneeId(element.assigneeId);
           obj2.setTriggerDate(this.dateFormat(element.triggerDate));
           obj2.setDueDate('--');
           obj2.setStyleColor('--');
+          obj2.setActionDesc(element.actionDesc);
           obj2.setAlertType(2);
-          obj2.setActionDesc(element.notificationDesc);
+          obj2.setCaseId(element.caseId);
           this.myOfferArray.push(obj2);
         });
+        this.myActionsList = this.myOfferArray;
       }
-    });
-    this.myActionsList = this.myOfferArray;
+    }
   }
 
   dateFormat(inputDate: string) {
@@ -122,7 +117,7 @@ export class DashboardComponent implements OnInit {
     this.display = true;
   }
 
-  dismissNotification(offerId,popover) {
+  dismissNotification(offerId, popover) {
     const userId = this.userService.getUserId();
     const postData = {
       'userId': userId,
@@ -153,7 +148,10 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  offerDetailOverView(Id) {
-    this.router.navigate(['/offerDetailView', Id]);
+  offerDetailOverView(offerId,caseId) {
+    console.log(offerId);
+    console.log(caseId);
+    // this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
+    this.router.navigate(['/offerDetailView', offerId,caseId]);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {TieredMenuModule} from 'primeng/tieredmenu';
 import {MenuItem} from 'primeng/api';
 import { MenuBarService } from '../services/menu-bar.service';
@@ -14,6 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class MenuBarComponent implements OnInit {
 
   @Input() caseId; 
+  @Output() updateMessage = new EventEmitter<string>();
   items: MenuItem[];
   showPopup: boolean = false;
   popupType: String = '';
@@ -36,7 +37,6 @@ export class MenuBarComponent implements OnInit {
     this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
 
     this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
-        debugger;
         if (data != null) {
             if (data['ideate'] != null) {
                 data['ideate'].forEach(element => {
@@ -84,13 +84,7 @@ export class MenuBarComponent implements OnInit {
           {label: 'Offer Launch'}
       ]
   },
-//   {
-//     label: 'On Hold / Cancel ',
-//     items: [
-//         {label: 'On Hold'},
-//         {label: 'Cancel'}
-//     ]
-// }
+
     ]
   }
 
@@ -99,12 +93,14 @@ export class MenuBarComponent implements OnInit {
       this.popupType = ptype;
   }
 
-  closePopup() {
+  closePopup(message) {
+      if (message != null && message !== '') {
+        this.updateMessage.next(message);
+      }
       this.showPopup = false;
   }
 
   navigate(name) {
-      debugger;
       if (this.itemShow[name] === true) {
         if (this.navigateHash[name] != null) {
             this.router.navigate(this.navigateHash[name]);

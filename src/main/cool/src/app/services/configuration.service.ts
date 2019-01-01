@@ -17,7 +17,6 @@ export class ConfigurationService {
     }
 
     init(): Promise<any> {
-        // debugger;
         return new Promise((resolve, reject) => {
             this.httpClient.get(this.urlGetCurrentUser, { withCredentials: true }).toPromise()
                 .then((user) => {

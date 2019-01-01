@@ -81,7 +81,6 @@ export class CreateOfferService {
   }
 
   getPrimaryBusinessEntity(bus: string): Observable<any> {
-    // debugger;
     let url = this.secondaryPrimaryBusinessEntityUrl + bus;
     return this.httpClient.get(url, {withCredentials:true});
   }

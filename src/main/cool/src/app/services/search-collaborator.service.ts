@@ -17,15 +17,11 @@ export class SearchCollaboratorService {
       'functionName': null
     };
   }
-  searchCollaborator(addEditCollaborator: AddEditCollaborator): Observable<any> {
-    const data = {'name': addEditCollaborator.name,
-      'businessEntity': addEditCollaborator.businessEntity,
-      'functionName': addEditCollaborator.functionName};
-    return this.httpClient.post(this.environmentService.REST_API_MM_STAKEHOLDERS_SEARCH_URL,data);
+  searchCollaborator(payLoad: any): Observable<any> {
+    return this.httpClient.post(this.environmentService.REST_API_MM_STAKEHOLDERS_SEARCH_URL,payLoad);
   }
 
   addCollaborators(saveCollaborator: any): Observable<any> {
-    // debugger;
     console.log('in service');
     return this.httpClient.post(this.environmentService.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL, saveCollaborator);
   }

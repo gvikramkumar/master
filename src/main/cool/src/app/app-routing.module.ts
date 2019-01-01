@@ -56,7 +56,7 @@ const routes: Routes = [
     component: ActionsComponent
   },
   {
-    path: 'offerDetailView/:id',
+    path: 'offerDetailView/:id/:id2',
     component: OfferDetailViewComponent,
     resolve:{ offerData: OfferOverViewResolver }
   },

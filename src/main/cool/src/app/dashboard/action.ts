@@ -9,8 +9,17 @@ export class ActionsAndNotifcations{
     alertType:number;
     styleColor:string;
     actionDesc:string;
-    constructor(){
+    caseId:string;
+    constructor() {
 
+    }
+
+    setCaseId(caseId) {
+        this.caseId = caseId;
+    }
+
+    getCaseId() {
+        return this.caseId;
     }
 
     setStyleColor(styleColor) {

@@ -28,11 +28,14 @@ export class EnvironmentService {
     REST_API_ACTIONSTRACKER_URL;
     REST_API_ACCESS_MANAGEMENT_GETUSER_URL;
     REST_API_OFFERPHASE_DETAILS_URL;
+    REST_API_STAKEHOLDERLIST_GET_URL;
+      
 
     constructor() {
         let windowUrl = location.href;
         if(windowUrl.includes('dev')) {
         this.baseapi = 'https://cool-srv-dev.cisco.com';
+           this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
           this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
           this.REST_API_PRIMARY_URL = this.baseapi+'/coolsrv/primaryBusiness/';
           this.REST_API_OFFER_CREATE_URL = this.baseapi+'/coolsrv/offer/create/';
@@ -49,14 +52,15 @@ export class EnvironmentService {
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
           this.REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL = this.baseapi+'/coolsrv/access/updateUser';
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
-          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/offer/hold/';
-          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/offer/Cancel/';
+          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/action/proceed';
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
           this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
           console.log("EnvironmentService: set env vars for dev environment");
         } else if(windowUrl.includes('stg')) {
             this.baseapi = 'https://cool-srv-stg.cisco.com';
+            this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
             this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
           this.REST_API_PRIMARY_URL = this.baseapi+'/coolsrv/primaryBusiness/';
           this.REST_API_OFFER_CREATE_URL = this.baseapi+'/coolsrv/offer/create/';
@@ -81,6 +85,7 @@ export class EnvironmentService {
             console.log("EnvironmentService: set env vars for stg environment");
         } else if(windowUrl.includes('prd')) {
             this.baseapi = 'https://cool-srv-prd.cisco.com';
+            this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
             this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
           this.REST_API_PRIMARY_URL = this.baseapi+'/coolsrv/primaryBusiness/';
           this.REST_API_OFFER_CREATE_URL = this.baseapi+'/coolsrv/offer/create/';
@@ -105,6 +110,7 @@ export class EnvironmentService {
             console.log("EnvironmentService: set env vars for prd environment");
         } else {
             this.baseapi = 'https://cool-srv-dev.cisco.com';
+            this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
             this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
           this.REST_API_PRIMARY_URL = this.baseapi+'/coolsrv/primaryBusiness/';
           this.REST_API_OFFER_CREATE_URL = this.baseapi+'/coolsrv/offer/create/';
