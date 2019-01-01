@@ -28,7 +28,7 @@ import { StakeholderfullService } from '../services/stakeholderfull.service';
   styleUrls: ['./stakeholder-full.component.css']
 })
 export class StakeholderFullComponent implements OnInit {
-   
+
    entityList;
    notiFication: boolean = false;
    @Input() portfolioFlag: boolean = false;
@@ -61,7 +61,7 @@ export class StakeholderFullComponent implements OnInit {
   constructor( private stakeholderfullService:StakeholderfullService ,
      private createOfferService:CreateOfferService,
      private searchCollaboratorService:SearchCollaboratorService ,
-     private activatedRoute: ActivatedRoute,) { 
+     private activatedRoute: ActivatedRoute,) {
 
         this.activatedRoute.params.subscribe(params => {
             this.currentOfferId = params['id'];
@@ -69,24 +69,24 @@ export class StakeholderFullComponent implements OnInit {
           if (!this.currentOfferId) {
             this.currentOfferId = this.createOfferService.coolOffer.offerId
           }
-  
-  
+
+
 }
- 
-  
-  
 
-   ngOnInit() { 
 
-     //this.stakeholderfullService.getdata().subscribe(data=>{ 
-      this.stakeholderfullService.getdata( this.currentOfferId).subscribe(data=>{ 
+
+
+   ngOnInit() {
+
+     //this.stakeholderfullService.getdata().subscribe(data=>{
+      this.stakeholderfullService.getdata( this.currentOfferId).subscribe(data=>{
         this.firstData=data;
        this.data=this.firstData.stakeholders;
-      
+
 
       console.log("Data::::"+this.data);
     });
-    this.createOfferService.getPrimaryBusinessUnits() 
+    this.createOfferService.getPrimaryBusinessUnits()
     .subscribe(data => {
       console.log("create offer Service "+data);
       // this.entityList = data.businessUnits;
@@ -245,10 +245,10 @@ export class StakeholderFullComponent implements OnInit {
 
 // }
 
-  
 
 
-  
+
+
 
   addToStakeData(res) {
     console.log(res);
@@ -262,7 +262,6 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   addCollaborator() {
-    // debugger
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
 
@@ -291,7 +290,7 @@ export class StakeholderFullComponent implements OnInit {
 
   }
 
- 
+
 
    getInitialChar(name) {
     if (name == null) return ""

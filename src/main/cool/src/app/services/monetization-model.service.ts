@@ -21,32 +21,41 @@ export class MonetizationModelService {
   }
 
   getOfferBuilderData(offerId) {
-    // debugger;
     let url =this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
     return this.http.get(url,{ withCredentials: true });
   }
 
   toNextSetp(data):Observable<any> {
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Accept' : 'application/json',
-        'withCredentials': 'true'
-      })
+        'Accept' : 'application/json'
+      }),
+      withCredentials: true,
     };
  
     let url = this.environmentService.REST_API_MMATTRIBUTES_POST_URL;
-    return this.http.post( url, data, httpOptions );
+    return this.http.post( url, data, httpOptions);
     };
- 
-    
-    
-
 
   showStakeholders(model, be){
     let url = this.environmentService.REST_API_MM_STAKEHOLDERS_GET_URL;
     url += model;
     url += "/" + be;
     return this.http.get(url);
+  };
+
+  proceedToStakeholder(data) {
+    let url = this.environmentService.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept' : 'application/json'
+      }),
+      withCredentials: true,
+    };
+    
+    return this.http.post(url, data, httpOptions);
   }
 }
