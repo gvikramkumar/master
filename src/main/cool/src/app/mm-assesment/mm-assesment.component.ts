@@ -452,11 +452,11 @@ proceedToStakeholder(){
   "phaseMilestone" : "ideate", 
   "subMilestone" : "Offer Model Evaluation"
   };
-  proceedToStakeholderPostData['ideate'] = {
+  proceedToStakeholderPostData['ideate'] = [{
     "subMilestone" : "Offer Model Evaluation", 
     "status" : "completed", 
     "completionDate" : new Date().toDateString(),
-  };
+  }];
   proceedToStakeholderPostData['secondaryBUList'] = this.offerBuilderdata['secondaryBUList']
   proceedToStakeholderPostData['secondaryBEList'] = this.offerBuilderdata['secondaryBEList']
 
