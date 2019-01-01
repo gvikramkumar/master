@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {TieredMenuModule} from 'primeng/tieredmenu';
 import {MenuItem} from 'primeng/api';
 import { MenuBarService } from '../services/menu-bar.service';
@@ -14,6 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class MenuBarComponent implements OnInit {
 
   @Input() caseId; 
+  @Output() updateMessage = new EventEmitter<string>();
   items: MenuItem[];
   showPopup: boolean = false;
   popupType: String = '';
@@ -98,7 +99,10 @@ export class MenuBarComponent implements OnInit {
       this.popupType = ptype;
   }
 
-  closePopup() {
+  closePopup(message) {
+      if (message != null && message !== '') {
+        this.updateMessage.next(message);
+      }
       this.showPopup = false;
   }
 

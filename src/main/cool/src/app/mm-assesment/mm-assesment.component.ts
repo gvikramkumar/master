@@ -362,6 +362,17 @@ export class MmAssesmentComponent implements OnInit {
     })
   }
 
+  updateMessage(message) {
+    debugger;
+    if (message != null && message !== "") {
+      if (message == 'hold') {
+        this.message = { contentHead: "", content: "The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
+      } else if (message == 'cancel') {
+        this.message = { contentHead: "", content: "The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
+      }
+    }
+  }
+
   getGroupKeys(obj) {
     if (typeof obj === 'object') {
       return Object.keys(obj);
@@ -461,7 +472,7 @@ proceedToStakeholder(){
       "action": "",
       "comment": ""
     };
-    that.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(result => {
+    that.offerPhaseService.proceedToStakeHolders(JSON.stringify(proceedPayload)).subscribe(result => {
       that.router.navigate(['/stakeholderFull', that.currentOfferId, that.caseId]);
     })
   })
