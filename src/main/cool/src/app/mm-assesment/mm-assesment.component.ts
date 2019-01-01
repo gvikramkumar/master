@@ -417,7 +417,7 @@ proceedToStakeholder(){
     }
   })
   proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
-  proceedToStakeholderPostData['derivedMM'] = this.currentMMModel;
+  proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? "" : this.currentMMModel;
   proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
 
   let stakeHolders = [];
