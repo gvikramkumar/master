@@ -8,25 +8,36 @@
                     <span class="icon-pencil icon-small"></span> Edit</a>
             </h5>
             <div class="divider divider--compressed"></div>
-            <div class="ui-steps ui-steps--success ui-steps--tiny">
-                    <div class="ui-step visited">
-                        <div class="step__icon"><span class="icon-check"></span></div>
-                        <div class="step__label">Ideate</div>
+            <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
+                <div class="ui-step {{mileStoneStatus[0].status}}">
+                    <div class="step__icon">
+                        <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
+                        <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
                     </div>
-                    <div class="ui-step active">
-                        <div class="step__icon">2</div>
-                        <div class="step__label">Plan</div>
-                    </div>
-                    <div class="ui-step">
-                        <div class="step__icon">3</div>
-                        <div class="step__label">Execute</div>
-                    </div>
-                    <div class="ui-step">
-                        <div class="step__icon">4</div>
-                        <div class="step__label">Launch</div>
-                    </div>
+                    <div class="step__label">Ideate</div>
                 </div>
-           
+                <div class="ui-step {{mileStoneStatus[1].status}}">
+                    <div class="step__icon">
+                        <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
+                        <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
+                    </div>
+                    <div class="step__label">Plan</div>
+                </div>
+                <div class="ui-step {{mileStoneStatus[2].status}}">
+                    <div class="step__icon">
+                        <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
+                        <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
+                    </div>
+                    <div class="step__label">Execute</div>
+                </div>
+                <div class="ui-step {{mileStoneStatus[3].status}}">
+                    <div class="step__icon">
+                        <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
+                        <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
+                    </div>
+                    <div class="step__label">Launch</div>
+                </div>
+            </div>
     </div>
     
 
@@ -115,24 +126,36 @@
             </div>
             <div class="col-md-6">
                 <h5 class="half-margin-bottom">Offer Phase</h5>
-                <div class="ui-steps ui-steps--success ui-steps--tiny">
-                    <div class="ui-step visited">
-                        <div class="step__icon"><span class="icon-check"></span></div>
-                        <div class="step__label">Ideate</div>
+                <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
+                        <div class="ui-step {{mileStoneStatus[0].status}}">
+                            <div class="step__icon">
+                                <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
+                                <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
+                            </div>
+                            <div class="step__label">Ideate</div>
+                        </div>
+                        <div class="ui-step {{mileStoneStatus[1].status}}">
+                            <div class="step__icon">
+                                <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
+                                <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
+                            </div>
+                            <div class="step__label">Plan</div>
+                        </div>
+                        <div class="ui-step {{mileStoneStatus[2].status}}">
+                            <div class="step__icon">
+                                <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
+                                <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
+                            </div>
+                            <div class="step__label">Execute</div>
+                        </div>
+                        <div class="ui-step {{mileStoneStatus[3].status}}">
+                            <div class="step__icon">
+                                <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
+                                <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
+                            </div>
+                            <div class="step__label">Launch</div>
+                        </div>
                     </div>
-                    <div class="ui-step active">
-                        <div class="step__icon">2</div>
-                        <div class="step__label">Plan</div>
-                    </div>
-                    <div class="ui-step">
-                        <div class="step__icon">3</div>
-                        <div class="step__label">Execute</div>
-                    </div>
-                    <div class="ui-step">
-                        <div class="step__icon">4</div>
-                        <div class="step__label">Launch</div>
-                    </div>
-                </div>
             </div>
         </div>
             <div class="row">

@@ -12,6 +12,7 @@ import { AddEditCollaborator } from '../create-offer-cool/add-edit-collaborator'
 import { StakeHolder } from '../models/stakeholder';
 import { StakeHolderDTO } from '../models/stakeholderdto';
 import { Collaborators } from '../models/collaborator';
+import { OfferPhaseService } from '../services/offer-phase.service';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -45,6 +46,9 @@ export class RightPanelComponent implements OnInit {
   ideateCompletedCount = 0;
   planCount = 0;
   planCompletedCount = 0;
+  mStoneCntInAllPhases:any[]=['ideate','plan','execute','launch'];
+  mileStoneStatus:any[]= [];
+  phaseProcessingCompleted = false;
 
   ddFunction = 'Select Function';
   flagFunction = false;
@@ -106,7 +110,8 @@ export class RightPanelComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private createOfferService: CreateOfferService,
-    private searchCollaboratorService: SearchCollaboratorService) {
+    private searchCollaboratorService: SearchCollaboratorService,
+    private offerPhaseService: OfferPhaseService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -130,10 +135,13 @@ export class RightPanelComponent implements OnInit {
         this.planCompletedCount = this.ideateCompletedCount + 1;
       }
     });
+
+    this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(data => {
+        this.processCurrentPhaseInfo(data);
+    });
+
     this.createOfferService.getPrimaryBusinessUnits()
       .subscribe(data => {
-        console.log(data);
-        // this.entityList = data.primaryBE;
         this.entityList = ['Security', 'IOT', 'Data Center', 'Enterprise'];
         this.funcionalRoleList = ['BUPM','SOE'];
       });
@@ -156,8 +164,8 @@ export class RightPanelComponent implements OnInit {
         this.phaseList = Object.keys(this.phaseTaskMap);
 
         Object.keys(this.phaseTaskMap).forEach(phase => {
-          console.log(phase);
-        })
+          // console.log(phase);
+        });
 
         if (this.OfferOwners) {
           this.OfferOwners.forEach(item => {
@@ -173,6 +181,34 @@ export class RightPanelComponent implements OnInit {
         }
       })
     }
+  }
+
+  processCurrentPhaseInfo(phaseInfo) {
+    this.mStoneCntInAllPhases.forEach(element => {
+      const obj = {};
+      let count = 0;
+      const phase = phaseInfo[element];
+        if (phase !== undefined) {
+          phase.forEach(element => {
+            if(element.status === 'Completed') {
+              count = count + 1;
+            }
+          });
+          obj['phase'] = element;
+          if ( count > 0 && count < 4) {
+            obj['status'] = 'active';
+          } else if ( count === 4) {
+            obj['status'] = 'visited';
+          } else if (count === 0) {
+            obj['status'] = '';
+          }
+        } else {
+          obj['phase'] = element;
+          obj['status'] = '';
+        }
+        this.mileStoneStatus.push(obj);
+    });
+    this.phaseProcessingCompleted = true;
   }
 
   showDialog() {
@@ -233,8 +269,6 @@ export class RightPanelComponent implements OnInit {
       }];
     }
 
-    console.log(payLoad);
-
     this.searchCollaboratorService.searchCollaborator(payLoad)
       .subscribe(data => {
         data.forEach(element => {
@@ -247,7 +281,6 @@ export class RightPanelComponent implements OnInit {
           element.userMappings[0].appRoleList.forEach(appRole => {
             collaborator.applicationRole.push(appRole);
           });
-          console.log(collaborator.applicationRole);
           collaborator.offerRole = collaborator.applicationRole[0];
 
           tempCollaboratorList.push(collaborator);
@@ -256,7 +289,7 @@ export class RightPanelComponent implements OnInit {
       },
         error => {
           console.log('error occured');
-          alert('Sorry, but something went wrong.')
+          alert('Sorry, but something went wrong.');
           this.collaboratorsList = [];
         });
   }

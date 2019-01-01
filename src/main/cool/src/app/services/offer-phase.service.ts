@@ -16,4 +16,9 @@ export class OfferPhaseService {
         return this.httpClient.get(url, { withCredentials: true });
     }
 
+    getCurrentOfferPhaseInfo(caseId): Observable<any> {
+        const url = this.offerPhaseDetailsUrl + '/' + caseId + '/true';
+        return this.httpClient.get(url, { withCredentials: true });
+    }
+
 }

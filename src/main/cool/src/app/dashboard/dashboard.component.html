@@ -47,7 +47,7 @@
                 <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
                 <input #gbforactions type="text" pInputText size="50" placeholder="Global Filter">
               </div>
-              <p-dataTable [value]="myActionsList" scrollable="true" scrollHeight="350px" [globalFilter]="gbforactions"
+              <p-dataTable [value]="myActionsList" scrollable="true" scrollHeight="400px" [globalFilter]="gbforactions"
                 #dt>
                 <p-column field="offerId" sortable="true" header="OFFER ID">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
@@ -106,7 +106,7 @@
                             <h5>Notification Details</h5><a class="modal__close" id="popover_close"><span class="icon-close"
                                 (click)="p2.close()"></span></a>
                             <p>{{actionData.actionDesc}}</p>
-                            <button class="btn btn--secondary base-margin-top" (click)="offerDetailOverView(actionData.offerId)">View
+                            <button class="btn btn--secondary base-margin-top" (click)="offerDetailOverView(actionData.offerId,actionData.caseId)">View
                               Offer</button>
                           </div>
                           <div class="popover__footer">
