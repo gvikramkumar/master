@@ -363,7 +363,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   updateMessage(message) {
-    debugger;
+ 
     if (message != null && message !== "") {
       if (message == 'hold') {
         this.message = { contentHead: "", content: "The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
