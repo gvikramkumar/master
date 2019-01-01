@@ -24,7 +24,7 @@ export class MenuBarService {
         withCredentials: true,
       };
 
-      return this.httpClient.put(this.environmentService.REST_API_HOLD_OFFER, data, httpOptions);
+      return this.httpClient.post(this.environmentService.REST_API_HOLD_OFFER, data, httpOptions);
     }
 
     cancelOffer(data):any {
@@ -36,7 +36,7 @@ export class MenuBarService {
         withCredentials: true,
       };
 
-      return this.httpClient.put(this.environmentService.REST_API_CANCEL_OFFER, data, httpOptions );
+      return this.httpClient.post(this.environmentService.REST_API_CANCEL_OFFER, data, httpOptions );
     }
 
 }
