@@ -36,7 +36,6 @@ export class MenuBarComponent implements OnInit {
     this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
 
     this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
-        debugger;
         if (data != null) {
             if (data['ideate'] != null) {
                 data['ideate'].forEach(element => {
@@ -104,7 +103,6 @@ export class MenuBarComponent implements OnInit {
   }
 
   navigate(name) {
-      debugger;
       if (this.itemShow[name] === true) {
         if (this.navigateHash[name] != null) {
             this.router.navigate(this.navigateHash[name]);

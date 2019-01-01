@@ -26,16 +26,17 @@ export class MonetizationModelService {
   }
 
   toNextSetp(data):Observable<any> {
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Accept' : 'application/json',
-        'withCredentials': 'true'
-      })
+        'Accept' : 'application/json'
+      }),
+      withCredentials: true,
     };
  
     let url = this.environmentService.REST_API_MMATTRIBUTES_POST_URL;
-    return this.http.post( url, data,{ withCredentials: true });
+    return this.http.post( url, data, httpOptions);
     };
 
   showStakeholders(model, be){

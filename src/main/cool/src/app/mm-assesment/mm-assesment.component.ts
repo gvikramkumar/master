@@ -376,15 +376,14 @@ export class MmAssesmentComponent implements OnInit {
   }
 
 proceedToStakeholder(){
-  debugger;
   let proceedToStakeholderPostData = {};
-  proceedToStakeholderPostData['offerId'] = this.currentOfferId;
-  proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'];
-  proceedToStakeholderPostData['offerDesc'] = this.offerBuilderdata['offerDesc'];
-  proceedToStakeholderPostData['offerCreatedBy'] = this.offerBuilderdata['offerCreatedBy'];
-  proceedToStakeholderPostData['offerCreationDate'] = this.offerBuilderdata['offerCreationDate'];
+  proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? "" : this.currentOfferId;
+  proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'] == null ? "" : this.offerBuilderdata['offerName'];
+  proceedToStakeholderPostData['offerDesc'] = this.offerBuilderdata['offerDesc'] == null ? "" : this.offerBuilderdata['offerDesc'];
+  proceedToStakeholderPostData['offerCreatedBy'] = this.offerBuilderdata['offerCreatedBy'] == null ? "" : this.offerBuilderdata['offerCreatedBy'];
+  proceedToStakeholderPostData['offerCreationDate'] = this.offerBuilderdata['offerCreationDate'] == null ? "" : this.offerBuilderdata['offerCreationDate'];
   proceedToStakeholderPostData['offerOwner'] = this.offerBuilderdata['offerOwner'];
-  proceedToStakeholderPostData['clonedOfferId'] = this.offerBuilderdata['clonedOfferId'];
+  proceedToStakeholderPostData['clonedOfferId'] = this.offerBuilderdata['clonedOfferId'] == null ? "" : this.offerBuilderdata['clonedOfferId'];
   proceedToStakeholderPostData['primaryBUList'] = this.offerBuilderdata['primaryBUList'];
   proceedToStakeholderPostData['primaryBEList'] = this.offerBuilderdata['primaryBEList'];
   proceedToStakeholderPostData['strategyReviewDate'] = this.offerBuilderdata['strategyReviewDate'];
