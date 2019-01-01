@@ -4,6 +4,7 @@ import { MenuBarService } from '../services/menu-bar.service';
 import { UserService } from '../services/user.service';
 
 
+
 @Component({
   selector: 'app-menu-bar-popup',
   templateUrl: './menu-bar-popup.component.html',

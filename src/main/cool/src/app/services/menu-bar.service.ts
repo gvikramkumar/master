@@ -16,12 +16,27 @@ export class MenuBarService {
 
     holdOffer(data):any {
 
-      return this.httpClient.put(this.environmentService.REST_API_HOLD_OFFER, data);
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Accept' : 'application/json'
+        }),
+        withCredentials: true,
+      };
+
+      return this.httpClient.put(this.environmentService.REST_API_HOLD_OFFER, data, httpOptions);
     }
 
     cancelOffer(data):any {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Accept' : 'application/json'
+        }),
+        withCredentials: true,
+      };
 
-      return this.httpClient.put(this.environmentService.REST_API_CANCEL_OFFER, data);
+      return this.httpClient.put(this.environmentService.REST_API_CANCEL_OFFER, data, httpOptions );
     }
 
 }

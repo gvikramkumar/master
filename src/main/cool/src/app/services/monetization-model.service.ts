@@ -48,7 +48,14 @@ export class MonetizationModelService {
 
   proceedToStakeholder(data) {
     let url = this.environmentService.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept' : 'application/json'
+      }),
+      withCredentials: true,
+    };
     
-    return this.http.post(url, data, { withCredentials: true });
+    return this.http.post(url, data, httpOptions);
   }
 }
