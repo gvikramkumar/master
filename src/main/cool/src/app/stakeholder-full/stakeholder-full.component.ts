@@ -60,7 +60,7 @@ export class StakeholderFullComponent implements OnInit {
 
   ngOnInit() {
 
-    this.stakeholderfullService.getdata().subscribe(data => {
+    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.data = data;
       console.log('Data::::' + this.data);
     });
