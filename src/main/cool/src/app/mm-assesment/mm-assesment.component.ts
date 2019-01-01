@@ -382,13 +382,13 @@ proceedToStakeholder(){
   proceedToStakeholderPostData['offerDesc'] = this.offerBuilderdata['offerDesc'] == null ? "" : this.offerBuilderdata['offerDesc'];
   proceedToStakeholderPostData['offerCreatedBy'] = this.offerBuilderdata['offerCreatedBy'] == null ? "" : this.offerBuilderdata['offerCreatedBy'];
   proceedToStakeholderPostData['offerCreationDate'] = this.offerBuilderdata['offerCreationDate'] == null ? "" : this.offerBuilderdata['offerCreationDate'];
-  proceedToStakeholderPostData['offerOwner'] = this.offerBuilderdata['offerOwner'];
+  proceedToStakeholderPostData['offerOwner'] = this.offerBuilderdata['offerOwner'] == null ? "" : this.offerBuilderdata['offerOwner'];
   proceedToStakeholderPostData['clonedOfferId'] = this.offerBuilderdata['clonedOfferId'] == null ? "" : this.offerBuilderdata['clonedOfferId'];
-  proceedToStakeholderPostData['primaryBUList'] = this.offerBuilderdata['primaryBUList'];
-  proceedToStakeholderPostData['primaryBEList'] = this.offerBuilderdata['primaryBEList'];
-  proceedToStakeholderPostData['strategyReviewDate'] = this.offerBuilderdata['strategyReviewDate'];
-  proceedToStakeholderPostData['designReviewDate'] = this.offerBuilderdata['designReviewDate'];
-  proceedToStakeholderPostData['readinessReviewDate'] = this.offerBuilderdata['readinessReviewDate'];
+  proceedToStakeholderPostData['primaryBUList'] = this.offerBuilderdata['primaryBUList'] == null ? "" : this.offerBuilderdata['primaryBUList'];
+  proceedToStakeholderPostData['primaryBEList'] = this.offerBuilderdata['primaryBEList'] == null ? "" : this.offerBuilderdata['primaryBEList'];
+  proceedToStakeholderPostData['strategyReviewDate'] = this.offerBuilderdata['strategyReviewDate'] == null ? "" : this.offerBuilderdata['strategyReviewDate'];
+  proceedToStakeholderPostData['designReviewDate'] = this.offerBuilderdata['designReviewDate'] == null ? "" : this.offerBuilderdata['designReviewDate'];
+  proceedToStakeholderPostData['readinessReviewDate'] = this.offerBuilderdata['readinessReviewDate'] == null ? "" : this.offerBuilderdata['readinessReviewDate'];
 
   var selectedCharacteristics = [];
   var additionalCharacteristics = []
