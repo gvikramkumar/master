@@ -13,10 +13,10 @@ export class StakeholderfullService {
    }
 
    getdata(offerId){ debugger;
-
+   //let url="http://10.24.122.136:8080/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All"
   
      return this._http.get(this.environmentService.REST_API_STAKEHOLDERLIST_GET_URL+'/'+offerId,{withCredentials:true});
-    
+    // return this._http.get(url);
    }
 
 }

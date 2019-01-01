@@ -87,7 +87,7 @@ export class StakeholderFullComponent implements OnInit {
       console.log("Data::::"+this.data);
     });
     this.createOfferService.getPrimaryBusinessUnits() 
-    .subscribe(data => { 
+    .subscribe(data => {
       console.log("create offer Service "+data);
       // this.entityList = data.businessUnits;
       this.entityList = ['Security', 'IOT', 'Data Center', 'Enterprise'];
