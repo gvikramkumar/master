@@ -472,7 +472,7 @@ proceedToStakeholder(){
       "action": "",
       "comment": ""
     };
-    that.offerPhaseService.proceedToStakeHolders(JSON.stringify(proceedPayload)).subscribe(result => {
+    that.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(result => {
       that.router.navigate(['/stakeholderFull', that.currentOfferId, that.caseId]);
     })
   })
