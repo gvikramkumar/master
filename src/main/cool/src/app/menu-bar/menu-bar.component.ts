@@ -84,13 +84,7 @@ export class MenuBarComponent implements OnInit {
           {label: 'Offer Launch'}
       ]
   },
-//   {
-//     label: 'On Hold / Cancel ',
-//     items: [
-//         {label: 'On Hold'},
-//         {label: 'Cancel'}
-//     ]
-// }
+
     ]
   }
 
