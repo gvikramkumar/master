@@ -438,7 +438,7 @@ proceedToStakeholder(){
         "_id" : sh['_id'], 
         "businessEntity" : sh['userMappings']['businessEntity'], 
         "functionalRole" : sh['userMappings']['functionalRole'],
-        "offerRole" : sh['userMappings']['appRoleList'][0],
+        "offerRole" : sh['userMappings'][0]['appRoleList'][0],
         "stakeholderDefaults" : sh['stakeholderDefaults']
       })
     });

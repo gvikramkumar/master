@@ -62,8 +62,8 @@ export class MenuBarPopupComponent implements OnInit {
     cancelData['userId'] = this.userService.getUserId();
     cancelData['caseId'] = this.caseId;
     cancelData['offerId'] = this.currentOfferId;
-    cancelData['taskNamed'] = 'discard';
-    cancelData['action'] = 'cancel ';
+    cancelData['taskName'] = 'discard';
+    cancelData['action'] = 'cancel';
     cancelData['comment'] = this.reason;
 
     // console.log(holdData);
