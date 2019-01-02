@@ -22,6 +22,7 @@ import { MenuItem } from 'primeng/components/common/menuitem';
 
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { ok } from 'assert';
+//import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'app-stakeholder-full',
@@ -62,6 +63,57 @@ export class StakeholderFullComponent implements OnInit {
   temporaryselectedCollabs: any[];
   finalCollabs: any[];
 
+public testingData=[
+  {"_id":"lulfeng",
+		"userName":"Lulu Feng",
+		"emailId":"lulfeng@cisco.com",
+		"businessUnits":["EMAILBU"],
+		"userMappings":[
+			{
+				"businessEntity":"Security",
+			    "functionalRole":"BUPM",
+		         "functionalAdmin":true,
+		         "appRoleList":["Owner","Co-Owner"],
+		         "keyPOC":false
+		     }
+		 ],
+	            "superAdmin":false
+},
+{"_id":"preveera",
+"userName":"prema veera",
+"emailId":"preveera@cisco.com",
+"businessUnits":["EMAILBU"],
+"userMappings":[
+  {
+    "businessEntity":"Security",
+      "functionalRole":"BUPM",
+         "functionalAdmin":true,
+         "appRoleList":["Owner","Co-Owner"],
+         "keyPOC":false
+     }
+ ],
+          "superAdmin":false
+},
+{"_id":"mona",
+"userName":"mona kumar",
+"emailId":"mona@cisco.com",
+"businessUnits":["EMAILBU"],
+"userMappings":[
+  {
+    "businessEntity":"Security",
+      "functionalRole":"BUPM",
+         "functionalAdmin":true,
+         "appRoleList":["Owner","Co-Owner"],
+         "keyPOC":false
+     }
+ ],
+          "superAdmin":false
+}
+];
+  newDatastring: string;
+  deleteCollabs: any[];
+
+
   constructor( private stakeholderfullService:StakeholderfullService ,
      private createOfferService:CreateOfferService,
      private searchCollaboratorService:SearchCollaboratorService ,
@@ -81,12 +133,15 @@ export class StakeholderFullComponent implements OnInit {
 
 
    ngOnInit() {
-
+    console.log("roles", this.testingData[0].userMappings[0].appRoleList);
+    this.newData=[];
+    this.temporaryselectedCollabs = [];
+    this.deleteCollabs = [];
      //this.stakeholderfullService.getdata().subscribe(data=>{
       this.stakeholderfullService.getdata( this.currentOfferId).subscribe(data=>{
         this.firstData=data;
        this.data=this.firstData.stakeholders;
-
+     console.log("data",typeof(this.data));
 
       console.log("Data::::"+this.data);
     });
@@ -206,7 +261,7 @@ export class StakeholderFullComponent implements OnInit {
   addCollaborator() {
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
-
+      console.log("final data to send backend",this.finalCollabs);
     this.finalCollabs.forEach(element => {
       let stakeHolder = new StakeHolder();
       stakeHolder.businessEntity = element.businessEntity;
@@ -231,42 +286,53 @@ export class StakeholderFullComponent implements OnInit {
     //this.display = false;
 
   }
-  selectlist(){
+  selectlist(event){debugger;
   // this.temporaryselectedCollabs = this.selectedCollabs;
      if(this.newData.length< 1 && this.selectedCollabs.length == 1){
        this.temporaryselectedCollabs.push(this.selectedCollabs);
      }
-    if(this.selectedCollabs.length == 1 && this.newData.length  > 1){
-      if( this.newData.indexOf(this.selectedCollabs)> -1){
-        this.temporaryselectedCollabs.push(this.selectedCollabs);
-      } else{
-        alert("User already selected");
 
-    }
 
-  } else if(this.selectedCollabs.length > 1 && this.newData.length  > 1){
+ if(this.selectedCollabs.length > 0 && this.newData.length  > 0){
     this.selectedCollabs.forEach(element => {
-      if( this.newData.indexOf(element)> -1){
-        this.temporaryselectedCollabs.push(element);
-      } else{
-        alert("User already selected");
+      if( this.newData.includes(element)){
+        alert("User already selected -- select ok to delete the user");
         this.selectedCollabs.pop();
-
+        this.deleteCollabs.push(element);
+      } else{
+       
+        this.temporaryselectedCollabs.push(element);
     }
+  });
+}
+  
+    if(this.selectedCollabs.length > 0 && this.newData.length  < 1){
+  
+         
+          this.temporaryselectedCollabs = this.selectedCollabs;
+    
 
-    });
   }
 
   }
 
-  addselectedCollabs(){
-    if(this.temporaryselectedCollabs.length>1){
-    this.newData = this.newData.concat(this.temporaryselectedCollabs);
+  addselectedCollabs(){debugger;
+    if(this.temporaryselectedCollabs.length>0 &&this.newData.length  >0 ){
+      this.newData = this.newData.concat(this.temporaryselectedCollabs);
+      this.finalCollabs = this.newData;
+      console.log("newdata",typeof(this.newData));
+      }
+    if(this.temporaryselectedCollabs.length>0 && this.newData.length <1){
+    this.newData = this.temporaryselectedCollabs;
     this.finalCollabs = this.newData;
-    }else{
-      alert("please select atleast one user")
+    console.log("newdata",typeof(this.newData));
+    this.newDatastring  = JSON.stringify(this.newData);
     }
-    console.log("newDatalist",this.data);
+    if(this.temporaryselectedCollabs.length < 1){
+      alert("select atleast one");
+    }
+   
+    console.log("newDatalist",this.newData[0]);
 
     this.temporaryselectedCollabs = [];
     this.selectedCollabs = [];
@@ -274,19 +340,22 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   multideleteCollaborator(){
-    for( var i=0;i<this.temporaryselectedCollabs.length -1;i++){
-      if(this.newData.includes(this.temporaryselectedCollabs[i])){
-
-        for(var j=0;j<this.newData.length -1;j++){
-          if(this.temporaryselectedCollabs[i] == this.newData[j]){
-            this.newData.splice(i,1)
-          }
-        }
-       }
-       else{
-         alert("user not present")
-       }
+    debugger;
+    if(this.deleteCollabs.length < 1){
+      alert("select atleast one");
     }
+  
+    if(this.deleteCollabs.length > 0){
+  
+    
+
+        this.newData = this.newData.filter(val => !this.deleteCollabs.includes(val));
+          }
+    
+       this.finalCollabs = this.newData;
+       this.deleteCollabs = [];
+       this.selectedCollabs = [];
+     }
 
   //  if(this.temporaryselectedCollabs.length>0){
   //   for( var i=0;i<this.temporaryselectedCollabs.length;i++){
@@ -298,10 +367,7 @@ export class StakeholderFullComponent implements OnInit {
   //       }
   //   }
   //}
-  this.finalCollabs = this.newData;
-  this.temporaryselectedCollabs = [];
-  this.selectedCollabs = [];
-}
+ 
 
 
 
