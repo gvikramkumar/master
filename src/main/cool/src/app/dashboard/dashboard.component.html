@@ -76,7 +76,7 @@
                             <h5>Action Description</h5><a class="modal__close" id="popover_close"><span class="icon-close"
                                 (click)="displayActionPop(p1)"></span></a>
                             <p>{{actionData.actionDesc}}</p>
-                            <button class="btn btn--secondary " (click)="offerDetailOverView(actionData.offerId)">View
+                            <button class="btn btn--secondary " (click)="offerDetailOverView(actionData.offerId,actionData.caseId)">View
                               Offer</button>
                           </div>
                           <div class="popover__footer">
