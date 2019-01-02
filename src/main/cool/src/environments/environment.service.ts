@@ -109,7 +109,7 @@ export class EnvironmentService {
           this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
             console.log("EnvironmentService: set env vars for prd environment");
         } else {
-            // this.baseapi = 'http://10.24.56.190:8080';
+            //this.baseapi = 'http://10.24.56.190:8080';
             this.baseapi = 'https://cool-srv-dev.cisco.com';
             this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
             this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
