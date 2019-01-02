@@ -51,10 +51,11 @@ export class MonetizationModelService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Accept' : 'application/json'
+        'Accept' : 'application/json',
+        'responseType' :'text'
       }),
-      withCredentials: true,
-    };
+      withCredentials: true
+    }; 
     
     return this.http.post(url, data, httpOptions);
   }
