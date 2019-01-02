@@ -1,54 +1,49 @@
 <div class="content">
-  <div class="container-fluid">
-    <div class="row base-margin-top">
+  <div class="container">
+    <div class="row">
       <div class="col-md-12">
-        <div class="panel panel--indigo panel--compressed task--bar">
-          <div class="row">
-            <div class="col">
-              <div class="header-heading">
-                <h1 class="page-title test-class">
-                  <span class="action--value header-headings">
-                    {{pendingActnCount}}
-                  </span>
-                  <span class="action--value-label header-headings">Pending
-                    Actions
-                  </span>
-                </h1>
-                <span class="vertical-divider"></span>
-                <h1 class="page-title test-class">
-                  <span class="action--value header-headings">
-                    {{needImmActnCount}}
-                  </span>
-                  <span class="action--value-label header-headings">Need
-                    Immediate Action
-                  </span>
-                </h1>
-              </div>
+        <div class="panel panel--indigo panel--loose header-bar base-margin-top">
+          <div class="header-bar__main">
+            <div class="header-heading">
+              <h1 class="page-title"><span class="action--value">{{pendingActnCount}}</span> <span class="action--value-label">Pending
+                  Actions</span></h1>
+              <span class="vertical-divider"></span>
+              <h1 class="page-title"><span class="action--value">{{needImmActnCount}}</span> <span class="action--value-label">Need
+                  Immediate Action</span></h1>
             </div>
-            <div class="col text-right">
-              <button class="btn btn--white" (click)="createNewOffer()"><span class="icon-add icon-small"></span><span
-                  class="button--label">New Offer</span></button>
-            </div>
+          </div>
+          <div class="header-toolbar">
+            <button (click)="createNewOffer()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
+              <span class="button--label">New Offer</span></button>
           </div>
         </div>
       </div>
     </div>
-    <div class="row base-margin-top">
+    <!-- My Actions & Notifications Section -->
+    <div class="row">
       <div class="col-md-12">
         <div class="card card--raised base-margin-top">
           <div class="panel">
             <div class="row card-table-header">
               <div class="col-md-8">
-                <h1 class="display-4">My Actions & Notifications</h1>
+                <h2 class="page--subheading">My Actions &amp; Notifications</h2>
+                <label class="header-link"><a href="">View All<span class="icon-chevron-right inline-icon"></span></a></label>
               </div>
-            </div>
+              <div class="col-md-4">
+                <div class="form-group input--icon half-margin-bottom">
+                  <div class="form-group__text">
+                      <i id="input-type-search" type="search"></i>
+                      <input #gbforactions type="text" pInputText size="50" placeholder="Search by keywords">
+                      <button type="button" class="link">
+                          <span class="icon-search"></span>
+                      </button>
+                  </div>
+                </div>
+              </div>
+              </div>
             <div class="responsive-table">
-              <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
-                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input #gbforactions type="text" pInputText size="50" placeholder="Global Filter">
-              </div>
               <p-dataTable [value]="myActionsList" scrollable="true" scrollHeight="400px" [globalFilter]="gbforactions"
-                #dt>
+              #dt>
                 <p-column field="offerId" sortable="true" header="OFFER ID">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span *ngIf="actionData.alertType == 1">
@@ -164,34 +159,36 @@
         </div>
       </div>
 
-      <!-- my offers -->
+      <!-- My Offers Section -->
 
       <div class="col-md-12">
-        <div class="card card--raised base-margin-top">
+        <div class="card card--raised">
           <div class="panel">
             <div class="row card-table-header">
               <div class="col-md-8">
-                <h1 class="display-4">My Offers</h1>
-                <label class="header-link myOfferHeader"><a href="">View All Offers</a></label>
+                <h2 class="page--subheading">My Offers</h2>
+                <label class="header-link"><a href="">View All Offers<span class="icon-chevron-right inline-icon"></span></a></label>
               </div>
+                <div class="col-md-4">
+                    <div class="form-group input--icon half-margin-bottom">
+                        <div class="form-group__text">
+                            <i id="input-type-search" type="search"></i>
+                            <input type="text" pInputText size="50" placeholder="Search by keywords"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')">
+                            <button type="button" class="link">
+                                <span class="icon-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                  </div>
             </div>
-            <!-- <div class="responsive-table"> -->
-              <!-- <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
-                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input #gbforoffer type="text" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')">
-              </div> -->
-              <p-table [value]="myOffersList" [scrollable]="true" scrollHeight="400px" [loading]="loading" #dt>
-                  <ng-template pTemplate="caption">
-                      <div style="text-align: left">        
-                          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                          <input type="text" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
-                      </div>
-                  </ng-template>
+            <div class="responsive-table">
+              <p-table #dt [value]="myOffersList" [scrollable]="true" scrollHeight="400px" [loading]="loading"
+               [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">                
                 <ng-template pTemplate="header">
                   <tr>
-                    <th rowspan="2" style="width:10%; text-align: center" 
-                    [pSortableColumn]="offerId">OFFER ID
-                    <p-sortIcon [field]="offerId"></p-sortIcon>
+                    <th rowspan="2" style="width:10%; text-align: center" [pSortableColumn]="offerId">OFFER ID
+                      <p-sortIcon [field]="offerId"></p-sortIcon>
                     </th>
                     <th rowspan="2" style="width:20%;text-align: center" [pSortableColumn]="offerName"> OFFER NAME
                       <p-sortIcon [field]="offerName"></p-sortIcon>
@@ -199,7 +196,8 @@
                     <th rowspan="2" style="width:20%;text-align: center" [pSortableColumn]="offerOwner"> OFFER OWNER
                       <p-sortIcon [field]="offerOwner"></p-sortIcon>
                     </th>
-                    <th rowspan="2" style="width:20%;text-align: center" [pSortableColumn]="expectedLaunchDate"> LAUNCH DATE
+                    <th rowspan="2" style="width:20%;text-align: center" [pSortableColumn]="expectedLaunchDate"> LAUNCH
+                      DATE
                       <p-sortIcon [field]="expectedLaunchDate"></p-sortIcon>
                     </th>
                     <th colspan="1" style="width:30%;text-align: center">LIFE CYCLE STATUS</th>
@@ -248,8 +246,7 @@
                           </div>
                         </div>
                       </div>
-                      <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'hold'"
-                        class="row no-gutters">
+                      <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'hold'" class="row no-gutters">
                         <div class="col-md-12">
                           <div class="progressbar__label progressbarLabel-cancelled">Hold</div>
                         </div>
@@ -377,7 +374,7 @@
                   </tr>
                 </ng-template>
               </p-table>
-            <!-- </div> -->
+            </div>
           </div>
         </div>
       </div>

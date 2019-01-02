@@ -294,7 +294,41 @@ color: #fbab18;
   padding-left: 10%;
 }
 
-::ng-deep .ui-datatable-scrollable-view .ui-datatable-scrollable-body {
+/* ::ng-deep .ui-datatable-scrollable-view .ui-datatable-scrollable-body {
   min-height: 400px;
   border: 1px solid #D5D5D5;
+} */
+
+::ng-deep  .ui-datatable .ui-datatable-tfoot>tr>td, .ui-datatable .ui-datatable-data>tr>td {
+  /* border-width: 0; */
+  padding: 0.65em .5em;
+}
+/* ::ng-deep .ui-widget-header {
+  background: transparent;
+  border: 0;
+  display: inline-block;
+} */
+::ng-deep .ui-datatable th.ui-state-default {
+  background: #eaeaea;
+}
+.cui .display-4 {
+  font-size: 22px;
+}
+.coolHeader.panel.panel--indigo {
+  height: 70px;
+}
+::ng-deep .ui-table .ui-table-tbody > tr {
+  background: #ffffff;
+  border-bottom: solid 1px #f2f2f2;
+}
+th.ui-state-default.ui-unselectable-text.ui-sortable-column {
+  white-space: nowrap;
+  font-size: 12px;
+}
+::ng-deep .ui-datatable-scrollable-view .ui-datatable-scrollable-body {
+  /* border: 0; */
+}
+::ng-deep .ui-table .ui-table-tbody > tr > td {
+  /* border: 0; */
+  background: inherit;
 }
