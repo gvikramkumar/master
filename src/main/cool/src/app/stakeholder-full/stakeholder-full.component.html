@@ -4,15 +4,15 @@
 
 <div class="content">
     <div class="container-fluid">
-        <!-- <app-menu-bar [caseId]="caseId">
-        </app-menu-bar>  -->
+        <app-menu-bar [caseId]="caseId">
+        </app-menu-bar> 
 <div class="panel-wrapper mt-15">
 
     <!-- Blue bar -->
     <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
             <div class="col-md-4">
-                <h4><button class="btn btn--icon btn--white"><span class="icon-back"></span></button> Stakeholders</h4>
+                <h4><button class="btn btn--icon btn--white"><span class="icon-back" (click)="gotoMMpage()"></span></button> Stakeholders</h4>
             </div>
             <div class="col-md-8 text-right">
                 <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
@@ -71,7 +71,7 @@
                                 </span>
                                 <div *ngIf ="d" class="flex-fluid text-left half-margin-left">
 
-                                    <div class="text-bold">{{d._id}}</div>
+                                    <div class="text-bold">{{d.name }}</div>
                                     
                                 </div>
                         </div>
@@ -130,44 +130,30 @@
                                 </div>
                                 </form>
                                 <div class="divider divider--compressed"></div>
-                                <h4>Search Results</h4>
-                               
+                                <h4 (mouseover) = "onOut($event, user)">Search Results</h4>
+                               <span >
                                  <p-dataTable *ngIf="collaboratorsList" [value]="collaboratorsList" [(selection)]="selectedCollabs"
-                                (selectionChange) = "selectlist($event)"  dataKey="_id" #dt>
+                                (selectionChange) = "selectlist($event)"
+                                 (mouseover) = "onEvent($event, user)"  dataKey="email" #dt>
                                     
 
-                                    <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
-                                    <p-column field=" userMappings"> 
-                                    <ng-template pTemplate="header">
-                                        Function
-                                    </ng-template>
-                                    <ng-template let-rowData="rowData" pTemplate="body">
-                                    <span *ngFor="let value of rowData.userMappings">{{ value.functionalRole }}</span>
-                                    </ng-template>
-                                    </p-column>
-                                    <p-column field=" userMappings">
-                                            <ng-template pTemplate="header">
-                                               Roles
-                                               </ng-template>
-                                               <ng-template let-rowData="rowData" pTemplate="body">
-                                               <span *ngFor="let value of rowData.userMappings">
-                                                 {{value.appRoleList[0]}}
-                                        </span>
-                                               </ng-template>
-                                               </p-column>
-    
-                                    <p-column field="userName" header="Name"></p-column>
-                                    <p-column field="emailId" header="Email"></p-column>
-                                    <p-column field=" userMappings"> 
-                                    <ng-template pTemplate="header">
-                                     businessEntity
-                                    </ng-template>
-                                    <ng-template let-rowData="rowData" pTemplate="body">
-                                    <span *ngFor="let value of rowData.userMappings">{{value.businessEntity }}</span>
-                                    </ng-template>
-                                    </p-column>
-
+                                <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
+                                <p-column field="functionalRole" header="Function"></p-column>
+                                <p-column field="applicationRole" header="Roles">
+                                    
+                                </p-column>
+                                <p-column field="name" header="Name"></p-column>
+                                <p-column field="email" header="Email"></p-column>
+                                <p-column field="businessEntity" header="BusinessEntity"></p-column>
+                                <p-column header = "delete">
+                                        <ng-template pTemplate="header">
+                                        </ng-template>
+                                        <ng-template let-user="rowData" pTemplate="body">
+                                          <button type="button" pButton *ngIf = "showDelete" (click)="onDelete(user)" icon="fa-delete">delete</button>
+                                        </ng-template>
+                                      </p-column>
                                 </p-dataTable>  
+                            </span>
                                   <br>
                                    <button class="btn btn--primary" (click)="multideleteCollaborator()">Remove</button> 
                                    <button class="btn btn--primary" (click)="addselectedCollabs()">Add</button> 

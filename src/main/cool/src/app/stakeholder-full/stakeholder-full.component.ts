@@ -22,6 +22,8 @@ import { MenuItem } from 'primeng/components/common/menuitem';
 
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { ok } from 'assert';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { routerNgProbeToken } from '@angular/router/src/router_module';
 //import { runInThisContext } from 'vm';
 
 @Component({
@@ -45,6 +47,7 @@ export class StakeholderFullComponent implements OnInit {
    lists;
    public newData:any[];
     //new update
+    public showDelete =false;
     public tempcoll:any[];
     public lstcoll:any[];
     public showtemp:boolean;
@@ -63,61 +66,17 @@ export class StakeholderFullComponent implements OnInit {
   temporaryselectedCollabs: any[];
   finalCollabs: any[];
 
-public testingData=[
-  {"_id":"lulfeng",
-		"userName":"Lulu Feng",
-		"emailId":"lulfeng@cisco.com",
-		"businessUnits":["EMAILBU"],
-		"userMappings":[
-			{
-				"businessEntity":"Security",
-			    "functionalRole":"BUPM",
-		         "functionalAdmin":true,
-		         "appRoleList":["Owner","Co-Owner"],
-		         "keyPOC":false
-		     }
-		 ],
-	            "superAdmin":false
-},
-{"_id":"preveera",
-"userName":"prema veera",
-"emailId":"preveera@cisco.com",
-"businessUnits":["EMAILBU"],
-"userMappings":[
-  {
-    "businessEntity":"Security",
-      "functionalRole":"BUPM",
-         "functionalAdmin":true,
-         "appRoleList":["Owner","Co-Owner"],
-         "keyPOC":false
-     }
- ],
-          "superAdmin":false
-},
-{"_id":"mona",
-"userName":"mona kumar",
-"emailId":"mona@cisco.com",
-"businessUnits":["EMAILBU"],
-"userMappings":[
-  {
-    "businessEntity":"Security",
-      "functionalRole":"BUPM",
-         "functionalAdmin":true,
-         "appRoleList":["Owner","Co-Owner"],
-         "keyPOC":false
-     }
- ],
-          "superAdmin":false
-}
-];
+
   newDatastring: string;
   deleteCollabs: any[];
+  caseId: any;
 
 
   constructor( private stakeholderfullService:StakeholderfullService ,
      private createOfferService:CreateOfferService,
      private searchCollaboratorService:SearchCollaboratorService ,
-     private activatedRoute: ActivatedRoute,) {
+     private activatedRoute: ActivatedRoute,
+     private router:Router) {
 
         this.activatedRoute.params.subscribe(params => {
             this.currentOfferId = params['id'];
@@ -125,7 +84,11 @@ public testingData=[
           if (!this.currentOfferId) {
             this.currentOfferId = this.createOfferService.coolOffer.offerId
           }
-
+          this.activatedRoute.params.subscribe(params => {
+            this.currentOfferId = params['id'];
+            this.caseId = params['id2'];
+          });
+      
 
 }
 
@@ -133,7 +96,7 @@ public testingData=[
 
 
    ngOnInit() {
-    console.log("roles", this.testingData[0].userMappings[0].appRoleList);
+    
     this.newData=[];
     this.temporaryselectedCollabs = [];
     this.deleteCollabs = [];
@@ -239,6 +202,7 @@ public testingData=[
           tempCollaboratorList.push(collaborator);
         });
         this.collaboratorsList = tempCollaboratorList;
+        console.log("collabarate list from backend",this.collaboratorsList);
       },
         error => {
           console.log('error occured');
@@ -259,32 +223,58 @@ public testingData=[
   }
 
   addCollaborator() {
-    const listOfStakeHolders: StakeHolder[] = [];
-    const stakeHolderDto = new StakeHolderDTO();
-      console.log("final data to send backend",this.finalCollabs);
-    this.finalCollabs.forEach(element => {
-      let stakeHolder = new StakeHolder();
-      stakeHolder.businessEntity = element.businessEntity;
-      stakeHolder.functionalRole = element.functionalRole;
-      stakeHolder.offerRole = element.offerRole;
-      stakeHolder._id = this.getUserIdFromEmail(element.email);
-      // stakeHolder.email = element.email; //add email for post
-      listOfStakeHolders.push(stakeHolder);
-    });
+    // const listOfStakeHolders: StakeHolder[] = [];
+    // const stakeHolderDto = new StakeHolderDTO();
+    //   console.log("final data to send backend",this.finalCollabs);
+    // this.finalCollabs.forEach(element => {
+    //   let stakeHolder = new StakeHolder();
+    //   stakeHolder.businessEntity = element.businessEntity;
+    //   stakeHolder.functionalRole = element.functionalRole;
+    //   stakeHolder.offerRole = element.offerRole;
+    //   stakeHolder._id = this.getUserIdFromEmail(element.email);
+    //   // stakeHolder.email = element.email; //add email for post
+    //   listOfStakeHolders.push(stakeHolder);
+    // });
 
-    stakeHolderDto.offerId = this.currentOfferId;
-    stakeHolderDto.stakeholders = listOfStakeHolders;
-    console.log(stakeHolderDto);
-    console.log('before service call');
+    // stakeHolderDto.offerId = this.currentOfferId;
+    // stakeHolderDto.stakeholders = listOfStakeHolders;
+    // console.log(stakeHolderDto);
+    // console.log('before service call');
 
-    let that = this;
-    this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
-      // update stakeData from data posted response
-      that.addToStakeData(data);
-    });
-    this.updateStakeData.next("");
-    //this.display = false;
+    // let that = this;
+    // this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
+      
+    //   that.addToStakeData(data);
+    // });
+    // this.updateStakeData.next("");
+    this.router.navigate(['/strategyReview', this.currentOfferId]);
+  }
 
+  gotoMMpage(){
+    this.router.navigate(['/mmassesment',this.currentOfferId,this.caseId]);
+  }
+  onDelete(user){debugger;
+    if(this.newData.length == 1){
+      this.newData.splice(0, 1);
+    }
+    if(this.newData.length > 1){
+   if(this.newData.includes(user)){
+    const index = this.newData.indexOf(user, 0);
+    if (index > -1) {
+      this.newData.splice(index, 1);
+    }
+   }else{
+     alert("user not present ");
+   }
+  }
+    
+  }
+  onEvent(event,value){
+    this.showDelete =true;
+  
+  }
+  onOut(event,value){
+    this.showDelete =false;
   }
   selectlist(event){debugger;
   // this.temporaryselectedCollabs = this.selectedCollabs;
