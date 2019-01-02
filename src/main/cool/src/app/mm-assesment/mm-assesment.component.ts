@@ -346,7 +346,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   updateStakeData(data) {
-    this.MonetizationModelService.showStakeholders(this.currentMMModel, this.currentPrimaryBE).subscribe(res => {
+    /* this.MonetizationModelService.showStakeholders(this.currentMMModel, this.currentPrimaryBE).subscribe(res => {
       this.stakeData = {};
       // console.log(res);
       let keyUsers = [];
@@ -359,7 +359,7 @@ export class MmAssesmentComponent implements OnInit {
         }
         this.stakeData[user['offerRole']].push({name: user['keyUser'], email: user['email']});
       })
-    })
+    }) */
   }
 
   updateMessage(message) {
@@ -436,9 +436,9 @@ proceedToStakeholder(){
     this.stakeData[prop].forEach(sh => {
       stakeHolders.push({
         "_id" : sh['_id'], 
-        "businessEntity" : sh['userMappings']['businessEntity'], 
-        "functionalRole" : sh['userMappings']['functionalRole'],
-        "offerRole" : sh['userMappings'][0]['appRoleList'][0],
+        "businessEntity" : sh['businessEntity'], 
+        "functionalRole" : sh['functionalRole'],
+        "offerRole" : sh['offerRole'],
         "stakeholderDefaults" : sh['stakeholderDefaults']
       })
     });
