@@ -4,8 +4,8 @@
 
 <div class="content">
     <div class="container-fluid">
-        <app-menu-bar [caseId]="caseId">
-        </app-menu-bar> 
+        <!-- <app-menu-bar [caseId]="caseId">
+        </app-menu-bar>  -->
 <div class="panel-wrapper mt-15">
 
     <!-- Blue bar -->
@@ -53,11 +53,13 @@
                       </div>
                     
                     </li>
+                
                     <li><div class="ui-accordion-header"><span class="icon-chevron-up icon-small pull-right"></span></div>
-                        <div class="ui-accordion-content">
-                            <div *ngFor="let d of newData">
+                        <div *ngIf = "newData" class="ui-accordion-content">
+                            <div *ngFor="let d of newData ">
+                         
                             <div class="flex-center-vertical">
-                                <!-- Team Member Name Avatar -->
+                                
                                 <span class="avatar-ico">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
                                     <title id="fwt-profile-button-loggedin-title"></title>
@@ -67,9 +69,10 @@
                                     </g> 
                                     </svg>
                                 </span>
-                                <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">{{d.userName}}</div>
-                                    <!-- <div>{{d.emailId}}</div> -->
+                                <div *ngIf ="d" class="flex-fluid text-left half-margin-left">
+
+                                    <div class="text-bold">{{d._id}}</div>
+                                    
                                 </div>
                         </div>
                         <div class="divider divider--compressed"></div>
@@ -129,8 +132,8 @@
                                 <div class="divider divider--compressed"></div>
                                 <h4>Search Results</h4>
                                
-                                 <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs"
-                                (selectionChange) = "selectlist()"  dataKey="email" #dt>
+                                 <p-dataTable *ngIf="collaboratorsList" [value]="collaboratorsList" [(selection)]="selectedCollabs"
+                                (selectionChange) = "selectlist($event)"  dataKey="_id" #dt>
                                     
 
                                     <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
@@ -147,13 +150,8 @@
                                                Roles
                                                </ng-template>
                                                <ng-template let-rowData="rowData" pTemplate="body">
-                                               <span *ngFor="let values of rowData.userMappings">
-                                                    <ng-template let-rowData="rowData" pTemplate="body">
-                                     <span *ngFor="let value of values.appRoleList;let i =index">
-                                                               <span *ngIf ="i == 0">{{value}}</span>
-                                                    
-                                                </span>
-                                            </ng-template>
+                                               <span *ngFor="let value of rowData.userMappings">
+                                                 {{value.appRoleList[0]}}
                                         </span>
                                                </ng-template>
                                                </p-column>
