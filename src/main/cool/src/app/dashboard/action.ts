@@ -10,6 +10,7 @@ export class ActionsAndNotifcations{
     styleColor:string;
     actionDesc:string;
     caseId:string;
+    createdBy:string;
     constructor() {
 
     }
@@ -20,6 +21,14 @@ export class ActionsAndNotifcations{
 
     getCaseId() {
         return this.caseId;
+    }
+
+    setCreatedBy(createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    getCreatedBy() {
+        return this.createdBy;
     }
 
     setStyleColor(styleColor) {
