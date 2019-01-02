@@ -271,6 +271,7 @@ export class RightPanelComponent implements OnInit {
 
     this.searchCollaboratorService.searchCollaborator(payLoad)
       .subscribe(data => {
+        this.selectedCollabs = [];
         data.forEach(element => {
           const collaborator = new Collaborators();
           collaborator.email = element.emailId;
@@ -309,7 +310,9 @@ export class RightPanelComponent implements OnInit {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
-      this.stakeData[user['offerRole']].push({ name: user['_id'], email: "sample@sample.com" });
+      this.stakeData[user['offerRole']].push({ name: user['_id'], email: user['email'], 
+      _id:user['_id'], businessEntity: user['businessEntity'], functionalRole: user['functionalRole'],
+      offerRole: user['offerRole'], stakeholderDefaults:false });
     })
   }
 
@@ -321,27 +324,26 @@ export class RightPanelComponent implements OnInit {
   addCollaborator() {
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
-
+    console.log(this.selectedCollabs);
     this.selectedCollabs.forEach(element => {
       let stakeHolder = new StakeHolder();
       stakeHolder.businessEntity = element.businessEntity;
       stakeHolder.functionalRole = element.functionalRole;
       stakeHolder.offerRole = element.offerRole;
       stakeHolder._id = this.getUserIdFromEmail(element.email);
-      // stakeHolder.email = element.email; //add email for post
+      stakeHolder.email = element.email;
       listOfStakeHolders.push(stakeHolder);
     });
-
+    this.selectedCollabs = [];
     stakeHolderDto.offerId = this.currentOfferId;
     stakeHolderDto.stakeholders = listOfStakeHolders;
     console.log(stakeHolderDto);
-    console.log('before service call');
 
     let that = this;
-    this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
+    //this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
       // update stakeData from data posted response
-      that.addToStakeData(data);
-    });
+    that.addToStakeData(stakeHolderDto);
+    //});
     this.updateStakeData.next("");
     this.display = false;
 
