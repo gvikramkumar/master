@@ -1,80 +1,173 @@
 <div class="content">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="coolHeader panel panel--vibblue panel--loose header-bar base-margin-top">
-                <div class="header-bar__main">
-                  <div class="header-heading">
-                    <h1 class="page-title"><span class="action--value header-headings">{{pendingActnCount}}</span> <span
-                        class="action--value-label header-headings">Pending
-                        Actions</span></h1>
-                    <span class="vertical-divider"></span>
-                    <h1 class="page-title"><span class="action--value header-headings">{{needImmActnCount}}</span> <span
-                        class="action--value-label header-headings">Need
-                        Immediate Action</span></h1>
-                  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel--indigo panel--loose header-bar base-margin-top">
+          <div class="header-bar__main">
+            <div class="header-heading">
+              <h1 class="page-title"><span class="action--value">{{pendingActnCount}}</span> <span class="action--value-label">Pending
+                  Actions</span></h1>
+              <span class="vertical-divider"></span>
+              <h1 class="page-title"><span class="action--value">{{needImmActnCount}}</span> <span class="action--value-label">Need
+                  Immediate Action</span></h1>
+            </div>
+          </div>
+          <div class="header-toolbar">
+            <button (click)="createNewAction()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
+              <span class="button--label">New Actions</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card--raised base-margin-top">
+          <div class="panel">
+            <div class="row card-table-header">
+              <div class="col-md-8">
+                <h2 class="page--subheading">Action Item Tracker</h2>
+              </div>
+            </div>
+            <div class="responsive-table">
+              <p-dataTable [value]="myActionsList" scrollHeight="400px">
+                <p-column field="offerId" sortable="true" header="OFFER">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span>{{actionData.offerId}}<br /></span>
+                    <span>{{actionData.offerName}}</span>
+                  </ng-template>
+                </p-column>
+                <p-column field="actions" sortable="true" header="ACTION">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span class="offerName">{{actionData.actiontTitle}} <br /></span>
+                    <span class="offerDesc">{{actionData.actionDesc}}</span>
+                  </ng-template>
+                </p-column>
+                <p-column field="createdBy" sortable="true" header="OFFER CREATED BY">
+                </p-column>
+                <p-column field="" sortable="true" header="FUNCTION">
+                </p-column>
+                <p-column field="assigneeId" sortable="true" header="ASSIGNED USER">
+                </p-column>
+                <p-column field="dueDate" header="DUE DATE" sortable="true">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span>{{actionData.dueDate}} <br /></span>
+                  </ng-template>
+                </p-column>
+                <p-column field="status" sortable="true" header="STATUS">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span *ngIf="actionData.alertType == 1">
+                      <div style="text-align:center">
+                        <span class="{{actionData.styleColor}}">
+                          <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
+                        </span>
+                      </div>
+                    </span>
+                    <span *ngIf="actionData.alertType == 2">
+                      <div style="text-align:center">
+                        <span>--</span>
+                      </div>
+                    </span>
+                  </ng-template>
+                </p-column>
+              </p-dataTable>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-dialog [showHeader]="false" [responsive]="true" [width]="700" [height]="400" [minY]="70" [(visible)]="displayActionPhase"
+      [closable]="true">
+      <div class="pull-right">
+        <span class="icon-close" (click)="closeActionDailog()"></span>
+      </div>
+      <div class="card__header">
+        <h5 class="card__title">Create an Action</h5>
+      </div>
+      <div class="row">
+        <form>
+          <div class="row base-margin-top">
+            <div class="col-md-6">
+              <div class="form-group half-margin-bottom">
+                <div class="form-group__text select">
+                  <select id="offerName" class="form-control" formControlName="offerName" [(ngModel)]="selectedOfferName">
+                    <option value="null" selected="">Select Offer Name</option>
+                    <option *ngFor="let x of myOfferList" [value]="x.offerName">
+                      {{x.offerName}}</option>
+                  </select>
                 </div>
-                
-                <div class="header-toolbar">
-                        <button (click)="createNewAction()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
-                            <span class="button--label">New Actions</span></button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group half-margin-bottom">
+                <div class="form-group__text">
+                  <input id="input-type-search" type="search" value="Action Title">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group half-margin-bottom">
+                <div class="form-group__text">
+                  <input id="input-type-search" type="search" value="Description">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group half-margin-bottom base-margin-top">
+                <div class="form-group__text select">
+                  <select id="input-type-select">
+                    <option value="first" selected="">Milestone</option>
+                    <option value="second">Second Value</option>
+                    <option value="third">Third Value</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="form-group__text select">
+                  <label for="functionName">Function</label>
+                  <select id="functionName" class="form-control" formControlName="functionName" [(ngModel)]="functionNameValue">
+                    <option value={{manualactionList}}>
+                      {{manualactionList}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group base-margin-top half-margin-bottom">
+                <label for="dueDate">ASSIGNEE</label>
+                <div class="form-group__text select">
+                  <select id="input-type-select">
+                    <option value="first" selected="">Assignee</option>
+                    <option value="second">Second Value</option>
+                    <option value="third">Third Value</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group label--floated input--icon half-margin-bottom">
+                <label for="dueDate">DUE DATE</label>
+                <div class="form-group__text">
+                  <input name="dueDateName" class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
+                    [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig" [(ngModel)]="dueDateValue"
+                    ngModel #dueDateName="ngModel">
+                  <button type="button" class="link" tabindex="-1">
+                    <span class="icon-month"></span>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-
-          <div class="row">
-                <div class="col-md-12">
-                  <div class="card card--raised base-margin-top">
-                    <div class="panel">
-                      <div class="row card-table-header">
-                        <div class="col-md-8">
-                          <h1 class="display-4">ACTION ITEM TRACKER</h1>
-                        </div>
-                        <div class="col-md-8">
-                                <span class="icon-filter"></span>
-                              </div>
-                        
-                      </div>
-                      <div class="responsive-table">
-                        <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
-                          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                          <input #gbforactions type="text" pInputText size="50" placeholder="Global Filter">
-                        </div>
-                        <p-dataTable [value]="myActions" [rows]="10" [paginator]="true" [globalFilter]="gbforactions" #dt>
-                          <p-column field="offerId" sortable= "true" header="Offer">
-                           
-                          </p-column>
-                          <p-column field="actions" sortable= "true" header="Action" >
-                        
-                          </p-column>
-                          <p-column field="createdBy" sortable= "true" header="Created By" >
-                          </p-column>
-                          <p-column field="function" sortable= "true" header="Function" >
-                          </p-column>
-                          <p-column field="assigned user" sortable= "true" header="Assigned User">
-                            
-                          </p-column>
-                          <p-column field="dueDate" sortable= "true" header="Due Date" >
-                            
-                          </p-column>
-                          <p-column field="status" header="Status" sortable= "true">
-                               
-                          </p-column>
-                        </p-dataTable>
-                      </div>
-                    </div>
-     </div>          
+          <div class="row pull-right">
+            <div class="form-actions">
+              <button class="btn btn--secondary" (click)="closeActionDailog()">Cancel</button>
+              <button class="btn btn--primary" type="submit">Create
+                an Action</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </p-dialog>
+  </div>
 </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-

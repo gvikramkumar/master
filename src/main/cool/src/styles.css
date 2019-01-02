@@ -306,6 +306,14 @@ ul li {
   color: #39393b;
 }
 
+.cui .panel.panel--indigo.panel--loose.header-bar.base-margin-top .header-heading h1.page-title {
+  color: white
+}
+
+.cui .panel.panel--indigo.panel--loose.header-bar.base-margin-top {
+  height: 70px;
+}
+
 .modal-body p {
   font-size: 1.4rem;
   color: #39393b;
