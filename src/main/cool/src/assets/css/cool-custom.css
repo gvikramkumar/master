@@ -23,6 +23,9 @@
   margin: auto 1em;
   font-size: 10px;
 }
+.cui .ui-cell-data span.icon-small {
+  color: #005073;
+}
 .cui .card.card--raised, .cui a.card.card--raised {
   -webkit-box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.25);
   box-shadow: 0 10px 4px -6px rgba(0, 0, 0, 0.075);
