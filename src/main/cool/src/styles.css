@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'assets/css/cui-standard.min.css';
 @import '~perfect-scrollbar/css/perfect-scrollbar.css';
-
+@import 'assets/css/cool-custom.css';
 html {
   height: 100%;
   font-size: 62.5%;
@@ -311,7 +311,7 @@ ul li {
 }
 
 .cui .panel.panel--indigo.panel--loose.header-bar.base-margin-top {
-  height: 70px;
+  height: 57px;
 }
 
 .modal-body p {
@@ -779,9 +779,9 @@ h6 .acc-title {
   max-width: 230px !important;
 }
 
-.custome-date {
-  /* border: 1px solid red; */
-}
+/* .custome-date {
+  border: 1px solid red;
+} */
 
 .cui ul.tabs>li>a {
   padding: 4px 0;
@@ -1261,3 +1261,5 @@ span.icon-check-outline.icon-medium {
   color:#666666;
   font-size: 18px;
 }
+
+

@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <div class="panel panel--indigo panel--loose header-bar base-margin-top">
+        <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
           <div class="header-bar__main">
             <div class="header-heading">
               <h1 class="page-title"><span class="action--value">{{pendingActnCount}}</span> <span class="action--value-label">Pending
@@ -180,188 +180,186 @@
                     </div>
             </div>
             <div class="responsive-table">
-              <p-dataTable [value]="myOffersList" scrollable="true" scrollHeight="400px" [globalFilter]="gbforoffer" #dt>
-              <p-headerColumnGroup>
-                <p-row>
-                  <p-column field="offerId" header="OFFER ID" sortable="true" rowspan="2" [style]="{'width': '100px'}">
-                  </p-column>
-                  <p-column field="offerName" header="OFFER NAME" sortable="true" rowspan="2" [style]="{'width': '150px'}">
-                  </p-column>
-                  <p-column field="offerOwner" header="OFFER OWNER" sortable="true" rowspan="2" [style]="{'width': '150px'}">
-                  </p-column>
-                  <p-column field="expectedLaunchDate" header="LAUNCH DATE" sortable="true" [style]="{'width': '200px'}"
-                    rowspan="2">
-                  </p-column>
-                  <p-column field="status" header="LIFE CYCLE STATUS" colspan="1" [style]="{'width': '400px'}"></p-column>
-                </p-row>
-                <p-row>
-                  <p-column [style]="{'width': '400px'}">
-                    <ng-template pTemplate="header">
-                      <span style="padding: 0px 60px 0px 0px">PRE-LAUNCH</span>
-                      <span style="padding: 0px 60px 0px 0px">IN MARKET</span>
-                      <span>END OF LIFE</span>
-                    </ng-template>
-                  </p-column>
-                </p-row>
-              </p-headerColumnGroup>
-              <p-column field="offerId" [style]="{'width': '100px'}"></p-column>
-              <p-column field="offerName" [style]="{'width': '150px'}"></p-column>
-              <p-column field="offerOwner" [style]="{'width': '150px'}"></p-column>
-              <p-column field="expectedLaunchDate" [style]="{'width': '200px'}">
-                <ng-template let-col let-offerData="rowData" pTemplate="body">
-                  <span>{{dateFormat(offerData.expectedLaunchDate)}} <br /></span>
+              <p-table #dt [value]="myOffersList" [scrollable]="true" scrollHeight="400px" [loading]="loading"
+               [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th rowspan="2" style="width:10%; text-align: center" [pSortableColumn]="offerId">OFFER ID
+                      <p-sortIcon [field]="offerId"></p-sortIcon>
+                    </th>
+                    <th rowspan="2" style="width:20%;text-align: center" [pSortableColumn]="offerName"> OFFER NAME
+                      <p-sortIcon [field]="offerName"></p-sortIcon>
+                    </th>
+                    <th rowspan="2" style="width:20%;text-align: center" [pSortableColumn]="offerOwner"> OFFER OWNER
+                      <p-sortIcon [field]="offerOwner"></p-sortIcon>
+                    </th>
+                    <th rowspan="2" style="width:20%;text-align: center" [pSortableColumn]="expectedLaunchDate"> LAUNCH
+                      DATE
+                      <p-sortIcon [field]="expectedLaunchDate"></p-sortIcon>
+                    </th>
+                    <th colspan="1" style="width:30%;text-align: center">LIFE CYCLE STATUS</th>
+                  </tr>
+                  <tr class="tr--th-small">
+                    <th colspan="1">
+                      <div class="row">
+                        <div class="col">
+                          PRE-LAUNCH
+                        </div>
+                        <div class="col">
+                          IN MARKET
+                        </div>
+                        <div class="col">
+                          END OF LIFE
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
                 </ng-template>
-              </p-column>
-              <p-column field="status" [style]="{'width': '400px'}">
-                <ng-template let-col let-offerData="rowData" pTemplate="body">
-                    <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'"
-                    class="row no-gutters">
-                    <div class="col-md-12">
-                      <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--warning" data-percentage="100">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--warning" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'hold'" class="row no-gutters">
-                    <div class="col-md-12">
-                      <div class="progressbar__label progressbarLabel-cancelled">Hold</div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--warning" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--warning" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Cancelled'" class="row no-gutters">
-                    <div class="col-md-12">
-                      <div class="progressbar__label progressbarLabel-cancelled">Cancelled</div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--warning" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--warning" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'In Market'" class="row no-gutters">
-                    <div class="col-md-12">
-                      <div class="progressbar__label progressbarLabel-inMarket">In Market</div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="100">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="100">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Update in progress'"
-                    class="row no-gutters">
-                    <div class="col-md-12">
-                      <div class="progressbar__label progressbarLabel-warning">Update in progress</div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="100">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--warning" data-percentage="100">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL In Progress'"
-                    class="row no-gutters">
-                    <div class="col-md-12">
-                      <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL in progress</div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="100">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="100">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--warning" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL'" class="row no-gutters">
-                    <div class="col-md-12">
-                      <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL</div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="100">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="100">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="progressbar progressbar--success" data-percentage="0">
-                        <div class="progressbar__fill"></div>
-                      </div>
-                    </div>
-                  </div>
-                </ng-template>
-              </p-column>
-            </p-dataTable>
+                <ng-template pTemplate="body" let-offerData>
+                    <tr>
+                      <td style="width:10%">{{offerData.offerId}}</td>
+                      <td style="width:20%">{{offerData.offerName}}</td>
+                      <td style="width:20%">{{offerData.offerOwner}}</td>
+                      <td style="width:20%">{{dateFormat(offerData.expectedLaunchDate)}}</td>
+                      <td style="width:30%">
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'"
+                          class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>
+                          </div>
+  
+                            <div class="progressbar progressbar--warning" data-percentage="100">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+  
+                            <div class="progressbar progressbar--warning" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+  
+                            <div class="progressbar progressbar--success" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                        </div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'hold'" class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-cancelled">Hold</div>
+                          </div>
+  
+                            <div class="progressbar progressbar--warning" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--warning" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                        </div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Cancelled'" class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-cancelled">Cancelled</div>
+                          </div>
+  
+                            <div class="progressbar progressbar--warning" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--warning" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                        </div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'In Market'" class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-inMarket">In Market</div>
+                          </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="100">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="100">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                        </div>
+  
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Update in progress'"
+                          class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-warning">Update in progress</div>
+                          </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="100">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--warning" data-percentage="100">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                        </div>
+  
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL In Progress'"
+                          class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL in progress</div>
+                          </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="100">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="100">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--warning" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                        </div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL'" class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL</div>
+                          </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="100">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                            <div class="progressbar progressbar--success" data-percentage="100">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+  
+                            <div class="progressbar progressbar--success" data-percentage="0">
+                              <div class="progressbar__fill"></div>
+                            </div>
+  
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+            </p-table>
             </div>
           </div>
         </div>
