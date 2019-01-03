@@ -1,0 +1,16 @@
+.cui .task--bar .btn {
+  border-radius: 6px;
+}
+.cui .ui-table .ui-table-tbody > tr > td {
+  border: 0
+}
+.cui .ui-datatable .ui-datatable-thead>tr>th, .cui .ui-table .ui-table-thead>tr>th {
+  white-space: nowrap;
+  font-weight: normal;
+  background: #EAEAEa;
+  color: #333333;
+}
+.cui .row.card-table-header[_ngcontent-c4] {
+  border-bottom: 0;
+  padding-bottom: 10px;
+}
