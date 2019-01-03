@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { HttpClient } from '@angular/common/http';
@@ -6,6 +6,11 @@ import { ActionsAndNotifcations } from '../dashboard/action';
 import * as moment from 'moment';
 import { ActionsService } from '../services/actions.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { CreateOfferService } from '../services/create-offer.service';
+import { DashboardService } from '../services/dashboard.service';
+import { NgForm } from '@angular/forms';
+import { CreateAction } from '../models/create-action';
+import { CreateActionService } from '../services/create-action.service';
 
 @Component({
   selector: 'app-actions',
@@ -13,7 +18,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
   styleUrls: ['./actions.component.css']
 })
 export class ActionsComponent implements OnInit {
-
+  @ViewChild('createActionForm') createActionForm: NgForm;
   myActionsList;
   myActions;
   pendingActnCount = 0;
@@ -22,17 +27,45 @@ export class ActionsComponent implements OnInit {
   displayActionPhase: Boolean = false;
   minDate: Date;
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+  manualactionList;
+  actionListData;
+  manualaction;
+  myOfferList;
+  assigneeList;
+  offerNameValue: string;
+  commentValue: string;
+  titleValue: string;
+  descriptionValue: string;
+  milestoneValue: string;
+  functionNameValue: string;
+  assigneeValue: string;
+  dueDateValue: string;
 
   constructor(private router: Router, private actionsService: ActionsService,
-    private userService: UserService, private httpClient: HttpClient) { }
+    private userService: UserService, private httpClient: HttpClient,
+    private createOfferService: CreateOfferService,
+    private dashboardService: DashboardService,
+    private createActionService: CreateActionService) { }
 
   ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
     this.actionsService.getMyActionsList()
-    .subscribe(data => {
-      this.myActions = data;
-      this.processMyActionsList();
+      .subscribe(data => {
+        this.myActions = data;
+        this.processMyActionsList();
+      });
+
+    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+      const actionListData = [];
+      const functionalRoleData = data.userMappings;
+      functionalRoleData.forEach(element => {
+        this.manualactionList = element.functionalRole;
+      });
+    });
+    this.manualactionList = this.actionListData;
+    this.dashboardService.getMyOffersList().subscribe(data => {
+      this.myOfferList = data;
     });
   }
 
@@ -61,8 +94,27 @@ export class ActionsComponent implements OnInit {
       });
 
       this.myActionsList = this.myOfferArray;
-      }
     }
+  }
+
+  createAction() {
+    const createAction: CreateAction = new CreateAction(
+      this.offerNameValue,
+      this.commentValue,
+      this.titleValue,
+      this.descriptionValue,
+      this.milestoneValue,
+      this.functionNameValue,
+      this.assigneeValue,
+      this.dueDateValue
+    );
+    console.log(createAction);
+    this.createActionService.registerOffer(createAction).subscribe((data) => {
+    },
+      (err) => {
+        console.log(err);
+    });
+  }
 
 
   createNewAction() {
@@ -71,9 +123,10 @@ export class ActionsComponent implements OnInit {
 
   closeActionDailog() {
     this.displayActionPhase = false;
+    this.createActionForm.reset();
   }
 
-  dateFormat(inputDate:string){
+  dateFormat(inputDate: string) {
     return moment(inputDate).format('DD-MMM-YYYY');
   }
 }
