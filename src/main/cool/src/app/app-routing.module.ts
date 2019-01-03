@@ -72,7 +72,7 @@ const routes: Routes = [
     path: 'menu',
     component: MenuBarComponent},
     {
-    path: 'strategyReview/:id',
+    path: 'strategyReview/:id/:id2',
     component: StrategyReviewComponent,
     resolve:{ offerData: OfferOverViewResolver }
   },

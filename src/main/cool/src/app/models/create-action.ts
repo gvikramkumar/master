@@ -1,4 +1,5 @@
 export class CreateAction {
+  offername: string;
   comment: string;
   title: string;
   description: string;
@@ -7,13 +8,15 @@ export class CreateAction {
   assignee: string;
   dueDate: string;
 
-  constructor(comment: string,
+  constructor(offername: string,
+    comment: string,
     title: string,
     description: string,
     milestone: string,
     selectFunction: string,
     assignee: string,
     dueDate: string) {
+        this.offername = offername;
         this.comment = comment;
         this.title = title;
         this.description = description;
