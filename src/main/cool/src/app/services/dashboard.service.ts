@@ -14,9 +14,11 @@ export class DashboardService {
   constructor(private http:HttpClient, private userService: UserService, private environmentService: EnvironmentService) { }
 
   getMyActionsList(): Observable<any> {
-    const tempUserId = 'jagondal';
-    // let url = this.environmentService.REST_API_MYACTIONS_URL+this.userService.getUserId();
-    const url = this.environmentService.REST_API_ACTIONSTRACKER_URL+tempUserId+'/true';
+    // const tempUserId = 'jagondal';
+    //let url = this.environmentService.REST_API_MYACTIONS_URL+this.userService.getUserId()+'/true';
+     let url = this.environmentService.REST_API_ACTIONSTRACKER_URL+this.userService.getUserId()+'/true';
+   
+    // const url = this.environmentService.REST_API_ACTIONSTRACKER_URL+tempUserId+'/true';
     return this.http.get(url,{ withCredentials: true });
   }
 
