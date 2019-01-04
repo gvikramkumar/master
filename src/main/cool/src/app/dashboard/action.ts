@@ -5,6 +5,7 @@ export class ActionsAndNotifcations{
     assigneeId:string;
     triggerDate:string;
     dueDate:string;
+    taskId:string;
     notificationTitle:string;
     alertType:number;
     styleColor:string;
@@ -17,6 +18,9 @@ export class ActionsAndNotifcations{
 
     setCaseId(caseId) {
         this.caseId = caseId;
+    }
+    setTaskId(taskId) {
+        this.taskId = taskId;
     }
 
     getCaseId() {

@@ -1,3 +1,5 @@
+
+
 <div class="content">
   <div class="container-fluid">
     <div class="row base-margin-top">
@@ -35,7 +37,7 @@
                 <ng-template pTemplate="header" let-columns>
                   <tr>
                     <th *ngFor="let col of columns">
-                      {{col.header}}
+                      {{col.header}}  
                     </th>
                   </tr>
                 </ng-template>
@@ -45,11 +47,12 @@
                     <td>{{car.userName}}</td>
                     <td>{{car.userMapping[0].functionalRole}}</td>
                     <td>{{car.userMapping[0].businessEntity}}</td>
-                    <td>
+                    <td>{{car.buList}}</td>
+                    <!-- <td>
                       <p-multiSelect [options]="arrToOptions(car.buList)" (onChange)="updatedAceessManagement($event.value)"
                         [style]="{'width':'100%'}">
                       </p-multiSelect>
-                    </td>
+                    </td> -->
                     <td>
                       <div *ngIf="car.userMapping[0].functionalAdmin">
                         <span>Admin</span>
@@ -96,22 +99,17 @@
                       <div class="form-group">
                         <div class="form-group__text select">
                           <label for="functionName">Function</label>
-                          <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
-                            ngModel>
-                            <option value="BUPM" selected="">OLE</option>
-                            <option value="SOE">SOE</option>
-                            <option value="BUPM">BU Ops</option>
-                            <option value="BUPM">CPS</option>
-                            <option value="BUPM">TAX</option>
-                            <option value="BUPM">FET</option>
-                            <option value="BUPM">PDT</option>
-                            <option value="BUPM">Global Revenue</option>
-                            <option value="BUPM">Royalty</option>
-                            <option value="BUPM">CXPM</option>
-                            <option value="BUPM">Sales</option>
-                            <option value="BUPM" selected="">BUPM</option>
+                          <!-- <select *ngFor="let user of registerNewUserfun">
+                            <option>{{user}}</option>
+                          </select> -->
 
-                          </select>
+                          <select id="functionName" class="form-control" 
+                          name="functionName" 
+                          [(ngModel)]="functionNameValue"
+                            ngModel >
+                            <option *ngFor="let user of registerNewUserfun">{{user}}</option>
+                            </select>
+
                         </div>
                       </div>
                     </div>

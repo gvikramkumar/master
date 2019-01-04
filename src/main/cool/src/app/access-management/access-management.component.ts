@@ -26,6 +26,7 @@ export class AccessManagementComponent implements OnInit {
   showFormSection = false;
   Obj;
   cols: any[];
+  registerNewUserfun:any;
   newUser:NewUser [] = [];
   constructor(private accessManagementService: AccessManagementService) { }
 
@@ -43,6 +44,7 @@ export class AccessManagementComponent implements OnInit {
     this.accessManagementService.accessManagementAll()
       .subscribe(data => {
         this.accessManagementData = data;
+        console.log("Access Management Data::::", this.accessManagementData);
       });
 
     this.accessManagementService.getBusinessUnit().subscribe(data => {
@@ -55,6 +57,9 @@ export class AccessManagementComponent implements OnInit {
     });
 
     this.getbusinessEntity();
+    this.accessManagementService.getregisterUserFunction().subscribe(data=>{
+            this.registerNewUserfun=data;
+    });
   }
 
   getbusinessEntity() {
@@ -138,5 +143,12 @@ export class AccessManagementComponent implements OnInit {
     });
     return res;
   }
+
+  // getregisterUserFun(){ debugger;
+  //    this.accessManagementService.getregisterUserFunction().subscribe(data=>{
+  //      this.registerNewUserfun=data;
+  //      console.log(" new data:::",this.registerNewUserfun);
+  //    })
+  // }
 
 }

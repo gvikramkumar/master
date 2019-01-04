@@ -35,6 +35,11 @@ export class AccessManagementService {
         const url = this.businessUnitUrl;
         return this.httpClient.get(url, {withCredentials:true});
     }
+    getregisterUserFunction(){
+      //  let url="http://10.155.72.125:8080/coolsrv/LOV/getFunctionalRoles";
+      let url=this.environmentService.REST_API_RIGISTERNEWUSER_GET_URL
+        return this.httpClient.get(url,{withCredentials:true});
+    }
 
     /**
      * Function to get business entities for the selected business units, from

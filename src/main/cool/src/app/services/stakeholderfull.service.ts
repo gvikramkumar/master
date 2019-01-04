@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
 import {UserService} from './user.service';
@@ -18,5 +18,24 @@ export class StakeholderfullService {
      return this._http.get(this.environmentService.REST_API_STAKEHOLDERLIST_GET_URL+'/'+offerId,{withCredentials:true});
     // return this._http.get(url);
    }
+
+
+   proceedToStrageyReview(data) {
+    let url = this.environmentService.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept' : 'application/json'
+      }),
+      withCredentials: true
+    }; 
+    
+    return this._http.post(url, data, httpOptions);
+  }
+
+  getOfferBuilderData(offerId) {
+    let url =this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
+    return this._http.get(url,{ withCredentials: true });
+  }
 
 }
