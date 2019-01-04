@@ -41,6 +41,9 @@
   margin:auto 3px;
   display: inline-block;
 }
+.cui .task--bar .btn--back.btn:hover {
+    background: rgba(0,0,0, .15);
+}
 .cui .task--bar .btn--back.btn {
   background:transparent;
 }
