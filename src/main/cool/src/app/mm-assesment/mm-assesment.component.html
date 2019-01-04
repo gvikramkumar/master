@@ -9,7 +9,7 @@
     <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
             <div class="col-md-4">
-                <h4><button class="btn btn--icon btn--white"><span class="icon-back" (click)='goBackToOffercreation()'></span></button> Offer Builder</h4>
+                <h4><button class="btn--back btn btn--icon btn--white"><span class="icon-back" (click)='goBackToOffercreation()'></span></button> Offer Builder</h4>
             </div>
             <div class="col-md-8 text-right">
                 <button class="btn btn--white"><span class="icon-save"></span> Save </button>
@@ -134,11 +134,11 @@
                                 'gray-button':attribute.type===1 && attribute.status===-1,
                                 'mm-model-btn-active':attribute.status===1||attribute.type===2,
                                 'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
-                              }" class="btn btn--small" style="max-width: none; margin: 10px auto;"
+                              }" class="btn btn--small"
                               (click)="toggleSelected(attribute)" >{{attribute.name}}</button>
                             </div>
                           </div>
-                          <div class="divider divider--compressed"></div>
+
                         </li>
                       </ul>
                     </div>
