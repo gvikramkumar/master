@@ -3,7 +3,7 @@
   width: 100%;
 }
 
-.leftContent,
+/* .leftContent,
 .rightContent {
   float: left;
 }
@@ -20,7 +20,7 @@
 .offer-header.card {
   padding: 0px;
   overflow: hidden;
-}
+} */
 
 .offer-header.card *[class^='col-'] {
   border-bottom: solid 1px #d8d8d8;
@@ -132,7 +132,7 @@
   padding: 5px 20px;
   border-radius: 50px;
   cursor: pointer;
-  margin: 0 12px 0 0; 
+  margin: 0 12px 0 0;
   display: inline-block;
 }
 
@@ -254,7 +254,7 @@ span.avatar-ico {
   display: inline-block;
   width: 35px;
   height: 35px;
-} 
+}
 .list.dimensions--toggle li{
   padding:10px 0;
 
@@ -284,7 +284,7 @@ span.avatar-ico {
 /* For tab's Space */
 .cui ul.tabs.tabs--bordered > li, .cui .nav-tabs.tabs--bordered > li {
   margin: 0 5px;
-} 
+}
 
 .cui ul.tabs.tabs--bordered  {
 margin: 0 5px;
