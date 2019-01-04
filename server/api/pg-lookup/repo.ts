@@ -67,15 +67,16 @@ export default class PgLookupRepo {
   }
   getSubmeasureGroupingReport() {
     return pgc.pgdb.query(`
-            select
+            select 
             sbm.sub_measure_name,
             group1.group_sub_measure_name,
             sbm.create_owner,
             sbm.create_datetimestamp,
             sbm.update_owner,
             sbm.update_datetimestamp
-            from fpadfa.dfa_sub_measure sbm,
-              (select a.grouped_by_smeasure_key as groupkey,
+            from 
+              fpadfa.dfa_sub_measure sbm,
+              (select distinct a.grouped_by_smeasure_key as groupkey,
                   b.sub_measure_name as group_sub_measure_name
                   from fpadfa.dfa_sub_measure a, fpadfa.dfa_sub_measure b
                   where 1=1
@@ -97,7 +98,8 @@ export default class PgLookupRepo {
             a.update_owner,
             a.update_datetimestamp
             from fpadfa.dfa_sub_measure a, fpadfa.dfa_open_period b
-            where b.fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')    
+            where b.fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period                            
+                                                    where module_id = 1 and open_flag = 'Y')    
             and a.twotier_flag = 'Y'
           `);
   }
@@ -109,7 +111,7 @@ export default class PgLookupRepo {
             node_type, 
             CASE
               WHEN sales_finance_hierarchy != null THEN sales_finance_hierarchy
-              ELSE 'Sales Fin hierarchy'
+              ELSE 'Sales Fin Hierarchy'
             end as sales_finance_hierarchy,
             node_code,
             fiscal_month_id,
@@ -117,8 +119,9 @@ export default class PgLookupRepo {
             create_datetimestamp,
             update_user,
             update_datetimestamp
-            from fpadfa.dfa_prof_disti_to_direct_map_upld
-            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+            from fpadfa.dfa_prof_disti_to_direct_map_upld            
+            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period                               
+                                                      where module_id =1 and open_flag = 'Y')              
           `);
   }
 
