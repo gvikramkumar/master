@@ -302,7 +302,7 @@ export class RightPanelComponent implements OnInit {
       return [];
     }
   }
-
+  alreayAddedStakeHolders:any[]=[];
   addToStakeData(res) {
     console.log(res);
     let keyUsers = res['stakeholders'];
@@ -310,9 +310,13 @@ export class RightPanelComponent implements OnInit {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
-      this.stakeData[user['offerRole']].push({ name: user['_id'], email: user['email'], 
-      _id:user['_id'], businessEntity: user['businessEntity'], functionalRole: user['functionalRole'],
-      offerRole: user['offerRole'], stakeholderDefaults:false });
+
+      if (this.alreayAddedStakeHolders.findIndex(k => k==user['_id']) == -1) {
+        this.stakeData[user['offerRole']].push({ name: user['_id'], email: user['email'], 
+        _id:user['_id'], businessEntity: user['businessEntity'], functionalRole: user['functionalRole'],
+        offerRole: user['offerRole'], stakeholderDefaults:false });
+        this.alreayAddedStakeHolders.push(user['_id']);
+      }
     })
   }
 

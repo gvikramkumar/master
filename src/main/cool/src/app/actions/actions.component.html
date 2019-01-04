@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="responsive-table">
-              <p-dataTable [value]="myActionsList" scrollHeight="400px">
+              <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
                 <p-column field="offerId" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.offerId}}<br /></span>
@@ -75,98 +75,115 @@
         </div>
       </div>
     </div>
-    <p-dialog [showHeader]="false" [responsive]="true" [width]="700" [height]="400" [minY]="70" [(visible)]="displayActionPhase"
+    <p-dialog [showHeader]="false" [responsive]="true" [width]="700" [height]="500" [minY]="70" [(visible)]="displayActionPhase"
       [closable]="true">
-      <div class="pull-right">
-        <span class="icon-close" (click)="closeActionDailog()"></span>
-      </div>
-      <div class="card__header">
-        <h5 class="card__title">Create an Action</h5>
-      </div>
       <div class="row">
-        <form>
-          <div class="row base-margin-top">
-            <div class="col-md-6">
-              <div class="form-group half-margin-bottom">
-                <div class="form-group__text select">
-                  <select id="offerName" class="form-control" formControlName="offerName" [(ngModel)]="selectedOfferName">
-                    <option value="null" selected="">Select Offer Name</option>
-                    <option *ngFor="let x of myOfferList" [value]="x.offerName">
-                      {{x.offerName}}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group half-margin-bottom">
-                <div class="form-group__text">
-                  <input id="input-type-search" type="search" value="Action Title">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group half-margin-bottom">
-                <div class="form-group__text">
-                  <input id="input-type-search" type="search" value="Description">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group half-margin-bottom base-margin-top">
-                <div class="form-group__text select">
-                  <select id="input-type-select">
-                    <option value="first" selected="">Milestone</option>
-                    <option value="second">Second Value</option>
-                    <option value="third">Third Value</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <div class="form-group__text select">
-                  <label for="functionName">Function</label>
-                  <select id="functionName" class="form-control" formControlName="functionName" [(ngModel)]="functionNameValue">
-                    <option value={{manualactionList}}>
-                      {{manualactionList}}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group base-margin-top half-margin-bottom">
-                <label for="dueDate">ASSIGNEE</label>
-                <div class="form-group__text select">
-                  <select id="input-type-select">
-                    <option value="first" selected="">Assignee</option>
-                    <option value="second">Second Value</option>
-                    <option value="third">Third Value</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group label--floated input--icon half-margin-bottom">
-                <label for="dueDate">DUE DATE</label>
-                <div class="form-group__text">
-                  <input name="dueDateName" class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
-                    [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig" [(ngModel)]="dueDateValue"
-                    ngModel #dueDateName="ngModel">
-                  <button type="button" class="link" tabindex="-1">
-                    <span class="icon-month"></span>
-                  </button>
-                </div>
-              </div>
-            </div>
+        <div class="col-md-12">
+          <div class="pull-right">
+            <span class="icon-close" (click)="closeActionDailog()"></span>
           </div>
-          <div class="row pull-right">
-            <div class="form-actions">
-              <button class="btn btn--secondary" (click)="closeActionDailog()">Cancel</button>
-              <button class="btn btn--primary" type="submit">Create
-                an Action</button>
-            </div>
+          <div class="card__header">
+            <h5 class="card__title">Create an Action</h5>
           </div>
-        </form>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <form autoComplete="off" #createActionForm="ngForm" (ngSubmit)="createAction()">
+            <div class="row base-margin-top">
+              <div class="col-md-6">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text select">
+                    <label for="offerName">SELECT OFFER NAME</label>
+                    <select id="offerName" type="text" class="form-control" name="offerName" [(ngModel)]="offerNameValue"
+                      required ngModel #offerName="ngModel">
+                      <option *ngFor="let offer of myOfferList" [value]="offer.offerName">
+                        {{offer.offerName}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <label for="titleName">ACTION TITLE</label>
+                    <input id="titleName" type="text" class="form-control" name="titleName" [(ngModel)]="titleValue"
+                      required ngModel #titleName="ngModel">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <label for="descriptionName">DESCRIPTION</label>
+                    <input id="descriptionName" type="text" class="form-control" name="descriptionName" [(ngModel)]="descriptionValue"
+                      required ngModel #descriptionName="ngModel">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text select">
+                    <label for="milestoneName">MILESTONE</label>
+                    <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
+                      required ngModel #milestoneName="ngModel">
+                      <option value="first">Milestone</option>
+                      <option value="second">Second Value</option>
+                      <option value="third">Third Value</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="form-group__text select">
+                    <label for="functionName">SELECT FUNCTION</label>
+                    <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
+                      ngModel required>
+                      <option value={{manualactionList}}>
+                        {{manualactionList}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group label--floated input--icon half-margin-bottom">
+                  <label for="assigneeName">ASSIGNEE</label>
+                  <div class="form-group__text select">
+                    <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
+                      required ngModel>
+                      <option value="first">Assignee</option>
+                      <option value="second">Second Value</option>
+                      <option value="third">Third Value</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group label--floated input--icon half-margin-bottom">
+                  <label for="dueDate">DUE DATE</label>
+                  <div class="form-group__text">
+                    <input name="dueDateName" class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
+                      [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig" [(ngModel)]="dueDateValue"
+                      required ngModel #dueDateName="ngModel">
+                    <button type="button" class="link" tabindex="-1">
+                      <span class="icon-month"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="row pull-right">
+              <div class="form-actions">
+                <button class="btn btn--secondary" (click)="closeActionDailog()">Cancel</button>
+                <button class="btn btn--primary" type="submit" [disabled]="!createActionForm.valid">Create
+                  an Action</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </p-dialog>
   </div>

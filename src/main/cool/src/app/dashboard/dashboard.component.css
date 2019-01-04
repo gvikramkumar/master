@@ -332,3 +332,15 @@ th.ui-state-default.ui-unselectable-text.ui-sortable-column {
   /* border: 0; */
   background: inherit;
 }
+
+.GREEN {
+  color: green; 
+ }
+ 
+.YELLOW {
+  color: yellow; 
+}
+ 
+.RED {
+  color: red; 
+}
