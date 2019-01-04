@@ -219,6 +219,9 @@
 .cui .dimensions--toggle[_ngcontent-c4] button.btn.btn--small[_ngcontent-c4] {
   margin: 10px 5px 5px 0;
 }
+.cui ul.tabs.tabs--bordered > li.active > a, .cui .nav-tabs.tabs--bordered > li.active > a {
+  padding: 5px 20px;
+}
 
 /* font sizes */
 .cui h4, .cui .h4 {
