@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
   displayPopOver: Boolean = true;
   displayActionPopOver: Boolean = true;
   currentOfferId;
+  cols: any[];
 
   constructor(private dashboardService: DashboardService,
     private router: Router, private createOfferService: CreateOfferService,
@@ -35,6 +36,12 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.cols = [
+      { field: 'offerId', header: 'OFFER ID' },
+      { field: 'offerName', header: 'OFFER NAME' },
+      { field: 'offerOwner', header: 'OFFER OWNER' },
+      { field: 'expectedLaunchDate', header: 'LAUNCH DATE' }
+    ];
     this.dashboardService.getMyActionsList()
       .subscribe(data => {
         this.myActions = data;
