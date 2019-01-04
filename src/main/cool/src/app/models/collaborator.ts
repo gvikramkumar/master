@@ -5,4 +5,5 @@ export class Collaborators {
     businessEntity: string;
     offerRole: string;
     name: string;
+    _id:string;
 }

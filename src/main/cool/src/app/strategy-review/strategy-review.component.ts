@@ -23,6 +23,7 @@ export class StrategyReviewComponent implements OnInit {
   stakeData = {};
   offerBuilderdata = {};
   minDate: Date;
+  
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   formTitle: any = ' ';
   totalApprovalsCount: any = 0;
@@ -135,6 +136,7 @@ export class StrategyReviewComponent implements OnInit {
   }
 
   updateMessage(message) {
+
     if (message != null && message !== '') {
       if (message === 'hold') {
         this.message = {
@@ -146,13 +148,16 @@ export class StrategyReviewComponent implements OnInit {
           contentHead: '',
           content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
           color: 'black' };
+
       }
     }
   }
 
+
   goBack() {
     this._location.back();
   }
+
 
   offerDetailOverView() {
     this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
