@@ -152,7 +152,7 @@
 
       <div class="row">
         <div class="col-lg-6">Effective Month:</div>
-        <div class="col-lg-6">{{sm.startFiscalMonth}}</div>      </div>
+        <div class="col-lg-6">{{shUtil.getFiscalMonthLongNameFromNumber(sm.startFiscalMonth)}}</div>      </div>
 
       <div class="row">
         <div class="col-lg-6">Processing Timing:</div>
@@ -220,7 +220,7 @@
   <div class="row heading">
     <div class="col-6">Rule Association:</div>
   </div>
-  <div *ngFor="let rule of rules"  [matTooltip]="rule.desc" matTooltipPosition="above">{{rule.name}}</div>
+  <div *ngFor="let rule of rules"  [matTooltip]="rule?.desc" matTooltipPosition="above">{{rule?.name}}</div>
 
 </div>
 

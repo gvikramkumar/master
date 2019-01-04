@@ -25,6 +25,7 @@ import {PgLookupService} from '../../services/pg-lookup.service';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  startFiscalMonth: string;
   flashCategories: string[];
   adjustmentTypes: string[];
   flashCategory: number;
@@ -224,15 +225,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         if (this.viewMode || this.editMode || this.copyMode) {
           this.sm = results[6];
         }
-        if (this.copyMode) {
-          // we'll reset these for each edit
-          this.sm.manualMixHw = undefined;
-          this.sm.manualMixSw = undefined;
+        if (this.viewMode) {
+          this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
         }
         if (this.copyMode) {
           this.sm.approvedOnce = 'N';
           delete this.sm.createdBy;
           delete this.sm.createdDate;
+          // we'll reset these for each edit
+          this.sm.manualMixHw = undefined;
+          this.sm.manualMixSw = undefined;
           this.orgSubmeasure = _.cloneDeep(this.sm);
         }
         if (this.editMode) {

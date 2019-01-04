@@ -8,6 +8,7 @@ import {RuleService} from '../../services/rule.service';
 import {AppStore} from '../../../../app/app-store';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import * as _ from 'lodash';
+import {shUtil} from '../../../../../../../shared/shared-util';
 
 @Component({
   selector: 'fin-submeasure-detail-dialog',
@@ -21,6 +22,7 @@ export class SubmeasureDetailDialogComponent {
   groupingSubmeasureName: string;
   rules: AllocationRule[] = [];
   rulesAll: AllocationRule[];
+  shUtil = shUtil;
 
   constructor(
     public dialogRef: MatDialogRef<SubmeasureDetailDialogComponent>,
@@ -49,9 +51,8 @@ export class SubmeasureDetailDialogComponent {
         this.sourceName = results[1].name;
         this.rulesAll = results[2];
         this.sm.rules.forEach(name => this.rules.push(_.find(this.rulesAll, {name})));
-        results[2].filter(rule => _.includes(this.sm.rules, rule.name));
         if (this.sm.groupingSubmeasureId) {
-          this.groupingSubmeasureName = results[2].name;
+          this.groupingSubmeasureName = results[3].name;
         }
       });
   }
