@@ -12,6 +12,7 @@ import { NgForm } from '@angular/forms';
 import { CreateAction } from '../models/create-action';
 import { CreateActionService } from '../services/create-action.service';
 
+
 @Component({
   selector: 'app-actions',
   templateUrl: './actions.component.html',
@@ -50,7 +51,13 @@ export class ActionsComponent implements OnInit {
   ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
-    this.actionsService.getMyActionsList()
+    // this.actionsService.getMyActionsList()
+    //   .subscribe(data => {
+    //     this.myActions = data;
+    //     this.processMyActionsList();
+    //   });
+
+      this.dashboardService.getMyActionsList()
       .subscribe(data => {
         this.myActions = data;
         this.processMyActionsList();
