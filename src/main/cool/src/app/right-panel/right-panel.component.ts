@@ -24,7 +24,6 @@ export class RightPanelComponent implements OnInit {
   notiFication: Boolean = false;
   @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
-  @Input() offerOwner: String;
   @Output() updateStakeData = new EventEmitter<string>();
   backdropCustom: Boolean = false;
   proceedFlag: boolean;

@@ -21,6 +21,8 @@
                 Aligned</span></div>
           </li>
         </ul>
+        <!-- <Exit Criteria Validation> -->
+        <app-exit-criteria-validation></app-exit-criteria-validation>
         <div class="accordion base-margin-top" id="accordion">
           <div class="card">
             <div class="panel panel--ltgray">
@@ -226,7 +228,6 @@
       <div class="rightContent" style="margin-top: -5px;">
           <app-right-panel
             [portfolioFlag]="setFlag"
-            [offerOwner]="offerBuilderdata['offerOwner']"
             [stakeData]="stakeData"
             (updateStakeData)="updateStakeData($event)"
           ></app-right-panel>

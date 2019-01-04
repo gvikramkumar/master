@@ -276,7 +276,7 @@ span.icon-view-feed-single.milestone {
 h5.mb-0 {
     line-height: 2;
 }
-.reviewed-comments {
+/* .reviewed-comments {
     display: inline-block;
     line-height: 1;
     margin-left: 2em;
@@ -284,7 +284,7 @@ h5.mb-0 {
     border-left: solid 1px #c3c3c3;
     float: right;
     min-width: 200px;
-}
+} */
 span.total {
     position: absolute;
     left: 0;
@@ -322,5 +322,8 @@ body.cui {
 }
 .cui .panel .header-toolbar .btn {
     padding: 0 35px;
+}
+.status-center{
+    text-align: center !important;
 }
 }
