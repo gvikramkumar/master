@@ -1,8 +1,55 @@
+.cui .header-menus {
+  position: absolute;
+  bottom: 0;
+  left: 40%;
+  right: 0;
+}
+.cui .avatar span.role {
+  font-size: 75%;
+  display: block;
+  text-align: right;
+  margin-right: 24px;
+}
+.cui .header-toolbar .avatar {
+  margin-right: 30px;
+  line-height: 1;
+}
+.cui .avatar span.role.userIdSpacing[_ngcontent-c1] {
+  position: relative;
+  top: 4px;
+  left: 0;
+}
+.cui .avatar span.icon-chevron-down {
+  margin-left: 10px;
+}
 .cui .panel.panel--indigo.panel--loose.header-bar.base-margin-top {
   height: 57px;
 }
+/* buttons */
+.cui .btn.btn--small,
+.cui .btn {
+  max-width: fit-content;
+}
 .cui .task--bar .btn {
   border-radius: 6px;
+}
+.cui .popover[_ngcontent-c4]:after {
+  border-color: rgba(136, 183, 213, 0);
+  border-bottom-color: #fff;
+  border-width: 10px;
+  margin-left: -122px;
+}
+.cui .popover[_ngcontent-c4]:before {
+  border-color: rgba(194, 225, 245, 0);
+  border-bottom-color: #d8d8d8;
+  border-width: 13px;
+  margin-left: -123px;
+}
+.cui .responsive-table {
+  overflow: visible;
+}
+.cui .responsive-table .ui-datatable-scrollable-body {
+  overflow: visible;
 }
 .cui .ui-table .ui-table-tbody > tr > td {
   border: 0
@@ -85,3 +132,8 @@
   overflow: hidden;
 }
 /* End Custom Progress Bar */
+
+/* MM */
+.list.dimensions--toggle[_ngcontent-c4] li[_ngcontent-c4] {
+  padding: 0;
+}

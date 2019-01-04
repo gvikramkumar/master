@@ -14,7 +14,7 @@
             <div class="col-md-8 text-right">
                 <button class="btn btn--white"><span class="icon-save"></span> Save </button>
                 <button class="btn btn--white"><span class="icon-export"></span> Export </button>
-                <button class="btn btn--white btn--wide" (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
+                <button class="btn btn--white" (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
             </div>
         </div>
     </div>
@@ -101,7 +101,7 @@
           <div class="alert__icon mm-alert-icon" [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}"></div>
           <div class="alert__message" [ngStyle]="{'color': message['color']}"><b>{{message['contentHead']}}</b>{{message['content']}}</div>
         </div>
-  
+
 
         <div class="panel-wrapper mt-20">
           <ul id="tabsv6" class="tabs tabs--bordered base-margin-top">
@@ -126,19 +126,19 @@
                         <li *ngFor="let subGroup of getGroupKeys(groupData[activeTabIndex]) ">
                           <div class="row">
                             <div class="col-md-2 margin-auto">{{subGroup}}</div>
-                    
+
                             <div class="col-md-10">
-                  
+
                               <button *ngFor="let attribute of groupData[activeTabIndex][subGroup]"
                               [ngClass]="{
                                 'gray-button':attribute.type===1 && attribute.status===-1,
                                 'mm-model-btn-active':attribute.status===1||attribute.type===2,
                                 'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
                               }" class="btn btn--small" style="max-width: none; margin: 10px auto;"
-                              (click)="toggleSelected(attribute)" >{{attribute.name}}</button> 
+                              (click)="toggleSelected(attribute)" >{{attribute.name}}</button>
                             </div>
                           </div>
-                          <div class="divider"></div>
+                          <div class="divider divider--compressed"></div>
                         </li>
                       </ul>
                     </div>
