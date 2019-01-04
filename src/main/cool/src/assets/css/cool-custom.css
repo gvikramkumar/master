@@ -33,6 +33,20 @@
 .cui .task--bar .btn {
   border-radius: 6px;
 }
+.cui .task--bar span.button--label {
+  color: #58585b;
+}
+.cui .task--bar span {
+  color: lightslategray;
+  margin:auto 3px;
+  display: inline-block;
+}
+.cui .task--bar .btn--back.btn {
+  background:transparent;
+}
+.cui .task--bar .btn--back.btn span {
+  color:#fff;
+}
 .cui .mm-model-btn-inactive[_ngcontent-c4] {
   border: 1px solid transparent;
   background: white;
@@ -78,6 +92,35 @@
   border-width: 13px;
   margin-left: -123px;
 }
+/* tables */
+.cui .ui-paginator-bottom a:not(.btn):hover, .cui .ui-paginator-bottom .link:focus, .cui .ui-paginator-bottom .link:hover, .cui .ui-paginator-bottom .link:active {
+    color: #fff;
+}
+.cui .ui-datatable-scrollable-body .ui-datatable-data, .cui .ui-datatable-scrollable-body .ui-datatable-data>tr:first-child {
+  border: transparent;
+}
+.cui .ui-datatable tbody > tr.ui-widget-content {
+  border-color: transparent;
+  border-bottom: solid 1px #f2f2f2;
+}
+.cui .ui-datatable tbody > tr.ui-widget-content.ui-datatable-odd {
+  background-color: #fafafb;
+  border-bottom: solid 1px #f2f2f2;
+}
+.cui .ui-datatable-scrollable-body .ui-datatable-data, .cui .ui-datatable-scrollable-body .ui-datatable-data>tr:first-child {
+  border-top-color: transparent;
+  border-bottom: solid 1px #f2f2f2;
+}
+.cui .ui-table .ui-paginator-bottom {
+  border: none;
+}
+.cui .ui-datatable .ui-paginator-bottom {
+  border: none;
+}
+.cui .ui-widget-header {
+  background: #f6f7f9 0 0 repeat-x;
+  background: transparent;
+}
 .cui .responsive-table {
   overflow: visible;
 }
@@ -93,15 +136,13 @@
   background: #EAEAEa;
   color: #333333;
   font-size: 12px;
+  text-transform: uppercase;
 }
 .cui .row.card-table-header[_ngcontent-c4] {
   border-bottom: 0;
   padding-bottom: 10px;
 }
-.cui .task--bar .btn--back.btn {
-  background:transparent;
-  color:#fff;
-}
+
 .cui .row.card-table-header span.icon-chevron-right.inline-icon[_ngcontent-c4] {
   padding: 10px 0 10px;
   margin: auto 1em;
@@ -183,4 +224,8 @@
 .cui h4, .cui .h4 {
   font-size: 22px;
   font-weight: 300;
+}
+/* Indigo task bar */
+.cui .panel.panel--indigo.panel--loose.header-bar.base-margin-top .header-heading h1.page-title span {
+  color: white
 }

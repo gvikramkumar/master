@@ -20,7 +20,8 @@
     </div>
 
     <div class="contentBox mt-10">
-      <div class="leftContent">
+      <div class="row">
+      <div class="leftContent col-sm-12 col-md-9">
         <div class="panel-wrapper">
           <!-- <div class="panel-body mt-10 offerData" *ngIf="panels.panel1"> -->
           <div class="offer-header card card--raised base-margin-top">
@@ -165,7 +166,7 @@
         </div>
       </div>
 
-      <div class="rightContent" style="margin-top: -5px;">
+      <div class="rightContent col-sm-12 col-md-3" >
         <app-right-panel
           [portfolioFlag]="setFlag"
           [offerOwner]="offerBuilderdata['offerOwner']"
@@ -173,6 +174,7 @@
           (updateStakeData)="updateStakeData($event)"
         ></app-right-panel>
       </div>
+    </div>
     </div>
   </div>
 
