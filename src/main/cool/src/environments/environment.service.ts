@@ -29,12 +29,9 @@ export class EnvironmentService {
     REST_API_ACCESS_MANAGEMENT_GETUSER_URL;
     REST_API_OFFERPHASE_DETAILS_URL;
     REST_API_STAKEHOLDERLIST_GET_URL;
-<<<<<<< Updated upstream
     REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL
     REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
-=======
     REST_API_RIGISTERNEWUSER_GET_URL;
->>>>>>> Stashed changes
 
     constructor() {
         let windowUrl = location.href;
@@ -127,17 +124,10 @@ export class EnvironmentService {
           this.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL = this.baseapi+'/coolsrv/access/getuser';
             console.log("EnvironmentService: set env vars for prd environment");
         } else {
-<<<<<<< Updated upstream
+
             //this.baseapi = 'http://10.65.65.88:8080';
             this.baseapi = 'https://cool-srv-dev.cisco.com';
-=======
 
-                this.baseapi = 'http://10.24.34.187:8080';
-                
-
-
-          // this.baseapi = 'https://cool-srv-dev.cisco.com';
->>>>>>> Stashed changes
             this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
             this.REST_API_RIGISTERNEWUSER_GET_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
             this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
