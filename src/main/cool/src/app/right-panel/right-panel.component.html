@@ -5,7 +5,7 @@
     <div class="card card--raised base-margin-top">
             <h5 class="half-margin-bottom">Offer Phase
                 <a href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
-                    <span class="icon-pencil icon-small"></span> Edit</a>
+                    <span class="icon-pencil"></span> Edit</a>
             </h5>
             <div class="divider divider--compressed"></div>
             <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
@@ -39,12 +39,12 @@
                 </div>
             </div>
     </div>
-    
+
 
 <!-- Estimated Lead Time -->
 <div class="card card--raised base-margin-top">
     <h5 class="half-margin-bottom">Estimated Lead Time</h5>
-    <span class="label label--warning-alt">3 weeks</span>
+    <span class="ribbon label label--warning-alt"><strong>3 </strong> <small> weeks</small></span>
 </div>
 
 <!-- People Involved -->
@@ -52,7 +52,7 @@
 
     <h5 class="half-margin-bottom">People Involved
         <a href="javascript:;" class="pull-right" (click)="showDialog()">
-            <span class="icon-pencil icon-small"></span> Edit</a>
+            <span class="icon-pencil"></span> Edit</a>
     </h5>
     <div class="divider divider--compressed"></div>
 
@@ -77,7 +77,7 @@
                     </span>
                     <div class="flex-fluid text-left half-margin-left">
                         <div class="text-bold">{{offerOwner}}</div>
-                      
+
                     </div>
                 </div>
             </div>

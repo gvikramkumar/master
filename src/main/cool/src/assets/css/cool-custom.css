@@ -220,10 +220,13 @@
   border-bottom: solid 1px #d4d4d4;
 }
 .cui .dimensions--toggle[_ngcontent-c4] button.btn.btn--small[_ngcontent-c4] {
-  margin: 10px 5px 5px 0;
+  margin: 5px 5px 5px 0;
 }
 .cui ul.tabs.tabs--bordered > li.active > a, .cui .nav-tabs.tabs--bordered > li.active > a {
   padding: 5px 20px;
+}
+.cui h5 a.pull-right {
+  font-size: 14px;
 }
 
 /* font sizes */
@@ -234,4 +237,42 @@
 /* Indigo task bar */
 .cui .panel.panel--indigo.panel--loose.header-bar.base-margin-top .header-heading h1.page-title span {
   color: white
+}
+
+/* Estimated Lead Time Ribbon */
+.ribbon {
+  background: #ffcc00;
+  width: auto;
+  display: inline-block;
+  padding: 0 10px 0 0;
+  margin: auto;
+  position: relative;
+  color: #39393b;
+
+  text-align: center;
+  margin-left: 100px;
+}
+.ribbon:after {
+  content: '';
+  border: 15px solid #ffcc00;
+  border-right-color: transparent;
+  border-right-width: 10px;
+  position: absolute;
+  top: 0;
+  right: -15px;
+}
+.cui .label--warning-alt {
+  background: #ffcc00;
+  color: #39393b;
+  font-size: 16px;
+  text-transform: uppercase;
+  display: inline-block;
+  line-height: 1.4;
+  position: relative;
+  left: -10px;
+  padding-left: 15px;
+  height: 30px;
+}
+.cui .label--warning-alt strong {
+  font-size: 22px;
 }
