@@ -29,6 +29,7 @@ export class EnvironmentService {
     REST_API_ACCESS_MANAGEMENT_GETUSER_URL;
     REST_API_OFFERPHASE_DETAILS_URL;
     REST_API_STAKEHOLDERLIST_GET_URL;
+    REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL
       
 
     constructor() {
@@ -57,6 +58,8 @@ export class EnvironmentService {
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
           this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
+          this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL=this.baseapi+'/coolsrv/emailNotification/sendEmailNotification/';
+          // https://cool-srv-dev.cisco.com/coolsrv/emailNotification/sendEmailNotification/{offerId}/{milestone};
           console.log("EnvironmentService: set env vars for dev environment");
         } else if(windowUrl.includes('stg')) {
             this.baseapi = 'https://cool-srv-stg.cisco.com';
@@ -82,6 +85,7 @@ export class EnvironmentService {
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
           this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
+          this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL=this.baseapi+'/coolsrv/emailNotification/sendEmailNotification/';
             console.log("EnvironmentService: set env vars for stg environment");
         } else if(windowUrl.includes('prd')) {
             this.baseapi = 'https://cool-srv-prd.cisco.com';
@@ -107,6 +111,7 @@ export class EnvironmentService {
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
           this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
+          this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL=this.baseapi+'/coolsrv/emailNotification/sendEmailNotification/';
             console.log("EnvironmentService: set env vars for prd environment");
         } else {
             //this.baseapi = 'http://10.24.56.190:8080';
@@ -134,6 +139,7 @@ export class EnvironmentService {
             this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
             this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
             this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
+            this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL=this.baseapi+'/coolsrv/emailNotification/sendEmailNotification/';
             console.log("EnvironmentService: set env vars for dev environment");
         }
     }

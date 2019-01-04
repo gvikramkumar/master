@@ -14,7 +14,13 @@ export class ExitCriteriaValidationService {
 
   getExitCriteriaData(offerId){
     let url =this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL+ offerId;
-    return this.http.get(url);
+    return this.http.get(url,{withCredentials: true});
+  }
+  requestApproval(offerId, mileStone){
+    let url = this.environmentService.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL+ offerId + mileStone;
+    url += offerId;
+    url += "/" + mileStone;
+    return this.http.post(url, null, {withCredentials: true});
   }
 
 }
