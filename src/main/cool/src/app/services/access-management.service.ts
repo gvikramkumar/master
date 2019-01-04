@@ -5,13 +5,14 @@ import { AccessManagement } from '../models/accessmanagement';
 import { Observable } from 'rxjs/Observable';
 import { EnvironmentService } from '../../environments/environment.service';
 import { NewUser } from '../models/newuser';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AccessManagementService {
     businessUnitUrl: string = environment.REST_API_SECONDARY_BUSINESS_UNIT_URL;
     businessEntityUrl: string = environment.PDAF_API+'?columns=BE&distinct=true';
 
-    constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) {}
+    constructor(private httpClient: HttpClient, private environmentService: EnvironmentService, private userService:UserService) {}
 
     accessManagementAll(): any {
         return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_GETALL_URL);
@@ -43,5 +44,10 @@ export class AccessManagementService {
     getBusinessEntity(): Observable<any> {
         const url = this.businessEntityUrl;
         return this.httpClient.get(url, {withCredentials:true});
+    }
+
+    checkAdminAccess():Observable<any>{
+        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL+'/'+ this.userService.getUserId(), 
+            {withCredentials:true});
     }
 }

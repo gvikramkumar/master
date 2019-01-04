@@ -1,26 +1,39 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 
 import 'rxjs/add/operator/toPromise';
 import { EnvironmentService } from '../../environments/environment.service';
+import { AccessManagementService } from './access-management.service';
 
 @Injectable()
 export class ConfigurationService {
     urlGetUserInfo = environment.REST_API_URL;
     urlGetCurrentUser = environment.REST_API_URL_GET_CURRENT_USER;
-    
+    urlCheckAdminAccess = this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
+    private _startupData: any;
     constructor(private httpClient: HttpClient, 
         private userService: UserService, 
-        private environmentService: EnvironmentService) {
+        private environmentService: EnvironmentService,
+        private accessMgmtService: AccessManagementService) {
     }
 
-    init(): Promise<any> {
+    init() {
         return new Promise((resolve, reject) => {
             this.httpClient.get(this.urlGetCurrentUser, { withCredentials: true }).toPromise()
                 .then((user) => {
                     this.userService.setUserId(user);
+                    
+                    // check for admin access
+                    this.accessMgmtService.checkAdminAccess().toPromise().then((data) => {
+                        console.log(data);
+                        this._startupData = {hasAdminAccess:true};
+                    }, (err) => {
+                        console.log(err);
+                        this._startupData = {hasAdminAccess:false};
+                    });
+                    
                     return this.httpClient.post(this.urlGetUserInfo, { userId: user }, { withCredentials: true }).toPromise().then((res: any) => {
                         this.userService.setFirstName(res.firstName);
                         this.userService.setLastName(res.lastName);
@@ -31,13 +44,14 @@ export class ConfigurationService {
 
         })
     }
+
     private handleError(data?: any) {
         return (error: any) => {
             console.log(error);
         }
     }
-    /*assignUserId(data) {
-        this.userService.userId = data.userId;
-    }*/
 
+    get startupData(): any {
+        return this._startupData;
+    }
 }
