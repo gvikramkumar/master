@@ -23,7 +23,7 @@
               <a routerLink="/action"><div class="tab__heading" title="Sidebar">Actions</div></a>
             </li>
           <li routerLinkActive="active">
-              <a routerLink="/accessManagement"><div class="tab__heading" title="Sidebar">Access Management</div></a>
+              <a routerLink="/accessManagement"><div class="tab__heading" title="Sidebar" *ngIf="hasAdminAccess">Access Management</div></a>
           </li>
 
         </ul>

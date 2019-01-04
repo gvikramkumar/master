@@ -4,6 +4,8 @@ import { CreateOfferService } from '../services/create-offer.service';
 import { HeaderService } from './header.service';
 import { UserService } from '../services/user.service'
 import { SelectItem } from 'primeng/api';
+import { AccessManagementService } from '../services/access-management.service';
+import { ConfigurationService } from '../services/configuration.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,19 +22,22 @@ export class HeaderComponent implements OnInit {
   userId;
   emailPrefOptions: SelectItem[];
   isBupmUser: Boolean = false;
-
+  hasAdminAccess:boolean = false;
   ngOnInit() {
   }
 
   constructor(private headerService: HeaderService, private router: Router,
-    private createOfferService: CreateOfferService, private userService: UserService) {
-    // this.selectedIndex = 2;
+    private createOfferService: CreateOfferService, private userService: UserService, 
+    private startupService:ConfigurationService) {
 
-    this.headerService.getCurrentUser().subscribe((user: any) => {
+      this.headerService.getCurrentUser().subscribe((user: any) => {
       this.userId = user;
       this.headerService.getUserInfo(user).subscribe((data: any) => {
         this.userName = data[0].cn;
       });
+      
+      this.hasAdminAccess = this.startupService.startupData['hasAdminAccess'];
+
     });
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
@@ -41,6 +46,9 @@ export class HeaderComponent implements OnInit {
         this.isBupmUser = true;
       }
     });
+
+    
+   
 
     this.emailPrefOptions= [
       {label: 'Realtime', value: 'Realtime' },
