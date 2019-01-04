@@ -59,7 +59,7 @@ export class SubmeasureDetailDialogComponent {
 
   hasFlashCategory() {
     // Manufacturing V&O and MRAP
-    return this.sm.measureId === 5 && this.sm.sourceId === 2;
+    return this.sm.measureId === 3 && this.sm.sourceId === 2;
   }
 
   hasAdjustmentType() {
