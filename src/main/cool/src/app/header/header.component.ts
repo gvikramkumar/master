@@ -23,6 +23,8 @@ export class HeaderComponent implements OnInit {
   emailPrefOptions: SelectItem[];
   isBupmUser: Boolean = false;
   hasAdminAccess:boolean = false;
+
+
   ngOnInit() {
   }
 

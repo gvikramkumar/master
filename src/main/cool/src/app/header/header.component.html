@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header header--compressed">
   <div class="header-bar container">
     <a href="javascript:;" class="header-bar__logo">
       <span class="icon-cisco"></span>
@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="header-toolbar">
-        <a href="javascript:;" class="avatar">{{userName}}<span class="icon-chevron-down icon-small"></span><span class="role userIdSpacing">{{functionalRole}}</span></a>
+        <a href="javascript:;" class="avatar">{{userName}}<span class="icon-chevron-down"></span><span class="role userIdSpacing">{{functionalRole}}</span></a>
         <a href="javascript:;" class="btn btn--icon">
             <span class="icon-search"></span>
         </a>
@@ -44,8 +44,8 @@
            </span>
         </a>
         <ng-template  #popNotificationContent ptemplate="body" placement="bottom">
-          <div class="emailPrefSpacing"> 
-              
+          <div class="emailPrefSpacing">
+
                  <p-multiSelect
                   id="selectedSValue"
                   class="form-control"
@@ -55,7 +55,7 @@
                   [(ngModel)]="secondaryBusinessUnitsValue"
                   [panelStyle]="{minWidth:'25em'}">
                 </p-multiSelect>
-                  
+
         </div>
       </ng-template>
         <a href="javascript:;" class="btn btn--icon">
@@ -67,7 +67,7 @@
             <p-header>
               <div class="row">
                 <div class="col"><span class="icon-check-outline icon-medium text-success"></span>CSPP</div>
-                
+
               </div>
             </p-header>
           </p-accordionTab>

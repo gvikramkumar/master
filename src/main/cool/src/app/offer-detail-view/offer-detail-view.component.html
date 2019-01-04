@@ -8,7 +8,7 @@
       <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
           <div class="col-md-4">
-            <h2 class="page--subheading"><button class="btn btn--icon btn--white" (click)="goBack()"><span class="icon-back"></span></button>
+            <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span class="icon-back"></span></button>
               Offer Detail Overview</h2>
           </div>
           <div class="col-md-8 text-right">
@@ -149,7 +149,7 @@
                         <div class="text-bold">
                           <span [ngClass]="(offerOverviewDetailsList.ideate[3].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                           {{offerOverviewDetailsList.ideate[3].subMilestone}}
-                        </div>                        
+                        </div>
                         <div [hidden]="offerOverviewDetailsList.ideate[1].status == 'Available'">
                             <div class="offer-header card base-margin-top">
                               <div class="row">

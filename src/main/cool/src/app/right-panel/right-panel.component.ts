@@ -13,6 +13,7 @@ import { StakeHolder } from '../models/stakeholder';
 import { StakeHolderDTO } from '../models/stakeholderdto';
 import { Collaborators } from '../models/collaborator';
 import { OfferPhaseService } from '../services/offer-phase.service';
+import { MonetizationModelService } from '../services/monetization-model.service';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -24,7 +25,6 @@ export class RightPanelComponent implements OnInit {
   notiFication: Boolean = false;
   @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
-  @Input() offerOwner: String;
   @Output() updateStakeData = new EventEmitter<string>();
   backdropCustom: Boolean = false;
   proceedFlag: boolean;
@@ -49,6 +49,7 @@ export class RightPanelComponent implements OnInit {
   mStoneCntInAllPhases:any[]=['ideate','plan','execute','launch'];
   mileStoneStatus:any[]= [];
   phaseProcessingCompleted = false;
+  offerName;
 
   ddFunction = 'Select Function';
   flagFunction = false;
@@ -111,7 +112,8 @@ export class RightPanelComponent implements OnInit {
     private router: Router,
     private createOfferService: CreateOfferService,
     private searchCollaboratorService: SearchCollaboratorService,
-    private offerPhaseService: OfferPhaseService) {
+    private offerPhaseService: OfferPhaseService,
+    private monetizationModelService: MonetizationModelService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -130,10 +132,15 @@ export class RightPanelComponent implements OnInit {
         this.ideateCompletedCount = this.ideateCompletedCount + 1;
       }
     });
+
     this.offerPhaseDetailsList.plan.forEach(element => {
       if (element.status === 'Completed') {
         this.planCompletedCount = this.ideateCompletedCount + 1;
       }
+    });
+
+    this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
+      this.offerName = data['offerName'];
     });
 
     this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(data => {

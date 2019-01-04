@@ -2,10 +2,10 @@
 </span>
 <div class="mb-10">
     <!-- Offer Phase Steps -->
-    <div class="card card--raised base-margin-top">
+    <div class="card card--raised base-margin-top" (click)="showOfferPhaseDailog()">
             <h5 class="half-margin-bottom">Offer Phase
                 <a href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
-                    <span class="icon-pencil icon-small"></span> Edit</a>
+                    <span class="icon-pencil"></span> Edit</a>
             </h5>
             <div class="divider divider--compressed"></div>
             <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
@@ -39,12 +39,12 @@
                 </div>
             </div>
     </div>
-    
+
 
 <!-- Estimated Lead Time -->
 <div class="card card--raised base-margin-top">
     <h5 class="half-margin-bottom">Estimated Lead Time</h5>
-    <span class="label label--warning-alt">3 weeks</span>
+    <span class="ribbon label label--warning-alt"><strong>3 </strong> <small> weeks</small></span>
 </div>
 
 <!-- People Involved -->
@@ -52,16 +52,16 @@
 
     <h5 class="half-margin-bottom">People Involved
         <a href="javascript:;" class="pull-right" (click)="showDialog()">
-            <span class="icon-pencil icon-small"></span> Edit</a>
+            <span class="icon-pencil"></span> Edit</a>
     </h5>
     <div class="divider divider--compressed"></div>
 
     <ul class="list">
-        <li>
+        <!-- <li>
             <div class="ui-accordion-header">Owner<span class="icon-chevron-up icon-small pull-right"></span></div>
             <div class="ui-accordion-content">
                 <div class="flex-center-vertical">
-                    <!-- Team Member Name Avatar -->
+                   
                     <span class="avatar-ico">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin"
                             role="img">
@@ -77,12 +77,12 @@
                     </span>
                     <div class="flex-fluid text-left half-margin-left">
                         <div class="text-bold">{{offerOwner}}</div>
-                      
+
                     </div>
                 </div>
             </div>
 
-        </li>
+        </li> -->
 
         <li *ngFor="let key of getKeys(stakeData)">
             <div class="ui-accordion-header">{{key}} ({{stakeData[key].length}})<span class="icon-chevron-up icon-small pull-right"></span></div>
@@ -114,15 +114,15 @@
         </li>
     </ul>
 
-    <p-dialog [showHeader]="false" [responsive]="true" [width]="1000" [minWidth]="400" [height]="700" [minY]="70"
+    <p-dialog [showHeader]="false" [responsive]="true" [width]="1000" [minWidth]="400" [height]="600" [minY]="70"
         [(visible)]="displayOfferPhase" [closable]="true">
         <div class="pull-right base-margin-top">
             <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <h4>AMP (Advanced Malware Protection) <span style="color: blue">573493</span></h4>
-                <h5 style="color: blue">View Offer Details</h5>
+                <h5>{{offerName}}&nbsp;<span style="color:indigo">{{currentOfferId}}</span></h5>
+                <h6 style="color: indigo">View Offer Details</h6>
             </div>
             <div class="col-md-6">
                 <h5 class="half-margin-bottom">Offer Phase</h5>
@@ -180,7 +180,7 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
-                                                <td><span style="color: blue">{{ideateData.subMilestone}}</span></td>
+                                                <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
                                                 <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
                                                 <td>{{ideateData.completionDate}}</td>
                                                 <td>{{ideateData.completionDate}}</td>
@@ -202,7 +202,7 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let planData of offerPhaseDetailsList.plan">
-                                                <td><span style="color: blue">{{planData.subMilestone}}</span></td>
+                                                <td><span style="color: indigo">{{planData.subMilestone}}</span></td>
                                                 <td [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">{{planData.status}}</td>
                                                 <td>{{planData.completionDate}}</td>
                                                 <td>{{planData.completionDate}}</td>
@@ -211,7 +211,7 @@
                                     </table>
                                 </div>
                             </p-accordionTab>
-                            <p-accordionTab header="Excute">
+                            <p-accordionTab header="Execute">
                                 <div class="responsive-table">
                                     <table class="table table--nostripes">
                                     </table>
