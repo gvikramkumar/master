@@ -159,7 +159,7 @@ export default class PgLookupRepo {
 
   getSalesSplitPercentageReport(fiscalMonth) {
     return pgc.pgdb.query(`
-            select 
+            select  
             account_code, 
             company_code, 
             sub_account_code,

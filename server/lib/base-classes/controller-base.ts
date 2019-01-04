@@ -298,14 +298,22 @@ export default class ControllerBase {
         .then(objs => this.mongoToPgSyncTransform(objs, userId, log, elog)) // override this to transform
         .then(objs => {
           return this.pgRepo.syncRecordsReplaceAll(pgRemoveFilter, objs, userId, true)
-            .then(results => log.push(`${tableName}: ${results.recordCount} records transferred`));
-        });
+            .then(results => results.recordCount);
+        })
+        .then(recordCount => {
+          return this.postSyncStep()
+            .then(() => log.push(`${tableName}: ${recordCount} records transferred`));
+        })
 /*
     } catch (err) {
       elog.push(`${tableName}: ${err.message}`);
       throw err;
     }
 */
+  }
+
+  postSyncStep() {
+    return Promise.resolve();
   }
 
   // put /:id

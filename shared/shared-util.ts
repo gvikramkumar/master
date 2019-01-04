@@ -141,7 +141,7 @@ function getCutoffDateStrFromFiscalMonth(fiscalMonthNum) {
 function getFiscalMonthLongNameFromNumber(fiscalMonthNum) {
   const year = fiscalMonthNum.toString().substr(0, 4);
   const date = new Date(Number(year), 11);
-  const fimos = getFiscalMonthListFromDate(date, 24);
+  const fimos = getFiscalMonthListFromDate(date, 12 * 50); // go back 50 years for historical data
   const fimo = _.find(fimos, {fiscalMonth: fiscalMonthNum});
   if (!fimo) {
     throw new Error(`getFiscalMonthLongNameFromNumber: fiscalmonth not found for: ${fiscalMonthNum}`);

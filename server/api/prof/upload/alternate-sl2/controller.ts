@@ -39,12 +39,10 @@ export default class AlternateSl2UploadUploadController extends UploadController
     return Promise.all([
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_iso_country', 'iso_country_name'),
-      this.repo.getMany({fiscalMonth: this.fiscalMonth})
     ])
       .then(results => {
         this.data.salesTerritoryNameCodes = results[0];
         this.data.alternateCountryNames = results[1];
-        this.data.alternateSl2Uploads = results[2];
       });
   }
 
