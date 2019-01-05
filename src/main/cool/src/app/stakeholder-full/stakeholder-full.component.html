@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-8 text-right">
                 <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
-                <!-- <button class="btn btn--white"><span class="icon-export"></span> Export </button> -->
+               
                 <button class="btn btn--white btn--wide" (click)=' addCollaborator()'>Proceed to Strategy Review <span class="icon-chevron-right"></span></button>
             </div>
         </div>
@@ -27,8 +27,6 @@
   <!-- People Involved -->
   <div class="card card--raised base-margin-top">
 
-        <!-- <h5 class="half-margin-bottom">People Involved <a href="javascript:;" onclick="window.location.href='add-edit-contacts.html'" class="pull-right"><span class="icon-pencil icon-small"></span> Edit</a></h5>
-        <div class="divider divider--compressed"></div>     -->
         <ul class="list">
                     <li><div class="ui-accordion-header"><span class="icon-chevron-up icon-small pull-right"></span></div>
                         <div class="ui-accordion-content">
@@ -46,7 +44,7 @@
                                 </span>
                                 <div class="flex-fluid text-left half-margin-left">
                                     <div class="text-bold">{{d._id}}
-                                            <button class="btn btn--primary"  *ngIf="!d.stakeholderDefaults" (click)=" onDelete(d)">Remove</button>
+                                            <button class="btn btn--primary" style="float:right;"  *ngIf="!d.stakeholderDefaults" (click)=" onDelete(d)">Remove</button>
                                         </div>
                                     <!-- <button *ngIf="!d.stakeholderDefaults"> Delete</button> -->
                                 </div>
@@ -55,38 +53,8 @@
                         </div>
                       </div>
 
-                    </li>
-
-                    <!-- <li><div class="ui-accordion-header"><span class="icon-chevron-up icon-small pull-right"></span></div>
-                        <div *ngIf = "newData" class="ui-accordion-content">
-                            <div *ngFor="let d of newData ">
-
-                            <div class="flex-center-vertical">
-
-                                <span class="avatar-ico">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
-                                    <title id="fwt-profile-button-loggedin-title"></title>
-                                    <g fill="none" fill-rule="evenodd">
-                                        <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344" x="0" y="0"></path>
-                                        <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16" x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">{{getInitialChar(d['userName'])}}</text>
-                                    </g>
-                                    </svg>
-                                </span>
-                                <div *ngIf ="d" class="flex-fluid text-left half-margin-left">
-
-                                    <div class="text-bold">{{d.name }}</div>
-
-                                </div>
-                        </div>
-                        <div class="divider divider--compressed"></div>
-                        </div>
-                      </div>
-
-                    </li> -->
-
-
-
-                    <li><div class="ui-accordion-header">Stakeholders<span class="icon-chevron-up icon-small pull-right"></span></div>
+                    </li> 
+                 <li><div class="ui-accordion-header">Stakeholders<span class="icon-chevron-up icon-small pull-right"></span></div>
                         <div class="ui-accordion-content">
 
                                <form [formGroup]="stakeholderForm" (ngSubmit)="onSearch()">
@@ -104,7 +72,7 @@
                                                       <div class="form-group__text select">
                                                           <select id="selectedFunction" class="form-control" formControlName="businessEntity">
                                                               <option [ngValue]="null">BusinessEntity</option>
-                                                              <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
+                                                              <option *ngFor="let businessEntity of getRole" value={{businessEntity}}>
                                                                   {{businessEntity}}</option>
                                                           </select>
                                                       </div>
@@ -115,18 +83,16 @@
                                                       <div class="form-group__text select">
                                                           <select id="selectedFunction" class="form-control" formControlName="functionName">
                                                               <option [ngValue]="null">Function</option>
-                                                              <option *ngFor="let businessEntity of funcionalRoleList" value={{businessEntity}}>
+                                                              <option *ngFor="let businessEntity of getRole" value={{businessEntity}}>
                                                                   {{businessEntity}}</option>
                                                           </select>
                                                       </div>
                                                   </div>
                                         </div>
                                         <div class="col-md-1">
-                                              <!-- <div class="form-group half-margin-bottom">
-                                                      <div class="form-group__text select"> -->
-                                                              <button class="btn btn--primary" (click)="onSearch()">Search</button>
-                                                      <!-- </div>
-                                                  </div> -->
+                                  
+                                          <button class="btn btn--primary" (click)="onSearch()">Search</button>
+                                                    
                                         </div>
 
 

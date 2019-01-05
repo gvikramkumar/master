@@ -37,9 +37,9 @@ export class StakeholderfullService {
     let url =this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
     return this._http.get(url,{ withCredentials: true });
   }
-  getOfferrole(){
+  getOfferrole(){ 
     let url=this.environmentService.REST_API_GETFUNCTIONAL_ROLE_URL;
-    return this._http.get(url);
+    return this._http.get(url,{withCredentials:true});
   }
 
 }
