@@ -42,9 +42,8 @@
               </div>
             </div>
             <div class="responsive-table">
-
-              <p-dataTable [value]="myActionsList"   (selectionChange) = "selectlist($event)" scrollable="true" scrollHeight="400px" [globalFilter]="gbforactions"
-              #dt>
+              <p-dataTable [value]="myActionsList" scrollable="true" scrollHeight="400px" [globalFilter]="gbforactions"
+                #dt>
                 <p-column field="offerId" sortable="true" header="OFFER ID">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span *ngIf="actionData.alertType == 1">
@@ -109,9 +108,8 @@
                           </div>
                         </div>
                       </ng-template>
-
-                      <span [ngbPopover]="popNotificationContent" (click)="p2.open();selectionChange(actionData)" #p2="ngbPopover" 
-                          triggers="manual" pTooltip="Notifications" tooltipPosition="top">
+                      <span [ngbPopover]="popNotificationContent" (click)="p2.open()" #p2="ngbPopover" triggers="manual"
+                        pTooltip="Notifications" tooltipPosition="top">
                         <span class="icon-alert icon-small" style="margin:0px 5px 0 0"></span></span>
                       {{actionData.offerId}}
                     </span>
@@ -242,7 +240,7 @@
                             <div class="progressbar__fill"></div>
                           </div>
                         </div>
-                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Cancelled'" class="row no-gutters">
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'cancel'" class="row no-gutters">
                           <div class="col-md-12">
                             <div class="progressbar__label progressbarLabel-cancelled">Cancelled</div>
                           </div>
