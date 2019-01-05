@@ -97,37 +97,11 @@ export class StakeholderFullComponent implements OnInit {
 
 }
 
-
-
-datas= [
-  {
-      "_id": "jbondre",
-      "businessEntity": "IOT",
-      "functionalRole": "BUPM",
-      "offerRole": "Reviewer",
-      "stakeholderDefaults": false
-  },
-  {
-      "_id": "jagondal",
-      "businessEntity": "All",
-      "functionalRole": "CPS",
-      "offerRole": "Reviewer",
-      "stakeholderDefaults": true
-  }
-]
-
-
-
-
-   ngOnInit() {
-
-    
-    
-    
+   ngOnInit() {  
     this.newData=[];
     this.temporaryselectedCollabs = [];
     this.deleteCollabs = [];
-     //this.stakeholderfullService.getdata().subscribe(data=>{
+     
       this.stakeholderfullService.getdata( this.currentOfferId).subscribe(data=>{
         this.firstData=data;
        this.data=this.firstData.stakeholders;
@@ -135,16 +109,10 @@ datas= [
      
       console.log("Data::::"+(JSON.stringify(this.firstData)));
     });
-    this.createOfferService.getPrimaryBusinessUnits()
-    .subscribe(data => {
-      console.log("create offer Service "+data);
-      // this.entityList = data.businessUnits;
-      this.entityList = ['Security', 'IOT', 'Data Center', 'Enterprise'];
-        this.funcionalRoleList = ['BUPM','SOE'];
-      console.log("create offer service"+ this.entityList);
-    });
+   
       this.stakeholderfullService.getOfferrole().subscribe(data=>{
         this.getRole=data;
+        console.log("getOfferRole:::",this.getRole);
       })
 
     this.stakeholderForm = new FormGroup({
@@ -152,26 +120,12 @@ datas= [
         businessEntity: new FormControl(null, Validators.required),
         functionName: new FormControl(null, Validators.required)
       });
-
-
     this.showtemp=false;
     this.tempcoll=[];
     this.lstcoll=[];
     this.lastvalue=false;
     this.tempvalue=true;
    }
-
-  //  selectList(event){
-  //      this.showtemp=false;
-  //      this.showdel=false;
-  //      if(this.tempvalue==true){
-  //          this.tempcoll=this.selectedColl;
-  //      }
-  //      if(this.lastvalue == true){
-  //          this.lstcoll=this.selectedColl;
-  //          console.log('lstcoll',this.lstcoll);
-  //      }
-  //  }
 
    getUserIdFromEmail(email): any {
     var arrayOfStrings = email.split('@');
@@ -321,7 +275,7 @@ datas= [
   gotoMMpage(){
     this.router.navigate(['/mmassesment',this.currentOfferId,this.caseId]);
   }
-  onDelete(user){debugger;
+  onDelete(user){
     if(this.data.length == 1){
       this.data.splice(0, 1);
     }
@@ -341,7 +295,7 @@ datas= [
   onOut(event,value){
     this.showDelete =false;
   }
-  selectlist(event){debugger;
+  selectlist(event){
   // this.temporaryselectedCollabs = this.selectedCollabs;
      if( this.selectedCollabs.length < 1){
        this.temporaryselectedCollabs.push(this.selectedCollabs);
@@ -365,7 +319,7 @@ datas= [
 
   }
 
-  addselectedCollabs(){debugger;
+  addselectedCollabs(){
     if(this.temporaryselectedCollabs.length>0 &&this.newData.length  >0 ){
     //  this.newData = this.newData.concat(this.temporaryselectedCollabs);
       this.data = this.data.concat(this.temporaryselectedCollabs);
@@ -393,15 +347,12 @@ datas= [
   }
 
   multideleteCollaborator(){
-    debugger;
+    
     if(this.deleteCollabs.length < 1){
       alert("select atleast one");
     }
   
     if(this.deleteCollabs.length > 0){
-  
-    
-
         this.data = this.data.filter(val => !this.deleteCollabs.includes(val));
           }
     
@@ -409,20 +360,6 @@ datas= [
        this.deleteCollabs = [];
        this.selectedCollabs = [];
      }
-
-  //  if(this.temporaryselectedCollabs.length>0){
-  //   for( var i=0;i<this.temporaryselectedCollabs.length;i++){
-  //       var arrlen=this.data.length;
-  //       for(var j=0;j<arrlen;j++){
-  //           if(this.temporaryselectedCollabs[i]==this.data[j]){
-  //               this.multideleteCollaboratordata=this.data.slice(0,j).concat(this.data.slice(j+1,arrlen));
-  //           }
-  //       }
-  //   }
-  //}
- 
-
-
 
    getInitialChar(name) {
     if (name == null) return ""

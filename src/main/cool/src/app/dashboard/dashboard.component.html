@@ -87,7 +87,7 @@
                         </div>
                       </ng-template>
                       <span placement="bottom" [ngbPopover]="popActionContent" #p1="ngbPopover" triggers="manual"
-                        (click)="p1.open()" pTooltip="Action" tooltipPosition="top">
+                        (click)="p1.open();selectedrownof(actionData)" pTooltip="Action" tooltipPosition="top">
                         <span class="icon-clock icon-small"></span>
                       {{actionData.offerId}}</span>
                     </span>
@@ -108,7 +108,7 @@
                           </div>
                         </div>
                       </ng-template>
-                      <span [ngbPopover]="popNotificationContent" (click)="p2.open()" #p2="ngbPopover" triggers="manual"
+                      <span [ngbPopover]="popNotificationContent" (click)="p2.open();selectedrownof(actionData)" #p2="ngbPopover" triggers="manual"
                         pTooltip="Notifications" tooltipPosition="top">
                         <span class="icon-alert icon-small"></span>
                       {{actionData.offerId}}</span>

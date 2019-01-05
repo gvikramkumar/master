@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
 import {UserService} from './user.service';
 import { EnvironmentService } from '../../environments/environment.service';
 
 @Injectable()
+
+
 export class DashboardService {
+
+
+
+ 
   // baseMyActionsUrl: string = environment.REST_API_MYACTIONS_URL;
   // baseMyOfferssUrl: string = environment.REST_API_MYOFFERS_URL;
   // baseDismissNotificationUrl: string = environment.REST_API_DISMISS_NOTIFICATION;
@@ -27,7 +33,17 @@ export class DashboardService {
   }
 
   postDismissNotification(data): Observable<any> {
+    
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept' : 'application/json'
+      }),
+      withCredentials: true
+    };
     let url = this.environmentService.REST_API_DISMISS_NOTIFICATION;
-    return this.http.post(url, data, { withCredentials: true });
+    console.log("url:::",url);
+    return this.http.post(url, data,httpOptions);
 }
 }

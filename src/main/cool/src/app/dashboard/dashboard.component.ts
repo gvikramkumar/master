@@ -90,6 +90,8 @@ export class DashboardComponent implements OnInit {
         this.myOfferArray.push(obj);
       });
 
+     
+
       // Process Notifications
       if (this.myActions.notificationList !== undefined) {
         this.myActions['notificationList'].forEach(element => {
@@ -113,6 +115,12 @@ export class DashboardComponent implements OnInit {
 
   dateFormat(inputDate: string) {
     return moment(inputDate).format('DD-MMM-YYYY');
+  }
+
+  selectedrownof(actionData){
+    console.log("selectedrow",actionData);
+    this.selectedrow=actionData ;
+        
   }
 
   getMyActions() {
@@ -145,21 +153,14 @@ export class DashboardComponent implements OnInit {
  }
 
   dismissNotification(offerId, popover) {
+
+    console.log("hello");
     const userId = this.userService.getUserId();
-    // const postData = {
-    //   'userId': userId,
-    //   'offerId': offerId,
-    //   'dismissedNotification': true
-    // };
-  const postData=  {
+    const postData=  {
       'taskId':this.selectedrow.taskId,
       'userId':this.selectedrow.assigneeId,
-      'caseId':this.selectedrow.caseId,
-      'offerId':this.selectedrow.offerId,
-      'taskName':"Notification",
-      'action':"", 
-      'comment':""
-}
+      'taskName':"Notification"
+ }
     console.log( "post Data:::",postData);
     this.dashboardService.postDismissNotification(postData);
     popover.close();
