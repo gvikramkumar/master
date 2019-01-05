@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-strategy-review',
@@ -16,10 +17,13 @@ export class StrategyReviewComponent implements OnInit {
   choiceSelected;
   groups = {};
   groupKeys = [];
+  groupNames=[];
+  groupData = [];
   message = {};
   stakeData = {};
   offerBuilderdata = {};
   minDate: Date;
+  
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   formTitle: any = ' ';
   totalApprovalsCount: any = 0;
@@ -64,8 +68,10 @@ export class StrategyReviewComponent implements OnInit {
     }
   ];
 
-  constructor(private router: Router, private monetizationModelService: MonetizationModelService,
-    private activatedRoute: ActivatedRoute) {
+  constructor(private router: Router,
+    private monetizationModelService: MonetizationModelService,
+    private activatedRoute: ActivatedRoute,
+    private _location: Location) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
         this.caseId = params['id2'];
@@ -73,6 +79,11 @@ export class StrategyReviewComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.message = {
+      contentHead: 'Great Work!',
+      content: 'Strategy review message.',
+      color: 'black'
+    };
     this.showButtonSection = true;
     this.showFormSection = false;
     this.totalApprovalsCount = this.strategyReviewList.length;
@@ -92,14 +103,17 @@ export class StrategyReviewComponent implements OnInit {
     this.minDate = new Date();
     this.monetizationModelService.getAttributes().subscribe(data => {
       this.offerData = data;
-      const defaultOfferDataGroups = this.offerData['groups'][0];
-      defaultOfferDataGroups['subGroup'].forEach((g) => {
-        this.groups[g['subGroupName']] = [];
-        g.choices.forEach((c) => {
-          this.groups[g['subGroupName']].push({ name: c, type: 0, status: -1 });
+      this.offerData['groups'].forEach(group => {
+        this.groupNames.push(group['groupName']);
+        const curGroup = {};
+        group['subGroup'].forEach(g => {
+          curGroup[g['subGroupName']] = [];
+          g.choices.forEach((c) => {
+            curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
+          });
         });
+        this.groupData.push(curGroup);
       });
-      this.groupKeys = Object.keys(this.groups);
     });
 
     this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
@@ -121,8 +135,32 @@ export class StrategyReviewComponent implements OnInit {
     });
   }
 
+  updateMessage(message) {
+
+    if (message != null && message !== '') {
+      if (message === 'hold') {
+        this.message = {
+          contentHead: '',
+          content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black' };
+      } else if (message === 'cancel') {
+        this.message = {
+          contentHead: '',
+          content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black' };
+
+      }
+    }
+  }
+
+
+  goBack() {
+    this._location.back();
+  }
+
+
   offerDetailOverView() {
-    this.router.navigate(['/offerDetailView', this.currentOfferId]);
+    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
   }
 
   doNotApprove() {

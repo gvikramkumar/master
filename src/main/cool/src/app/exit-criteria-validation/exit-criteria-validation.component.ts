@@ -18,6 +18,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
   offerOwner:String = '';
   stakeData = {};
   requestApprovalAvailable:Boolean = true;
+  
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
@@ -75,6 +76,11 @@ export class ExitCriteriaValidationComponent implements OnInit {
   }
 }
 
+requestForApproval(){
+  this.exitCriteriaValidationService.requestApproval(this.currentOfferId, this.ideate).subscribe(data => {
+    
+  })
+}
 updateStakeData(data) {
   // this.monetizationModelService.showStakeholders(this.currentMMModel, this.currentPrimaryBE).subscribe(res => {
   //   this.stakeData = {};

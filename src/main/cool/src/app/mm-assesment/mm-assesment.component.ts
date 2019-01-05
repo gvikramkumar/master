@@ -46,8 +46,11 @@ export class MmAssesmentComponent implements OnInit {
     private offerPhaseService: OfferPhaseService
   ) {
     this.activatedRoute.params.subscribe(params => {
+    
       this.currentOfferId = params['id'];
+      console.log("param ::::", params);
       this.caseId = params['id2'];
+      
     });
 
   }
@@ -81,7 +84,7 @@ export class MmAssesmentComponent implements OnInit {
 
     this.MonetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
       this.offerBuilderdata = data;
-     
+     console.log("getofferbuilderData",this.offerBuilderdata);
       this.offerBuilderdata['BEList'] = [];
       this.offerBuilderdata['BUList'] = [];
       if (this.offerBuilderdata['primaryBEList'] != null) {
@@ -306,7 +309,7 @@ export class MmAssesmentComponent implements OnInit {
       console.log(postData);
   
   
-      this.MonetizationModelService.toNextSetp(JSON.stringify(postData)).subscribe(data => {
+      this.MonetizationModelService.toNextSetp(postData).subscribe(data => {
         console.log(data);
         if (data['mmMapperStatus'] === 'Aligned') {
           this.message = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`,mmModel: data['mmModel'] };

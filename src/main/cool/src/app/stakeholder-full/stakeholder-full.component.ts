@@ -24,6 +24,8 @@ import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { ok } from 'assert';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { routerNgProbeToken } from '@angular/router/src/router_module';
+import { BupmGuard } from '../auth/gaurds/bupm-guard';
+import {OfferPhaseService} from '../services/offer-phase.service';
 //import { runInThisContext } from 'vm';
 
 @Component({
@@ -45,6 +47,8 @@ export class StakeholderFullComponent implements OnInit {
    currentOfferId;
    temporaryList;
    lists;
+   message = {};
+   public offerBuilderdata;
    public newData:any[];
     //new update
     public showDelete =false;
@@ -76,7 +80,7 @@ export class StakeholderFullComponent implements OnInit {
      private createOfferService:CreateOfferService,
      private searchCollaboratorService:SearchCollaboratorService ,
      private activatedRoute: ActivatedRoute,
-     private router:Router) {
+     private router:Router, private offerPhaseService:OfferPhaseService) {
 
         this.activatedRoute.params.subscribe(params => {
             this.currentOfferId = params['id'];
@@ -94,8 +98,30 @@ export class StakeholderFullComponent implements OnInit {
 
 
 
+datas= [
+  {
+      "_id": "jbondre",
+      "businessEntity": "IOT",
+      "functionalRole": "BUPM",
+      "offerRole": "Reviewer",
+      "stakeholderDefaults": false
+  },
+  {
+      "_id": "jagondal",
+      "businessEntity": "All",
+      "functionalRole": "CPS",
+      "offerRole": "Reviewer",
+      "stakeholderDefaults": true
+  }
+]
+
+
+
 
    ngOnInit() {
+
+    
+    
     
     this.newData=[];
     this.temporaryselectedCollabs = [];
@@ -105,8 +131,8 @@ export class StakeholderFullComponent implements OnInit {
         this.firstData=data;
        this.data=this.firstData.stakeholders;
      console.log("data",typeof(this.data));
-
-      console.log("Data::::"+this.data);
+     
+      console.log("Data::::"+(JSON.stringify(this.firstData)));
     });
     this.createOfferService.getPrimaryBusinessUnits()
     .subscribe(data => {
@@ -145,6 +171,18 @@ export class StakeholderFullComponent implements OnInit {
    getUserIdFromEmail(email): any {
     var arrayOfStrings = email.split('@');
     return arrayOfStrings[0];
+  }
+
+  
+  updateMessage(message) {
+ 
+    if (message != null && message !== "") {
+      if (message == 'hold') {
+        this.message = { contentHead: "", content: "The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
+      } else if (message == 'cancel') {
+        this.message = { contentHead: "", content: "The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
+      }
+    }
   }
 
 
@@ -187,7 +225,9 @@ export class StakeholderFullComponent implements OnInit {
     this.searchCollaboratorService.searchCollaborator(payLoad)
       .subscribe(data => {
         data.forEach(element => {
+          console.log("coll",element);
           const collaborator = new Collaborators();
+          collaborator._id = element._id;
           collaborator.email = element.emailId;
           collaborator.name = element.userName;
           collaborator.functionalRole = element.userMappings[0].functionalRole;
@@ -223,52 +263,68 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   addCollaborator() {
-    // const listOfStakeHolders: StakeHolder[] = [];
-    // const stakeHolderDto = new StakeHolderDTO();
-    //   console.log("final data to send backend",this.finalCollabs);
-    // this.finalCollabs.forEach(element => {
-    //   let stakeHolder = new StakeHolder();
-    //   stakeHolder.businessEntity = element.businessEntity;
-    //   stakeHolder.functionalRole = element.functionalRole;
-    //   stakeHolder.offerRole = element.offerRole;
-    //   stakeHolder._id = this.getUserIdFromEmail(element.email);
-    //   // stakeHolder.email = element.email; //add email for post
-    //   listOfStakeHolders.push(stakeHolder);
-    // });
+    console.log("finalcolabrattiondata::::::",this.data);
+     const listOfStakeHolders: StakeHolder[] = [];
+     let stakeholdersPayLoad={
+       offerId:this.currentOfferId,
+       caseId:this.caseId,
+       stakeholders:[]
+     }
+     this.data.forEach(element=>{
+      let obj={
+        "_id" : element._id, 
+        "businessEntity" :element.businessEntity, 
+        "functionalRole" : element.functionalRole, 
+        "stakeholderDefaults" : false
+       }
+       stakeholdersPayLoad['stakeholders'].push(obj);
 
-    // stakeHolderDto.offerId = this.currentOfferId;
-    // stakeHolderDto.stakeholders = listOfStakeHolders;
-    // console.log(stakeHolderDto);
-    // console.log('before service call');
+     })
+     console.log("stakeholdersPayLoad",stakeholdersPayLoad);
+     
+     
+     this.stakeholderfullService.getOfferBuilderData(this.currentOfferId).subscribe(data=>{
+         this.offerBuilderdata=data;
+         console.log("offerOwner",this.offerBuilderdata);
+     });
 
-    // let that = this;
-    // this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
-      
-    //   that.addToStakeData(data);
-    // });
-    // this.updateStakeData.next("");
-    this.router.navigate(['/strategyReview', this.currentOfferId]);
+     
+
+     this.stakeholderfullService.proceedToStrageyReview(stakeholdersPayLoad).subscribe(data=>{
+      let proceedPayload = {
+            "taskId": "",
+             "userId": this.offerBuilderdata['offerOwner'],
+            "caseId": this.caseId,
+            "offerId": this.currentOfferId,
+            "taskName": "Stake Holders", 
+            "action": "",
+            "comment": ""
+          };
+          this.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(result => {
+            this.router.navigate(['/strategyReview', this.currentOfferId,this.caseId]);
+           })
+     })
+    
+
   }
+  
 
   gotoMMpage(){
     this.router.navigate(['/mmassesment',this.currentOfferId,this.caseId]);
   }
   onDelete(user){debugger;
-    if(this.newData.length == 1){
-      this.newData.splice(0, 1);
+    if(this.data.length == 1){
+      this.data.splice(0, 1);
     }
-    if(this.newData.length > 1){
-   if(this.newData.includes(user)){
-    const index = this.newData.indexOf(user, 0);
-    if (index > -1) {
-      this.newData.splice(index, 1);
+    for(let i=0;i<= this.data.length -1;i++){
+      if(this.data[i]._id === user._id){
+        this.data.splice(i,1);
+      }
     }
-   }else{
-     alert("user not present ");
-   }
-  }
+    this.finalCollabs = this.data;
+    console.log("finaldata",this.data);
     
-  }
+}
   onEvent(event,value){
     this.showDelete =true;
   
@@ -278,14 +334,14 @@ export class StakeholderFullComponent implements OnInit {
   }
   selectlist(event){debugger;
   // this.temporaryselectedCollabs = this.selectedCollabs;
-     if(this.newData.length< 1 && this.selectedCollabs.length == 1){
+     if( this.selectedCollabs.length < 1){
        this.temporaryselectedCollabs.push(this.selectedCollabs);
      }
 
 
- if(this.selectedCollabs.length > 0 && this.newData.length  > 0){
+ if(this.selectedCollabs.length > 0 && this.data.length  > 0){
     this.selectedCollabs.forEach(element => {
-      if( this.newData.includes(element)){
+      if( this.data.includes(element)){
         alert("User already selected -- select ok to delete the user");
         this.selectedCollabs.pop();
         this.deleteCollabs.push(element);
@@ -296,25 +352,23 @@ export class StakeholderFullComponent implements OnInit {
   });
 }
   
-    if(this.selectedCollabs.length > 0 && this.newData.length  < 1){
-  
-         
-          this.temporaryselectedCollabs = this.selectedCollabs;
-    
-
-  }
+   
 
   }
 
   addselectedCollabs(){debugger;
     if(this.temporaryselectedCollabs.length>0 &&this.newData.length  >0 ){
-      this.newData = this.newData.concat(this.temporaryselectedCollabs);
+    //  this.newData = this.newData.concat(this.temporaryselectedCollabs);
+      this.data = this.data.concat(this.temporaryselectedCollabs);
+      console.log("newdatsa",this.data);
       this.finalCollabs = this.newData;
       console.log("newdata",typeof(this.newData));
       }
     if(this.temporaryselectedCollabs.length>0 && this.newData.length <1){
     this.newData = this.temporaryselectedCollabs;
     this.finalCollabs = this.newData;
+    this.data= this.data.concat(this.newData);
+    console.log("newdatsa",this.data);
     console.log("newdata",typeof(this.newData));
     this.newDatastring  = JSON.stringify(this.newData);
     }
@@ -339,10 +393,10 @@ export class StakeholderFullComponent implements OnInit {
   
     
 
-        this.newData = this.newData.filter(val => !this.deleteCollabs.includes(val));
+        this.data = this.data.filter(val => !this.deleteCollabs.includes(val));
           }
     
-       this.finalCollabs = this.newData;
+       this.finalCollabs = this.data;
        this.deleteCollabs = [];
        this.selectedCollabs = [];
      }

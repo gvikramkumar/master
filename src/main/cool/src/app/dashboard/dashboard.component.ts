@@ -7,6 +7,7 @@ import { UserService } from '../services/user.service';
 import { HttpClient } from '@angular/common/http';
 import { ActionsAndNotifcations } from './action';
 import * as moment from 'moment';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,21 +30,37 @@ export class DashboardComponent implements OnInit {
   displayActionPopOver: Boolean = true;
   currentOfferId;
 
+  cols: any[];
+
+  selectedrow: any;
+  taskId: any;
+  actionsArray: any[];
+
+
   constructor(private dashboardService: DashboardService,
     private router: Router, private createOfferService: CreateOfferService,
     private userService: UserService, private httpClient: HttpClient) {
   }
 
   ngOnInit() {
+    this.cols = [
+      { field: 'offerId', header: 'OFFER ID' },
+      { field: 'offerName', header: 'OFFER NAME' },
+      { field: 'offerOwner', header: 'OFFER OWNER' },
+      { field: 'expectedLaunchDate', header: 'LAUNCH DATE' }
+    ];
     this.dashboardService.getMyActionsList()
       .subscribe(data => {
         this.myActions = data;
+        console.log('getMyAction list:::',this.myActions)
         this.processMyActionsList();
       });
 
     this.dashboardService.getMyOffersList()
       .subscribe(data => {
         this.myOffersList = data;
+        
+        console.log('getMyOffersList:::',this.myOffersList)
         this.myOffersListProps = Object.keys(this.myOffersList);
       });
   }
@@ -62,6 +79,8 @@ export class DashboardComponent implements OnInit {
         obj.setActionDesc(element.actionDesc);
         obj.setAlertType(1);
         obj.setCaseId(element.caseId);
+        obj.setTaskId(element.taskId);
+        
         // Set the status color
         if (element.status === 'Red') {
           this.needImmActnCount = this.needImmActnCount + 1;
@@ -84,6 +103,7 @@ export class DashboardComponent implements OnInit {
           obj2.setActionDesc(element.actionDesc);
           obj2.setAlertType(2);
           obj2.setCaseId(element.caseId);
+          obj2.setTaskId(element.taskId);
           this.myOfferArray.push(obj2);
         });
         this.myActionsList = this.myOfferArray;
@@ -117,13 +137,30 @@ export class DashboardComponent implements OnInit {
     this.display = true;
   }
 
+
+  selectionChange(value){debugger;
+    this.selectedrow=value ;
+   
+ 
+ }
+
   dismissNotification(offerId, popover) {
     const userId = this.userService.getUserId();
-    const postData = {
-      'userId': userId,
-      'offerId': offerId,
-      'dismissedNotification': true
-    };
+    // const postData = {
+    //   'userId': userId,
+    //   'offerId': offerId,
+    //   'dismissedNotification': true
+    // };
+  const postData=  {
+      'taskId':this.selectedrow.taskId,
+      'userId':this.selectedrow.assigneeId,
+      'caseId':this.selectedrow.caseId,
+      'offerId':this.selectedrow.offerId,
+      'taskName':"Notification",
+      'action':"", 
+      'comment':""
+}
+    console.log( "post Data:::",postData);
     this.dashboardService.postDismissNotification(postData);
     popover.close();
     console.log('dismissed');

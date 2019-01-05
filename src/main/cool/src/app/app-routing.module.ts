@@ -17,6 +17,7 @@ import { AccessManagementComponent } from './access-management/access-management
 import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
+import { AuthGuard } from './auth/gaurds/auth-guard';
 
 
 const routes: Routes = [
@@ -78,7 +79,8 @@ const routes: Routes = [
   },
   {
     path: 'accessManagement',
-    component: AccessManagementComponent
+    component: AccessManagementComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'auth-error',

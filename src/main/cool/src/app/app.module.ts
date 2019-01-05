@@ -55,6 +55,7 @@ import { CreateActionService } from './services/create-action.service';
 import { StakeholderfullService } from './services/stakeholderfull.service';
 import { OfferPhaseService } from './services/offer-phase.service';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
+import { AuthGuard } from './auth/gaurds/auth-guard';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -121,6 +122,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     StakeholderfullService,
     AccessManagementService,
     BupmGuard,
+    AuthGuard,
     CreateActionService,
     UserService,
     OfferPhaseService,

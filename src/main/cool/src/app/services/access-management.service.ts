@@ -5,13 +5,14 @@ import { AccessManagement } from '../models/accessmanagement';
 import { Observable } from 'rxjs/Observable';
 import { EnvironmentService } from '../../environments/environment.service';
 import { NewUser } from '../models/newuser';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AccessManagementService {
     businessUnitUrl: string = environment.REST_API_SECONDARY_BUSINESS_UNIT_URL;
     businessEntityUrl: string = environment.PDAF_API+'?columns=BE&distinct=true';
 
-    constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) {}
+    constructor(private httpClient: HttpClient, private environmentService: EnvironmentService, private userService:UserService) {}
 
     accessManagementAll(): any {
         return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_GETALL_URL);
@@ -34,6 +35,11 @@ export class AccessManagementService {
         const url = this.businessUnitUrl;
         return this.httpClient.get(url, {withCredentials:true});
     }
+    getregisterUserFunction(){
+      //  let url="http://10.155.72.125:8080/coolsrv/LOV/getFunctionalRoles";
+      let url=this.environmentService.REST_API_RIGISTERNEWUSER_GET_URL
+        return this.httpClient.get(url,{withCredentials:true});
+    }
 
     /**
      * Function to get business entities for the selected business units, from
@@ -43,5 +49,10 @@ export class AccessManagementService {
     getBusinessEntity(): Observable<any> {
         const url = this.businessEntityUrl;
         return this.httpClient.get(url, {withCredentials:true});
+    }
+
+    checkAdminAccess():Observable<any>{
+        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL+'/'+ this.userService.getUserId(), 
+            {withCredentials:true});
     }
 }
