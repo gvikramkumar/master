@@ -74,6 +74,7 @@ export class StakeholderFullComponent implements OnInit {
   newDatastring: string;
   deleteCollabs: any[];
   caseId: any;
+  getRole:any;
 
 
   constructor( private stakeholderfullService:StakeholderfullService ,
@@ -142,6 +143,10 @@ datas= [
         this.funcionalRoleList = ['BUPM','SOE'];
       console.log("create offer service"+ this.entityList);
     });
+      this.stakeholderfullService.getOfferrole().subscribe(data=>{
+        this.getRole=data;
+      })
+
     this.stakeholderForm = new FormGroup({
         name: new FormControl(null, Validators.required),
         businessEntity: new FormControl(null, Validators.required),

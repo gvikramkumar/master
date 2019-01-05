@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from './environment';
 import 'rxjs/add/operator/toPromise';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Injectable()
 export class EnvironmentService {
@@ -32,11 +33,13 @@ export class EnvironmentService {
     REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL;
     REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
     REST_API_RIGISTERNEWUSER_GET_URL;
+    REST_API_GETFUNCTIONAL_ROLE_URL;
 
     constructor() {
         let windowUrl = location.href;
         if(windowUrl.includes('dev')) {
         this.baseapi = 'https://cool-srv-dev.cisco.com';
+           this.REST_API_GETFUNCTIONAL_ROLE_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
            this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
            this.REST_API_RIGISTERNEWUSER_GET_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
           this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
@@ -68,6 +71,7 @@ export class EnvironmentService {
           console.log("EnvironmentService: set env vars for dev environment");
         } else if(windowUrl.includes('stg')) {
             this.baseapi = 'https://cool-srv-stg.cisco.com';
+            this.REST_API_GETFUNCTIONAL_ROLE_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
             this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
             this.REST_API_RIGISTERNEWUSER_GET_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
             this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
@@ -96,6 +100,7 @@ export class EnvironmentService {
             console.log("EnvironmentService: set env vars for stg environment");
         } else if(windowUrl.includes('prd')) {
             this.baseapi = 'https://cool-srv-prd.cisco.com';
+            this.REST_API_GETFUNCTIONAL_ROLE_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
             this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
             this.REST_API_RIGISTERNEWUSER_GET_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
             this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
@@ -126,6 +131,7 @@ export class EnvironmentService {
 
            // this.baseapi = 'http://10.155.74.56:8080';
             this.baseapi = 'https://cool-srv-dev.cisco.com';
+            this.REST_API_GETFUNCTIONAL_ROLE_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
 
             this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
             this.REST_API_RIGISTERNEWUSER_GET_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
