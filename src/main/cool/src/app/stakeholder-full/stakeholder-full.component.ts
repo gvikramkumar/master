@@ -173,6 +173,10 @@ datas= [
     return arrayOfStrings[0];
   }
 
+  gotoOfferviewDetails(){
+    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+  }
+
   
   updateMessage(message) {
  
@@ -368,7 +372,7 @@ datas= [
     this.newData = this.temporaryselectedCollabs;
     this.finalCollabs = this.newData;
     this.data= this.data.concat(this.newData);
-    console.log("newdatsa",this.data);
+    console.log("newdatsa:::::",this.data);
     console.log("newdata",typeof(this.newData));
     this.newDatastring  = JSON.stringify(this.newData);
     }
