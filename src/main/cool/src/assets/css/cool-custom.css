@@ -148,6 +148,7 @@
   text-transform: uppercase;
   /* width: 10%; */
   text-align: center;
+  border-color:#d6d6d6;
 }
 .cui .row.card-table-header[_ngcontent-c4] {
   border-bottom: 0;

@@ -211,7 +211,7 @@
                       <td *ngFor="let col of columns" style="width:10%">
                         {{offerData[col.field]}}
                       </td>
-                      <td style="width:20%">
+                      <td style="width:20%" class="td--progress-fitted">
                         <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'" class="row no-gutters">
                           <div class="col-md-12">
                             <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>
