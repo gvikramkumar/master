@@ -88,8 +88,8 @@
                       </ng-template>
                       <span placement="bottom" [ngbPopover]="popActionContent" #p1="ngbPopover" triggers="manual"
                         (click)="p1.open()" pTooltip="Action" tooltipPosition="top">
-                        <span class="icon-clock icon-small" style="margin:0px 5px 0 0"></span></span>
-                      {{actionData.offerId}}
+                        <span class="icon-clock icon-small"></span>
+                      {{actionData.offerId}}</span>
                     </span>
                     <span *ngIf="actionData.alertType == 2">
                       <ng-template #popNotificationContent ptemplate="body">
@@ -110,8 +110,8 @@
                       </ng-template>
                       <span [ngbPopover]="popNotificationContent" (click)="p2.open()" #p2="ngbPopover" triggers="manual"
                         pTooltip="Notifications" tooltipPosition="top">
-                        <span class="icon-alert icon-small" style="margin:0px 5px 0 0"></span></span>
-                      {{actionData.offerId}}
+                        <span class="icon-alert icon-small"></span>
+                      {{actionData.offerId}}</span>
                     </span>
                   </ng-template>
                 </p-column>
@@ -181,13 +181,13 @@
             </div>
             <div class="responsive-table">
               <p-table [columns]="cols" #dt [value]="myOffersList" [scrollable]="true" scrollHeight="400px" [loading]="loading"
-                [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">         
+                [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                       <th *ngFor="let col of columns" [pSortableColumn]="col.field" rowspan="2" style="width:10%; text-align: center">
                         {{col.header}}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
-                      </th>          
+                      </th>
                       <th colspan="1" style="width:30%; text-align: center">LIFE CYCLE STATUS</th>
                     </tr>
                     <tr class="tr--th-small">
