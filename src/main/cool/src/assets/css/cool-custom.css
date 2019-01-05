@@ -228,6 +228,10 @@
 .cui h5 a.pull-right {
   font-size: 14px;
 }
+/* phases widget */
+.cui .ui-step.active {
+  cursor: pointer;
+}
 
 /* font sizes */
 .cui h4, .cui .h4 {
@@ -275,4 +279,16 @@
 }
 .cui .label--warning-alt strong {
   font-size: 22px;
+}
+/* Form Elements */
+
+/* date picker */
+.cui .theme-blue .bs-datepicker-head {
+  background-color: #5bc0de;
+}
+.cui .theme-blue .bs-datepicker-head button {
+  color: white;
+}
+.cui .theme-blue .bs-datepicker-head {
+  background-color: #005073;
 }

@@ -61,7 +61,7 @@
             <div class="ui-accordion-header">Owner<span class="icon-chevron-up icon-small pull-right"></span></div>
             <div class="ui-accordion-content">
                 <div class="flex-center-vertical">
-                   
+
                     <span class="avatar-ico">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin"
                             role="img">
@@ -166,63 +166,63 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <p-accordion>
-                            <p-accordionTab header="Ideate">
-                                <div class="responsive-table">
-                                    <table class="table table--nostripes">
-                                        <thead>
-                                            <tr>
-                                                <th>Ideate - <span [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'"> {{ideateCompletedCount}} of {{ideateCount}} <span class="icon-check-outline icon-medium"></span></span></th>
-                                                <th>STATUS</th>
-                                                <th>TARGET DATE</th>
-                                                <th>COMPLETION DATE</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
-                                                <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
-                                                <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
-                                                <td>{{ideateData.completionDate}}</td>
-                                                <td>{{ideateData.completionDate}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </p-accordionTab>
-                            <p-accordionTab header="Plan">
-                                <div class="responsive-table">
-                                    <table class="table table--nostripes">
-                                        <thead>
-                                            <tr>
-                                                <th>Plan - <span class="text-success"> {{planCompletedCount}} of {{planCount}} <span class="icon-check-outline icon-medium"></span></span></th>
-                                                <th>STATUS</th>
-                                                <th>TARGET DATE</th>
-                                                <th>COMPLETION DATE</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let planData of offerPhaseDetailsList.plan">
-                                                <td><span style="color: indigo">{{planData.subMilestone}}</span></td>
-                                                <td [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">{{planData.status}}</td>
-                                                <td>{{planData.completionDate}}</td>
-                                                <td>{{planData.completionDate}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </p-accordionTab>
-                            <p-accordionTab header="Execute">
-                                <div class="responsive-table">
-                                    <table class="table table--nostripes">
-                                    </table>
-                                </div>
-                            </p-accordionTab>
-                            <p-accordionTab header="Launch">
-                                <div class="responsive-table">
-                                    <table class="table table--nostripes">
-                                    </table>
-                                </div>
-                            </p-accordionTab>
+                        <p-accordion [multiple]="true">
+                          <p-accordionTab header="Ideate" [selected]="true">
+                              <div class="responsive-table">
+                                  <table class="table table--nostripes">
+                                      <thead>
+                                          <tr>
+                                              <th>Ideate - <span [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'"> {{ideateCompletedCount}} of {{ideateCount}} <span class="icon-check-outline icon-medium"></span></span></th>
+                                              <th>STATUS</th>
+                                              <th>TARGET DATE</th>
+                                              <th>COMPLETION DATE</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
+                                              <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
+                                              <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
+                                              <td>{{ideateData.completionDate}}</td>
+                                              <td>{{ideateData.completionDate}}</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </p-accordionTab>
+                          <p-accordionTab header="Plan" [selected]="true">
+                              <div class="responsive-table">
+                                  <table class="table table--nostripes">
+                                      <thead>
+                                          <tr>
+                                              <th>Plan - <span class="text-success"> {{planCompletedCount}} of {{planCount}} <span class="icon-check-outline icon-medium"></span></span></th>
+                                              <th>STATUS</th>
+                                              <th>TARGET DATE</th>
+                                              <th>COMPLETION DATE</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let planData of offerPhaseDetailsList.plan">
+                                              <td><span style="color: indigo">{{planData.subMilestone}}</span></td>
+                                              <td [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">{{planData.status}}</td>
+                                              <td>{{planData.completionDate}}</td>
+                                              <td>{{planData.completionDate}}</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </p-accordionTab>
+                          <p-accordionTab header="Execute" [selected]="true">
+                              <div class="responsive-table">
+                                  <table class="table table--nostripes">
+                                  </table>
+                              </div>
+                          </p-accordionTab>
+                          <p-accordionTab header="Launch" [selected]="true">
+                              <div class="responsive-table">
+                                  <table class="table table--nostripes">
+                                  </table>
+                              </div>
+                          </p-accordionTab>
                         </p-accordion>
                     </div>
                 </div>
