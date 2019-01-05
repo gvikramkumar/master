@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
         obj.setTaskId(element.taskId);
         
         // Set the status color
-        if (element.status === 'Red') {
+        if (element.status && element.status.toLowerCase() === 'red') {
           this.needImmActnCount = this.needImmActnCount + 1;
         } else {
           this.pendingActnCount = this.pendingActnCount + 1;

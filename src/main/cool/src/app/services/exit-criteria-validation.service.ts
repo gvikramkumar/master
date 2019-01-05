@@ -17,7 +17,7 @@ export class ExitCriteriaValidationService {
     return this.http.get(url,{withCredentials: true});
   }
   requestApproval(offerId, mileStone){
-    let url = this.environmentService.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL+ offerId + mileStone;
+    let url = this.environmentService.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL;
     url += offerId;
     url += "/" + mileStone;
     return this.http.post(url, null, {withCredentials: true});
