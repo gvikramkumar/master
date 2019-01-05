@@ -188,7 +188,7 @@
                         {{col.header}}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                       </th>
-                      <th colspan="1" style="width:30%; text-align: center">LIFE CYCLE STATUS</th>
+                      <th colspan="1" style="width:20%; text-align: center">LIFE CYCLE STATUS</th>
                     </tr>
                     <tr class="tr--th-small">
                       <th colspan="1">
@@ -211,7 +211,7 @@
                       <td *ngFor="let col of columns" style="width:10%">
                         {{offerData[col.field]}}
                       </td>
-                      <td style="width:30%">
+                      <td style="width:20%">
                         <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'" class="row no-gutters">
                           <div class="col-md-12">
                             <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>

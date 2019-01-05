@@ -9,7 +9,7 @@
       <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
           <div class="col-md-4">
-            <h4><button class="btn btn--icon btn--white"><span class="icon-back" (click)='goBack()'></span></button> Strategy Review</h4>
+            <h4><button class="btn--back btn btn--icon btn--white"><span class="icon-back" (click)='goBack()'></span></button> Strategy Review</h4>
           </div>
           <div class="col-md-8 text-right">
             <button class="btn btn--white" (click)="offerDetailOverView()">Offer Detail View<span class="icon-chevron-right"></span></button>
@@ -32,7 +32,7 @@
         <!-- <Exit Criteria Validation> -->
         <app-exit-criteria-validation></app-exit-criteria-validation>
         <div class="accordion base-margin-top" id="accordion">
-          <div class="card">
+
             <div class="panel panel--ltgray">
               <div class="row">
                 <div class="col-md-2">
@@ -71,8 +71,8 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row base-margin-top">
+
+          <div class="review-status row base-margin-top">
             <div class="col-md-12">
               <div class="panel">
                 <div class="panel panel--ltgray">
@@ -88,7 +88,7 @@
                 <p-accordion>
                   <p-accordionTab *ngFor="let strategyReviewData of strategyReviewList">
                     <p-header style="color:black">
-                      <div class="row" style="vertical-align: middle;">
+                      <div class="row" style="vertical-align: middle;margin-left: 20px">
                         <div class="col">
                           <span class="icon-check-outline icon-eye-closed icon-medium" *ngIf="strategyReviewData.approvalStatus == 'Not Reviewed'"></span>
                           <span class="icon-warning-outline icon-medium text-warning" *ngIf="strategyReviewData.approvalStatus == 'Conditionally Approved'"></span>
