@@ -92,7 +92,8 @@ export class ActionsComponent implements OnInit {
         obj.setCaseId(element.caseId);
         obj.setCreatedBy(element.createdBy);
         // Set the status color
-        if (element.status === 'Red') {
+
+        if ( element.status && element.status.toLowerCase() === 'red') {
           this.needImmActnCount = this.needImmActnCount + 1;
         } else {
           this.pendingActnCount = this.pendingActnCount + 1;
