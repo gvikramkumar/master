@@ -23,6 +23,7 @@ export class StrategyReviewComponent implements OnInit {
   stakeData = {};
   offerBuilderdata = {};
   minDate: Date;
+
   
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   formTitle: any = ' ';
