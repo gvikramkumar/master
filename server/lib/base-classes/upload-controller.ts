@@ -418,6 +418,7 @@ export default class UploadController {
         {type: 'product-class-upload', syncMapProp: 'dfa_prof_swalloc_manualmix_upld'},
         {type: 'alternate-sl2-upload', syncMapProp: 'dfa_prof_scms_triang_altsl2_map_upld'},
         {type: 'corp-adjustments-upload', syncMapProp: 'dfa_prof_scms_triang_corpadj_map_upld'},
+        {type: 'disti-direct-upload', syncMapProp: 'dfa_prof_disti_to_direct_map_upld'},
       ]
     };
     const syncMap = new SyncMap();

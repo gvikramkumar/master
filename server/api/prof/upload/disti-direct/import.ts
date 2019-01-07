@@ -18,7 +18,7 @@ export default class DistiDirectUploadImport {
       this.nodeType = 'Disti SL3';
     } else if (this.nodeType.toLowerCase() === 'direct sl2') {
       this.nodeType = 'Direct SL2';
-
+    }
     if (this.salesFinanceHierarchy.toLowerCase() === 'sales fin hierarchy') {
       this.salesFinanceHierarchy = 'Sales Fin Hierarchy';
     }

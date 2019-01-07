@@ -26,6 +26,21 @@ export default class PgLookupRepo {
           `);
   }
 
+/*
+// this was taking too long to replace the dollar/mapping/dept upload reports with pg only solutions
+// i.e. getting submeasure.name from pg instead of mongo
+  getDollarUploadReport(params) {
+    return pgc.pgdb.query(`
+            select fiscal_month_id, sm.sub_measure_name, input_product_value, input_sales_value, 
+              input_entity_value, input_internal_be_value, input_scms_value, amount_value
+            from fpadfa.dfa_prof_input_amnt_upld up
+            left outer join fpadfa.dfa_sub_measure sm on up.sub_measure_key = sm.sub_measure_key
+            where fiscal_month_id = ${params.fiscalMonth} and up.sub_measure_key = ${params.submeasureKey};
+            `);
+
+  }
+*/
+
   getProductHierarchyReport() {
     return pgc.pgdb.query(`
             select 
@@ -339,6 +354,52 @@ export default class PgLookupRepo {
       .then(resp => resp.rows);
   }
 
+  updateDistiUploadExtTheaterNameDistiSL3(fiscalMonth) {
+    return pgc.pgdb.query(`
+        update  fpadfa.dfa_prof_disti_to_direct_map_upld
+        set ext_theater_name = distimap.external_theater
+        from (select D2D.node_code as distinode
+        ,case dsh.dd_external_theater_name
+        when 'APJC' then 'APJC'
+        when 'Americas' then 'Americas'
+        when 'EMEA' then 'EMEA' end as external_theater
+        from  fpadfa.dfa_prof_disti_to_direct_map_upld D2D
+        ,fpacon.vw_fpa_sales_hierarchy dsh
+        where 1=1
+        and D2D.fiscal_month_id = ${fiscalMonth}
+        and D2D.node_type = 'Disti SL3'
+        and D2D.node_code = DSH.l3_sales_territory_name_code
+        group by 1,2) distimap
+        where 1=1
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.fiscal_month_id = ${fiscalMonth}
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.node_type='Disti SL3'
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.node_code = distimap.distinode
+    `);
+  }
+
+  updateDistiUploadExtTheaterNameDirectSL2(fiscalMonth) {
+    return pgc.pgdb.query(`
+        update  fpadfa.dfa_prof_disti_to_direct_map_upld
+        set ext_theater_name = distimap.external_theater
+        from (select D2D.node_code as distinode
+        ,case dsh.l1_sales_territory_descr
+        when 'APJC__' then 'APJC'
+        when 'Americas' then 'Americas'
+        when 'EMEAR-REGION' then 'EMEA'
+        when 'GLOBAL SERVICE PROVIDER' then 'Americas' end as external_theater
+        from  fpadfa.dfa_prof_disti_to_direct_map_upld D2D
+        ,fpacon.vw_fpa_sales_hierarchy dsh
+        where 1=1
+        and D2D.fiscal_month_id = ${fiscalMonth}
+        and D2D.node_type = 'Direct SL2'
+        and D2D.node_code = DSH.l2_sales_territory_name_code
+        group by 1,2) distimap
+        where 1=1
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.fiscal_month_id = ${fiscalMonth}
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.node_type='Direct SL2'
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.node_code = distimap.distinode
+    `);
+  }
 
   checkForExistenceAndReturnValue(table, column, value, upper = true) {
     if (!value && value !== 0) {
