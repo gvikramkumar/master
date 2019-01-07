@@ -29,10 +29,11 @@ export class ActionsComponent implements OnInit {
   displayActionPhase: Boolean = false;
   minDate: Date;
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
-  manualactionList;
+  functionList;
   actionListData;
   manualaction;
   myOfferList;
+  milestoneList = [];
   assigneeList;
   offerNameValue: string;
   commentValue: string;
@@ -42,6 +43,7 @@ export class ActionsComponent implements OnInit {
   functionNameValue: string;
   assigneeValue: Array<any>;
   dueDateValue: string;
+  offerCaseMap:object = {};
 
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
@@ -52,31 +54,55 @@ export class ActionsComponent implements OnInit {
   ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
-    // this.actionsService.getMyActionsList()
-    //   .subscribe(data => {
-    //     this.myActions = data;
-    //     this.processMyActionsList();
-    //   });
-
-      this.dashboardService.getMyActionsList()
+    this.dashboardService.getMyActionsList()
       .subscribe(data => {
         this.myActions = data;
         this.processMyActionsList();
       });
 
-    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      const actionListData = [];
-      const functionalRoleData = data.userMappings;
-      functionalRoleData.forEach(element => {
-        this.manualactionList = element.functionalRole;
-      });
-    });
-    this.manualactionList = this.actionListData;
+    // this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+    //   const actionListData = [];
+    //   const functionalRoleData = data.userMappings;
+    //   functionalRoleData.forEach(element => {
+    //     this.manualactionList = element.functionalRole;
+    //   });
+    // });
+    // this.manualactionList = this.actionListData;
     this.dashboardService.getMyOffersList().subscribe(data => {
       this.myOfferList = data;
+
+      data.forEach(ele => {
+        this.offerCaseMap[ele.offerId] = ele.caseId;
+      })
     });
+
+
+   this.actionsService.getFunction().subscribe(data => {
+     this.functionList = data;
+
+  });
+
+  
+
   }
 
+  onChange(offerId){
+    this.actionsService.getMilestones(this.offerCaseMap[offerId]).subscribe(data => {
+      this.milestoneList = [];
+      for (var prop in data) {
+       data[prop].forEach(ele =>{
+        this.milestoneList.push(ele);
+       })
+    }
+       
+    });
+
+    this.actionsService.getAssignee(offerId).subscribe(data => {
+      this.assigneeList = data;
+  
+    });
+  }
+  
   processMyActionsList() {
     // Process Actions
     if (this.myActions.actionList !== undefined) {
@@ -107,18 +133,20 @@ export class ActionsComponent implements OnInit {
   }
 // Create New Action
   createAction() {
+    var selectedAssignee = [this.assigneeValue];
+
     const createAction: CreateAction = new CreateAction(
       this.offerNameValue,
-      this.commentValue,
       this.titleValue,
       this.descriptionValue,
       this.milestoneValue,
       this.functionNameValue,
-      this.assigneeValue,
-      this.dueDateValue
+      selectedAssignee,
+      this.dueDateValue  
     );
     console.log(createAction);
     this.actionsService.createNewAction(createAction).subscribe((data) => {
+      this.closeActionDailog();
     },
       (err) => {
         console.log(err);

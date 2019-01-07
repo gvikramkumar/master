@@ -31,8 +31,9 @@ export class ActionsService {
     return this.http.get(url,{ withCredentials: true });
   }
 
-  getAssignee(): Observable<any> {
+  getAssignee(offerId): Observable<any> {
     let url = this.environmentService.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
+    url += offerId;
     return this.http.get(url,{ withCredentials: true });
   }
 
