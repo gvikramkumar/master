@@ -83,6 +83,12 @@ export class StakeholderFullComponent implements OnInit {
     });
   }
   ngOnInit() {
+
+    this.message = {
+      contentHead: 'Great Work!',
+      content: 'Stakeholders message.',
+      color: 'black'
+    };
     this.newData = [];
     this.temporaryselectedCollabs = [];
     this.deleteCollabs = [];

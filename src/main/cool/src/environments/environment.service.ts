@@ -144,7 +144,7 @@ export class EnvironmentService {
             console.log("EnvironmentService: set env vars for prd environment");
         } else {
 
-           // this.baseapi = 'http://10.24.105.33:8080';
+            //this.baseapi = 'http://10.155.72.242:8080';
             this.baseapi = 'https://cool-srv-dev.cisco.com';
             this.REST_API_GETFUNCTIONAL_ROLE_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
             this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
