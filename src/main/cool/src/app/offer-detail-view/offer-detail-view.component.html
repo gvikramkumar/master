@@ -20,10 +20,10 @@
         <div class="col-md-12">
           <div class="card">
             <p-accordion [multiple]="true">
-              <p-accordionTab header="Ideate" [selected]="true">
+              <p-accordionTab header="Ideate">
                 <div class="timeline timeline--block">
                   <div class="timeline__list">
-                    <div class="timeline__item">
+                    <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[0]?.status != null">
                       <div [ngClass]="(offerOverviewDetailsList.ideate[0].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                         <span [ngClass]="(offerOverviewDetailsList.ideate[0].status == 'Available')?'icon-warning-outline':'icon-check'"></span>
                       </div>
@@ -35,7 +35,7 @@
                         <app-offer-create-detail [hidden]="offerOverviewDetailsList.ideate[0].status == 'Available'"></app-offer-create-detail>
                       </div>
                     </div>
-                    <div class="timeline__item">
+                    <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[1]?.status != null">
                       <div [ngClass]="(offerOverviewDetailsList.ideate[1].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                         <span [ngClass]="(offerOverviewDetailsList.ideate[1].status == 'Available')?'icon-warning':'icon-check'"></span>
                       </div>
@@ -105,7 +105,7 @@
                           </div>
                       </div>
                     </div>
-                    <div class="timeline__item">
+                    <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[2]?.status != null">
                       <div [ngClass]="(offerOverviewDetailsList.ideate[2].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                         <span [ngClass]="(offerOverviewDetailsList.ideate[2].status == 'Available')?'icon-warning':'icon-check'"></span>
                       </div>
@@ -141,7 +141,7 @@
                           </div>
                       </div>
                     </div>
-                   <div class="timeline__item">
+                   <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[3]?.status != null">
                       <div [ngClass]="(offerOverviewDetailsList.ideate[3].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                         <span [ngClass]="(offerOverviewDetailsList.ideate[3].status == 'Available')?'icon-warning':'icon-check'"></span>
                       </div>
@@ -150,7 +150,7 @@
                           <span [ngClass]="(offerOverviewDetailsList.ideate[3].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                           {{offerOverviewDetailsList.ideate[3].subMilestone}}
                         </div>
-                        <div [hidden]="offerOverviewDetailsList.ideate[1].status == 'Available'">
+                        <div [hidden]="offerOverviewDetailsList.ideate[3].status == 'Available'">
                             <div class="offer-header card base-margin-top">
                               <div class="row">
                                 <div class="col-md-4">
@@ -200,9 +200,9 @@
                 </div>
               </p-accordionTab>
               <p-accordionTab header="Plan">
-                <div class="timeline">
+              <div class="timeline">
                   <div class="timeline__list">
-                    <div class="timeline__item">
+                    <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[0]?.status != null">
                       <div [ngClass]="(offerOverviewDetailsList.plan[0].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                         <span [ngClass]="(offerOverviewDetailsList.plan[0].status == 'Available')?'icon-warning':'icon-check'"></span>
                       </div>
@@ -215,7 +215,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="timeline__item">
+                    <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[1]?.status != null">
                       <div [ngClass]="(offerOverviewDetailsList.plan[1].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                         <span [ngClass]="(offerOverviewDetailsList.plan[1].status == 'Available')?'icon-warning':'icon-check'"></span>
                       </div>
@@ -228,7 +228,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="timeline__item">
+                    <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[2]?.status != null">
                         <div [ngClass]="(offerOverviewDetailsList.plan[2].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                           <span [ngClass]="(offerOverviewDetailsList.plan[2].status == 'Available')?'icon-warning':'icon-check'"></span>
                         </div>
@@ -241,7 +241,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="timeline__item">
+                      <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[3]?.status != null">
                           <div [ngClass]="(offerOverviewDetailsList.plan[3].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                             <span [ngClass]="(offerOverviewDetailsList.plan[3].status == 'Available')?'icon-warning':'icon-check'"></span>
                           </div>
@@ -255,7 +255,7 @@
                           </div>
                         </div>
                   </div>
-                </div>
+                </div> 
               </p-accordionTab>
               <p-accordionTab header="Execute">
                 <div class="card">

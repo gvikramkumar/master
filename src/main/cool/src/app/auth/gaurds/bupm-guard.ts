@@ -18,7 +18,10 @@ export class BupmGuard implements CanActivate {
 
   async getFunctionalRole() {
     const response = await this.createOfferService.getPrimaryBusinessUnits().toPromise().then((data) => {
-      this.functionalRole = data.userMappings[0].functionalRole;
+      console.log(data);
+      if( data.userMappings != null || data.userMappings != undefined) {
+        this.functionalRole = data.userMappings[0].functionalRole;
+      }
     });
 
     if (this.functionalRole === 'BUPM') {

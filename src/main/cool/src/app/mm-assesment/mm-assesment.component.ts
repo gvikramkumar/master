@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { SharedServiceService } from '../shared-service.service';
+import { SharedService } from '../shared-service.service';
 import { Subscription } from 'rxjs/Subscription';
 import { CreateOfferService } from '../services/create-offer.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
@@ -39,7 +39,7 @@ export class MmAssesmentComponent implements OnInit {
   currentPrimaryBE:any;
 
   constructor(private router: Router,
-    private sharedService: SharedServiceService,
+    private sharedService: SharedService,
     private createOfferService: CreateOfferService,
     private activatedRoute: ActivatedRoute,
     private MonetizationModelService: MonetizationModelService,
@@ -326,7 +326,7 @@ export class MmAssesmentComponent implements OnInit {
         this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
         this.MonetizationModelService.showStakeholders(data['mmModel'], this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
           this.stakeData = {};
-          // console.log(res);
+          console.log(res);
           let keyUsers;
           if (res != null) {
             keyUsers = res;
@@ -433,15 +433,15 @@ proceedToStakeholder(){
   proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
   proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? "" : this.currentMMModel;
   proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
-
+console.log(this.stakeData);
   let stakeHolders = [];
   for (var prop in this.stakeData) {
     this.stakeData[prop].forEach(sh => {
       stakeHolders.push({
         "_id" : sh['_id'], 
-        "businessEntity" : sh['businessEntity'], 
-        "functionalRole" : sh['functionalRole'],
-        "offerRole" : sh['offerRole'],
+        "businessEntity" : sh['userMappings'][0]['businessEntity'], 
+        "functionalRole" : sh['userMappings'][0]['functionalRole'],
+        "offerRole" : sh['userMappings'][0]['appRoleList'][0],
         "stakeholderDefaults" : sh['stakeholderDefaults']
       })
     });
