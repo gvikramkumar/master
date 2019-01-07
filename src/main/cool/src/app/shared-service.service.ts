@@ -7,22 +7,19 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { EnvironmentService } from '../environments/environment.service';
 
 
 @Injectable()
-export class SharedServiceService {
+export class SharedService {
 
-    // private _proceedValue = new BehaviorSubject<boolean>(false);
-    // setProceedValue(value) {
-    //   this._proceedValue.next(value);
-    // }
-    // _proceedFlagValue$ = this._proceedValue.asObservable();
+    constructor(private _http:HttpClient, private environmentService: EnvironmentService){
+    }
+
+    getFunctionalRoles():Observable<any>{
+        let url = this.environmentService.REST_API_RIGISTERNEWUSER_GET_URL;
+        return this._http.get(url, {withCredentials:true});
+    }
 
 
-    // private _alignValue = new BehaviorSubject<boolean>(false);
-    // setAlignValue(value) {
-    //   this._alignValue.next(value);
-    // }
-    // _alignFlagValue$ = this._alignValue.asObservable();
 }

@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { SharedServiceService } from '../shared-service.service';
 import { Subscription } from 'rxjs/Subscription';
 import { CreateOfferService } from '../services/create-offer.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -245,6 +244,7 @@ export class RightPanelComponent implements OnInit {
   onSearch() {
     let tempCollaboratorList: Collaborators[] = [];
 
+    const tempVar = this.addEditCollaboratorsForm.controls['name'].value;
     const userName = this.addEditCollaboratorsForm.controls['name'].value;
     const businessEntity = this.addEditCollaboratorsForm.controls['businessEntity'].value;
     const functionalRole = this.addEditCollaboratorsForm.controls['functionName'].value;
@@ -252,8 +252,10 @@ export class RightPanelComponent implements OnInit {
     const payLoad = {
     };
 
-    if (userName !== undefined && userName != null) {
-      payLoad['userName'] = userName;
+    if (userName !== undefined && userName != null &&  userName.includes('@')) {
+      payLoad['emailId'] = userName;
+    }else{
+      payLoad['userName'] = userName
     }
 
     if (businessEntity !== undefined && businessEntity != null) {
@@ -319,12 +321,24 @@ export class RightPanelComponent implements OnInit {
       }
 
       if (this.alreayAddedStakeHolders.findIndex(k => k==user['_id']) == -1) {
-        this.stakeData[user['offerRole']].push({ name: user['_id'], email: user['email'], 
-        _id:user['_id'], businessEntity: user['businessEntity'], functionalRole: user['functionalRole'],
-        offerRole: user['offerRole'], stakeholderDefaults:false });
-        this.alreayAddedStakeHolders.push(user['_id']);
+        this.stakeData[user['offerRole']].push(
+          { 
+            userName: user['_id'], 
+            emailId: user['email'], 
+            _id:user['_id'], 
+            userMappings: [{
+              appRoleList : [user['offerRole']],
+              businessEntity: user['businessEntity'],
+              functionalRole: user['functionalRole']
+            }
+            ],
+            stakeholderDefaults:false 
+          });
+          this.alreayAddedStakeHolders.push(user['_id']);
       }
     })
+
+    console.log(this.stakeData);
   }
 
   getUserIdFromEmail(email): any {

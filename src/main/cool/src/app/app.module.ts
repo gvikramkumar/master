@@ -11,7 +11,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { DashboardService } from './services/dashboard.service';
 import { ActionsService } from './services/actions.service';
-import { SharedServiceService } from './shared-service.service';
+import { SharedService } from './shared-service.service';
 import {MonetizationModelService} from './services/monetization-model.service';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -56,6 +56,7 @@ import { StakeholderfullService } from './services/stakeholderfull.service';
 import { OfferPhaseService } from './services/offer-phase.service';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { AuthGuard } from './auth/gaurds/auth-guard';
+import {AutoCompleteModule} from 'primeng/autocomplete';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -105,11 +106,12 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     TableModule,
     CalendarModule,
     AccordionModule,
-    TooltipModule
+    TooltipModule,
+    AutoCompleteModule
   ],
   providers: 
   [
-    SharedServiceService, 
+    SharedService, 
     CreateOfferService, 
     SearchCollaboratorService, 
     ConfigurationService,

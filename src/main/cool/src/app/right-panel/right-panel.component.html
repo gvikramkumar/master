@@ -104,8 +104,8 @@
                             </svg>
                         </span>
                         <div class="flex-fluid text-left half-margin-left">
-                            <div class="text-bold">{{coOwners['name']}}</div>
-                            <div>{{coOwners['email']}}</div>
+                            <div class="text-bold">{{coOwners['userName']}}</div>
+                            <div>{{coOwners['emailId']}}</div>
                         </div>
                     </div>
                     <div class="divider divider--compressed"></div>
@@ -114,7 +114,7 @@
         </li>
     </ul>
 
-    <p-dialog [showHeader]="false" [responsive]="true" [width]="1000" [minY]="70"
+    <p-dialog [showHeader]="false" [responsive]="true" [width]="1000" [minWidth]="400" [height]="600" [minY]="70"
         [(visible)]="displayOfferPhase" [closable]="true">
         <div class="pull-right base-margin-top">
             <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
