@@ -13,6 +13,7 @@ import { CreateAction } from '../models/create-action';
 import { CreateActionService } from '../services/create-action.service';
 
 
+
 @Component({
   selector: 'app-actions',
   templateUrl: './actions.component.html',
@@ -39,7 +40,7 @@ export class ActionsComponent implements OnInit {
   descriptionValue: string;
   milestoneValue: string;
   functionNameValue: string;
-  assigneeValue: string;
+  assigneeValue: Array<any>;
   dueDateValue: string;
 
   constructor(private router: Router, private actionsService: ActionsService,
@@ -104,7 +105,7 @@ export class ActionsComponent implements OnInit {
       this.myActionsList = this.myOfferArray;
     }
   }
-
+// Create New Action
   createAction() {
     const createAction: CreateAction = new CreateAction(
       this.offerNameValue,
@@ -117,7 +118,7 @@ export class ActionsComponent implements OnInit {
       this.dueDateValue
     );
     console.log(createAction);
-    this.createActionService.registerOffer(createAction).subscribe((data) => {
+    this.actionsService.createNewAction(createAction).subscribe((data) => {
     },
       (err) => {
         console.log(err);

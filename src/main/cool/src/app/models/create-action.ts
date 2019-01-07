@@ -5,7 +5,7 @@ export class CreateAction {
   description: string;
   milestone: string;
   selectFunction: string;
-  assignee: string;
+  assignee: Array<any>;
   dueDate: string;
 
   constructor(offername: string,
@@ -14,7 +14,7 @@ export class CreateAction {
     description: string,
     milestone: string,
     selectFunction: string,
-    assignee: string,
+    assignee: Array<any>,
     dueDate: string) {
         this.offername = offername;
         this.comment = comment;

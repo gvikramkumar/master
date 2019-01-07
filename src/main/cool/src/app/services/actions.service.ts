@@ -18,10 +18,27 @@ export class ActionsService {
     return this.http.get(url,{ withCredentials: true });
   }
 
-  getMyActionsList(): Observable<any> {
-    const tempUserId = 'jagondal';
-    // let url = this.environmentService.REST_API_MYACTIONS_URL+this.userService.getUserId();
-    const url = this.environmentService.REST_API_ACTIONSTRACKER_URL+tempUserId+'/true';
+  getMilestones(caseId): Observable<any> {
+    let url = this.environmentService.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL;
+    url += "/" + caseId;
+    url += "/" + false;
+
     return this.http.get(url,{ withCredentials: true });
+  }
+
+  getFunction(): Observable<any> {
+    let url = this.environmentService.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL;
+    return this.http.get(url,{ withCredentials: true });
+  }
+
+  getAssignee(): Observable<any> {
+    let url = this.environmentService.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
+    return this.http.get(url,{ withCredentials: true });
+  }
+
+
+  createNewAction(newActionData): Observable<any> {
+    let url = this.environmentService.REST_API_CREATE_NEW_ACTION_POST_URL;
+    return this.http.post(url,{ withCredentials: true });
   }
 }

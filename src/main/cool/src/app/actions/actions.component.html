@@ -151,7 +151,7 @@
                 <div class="form-group label--floated input--icon half-margin-bottom">
                   <label for="assigneeName">ASSIGNEE</label>
                   <div class="form-group__text select">
-                    <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
+                    <select id="assigneeName" class="form-control" multiple name="assigneeName" [(ngModel)]="assigneeValue"
                       required ngModel>
                       <option value="first">Assignee</option>
                       <option value="second">Second Value</option>
@@ -178,7 +178,7 @@
             <div class="row pull-right">
               <div class="form-actions">
                 <button class="btn btn--secondary" (click)="closeActionDailog()">Cancel</button>
-                <button class="btn btn--primary" type="submit" [disabled]="!createActionForm.valid">Create
+                <button class="btn btn--primary" type="submit" [disabled]="!createActionForm.valid" (click)="createAction()">Create
                   an Action</button>
               </div>
             </div>
