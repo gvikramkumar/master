@@ -1,5 +1,6 @@
 export class CreateAction {
   offerId: string;
+  caseId: string;
   actionTitle: string;
   description: string;
   mileStone: string;
@@ -9,6 +10,7 @@ export class CreateAction {
   
 
   constructor(offerId: string,
+    caseId: string,
     actionTitle: string,
     description: string,
     mileStone: string,
@@ -16,6 +18,7 @@ export class CreateAction {
     assignee: Array<any>,
     dueDate: string) {
         this.offerId = offerId;
+        this.caseId=caseId;
         this.actionTitle = actionTitle;
         this.description = description;
         this.mileStone = mileStone;

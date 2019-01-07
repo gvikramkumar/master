@@ -137,6 +137,7 @@ export class ActionsComponent implements OnInit {
 
     const createAction: CreateAction = new CreateAction(
       this.offerNameValue,
+      this.offerCaseMap[this.offerNameValue],
       this.titleValue,
       this.descriptionValue,
       this.milestoneValue,
