@@ -18,7 +18,7 @@ export class EnvironmentService {
     REST_API_MM_STAKEHOLDERS_GET_URL;
     REST_API_MM_OFFER_BUILDER_GET_URL;
     REST_API_MM_STAKEHOLDERS_SEARCH_URL;
-    REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL;
+    REST_API_UPDATE_OFFER;
     REST_API_DISMISS_NOTIFICATION;
     REST_API_ACCESS_MANAGEMENT_GETALL_URL;
     REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL;
@@ -56,7 +56,7 @@ export class EnvironmentService {
           this.REST_API_MM_STAKEHOLDERS_GET_URL = this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/';
           this.REST_API_MM_OFFER_BUILDER_GET_URL = this.baseapi+'/coolsrv/offer/getOffersDetails/';
           this.REST_API_MM_STAKEHOLDERS_SEARCH_URL = this.baseapi+'/coolsrv/collabrators/searchCollabrators';
-          this.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL = this.baseapi+'/coolsrv/offer/updateOfferDetails';
+          this.REST_API_UPDATE_OFFER = this.baseapi+'/coolsrv/offer/updateOfferDetails';
           this.REST_API_DISMISS_NOTIFICATION = this.baseapi+'/coolsrv/action/proceed';
           this.REST_API_ACCESS_MANAGEMENT_GETALL_URL = this.baseapi+'/coolsrv/access/getAll';
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
@@ -91,7 +91,7 @@ export class EnvironmentService {
           this.REST_API_MM_STAKEHOLDERS_GET_URL = this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/';
           this.REST_API_MM_OFFER_BUILDER_GET_URL = this.baseapi+'/coolsrv/offer/getOffersDetails/';
           this.REST_API_MM_STAKEHOLDERS_SEARCH_URL = this.baseapi+'/coolsrv/collabrators/searchCollabrators';
-          this.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL = this.baseapi+'/coolsrv/offer/updateOfferDetails';
+          this.REST_API_UPDATE_OFFER = this.baseapi+'/coolsrv/offer/updateOfferDetails';
           this.REST_API_DISMISS_NOTIFICATION = this.baseapi+'/coolsrv/action/proceed';
           this.REST_API_ACCESS_MANAGEMENT_GETALL_URL = this.baseapi+'/coolsrv/access/getAll';
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
@@ -124,7 +124,7 @@ export class EnvironmentService {
           this.REST_API_MM_STAKEHOLDERS_GET_URL = this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/';
           this.REST_API_MM_OFFER_BUILDER_GET_URL = this.baseapi+'/coolsrv/offer/getOffersDetails/';
           this.REST_API_MM_STAKEHOLDERS_SEARCH_URL = this.baseapi+'/coolsrv/collabrators/searchCollabrators';
-          this.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL = this.baseapi+'/coolsrv/offer/updateOfferDetails';
+          this.REST_API_UPDATE_OFFER = this.baseapi+'/coolsrv/offer/updateOfferDetails';
           this.REST_API_DISMISS_NOTIFICATION = this.baseapi+'/coolsrv/action/proceed';
           this.REST_API_ACCESS_MANAGEMENT_GETALL_URL = this.baseapi+'/coolsrv/access/getAll';
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
@@ -144,7 +144,7 @@ export class EnvironmentService {
             console.log("EnvironmentService: set env vars for prd environment");
         } else {
 
-           // this.baseapi = 'http://10.24.105.33:8080';
+          //  this.baseapi = 'http://10.155.72.242:8080';
             this.baseapi = 'https://cool-srv-dev.cisco.com';
             this.REST_API_GETFUNCTIONAL_ROLE_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
             this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
@@ -159,7 +159,7 @@ export class EnvironmentService {
           this.REST_API_MM_STAKEHOLDERS_GET_URL = this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/';
           this.REST_API_MM_OFFER_BUILDER_GET_URL = this.baseapi+'/coolsrv/offer/getOffersDetails/';
           this.REST_API_MM_STAKEHOLDERS_SEARCH_URL = this.baseapi+'/coolsrv/collabrators/searchCollabrators';
-          this.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL = this.baseapi+'/coolsrv/offer/updateOfferDetails';
+          this.REST_API_UPDATE_OFFER = this.baseapi+'/coolsrv/offer/updateOfferDetails';
           this.REST_API_DISMISS_NOTIFICATION = this.baseapi+'/coolsrv/action/proceed';
           this.REST_API_ACCESS_MANAGEMENT_GETALL_URL = this.baseapi+'/coolsrv/access/getAll';
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';

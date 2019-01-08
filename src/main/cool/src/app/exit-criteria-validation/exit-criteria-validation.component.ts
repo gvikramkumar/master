@@ -13,6 +13,7 @@ import {HeaderService} from '../header/header.service';
 
 export class ExitCriteriaValidationComponent implements OnInit {
   currentOfferId;
+  currentCaseId;
   exitCriteriaData;
   ideate = [];
   offerOwner:String = '';
@@ -28,11 +29,12 @@ export class ExitCriteriaValidationComponent implements OnInit {
     ) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
+        this.currentCaseId = params['id2']
       });
      }
 
   ngOnInit() {
-    this.exitCriteriaValidationService.getExitCriteriaData(this.currentOfferId).subscribe(data => {
+    this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
       console.log(data);
       const canRequestUsers = [];
       this.exitCriteriaData=data;

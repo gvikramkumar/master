@@ -62,7 +62,7 @@ export class MmAssesmentComponent implements OnInit {
   ngOnInit() {
 
 
-    this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monitization Model best aligns to your requirements.", color: "black" };
+    this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
 
 
     this.MonetizationModelService.getAttributes().subscribe(data => {
@@ -483,7 +483,8 @@ console.log(this.stakeData);
  }
 
 goBackToOffercreation(){
-  this.router.navigate(['/coolOffer']);
+  console.log("off",this.currentOfferId)
+  this.router.navigate(['/coolOffer', this.currentOfferId]);
 }
 }
 

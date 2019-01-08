@@ -143,7 +143,7 @@ export class ActionsComponent implements OnInit {
       this.milestoneValue,
       this.functionNameValue,
       selectedAssignee,
-      this.dueDateValue  
+      this.dueDateValue.toString(),
     );
     console.log(createAction);
     this.actionsService.createNewAction(createAction).subscribe((data) => {

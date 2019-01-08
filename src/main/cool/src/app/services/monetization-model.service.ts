@@ -47,7 +47,7 @@ export class MonetizationModelService {
   };
 
   proceedToStakeholder(data) {
-    let url = this.environmentService.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL;
+    let url = this.environmentService.REST_API_UPDATE_OFFER;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
