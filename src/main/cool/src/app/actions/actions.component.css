@@ -332,4 +332,17 @@
     /* border: 0; */
     background: inherit;
   }
+
+  .GREEN {
+    color: green; 
+   }
+
+  .YELLOW {
+    color: yellow; 
+   }
+
+   .RED {
+    color: red; 
+  }
+  
   

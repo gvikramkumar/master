@@ -18,7 +18,7 @@ export class EnvironmentService {
     REST_API_MM_STAKEHOLDERS_GET_URL;
     REST_API_MM_OFFER_BUILDER_GET_URL;
     REST_API_MM_STAKEHOLDERS_SEARCH_URL;
-    REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL;
+    REST_API_UPDATE_OFFER;
     REST_API_DISMISS_NOTIFICATION;
     REST_API_ACCESS_MANAGEMENT_GETALL_URL;
     REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL;
@@ -26,6 +26,7 @@ export class EnvironmentService {
     REST_API_TURBO_TAX_MENU;
     REST_API_HOLD_OFFER;
     REST_API_CANCEL_OFFER;
+    REST_API_EMAIL_NORIFICATION;
     REST_API_ACTIONSTRACKER_URL;
     REST_API_ACCESS_MANAGEMENT_GETUSER_URL;
     REST_API_OFFERPHASE_DETAILS_URL;
@@ -34,6 +35,10 @@ export class EnvironmentService {
     REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
     REST_API_RIGISTERNEWUSER_GET_URL;
     REST_API_GETFUNCTIONAL_ROLE_URL;
+    REST_API_CREATE_NEW_ACTION_POST_URL;
+    REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL;
+    REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL;
+    REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
 
     constructor() {
         let windowUrl = location.href;
@@ -52,8 +57,7 @@ export class EnvironmentService {
           this.REST_API_MM_STAKEHOLDERS_GET_URL = this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/';
           this.REST_API_MM_OFFER_BUILDER_GET_URL = this.baseapi+'/coolsrv/offer/getOffersDetails/';
           this.REST_API_MM_STAKEHOLDERS_SEARCH_URL = this.baseapi+'/coolsrv/collabrators/searchCollabrators';
-          this.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL = this.baseapi+'/coolsrv/offer/updateOfferDetails';
-          //new url
+          this.REST_API_UPDATE_OFFER = this.baseapi+'/coolsrv/offer/updateOfferDetails';
           this.REST_API_DISMISS_NOTIFICATION = this.baseapi+'/coolsrv/action/proceed';
           this.REST_API_ACCESS_MANAGEMENT_GETALL_URL = this.baseapi+'/coolsrv/access/getAll';
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
@@ -61,6 +65,7 @@ export class EnvironmentService {
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
           this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/action/proceed';
           this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/coolsrv/emailNotification/send'
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
          // this.REST_API_ACTIONSTRACKER_URL = 'http://10.155.72.125:8080/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
@@ -68,6 +73,10 @@ export class EnvironmentService {
           this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL=this.baseapi+'/coolsrv/emailNotification/sendEmailNotification/';
           // https://cool-srv-dev.cisco.com/coolsrv/emailNotification/sendEmailNotification/{offerId}/{milestone};
           this.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL = this.baseapi+'/coolsrv/access/getuser';
+          this.REST_API_CREATE_NEW_ACTION_POST_URL = this.baseapi+'/coolsrv/action/create/manualAction';
+          this.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL = this.baseapi+'/coolsrv/bpmApi/getMilestones';
+          this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
+          this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseapi+'/coolsrv/LOV/getAssignee/';
           console.log("EnvironmentService: set env vars for dev environment");
         } else if(windowUrl.includes('stg')) {
             this.baseapi = 'https://cool-srv-stg.cisco.com';
@@ -84,19 +93,24 @@ export class EnvironmentService {
           this.REST_API_MM_STAKEHOLDERS_GET_URL = this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/';
           this.REST_API_MM_OFFER_BUILDER_GET_URL = this.baseapi+'/coolsrv/offer/getOffersDetails/';
           this.REST_API_MM_STAKEHOLDERS_SEARCH_URL = this.baseapi+'/coolsrv/collabrators/searchCollabrators';
-          this.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL = this.baseapi+'/coolsrv/offer/updateOfferDetails';
+          this.REST_API_UPDATE_OFFER = this.baseapi+'/coolsrv/offer/updateOfferDetails';
           this.REST_API_DISMISS_NOTIFICATION = this.baseapi+'/coolsrv/action/proceed';
           this.REST_API_ACCESS_MANAGEMENT_GETALL_URL = this.baseapi+'/coolsrv/access/getAll';
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
           this.REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL = this.baseapi+'/coolsrv/access/updateUser';
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
-          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/offer/hold/';
-          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/offer/Cancel/';
+          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/coolsrv/emailNotification/send'
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
           this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
           this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL=this.baseapi+'/coolsrv/emailNotification/sendEmailNotification/';
           this.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL = this.baseapi+'/coolsrv/access/getuser';
+          this.REST_API_CREATE_NEW_ACTION_POST_URL = this.baseapi+'/coolsrv/action/create/manualAction';
+          this.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL= this.baseapi+'/coolsrv/bpmApi/getMilestones';
+          this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
+          this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseapi+'/coolsrv/LOV/getAssignee/';
             console.log("EnvironmentService: set env vars for stg environment");
         } else if(windowUrl.includes('prd')) {
             this.baseapi = 'https://cool-srv-prd.cisco.com';
@@ -113,26 +127,30 @@ export class EnvironmentService {
           this.REST_API_MM_STAKEHOLDERS_GET_URL = this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/';
           this.REST_API_MM_OFFER_BUILDER_GET_URL = this.baseapi+'/coolsrv/offer/getOffersDetails/';
           this.REST_API_MM_STAKEHOLDERS_SEARCH_URL = this.baseapi+'/coolsrv/collabrators/searchCollabrators';
-          this.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL = this.baseapi+'/coolsrv/offer/updateOfferDetails';
+          this.REST_API_UPDATE_OFFER = this.baseapi+'/coolsrv/offer/updateOfferDetails';
           this.REST_API_DISMISS_NOTIFICATION = this.baseapi+'/coolsrv/action/proceed';
           this.REST_API_ACCESS_MANAGEMENT_GETALL_URL = this.baseapi+'/coolsrv/access/getAll';
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
           this.REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL = this.baseapi+'/coolsrv/access/updateUser';
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
-          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/offer/hold/';
-          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/offer/Cancel/';
+          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/coolsrv/emailNotification/send'
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
           this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
           this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL=this.baseapi+'/coolsrv/emailNotification/sendEmailNotification/';
           this.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL = this.baseapi+'/coolsrv/access/getuser';
+          this.REST_API_CREATE_NEW_ACTION_POST_URL = this.baseapi+'/coolsrv/action/create/manualAction';
+          this.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL= this.baseapi+'/coolsrv/bpmApi/getMilestones';
+          this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
+          this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseapi+'/coolsrv/LOV/getAssignee/';
             console.log("EnvironmentService: set env vars for prd environment");
         } else {
 
-           // this.baseapi = 'http://10.155.74.56:8080';
+          //  this.baseapi = 'http://10.155.72.242:8080';
             this.baseapi = 'https://cool-srv-dev.cisco.com';
             this.REST_API_GETFUNCTIONAL_ROLE_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
-
             this.REST_API_STAKEHOLDERLIST_GET_URL=this.baseapi+'/coolsrv/offer/getOffersDetails';
             this.REST_API_RIGISTERNEWUSER_GET_URL=this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
             this.REST_API_MYACTIONS_URL = this.baseapi+'/coolsrv/action/getMyAction/';
@@ -145,7 +163,7 @@ export class EnvironmentService {
           this.REST_API_MM_STAKEHOLDERS_GET_URL = this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/';
           this.REST_API_MM_OFFER_BUILDER_GET_URL = this.baseapi+'/coolsrv/offer/getOffersDetails/';
           this.REST_API_MM_STAKEHOLDERS_SEARCH_URL = this.baseapi+'/coolsrv/collabrators/searchCollabrators';
-          this.REST_API_MM_STAKEHOLDERS_EDIT_ADD_URL = this.baseapi+'/coolsrv/offer/updateOfferDetails';
+          this.REST_API_UPDATE_OFFER = this.baseapi+'/coolsrv/offer/updateOfferDetails';
           this.REST_API_DISMISS_NOTIFICATION = this.baseapi+'/coolsrv/action/proceed';
           this.REST_API_ACCESS_MANAGEMENT_GETALL_URL = this.baseapi+'/coolsrv/access/getAll';
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
@@ -154,11 +172,16 @@ export class EnvironmentService {
             this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
             this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/action/proceed/';
             this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/action/proceed/';
+            this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/coolsrv/emailNotification/send'
             this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
             this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
             this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
             this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL=this.baseapi+'/coolsrv/emailNotification/sendEmailNotification/';
             this.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL = this.baseapi+'/coolsrv/access/getuser';
+            this.REST_API_CREATE_NEW_ACTION_POST_URL = this.baseapi+'/coolsrv/action/create/manualAction';
+            this.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL= this.baseapi+'/coolsrv/bpmApi/getMilestones';
+            this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseapi+'/coolsrv/LOV/getFunctionalRoles';
+            this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseapi+'/coolsrv/LOV/getAssignee/';
             console.log("EnvironmentService: set env vars for dev environment");
         }
     }

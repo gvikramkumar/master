@@ -96,9 +96,9 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="offerName">SELECT OFFER NAME</label>
-                    <select id="offerName" type="text" class="form-control" name="offerName" [(ngModel)]="offerNameValue"
+                    <select id="offerName" type="text" class="form-control" name="offerName" [(ngModel)]="offerNameValue" (change)="onChange($event.target.value)"
                       required ngModel #offerName="ngModel">
-                      <option *ngFor="let offer of myOfferList" [value]="offer.offerName">
+                      <option *ngFor="let offer of myOfferList" [value]="offer.offerId">
                         {{offer.offerName}}</option>
                     </select>
                   </div>
@@ -128,9 +128,8 @@
                     <label for="milestoneName">MILESTONE</label>
                     <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
                       required ngModel #milestoneName="ngModel">
-                      <option value="first">Milestone</option>
-                      <option value="second">Second Value</option>
-                      <option value="third">Third Value</option>
+                      <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
+                        {{milestone.subMilestone}}</option>
                     </select>
                   </div>
                 </div>
@@ -141,8 +140,8 @@
                     <label for="functionName">SELECT FUNCTION</label>
                     <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
                       ngModel required>
-                      <option value={{manualactionList}}>
-                        {{manualactionList}}</option>
+                      <option *ngFor="let function of functionList" [value]="function">
+                        {{function}}</option>
                     </select>
                   </div>
                 </div>
@@ -153,9 +152,8 @@
                   <div class="form-group__text select">
                     <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
                       required ngModel>
-                      <option value="first">Assignee</option>
-                      <option value="second">Second Value</option>
-                      <option value="third">Third Value</option>
+                      <option *ngFor="let assignee of assigneeList" [value]="assignee">
+                        {{assignee}}</option>
                     </select>
                   </div>
                 </div>
@@ -178,7 +176,7 @@
             <div class="row pull-right">
               <div class="form-actions">
                 <button class="btn btn--secondary" (click)="closeActionDailog()">Cancel</button>
-                <button class="btn btn--primary" type="submit" [disabled]="!createActionForm.valid">Create
+                <button class="btn btn--primary" type="submit" [disabled]="!createActionForm.valid" (click)="createAction()">Create
                   an Action</button>
               </div>
             </div>

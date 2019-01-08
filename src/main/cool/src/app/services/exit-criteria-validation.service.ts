@@ -12,8 +12,8 @@ export class ExitCriteriaValidationService {
     private environmentService: EnvironmentService
   ) { }
 
-  getExitCriteriaData(offerId){
-    let url =this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL+ offerId;
+  getExitCriteriaData(caseId){
+    let url =this.environmentService.REST_API_OFFERPHASE_DETAILS_URL+"/"+caseId +'/true';
     return this.http.get(url,{withCredentials: true});
   }
   requestApproval(offerId, mileStone){
