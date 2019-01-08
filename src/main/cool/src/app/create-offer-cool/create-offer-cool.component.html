@@ -4,12 +4,12 @@
       <h1 class="page--heading">Create New Offer</h1>
       <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span class="icon-back"></span></button>
               Offer Info</h2>
           </div>
-          <div class="col-md-8 text-right">
-            <button class="btn btn--white btn--wide" [disabled]="!offerCreateForm.valid" (click)="proceedToOfferBuilder()">Proceed to Offer Builder <span class="icon-chevron-right"></span></button>
+          <div class="col-sm-8 text-right">
+            <button class="btn btn--white" [disabled]="!offerCreateForm.valid" (click)="proceedToOfferBuilder()">Proceed to Offer Builder <span class="icon-chevron-right"></span></button>
           </div>
         </div>
       </div>
