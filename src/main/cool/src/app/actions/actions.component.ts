@@ -54,21 +54,13 @@ export class ActionsComponent implements OnInit {
   ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
-    this.dashboardService.getMyActionsList()
+    this.actionsService.getActionsTracker()
       .subscribe(data => {
         this.myActions = data;
         this.processMyActionsList();
       });
 
-    // this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-    //   const actionListData = [];
-    //   const functionalRoleData = data.userMappings;
-    //   functionalRoleData.forEach(element => {
-    //     this.manualactionList = element.functionalRole;
-    //   });
-    // });
-    // this.manualactionList = this.actionListData;
-    this.actionsService.getActionsTracker().subscribe(data => {
+    this.dashboardService.getMyOffersList().subscribe(data => {      
       this.myOfferList = data;
 
       data.forEach(ele => {
@@ -165,6 +157,6 @@ export class ActionsComponent implements OnInit {
   }
 
   dateFormat(inputDate: string) {
-    return moment(inputDate).format('DD-MMM-YYYY');
+    return moment(inputDate).format('DD-MM-YYYY');
   }
 }
