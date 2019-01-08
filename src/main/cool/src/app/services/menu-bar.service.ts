@@ -39,4 +39,16 @@ export class MenuBarService {
       return this.httpClient.post(this.environmentService.REST_API_CANCEL_OFFER, data, httpOptions );
     }
 
+    sendNotification(data:object) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Accept' : 'application/json'
+        }),
+        withCredentials: true,
+      };
+
+      return this.httpClient.post(this.environmentService.REST_API_EMAIL_NORIFICATION, data, httpOptions );
+    }
+
 }

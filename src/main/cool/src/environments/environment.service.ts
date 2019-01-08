@@ -26,6 +26,7 @@ export class EnvironmentService {
     REST_API_TURBO_TAX_MENU;
     REST_API_HOLD_OFFER;
     REST_API_CANCEL_OFFER;
+    REST_API_EMAIL_NORIFICATION;
     REST_API_ACTIONSTRACKER_URL;
     REST_API_ACCESS_MANAGEMENT_GETUSER_URL;
     REST_API_OFFERPHASE_DETAILS_URL;
@@ -64,6 +65,7 @@ export class EnvironmentService {
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
           this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/action/proceed';
           this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/colsrv/emailNotification/send'
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
          // this.REST_API_ACTIONSTRACKER_URL = 'http://10.155.72.125:8080/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
@@ -97,8 +99,9 @@ export class EnvironmentService {
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
           this.REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL = this.baseapi+'/coolsrv/access/updateUser';
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
-          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/offer/hold/';
-          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/offer/Cancel/';
+          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/colsrv/emailNotification/send'
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
           this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
@@ -130,8 +133,9 @@ export class EnvironmentService {
           this.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL = this.baseapi+'/coolsrv/access/createNewUser';
           this.REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL = this.baseapi+'/coolsrv/access/updateUser';
           this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
-          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/offer/hold/';
-          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/offer/Cancel/';
+          this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/action/proceed';
+          this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/colsrv/emailNotification/send'
           this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
           this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
           this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
@@ -168,6 +172,7 @@ export class EnvironmentService {
             this.REST_API_TURBO_TAX_MENU = this.baseapi + '/coolsrv/bpmApi/getMilestones/';
             this.REST_API_HOLD_OFFER = this.baseapi + '/coolsrv/action/proceed/';
             this.REST_API_CANCEL_OFFER = this.baseapi + '/coolsrv/action/proceed/';
+            this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/colsrv/emailNotification/send'
             this.REST_API_ACTIONSTRACKER_URL = this.baseapi+'/coolsrv/bpmApi/getTask/';
             this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL=this.baseapi+'/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All';
             this.REST_API_OFFERPHASE_DETAILS_URL=this.baseapi+'/coolsrv/bpmApi/getMilestones';
