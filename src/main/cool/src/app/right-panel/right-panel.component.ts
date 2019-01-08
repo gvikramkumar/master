@@ -321,9 +321,10 @@ export class RightPanelComponent implements OnInit {
       }
 
       if (this.alreayAddedStakeHolders.findIndex(k => k==user['_id']) == -1) {
+        console.log(user['userName']);
         this.stakeData[user['offerRole']].push(
           { 
-            userName: user['_id'], 
+            userName: user['userName'], 
             emailId: user['email'], 
             _id:user['_id'], 
             userMappings: [{
@@ -351,12 +352,14 @@ export class RightPanelComponent implements OnInit {
     const stakeHolderDto = new StakeHolderDTO();
     console.log(this.selectedCollabs);
     this.selectedCollabs.forEach(element => {
+      console.log(element);
       let stakeHolder = new StakeHolder();
       stakeHolder.businessEntity = element.businessEntity;
       stakeHolder.functionalRole = element.functionalRole;
       stakeHolder.offerRole = element.offerRole;
       stakeHolder._id = this.getUserIdFromEmail(element.email);
       stakeHolder.email = element.email;
+      stakeHolder.userName = element.name;
       listOfStakeHolders.push(stakeHolder);
     });
     this.selectedCollabs = [];
