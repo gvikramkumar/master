@@ -4,4 +4,5 @@ export class StakeHolder{
 	functionalRole:string;
 	offerRole:string;
 	email:string;//email for post data in add
+	userName:string;
 }

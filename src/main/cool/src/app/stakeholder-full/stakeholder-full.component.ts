@@ -10,6 +10,7 @@ import { Collaborators } from '../models/collaborator';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { SharedService } from '../shared-service.service';
+import { templateJitUrl } from '@angular/compiler';
 
 @Component({
   selector: 'app-stakeholder-full',
@@ -54,12 +55,11 @@ export class StakeholderFullComponent implements OnInit {
   deleteCollabs: any[];
   caseId: any;
   getRole: any;
-  stakeHolderInfo = {
-    Stakeholders: []
-  };
+  stakeHolderInfo = {};
+  Stakeholders: any[] = [];
   val;
-  deletedCars
-
+  selectedSh;
+  alreayAddedStakeHolders;
   cols = [
     { field: 'name', header: 'NAME' },
     { field: 'email', header: 'EMAIL' },
@@ -161,42 +161,34 @@ export class StakeholderFullComponent implements OnInit {
 
   processStakeHolderData(stakeHolderData) {
 
-    console.log(stakeHolderData);
-
-
     stakeHolderData.forEach(stakeHolder => {
 
       if (this.stakeHolderInfo[stakeHolder['offerRole']] == null) {
         this.stakeHolderInfo[stakeHolder['offerRole']] = [];
       }
+      
+      this.stakeHolderInfo[stakeHolder['offerRole']].push(
+        {
+          name: stakeHolder['name'],
+          email: stakeHolder['_id'] + '@cisco.com',
+          _id: stakeHolder['_id'],
+          businessEntity: stakeHolder['businessEntity'],
+          functionalRole: stakeHolder['functionalRole'],
+          offerRole: stakeHolder['offerRole'],
+          stakeholderDefaults: stakeHolder['stakeholderDefaults']
+        });
 
-      if (stakeHolder['stakeholderDefaults']) {
-        console.log(stakeHolder['stakeholderDefaults']);
-        this.stakeHolderInfo[stakeHolder['offerRole']].push(
-          {
-            name: stakeHolder['_id'],
-            email: stakeHolder['_id'] + '@cisco.com',
-            _id: stakeHolder['_id'],
-            businessEntity: stakeHolder['businessEntity'],
-            functionalRole: stakeHolder['functionalRole'],
-            offerRole: stakeHolder['offerRole'],
-            stakeholderDefaults: stakeHolder['stakeholderDefaults']
-          });
-      } else {
-        this.stakeHolderInfo['Stakeholders'].push(
-          {
-            name: stakeHolder['_id'],
-            email: stakeHolder['_id'] + '@cisco.com',
-            _id: stakeHolder['_id'],
-            businessEntity: stakeHolder['businessEntity'],
-            functionalRole: stakeHolder['functionalRole'],
-            offerRole: stakeHolder['offerRole'],
-            stakeholderDefaults: stakeHolder['stakeholderDefaults']
-          });
-      }
-
+      this.Stakeholders.push(
+        {
+          name: stakeHolder['name'],
+          email: stakeHolder['_id'] + '@cisco.com',
+          _id: stakeHolder['_id'],
+          businessEntity: stakeHolder['businessEntity'],
+          functionalRole: stakeHolder['functionalRole'],
+          offerRole: stakeHolder['offerRole'],
+          stakeholderDefaults: stakeHolder['stakeholderDefaults']
+        });
     });
-    console.log(this.stakeHolderInfo);
   }
 
   getUserIdFromEmail(email): any {
@@ -224,16 +216,26 @@ export class StakeholderFullComponent implements OnInit {
     const functionalRole = this.stakeholderForm.controls['functionalRole'].value;
     console.log(functionalRole);
     console.log(this.val);
-    this.stakeHolderInfo['Stakeholders'].push(
-      {
-        name: this.val['userName'],
-        email: this.val['_id'] + '@cisco.com',
-        _id: this.val['_id'],
-        businessEntity: this.val['userMappings'][0]['businessEntity'],
-        functionalRole: functionalRole,
-        offerRole: functionalRole,
-        stakeholderDefaults: false
-      });
+
+    const obj = {
+      name: this.val['userName'],
+      email: this.val['_id'] + '@cisco.com',
+      _id: this.val['_id'],
+      businessEntity: this.val['userMappings'][0]['businessEntity'],
+      functionalRole: functionalRole,
+      offerRole: functionalRole,
+      stakeholderDefaults: false
+    };
+
+    if (this.Stakeholders.findIndex(k => k._id === this.val['_id']) == -1) {
+      this.Stakeholders.push(obj);
+      if (this.stakeHolderInfo[obj['offerRole']] == null) {
+        this.stakeHolderInfo[obj['offerRole']] = [];
+      }
+  
+      this.stakeHolderInfo[obj['offerRole']].push(obj);
+    }
+
     this.stakeholderForm.reset();
   }
 
@@ -257,26 +259,22 @@ export class StakeholderFullComponent implements OnInit {
       stakeholders: []
     }
 
-    console.log(this.stakeHolderInfo);
 
     const keys: any[] = Object.keys(this.stakeHolderInfo);
 
     keys.forEach(key => {
-      this.stakeHolderInfo[key].forEach(element => {
-        let obj = {
-          "_id": element._id,
-          "businessEntity": element.businessEntity,
-          "functionalRole": element.functionalRole,
-          "stakeholderDefaults": element.stakeholderDefaults === true ? true : false
-        }
-        stakeholdersPayLoad['stakeholders'].push(obj);
-      })
-
+        this.stakeHolderInfo[key].forEach(element => {
+          let obj = {
+            "_id": element._id,
+            "businessEntity": element.businessEntity,
+            "functionalRole": element.functionalRole,
+            "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
+            "offerRole": element.offerRole,
+            "name": element.name
+          }
+          stakeholdersPayLoad['stakeholders'].push(obj);
+        })
     });
-
-
-
-    console.log("stakeholdersPayLoad", stakeholdersPayLoad);
 
     this.stakeholderfullService.proceedToStrageyReview(stakeholdersPayLoad).subscribe(data => {
       let proceedPayload = {
@@ -399,9 +397,29 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   deleteStakeHolder(stakeHolderId) {
-    this.stakeHolderInfo.Stakeholders.splice(this.stakeHolderInfo.Stakeholders.findIndex(matchesEl), 1);
+    console.log(stakeHolderId);
+    this.Stakeholders.splice(this.Stakeholders.findIndex(matchesEl), 1);
     function matchesEl(el) {
       return el._id === stakeHolderId
     }
+
+    const keys: any[] = Object.keys(this.stakeHolderInfo);
+
+    keys.forEach(key => {
+      let tmp = this.stakeHolderInfo[key];
+
+      if (tmp.length > 0) {
+        for (let i = 0; i < tmp.length; i++) {
+          if (tmp[i]._id === stakeHolderId) {
+            tmp.splice(i, 1);
+          }
+        }
+      }
+
+      this.stakeHolderInfo[key] = tmp;
+      if (tmp.length  === 0){
+        delete this.stakeHolderInfo[key];
+      }
+    });
   }
 }
