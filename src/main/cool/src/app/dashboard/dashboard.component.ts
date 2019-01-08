@@ -52,15 +52,12 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getMyActionsList()
       .subscribe(data => {
         this.myActions = data;
-        console.log('getMyAction list:::',this.myActions)
         this.processMyActionsList();
       });
 
     this.dashboardService.getMyOffersList()
       .subscribe(data => {
         this.myOffersList = data;
-        
-        console.log('getMyOffersList:::',this.myOffersList)
         this.myOffersListProps = Object.keys(this.myOffersList);
       });
   }
@@ -80,7 +77,7 @@ export class DashboardComponent implements OnInit {
         obj.setAlertType(1);
         obj.setCaseId(element.caseId);
         obj.setTaskId(element.taskId);
-        
+
         // Set the status color
         if (element.status && element.status.toLowerCase() === 'red') {
           this.needImmActnCount = this.needImmActnCount + 1;
@@ -90,7 +87,7 @@ export class DashboardComponent implements OnInit {
         this.myOfferArray.push(obj);
       });
 
-     
+
 
       // Process Notifications
       if (this.myActions.notificationList !== undefined) {
@@ -117,10 +114,9 @@ export class DashboardComponent implements OnInit {
     return moment(inputDate).format('DD-MMM-YYYY');
   }
 
-  selectedrownof(actionData){
-    console.log("selectedrow",actionData);
-    this.selectedrow=actionData ;
-        
+  selectedrownof(actionData) {
+    this.selectedrow = actionData;
+
   }
 
   getMyActions() {
@@ -146,26 +142,25 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  selectionChange(value){debugger;
-    this.selectedrow=value ;
-   
- 
- }
+  selectionChange(value) {
+    this.selectedrow = value;
+  }
 
   dismissNotification(offerId, popover) {
+    const postData = {
+      'taskId': this.selectedrow.taskId,
+      'userId': this.selectedrow.assigneeId,
+      'taskName': "Notification",
+      'caseId': "",
+      'offerId': "",
+      'action': "",
+      'comment': ""
+    }
+    this.dashboardService.postDismissNotification(postData).subscribe(data => {
+      popover.close();
+      this.getMyActions();
+    });
 
-    console.log("hello");
-    const userId = this.userService.getUserId();
-    const postData=  {
-      'taskId':this.selectedrow.taskId,
-      'userId':this.selectedrow.assigneeId,
-      'taskName':"Notification"
- }
-    console.log( "post Data:::",postData);
-    this.dashboardService.postDismissNotification(postData);
-    popover.close();
-    console.log('dismissed');
-    this.getMyActions();
   }
 
   closeNotification() {
@@ -186,10 +181,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  offerDetailOverView(offerId,caseId) {
-    console.log(offerId);
-    console.log(caseId);
-    // this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
-    this.router.navigate(['/offerDetailView', offerId,caseId]);
+  offerDetailOverView(offerId, caseId) {
+    this.router.navigate(['/offerDetailView', offerId, caseId]);
   }
 }
