@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { MenuItem } from 'primeng/api';
 import { MenuBarService } from '../services/menu-bar.service';
+import { UserService } from '../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 
@@ -13,7 +14,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class MenuBarComponent implements OnInit {
 
-    @Input() caseId;
+    @Input() caseId:string;
+    @Input() currentMMModel:string;
+    @Input() offerId:string;
+    @Input() offerName:string;
+    @Input() stakeData:object;
     @Output() updateMessage = new EventEmitter<string>();
     items: MenuItem[];
     showPopup: boolean = false;
@@ -23,6 +28,7 @@ export class MenuBarComponent implements OnInit {
     currentOfferId: String = '';
 
     constructor(private menuBarService: MenuBarService,
+        private userService: UserService,
         private router: Router,
         private activatedRoute: ActivatedRoute) {
         this.activatedRoute.params.subscribe(params => {
@@ -89,12 +95,60 @@ export class MenuBarComponent implements OnInit {
     }
 
     showOppupFunc(ptype) {
-        this.showPopup = true;
-        this.popupType = ptype;
+        if (this.currentMMModel != null) {
+            this.showPopup = true;
+            this.popupType = ptype;
+        }
     }
 
     closePopup(message) {
         if (message != null && message !== '') {
+            var emailNotificationData = {};
+            if (message == 'hold') {
+                var emailSubject = `[${this.offerName}]([${this.offerId}]) has been on hold by [${this.userService.getUserId()}]`;
+                var emailBody = `Hello,
+                [${this.offerName}]([${this.offerId}]) has been on hold by [${this.userService.getUserId()}].
+                All related actions have been disabled.
+                Click here to view on hold offer in COOL.
+                You are receiving this email because you have been identified as a stakeholder for [${this.offerName}].`
+                var stakeHolders = [];
+                for (var prop in this.stakeData) {
+                    this.stakeData[prop].forEach(stakeholder => {
+                        stakeHolders.push(stakeholder['emailId'])
+                    })
+                }
+                emailNotificationData = {
+                    'subject': emailSubject,
+                    'emailBody': emailBody,
+                    'toMailLists': stakeHolders,
+                }
+                this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+
+                });
+            }
+            if (message == 'cancel') {
+                var emailSubject = `[${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}]`;
+                var emailBody = `Hello,
+                [${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}].
+                All related actions have been disabled.
+                Click here to view canceled offer in COOL.
+                You are receiving this email because you have been identified as a stakeholder for [${this.offerName}].`
+                var stakeHolders = [];
+                for (var prop in this.stakeData) {
+                    this.stakeData[prop].forEach(stakeholder => {
+                        stakeHolders.push(stakeholder['emailId'])
+                    })
+                }
+                emailNotificationData = {
+                    'subject': emailSubject,
+                    'emailBody': emailBody,
+                    'toMailLists': stakeHolders,
+                }
+                this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                    
+                });
+            }
+            console.log(emailNotificationData)
             this.updateMessage.next(message);
         }
         this.showPopup = false;

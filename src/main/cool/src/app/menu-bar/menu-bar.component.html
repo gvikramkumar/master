@@ -12,9 +12,13 @@
                   </li>
                   <li> <span>On Hold/Cancel</span>  
                       <ul class="panel--indigo">
-                              <li (click)='showOppupFunc("hold")'><span>On Hold</span>
+                              <li 
+                              [ngClass]="{'disable-item': currentMMModel == null}"
+                              (click)='showOppupFunc("hold")'><span>On Hold</span>
                               </li>
-                              <li (click)='showOppupFunc("cancel")'><span>Cancel</span>
+                              <li 
+                              [ngClass]="{'disable-item': currentMMModel == null}"
+                              (click)='showOppupFunc("cancel")'><span>Cancel</span>
                               </li>
                             
                           </ul>

@@ -1,6 +1,10 @@
 <div class="content">
     <div class="container-fluid">
       <app-menu-bar [caseId]="caseId"
+      [currentMMModel]="currentMMModel"
+      [offerId]="currentOfferId"
+      [offerName]="offerData['offerName']"
+      [stakeData]="stakeData"
       (updateMessage)="updateMessage($event)">
       </app-menu-bar>
 <div class="panel-wrapper mt-15">
