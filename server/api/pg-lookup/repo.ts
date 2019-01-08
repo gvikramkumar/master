@@ -308,49 +308,126 @@ export default class PgLookupRepo {
           `);
   }
 
-  getSubmeasureFlashCategories() {
-    return pgc.pgdb.query(`
+  getSubmeasureFlashCategories(req) {
+    // this must be called with a submeasureKey = 0 (new submeasure) or the submeasureKey
+    // if 0, then get the list of available values minus those taken already. If not 0, then get the value it's using added to the list of available
+    const sql = `
         select a.adj_type_id_name||' - '||a.adj_type_id as mrap_category_id, a.adj_type_id::integer
-        from
-        (
-        select 
-         ds.source_system_id source_system_id
-        ,ds.source_system_name source_system_name
-        ,ds.source_system_type_code source_system_type_code
-        ,adj.adj_type_id adj_type_id
-        ,adj.adj_type_id_name adj_type_id_name
-        from
-        fpadfa.dfa_data_sources ds
-        ,fpadfa.dfa_prof_source_adj_type_all adj
-        where 
-            ds.module_id=1
-        and ds.source_system_id=2 /*MRAP*/
-        and ds.source_system_id=adj.source_system_id) a
+                from
+                (             
+                select distinct 
+                                 ds.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,ad.adj_type_id adj_type_id, upper(ad.adj_type_id_name) adj_type_id_name
+                               from
+                                 fpadfa.dfa_measure ms
+                                ,fpadfa.dfa_sub_measure sm
+                                ,fpadfa.dfa_prof_source_adj_type_all ad right join
+                                  fpadfa.dfa_data_sources ds on ds.source_system_id = ad.source_system_id
+                   where
+                           ms.measure_id = sm.measure_id
+                    and sm.source_system_id = ds.source_system_id
+                    and ds.module_id=1
+                    and ms.measure_id=3
+                    and sm.source_system_id <> 4   
+                    and ds.status_flag = 'A'              
+                    except 
+                                select 
+                                 sm.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,adj.adj_type_id adj_type_id, UPPER(adj.adj_type_id_name) adj_type_id_name
+                               from 
+                                 fpadfa.dfa_sub_measure sm
+                               ,fpadfa.dfa_data_sources ds
+                               ,fpadfa.dfa_prof_source_adj_type_all adj
+                   where 
+                           sm.source_system_id=ds.source_system_id                                       
+                    and sm.source_system_id=adj.source_system_id                                         
+                    and sm.source_system_adj_type_id=adj.adj_type_id 
+                    and ds.module_id=1
+                   and sm.measure_id=3                                  
+                    and sm.source_system_id <> 4                                         
+                    and sm.status_flag='A'                                   
+            union
+                    select 
+                                 sm.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,adj.adj_type_id adj_type_id, UPPER(adj.adj_type_id_name) adj_type_id_name
+                               from 
+                                 fpadfa.dfa_sub_measure sm
+                               ,fpadfa.dfa_data_sources ds
+                               ,fpadfa.dfa_prof_source_adj_type_all adj
+                   where 
+                           sm.source_system_id=ds.source_system_id                                       
+                    and sm.source_system_id=adj.source_system_id                                         
+                    and sm.source_system_adj_type_id=adj.adj_type_id
+                   and ds.module_id=1
+                   and sm.measure_id=3                                   
+                    and sm.source_system_id <> 4                                         
+                    and sm.sub_measure_key = ${Number(req.query.submeasureKey)}
+--                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
+--                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
+            ) a
         order by a.adj_type_id_name||' - '||a.adj_type_id
-    `)
+    `;
+    return pgc.pgdb.query(sql)
       .then(resp => resp.rows);
   }
 
-  getSubmeasureAdjustmentTypes() {
-    return pgc.pgdb.query(`
+  getSubmeasureAdjustmentTypes(req) {
+    // this must be called with a submeasureKey = 0 (new submeasure) or the submeasureKey
+    // if 0, then get the list of available values minus those taken already. If not 0, then get the value it's using added to the list of available
+    const sql = `
         select a.adj_type_id_name||' - '||a.adj_type_id as rrr_category_id, a.adj_type_id::integer
-        from
-        (
-        select 
-         ds.source_system_id source_system_id
-        ,ds.source_system_name source_system_name
-        ,ds.source_system_type_code source_system_type_code
-        ,adj.adj_type_id adj_type_id
-        ,adj.adj_type_id_name adj_type_id_name
-        from
-        fpadfa.dfa_data_sources ds
-        ,fpadfa.dfa_prof_source_adj_type_all adj
-        where 
-            ds.module_id=1
-        and ds.source_system_id=1 /*RRR*/
-        and ds.source_system_id=adj.source_system_id) a
+                from
+                (             
+                select distinct 
+                                 ds.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,ad.adj_type_id adj_type_id, upper(ad.adj_type_id_name) adj_type_id_name
+                               from
+                                 fpadfa.dfa_measure ms
+                                ,fpadfa.dfa_sub_measure sm
+                                ,fpadfa.dfa_prof_source_adj_type_all ad right join
+                                  fpadfa.dfa_data_sources ds on ds.source_system_id = ad.source_system_id
+                   where
+                           ms.measure_id = sm.measure_id
+                    and sm.source_system_id = ds.source_system_id
+                    and ms.measure_id=1
+                    and sm.source_system_id <> 4   
+                    and ds.status_flag = 'A'              
+                    except 
+                                select 
+                                 sm.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,adj.adj_type_id adj_type_id, UPPER(adj.adj_type_id_name) adj_type_id_name
+                               from 
+                                 fpadfa.dfa_sub_measure sm
+                               ,fpadfa.dfa_data_sources ds
+                               ,fpadfa.dfa_prof_source_adj_type_all adj
+                   where 
+                           sm.source_system_id=ds.source_system_id                                       
+                    and sm.source_system_id=adj.source_system_id                                         
+                    and sm.source_system_adj_type_id=adj.adj_type_id                                         
+                    and sm.measure_id=1                                    
+                    and sm.source_system_id <> 4                                         
+                    and sm.status_flag='A'                                   
+            union
+                    select 
+                                 sm.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,adj.adj_type_id adj_type_id, UPPER(adj.adj_type_id_name) adj_type_id_name
+                               from 
+                                 fpadfa.dfa_sub_measure sm
+                               ,fpadfa.dfa_data_sources ds
+                               ,fpadfa.dfa_prof_source_adj_type_all adj
+                   where 
+                           sm.source_system_id=ds.source_system_id                                       
+                    and sm.source_system_id=adj.source_system_id                                         
+                    and sm.source_system_adj_type_id=adj.adj_type_id                                         
+                    and sm.measure_id=1                                    
+                    and sm.source_system_id <> 4                                         
+                            and sm.sub_measure_key = ${Number(req.query.submeasureKey)}
+        --                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
+        --                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
+            ) a
         order by a.adj_type_id_name||' - '||a.adj_type_id
-    `)
+    `;
+    return pgc.pgdb.query(sql)
       .then(resp => resp.rows);
   }
 

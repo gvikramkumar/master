@@ -207,8 +207,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.ruleService.getManyLatestGroupByNameActive().toPromise(),
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinct('name', {moduleId: -1}).toPromise(),
-      this.pgLookupService.getSubmeasureFlashCategories().toPromise(),
-      this.pgLookupService.getSubmeasureAdjustmentTypes().toPromise(),
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
       promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
@@ -219,11 +217,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.rules = _.sortBy(results[1], 'name');
         this.sources = _.sortBy(results[2], 'name');
         this.submeasureNames = results[3];
-        this.flashCategories = results[4];
-        this.adjustmentTypes = results[5];
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.sm = results[6];
+          this.sm = results[4];
         }
         if (this.viewMode) {
           this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
@@ -246,6 +242,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
         }
         this.init();
+      })
+      .then(() => {
+        return Promise.all([
+          this.pgLookupService.getSubmeasureFlashCategories(this.sm.submeasureKey || 0).toPromise(),
+          this.pgLookupService.getSubmeasureAdjustmentTypes(this.sm.submeasureKey || 0).toPromise(),
+        ])
+          .then(results => {
+            this.flashCategories = results[0];
+            this.adjustmentTypes = results[1];
+          });
       });
   }
 
