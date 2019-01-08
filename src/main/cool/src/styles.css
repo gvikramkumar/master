@@ -1222,7 +1222,7 @@ h6 .acc-title {
   bottom: 0;
   z-index: 1;
 }
-.cui .timeline__icon {
+/* .cui .timeline__icon {
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -1230,10 +1230,9 @@ h6 .acc-title {
   left: 9px;
   z-index: 2;
   border: 5px solid #f5f5f6;
-  /* background-color: #6ebe4a; */
   color: white;
   line-height: 1;
-}
+} */
 
 .timeline__content span.icon-chevron-up.icon-small {
   line-height: 1;

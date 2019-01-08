@@ -197,7 +197,7 @@ span.icon-chevron-up.icon-small {
   bottom: 0;
   z-index: 1;
 }
-.cui .timeline__icon {
+/* .cui .timeline__icon {
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -208,7 +208,7 @@ span.icon-chevron-up.icon-small {
   background-color: #6ebe4a;
   color: white;
   line-height: 1;
-}
+} */
 
 .timeline__content span.icon-chevron-up.icon-small {
   line-height: 1;
