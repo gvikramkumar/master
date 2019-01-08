@@ -70,7 +70,7 @@ export class EnvironmentService {
 
         switch (environment) {
             case 'production':
-                this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
+                this.baseapi = 'https://cool-srv-prd.cisco.com/coolsrv';
                 this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
                 break;
             case 'stage':
@@ -78,7 +78,7 @@ export class EnvironmentService {
                 this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
                 break;
             case 'development':
-                this.baseapi = 'https://cool-srv-prd.cisco.com/coolsrv';
+                this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
                 this.basepdafapi = 'https://pdaf-api.cisco.com/pdafapp';
                 break;
             default:
