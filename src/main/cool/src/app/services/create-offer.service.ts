@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import {CreateOffer} from '../create-offer-cool/create-offer';
+import { CreateOffer } from '../create-offer-cool/create-offer';
 import { UserService } from './user.service';
 import { EnvironmentService } from '../../environments/environment.service';
 
@@ -14,6 +14,7 @@ export class CreateOfferService {
 
   baseUrl: string = environment.REST_API_URL;
   offerCreateUrl: string = this.environmentService.REST_API_OFFER_CREATE_URL;
+  offerUpdateUrl: string = this.environmentService.REST_API_UPDATE_OFFER;
   basePrimaryUrl: string = this.environmentService.REST_API_PRIMARY_URL;
   secondaryBusinessUnitUrl: string = environment.REST_API_SECONDARY_BUSINESS_UNIT_URL;
   secondaryBusinessEntityUrl: string = environment.REST_API_SECONDARY_BUSINESS_ENTITY_URL;
@@ -22,7 +23,7 @@ export class CreateOfferService {
   coolOffer;
   coolOfferCopy;
   currenTOffer = new BehaviorSubject<any>('');
-  routeFlag  = new BehaviorSubject<boolean>(false);
+  routeFlag = new BehaviorSubject<boolean>(false);
 
   constructor(private httpClient: HttpClient, private userService: UserService, private environmentService: EnvironmentService) {
     this.coolOffer = {
@@ -57,7 +58,7 @@ export class CreateOfferService {
 
   getAllBusinessUnit() {
     let url = this.baseUrl + 'lov/businessUnit';
-    return this.httpClient.get(url,  { withCredentials: true });
+    return this.httpClient.get(url, { withCredentials: true });
   }
 
   getAllBusinessEntity(): Observable<any> {
@@ -67,22 +68,22 @@ export class CreateOfferService {
 
   getPrimaryBusinessUnits(): Observable<any> {
     let url = this.basePrimaryUrl + this.userService.getUserId();
-        return this.httpClient.get(url,{ withCredentials: true });
+    return this.httpClient.get(url, { withCredentials: true });
   }
 
   getSecondaryBusinessUnit() {
     let url = this.secondaryBusinessUnitUrl;
-    return this.httpClient.get(url, {withCredentials:true});
+    return this.httpClient.get(url, { withCredentials: true });
   }
 
   getSecondaryBusinessEntity(bus: string): Observable<any> {
     let url = this.secondaryBusinessEntityUrl + bus;
-    return this.httpClient.get(url, {withCredentials:true});
+    return this.httpClient.get(url, { withCredentials: true });
   }
 
   getPrimaryBusinessEntity(bus: string): Observable<any> {
     let url = this.secondaryPrimaryBusinessEntityUrl + bus;
-    return this.httpClient.get(url, {withCredentials:true});
+    return this.httpClient.get(url, { withCredentials: true });
   }
 
   getQuestionsBox(): Observable<any> {
@@ -95,8 +96,8 @@ export class CreateOfferService {
   }
 
   postDataofMmMapper(obj) {
-    let url = this.baseUrl+'mmMapping'
-    return this.httpClient.post(url,obj);
+    let url = this.baseUrl + 'mmMapping'
+    return this.httpClient.post(url, obj);
   }
 
   validateCoolOffer() {
@@ -110,12 +111,12 @@ export class CreateOfferService {
   }
 
   getOfferById(offerId) {
-    let url = this.baseUrl + 'offer/'+offerId;
+    let url = this.baseUrl + 'offer/' + offerId;
     return this.httpClient.get(url, { withCredentials: true });
   }
 
   getMMMapperById(offerId) {
-    let url = this.baseUrl + 'mmMapping/'+offerId;
+    let url = this.baseUrl + 'mmMapping/' + offerId;
     return this.httpClient.get(url, { withCredentials: true });
   }
 
@@ -124,6 +125,13 @@ export class CreateOfferService {
     createoffer.offerCreatedBy = this.userService.getUserId();
     createoffer.offerOwner = this.userService.getUserId();
     return this.httpClient.post(this.offerCreateUrl, createoffer, { withCredentials: true });
+  }
+
+  updateOffer(createoffer: CreateOffer): Observable<any> {
+    createoffer.userId = this.userService.getUserId();
+    createoffer.offerCreatedBy = this.userService.getUserId();
+    createoffer.offerOwner = this.userService.getUserId();
+    return this.httpClient.post(this.offerUpdateUrl, createoffer, { withCredentials: true });
   }
 
 }

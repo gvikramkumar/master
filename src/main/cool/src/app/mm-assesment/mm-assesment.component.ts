@@ -483,7 +483,8 @@ console.log(this.stakeData);
  }
 
 goBackToOffercreation(){
-  this.router.navigate(['/coolOffer']);
+  console.log("off",this.currentOfferId)
+  this.router.navigate(['/coolOffer', this.currentOfferId]);
 }
 }
 
