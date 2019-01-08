@@ -118,10 +118,10 @@ span.badge-wrapper.base-margin-left:hover:after {
 .cui .table--selectable > tbody > tr > td {
   border-bottom: solid 1px #f2f2f2;
 }
-.row.card-table-header {
+/* .row.card-table-header {
   border-bottom: 1px solid #f2f2f2;
   padding-bottom: 10px;
-}
+} */
 .cui [data-balloon][data-balloon-pos='right']:before{
   margin-left: 2px;
 }
@@ -166,15 +166,15 @@ span.badge-wrapper.base-margin-left:hover:after {
 }
 
 .Green{
- color: green; 
+ color: #6EBE4A;
 }
 
 .Yellow{
-  color: yellow; 
+  color: #FBAB18;
  }
 
  .Red{
-  color: red; 
+  color: #E2231A;
  }
 
  .offerName{
@@ -334,13 +334,13 @@ th.ui-state-default.ui-unselectable-text.ui-sortable-column {
 }
 
 .GREEN {
-  color: green; 
+  color: #6EBE4A;
  }
- 
+
 .YELLOW {
-  color: yellow; 
+  color: #FBAB18;
 }
- 
+
 .RED {
-  color: red; 
+  color: #E2231A;
 }

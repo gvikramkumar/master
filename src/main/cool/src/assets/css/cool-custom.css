@@ -339,7 +339,7 @@ span.icon-close {
   background: #f6f7f9;
   color: #555555;
 }
-.cui .review-status .ui-accordion .ui-accordion-header.ui-state-active {
+.cui .ui-accordion .ui-accordion-header.ui-state-active {
   background: #f5f5f5;
   border-left-color: transparent;
   border-right-color: transparent;
