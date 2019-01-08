@@ -25,6 +25,7 @@ import {PgLookupService} from '../../services/pg-lookup.service';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  startFiscalMonth: string;
   flashCategories: string[];
   adjustmentTypes: string[];
   flashCategory: number;
@@ -206,8 +207,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.ruleService.getManyLatestGroupByNameActive().toPromise(),
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinct('name', {moduleId: -1}).toPromise(),
-      this.pgLookupService.getSubmeasureFlashCategories().toPromise(),
-      this.pgLookupService.getSubmeasureAdjustmentTypes().toPromise(),
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
       promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
@@ -218,21 +217,20 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.rules = _.sortBy(results[1], 'name');
         this.sources = _.sortBy(results[2], 'name');
         this.submeasureNames = results[3];
-        this.flashCategories = results[4];
-        this.adjustmentTypes = results[5];
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.sm = results[6];
+          this.sm = results[4];
         }
-        if (this.copyMode) {
-          // we'll reset these for each edit
-          this.sm.manualMixHw = undefined;
-          this.sm.manualMixSw = undefined;
+        if (this.viewMode) {
+          this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
         }
         if (this.copyMode) {
           this.sm.approvedOnce = 'N';
           delete this.sm.createdBy;
           delete this.sm.createdDate;
+          // we'll reset these for each edit
+          this.sm.manualMixHw = undefined;
+          this.sm.manualMixSw = undefined;
           this.orgSubmeasure = _.cloneDeep(this.sm);
         }
         if (this.editMode) {
@@ -244,6 +242,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
         }
         this.init();
+      })
+      .then(() => {
+        return Promise.all([
+          this.pgLookupService.getSubmeasureFlashCategories(this.sm.submeasureKey || 0).toPromise(),
+          this.pgLookupService.getSubmeasureAdjustmentTypes(this.sm.submeasureKey || 0).toPromise(),
+        ])
+          .then(results => {
+            this.flashCategories = results[0];
+            this.adjustmentTypes = results[1];
+          });
       });
   }
 
@@ -272,7 +280,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   hasFlashCategory() {
     // Manufacturing V&O and MRAP
-    return this.sm.measureId === 5 && this.sm.sourceId === 2;
+    return this.sm.measureId === 3 && this.sm.sourceId === 2;
   }
 
   hasAdjustmentType() {

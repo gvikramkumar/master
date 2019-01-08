@@ -37,8 +37,8 @@ db.dfa_measure.insertMany([
   {
     measureId: NumberInt(3),
     moduleId: NumberInt(1),
-    name: "Manufacturing Overhead",
-    typeCode: "MOVHD",
+    name: "Manufacturing V&O",
+    typeCode: "MOCOGS",
     sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
     hierarchies: ['PRODUCT', 'SALES'],
     status: "A",
@@ -53,8 +53,8 @@ db.dfa_measure.insertMany([
   {
     measureId: NumberInt(4),
     moduleId: NumberInt(1),
-    name: "Manufacturing Supply Chain Expenses",
-    typeCode: "INVEX",
+    name: "Manufacturing Overhead",
+    typeCode: "MOVHD",
     sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
     hierarchies: ['PRODUCT', 'SALES'],
     status: "A",
@@ -69,8 +69,8 @@ db.dfa_measure.insertMany([
   {
     measureId: NumberInt(5),
     moduleId: NumberInt(1),
-    name: "Manufacturing V&O",
-    typeCode: "MOCOGS",
+    name: "Manufacturing Supply Chain Expenses",
+    typeCode: "INVEX",
     sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
     hierarchies: ['PRODUCT', 'SALES'],
     status: "A",

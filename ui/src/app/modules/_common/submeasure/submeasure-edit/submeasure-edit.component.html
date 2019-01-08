@@ -35,7 +35,7 @@
           <fin-input name="manualMixSw" label="SW" [(ngModel)]="sm.manualMixSw" [required]="true" [inline]="true" class="hwsw-inputs"></fin-input>
         </div>
 
-        <cui-select *ngIf="sm.measureId === 5" [disabled]="sm.sourceId !== 2" name="flashCategory" [(ngModel)]="flashCategory" [items]="flashCategories" label="MRAP - Flash Category Id*" empty="true" [required]="true" optionsKey="mrap_category_id" optionsValue="adj_type_id"></cui-select>
+        <cui-select *ngIf="sm.measureId === 3" [disabled]="sm.sourceId !== 2" name="flashCategory" [(ngModel)]="flashCategory" [items]="flashCategories" label="MRAP - Flash Category Id*" empty="true" [required]="true" optionsKey="mrap_category_id" optionsValue="adj_type_id"></cui-select>
         <cui-select *ngIf="sm.measureId === 1"  [disabled]="sm.sourceId !== 1" name="adjustmentType" [(ngModel)]="adjustmentType" [items]="adjustmentTypes" label="Adjustment Type*" empty="true" [required]="true" optionsKey="rrr_category_id" optionsValue="adj_type_id"></cui-select>
 
         <div class="margin-top:15px; height: 0px;">&nbsp;</div>
@@ -67,7 +67,7 @@
         <div class="form-group-max-width">
           <div class="border-outline">
               <fieldset class="input-filter-level">
-                <legend>Business Input Level*</legend>
+                <legend>Business Input Level</legend>
                 <div class="row half-padding">
                   <div class="col-6">
                     <div class="left text-center">Hierarchy</div>
@@ -194,7 +194,8 @@
 
     <div class="row" style="margin-top:30px;">
       <div class="col-lg-6">
-        <cui-select name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos" label="Effective Month*" empty="true"
+        <fin-input name="startMonth" *ngIf="viewMode" [(ngModel)]="startFiscalMonth" label="Effective Month*"></fin-input>
+        <cui-select *ngIf="!viewMode" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos" label="Effective Month*" empty="true"
                     [required]="true" optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
 
         <cui-select name="processingTime" [(ngModel)]="sm.processingTime" [items]="timings" label="Processing Timing" empty="true"

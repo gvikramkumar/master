@@ -4,6 +4,7 @@ import {svrUtil} from '../common/svr-util';
 import RepoBase from './repo-base';
 import {PgRepoBase} from './pg-repo-base';
 import AnyObj from '../../../shared/models/any-obj';
+import {ApiDfaData} from '../middleware/add-global-data';
 
 export default class ControllerBase {
   isMirrorRepo = false; // set if you're writing to mongo and pg at same time (we sync daily now so not used currently)
@@ -272,7 +273,7 @@ export default class ControllerBase {
   }
 
   mongoToPgSync(tableName: string, userId: string, log: string[], elog: string[],
-                mgGetFilter: AnyObj = {}, pgRemoveFilter: AnyObj = {}) {
+                mgGetFilter: AnyObj = {}, pgRemoveFilter: AnyObj = {}, dfa?: ApiDfaData) {
     // try {
       if (this.repo.isModuleRepo && !mgGetFilter.then && mgGetFilter.moduleId !== -1) {
           elog.push(`mongoToPgSync: ${this.repo.modelName} isModuleRepo but doesn't have mgGetFilter.moduleId set to -1.`);
@@ -298,7 +299,11 @@ export default class ControllerBase {
         .then(objs => this.mongoToPgSyncTransform(objs, userId, log, elog)) // override this to transform
         .then(objs => {
           return this.pgRepo.syncRecordsReplaceAll(pgRemoveFilter, objs, userId, true)
-            .then(results => log.push(`${tableName}: ${results.recordCount} records transferred`));
+            .then(results => results.recordCount);
+        })
+        .then(recordCount => {
+          return this.postSyncStep(dfa)
+            .then(() => log.push(`${tableName}: ${recordCount} records transferred`));
         });
 /*
     } catch (err) {
@@ -306,6 +311,10 @@ export default class ControllerBase {
       throw err;
     }
 */
+  }
+
+  postSyncStep(dfa: ApiDfaData): Promise<any> {
+    return Promise.resolve();
   }
 
   // put /:id

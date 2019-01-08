@@ -5,9 +5,13 @@ import MappingUploadTemplate from './template';
 import MappingUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
+import AnyObj from '../../../../../shared/models/any-obj';
+import {NamedApiError} from '../../../../lib/common/named-api-error';
+import * as _ from 'lodash';
 
 @injectable()
 export default class MappingUploadUploadController extends InputFilterLevelUploadController {
+  imports: AnyObj[];
 
   constructor(
     repo: MappingUploadRepo,
@@ -60,12 +64,31 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
   }
 
   validate() {
+    // sort by submeasureName, add up splitPercentage, error if not 1.0
+    this.imports =
+      _.sortBy(this.rows1.map(row => new MappingUploadImport(row, this.fiscalMonth)), 'submeasureName');
+    const obj = {};
+    this.imports.forEach(val => {
+      if (obj[val.submeasureName]) {
+        obj[val.submeasureName] += val.percentage;
+      } else {
+        obj[val.submeasureName] = val.percentage;
+      }
+    });
+    _.forEach(obj, (val, key) => {
+      if (val !== 1.0) {
+        this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
+      }
+    });
+
+    if (this.errors.length) {
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Submeasure percentage values not 100%', this.errors));
+    }
     return Promise.resolve();
   }
 
   getImportArray() {
-    const imports = this.rows1.map(row => new MappingUploadImport(row, this.fiscalMonth));
-    return Promise.resolve(imports);
+    return Promise.resolve(this.imports);
   }
 
   removeDuplicatesFromDatabase(imports) {
@@ -78,7 +101,6 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
     }
     return Promise.resolve();
   }
-
 
   validatePercentage() {
     if (this.validatePercentageValue(this.PropNames.percentage, this.temp.percentage, true)) {

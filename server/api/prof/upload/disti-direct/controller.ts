@@ -1,0 +1,156 @@
+import {injectable} from 'inversify';
+import * as _ from 'lodash';
+import UploadController from '../../../../lib/base-classes/upload-controller';
+import DistiDirectUploadTemplate from './template';
+import DistiDirectUploadImport from './import';
+import {NamedApiError} from '../../../../lib/common/named-api-error';
+import AnyObj from '../../../../../shared/models/any-obj';
+import SubmeasureRepo from '../../../common/submeasure/repo';
+import OpenPeriodRepo from '../../../common/open-period/repo';
+import PgLookupRepo from '../../../pg-lookup/repo';
+import DistiDirectUploadRepo from '../../disti-direct-upload/repo';
+
+@injectable()
+export default class DistiDirectUploadUploadController extends UploadController {
+  imports: AnyObj[];
+
+  constructor(
+    repo: DistiDirectUploadRepo,
+    private pgRepo: PgLookupRepo,
+    openPeriodRepo: OpenPeriodRepo,
+    submeasureRepo: SubmeasureRepo
+  ) {
+    super(
+      repo,
+      openPeriodRepo,
+      submeasureRepo
+    );
+    this.uploadName = 'Disty To Direct Upload';
+
+    this.PropNames = {
+      groupId: 'Group ID',
+      nodeType: 'Node Type',
+      salesFinanceHierarchy: 'Sales Finance Hierarchy',
+      nodeCode: 'Node Code'
+    };
+  }
+
+  getValidationAndImportData() {
+    return Promise.all([
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_fin_sales_theater_hier', 'level03_theater_name'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l3_sales_territory_name_code', 'l1_sales_territory_descr = \'WW Distribution\''),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code', 'sales_territory_descr <> \'WW Distribution\''),
+    ])
+      .then(results => {
+        this.data.level03TheaterNames = results[0];
+        this.data.distiSL3NodeCodes = results[1];
+        this.data.directSL2NodeCodes = results[2];
+      });
+  }
+
+  validateRow1(row) {
+    this.temp = new DistiDirectUploadTemplate(row);
+    return Promise.all([
+      this.validateGroupId(),
+      this.validateNodeType(),
+      this.validateSalesFinanceHierarchy(),
+      this.validateNodeCode()
+    ])
+      .then(() => this.lookForErrors());
+  }
+
+  validate() {
+    // first check if duplicates in the data they're uploading
+    this.imports = this.rows1.map(row => new DistiDirectUploadImport(row, this.fiscalMonth));
+    let obj = {};
+    this.imports.forEach((val: DistiDirectUploadImport) => {
+      const arr = _.get(obj, `${val.nodeType.toUpperCase()}`);
+      const entry = val.nodeCode && val.nodeCode.toUpperCase();
+      if (arr) {
+        if (arr.indexOf(entry) !== -1) {
+          this.addErrorMessageOnly(`${val.nodeType} / ${val.nodeCode}`);
+        } else {
+          arr.push(entry);
+        }
+      } else {
+        _.set(obj, `${val.nodeType.toUpperCase()}`, [entry]);
+      }
+    });
+
+    if (this.errors.length) {
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Node Type/Node Code entries in your upload', this.errors));
+    }
+
+    obj = {};
+    this.imports.forEach((val: DistiDirectUploadImport) => {
+      const arr = _.get(obj, `${val.groupId.toString()}`);
+      const entry = val.nodeType && val.nodeType.toUpperCase();
+      if (arr) {
+        if (arr.indexOf(entry) !== -1) {
+          this.addErrorMessageOnly(`${val.groupId} / ${val.nodeType}`);
+        } else {
+          arr.push(entry);
+        }
+      } else {
+        _.set(obj, `${val.groupId.toString()}`, [entry]);
+      }
+    });
+
+    if (this.errors.length) {
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Group ID/Node Type entries in your upload', this.errors));
+    }
+
+    return Promise.resolve();
+  }
+
+  getImportArray() {
+    // we already put the imports together in validate() so just use them
+    return Promise.resolve(this.imports);
+  }
+
+  removeDuplicatesFromDatabase(imports: DistiDirectUploadImport[]) {
+    const duplicateNodeTypeNodeCode = _.uniqWith(imports, (a, b) => a.nodeType === b.nodeType && a.nodeCode === b.nodeCode)
+      .map(x => _.pick(x, ['nodeType', 'nodeCode']))
+    const duplicateGroupIdNodeType = _.uniqWith(imports, (a, b) => a.groupId === b.groupId && a.nodeType === b.nodeType)
+      .map(x => _.pick(x, ['groupId', 'nodeType']))
+    return this.repo.bulkRemove(duplicateNodeTypeNodeCode.concat(duplicateGroupIdNodeType));
+  }
+
+  validateGroupId() {
+    if (this.validateNumberValue(this.PropNames.groupId, this.temp.groupId, true)) {
+      this.temp.groupId = Number(this.temp.groupId);
+    }
+    return Promise.resolve();
+  }
+
+  validateNodeType() {
+    if (!this.temp.nodeType) {
+      this.addErrorRequired(this.PropNames.nodeType);
+    } else if (this.temp.nodeType.toLowerCase() !== 'disti sl3' && this.temp.nodeType.toLowerCase() !== 'direct sl2') {
+      this.addErrorInvalid(this.PropNames.nodeType, this.temp.nodeType);
+    }
+    return Promise.resolve();
+  }
+
+  validateSalesFinanceHierarchy() {
+    if (!this.temp.salesFinanceHierarchy) {
+      this.addErrorRequired(this.PropNames.salesFinanceHierarchy);
+    } else if (this.temp.salesFinanceHierarchy.toLowerCase() !== 'sales fin hierarchy' && this.notExists(this.data.level03TheaterNames, this.temp.salesFinanceHierarchy)) {
+      this.addErrorInvalid(this.PropNames.salesFinanceHierarchy, this.temp.salesFinanceHierarchy);
+    }
+    return Promise.resolve();
+  }
+
+  validateNodeCode() {
+    if (!this.temp.nodeCode) {
+      this.addErrorRequired(this.PropNames.nodeCode);
+    } else if (this.temp.nodeType.toLowerCase() === 'disti sl3' && this.notExists(this.data.distiSL3NodeCodes, this.temp.nodeCode)) {
+      this.addErrorInvalid(this.PropNames.nodeCode, this.temp.nodeCode);
+    } else if (this.temp.nodeType.toLowerCase() === 'direct sl2' && this.notExists(this.data.directSL2NodeCodes, this.temp.nodeCode)) {
+      this.addErrorInvalid(this.PropNames.nodeCode, this.temp.nodeCode);
+    }
+    return Promise.resolve();
+  }
+
+}
+

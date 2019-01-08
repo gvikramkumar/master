@@ -1,15 +1,12 @@
 import config from './config/get-config';
-import process from 'process';
 import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import {NamedApiError} from './lib/common/named-api-error';
 import notFound from './lib/middleware/not-found';
 import {errorHandler} from './lib/middleware/error-handler';
-import {authorize} from './lib/middleware/authorize';
 import {moduleLookupRouter} from './api/common/module-lookup/router';
 import {reportRouter} from './api/prof/report/router';
 import {salesSplitUploadRouter} from './api/prof/sales-split-upload/router';
@@ -31,14 +28,9 @@ import {addSsoUser} from './lib/middleware/add-sso-user';
 import {userRouter} from './api/user/router';
 import {moduleSourceRouter} from './api/common/module-source/router';
 import {databaseRouter} from './api/database/router';
-import LookupRepo from './api/lookup/repo';
-import * as _ from 'lodash';
-import AnyObj from '../shared/models/any-obj';
-import {ApiError} from './lib/common/api-error';
-import {siteRestriction} from './lib/middleware/site-restriction';
 import {addGlobalData} from './lib/middleware/add-global-data';
 import {healthcheck} from './lib/middleware/healthcheck';
-import {svrUtil} from './lib/common/svr-util';
+import {distiDirectUploadRouter} from './api/prof/disti-direct-upload/router';
 
 export default function () {
 
@@ -138,6 +130,7 @@ export default function () {
   app.use('/api/prof/report', reportRouter);
   app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
   app.use('/api/prof/upload', profUploadRouter);
+  app.use('/api/prof/disti-direct-upload', distiDirectUploadRouter);
 
   app.use(notFound());
   app.use(errorHandler({showStack: config.showStack}));

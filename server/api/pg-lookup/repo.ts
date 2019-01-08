@@ -26,6 +26,21 @@ export default class PgLookupRepo {
           `);
   }
 
+/*
+// this was taking too long to replace the dollar/mapping/dept upload reports with pg only solutions
+// i.e. getting submeasure.name from pg instead of mongo
+  getDollarUploadReport(params) {
+    return pgc.pgdb.query(`
+            select fiscal_month_id, sm.sub_measure_name, input_product_value, input_sales_value, 
+              input_entity_value, input_internal_be_value, input_scms_value, amount_value
+            from fpadfa.dfa_prof_input_amnt_upld up
+            left outer join fpadfa.dfa_sub_measure sm on up.sub_measure_key = sm.sub_measure_key
+            where fiscal_month_id = ${params.fiscalMonth} and up.sub_measure_key = ${params.submeasureKey};
+            `);
+
+  }
+*/
+
   getProductHierarchyReport() {
     return pgc.pgdb.query(`
             select 
@@ -67,15 +82,16 @@ export default class PgLookupRepo {
   }
   getSubmeasureGroupingReport() {
     return pgc.pgdb.query(`
-            select
+            select 
             sbm.sub_measure_name,
             group1.group_sub_measure_name,
             sbm.create_owner,
             sbm.create_datetimestamp,
             sbm.update_owner,
             sbm.update_datetimestamp
-            from fpadfa.dfa_sub_measure sbm,
-              (select a.grouped_by_smeasure_key as groupkey,
+            from 
+              fpadfa.dfa_sub_measure sbm,
+              (select distinct a.grouped_by_smeasure_key as groupkey,
                   b.sub_measure_name as group_sub_measure_name
                   from fpadfa.dfa_sub_measure a, fpadfa.dfa_sub_measure b
                   where 1=1
@@ -97,7 +113,8 @@ export default class PgLookupRepo {
             a.update_owner,
             a.update_datetimestamp
             from fpadfa.dfa_sub_measure a, fpadfa.dfa_open_period b
-            where b.fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')    
+            where b.fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period                            
+                                                    where module_id = 1 and open_flag = 'Y')    
             and a.twotier_flag = 'Y'
           `);
   }
@@ -109,7 +126,7 @@ export default class PgLookupRepo {
             node_type, 
             CASE
               WHEN sales_finance_hierarchy != null THEN sales_finance_hierarchy
-              ELSE 'Sales Fin hierarchy'
+              ELSE 'Sales Fin Hierarchy'
             end as sales_finance_hierarchy,
             node_code,
             fiscal_month_id,
@@ -117,8 +134,9 @@ export default class PgLookupRepo {
             create_datetimestamp,
             update_user,
             update_datetimestamp
-            from fpadfa.dfa_prof_disti_to_direct_map_upld
-            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period where open_flag = 'Y')
+            from fpadfa.dfa_prof_disti_to_direct_map_upld            
+            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period                               
+                                                      where module_id =1 and open_flag = 'Y')              
           `);
   }
 
@@ -156,7 +174,7 @@ export default class PgLookupRepo {
 
   getSalesSplitPercentageReport(fiscalMonth) {
     return pgc.pgdb.query(`
-            select 
+            select  
             account_code, 
             company_code, 
             sub_account_code,
@@ -290,52 +308,175 @@ export default class PgLookupRepo {
           `);
   }
 
-  getSubmeasureFlashCategories() {
-    return pgc.pgdb.query(`
+  getSubmeasureFlashCategories(req) {
+    // this must be called with a submeasureKey = 0 (new submeasure) or the submeasureKey
+    // if 0, then get the list of available values minus those taken already. If not 0, then get the value it's using added to the list of available
+    const sql = `
         select a.adj_type_id_name||' - '||a.adj_type_id as mrap_category_id, a.adj_type_id::integer
-        from
-        (
-        select 
-         ds.source_system_id source_system_id
-        ,ds.source_system_name source_system_name
-        ,ds.source_system_type_code source_system_type_code
-        ,adj.adj_type_id adj_type_id
-        ,adj.adj_type_id_name adj_type_id_name
-        from
-        fpadfa.dfa_data_sources ds
-        ,fpadfa.dfa_prof_source_adj_type_all adj
-        where 
-            ds.module_id=1
-        and ds.source_system_id=2 /*MRAP*/
-        and ds.source_system_id=adj.source_system_id) a
+                from
+                (             
+                select distinct 
+                                 ds.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,ad.adj_type_id adj_type_id, upper(ad.adj_type_id_name) adj_type_id_name
+                               from
+                                 fpadfa.dfa_measure ms
+                                ,fpadfa.dfa_sub_measure sm
+                                ,fpadfa.dfa_prof_source_adj_type_all ad right join
+                                  fpadfa.dfa_data_sources ds on ds.source_system_id = ad.source_system_id
+                   where
+                           ms.measure_id = sm.measure_id
+                    and sm.source_system_id = ds.source_system_id
+                    and ds.module_id=1
+                    and ms.measure_id=3
+                    and sm.source_system_id <> 4   
+                    and ds.status_flag = 'A'              
+                    except 
+                                select 
+                                 sm.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,adj.adj_type_id adj_type_id, UPPER(adj.adj_type_id_name) adj_type_id_name
+                               from 
+                                 fpadfa.dfa_sub_measure sm
+                               ,fpadfa.dfa_data_sources ds
+                               ,fpadfa.dfa_prof_source_adj_type_all adj
+                   where 
+                           sm.source_system_id=ds.source_system_id                                       
+                    and sm.source_system_id=adj.source_system_id                                         
+                    and sm.source_system_adj_type_id=adj.adj_type_id 
+                    and ds.module_id=1
+                   and sm.measure_id=3                                  
+                    and sm.source_system_id <> 4                                         
+                    and sm.status_flag='A'                                   
+            union
+                    select 
+                                 sm.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,adj.adj_type_id adj_type_id, UPPER(adj.adj_type_id_name) adj_type_id_name
+                               from 
+                                 fpadfa.dfa_sub_measure sm
+                               ,fpadfa.dfa_data_sources ds
+                               ,fpadfa.dfa_prof_source_adj_type_all adj
+                   where 
+                           sm.source_system_id=ds.source_system_id                                       
+                    and sm.source_system_id=adj.source_system_id                                         
+                    and sm.source_system_adj_type_id=adj.adj_type_id
+                   and ds.module_id=1
+                   and sm.measure_id=3                                   
+                    and sm.source_system_id <> 4                                         
+                    and sm.sub_measure_key = ${Number(req.query.submeasureKey)}
+--                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
+--                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
+            ) a
         order by a.adj_type_id_name||' - '||a.adj_type_id
-    `)
+    `;
+    return pgc.pgdb.query(sql)
       .then(resp => resp.rows);
   }
 
-  getSubmeasureAdjustmentTypes() {
-    return pgc.pgdb.query(`
+  getSubmeasureAdjustmentTypes(req) {
+    // this must be called with a submeasureKey = 0 (new submeasure) or the submeasureKey
+    // if 0, then get the list of available values minus those taken already. If not 0, then get the value it's using added to the list of available
+    const sql = `
         select a.adj_type_id_name||' - '||a.adj_type_id as rrr_category_id, a.adj_type_id::integer
-        from
-        (
-        select 
-         ds.source_system_id source_system_id
-        ,ds.source_system_name source_system_name
-        ,ds.source_system_type_code source_system_type_code
-        ,adj.adj_type_id adj_type_id
-        ,adj.adj_type_id_name adj_type_id_name
-        from
-        fpadfa.dfa_data_sources ds
-        ,fpadfa.dfa_prof_source_adj_type_all adj
-        where 
-            ds.module_id=1
-        and ds.source_system_id=1 /*RRR*/
-        and ds.source_system_id=adj.source_system_id) a
+                from
+                (             
+                select distinct 
+                                 ds.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,ad.adj_type_id adj_type_id, upper(ad.adj_type_id_name) adj_type_id_name
+                               from
+                                 fpadfa.dfa_measure ms
+                                ,fpadfa.dfa_sub_measure sm
+                                ,fpadfa.dfa_prof_source_adj_type_all ad right join
+                                  fpadfa.dfa_data_sources ds on ds.source_system_id = ad.source_system_id
+                   where
+                           ms.measure_id = sm.measure_id
+                    and sm.source_system_id = ds.source_system_id
+                    and ms.measure_id=1
+                    and sm.source_system_id <> 4   
+                    and ds.status_flag = 'A'              
+                    except 
+                                select 
+                                 sm.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,adj.adj_type_id adj_type_id, UPPER(adj.adj_type_id_name) adj_type_id_name
+                               from 
+                                 fpadfa.dfa_sub_measure sm
+                               ,fpadfa.dfa_data_sources ds
+                               ,fpadfa.dfa_prof_source_adj_type_all adj
+                   where 
+                           sm.source_system_id=ds.source_system_id                                       
+                    and sm.source_system_id=adj.source_system_id                                         
+                    and sm.source_system_adj_type_id=adj.adj_type_id                                         
+                    and sm.measure_id=1                                    
+                    and sm.source_system_id <> 4                                         
+                    and sm.status_flag='A'                                   
+            union
+                    select 
+                                 sm.source_system_id source_system_id, ds.source_system_name source_system_name
+                                ,adj.adj_type_id adj_type_id, UPPER(adj.adj_type_id_name) adj_type_id_name
+                               from 
+                                 fpadfa.dfa_sub_measure sm
+                               ,fpadfa.dfa_data_sources ds
+                               ,fpadfa.dfa_prof_source_adj_type_all adj
+                   where 
+                           sm.source_system_id=ds.source_system_id                                       
+                    and sm.source_system_id=adj.source_system_id                                         
+                    and sm.source_system_adj_type_id=adj.adj_type_id                                         
+                    and sm.measure_id=1                                    
+                    and sm.source_system_id <> 4                                         
+                            and sm.sub_measure_key = ${Number(req.query.submeasureKey)}
+        --                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
+        --                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
+            ) a
         order by a.adj_type_id_name||' - '||a.adj_type_id
-    `)
+    `;
+    return pgc.pgdb.query(sql)
       .then(resp => resp.rows);
   }
 
+  updateDistiUploadExtTheaterNameDistiSL3(fiscalMonth) {
+    return pgc.pgdb.query(`
+        update  fpadfa.dfa_prof_disti_to_direct_map_upld
+        set ext_theater_name = distimap.external_theater
+        from (select D2D.node_code as distinode
+        ,case dsh.dd_external_theater_name
+        when 'APJC' then 'APJC'
+        when 'Americas' then 'Americas'
+        when 'EMEA' then 'EMEA' end as external_theater
+        from  fpadfa.dfa_prof_disti_to_direct_map_upld D2D
+        ,fpacon.vw_fpa_sales_hierarchy dsh
+        where 1=1
+        and D2D.fiscal_month_id = ${fiscalMonth}
+        and D2D.node_type = 'Disti SL3'
+        and D2D.node_code = DSH.l3_sales_territory_name_code
+        group by 1,2) distimap
+        where 1=1
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.fiscal_month_id = ${fiscalMonth}
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.node_type='Disti SL3'
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.node_code = distimap.distinode
+    `);
+  }
+
+  updateDistiUploadExtTheaterNameDirectSL2(fiscalMonth) {
+    return pgc.pgdb.query(`
+        update  fpadfa.dfa_prof_disti_to_direct_map_upld
+        set ext_theater_name = distimap.external_theater
+        from (select D2D.node_code as distinode
+        ,case dsh.l1_sales_territory_descr
+        when 'APJC__' then 'APJC'
+        when 'Americas' then 'Americas'
+        when 'EMEAR-REGION' then 'EMEA'
+        when 'GLOBAL SERVICE PROVIDER' then 'Americas' end as external_theater
+        from  fpadfa.dfa_prof_disti_to_direct_map_upld D2D
+        ,fpacon.vw_fpa_sales_hierarchy dsh
+        where 1=1
+        and D2D.fiscal_month_id = ${fiscalMonth}
+        and D2D.node_type = 'Direct SL2'
+        and D2D.node_code = DSH.l2_sales_territory_name_code
+        group by 1,2) distimap
+        where 1=1
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.fiscal_month_id = ${fiscalMonth}
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.node_type='Direct SL2'
+        and fpadfa.dfa_prof_disti_to_direct_map_upld.node_code = distimap.distinode
+    `);
+  }
 
   checkForExistenceAndReturnValue(table, column, value, upper = true) {
     if (!value && value !== 0) {

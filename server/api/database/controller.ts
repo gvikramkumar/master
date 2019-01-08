@@ -19,6 +19,7 @@ import CorpAdjustmentsUploadController from '../prof/corp-adjustments-upload/con
 import {ApiDfaData} from '../../lib/middleware/add-global-data';
 import * as _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
+import DistiDirectUploadController from '../prof/disti-direct-upload/controller';
 
 @injectable()
 export default class DatabaseController {
@@ -37,6 +38,7 @@ export default class DatabaseController {
     private salesSplitUploadCtrl: SalesSplitUploadController,
     private alternateSl2UploadCtrl: AlternateSl2UploadController,
     private corpAdjustmentsUploadCtrl: CorpAdjustmentsUploadController,
+    private distiDirectUploadController: DistiDirectUploadController
     ) {
   }
 
@@ -103,6 +105,10 @@ export default class DatabaseController {
         if (syncMap.dfa_prof_sales_split_pctmap_upld) {
           promises.push(this.salesSplitUploadCtrl.mongoToPgSync('dfa_prof_sales_split_pctmap_upld', userId, log, elog,
             {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
+        }
+        if (syncMap.dfa_prof_disti_to_direct_map_upld) {
+          promises.push(this.distiDirectUploadController.mongoToPgSync('dfa_prof_disti_to_direct_map_upld', userId, log, elog,
+            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}, dfa));
         }
       })
       .then(() => {

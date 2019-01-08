@@ -40,13 +40,11 @@ export default class CorpAdjustmentsUploadUploadController extends UploadControl
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_iso_country', 'iso_country_name'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_descr'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code'),
-      this.repo.getMany({fiscalMonth: this.fiscalMonth})
     ])
       .then(results => {
         this.data.countryNames = results[0];
         this.data.salesTerritoryCodes = results[1];
         this.data.salesCoverageCodes = results[2];
-        this.data.corpAdjustmentsUploads = results[3];
       });
   }
 

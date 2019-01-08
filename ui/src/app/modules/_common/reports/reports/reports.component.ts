@@ -100,7 +100,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Corp_Adjustment_Report'
     },
     {
-      type: 'disty-to-direct', text: 'Disty to Direct Mapping', disabled: false,
+      type: 'disti-direct', text: 'Disty to Direct Mapping', disabled: false,
       filename: 'Disty_to_Direct_Mapping_Report'
     }
   ];

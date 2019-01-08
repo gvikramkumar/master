@@ -39,7 +39,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     {type: 'product-class-upload', text: 'Product Classification (SW/HW Mix)', disabled: false},
     {type: 'alternate-sl2-upload', text: 'Alternate SL2 Mapping', disabled: false},
     {type: 'corp-adjustments-upload', text: 'Corp Adjustments Mapping', disabled: false},
-    // {type: 'disti-direct-upload', text: 'Disty to Direct Mapping', disabled: false},
+    {type: 'disti-direct-upload', text: 'Disty to Direct Mapping', disabled: false},
   ];
   uploadType = this.uploadTypes[0];
 
