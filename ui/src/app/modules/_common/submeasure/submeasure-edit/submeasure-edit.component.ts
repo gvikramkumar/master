@@ -226,6 +226,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         }
         if (this.copyMode) {
           this.sm.approvedOnce = 'N';
+          delete this.sm.submeasureKey;
+          delete this.sm.submeasureId;
           delete this.sm.createdBy;
           delete this.sm.createdDate;
           // we'll reset these for each edit
