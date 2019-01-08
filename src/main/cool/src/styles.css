@@ -249,13 +249,13 @@ body.cui .alert__close:hover {
   font-size: 1em
 }
 
-.cui .container {
+/* .cui .container {
   min-width: 1024px;
   padding-right: 30px;
   padding-left: 30px;
   max-width: 100%;
   margin: auto;
-}
+} */
 
 .cui .container-fluid {
   max-width: 100%;

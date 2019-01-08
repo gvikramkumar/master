@@ -3,6 +3,7 @@
   bottom: 0;
   left: 45%;
   right: 0;
+  text-align:center;
 }
 .cui .avatar span.role {
   font-size: 75%;
@@ -370,4 +371,20 @@ span.icon-close {
 .cui .timeline__icon span {
   left: 4px;
   top: 3px;
+}
+
+.logo-cool-full {
+  display: none;
+}
+.logo-cool {
+  display: inline-block;
+}
+@media (min-width: 1200px) {
+  .logo-cool-full {
+    display: inline-block;
+  }
+  .logo-cool {
+    display: none;
+  }
+
 }
