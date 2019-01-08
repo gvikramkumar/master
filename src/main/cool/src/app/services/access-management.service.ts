@@ -9,8 +9,8 @@ import { UserService } from './user.service';
 
 @Injectable()
 export class AccessManagementService {
-    businessUnitUrl: string = environment.REST_API_SECONDARY_BUSINESS_UNIT_URL;
-    businessEntityUrl: string = environment.PDAF_API+'?columns=BE&distinct=true';
+    businessUnitUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_UNIT_URL;
+    businessEntityUrl: string = this.environmentService.PDAF_API+'?columns=BE&distinct=true';
 
     constructor(private httpClient: HttpClient, private environmentService: EnvironmentService, private userService:UserService) {}
 

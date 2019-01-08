@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule , HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AppRoutingModule } from './app-routing.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -57,6 +57,7 @@ import { OfferPhaseService } from './services/offer-phase.service';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { AuthGuard } from './auth/gaurds/auth-guard';
 import {AutoCompleteModule} from 'primeng/autocomplete';
+import { HttpInterceptorService } from './services/http-interceptor.service';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -111,6 +112,11 @@ export function app_init(configService: ConfigurationService,userService: UserSe
   ],
   providers: 
   [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true
+    },
     SharedService, 
     CreateOfferService, 
     SearchCollaboratorService, 

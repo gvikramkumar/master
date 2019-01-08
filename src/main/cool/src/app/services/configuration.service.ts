@@ -9,8 +9,8 @@ import { AccessManagementService } from './access-management.service';
 
 @Injectable()
 export class ConfigurationService {
-    urlGetUserInfo = environment.REST_API_URL;
-    urlGetCurrentUser = environment.REST_API_URL_GET_CURRENT_USER;
+    urlGetUserInfo = this.environmentService.REST_API_URL_GET_LDAP_INFO;
+    urlGetCurrentUser = this.environmentService.REST_API_URL_GET_CURRENT_USER;
     urlCheckAdminAccess = this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
     private _startupData: any;
     constructor(private httpClient: HttpClient, 
