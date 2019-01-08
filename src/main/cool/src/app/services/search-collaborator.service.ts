@@ -8,7 +8,7 @@ import { EnvironmentService } from '../../environments/environment.service';
 
 @Injectable()
 export class SearchCollaboratorService {
-  baseUrl: string = environment.REST_API_URL;
+  baseUrl: string = this.environmentService.REST_API_URL_GET_LDAP_INFO;
   addEditCollaborator;
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) {
     this.addEditCollaborator = {
