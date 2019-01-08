@@ -379,6 +379,11 @@ span.icon-close {
 .logo-cool {
   display: inline-block;
 }
+/* Hamburger Flyout */
+#flyoutmenu[_ngcontent-c5] ul[_ngcontent-c5] li.hover[_ngcontent-c5], #flyoutmenu[_ngcontent-c5] ul[_ngcontent-c5] li[_ngcontent-c5]:hover {
+  cursor: pointer;
+}
+
 
 @media (min-width: 1200px) {
   .logo-cool-full {

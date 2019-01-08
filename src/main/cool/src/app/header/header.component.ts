@@ -6,6 +6,7 @@ import { UserService } from '../services/user.service'
 import { SelectItem } from 'primeng/api';
 import { AccessManagementService } from '../services/access-management.service';
 import { ConfigurationService } from '../services/configuration.service';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -29,7 +30,7 @@ export class HeaderComponent implements OnInit {
   }
 
   constructor(private headerService: HeaderService, private router: Router,
-    private createOfferService: CreateOfferService, private userService: UserService, 
+    private createOfferService: CreateOfferService, private userService: UserService,
     private startupService:ConfigurationService) {
 
       this.headerService.getCurrentUser().subscribe((user: any) => {
@@ -37,7 +38,7 @@ export class HeaderComponent implements OnInit {
       this.headerService.getUserInfo(user).subscribe((data: any) => {
         this.userName = data[0].cn;
       });
-      
+
       this.hasAdminAccess = this.startupService.startupData['hasAdminAccess'];
 
     });
@@ -49,8 +50,8 @@ export class HeaderComponent implements OnInit {
       }
     });
 
-    
-   
+
+
 
     this.emailPrefOptions= [
       {label: 'Realtime', value: 'Realtime' },
