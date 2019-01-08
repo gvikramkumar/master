@@ -13,7 +13,7 @@ export class DashboardService {
  constructor(private http:HttpClient, private userService: UserService, private environmentService: EnvironmentService) { }
 
   getMyActionsList(): Observable<any> {
-    let url = this.environmentService.REST_API_ACTIONSTRACKER_URL+this.userService.getUserId()+'/true';
+    let url = this.environmentService.REST_API_ACTIONSTRACKER_URL+this.userService.getUserId()+'/false';
     return this.http.get(url,{ withCredentials: true });
   }
 

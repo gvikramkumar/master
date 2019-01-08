@@ -68,7 +68,7 @@ export class ActionsComponent implements OnInit {
     //   });
     // });
     // this.manualactionList = this.actionListData;
-    this.dashboardService.getMyOffersList().subscribe(data => {
+    this.actionsService.getActionsTracker().subscribe(data => {
       this.myOfferList = data;
 
       data.forEach(ele => {
