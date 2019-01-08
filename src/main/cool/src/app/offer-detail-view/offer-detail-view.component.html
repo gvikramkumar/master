@@ -151,49 +151,109 @@
                           {{offerOverviewDetailsList.ideate[3].subMilestone}}
                         </div>
                         <div [hidden]="offerOverviewDetailsList.ideate[3].status == 'Available'">
-                            <div class="offer-header card base-margin-top">
-                              <div class="row">
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">Who takes ownership of the asset(s)?</div>
-                                    <div>Customer- End Customer</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">What will be the offer services strategies?</div>
-                                    <div>SW minimum M&S</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">What medium will be leveraged for selling the offer?</div>
-                                    <div>Transactional</div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">In what way will the offer be priced?</div>
-                                    <div>Utility Pricing</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">What will be the offer Licensing type?</div>
-                                    <div>Subscription - Utility/Usage</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">Will Cisco host the product set-up?</div>
-                                    <div>Cloud</div>
-                                  </div>
-                                </div>
-                              </div>
+                          <div class="offer-header card base-margin-top">
+                            <div class="responsive-table">
+                              <table class="table table--nostripes table--highlight table--hover table--selectable">
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <h6>Offer Characteristics</h6>
+                                    <th>SubGroup</th>
+                                    <th>Characteristics</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let offerCharacteristics of offerCharacteristicsList">
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ offerCharacteristics.subgroup }}</td>
+                                    <td>{{ offerCharacteristics.characteristics }}</td>
+                                  </tr>
+                                </tbody>
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <h6>Packaging</h6>
+                                    <th>SubGroup</th>
+                                    <th>Characteristics</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let packaging of packagingList">
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ packaging.subgroup }}</td>
+                                    <td>{{ packaging.characteristics }}</td>
+                                  </tr>
+                                </tbody>
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <h6>Support</h6>
+                                    <th>SubGroup</th>
+                                    <th>Characteristics</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let support of supportList">
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ support.subgroup }}</td>
+                                    <td>{{ support.characteristics }}</td>
+                                  </tr>
+                                </tbody>
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <h6>Pricing</h6>
+                                    <th>SubGroup</th>
+                                    <th>Characteristics</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let pricing of pricingList">
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ pricing.subgroup }}</td>
+                                    <td>{{ pricing.characteristics }}</td>
+                                  </tr>
+                                </tbody>
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <h6>Billing & Comp</h6>
+                                    <th>SubGroup</th>
+                                    <th>Characteristics</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let billingAndComp of billingAndCompList">
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ billingAndComp.subgroup }}</td>
+                                    <td>{{ billingAndComp.characteristics }}</td>
+                                  </tr>
+                                </tbody>
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <h6>Program</h6>
+                                    <th>SubGroup</th>
+                                    <th>Characteristics</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let program of programList">
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ program.subgroup }}</td>
+                                    <td>{{ program.characteristics }}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
                             </div>
                           </div>
+                        </div>
                       </div>
                     </div>
                   </div>

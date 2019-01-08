@@ -3,6 +3,7 @@ import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StakeHolder } from '../models/stakeholder';
 import {Location} from '@angular/common';
+import { OfferCharacteristics } from '../models/OfferCharacteristics';
 
 
 @Component({
@@ -17,6 +18,12 @@ export class OfferDetailViewComponent implements OnInit {
   offerOwner;
   offerCoOwnerList: StakeHolder[] = [];
   offerStakeHolderList: StakeHolder[] = [];
+  offerCharacteristicsList: OfferCharacteristics[] = [];
+  packagingList: OfferCharacteristics[] = [];
+  supportList: OfferCharacteristics[] = [];
+  pricingList: OfferCharacteristics[] = [];
+  billingAndCompList: OfferCharacteristics[] = [];
+  programList: OfferCharacteristics[] = [];
   stakeName;
   email;
   functionalRole;
@@ -90,6 +97,50 @@ export class OfferDetailViewComponent implements OnInit {
             this.offerCoOwnerList.push(stakeholdersInfo);
           } else {
             this.offerStakeHolderList.push(stakeholdersInfo);
+          }
+        });
+        let offerCharacteristics = null;
+        let packaging = null;
+        let support = null;
+        let pricing = null;
+        let billingAndComp = null;
+        let program = null;
+        this.offerViewData.selectedCharacteristics.forEach(element => {
+          offerCharacteristics = new OfferCharacteristics();
+          offerCharacteristics.subgroup = element.subgroup;
+          offerCharacteristics.characteristics = element.characteristics;
+          if (element.group === 'Offer Characteristics') {
+            this.offerCharacteristicsList.push(offerCharacteristics);
+          }
+          packaging = new OfferCharacteristics();
+          packaging.subgroup = element.subgroup;
+          packaging.characteristics = element.characteristics;
+          if (element.group === 'Packaging') {
+            this.packagingList.push(packaging);
+          }
+          support = new OfferCharacteristics();
+          support.subgroup = element.subgroup;
+          support.characteristics = element.characteristics;
+          if (element.group === 'Support') {
+            this.supportList.push(support);
+          }
+          pricing = new OfferCharacteristics();
+          pricing.subgroup = element.subgroup;
+          pricing.characteristics = element.characteristics;
+          if (element.group === 'Pricing') {
+            this.pricingList.push(pricing);
+          }
+          billingAndComp = new OfferCharacteristics();
+          billingAndComp.subgroup = element.subgroup;
+          billingAndComp.characteristics = element.characteristics;
+          if (element.group === 'Billing & Comp') {
+            this.billingAndCompList.push(billingAndComp);
+          }
+          program = new OfferCharacteristics();
+          program.subgroup = element.subgroup;
+          program.characteristics = element.characteristics;
+          if (element.group === 'Program') {
+            this.programList.push(program);
           }
         });
       });
