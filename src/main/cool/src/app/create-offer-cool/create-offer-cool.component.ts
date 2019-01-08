@@ -7,8 +7,11 @@ import { CreateOffer } from './create-offer';
 import { SelectItem } from 'primeng/api';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { UserService } from '../services/user.service';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 import { Status } from './status';
+import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import * as moment from 'moment';
+import { getUrlScheme, createOfflineCompileUrlResolver } from '@angular/compiler';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -45,13 +48,41 @@ export class CreateOfferCoolComponent implements OnInit {
   designReviewDateValue: string;
   readinessReviewDateValue: string;
   expectedLaunchDateValue: string;
-  caseId:string;
+  caseId: string;
   userSelectedAllUnits;
 
   constructor(private createOfferService: CreateOfferService,
+    private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private _location: Location) {
+    this.activatedRoute.params.subscribe(params => {
+      this.offerId = params['id'];
+      console.log("offerId", this.offerId);
+      if (this.offerId) {
+        this.offerDetailViewService.offerDetailView(this.offerId).subscribe(offerDetailRes => {
+          console.log("offerDetailView", offerDetailRes);
+          this.caseId = offerDetailRes.caseId;
+          this.offerNameValue = offerDetailRes.offerName;
+          this.offerDescValue = offerDetailRes.offerDesc;
+          this.primaryBusinessUnitsValue = offerDetailRes.primaryBUList;
+          this.getPrimaryBusinessEntityPromise(offerDetailRes.primaryBUList)
+            .then(() => {
+              this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList;
+            })
+
+          this.secondaryBusinessUnitsValue = offerDetailRes.secondaryBUList;
+          this.getSecondaryBusinessEntityPromise(offerDetailRes.secondaryBUList)
+            .then(() => {
+              this.secondaryBusinessEntitiesValue = offerDetailRes.secondaryBEList;
+            })
+          this.strategyReviewDateValue = moment(offerDetailRes.strategyReviewDate).format('MM/DD/YYYY');
+          this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
+          this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
+          this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
+        })
+      }
+    });
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       this.primaryBusinessUnitList = <any>data;
@@ -83,37 +114,49 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getSecondaryBusinessEntity(event) {
-    this.createOfferService.getSecondaryBusinessEntity(event.toString())
-      .subscribe(data => {
-        this.secondaryBusinessEntityList = <any>data;
-        const secondaryBeArry = [];
-        this.secondaryBusinessEntityList.forEach(element => {
-          secondaryBeArry.push({ label: element.BE, value: element.BE });
+    this.getSecondaryBusinessEntityPromise(event);
+  }
+  getSecondaryBusinessEntityPromise(event) {
+    return new Promise((resolve, reject) => {
+      this.createOfferService.getSecondaryBusinessEntity(event.toString())
+        .subscribe(data => {
+          this.secondaryBusinessEntityList = <any>data;
+          const secondaryBeArry = [];
+          this.secondaryBusinessEntityList.forEach(element => {
+            secondaryBeArry.push({ label: element.BE, value: element.BE });
+          });
+          this.secondaryBusinessEntities = this.removeDuplicates(secondaryBeArry, 'label');
+          resolve();
         });
-        this.secondaryBusinessEntities = this.removeDuplicates(secondaryBeArry, 'label');
-      });
+    });
   }
 
   getPrimaryBusinessEntity(event) {
-    if( event.toString() === 'All') {
+    if (event.toString() === 'All') {
       this.userSelectedAllUnits = true;
     }
-    this.createOfferService.getPrimaryBusinessEntity(event.toString())
-      .subscribe(data => {
-        const primaryBeArry = [];
-        // When primary business unit is selected as 'All'
-        // then entities are displayed as 'all
-        if (data.length === 0 && this.userSelectedAllUnits) {
-          primaryBeArry.push({ label: 'All', value: 'All' });
-        }
+    this.getPrimaryBusinessEntityPromise(event);
 
-        data.forEach(element => {
-          primaryBeArry.push({ label: element.BE, value: element.BE });
-        });
-        this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
-      });
   }
+  getPrimaryBusinessEntityPromise(event) {
+    return new Promise((resolve, reject) => {
+      this.createOfferService.getPrimaryBusinessEntity(event.toString())
+        .subscribe(data => {
+          const primaryBeArry = [];
+          // When primary business unit is selected as 'All'
+          // then entities are displayed as 'all
+          if (data.length === 0 && this.userSelectedAllUnits) {
+            primaryBeArry.push({ label: 'All', value: 'All' });
+          }
 
+          data.forEach(element => {
+            primaryBeArry.push({ label: element.BE, value: element.BE });
+          });
+          this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
+          resolve();
+        });
+    });
+  }
   mModelAssesment() {
     this.router.navigate(['/mmassesment', this.offerId]);
   }
@@ -127,18 +170,19 @@ export class CreateOfferCoolComponent implements OnInit {
 
   goBack() {
     this._location.back();
+   
   }
 
-  createOffer() {
+  proceedToOfferBuilder() {
     const loggedInUserId = '';
     const offerOwner = '';
     const offerCreatedBy = '';
 
     // Set the status for offer creation
-    const status =  new Status();
+    const status = new Status();
     status.offerPhase = 'PreLaunch';
     status.offerMilestone = 'Launch In Progress';
-    status.phaseMilestone =  'Ideate';
+    status.phaseMilestone = 'Ideate';
     status.subMilestone = 'Offer Creation';
 
     const offerCreationDate = new Date().toDateString();
@@ -158,7 +202,20 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreatedBy,
       offerCreationDate,
       status);
-      console.log(createoffer);
+    console.log(createoffer);
+    if (!this.offerId) {
+      console.log('creating new offer')
+      this.createOffer(createoffer);
+    }
+    else {
+      console.log('updating offer')
+      this.updateOffer(createoffer);
+    }
+
+  }
+
+  createOffer(createoffer) {
+
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.offerId = data.offerId;
       this.caseId = data.caseId;
@@ -167,5 +224,18 @@ export class CreateOfferCoolComponent implements OnInit {
       (err) => {
         console.log(err);
       });
+  }
+  updateOffer(createoffer) {
+    createoffer.offerId = this.offerId;
+    createoffer.caseId = this.caseId;
+    this.createOfferService.updateOffer(createoffer).subscribe((data) => {
+      // this.offerId = this.offerId;
+      // this.caseId = data.caseId;
+      this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
+    },
+      (err) => {
+        console.log(err);
+      });
+
   }
 }
