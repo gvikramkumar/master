@@ -39,21 +39,18 @@ export class MmAssesmentComponent implements OnInit {
   currentMMModel:string = null;
   currentPrimaryBE:any;
   userName;
-
   constructor(private router: Router,
     private sharedService: SharedService,
     private createOfferService: CreateOfferService,
     private activatedRoute: ActivatedRoute,
     private MonetizationModelService: MonetizationModelService,
     private offerPhaseService: OfferPhaseService,
-    private configService: ConfigurationService
   ) {
     this.activatedRoute.params.subscribe(params => {
     
       this.currentOfferId = params['id'];
       console.log("param ::::", params);
       this.caseId = params['id2'];
-      
     });
 
   }
@@ -103,6 +100,7 @@ export class MmAssesmentComponent implements OnInit {
       if (this.offerBuilderdata['secondaryBUList'] != null) {
         this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
       }
+     
     })
 
   }
@@ -335,7 +333,7 @@ export class MmAssesmentComponent implements OnInit {
           if (res != null) {
             keyUsers = res;
           }
-
+          
           // Build data for owner
           if (this.stakeData['Owner'] == null) {
             this.stakeData['Owner'] = [];
@@ -343,7 +341,7 @@ export class MmAssesmentComponent implements OnInit {
 
           this.stakeData['Owner'].push(
             {
-              userName: this.configService.getUserName(),
+              userName: this.offerBuilderdata['offerOwner'],
               emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
               _id: this.offerBuilderdata['offerOwner'],
               userMappings: [{
@@ -374,6 +372,7 @@ export class MmAssesmentComponent implements OnInit {
         this.activeTabIndex += 1;
       }
     }
+
   }
 
   updateStakeData(data) {

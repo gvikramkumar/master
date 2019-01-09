@@ -26,6 +26,7 @@ export class RightPanelComponent implements OnInit {
   @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
   @Output() updateStakeData = new EventEmitter<string>();
+  @Input() ownerId:any;
   backdropCustom: Boolean = false;
   proceedFlag: boolean;
   subscription: Subscription;
@@ -50,7 +51,7 @@ export class RightPanelComponent implements OnInit {
   mileStoneStatus:any[]= [];
   phaseProcessingCompleted = false;
   offerName;
-
+  alreayAddedStakeHolders:any[]=[];
   ddFunction = 'Select Function';
   flagFunction = false;
 
@@ -157,16 +158,15 @@ export class RightPanelComponent implements OnInit {
     this.sharedService.getBusinessEntity().subscribe(data => {
       console.log(data);
       let businessEntities = <any>data;
-      const beArry = [];
+      let beArry = [];
       businessEntities.forEach(element => {
-        beArry.push({ label: element.BE, value: element.BE });
+        if (element.BE !== null) {
+          beArry.push(element.BE);
+        }
       });
-      businessEntities = this.removeDuplicates(beArry, 'label');
-      this.entityList = businessEntities;
+      this.entityList = beArry;
       console.log(this.entityList);
     });
-
- 
 
     this.addEditCollaboratorsForm = new FormGroup({
       name: new FormControl(null, Validators.required),
@@ -203,12 +203,6 @@ export class RightPanelComponent implements OnInit {
         }
       })
     }
-  }
-
-  removeDuplicates(myArr, prop) {
-    return myArr.filter((obj, pos, arr) => {
-      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-    });
   }
 
   processCurrentPhaseInfo(phaseInfo) {
@@ -292,6 +286,7 @@ export class RightPanelComponent implements OnInit {
       }];
     }
 
+    
     if ((businessEntity !== undefined && businessEntity != null) &&
       (functionalRole !== undefined && functionalRole != null)) {
       payLoad['userMappings'] = [{
@@ -333,7 +328,7 @@ export class RightPanelComponent implements OnInit {
       return [];
     }
   }
-  alreayAddedStakeHolders:any[]=[];
+
   addToStakeData(res) {
     console.log(res);
     let keyUsers = res['stakeholders'];
@@ -341,9 +336,8 @@ export class RightPanelComponent implements OnInit {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
-
       if (this.alreayAddedStakeHolders.findIndex(k => k==user['_id']) == -1) {
-        console.log(user['userName']);
+        console.log(user['_id']);
         this.stakeData[user['offerRole']].push(
           { 
             userName: user['userName'], 
