@@ -396,6 +396,15 @@ export class StakeholderFullComponent implements OnInit {
     return initials;
   }
 
+  /**
+   * Delete Stake Holders when user selected check boxes
+   */
+  delteSelectedStakeHolders() {
+    this.selectedSh.forEach(shs => {
+      this.deleteStakeHolder(shs._id);
+    });
+  }
+
   deleteStakeHolder(stakeHolderId) {
     console.log(stakeHolderId);
     this.Stakeholders.splice(this.Stakeholders.findIndex(matchesEl), 1);
