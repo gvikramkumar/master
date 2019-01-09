@@ -13,6 +13,7 @@ import { StakeHolderDTO } from '../models/stakeholderdto';
 import { Collaborators } from '../models/collaborator';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
+import { SharedService } from '../shared-service.service';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -25,6 +26,7 @@ export class RightPanelComponent implements OnInit {
   @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
   @Output() updateStakeData = new EventEmitter<string>();
+  @Input() ownerId:any;
   backdropCustom: Boolean = false;
   proceedFlag: boolean;
   subscription: Subscription;
@@ -49,7 +51,7 @@ export class RightPanelComponent implements OnInit {
   mileStoneStatus:any[]= [];
   phaseProcessingCompleted = false;
   offerName;
-
+  alreayAddedStakeHolders:any[]=[];
   ddFunction = 'Select Function';
   flagFunction = false;
 
@@ -112,7 +114,8 @@ export class RightPanelComponent implements OnInit {
     private createOfferService: CreateOfferService,
     private searchCollaboratorService: SearchCollaboratorService,
     private offerPhaseService: OfferPhaseService,
-    private monetizationModelService: MonetizationModelService) {
+    private monetizationModelService: MonetizationModelService,
+    private sharedService: SharedService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -146,11 +149,24 @@ export class RightPanelComponent implements OnInit {
         this.processCurrentPhaseInfo(data);
     });
 
-    this.createOfferService.getPrimaryBusinessUnits()
-      .subscribe(data => {
-        this.entityList = ['Security', 'IOT', 'Data Center', 'Enterprise'];
-        this.funcionalRoleList = ['BUPM','SOE'];
+    // Get Functional Roles
+    this.sharedService.getFunctionalRoles().subscribe(data => {
+      this.funcionalRoleList = data;
+    });
+
+    // Get Business Entities
+    this.sharedService.getBusinessEntity().subscribe(data => {
+      console.log(data);
+      let businessEntities = <any>data;
+      let beArry = [];
+      businessEntities.forEach(element => {
+        if (element.BE !== null) {
+          beArry.push(element.BE);
+        }
       });
+      this.entityList = beArry;
+      console.log(this.entityList);
+    });
 
     this.addEditCollaboratorsForm = new FormGroup({
       name: new FormControl(null, Validators.required),
@@ -270,6 +286,7 @@ export class RightPanelComponent implements OnInit {
       }];
     }
 
+    
     if ((businessEntity !== undefined && businessEntity != null) &&
       (functionalRole !== undefined && functionalRole != null)) {
       payLoad['userMappings'] = [{
@@ -311,7 +328,7 @@ export class RightPanelComponent implements OnInit {
       return [];
     }
   }
-  alreayAddedStakeHolders:any[]=[];
+
   addToStakeData(res) {
     console.log(res);
     let keyUsers = res['stakeholders'];
@@ -319,9 +336,8 @@ export class RightPanelComponent implements OnInit {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
-
       if (this.alreayAddedStakeHolders.findIndex(k => k==user['_id']) == -1) {
-        console.log(user['userName']);
+        console.log(user['_id']);
         this.stakeData[user['offerRole']].push(
           { 
             userName: user['userName'], 

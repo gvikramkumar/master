@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { CreateOfferService } from '../services/create-offer.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import {OfferPhaseService} from '../services/offer-phase.service';
+import { ConfigurationService } from '../services/configuration.service';
 
 
 
@@ -38,20 +39,18 @@ export class MmAssesmentComponent implements OnInit {
   currentMMModel:string = null;
   currentPrimaryBE:any;
   userName;
-
   constructor(private router: Router,
     private sharedService: SharedService,
     private createOfferService: CreateOfferService,
     private activatedRoute: ActivatedRoute,
     private MonetizationModelService: MonetizationModelService,
-    private offerPhaseService: OfferPhaseService
+    private offerPhaseService: OfferPhaseService,
   ) {
     this.activatedRoute.params.subscribe(params => {
     
       this.currentOfferId = params['id'];
       console.log("param ::::", params);
       this.caseId = params['id2'];
-      
     });
 
   }
@@ -101,6 +100,7 @@ export class MmAssesmentComponent implements OnInit {
       if (this.offerBuilderdata['secondaryBUList'] != null) {
         this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
       }
+     
     })
 
   }
@@ -333,7 +333,7 @@ export class MmAssesmentComponent implements OnInit {
           if (res != null) {
             keyUsers = res;
           }
-
+          
           // Build data for owner
           if (this.stakeData['Owner'] == null) {
             this.stakeData['Owner'] = [];
@@ -372,6 +372,7 @@ export class MmAssesmentComponent implements OnInit {
         this.activeTabIndex += 1;
       }
     }
+
   }
 
   updateStakeData(data) {
