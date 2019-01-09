@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import {Location} from '@angular/common';
+import { StakeholderfullService } from '../services/stakeholderfull.service';
 
 @Component({
   selector: 'app-strategy-review',
@@ -14,6 +15,7 @@ export class StrategyReviewComponent implements OnInit {
   currentOfferId;
   caseId;
   bviewDeckData: any[];
+  
   choiceSelected;
   groups = {};
   groupKeys = [];
@@ -21,10 +23,11 @@ export class StrategyReviewComponent implements OnInit {
   groupData = [];
   message = {};
   stakeData = {};
+  newDataArray =[];
   offerBuilderdata = {};
   minDate: Date;
 
-  
+  public data =[];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   formTitle: any = ' ';
   totalApprovalsCount: any = 0;
@@ -68,8 +71,11 @@ export class StrategyReviewComponent implements OnInit {
       comment : 'Comment'
     }
   ];
+  firstData: Object;
+  stakeHolderInfo: any;
 
   constructor(private router: Router,
+    private stakeholderfullService:StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute,
     private _location: Location) {
@@ -80,6 +86,7 @@ export class StrategyReviewComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.data = [];
     this.message = {
       contentHead: 'Great Work!',
       content: 'Strategy review message.',
@@ -100,6 +107,39 @@ export class StrategyReviewComponent implements OnInit {
       }
     });
 
+    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+    
+      this.firstData = data;
+      console.log("firstData",data);
+      this.data = this.firstData['stakeholders'];
+      this.stakeHolderInfo = {};
+     // this.processStakeHolderData(this.data);
+      console.log("data",this.data[0].offerRole);
+      for(let i=0;i<= this.data.length -1;i++){
+        if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
+          this.stakeHolderInfo[this.data[i]['offerRole']] = [];
+        }
+        
+        this.stakeHolderInfo[this.data[i]['offerRole']].push(
+          {
+            userName: this.data[i]['name'],
+            emailId: this.data[i]['_id'] + '@cisco.com',
+            _id: this.data[i]['_id'],
+            businessEntity: this.data[i]['businessEntity'],
+            functionalRole: this.data[i]['functionalRole'],
+            offerRole: this.data[i]['offerRole'],
+            stakeholderDefaults:this.data[i]['stakeholderDefaults']
+           
+          });
+      
+      }
+      this.stakeData=this.stakeHolderInfo; 
+      console.log("this stakedate",this.stakeData);
+      console.log("data",typeof(this.newDataArray));
+
+     
+    });
+    
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
     this.monetizationModelService.getAttributes().subscribe(data => {
@@ -117,6 +157,8 @@ export class StrategyReviewComponent implements OnInit {
       });
     });
 
+    
+
     this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
       this.offerBuilderdata = data;
       this.offerBuilderdata['BEList'] = [];
@@ -133,6 +175,32 @@ export class StrategyReviewComponent implements OnInit {
       if (this.offerBuilderdata['secondaryBUList'] != null) {
         this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
       }
+    });
+  }
+
+  
+  processStakeHolderData(stakeHolderData) {
+
+    stakeHolderData.forEach(stakeHolder => {
+
+      if (this.stakeHolderInfo[stakeHolder['offerRole']] == null) {
+        this.stakeHolderInfo[stakeHolder['offerRole']] = [];
+      }
+      
+      this.stakeHolderInfo[stakeHolder['offerRole']].push(
+        {
+          name: stakeHolder['name'],
+          email: stakeHolder['_id'] + '@cisco.com',
+          _id: stakeHolder['_id'],
+          businessEntity: stakeHolder['businessEntity'],
+          functionalRole: stakeHolder['functionalRole'],
+          offerRole: stakeHolder['offerRole'],
+          stakeholderDefaults: stakeHolder['stakeholderDefaults']
+         
+        });
+
+        this.stakeData=this.stakeHolderInfo; 
+        console.log("this stakedate",this.stakeData);
     });
   }
 
@@ -156,7 +224,9 @@ export class StrategyReviewComponent implements OnInit {
 
 
   goBack() {
-    this._location.back();
+   // this._location.back();
+   // this.router.navigate(['/stakeholderFull',this.currentOfferId]);
+   this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
   }
 
 
