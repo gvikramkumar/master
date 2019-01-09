@@ -79,7 +79,8 @@ export class EnvironmentService {
                 break;
             case 'development':
                 this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
-                this.basepdafapi = 'https://pdaf-api.cisco.com/pdafapp';
+                // this.basepdafapi = 'https://pdaf-api.cisco.com/pdafapp';
+                this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
                 break;
             default:
                 this.baseapi = '/api';
