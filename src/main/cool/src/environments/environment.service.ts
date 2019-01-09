@@ -41,7 +41,7 @@ export class EnvironmentService {
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
     
     basepdafapi: string = '';
-    basepdafdevapi:string ='';F
+    basepdafdevapi:string ='';
 
     REST_API_URL_GET_CURRENT_USER;
     REST_API_URL_GET_LDAP_INFO;
@@ -93,8 +93,8 @@ export class EnvironmentService {
                  * Please remove your user ID and Password before checkin
                  * this will be only used for local development
                  */
-                this.USER_ID = 'snawathe';
-                this.PASSWORD = 'Nov@2018';
+                this.USER_ID = '';
+                this.PASSWORD = '';
         }
 
 
