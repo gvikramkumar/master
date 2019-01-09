@@ -90,10 +90,11 @@ export class OfferDetailViewComponent implements OnInit {
         this.offerViewData.stakeholders.forEach(element => {
           stakeholdersInfo = new StakeHolder();
           stakeholdersInfo._id = element._id;
+          stakeholdersInfo.name = element.name;
           stakeholdersInfo.offerRole = element.offerRole;
           stakeholdersInfo.email = element.email;
           stakeholdersInfo.functionalRole = element.functionalRole;
-          if (element.offerRole === 'coowner') {
+          if (element.offerRole === 'Co-Owner') {
             this.offerCoOwnerList.push(stakeholdersInfo);
           } else {
             this.offerStakeHolderList.push(stakeholdersInfo);
@@ -144,6 +145,19 @@ export class OfferDetailViewComponent implements OnInit {
           }
         });
       });
+  }
+
+  getInitialChar(name) {
+    if (name == null) {
+      return '';
+    }
+    const names = name.split(' ');
+    let initials = '';
+    initials += names[0].charAt(0).toUpperCase();
+    if (names.length > 1) {
+      initials += names[1].charAt(0).toUpperCase();
+    }
+    return initials;
   }
 
   goBack() {
