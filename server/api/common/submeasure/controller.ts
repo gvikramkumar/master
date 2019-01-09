@@ -158,7 +158,7 @@ export default class SubmeasureController extends ApprovalController {
 
   postApproveStep(sm, req) {
     // remove product class uploads for this submeasure and add new ones
-    if (sm.categoryType === 'MM') {
+    if (sm.categoryType === 'Manual Mix') {
       return this.productClassUploadRepo.removeMany({submeasureName: sm.name})
         .then(() => {
           return this.productClassUploadRepo.addManyTransaction([

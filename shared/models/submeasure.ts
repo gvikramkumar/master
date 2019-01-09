@@ -11,7 +11,7 @@ export class Submeasure {
   endFiscalMonth: string;
   processingTime: string;
   pnlnodeGrouping: string;
-  categoryType = 'HW';
+  categoryType: string;
   inputFilterLevel = new InputFilterLevel();
   manualMapping = new InputFilterLevel();
   reportingLevels: string[] = [undefined, undefined, undefined];

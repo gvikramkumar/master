@@ -29,7 +29,7 @@
 
         <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes"
                     label="Submeasure Category Type" empty="true" optionsKey="name" optionsValue="value" [required]="true"></cui-select>
-        <div *ngIf="sm.categoryType === 'MM'" fxLayout="row" fxLayoutAlign="start start">
+        <div *ngIf="sm.categoryType === 'Manual Mix'" fxLayout="row" fxLayoutAlign="start start">
           <div class="form-group-text form-group-inline-30">Manual Mix HW/SW:</div>
           <fin-input name="manualMixHw" label="HW" [(ngModel)]="sm.manualMixHw" [required]="true" [inline]="true" class="hwsw-inputs"></fin-input>
           <fin-input name="manualMixSw" label="SW" [(ngModel)]="sm.manualMixSw" [required]="true" [inline]="true" class="hwsw-inputs"></fin-input>

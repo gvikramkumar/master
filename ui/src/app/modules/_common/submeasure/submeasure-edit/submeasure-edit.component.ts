@@ -40,7 +40,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   copyMode = false;
   submeasureNames: string[] = [];
   sm = new Submeasure();
-  orgSubmeasure = _.cloneDeep(this.sm);
+  orgSubmeasure: Submeasure;
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
   groupingSubmeasures: GroupingSubmeasure[] = [];
@@ -86,7 +86,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     },
     {
       name: 'Manual Mix',
-      value: 'MM'
+      value: 'Manual Mix'
     }
   ];
   ibe_items = [
@@ -233,16 +233,15 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           // we'll reset these for each edit
           this.sm.manualMixHw = undefined;
           this.sm.manualMixSw = undefined;
-          this.orgSubmeasure = _.cloneDeep(this.sm);
         }
         if (this.editMode) {
           if (_.includes(['A', 'I'], this.sm.status)) {
             delete this.sm.createdBy;
             delete this.sm.createdDate;
           }
-          this.orgSubmeasure = _.cloneDeep(this.sm);
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
         }
+        this.orgSubmeasure = _.cloneDeep(this.sm);
         this.init();
       })
       .then(() => {
@@ -338,7 +337,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.disableCategories = false;
     } else {
       this.disableCategories = true;
-      this.sm.categoryType = 'HW';
+      this.sm.categoryType = this.sm.categoryType || 'HW';
     }
 
     this.submeasureService.callMethod('getGroupingSubmeasures', {measureId: this.sm.measureId})
@@ -714,7 +713,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.sm.startFiscalMonth) {
       this.errs.push(`No "Effective Month" value`);
     }
-    if (this.sm.categoryType === 'MM') {
+    if (this.sm.categoryType === 'Manual Mix') {
       const hw = Number(this.sm.manualMixHw);
       const sw = Number(this.sm.manualMixSw);
       if (isNaN(hw)) {
