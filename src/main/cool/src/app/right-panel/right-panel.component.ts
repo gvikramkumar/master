@@ -26,7 +26,6 @@ export class RightPanelComponent implements OnInit {
   @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
   @Output() updateStakeData = new EventEmitter<string>();
-  @Input() ownerId:any;
   backdropCustom: Boolean = false;
   proceedFlag: boolean;
   subscription: Subscription;
@@ -54,7 +53,8 @@ export class RightPanelComponent implements OnInit {
   alreayAddedStakeHolders:any[]=[];
   ddFunction = 'Select Function';
   flagFunction = false;
-
+  private eventsSubscription: any;
+  @Input() events: Observable<string>;
   ddOwner1 = 'Select Owner';
   flagOwner1 = false;
 
@@ -203,6 +203,21 @@ export class RightPanelComponent implements OnInit {
         }
       })
     }
+
+    this.eventsSubscription = this.events.subscribe((data) => this.storeOwnerId(data))
+  }
+
+  /**
+   * Method to store offer owner id in an aray
+   * @param data offer Owner Id
+   */
+  storeOwnerId(data){
+    this.alreayAddedStakeHolders.push(data);
+  }
+
+  ngOnDestroy() {
+    if(this.eventsSubscription)
+    this.eventsSubscription.unsubscribe()
   }
 
   processCurrentPhaseInfo(phaseInfo) {

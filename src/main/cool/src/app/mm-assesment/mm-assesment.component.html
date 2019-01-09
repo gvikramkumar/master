@@ -175,6 +175,7 @@
           [portfolioFlag]="setFlag"
           [stakeData]="stakeData"
           (updateStakeData)="updateStakeData($event)"
+          [events]="eventsSubject.asObservable()"
         ></app-right-panel>
       </div>
     </div>
