@@ -95,10 +95,10 @@ export class MenuBarComponent implements OnInit {
     }
 
     showOppupFunc(ptype) {
-        if (this.currentMMModel != null) {
+        
             this.showPopup = true;
             this.popupType = ptype;
-        }
+        
     }
 
     closePopup(message) {
