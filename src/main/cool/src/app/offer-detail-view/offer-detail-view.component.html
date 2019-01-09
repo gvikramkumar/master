@@ -46,109 +46,165 @@
                         <span [ngClass]="(offerOverviewDetailsList.ideate[1].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.ideate[1].subMilestone}}
                       </div>
-                      <div [hidden]="offerOverviewDetailsList.ideate[1].status == 'Available'">
+                      <div [hidden]="offerOverviewDetailsList.ideate[1].status == 'Available'">                      
                         <div class="offer-header card base-margin-top">
-                          <div class="responsive-table">
-                            <table class="table table--nostripes table--highlight table--hover table--selectable">
-                              <thead>
-                                <tr>
-                                  <th></th>
-                                  <h6>Offer Characteristics</h6>
-                                  <th>SubGroup</th>
-                                  <th>Characteristics</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let offerCharacteristics of offerCharacteristicsList">
-                                  <td></td>
-                                  <td></td>
-                                  <td>{{ offerCharacteristics.subgroup }}</td>
-                                  <td>{{ offerCharacteristics.characteristics }}</td>
-                                </tr>
-                              </tbody>
-                              <thead>
-                                <tr>
-                                  <th></th>
-                                  <h6>Packaging</h6>
-                                  <th>SubGroup</th>
-                                  <th>Characteristics</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let packaging of packagingList">
-                                  <td></td>
-                                  <td></td>
-                                  <td>{{ packaging.subgroup }}</td>
-                                  <td>{{ packaging.characteristics }}</td>
-                                </tr>
-                              </tbody>
-                              <thead>
-                                <tr>
-                                  <th></th>
-                                  <h6>Support</h6>
-                                  <th>SubGroup</th>
-                                  <th>Characteristics</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let support of supportList">
-                                  <td></td>
-                                  <td></td>
-                                  <td>{{ support.subgroup }}</td>
-                                  <td>{{ support.characteristics }}</td>
-                                </tr>
-                              </tbody>
-                              <thead>
-                                <tr>
-                                  <th></th>
-                                  <h6>Pricing</h6>
-                                  <th>SubGroup</th>
-                                  <th>Characteristics</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let pricing of pricingList">
-                                  <td></td>
-                                  <td></td>
-                                  <td>{{ pricing.subgroup }}</td>
-                                  <td>{{ pricing.characteristics }}</td>
-                                </tr>
-                              </tbody>
-                              <thead>
-                                <tr>
-                                  <th></th>
-                                  <h6>Billing & Comp</h6>
-                                  <th>SubGroup</th>
-                                  <th>Characteristics</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let billingAndComp of billingAndCompList">
-                                  <td></td>
-                                  <td></td>
-                                  <td>{{ billingAndComp.subgroup }}</td>
-                                  <td>{{ billingAndComp.characteristics }}</td>
-                                </tr>
-                              </tbody>
-                              <thead>
-                                <tr>
-                                  <th></th>
-                                  <h6>Program</h6>
-                                  <th>SubGroup</th>
-                                  <th>Characteristics</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let program of programList">
-                                  <td></td>
-                                  <td></td>
-                                  <td>{{ program.subgroup }}</td>
-                                  <td>{{ program.characteristics }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="text-bold">Offer Characteristics</div>                   
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="text-bold">Subgroup</div>
+                                  <div class="base-margin-top">
+                                    <ul>
+                                      <li *ngFor="let offerCharacteristics of offerCharacteristicsList">
+                                        <app-stakeholder-identification [subgroupName]="offerCharacteristics.subgroup"></app-stakeholder-identification>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="text-bold">Characteristics</div>
+                                  <div class="base-margin-top">
+                                    <ul>
+                                        <li *ngFor="let offerCharacteristics of offerCharacteristicsList">
+                                          <app-stakeholder-identification  [characteristics]="offerCharacteristics.characteristics"></app-stakeholder-identification>
+                                        </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                  <div class="flex-fluid text-left half-margin-left">
+                                    <div class="text-bold">Packaging</div>                   
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="flex-fluid text-left half-margin-left">
+                                      <ul>
+                                        <li *ngFor="let packaging of packagingList">
+                                          <app-stakeholder-identification [subgroupName]="packaging.subgroup"></app-stakeholder-identification>
+                                        </li>
+                                      </ul>
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="flex-fluid text-left half-margin-left">
+                                      <ul>
+                                          <li *ngFor="let packaging of packagingList">
+                                            <app-stakeholder-identification  [characteristics]="packaging.characteristics"></app-stakeholder-identification>
+                                          </li>
+                                      </ul>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                  <div class="col-md-4">
+                                    <div class="flex-fluid text-left half-margin-left">
+                                      <div class="text-bold">Support</div>                   
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="flex-fluid text-left half-margin-left">
+                                        <ul>
+                                          <li *ngFor="let support of supportList">
+                                            <app-stakeholder-identification [subgroupName]="support.subgroup"></app-stakeholder-identification>
+                                          </li>
+                                        </ul>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="flex-fluid text-left half-margin-left">
+                                        <ul>
+                                            <li *ngFor="let support of supportList">
+                                              <app-stakeholder-identification  [characteristics]="support.characteristics"></app-stakeholder-identification>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                      <div class="flex-fluid text-left half-margin-left">
+                                        <div class="text-bold">Pricing</div>                   
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="flex-fluid text-left half-margin-left">
+                                          <ul>
+                                            <li *ngFor="let pricing of pricingList">
+                                              <app-stakeholder-identification [subgroupName]="pricing.subgroup"></app-stakeholder-identification>
+                                            </li>
+                                          </ul>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="flex-fluid text-left half-margin-left">
+                                          <ul>
+                                              <li *ngFor="let pricing of pricingList">
+                                                <app-stakeholder-identification  [characteristics]="pricing.characteristics"></app-stakeholder-identification>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-md-4">
+                                        <div class="flex-fluid text-left half-margin-left">
+                                          <div class="text-bold">Billing & Comp</div>                   
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="flex-fluid text-left half-margin-left">
+                                            <ul>
+                                              <li *ngFor="let billingAndComp of billingAndCompList">
+                                                <app-stakeholder-identification [subgroupName]="billingAndComp.subgroup"></app-stakeholder-identification>
+                                              </li>
+                                            </ul>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="flex-fluid text-left half-margin-left">
+                                            <ul>
+                                                <li *ngFor="let billingAndComp of billingAndCompList">
+                                                  <app-stakeholder-identification  [characteristics]="billingAndComp.characteristics"></app-stakeholder-identification>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                          <div class="flex-fluid text-left half-margin-left">
+                                            <div class="text-bold">Program</div>                   
+                                          </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="flex-fluid text-left half-margin-left">
+                                              <ul>
+                                                <li *ngFor="let program of programList">
+                                                  <app-stakeholder-identification [subgroupName]="program.subgroup"></app-stakeholder-identification>
+                                                </li>
+                                              </ul>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="flex-fluid text-left half-margin-left">                 
+                                              <ul>
+                                                  <li *ngFor="let program of programList">
+                                                    <app-stakeholder-identification  [characteristics]="program.characteristics"></app-stakeholder-identification>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                        </div>
+                                      </div>
                           </div>
-                        </div>
                       </div>
                     </div>
                   </div>
