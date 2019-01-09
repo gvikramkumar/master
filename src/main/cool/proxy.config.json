@@ -1,13 +1,20 @@
 {
     "/api": {
-        "target": "https://cool-srv-dev.cisco.com/coolsrv",
+        "target": "https://cool-srv-stg.cisco.com/coolsrv",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug",
         "pathRewrite": {"^/api" : ""}
     },
+    "/pdafappdev": {
+        "target": "https://pdaf-api-dev.cisco.com/pdafapp",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug",
+        "pathRewrite": {"^/pdafappdev" : ""}
+    },
     "/pdafapp": {
-        "target": "https://pdaf-api.cisco.com/pdafapp",
+        "target": "https://pdaf-api-stg.cisco.com/pdafapp",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug",

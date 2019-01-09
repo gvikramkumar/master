@@ -41,6 +41,7 @@ export class EnvironmentService {
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
     
     basepdafapi: string = '';
+    basepdafdevapi:string ='';
 
     REST_API_URL_GET_CURRENT_USER;
     REST_API_URL_GET_LDAP_INFO;
@@ -71,20 +72,27 @@ export class EnvironmentService {
         switch (environment) {
             case 'production':
                 this.baseapi = 'https://cool-srv-prd.cisco.com/coolsrv';
-                this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
+                this.basepdafapi = 'https://pdaf-api-prd.cisco.com/pdafapp';
+                this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
                 break;
             case 'stage':
                 this.baseapi = 'https://cool-srv-stg.cisco.com/coolsrv';
                 this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
+                this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
                 break;
             case 'development':
                 this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
-                // this.basepdafapi = 'https://pdaf-api.cisco.com/pdafapp';
                 this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
+                this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
                 break;
             default:
                 this.baseapi = '/api';
                 this.basepdafapi = '/pdafapp';
+                this.basepdafdevapi ='/pdafappdev';
+                /**
+                 * Please remove your user ID and Password before checkin
+                 * this will be only used for local development
+                 */
                 this.USER_ID = '';
                 this.PASSWORD = '';
         }
@@ -123,7 +131,7 @@ export class EnvironmentService {
         this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseapi + '/LOV/getAssignee/';
 
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.0/get/currentUser';
-        this.REST_API_URL_GET_LDAP_INFO = this.basepdafapi + '/user/1.0/getLdapUserInfo';
+        this.REST_API_URL_GET_LDAP_INFO = this.basepdafdevapi + '/user/1.0/getLdapUserInfo';
         this.REST_API_PRIMARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
         this.REST_API_SECONDARY_BUSINESS_UNIT_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true';
         this.REST_API_SECONDARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
