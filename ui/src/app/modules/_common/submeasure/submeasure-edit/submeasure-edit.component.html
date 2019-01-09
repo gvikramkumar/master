@@ -97,24 +97,24 @@
                   </div>
                   <div class="col-6">
                     <div class="sel-wrap">
-                      <cui-select name="ibeLevel" [(ngModel)]="sm.inputFilterLevel.internalBELevel" [fxShow]="ifl_switch_ibe" class="option"
-                                  [items]="ibe_items" optionsKey="name"optionsValue="value" empty="true"></cui-select>
+                      <cui-select name="ibeLevel" [(ngModel)]="sm.inputFilterLevel.internalBELevel" [required]="ifl_switch_ibe" class="option"
+                                  [items]="ibe_items" optionsKey="name"optionsValue="value" empty="true" [disabled]="!ifl_switch_ibe"></cui-select>
                     </div>
                     <div class="sel-wrap">
-                      <cui-select name="productLevel" [(ngModel)]="sm.inputFilterLevel.productLevel" [fxShow]="ifl_switch_p" class="option"
-                                  [items]="p_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                      <cui-select name="productLevel" [(ngModel)]="sm.inputFilterLevel.productLevel" [required]="ifl_switch_p" class="option"
+                                  [items]="p_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_p"></cui-select>
                     </div>
                     <div class="sel-wrap">
-                      <cui-select name="entityLevel" [(ngModel)]="sm.inputFilterLevel.entityLevel" [fxShow]="ifl_switch_le" class="option"
-                                  [items]="le_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                      <cui-select name="entityLevel" [(ngModel)]="sm.inputFilterLevel.entityLevel" [required]="ifl_switch_le" class="option"
+                                  [items]="le_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_le"></cui-select>
                     </div>
                     <div class="sel-wrap">
-                      <cui-select name="salesLevel" [(ngModel)]="sm.inputFilterLevel.salesLevel" [fxShow]="ifl_switch_s" class="option"
-                                  [items]="s_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                      <cui-select name="salesLevel" [(ngModel)]="sm.inputFilterLevel.salesLevel" [required]="ifl_switch_s" class="option"
+                                  [items]="s_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_s"></cui-select>
                     </div>
                     <div class="sel-wrap">
-                      <cui-select name="scmsLevel" [(ngModel)]="sm.inputFilterLevel.scmsLevel" [fxShow]="ifl_switch_scms" class="option"
-                                  [items]="scms_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                      <cui-select name="scmsLevel" [(ngModel)]="sm.inputFilterLevel.scmsLevel" [required]="ifl_switch_scms" class="option"
+                                  [items]="scms_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_scms"></cui-select>
                     </div>
                   </div>
                 </div>
@@ -163,24 +163,24 @@
               </div>
               <div class="col-6">
                 <div class="sel-wrap">
-                  <cui-select name="ibeLevelMM" [(ngModel)]="sm.manualMapping.internalBELevel" [fxShow]="mm_switch_ibe" class="option"
-                              [items]="ibe_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                  <cui-select name="ibeLevelMM" [(ngModel)]="sm.manualMapping.internalBELevel" [required]="mm_switch_ibe" class="option"
+                              [items]="ibe_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_ibe"></cui-select>
                 </div>
                 <div class="sel-wrap">
-                  <cui-select name="productLevelMM" [(ngModel)]="sm.manualMapping.productLevel" [fxShow]="mm_switch_p" class="option"
-                              [items]="p_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                  <cui-select name="productLevelMM" [(ngModel)]="sm.manualMapping.productLevel" [required]="mm_switch_p" class="option"
+                              [items]="p_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_p"></cui-select>
                 </div>
                 <div class="sel-wrap">
-                  <cui-select name="entityLevelMM" [(ngModel)]="sm.manualMapping.entityLevel" [fxShow]="mm_switch_le" class="option"
-                              [items]="le_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                  <cui-select name="entityLevelMM" [(ngModel)]="sm.manualMapping.entityLevel" [required]="mm_switch_le" class="option"
+                              [items]="le_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_le"></cui-select>
                 </div>
                 <div class="sel-wrap">
-                  <cui-select name="salesLevelMM" [(ngModel)]="sm.manualMapping.salesLevel" [fxShow]="mm_switch_s" class="option"
-                              [items]="s_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                  <cui-select name="salesLevelMM" [(ngModel)]="sm.manualMapping.salesLevel" [required]="mm_switch_s" class="option"
+                              [items]="s_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_s"></cui-select>
                 </div>
                 <div class="sel-wrap">
-                  <cui-select name="scmsLevelMM" [(ngModel)]="sm.manualMapping.scmsLevel" [fxShow]="mm_switch_scms" class="option"
-                              [items]="scms_items" optionsKey="name" optionsValue="value" empty="true"></cui-select>
+                  <cui-select name="scmsLevelMM" [(ngModel)]="sm.manualMapping.scmsLevel" [required]="mm_switch_scms" class="option"
+                              [items]="scms_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_scms"></cui-select>
                 </div>
               </div>
             </div>
