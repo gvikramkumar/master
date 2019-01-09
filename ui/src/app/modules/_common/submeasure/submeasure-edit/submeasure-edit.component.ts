@@ -26,8 +26,8 @@ import {PgLookupService} from '../../services/pg-lookup.service';
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
   startFiscalMonth: string;
-  flashCategories: string[];
-  adjustmentTypes: string[];
+  flashCategories = [];
+  adjustmentTypes = [];
   flashCategory: number;
   adjustmentType: number;
   sourceAdjCategories: {name: string, value: number}[] = [];
@@ -253,6 +253,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           .then(results => {
             this.flashCategories = results[0];
             this.adjustmentTypes = results[1];
+            // cui-selects will delete properties if not found in selects, so we have to preserve the values and reapply them after the items come in
+            this.sm.categoryType = this.orgSubmeasure.categoryType;
           });
       });
   }

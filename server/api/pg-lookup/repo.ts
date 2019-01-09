@@ -365,6 +365,7 @@ export default class PgLookupRepo {
 --                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
 --                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
             ) a
+        where a.adj_type_id_name||' - '||a.adj_type_id is not null
         order by a.adj_type_id_name||' - '||a.adj_type_id
     `;
     return pgc.pgdb.query(sql)
@@ -425,6 +426,7 @@ export default class PgLookupRepo {
         --                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
         --                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
             ) a
+        where a.adj_type_id_name||' - '||a.adj_type_id is not null
         order by a.adj_type_id_name||' - '||a.adj_type_id
     `;
     return pgc.pgdb.query(sql)
