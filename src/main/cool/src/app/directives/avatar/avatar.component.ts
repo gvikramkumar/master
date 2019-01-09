@@ -15,4 +15,17 @@ export class AvatarComponent implements OnInit {
   ngOnInit() {
   }
 
+  getInitialChar(name) {
+    if (name == null) {
+      return '';
+    }
+    const names = name.split(' ');
+    let initials = '';
+    initials += names[0].charAt(0).toUpperCase();
+    if (names.length > 1) {
+      initials += names[1].charAt(0).toUpperCase();
+    }
+    return initials;
+  }
+
 }
