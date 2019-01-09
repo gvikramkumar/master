@@ -14,8 +14,6 @@ const filterLevelSchema = new Schema({
 const indicatorsSchema = new Schema({
   dollarUploadFlag: {type: String, enum: ['Y', 'N'], required: true},
   manualMapping: {type: String, enum: ['Y', 'N'], required: true},
-  expenseSSOT: {type: String, enum: ['Y', 'N'], required: true},
-  manualMix: {type: String, enum: ['Y', 'N'], required: true},
   groupFlag: {type: String, enum: ['Y', 'N'], required: true},
   retainedEarnings: {type: String, enum: ['Y', 'N'], required: true},
   transition: {type: String, enum: ['Y', 'N'], required: true},

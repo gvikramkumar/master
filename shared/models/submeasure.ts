@@ -43,8 +43,6 @@ class InputFilterLevel {
 class Indicators {
   dollarUploadFlag = 'N';
   manualMapping = 'N';
-  expenseSSOT = 'N';
-  manualMix = 'N';
   groupFlag = 'N';
   retainedEarnings = 'N';
   transition = 'N';

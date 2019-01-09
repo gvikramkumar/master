@@ -20,8 +20,6 @@ const ormMap: OrmMap[] = [
   {prop: 'glAcctNumber', field: 'gl_acct_number', type: OrmTypes.number},
   {prop: 'indicators.dollarUploadFlag', field: 'dollar_upld_flag'},
   {prop: 'indicators.manualMapping', field: 'manual_mapping_flag'},
-  {prop: 'indicators.expenseSSOT', field: '', mgDefault: 'N'},
-  {prop: 'indicators.manualMix', field: '', mgDefault: 'N'},
   {prop: 'indicators.groupFlag', field: '', mgDefault: 'N'},
   {prop: 'indicators.retainedEarnings', field: 'retained_earnings_flag'},
   {prop: 'indicators.transition', field: 'transition_flag'},

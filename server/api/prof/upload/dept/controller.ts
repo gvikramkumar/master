@@ -138,7 +138,7 @@ export default class DeptUploadUploadController extends UploadController {
   }
 
   validateCanDeptUpload() {
-    if (this.submeasure.indicators.expenseSSOT.toUpperCase() !== 'Y') {
+    if (this.submeasure.indicators.deptAcct.toUpperCase() !== 'Y') {
       this.addErrorMessageOnly(`Sub Measure doesn't allow department upload`);
     }
     return Promise.resolve();

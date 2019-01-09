@@ -83,7 +83,7 @@ export default class ProductClassUploadUploadController extends UploadController
   }
 
   validateCanProductClassUpload() {
-    if (this.submeasure.indicators.manualMix.toUpperCase() !== 'Y') {
+    if (this.submeasure.categoryType !== 'Manual Mix') {
       this.addErrorMessageOnly(`Sub Measure doesn't allow product classification upload`);
     }
     return Promise.resolve();
