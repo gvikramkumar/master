@@ -94,8 +94,8 @@ export class EnvironmentService {
                  * Please remove your user ID and Password before checkin
                  * this will be only used for local development
                  */
-                this.USER_ID = 'lulfeng';
-                this.PASSWORD = 'Wdq123321@';
+                this.USER_ID = '';
+                this.PASSWORD = '';
         }
 
 
