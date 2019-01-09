@@ -85,8 +85,8 @@ export class EnvironmentService {
             default:
                 this.baseapi = '/api';
                 this.basepdafapi = '/pdafapp';
-                this.USER_ID = '';
-                this.PASSWORD = '';
+                this.USER_ID = 'lulfeng';
+                this.PASSWORD = 'Wdq123321@';
         }
 
 
