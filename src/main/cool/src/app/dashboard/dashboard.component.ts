@@ -63,6 +63,8 @@ export class DashboardComponent implements OnInit {
   }
 
   processMyActionsList() {
+    
+   this.myOfferArray = [];
     // Process Actions
     if (this.myActions.actionList !== undefined) {
       this.myActions['actionList'].forEach(element => {

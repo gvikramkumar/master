@@ -6,11 +6,7 @@ import { CreateOfferService } from '../services/create-offer.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import {OfferPhaseService} from '../services/offer-phase.service';
 import { ConfigurationService } from '../services/configuration.service';
-import { OfferDetailViewService } from '../services/offer-detail-view.service';
-
-
-
-
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -40,6 +36,8 @@ export class MmAssesmentComponent implements OnInit {
   currentMMModel:string = null;
   currentPrimaryBE:any;
   userName;
+  private eventsSubject: Subject<string> = new Subject<string>();
+  
   constructor(private router: Router,
     private sharedService: SharedService,
     private createOfferService: CreateOfferService,
@@ -371,6 +369,11 @@ export class MmAssesmentComponent implements OnInit {
       }
     }
 
+    this.emitEventToChild();
+  }
+
+  emitEventToChild() {
+    this.eventsSubject.next(this.offerBuilderdata['offerOwner'])
   }
 
   updateStakeData(data) {
