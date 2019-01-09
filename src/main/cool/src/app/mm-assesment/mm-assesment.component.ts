@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { CreateOfferService } from '../services/create-offer.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import {OfferPhaseService} from '../services/offer-phase.service';
+import { ConfigurationService } from '../services/configuration.service';
 
 
 
@@ -44,7 +45,8 @@ export class MmAssesmentComponent implements OnInit {
     private createOfferService: CreateOfferService,
     private activatedRoute: ActivatedRoute,
     private MonetizationModelService: MonetizationModelService,
-    private offerPhaseService: OfferPhaseService
+    private offerPhaseService: OfferPhaseService,
+    private configService: ConfigurationService
   ) {
     this.activatedRoute.params.subscribe(params => {
     
@@ -341,7 +343,7 @@ export class MmAssesmentComponent implements OnInit {
 
           this.stakeData['Owner'].push(
             {
-              userName: this.offerBuilderdata['offerOwner'],
+              userName: this.configService.getUserName(),
               emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
               _id: this.offerBuilderdata['offerOwner'],
               userMappings: [{

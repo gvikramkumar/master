@@ -45,7 +45,7 @@
                                                             x="0" y="0"></path>
                                                         <text fill="#007493" font-family="CiscoSans, Arial, sans-serif"
                                                             font-weight="300" font-size="16" x="50%" y="50%" dy=".35em"
-                                                            text-anchor="middle" id="fwt-initials">{{getInitialChar(coOwners['userName'])}}</text>
+                                                            text-anchor="middle" id="fwt-initials">{{getInitialChar(coOwners['name'])}}</text>
                                                     </g>
                                                 </svg>
                                             </span>
@@ -147,7 +147,7 @@
                         </li>
                     </ul>
                     <div class="col-md-12 base-margin-top">
-                        <button class="btn btn--primary">REMOVE</button>
+                        <button class="btn btn--primary" (click)="delteSelectedStakeHolders()">REMOVE</button>
                     </div>
                 </div>
             </div>
