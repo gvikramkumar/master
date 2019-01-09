@@ -58,6 +58,7 @@ import { OfferOverViewResolver } from './services/offer-overview-resolver.servic
 import { AuthGuard } from './auth/gaurds/auth-guard';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import { HttpInterceptorService } from './services/http-interceptor.service';
+import { StakeholderIdentificationComponent } from './directives/stakeholder-identification/stakeholder-identification.component';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -84,7 +85,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     AccessManagementComponent,
     AvatarComponent,
     MenuBarPopupComponent,
-    AuthErrorComponent
+    AuthErrorComponent,
+    StakeholderIdentificationComponent
   ],
   imports: [
     BrowserModule,
