@@ -1,3 +1,6 @@
+.cui a:not(.btn):active, .cui a:not(.btn):hover, .cui a:not(.btn):focus, .cui .link:active, .cui .link:hover, .cui .link:focus {
+  text-decoration: none;
+}
 .cui .header-menus {
   position: absolute;
   bottom: 0;
