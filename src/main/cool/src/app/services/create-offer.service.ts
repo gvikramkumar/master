@@ -12,13 +12,13 @@ import { EnvironmentService } from '../../environments/environment.service';
 @Injectable()
 export class CreateOfferService {
 
-  baseUrl: string = environment.REST_API_URL;
+  baseUrl: string = this.environmentService.REST_API_URL_GET_LDAP_INFO;
   offerCreateUrl: string = this.environmentService.REST_API_OFFER_CREATE_URL;
   offerUpdateUrl: string = this.environmentService.REST_API_UPDATE_OFFER;
   basePrimaryUrl: string = this.environmentService.REST_API_PRIMARY_URL;
-  secondaryBusinessUnitUrl: string = environment.REST_API_SECONDARY_BUSINESS_UNIT_URL;
-  secondaryBusinessEntityUrl: string = environment.REST_API_SECONDARY_BUSINESS_ENTITY_URL;
-  secondaryPrimaryBusinessEntityUrl: string = environment.REST_API_PRIMARY_BUSINESS_ENTITY_URL;
+  secondaryBusinessUnitUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_UNIT_URL;
+  secondaryBusinessEntityUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_ENTITY_URL;
+  secondaryPrimaryBusinessEntityUrl: string = this.environmentService.REST_API_PRIMARY_BUSINESS_ENTITY_URL;
 
   coolOffer;
   coolOfferCopy;

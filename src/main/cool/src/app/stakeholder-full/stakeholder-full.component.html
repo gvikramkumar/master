@@ -14,7 +14,7 @@
                     <div class="col-md-8 text-right">
                         <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
                         <!-- <button class="btn btn--white"><span class="icon-export"></span> Export </button> -->
-                        <button class="btn btn--white btn--wide" (click)=' addCollaborator()'>Proceed to Strategy
+                        <button class="btn btn--white" (click)=' addCollaborator()'>Proceed to Strategy
                             Review <span class="icon-chevron-right"></span></button>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
 
                         <li>
                             <div class="ui-accordion-header"><span class="text-uppercase"> Stakeholders
-                                    ({{stakeHolderInfo['Stakeholders'].length}})</span><span class="icon-chevron-up icon-small pull-right"></span></div>
+                                    ({{Stakeholders.length}})</span><span class="icon-chevron-up icon-small pull-right"></span></div>
                             <div class="ui-accordion-content">
                                 <div class="panel panel--compressed panel--ltgray panel--loose">
                                     <span>Add Stakeholders</span>
@@ -116,8 +116,8 @@
                                 </div>
 
                                 <div class="responsive-table base-margin-top">
-                                    <p-table #dt [columns]="cols" [value]="stakeHolderInfo['Stakeholders']"
-                                        [(selection)]="deletedCars" [rows]="6">
+                                    <p-table #dt [columns]="cols" [value]="Stakeholders"
+                                        [(selection)]="selectedSh" [rows]="6">
                                         <ng-template pTemplate="header" let-columns>
                                             <tr>
                                                 <th style="width: 2.25em">
@@ -131,13 +131,13 @@
                                         <ng-template pTemplate="body" let-stakeholder>
                                             <tr>
                                                 <td>
-                                                    <p-tableCheckbox [value]="stakeholder"></p-tableCheckbox>
+                                                    <p-tableCheckbox [value]="stakeholder" [disabled]="stakeholder.stakeholderDefaults" ></p-tableCheckbox>
                                                 </td>
                                                 <td>{{stakeholder.name}}</td>
                                                 <td>{{stakeholder.email}}</td>
                                                 <td>
                                                     {{stakeholder.functionalRole}}
-                                                    <span class="icon-trash icon-small pull-right" (click)="deleteStakeHolder(stakeholder.name)"></span>
+                                                    <span *ngIf="!stakeholder.stakeholderDefaults" class="icon-trash icon-small pull-right" (click)="deleteStakeHolder(stakeholder._id)"></span>
                                                 </td>
                                             </tr>
                                         </ng-template>

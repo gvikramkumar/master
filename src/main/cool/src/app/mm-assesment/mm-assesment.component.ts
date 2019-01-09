@@ -37,6 +37,7 @@ export class MmAssesmentComponent implements OnInit {
   canClickNextStep: boolean = false;
   currentMMModel:string = null;
   currentPrimaryBE:any;
+  userName;
 
   constructor(private router: Router,
     private sharedService: SharedService,
@@ -63,11 +64,12 @@ export class MmAssesmentComponent implements OnInit {
 
 
     this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
+    
 
 
     this.MonetizationModelService.getAttributes().subscribe(data => {
       this.offerData = data;
-
+      console.log(this.offerData);
       this.offerData['groups'].forEach(group => {
         this.groupNames.push(group['groupName']);
         let curGroup = {};
@@ -331,14 +333,38 @@ export class MmAssesmentComponent implements OnInit {
           if (res != null) {
             keyUsers = res;
           }
+
+          // Build data for owner
+          if (this.stakeData['Owner'] == null) {
+            this.stakeData['Owner'] = [];
+          }
+
+          this.stakeData['Owner'].push(
+            {
+              userName: this.offerBuilderdata['offerOwner'],
+              emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
+              _id: this.offerBuilderdata['offerOwner'],
+              userMappings: [{
+                appRoleList: ['Owner'],
+                businessEntity: 'Security',
+                functionalRole: 'BUPM'
+              }
+              ],
+              stakeholderDefaults: true
+            });
+
           keyUsers.forEach(user => {
             if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
               this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
             }
+            console.log(user);
             let curUser = user;
             curUser['stakeholderDefaults'] = true;
             this.stakeData[user['userMappings'][0]['appRoleList'][0]].push(curUser);
+            console.log(curUser);
           })
+
+
         })
       })
     } else {
@@ -442,7 +468,8 @@ console.log(this.stakeData);
         "businessEntity" : sh['userMappings'][0]['businessEntity'], 
         "functionalRole" : sh['userMappings'][0]['functionalRole'],
         "offerRole" : sh['userMappings'][0]['appRoleList'][0],
-        "stakeholderDefaults" : sh['stakeholderDefaults']
+        "stakeholderDefaults" : sh['stakeholderDefaults'],
+        "name":sh['userName']
       })
     });
   }

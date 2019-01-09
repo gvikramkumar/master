@@ -1,8 +1,12 @@
+.cui a:not(.btn):active, .cui a:not(.btn):hover, .cui a:not(.btn):focus, .cui .link:active, .cui .link:hover, .cui .link:focus {
+  text-decoration: none;
+}
 .cui .header-menus {
   position: absolute;
   bottom: 0;
-  left: 45%;
+  left: 25%;
   right: 0;
+  text-align:center;
 }
 .cui .avatar span.role {
   font-size: 75%;
@@ -314,6 +318,7 @@
 }
 .cui .ui-accordion .ui-accordion-header {
   line-height: 2;
+  margin-top: 5px;
 }
 /* modals */
 span.icon-close {
@@ -333,12 +338,12 @@ span.icon-close {
   background: #e8e8e8;
   border-top: none;
 }
-.cui .ui-state-default {
+.cui .ui-accordion-header.ui-state-default {
   border: none;
   background: #f6f7f9;
   color: #555555;
 }
-.cui .review-status .ui-accordion .ui-accordion-header.ui-state-active {
+.cui .ui-accordion .ui-accordion-header.ui-state-active {
   background: #f5f5f5;
   border-left-color: transparent;
   border-right-color: transparent;
@@ -348,4 +353,47 @@ span.icon-close {
 }
 .cui .review-status .panel--ltgray {
   margin: -15px;
+}
+
+
+/* Offer Detail */
+.cui .timeline__icon {
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  left: 5px;
+  z-index: 2;
+  border: 5px solid #f5f5f6;
+  background-color: #6ebe4a;
+  color: white;
+  line-height: 1;
+  top: 2px;
+}
+
+.cui .timeline__icon span {
+  left: 4px;
+  top: 3px;
+}
+
+.logo-cool-full {
+  display: none;
+}
+.logo-cool {
+  display: inline-block;
+}
+/* Hamburger Flyout */
+#flyoutmenu[_ngcontent-c5] ul[_ngcontent-c5] li.hover[_ngcontent-c5], #flyoutmenu[_ngcontent-c5] ul[_ngcontent-c5] li[_ngcontent-c5]:hover {
+  cursor: pointer;
+}
+
+
+@media (min-width: 1200px) {
+  .logo-cool-full {
+    display: inline-block;
+  }
+  .logo-cool {
+    display: none;
+  }
+
 }
