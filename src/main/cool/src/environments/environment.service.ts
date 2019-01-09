@@ -87,7 +87,7 @@ export class EnvironmentService {
                 this.basepdafdevapi = 'https://cool-srv-dev.cisco.com/pdafapp';
                 break;
             default:
-                // this.baseapi = '/api';
+                this.baseapi = '/api';
                 this.basepdafapi = '/pdafapp';
                 this.basepdafdevapi ='/pdafappdev';
                 /**
