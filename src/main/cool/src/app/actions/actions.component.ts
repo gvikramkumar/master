@@ -138,6 +138,7 @@ export class ActionsComponent implements OnInit {
       this.dueDateValue.toString(),
     );
     console.log(createAction);
+    
     this.actionsService.createNewAction(createAction).subscribe((data) => {
       this.closeActionDailog();
     },

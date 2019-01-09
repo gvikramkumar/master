@@ -6,6 +6,7 @@ import { CreateOfferService } from '../services/create-offer.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import {OfferPhaseService} from '../services/offer-phase.service';
 import { ConfigurationService } from '../services/configuration.service';
+import { OfferDetailViewService } from '../services/offer-detail-view.service';
 
 
 
@@ -63,9 +64,6 @@ export class MmAssesmentComponent implements OnInit {
 
 
     this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
-    
-
-
     this.MonetizationModelService.getAttributes().subscribe(data => {
       this.offerData = data;
       console.log(this.offerData);

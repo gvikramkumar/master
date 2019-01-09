@@ -40,8 +40,7 @@ export class ActionsService {
 
 
   createNewAction(newActionData: CreateAction): Observable<any> {
-    
     let url = this.environmentService.REST_API_CREATE_NEW_ACTION_POST_URL;
-    return this.http.post(url, newActionData, { withCredentials: true });
+    return this.http.post(url, newActionData);
   }
 }

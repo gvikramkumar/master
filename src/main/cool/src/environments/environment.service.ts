@@ -81,20 +81,21 @@ export class EnvironmentService {
                 this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
                 break;
             case 'development':
+               
                 this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
-                this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
-                this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
+                this.basepdafapi = 'https://cool-srv-dev.cisco.com/pdafapp';
+                this.basepdafdevapi = 'https://cool-srv-dev.cisco.com/pdafapp';
                 break;
             default:
-                this.baseapi = '/api';
+                // this.baseapi = '/api';
                 this.basepdafapi = '/pdafapp';
                 this.basepdafdevapi ='/pdafappdev';
                 /**
                  * Please remove your user ID and Password before checkin
                  * this will be only used for local development
                  */
-                this.USER_ID = '';
-                this.PASSWORD = '';
+                this.USER_ID = 'lulfeng';
+                this.PASSWORD = 'Wdq123321@';
         }
 
 
@@ -129,7 +130,7 @@ export class EnvironmentService {
         this.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL = this.baseapi + '/bpmApi/getMilestones';
         this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseapi + '/LOV/getFunctionalRoles';
         this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseapi + '/LOV/getAssignee/';
-
+        this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/emailNotification/send';
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.0/get/currentUser';
         this.REST_API_URL_GET_LDAP_INFO = this.basepdafdevapi + '/user/1.0/getLdapUserInfo';
         this.REST_API_PRIMARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';

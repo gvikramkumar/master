@@ -1,6 +1,6 @@
 {
     "/api": {
-        "target": "https://cool-srv-stg.cisco.com/coolsrv",
+        "target": "http://10.24.52.167:8080/coolsrv",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug",
