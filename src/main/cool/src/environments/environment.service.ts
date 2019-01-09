@@ -82,9 +82,9 @@ export class EnvironmentService {
                 break;
             case 'development':
                
-                this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
-                this.basepdafapi = 'https://cool-srv-dev.cisco.com/pdafapp';
-                this.basepdafdevapi = 'https://cool-srv-dev.cisco.com/pdafapp';
+            this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
+            this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
+            this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
                 break;
             default:
                 this.baseapi = '/api';
@@ -94,8 +94,8 @@ export class EnvironmentService {
                  * Please remove your user ID and Password before checkin
                  * this will be only used for local development
                  */
-                this.USER_ID = '';
-                this.PASSWORD = '';
+                this.USER_ID = 'lulfeng';
+                this.PASSWORD = 'Wdq123321@';
         }
 
 

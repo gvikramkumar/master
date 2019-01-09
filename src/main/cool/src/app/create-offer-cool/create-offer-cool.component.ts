@@ -215,7 +215,7 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   createOffer(createoffer) {
-
+   debugger;
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.offerId = data.offerId;
       this.caseId = data.caseId;
