@@ -6,6 +6,7 @@ import { CreateOfferService } from '../services/create-offer.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import {OfferPhaseService} from '../services/offer-phase.service';
 import { ConfigurationService } from '../services/configuration.service';
+import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { Subject } from 'rxjs/Subject';
 
 @Component({
@@ -44,6 +45,7 @@ export class MmAssesmentComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private MonetizationModelService: MonetizationModelService,
     private offerPhaseService: OfferPhaseService,
+    private offerDetailViewService: OfferDetailViewService,
   ) {
     this.activatedRoute.params.subscribe(params => {
     
@@ -59,9 +61,12 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   ngOnInit() {
-
+// Hold the data
+    this.offerDetailViewService.offerDetailView(this.currentOfferId).subscribe(offerDetailRes => {});
 
     this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
+
+    // Get Attributes for each group
     this.MonetizationModelService.getAttributes().subscribe(data => {
       this.offerData = data;
       console.log(this.offerData);
@@ -78,7 +83,7 @@ export class MmAssesmentComponent implements OnInit {
       })
 
     });
-
+// Get offer Registration Information
     this.MonetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
       this.offerBuilderdata = data;
      console.log("getofferbuilderData",this.offerBuilderdata);
@@ -270,11 +275,6 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
 
-  fakeNextStep() {
-    if (this.activeTabIndex < this.groupNames.length - 1) {
-      this.activeTabIndex += 1;
-    }
-  }
 
   toPrevStep() {
     if (this.activeTabIndex > 0) {
@@ -282,18 +282,15 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
 
-  toNextStep() {
-    // let processedgroups = {};
+  toNextStep() {   
     if (this.activeTabIndex == 0) {
       var index = 0;
       var groupKeys = this.getGroupKeys(this.groupData[0]);
       groupKeys.forEach((key) => {
-        // processedgroups[key] = [];
         this.offerData['groups'][0]['subGroup'][index]['selected'] = [];
         this.groupData[0][key].forEach((attr) => {
           if (attr.status == 1 || attr.type == 2) {
             this.offerData['groups'][0]['subGroup'][index]['selected'].push(attr.name);
-            // processedgroups[key].push(attr.name);
           }
         })
         index += 1;
