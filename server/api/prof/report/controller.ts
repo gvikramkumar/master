@@ -145,8 +145,8 @@ export default class ReportController extends ControllerBase {
         break;
       case 'disti-direct':
         excelSheetname = ['Disti to Direct'];
-        excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
+        excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'External Theater', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
+        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'ext_theater_name', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
         promise = this.postgresRepo.getDistiToDirectMappingReport();
         break;
       case 'alternate-sl2':

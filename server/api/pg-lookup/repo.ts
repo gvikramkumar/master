@@ -129,10 +129,11 @@ export default class PgLookupRepo {
               ELSE 'Sales Fin Hierarchy'
             end as sales_finance_hierarchy,
             node_code,
+            ext_theater_name,
             fiscal_month_id,
-            create_user,
+            create_owner,
             create_datetimestamp,
-            update_user,
+            update_owner,
             update_datetimestamp
             from fpadfa.dfa_prof_disti_to_direct_map_upld            
             where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period                               
