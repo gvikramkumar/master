@@ -13,7 +13,6 @@ export class ConfigurationService {
     urlGetCurrentUser = this.environmentService.REST_API_URL_GET_CURRENT_USER;
     urlCheckAdminAccess = this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
     private _startupData: any;
-    private userName:string;
 
     constructor(private httpClient: HttpClient, 
         private userService: UserService, 
@@ -30,16 +29,16 @@ export class ConfigurationService {
                     // check for admin access
                     this.accessMgmtService.checkAdminAccess().toPromise().then((data) => {
                         console.log(data);
-                        this._startupData = {hasAdminAccess:true};
+                        this._startupData = {hasAdminAccess:true, userName: data.userName};
                     }, (err) => {
                         console.log(err);
                         this._startupData = {hasAdminAccess:false};
                     });
                     
                     return this.httpClient.post(this.urlGetUserInfo, { userId: user }, { withCredentials: true }).toPromise().then((res: any) => {
+                        console.log(res);
                         this.userService.setFirstName(res.firstName);
                         this.userService.setLastName(res.lastName);
-                        this.userName = res.firstName + ' ' + res.lastName;
                     })
                 })
                 .then((response) => resolve(true))
@@ -57,10 +56,4 @@ export class ConfigurationService {
     get startupData(): any {
         return this._startupData;
     }
-
-    getUserName(): string {
-        return this.userName;
-    }
-
-
 }

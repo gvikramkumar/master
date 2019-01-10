@@ -38,7 +38,8 @@ export class MmAssesmentComponent implements OnInit {
   currentPrimaryBE:any;
   userName;
   private eventsSubject: Subject<string> = new Subject<string>();
-  
+  ownerName;
+
   constructor(private router: Router,
     private sharedService: SharedService,
     private createOfferService: CreateOfferService,
@@ -46,11 +47,11 @@ export class MmAssesmentComponent implements OnInit {
     private MonetizationModelService: MonetizationModelService,
     private offerPhaseService: OfferPhaseService,
     private offerDetailViewService: OfferDetailViewService,
+    private configService:ConfigurationService,
   ) {
     this.activatedRoute.params.subscribe(params => {
     
       this.currentOfferId = params['id'];
-      console.log("param ::::", params);
       this.caseId = params['id2'];
     });
 
@@ -61,6 +62,10 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // Fetch logged in owner name from configurationservice.
+    this.ownerName = this.configService.startupData['userName'];
+
 // Hold the data
     this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
 
@@ -378,7 +383,7 @@ export class MmAssesmentComponent implements OnInit {
 
           this.stakeData['Owner'].push(
             {
-              userName: this.offerBuilderdata['offerOwner'],
+              userName: this.ownerName,
               emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
               _id: this.offerBuilderdata['offerOwner'],
               userMappings: [{
