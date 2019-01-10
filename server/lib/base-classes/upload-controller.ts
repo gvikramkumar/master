@@ -436,7 +436,7 @@ export default class UploadController {
       const databaseCtrl = injector.get(DatabaseController);
       return databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id)
         .catch(err => {
-          throw new ApiError('AutoSync error', err);
+          throw new ApiError('AutoSync error', Object.assign({message: err.message}, err));
         });
     } else {
       return Promise.resolve();
