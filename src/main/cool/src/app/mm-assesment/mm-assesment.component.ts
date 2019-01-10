@@ -62,27 +62,71 @@ export class MmAssesmentComponent implements OnInit {
 
   ngOnInit() {
 // Hold the data
-    this.offerDetailViewService.offerDetailView(this.currentOfferId).subscribe(offerDetailRes => {});
-
     this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
 
     // Get Attributes for each group
-    this.MonetizationModelService.getAttributes().subscribe(data => {
-      this.offerData = data;
-      console.log(this.offerData);
-      this.offerData['groups'].forEach(group => {
-        this.groupNames.push(group['groupName']);
-        let curGroup = {};
-        group['subGroup'].forEach(g => {
-          curGroup[g['subGroupName']] = [];
-          g.choices.forEach((c) => {
-            curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
+
+    this.offerDetailViewService.mmDataRetrive(this.currentOfferId).subscribe(offerDetailRes => {
+      let selectedCharacteristics = {};
+      if (offerDetailRes['selectedCharacteristics'] != null) {
+        offerDetailRes['selectedCharacteristics'].forEach(selected => {
+          if (selectedCharacteristics[selected['group']] == null) {
+            selectedCharacteristics[selected['group']] = {};
+          }
+          if (selectedCharacteristics[selected['group']][selected['subgroup']] == null) {
+            selectedCharacteristics[selected['group']][selected['subgroup']] = [];
+          }
+          selected['characteristics'].forEach(character => {
+            selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
           })
         })
-        this.groupData.push(curGroup);
+      }
+
+      // mm model and message section
+      this.currentMMModel = offerDetailRes['derivedMM'];
+      if (offerDetailRes['derivedMM'] != null && offerDetailRes['derivedMM'] !== "") {
+        this.canClickNextStep = true;
+      }
+      if (offerDetailRes['overallStatus'] === 'Aligned') {
+        this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerDetailRes['derivedMM']}`,mmModel: offerDetailRes['derivedMM'] };
+      } else if (offerDetailRes['overallStatus'] === 'Partially Aligned') {
+        this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerDetailRes['derivedMM']}.`, mmModel: offerDetailRes['derivedMM'] };
+      } else {
+        this.message = { contentHead: offerDetailRes['overallStatus'], content: "  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models." };
+      }
+
+      // stake holder data
+      let keyUsers = offerDetailRes['stakeholders'];
+      keyUsers.forEach(user => {
+        if (this.stakeData[user['offerRole']] == null) {
+          this.stakeData[user['offerRole']] = [];
+        }
+        this.stakeData[user['offerRole']].push(user);
       })
 
+      // buttons and buttons' status
+      let that = this;
+      this.MonetizationModelService.getAttributes().subscribe(data => {
+        that.offerData = data;
+        console.log(that.offerData);
+        that.offerData['groups'].forEach(group => {
+          that.groupNames.push(group['groupName']);
+          let curGroup = {};
+          group['subGroup'].forEach(g => {
+            curGroup[g['subGroupName']] = [];
+            g.choices.forEach((c) => {
+              if (selectedCharacteristics[group['groupName']] != null &&  selectedCharacteristics[group['groupName']][g['subGroupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)) {
+                curGroup[g['subGroupName']].push({ name: c, type: 0, status: 1 });
+              } else {
+                curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
+              }
+            })
+          })
+          that.groupData.push(curGroup);
+        })
+      });
     });
+
 // Get offer Registration Information
     this.MonetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
       this.offerBuilderdata = data;
