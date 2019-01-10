@@ -302,7 +302,7 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   onDelete(user) {
-    debugger;
+  
     if (this.data.length == 1) {
       this.data.splice(0, 1);
     }

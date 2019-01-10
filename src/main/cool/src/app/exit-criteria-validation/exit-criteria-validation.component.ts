@@ -35,7 +35,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
 
   ngOnInit() {
     this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
-      debugger;
+    
       console.log(data);
       const canRequestUsers = [];
       this.exitCriteriaData=data;
