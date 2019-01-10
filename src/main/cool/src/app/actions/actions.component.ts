@@ -62,19 +62,14 @@ export class ActionsComponent implements OnInit {
 
     this.dashboardService.getMyOffersList().subscribe(data => {      
       this.myOfferList = data;
-
       data.forEach(ele => {
         this.offerCaseMap[ele.offerId] = ele.caseId;
       })
     });
 
-
    this.actionsService.getFunction().subscribe(data => {
      this.functionList = data;
-
   });
-
-  
 
   }
 
@@ -96,7 +91,7 @@ export class ActionsComponent implements OnInit {
   }
   
   processMyActionsList() {
-    // Process Actions
+    // Process get Actions data
     if (this.myActions.actionList !== undefined) {
       this.myActions['actionList'].forEach(element => {
         const obj = new ActionsAndNotifcations();
@@ -111,7 +106,6 @@ export class ActionsComponent implements OnInit {
         obj.setCaseId(element.caseId);
         obj.setCreatedBy(element.createdBy);
         // Set the status color
-
         if ( element.status && element.status.toLowerCase() === 'red') {
           this.needImmActnCount = this.needImmActnCount + 1;
         } else {
@@ -125,8 +119,8 @@ export class ActionsComponent implements OnInit {
   }
 // Create New Action
   createAction() {
+    //Process post data
     var selectedAssignee = [this.assigneeValue];
-
     const createAction: CreateAction = new CreateAction(
       this.offerNameValue,
       this.offerCaseMap[this.offerNameValue],
@@ -141,9 +135,6 @@ export class ActionsComponent implements OnInit {
     
     this.actionsService.createNewAction(createAction).subscribe((data) => {
       this.closeActionDailog();
-    },
-      (err) => {
-        console.log(err);
     });
   }
 
