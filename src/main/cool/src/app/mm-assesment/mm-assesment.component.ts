@@ -66,11 +66,8 @@ export class MmAssesmentComponent implements OnInit {
     // Fetch logged in owner name from configurationservice.
     this.ownerName = this.configService.startupData['userName'];
 
-// Hold the data
-    this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
 
     // Get Attributes for each group
-
     this.offerDetailViewService.mmDataRetrive(this.currentOfferId).subscribe(offerDetailRes => {
       let selectedCharacteristics = {};
       if (offerDetailRes['selectedCharacteristics'] != null) {
@@ -86,13 +83,16 @@ export class MmAssesmentComponent implements OnInit {
           })
         })
       }
+      let that = this;
 
       // mm model and message section
       this.currentMMModel = offerDetailRes['derivedMM'];
       if (offerDetailRes['derivedMM'] != null && offerDetailRes['derivedMM'] !== "") {
         this.canClickNextStep = true;
       }
-      if (offerDetailRes['overallStatus'] === 'Aligned') {
+      if (offerDetailRes['overallStatus'] == null) {
+        this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
+      } else if (offerDetailRes['overallStatus'] === 'Aligned') {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerDetailRes['derivedMM']}`,mmModel: offerDetailRes['derivedMM'] };
       } else if (offerDetailRes['overallStatus'] === 'Partially Aligned') {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerDetailRes['derivedMM']}.`, mmModel: offerDetailRes['derivedMM'] };
@@ -100,17 +100,31 @@ export class MmAssesmentComponent implements OnInit {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: "  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models." };
       }
 
-      // stake holder data
-      let keyUsers = offerDetailRes['stakeholders'];
-      keyUsers.forEach(user => {
-        if (this.stakeData[user['offerRole']] == null) {
-          this.stakeData[user['offerRole']] = [];
-        }
-        this.stakeData[user['offerRole']].push(user);
-      })
+    // Get offer Registration Information
+    this.MonetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
+      that.offerBuilderdata = data;
+     console.log("getofferbuilderData",that.offerBuilderdata);
+     that.offerBuilderdata['BEList'] = [];
+     that.offerBuilderdata['BUList'] = [];
+      if (that.offerBuilderdata['primaryBEList'] != null) {
+        that.offerBuilderdata['BEList'] = that.offerBuilderdata['BEList'].concat(that.offerBuilderdata['primaryBEList']);
+      }
+      if (that.offerBuilderdata['secondaryBEList'] != null) {
+        that.offerBuilderdata['BEList'] = that.offerBuilderdata['BEList'].concat(that.offerBuilderdata['secondaryBEList']);
+      }
+      if (that.offerBuilderdata['primaryBUList'] != null) {
+        that.offerBuilderdata['BUList'] = that.offerBuilderdata['BUList'].concat(that.offerBuilderdata['primaryBUList']);
+      }
+      if (that.offerBuilderdata['secondaryBUList'] != null) {
+        that.offerBuilderdata['BUList'] = that.offerBuilderdata['BUList'].concat(that.offerBuilderdata['secondaryBUList']);
+      }
+     
+      if (offerDetailRes['derivedMM'] != null && offerDetailRes['derivedMM'] != "") {
+        this.getStakeData(offerDetailRes['derivedMM'])
+      }
+    })
 
       // buttons and buttons' status
-      let that = this;
       this.MonetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
         console.log(that.offerData);
@@ -131,28 +145,6 @@ export class MmAssesmentComponent implements OnInit {
         })
       });
     });
-
-// Get offer Registration Information
-    this.MonetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
-      this.offerBuilderdata = data;
-     console.log("getofferbuilderData",this.offerBuilderdata);
-      this.offerBuilderdata['BEList'] = [];
-      this.offerBuilderdata['BUList'] = [];
-      if (this.offerBuilderdata['primaryBEList'] != null) {
-        this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
-      }
-      if (this.offerBuilderdata['secondaryBEList'] != null) {
-        this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['secondaryBEList']);
-      }
-      if (this.offerBuilderdata['primaryBUList'] != null) {
-        this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['primaryBUList']);
-      }
-      if (this.offerBuilderdata['secondaryBUList'] != null) {
-        this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
-      }
-     
-    })
-
   }
 
 
@@ -368,46 +360,7 @@ export class MmAssesmentComponent implements OnInit {
           this.activeTabIndex += 1;
         }
         this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
-        this.MonetizationModelService.showStakeholders(data['mmModel'], this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
-          this.stakeData = {};
-          console.log(res);
-          let keyUsers;
-          if (res != null) {
-            keyUsers = res;
-          }
-          
-          // Build data for owner
-          if (this.stakeData['Owner'] == null) {
-            this.stakeData['Owner'] = [];
-          }
-
-          this.stakeData['Owner'].push(
-            {
-              userName: this.ownerName,
-              emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
-              _id: this.offerBuilderdata['offerOwner'],
-              userMappings: [{
-                appRoleList: ['Owner'],
-                businessEntity: 'Security',
-                functionalRole: 'BUPM'
-              }
-              ],
-              stakeholderDefaults: true
-            });
-
-          keyUsers.forEach(user => {
-            if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
-              this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
-            }
-            console.log(user);
-            let curUser = user;
-            curUser['stakeholderDefaults'] = true;
-            this.stakeData[user['userMappings'][0]['appRoleList'][0]].push(curUser);
-            console.log(curUser);
-          })
-
-
-        })
+        this.getStakeData(data['mmModel']);
       })
     } else {
       if (this.activeTabIndex < this.groupNames.length - 1) {
@@ -416,6 +369,49 @@ export class MmAssesmentComponent implements OnInit {
     }
 
     this.emitEventToChild();
+  }
+
+  getStakeData(mmModel) {
+    this.MonetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
+      this.stakeData = {};
+      console.log(res);
+      let keyUsers;
+      if (res != null) {
+        keyUsers = res;
+      }
+      
+      // Build data for owner
+      if (this.stakeData['Owner'] == null) {
+        this.stakeData['Owner'] = [];
+      }
+
+      this.stakeData['Owner'].push(
+        {
+          userName: this.ownerName,
+          emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
+          _id: this.offerBuilderdata['offerOwner'],
+          userMappings: [{
+            appRoleList: ['Owner'],
+            businessEntity: 'Security',
+            functionalRole: 'BUPM'
+          }
+          ],
+          stakeholderDefaults: true
+        });
+
+      keyUsers.forEach(user => {
+        if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
+          this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
+        }
+        console.log(user);
+        let curUser = user;
+        curUser['stakeholderDefaults'] = true;
+        this.stakeData[user['userMappings'][0]['appRoleList'][0]].push(curUser);
+        console.log(curUser);
+      })
+
+
+    })
   }
 
   emitEventToChild() {
