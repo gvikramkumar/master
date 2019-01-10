@@ -16,10 +16,10 @@ export class ExitCriteriaValidationService {
     let url =this.environmentService.REST_API_OFFERPHASE_DETAILS_URL+"/"+caseId +'/true';
     return this.http.get(url,{withCredentials: true});
   }
-  requestApproval(offerId, mileStone){
+  requestApproval(offerId){
     let url = this.environmentService.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL;
     url += offerId;
-    url += "/" + mileStone;
+    url += "/" + "strategyReview";
     return this.http.post(url, null, {withCredentials: true});
   }
 

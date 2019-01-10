@@ -30,7 +30,9 @@
             <div class="alert__message" [ngStyle]="{'color': message['color']}"><b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
         </div>
         <!-- <Exit Criteria Validation> -->
-        <app-exit-criteria-validation></app-exit-criteria-validation>
+        <app-exit-criteria-validation
+        [stakeData]="stakeData"
+        ></app-exit-criteria-validation>
         <div class="accordion base-margin-top" id="accordion">
 
             <div class="panel panel--ltgray">

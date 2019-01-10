@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {ExitCriteriaValidationService} from '../services/exit-criteria-validation.service';
 import {MonetizationModelService} from '../services/monetization-model.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -12,12 +12,12 @@ import {HeaderService} from '../header/header.service';
 })
 
 export class ExitCriteriaValidationComponent implements OnInit {
+  @Input() stakeData:object;
   currentOfferId;
   currentCaseId;
   exitCriteriaData;
   ideate = [];
   offerOwner:String = '';
-  stakeData = {};
   requestApprovalAvailable:Boolean = true;
   
 
@@ -35,29 +35,38 @@ export class ExitCriteriaValidationComponent implements OnInit {
 
   ngOnInit() {
     this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
+      debugger;
       console.log(data);
       const canRequestUsers = [];
       this.exitCriteriaData=data;
       this.ideate = data['ideate'];
-      this.offerOwner = data['offerOwner'];
-      canRequestUsers.push(this.offerOwner);
+      // this.offerOwner = data['offerOwner'];
+      // canRequestUsers.push(this.offerOwner);
 
       for (let i = 0; i < this.ideate.length; i++) {
-        if (this.ideate[i]['status'] != 'completed') {
+        if (this.ideate[i]['status'] != 'Completed') {
           this.requestApprovalAvailable = false;
           break;
         }
       }
 
-      data['stakeholders'].forEach(sh => {
-        if (sh['offerRole'] == 'co-owner') {
-          canRequestUsers.push(sh['_id']);
+      // data['stakeholders'].forEach(sh => {
+      //   if (sh['offerRole'] == 'co-owner') {
+      //     canRequestUsers.push(sh['_id']);
+      //   }
+      //   if (this.stakeData[sh['offerRole']] == null) {
+      //     this.stakeData[sh['offerRole']] = [];
+      //   }
+      //   this.stakeData[sh['offerRole']].push({name: sh['_id'], email: sh['email']});
+      // })
+
+      for (var prop in this.stakeData) {
+        if (prop == 'Co-Owner' || prop == 'Owner') {
+          this.stakeData[prop].forEach(holder => {
+            canRequestUsers.push(holder['_id']);
+          })
         }
-        if (this.stakeData[sh['offerRole']] == null) {
-          this.stakeData[sh['offerRole']] = [];
-        }
-        this.stakeData[sh['offerRole']].push({name: sh['_id'], email: sh['email']});
-      })
+      }
 
       let that = this;
       this.headerService.getCurrentUser().subscribe(user => {
@@ -79,24 +88,11 @@ export class ExitCriteriaValidationComponent implements OnInit {
 }
 
 requestForApproval(){
-  this.exitCriteriaValidationService.requestApproval(this.currentOfferId, this.ideate).subscribe(data => {
-    
+  console.log(this.currentOfferId)
+  console.log(this.ideate)
+  this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
+
   })
-}
-updateStakeData(data) {
-  // this.monetizationModelService.showStakeholders(this.currentMMModel, this.currentPrimaryBE).subscribe(res => {
-  //   this.stakeData = {};
-  //   let keyUsers = [];
-  //   if (res != null && res[0] != null) {
-  //     keyUsers = res[0]['coolRoleKeyUser'];
-  //   }
-  //   keyUsers.forEach(user => {
-  //     if (this.stakeData[user['offerRole']] == null) {
-  //       this.stakeData[user['offerRole']] = [];
-  //     }
-  //     this.stakeData[user['offerRole']].push({name: user['keyUser'], email: user['email']});
-  //   })
-  // })
 }
 
 }
