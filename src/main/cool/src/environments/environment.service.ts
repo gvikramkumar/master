@@ -39,6 +39,7 @@ export class EnvironmentService {
     REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL;
     REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL;
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
+    REST_API_CREATE_BPM_APPROVAL_URL;
     
     basepdafapi: string = '';
     basepdafdevapi:string ='';
@@ -130,6 +131,7 @@ export class EnvironmentService {
         this.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL = this.baseapi + '/bpmApi/getMilestones';
         this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseapi + '/LOV/getFunctionalRoles';
         this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseapi + '/LOV/getAssignee/';
+        this.REST_API_CREATE_BPM_APPROVAL_URL = this.baseapi + '/action/proceed';
         this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/emailNotification/send';
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.0/get/currentUser';
         this.REST_API_URL_GET_LDAP_INFO = this.basepdafdevapi + '/user/1.0/getLdapUserInfo';
