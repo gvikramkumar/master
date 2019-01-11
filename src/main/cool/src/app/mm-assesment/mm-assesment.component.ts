@@ -66,49 +66,85 @@ export class MmAssesmentComponent implements OnInit {
     // Fetch logged in owner name from configurationservice.
     this.ownerName = this.configService.startupData['userName'];
 
-// Hold the data
-    this.offerDetailViewService.offerDetailView(this.currentOfferId).subscribe(offerDetailRes => {});
-
-    this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
 
     // Get Attributes for each group
-    this.MonetizationModelService.getAttributes().subscribe(data => {
-      this.offerData = data;
-      console.log(this.offerData);
-      this.offerData['groups'].forEach(group => {
-        this.groupNames.push(group['groupName']);
-        let curGroup = {};
-        group['subGroup'].forEach(g => {
-          curGroup[g['subGroupName']] = [];
-          g.choices.forEach((c) => {
-            curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
+    this.offerDetailViewService.mmDataRetrive(this.currentOfferId).subscribe(offerDetailRes => {
+      let selectedCharacteristics = {};
+      if (offerDetailRes['selectedCharacteristics'] != null) {
+        offerDetailRes['selectedCharacteristics'].forEach(selected => {
+          if (selectedCharacteristics[selected['group']] == null) {
+            selectedCharacteristics[selected['group']] = {};
+          }
+          if (selectedCharacteristics[selected['group']][selected['subgroup']] == null) {
+            selectedCharacteristics[selected['group']][selected['subgroup']] = [];
+          }
+          selected['characteristics'].forEach(character => {
+            selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
           })
         })
-        this.groupData.push(curGroup);
-      })
+      }
+      let that = this;
 
-    });
-// Get offer Registration Information
+      // mm model and message section
+      this.currentMMModel = offerDetailRes['derivedMM'];
+      if (offerDetailRes['derivedMM'] != null && offerDetailRes['derivedMM'] !== "") {
+        this.canClickNextStep = true;
+      }
+      if (offerDetailRes['overallStatus'] == null) {
+        this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
+      } else if (offerDetailRes['overallStatus'] === 'Aligned') {
+        this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerDetailRes['derivedMM']}`,mmModel: offerDetailRes['derivedMM'] };
+      } else if (offerDetailRes['overallStatus'] === 'Partially Aligned') {
+        this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerDetailRes['derivedMM']}.`, mmModel: offerDetailRes['derivedMM'] };
+      } else {
+        this.message = { contentHead: offerDetailRes['overallStatus'], content: "  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models." };
+      }
+
+    // Get offer Registration Information
     this.MonetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
-      this.offerBuilderdata = data;
-     console.log("getofferbuilderData",this.offerBuilderdata);
-      this.offerBuilderdata['BEList'] = [];
-      this.offerBuilderdata['BUList'] = [];
-      if (this.offerBuilderdata['primaryBEList'] != null) {
-        this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
+      that.offerBuilderdata = data;
+     console.log("getofferbuilderData",that.offerBuilderdata);
+     that.offerBuilderdata['BEList'] = [];
+     that.offerBuilderdata['BUList'] = [];
+      if (that.offerBuilderdata['primaryBEList'] != null) {
+        that.offerBuilderdata['BEList'] = that.offerBuilderdata['BEList'].concat(that.offerBuilderdata['primaryBEList']);
       }
-      if (this.offerBuilderdata['secondaryBEList'] != null) {
-        this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['secondaryBEList']);
+      if (that.offerBuilderdata['secondaryBEList'] != null) {
+        that.offerBuilderdata['BEList'] = that.offerBuilderdata['BEList'].concat(that.offerBuilderdata['secondaryBEList']);
       }
-      if (this.offerBuilderdata['primaryBUList'] != null) {
-        this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['primaryBUList']);
+      if (that.offerBuilderdata['primaryBUList'] != null) {
+        that.offerBuilderdata['BUList'] = that.offerBuilderdata['BUList'].concat(that.offerBuilderdata['primaryBUList']);
       }
-      if (this.offerBuilderdata['secondaryBUList'] != null) {
-        this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
+      if (that.offerBuilderdata['secondaryBUList'] != null) {
+        that.offerBuilderdata['BUList'] = that.offerBuilderdata['BUList'].concat(that.offerBuilderdata['secondaryBUList']);
       }
      
+      if (offerDetailRes['derivedMM'] != null && offerDetailRes['derivedMM'] != "") {
+        this.getStakeData(offerDetailRes['derivedMM'])
+      }
     })
 
+      // buttons and buttons' status
+      this.MonetizationModelService.getAttributes().subscribe(data => {
+        that.offerData = data;
+        console.log(that.offerData);
+        that.offerData['groups'].forEach(group => {
+          that.groupNames.push(group['groupName']);
+          let curGroup = {};
+          group['subGroup'].forEach(g => {
+            curGroup[g['subGroupName']] = [];
+            g.choices.forEach((c) => {
+              if (selectedCharacteristics[group['groupName']] != null &&  selectedCharacteristics[group['groupName']][g['subGroupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)) {
+                curGroup[g['subGroupName']].push({ name: c, type: 0, status: 1 });
+              } else {
+                curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
+              }
+            })
+          })
+          that.groupData.push(curGroup);
+        })
+      });
+    });
   }
 
 
@@ -324,46 +360,7 @@ export class MmAssesmentComponent implements OnInit {
           this.activeTabIndex += 1;
         }
         this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
-        this.MonetizationModelService.showStakeholders(data['mmModel'], this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
-          this.stakeData = {};
-          console.log(res);
-          let keyUsers;
-          if (res != null) {
-            keyUsers = res;
-          }
-          
-          // Build data for owner
-          if (this.stakeData['Owner'] == null) {
-            this.stakeData['Owner'] = [];
-          }
-
-          this.stakeData['Owner'].push(
-            {
-              userName: this.ownerName,
-              emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
-              _id: this.offerBuilderdata['offerOwner'],
-              userMappings: [{
-                appRoleList: ['Owner'],
-                businessEntity: 'Security',
-                functionalRole: 'BUPM'
-              }
-              ],
-              stakeholderDefaults: true
-            });
-
-          keyUsers.forEach(user => {
-            if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
-              this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
-            }
-            console.log(user);
-            let curUser = user;
-            curUser['stakeholderDefaults'] = true;
-            this.stakeData[user['userMappings'][0]['appRoleList'][0]].push(curUser);
-            console.log(curUser);
-          })
-
-
-        })
+        this.getStakeData(data['mmModel']);
       })
     } else {
       if (this.activeTabIndex < this.groupNames.length - 1) {
@@ -372,6 +369,49 @@ export class MmAssesmentComponent implements OnInit {
     }
 
     this.emitEventToChild();
+  }
+
+  getStakeData(mmModel) {
+    this.MonetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
+      this.stakeData = {};
+      console.log(res);
+      let keyUsers;
+      if (res != null) {
+        keyUsers = res;
+      }
+      
+      // Build data for owner
+      if (this.stakeData['Owner'] == null) {
+        this.stakeData['Owner'] = [];
+      }
+
+      this.stakeData['Owner'].push(
+        {
+          userName: this.ownerName,
+          emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
+          _id: this.offerBuilderdata['offerOwner'],
+          userMappings: [{
+            appRoleList: ['Owner'],
+            businessEntity: 'Security',
+            functionalRole: 'BUPM'
+          }
+          ],
+          stakeholderDefaults: true
+        });
+
+      keyUsers.forEach(user => {
+        if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
+          this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
+        }
+        console.log(user);
+        let curUser = user;
+        curUser['stakeholderDefaults'] = true;
+        this.stakeData[user['userMappings'][0]['appRoleList'][0]].push(curUser);
+        console.log(curUser);
+      })
+
+
+    })
   }
 
   emitEventToChild() {

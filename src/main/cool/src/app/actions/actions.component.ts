@@ -42,7 +42,7 @@ export class ActionsComponent implements OnInit {
   milestoneValue: string;
   functionNameValue: string;
   assigneeValue: Array<any>;
-  dueDateValue: string;
+  dueDateValue: any;
   offerCaseMap:object = {};
 
   constructor(private router: Router, private actionsService: ActionsService,
@@ -129,7 +129,7 @@ export class ActionsComponent implements OnInit {
       this.milestoneValue,
       this.functionNameValue,
       selectedAssignee,
-      this.dueDateValue.toString(),
+      this.dueDateValue.toISOString(),
     );
     console.log(createAction);
     
@@ -149,6 +149,6 @@ export class ActionsComponent implements OnInit {
   }
 
   dateFormat(inputDate: string) {
-    return moment(inputDate).format('DD-MM-YYYY');
+    return moment(inputDate).format('MM/DD/YYYY');
   }
 }
