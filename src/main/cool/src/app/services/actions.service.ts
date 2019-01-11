@@ -5,6 +5,8 @@ import { environment } from '../../environments/environment';
 import {UserService} from './user.service';
 import { EnvironmentService } from '../../environments/environment.service';
 import { CreateAction } from '../models/create-action';
+import { CreateActionComment } from '../models/create-action-comment';
+import { CreateActionApprove } from '../models/create-action-approve';
 
 @Injectable()
 export class ActionsService {
@@ -42,5 +44,15 @@ export class ActionsService {
   createNewAction(newActionData: CreateAction): Observable<any> {
     let url = this.environmentService.REST_API_CREATE_NEW_ACTION_POST_URL;
     return this.http.post(url, newActionData);
+  }
+
+  createNotAndConditional(createActionComment: CreateActionComment): Observable<any> {
+    let url = this.environmentService.REST_API_CREATE_BPM_APPROVAL_URL;
+    return this.http.post(url, createActionComment);
+  }
+
+  createActionApprove(createActionApprove: CreateActionApprove): Observable<any> {
+    let url = this.environmentService.REST_API_CREATE_BPM_APPROVAL_URL;
+    return this.http.post(url, createActionApprove);
   }
 }

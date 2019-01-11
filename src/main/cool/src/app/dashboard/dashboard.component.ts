@@ -7,7 +7,11 @@ import { UserService } from '../services/user.service';
 import { HttpClient } from '@angular/common/http';
 import { ActionsAndNotifcations } from './action';
 import * as moment from 'moment';
-import { element } from 'protractor';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { NgForm } from '@angular/forms';
+import { CreateActionComment } from '../models/create-action-comment';
+import { ActionsService } from '../services/actions.service';
+import { CreateActionApprove } from '../models/create-action-approve';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +20,8 @@ import { element } from 'protractor';
   providers: [DashboardService]
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('createActionForm') createActionForm: NgForm;
+  @ViewChild('createActionApproveForm') createActionApproveForm: NgForm;
   recentOfferList: Offer[];
   myActionsList;
   myOffersList;
@@ -29,17 +35,35 @@ export class DashboardComponent implements OnInit {
   displayPopOver: Boolean = true;
   displayActionPopOver: Boolean = true;
   currentOfferId;
-
+  showFeedbackButtons: Boolean = true;
+  doNotApproveSection = false;
+  showConditionalApprovalSection = false;
+  showApproveSection = false;
+  hidepopup;
+  public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+  minDate: Date;
   cols: any[];
-
   selectedrow: any;
   taskId: any;
   actionsArray: any[];
-
+  commentValue: string;
+  titleValue: string;
+  descriptionValue: string;
+  milestoneValue: string;
+  functionNameValue: string;
+  assigneeValue: Array<any>;
+  dueDateValue: string;
+  functionList;
+  assigneeList;
+  milestoneList;
+  action: any;
 
   constructor(private dashboardService: DashboardService,
-    private router: Router, private createOfferService: CreateOfferService,
-    private userService: UserService, private httpClient: HttpClient) {
+    private router: Router,
+    private createOfferService: CreateOfferService,
+    private userService: UserService,
+    private actionsService: ActionsService,
+    private httpClient: HttpClient) {
   }
 
   ngOnInit() {
@@ -60,11 +84,16 @@ export class DashboardComponent implements OnInit {
         this.myOffersList = data;
         this.myOffersListProps = Object.keys(this.myOffersList);
       });
+    this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
+    this.minDate = new Date();
+
+    this.actionsService.getFunction().subscribe(data => {
+      this.functionList = data;
+    });
   }
 
   processMyActionsList() {
-    
-   this.myOfferArray = [];
+    this.myOfferArray = [];
     // Process Actions
     if (this.myActions.actionList !== undefined) {
       this.myActions['actionList'].forEach(element => {
@@ -89,8 +118,6 @@ export class DashboardComponent implements OnInit {
         this.myOfferArray.push(obj);
       });
 
-
-
       // Process Notifications
       if (this.myActions.notificationList !== undefined) {
         this.myActions['notificationList'].forEach(element => {
@@ -112,13 +139,44 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  doNotApprove() {
+    this.hidepopup = true;
+    this.doNotApproveSection = true;
+    this.action = 'not approved';
+  }
+
+  conditionalApprove() {
+    this.hidepopup = true;
+    this.showConditionalApprovalSection = true;
+    this.action = 'conditionally Approved';
+  }
+
+  approve() {
+    this.hidepopup = true;
+    this.showApproveSection = true;
+    this.action = 'approved';
+  }
+
   dateFormat(inputDate: string) {
     return moment(inputDate).format('DD-MMM-YYYY');
   }
 
   selectedrownof(actionData) {
     this.selectedrow = actionData;
-
+    this.taskId = actionData.taskId;
+    this.actionsService.getAssignee(actionData.offerId).subscribe(data => {
+      this.assigneeList = data;
+    });
+    this.actionsService.getMilestones(actionData.caseId).subscribe(data => {
+      this.milestoneList = [];
+      for (const milestone in data) {
+        if(data) {
+          data[milestone].forEach(element => {
+            this.milestoneList.push(element);
+          });
+        }
+      }
+    });
   }
 
   getMyActions() {
@@ -152,12 +210,12 @@ export class DashboardComponent implements OnInit {
     const postData = {
       'taskId': this.selectedrow.taskId,
       'userId': this.selectedrow.assigneeId,
-      'taskName': "Notification",
-      'caseId': "",
-      'offerId': "",
-      'action': "",
-      'comment': ""
-    }
+      'taskName': 'Notification',
+      'caseId': '',
+      'offerId': '',
+      'action': '',
+      'comment': ''
+    };
     this.dashboardService.postDismissNotification(postData).subscribe(data => {
       popover.close();
       this.getMyActions();
@@ -178,6 +236,10 @@ export class DashboardComponent implements OnInit {
   }
 
   displayActionPop(popover) {
+    this.hidepopup = false;
+    this.doNotApproveSection = false;
+    this.showConditionalApprovalSection = false;
+    this.showApproveSection = false;
     if (popover.isOpen()) {
       popover.close();
     }
@@ -185,5 +247,43 @@ export class DashboardComponent implements OnInit {
 
   offerDetailOverView(offerId, caseId) {
     this.router.navigate(['/offerDetailView', offerId, caseId]);
+  }
+
+  createAction() {
+    const taskId = this.taskId;
+    const userId = this.userService.getUserId();
+    const taskName = 'Action';
+    const createActionComment: CreateActionComment = new CreateActionComment(
+      taskId,
+      userId,
+      taskName,
+      this.action,
+      this.commentValue,
+      this.titleValue,
+      this.descriptionValue,
+      this.milestoneValue,
+      this.functionNameValue,
+      this.assigneeValue,
+      this.dueDateValue.toString(),
+    );
+    this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
+    });
+    this.createActionForm.reset();
+  }
+
+  createActionApprove() {
+    const taskId = this.taskId;
+    const userId = this.userService.getUserId();
+    const taskName = 'Action';
+    const createActionApprove: CreateActionApprove = new CreateActionApprove(
+      taskId,
+      userId,
+      taskName,
+      this.action,
+      this.commentValue
+    );
+    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+    });
+    this.createActionApproveForm.reset();
   }
 }
