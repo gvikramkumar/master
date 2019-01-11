@@ -26,8 +26,6 @@ db.dfa_submeasure.insertMany([
     indicators: {
       dollarUploadFlag: "Y",
       manualMapping: "Y",
-      expenseSSOT: "Y",
-      manualMix: "Y",
       groupFlag: 'N',
       retainedEarnings: 'N',
       transition: 'N',
@@ -72,8 +70,6 @@ db.dfa_submeasure.insertMany([
     indicators: {
       dollarUploadFlag: "Y",
       manualMapping: "Y",
-      expenseSSOT: "Y",
-      manualMix: "Y",
       groupFlag: 'N',
       retainedEarnings: 'N',
       transition: 'N',

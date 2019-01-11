@@ -49,7 +49,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   editMode = false;
   copyMode = false;
   rule = new AllocationRule();
-  orgRule = _.cloneDeep(this.rule);
+  orgRule: AllocationRule;
   drivers: {name: string, value: string}[];
   periods: {period: string}[];
 
@@ -119,16 +119,15 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.rule.approvedOnce = 'N';
           delete this.rule.createdBy;
           delete this.rule.createdDate;
-          this.orgRule = _.cloneDeep(this.rule);
         }
         if (this.editMode) {
           if (_.includes(['A', 'I'], this.rule.status)) {
             delete this.rule.createdBy;
             delete this.rule.createdDate;
           }
-          this.orgRule = _.cloneDeep(this.rule);
           this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
         }
+        this.orgRule = _.cloneDeep(this.rule);
 
         this.salesSL2ChoiceOptions = {
           asyncValidations: [

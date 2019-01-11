@@ -62,7 +62,27 @@ export default class DistiDirectUploadUploadController extends UploadController 
   validate() {
     // first check if duplicates in the data they're uploading
     this.imports = this.rows1.map(row => new DistiDirectUploadImport(row, this.fiscalMonth));
+
     let obj = {};
+    this.imports.forEach((val: DistiDirectUploadImport) => {
+      const arr = _.get(obj, `${val.groupId.toString()}.${val.nodeType.toUpperCase()}`);
+      const entry = val.nodeCode && val.nodeCode.toUpperCase();
+      if (arr) {
+        if (arr.indexOf(entry) !== -1) {
+          this.addErrorMessageOnly(`${val.groupId} / ${val.nodeType} / ${val.nodeCode}`);
+        } else {
+          arr.push(entry);
+        }
+      } else {
+        _.set(obj, `${val.groupId.toString()}.${val.nodeType.toUpperCase()}`, [entry]);
+      }
+    });
+
+    if (this.errors.length) {
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Group ID/Node Type/NodeCode entries in your upload', this.errors));
+    }
+
+    obj = {};
     this.imports.forEach((val: DistiDirectUploadImport) => {
       const arr = _.get(obj, `${val.nodeType.toUpperCase()}`);
       const entry = val.nodeCode && val.nodeCode.toUpperCase();
@@ -81,25 +101,6 @@ export default class DistiDirectUploadUploadController extends UploadController 
       return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Node Type/Node Code entries in your upload', this.errors));
     }
 
-    obj = {};
-    this.imports.forEach((val: DistiDirectUploadImport) => {
-      const arr = _.get(obj, `${val.groupId.toString()}`);
-      const entry = val.nodeType && val.nodeType.toUpperCase();
-      if (arr) {
-        if (arr.indexOf(entry) !== -1) {
-          this.addErrorMessageOnly(`${val.groupId} / ${val.nodeType}`);
-        } else {
-          arr.push(entry);
-        }
-      } else {
-        _.set(obj, `${val.groupId.toString()}`, [entry]);
-      }
-    });
-
-    if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Group ID/Node Type entries in your upload', this.errors));
-    }
-
     return Promise.resolve();
   }
 
@@ -109,11 +110,9 @@ export default class DistiDirectUploadUploadController extends UploadController 
   }
 
   removeDuplicatesFromDatabase(imports: DistiDirectUploadImport[]) {
-    const duplicateNodeTypeNodeCode = _.uniqWith(imports, (a, b) => a.nodeType === b.nodeType && a.nodeCode === b.nodeCode)
-      .map(x => _.pick(x, ['nodeType', 'nodeCode']))
-    const duplicateGroupIdNodeType = _.uniqWith(imports, (a, b) => a.groupId === b.groupId && a.nodeType === b.nodeType)
-      .map(x => _.pick(x, ['groupId', 'nodeType']))
-    return this.repo.bulkRemove(duplicateNodeTypeNodeCode.concat(duplicateGroupIdNodeType));
+    const duplicates = _.uniqWith(imports, (a, b) => a.groupId === b.groupId && a.nodeType === b.nodeType && a.nodeCode === b.nodeCode)
+      .map(x => _.pick(x, ['groupId', 'nodeType', 'nodeCode']))
+    return this.repo.bulkRemove(duplicates);
   }
 
   validateGroupId() {

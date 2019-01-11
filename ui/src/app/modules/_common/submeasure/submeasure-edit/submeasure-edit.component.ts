@@ -26,8 +26,8 @@ import {PgLookupService} from '../../services/pg-lookup.service';
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
   startFiscalMonth: string;
-  flashCategories: string[];
-  adjustmentTypes: string[];
+  flashCategories = [];
+  adjustmentTypes = [];
   flashCategory: number;
   adjustmentType: number;
   sourceAdjCategories: {name: string, value: number}[] = [];
@@ -40,10 +40,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   copyMode = false;
   submeasureNames: string[] = [];
   sm = new Submeasure();
-  orgSubmeasure = _.cloneDeep(this.sm);
+  orgSubmeasure: Submeasure;
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
-  groupingSubmeasures: GroupingSubmeasure[] = [];
+  groupingSubmeasures = [];
   sources: Source[];
   measureSources: Source[] = [];
   rules: AllocationRule[] = [];
@@ -86,7 +86,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     },
     {
       name: 'Manual Mix',
-      value: 'MM'
+      value: 'Manual Mix'
     }
   ];
   ibe_items = [
@@ -233,16 +233,15 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           // we'll reset these for each edit
           this.sm.manualMixHw = undefined;
           this.sm.manualMixSw = undefined;
-          this.orgSubmeasure = _.cloneDeep(this.sm);
         }
         if (this.editMode) {
           if (_.includes(['A', 'I'], this.sm.status)) {
             delete this.sm.createdBy;
             delete this.sm.createdDate;
           }
-          this.orgSubmeasure = _.cloneDeep(this.sm);
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
         }
+        this.orgSubmeasure = _.cloneDeep(this.sm);
         this.init();
       })
       .then(() => {
@@ -253,6 +252,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           .then(results => {
             this.flashCategories = results[0];
             this.adjustmentTypes = results[1];
+            // cui-selects will delete properties if not found in selects, so we have to preserve the values and reapply them after the items come in
+            this.sm.categoryType = this.orgSubmeasure.categoryType;
           });
       });
   }
@@ -336,7 +337,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.disableCategories = false;
     } else {
       this.disableCategories = true;
-      this.sm.categoryType = 'HW';
+      this.sm.categoryType = this.sm.categoryType || 'HW';
     }
 
     this.submeasureService.callMethod('getGroupingSubmeasures', {measureId: this.sm.measureId})
@@ -344,6 +345,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.groupingSubmeasures = groupingSubmeasures;
         if (!init) {
           this.sm.groupingSubmeasureId = undefined;
+        } else {
+          // this is a total hack. only way I could get the dropdown to populate on page refresh on cui 6.5.6. Remove for later versions and see if it works
+          this.sm.groupingSubmeasureId = undefined;
+          setTimeout(() => {
+            this.sm.groupingSubmeasureId = this.orgSubmeasure.groupingSubmeasureId;
+          });
         }
       });
 
@@ -375,13 +382,14 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     switch (sw) {
       case 'ibe' :
         if (this.ifl_switch_ibe) {
-          this.mm_switch_ibe = false;
           this.ifl_switch_p = false;
+          this.mm_switch_ibe = false;
+          this.mm_switch_p = false;
           this.ProductIflDisabled = true;
           this.BeMmDisabled = true;
           this.ProductMmDisabled = true;
-          this.sm.inputFilterLevel.productLevel = undefined;
         } else {
+          this.sm.inputFilterLevel.internalBELevel = undefined;
           this.ProductIflDisabled = false;
           this.BeMmDisabled = false;
           this.ProductMmDisabled = false;
@@ -390,35 +398,39 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       case 'p' :
         if (this.ifl_switch_p) {
           this.ifl_switch_ibe = false;
+          this.mm_switch_ibe = false;
+          this.mm_switch_p = false;
           this.BeIflDisabled = true;
+          this.BeMmDisabled = true;
           this.ProductMmDisabled = true;
-          this.sm.inputFilterLevel.internalBELevel = undefined;
         } else {
+          this.sm.inputFilterLevel.productLevel = undefined;
           this.BeIflDisabled = false;
+          this.BeMmDisabled = false;
           this.ProductMmDisabled = false;
         }
         break;
       case 'le' :
         if (this.ifl_switch_le) {
           this.LegalMmDisabled = true;
-          this.sm.manualMapping.entityLevel = undefined;
         } else {
+          this.sm.inputFilterLevel.entityLevel = undefined;
           this.LegalMmDisabled = false;
         }
         break;
       case 's' :
         if (this.ifl_switch_s) {
           this.SalesMmDisabled = true;
-          this.sm.manualMapping.salesLevel = undefined;
         } else {
+          this.sm.inputFilterLevel.salesLevel = undefined;
           this.SalesMmDisabled = false;
         }
         break;
       case 'scms' :
         if (this.ifl_switch_scms) {
           this.ScmsMmDisabled = true;
-          this.sm.manualMapping.scmsLevel = undefined;
         } else {
+          this.sm.inputFilterLevel.scmsLevel = undefined;
           this.ScmsMmDisabled = false;
         }
         break;
@@ -432,50 +444,55 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     switch (sw) {
       case 'ibe' :
         if (this.mm_switch_ibe) {
-          this.ifl_switch_ibe = false;
           this.mm_switch_p = false;
+          this.ifl_switch_ibe = false;
+          this.ifl_switch_p = false;
           this.ProductMmDisabled = true;
           this.BeIflDisabled = true;
-          this.sm.manualMapping.productLevel = undefined;
-          this.sm.manualMapping.internalBELevel = undefined;
+          this.ProductIflDisabled = true;
         } else {
+          this.sm.manualMapping.internalBELevel = undefined;
           this.ProductMmDisabled = false;
           this.BeIflDisabled = false;
+          this.ProductIflDisabled = false;
         }
         break;
       case 'p' :
         if (this.mm_switch_p) {
           this.mm_switch_ibe = false;
+          this.ifl_switch_ibe = false;
+          this.ifl_switch_p = false;
           this.BeMmDisabled = true;
+          this.BeIflDisabled = true;
           this.ProductIflDisabled = true;
-          this.sm.manualMapping.internalBELevel = undefined;
-          this.sm.inputFilterLevel.productLevel = undefined;
         } else {
+          this.sm.manualMapping.productLevel = undefined;
           this.BeMmDisabled = false;
+          this.BeIflDisabled = false;
           this.ProductIflDisabled = false;
         }
         break;
       case 'le' :
         if (this.mm_switch_le) {
           this.LegalIflDisabled = true;
-          this.sm.inputFilterLevel.entityLevel = undefined;
         } else {
+          this.sm.manualMapping.entityLevel = undefined;
           this.LegalIflDisabled = false;
         }
         break;
       case 's' :
         if (this.mm_switch_s) {
           this.SalesIflDisabled = true;
-          this.sm.inputFilterLevel.salesLevel = undefined;
         } else {
+          this.sm.manualMapping.salesLevel = undefined;
           this.SalesIflDisabled = false;
         }
         break;
       case 'scms' :
         if (this.mm_switch_scms) {
           this.ScmsIflDisabled = true;
-          this.sm.inputFilterLevel.scmsLevel = undefined;
         } else {
+          this.sm.manualMapping.scmsLevel = undefined;
           this.ScmsIflDisabled = false;
         }
         break;
@@ -485,17 +502,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   mmSelect() {
     // if manual mapping is unselected, clear out the values
     if (this.sm.indicators.manualMapping ===  'N') {
+
       this.mm_switch_ibe = false;
       this.mm_switch_p = false;
       this.mm_switch_le = false;
       this.mm_switch_s = false;
       this.mm_switch_scms = false;
-
-      this.sm.manualMapping.internalBELevel = undefined;
-      this.sm.manualMapping.productLevel = undefined;
-      this.sm.manualMapping.entityLevel = undefined;
-      this.sm.manualMapping.salesLevel = undefined;
-      this.sm.manualMapping.scmsLevel = undefined;
 
       this.mmChange('ibe');
       this.mmChange('p');
@@ -703,6 +715,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   validate() {
+
+    if (this.isGroupingParent()) {
+      return null;
+    }
+
     this.errs = [];
     if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
       this.errs.push('Duplicate rules entered');
@@ -712,7 +729,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.sm.startFiscalMonth) {
       this.errs.push(`No "Effective Month" value`);
     }
-    if (this.sm.categoryType === 'MM') {
+    if (this.sm.categoryType === 'Manual Mix') {
       const hw = Number(this.sm.manualMixHw);
       const sw = Number(this.sm.manualMixSw);
       if (isNaN(hw)) {
@@ -726,8 +743,26 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       }
     }
 
+    if (!this.validateManualMapping()) {
+      this.errs.push('Manual Mapping selected, but no value entered');
+    }
+
     this.errs = this.errs.map(err => `* ${err}`)
     return this.errs.length ? this.errs : null;
+  }
+
+    validateManualMapping() {
+    if (
+      this.isManualMapping() &&
+      !(this.mm_switch_ibe || this.mm_switch_p || this.mm_switch_le || this.mm_switch_s || this.mm_switch_scms)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  isGroupingParent() {
+    return this.sm.indicators.groupFlag === 'Y';
   }
 
   ngOnDestroy() {

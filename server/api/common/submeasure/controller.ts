@@ -141,7 +141,7 @@ export default class SubmeasureController extends ApprovalController {
   }
 
   approve(req, res, next) {
-    if (!req.body.rules.length) {
+    if (req.body.indicators.groupFlag === 'N' && !req.body.rules.length) {
       next(new ApiError(`No rules specified in submeasure: ${req.body.name}`));
       return;
     }
@@ -158,7 +158,7 @@ export default class SubmeasureController extends ApprovalController {
 
   postApproveStep(sm, req) {
     // remove product class uploads for this submeasure and add new ones
-    if (sm.categoryType === 'MM') {
+    if (sm.categoryType === 'Manual Mix') {
       return this.productClassUploadRepo.removeMany({submeasureName: sm.name})
         .then(() => {
           return this.productClassUploadRepo.addManyTransaction([
