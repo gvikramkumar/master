@@ -43,7 +43,7 @@ export class SubmeasureDetailDialogComponent {
       this.ruleService.getManyLatestGroupByNameActive(this.store.module.moduleId).toPromise()
     ];
     if (this.sm.groupingSubmeasureId) {
-      promises.push(this.submeasureService.getOneLatest({submeasureKey: this.sm.groupingSubmeasureId, status: {$in: ['A', 'I']}}).toPromise());
+      promises.push(this.submeasureService.getOneLatest({submeasureKey: this.sm.groupingSubmeasureId}).toPromise());
     }
     Promise.all(promises)
       .then(results => {

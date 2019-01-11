@@ -43,7 +43,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   orgSubmeasure: Submeasure;
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
-  groupingSubmeasures: GroupingSubmeasure[] = [];
+  groupingSubmeasures = [];
   sources: Source[];
   measureSources: Source[] = [];
   rules: AllocationRule[] = [];
@@ -345,6 +345,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.groupingSubmeasures = groupingSubmeasures;
         if (!init) {
           this.sm.groupingSubmeasureId = undefined;
+        } else {
+          // this is a total hack. only way I could get the dropdown to populate on page refresh on cui 6.5.6. Remove for later versions and see if it works
+          this.sm.groupingSubmeasureId = undefined;
+          setTimeout(() => {
+            this.sm.groupingSubmeasureId = this.orgSubmeasure.groupingSubmeasureId;
+          });
         }
       });
 
@@ -709,6 +715,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   validate() {
+
+    if (this.isGroupingParent()) {
+      return null;
+    }
+
     this.errs = [];
     if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
       this.errs.push('Duplicate rules entered');
@@ -748,6 +759,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     } else {
       return true;
     }
+  }
+
+  isGroupingParent() {
+    return this.sm.indicators.groupFlag === 'Y';
   }
 
   ngOnDestroy() {
