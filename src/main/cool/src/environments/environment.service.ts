@@ -44,6 +44,7 @@ export class EnvironmentService {
     
     basepdafapi: string = '';
     basepdafdevapi:string ='';
+    pdaf_redirect_uri:string = '';
 
     REST_API_URL_GET_CURRENT_USER;
     REST_API_URL_GET_LDAP_INFO;
@@ -51,6 +52,7 @@ export class EnvironmentService {
     REST_API_SECONDARY_BUSINESS_UNIT_URL;
     REST_API_SECONDARY_BUSINESS_ENTITY_URL;
     PDAF_API;
+    PDAF_GET_TOKEN_API;
 
     USER_ID;
     PASSWORD;
@@ -81,23 +83,26 @@ export class EnvironmentService {
                 this.baseapi = 'https://cool-srv-stg.cisco.com/coolsrv';
                 this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
                 this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
+                this.pdaf_redirect_uri = 'https://cool-stg.cisco.com/cool';
                 break;
             case 'development':
                
             this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
             this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
             this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
+            this.pdaf_redirect_uri = 'https://cool-dev.cisco.com/cool';
                 break;
             default:
                 this.baseapi = '/api';
                 this.basepdafapi = '/pdafapp';
                 this.basepdafdevapi ='/pdafappdev';
+                this.pdaf_redirect_uri = 'https://cool-dev.cisco.com/cool';
                 /**
                  * Please remove your user ID and Password before checkin
                  * this will be only used for local development
                  */
-                this.USER_ID = '';
-                this.PASSWORD = '';
+                this.USER_ID = 'lulfeng';
+                this.PASSWORD = 'Wdq123321@';
         }
 
 
@@ -142,6 +147,7 @@ export class EnvironmentService {
         this.REST_API_SECONDARY_BUSINESS_UNIT_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true';
         this.REST_API_SECONDARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
         this.PDAF_API = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy';
+        this.PDAF_GET_TOKEN_API = "https://cloudsso-test.cisco.com/as/authorization.oauth2?client_id=cool_pdaf_client&response_type=token&redirect_uri=" + this.pdaf_redirect_uri;
        
     }
 

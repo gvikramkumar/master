@@ -10,7 +10,6 @@ import {ExitCriteriaValidationComponent} from './exit-criteria-validation/exit-c
 import {StakeholderFullComponent} from './stakeholder-full/stakeholder-full.component';
 import {MenuBarComponent} from './menu-bar/menu-bar.component';
 import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
-
 import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
 import { ActionsComponent } from './actions/actions.component';
 import { AccessManagementComponent } from './access-management/access-management.component';
@@ -18,6 +17,7 @@ import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { AuthGuard } from './auth/gaurds/auth-guard';
+import {OfferSolutioningComponent} from './offer-solutioning/offer-solutioning.component'
 
 
 const routes: Routes = [
@@ -85,6 +85,10 @@ const routes: Routes = [
   {
     path: 'auth-error',
     component: AuthErrorComponent
+  },
+  {
+    path: 'offerSolutioning',
+    component: OfferSolutioningComponent
   }
 ];
 

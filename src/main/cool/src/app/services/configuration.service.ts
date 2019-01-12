@@ -12,6 +12,7 @@ export class ConfigurationService {
     urlGetUserInfo = this.environmentService.REST_API_URL_GET_LDAP_INFO;
     urlGetCurrentUser = this.environmentService.REST_API_URL_GET_CURRENT_USER;
     urlCheckAdminAccess = this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
+    accessToken:string = "";
     private _startupData: any;
 
     constructor(private httpClient: HttpClient, 
@@ -21,6 +22,26 @@ export class ConfigurationService {
     }
 
     init() {
+        debugger;
+        let that = this;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (location.hash) {
+                        /* Extract the Access Token from the URI fragment */
+                        that.accessToken = location.hash.split('&')[0].split('=')[1];
+                    }
+                }
+            };
+            
+            xhttp.open("GET", this.environmentService.PDAF_GET_TOKEN_API, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.send();
+        ;
+        
+        
+        console.log(this.getAuthHeader());
+        // original code: DO NOT CH
         return new Promise((resolve, reject) => {
             this.httpClient.get(this.urlGetCurrentUser, { withCredentials: true }).toPromise()
                 .then((user) => {
@@ -51,6 +72,11 @@ export class ConfigurationService {
         return (error: any) => {
             console.log(error);
         }
+    }
+
+    /* set this header value with key as 'Authorization' before calling any api */
+    getAuthHeader(){
+       return ('Bearer ' + this.accessToken);
     }
 
     get startupData(): any {
