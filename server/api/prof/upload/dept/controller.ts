@@ -138,7 +138,13 @@ export default class DeptUploadUploadController extends UploadController {
   }
 
   validateCanDeptUpload() {
+/*
     if (this.submeasure.indicators.deptAcct.toUpperCase() !== 'Y') {
+      this.addErrorMessageOnly(`Sub Measure doesn't allow department upload`);
+    }
+*/
+    // std cogs adj and mfg overhead measures (2 & 4) AND sm has EXPSSOT MFGO source (#3)
+    if (!( (this.submeasure.measureId === 2 || this.submeasure.measureId === 4) && this.submeasure.sourceId === 3) ) {
       this.addErrorMessageOnly(`Sub Measure doesn't allow department upload`);
     }
     return Promise.resolve();
