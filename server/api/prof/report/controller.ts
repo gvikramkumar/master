@@ -68,7 +68,7 @@ export default class ReportController extends ControllerBase {
   getExcelReport(req, res, next) {
     this.verifyProperties(req.body, ['excelFilename']);
     const moduleId = req.body.moduleId;
-    const excelFilename = req.body.excelFilename;
+    let excelFilename = req.body.excelFilename;
     const body = _.omit(req.body, ['moduleId', 'excelFilename']);
     let excelSheetname;
     let excelHeaders;
@@ -141,7 +141,8 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['2t Submeasure List'];
         excelHeaders = ['Submeasure Name', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
         excelProperties = ['sub_measure_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
-        promise = this.postgresRepo.get2TSebmeasureListReport();
+        excelFilename = `2T_Sub_Measure_List_Report_${req.dfa.fiscalMonths.prof}.xlsx`;
+        promise = this.postgresRepo.get2TSebmeasureListReport(req.dfa.fiscalMonths.prof);
         break;
       case 'disti-direct':
         excelSheetname = ['Disti to Direct'];

@@ -65,7 +65,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: '2t-submeasure-list', text: '2T Sub-Measure List', disabled: false,
-      filename: 'Sub_Measure_List_Report'
+      filename: '2T_Sub_Measure_List_Report'
     },
     {
       type: 'allocation-rule', text: 'Rule Updates', disabled: false,
@@ -237,7 +237,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${this.fiscalMonth}.xlsx`;
     } else if (this.report.hasSubmeasureOnly) {
       return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${dateStr}.xlsx`;
-    } else if (this.report.hasFiscalMonthOnly || this.report.hasMultiFiscalMonthOnly) {
+    } else if (this.report.hasFiscalMonthOnly) {
       return this.report.filename + `_${this.fiscalMonth}.xlsx`;
     } else {
       return this.report.filename + `_${dateStr}.xlsx`;
