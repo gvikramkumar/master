@@ -4,20 +4,17 @@
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug",
-        "pathRewrite": {"^/api" : ""}
-    },
-    "/pdafappdev": {
-        "target": "https://pdaf-api-dev.cisco.com/pdafapp",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {"^/pdafappdev" : ""}
+        "pathRewrite": {
+            "^/api": ""
+        }
     },
     "/pdafapp": {
-        "target": "https://pdaf-api-stg.cisco.com/pdafapp",
+        "target": "https://api-supplychain-dev.cisco.com/pdafapp",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug",
-        "pathRewrite": {"^/pdafapp" : ""}
+        "pathRewrite": {
+            "^/pdafapp": ""
+        }
     }
 }
