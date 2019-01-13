@@ -102,7 +102,7 @@ export class EnvironmentService {
                 this.basepdafapi = '/pdafapp';
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com'
                 this.client_id = 'cool_pdaf_client';
-                this.redirect_url = 'http://localhost:4200'
+                this.redirect_url = 'http://localhost.cisco.com:4200'
               
         }
 
@@ -143,7 +143,7 @@ export class EnvironmentService {
         this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/emailNotification/send';
         this.REST_APT_MMPAGE_RETRIVE_DATA_GET_URL = this.baseapi + '/offer/getOffersDetails/'
 
-        this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.0/get/currentUser';
+        this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.1/get/currentUser';
         this.REST_API_URL_GET_LDAP_INFO = this.basepdafapi + '/user/1.0/getLdapUserInfo';
         this.REST_API_PRIMARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
         this.REST_API_SECONDARY_BUSINESS_UNIT_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true';
