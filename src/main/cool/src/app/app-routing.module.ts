@@ -6,9 +6,9 @@ import { CreateOfferCoolComponent } from './create-offer-cool/create-offer-cool.
 import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
 import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.component';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
-import {ExitCriteriaValidationComponent} from './exit-criteria-validation/exit-criteria-validation.component';
-import {StakeholderFullComponent} from './stakeholder-full/stakeholder-full.component';
-import {MenuBarComponent} from './menu-bar/menu-bar.component';
+import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
+import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
+import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
 import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
 import { ActionsComponent } from './actions/actions.component';
@@ -17,19 +17,15 @@ import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { AuthGuard } from './auth/gaurds/auth-guard';
-import {OfferSolutioningComponent} from './offer-solutioning/offer-solutioning.component'
+import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component'
 
 
 const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch : 'full'
-  },
+
   {
     path: 'dashboard',
     component: DashboardComponent
-  } ,
+  },
   {
     path: 'coolOffer',
     component: CreateOfferCoolComponent,
@@ -42,7 +38,7 @@ const routes: Routes = [
   {
     path: 'mmassesment/:id/:id2',
     component: MmAssesmentComponent,
-    resolve:{ offerData: OfferOverViewResolver }
+    resolve: { offerData: OfferOverViewResolver }
   },
   {
     path: 'createNewOffer',
@@ -59,7 +55,7 @@ const routes: Routes = [
   {
     path: 'offerDetailView/:id/:id2',
     component: OfferDetailViewComponent,
-    resolve:{ offerData: OfferOverViewResolver }
+    resolve: { offerData: OfferOverViewResolver }
   },
   {
     path: 'exitCriteriaValidation/:id',
@@ -71,11 +67,12 @@ const routes: Routes = [
   },
   {
     path: 'menu',
-    component: MenuBarComponent},
-    {
+    component: MenuBarComponent
+  },
+  {
     path: 'strategyReview/:id/:id2',
     component: StrategyReviewComponent,
-    resolve:{ offerData: OfferOverViewResolver }
+    resolve: { offerData: OfferOverViewResolver }
   },
   {
     path: 'accessManagement',
@@ -89,6 +86,16 @@ const routes: Routes = [
   {
     path: 'offerSolutioning',
     component: OfferSolutioningComponent
+  },
+  {
+    path: 'access_token',
+    redirectTo: '/dashboard',
+    pathMatch: 'full'
+  },
+  {
+    path: '',
+    redirectTo: '/dashboard',
+    pathMatch: 'full'
   }
 ];
 
