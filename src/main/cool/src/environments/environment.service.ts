@@ -7,7 +7,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 @Injectable()
 export class EnvironmentService {
 
-    baseapi: string='';
+    baseapi: string = '';
     REST_API_MYACTIONS_URL;
     REST_API_PRIMARY_URL;
     REST_API_OFFER_CREATE_URL;
@@ -41,10 +41,8 @@ export class EnvironmentService {
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
     REST_API_CREATE_BPM_APPROVAL_URL;
     REST_APT_MMPAGE_RETRIVE_DATA_GET_URL;
-    
+
     basepdafapi: string = '';
-    basepdafdevapi:string ='';
-    pdaf_redirect_uri:string = '';
 
     REST_API_URL_GET_CURRENT_USER;
     REST_API_URL_GET_LDAP_INFO;
@@ -54,12 +52,16 @@ export class EnvironmentService {
     PDAF_API;
     PDAF_GET_TOKEN_API;
 
-    USER_ID;
-    PASSWORD;
+    authtokenbaseapi: string = '';
+    client_id;
+    redirect_url;
+    GENERATE_AUTH_TOKEN_URL;
+
+
     constructor() {
         this.setEnvironmentVariables();
     }
-   
+
     private setEnvironmentVariables() {
         const windowUrl = location.href;
         let environment = 'localhost';
@@ -77,34 +79,34 @@ export class EnvironmentService {
             case 'production':
                 this.baseapi = 'https://cool-srv-prd.cisco.com/coolsrv';
                 this.basepdafapi = 'https://pdaf-api-prd.cisco.com/pdafapp';
-                this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
+                this.authtokenbaseapi = 'https://cloudsso.cisco.com'
+                this.client_id = 'cool_pdaf_client';
+                this.redirect_url = 'https://cool-prd.cisco.com/cool'
                 break;
             case 'stage':
                 this.baseapi = 'https://cool-srv-stg.cisco.com/coolsrv';
                 this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
-                this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
-                this.pdaf_redirect_uri = 'https://cool-stg.cisco.com/cool';
+                this.authtokenbaseapi = 'https://cloudsso-test.cisco.com'
+                this.client_id = 'cool_pdaf_client';
+                this.redirect_url = 'https://cool-stg.cisco.com/cool'
                 break;
             case 'development':
-               
-            this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
-            this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
-            this.basepdafdevapi = 'https://pdaf-api-dev.cisco.com/pdafapp';
-            this.pdaf_redirect_uri = 'https://cool-dev.cisco.com/cool';
+                this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
+                this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
+                this.authtokenbaseapi = 'https://cloudsso-test.cisco.com'
+                this.client_id = 'cool_pdaf_client';
+                this.redirect_url = 'https://cool-dev.cisco.com/cool'
                 break;
             default:
                 this.baseapi = '/api';
                 this.basepdafapi = '/pdafapp';
-                this.basepdafdevapi ='/pdafappdev';
-                this.pdaf_redirect_uri = 'https://cool-dev.cisco.com/cool';
-                /**
-                 * Please remove your user ID and Password before checkin
-                 * this will be only used for local development
-                 */
-                this.USER_ID = '';
-                this.PASSWORD = '';
+                this.authtokenbaseapi = 'https://cloudsso-test.cisco.com'
+                this.client_id = 'cool_pdaf_client';
+                this.redirect_url = 'http://localhost:4200'
+              
         }
 
+        this.GENERATE_AUTH_TOKEN_URL = `${this.authtokenbaseapi}/as/authorization.oauth2?client_id=${this.client_id}&response_type=token&redirect_uri=${this.redirect_url}`;
 
         this.REST_API_GETFUNCTIONAL_ROLE_URL = this.baseapi + '/LOV/getFunctionalRoles';
         this.REST_API_STAKEHOLDERLIST_GET_URL = this.baseapi + '/offer/getOffersDetails';
@@ -142,13 +144,11 @@ export class EnvironmentService {
         this.REST_APT_MMPAGE_RETRIVE_DATA_GET_URL = this.baseapi + '/offer/getOffersDetails/'
 
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.0/get/currentUser';
-        this.REST_API_URL_GET_LDAP_INFO = this.basepdafdevapi + '/user/1.0/getLdapUserInfo';
+        this.REST_API_URL_GET_LDAP_INFO = this.basepdafapi + '/user/1.0/getLdapUserInfo';
         this.REST_API_PRIMARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
         this.REST_API_SECONDARY_BUSINESS_UNIT_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true';
         this.REST_API_SECONDARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
         this.PDAF_API = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy';
-        this.PDAF_GET_TOKEN_API = "https://cloudsso-test.cisco.com/as/authorization.oauth2?client_id=cool_pdaf_client&response_type=token&redirect_uri=" + this.pdaf_redirect_uri;
-       
     }
 
 

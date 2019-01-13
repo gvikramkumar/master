@@ -8,14 +8,15 @@ import {
 } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { EnvironmentService } from "../../environments/environment.service";
+import { ConfigurationService } from '../services/configuration.service'
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
-  constructor(private environmentService: EnvironmentService) { }
-  
+  constructor(private environmentService: EnvironmentService, private configurationService: ConfigurationService) { }
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.environmentService.USER_ID && this.environmentService.PASSWORD && req.url.startsWith('/pdafapp')) {
-      const authReq = req.clone({ headers: req.headers.set('Authorization', `Basic ${btoa(this.environmentService.USER_ID + ":" + this.environmentService.PASSWORD)}`) });
+    if (req.url.startsWith(this.environmentService.basepdafapi) && this.configurationService.startupData.token) {
+      const authReq = req.clone({ headers: req.headers.set('Authorization', `Bearer ${this.configurationService.startupData.token}`) });
       return next.handle(authReq)
     }
     else {
