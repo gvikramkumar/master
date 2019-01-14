@@ -1,0 +1,20 @@
+.addcommentspan{
+    color: #007493; 
+    font-size: 19px;
+margin-right: 5px;  
+cursor: pointer;
+}
+
+.addcomment,h6{
+    color: #007493;
+}
+
+textarea,{
+    width:100%;
+}
+
+.comments{
+   max-height: 200px;
+overflow-y: scroll;
+
+}

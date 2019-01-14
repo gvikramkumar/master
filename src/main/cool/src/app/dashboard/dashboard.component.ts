@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild, } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild, ɵConsole,Output,EventEmitter } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { Offer } from '../models/offer';
 import { Router } from '@angular/router';
@@ -66,6 +66,7 @@ export class DashboardComponent implements OnInit {
     private httpClient: HttpClient) {
   }
 
+
   ngOnInit() {
     this.cols = [
       { field: 'offerId', header: 'OFFER ID' },
@@ -76,12 +77,14 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getMyActionsList()
       .subscribe(data => {
         this.myActions = data;
+        console.log("first data",data);
         this.processMyActionsList();
       });
 
     this.dashboardService.getMyOffersList()
       .subscribe(data => {
         this.myOffersList = data;
+        console.log("myofferList",this.myOffersList);
         this.myOffersListProps = Object.keys(this.myOffersList);
       });
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
@@ -135,6 +138,7 @@ export class DashboardComponent implements OnInit {
           this.myOfferArray.push(obj2);
         });
         this.myActionsList = this.myOfferArray;
+        console.log("Actions-myActions",this.myActionsList);
       }
     }
   }
@@ -158,7 +162,7 @@ export class DashboardComponent implements OnInit {
   }
 
   dateFormat(inputDate: string) {
-    return moment(inputDate).format('DD-MMM-YYYY');
+    return moment(inputDate).format('DD-MM-YYYY');
   }
 
   selectedrownof(actionData) {
@@ -243,6 +247,7 @@ export class DashboardComponent implements OnInit {
     if (popover.isOpen()) {
       popover.close();
     }
+
   }
 
   offerDetailOverView(offerId, caseId) {

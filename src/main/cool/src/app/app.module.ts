@@ -61,6 +61,13 @@ import { HttpInterceptorService } from './services/http-interceptor.service';
 import { StakeholderIdentificationComponent } from './directives/stakeholder-identification/stakeholder-identification.component';
 import { StrategyReviewService } from './services/strategy-review.service';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
+import { ViewcommentComponent } from './viewcomment/viewcomment.component';
+import {ViewcommentService } from './services/viewcomment.service';
+import {HeaderService} from './header/header.service';
+import { TurbotaxviewComponent } from './turbotaxview/turbotaxview.component';
+import {  TurbotaxService } from './services/turbotax.service';
+import {OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component'
+
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -73,6 +80,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     FooterComponent,
     DashboardComponent,
     CreateOfferCoolComponent,
+    OfferSolutioningComponent,
     MmAssesmentComponent,
     CreateNewOfferComponent,
     RightPanelComponent,
@@ -89,7 +97,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     MenuBarPopupComponent,
     AuthErrorComponent,
     StakeholderIdentificationComponent,
-    OfferSolutioningComponent
+    ViewcommentComponent,
+    TurbotaxviewComponent
   ],
   imports: [
     BrowserModule,
@@ -129,9 +138,11 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     EnvironmentService,
     MonetizationModelService,
     OfferDetailViewService,
+    HeaderService,
     ExitCriteriaValidationService,
     DashboardService,
     ActionsService,
+    
     StakeholderfullService,
     AccessManagementService,
     BupmGuard,
@@ -141,6 +152,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     OfferPhaseService,
     OfferOverViewResolver,
     StrategyReviewService,
+    ViewcommentService,
+    TurbotaxService,
     MenuBarService,
      {
        provide: APP_INITIALIZER,

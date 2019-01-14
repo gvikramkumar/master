@@ -43,6 +43,8 @@ export class EnvironmentService {
     REST_APT_MMPAGE_RETRIVE_DATA_GET_URL;
     REST_API_STRATEGY_REVIEW_GET_URL;
     
+    REST_API_VIEW_COMMENT_GET_URL;
+    REST_API_CREATE_COMMENT_URL;
 
     basepdafapi: string = '';
 
@@ -146,6 +148,8 @@ export class EnvironmentService {
         this.REST_APT_MMPAGE_RETRIVE_DATA_GET_URL = this.baseapi + '/offer/getOffersDetails/';
         this.REST_API_STRATEGY_REVIEW_GET_URL = this.baseapi + '/strateReview/review/';
 
+        this.REST_API_VIEW_COMMENT_GET_URL=this.baseapi+'/action/getComment';
+        this.REST_API_CREATE_COMMENT_URL=this.baseapi+'/action/createComment';
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.1/get/currentUser';
         this.REST_API_URL_GET_LDAP_INFO = this.basepdafapi + '/user/1.0/getLdapUserInfo';
         this.REST_API_PRIMARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';

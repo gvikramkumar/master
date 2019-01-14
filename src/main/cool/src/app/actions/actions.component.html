@@ -32,14 +32,51 @@
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
                 <p-column field="offerId" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.offerId}}<br /></span>
+                    <a  [ngbPopover]="popCommentContent"
+                     (click)="p3.open()" autoClose="'outside'" #p3="ngbPopover"
+                     triggers="manual" pTooltip="TurboTax" placement="right">{{actionData.offerId}}<br /></a>
                     <span>{{actionData.offerName}}</span>
+                    <!--new code strarts here-->
+
+                    <ng-template #popCommentContent ptemplate="body">
+                      <div  class="popover" style="width:1000px;">
+
+                        <div class="popover__body">
+
+                          <app-turbotaxview [caseId]="actionData.caseId"></app-turbotaxview>
+                          <a class="modal__close" id="popover_close"><span class="icon-close"
+                            (click)="displayActionPop(p3)"></span></a>
+                        </div>
+
+                      </div>
+                    </ng-template>
+
+                    <!--ends here-->
+
                   </ng-template>
                 </p-column>
                 <p-column field="actions" sortable="true" header="ACTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span class="offerName">{{actionData.actiontTitle}} <br /></span>
                     <span class="offerDesc">{{actionData.actionDesc}}</span>
+                    <!-- my new code coming here -->
+                    <ng-template #popCommentContent ptemplate="body">
+                      <div  class="popover" style="width:501px;left:230px">
+
+                        <div class="popover__body">
+                          <h5>View/Edit Comment</h5>
+
+                          <app-viewcomment [taskId] = "actionData.taskId" [popContent] = "p4"></app-viewcomment>
+                          <a class="modal__close" id="popover_close"
+                          ><span class="icon-close"
+                            (click)="displayActionPop(p4)"></span></a>
+                        </div> 
+
+                      </div>
+                    </ng-template>
+                    <span [ngbPopover]="popCommentContent" (click)="p4.open()" autoClose="'outside'" #p4="ngbPopover"
+                      triggers="manual" pTooltip="Comments" placement="top" class="fa fa-comment" aria-hidden="true"></span>
+                    <!--new code ending here-->
                   </ng-template>
                 </p-column>
                 <p-column field="createdBy" sortable="true" header="OFFER CREATED BY">
@@ -186,3 +223,5 @@
     </p-dialog>
   </div>
 </div>
+
+
