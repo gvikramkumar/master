@@ -89,7 +89,7 @@ export class EnvironmentService {
                 break;
             case 'stage':
                 this.baseapi = 'https://cool-srv-stg.cisco.com/coolsrv';
-                this.basepdafapi = 'https://api-supplychain-stage.cisco.com/pdafapp';
+                this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com'
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-stg.cisco.com/cool'
