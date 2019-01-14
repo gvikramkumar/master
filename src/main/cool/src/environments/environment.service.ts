@@ -41,6 +41,7 @@ export class EnvironmentService {
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
     REST_API_CREATE_BPM_APPROVAL_URL;
     REST_APT_MMPAGE_RETRIVE_DATA_GET_URL;
+    REST_API_STRATEGY_REVIEW_GET_URL;
     
     basepdafapi: string = '';
     basepdafdevapi:string ='';
@@ -134,7 +135,8 @@ export class EnvironmentService {
         this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseapi + '/LOV/getAssignee/';
         this.REST_API_CREATE_BPM_APPROVAL_URL = this.baseapi + '/action/proceed';
         this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/emailNotification/send';
-        this.REST_APT_MMPAGE_RETRIVE_DATA_GET_URL = this.baseapi + '/offer/getOffersDetails/'
+        this.REST_APT_MMPAGE_RETRIVE_DATA_GET_URL = this.baseapi + '/offer/getOffersDetails/';
+        this.REST_API_STRATEGY_REVIEW_GET_URL = this.baseapi + '/strateReview/review/';
 
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.0/get/currentUser';
         this.REST_API_URL_GET_LDAP_INFO = this.basepdafdevapi + '/user/1.0/getLdapUserInfo';

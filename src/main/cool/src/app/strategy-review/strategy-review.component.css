@@ -294,3 +294,28 @@ margin: 0 5px;
   padding: 0;
   overflow: hidden;
 }
+
+.reviewed-comments {
+  display: inline-block;
+  line-height: 1;
+  margin-left: 2em;
+  padding-left: 1em;
+  border-left: solid 1px #c3c3c3;
+  float: right;
+  min-width: 200px;
+}
+
+span.total {
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  text-align: center;
+  width: 2em;
+  top: 3px;
+  color: white;
+  font-family: sans-serif;
+}
+
+.not-reviewed {
+  text-align: center;
+}
