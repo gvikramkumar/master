@@ -25,7 +25,7 @@ db.dfa_submeasure.insertMany([
     reportingLevels: [null, "Indirect Revenue Adjustments", null],
     indicators: {
       dollarUploadFlag: "Y",
-      manualMapping: "Y",
+      manualMapping: "N",
       groupFlag: 'N',
       retainedEarnings: 'N',
       transition: 'N',
@@ -69,7 +69,7 @@ db.dfa_submeasure.insertMany([
     reportingLevels: ["Manufacturing Overhead"],
     indicators: {
       dollarUploadFlag: "Y",
-      manualMapping: "Y",
+      manualMapping: "N",
       groupFlag: 'N',
       retainedEarnings: 'N',
       transition: 'N',
