@@ -65,12 +65,12 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
       ]))
       .then(() => this.lookForErrors())
       .then(() => Promise.all([
-        this.validateInputProductValue(),
-        this.validateInputSalesValue(),
+        this.validateInputProductValue(true),
+        this.validateInputSalesValue(true),
         this.validateGrossUnbilledAccruedRevenueFlag(),
-        this.validateInputLegalEntityValue(),
-        this.validateInputBusinessEntityValue(),
-        this.validateSCMSSegment(),
+        this.validateInputLegalEntityValue(true),
+        this.validateInputBusinessEntityValue(true),
+        this.validateSCMSSegment(true),
         this.validateAmount(),
         this.validateRevenueClassification(),
       ]))
