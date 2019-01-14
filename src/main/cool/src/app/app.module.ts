@@ -59,13 +59,7 @@ import { AuthGuard } from './auth/gaurds/auth-guard';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 import { StakeholderIdentificationComponent } from './directives/stakeholder-identification/stakeholder-identification.component';
-import { ViewcommentComponent } from './viewcomment/viewcomment.component';
-import {ViewcommentService } from './services/viewcomment.service';
-import {HeaderService} from './header/header.service';
-import { TurbotaxviewComponent } from './turbotaxview/turbotaxview.component';
-import {  TurbotaxService } from './services/turbotax.service';
-import {OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component'
-
+import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -78,7 +72,6 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     FooterComponent,
     DashboardComponent,
     CreateOfferCoolComponent,
-    OfferSolutioningComponent,
     MmAssesmentComponent,
     CreateNewOfferComponent,
     RightPanelComponent,
@@ -95,8 +88,7 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     MenuBarPopupComponent,
     AuthErrorComponent,
     StakeholderIdentificationComponent,
-    ViewcommentComponent,
-    TurbotaxviewComponent
+    OfferSolutioningComponent
   ],
   imports: [
     BrowserModule,
@@ -136,11 +128,9 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     EnvironmentService,
     MonetizationModelService,
     OfferDetailViewService,
-    HeaderService,
     ExitCriteriaValidationService,
     DashboardService,
     ActionsService,
-    
     StakeholderfullService,
     AccessManagementService,
     BupmGuard,
@@ -149,8 +139,6 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     UserService,
     OfferPhaseService,
     OfferOverViewResolver,
-    ViewcommentService,
-    TurbotaxService,
     MenuBarService,
      {
        provide: APP_INITIALIZER,

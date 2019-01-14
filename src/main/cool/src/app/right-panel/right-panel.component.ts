@@ -116,7 +116,7 @@ export class RightPanelComponent implements OnInit {
     private offerPhaseService: OfferPhaseService,
     private monetizationModelService: MonetizationModelService,
     private sharedService: SharedService) {
-    this.activatedRoute.params.subscribe(params => { debugger;
+    this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
     });
