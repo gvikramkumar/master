@@ -60,6 +60,7 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 import { StakeholderIdentificationComponent } from './directives/stakeholder-identification/stakeholder-identification.component';
 import { StrategyReviewService } from './services/strategy-review.service';
+import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
 
 export function app_init(configService: ConfigurationService,userService: UserService, envService: EnvironmentService ){
   return () => {return configService.init();};
@@ -87,7 +88,8 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     AvatarComponent,
     MenuBarPopupComponent,
     AuthErrorComponent,
-    StakeholderIdentificationComponent
+    StakeholderIdentificationComponent,
+    OfferSolutioningComponent
   ],
   imports: [
     BrowserModule,

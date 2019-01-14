@@ -12,9 +12,9 @@ export class HeaderService {
     var url = this.environmentService.REST_API_URL_GET_LDAP_INFO;
     return this.httpClient.post(url, { userId: user }, { withCredentials: true });
   }
+
   public getCurrentUser() {
     var url = this.environmentService.REST_API_URL_GET_CURRENT_USER;
     return this.httpClient.get(url, { withCredentials: true });
   }
-
 }
