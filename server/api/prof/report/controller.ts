@@ -271,11 +271,15 @@ export default class ReportController extends ControllerBase {
       case 'rule-submeasure':
         // multiSheetReport = true; ?? if multisheet report uncomment this line
         excelSheetname = ['History'];
-        excelHeaders = ['START_FISCAL_PERIOD_ID', 'END_FISCAL_PERIOD_ID', 'Sub_Measure_Key', 'SUB_MEASURE_NAME', 'MEASURE_NAME', 'SOURCE_SYSTEM_NAME', 'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
-          'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Updated By', 'Updated Date'];
+        excelHeaders = ['Start Fiscal Month', 'End Fiscal Month', 'Sub Measure Key', 'Sub Measure Name', 'Measure Name', 'Source System', 'Sales Level', 'Product Level', 'SCMS Level',
+          'Legal Entity Level', 'BE Level', 'SM Status', 'SM Updated By', 'SM Updated Date',
+          'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country Match', 'Ext Theater Match',
+          'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Rule Status', 'Rule Updated By', 'Rule Updated Date'];
 
         excelProperties = ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'salesLevel', 'productLevel', 'scmsLevel', 'legalEntityLevel', 'beLevel',
-          'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'sl1Select', 'scmsSelect', 'beSelect', 'status', 'updatedBy', 'updatedDate'];
+          'smStatus', 'smUpdatedBy', 'smUpdatedDate',
+          'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch',
+          'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'ruleStatus', 'ruleUpdatedBy', 'ruleUpdatedDate'];
 
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
@@ -319,6 +323,9 @@ export default class ReportController extends ControllerBase {
                     scmsLevel: sm.inputFilterLevel.scmsLevel,
                     legalEntityLevel: sm.inputFilterLevel.legalEntityLevel,
                     beLevel: sm.inputFilterLevel.beLevel,
+                    smStatus: sm.status,
+                    smUpdatedBy: sm.updatedBy,
+                    smUpdatedDate: sm.updatedDate,
 
                     ruleName: rule.name,
                     driverName: rule.driverName,
@@ -331,9 +338,9 @@ export default class ReportController extends ControllerBase {
                     sl1Select: rule.sl1Select,
                     scmsSelect: rule.scmsSelect,
                     beSelect: rule.beSelect,
-                    status: rule.status,
-                    updatedBy: rule.updatedBy,
-                    updatedDate: rule.updatedDate
+                    ruleStatus: rule.status,
+                    ruleUpdatedBy: rule.updatedBy,
+                    ruleUpdatedDate: rule.updatedDate
                     // etc, etc,
 
                   });
