@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+
 import { CreateOfferService } from '../services/create-offer.service';
 
-const searchOptions = ['Option1','Option2', 'Option3', 'Option4' ];
+const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
   selector: 'app-create-new-offer',
   templateUrl: './create-new-offer.component.html',
@@ -13,15 +13,16 @@ const searchOptions = ['Option1','Option2', 'Option3', 'Option4' ];
 export class CreateNewOfferComponent implements OnInit {
 
   search = (text$: Observable<string>) =>
-  text$
-    .debounceTime(200)
-    .distinctUntilChanged()
-    .map(term => term.length < 0 ? []
-      : searchOptions.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
+    text$
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        map(term => term.length < 0 ? []
+          : searchOptions.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+      );
+  backdropCustom = false;
 
-  backdropCustom=false;
-
-  reqType='state';
+  reqType = 'state';
 
 
   offerData = {
@@ -44,58 +45,58 @@ export class CreateNewOfferComponent implements OnInit {
     "panel2": true
   }
 
-  dotBox=[
+  dotBox = [
     {
-      status:"Completed",
-      statuscontent:"Initial MM Assesment"
+      status: "Completed",
+      statuscontent: "Initial MM Assesment"
     },
     {
-     status:"Completed",
-     statuscontent:"Initial offer Dimension"
-   }
-   ,
+      status: "Completed",
+      statuscontent: "Initial offer Dimension"
+    }
+    ,
     {
-     status:"In Progress",
-     statuscontent:"Stakeholders Identified"
-   },
-   {
-    status:"Completed",
-    statuscontent:"Offer Portfolio"
-  },
-   {
-    status:"In Progress",
-    statuscontent:"Strategy Review Completion"
-  },
-  {
-   status:"Pending",
-   statuscontent:"Offer Construct Details"
- }
+      status: "In Progress",
+      statuscontent: "Stakeholders Identified"
+    },
+    {
+      status: "Completed",
+      statuscontent: "Offer Portfolio"
+    },
+    {
+      status: "In Progress",
+      statuscontent: "Strategy Review Completion"
+    },
+    {
+      status: "Pending",
+      statuscontent: "Offer Construct Details"
+    }
   ]
 
-  resultTable=[
+  resultTable = [
     {
-      name:'Mary Adams',
-      id:'madams@altus.com',
-      function:'Pricing'
+      name: 'Mary Adams',
+      id: 'madams@altus.com',
+      function: 'Pricing'
     },
     {
-      name:'Gina Silva',
-      id:'gsilva@altus.com',
-      function:'Finance'
+      name: 'Gina Silva',
+      id: 'gsilva@altus.com',
+      function: 'Finance'
     },
     {
-      name:'Derek Brian',
-      id:'dbrian@altus.com',
-      function:'Pricing'
+      name: 'Derek Brian',
+      id: 'dbrian@altus.com',
+      function: 'Pricing'
     },
   ]
 
   setFlag: boolean;
 
 
-  constructor(private createOfferService: CreateOfferService) { 
+  constructor(private createOfferService: CreateOfferService) {
   }
-  toggleFilter:boolean = false;
+  toggleFilter: boolean = false;
   ngOnInit() {
     this.setFlag = true;
   }
@@ -103,39 +104,39 @@ export class CreateNewOfferComponent implements OnInit {
     {
       "functionaName": "CSPP",
       "approvalStatus": "Auto Approved",
-      "approvedOn":   "",
+      "approvedOn": "",
       "owner": ""
     },
     {
       "functionaName": "CPS",
       "approvalStatus": "Pending",
-      "approvedOn":   "9-Aug-2018",
+      "approvedOn": "9-Aug-2018",
       "owner": "John Thomas (FM)"
     },
     {
       "functionaName": "Compensation Ops",
       "approvalStatus": "Approved",
-      "approvedOn":   "5-Aug-2018",
+      "approvedOn": "5-Aug-2018",
       "owner": "Sean Parker(OPS)"
     },
     {
       "functionaName": "Royelty Team",
       "approvalStatus": "Conditionally Approved",
-      "approvedOn":   "4-Aug-2018",
+      "approvedOn": "4-Aug-2018",
       "owner": "Conditionally Approved"
     }
   ]
 
-  show_deliveryDesc(){
-    this.backdropCustom=true;
-   }
-
-  onSaveClick(){
-    this.backdropCustom=false;
+  show_deliveryDesc() {
+    this.backdropCustom = true;
   }
 
-  onCancelClick(){
-    this.backdropCustom=false;
+  onSaveClick() {
+    this.backdropCustom = false;
+  }
+
+  onCancelClick() {
+    this.backdropCustom = false;
   }
 
 }

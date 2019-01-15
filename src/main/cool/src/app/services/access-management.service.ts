@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AccessManagement } from '../models/accessmanagement';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { EnvironmentService } from '../../environments/environment.service';
 import { NewUser } from '../models/newuser';
 import { UserService } from './user.service';

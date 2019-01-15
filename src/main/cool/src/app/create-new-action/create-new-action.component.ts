@@ -17,6 +17,9 @@ export class CreateNewActionComponent implements OnInit {
   manualaction;
   myOfferList;
   assigneeList;
+  functionNameValue;
+  selectedOfferName;
+  addManualAction;
 
   constructor(private router: Router, 
     private searchCollaboratorService: SearchCollaboratorService,
