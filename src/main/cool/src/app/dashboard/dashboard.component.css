@@ -70,10 +70,10 @@ span.icon-chevron-right.inline-icon {
   vertical-align: middle;
 }
 .header-bar__main span.vertical-divider {
-  opacity: .5;
+  opacity: .25;
   display: inline-block;
   border-left: solid 1px white;
-  height: 50px;
+  height: 35px;
   margin: 10px 20px;
 }
 span.table--description {

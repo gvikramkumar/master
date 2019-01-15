@@ -1,16 +1,16 @@
-<h1 class="display-4 base-margin-top half-margin-bottom">   
+<h1 class="display-4 base-margin-top half-margin-bottom">
   <button class="btn btn--icon btn--white" id="flyOut"><span class="icon-list-menu"></span>
-      <div id='flyoutmenu'>  
+      <div id='flyoutmenu'>
               <ul class="panel--indigo">
                   <li *ngFor="let item of items" ><span>{{item['label']}}</span>
                       <ul class="panel--indigo">
-                          <li *ngFor="let subItem of item['items']" 
+                          <li *ngFor="let subItem of item['items']"
                           [ngClass]="{'disable-item': itemShow[subItem['label']] !== true}"
                           (click)="navigate(subItem['label'])"><span>{{subItem['label']}}</span>
                           </li>
                       </ul>
                   </li>
-                  <li> <span>On Hold/Cancel</span>  
+                  <li> <span>On Hold/Cancel</span>
                       <ul class="panel--indigo">
                               <li (click)='showOppupFunc("hold")'><span>On Hold</span>
                               </li>
@@ -19,9 +19,9 @@
                        </ul>
                   </li>
               </ul>
-          </div> 
-          
+      </div>
+
   </button> Cisco Data Platform<span class="offerID">(Offer ID  {{currentOfferId}})</span>
-</h1>  
+</h1>
 
 <app-menu-bar-popup  [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)" ></app-menu-bar-popup>
