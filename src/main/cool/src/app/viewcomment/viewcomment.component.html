@@ -2,26 +2,26 @@
   <div class="divider divider--compressed"></div>
   <br>
   <h6>COMMENT</h6>
-   <div class="comments">
-  <div *ngFor="let data of viewcomment">
-    {{data.comment}}
+  <div class="comments">
+    <div *ngFor="let data of viewcomment">
+      {{data.comment}}
+      <div class="divider divider--compressed"></div>
+      <span style="float:right;">{{data.date}}</span>
+    </div>
     <div class="divider divider--compressed"></div>
-     <span style="float:right;">{{data.date}}</span> 
   </div>
-  <div class="divider divider--compressed"></div>
-</div>
 
-  <span class= "addcommentspan" *ngIf="onDisable" (click)="OnAddComment()">+</span>
-  <label for="comment" class= "addcomment" (click)="OnAddComment()">
-   Add Another Comment</label>
-  <div *ngIf="addcomment"  >
-  <textarea style ="width:100%" [value] = "newComment" (input) = "onAddComment($event)"></textarea><br>
-  <small *ngIf = "showError" style = "  color:red">
-   !Comment should not be more than 300 characters
-  </small><br>
+  <span class="addcommentspan" *ngIf="onDisable" (click)="addComment()">+</span>
+  <label for="comment" class="addcomment" (click)="addComment()">
+    Add Another Comment</label>
+  <div *ngIf="addcomment">
+    <textarea style="width:100%" [value]="newComment" (input)="validateComment($event)"></textarea><br>
+    <small *ngIf="showError" style="  color:red">
+      Comment should not be more than 300 characters
+    </small><br>
 
- 
-  <button class="btn btn--primary" style="float:right;" (click)="updateComment()"  [disabled]="onDisable" type="submit">Update</button>
-  <button class="btn btn--primary" style="float:right;margin-right:12px" (click)="removeComment()" type="submit">Cancel</button>
-</div>
+
+    <button class="btn btn--primary" style="float:right;" (click)="updateComment()" [disabled]="onDisable" type="submit">Update</button>
+    <button class="btn btn--primary" style="float:right;margin-right:12px" (click)="removeComment()" type="submit">Cancel</button>
+  </div>
 </div>

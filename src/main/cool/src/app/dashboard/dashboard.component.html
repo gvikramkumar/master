@@ -436,8 +436,37 @@
                       </ng-template>
                       <span placement="bottom" [ngbPopover]="popActionContent" #p1="ngbPopover" triggers="manual"
                         (click)="p1.open();selectedrownof(actionData)" pTooltip="Action" tooltipPosition="top">
-                        <span class="icon-clock icon-small"></span>
-                        {{actionData.offerId}}</span>
+                        <span class="icon-clock icon-small"></span></span>
+                        <!-- {{actionData.offerId}} -->
+                        <!--my changes start here-->
+
+
+
+                        <span>
+                          <a  [ngbPopover]="turboContent"
+                          (click)="p5.open()" autoClose="'outside'" #p5="ngbPopover"
+                          triggers="manual" pTooltip="TurboTax" placement="right">
+                          <!-- {{offerData[col.field]}} -->
+                          {{actionData.offerId}}
+                      <br /></a>
+                          <ng-template #turboContent ptemplate="body">
+                              <div  class="popover" style="width:1000px;">
+        
+                                <div class="popover__body">
+                                    <app-turbotaxview [caseId]="actionData.caseId"></app-turbotaxview>
+    
+                                   <a class="modal__close" id="popover_close"><span class="icon-close"
+                                    (click)="displayActionPop(p5)"></span></a>
+                                </div>
+        
+                              </div>
+                            </ng-template>  
+        
+                            <!--ends here-->
+                      </span> 
+
+
+                        <!--end here-->
                     </span>
                     <span *ngIf="actionData.alertType == 2">
                       <ng-template #popNotificationContent ptemplate="body">
@@ -494,7 +523,7 @@
                       </div>
                     </ng-template>
                     <span [ngbPopover]="popCommentContent" (click)="p3.open()" autoClose="'outside'" #p3="ngbPopover"
-                      triggers="manual" pTooltip="Comments" placement="right" class="fa fa-comment" aria-hidden="true"></span>
+                      triggers="manual" pTooltip="Comments" placement="right"  class="icon-comment" aria-hidden="true"></span>
 
                   </ng-template>
                 </p-column>
@@ -557,7 +586,8 @@
               </div>
             </div>
             <div class="responsive-table">
-              <p-table [columns]="cols" #dt [value]="myOffersList" [scrollable]="true" scrollHeight="400px" [loading]="loading"
+              <p-table [columns]="cols" #dt [value]="myOffersList" [scrollable]="true" 
+              scrollHeight="400px" [loading]="loading"
                 [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">
                 <ng-template pTemplate="header" let-columns>
                   <tr>
@@ -586,7 +616,36 @@
                 <ng-template pTemplate="body" let-offerData let-columns="columns">
                   <tr>
                     <td *ngFor="let col of columns" style="width:10%">
-                      {{offerData[col.field]}}
+                      <!-- startcode -->
+                     <span *ngIf="col.field == 'offerId'||col.field=='offerName' else other"  >
+                          <a  [ngbPopover]="turboContent"
+                          (click)="p4.open()" autoClose="'outside'" #p4="ngbPopover"
+                          triggers="manual" pTooltip="TurboTax" placement="right">
+                          {{offerData[col.field]}}
+                      <br /></a>
+                          <ng-template #turboContent ptemplate="body">
+                              <div  class="popover" style="width:1000px;">
+        
+                                <div class="popover__body">
+                                    <app-turbotaxview [caseId]="offerData.caseId"></app-turbotaxview>
+    
+                                   <a class="modal__close" id="popover_close"><span class="icon-close"
+                                    (click)="displayActionPop(p4)"></span></a>
+                                </div>
+        
+                              </div>
+                            </ng-template>  
+        
+                           
+                      </span> 
+                     
+
+                      <ng-template #other>
+                          {{offerData[col.field]}}
+                      
+                      </ng-template>
+
+
                     </td>
                     <td style="width:20%" class="td--progress-fitted">
                       <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'"
@@ -702,5 +761,4 @@
   </div>
 </div>
 
-<!--view comment template-->
-<app-turbotaxview></app-turbotaxview>
+

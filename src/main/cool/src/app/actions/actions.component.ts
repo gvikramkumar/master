@@ -11,7 +11,7 @@ import { DashboardService } from '../services/dashboard.service';
 import { NgForm } from '@angular/forms';
 import { CreateAction } from '../models/create-action';
 import { CreateActionService } from '../services/create-action.service';
-import { MenuBarService } from '../services/menu-bar.service'
+
 
 
 
@@ -51,9 +51,9 @@ export class ActionsComponent implements OnInit {
     private createOfferService: CreateOfferService,
     private dashboardService: DashboardService,
     private createActionService: CreateActionService,
-    private menuBarService:MenuBarService) { }
+    ) { }
 
-  ngOnInit() { debugger;
+  ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
     this.actionsService.getActionsTracker()
@@ -61,13 +61,7 @@ export class ActionsComponent implements OnInit {
         this.myActions = data;
         console.log("action offer Id",this.myActions);
         this.processMyActionsList();
-        console.log("actionlist",this.myActionsList);
       });
-
-      this.menuBarService.getRubboTaxMenu(this.myActionsList.caseId).subscribe(data=>{debugger;
-        console.log("teuboTaxDetails",data);
-      })
-    
 
     this.dashboardService.getMyOffersList().subscribe(data => {      
       this.myOfferList = data;
@@ -79,8 +73,9 @@ export class ActionsComponent implements OnInit {
    this.actionsService.getFunction().subscribe(data => {
      this.functionList = data;
   });
+     
+  
 
- 
   }
 
   onChange(offerId){
