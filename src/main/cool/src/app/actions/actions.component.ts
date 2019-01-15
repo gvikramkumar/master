@@ -44,7 +44,11 @@ export class ActionsComponent implements OnInit {
   functionNameValue: string;
   assigneeValue: Array<any>;
   dueDateValue: any;
+  ownerValue: string;
   offerCaseMap:object = {};
+  offerNameMap: object = {};
+  offerOwnerMap: object = {};
+  actionOwner: string;
 
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
@@ -67,6 +71,9 @@ export class ActionsComponent implements OnInit {
       this.myOfferList = data;
       data.forEach(ele => {
         this.offerCaseMap[ele.offerId] = ele.caseId;
+        this.offerNameMap[ele.offerId] = ele.offerName;
+        this.offerOwnerMap[ele.offerId] = ele.offerCreatedBy;
+
       })
     });
 
@@ -74,7 +81,9 @@ export class ActionsComponent implements OnInit {
      this.functionList = data;
   });
      
-  
+  // this.userService.getName().subscribe(data => {
+  //   this.actionOwner = data;
+  // })
 
   }
 
@@ -139,6 +148,8 @@ export class ActionsComponent implements OnInit {
       this.functionNameValue,
       selectedAssignee,
       this.dueDateValue.toISOString(),
+      this.offerOwnerMap[this.offerNameValue],
+      this.offerNameMap[this.offerNameValue],
     );
     console.log(createAction);
     

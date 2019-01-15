@@ -71,6 +71,9 @@ import { ViewcommentService } from './services/viewcomment.service';
 import { HeaderService } from './header/header.service';
 import { TurbotaxviewComponent } from './turbotaxview/turbotaxview.component';
 import {  TurbotaxService } from './services/turbotax.service';
+import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
+import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
+import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
 
 
 
@@ -109,7 +112,10 @@ export function app_init(configService: ConfigurationService, userService: UserS
     BillingComponent,
     ProgramComponent,
     ViewcommentComponent,
-    TurbotaxviewComponent
+    TurbotaxviewComponent,
+    OfferBasicInfoComponent,
+    MmInfoBarComponent,
+    MmMessageBarComponent
   ],
   imports: [
     BrowserModule,
