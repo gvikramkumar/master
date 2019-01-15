@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { StrategyReviewService } from '../services/strategy-review.service';
 import { NgForm } from '@angular/forms';
@@ -26,15 +26,15 @@ export class StrategyReviewComponent implements OnInit {
   choiceSelected;
   groups = {};
   groupKeys = [];
-  groupNames=[];
+  groupNames = [];
   groupData = [];
   message = {};
   stakeData = {};
-  newDataArray =[];
+  newDataArray = [];
   offerBuilderdata = {};
   minDate: Date;
 
-  public data =[];
+  public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   totalApprovalsCount: any = 0;
   approvedCount: any = 0;
@@ -62,23 +62,35 @@ export class StrategyReviewComponent implements OnInit {
   stakeHolderInfo: any;
 
   constructor(private router: Router,
-    private stakeholderfullService:StakeholderfullService,
+    private stakeholderfullService: StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute,
     private strategyReviewService: StrategyReviewService,
     private actionsService: ActionsService,
     private userService: UserService,
     private _location: Location) {
-      this.activatedRoute.params.subscribe(params => {
-        this.currentOfferId = params['id'];
-        this.caseId = params['id2'];
-      });
-    }
+    this.activatedRoute.params.subscribe(params => {
+      this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
+    });
+  }
 
   ngOnInit() {
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
       this.strategyReviewList = data;
       console.log(this.strategyReviewList);
+      this.totalApprovalsCount = this.strategyReviewList.length;
+      this.strategyReviewList.forEach(element => {
+        if (element.status === 'Approved') {
+          this.approvedCount = this.approvedCount + 1;
+        } else if (element.status === 'Not Approved') {
+          this.notApprovedCount = this.notApprovedCount + 1;
+        } else if (element.status === 'Conditionally Approved') {
+          this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
+        } else if (element.status === 'Not Reviewed') {
+          this.notReviewedCount = this.notReviewedCount + 1;
+        }
+      });
     });
 
     this.data = [];
@@ -88,46 +100,33 @@ export class StrategyReviewComponent implements OnInit {
       color: 'black'
     };
     this.showButtonSection = true;
-    this.totalApprovalsCount = this.strategyReviewList.length;
-    this.strategyReviewList.forEach(element => {
-      if (element.status === 'Approved') {
-        this.approvedCount = this.approvedCount + 1;
-       } else if (element.status === 'Not Approved') {
-         this.notApprovedCount = this.notApprovedCount + 1;
-       } else if (element.status === 'Conditionally Approved') {
-        this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
-       } else if (element.status === 'Not Reviewed') {
-         this.notReviewedCount = this.notReviewedCount + 1;
-       }
-     });
-
-      this.actionsService.getFunction().subscribe(data => {
+    this.actionsService.getFunction().subscribe(data => {
       this.functionList = data;
-      });
+    });
 
-      this.actionsService.getMilestones(this.caseId).subscribe(data => {
-        this.milestoneList = [];
-        for (const milestone in data) {
-          if(data) {
-            data[milestone].forEach(element => {
-              this.milestoneList.push(element);
-            });
-          }
+    this.actionsService.getMilestones(this.caseId).subscribe(data => {
+      this.milestoneList = [];
+      for (const milestone in data) {
+        if (data) {
+          data[milestone].forEach(element => {
+            this.milestoneList.push(element);
+          });
         }
-      });
+      }
+    });
 
-      this.actionsService.getAssignee(this.currentOfferId).subscribe(data => {
-        this.assigneeList = data;
-      });
+    this.actionsService.getAssignee(this.currentOfferId).subscribe(data => {
+      this.assigneeList = data;
+    });
 
-      this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
-      console.log('firstData',data);
+      console.log('firstData', data);
       this.data = this.firstData['stakeholders'];
       this.stakeHolderInfo = {};
-     // this.processStakeHolderData(this.data);
-      console.log('data',this.data[0].offerRole);
-      for(let i=0;i<= this.data.length -1;i++){
+      // this.processStakeHolderData(this.data);
+      console.log('data', this.data[0].offerRole);
+      for (let i = 0; i <= this.data.length - 1; i++) {
         if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
           this.stakeHolderInfo[this.data[i]['offerRole']] = [];
         }
@@ -139,12 +138,12 @@ export class StrategyReviewComponent implements OnInit {
             businessEntity: this.data[i]['businessEntity'],
             functionalRole: this.data[i]['functionalRole'],
             offerRole: this.data[i]['offerRole'],
-            stakeholderDefaults:this.data[i]['stakeholderDefaults']
+            stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
       }
       this.stakeData = this.stakeHolderInfo;
-      console.log('this stakedate',this.stakeData);
-      console.log('data',typeof(this.newDataArray));
+      console.log('this stakedate', this.stakeData);
+      console.log('data', typeof (this.newDataArray));
     });
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
@@ -197,8 +196,8 @@ export class StrategyReviewComponent implements OnInit {
           offerRole: stakeHolder['offerRole'],
           stakeholderDefaults: stakeHolder['stakeholderDefaults']
         });
-        this.stakeData = this.stakeHolderInfo;
-        console.log('this stakedate',this.stakeData);
+      this.stakeData = this.stakeHolderInfo;
+      console.log('this stakedate', this.stakeData);
     });
   }
 
@@ -208,20 +207,22 @@ export class StrategyReviewComponent implements OnInit {
         this.message = {
           contentHead: '',
           content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.',
-          color: 'black' };
+          color: 'black'
+        };
       } else if (message === 'cancel') {
         this.message = {
           contentHead: '',
           content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
-          color: 'black' };
+          color: 'black'
+        };
       }
     }
   }
 
   goBack() {
-   // this._location.back();
-   // this.router.navigate(['/stakeholderFull',this.currentOfferId]);
-   this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
+    // this._location.back();
+    // this.router.navigate(['/stakeholderFull',this.currentOfferId]);
+    this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
   }
 
 

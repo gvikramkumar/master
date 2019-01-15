@@ -146,7 +146,7 @@ export class EnvironmentService {
         this.REST_API_CREATE_BPM_APPROVAL_URL = this.baseapi + '/action/proceed';
         this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/emailNotification/send';
         this.REST_APT_MMPAGE_RETRIVE_DATA_GET_URL = this.baseapi + '/offer/getOffersDetails/';
-        this.REST_API_STRATEGY_REVIEW_GET_URL = this.baseapi + '/strateReview/review/';
+        this.REST_API_STRATEGY_REVIEW_GET_URL = this.baseapi + '/strateReview/getInfo/';
 
         this.REST_API_VIEW_COMMENT_GET_URL=this.baseapi+'/action/getComment';
         this.REST_API_CREATE_COMMENT_URL=this.baseapi+'/action/createComment';
