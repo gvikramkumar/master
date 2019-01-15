@@ -112,7 +112,7 @@ function getHtmlForLargeSingleMessage(msg) {
 }
 
 function isManualUploadSource(sourceId: number) {
-  return sourceId === 4;
+  return sourceId === 4; // Manual Upload
 }
 
 function stringToArray(str, type?) {

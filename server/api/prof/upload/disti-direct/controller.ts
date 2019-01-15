@@ -60,10 +60,39 @@ export default class DistiDirectUploadUploadController extends UploadController 
   }
 
   validate() {
-    // first check if duplicates in the data they're uploading
     this.imports = this.rows1.map(row => new DistiDirectUploadImport(row, this.fiscalMonth));
-
+    /*
+    * groupId has one disti sl3 and one or more direct sl2 (or do separately??)
+    * duplicate groupId/nodeType/nodeCode
+    * duplicate nodeType/nodeCode
+     */
     let obj = {};
+    this.imports.forEach((val: DistiDirectUploadImport) => {
+      const groupId = _.get(obj, `${val.groupId}`);
+      const distiSl3 = val.nodeType === 'Disti SL3';
+      const directSl2 = val.nodeType === 'Direct SL2';
+      if (groupId) {
+        if (distiSl3) {
+          groupId.distiSl3++;
+        } else if (directSl2) {
+          groupId.directSl2++;
+        }
+      } else {
+        _.set(obj, `${val.groupId}`, {distiSl3: distiSl3 ? 1 : 0, directSl2: directSl2 ? 1 : 0});
+      }
+    });
+
+    _.each(obj, (val, key) => {
+      if (val.distiSl3 !== 1 || val.directSl2 === 0) {
+        this.addErrorMessageOnly(`${key}`);
+      }
+    })
+
+    if (this.errors.length) {
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Group IDs not having exactly one "Disti SL3" and one or more "Direct SL2" nodes', this.errors));
+    }
+
+    obj = {};
     this.imports.forEach((val: DistiDirectUploadImport) => {
       const arr = _.get(obj, `${val.groupId.toString()}.${val.nodeType.toUpperCase()}`);
       const entry = val.nodeCode && val.nodeCode.toUpperCase();
@@ -110,9 +139,8 @@ export default class DistiDirectUploadUploadController extends UploadController 
   }
 
   removeDuplicatesFromDatabase(imports: DistiDirectUploadImport[]) {
-    const duplicates = _.uniqWith(imports, (a, b) => a.groupId === b.groupId && a.nodeType === b.nodeType && a.nodeCode === b.nodeCode)
-      .map(x => _.pick(x, ['groupId', 'nodeType', 'nodeCode']))
-    return this.repo.bulkRemove(duplicates);
+    // delete all for that fiscal month, so all then
+    return this.repo.removeMany({});
   }
 
   validateGroupId() {

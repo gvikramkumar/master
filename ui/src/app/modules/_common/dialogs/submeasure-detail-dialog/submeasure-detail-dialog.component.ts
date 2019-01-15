@@ -52,7 +52,7 @@ export class SubmeasureDetailDialogComponent {
         this.rulesAll = results[2];
         this.sm.rules.forEach(name => this.rules.push(_.find(this.rulesAll, {name})));
         if (this.sm.groupingSubmeasureId) {
-          this.groupingSubmeasureName = results[3].name;
+          this.groupingSubmeasureName = results[3] && results[3].name;
         }
       });
   }

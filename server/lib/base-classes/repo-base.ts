@@ -95,16 +95,10 @@ export default class RepoBase {
     return this.getManyByGroupLatestOrEaliest(filter, 1);
   }
 
-  getManyLatestGroupByNameActive(moduleId, _filter = {}) {
-    if (!moduleId) {
-      throw new ApiError('getManyLatestGroupByNameActive: no moduleId');
-    }
-    const filter = Object.assign(_filter, {
-      groupField: 'name',
-      status: 'A',
-      moduleId
-    });
-    return this.getManyByGroupLatest(filter);
+  // get the latest version that's active or inactive, but only the actives from those
+  getManyLatestGroupByNameActive(moduleId, filter = {}) {
+    return this.getManyLatestGroupByNameActiveInactive(moduleId, filter)
+      .then(docs => docs.filter(doc => doc.status = 'A'));
   }
 
   getManyLatestGroupByNameInactive(moduleId, _filter = {}) {
@@ -114,6 +108,19 @@ export default class RepoBase {
     const filter = Object.assign(_filter, {
       groupField: 'name',
       status: 'I',
+      moduleId
+    });
+    return this.getManyByGroupLatest(filter);
+  }
+
+  // get lastest active or inactive version, whichever is later
+  getManyLatestGroupByNameActiveInactive(moduleId, _filter = {}) {
+    if (!moduleId) {
+      throw new ApiError('getManyLatestGroupByNameActiveInactive: no moduleId');
+    }
+    const filter = Object.assign(_filter, {
+      groupField: 'name',
+      status: {$in: ['A', 'I']},
       moduleId
     });
     return this.getManyByGroupLatest(filter);
@@ -131,40 +138,6 @@ export default class RepoBase {
     return this.getManyByGroupEarliest(filter);
   }
 
-  // get lastest active or inactive version, whichever is later
-  getManyLatestByNameActiveInactive(moduleId, filter = {}) {
-    if (!moduleId) {
-      throw new ApiError('getManyLatestByNameActiveInactive: no moduleId');
-    }
-    return Promise.all([
-      this.getManyLatestGroupByNameActive(moduleId, filter),
-      this.getManyLatestGroupByNameInactive(moduleId, filter),
-    ])
-      .then(results => {
-        const actives = results[0];
-        const inactives = results[1];
-        const names = _.uniq(actives.concat(inactives).map(x => x.name.toLowerCase()));
-        const ailist = [];
-        names.forEach(name => {
-          // what we want is the lastest active, BUT... if there's a later inactive, or inactive and no active... then
-          // we want the latest inactive, so they can make it active again if needed.
-          const a = _.find(actives, x => x.name.toLowerCase() === name);
-          const i = _.find(inactives, x => x.name.toLowerCase() === name);
-          if (a && !i) {
-            ailist.push(a);
-          } else if (i && !a) {
-            ailist.push(i);
-          } else if (a.updatedDate >= i.updatedDate) {
-            ailist.push(a);
-          } else if (i.updatedDate > a.updatedDate) {
-            ailist.push(i);
-          }
-        });
-        return ailist;
-      });
-
-  }
-
   getOneById(id) {
     return this.Model.findById(id).exec();
   }
@@ -177,6 +150,12 @@ export default class RepoBase {
     filter = this.addDateRangeToFilter(filter);
     return this.Model.find(filter).sort({updatedDate: -1}).limit(1).exec()
       .then(arr => arr.length ? arr[0] : null);
+  }
+
+  // get lastest active or inactive version, whichever is later,
+  getOneLatestActiveInactive(_filter = {}) {
+    const filter = Object.assign(_filter, {status: {$in: ['A', 'I']}});
+    return this.getOneLatest(filter);
   }
 
   getOneWithTimestamp(data) {

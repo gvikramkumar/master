@@ -68,9 +68,8 @@ data;
       });
   }
 
-  validateInputProductValue() {
-    let productLevel = this.submeasure.inputFilterLevel.productLevel || (
-      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.productLevel);
+  validateInputProductValue(dollar?: boolean) {
+    let productLevel = dollar ? this.submeasure.inputFilterLevel.productLevel : this.submeasure.manualMapping.productLevel;
     productLevel = productLevel ? productLevel.toUpperCase() : productLevel;
     if (productLevel && !this.temp.inputProductValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputProductValue);
@@ -94,9 +93,8 @@ data;
     return Promise.resolve();
   }
 
-  validateInputSalesValue() {
-    let salesLevel = this.submeasure.inputFilterLevel.salesLevel || (
-      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.salesLevel);
+  validateInputSalesValue(dollar?: boolean) {
+    let salesLevel = dollar ? this.submeasure.inputFilterLevel.salesLevel : this.submeasure.manualMapping.salesLevel;
     salesLevel = salesLevel ? salesLevel.toUpperCase() : salesLevel;
     if (salesLevel && !this.temp.inputSalesValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputSalesValue);
@@ -132,9 +130,8 @@ data;
     return Promise.resolve();
   }
 
-  validateSCMSSegment() {
-    let scmsLevel = this.submeasure.inputFilterLevel.scmsLevel || (
-      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.scmsLevel);
+  validateSCMSSegment(dollar?: boolean) {
+    let scmsLevel = dollar ? this.submeasure.inputFilterLevel.scmsLevel : this.submeasure.manualMapping.scmsLevel;
     scmsLevel = scmsLevel ? scmsLevel.toUpperCase() : scmsLevel;
     if (scmsLevel && !this.temp.scmsSegment) {
       this.addErrorRequiredForSubmeasure(this.PropNames.scmsSegment);
@@ -150,9 +147,8 @@ data;
     return Promise.resolve();
   }
 
-  validateInputLegalEntityValue() {
-    let entityLevel = this.submeasure.inputFilterLevel.entityLevel || (
-      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.entityLevel);
+  validateInputLegalEntityValue(dollar?: boolean) {
+    let entityLevel = dollar ? this.submeasure.inputFilterLevel.entityLevel : this.submeasure.manualMapping.entityLevel;
     entityLevel = entityLevel ? entityLevel.toUpperCase() : entityLevel;
     if (entityLevel && !this.temp.inputLegalEntityValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputLegalEntityValue);
@@ -168,9 +164,8 @@ data;
     return Promise.resolve();
   }
 
-  validateInputBusinessEntityValue() {
-    let internalBELevel = this.submeasure.inputFilterLevel.internalBELevel || (
-      this.submeasure.indicators.manualMapping === 'Y' && this.submeasure.manualMapping.internalBELevel);
+  validateInputBusinessEntityValue(dollar?: boolean) {
+    let internalBELevel = dollar ? this.submeasure.inputFilterLevel.internalBELevel : this.submeasure.manualMapping.internalBELevel;
     internalBELevel = internalBELevel ? internalBELevel.toUpperCase() : internalBELevel;
     if (internalBELevel && !this.temp.inputBusinessEntityValue) {
       this.addErrorRequiredForSubmeasure(this.PropNames.inputBusinessEntityValue);

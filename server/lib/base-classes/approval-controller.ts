@@ -103,7 +103,7 @@ export default class ApprovalController extends ControllerBase {
 
   getManyLatestByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
-      this.repo.getManyLatestByNameActiveInactive(req.body.moduleId),
+      this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId),
       this.repo.getMany({
         status: {$in: ['D', 'P']},
         createdBy: req.user.id,
@@ -119,7 +119,7 @@ export default class ApprovalController extends ControllerBase {
 
   getManyLatestByNameActiveInactiveConcatDraftPending(req, res, next) {
     return Promise.all([
-      this.repo.getManyLatestByNameActiveInactive(req.body.moduleId),
+      this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId),
       this.repo.getMany({
         status: {$in: ['D', 'P']},
         moduleId: req.body.moduleId})
@@ -151,7 +151,7 @@ export default class ApprovalController extends ControllerBase {
     const ppmtEmail = svrUtil.getPpmtEmail(req.dfa);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
-      promises.push(this.repo.getOneLatest({moduleId, name: data.name, approvedOnce: 'Y', status: {$in: ['A', 'I']}}));
+      promises.push(this.repo.getOneLatestActiveInactive({moduleId, name: data.name, approvedOnce: 'Y'}));
     }
     return Promise.all(promises)
       .then(results => {

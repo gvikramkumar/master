@@ -103,19 +103,17 @@ export default class PgLookupRepo {
           `);
   }
 
-  get2TSebmeasureListReport() {
+  get2TSebmeasureListReport(fiscalMonth) {
     return pgc.pgdb.query(`
             select 
-            a.sub_measure_name, 
-            b.fiscal_month_id, 
-            a.create_owner,
-            a.create_datetimestamp,
-            a.update_owner,
-            a.update_datetimestamp
-            from fpadfa.dfa_sub_measure a, fpadfa.dfa_open_period b
-            where b.fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period                            
-                                                    where module_id = 1 and open_flag = 'Y')    
-            and a.twotier_flag = 'Y'
+            sub_measure_name, 
+            ${fiscalMonth} as fiscal_month_id, 
+            create_owner,
+            create_datetimestamp,
+            update_owner,
+            update_datetimestamp
+            from fpadfa.dfa_sub_measure
+            where twotier_flag = 'Y'
           `);
   }
 
