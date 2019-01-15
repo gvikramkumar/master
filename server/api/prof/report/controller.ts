@@ -22,6 +22,7 @@ import {DollarUploadPgRepo} from '../dollar-upload/pgrepo';
 import {MappingUploadPgRepo} from '../mapping-upload/pgrepo';
 import {DeptUploadPgRepo} from '../dept-upload/pgrepo';
 import {Submeasure} from '../../../../shared/models/submeasure';
+import {ProductClassUploadPgRepo} from '../product-class-upload/pgrepo';
 
 @injectable()
 export default class ReportController extends ControllerBase {
@@ -38,7 +39,8 @@ export default class ReportController extends ControllerBase {
     private submeasureRepo: SubmeasureRepo,
     private allocationRuleRepo: AllocationRuleRepo,
     private measureRepo: MeasureRepo,
-    private sourceRepo: SourceRepo
+    private sourceRepo: SourceRepo,
+    private productClassUploadPgRepo: ProductClassUploadPgRepo
   ) {
     super(null);
   }
@@ -130,7 +132,18 @@ export default class ReportController extends ControllerBase {
               .then(docs => docs.map(doc => this.transformAddSubmeasureName(doc)));
           })
 
-        break
+        break;
+      case 'product-classification':
+        excelSheetname = ['Product Classification'];
+        excelHeaders = ['Sub Measure Name', 'Split Category', 'Split Percentage'];
+        excelProperties = ['submeasureName', 'splitCategory', 'splitPercentage'];
+        promise = this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
+          .then(submeasures => {
+            this.submeasures = submeasures;
+            return this.productClassUploadPgRepo.getMany(body)
+              .then(docs => docs.map(doc => this.transformAddSubmeasureName(doc)));
+          })
+        break;
       case 'submeasure-grouping':
         excelSheetname = ['Submeasure Grouping'];
         excelHeaders = ['Submeasure Name', 'Group Submeasure Name', 'Created By', 'Create Time', 'Updated By', 'Update Time'];
@@ -272,14 +285,21 @@ export default class ReportController extends ControllerBase {
         // multiSheetReport = true; ?? if multisheet report uncomment this line
         excelSheetname = ['History'];
         excelHeaders = ['Start Fiscal Month', 'End Fiscal Month', 'Sub Measure Key', 'Sub Measure Name', 'Measure Name', 'Source System', 'Sales Level', 'Product Level', 'SCMS Level',
-          'Legal Entity Level', 'BE Level', 'SM Status', 'SM Updated By', 'SM Updated Date',
+          'Legal Entity Level', 'BE Level', 
+          'Rule1', 'Rule2', 'Rule3', 'Rule4', 'Rule5', 'Rule6', 'Rule7', 'Rule8', 'Rule9', 'Rule10', 'Rule11', 'Rule12', 'Rule13', 'Rule14', 'Rule15',
+          'SM Status', 'SM Updated By', 'SM Updated Date',
           'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country Match', 'Ext Theater Match',
           'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Rule Status', 'Rule Updated By', 'Rule Updated Date'];
 
-        excelProperties = ['startFiscalMonth', 'endFiscalMonth', 'submeasureKey', 'name', 'measureName', 'sourceName', 'salesLevel', 'productLevel', 'scmsLevel', 'legalEntityLevel', 'beLevel',
-          'smStatus', 'smUpdatedBy', 'smUpdatedDate',
-          'ruleName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch',
-          'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'ruleStatus', 'ruleUpdatedBy', 'ruleUpdatedDate'];
+        excelProperties = [
+          'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.measureName', 'sm.sourceName',
+          'sm.inputFilterLevel.salesLevel', 'sm.inputFilterLevel.productLevel', 'sm.inputFilterLevel.scmsLevel', 'sm.inputFilterLevel.legalEntityLevel', 'sm.inputFilterLevel.beLevel',
+          'sm.rules[0]', 'sm.rules[1]', 'sm.rules[2]', 'sm.rules[3]', 'sm.rules[4]', 'sm.rules[5]', 'sm.rules[6]', 'sm.rules[7]', 'sm.rules[8]', 'sm.rules[9]', 'sm.rules[10]', 'sm.rules[11]', 'sm.rules[12]', 'sm.rules[13]', 'sm.rules[14]',
+          'sm.status', 'sm.updatedBy', 'sm.updatedDate',
+          'rule.name', 'rule.driverName', 'rule.period', 'rule.salesMatch', 'rule.productMatch', 'rule.scmsMatch', 'rule.legalEntityMatch', 'rule.beMatch', 'rule.countryMatch', 'rule.extTheaterMatch',
+          'rule.sl1Select', 'rule.sl2Select', 'rule.sl2Select', 'rule.prodTGSelect', 'rule.prodBUSelect', 'rule.prodPFSelect', 'rule.scmsSelect', 'rule.beSelect',
+          'rule.status', 'rule.updatedBy', 'rule.updatedDate'
+        ];
 
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
@@ -311,39 +331,7 @@ export default class ReportController extends ControllerBase {
               rules.forEach(rule => {
                 ruleSms = _.sortBy(sms.filter(sm => _.includes(sm.rules, rule.name)), 'name');
                 ruleSms.forEach(sm => {
-                  rows.push({
-                    startFiscalMonth: sm.startFiscalMonth,
-                    endFiscalMonth: sm.endFiscalMonth,
-                    submeasureKey: sm.submeasureKey,
-                    name: sm.name,
-                    measureName: sm.measureName,
-                    sourceName: sm.sourceName,
-                    salesLevel: sm.inputFilterLevel.salesLevel,
-                    productLevel: sm.inputFilterLevel.productLevel,
-                    scmsLevel: sm.inputFilterLevel.scmsLevel,
-                    legalEntityLevel: sm.inputFilterLevel.legalEntityLevel,
-                    beLevel: sm.inputFilterLevel.beLevel,
-                    smStatus: sm.status,
-                    smUpdatedBy: sm.updatedBy,
-                    smUpdatedDate: sm.updatedDate,
-
-                    ruleName: rule.name,
-                    driverName: rule.driverName,
-                    period: rule.period,
-                    salesMatch: rule.salesMatch,
-                    productMatch: rule.productMatch,
-                    scmsMatch: rule.scmsMatch,
-                    legalEntityMatch: rule.legalEntityMatch,
-                    beMatch: rule.beMatch,
-                    sl1Select: rule.sl1Select,
-                    scmsSelect: rule.scmsSelect,
-                    beSelect: rule.beSelect,
-                    ruleStatus: rule.status,
-                    ruleUpdatedBy: rule.updatedBy,
-                    ruleUpdatedDate: rule.updatedDate
-                    // etc, etc,
-
-                  });
+                  rows.push({sm, rule});
                 });
               });
             });
