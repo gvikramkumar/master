@@ -39,10 +39,8 @@ export class ConfigurationService {
                             this._startupData.hasAdminAccess = false;
                         });
 
-                        return this.httpClient.post(this.urlGetUserInfo, { userId: user }).toPromise().then((res: any) => {
-                            console.log(res);
-                            this.userService.setFirstName(res.firstName);
-                            this.userService.setLastName(res.lastName);
+                        return this.httpClient.post(this.urlGetUserInfo, { userId: user }).toPromise().then((resUserInfo: any) => {
+                            this.userService.setName(resUserInfo[0].cn);
                         })
                     })
                     .then((response) => resolve(true))
