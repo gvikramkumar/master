@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
   milestoneValue: string;
   functionNameValue: string;
   assigneeValue: Array<any>;
-  dueDateValue: string;
+  dueDateValue: any;
   functionList;
   assigneeList;
   milestoneList;
@@ -269,7 +269,7 @@ export class DashboardComponent implements OnInit {
       this.milestoneValue,
       this.functionNameValue,
       this.assigneeValue,
-      this.dueDateValue.toString(),
+      this.dueDateValue.toISOString(),
     );
     this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
     });

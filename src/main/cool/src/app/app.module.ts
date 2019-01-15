@@ -59,6 +59,7 @@ import { AuthGuard } from './auth/gaurds/auth-guard';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 import { StakeholderIdentificationComponent } from './directives/stakeholder-identification/stakeholder-identification.component';
+import { StrategyReviewService } from './services/strategy-review.service';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
 import { PackingComponent } from './offer-dimension/packing/packing.component';
 import { SupportComponent } from './offer-dimension/support/support.component';
@@ -69,7 +70,7 @@ import { ViewcommentComponent } from './viewcomment/viewcomment.component';
 import { ViewcommentService } from './services/viewcomment.service';
 import { HeaderService } from './header/header.service';
 import { TurbotaxviewComponent } from './turbotaxview/turbotaxview.component';
-import { TurbotaxService } from './services/turbotax.service';
+import {  TurbotaxService } from './services/turbotax.service';
 
 
 
@@ -163,6 +164,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
       OfferOverViewResolver,
       ViewcommentService,
       TurbotaxService,
+      StrategyReviewService,
       MenuBarService,
       {
         provide: APP_INITIALIZER,
