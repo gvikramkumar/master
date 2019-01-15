@@ -14,6 +14,7 @@ import { CreateActionService } from '../services/create-action.service';
 
 
 
+
 @Component({
   selector: 'app-actions',
   templateUrl: './actions.component.html',
@@ -49,7 +50,8 @@ export class ActionsComponent implements OnInit {
     private userService: UserService, private httpClient: HttpClient,
     private createOfferService: CreateOfferService,
     private dashboardService: DashboardService,
-    private createActionService: CreateActionService) { }
+    private createActionService: CreateActionService,
+    ) { }
 
   ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
@@ -57,6 +59,7 @@ export class ActionsComponent implements OnInit {
     this.actionsService.getActionsTracker()
       .subscribe(data => {
         this.myActions = data;
+        console.log("action offer Id",this.myActions);
         this.processMyActionsList();
       });
 
@@ -70,6 +73,8 @@ export class ActionsComponent implements OnInit {
    this.actionsService.getFunction().subscribe(data => {
      this.functionList = data;
   });
+     
+  
 
   }
 
@@ -105,6 +110,8 @@ export class ActionsComponent implements OnInit {
         obj.setAlertType(1);
         obj.setCaseId(element.caseId);
         obj.setCreatedBy(element.createdBy);
+        obj.setCaseId(element.caseId);
+        obj.setTaskId(element.taskId);
         // Set the status color
         if ( element.status && element.status.toLowerCase() === 'red') {
           this.needImmActnCount = this.needImmActnCount + 1;
@@ -115,6 +122,7 @@ export class ActionsComponent implements OnInit {
       });
 
       this.myActionsList = this.myOfferArray;
+      console.log("checking caseId",this.myActionsList);
     }
   }
 // Create New Action
@@ -139,6 +147,17 @@ export class ActionsComponent implements OnInit {
   }
 
 
+ /*  displayPop() {
+    this.displayPopOver = true;
+  } */
+
+  displayActionPop(popover) {
+    
+    if (popover.isOpen()) {
+      popover.close();
+    }
+
+  }
   createNewAction() {
     this.displayActionPhase = true;
   }
@@ -151,4 +170,5 @@ export class ActionsComponent implements OnInit {
   dateFormat(inputDate: string) {
     return moment(inputDate).format('MM/DD/YYYY');
   }
+
 }
