@@ -330,9 +330,9 @@ th.ui-state-default.ui-unselectable-text.ui-sortable-column {
   white-space: nowrap;
   font-size: 12px;
 }
-::ng-deep .ui-datatable-scrollable-view .ui-datatable-scrollable-body {
-  /* border: 0; */
-}
+/* ::ng-deep .ui-datatable-scrollable-view .ui-datatable-scrollable-body {
+  border: 0;
+} */
 ::ng-deep .ui-table .ui-table-tbody > tr > td {
   /* border: 0; */
   background: inherit;
