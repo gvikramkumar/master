@@ -48,7 +48,7 @@
               </div>
               <div class="col-6">
                 <fin-checkbox label="Is Service Submeasure" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
-                              [inline]="true" [disabled]="sm.groupingSubmeasureId"></fin-checkbox>
+                              [inline]="true"></fin-checkbox>
               </div>
             </div>
             <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
