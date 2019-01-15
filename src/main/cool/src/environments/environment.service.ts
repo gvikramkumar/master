@@ -41,6 +41,8 @@ export class EnvironmentService {
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
     REST_API_CREATE_BPM_APPROVAL_URL;
     REST_APT_MMPAGE_RETRIVE_DATA_GET_URL;
+    REST_API_STRATEGY_REVIEW_GET_URL;
+    
     REST_API_VIEW_COMMENT_GET_URL;
     REST_API_CREATE_COMMENT_URL;
 
@@ -80,14 +82,14 @@ export class EnvironmentService {
         switch (environment) {
             case 'production':
                 this.baseapi = 'https://cool-srv-prd.cisco.com/coolsrv';
-                this.basepdafapi = 'https://pdaf-api-prd.cisco.com/pdafapp';
+                this.basepdafapi = 'https://api-supplychain.cisco.com/pdafapp';
                 this.authtokenbaseapi = 'https://cloudsso.cisco.com'
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-prd.cisco.com/cool'
                 break;
             case 'stage':
                 this.baseapi = 'https://cool-srv-stg.cisco.com/coolsrv';
-                this.basepdafapi = 'https://pdaf-api-stg.cisco.com/pdafapp';
+                this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com'
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-stg.cisco.com/cool'
@@ -144,6 +146,8 @@ export class EnvironmentService {
         this.REST_API_CREATE_BPM_APPROVAL_URL = this.baseapi + '/action/proceed';
         this.REST_API_EMAIL_NORIFICATION = this.baseapi + '/emailNotification/send';
         this.REST_APT_MMPAGE_RETRIVE_DATA_GET_URL = this.baseapi + '/offer/getOffersDetails/';
+        this.REST_API_STRATEGY_REVIEW_GET_URL = this.baseapi + '/strateReview/getInfo/';
+
         this.REST_API_VIEW_COMMENT_GET_URL=this.baseapi+'/action/getComment';
         this.REST_API_CREATE_COMMENT_URL=this.baseapi+'/action/createComment';
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.1/get/currentUser';

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable";
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
@@ -32,6 +32,18 @@ export class SharedService {
     getBusinessEntity(): Observable<any> {
         const url = this.businessEntityUrl;
         return this._http.get(url, {withCredentials:true});
+    }
+
+    proceedToNextPhase(data) {
+        let url = this.environmentService.REST_API_HOLD_OFFER;
+        const httpOptions = {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+              'Accept' : 'application/json'
+            }),
+            withCredentials: true,
+          };
+        return this._http.post(url, data, httpOptions);
     }
 
 }

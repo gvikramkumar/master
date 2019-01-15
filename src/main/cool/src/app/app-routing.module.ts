@@ -17,7 +17,7 @@ import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { AuthGuard } from './auth/gaurds/auth-guard';
-import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component'
+import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
 
 
 const routes: Routes = [
