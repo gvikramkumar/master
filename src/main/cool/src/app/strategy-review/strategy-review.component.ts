@@ -10,6 +10,7 @@ import { ActionsService } from '../services/actions.service';
 import { CreateActionComment } from '../models/create-action-comment';
 import { CreateActionApprove } from '../models/create-action-approve';
 import { UserService } from '../services/user.service';
+import { SharedService } from '../shared-service.service';
 
 @Component({
   selector: 'app-strategy-review',
@@ -68,7 +69,8 @@ export class StrategyReviewComponent implements OnInit {
     private strategyReviewService: StrategyReviewService,
     private actionsService: ActionsService,
     private userService: UserService,
-    private _location: Location) {
+    private _location: Location,
+    private sharedService: SharedService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -227,7 +229,20 @@ export class StrategyReviewComponent implements OnInit {
 
 
   offerDetailOverView() {
-    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+    const proceedPayload = {
+      'taskId': '',
+      'userId': this.offerBuilderdata['offerOwner'],
+      'caseId': this.caseId,
+      'offerId': this.currentOfferId,
+      'taskName': 'Stratergy Review',
+      'action': '',
+      'comment': ''
+    };
+    this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
+      this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   onTabOpen(taskId) {
