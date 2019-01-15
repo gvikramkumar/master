@@ -92,6 +92,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Sales_Split_Percentage_Report'
     },
     {
+      type: 'product-classification', hasFiscalMonthOnly: true, text: 'Product Classification (SW/HW Mix)', disabled: false,
+      filename: 'Product_Classification_Report'
+    },
+    {
       type: 'alternate-sl2', hasFiscalMonthOnly: true, text: 'Alternate SL2 Mapping', disabled: false,
       filename: 'Alternate_SL2_Report'
     },
@@ -150,6 +154,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     switch (this.report.type) {
       case 'sales-split-percentage':
         obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_sales_split_pctmap_upld', 'fiscal_month_id');
+        break;
+      case 'product-classification':
+        obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_swalloc_manualmix_upld', 'fiscal_month_id');
         break;
       case 'alternate-sl2':
         obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_altsl2_map_upld', 'fiscal_month_id');
