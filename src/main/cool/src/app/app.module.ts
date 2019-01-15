@@ -60,7 +60,6 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 import { StakeholderIdentificationComponent } from './directives/stakeholder-identification/stakeholder-identification.component';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
-import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { PackingComponent } from './offer-dimension/packing/packing.component';
 import { SupportComponent } from './offer-dimension/support/support.component';
 import { OfferPricingComponent } from './offer-dimension/offer-pricing/offer-pricing.component';
@@ -95,7 +94,6 @@ export function app_init(configService: ConfigurationService,userService: UserSe
     AuthErrorComponent,
     StakeholderIdentificationComponent,
     OfferSolutioningComponent,
-    OfferDimensionComponent,
     PackingComponent,
     SupportComponent,
     OfferPricingComponent,

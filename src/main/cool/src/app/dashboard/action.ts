@@ -12,6 +12,7 @@ export class ActionsAndNotifcations{
     actionDesc:string;
     caseId:string;
     createdBy:string;
+    defaultFunction:string;
     constructor() {
 
     }
@@ -71,5 +72,8 @@ export class ActionsAndNotifcations{
 
     setDueDate(dueDate){
         this.dueDate = dueDate;
+    }
+    setDefaultFunction(defaultFunction){
+        this.defaultFunction = defaultFunction
     }
 }

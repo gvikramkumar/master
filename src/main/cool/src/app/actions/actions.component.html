@@ -45,6 +45,9 @@
                 <p-column field="createdBy" sortable="true" header="OFFER CREATED BY">
                 </p-column>
                 <p-column field="" sortable="true" header="FUNCTION">
+                    <ng-template let-col let-actionData="rowData" pTemplate="body">
+                        <span>{{actionData.defaultFunction}} <br /></span>
+                      </ng-template>
                 </p-column>
                 <p-column field="assigneeId" sortable="true" header="ASSIGNED USER">
                 </p-column>

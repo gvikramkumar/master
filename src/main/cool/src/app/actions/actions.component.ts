@@ -105,6 +105,7 @@ export class ActionsComponent implements OnInit {
         obj.setAlertType(1);
         obj.setCaseId(element.caseId);
         obj.setCreatedBy(element.createdBy);
+        obj.setDefaultFunction(element.function);
         // Set the status color
         if ( element.status && element.status.toLowerCase() === 'red') {
           this.needImmActnCount = this.needImmActnCount + 1;
