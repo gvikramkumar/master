@@ -234,23 +234,30 @@ export default class ReportController extends ControllerBase {
       case 'allocation-rule':
         multiSheetReport = true;
         excelSheetname = [['Original'], ['Rule History'], ['As Of Now']];
-        excelHeaders = [['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match',
-                          'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
+        excelHeaders = [['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater',
+          'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select',
+          'Status', 'Approval Status', 'Approved By', 'Approval Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
-                        ['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match',
-                          'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
+          ['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater',
+            'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select',
+            'Status', 'Approval Status', 'Approved By', 'Approval Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
-                        ['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match',
-                          'Sales Select', 'SCMS Select', 'BE Select', 'Status', 'Created By', 'Created Date', 'Updated By', 'Updated Date']];
+          ['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater',
+            'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select',
+            'Status', 'Approval Status', 'Approved By', 'Approval Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date']];
 
-        excelProperties = [['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch',
-                          'sl1Select', 'scmsSelect', 'beSelect', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
+        excelProperties = [['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch',
+          'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect',
+          'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-                            ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch',
-                              'sl1Select', 'scmsSelect', 'beSelect', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
+          ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch',
+            'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect',
+            'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-                            ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch',
-                              'sl1Select', 'scmsSelect', 'beSelect', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate']];
+          ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch',
+            'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect',
+            'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate']];
+
         promise = Promise.all([
           this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
             .then(docs => docs.map(doc => this.transformRule(doc))),
