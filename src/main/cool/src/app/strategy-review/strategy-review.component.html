@@ -22,7 +22,7 @@
         <ul class="list list--highlight base-margin-top">
           <li>
             <div class="panel panel--bordered"><span class="text-success"><span class="icon-check-outline icon-medium"></span>
-                 Aligned</span></div>
+                 {{derivedMM}} Aligned</span></div>
           </li>
         </ul>
         <div class="alert base-margin-top half-margin-bottom" [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
@@ -40,37 +40,22 @@
               <div class="row">
                 <div class="col-md-2">
                   <h6><span>{{totalApprovalsCount}}</span> <span> Total Approvals</span></h6>
-                  <div class="progressbar progressbar--default" data-percentage="66">
-                    <div class="progressbar__fill"></div>
-                  </div>
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-2">
-                  <h6><span>{{approvedCount}}</span> <span>Approved</span></h6>
-                  <div class="progressbar progressbar--success" data-percentage="66">
-                    <div class="progressbar__fill"></div>
-                  </div>
+                  <h6><span>{{approvedCount}}</span><span> Approved</span></h6>
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-3">
-                  <h6><span>{{conditionallyApprovedCount}}</span> <span>Conditionally Approved</span></h6>
-                  <div class="progressbar progressbar--warning" data-percentage="66">
-                    <div class="progressbar__fill"></div>
-                  </div>
+                  <h6><span>{{conditionallyApprovedCount}}</span><span> Conditionally Approved</span></h6>
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-2">
-                  <h6><span>{{notApprovedCount}}</span> <span>Not Approved</span></h6>
-                  <div class="progressbar progressbar--danger" data-percentage="66">
-                    <div class="progressbar__fill"></div>
-                  </div>
+                  <h6><span>{{notApprovedCount}}</span><span> Not Approved</span></h6>
                 </div>
                 <span class="vertical-divider"></span>
                 <div class="col-md-2">
-                  <h6><span>{{notReviewedCount}}</span> <span>Not Reviewed</span></h6>
-                  <div class="progressbar progressbar--warning" data-percentage="66">
-                    <div class="progressbar__fill"></div>
-                  </div>
+                  <h6><span>{{notReviewedCount}}</span><span> Not Reviewed</span></h6>
                 </div>
               </div>
             </div>

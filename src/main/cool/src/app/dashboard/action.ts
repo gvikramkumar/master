@@ -1,20 +1,25 @@
 export class ActionsAndNotifcations{
-    offerId: string;
-    actiontTitle: string;
-    offerName: string;
-    assigneeId: string;
-    triggerDate: string;
-    dueDate: string;
-    taskId: string;
-    notificationTitle: string;
-    alertType: number;
-    styleColor: string;
-    actionDesc: string;
-    caseId: string;
-    createdBy: string;
-    defaultFunction: string;
+    offerId:string;
+    actiontTitle:string;
+    offerName:string;
+    assigneeId:string;
+    triggerDate:string;
+    dueDate:string;
+    taskId:string;
+    notificationTitle:string;
+    alertType:number;
+    styleColor:string;
+    actionDesc:string;
+    caseId:string;
+    createdBy:string;
+    defaultFunction:string;
+    type:string;
     constructor() {
 
+    }
+
+    setType(type) {
+        this.type = type;
     }
 
     setCaseId(caseId) {
