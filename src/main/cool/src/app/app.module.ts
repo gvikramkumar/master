@@ -78,6 +78,7 @@ import { OffersolutioningCardOneComponent } from './offersolutioning-card-one/of
 import { OffersolutioningCardTwoComponent } from './offersolutioning-card-two/offersolutioning-card-two.component';
 import { OffersolutioningCardThreeComponent } from './offersolutioning-card-three/offersolutioning-card-three.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
+import { MessageService } from './services/message.service';
 
 
 
@@ -179,6 +180,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
       ViewcommentService,
       TurbotaxService,
       StrategyReviewService,
+      MessageService,
       MenuBarService,
       {
         provide: APP_INITIALIZER,

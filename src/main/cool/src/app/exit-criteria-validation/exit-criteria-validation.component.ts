@@ -3,6 +3,7 @@ import {ExitCriteriaValidationService} from '../services/exit-criteria-validatio
 import {MonetizationModelService} from '../services/monetization-model.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {HeaderService} from '../header/header.service';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-exit-criteria-validation',
@@ -25,7 +26,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private monetizationModelService: MonetizationModelService,
     private headerService: HeaderService,
-
+    private messageService: MessageService
     ) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
@@ -78,6 +79,7 @@ requestForApproval() {
   payload['owner'] = this.offerBuilderdata['offerName'];
   this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
     this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
+      this.messageService.sendMessage('Strategy Review');
       this.requestApprovalAvailable = false;
     });
 
