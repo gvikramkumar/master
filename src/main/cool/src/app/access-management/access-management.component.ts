@@ -144,11 +144,4 @@ export class AccessManagementComponent implements OnInit {
     return res;
   }
 
-  // getregisterUserFun(){ debugger;
-  //    this.accessManagementService.getregisterUserFunction().subscribe(data=>{
-  //      this.registerNewUserfun=data;
-  //      console.log(" new data:::",this.registerNewUserfun);
-  //    })
-  // }
-
 }

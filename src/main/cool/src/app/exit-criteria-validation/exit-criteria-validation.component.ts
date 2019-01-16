@@ -13,13 +13,13 @@ import {HeaderService} from '../header/header.service';
 
 export class ExitCriteriaValidationComponent implements OnInit {
   @Input() stakeData:object;
+  @Input() offerBuilderdata;
   currentOfferId;
   currentCaseId;
   exitCriteriaData;
   ideate = [];
   offerOwner:String = '';
   requestApprovalAvailable:Boolean = true;
-  
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
@@ -29,51 +29,35 @@ export class ExitCriteriaValidationComponent implements OnInit {
     ) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
-        this.currentCaseId = params['id2']
+        this.currentCaseId = params['id2'];
       });
      }
 
   ngOnInit() {
-    this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
-    
-      console.log(data);
+      this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
       const canRequestUsers = [];
       this.exitCriteriaData=data;
       this.ideate = data['ideate'];
-      // this.offerOwner = data['offerOwner'];
-      // canRequestUsers.push(this.offerOwner);
 
       for (let i = 0; i < this.ideate.length; i++) {
-        if (this.ideate[i]['status'] != 'Completed') {
+        if (this.ideate[i]['status'] !== 'Completed') {
           this.requestApprovalAvailable = false;
           break;
         }
       }
-
-      // data['stakeholders'].forEach(sh => {
-      //   if (sh['offerRole'] == 'co-owner') {
-      //     canRequestUsers.push(sh['_id']);
-      //   }
-      //   if (this.stakeData[sh['offerRole']] == null) {
-      //     this.stakeData[sh['offerRole']] = [];
-      //   }
-      //   this.stakeData[sh['offerRole']].push({name: sh['_id'], email: sh['email']});
-      // })
-
-      for (var prop in this.stakeData) {
-        if (prop == 'Co-Owner' || prop == 'Owner') {
+      for (let prop in this.stakeData) {
+        if (prop === 'Co-Owner' || prop === 'Owner') {
           this.stakeData[prop].forEach(holder => {
             canRequestUsers.push(holder['_id']);
-          })
+          });
         }
       }
 
-      let that = this;
       this.headerService.getCurrentUser().subscribe(user => {
         if (!canRequestUsers.includes(user)) {
-          that.requestApprovalAvailable = false;
+          this.requestApprovalAvailable = false;
         }
-      })
+      });
     });
   }
 
@@ -87,12 +71,17 @@ export class ExitCriteriaValidationComponent implements OnInit {
   }
 }
 
-requestForApproval(){
-  console.log(this.currentOfferId)
-  console.log(this.ideate)
-  this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
 
-  })
+requestForApproval() {
+  let payload = {};
+  payload['offerName'] = this.offerBuilderdata['offerOwner'];
+  payload['owner'] = this.offerBuilderdata['offerName'];
+  this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
+    this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
+      this.requestApprovalAvailable = false;
+    });
+
+  });
 }
 
 }
