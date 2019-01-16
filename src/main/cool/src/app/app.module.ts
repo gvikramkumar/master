@@ -61,11 +61,11 @@ import { HttpInterceptorService } from './services/http-interceptor.service';
 import { StakeholderIdentificationComponent } from './directives/stakeholder-identification/stakeholder-identification.component';
 import { StrategyReviewService } from './services/strategy-review.service';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
-import { PackingComponent } from './offer-dimension/packing/packing.component';
-import { SupportComponent } from './offer-dimension/support/support.component';
-import { OfferPricingComponent } from './offer-dimension/offer-pricing/offer-pricing.component';
-import { BillingComponent } from './offer-dimension/billing/billing.component';
-import { ProgramComponent } from './offer-dimension/program/program.component';
+import { PackingComponent } from './offer-dimension-groups/packing/packing.component';
+import { SupportComponent } from './offer-dimension-groups/support/support.component';
+import { OfferPricingComponent } from './offer-dimension-groups/offer-pricing/offer-pricing.component';
+import { BillingComponent } from './offer-dimension-groups/billing/billing.component';
+import { ProgramComponent } from './offer-dimension-groups/program/program.component';
 import { ViewcommentComponent } from './viewcomment/viewcomment.component';
 import { ViewcommentService } from './services/viewcomment.service';
 import { HeaderService } from './header/header.service';
@@ -74,6 +74,10 @@ import {  TurbotaxService } from './services/turbotax.service';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
+import { OffersolutioningCardOneComponent } from './offersolutioning-card-one/offersolutioning-card-one.component';
+import { OffersolutioningCardTwoComponent } from './offersolutioning-card-two/offersolutioning-card-two.component';
+import { OffersolutioningCardThreeComponent } from './offersolutioning-card-three/offersolutioning-card-three.component';
+import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 
 
 
@@ -115,7 +119,11 @@ export function app_init(configService: ConfigurationService, userService: UserS
     TurbotaxviewComponent,
     OfferBasicInfoComponent,
     MmInfoBarComponent,
-    MmMessageBarComponent
+    MmMessageBarComponent,
+    OffersolutioningCardOneComponent,
+    OffersolutioningCardTwoComponent,
+    OffersolutioningCardThreeComponent,
+    OfferDimensionComponent
   ],
   imports: [
     BrowserModule,
