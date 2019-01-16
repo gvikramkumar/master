@@ -337,7 +337,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.disableCategories = false;
     } else {
       this.disableCategories = true;
-      this.sm.categoryType = this.sm.categoryType || 'HW';
+      if (init) {
+        // we have some values that violate the rules (a non-cogs that has SW) that we need to show
+        // but only on load. If they change measure then we want to force HW on non-cogs
+        this.sm.categoryType = this.sm.categoryType || 'HW';
+      } else {
+        this.sm.categoryType = 'HW';
+      }
     }
 
     this.submeasureService.callMethod('getGroupingSubmeasures', {measureId: this.sm.measureId})
