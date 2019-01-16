@@ -13,7 +13,7 @@
         <cui-select name="measure" [(ngModel)]="sm.measureId" [items]="measures" label="Measure*" empty="true" [required]="true"
                     optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
         <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name"
-                   [notInList]="submeasureNames" notInListMessage="Submeasure name already exists" [required]="true" (blur)="updateReportingLevel3()"></fin-input>
+                   [notInList]="submeasureNames" notInListMessage="Sub-Measure name already exists" [required]="true" (blur)="updateReportingLevel3()"></fin-input>
         <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source*" empty="true" [disabled]="!sm.measureId"
                     optionsKey="name" optionsValue="sourceId" [required]="!isGroupingParent()" (ngModelChange)=sourceChange()></cui-select>
         <fin-input name="desc" [textarea]="true" [(ngModel)]="sm.desc" label="Description" [rows]="2" [required]="!isGroupingParent()"></fin-input>
@@ -28,7 +28,7 @@
         </div>
 
         <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes"
-                    label="Submeasure Category Type" empty="true" optionsKey="name" optionsValue="value" [required]="!isGroupingParent()"></cui-select>
+                    label="Sub-Measure Category Type" empty="true" optionsKey="name" optionsValue="value" [required]="!isGroupingParent()"></cui-select>
         <div *ngIf="sm.categoryType === 'Manual Mix'" fxLayout="row" fxLayoutAlign="start start">
           <div class="form-group-text form-group-inline-30">Manual Mix HW/SW:</div>
           <fin-input name="manualMixHw" label="HW" [(ngModel)]="sm.manualMixHw" [required]="!isGroupingParent()" [inline]="true" class="hwsw-inputs"></fin-input>
@@ -43,16 +43,16 @@
           <div style="margin-bottom:-10px;">
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
-                <fin-checkbox label="Is Group Submeasure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N" [inline]="true"
+                <fin-checkbox label="Is Group Sub-Measure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N" [inline]="true"
                               [disabled]="!!sm.groupingSubmeasureId"></fin-checkbox>
               </div>
               <div class="col-6">
-                <fin-checkbox label="Is Service Submeasure" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
-                              [inline]="true" [disabled]="sm.groupingSubmeasureId"></fin-checkbox>
+                <fin-checkbox label="Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
+                              [inline]="true"></fin-checkbox>
               </div>
             </div>
             <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
-                        label="Grouping Submeasure" empty="true" optionsKey="name"
+                        label="Grouping Sub-Measure" empty="true" optionsKey="name"
                         optionsValue="submeasureKey" [disabled]="isGroupingParent()"></cui-select>
           </div>
         </div>

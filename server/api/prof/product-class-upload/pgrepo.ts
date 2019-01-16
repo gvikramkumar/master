@@ -4,7 +4,6 @@ import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 
 const ormMap: OrmMap[] = [
   {prop: 'fiscalMonth', field: 'fiscal_month_id', type: OrmTypes.number},
-  {prop: 'submeasureName', field: ''},
   {prop: 'submeasureKey', field: 'sub_measure_key', type: OrmTypes.number},
   {prop: 'splitCategory', field: 'split_category'},
   {prop: 'splitPercentage', field: 'split_percentage', type: OrmTypes.number},
