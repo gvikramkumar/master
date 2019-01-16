@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 
-import 'rxjs/add/operator/toPromise';
+
 import { EnvironmentService } from '../../environments/environment.service';
 import { AccessManagementService } from './access-management.service';
 

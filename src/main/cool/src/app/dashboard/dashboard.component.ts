@@ -57,7 +57,8 @@ export class DashboardComponent implements OnInit {
   assigneeList;
   milestoneList;
   action: any;
-
+  loading;
+  
   constructor(private dashboardService: DashboardService,
     private router: Router,
     private createOfferService: CreateOfferService,

@@ -34,7 +34,9 @@ export class StrategyReviewComponent implements OnInit {
   newDataArray = [];
   offerBuilderdata = {};
   minDate: Date;
-
+  updateStakeData;
+  setFlag;
+  
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   totalApprovalsCount: any = 0;

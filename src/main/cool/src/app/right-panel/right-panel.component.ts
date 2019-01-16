@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+import { Observable, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import { CreateOfferService } from '../services/create-offer.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
@@ -46,11 +45,11 @@ export class RightPanelComponent implements OnInit {
   ideateCompletedCount = 0;
   planCount = 0;
   planCompletedCount = 0;
-  mStoneCntInAllPhases:any[]=['ideate','plan','execute','launch'];
-  mileStoneStatus:any[]= [];
+  mStoneCntInAllPhases: any[] = ['ideate', 'plan', 'execute', 'launch'];
+  mileStoneStatus: any[] = [];
   phaseProcessingCompleted = false;
   offerName;
-  alreayAddedStakeHolders:any[]=[];
+  alreayAddedStakeHolders: any[] = [];
   ddFunction = 'Select Function';
   flagFunction = false;
   private eventsSubscription: any;
@@ -104,10 +103,12 @@ export class RightPanelComponent implements OnInit {
 
   search = (text$: Observable<string>) =>
     text$
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .map(term => term.length < 0 ? []
-        : searchOptions.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        map(term => term.length < 0 ? []
+          : searchOptions.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+      );
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -146,7 +147,7 @@ export class RightPanelComponent implements OnInit {
     });
 
     this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(data => {
-        this.processCurrentPhaseInfo(data);
+      this.processCurrentPhaseInfo(data);
     });
 
     // Get Functional Roles
@@ -211,13 +212,13 @@ export class RightPanelComponent implements OnInit {
    * Method to store offer owner id in an aray
    * @param data offer Owner Id
    */
-  storeOwnerId(data){
+  storeOwnerId(data) {
     this.alreayAddedStakeHolders.push(data);
   }
 
   ngOnDestroy() {
-    if(this.eventsSubscription)
-    this.eventsSubscription.unsubscribe()
+    if (this.eventsSubscription)
+      this.eventsSubscription.unsubscribe()
   }
 
   processCurrentPhaseInfo(phaseInfo) {
@@ -225,25 +226,25 @@ export class RightPanelComponent implements OnInit {
       const obj = {};
       let count = 0;
       const phase = phaseInfo[element];
-        if (phase !== undefined) {
-          phase.forEach(element => {
-            if(element.status === 'Completed') {
-              count = count + 1;
-            }
-          });
-          obj['phase'] = element;
-          if ( count > 0 && count < 4) {
-            obj['status'] = 'active';
-          } else if ( count === 4) {
-            obj['status'] = 'visited';
-          } else if (count === 0) {
-            obj['status'] = '';
+      if (phase !== undefined) {
+        phase.forEach(element => {
+          if (element.status === 'Completed') {
+            count = count + 1;
           }
-        } else {
-          obj['phase'] = element;
+        });
+        obj['phase'] = element;
+        if (count > 0 && count < 4) {
+          obj['status'] = 'active';
+        } else if (count === 4) {
+          obj['status'] = 'visited';
+        } else if (count === 0) {
           obj['status'] = '';
         }
-        this.mileStoneStatus.push(obj);
+      } else {
+        obj['phase'] = element;
+        obj['status'] = '';
+      }
+      this.mileStoneStatus.push(obj);
     });
     this.phaseProcessingCompleted = true;
   }
@@ -283,9 +284,9 @@ export class RightPanelComponent implements OnInit {
     const payLoad = {
     };
 
-    if (userName !== undefined && userName != null &&  userName.includes('@')) {
+    if (userName !== undefined && userName != null && userName.includes('@')) {
       payLoad['emailId'] = userName;
-    }else{
+    } else {
       payLoad['userName'] = userName
     }
 
@@ -301,7 +302,7 @@ export class RightPanelComponent implements OnInit {
       }];
     }
 
-    
+
     if ((businessEntity !== undefined && businessEntity != null) &&
       (functionalRole !== undefined && functionalRole != null)) {
       payLoad['userMappings'] = [{
@@ -351,22 +352,22 @@ export class RightPanelComponent implements OnInit {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
-      if (this.alreayAddedStakeHolders.findIndex(k => k==user['_id']) == -1) {
+      if (this.alreayAddedStakeHolders.findIndex(k => k == user['_id']) == -1) {
         console.log(user['_id']);
         this.stakeData[user['offerRole']].push(
-          { 
-            userName: user['userName'], 
-            emailId: user['email'], 
-            _id:user['_id'], 
+          {
+            userName: user['userName'],
+            emailId: user['email'],
+            _id: user['_id'],
             userMappings: [{
-              appRoleList : [user['offerRole']],
+              appRoleList: [user['offerRole']],
               businessEntity: user['businessEntity'],
               functionalRole: user['functionalRole']
             }
             ],
-            stakeholderDefaults:false 
+            stakeholderDefaults: false
           });
-          this.alreayAddedStakeHolders.push(user['_id']);
+        this.alreayAddedStakeHolders.push(user['_id']);
       }
     })
 
@@ -400,7 +401,7 @@ export class RightPanelComponent implements OnInit {
 
     let that = this;
     //this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
-      // update stakeData from data posted response
+    // update stakeData from data posted response
     that.addToStakeData(stakeHolderDto);
     //});
     this.updateStakeData.next("");
