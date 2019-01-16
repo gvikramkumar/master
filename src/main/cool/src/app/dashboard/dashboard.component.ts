@@ -112,6 +112,7 @@ export class DashboardComponent implements OnInit {
         obj.setAlertType(1);
         obj.setCaseId(element.caseId);
         obj.setTaskId(element.taskId);
+        obj.setType(element.type);
 
         // Set the status color
         if (element.status && element.status.toLowerCase() === 'red') {

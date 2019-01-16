@@ -13,8 +13,13 @@ export class ActionsAndNotifcations{
     caseId:string;
     createdBy:string;
     defaultFunction:string;
+    type:string;
     constructor() {
 
+    }
+
+    setType(type) {
+        this.type = type;
     }
 
     setCaseId(caseId) {
