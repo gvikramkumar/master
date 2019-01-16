@@ -1,18 +1,18 @@
 export class ActionsAndNotifcations{
-    offerId:string;
-    actiontTitle:string;
-    offerName:string;
-    assigneeId:string;
-    triggerDate:string;
-    dueDate:string;
-    taskId:string;
-    notificationTitle:string;
-    alertType:number;
-    styleColor:string;
-    actionDesc:string;
-    caseId:string;
-    createdBy:string;
-    defaultFunction:string;
+    offerId: string;
+    actiontTitle: string;
+    offerName: string;
+    assigneeId: string;
+    triggerDate: string;
+    dueDate: string;
+    taskId: string;
+    notificationTitle: string;
+    alertType: number;
+    styleColor: string;
+    actionDesc: string;
+    caseId: string;
+    createdBy: string;
+    defaultFunction: string;
     constructor() {
 
     }
@@ -40,40 +40,40 @@ export class ActionsAndNotifcations{
         this.styleColor = styleColor;
     }
 
-    setActionDesc(actionDesc){
+    setActionDesc(actionDesc) {
         this.actionDesc = actionDesc;
     }
 
-    setAlertType(alertType){
+    setAlertType(alertType) {
         this.alertType = alertType;
     }
-    setOfferId(offerId){
+    setOfferId(offerId) {
         this.offerId = offerId;
     }
 
-    setOfferName(offerName){
+    setOfferName(offerName) {
         this.offerName = offerName;
     }
 
-    setActiontTitle(actiontTitle){
+    setActiontTitle(actiontTitle) {
         this.actiontTitle = actiontTitle;
     }
 
-    setNotificationTitle(notificationTitle){
+    setNotificationTitle(notificationTitle) {
         this.notificationTitle = notificationTitle;
     }
-    setAssigneeId(assigneeId){
+    setAssigneeId(assigneeId) {
         this.assigneeId = assigneeId;
     }
 
-    setTriggerDate(triggerDate){
+    setTriggerDate(triggerDate) {
         this.triggerDate = triggerDate;
     }
 
-    setDueDate(dueDate){
+    setDueDate(dueDate) {
         this.dueDate = dueDate;
     }
-    setDefaultFunctione(defaultFunction){
+    setDefaultFunctione(defaultFunction) {
         this.defaultFunction = defaultFunction;
     }
 }
