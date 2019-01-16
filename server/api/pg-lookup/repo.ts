@@ -41,6 +41,15 @@ export default class PgLookupRepo {
   }
 */
 
+  getAdjustmentTypeIdDesc() {
+    return pgc.pgdb.query('select source_system_id, adj_type_id, adj_type_description from fpadfa.dfa_prof_source_adj_type_all')
+      .then(resp => resp.rows.map(x => {
+        x.source_system_id = Number(x.source_system_id);
+        x.adj_type_id = Number(x.adj_type_id);
+        return x;
+      }));
+  }
+
   getProductHierarchyReport() {
     return pgc.pgdb.query(`
             select 
