@@ -11,13 +11,13 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./menu-bar-popup.component.css']
 })
 export class MenuBarPopupComponent implements OnInit {
-  @Input() show: boolean = false;
+  @Input() show = false;
   @Input() popupType: String = '';
   @Output() closePopup = new EventEmitter<string>();
   currentOfferId: String;
   caseId: String;
-  reason: String = "";
- 
+  reason: String = '';
+
 
   constructor(private activatedRoute: ActivatedRoute,
     private menuBarService: MenuBarService,
@@ -48,7 +48,7 @@ export class MenuBarPopupComponent implements OnInit {
   }
 
   submit() {
-    let holdData={};
+    let holdData= {};
     holdData['taskId'] = '';
     holdData['userId'] = this.userService.getUserId();
     holdData['caseId'] = this.caseId;
