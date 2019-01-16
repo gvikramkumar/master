@@ -66,8 +66,6 @@ export class MenuBarPopupComponent implements OnInit {
     cancelData['action'] = 'cancel';
     cancelData['comment'] = this.reason;
 
-    // console.log(holdData);
-    // console.log(cancelData);
     if (this.popupType === 'hold') {
       this.menuBarService.holdOffer(holdData).subscribe(res => {
         this.closePopup.next('hold');
@@ -76,7 +74,7 @@ export class MenuBarPopupComponent implements OnInit {
       this.menuBarService.cancelOffer(cancelData).subscribe(res => {
         this.closePopup.next('cancel');
       });
-    }    
+    }
   }
 
 }

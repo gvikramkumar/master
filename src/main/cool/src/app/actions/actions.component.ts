@@ -63,47 +63,43 @@ export class ActionsComponent implements OnInit {
     this.actionsService.getActionsTracker()
       .subscribe(data => {
         this.myActions = data;
-        console.log("action offer Id",this.myActions);
         this.processMyActionsList();
       });
 
-    this.dashboardService.getMyOffersList().subscribe(data => {      
+    this.dashboardService.getMyOffersList().subscribe(data => {
       this.myOfferList = data;
       data.forEach(ele => {
         this.offerCaseMap[ele.offerId] = ele.caseId;
         this.offerNameMap[ele.offerId] = ele.offerName;
         this.offerOwnerMap[ele.offerId] = ele.offerCreatedBy;
 
-      })
+      });
     });
 
    this.actionsService.getFunction().subscribe(data => {
      this.functionList = data;
   });
-     
+
   // this.userService.getName().subscribe(data => {
   //   this.actionOwner = data;
   // })
 
   }
 
-  onChange(offerId){
+  onChange(offerId) {
     this.actionsService.getMilestones(this.offerCaseMap[offerId]).subscribe(data => {
       this.milestoneList = [];
-      for (var prop in data) {
-       data[prop].forEach(ele =>{
+      for (let prop in data) {
+       data[prop].forEach(ele => {
         this.milestoneList.push(ele);
-       })
+       });
     }
-       
     });
 
     this.actionsService.getAssignee(offerId).subscribe(data => {
       this.assigneeList = data;
-  
     });
   }
-  
   processMyActionsList() {
     // Process get Actions data
     if (this.myActions.actionList !== undefined) {
@@ -132,13 +128,13 @@ export class ActionsComponent implements OnInit {
       });
 
       this.myActionsList = this.myOfferArray;
-      console.log("checking caseId",this.myActionsList);
     }
   }
 // Create New Action
   createAction() {
-    //Process post data
-    var selectedAssignee = [this.assigneeValue];
+     // Process post data
+    const selectedAssignee = [this.assigneeValue];
+    const type = 'Manual Action';
     const createAction: CreateAction = new CreateAction(
       this.offerNameValue,
       this.offerCaseMap[this.offerNameValue],
@@ -150,9 +146,8 @@ export class ActionsComponent implements OnInit {
       this.dueDateValue.toISOString(),
       this.offerOwnerMap[this.offerNameValue],
       this.offerNameMap[this.offerNameValue],
+      type,
     );
-    console.log(createAction);
-    
     this.actionsService.createNewAction(createAction).subscribe((data) => {
       this.closeActionDailog();
     });
@@ -164,7 +159,6 @@ export class ActionsComponent implements OnInit {
   } */
 
   displayActionPop(popover) {
-    
     if (popover.isOpen()) {
       popover.close();
     }

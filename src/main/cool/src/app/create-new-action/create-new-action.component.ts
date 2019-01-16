@@ -25,37 +25,24 @@ export class CreateNewActionComponent implements OnInit {
     private searchCollaboratorService: SearchCollaboratorService,
     private userService: UserService,
     private createOfferService: CreateOfferService,
-    private dashboardService: DashboardService) { 
-      
+    private dashboardService: DashboardService) {
     }
 
   ngOnInit() {
-    
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
      const actionListData = [];
           let functionalRoleData = data.userMappings;
           functionalRoleData.forEach(element => {
             this.manualactionList = element.functionalRole;
-            //actionListData.push({ label: element, value: element });
           });
-          
         });
         this.manualactionList = this.actionListData;
-        
   this.dashboardService.getMyOffersList().subscribe(data => {
     this.myOfferList = data;
     for(var i; i < this.myOfferList.length; i++) {
       if(this.myOfferList[i].stakeholders !== null ) {
           let test = this.myOfferList[i].stakeholders;
-    }
-    // this.myOfferList.forEach(x => {
-    //   if(x.stakeholders !== null || x.stakeholders !== undefined) {
-    //   let test = x.stakeholders;
-    //   console.log(test);
-    //   }
-    //   //this.assigneeList = test;
-    // })
-    
+    } 
   }
   });
   }
