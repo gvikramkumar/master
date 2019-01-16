@@ -435,7 +435,7 @@
                       </div>                                  
                       </ng-template>
                       <span placement="bottom" [ngbPopover]="popActionContent" #p1="ngbPopover" triggers="manual"
-                        (click)="p1.open();selectedrownof(actionData)" pTooltip="Action" tooltipPosition="top">
+                        (click)="p1.open();selectedrownof(actionData)" [autoClose]="false" pTooltip="Action" tooltipPosition="top">
                         <span class="icon-clock icon-small"></span></span>
                         <!-- {{actionData.offerId}} -->
                         <!--my changes start here-->
