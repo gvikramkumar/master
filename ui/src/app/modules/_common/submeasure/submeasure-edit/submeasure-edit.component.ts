@@ -626,6 +626,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   validateSaveToDraft() {
     const errors = [];
+    if (!(this.sm.measureId)) {
+      errors.push('You must choose a measure to save to draft.');
+    }
     if (!(this.sm.name && this.sm.name.trim())) {
       errors.push('You must define a name to save to draft.');
     }
@@ -636,22 +639,25 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   saveToDraft() {
-    const errors = this.validateSaveToDraft();
-    if (errors) {
-      this.uiUtil.validationErrorsDialog(errors);
-    } else {
-      this.cleanUp();
-      const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
-      this.submeasureService.saveToDraft(this.sm, {saveMode})
-        .subscribe(sm => {
-          // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
-          this.addMode = false;
-          this.copyMode = false;
-          this.editMode = true;
-          this.sm = sm;
-          this.uiUtil.toast('Submeasure saved to draft.');
-        });
-    }
+    UiUtil.waitForAsyncValidations(this.form)
+      .then(() => {
+        const errors = this.validateSaveToDraft();
+        if (errors) {
+          this.uiUtil.validationErrorsDialog(errors);
+        } else {
+          this.cleanUp();
+          const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
+          this.submeasureService.saveToDraft(this.sm, {saveMode})
+            .subscribe(sm => {
+              // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
+              this.addMode = false;
+              this.copyMode = false;
+              this.editMode = true;
+              this.sm = sm;
+              this.uiUtil.toast('Submeasure saved to draft.');
+            });
+        }
+      });
   }
 
   reject() {
