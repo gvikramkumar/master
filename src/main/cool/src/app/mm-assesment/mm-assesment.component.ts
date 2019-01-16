@@ -98,13 +98,11 @@ export class MmAssesmentComponent implements OnInit {
       } else if (offerDetailRes['overallStatus'] === 'Partially Aligned') {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerDetailRes['derivedMM']}.`, mmModel: offerDetailRes['derivedMM'] };
       } else {
-        this.message = { contentHead: offerDetailRes['overallStatus'], content: "  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models." };
+        this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'};
       }
 
-      // Get offer Registration Information
       this.MonetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
         that.offerBuilderdata = data;
-        console.log("getofferbuilderData", that.offerBuilderdata);
         that.offerBuilderdata['BEList'] = [];
         that.offerBuilderdata['BUList'] = [];
         if (that.offerBuilderdata['primaryBEList'] != null) {
@@ -125,10 +123,8 @@ export class MmAssesmentComponent implements OnInit {
         }
       })
 
-      // buttons and buttons' status
       this.MonetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
-        console.log(that.offerData);
         that.offerData['groups'].forEach(group => {
           that.groupNames.push(group['groupName']);
           let curGroup = {};

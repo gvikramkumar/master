@@ -13,8 +13,13 @@ export class ActionsAndNotifcations{
     caseId:string;
     createdBy:string;
     defaultFunction:string;
+    type:string;
     constructor() {
 
+    }
+
+    setType(type) {
+        this.type = type;
     }
 
     setCaseId(caseId) {
@@ -40,40 +45,40 @@ export class ActionsAndNotifcations{
         this.styleColor = styleColor;
     }
 
-    setActionDesc(actionDesc){
+    setActionDesc(actionDesc) {
         this.actionDesc = actionDesc;
     }
 
-    setAlertType(alertType){
+    setAlertType(alertType) {
         this.alertType = alertType;
     }
-    setOfferId(offerId){
+    setOfferId(offerId) {
         this.offerId = offerId;
     }
 
-    setOfferName(offerName){
+    setOfferName(offerName) {
         this.offerName = offerName;
     }
 
-    setActiontTitle(actiontTitle){
+    setActiontTitle(actiontTitle) {
         this.actiontTitle = actiontTitle;
     }
 
-    setNotificationTitle(notificationTitle){
+    setNotificationTitle(notificationTitle) {
         this.notificationTitle = notificationTitle;
     }
-    setAssigneeId(assigneeId){
+    setAssigneeId(assigneeId) {
         this.assigneeId = assigneeId;
     }
 
-    setTriggerDate(triggerDate){
+    setTriggerDate(triggerDate) {
         this.triggerDate = triggerDate;
     }
 
-    setDueDate(dueDate){
+    setDueDate(dueDate) {
         this.dueDate = dueDate;
     }
-    setDefaultFunctione(defaultFunction){
+    setDefaultFunctione(defaultFunction) {
         this.defaultFunction = defaultFunction;
     }
 }

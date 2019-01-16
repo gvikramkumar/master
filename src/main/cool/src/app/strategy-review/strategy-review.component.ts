@@ -36,6 +36,7 @@ export class StrategyReviewComponent implements OnInit {
   minDate: Date;
   updateStakeData;
   setFlag;
+  derivedMM;
   
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
@@ -82,7 +83,6 @@ export class StrategyReviewComponent implements OnInit {
   ngOnInit() {
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
       this.strategyReviewList = data;
-      console.log(this.strategyReviewList);
       this.totalApprovalsCount = this.strategyReviewList.length;
       this.strategyReviewList.forEach(element => {
         if (element.status === 'Approved') {
@@ -125,11 +125,10 @@ export class StrategyReviewComponent implements OnInit {
 
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
-      console.log('firstData', data);
+      this.derivedMM = this.firstData['derivedMM'];
       this.data = this.firstData['stakeholders'];
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
-      console.log('data', this.data[0].offerRole);
       for (let i = 0; i <= this.data.length - 1; i++) {
         if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
           this.stakeHolderInfo[this.data[i]['offerRole']] = [];
@@ -146,8 +145,6 @@ export class StrategyReviewComponent implements OnInit {
           });
       }
       this.stakeData = this.stakeHolderInfo;
-      console.log('this stakedate', this.stakeData);
-      console.log('data', typeof (this.newDataArray));
     });
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
@@ -201,7 +198,6 @@ export class StrategyReviewComponent implements OnInit {
           stakeholderDefaults: stakeHolder['stakeholderDefaults']
         });
       this.stakeData = this.stakeHolderInfo;
-      console.log('this stakedate', this.stakeData);
     });
   }
 
@@ -236,7 +232,7 @@ export class StrategyReviewComponent implements OnInit {
       'userId': this.offerBuilderdata['offerOwner'],
       'caseId': this.caseId,
       'offerId': this.currentOfferId,
-      'taskName': 'Stratergy Review',
+      'taskName': 'Strategy Review',
       'action': '',
       'comment': ''
     };
@@ -248,7 +244,6 @@ export class StrategyReviewComponent implements OnInit {
   }
 
   onTabOpen(taskId) {
-    console.log(taskId);
     this.currentTaskId = taskId;
   }
 
@@ -294,7 +289,6 @@ export class StrategyReviewComponent implements OnInit {
       this.assigneeValue,
       this.dueDateValue.toISOString(),
     );
-    console.log(createActionComment);
     this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
     });
     this.createActionForm.reset();
@@ -311,7 +305,6 @@ export class StrategyReviewComponent implements OnInit {
       this.action,
       this.commentValue
     );
-    console.log(createActionApprove);
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
     });
     this.createActionApproveForm.reset();

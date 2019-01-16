@@ -81,11 +81,11 @@
                               Offer</button>
                           </div>
                           <div class="popover__footer">
-                            <div *ngIf="showFeedbackButtons == false">
+                            <div *ngIf="actionData.type == 'Manual Action'">
                               <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="displayActionPop(p1)">Complete</button>
                               <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="displayActionPop(p1)">Provide Feedback</button>
                             </div>
-                            <div>
+                            <div *ngIf="actionData.type == 'Strategy Review'">
                               <button class="btn btn--primary base-margin-top" (click)="doNotApprove()">Do Not Approve</button>
                               <button class="btn btn--primary base-margin-top" (click)="conditionalApprove()">Conditional Approval</button>
                               <button class="btn btn--primary base-margin-top" (click)="approve()">Approve</button>
@@ -435,7 +435,7 @@
                       </div>
                       </ng-template>
                       <span placement="bottom" [ngbPopover]="popActionContent" #p1="ngbPopover" triggers="manual"
-                        (click)="p1.open();selectedrownof(actionData)" pTooltip="Action" tooltipPosition="top">
+                        (click)="p1.open();selectedrownof(actionData)" [autoClose]="false" pTooltip="Action" tooltipPosition="top">
                         <span class="icon-clock icon-small"></span></span>
                         <!-- {{actionData.offerId}} -->
                         <!--my changes start here-->

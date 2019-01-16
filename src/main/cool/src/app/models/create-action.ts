@@ -9,7 +9,7 @@ export class CreateAction {
   dueDate: any;
   owner: string;
   offerName: string;
-  
+  type: string;
 
   constructor(offerId: string,
     caseId: string,
@@ -20,7 +20,8 @@ export class CreateAction {
     assignee: Array<any>,
     dueDate: any,
     owner: string,
-    offerName: string
+    offerName: string,
+    type: string,
     ) {
         this.offerId = offerId;
         this.caseId=caseId;
@@ -32,5 +33,6 @@ export class CreateAction {
         this.dueDate = dueDate;
         this.owner = owner;
         this.offerName = offerName;
+        this.type = type;
   }
 }

@@ -28,6 +28,7 @@ export class EnvironmentService {
     REST_API_OFFERPHASE_DETAILS_URL;
     REST_API_STAKEHOLDERLIST_GET_URL;
     REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL;
+    REST_API_EXITCRITERIA_REQUEST_ACTION_AUTO_CREATION_URL;
     REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
     REST_API_RIGISTERNEWUSER_GET_URL;
     REST_API_GETFUNCTIONAL_ROLE_URL;
@@ -38,7 +39,6 @@ export class EnvironmentService {
     REST_API_CREATE_BPM_APPROVAL_URL;
     REST_APT_MMPAGE_RETRIVE_DATA_GET_URL;
     REST_API_STRATEGY_REVIEW_GET_URL;
-
     REST_API_VIEW_COMMENT_GET_URL;
     REST_API_CREATE_COMMENT_URL;
 
@@ -142,6 +142,7 @@ export class EnvironmentService {
         this.REST_API_ACCESS_MANAGEMENT_GETUSER_URL = this.baseapi + '/stakeholder/getStakeHolderMgnt/MM1/All';
         this.REST_API_OFFERPHASE_DETAILS_URL = this.baseapi + '/bpmApi/getMilestones';
         this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL = this.baseapi + '/emailNotification/sendEmailNotification/';
+        this.REST_API_EXITCRITERIA_REQUEST_ACTION_AUTO_CREATION_URL = this.baseapi + '/action/create/task/';
         this.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL = this.baseapi + '/access/getuser';
         this.REST_API_CREATE_NEW_ACTION_POST_URL = this.baseapi + '/action/create/manualAction';
         this.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL = this.baseapi + '/bpmApi/getMilestones';
