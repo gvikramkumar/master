@@ -75,12 +75,13 @@ export class DashboardComponent implements OnInit {
       { field: 'offerOwner', header: 'OFFER OWNER' },
       { field: 'expectedLaunchDate', header: 'LAUNCH DATE' }
     ];
-    this.dashboardService.getMyActionsList()
-      .subscribe(data => {
-        this.myActions = data;
-        console.log("first data",data);
-        this.processMyActionsList();
-      });
+    this.getMyActionsList();
+    // this.dashboardService.getMyActionsList()
+    //   .subscribe(data => {
+    //     this.myActions = data;
+    //     console.log("first data",data);
+    //     this.processMyActionsList();
+    //   });
 
     this.dashboardService.getMyOffersList()
       .subscribe(data => {
@@ -93,6 +94,15 @@ export class DashboardComponent implements OnInit {
 
     this.actionsService.getFunction().subscribe(data => {
       this.functionList = data;
+    });
+  }
+
+  getMyActionsList() {
+    this.dashboardService.getMyActionsList()
+    .subscribe(data => {
+      this.myActions = data;
+      console.log("first data",data);
+      this.processMyActionsList();
     });
   }
 
@@ -256,7 +266,7 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/offerDetailView', offerId, caseId]);
   }
 
-  createAction() {
+  createAction(popover) {
     const taskId = this.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
@@ -274,11 +284,15 @@ export class DashboardComponent implements OnInit {
       this.dueDateValue.toISOString(),
     );
     this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
+      if (popover.isOpen()) {
+        popover.close();
+      }
+      this.getMyActionsList();
     });
     this.createActionForm.reset();
   }
 
-  createActionApprove() {
+  createActionApprove(popover) {
     const taskId = this.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
@@ -290,6 +304,10 @@ export class DashboardComponent implements OnInit {
       this.commentValue
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+      if (popover.isOpen()) {
+        popover.close();
+      }
+      this.getMyActionsList();
     });
     this.createActionApproveForm.reset();
   }
