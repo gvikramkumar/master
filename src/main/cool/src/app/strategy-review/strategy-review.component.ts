@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -11,13 +11,15 @@ import { CreateActionComment } from '../models/create-action-comment';
 import { CreateActionApprove } from '../models/create-action-approve';
 import { UserService } from '../services/user.service';
 import { SharedService } from '../shared-service.service';
+import { MessageService } from '../services/message.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-strategy-review',
   templateUrl: './strategy-review.component.html',
   styleUrls: ['./strategy-review.component.css']
 })
-export class StrategyReviewComponent implements OnInit {
+export class StrategyReviewComponent implements OnInit, OnDestroy {
   @ViewChild('createActionForm') createActionForm: NgForm;
   @ViewChild('createActionApproveForm') createActionApproveForm: NgForm;
   offerData: any;
@@ -64,6 +66,7 @@ export class StrategyReviewComponent implements OnInit {
   strategyReviewList;
   firstData: Object;
   stakeHolderInfo: any;
+  subscription: Subscription;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
@@ -73,7 +76,8 @@ export class StrategyReviewComponent implements OnInit {
     private actionsService: ActionsService,
     private userService: UserService,
     private _location: Location,
-    private sharedService: SharedService) {
+    private sharedService: SharedService,
+    private messageService: MessageService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -81,21 +85,10 @@ export class StrategyReviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
-      this.strategyReviewList = data;
-      this.totalApprovalsCount = this.strategyReviewList.length;
-      this.strategyReviewList.forEach(element => {
-        if (element.status === 'Approved') {
-          this.approvedCount = this.approvedCount + 1;
-        } else if (element.status === 'Not Approved') {
-          this.notApprovedCount = this.notApprovedCount + 1;
-        } else if (element.status === 'Conditionally Approved') {
-          this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
-        } else if (element.status === 'Not Reviewed') {
-          this.notReviewedCount = this.notReviewedCount + 1;
-        }
+    this.subscription = this.messageService.getMessage()
+      .subscribe(message => {
+         this.getStrategyReviwInfo();
       });
-    });
 
     this.data = [];
     this.message = {
@@ -179,6 +172,24 @@ export class StrategyReviewComponent implements OnInit {
       if (this.offerBuilderdata['secondaryBUList'] != null) {
         this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
       }
+    });
+  }
+
+  getStrategyReviwInfo() {
+    this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
+      this.strategyReviewList = data;
+      this.totalApprovalsCount = this.strategyReviewList.length;
+      this.strategyReviewList.forEach(element => {
+        if (element.status === 'Approved') {
+          this.approvedCount = this.approvedCount + 1;
+        } else if (element.status === 'Not Approved') {
+          this.notApprovedCount = this.notApprovedCount + 1;
+        } else if (element.status === 'Conditionally Approved') {
+          this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
+        } else if (element.status === 'Not Reviewed') {
+          this.notReviewedCount = this.notReviewedCount + 1;
+        }
+      });
     });
   }
 
@@ -276,6 +287,9 @@ export class StrategyReviewComponent implements OnInit {
     const taskId = this.currentTaskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
+    const createActionPayload = {};
+    createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
+    createActionPayload['owner'] = this.assigneeValue;
     const createActionComment: CreateActionComment = new CreateActionComment(
       taskId,
       userId,
@@ -290,6 +304,9 @@ export class StrategyReviewComponent implements OnInit {
       this.dueDateValue.toISOString(),
     );
     this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
+      this.actionsService.postForNewAction(this.currentOfferId, this.caseId, createActionPayload).subscribe(response => {
+        this.closeForm();
+      });
     });
     this.createActionForm.reset();
   }
@@ -306,8 +323,13 @@ export class StrategyReviewComponent implements OnInit {
       this.commentValue
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+      this.closeForm();
     });
-    this.createActionApproveForm.reset();
+    this.createActionForm.reset();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

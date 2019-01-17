@@ -61,7 +61,7 @@
                                     <th>Offer Owner </th>
                                     <th>Due Date </th>
                                     <th>Action Completion Phase </th>
-                                  </tr>popover__title
+                                  </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
@@ -233,7 +233,7 @@
                                   <div class="row">
                                     <div class="col-md-12 text-right">
                                       <button class="btn btn--secondary" (click)="displayActionPop(p1)">Cancel</button>
-                                      <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction()">Create an Action</button>
+                                      <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction(p1)">Create an Action</button>
                                     </div>
                                   </div>
                                 </form>
@@ -381,7 +381,7 @@
                                     <div class="row">
                                       <div class="col-md-12 text-right">
                                         <button class="btn btn--secondary" (click)="displayActionPop(p1)">Cancel</button>
-                                        <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction()">Create an Action</button>
+                                        <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction(p1)">Create an Action</button>
                                       </div>
                                     </div>
                                   </form>
@@ -425,7 +425,7 @@
                                   <div class="row">
                                     <div class="col-md-12 text-right">
                                       <button class="btn btn--secondary" (click)="displayActionPop(p1)">Cancel</button>
-                                      <button class="btn btn--primary" [disabled]="!createActionApproveForm.valid" (click)="createActionApprove()">Submit</button>
+                                      <button class="btn btn--primary" [disabled]="!createActionApproveForm.valid" (click)="createActionApprove(p1)">Submit</button>
                                     </div>
                                   </div>
                                 </form>

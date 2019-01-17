@@ -18,8 +18,8 @@ export class MmAssesmentComponent implements OnInit {
 
   public model: any;
   aligned: boolean;
-  proceedFlag: boolean = false;
-  alignedFlag: boolean = false;
+  proceedFlag = false;
+  alignedFlag = false;
   subscription: Subscription;
   offerData: any;
   currentOfferId;
@@ -45,7 +45,7 @@ export class MmAssesmentComponent implements OnInit {
     private sharedService: SharedService,
     private createOfferService: CreateOfferService,
     private activatedRoute: ActivatedRoute,
-    private MonetizationModelService: MonetizationModelService,
+    private monetizationModelService: MonetizationModelService,
     private offerPhaseService: OfferPhaseService,
     private offerDetailViewService: OfferDetailViewService,
     private configService: ConfigurationService,
@@ -81,18 +81,18 @@ export class MmAssesmentComponent implements OnInit {
           }
           selected['characteristics'].forEach(character => {
             selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
-          })
-        })
+          });
+        });
       }
       let that = this;
 
       // mm model and message section
       this.currentMMModel = offerDetailRes['derivedMM'];
-      if (offerDetailRes['derivedMM'] != null && offerDetailRes['derivedMM'] !== "") {
+      if (offerDetailRes['derivedMM'] != null && offerDetailRes['derivedMM'] !== '') {
         this.canClickNextStep = true;
       }
       if (offerDetailRes['overallStatus'] == null) {
-        this.message = { contentHead: "Great Work!", content: " Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.", color: "black" };
+        this.message = { contentHead: 'Great Work!', content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.', color: 'black' };
       } else if (offerDetailRes['overallStatus'] === 'Aligned') {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerDetailRes['derivedMM']}`, mmModel: offerDetailRes['derivedMM'] };
       } else if (offerDetailRes['overallStatus'] === 'Partially Aligned') {
@@ -101,7 +101,7 @@ export class MmAssesmentComponent implements OnInit {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'};
       }
 
-      this.MonetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
+      this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
         that.offerBuilderdata = data;
         that.offerBuilderdata['BEList'] = [];
         that.offerBuilderdata['BUList'] = [];
@@ -118,12 +118,12 @@ export class MmAssesmentComponent implements OnInit {
           that.offerBuilderdata['BUList'] = that.offerBuilderdata['BUList'].concat(that.offerBuilderdata['secondaryBUList']);
         }
 
-        if (offerDetailRes['derivedMM'] != null && offerDetailRes['derivedMM'] != "") {
-          this.getStakeData(offerDetailRes['derivedMM'])
+        if (offerDetailRes['derivedMM'] !== null && offerDetailRes['derivedMM'] !== '') {
+          this.getStakeData(offerDetailRes['derivedMM']);
         }
-      })
+      });
 
-      this.MonetizationModelService.getAttributes().subscribe(data => {
+      this.monetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
         that.offerData['groups'].forEach(group => {
           that.groupNames.push(group['groupName']);
@@ -136,10 +136,10 @@ export class MmAssesmentComponent implements OnInit {
               } else {
                 curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
               }
-            })
-          })
+            });
+          });
           that.groupData.push(curGroup);
-        })
+        });
       });
     });
   }
@@ -151,7 +151,7 @@ export class MmAssesmentComponent implements OnInit {
     let offerComponentAttrs = curGroup[groupName];
     let res = [];
     offerComponentAttrs.forEach(function (attr) {
-      if (attr.status == 1) {
+      if (attr.status === 1) {
         res.push(attr.name);
       }
     });
@@ -168,7 +168,7 @@ export class MmAssesmentComponent implements OnInit {
     curGroup['Delivery'].forEach((attr) => {
       attr.type = 0;
     });
-    curGroup["Licensing"].forEach((attr) => {
+    curGroup['Licensing'].forEach((attr) => {
       attr.type = 0;
     });
   }
@@ -176,14 +176,14 @@ export class MmAssesmentComponent implements OnInit {
   changeSubGroupType(curGroup) {
     let selectedAttrs = this.getSubgroupAttributes(curGroup, 'Offer Components');
     this.clearSubGroupType(curGroup);
-    if (selectedAttrs.length == 1 && selectedAttrs.indexOf("SW - SaaS") != -1) {
-      var perpetual = curGroup['Licensing'].find(obj => {
+    if (selectedAttrs.length === 1 && selectedAttrs.indexOf('SW - SaaS') !== -1) {
+      let perpetual = curGroup['Licensing'].find(obj => {
         return obj.name === 'Perpetual'
       });
       perpetual.type = 1;
 
       curGroup['Delivery'].forEach((attr) => {
-        if (attr.name == 'Provisioning Fulfillment') {
+        if (attr.name === 'Provisioning Fulfillment') {
           attr.type = 2;
         } else {
           attr.type = 1;
@@ -191,54 +191,30 @@ export class MmAssesmentComponent implements OnInit {
       });
 
       curGroup['Deployment'].forEach((attr) => {
-        if (attr.name == 'Cloud') {
+        if (attr.name === 'Cloud') {
           attr.type = 2;
         } else {
           attr.type = 1;
         }
       });
-    } else if (selectedAttrs.includes("SW - SaaS") && (selectedAttrs.includes("Hardware (Commodity (x86) / Proprietary)") || selectedAttrs.includes("SW - OS") || selectedAttrs.includes("SW - OS Feature / Application / 3rd Part SW / VNF"))) {
+    } else if (selectedAttrs.includes('SW - SaaS') && (selectedAttrs.includes('Hardware (Commodity (x86) / Proprietary)') || selectedAttrs.includes('SW - OS') || selectedAttrs.includes('SW - OS Feature / Application / 3rd Part SW / VNF'))) {
       curGroup['Delivery'].forEach((attr) => {
-        if (attr.name == 'Provisioning Fulfillment') {
+        if (attr.name === 'Provisioning Fulfillment') {
           attr.type = 2;
         }
       });
 
       curGroup['Deployment'].forEach((attr) => {
-        if (attr.name == 'Hybrid') {
+        if (attr.name === 'Hybrid') {
           attr.type = 2;
         } else {
           attr.type = 1;
         }
       });
 
-    } else if (selectedAttrs.includes("Hardware (Commodity (x86) / Proprietary)") && (selectedAttrs.includes("SW - OS") || selectedAttrs.includes("SW - OS Feature / Application / 3rd Part SW / VNF"))) {
+    } else if (selectedAttrs.includes('Hardware (Commodity (x86) / Proprietary)') && (selectedAttrs.includes('SW - OS') || selectedAttrs.includes('SW - OS Feature / Application / 3rd Part SW / VNF'))) {
       curGroup['Hosting Party'].forEach((attr) => {
-        if (attr.name == "Hosting Party - N/A") {
-          attr.type = 2;
-        } else {
-          attr.type = 1;
-        }
-      });
-
-      curGroup['Delivery'].forEach((attr) => {
-        if (attr.name == 'Provisioning Fulfillment') {
-          attr.type = 1;
-        }
-      });
-
-      curGroup['Deployment'].forEach((attr) => {
-        if (attr.name == 'On-Premise') {
-          attr.type = 2;
-        } else {
-          attr.type = 1;
-        }
-      });
-
-    } else if (selectedAttrs.length == 1 && selectedAttrs.includes("Hardware (Commodity (x86) / Proprietary)")) {
-
-      curGroup['Hosting Party'].forEach((attr) => {
-        if (attr.name == "Hosting Party - N/A") {
+        if (attr.name === 'Hosting Party - N/A') {
           attr.type = 2;
         } else {
           attr.type = 1;
@@ -246,23 +222,47 @@ export class MmAssesmentComponent implements OnInit {
       });
 
       curGroup['Delivery'].forEach((attr) => {
-        if (attr.name == 'Physical Fulfillment') {
-          attr.type = 2;
+        if (attr.name === 'Provisioning Fulfillment') {
+          attr.type = 1;
         }
       });
 
       curGroup['Deployment'].forEach((attr) => {
-        if (attr.name == 'On-Premise') {
+        if (attr.name === 'On-Premise') {
           attr.type = 2;
         } else {
           attr.type = 1;
         }
       });
 
-    } else if (selectedAttrs.includes("SW - OS") || selectedAttrs.includes("SW - OS Feature / Application / 3rd Part SW / VNF")) {
+    } else if (selectedAttrs.length === 1 && selectedAttrs.includes('Hardware (Commodity (x86) / Proprietary)')) {
 
       curGroup['Hosting Party'].forEach((attr) => {
-        if (attr.name == "Hosting Party - N/A") {
+        if (attr.name === 'Hosting Party - N/A') {
+          attr.type = 2;
+        } else {
+          attr.type = 1;
+        }
+      });
+
+      curGroup['Delivery'].forEach((attr) => {
+        if (attr.name === 'Physical Fulfillment') {
+          attr.type = 2;
+        }
+      });
+
+      curGroup['Deployment'].forEach((attr) => {
+        if (attr.name === 'On-Premise') {
+          attr.type = 2;
+        } else {
+          attr.type = 1;
+        }
+      });
+
+    } else if (selectedAttrs.includes('SW - OS') || selectedAttrs.includes('SW - OS Feature / Application / 3rd Part SW / VNF')) {
+
+      curGroup['Hosting Party'].forEach((attr) => {
+        if (attr.name === 'Hosting Party - N/A') {
           attr.type = 2;
         } else {
           attr.type = 1;
@@ -270,7 +270,7 @@ export class MmAssesmentComponent implements OnInit {
       });
 
       curGroup['Deployment'].forEach((attr) => {
-        if (attr.name == 'On-Premise') {
+        if (attr.name === 'On-Premise') {
           attr.type = 2;
         } else {
           attr.type = 1;
@@ -284,19 +284,19 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
-    if (attribute.type == 2 && attribute.status == -1) {
+    if (attribute.type === 2 && attribute.status === -1) {
       attribute.type = 0;
       return;
     }
     attribute.status = -attribute.status;
 
-    if (this.activeTabIndex == 0) {
+    if (this.activeTabIndex === 0) {
       if (this.groupData[0]['Offer Components'].includes(attribute)) {
         this.changeSubGroupType(this.groupData[0]);
       }
 
-      var next = 0;
-      var groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
+      let next = 0;
+      let groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
       groupKeys.forEach(key => {
         for (let attr of this.groupData[0][key]) {
           if (attr.status === 1 || attr.type === 2) {
@@ -304,8 +304,8 @@ export class MmAssesmentComponent implements OnInit {
             break;
           }
         }
-      })
-      if (next == groupKeys.length) {
+      });
+      if (next === groupKeys.length) {
         this.canClickNextStep = true;
       } else {
         this.canClickNextStep = false;
@@ -321,44 +321,42 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toNextStep() {
-    if (this.activeTabIndex == 0) {
+    if (this.activeTabIndex === 0) {
       var index = 0;
       var groupKeys = this.getGroupKeys(this.groupData[0]);
       groupKeys.forEach((key) => {
         this.offerData['groups'][0]['subGroup'][index]['selected'] = [];
         this.groupData[0][key].forEach((attr) => {
-          if (attr.status == 1 || attr.type == 2) {
+          if (attr.status === 1 || attr.type === 2) {
             this.offerData['groups'][0]['subGroup'][index]['selected'].push(attr.name);
           }
-        })
+        });
         index += 1;
-      })
-      this.offerData["offerId"] = this.currentOfferId;
-      this.offerData["mmChoice"] = "REVALIDATE";
-      this.offerData["mmId"] = null;
+      });
+      this.offerData['offerId'] = this.currentOfferId;
+      this.offerData['mmChoice'] = 'REVALIDATE';
+      this.offerData['mmId'] = null;
       // console.log(this.offerData);
-      var postData = this.offerData;
+      let postData = this.offerData;
       postData['groups'] = this.offerData['groups'].slice(0, 1);
-      console.log(postData);
 
 
-      this.MonetizationModelService.toNextSetp(postData).subscribe(data => {
-        console.log(data);
+      this.monetizationModelService.toNextSetp(postData).subscribe(data => {
         if (data['mmMapperStatus'] === 'Aligned') {
           this.message = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`, mmModel: data['mmModel'] };
         } else if (data['mmMapperStatus'] === 'Partially Aligned') {
           this.message = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${data['mmModel']}.`, mmModel: data['mmModel'] };
         } else {
-          this.message = { contentHead: data['mmMapperStatus'], content: "  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models." };
+          this.message = { contentHead: data['mmMapperStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
         }
 
         this.currentMMModel = data['mmModel'];
-        if (data['mmModel'] != null && this.activeTabIndex < this.groupNames.length - 1) {
+        if (data['mmModel'] !== null && this.activeTabIndex < this.groupNames.length - 1) {
           this.activeTabIndex += 1;
         }
         this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
         this.getStakeData(data['mmModel']);
-      })
+      });
     } else {
       if (this.activeTabIndex < this.groupNames.length - 1) {
         this.activeTabIndex += 1;
@@ -369,9 +367,8 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   getStakeData(mmModel) {
-    this.MonetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
+    this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
       this.stakeData = {};
-      console.log(res);
       let keyUsers;
       if (res != null) {
         keyUsers = res;
@@ -400,19 +397,17 @@ export class MmAssesmentComponent implements OnInit {
         if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
           this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
         }
-        console.log(user);
         let curUser = user;
         curUser['stakeholderDefaults'] = true;
         this.stakeData[user['userMappings'][0]['appRoleList'][0]].push(curUser);
-        console.log(curUser);
-      })
+      });
 
 
-    })
+    });
   }
 
   emitEventToChild() {
-    this.eventsSubject.next(this.offerBuilderdata['offerOwner'])
+    this.eventsSubject.next(this.offerBuilderdata['offerOwner']);
   }
 
   updateStakeData(data) {
@@ -434,11 +429,11 @@ export class MmAssesmentComponent implements OnInit {
 
   updateMessage(message) {
 
-    if (message != null && message !== "") {
-      if (message == 'hold') {
-        this.message = { contentHead: "", content: "The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
-      } else if (message == 'cancel') {
-        this.message = { contentHead: "", content: "The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
+    if (message != null && message !== '') {
+      if (message === 'hold') {
+        this.message = { contentHead: '', content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
+      } else if (message === 'cancel') {
+        this.message = { contentHead: '', content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
       }
     }
   }
@@ -451,32 +446,32 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
   changeTab(index) {
-    if (this.canClickNextStep == true && this.currentMMModel != null) {
+    if (this.canClickNextStep === true && this.currentMMModel !== null) {
       this.activeTabIndex = index;
     }
   }
 
   proceedToStakeholder() {
     let proceedToStakeholderPostData = {};
-    proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? "" : this.currentOfferId;
-    proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'] == null ? "" : this.offerBuilderdata['offerName'];
-    proceedToStakeholderPostData['offerDesc'] = this.offerBuilderdata['offerDesc'] == null ? "" : this.offerBuilderdata['offerDesc'];
-    proceedToStakeholderPostData['offerCreatedBy'] = this.offerBuilderdata['offerCreatedBy'] == null ? "" : this.offerBuilderdata['offerCreatedBy'];
-    proceedToStakeholderPostData['offerCreationDate'] = this.offerBuilderdata['offerCreationDate'] == null ? "" : this.offerBuilderdata['offerCreationDate'];
-    proceedToStakeholderPostData['offerOwner'] = this.offerBuilderdata['offerOwner'] == null ? "" : this.offerBuilderdata['offerOwner'];
-    proceedToStakeholderPostData['clonedOfferId'] = this.offerBuilderdata['clonedOfferId'] == null ? "" : this.offerBuilderdata['clonedOfferId'];
-    proceedToStakeholderPostData['primaryBUList'] = this.offerBuilderdata['primaryBUList'] == null ? "" : this.offerBuilderdata['primaryBUList'];
-    proceedToStakeholderPostData['primaryBEList'] = this.offerBuilderdata['primaryBEList'] == null ? "" : this.offerBuilderdata['primaryBEList'];
-    proceedToStakeholderPostData['strategyReviewDate'] = this.offerBuilderdata['strategyReviewDate'] == null ? "" : this.offerBuilderdata['strategyReviewDate'];
-    proceedToStakeholderPostData['designReviewDate'] = this.offerBuilderdata['designReviewDate'] == null ? "" : this.offerBuilderdata['designReviewDate'];
-    proceedToStakeholderPostData['readinessReviewDate'] = this.offerBuilderdata['readinessReviewDate'] == null ? "" : this.offerBuilderdata['readinessReviewDate'];
+    proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
+    proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'] == null ? '' : this.offerBuilderdata['offerName'];
+    proceedToStakeholderPostData['offerDesc'] = this.offerBuilderdata['offerDesc'] == null ? '' : this.offerBuilderdata['offerDesc'];
+    proceedToStakeholderPostData['offerCreatedBy'] = this.offerBuilderdata['offerCreatedBy'] == null ? '' : this.offerBuilderdata['offerCreatedBy'];
+    proceedToStakeholderPostData['offerCreationDate'] = this.offerBuilderdata['offerCreationDate'] == null ? '' : this.offerBuilderdata['offerCreationDate'];
+    proceedToStakeholderPostData['offerOwner'] = this.offerBuilderdata['offerOwner'] == null ? '' : this.offerBuilderdata['offerOwner'];
+    proceedToStakeholderPostData['clonedOfferId'] = this.offerBuilderdata['clonedOfferId'] == null ? '' : this.offerBuilderdata['clonedOfferId'];
+    proceedToStakeholderPostData['primaryBUList'] = this.offerBuilderdata['primaryBUList'] == null ? '' : this.offerBuilderdata['primaryBUList'];
+    proceedToStakeholderPostData['primaryBEList'] = this.offerBuilderdata['primaryBEList'] == null ? '' : this.offerBuilderdata['primaryBEList'];
+    proceedToStakeholderPostData['strategyReviewDate'] = this.offerBuilderdata['strategyReviewDate'] == null ? '' : this.offerBuilderdata['strategyReviewDate'];
+    proceedToStakeholderPostData['designReviewDate'] = this.offerBuilderdata['designReviewDate'] == null ? '' : this.offerBuilderdata['designReviewDate'];
+    proceedToStakeholderPostData['readinessReviewDate'] = this.offerBuilderdata['readinessReviewDate'] == null ? '' : this.offerBuilderdata['readinessReviewDate'];
 
-    var selectedCharacteristics = [];
-    var additionalCharacteristics = []
+    let selectedCharacteristics = [];
+    let additionalCharacteristics = [];
     this.groupData.forEach((group, index) => {
-      for (var prop in group) {
-        var subselectedCharacteristics = {}
-        var notSubselectedCharacteristics = {}
+      for (let prop in group) {
+        let subselectedCharacteristics = {};
+        let notSubselectedCharacteristics = {};
         subselectedCharacteristics['group'] = this.groupNames[index];
         subselectedCharacteristics['subgroup'] = prop;
         subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
@@ -492,66 +487,63 @@ export class MmAssesmentComponent implements OnInit {
           } else {
             notSubselectedCharacteristics['characteristics'].push(characters['name']);
           }
-        })
+        });
         selectedCharacteristics.push(subselectedCharacteristics);
         additionalCharacteristics.push(notSubselectedCharacteristics);
       }
-    })
+    });
     proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
-    proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? "" : this.currentMMModel;
+    proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
     proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
-    console.log(this.stakeData);
     let stakeHolders = [];
-    for (var prop in this.stakeData) {
+    for (let prop in this.stakeData) {
       this.stakeData[prop].forEach(sh => {
         stakeHolders.push({
-          "_id": sh['_id'],
-          "businessEntity": sh['userMappings'][0]['businessEntity'],
-          "functionalRole": sh['userMappings'][0]['functionalRole'],
-          "offerRole": sh['userMappings'][0]['appRoleList'][0],
-          "stakeholderDefaults": sh['stakeholderDefaults'],
-          "name": sh['userName']
-        })
+          '_id': sh['_id'],
+          'businessEntity': sh['userMappings'][0]['businessEntity'],
+          'functionalRole': sh['userMappings'][0]['functionalRole'],
+          'offerRole': sh['userMappings'][0]['appRoleList'][0],
+          'stakeholderDefaults': sh['stakeholderDefaults'],
+          'name': sh['userName']
+        });
       });
     }
     proceedToStakeholderPostData['stakeholders'] = stakeHolders;
 
     proceedToStakeholderPostData['expectedLaunchDate'] = this.offerBuilderdata['expectedLaunchDate'];
     proceedToStakeholderPostData['status'] = {
-      "offerPhase": "PreLaunch",
-      "offerMilestone": "Launch In Progress",
-      "phaseMilestone": "ideate",
-      "subMilestone": "Offer Model Evaluation"
+      'offerPhase': 'PreLaunch',
+      'offerMilestone': 'Launch In Progress',
+      'phaseMilestone': 'ideate',
+      'subMilestone': 'Offer Model Evaluation'
     };
     proceedToStakeholderPostData['ideate'] = [{
-      "subMilestone": "Offer Model Evaluation",
-      "status": "completed",
-      "completionDate": new Date().toDateString(),
+      'subMilestone': 'Offer Model Evaluation',
+      'status': 'completed',
+      'completionDate': new Date().toDateString(),
     }];
-    proceedToStakeholderPostData['secondaryBUList'] = this.offerBuilderdata['secondaryBUList']
-    proceedToStakeholderPostData['secondaryBEList'] = this.offerBuilderdata['secondaryBEList']
+    proceedToStakeholderPostData['secondaryBUList'] = this.offerBuilderdata['secondaryBUList'];
+    proceedToStakeholderPostData['secondaryBEList'] = this.offerBuilderdata['secondaryBEList'];
 
-    console.log(proceedToStakeholderPostData)
     let that = this;
-    this.MonetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
+    this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
       let proceedPayload = {
-        "taskId": "",
-        "userId": this.offerBuilderdata['offerOwner'],
-        "caseId": that.caseId,
-        "offerId": that.currentOfferId,
-        "taskName": "Offer MM",
-        "action": "",
-        "comment": ""
+        'taskId': '',
+        'userId': this.offerBuilderdata['offerOwner'],
+        'caseId': that.caseId,
+        'offerId': that.currentOfferId,
+        'taskName': 'Offer MM',
+        'action': '',
+        'comment': ''
       };
       that.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(result => {
         that.router.navigate(['/stakeholderFull', that.currentOfferId, that.caseId]);
-      })
-    })
+      });
+    });
 
   }
 
   goBackToOffercreation() {
-    console.log("off", this.currentOfferId)
     this.router.navigate(['/coolOffer', this.currentOfferId]);
   }
 }
