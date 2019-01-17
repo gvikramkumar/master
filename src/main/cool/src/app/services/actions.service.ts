@@ -55,4 +55,11 @@ export class ActionsService {
     let url = this.environmentService.REST_API_CREATE_BPM_APPROVAL_URL;
     return this.http.post(url, createActionApprove);
   }
+
+  postForNewAction(offerId,caseId,createActionPayload) {
+    let url = this.environmentService.REST_API_EXITCRITERIA_REQUEST_ACTION_AUTO_CREATION_URL;
+    url += offerId;
+    url += '/' + caseId;
+    return this.http.post(url, createActionPayload);
+  }
 }
