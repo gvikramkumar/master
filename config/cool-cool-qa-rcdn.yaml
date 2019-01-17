@@ -28,7 +28,7 @@ spec:
       containers:
         -
           name: "cool"
-          image: "containers.cisco.com/it_cvc_supply_chain/cooldev-sdaas_cool :__IMAGETAG__"
+          image: "containers.cisco.com/it_cvc_supply_chain/cooldev-sdaas_cool:__IMAGETAG__"
           ports:
             -
               containerPort: 8080
