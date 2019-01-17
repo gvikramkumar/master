@@ -21,7 +21,7 @@ export class MenuBarComponent implements OnInit {
     @Input() stakeData:object;
     @Output() updateMessage = new EventEmitter<string>();
     items: MenuItem[];
-    showPopup: boolean = false;
+    showPopup = false;
     popupType: String = '';
     itemShow: Object = {};
     navigateHash: Object = {};
@@ -46,7 +46,7 @@ export class MenuBarComponent implements OnInit {
             if (data != null) {
                 if (data['ideate'] != null) {
                     data['ideate'].forEach(element => {
-                        if (element['status'] == 'Completed' || element['status'] == 'In progress') {
+                        if (element['status'] === 'Completed' || element['status'] === 'In progress') {
                             this.itemShow[element['subMilestone']] = true;
                         }
                     });
@@ -91,64 +91,63 @@ export class MenuBarComponent implements OnInit {
                 ]
             },
 
-        ]
+        ];
     }
 
     showOppupFunc(ptype) {
-        
+
             this.showPopup = true;
             this.popupType = ptype;
-        
+
     }
 
     closePopup(message) {
         if (message != null && message !== '') {
-            var emailNotificationData = {};
-            if (message == 'hold') {
-                var emailSubject = `[${this.offerName}]([${this.offerId}]) has been on hold by [${this.userService.getUserId()}]`;
-                var emailBody = `Hello,
+           let emailNotificationData = {};
+            if (message === 'hold') {
+                let emailSubject = `[${this.offerName}]([${this.offerId}]) has been on hold by [${this.userService.getUserId()}]`;
+                let emailBody = `Hello,
                 [${this.offerName}]([${this.offerId}]) has been on hold by [${this.userService.getUserId()}].
                 All related actions have been disabled.
                 Click here to view on hold offer in COOL.
-                You are receiving this email because you have been identified as a stakeholder for [${this.offerName}].`
-                var stakeHolders = [];
-                for (var prop in this.stakeData) {
+                You are receiving this email because you have been identified as a stakeholder for [${this.offerName}].`;
+                let stakeHolders = [];
+                for (let prop in this.stakeData) {
                     this.stakeData[prop].forEach(stakeholder => {
-                        stakeHolders.push(stakeholder['emailId'])
-                    })
+                        stakeHolders.push(stakeholder['emailId']);
+                    });
                 }
                 emailNotificationData = {
                     'subject': emailSubject,
                     'emailBody': emailBody,
                     'toMailLists': stakeHolders,
-                }
+                };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
 
                 });
             }
-            if (message == 'cancel') {
-                var emailSubject = `[${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}]`;
-                var emailBody = `Hello,
+            if (message === 'cancel') {
+                let emailSubject = `[${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}]`;
+                let emailBody = `Hello,
                 [${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}].
                 All related actions have been disabled.
                 Click here to view canceled offer in COOL.
-                You are receiving this email because you have been identified as a stakeholder for [${this.offerName}].`
-                var stakeHolders = [];
-                for (var prop in this.stakeData) {
+                You are receiving this email because you have been identified as a stakeholder for [${this.offerName}].`;
+                let stakeHolders = [];
+                for (let prop in this.stakeData) {
                     this.stakeData[prop].forEach(stakeholder => {
-                        stakeHolders.push(stakeholder['emailId'])
-                    })
+                        stakeHolders.push(stakeholder['emailId']);
+                    });
                 }
                 emailNotificationData = {
                     'subject': emailSubject,
                     'emailBody': emailBody,
                     'toMailLists': stakeHolders,
-                }
+                };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
-                    
+
                 });
             }
-            console.log(emailNotificationData)
             this.updateMessage.next(message);
         }
         this.showPopup = false;
