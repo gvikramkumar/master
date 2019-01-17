@@ -33,4 +33,27 @@ export default class ProductClassUploadController extends ControllerBase {
       });
   }
 
+  getManualMixValuesForSubmeasureName(req, res, next) {
+    return this.repo.getMany({submeasureName: req.body.submeasureName})
+      .then(docs => {
+        if (!docs.length) {
+          res.status(204).end();
+        } else {
+          if (docs.length !== 2) {
+            throw new ApiError(`getManualMixValuesForSubmeasureName: expected 2 records but got: ${docs.length}`);
+          }
+          const hw = _.find(docs, {splitCategory: 'HARDWARE'});
+          const sw = _.find(docs, {splitCategory: 'SOFTWARE'});
+          if (!(hw && sw)) {
+            throw new ApiError(`getManualMixValuesForSubmeasureName: missing HW or SW value`);
+          }
+          res.json({
+            HW: hw.splitPercentage,
+            SW: sw.splitPercentage
+          });
+        }
+      })
+      .catch(next);
+  }
+
 }

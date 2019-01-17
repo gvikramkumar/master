@@ -18,6 +18,7 @@ import {NgForm} from '@angular/forms';
 import {Submeasure} from '../../../../../../../shared/models/submeasure';
 import {shUtil} from '../../../../../../../shared/shared-util';
 import {PgLookupService} from '../../services/pg-lookup.service';
+import {ProductClassUploadService} from '../../../prof/services/product-class.service';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -25,6 +26,8 @@ import {PgLookupService} from '../../services/pg-lookup.service';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  manualMixHw: number;
+  manualMixSw: number;
   startFiscalMonth: string;
   flashCategories = [];
   adjustmentTypes = [];
@@ -188,7 +191,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     private measureService: MeasureService,
     private sourceService: SourceService,
     private uiUtil: UiUtil,
-    private pgLookupService: PgLookupService
+    private pgLookupService: PgLookupService,
+    private productClassUploadService: ProductClassUploadService
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -208,7 +212,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinct('name', {moduleId: -1}).toPromise(),
     ];
-    if (this.viewMode || this.editMode || this.copyMode) {
+    if (!this.addMode) {
       promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
     }
     Promise.all(promises)
@@ -245,15 +249,29 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.init();
       })
       .then(() => {
-        return Promise.all([
+        const promises2: Promise<any>[] = [
           this.pgLookupService.getSubmeasureFlashCategories(this.sm.submeasureKey || 0).toPromise(),
           this.pgLookupService.getSubmeasureAdjustmentTypes(this.sm.submeasureKey || 0).toPromise(),
-        ])
+        ]
+        if (!this.addMode) {
+          promises2.push(this.productClassUploadService.callMethod('getManualMixValuesForSubmeasureName', {submeasureName: this.sm.name}).toPromise());
+        }
+        return Promise.all(promises2)
           .then(results => {
             this.flashCategories = results[0];
             this.adjustmentTypes = results[1];
             // cui-selects will delete properties if not found in selects, so we have to preserve the values and reapply them after the items come in
             this.sm.categoryType = this.orgSubmeasure.categoryType;
+            if (!this.addMode) {
+              // if !addMode and draft or pending, then use value from sm, else get value from database (if it exists)
+              if (_.includes(['D', 'P'], this.sm.status) && this.sm.manualMixHw && this.sm.manualMixSw) {
+                this.manualMixHw = this.sm.manualMixHw;
+                this.manualMixSw = this.sm.manualMixSw;
+              } else if (results[2]) {
+                this.manualMixHw = results[2].HW;
+                this.manualMixSw = results[2].SW;
+              }
+            }
           });
       });
   }
@@ -589,6 +607,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     } else {
       this.sm.sourceSystemAdjTypeId = undefined;
     }
+    if (this.isManualMix()) {
+      this.sm.manualMixHw = this.manualMixHw;
+      this.sm.manualMixSw = this.manualMixSw;
+    }
   }
 
   hasChanges() {
@@ -632,20 +654,17 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!(this.sm.name && this.sm.name.trim())) {
       errors.push('You must define a name to save to draft.');
     }
-    if (_.includes(this.submeasureNames, this.sm.name)) {
-      errors.push('Rule name already exists.');
-    }
     return errors.length ? errors : null;
   }
 
   saveToDraft() {
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
+        this.cleanUp();
         const errors = this.validateSaveToDraft();
         if (errors) {
           this.uiUtil.validationErrorsDialog(errors);
         } else {
-          this.cleanUp();
           const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
           this.submeasureService.saveToDraft(this.sm, {saveMode})
             .subscribe(sm => {
@@ -741,7 +760,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.sm.startFiscalMonth) {
       this.errs.push(`No "Effective Month" value`);
     }
-    if (this.sm.categoryType === 'Manual Mix') {
+    if (this.isManualMix()) {
       const hw = Number(this.sm.manualMixHw);
       const sw = Number(this.sm.manualMixSw);
       if (isNaN(hw)) {
@@ -775,6 +794,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   isGroupingParent() {
     return this.sm.indicators.groupFlag === 'Y';
+  }
+
+  isManualMix() {
+    return this.sm.categoryType === 'Manual Mix';
   }
 
   ngOnDestroy() {

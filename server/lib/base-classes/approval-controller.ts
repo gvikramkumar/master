@@ -71,8 +71,7 @@ export default class ApprovalController extends ControllerBase {
     promise.then(() => {
       this.repo.update(data, req.user.id, true, true, false)
         .then(item => {
-          return this.postApproveStep(item, req)
-            .then(() => item);
+          return this.postApproveStep(item, req);
         })
         .then(item => {
           return this.sendApprovalEmail(req, ApprovalMode.approve, item)
@@ -132,8 +131,9 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
+  // this step can modify the item, so any overrides are responsible for returning the passed item
   postApproveStep(item, req) {
-    return Promise.resolve();
+    return Promise.resolve(item);
   }
 
   sendApprovalEmail(req, mode: ApprovalMode, item: AnyObj): Promise<any> {

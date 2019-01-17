@@ -5,21 +5,7 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-const imports = [
-  {submeasureName: 'one', nodeValue: 1},
-  {submeasureName: 'one', nodeValue: 1},
-  {submeasureName: 'two', nodeValue: 1},
-  {submeasureName: 'two', nodeValue: 1},
-]
-
-const duplicates = _.uniqWith(imports, (a, b) => a.submeasureName === b.submeasureName && a.nodeValue === b.nodeValue);
-console.log(duplicates);
-
-
-
-
-
-
+console.log(Boolean(.000000));
 
 
 
