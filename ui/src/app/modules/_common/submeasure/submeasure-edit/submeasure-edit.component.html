@@ -27,7 +27,7 @@
           <div class="form-group-text" style="margin-left:30px;">Status: {{UiUtil.getStatusText(sm.status)}}</div>
         </div>
 
-        <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes"
+        <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes" [required]="isCogsMeasure()"
                     label="Sub-Measure Category Type" empty="true" optionsKey="name" optionsValue="value" [required]="!isGroupingParent()"></cui-select>
         <div *ngIf="isManualMix()" fxLayout="row" fxLayoutAlign="start start">
           <div class="form-group-text form-group-inline-30">Manual Mix HW/SW:</div>
