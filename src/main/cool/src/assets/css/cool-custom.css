@@ -5,10 +5,10 @@
   background: #fafafa;
   border-bottom: 1px solid #dfdfdf;
 }
-.cool.cui ul.tabs > li, .cool.cui .nav-tabs > li {
+.cool.cui header ul.tabs > li, .cool.cui header .nav-tabs > li {
   margin: 0 20px 0 0;
 }
-.cool.cui ul.tabs > li.active > a, .cool.cui ul.tabs > li:hover > a, .cool.cui .nav-tabs > li.active > a, .cool.cui .nav-tabs > li:hover > a {
+.cool.cui header ul.tabs > li.active > a, .cool.cui header ul.tabs > li:hover > a, .cool.cui header .nav-tabs > li.active > a, .cool.cui header .nav-tabs > li:hover > a {
   font-weight: normal;
   box-shadow: 0 -3px 0 #005073 inset;
   color: #005073;
@@ -27,7 +27,9 @@
   font-size: 22px;
   display: inline-block;
 }
-
+.cool.cui .ui-datatable-scrollable-body {
+  min-height: 200px;
+}
 .cui a:not(.btn):active, .cui a:not(.btn):hover, .cui a:not(.btn):focus, .cui .link:active, .cui .link:hover, .cui .link:focus {
   text-decoration: none;
 }
