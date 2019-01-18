@@ -49,6 +49,10 @@ export class ActionsComponent implements OnInit {
   offerNameMap: object = {};
   offerOwnerMap: object = {};
   actionOwner: string;
+  lastValueInMilestone:Array<any>;
+  milestone: any;
+  val: any;
+
 
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
@@ -85,13 +89,40 @@ export class ActionsComponent implements OnInit {
   // })
 
   }
+// Lulu's Code
+  // onChange(offerId) {
+  //   this.actionsService.getMilestones(this.offerCaseMap[offerId]).subscribe(data => {
+  //     this.milestoneList = [];
+  //     for (let prop in data) {
+  //      data[prop].forEach(ele => {
+  //       this.milestoneList.push(ele);
+  //      });
+  //   }
+  //   });
+
+  //   this.actionsService.getAssignee(offerId).subscribe(data => {
+  //     this.assigneeList = data;
+  //   });
+  // }
 
   onChange(offerId) {
     this.actionsService.getMilestones(this.offerCaseMap[offerId]).subscribe(data => {
       this.milestoneList = [];
+      this.lastValueInMilestone=[];
       for (let prop in data) {
        data[prop].forEach(ele => {
         this.milestoneList.push(ele);
+        
+        this.lastValueInMilestone=this.milestoneList.slice(-1)[0];
+        console.log("this.lastValueInMilestone",this.lastValueInMilestone);
+         let mile=this.lastValueInMilestone
+         this.val=mile['subMilestone'];
+         console.log("val",this.val);
+         console.log("mile",mile);
+         console.log(typeof mile);
+       //console.log("this.milestone submilestone",this.milestone['submilestone']);
+      // console.log("this.milestone",this.milestone);
+   
        });
     }
     });
