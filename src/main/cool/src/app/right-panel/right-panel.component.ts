@@ -476,7 +476,7 @@ export class RightPanelComponent implements OnInit {
   }
 
   navigate(name) {
-        if (this.navigateHash[name] != null) {
+        if (this.navigateHash[name] !== null) {
             this.router.navigate(this.navigateHash[name]);
         }
 }
