@@ -85,7 +85,11 @@ export class Orm {
       } else if (map.type === OrmTypes.date) {
         record[map.field] = this.getPgDateString(_.get(obj, map.prop));
       } else {
-        record[map.field] = _.get(obj, map.prop);
+        let val = _.get(obj, map.prop);
+        if (val && typeof val === 'string') {
+          val = val.replace(/'/g, '\'\''); // postgres has strings wrapped in single quotes, so we have to replace single quotes with double single quotes
+        }
+        record[map.field] = val;
       }
     });
     return record;

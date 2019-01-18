@@ -5,7 +5,10 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-console.log(Boolean(.000000));
+
+const str = "la'la'la";
+
+console.log(str.replace(/'/g, '\'\''));
 
 
 
