@@ -62,4 +62,9 @@ export class ActionsService {
     url += '/' + caseId;
     return this.http.post(url, createActionPayload);
   }
+
+  escalateNotification(emailPayload) {
+    let url = this.environmentService.REST_API_ESCALATE_NOTIFICATION_URL;
+    return this.http.post(url, emailPayload);
+  }
 }

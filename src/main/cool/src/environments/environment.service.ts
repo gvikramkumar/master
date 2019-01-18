@@ -43,6 +43,7 @@ export class EnvironmentService {
     REST_API_CREATE_COMMENT_URL;
     REST_API_DASH_DIFF_APPROVE_URL;
     REST_API_DASH_DIFF_APPROVE_COMMENT_URL;
+    REST_API_ESCALATE_NOTIFICATION_URL;
 
     basepdafapi = '';
 
@@ -167,5 +168,6 @@ export class EnvironmentService {
         this.REST_API_CREATE_COMMENT_URL = this.baseapi + '/action/createComment';
         this.REST_API_DASH_DIFF_APPROVE_URL = this.baseapi + '/action/create/manualAction';
         this.REST_API_DASH_DIFF_APPROVE_COMMENT_URL = this.baseapi + '/action/proceed';
+        this.REST_API_ESCALATE_NOTIFICATION_URL = this.baseapi + '/emailNotification/send';
     }
 }

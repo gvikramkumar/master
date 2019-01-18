@@ -149,19 +149,19 @@ export class DashboardComponent implements OnInit {
   doNotApprove() {
     this.hidepopup = true;
     this.doNotApproveSection = true;
-    this.action = 'not approved';
+    this.action = 'Not Approved';
   }
 
   conditionalApprove() {
     this.hidepopup = true;
     this.showConditionalApprovalSection = true;
-    this.action = 'conditionally Approved';
+    this.action = 'Conditionally Approved';
   }
 
   approve() {
     this.hidepopup = true;
     this.showApproveSection = true;
-    this.action = 'approved';
+    this.action = 'Approved';
   }
 
   dateFormat(inputDate: string) {
@@ -258,7 +258,7 @@ export class DashboardComponent implements OnInit {
   }
 // Not and conditional approve?
   createAction(popover) {
-    const createActionPayload = {};
+        const createActionPayload = {};
     createActionPayload['offerName'] = this.currentOfferName;
     createActionPayload['owner'] = this.assigneeValue;
     createActionPayload['assignee'] = [this.assigneeValue];
