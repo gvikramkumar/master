@@ -39,12 +39,13 @@ export class AccessManagementComponent implements OnInit {
       { field: 'userMapping', header: 'Business Entity' },
       { field: 'buList', header: 'Business Unit' },
       { field: 'functionalAdmin', header: 'Access' }
+      
     ];
 
     this.accessManagementService.accessManagementAll()
       .subscribe(data => {
-        this.accessManagementData = data;
-        console.log("Access Management Data::::", this.accessManagementData);
+        // this.accessManagementData = data;
+        this.processAdminData(data);
       });
 
     this.accessManagementService.getBusinessUnit().subscribe(data => {
@@ -53,6 +54,7 @@ export class AccessManagementComponent implements OnInit {
       this.businessUnits.forEach(element => {
         buArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
       });
+      buArry.push({ label: 'All', value: 'All' });
       this.businessUnits = buArry;
     });
 
@@ -68,8 +70,11 @@ export class AccessManagementComponent implements OnInit {
         this.businessEntities = <any>data;
         const beArry = [];
         this.businessEntities.forEach(element => {
-          beArry.push({ label: element.BE, value: element.BE });
+          if (element.BE != null){
+            beArry.push({ label: element.BE, value: element.BE });
+          }
         });
+        beArry.push({ label: 'All', value: 'All' });
         this.businessEntities = this.removeDuplicates(beArry, 'label');
       });
   }
@@ -83,8 +88,27 @@ export class AccessManagementComponent implements OnInit {
   getAllUpdate() {
     this.accessManagementService.accessManagementAll()
       .subscribe(data => {
-        this.accessManagementData = data;
+        // this.accessManagementData = data;
+        this.processAdminData(data);
       });
+  }
+
+  processAdminData(data) {
+    let finalAdminData: any[] = [];
+    data.forEach(element => {
+      let temp = element;
+      let beList: any[] = []
+      element.userMapping.forEach(userMaps => {
+        beList.push(userMaps.businessEntity)
+      });
+      temp['beList'] = beList;
+      temp['appRoleList'] = element.userMapping[0].appRoleList;
+      temp['functionalRole'] = element.userMapping[0].functionalRole;
+      temp['keyPOC'] = element.userMapping[0].keyPOC;
+      temp['functionalAdmin'] = element.userMapping[0].functionalAdmin;
+      finalAdminData.push(temp);
+    });
+    this.accessManagementData = finalAdminData;
   }
 
   createUser() {
@@ -110,7 +134,6 @@ export class AccessManagementComponent implements OnInit {
 
     this.newUser.push(user);
 
-    console.log(this.newUser);
 
     this.accessManagementService.registerUser(this.newUser).subscribe((data) => {
       this.getAllUpdate();
@@ -121,8 +144,37 @@ export class AccessManagementComponent implements OnInit {
     this.offerCreateForm.reset();
   }
 
-  updatedAceessManagement(event) {
-    this.accessManagementService.updateAccessManagement(event)
+  updatedAceessManagementBe(updatedUserBe) {
+    const userMappings: UserMapping[] = [];
+    updatedUserBe.beList.forEach(element => {
+      const userMapping = new UserMapping(
+        element,
+        updatedUserBe.functionalRole,
+        updatedUserBe.functionalAdmin,
+        updatedUserBe.keyPOC
+      );
+      userMappings.push(userMapping);
+    });
+
+    let updateAdmin = {
+      "_id": updatedUserBe.userId,
+      "businessUnits": updatedUserBe.buList,
+      "userMappings": userMappings
+    }
+
+    this.accessManagementService.updateAccessManagement(updateAdmin)
+      .subscribe(data => {
+        console.log('updated successfully');
+      });
+  }
+
+  updatedAceessManagement(updatedUser) {
+    let updateAdmin = {
+      "_id": updatedUser.userId,
+      "businessUnits": updatedUser.buList,
+      "userMappings": updatedUser.userMapping
+    }
+    this.accessManagementService.updateAccessManagement(updateAdmin)
       .subscribe(data => {
         console.log('updated successfully');
       });
