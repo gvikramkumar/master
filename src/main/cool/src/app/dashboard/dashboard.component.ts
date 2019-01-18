@@ -1,10 +1,9 @@
-import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild, ɵConsole,Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild, ɵConsole, Output, EventEmitter } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { Offer } from '../models/offer';
 import { Router } from '@angular/router';
 import { CreateOfferService } from '../services/create-offer.service';
 import { UserService } from '../services/user.service';
-import { HttpClient } from '@angular/common/http';
 import { ActionsAndNotifcations } from './action';
 import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -35,6 +34,8 @@ export class DashboardComponent implements OnInit {
   displayPopOver: Boolean = true;
   displayActionPopOver: Boolean = true;
   currentOfferId;
+  currentCaseId;
+  currentOfferName;
   showFeedbackButtons: Boolean = true;
   doNotApproveSection = false;
   showConditionalApprovalSection = false;
@@ -62,10 +63,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private createOfferService: CreateOfferService,
     private userService: UserService,
-    private actionsService: ActionsService,
-    private httpClient: HttpClient) {
+    private actionsService: ActionsService) {
   }
-
 
   ngOnInit() {
     this.cols = [
@@ -74,11 +73,8 @@ export class DashboardComponent implements OnInit {
       { field: 'offerOwner', header: 'OFFER OWNER' },
       { field: 'expectedLaunchDate', header: 'LAUNCH DATE' }
     ];
-    this.dashboardService.getMyActionsList()
-      .subscribe(data => {
-        this.myActions = data;
-        this.processMyActionsList();
-      });
+
+    this.getMyActionsList();
 
     this.dashboardService.getMyOffersList()
       .subscribe(data => {
@@ -91,6 +87,14 @@ export class DashboardComponent implements OnInit {
     this.actionsService.getFunction().subscribe(data => {
       this.functionList = data;
     });
+  }
+
+  getMyActionsList() {
+    this.dashboardService.getMyActionsList()
+      .subscribe(data => {
+        this.myActions = data;
+        this.processMyActionsList();
+      });
   }
 
   processMyActionsList() {
@@ -110,6 +114,7 @@ export class DashboardComponent implements OnInit {
         obj.setCaseId(element.caseId);
         obj.setTaskId(element.taskId);
         obj.setType(element.type);
+        obj.setActiontTitle(element.actiontTitle);
 
         // Set the status color
         if (element.status && element.status.toLowerCase() === 'red') {
@@ -166,13 +171,16 @@ export class DashboardComponent implements OnInit {
   selectedrownof(actionData) {
     this.selectedrow = actionData;
     this.taskId = actionData.taskId;
+    this.currentOfferId = actionData.offerId;
+    this.currentCaseId = actionData.caseId;
+    this.currentOfferName = actionData.offerName;
     this.actionsService.getAssignee(actionData.offerId).subscribe(data => {
       this.assigneeList = data;
     });
     this.actionsService.getMilestones(actionData.caseId).subscribe(data => {
       this.milestoneList = [];
       for (const milestone in data) {
-        if(data) {
+        if (data) {
           data[milestone].forEach(element => {
             this.milestoneList.push(element);
           });
@@ -203,7 +211,6 @@ export class DashboardComponent implements OnInit {
     this.display = true;
   }
 
-
   selectionChange(value) {
     this.selectedrow = value;
   }
@@ -222,7 +229,6 @@ export class DashboardComponent implements OnInit {
       popover.close();
       this.getMyActions();
     });
-
   }
 
   closeNotification() {
@@ -245,17 +251,21 @@ export class DashboardComponent implements OnInit {
     if (popover.isOpen()) {
       popover.close();
     }
-
   }
 
   offerDetailOverView(offerId, caseId) {
     this.router.navigate(['/offerDetailView', offerId, caseId]);
   }
 
-  createAction() {
+  createAction(popover) {
     const taskId = this.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
+    const offerId = this.currentOfferId;
+    const caseId = this.currentCaseId;
+    const createActionPayload = {};
+    createActionPayload['offerName'] = this.currentOfferName;
+    createActionPayload['owner'] = this.assigneeValue;
     const createActionComment: CreateActionComment = new CreateActionComment(
       taskId,
       userId,
@@ -270,11 +280,15 @@ export class DashboardComponent implements OnInit {
       this.dueDateValue.toISOString(),
     );
     this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
+      this.actionsService.postForNewAction(offerId, caseId, createActionPayload).subscribe(response => {
+        this.displayActionPop(popover);
+        this.getMyActionsList();
+      });
     });
     this.createActionForm.reset();
   }
 
-  createActionApprove() {
+  createActionApprove(popover) {
     const taskId = this.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
@@ -286,8 +300,10 @@ export class DashboardComponent implements OnInit {
       this.commentValue
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+      this.displayActionPop(popover);
+      this.getMyActionsList();
     });
-    this.createActionApproveForm.reset();
+    this.createActionForm.reset();
   }
 
   transferDateFormat(offerData, field) {

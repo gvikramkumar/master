@@ -286,6 +286,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const taskId = this.currentTaskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
+    const createActionPayload = {};
+    createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
+    createActionPayload['owner'] = this.assigneeValue;
     const createActionComment: CreateActionComment = new CreateActionComment(
       taskId,
       userId,
@@ -300,6 +303,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.dueDateValue.toISOString(),
     );
     this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
+      this.actionsService.postForNewAction(this.currentOfferId, this.caseId, createActionPayload).subscribe(response => {
+        this.closeForm();
+      });
     });
     this.createActionForm.reset();
   }
@@ -316,8 +322,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.commentValue
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+      this.closeForm();
     });
-    this.createActionApproveForm.reset();
+    this.createActionForm.reset();
   }
 
   ngOnDestroy() {

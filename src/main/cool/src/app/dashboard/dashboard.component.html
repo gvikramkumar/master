@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
-          <div class="header-bar__main">
+          <div class="header-bar__main col-md-6">
             <div class="header-heading">
               <h1 class="page-title"><span class="action--value">{{pendingActnCount}}</span> <span class="action--value-label">Pending
                   Actions</span></h1>
@@ -12,7 +12,7 @@
                   Immediate Action</span></h1>
             </div>
           </div>
-          <div class="header-toolbar">
+          <div class="header-toolbar col-md-6">
             <button (click)="createNewOffer()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
               <span class="button--label">New Offer</span></button>
           </div>
@@ -61,7 +61,7 @@
                                     <th>Offer Owner </th>
                                     <th>Due Date </th>
                                     <th>Action Completion Phase </th>
-                                  </tr>popover__title
+                                  </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
@@ -89,8 +89,8 @@
                               <button class="btn btn--primary base-margin-top" (click)="doNotApprove()">Do Not Approve</button>
                               <button class="btn btn--primary base-margin-top" (click)="conditionalApprove()">Conditional Approval</button>
                               <button class="btn btn--primary base-margin-top" (click)="approve()">Approve</button>
-                            </div>                
-                          </div> 
+                            </div>
+                          </div>
                           </div>
                           <section *ngIf="doNotApproveSection">
                               <div class="row">
@@ -99,10 +99,10 @@
                                     <span class="icon-close" (click)="displayActionPop(p1)"></span>
                                   </div>
                                   <div class="card__header">
-                                    <h5 class="card__title">Add a Reason for Not Approving</h5> 
-                                  </div> 
-                                 </div> 
-                              </div> 
+                                    <h5 class="card__title">Add a Reason for Not Approving</h5>
+                                  </div>
+                                 </div>
+                              </div>
                             <div class="divider"></div>
                             <div class="row">
                               <div class="col-md-12">
@@ -112,14 +112,14 @@
                                       <div class="form-group half-margin-bottom">
                                         <div class="form-group__text">
                                           <label for="action">ADD A COMMENT</label>
-                                          <input 
-                                            id="commentName" 
-                                            type="text" 
-                                            class="form-control" 
-                                            name="commentName" 
+                                          <input
+                                            id="commentName"
+                                            type="text"
+                                            class="form-control"
+                                            name="commentName"
                                             [(ngModel)]="commentValue"
-                                            required 
-                                            ngModel 
+                                            required
+                                            ngModel
                                             #titleName="ngModel">
                                         </div>
                                       </div>
@@ -131,14 +131,14 @@
                                       <div class="form-group half-margin-bottom">
                                         <div class="form-group__text">
                                           <label for="action">ACTION TITLE</label>
-                                          <input 
-                                            id="titleName" 
-                                            type="text" 
-                                            class="form-control" 
-                                            name="titleName" 
+                                          <input
+                                            id="titleName"
+                                            type="text"
+                                            class="form-control"
+                                            name="titleName"
                                             [(ngModel)]="titleValue"
-                                            required 
-                                            ngModel 
+                                            required
+                                            ngModel
                                             #titleName="ngModel">
                                         </div>
                                       </div>
@@ -147,14 +147,14 @@
                                       <div class="form-group half-margin-bottom">
                                         <div class="form-group__text">
                                           <label for="action">ACTION DESCRIPTION</label>
-                                          <input 
-                                              id="descriptionName" 
-                                              type="text" 
-                                              class="form-control" 
-                                              name="descriptionName" 
+                                          <input
+                                              id="descriptionName"
+                                              type="text"
+                                              class="form-control"
+                                              name="descriptionName"
                                               [(ngModel)]="descriptionValue"
-                                              required 
-                                              ngModel 
+                                              required
+                                              ngModel
                                               #descriptionName="ngModel">
                                         </div>
                                       </div>
@@ -165,14 +165,14 @@
                                       <div class="form-group half-margin-bottom">
                                         <div class="form-group__text select">
                                           <label for="functionName">MILESTONE</label>
-                                          <select 
+                                          <select
                                             id="milestoneName"
-                                             type="text" 
-                                             class="form-control" 
-                                             name="milestoneName" 
+                                             type="text"
+                                             class="form-control"
+                                             name="milestoneName"
                                              [(ngModel)]="milestoneValue"
-                                             required 
-                                             ngModel 
+                                             required
+                                             ngModel
                                              #milestoneName="ngModel">
                                             <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
                                               {{milestone.subMilestone}}</option>
@@ -185,12 +185,12 @@
                                         <div class="form-group__text">
                                           <div class="form-group__text select">
                                             <label for="functionName">SELECT FUNCTION</label>
-                                            <select 
-                                              id="functionName" 
-                                              class="form-control" 
-                                              name="functionName" 
+                                            <select
+                                              id="functionName"
+                                              class="form-control"
+                                              name="functionName"
                                               [(ngModel)]="functionNameValue"
-                                              ngModel 
+                                              ngModel
                                               required>
                                               <option *ngFor="let function of functionList" [value]="function">
                                                {{function}}</option>
@@ -233,7 +233,7 @@
                                   <div class="row">
                                     <div class="col-md-12 text-right">
                                       <button class="btn btn--secondary" (click)="displayActionPop(p1)">Cancel</button>
-                                      <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction()">Create an Action</button>
+                                      <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction(p1)">Create an Action</button>
                                     </div>
                                   </div>
                                 </form>
@@ -247,10 +247,10 @@
                                       <span class="icon-close" (click)="displayActionPop(p1)"></span>
                                     </div>
                                     <div class="card__header">
-                                      <h5 class="card__title">Conditional Approval</h5> 
-                                    </div> 
-                                   </div> 
-                                </div> 
+                                      <h5 class="card__title">Conditional Approval</h5>
+                                    </div>
+                                   </div>
+                                </div>
                               <div class="divider"></div>
                               <div class="row">
                                 <div class="col-md-12">
@@ -260,14 +260,14 @@
                                         <div class="form-group half-margin-bottom">
                                           <div class="form-group__text">
                                             <label for="action">ADD A COMMENT</label>
-                                            <input 
-                                              id="commentName" 
-                                              type="text" 
-                                              class="form-control" 
-                                              name="commentName" 
+                                            <input
+                                              id="commentName"
+                                              type="text"
+                                              class="form-control"
+                                              name="commentName"
                                               [(ngModel)]="commentValue"
-                                              required 
-                                              ngModel 
+                                              required
+                                              ngModel
                                               #titleName="ngModel">
                                           </div>
                                         </div>
@@ -279,14 +279,14 @@
                                         <div class="form-group half-margin-bottom">
                                           <div class="form-group__text">
                                             <label for="action">ACTION TITLE</label>
-                                            <input 
-                                              id="titleName" 
-                                              type="text" 
-                                              class="form-control" 
-                                              name="titleName" 
+                                            <input
+                                              id="titleName"
+                                              type="text"
+                                              class="form-control"
+                                              name="titleName"
                                               [(ngModel)]="titleValue"
-                                              required 
-                                              ngModel 
+                                              required
+                                              ngModel
                                               #titleName="ngModel">
                                           </div>
                                         </div>
@@ -295,14 +295,14 @@
                                         <div class="form-group half-margin-bottom">
                                           <div class="form-group__text">
                                             <label for="action">ACTION DESCRIPTION</label>
-                                            <input 
-                                                id="descriptionName" 
-                                                type="text" 
-                                                class="form-control" 
-                                                name="descriptionName" 
+                                            <input
+                                                id="descriptionName"
+                                                type="text"
+                                                class="form-control"
+                                                name="descriptionName"
                                                 [(ngModel)]="descriptionValue"
-                                                required 
-                                                ngModel 
+                                                required
+                                                ngModel
                                                 #descriptionName="ngModel">
                                           </div>
                                         </div>
@@ -313,14 +313,14 @@
                                         <div class="form-group half-margin-bottom">
                                           <div class="form-group__text select">
                                             <label for="functionName">MILESTONE</label>
-                                            <select 
+                                            <select
                                               id="milestoneName"
-                                               type="text" 
-                                               class="form-control" 
-                                               name="milestoneName" 
+                                               type="text"
+                                               class="form-control"
+                                               name="milestoneName"
                                                [(ngModel)]="milestoneValue"
-                                               required 
-                                               ngModel 
+                                               required
+                                               ngModel
                                                #milestoneName="ngModel">
                                               <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
                                                 {{milestone.subMilestone}}</option>
@@ -333,12 +333,12 @@
                                           <div class="form-group__text">
                                             <div class="form-group__text select">
                                               <label for="functionName">SELECT FUNCTION</label>
-                                              <select 
-                                                id="functionName" 
-                                                class="form-control" 
-                                                name="functionName" 
+                                              <select
+                                                id="functionName"
+                                                class="form-control"
+                                                name="functionName"
                                                 [(ngModel)]="functionNameValue"
-                                                ngModel 
+                                                ngModel
                                                 required>
                                                 <option *ngFor="let function of functionList" [value]="function">
                                                  {{function}}</option>
@@ -356,7 +356,7 @@
                                               required ngModel>
                                               <option *ngFor="let assignee of assigneeList" [value]="assignee">
                                                 {{assignee}}</option>
-                                            </select>               
+                                            </select>
                                             </div>
                                           </div>
                                         </div>
@@ -381,7 +381,7 @@
                                     <div class="row">
                                       <div class="col-md-12 text-right">
                                         <button class="btn btn--secondary" (click)="displayActionPop(p1)">Cancel</button>
-                                        <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction()">Create an Action</button>
+                                        <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction(p1)">Create an Action</button>
                                       </div>
                                     </div>
                                   </form>
@@ -395,10 +395,10 @@
                                       <span class="icon-close" (click)="displayActionPop(p1)"></span>
                                     </div>
                                     <div class="card__header">
-                                      <h5 class="card__title">Add Comment</h5> 
-                                    </div> 
-                                   </div> 
-                                </div> 
+                                      <h5 class="card__title">Add Comment</h5>
+                                    </div>
+                                   </div>
+                                </div>
                               <div class="divider"></div>
                             <div class="row">
                               <div class="col-md-12">
@@ -408,31 +408,31 @@
                                       <div class="form-group half-margin-bottom">
                                         <div class="form-group__text">
                                           <label for="action">ADD A COMMENT</label>
-                                          <input 
-                                              id="commentName" 
-                                              type="text" 
-                                              class="form-control" 
-                                              name="commentName" 
+                                          <input
+                                              id="commentName"
+                                              type="text"
+                                              class="form-control"
+                                              name="commentName"
                                               [(ngModel)]="commentValue"
-                                              required 
-                                              ngModel 
+                                              required
+                                              ngModel
                                               #titleName="ngModel">
                                         </div>
                                       </div>
                                     </div>
-                                  </div>       
+                                  </div>
                                   <div class="divider"></div>
                                   <div class="row">
                                     <div class="col-md-12 text-right">
                                       <button class="btn btn--secondary" (click)="displayActionPop(p1)">Cancel</button>
-                                      <button class="btn btn--primary" [disabled]="!createActionApproveForm.valid" (click)="createActionApprove()">Submit</button>
+                                      <button class="btn btn--primary" [disabled]="!createActionApproveForm.valid" (click)="createActionApprove(p1)">Submit</button>
                                     </div>
                                   </div>
                                 </form>
                             </div>
                           </div>
-                        </section>                        
-                      </div>                                  
+                        </section>
+                      </div>
                       </ng-template>
                       <span placement="bottom" [ngbPopover]="popActionContent" #p1="ngbPopover" triggers="manual"
                         (click)="p1.open();selectedrownof(actionData)" [autoClose]="false" pTooltip="Action" tooltipPosition="top">
