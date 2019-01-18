@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StakeHolder } from '../models/stakeholder';
 import {Location} from '@angular/common';
 import { OfferCharacteristics } from '../models/OfferCharacteristics';
+import { StrategyReviewService } from '../services/strategy-review.service';
 
 
 @Component({
@@ -31,54 +32,34 @@ export class OfferDetailViewComponent implements OnInit {
   obj = {
   };
   offerOverviewDetailsList;
-  strategyReviewList = [
-    {
-      function : 'CPS',
-      approvalStatus : 'Approved',
-      reviewedOn : '11-Aug-2018',
-      reviewedBy : 'Sean Parker (OPS)',
-      comment : 'Comment'
-    },
-    {
-      function : 'CPS',
-      approvalStatus : 'Approved',
-      reviewedOn : '11-Aug-2018',
-      reviewedBy : 'Sean Parker (OPS)',
-      comment : 'Comment'
-    },
-    {
-      function : 'Compensation Ops',
-      approvalStatus : 'Conditionally Approved',
-      reviewedOn : '06-Aug-2018',
-      reviewedBy : 'Jessica Lara',
-      comment : 'Comment'
-    },
-    {
-      function : 'Compensation Ops',
-      approvalStatus : 'Conditionally Approved',
-      reviewedOn : '06-Aug-2018',
-      reviewedBy : 'Jessica Lara',
-      comment : 'Comment'
-    }
-  ];
+  strategyReviewList;
+  offerOwnerCount: any = 1;
+  coOwnerTotalCount: any = 0;
+  stakeHolderTotalCount: any = 0;
 
   constructor(private activatedRoute: ActivatedRoute,
     private _route:Router,
     private offerDetailViewService: OfferDetailViewService,
+    private strategyReviewService: StrategyReviewService,
     private _location: Location) {
     this.activatedRoute.params.subscribe(params => {
        this.currentOfferId = params['id'];
        this.caseId = params['id2'];
      });
     this.activatedRoute.data.subscribe((data) => {
-    console.log(data);
     });
     this.offerOverviewDetailsList = this.activatedRoute.snapshot.data['offerData'];
-    console.log(this.offerOverviewDetailsList);
   }
 
   ngOnInit() {
       this.getOfferOVerviewDetails();
+      this.getStrategyReviwInfo();
+  }
+
+  getStrategyReviwInfo() {
+    this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
+      this.strategyReviewList = data;
+    });
   }
 
   getOfferOVerviewDetails() {
@@ -96,8 +77,10 @@ export class OfferDetailViewComponent implements OnInit {
           stakeholdersInfo.functionalRole = element.functionalRole;
           if (element.offerRole === 'Co-Owner') {
             this.offerCoOwnerList.push(stakeholdersInfo);
+            this.coOwnerTotalCount = this.offerCoOwnerList.length;
           } else {
             this.offerStakeHolderList.push(stakeholdersInfo);
+            this.stakeHolderTotalCount = this.offerStakeHolderList.length;
           }
         });
         let offerCharacteristics = null;
