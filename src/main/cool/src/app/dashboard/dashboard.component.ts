@@ -266,7 +266,7 @@ export class DashboardComponent implements OnInit {
     createActionPayload['caseId'] = this.currentCaseId;
     createActionPayload['description'] = this.descriptionValue;
     createActionPayload['actionTitle'] = this.titleValue;
-    createActionPayload['duedate'] = this.dueDateValue.toISOString();
+    createActionPayload['dueDate'] = this.dueDateValue.toISOString();
     createActionPayload['mileStone'] = this.milestoneValue;
     createActionPayload['selectedfunction'] = this.functionNameValue;
     createActionPayload['type'] = 'Manual Action';
