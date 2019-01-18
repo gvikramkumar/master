@@ -256,37 +256,37 @@ export class DashboardComponent implements OnInit {
   offerDetailOverView(offerId, caseId) {
     this.router.navigate(['/offerDetailView', offerId, caseId]);
   }
-
+// Not and conditional approve?
   createAction(popover) {
-    const taskId = this.taskId;
-    const userId = this.userService.getUserId();
-    const taskName = 'Action';
-    const offerId = this.currentOfferId;
-    const caseId = this.currentCaseId;
-    const createActionPayload = {};
+        const createActionPayload = {};
     createActionPayload['offerName'] = this.currentOfferName;
     createActionPayload['owner'] = this.assigneeValue;
-    const createActionComment: CreateActionComment = new CreateActionComment(
-      taskId,
-      userId,
-      taskName,
-      this.action,
-      this.commentValue,
-      this.titleValue,
-      this.descriptionValue,
-      this.milestoneValue,
-      this.functionNameValue,
-      this.assigneeValue,
-      this.dueDateValue.toISOString(),
-    );
-    this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
-      this.actionsService.postForNewAction(offerId, caseId, createActionPayload).subscribe(response => {
+    createActionPayload['assignee'] = [this.assigneeValue];
+    createActionPayload['offerId'] = this.currentOfferId;
+    createActionPayload['caseId'] = this.currentCaseId;
+    createActionPayload['description'] = this.descriptionValue;
+    createActionPayload['actionTitle'] = this.titleValue;
+    createActionPayload['duedate'] = this.dueDateValue.toISOString();
+    createActionPayload['mileStone'] = this.milestoneValue;
+    createActionPayload['selectedfunction'] = this.functionNameValue;
+    createActionPayload['type'] = 'Manual Action';
+    const createCommentPayload = {};
+    createCommentPayload['taskId'] = this.taskId;
+    createCommentPayload['userId'] = this.userService.getUserId();
+    createCommentPayload['taskName'] = 'Action';
+    createCommentPayload['action'] = this.action;
+    createCommentPayload['comment'] = this.commentValue;
+
+    this.dashboardService.postComments(createCommentPayload).subscribe((data) => {
+      this.dashboardService.postActionForNapprove(createActionPayload).subscribe(response => {
         this.displayActionPop(popover);
         this.getMyActionsList();
       });
     });
     this.createActionForm.reset();
   }
+
+
 
   createActionApprove(popover) {
     const taskId = this.taskId;
@@ -305,6 +305,7 @@ export class DashboardComponent implements OnInit {
     });
     this.createActionForm.reset();
   }
+
 // Change date format for offer list
   transferDateFormat(offerData, field) {
     if (field === 'expectedLaunchDate') {

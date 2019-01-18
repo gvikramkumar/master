@@ -174,7 +174,7 @@ export class ActionsComponent implements OnInit {
   }
 
   dateFormat(inputDate: string) {
-    return moment(inputDate).format('MM/DD/YYYY');
+    return moment(inputDate).format('DD-MMM-YYYY');
   }
 
 }
