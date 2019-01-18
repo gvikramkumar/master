@@ -41,23 +41,41 @@
                     </th>
                   </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-car>
+                <ng-template pTemplate="body" let-user>
                   <tr>
-                    <td>{{car.emailId}}</td>
-                    <td>{{car.userName}}</td>
-                    <td>{{car.userMapping[0].functionalRole}}</td>
-                    <td>{{car.userMapping[0].businessEntity}}</td>
-                    <td>{{car.buList}}</td>
-                    <!-- <td>
-                      <p-multiSelect [options]="arrToOptions(car.buList)" (onChange)="updatedAceessManagement($event.value)"
-                        [style]="{'width':'100%'}">
-                      </p-multiSelect>
-                    </td> -->
+                    <td>{{user.emailId}}</td>
+                    <td>{{user.userName}}</td>
+                    <td>{{user.userMapping[0].functionalRole}}</td>
                     <td>
-                      <div *ngIf="car.userMapping[0].functionalAdmin">
+                      <p-multiSelect 
+                        [options]="businessEntities" 
+                        [filter]="false" 
+                        [showHeader]="false" 
+                        [displaySelectedLabel]="true" 
+                        [(ngModel)]="user.beList" 
+                        (onPanelHide)="updatedAceessManagementBe(user)"
+                        [style]="{'width':'100%'}"
+                        [appendTo]="body"
+                        >
+                      </p-multiSelect>
+                    </td>
+                    <td>
+                      <p-multiSelect 
+                        [options]="businessUnits" 
+                        [filter]="false" 
+                        [showHeader]="false" 
+                        [displaySelectedLabel]="true" 
+                        [(ngModel)]="user.buList" 
+                        (onPanelHide)="updatedAceessManagement(user)"
+                        [style]="{'width':'100%'}"
+                        [appendTo]="body">
+                      </p-multiSelect>
+                    </td>
+                    <td>
+                      <div *ngIf="user.userMapping[0].functionalAdmin">
                         <span>Admin</span>
                       </div>
-                      <div *ngIf="car.userMapping[0].keyPOC">
+                      <div *ngIf="user.userMapping[0].keyPOC">
                         <span>KeyPOC</span>
                       </div>
                     </td>
