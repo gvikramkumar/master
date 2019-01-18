@@ -222,7 +222,7 @@
                           <div class="row">
                             <div class="col-md-4">
                               <div class="flex-fluid text-left half-margin-left">
-                                <div class="text-bold">Owner</div>
+                                <div class="text-bold">Owner <em>({{offerOwnerCount}})</em></div>
                                 <div class="ui-accordion-content">
                                   <div class="flex-center-vertical">
                                     <!-- Team Member Name Avatar -->
@@ -249,7 +249,7 @@
                             </div>
                             <div class="col-md-4">
                               <div class="flex-fluid text-left half-margin-left">
-                                <div class="text-bold">Co-Owner</div>
+                                <div class="text-bold">Co-Owner <em>({{coOwnerTotalCount}})</em></div>
                                 <div class="ui-accordion-content">
                                   <ul>
                                     <li *ngFor="let coowner of offerCoOwnerList">
@@ -262,7 +262,7 @@
                             </div>
                             <div class="col-md-4">
                               <div class="flex-fluid text-left half-margin-left">
-                                <div class="text-bold">Stakeholders</div>
+                                <div class="text-bold">Stakeholders <em>({{stakeHolderTotalCount}})</em></div>
                                 <div class="ui-accordion-content">
                                   <ul>
                                     <li *ngFor="let stakeholder of offerStakeHolderList">
@@ -301,10 +301,10 @@
                               </thead>
                               <tbody>
                                 <tr *ngFor="let strategyReviewData of strategyReviewList">
-                                  <td><span class="icon-check-outline icon-medium"></span> {{
-                                    strategyReviewData.function }}</td>
-                                  <td>{{ strategyReviewData.approvalStatus }}</td>
-                                  <td>{{ strategyReviewData.reviewedOn }}</td>
+                                  <td><span class="icon-check-outline icon-medium"></span> 
+                                    {{ strategyReviewData.function }}</td>
+                                  <td>{{ strategyReviewData.status }}</td>
+                                  <td>{{ strategyReviewData.reviewedOn | date:'dd-MMM-yyyy' }}</td>
                                   <td>{{ strategyReviewData.reviewedBy }}</td>
                                 </tr>
                               </tbody>
