@@ -305,7 +305,7 @@ export class DashboardComponent implements OnInit {
     });
     this.createActionForm.reset();
   }
-
+// Change date format for offer list
   transferDateFormat(offerData, field) {
     if (field === 'expectedLaunchDate') {
       return moment(offerData[field]).format('DD-MMM-YYYY');

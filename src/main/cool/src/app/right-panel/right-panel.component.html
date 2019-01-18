@@ -180,7 +180,7 @@
                                       </thead>
                                       <tbody>
                                           <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
-                                              <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
+                                              <td><span style="color: indigo" (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></td>
                                               <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
                                               <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
                                               <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
