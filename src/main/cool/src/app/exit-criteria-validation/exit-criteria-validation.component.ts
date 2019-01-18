@@ -75,8 +75,8 @@ export class ExitCriteriaValidationComponent implements OnInit {
 
 requestForApproval() {
   let payload = {};
-  payload['offerName'] = this.offerBuilderdata['offerOwner'];
-  payload['owner'] = this.offerBuilderdata['offerName'];
+  payload['offerName'] = this.offerBuilderdata['offerName'];
+  payload['owner'] = this.offerBuilderdata['offerOwner'];
   this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
     this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
       this.messageService.sendMessage('Strategy Review');

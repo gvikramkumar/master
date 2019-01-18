@@ -178,7 +178,7 @@ export class MmAssesmentComponent implements OnInit {
     this.clearSubGroupType(curGroup);
     if (selectedAttrs.length === 1 && selectedAttrs.indexOf('SW - SaaS') !== -1) {
       let perpetual = curGroup['Licensing'].find(obj => {
-        return obj.name === 'Perpetual'
+        return obj.name === 'Perpetual';
       });
       perpetual.type = 1;
 

@@ -388,6 +388,11 @@ span.icon-close {
 }
 
 
+
+.cui table .ui-widget-content span.ui-cell-data {
+  word-break: break-word;
+}
+
 @media (min-width: 1200px) {
   .logo-cool-full {
     display: inline-block;

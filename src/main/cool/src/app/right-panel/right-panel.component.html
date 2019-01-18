@@ -182,8 +182,8 @@
                                           <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
                                               <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
                                               <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
-                                              <td>{{ideateData.completionDate}}</td>
-                                              <td>{{ideateData.completionDate}}</td>
+                                              <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
+                                              <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
                                           </tr>
                                       </tbody>
                                   </table>
@@ -204,8 +204,8 @@
                                           <tr *ngFor="let planData of offerPhaseDetailsList.plan">
                                               <td><span style="color: indigo">{{planData.subMilestone}}</span></td>
                                               <td [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">{{planData.status}}</td>
-                                              <td>{{planData.completionDate}}</td>
-                                              <td>{{planData.completionDate}}</td>
+                                              <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>
+                                              <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>
                                           </tr>
                                       </tbody>
                                   </table>

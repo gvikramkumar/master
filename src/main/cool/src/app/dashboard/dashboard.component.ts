@@ -58,7 +58,6 @@ export class DashboardComponent implements OnInit {
   milestoneList;
   action: any;
   loading;
-  
   constructor(private dashboardService: DashboardService,
     private router: Router,
     private createOfferService: CreateOfferService,
@@ -78,14 +77,12 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getMyActionsList()
       .subscribe(data => {
         this.myActions = data;
-        console.log("first data",data);
         this.processMyActionsList();
       });
 
     this.dashboardService.getMyOffersList()
       .subscribe(data => {
         this.myOffersList = data;
-        console.log("myofferList",this.myOffersList);
         this.myOffersListProps = Object.keys(this.myOffersList);
       });
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
@@ -131,8 +128,8 @@ export class DashboardComponent implements OnInit {
           obj2.setOfferName(element.offerName);
           obj2.setAssigneeId(element.assigneeId);
           obj2.setTriggerDate(this.dateFormat(element.triggerDate));
-          obj2.setDueDate('--');
-          obj2.setStyleColor('--');
+          obj2.setDueDate(this.dateFormat(element.dueDate));
+          obj2.setStyleColor(element.status);
           obj2.setActionDesc(element.actionDesc);
           obj2.setAlertType(2);
           obj2.setCaseId(element.caseId);
@@ -140,7 +137,6 @@ export class DashboardComponent implements OnInit {
           this.myOfferArray.push(obj2);
         });
         this.myActionsList = this.myOfferArray;
-        console.log("Actions-myActions",this.myActionsList);
       }
     }
   }
@@ -164,7 +160,7 @@ export class DashboardComponent implements OnInit {
   }
 
   dateFormat(inputDate: string) {
-    return moment(inputDate).format('DD-MM-YYYY');
+    return moment(inputDate).format('DD-MMM-YYYY');
   }
 
   selectedrownof(actionData) {
@@ -292,5 +288,13 @@ export class DashboardComponent implements OnInit {
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
     });
     this.createActionApproveForm.reset();
+  }
+
+  transferDateFormat(offerData, field) {
+    if (field === 'expectedLaunchDate') {
+      return moment(offerData[field]).format('DD-MMM-YYYY');
+    } else {
+      return offerData[field];
+    }
   }
 }
