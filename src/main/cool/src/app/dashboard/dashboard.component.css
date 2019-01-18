@@ -74,13 +74,13 @@ span.icon-chevron-right.inline-icon {
 .header-bar__main span {
   vertical-align: middle;
 }
-.header-bar__main span.vertical-divider {
+/* .header-bar__main span.vertical-divider {
   opacity: .25;
   display: inline-block;
   border-left: solid 1px white;
   height: 35px;
   margin: 10px 20px;
-}
+} */
 span.table--description {
   font-size: 80%;
   display: block;
@@ -146,9 +146,9 @@ span.badge-wrapper.base-margin-left:hover:after {
   .cui .pagination {
     text-align: right;
   }
-  .header-bar__main span.vertical-divider {
+  /* .header-bar__main span.vertical-divider {
     margin: 10px 40px;
-  }
+  } */
   .header-toolbar button span.button--label {
     display: inline-block;
   }

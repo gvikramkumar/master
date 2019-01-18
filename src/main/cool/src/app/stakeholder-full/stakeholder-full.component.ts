@@ -85,7 +85,7 @@ export class StakeholderFullComponent implements OnInit {
   ngOnInit() {
 
     this.message = {
-      contentHead: 'Great Work!',
+      contentHead: '',
       content: 'Stakeholders message.',
       color: 'black'
     };
@@ -166,7 +166,7 @@ export class StakeholderFullComponent implements OnInit {
       if (this.stakeHolderInfo[stakeHolder['offerRole']] == null) {
         this.stakeHolderInfo[stakeHolder['offerRole']] = [];
       }
-      
+
       this.stakeHolderInfo[stakeHolder['offerRole']].push(
         {
           name: stakeHolder['name'],
@@ -232,7 +232,7 @@ export class StakeholderFullComponent implements OnInit {
       if (this.stakeHolderInfo[obj['offerRole']] == null) {
         this.stakeHolderInfo[obj['offerRole']] = [];
       }
-  
+
       this.stakeHolderInfo[obj['offerRole']].push(obj);
     }
 
@@ -302,7 +302,7 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   onDelete(user) {
-  
+
     if (this.data.length == 1) {
       this.data.splice(0, 1);
     }

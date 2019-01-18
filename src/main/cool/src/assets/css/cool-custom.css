@@ -65,6 +65,14 @@
   display: inline-block;
   text-align: right;
 }
+.cool.cui .header-bar__main span.vertical-divider {
+  opacity: .25;
+  display: inline-block;
+  border-left: solid 1px white;
+  height: 35px;
+  margin: 10px 20px;
+}
+
 /* buttons */
 .cui .btn.btn--small,
 .cui .btn {
@@ -208,6 +216,9 @@
   font-size: 26px;
   color: #333333;
   margin-bottom: .25em;
+}
+.cool.cui .ui-table .ui-sortable-column.ui-state-highlight .ui-sortable-column-icon {
+  color: #1b1d1f;
 }
 /* Custom 3-segment Progress Bar */
 .cui .td--progress-fitted .row.no-gutters {
@@ -422,6 +433,11 @@ span.icon-close {
   word-break: break-word;
 }
 
+@media (min-width: 1200px) {
+  .cool.cui .header-bar__main span.vertical-divider {
+    margin: 10px 40px;
+  }
+}
 @media (min-width: 1200px) {
   .logo-cool-full {
     display: inline-block;
