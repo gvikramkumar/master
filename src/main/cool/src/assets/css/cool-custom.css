@@ -27,7 +27,7 @@
   font-size: 22px;
   display: inline-block;
 }
-.cool.cui .ui-datatable-scrollable-body {
+.cool.cui .ui-datatable-scrollable-body, .cool.cui .ui-table-scrollable-body {
   min-height: 200px;
 }
 .cui a:not(.btn):active, .cui a:not(.btn):hover, .cui a:not(.btn):focus, .cui .link:active, .cui .link:hover, .cui .link:focus {
