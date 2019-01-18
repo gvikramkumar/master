@@ -305,6 +305,20 @@ export class DashboardComponent implements OnInit {
     });
     this.createActionForm.reset();
   }
+
+  createActionForPApprove(){
+    const taskId = this.taskId;
+    const userId = this.userService.getUserId();
+    const taskName = 'Action';
+    const createActionApprove: CreateActionApprove = new CreateActionApprove(
+      taskId,
+      userId,
+      taskName,
+      this.action,
+      this.commentValue
+    );
+  }
+
 // Change date format for offer list
   transferDateFormat(offerData, field) {
     if (field === 'expectedLaunchDate') {

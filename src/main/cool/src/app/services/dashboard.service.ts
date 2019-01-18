@@ -25,4 +25,12 @@ export class DashboardService {
   postDismissNotification(data) {
     return this.http.post(this.environmentService.REST_API_DISMISS_NOTIFICATION, data);
   }
+
+  postComments(data) {
+    return this.http.post(this.environmentService.REST_API_DASH_DIFF_APPROVE_COMMENT_URL, data);
+  }
+
+  postActionForNapprove(data){
+    return this.http.post(this.environmentService.REST_API_DASH_DIFF_APPROVE_URL, data);
+  }
 }

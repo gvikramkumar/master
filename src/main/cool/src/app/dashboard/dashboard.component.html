@@ -92,6 +92,7 @@
                             </div>
                           </div>
                           </div>
+                          <!-- <DO NOT APPROVE> -->
                           <section *ngIf="doNotApproveSection">
                               <div class="row">
                                 <div class="col-md-12">
@@ -240,6 +241,7 @@
                             </div>
                           </div>
                         </section>
+                         <!-- <CONDITIONAL APPROVE> -->
                         <section *ngIf="showConditionalApprovalSection">
                                 <div class="row">
                                   <div class="col-md-12">
@@ -388,6 +390,7 @@
                               </div>
                             </div>
                           </section>
+                         <!-- <APPROVE> -->
                           <section *ngIf="showApproveSection">
                               <div class="row">
                                   <div class="col-md-12">
@@ -432,6 +435,7 @@
                             </div>
                           </div>
                         </section>
+
                       </div>
                       </ng-template>
                       <span placement="bottom" [ngbPopover]="popActionContent" #p1="ngbPopover" triggers="manual"
