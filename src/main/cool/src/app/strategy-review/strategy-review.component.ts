@@ -13,6 +13,7 @@ import { UserService } from '../services/user.service';
 import { SharedService } from '../shared-service.service';
 import { MessageService } from '../services/message.service';
 import { Subscription } from 'rxjs';
+import { HeaderService } from '../header/header.service';
 
 @Component({
   selector: 'app-strategy-review',
@@ -39,6 +40,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   updateStakeData;
   setFlag;
   derivedMM;
+  currentUser;
+  managerName;
+  offerName;
 
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
@@ -50,6 +54,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   showButtonSection = false;
   doNotApproveSection = false;
   showConditionalApprovalSection = false;
+  escalateVisibleAvailable: Boolean = false;
   showApproveSection = false;
   action: any;
   currentTaskId: any;
@@ -77,7 +82,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private _location: Location,
     private sharedService: SharedService,
-    private messageService: MessageService) {
+    private messageService: MessageService,
+    private headerService: HeaderService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -85,6 +91,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const canEscalateUsers = [];
     this.subscription = this.messageService.getMessage()
       .subscribe(message => {
          this.getStrategyReviwInfo();
@@ -120,6 +127,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.firstData = data;
       this.derivedMM = this.firstData['derivedMM'];
       this.data = this.firstData['stakeholders'];
+      this.offerName = this.firstData['offerName'];
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
       for (let i = 0; i <= this.data.length - 1; i++) {
@@ -138,6 +146,23 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
           });
       }
       this.stakeData = this.stakeHolderInfo;
+
+      for (const auth in this.stakeData) {
+        if (auth === 'Co-Owner' || auth === 'Owner') {
+          this.stakeData[auth].forEach(owners => {
+            canEscalateUsers.push(owners['_id']);
+          });
+        }
+      }
+      this.headerService.getCurrentUser().subscribe(user => {
+        this.currentUser = user;
+        if (canEscalateUsers.includes(user)) {
+          this.escalateVisibleAvailable = true;
+        }
+        this.headerService.getUserInfo(this.currentUser).subscribe(userData => {
+          this.managerName = userData[0].manager;
+        });
+      });
     });
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
@@ -259,19 +284,19 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
 
   doNotApprove() {
     this.doNotApproveSection = true;
-    this.action = 'not approved';
+    this.action = 'Not Approved';
     this.showButtonSection = false;
   }
 
   conditionalApprove() {
     this.showConditionalApprovalSection = true;
-    this.action = 'conditionally Approved';
+    this.action = 'Conditionally Approved';
     this.showButtonSection = false;
   }
 
   approve() {
     this.showApproveSection = true;
-    this.action = 'approved';
+    this.action = 'Approved';
     this.showButtonSection = false;
   }
 
@@ -305,6 +330,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
       this.actionsService.postForNewAction(this.currentOfferId, this.caseId, createActionPayload).subscribe(response => {
         this.closeForm();
+        this.getStrategyReviwInfo();
       });
     });
     this.createActionForm.reset();
@@ -323,8 +349,20 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
       this.closeForm();
+      this.getStrategyReviwInfo();
     });
-    this.createActionForm.reset();
+    this.createActionApproveForm.reset();
+  }
+
+  onEscalate() {
+    const mailList = [this.managerName];
+    const emailPayload = {};
+    emailPayload['subject'] = 'Immediate Attention needed! ' + this.currentOfferId + ' + ' + this.offerName + ' Approval pending';
+    emailPayload['emailBody'] = 'Hello You are receiving this message because the below offer has a pending approval that requires review from a member of your team. Offer ID: '+this.currentOfferId+' Offer Name: '+this.offerName+ ' Your immediate attention is highly appreciated. Thanks';
+    emailPayload['toMailLists'] = mailList;
+    this.actionsService.escalateNotification(emailPayload).subscribe(data => {
+      this.getStrategyReviwInfo();
+    });
   }
 
   ngOnDestroy() {

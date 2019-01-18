@@ -84,20 +84,24 @@
                           <span class="icon-check-outline icon-medium text-success" *ngIf="strategyReviewData.status == 'Approved'"></span>
                           {{strategyReviewData.function}}</div>
                         <div class="col">{{strategyReviewData.status}}</div>
-                        <div class="col">{{strategyReviewData.reviewedOn}}</div>
+                        <div class="col">{{strategyReviewData.reviewedOn | date:'dd-MMM-yyyy'}}</div>
                         <div class="col">{{strategyReviewData.reviewedBy}}</div>
                         <div class="reviewed-comments"><span class="icon-message icon-medium"><span class="total">{{strategyReviewData.comments.length}}</span></span> Comment</div>
                       </div>
                     </p-header>
                     <div *ngIf="strategyReviewData.status=='Not Reviewed'; then reviewRequiredPlaceHolder">
                     </div>
-                    <ng-template #reviewRequiredPlaceHolder>
+                    <div *ngIf="strategyReviewData.status=='Not Reviewed' && escalateVisibleAvailable; then visibleEscalateTemplate">
+                    </div>
+                    <ng-template #visibleEscalateTemplate>
                       <div class="panel panel--bordered not-reviewed">
                         <p>This is the strategy review milestone and the content is a placeholder for
                           milestone summary.
                           This is the strategy review milestone and the content is ... </p>
-                        <button class="btn btn--secondary">Escalate</button>
+                        <button class="btn btn--secondary" [disabled]="strategyReviewData.flag=='Not Escalate'" (click)="onEscalate()">Escalate</button>
                       </div>
+                    </ng-template>
+                    <ng-template #reviewRequiredPlaceHolder>
                       <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
                           <div class="panel--header">
                             <h5>Approval Decision</h5>
