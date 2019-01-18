@@ -1,3 +1,35 @@
+.cool.cui .content {
+  background: #fff;
+}
+.cool.cui .header {
+  background: #fafafa;
+  border-bottom: 1px solid #dfdfdf;
+}
+.cool.cui header ul.tabs > li, .cool.cui header .nav-tabs > li {
+  margin: 0 20px 0 0;
+}
+.cool.cui header ul.tabs > li.active > a, .cool.cui header ul.tabs > li:hover > a, .cool.cui header .nav-tabs > li.active > a, .cool.cui header .nav-tabs > li:hover > a {
+  font-weight: normal;
+  box-shadow: 0 -3px 0 #005073 inset;
+  color: #005073;
+}
+.cool.cui .btn.btn--small,
+.cui .btn.btn--wide {
+  max-width: fit-content;
+}
+
+.cool.cui h1.page--heading {
+  font-size: 26px;
+  color: #333333
+}
+
+.cool.cui h2.page--subheading {
+  font-size: 22px;
+  display: inline-block;
+}
+.cool.cui .ui-datatable-scrollable-body, .cool.cui .ui-table-scrollable-body {
+  min-height: 200px;
+}
 .cui a:not(.btn):active, .cui a:not(.btn):hover, .cui a:not(.btn):focus, .cui .link:active, .cui .link:hover, .cui .link:focus {
   text-decoration: none;
 }
@@ -28,6 +60,10 @@
 }
 .cui .panel.panel--indigo.panel--loose.header-bar.base-margin-top {
   height: 57px;
+}
+.cui .panel.panel--indigo .header-toolbar {
+  display: inline-block;
+  text-align: right;
 }
 /* buttons */
 .cui .btn.btn--small,
@@ -131,18 +167,11 @@
 .cui .ui-table .ui-table-thead>tr>th, .ui-table .ui-table-tbody>tr>td, .ui-table .ui-table-tfoot>tr>td {
   padding: .25em .75em;
 }
-/* .cui .responsive-table {
-  overflow: visible;
-}
-.cui .responsive-table .ui-datatable-scrollable-body {
-  overflow: visible;
-} */
+
 .cui .ui-table .ui-table-tbody > tr > td {
   border: 0
 }
-/* .cui .ui-datatable .ui-datatable-thead>tr>th, .cui .ui-table .ui-table-thead>tr>th:first-of-type {
-  width:5%;
-} */
+
 .cui .ui-datatable .ui-datatable-thead>tr>th, .cui .ui-table .ui-table-thead>tr>th {
   white-space: nowrap;
   font-weight: normal;
@@ -387,6 +416,11 @@ span.icon-close {
   cursor: pointer;
 }
 
+
+
+.cui table .ui-widget-content span.ui-cell-data {
+  word-break: break-word;
+}
 
 @media (min-width: 1200px) {
   .logo-cool-full {

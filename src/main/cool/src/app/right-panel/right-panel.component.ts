@@ -25,6 +25,7 @@ export class RightPanelComponent implements OnInit {
   @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
   @Output() updateStakeData = new EventEmitter<string>();
+  navigateHash: Object = {};
   backdropCustom: Boolean = false;
   proceedFlag: boolean;
   subscription: Subscription;
@@ -128,6 +129,14 @@ export class RightPanelComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId];
+    this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
+    this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
+    this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
+
+
+
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
     this.offerPhaseDetailsList.ideate.forEach(element => {
@@ -448,7 +457,7 @@ export class RightPanelComponent implements OnInit {
   }
 
   getInitialChar(name) {
-    if (name == null) return ""
+    if (name == null) return "";
     let names = name.split(' ');
     let initials = "";
     initials += names[0].charAt(0).toUpperCase();
@@ -465,4 +474,10 @@ export class RightPanelComponent implements OnInit {
     })
     return res;
   }
+
+  navigate(name) {
+        if (this.navigateHash[name] !== null) {
+            this.router.navigate(this.navigateHash[name]);
+        }
+}
 }

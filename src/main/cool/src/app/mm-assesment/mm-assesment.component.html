@@ -16,8 +16,8 @@
                 <h4><button class="btn--back btn btn--icon btn--white"><span class="icon-back" (click)='goBackToOffercreation()'></span></button> Offer Builder</h4>
             </div>
             <div class="col-md-8 text-right">
-                <button class="btn btn--white"><span class="icon-save"></span> Save </button>
-                <button class="btn btn--white"><span class="icon-export"></span> Export </button>
+                <button class="btn btn--white"> Save </button>
+                <button class="btn btn--white"> Export </button>
                 <button class="btn btn--white" (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
             </div>
         </div>
@@ -44,7 +44,7 @@
                   <div>
                     {{
                       offerBuilderdata["expectedLaunchDate"]
-                        | date: "MM/dd/yyyy"
+                        | date: "dd-MMM-y"
                     }}
                   </div>
                 </div>

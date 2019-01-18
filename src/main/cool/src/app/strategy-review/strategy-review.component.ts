@@ -39,7 +39,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   updateStakeData;
   setFlag;
   derivedMM;
-  
+
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   totalApprovalsCount: any = 0;
@@ -250,7 +250,6 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
       this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
     }, (error) => {
-      console.log(error);
     });
   }
 

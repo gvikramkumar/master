@@ -67,11 +67,13 @@ export class EnvironmentService {
         let environment = 'localhost';
         if (windowUrl.includes('dev')) {
             environment = 'development';
+        } else if (windowUrl.includes('qa')) {
+            environment = 'qualityassurance';
         } else if (windowUrl.includes('stg')) {
             environment = 'stage';
         } else if (windowUrl.includes('prd')) {
             environment = 'production';
-        }
+        } 
 
         switch (environment) {
             case 'production':
@@ -88,13 +90,20 @@ export class EnvironmentService {
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-stg.cisco.com/cool';
                 break;
+            case 'qualityassurance':
+                this.baseapi = 'https://cool-srv-qa.cisco.com/coolsrv';
+                this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
+                this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
+                this.client_id = 'cool_pdaf_client';
+                this.redirect_url = 'https://cool-qa.cisco.com/cool';
+                break;    
             case 'development':
                 this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
                 this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-dev.cisco.com/cool';
-                break;
+                break;			
             default:
                 this.baseapi = '/api';
                 this.basepdafapi = '/pdafapp';
