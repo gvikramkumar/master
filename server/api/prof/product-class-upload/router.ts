@@ -7,6 +7,7 @@ const ctrl = injector.get(ProductClassUploadController);
 
 export const productClassUploadRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
+  .post('/call-method/:method', ctrl.callMethod.bind(ctrl))
   .post('/', ctrl.addOne.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))
   .put('/:id', ctrl.update.bind(ctrl))

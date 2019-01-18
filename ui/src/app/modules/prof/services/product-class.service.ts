@@ -9,10 +9,10 @@ const apiUrl = environment.apiUrl;
 @Injectable({
   providedIn: 'root'
 })
-export class DollarUploadService extends RestBase<any> {
+export class ProductClassUploadService extends RestBase<any> {
 
   constructor(httpClient: HttpClient, store: AppStore) {
-    super('prof/dollar-upload', httpClient, store);
+    super('prof/product-class-upload', httpClient, store);
   }
 
 }

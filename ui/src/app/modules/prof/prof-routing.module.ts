@@ -145,7 +145,7 @@ const routes: Routes = [
                 desc: 'Create a new rule'
               },
               breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management',
-                routerUrl: '/prof/rule-management'}, {label: 'Create'}]
+                routerUrl: '/prof/rule-management'}, {label: 'Add New'}]
             }
           },
           {

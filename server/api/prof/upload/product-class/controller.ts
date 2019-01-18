@@ -53,7 +53,29 @@ export default class ProductClassUploadUploadController extends UploadController
     // sort by submeasureName, add up splitPercentage, error if not 1.0
     this.imports =
       _.sortBy(this.rows1.map(row => new ProductClassUploadImport(row, this.fiscalMonth)), 'submeasureName');
-    const obj = {};
+
+    let obj = {};
+    this.imports.forEach(val => {
+      if (!obj[val.submeasureName]) {
+        obj[val.submeasureName] = {hw: 0, sw: 0};
+      }
+      if (val.splitCategory === 'HARDWARE') {
+        obj[val.submeasureName].hw++;
+      } else if (val.splitCategory === 'SOFTWARE') {
+        obj[val.submeasureName].sw++;
+      }
+    });
+    _.forEach(obj, (val, key) => {
+      if (val.hw > 1 || val.sw > 1) {
+        this.addErrorMessageOnly(key);
+      }
+    });
+
+    if (this.errors.length) {
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Submeasures with duplicate HW/SW entries', this.errors));
+    }
+
+    obj = {};
     this.imports.forEach(val => {
       if (obj[val.submeasureName]) {
         obj[val.submeasureName] += val.splitPercentage;
@@ -70,6 +92,7 @@ export default class ProductClassUploadUploadController extends UploadController
     if (this.errors.length) {
       return Promise.reject(new NamedApiError(this.UploadValidationError, 'Submeasure percentage values not 100%', this.errors));
     }
+
     return Promise.resolve();
   }
 
