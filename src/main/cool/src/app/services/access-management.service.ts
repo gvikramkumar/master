@@ -23,7 +23,7 @@ export class AccessManagementService {
             newUser, { withCredentials: true });
     }
 
-    updateAccessManagement(accessManagement: AccessManagement) {
+    updateAccessManagement(accessManagement: any) {
         return this.httpClient.post(this.environmentService.REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL,
                                     accessManagement, { withCredentials: true });
     }
