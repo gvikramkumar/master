@@ -108,6 +108,8 @@ export class MenuBarComponent implements OnInit {
         if (message != null && message !== '') {
            let emailNotificationData = {};
             if (message === 'hold') {
+                this.holdStatusValid = false;
+                this.cancelStatusValid = false;
                 let emailSubject = `[${this.offerName}]([${this.offerId}]) has been on hold by [${this.userService.getUserId()}]`;
                 let emailBody = `Hello,
                 [${this.offerName}]([${this.offerId}]) has been on hold by [${this.userService.getUserId()}].
@@ -126,11 +128,11 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
-                    this.holdStatusValid = false;
-                    this.cancelStatusValid = false;
                 });
             }
             if (message === 'cancel') {
+                this.holdStatusValid = false;
+                this.cancelStatusValid = false;
                 let emailSubject = `[${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}]`;
                 let emailBody = `Hello,
                 [${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}].
@@ -149,8 +151,7 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
-                    this.holdStatusValid = false;
-                    this.cancelStatusValid = false;
+                  
 
                 });
             }
