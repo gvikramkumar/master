@@ -94,7 +94,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const canEscalateUsers = [];
     this.subscription = this.messageService.getMessage()
       .subscribe(message => {
-         this.getStrategyReviwInfo();
+        this.getStrategyReviwInfo();
       });
 
     this.data = [];
@@ -205,13 +205,13 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.strategyReviewList = data;
       this.totalApprovalsCount = this.strategyReviewList.length;
       this.strategyReviewList.forEach(element => {
-        if (element.status === 'Approved') {
+        if (element.status && element.status.toLowerCase() === 'approved') {
           this.approvedCount = this.approvedCount + 1;
-        } else if (element.status === 'Not Approved') {
+        } else if (element.status && element.status.toLowerCase() === 'not approved') {
           this.notApprovedCount = this.notApprovedCount + 1;
-        } else if (element.status === 'Conditionally Approved') {
+        } else if (element.status && element.status.toLowerCase() === 'conditionally approved') {
           this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
-        } else if (element.status === 'Not Reviewed') {
+        } else if (element.status && element.status.toLowerCase() === 'not reviewed') {
           this.notReviewedCount = this.notReviewedCount + 1;
         }
       });
@@ -358,7 +358,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const mailList = [this.managerName];
     const emailPayload = {};
     emailPayload['subject'] = 'Immediate Attention needed! ' + this.currentOfferId + ' + ' + this.offerName + ' Approval pending';
-    emailPayload['emailBody'] = 'Hello You are receiving this message because the below offer has a pending approval that requires review from a member of your team. Offer ID: '+this.currentOfferId+' Offer Name: '+this.offerName+ ' Your immediate attention is highly appreciated. Thanks';
+    emailPayload['emailBody'] = 'Hello You are receiving this message because the below offer has a pending approval that requires review from a member of your team. Offer ID: ' + this.currentOfferId + ' Offer Name: ' + this.offerName + ' Your immediate attention is highly appreciated. Thanks';
     emailPayload['toMailLists'] = mailList;
     this.actionsService.escalateNotification(emailPayload).subscribe(data => {
       this.getStrategyReviwInfo();

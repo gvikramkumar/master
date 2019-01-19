@@ -313,7 +313,7 @@
     <div class="popover__body">
       <h5>Notification Details</h5>
       <p>{{selectedAction.actionDesc}}</p>
-      <button class="btn btn--secondary base-margin-top" (click)="offerDetailOverView(selectedAction.offerId,selectedAction.caseId)">View
+      <button class="btn btn--secondary base-margin-top" [routerLink]="['/offerDetailView',selectedAction.offerId, selectedAction.caseId]">View
         Offer</button>
     </div>
     <div class="popover__footer">
