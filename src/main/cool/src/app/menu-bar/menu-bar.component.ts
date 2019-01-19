@@ -26,6 +26,9 @@ export class MenuBarComponent implements OnInit {
     itemShow: Object = {};
     navigateHash: Object = {};
     currentOfferId: String = '';
+    holdStatusValid = true;
+    cancelStatusValid = true;
+
 
     constructor(private menuBarService: MenuBarService,
         private userService: UserService,
@@ -95,10 +98,10 @@ export class MenuBarComponent implements OnInit {
     }
 
     showOppupFunc(ptype) {
-
+        if ((ptype === 'hold' && this.holdStatusValid === true) || (ptype === 'cancel' && this.cancelStatusValid === true)) {
             this.showPopup = true;
             this.popupType = ptype;
-
+        }
     }
 
     closePopup(message) {
@@ -123,7 +126,8 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
-
+                    this.holdStatusValid = false;
+                    this.cancelStatusValid = false;
                 });
             }
             if (message === 'cancel') {
@@ -145,6 +149,8 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                    this.holdStatusValid = false;
+                    this.cancelStatusValid = false;
 
                 });
             }
