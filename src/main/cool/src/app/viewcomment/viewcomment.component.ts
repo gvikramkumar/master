@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { ViewcommentService } from '../services/viewcomment.service';
@@ -8,7 +8,7 @@ import * as moment from 'moment';
   templateUrl: './viewcomment.component.html',
   styleUrls: ['./viewcomment.component.css']
 })
-export class ViewcommentComponent implements OnInit {
+export class ViewcommentComponent implements OnInit, OnChanges {
   @Input() userName: string;
   @Input() taskId: string;
   @Input() popContent;
@@ -37,17 +37,27 @@ export class ViewcommentComponent implements OnInit {
   ngOnInit() {
     this.newComment = '';
     this.onDisable = true;
-    this.getComments();
+    this.viewcomment = [];
+    // this.getComments(this.taskId);
+    this.viewCommentForm = new FormGroup({
+      comment: new FormControl(null, Validators.required)
+    });
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    const taskId: SimpleChange = changes.taskId;
+    this.newComment = '';
+    this.onDisable = true;
+    this.viewcomment = [];
+    this.getComments(taskId.currentValue);
     this.viewCommentForm = new FormGroup({
       comment: new FormControl(null, Validators.required)
     });
   }
 
-
-  private getComments() {
-    this.viewcommentService.getViewComment(this.taskId).subscribe(resComments => {
+  private getComments(taskId) {
+    this.viewcommentService.getViewComment(taskId).subscribe(resComments => {
       this.viewcomment = resComments.map(comment => {
-        comment.date = moment(comment.date).format('MM-DD-YYYY');
+        //comment.date = moment(comment.date).format('MM-DD-YYYY');
         return comment;
       });
     });
@@ -55,17 +65,17 @@ export class ViewcommentComponent implements OnInit {
 
   updateComment() {
     let obj = {
-      "comment": this.newComment,
-      "commentOwner": this.userId
+      'comment': this.newComment,
+      'commentOwner': this.userId
     }
     this.newComment = '';
     this.viewcommentService.postViewComment(obj, this.taskId).subscribe(res => {
-      this.getComments();
+      this.getComments(this.taskId);
     })
   }
 
   validateComment(event) {
-    let value = event.target.value;
+    const value = event.target.value;
     if (value.toString().length < 1) {
       this.onDisable = true;
     } else {
