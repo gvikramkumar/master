@@ -64,6 +64,22 @@ export class CreateOfferService {
     let url = this.baseUrl + 'lov/businessEntity';
     return this.httpClient.get(url, { withCredentials: true });
   }
+  //Lulu's change on GET BE
+  getDistinctBE() {
+    let url = this.environmentService.REST_API_PRIMARY_BUSINESS_ENTITY_LULU_URL;
+    return this.httpClient.get(url, { withCredentials: true });
+  }
+// lulu's change on GET SECONDARY BU
+  getDistincBU(){
+    let url = this.environmentService.REST_API_SECONDARY_BUSINESS_UNIT_LULU_URL;
+    return this.httpClient.get(url, { withCredentials: true });
+  }
+
+  //Lulu's change on GET PRIMARY BU BASED ON BE
+  getPrimaryBuBasedOnBe(data){
+    let url = this.environmentService.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL + data;
+    return this.httpClient.get(url, { withCredentials: true });
+  }
 
   getPrimaryBusinessUnits(): Observable<any> {
     let url = this.basePrimaryUrl + this.userService.getUserId();
@@ -74,6 +90,7 @@ export class CreateOfferService {
     let url = this.secondaryBusinessUnitUrl;
     return this.httpClient.get(url, { withCredentials: true });
   }
+
 
   getSecondaryBusinessEntity(bus: string): Observable<any> {
     let url = this.secondaryBusinessEntityUrl + bus;

@@ -50,7 +50,10 @@ export class EnvironmentService {
     REST_API_URL_GET_CURRENT_USER;
     REST_API_URL_GET_LDAP_INFO;
     REST_API_PRIMARY_BUSINESS_ENTITY_URL;
+    REST_API_PRIMARY_BUSINESS_ENTITY_LULU_URL;
+    REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL;
     REST_API_SECONDARY_BUSINESS_UNIT_URL;
+    REST_API_SECONDARY_BUSINESS_UNIT_LULU_URL;
     REST_API_SECONDARY_BUSINESS_ENTITY_URL;
     PDAF_API;
     PDAF_GET_TOKEN_API;
@@ -122,6 +125,9 @@ export class EnvironmentService {
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.1/get/currentUser';
         this.REST_API_URL_GET_LDAP_INFO = this.basepdafapi + '/user/1.0/getLdapUserInfo';
         this.REST_API_PRIMARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
+        this.REST_API_PRIMARY_BUSINESS_ENTITY_LULU_URL = this.basepdafapi + 'mdm/1.0/hierarchy/getBUhierarchy?columns=BE&distinct=true';
+        this.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL = this.basepdafapi + 'mdm/1.0/hierarchy/getBUhierarchy?be=';
+        this.REST_API_SECONDARY_BUSINESS_UNIT_LULU_URL = this.basepdafapi + 'mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true';
         this.REST_API_SECONDARY_BUSINESS_UNIT_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true';
         this.REST_API_SECONDARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
         this.PDAF_API = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy';
