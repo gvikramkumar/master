@@ -8,13 +8,13 @@
             <div class="panel panel--indigo panel--compressed task--bar">
                 <div class="row">
                     <div class="col-md-4">
-                        <h4><button class="btn--back btn btn--icon btn--white"><span class="icon-back" (click)="gotoMMpage()"></span></button>
+                        <h4><button [disabled]="!backbuttonStatusValid" class="btn--back btn btn--icon btn--white"><span class="icon-back" (click)="gotoMMpage()"></span></button>
                             Stakeholders</h4>
                     </div>
                     <div class="col-md-8 text-right">
                         <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
                         <!-- <button class="btn btn--white"><span class="icon-export"></span> Export </button> -->
-                        <button class="btn btn--white" (click)=' addCollaborator()'>Proceed to Strategy
+                        <button class="btn btn--white" [disabled]="!proceedButtonStatusValid" (click)=' addCollaborator()'>Proceed to Strategy
                             Review <span class="icon-chevron-right"></span></button>
                     </div>
                 </div>

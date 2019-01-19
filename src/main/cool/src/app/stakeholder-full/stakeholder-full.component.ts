@@ -31,6 +31,8 @@ export class StakeholderFullComponent implements OnInit {
   temporaryList;
   lists;
   message = {};
+  proceedButtonStatusValid = true;
+  backbuttonStatusValid = true;
   public offerBuilderdata;
   public newData: any[];
   //new update
@@ -203,8 +205,12 @@ export class StakeholderFullComponent implements OnInit {
   updateMessage(message) {
     if (message != null && message !== "") {
       if (message == 'hold') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = { contentHead: "", content: "The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
       } else if (message == 'cancel') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = { contentHead: "", content: "The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
       }
     }

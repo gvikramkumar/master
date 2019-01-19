@@ -72,6 +72,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   firstData: Object;
   stakeHolderInfo: any;
   subscription: Subscription;
+  proceedButtonStatusValid = true;
+  backbuttonStatusValid = true;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
@@ -240,12 +242,16 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   updateMessage(message) {
     if (message != null && message !== '') {
       if (message === 'hold') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = {
           contentHead: '',
           content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.',
           color: 'black'
         };
       } else if (message === 'cancel') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = {
           contentHead: '',
           content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
