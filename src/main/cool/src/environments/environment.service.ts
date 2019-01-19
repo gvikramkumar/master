@@ -79,7 +79,7 @@ export class EnvironmentService {
             environment = 'stage';
         } else if (windowUrl.includes('prd')) {
             environment = 'production';
-        } 
+        }
 
         switch (environment) {
             case 'production':
@@ -102,14 +102,14 @@ export class EnvironmentService {
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-qa.cisco.com/cool';
-                break;    
+                break;
             case 'development':
                 this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
                 this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-dev.cisco.com/cool';
-                break;			
+                break;
             default:
                 this.baseapi = '/api';
                 this.basepdafapi = '/pdafapp';
