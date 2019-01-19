@@ -27,6 +27,8 @@ const ormMap: OrmMap[] = [
   {prop: 'indicators.dualGaap', field: 'dual_gaap_flag'},
   {prop: 'indicators.twoTier', field: 'twotier_flag'},
   {prop: 'indicators.service', field: 'service_flag'},
+  {prop: 'indicators.allocationRequired', field: 'allocation_reqd_flag'},
+  {prop: 'indicators.passThrough', field: 'pass_through_flag'},
   {prop: 'indicators.deptAcct', field: 'dept_acct_flag'},
   {prop: 'reportingLevels[0]', field: 'gross_mgn_rollup1'},
   {prop: 'reportingLevels[1]', field: 'gross_mgn_rollup2'},

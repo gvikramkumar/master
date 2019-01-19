@@ -141,7 +141,9 @@ export default class SubmeasureController extends ApprovalController {
   }
 
   approve(req, res, next) {
-    if (req.body.indicators.groupFlag === 'N' && !req.body.rules.length) {
+    const sm = req.body;
+    const noRulesRequired = sm.indicators.passThrough === 'Y'  || (sm.indicators.groupFlag === 'Y' && sm.indicators.allocationRequired === 'N');
+    if (!noRulesRequired && !sm.rules.length) {
       next(new ApiError(`No rules specified in submeasure: ${req.body.name}`));
       return;
     }

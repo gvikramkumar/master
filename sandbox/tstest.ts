@@ -6,10 +6,13 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {take, first} from 'rxjs/operators';
 
 
-const str = "la'la'la";
 
-console.log(str.replace(/'/g, '\'\''));
+function isValidFiscalMonth(strOrNum) {
+  return /^\d{6}$/.test(strOrNum.toString().trim());
+}
 
+console.log(isValidFiscalMonth(1234567));
+console.log(isValidFiscalMonth('1234567'));
 
 
 
