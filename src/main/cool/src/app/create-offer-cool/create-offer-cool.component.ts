@@ -10,6 +10,7 @@ import { UserService } from '../services/user.service';
 import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import { ConfigurationService } from '../services/configuration.service';
 import * as moment from 'moment';
 import { getUrlScheme, createOfflineCompileUrlResolver } from '@angular/compiler';
 
@@ -55,7 +56,8 @@ export class CreateOfferCoolComponent implements OnInit {
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private _location: Location) {
+    private _location: Location,
+    private configurationService: ConfigurationService,) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       console.log("offerId", this.offerId);
@@ -95,6 +97,8 @@ this.createOfferService.getDistinctBE().subscribe(data => {
   this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
   this.secondaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');;
 });
+
+const token = configurationService.getStartupData();
 
 // lulu's change GET SECONDARY BU
 this.createOfferService.getDistincBU().subscribe(data => {

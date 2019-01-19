@@ -18,6 +18,12 @@ export class CreateOfferService {
   secondaryBusinessUnitUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_UNIT_URL;
   secondaryBusinessEntityUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_ENTITY_URL;
   secondaryPrimaryBusinessEntityUrl: string = this.environmentService.REST_API_PRIMARY_BUSINESS_ENTITY_URL;
+  getBEUrl: string = this.environmentService.REST_API_PRIMARY_BUSINESS_ENTITY_LULU_URL;
+  getPrimaryBUBasedOnBE: string =this.environmentService.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL;
+  getDinstinctBUUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_UNIT_LULU_URL;
+
+  
+
 
   coolOffer;
   coolOfferCopy;
@@ -66,18 +72,18 @@ export class CreateOfferService {
   }
   //Lulu's change on GET BE
   getDistinctBE() {
-    let url = this.environmentService.REST_API_PRIMARY_BUSINESS_ENTITY_LULU_URL;
+    let url = this.getBEUrl;
     return this.httpClient.get(url, { withCredentials: true });
   }
 // lulu's change on GET SECONDARY BU
   getDistincBU(){
-    let url = this.environmentService.REST_API_SECONDARY_BUSINESS_UNIT_LULU_URL;
+    let url = this.getDinstinctBUUrl;
     return this.httpClient.get(url, { withCredentials: true });
   }
 
   //Lulu's change on GET PRIMARY BU BASED ON BE
   getPrimaryBuBasedOnBe(data){
-    let url = this.environmentService.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL + data;
+    let url = this.getPrimaryBUBasedOnBE + data;
     return this.httpClient.get(url, { withCredentials: true });
   }
 
