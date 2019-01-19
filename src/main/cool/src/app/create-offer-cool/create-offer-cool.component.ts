@@ -56,8 +56,7 @@ export class CreateOfferCoolComponent implements OnInit {
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private _location: Location,
-    private configurationService: ConfigurationService,) {
+    private _location: Location,) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       console.log("offerId", this.offerId);
@@ -98,7 +97,6 @@ this.createOfferService.getDistinctBE().subscribe(data => {
   this.secondaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');;
 });
 
-const token = configurationService.getStartupData();
 
 // lulu's change GET SECONDARY BU
 this.createOfferService.getDistincBU().subscribe(data => {

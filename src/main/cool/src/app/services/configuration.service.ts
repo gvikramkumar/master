@@ -61,8 +61,4 @@ export class ConfigurationService {
     get startupData(): any {
         return this._startupData;
     }
-
-    getStartupData() {
-        return this._startupData;
-    }
 }
