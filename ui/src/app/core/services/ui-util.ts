@@ -38,6 +38,13 @@ export class UiUtil {
     edit >> D/P and editMode >> update
   */
 
+  static isValidFiscalMonth(strOrNum) {
+    if (!strOrNum) {
+      return false;
+    }
+    return /^\d{6}$/.test(strOrNum.toString().trim());
+  }
+
   static updateUrl(router, route, queryParams) {
     router.navigate([], {relativeTo: route, queryParamsHandling: 'merge', queryParams, replaceUrl: true});
   }

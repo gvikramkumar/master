@@ -593,6 +593,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
+  clearAllocationRequired() {
+    if (this.sm.indicators.groupFlag === 'N') {
+      this.sm.indicators.allocationRequired = 'N';
+    }
+  }
+
   cleanUp() {
     this.cleanIflSwitchChoices();
     this.cleanMMSwitchChoices();
@@ -611,6 +617,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.manualMixHw = this.manualMixHw;
       this.sm.manualMixSw = this.manualMixSw;
     }
+    this.clearAllocationRequired();
   }
 
   hasChanges() {
@@ -746,36 +753,43 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   validate() {
-
-    if (this.isGroupingParent()) {
-      return null;
-    }
-
     this.errs = [];
-    if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
-      this.errs.push('Duplicate rules entered');
-    }
-    // this shouldn't have to be here, but currently we have a bug where form.valid === true even though this control
-    // is highlighted red with required: true error
-    if (!this.sm.startFiscalMonth) {
-      this.errs.push(`No "Effective Month" value`);
-    }
-    if (this.isManualMix()) {
-      const hw = Number(this.sm.manualMixHw);
-      const sw = Number(this.sm.manualMixSw);
-      if (isNaN(hw)) {
-        this.errs.push(`Manual Mix HW value, not a number: ${this.sm.manualMixHw}`);
-      }
-      if (isNaN(sw)) {
-        this.errs.push(`Manual Mix SW value, not a number: ${this.sm.manualMixSw}`);
-      }
-      if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
-        this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
-      }
-    }
 
-    if (!this.validateManualMapping()) {
-      this.errs.push('Manual Mapping selected, but no value entered');
+    if (this.isUnallocatedGroup()) {
+      if (this.isUnallocatedGroup() && this.sm.rules.length) {
+        this.errs.push('No rules allowed on Grouping Sub-Measures without Allocation Required checked');
+      }
+    } else if (this.isPassThrough()) {
+      if (this.isPassThrough() && this.sm.rules.length) {
+        this.errs.push('No rules allowed on Pass Through Sub-Measures');
+      }
+    } else {
+      if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
+        this.errs.push('Duplicate rules entered');
+      }
+      // this shouldn't have to be here, but currently we have a bug where form.valid === true even though this control
+      // is highlighted red with required: true error
+      if (!UiUtil.isValidFiscalMonth(this.sm.startFiscalMonth)) {
+        this.errs.push(`No "Effective Month" value`);
+      }
+
+      if (this.isManualMix()) {
+        const hw = Number(this.sm.manualMixHw);
+        const sw = Number(this.sm.manualMixSw);
+        if (isNaN(hw)) {
+          this.errs.push(`Manual Mix HW value, not a number: ${this.sm.manualMixHw}`);
+        }
+        if (isNaN(sw)) {
+          this.errs.push(`Manual Mix SW value, not a number: ${this.sm.manualMixSw}`);
+        }
+        if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
+          this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
+        }
+      }
+
+      if (!this.validateManualMapping()) {
+        this.errs.push('Manual Mapping selected, but no value entered');
+      }
     }
 
     this.errs = this.errs.map(err => `* ${err}`)
@@ -800,7 +814,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return this.sm.categoryType === 'Manual Mix';
   }
 
-  ngOnDestroy() {
-
+  isPassThrough() {
+    return this.sm.indicators.passThrough === 'Y';
   }
+
+  isUnallocatedGroup() {
+    return this.sm.indicators.groupFlag === 'Y' && this.sm.indicators.allocationRequired === 'N';
+  }
+
+  isAllocatedGroup() {
+    return this.sm.indicators.groupFlag === 'Y' && this.sm.indicators.allocationRequired === 'Y';
+  }
+
 }

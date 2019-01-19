@@ -161,19 +161,19 @@ export default class ReportController extends ControllerBase {
       case 'disti-direct':
         excelSheetname = ['Disti to Direct'];
         excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'External Theater', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'ext_theater_name', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
+        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'ext_theater_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         promise = this.pgLookupRepo.getDistiToDirectMappingReport();
         break;
       case 'alternate-sl2':
         excelSheetname = ['Alternate SL2'];
         excelHeaders = ['Actual SL2', 'Alternate SL2', 'Alternate Country', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
+        excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         promise = this.pgLookupRepo.getAlternateSL2Report(body.fiscalMonth);
         break;
       case 'corp-adjustment':
         excelSheetname = ['Corp Adjustment'];
         excelHeaders = ['Country Name', 'Sales Territory Code', 'SCMS Value', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'create_user', 'create_datetimestamp', 'update_user', 'update_datetimestamp'];
+        excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         promise = this.pgLookupRepo.getCorpAdjustmentReport(body.fiscalMonth);
         break;
       case 'sales-split-percentage':

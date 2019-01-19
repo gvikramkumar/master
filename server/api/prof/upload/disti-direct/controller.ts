@@ -83,13 +83,13 @@ export default class DistiDirectUploadUploadController extends UploadController 
     });
 
     _.each(obj, (val, key) => {
-      if (val.distiSl3 !== 1 || val.directSl2 === 0) {
+      if (val.distiSl3 === 0 || val.directSl2 === 0) {
         this.addErrorMessageOnly(`${key}`);
       }
     })
 
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Group IDs not having exactly one "Disti SL3" and one or more "Direct SL2" nodes', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Group IDs not having one or more "Disti SL3" and "Direct SL2" nodes', this.errors));
     }
 
     obj = {};

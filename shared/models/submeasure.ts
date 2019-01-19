@@ -51,4 +51,6 @@ class Indicators {
   twoTier = 'N';
   service = 'N';
   deptAcct = 'N';
+  allocationRequired = 'N';
+  passThrough = 'N';
 }
