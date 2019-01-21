@@ -166,11 +166,12 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="milestoneName">MILESTONE</label>
-                    <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
+                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly >
+                    <!-- <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
                       required ngModel #milestoneName="ngModel">
                       <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
                         {{milestone.subMilestone}}</option>
-                    </select>
+                    </select> -->
                   </div>
                 </div>
               </div>

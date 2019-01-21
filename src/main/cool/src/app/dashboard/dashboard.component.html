@@ -5,10 +5,10 @@
         <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
           <div class="header-bar__main col-md-6">
             <div class="header-heading">
-              <h1 class="page-title"><span class="action--value">{{pendingActnCount}}</span> <span class="action--value-label">Pending
+              <h1 class="page-title"><span class="action--value">{{pendingActionCount}}</span> <span class="action--value-label">Pending
                   Actions</span></h1>
               <span class="vertical-divider"></span>
-              <h1 class="page-title"><span class="action--value">{{needImmActnCount}}</span> <span class="action--value-label">Need
+              <h1 class="page-title"><span class="action--value">{{needImmediateActionCount}}</span> <span class="action--value-label">Need
                   Immediate Action</span></h1>
             </div>
           </div>
@@ -42,510 +42,55 @@
               </div>
             </div>
             <div class="responsive-table">
-              <p-dataTable [value]="myActionsList" scrollable="true" scrollHeight="400px" [globalFilter]="gbforactions"
-                #dt>
+              <p-dataTable [value]="myActionsAndNotifications" scrollable="true" scrollHeight="400px" [globalFilter]="gbforactions"
+                [resizableColumns]="true" #dt>
                 <p-column field="offerId" sortable="true" header="OFFER ID">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span *ngIf="actionData.alertType == 1">
-                      <ng-template #popActionContent ptemplate="body">
-                        <div *ngIf="displayActionPopOver== true" class="popover">
-                          <div [hidden]="hidepopup">
-                          <h4 class="popover__title">Offer ID <span> {{actionData.offerId}}</span> </h4>
-                          <div class="popover__body">
-                            <div class="responsive-table half-margin-bottom">
-                              <table class="table table--nostripes actionPop">
-                                <thead>
-                                  <tr>
-                                    <th>Offer Name </th>
-                                    <th>Action Title </th>
-                                    <th>Offer Owner </th>
-                                    <th>Due Date </th>
-                                    <th>Action Completion Phase </th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>{{actionData.offerName}}</td>
-                                    <td>{{actionData.actiontTitle}}</td>
-                                    <td>{{actionData.assigneeId}}</td>
-                                    <td>{{actionData.dueDate}}</td>
-                                    <td>Design Review</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                            <h5>Action Description</h5><a class="modal__close" id="popover_close"><span class="icon-close"
-                                (click)="displayActionPop(p1)"></span></a>
-                            <p>{{actionData.actionDesc}}</p>
-                            <button class="btn btn--secondary " (click)="offerDetailOverView(actionData.offerId,actionData.caseId)">View
-                              Offer</button>
-                          </div>
-                          <div class="popover__footer">
-                            <div *ngIf="actionData.type == 'Manual Action'">
-                              <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="displayActionPop(p1)">Complete</button>
-                              <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="displayActionPop(p1)">Provide Feedback</button>
-                            </div>
-                            <div *ngIf="actionData.type == 'Strategy Review'">
-                              <button class="btn btn--primary base-margin-top" (click)="doNotApprove()">Do Not Approve</button>
-                              <button class="btn btn--primary base-margin-top" (click)="conditionalApprove()">Conditional Approval</button>
-                              <button class="btn btn--primary base-margin-top" (click)="approve()">Approve</button>
-                            </div>
-                          </div>
-                          </div>
-                          <!-- <DO NOT APPROVE> -->
-                          <section *ngIf="doNotApproveSection">
-                              <div class="row">
-                                <div class="col-md-12">
-                                  <div class="pull-right">
-                                    <span class="icon-close" (click)="displayActionPop(p1)"></span>
-                                  </div>
-                                  <div class="card__header">
-                                    <h5 class="card__title">Add a Reason for Not Approving</h5>
-                                  </div>
-                                 </div>
-                              </div>
-                            <div class="divider"></div>
-                            <div class="row">
-                              <div class="col-md-12">
-                                <form autoComplete="off" #createActionForm="ngForm">
-                                  <div class="row">
-                                    <div class="col-md-12">
-                                      <div class="form-group half-margin-bottom">
-                                        <div class="form-group__text">
-                                          <label for="action">ADD A COMMENT</label>
-                                          <input
-                                            id="commentName"
-                                            type="text"
-                                            class="form-control"
-                                            name="commentName"
-                                            [(ngModel)]="commentValue"
-                                            required
-                                            ngModel
-                                            #titleName="ngModel">
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <h5 class="card__title">Create an Action Item</h5>
-                                  <div class="row">
-                                    <div class="col-md-4">
-                                      <div class="form-group half-margin-bottom">
-                                        <div class="form-group__text">
-                                          <label for="action">ACTION TITLE</label>
-                                          <input
-                                            id="titleName"
-                                            type="text"
-                                            class="form-control"
-                                            name="titleName"
-                                            [(ngModel)]="titleValue"
-                                            required
-                                            ngModel
-                                            #titleName="ngModel">
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                      <div class="form-group half-margin-bottom">
-                                        <div class="form-group__text">
-                                          <label for="action">ACTION DESCRIPTION</label>
-                                          <input
-                                              id="descriptionName"
-                                              type="text"
-                                              class="form-control"
-                                              name="descriptionName"
-                                              [(ngModel)]="descriptionValue"
-                                              required
-                                              ngModel
-                                              #descriptionName="ngModel">
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="col-md-4">
-                                      <div class="form-group half-margin-bottom">
-                                        <div class="form-group__text select">
-                                          <label for="functionName">MILESTONE</label>
-                                          <select
-                                            id="milestoneName"
-                                             type="text"
-                                             class="form-control"
-                                             name="milestoneName"
-                                             [(ngModel)]="milestoneValue"
-                                             required
-                                             ngModel
-                                             #milestoneName="ngModel">
-                                            <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
-                                              {{milestone.subMilestone}}</option>
-                                            </select>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <div class="form-group half-margin-bottom">
-                                        <div class="form-group__text">
-                                          <div class="form-group__text select">
-                                            <label for="functionName">SELECT FUNCTION</label>
-                                            <select
-                                              id="functionName"
-                                              class="form-control"
-                                              name="functionName"
-                                              [(ngModel)]="functionNameValue"
-                                              ngModel
-                                              required>
-                                              <option *ngFor="let function of functionList" [value]="function">
-                                               {{function}}</option>
-                                             </select>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <div class="form-group half-margin-bottom">
-                                        <div class="form-group__text">
-                                          <div class="form-group__text select">
-                                            <label for="functionName">ASSIGNEE</label>
-                                            <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
-                                            required ngModel>
-                                            <option *ngFor="let assignee of assigneeList" [value]="assignee">
-                                              {{assignee}}</option>
-                                          </select>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="col-md-4">
-                                      <div class="form-group label--floated input--icon half-margin-bottom">
-                                        <label for="dueDate">DUE DATE</label>
-                                        <div class="form-group__text">
-                                            <input name="dueDateName" class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
-                                              [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig" [(ngModel)]="dueDateValue"
-                                              required ngModel #dueDateName="ngModel">
-                                            <button type="button" class="link" tabindex="-1">
-                                              <span class="icon-month"></span>
-                                            </button>
-                                          </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="divider"></div>
-                                  <div class="row">
-                                    <div class="col-md-12 text-right">
-                                      <button class="btn btn--secondary" (click)="displayActionPop(p1)">Cancel</button>
-                                      <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction(p1)">Create an Action</button>
-                                    </div>
-                                  </div>
-                                </form>
-                            </div>
-                          </div>
-                        </section>
-                         <!-- <CONDITIONAL APPROVE> -->
-                        <section *ngIf="showConditionalApprovalSection">
-                                <div class="row">
-                                  <div class="col-md-12">
-                                    <div class="pull-right">
-                                      <span class="icon-close" (click)="displayActionPop(p1)"></span>
-                                    </div>
-                                    <div class="card__header">
-                                      <h5 class="card__title">Conditional Approval</h5>
-                                    </div>
-                                   </div>
-                                </div>
-                              <div class="divider"></div>
-                              <div class="row">
-                                <div class="col-md-12">
-                                  <form autoComplete="off" #createActionForm="ngForm">
-                                    <div class="row">
-                                      <div class="col-md-12">
-                                        <div class="form-group half-margin-bottom">
-                                          <div class="form-group__text">
-                                            <label for="action">ADD A COMMENT</label>
-                                            <input
-                                              id="commentName"
-                                              type="text"
-                                              class="form-control"
-                                              name="commentName"
-                                              [(ngModel)]="commentValue"
-                                              required
-                                              ngModel
-                                              #titleName="ngModel">
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <h5 class="card__title">Create an Action Item</h5>
-                                    <div class="row">
-                                      <div class="col-md-4">
-                                        <div class="form-group half-margin-bottom">
-                                          <div class="form-group__text">
-                                            <label for="action">ACTION TITLE</label>
-                                            <input
-                                              id="titleName"
-                                              type="text"
-                                              class="form-control"
-                                              name="titleName"
-                                              [(ngModel)]="titleValue"
-                                              required
-                                              ngModel
-                                              #titleName="ngModel">
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-8">
-                                        <div class="form-group half-margin-bottom">
-                                          <div class="form-group__text">
-                                            <label for="action">ACTION DESCRIPTION</label>
-                                            <input
-                                                id="descriptionName"
-                                                type="text"
-                                                class="form-control"
-                                                name="descriptionName"
-                                                [(ngModel)]="descriptionValue"
-                                                required
-                                                ngModel
-                                                #descriptionName="ngModel">
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="row">
-                                      <div class="col-md-4">
-                                        <div class="form-group half-margin-bottom">
-                                          <div class="form-group__text select">
-                                            <label for="functionName">MILESTONE</label>
-                                            <select
-                                              id="milestoneName"
-                                               type="text"
-                                               class="form-control"
-                                               name="milestoneName"
-                                               [(ngModel)]="milestoneValue"
-                                               required
-                                               ngModel
-                                               #milestoneName="ngModel">
-                                              <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
-                                                {{milestone.subMilestone}}</option>
-                                              </select>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <div class="form-group half-margin-bottom">
-                                          <div class="form-group__text">
-                                            <div class="form-group__text select">
-                                              <label for="functionName">SELECT FUNCTION</label>
-                                              <select
-                                                id="functionName"
-                                                class="form-control"
-                                                name="functionName"
-                                                [(ngModel)]="functionNameValue"
-                                                ngModel
-                                                required>
-                                                <option *ngFor="let function of functionList" [value]="function">
-                                                 {{function}}</option>
-                                               </select>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <div class="form-group half-margin-bottom">
-                                          <div class="form-group__text">
-                                            <div class="form-group__text select">
-                                              <label for="functionName">ASSIGNEE</label>
-                                            <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
-                                              required ngModel>
-                                              <option *ngFor="let assignee of assigneeList" [value]="assignee">
-                                                {{assignee}}</option>
-                                            </select>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="row">
-                                      <div class="col-md-4">
-                                        <div class="form-group label--floated input--icon half-margin-bottom">
-                                          <label for="dueDate">DUE DATE</label>
-                                          <div class="form-group__text">
-                                              <input name="dueDateName" class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
-                                                [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig" [(ngModel)]="dueDateValue"
-                                                required ngModel #dueDateName="ngModel">
-                                              <button type="button" class="link" tabindex="-1">
-                                                <span class="icon-month"></span>
-                                              </button>
-                                            </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div class="row">
-                                      <div class="col-md-12 text-right">
-                                        <button class="btn btn--secondary" (click)="displayActionPop(p1)">Cancel</button>
-                                        <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction(p1)">Create an Action</button>
-                                      </div>
-                                    </div>
-                                  </form>
-                              </div>
-                            </div>
-                          </section>
-                         <!-- <APPROVE> -->
-                          <section *ngIf="showApproveSection">
-                              <div class="row">
-                                  <div class="col-md-12">
-                                    <div class="pull-right">
-                                      <span class="icon-close" (click)="displayActionPop(p1)"></span>
-                                    </div>
-                                    <div class="card__header">
-                                      <h5 class="card__title">Add Comment</h5>
-                                    </div>
-                                   </div>
-                                </div>
-                              <div class="divider"></div>
-                            <div class="row">
-                              <div class="col-md-12">
-                                <form autoComplete="off" #createActionApproveForm="ngForm">
-                                  <div class="row">
-                                    <div class="col-md-12">
-                                      <div class="form-group half-margin-bottom">
-                                        <div class="form-group__text">
-                                          <label for="action">ADD A COMMENT</label>
-                                          <input
-                                              id="commentName"
-                                              type="text"
-                                              class="form-control"
-                                              name="commentName"
-                                              [(ngModel)]="commentValue"
-                                              required
-                                              ngModel
-                                              #titleName="ngModel">
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="divider"></div>
-                                  <div class="row">
-                                    <div class="col-md-12 text-right">
-                                      <button class="btn btn--secondary" (click)="displayActionPop(p1)">Cancel</button>
-                                      <button class="btn btn--primary" [disabled]="!createActionApproveForm.valid" (click)="createActionApprove(p1)">Submit</button>
-                                    </div>
-                                  </div>
-                                </form>
-                            </div>
-                          </div>
-                        </section>
-
-                      </div>
-                      </ng-template>
-                      <span placement="bottom" [ngbPopover]="popActionContent" #p1="ngbPopover" triggers="manual"
-                        (click)="p1.open();selectedrownof(actionData)" [autoClose]="false" pTooltip="Action" tooltipPosition="top">
+                    <span *ngIf="actionData.alertType == 'action'">
+                      <span (click)="showActionPopUp($event,actionData,popActionContent)">
                         <span class="icon-clock icon-small"></span></span>
-                        <!-- {{actionData.offerId}} -->
-                        <!--my changes start here-->
-
-
-
-                        <span>
-                          <a  [ngbPopover]="turboContent"
-                          (click)="p5.open()" autoClose="'outside'" #p5="ngbPopover"
-                          triggers="manual" pTooltip="TurboTax" placement="right">
-                          <!-- {{offerData[col.field]}} -->
-                          {{actionData.offerId}}
-                      <br /></a>
-                          <ng-template #turboContent ptemplate="body">
-                              <div  class="popover" style="width:1000px;">
-        
-                                <div class="popover__body">
-                                    <app-turbotaxview [caseId]="actionData.caseId"></app-turbotaxview>
-    
-                                   <a class="modal__close" id="popover_close"><span class="icon-close"
-                                    (click)="displayActionPop(p5)"></span></a>
-                                </div>
-        
-                              </div>
-                            </ng-template>  
-        
-                            <!--ends here-->
-                      </span> 
-
-
-                        <!--end here-->
+                      <span>
+                        <a (click)="showOfferPopUp($event,actionData,popturboContent)">
+                          &nbsp; {{actionData.offerId}}
+                        </a>
+                      </span>
                     </span>
-                    <span *ngIf="actionData.alertType == 2">
-                      <ng-template #popNotificationContent ptemplate="body">
-                        <div *ngIf="displayPopOver== true" class="popover">
-                          <h4 class="popover__title">Offer ID <span> {{actionData.offerId}}</span> </h4>
-                          <div class="popover__body">
-                            <h5>Notification Details</h5><a class="modal__close" id="popover_close"><span class="icon-close"
-                                (click)="p2.close()"></span></a>
-                            <p>{{actionData.actionDesc}}</p>
-                            <button class="btn btn--secondary base-margin-top" (click)="offerDetailOverView(actionData.offerId,actionData.caseId)">View
-                              Offer</button>
-                          </div>
-                          <div class="popover__footer">
-                            <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="dismissNotification(actionData.offerId,p2)">Dismiss
-                              Notification</button>
-                          </div>
-                        </div>
-                      </ng-template>
-                      <span [ngbPopover]="popNotificationContent" (click)="p2.open();selectedrownof(actionData)" #p2="ngbPopover"
-                        triggers="manual" pTooltip="Notifications" tooltipPosition="top">
+                    <span *ngIf="actionData.alertType == 'notification'">
+                      <span (click)="showActionPopUp($event,actionData,popNotificationContent)">
                         <span class="icon-alert icon-small"></span>
-                        {{actionData.offerId}}</span>
+                        &nbsp; {{actionData.offerId}}
+                      </span>
                     </span>
                   </ng-template>
                 </p-column>
                 <p-column field="actions" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-
-                    <span class="offerName">{{actionData.actiontTitle}} <br /></span>
-                    <span class="offerDesc">{{actionData.actionDesc}}</span>
-                    <!-- <ng-template #popCommentContent ptemplate="body" >
-                        <div *ngIf="displayPopOver== true" style = "width:501px;left:230px"class="popover">
-                          <div class="popover__body">
-                             <app-viewcomment></app-viewcomment>
-                          </div>
-                          <div class="popover__footer">
-                          </div>
-                        </div>
-                      </ng-template> -->
-
-
-
-                    <ng-template #popCommentContent ptemplate="body">
-                      <div *ngIf="displayPopOver== true" class="popover" style="width:501px;left:230px">
-
-                        <div class="popover__body">
-                          <h5>View/Edit Comment</h5>
-
-                          <app-viewcomment [taskId] = "actionData.taskId" [popContent] = "p3"></app-viewcomment>
-                          <a class="modal__close" id="popover_close"><span class="icon-close"
-                            (click)="displayActionPop(p3)"></span></a>
-                        </div>
-
-                      </div>
-                    </ng-template>
-                    <span [ngbPopover]="popCommentContent" (click)="p3.open()" autoClose="'outside'" #p3="ngbPopover"
-                      triggers="manual" pTooltip="Comments" placement="right"  class="icon-comment" aria-hidden="true"></span>
-
+                    <span>
+                      <span class="text-indigo">{{actionData.title}} &nbsp;
+                        &nbsp;<span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right qtr-padding"></span><br /></span>
+                      <span class="text-small">{{actionData.desc}}</span>
+                    </span>
                   </ng-template>
                 </p-column>
                 <p-column field="offerName" sortable="true" header="OFFER NAME">
                 </p-column>
                 <p-column field="assigneeId" sortable="true" header="OFFER OWNER">
+                  <!-- <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <div style="white-space:pre-wrap;">
+                      {{actionData.assigneeId}}</div>
+                  </ng-template> -->
                 </p-column>
                 <p-column field="status" sortable="true" header="STATUS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span *ngIf="actionData.alertType == 1">
-                      <div style="text-align:center">
-                        <span class="{{actionData.styleColor}}">
+                    <span *ngIf="actionData.alertType == 'action'">
+                      <div class="text-center">
+                        <span class="{{actionData.status}}">
                           <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
                         </span>
                       </div>
                     </span>
-                    <span *ngIf="actionData.alertType == 2">
-                      <div style="text-align:center">
+                    <span *ngIf="actionData.alertType == 'notification'">
+                      <div class="text-center">
                         <span>--</span>
                       </div>
                     </span>
@@ -553,12 +98,16 @@
                 </p-column>
                 <p-column field="triggerDate" sortable="true" header="TRIGGER DATE">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.triggerDate}} <br /></span>
+                    <span>{{actionData.triggerDate | date:'dd-MMM-yyyy'}} <br /></span>
                   </ng-template>
                 </p-column>
                 <p-column field="dueDate" header="DUE DATE" sortable="true">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.dueDate}} <br /></span>
+                    <span class="text-center" *ngIf="actionData.alertType == 'action'">{{actionData.dueDate|
+                      date:'dd-MMM-yyyy'}} <br /></span>
+                    <span *ngIf="actionData.alertType == 'notification'">
+                      <span>--</span>
+                    </span>
                   </ng-template>
                 </p-column>
               </p-dataTable>
@@ -590,8 +139,7 @@
               </div>
             </div>
             <div class="responsive-table">
-              <p-table [columns]="cols" #dt [value]="myOffersList" [scrollable]="true" 
-              scrollHeight="400px" [loading]="loading"
+              <p-table [columns]="offerColumns" #dt [value]="myOffers" [scrollable]="true" scrollHeight="400px"
                 [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">
                 <ng-template pTemplate="header" let-columns>
                   <tr>
@@ -620,36 +168,17 @@
                 <ng-template pTemplate="body" let-offerData let-columns="columns">
                   <tr>
                     <td *ngFor="let col of columns" style="width:10%">
-                      <!-- startcode -->
-                     <span *ngIf="col.field == 'offerId'||col.field=='offerName' else other"  >
-                          <a  [ngbPopover]="turboContent"
-                          (click)="p4.open()" autoClose="'outside'" #p4="ngbPopover"
-                          triggers="manual" pTooltip="TurboTax" placement="right">
+                      <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
+                        <a (click)="showOfferPopUp($event,offerData,popturboContent)">
                           {{offerData[col.field]}}
-                      <br /></a>
-                          <ng-template #turboContent ptemplate="body">
-                              <div  class="popover" style="width:1000px;">
-        
-                                <div class="popover__body">
-                                    <app-turbotaxview [caseId]="offerData.caseId"></app-turbotaxview>
-    
-                                   <a class="modal__close" id="popover_close"><span class="icon-close"
-                                    (click)="displayActionPop(p4)"></span></a>
-                                </div>
-        
-                              </div>
-                            </ng-template>  
-        
-                           
-                      </span> 
-                     
-
-                      <ng-template #other>
-                          {{transferDateFormat(offerData, col.field)}}
-                      
-                      </ng-template>
-
-
+                        </a>
+                      </span>
+                      <span *ngIf="col.field == 'expectedLaunchDate'">
+                        {{offerData[col.field] | date:'dd-MMM-yyyy'}}
+                      </span>
+                      <span *ngIf="col.field == 'offerOwner'">
+                        {{offerData[col.field]}}
+                      </span>
                     </td>
                     <td style="width:20%" class="td--progress-fitted">
                       <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'"
@@ -765,4 +294,351 @@
   </div>
 </div>
 
-
+<p-overlayPanel #popturboContent [showCloseIcon]="true">
+  <div *ngIf="selectedCaseId" class="base-padding" style="min-width:700px">
+    <app-turbotaxview [caseId]="selectedCaseId"></app-turbotaxview>
+  </div>
+</p-overlayPanel>
+<p-overlayPanel #popCommentContent [showCloseIcon]="true">
+  <div *ngIf="selectedAction" class="base-padding" style="min-width:700px; max-width:700px">
+    <div class="popover__body">
+      <h5>View/Edit Comment</h5>
+      <app-viewcomment [taskId]="selectedAction.taskId" [popContent]="p3"></app-viewcomment>
+    </div>
+  </div>
+</p-overlayPanel>
+<p-overlayPanel #popNotificationContent [showCloseIcon]="true">
+  <div *ngIf="selectedAction" class="base-padding" style="min-width:700px">
+    <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
+    <div class="popover__body">
+      <h5>Notification Details</h5>
+      <p>{{selectedAction.actionDesc}}</p>
+      <button class="btn btn--secondary base-margin-top" [routerLink]="['/offerDetailView',selectedAction.offerId, selectedAction.caseId]">View
+        Offer</button>
+    </div>
+    <div class="popover__footer">
+      <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="dismissNotification(popNotificationContent)">Dismiss
+        Notification</button>
+    </div>
+  </div>
+</p-overlayPanel>
+<p-overlayPanel #popActionContent [showCloseIcon]="true" (onShow)="getActionFormValues()">
+  <div *ngIf="selectedAction" class="base-padding" style="min-width:700px">
+    <div *ngIf="showActionSection">
+      <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
+      <div class="popover__body">
+        <div class="responsive-table half-margin-bottom">
+          <table class="table table--nostripes actionPop">
+            <thead>
+              <tr>
+                <th>Offer Name </th>
+                <th>Action Title </th>
+                <th>Offer Owner </th>
+                <th>Due Date </th>
+                <th>Action Completion Phase </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{selectedAction.offerName}}</td>
+                <td>{{selectedAction.actiontTitle}}</td>
+                <td>{{selectedAction.assigneeId}}</td>
+                <td>{{selectedAction.dueDate | date:'dd-MMM-yyyy'}}</td>
+                <td>{{selectedAction.milestone}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h5>Action Description</h5>
+        <p>{{selectedAction.actionDesc}}</p>
+        <button class="btn btn--secondary " [routerLink]="['/offerDetailView',selectedAction.offerId, selectedAction.caseId]">
+          View Offer
+        </button>
+      </div>
+      <div class="popover__footer">
+        <div *ngIf="selectedAction.type == 'Manual Action'">
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="popActionContent.hide($event)">Complete</button>
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="popActionContent.hide($event)">Provide
+            Feedback</button>
+        </div>
+        <div *ngIf="selectedAction.type == 'Strategy Review'">
+          <button class="btn btn--primary base-margin-top" (click)="doNotApprove()">
+            Do Not Approve
+          </button>
+          <button class="btn btn--primary base-margin-top" (click)="conditionalApprove()">
+            Conditional Approval
+          </button>
+          <button class="btn btn--primary base-margin-top" (click)="approve()">
+            Approve
+          </button>
+        </div>
+      </div>
+    </div>
+    <section *ngIf="showDoNotApproveSection">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card__header">
+            <h5 class="card__title">Add a Reason for Not Approving</h5>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <form autoComplete="off" #createActionForm="ngForm">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <label for="action">ADD A COMMENT</label>
+                    <input id="commentName" type="text" class="form-control" name="commentName" [(ngModel)]="commentValue"
+                      required ngModel #titleName="ngModel">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5 class="card__title">Create an Action Item</h5>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <label for="action">ACTION TITLE</label>
+                    <input id="titleName" type="text" class="form-control" name="titleName" [(ngModel)]="titleValue"
+                      required ngModel #titleName="ngModel">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <label for="action">ACTION DESCRIPTION</label>
+                    <input id="descriptionName" type="text" class="form-control" name="descriptionName" [(ngModel)]="descriptionValue"
+                      required ngModel #descriptionName="ngModel">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text select">
+                    <label for="functionName">MILESTONE</label>
+                    <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
+                      required ngModel #milestoneName="ngModel">
+                      <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
+                        {{milestone.subMilestone}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <div class="form-group__text select">
+                      <label for="functionName">SELECT FUNCTION</label>
+                      <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
+                        ngModel required>
+                        <option *ngFor="let function of functionList" [value]="function">
+                          {{function}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <div class="form-group__text select">
+                      <label for="functionName">ASSIGNEE</label>
+                      <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
+                        required ngModel>
+                        <option *ngFor="let assignee of assigneeList" [value]="assignee">
+                          {{assignee}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group label--floated input--icon half-margin-bottom">
+                  <label for="dueDate">DUE DATE</label>
+                  <div class="form-group__text">
+                    <!-- <input type="date" name="dueDateName" class="form-control" [(ngModel)]="dueDateValue" required
+                      ngModel #dueDateName="ngModel"> -->
+                    <p-calendar [(ngModel)]="dateValue" [minDate]="minDate" name="dueDateName" class="form-control"
+                      [(ngModel)]="dueDateValue" required ngModel #dueDateName="ngModel"></p-calendar>
+                    <!-- <button type="button" class="link" tabindex="-1">
+                      <span class="icon-month"></span>
+                    </button> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <button class="btn btn--secondary" (click)="popActionContent.hide($event)">Cancel</button>
+                <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createNotAndConditionalAction(popActionContent)">Create
+                  an Action</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section *ngIf="showConditionalApprovalSection">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right">
+            <span class="icon-close" (click)="popActionContent.hide($event)"></span>
+          </div>
+          <div class="card__header">
+            <h5 class="card__title">Conditional Approval</h5>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <form autoComplete="off" #createActionForm="ngForm">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <label for="action">ADD A COMMENT</label>
+                    <input id="commentName" type="text" class="form-control" name="commentName" [(ngModel)]="commentValue"
+                      required ngModel #titleName="ngModel">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5 class="card__title">Create an Action Item</h5>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <label for="action">ACTION TITLE</label>
+                    <input id="titleName" type="text" class="form-control" name="titleName" [(ngModel)]="titleValue"
+                      required ngModel #titleName="ngModel">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <label for="action">ACTION DESCRIPTION</label>
+                    <input id="descriptionName" type="text" class="form-control" name="descriptionName" [(ngModel)]="descriptionValue"
+                      required ngModel #descriptionName="ngModel">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text select">
+                    <label for="functionName">MILESTONE</label>
+                    <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
+                      required ngModel #milestoneName="ngModel">
+                      <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
+                        {{milestone.subMilestone}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <div class="form-group__text select">
+                      <label for="functionName">SELECT FUNCTION</label>
+                      <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
+                        ngModel required>
+                        <option *ngFor="let function of functionList" [value]="function">
+                          {{function}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <div class="form-group__text select">
+                      <label for="functionName">ASSIGNEE</label>
+                      <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
+                        required ngModel>
+                        <option *ngFor="let assignee of assigneeList" [value]="assignee">
+                          {{assignee}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group label--floated input--icon half-margin-bottom">
+                  <label for="dueDate">DUE DATE</label>
+                  <div class="form-group__text">
+                    <p-calendar name="dueDateName" class="form-control" [minDate]="minDate" [(ngModel)]="dueDateValue"
+                      required ngModel #dueDateName="ngModel"></p-calendar>
+                    <button type="button" class="link" tabindex="-1">
+                      <!-- <span class="icon-month"></span> -->
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <button class="btn btn--secondary" (click)="popActionContent.hide($event)">Cancel</button>
+                <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createNotAndConditionalAction(popActionContent)">Create
+                  an Action</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section *ngIf="showApproveSection">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right">
+            <span class="icon-close" (click)="popActionContent.hide($event)"></span>
+          </div>
+          <div class="card__header">
+            <h5 class="card__title">Add Comment</h5>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <form autoComplete="off" #createActionApproveForm="ngForm">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group half-margin-bottom">
+                  <div class="form-group__text">
+                    <label for="action">ADD A COMMENT</label>
+                    <input id="commentName" type="text" class="form-control" name="commentName" [(ngModel)]="commentValue"
+                      required ngModel #titleName="ngModel">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <button class="btn btn--secondary" (click)="popActionContent.hide($event)">Cancel</button>
+                <button class="btn btn--primary" [disabled]="!createActionApproveForm.valid" (click)="createApproveAction(popActionContent)">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</p-overlayPanel>

@@ -12,9 +12,13 @@
                   </li>
                   <li> <span>On Hold/Cancel</span>
                       <ul class="panel--indigo">
-                              <li (click)='showOppupFunc("hold")'><span>On Hold</span>
+                              <li                          
+                              [ngClass]="{'disable-item': holdStatusValid !== true}"
+                              (click)='showOppupFunc("hold")'><span>On Hold</span>
                               </li>
-                              <li (click)='showOppupFunc("cancel")'><span>Cancel</span>
+                              <li 
+                              [ngClass]="{'disable-item': cancelStatusValid !== true}"
+                              (click)='showOppupFunc("cancel")'><span>Cancel</span>
                               </li>
                        </ul>
                   </li>

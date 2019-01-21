@@ -26,6 +26,9 @@ export class MenuBarComponent implements OnInit {
     itemShow: Object = {};
     navigateHash: Object = {};
     currentOfferId: String = '';
+    holdStatusValid = true;
+    cancelStatusValid = true;
+
 
     constructor(private menuBarService: MenuBarService,
         private userService: UserService,
@@ -95,16 +98,18 @@ export class MenuBarComponent implements OnInit {
     }
 
     showOppupFunc(ptype) {
-
+        if ((ptype === 'hold' && this.holdStatusValid === true) || (ptype === 'cancel' && this.cancelStatusValid === true)) {
             this.showPopup = true;
             this.popupType = ptype;
-
+        }
     }
 
     closePopup(message) {
         if (message != null && message !== '') {
            let emailNotificationData = {};
             if (message === 'hold') {
+                this.holdStatusValid = false;
+                this.cancelStatusValid = false;
                 let emailSubject = `[${this.offerName}]([${this.offerId}]) has been on hold by [${this.userService.getUserId()}]`;
                 let emailBody = `Hello,
                 [${this.offerName}]([${this.offerId}]) has been on hold by [${this.userService.getUserId()}].
@@ -123,10 +128,11 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
-
                 });
             }
             if (message === 'cancel') {
+                this.holdStatusValid = false;
+                this.cancelStatusValid = false;
                 let emailSubject = `[${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}]`;
                 let emailBody = `Hello,
                 [${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}].
@@ -145,6 +151,7 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                  
 
                 });
             }

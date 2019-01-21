@@ -40,6 +40,8 @@ export class MmAssesmentComponent implements OnInit {
   ownerName;
   setFlag;
   backdropCustom;
+  proceedButtonStatusValid = false;
+  backbuttonStatusValid = true;
 
   constructor(private router: Router,
     private sharedService: SharedService,
@@ -342,6 +344,7 @@ export class MmAssesmentComponent implements OnInit {
 
 
       this.monetizationModelService.toNextSetp(postData).subscribe(data => {
+        this.proceedButtonStatusValid = true;
         if (data['mmMapperStatus'] === 'Aligned') {
           this.message = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`, mmModel: data['mmModel'] };
         } else if (data['mmMapperStatus'] === 'Partially Aligned') {
@@ -431,8 +434,12 @@ export class MmAssesmentComponent implements OnInit {
 
     if (message != null && message !== '') {
       if (message === 'hold') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = { contentHead: '', content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
       } else if (message === 'cancel') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = { contentHead: '', content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
       }
     }

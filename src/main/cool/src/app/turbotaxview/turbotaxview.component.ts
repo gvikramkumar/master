@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { TurbotaxService } from '../services/turbotax.service';
@@ -8,7 +8,7 @@ import { MenuBarService } from '../services/menu-bar.service'
     templateUrl: './turbotaxview.component.html',
     styleUrls: ['./turbotaxview.component.css']
 })
-export class TurbotaxviewComponent implements OnInit {
+export class TurbotaxviewComponent implements OnInit, OnChanges {
     @Input() caseId: string
 
     public mStoneCntInAllPhases: any[] = ['ideate', 'plan', 'execute', 'launch'];
@@ -30,7 +30,10 @@ export class TurbotaxviewComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
+        this.init(this.caseId);
+    }
+    private init(caseId) {
+        this.menuBarService.getRubboTaxMenu(caseId).subscribe(data => {
             this.offerPhaseDetailsList = data;
             this.ideateCount = data['ideate'].length;
             this.planCount = data['plan'].length;
@@ -39,17 +42,27 @@ export class TurbotaxviewComponent implements OnInit {
                     this.ideateCompletedCount = this.ideateCompletedCount + 1;
                 }
             });
-
             data['plan'].forEach(element => {
                 if (element.status === 'Completed') {
                     this.planCompletedCount = this.ideateCompletedCount + 1;
                 }
             });
-        })
-
-        this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(data => {
+        });
+        this.offerPhaseService.getCurrentOfferPhaseInfo(caseId).subscribe(data => {
             this.processCurrentPhaseInfo(data);
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        const caseId: SimpleChange = changes.caseId;
+        this.offerPhaseDetailsList = null;
+        this.ideateCount = null;
+        this.planCount = null;
+        this.ideateCompletedCount = 0;
+        this.planCompletedCount = 0;
+        this.mileStoneStatus = [];
+        this.phaseProcessingCompleted = false;
+        this.init(caseId.currentValue);
     }
 
     processCurrentPhaseInfo(phaseInfo) {

@@ -10,6 +10,7 @@ import { UserService } from '../services/user.service';
 import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import { ConfigurationService } from '../services/configuration.service';
 import * as moment from 'moment';
 import { getUrlScheme, createOfflineCompileUrlResolver } from '@angular/compiler';
 
@@ -55,7 +56,7 @@ export class CreateOfferCoolComponent implements OnInit {
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private _location: Location) {
+    private _location: Location,) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       console.log("offerId", this.offerId);
@@ -70,7 +71,6 @@ export class CreateOfferCoolComponent implements OnInit {
             .then(() => {
               this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList;
             })
-
           this.secondaryBusinessUnitsValue = offerDetailRes.secondaryBUList;
           this.getSecondaryBusinessEntityPromise(offerDetailRes.secondaryBUList)
             .then(() => {
@@ -84,35 +84,65 @@ export class CreateOfferCoolComponent implements OnInit {
       }
     });
 
-    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      this.primaryBusinessUnitList = <any>data;
-      const primaryBuArry = [];
-      this.primaryBusinessUnitList.businessUnits.forEach(element => {
-        primaryBuArry.push({ label: element, value: element });
-      });
-      this.primaryBusinessUnits = primaryBuArry;
-    });
+//Lulu's change GET PRIMARY AND SECONDARY BE
+this.createOfferService.getDistinctBE().subscribe(data => {
+  const primaryBeArry = [];
+  const dataArray = data as Array<any>;
+  dataArray.forEach(element => {
+    if (element['BE'] !== null) {
+      primaryBeArry.push({ label: element['BE'], value: element['BE'] });
+    }
+  });
+  this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
+  this.secondaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');;
+});
 
-    this.createOfferService.getSecondaryBusinessUnit().subscribe(data => {
-      this.secondaryBusinessUnitList = <any>data;
-      const secondaryBuArry = [];
-      this.secondaryBusinessUnitList.forEach(element => {
-        secondaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
-      });
-      this.secondaryBusinessUnits = secondaryBuArry;
-    });
 
-    this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['id'];
-    });
+// lulu's change GET SECONDARY BU
+this.createOfferService.getDistincBU().subscribe(data => {
+  const secondaryBuArry = [];
+  const dataArray = data as Array<any>;
+  dataArray.forEach(element => {
+    if (element['BUSINESS_UNIT'] !== null) {
+      secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
+    }
+  });
+  this.secondaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
+});
+
+    
+// GET PRIMARY BU
+    // this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+    //   this.primaryBusinessUnitList = <any>data;
+    //   const primaryBuArry = [];
+    //   this.primaryBusinessUnitList.businessUnits.forEach(element => {
+    //     primaryBuArry.push({ label: element, value: element });
+    //   });
+    //   this.primaryBusinessUnits = primaryBuArry;
+    // });
+// GET SECOND BU
+    // this.createOfferService.getSecondaryBusinessUnit().subscribe(data => {
+    //   this.secondaryBusinessUnitList = <any>data;
+    //   const secondaryBuArry = [];
+    //   this.secondaryBusinessUnitList.forEach(element => {
+    //     secondaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
+    //   });
+    //   this.secondaryBusinessUnits = secondaryBuArry;
+    // });
+
+    // this.activatedRoute.params.subscribe(params => {
+    //   this.offerId = params['id'];
+    // });
   }
+
+
 
   removeDuplicates(myArr, prop) {
     return myArr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
   }
-
+// GET SECOND BE
   getSecondaryBusinessEntity(event) {
     this.getSecondaryBusinessEntityPromise(event);
   }
@@ -131,14 +161,37 @@ export class CreateOfferCoolComponent implements OnInit {
     });
   }
 
+  // Lulu's change on Get Primary BU when primary BE changed 
+  getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
+    this.getPrimaryBusinessUnitPromise(event);
+  }
+  getPrimaryBusinessUnitPromise(event) {
+    return new Promise((resolve, reject) => {
+      this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
+        .subscribe(data => {
+          const primaryBuArry = [];
+          const dataArray = data as Array<any>;
+          dataArray.forEach(element => {
+            if (element.BUSINESS_UNIT !== null) {
+              primaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
+            }
+          });
+          this.primaryBusinessUnits = this.removeDuplicates(primaryBuArry, 'label');
+          resolve();
+        });
+    });
+  }
+
+// GET PRIMARY BE
   getPrimaryBusinessEntity(event) {
     if (event.toString() === 'All') {
       this.userSelectedAllUnits = true;
     }
-    this.getPrimaryBusinessEntityPromise(event);
+    this.getPrimaryBusinessEntityPromise(event);  
 
   }
   getPrimaryBusinessEntityPromise(event) {
+
     return new Promise((resolve, reject) => {
       this.createOfferService.getPrimaryBusinessEntity(event.toString())
         .subscribe(data => {
@@ -161,6 +214,7 @@ export class CreateOfferCoolComponent implements OnInit {
     this.router.navigate(['/mmassesment', this.offerId]);
   }
 
+
   ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
 
@@ -170,7 +224,6 @@ export class CreateOfferCoolComponent implements OnInit {
 
   goBack() {
     this._location.back();
-   
   }
 
   proceedToOfferBuilder() {

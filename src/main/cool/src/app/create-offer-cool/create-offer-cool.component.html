@@ -58,20 +58,7 @@
                     </div>
                   </div>
                   <div class="row base-margin-top">
-                    <div class="col-md-6">
-                      <div class="form-group half-margin-bottom">
-                        <label for="selectedValue">Primary Business Unit</label>
-                        <p-multiSelect
-                          id="selectedBuValue"
-                          class="form-control"
-                          name="primaryBUList"
-                          [options]="primaryBusinessUnits"
-                          (onChange)="getPrimaryBusinessEntity($event.value)"
-                          [(ngModel)]="primaryBusinessUnitsValue"
-                          [style]="{'width':'100%'}">
-                        </p-multiSelect>
-                      </div>
-                    </div>
+                     <!-- <BE Part> -->
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
                         <label for="selectedBeValue">Primary Business Entity</label>
@@ -80,27 +67,30 @@
                         class="form-control"
                         name="primaryBEList"
                         [options]="primaryBusinessEntities"
+                        (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)"
                         [(ngModel)]="primaryBusinessEntitiesValue"
                         [style]="{'width':'100%'}">
                       </p-multiSelect>
-                      </div>
+                      </div> 
                     </div>
+                    <!-- <BU part> -->
+                        <div class="col-md-6">
+                            <div class="form-group half-margin-bottom">
+                              <label for="selectedValue">Primary Business Unit</label>
+                              <p-multiSelect
+                                id="selectedBuValue"
+                                class="form-control"
+                                name="primaryBUList"
+                                [options]="primaryBusinessUnits"
+                                [(ngModel)]="primaryBusinessUnitsValue"
+                                [style]="{'width':'100%'}">
+                              </p-multiSelect>
+                            </div>
+                          </div>
+
                   </div>
                   <div class="row base-margin-top">
-                    <div class="col-md-6">
-                      <div class="form-group half-margin-bottom">
-                        <label for="selectedSValue">Secondary Business Unit</label>
-                        <p-multiSelect
-                          id="selectedSValue"
-                          class="form-control"
-                          name="secondaryBUList"
-                          [options]="secondaryBusinessUnits"
-                          (onChange)="getSecondaryBusinessEntity($event.value)"
-                          [(ngModel)]="secondaryBusinessUnitsValue"
-                          [style]="{'width':'100%'}">
-                        </p-multiSelect>
-                      </div>
-                    </div>
+                    <!-- <Second BE> -->
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
                         <label for="selectedSeValue">Secondary Business Entity</label>
@@ -114,6 +104,21 @@
                         </p-multiSelect>
                       </div>
                     </div>
+
+                       <!-- <Second BU> -->
+                          <div class="col-md-6">
+                              <div class="form-group half-margin-bottom">
+                                <label for="selectedSValue">Secondary Business Unit</label>
+                                <p-multiSelect
+                                  id="selectedSValue"
+                                  class="form-control"
+                                  name="secondaryBUList"
+                                  [options]="secondaryBusinessUnits"
+                                  [(ngModel)]="secondaryBusinessUnitsValue"
+                                  [style]="{'width':'100%'}">
+                                </p-multiSelect>
+                              </div>
+                            </div>
                   </div>
                   <div class="row">
                   <div class="col-md-6">

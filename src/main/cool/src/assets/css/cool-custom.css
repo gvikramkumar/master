@@ -420,6 +420,7 @@ span.icon-close {
 
 .cui table .ui-widget-content span.ui-cell-data {
   word-break: break-word;
+  white-space: pre-wrap;
 }
 
 @media (min-width: 1200px) {
