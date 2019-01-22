@@ -254,7 +254,7 @@
           </div>
           <div class="form-group-check form-group-inline-30">
             <fin-checkbox label="Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
-                          [inline]="true"></fin-checkbox>
+                          (change)="filterGroupingSubmeasuresIfService()" [inline]="true"></fin-checkbox>
           </div>
           <div class="form-group-check form-group-inline-30">
             <fin-checkbox label="Pass Through" [(model)]="sm.indicators.passThrough" trueVal="Y" falseVal="N"

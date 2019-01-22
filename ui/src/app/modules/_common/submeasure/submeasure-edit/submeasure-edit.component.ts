@@ -46,6 +46,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   orgSubmeasure: Submeasure;
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
+  groupingSubmeasuresAll = [];
   groupingSubmeasures = [];
   sources: Source[];
   measureSources: Source[] = [];
@@ -364,7 +365,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
     this.submeasureService.callMethod('getGroupingSubmeasures', {measureId: this.sm.measureId})
       .subscribe(groupingSubmeasures => {
-        this.groupingSubmeasures = groupingSubmeasures;
+        this.groupingSubmeasuresAll = groupingSubmeasures;
+        this.filterGroupingSubmeasuresIfService();
+
         if (!init) {
           this.sm.groupingSubmeasureId = undefined;
         } else {
@@ -391,6 +394,19 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
 
     this.pnlNodes = this.pnlNodesAll.filter(x => x.measure_id === this.sm.measureId);
+  }
+
+  isService() {
+    return this.sm.indicators.service === 'Y';
+  }
+
+  filterGroupingSubmeasuresIfService() {
+    const sms = _.clone(this.groupingSubmeasuresAll);
+    if (this.isService()) {
+      this.groupingSubmeasures = sms.filter(sm => sm.indicators.service === 'Y');
+    } else {
+      this.groupingSubmeasures = sms;
+    }
   }
 
   updateReportingLevel3() {
