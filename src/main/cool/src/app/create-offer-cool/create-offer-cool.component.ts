@@ -42,7 +42,7 @@ export class CreateOfferCoolComponent implements OnInit {
   offerNameValue: string;
   offerDescValue: string;
   primaryBusinessUnitsValue: string;
-  primaryBusinessEntitiesValue: string;
+  primaryBusinessEntitiesValue: string[];
   secondaryBusinessUnitsValue: string;
   secondaryBusinessEntitiesValue: string;
   strategyReviewDateValue: string;
@@ -111,28 +111,18 @@ this.createOfferService.getDistincBU().subscribe(data => {
 });
 
     
-// GET PRIMARY BU
-    // this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-    //   this.primaryBusinessUnitList = <any>data;
-    //   const primaryBuArry = [];
-    //   this.primaryBusinessUnitList.businessUnits.forEach(element => {
-    //     primaryBuArry.push({ label: element, value: element });
-    //   });
-    //   this.primaryBusinessUnits = primaryBuArry;
-    // });
-// GET SECOND BU
-    // this.createOfferService.getSecondaryBusinessUnit().subscribe(data => {
-    //   this.secondaryBusinessUnitList = <any>data;
-    //   const secondaryBuArry = [];
-    //   this.secondaryBusinessUnitList.forEach(element => {
-    //     secondaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
-    //   });
-    //   this.secondaryBusinessUnits = secondaryBuArry;
-    // });
+    // Fetch Primary BE's assigned through admin page. 
+    // Show this BE's as selected in Primary BE multiselect list in the offer creation page.
+    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+      const primaryBeArray: any[] = [];
+      data.userMappings.forEach(element => {
+        primaryBeArray.push(element.businessEntity);
+      });
+      this.primaryBusinessEntitiesValue = primaryBeArray;
+      // Load primary business units when business entities are selected.
+      this.getPrimaryBusinessUnitBasedOnPrimaryBE(primaryBeArray);
+    });
 
-    // this.activatedRoute.params.subscribe(params => {
-    //   this.offerId = params['id'];
-    // });
   }
 
 

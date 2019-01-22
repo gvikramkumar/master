@@ -5,7 +5,7 @@ export class CreateOffer {
   offerName: string;
   offerDesc: string;
   primaryBUList: string;
-  primaryBEList: string;
+  primaryBEList: string[];
   secondaryBUList: string;
   secondaryBEList: string;
   strategyReviewDate: string;
@@ -21,7 +21,7 @@ export class CreateOffer {
               offerName: string,
               offerDesc: string,
               primaryBUList: string,
-              primaryBEList: string,
+              primaryBEList: string[],
               secondaryBUList: string,
               secondaryBEList: string,
               strategyReviewDate: string,
