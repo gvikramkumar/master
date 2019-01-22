@@ -36,12 +36,14 @@ export class CreateOfferCoolComponent implements OnInit {
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   secondaryBusinessUnits: SelectItem[];
   secondaryBusinessEntities: SelectItem[];
+  secondaryBusinessEntitiesFiltered: SelectItem[];
+  secondaryBusinessUnitsFiltered: SelectItem[];
   minDate: Date;
   primaryBusinessUnits: SelectItem[] = [];
   primaryBusinessEntities: SelectItem[];
   offerNameValue: string;
   offerDescValue: string;
-  primaryBusinessUnitsValue: string;
+  primaryBusinessUnitsValue: string[]=[];
   primaryBusinessEntitiesValue: string;
   secondaryBusinessUnitsValue: string;
   secondaryBusinessEntitiesValue: string;
@@ -91,8 +93,11 @@ this.createOfferService.getDistinctBE().subscribe(data => {
       primaryBeArry.push({ label: element['BE'], value: element['BE'] });
     }
   });
-  this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
-  this.secondaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');;
+  // this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
+  // this.secondaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
+
+  this.primaryBusinessEntities = primaryBeArry;
+  this.secondaryBusinessEntities = primaryBeArry;
 });
 
 
@@ -105,7 +110,8 @@ this.createOfferService.getDistincBU().subscribe(data => {
       secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
     }
   });
-  this.secondaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
+  // this.secondaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
+  this.secondaryBusinessUnits = secondaryBuArry;
 });
 
     // Fetch Primary BE's assigned through admin page. 
@@ -117,12 +123,15 @@ this.createOfferService.getDistincBU().subscribe(data => {
       });
       this.primaryBusinessEntitiesValue = primaryBeArray[0];
       // Load primary business units when business entities are selected.
-      this.getPrimaryBusinessUnitBasedOnPrimaryBE(primaryBeArray);
+      this.getPrimaryBusinessUnitBasedOnPrimaryBE(this.primaryBusinessEntitiesValue);
     });
 
   }
 
-
+  skipSelectedBusinessEntities(selectedPbe) {
+    const tmpBusinessEntities = this.secondaryBusinessEntities;
+    this.secondaryBusinessEntitiesFiltered  = tmpBusinessEntities.filter((obj) => obj.value !== selectedPbe);
+  }
 
   removeDuplicates(myArr, prop) {
     return myArr.filter((obj, pos, arr) => {
@@ -148,6 +157,17 @@ this.createOfferService.getDistincBU().subscribe(data => {
     });
   }
 
+  getSecondaryBusinessUnitsFiltered() {
+    const tmpBusinessUnites = [...this.secondaryBusinessUnits];
+    this.primaryBusinessUnitsValue.forEach(selectedBU => {
+      const index = tmpBusinessUnites.findIndex(o => o.value === selectedBU);
+      if (index !== -1) {
+        tmpBusinessUnites.splice(index, 1);
+      }
+    });
+    this.secondaryBusinessUnitsFiltered = tmpBusinessUnites;
+  }
+
   // Lulu's change on Get Primary BU when primary BE changed 
   getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
     this.primaryBusinessUnitsValue = null;
@@ -165,6 +185,7 @@ this.createOfferService.getDistincBU().subscribe(data => {
             }
           });
           this.primaryBusinessUnits = this.removeDuplicates(primaryBuArry, 'label');
+          this.skipSelectedBusinessEntities(event);
           resolve();
         });
     });
