@@ -14,9 +14,9 @@
                     optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
         <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name"
                    [notInList]="submeasureNames" notInListMessage="Sub-Measure name already exists" [required]="true" (blur)="updateReportingLevel3()"></fin-input>
-        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" label="Source*" empty="true" [disabled]="!sm.measureId"
+        <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" [label]="!isUnallocatedGroup()?'Source*':'Source'" empty="true" [disabled]="!sm.measureId"
                     optionsKey="name" optionsValue="sourceId" [required]="!isUnallocatedGroup()" (ngModelChange)=sourceChange()></cui-select>
-        <fin-input name="desc" [textarea]="true" [(ngModel)]="sm.desc" label="Description" [rows]="2" [required]="!isUnallocatedGroup()"></fin-input>
+        <fin-input name="desc" [textarea]="true" [(ngModel)]="sm.desc" [label]="!isUnallocatedGroup()?'Description*':'Description'" [rows]="2" [required]="!isUnallocatedGroup()"></fin-input>
       </div>
 
       <div class="col-lg-6 form-group-max-width">
@@ -28,15 +28,21 @@
         </div>
 
         <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes" [required]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()"
-                    label="Sub-Measure Category Type" empty="true" optionsKey="name" optionsValue="value"></cui-select>
+                    [label]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'" empty="true" optionsKey="name" optionsValue="value"></cui-select>
         <div *ngIf="isManualMix()" fxLayout="row" fxLayoutAlign="start start">
           <div class="form-group-text form-group-inline-30">Manual Mix HW/SW:</div>
-          <fin-input name="manualMixHw" label="HW" [(ngModel)]="manualMixHw" [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true" class="hwsw-inputs"></fin-input>
-          <fin-input name="manualMixSw" label="SW" [(ngModel)]="manualMixSw" [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true" class="hwsw-inputs"></fin-input>
+          <fin-input name="manualMixHw" [label]="!isUnallocatedGroup() && !isPassThrough()?'HW*':'HW'" [(ngModel)]="manualMixHw"
+                     [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true" class="hwsw-inputs"></fin-input>
+          <fin-input name="manualMixSw" [label]="!isUnallocatedGroup() && !isPassThrough()?'SW*':'SW'" [(ngModel)]="manualMixSw"
+                     [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true" class="hwsw-inputs"></fin-input>
         </div>
 
-        <cui-select *ngIf="sm.measureId === 3" [disabled]="sm.sourceId !== 2" name="flashCategory" [(ngModel)]="flashCategory" [items]="flashCategories" label="MRAP - Flash Category Id*" empty="true" [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="mrap_category_id" optionsValue="adj_type_id"></cui-select>
-        <cui-select *ngIf="sm.measureId === 1"  [disabled]="sm.sourceId !== 1" name="adjustmentType" [(ngModel)]="adjustmentType" [items]="adjustmentTypes" label="Adjustment Type*" empty="true" [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="rrr_category_id" optionsValue="adj_type_id"></cui-select>
+        <cui-select *ngIf="sm.measureId === 3" [disabled]="sm.sourceId !== 2" name="flashCategory" [(ngModel)]="flashCategory" [items]="flashCategories"
+                    [label]="!isUnallocatedGroup() && !isPassThrough()?'MRAP - Flash Category Id*':'MRAP - Flash Category Id'" empty="true"
+                    [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="mrap_category_id" optionsValue="adj_type_id"></cui-select>
+        <cui-select *ngIf="sm.measureId === 1"  [disabled]="sm.sourceId !== 1" name="adjustmentType" [(ngModel)]="adjustmentType" [items]="adjustmentTypes"
+                    [label]="!isUnallocatedGroup() && !isPassThrough()?'Adjustment Type*':'Adjustment Type'" empty="true"
+                    [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="rrr_category_id" optionsValue="adj_type_id"></cui-select>
 
         <div class="margin-top:15px; height: 0px;">&nbsp;</div>
         <div class="border-outline">
@@ -195,7 +201,8 @@
     <div class="row" style="margin-top:30px;">
       <div class="col-lg-6">
         <fin-input name="startMonth" *ngIf="viewMode" [(ngModel)]="startFiscalMonth" label="Effective Month*"></fin-input>
-        <cui-select *ngIf="!viewMode" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos" label="Effective Month*" empty="true"
+        <cui-select *ngIf="!viewMode" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos"
+                    [label]="!isUnallocatedGroup() && !isPassThrough()?'Effective Month*':'Effective Month'" empty="true"
                     [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
 
         <cui-select name="processingTime" [(ngModel)]="sm.processingTime" [items]="timings" label="Processing Timing" empty="true"
