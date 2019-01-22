@@ -37,12 +37,12 @@ export class CreateOfferCoolComponent implements OnInit {
   secondaryBusinessUnits: SelectItem[];
   secondaryBusinessEntities: SelectItem[];
   minDate: Date;
-  primaryBusinessUnits: SelectItem[];
+  primaryBusinessUnits: SelectItem[] = [];
   primaryBusinessEntities: SelectItem[];
   offerNameValue: string;
   offerDescValue: string;
   primaryBusinessUnitsValue: string;
-  primaryBusinessEntitiesValue: string[];
+  primaryBusinessEntitiesValue: string;
   secondaryBusinessUnitsValue: string;
   secondaryBusinessEntitiesValue: string;
   strategyReviewDateValue: string;
@@ -59,10 +59,8 @@ export class CreateOfferCoolComponent implements OnInit {
     private _location: Location,) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
-      console.log("offerId", this.offerId);
       if (this.offerId) {
         this.offerDetailViewService.offerDetailView(this.offerId).subscribe(offerDetailRes => {
-          console.log("offerDetailView", offerDetailRes);
           this.caseId = offerDetailRes.caseId;
           this.offerNameValue = offerDetailRes.offerName;
           this.offerDescValue = offerDetailRes.offerDesc;
@@ -70,21 +68,21 @@ export class CreateOfferCoolComponent implements OnInit {
           this.getPrimaryBusinessEntityPromise(offerDetailRes.primaryBUList)
             .then(() => {
               this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList;
-            })
+            });
           this.secondaryBusinessUnitsValue = offerDetailRes.secondaryBUList;
           this.getSecondaryBusinessEntityPromise(offerDetailRes.secondaryBUList)
             .then(() => {
               this.secondaryBusinessEntitiesValue = offerDetailRes.secondaryBEList;
-            })
+            });
           this.strategyReviewDateValue = moment(offerDetailRes.strategyReviewDate).format('MM/DD/YYYY');
           this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
           this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
-        })
+        });
       }
     });
 
-//Lulu's change GET PRIMARY AND SECONDARY BE
+// Lulu's change GET PRIMARY AND SECONDARY BE
 this.createOfferService.getDistinctBE().subscribe(data => {
   const primaryBeArry = [];
   const dataArray = data as Array<any>;
@@ -110,7 +108,6 @@ this.createOfferService.getDistincBU().subscribe(data => {
   this.secondaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
 });
 
-    
     // Fetch Primary BE's assigned through admin page. 
     // Show this BE's as selected in Primary BE multiselect list in the offer creation page.
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
@@ -118,7 +115,7 @@ this.createOfferService.getDistincBU().subscribe(data => {
       data.userMappings.forEach(element => {
         primaryBeArray.push(element.businessEntity);
       });
-      this.primaryBusinessEntitiesValue = primaryBeArray;
+      this.primaryBusinessEntitiesValue = primaryBeArray[0];
       // Load primary business units when business entities are selected.
       this.getPrimaryBusinessUnitBasedOnPrimaryBE(primaryBeArray);
     });
@@ -153,6 +150,7 @@ this.createOfferService.getDistincBU().subscribe(data => {
 
   // Lulu's change on Get Primary BU when primary BE changed 
   getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
+    this.primaryBusinessUnitsValue = null;
     this.getPrimaryBusinessUnitPromise(event);
   }
   getPrimaryBusinessUnitPromise(event) {
@@ -177,7 +175,7 @@ this.createOfferService.getDistincBU().subscribe(data => {
     if (event.toString() === 'All') {
       this.userSelectedAllUnits = true;
     }
-    this.getPrimaryBusinessEntityPromise(event);  
+    this.getPrimaryBusinessEntityPromise(event);
 
   }
   getPrimaryBusinessEntityPromise(event) {
@@ -229,13 +227,15 @@ this.createOfferService.getDistincBU().subscribe(data => {
     status.subMilestone = 'Offer Creation';
 
     const offerCreationDate = new Date().toDateString();
+    const selectedPrimaryBe: string [] = [];
+    selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
       offerOwner,
       this.offerNameValue,
       this.offerDescValue,
       this.primaryBusinessUnitsValue,
-      this.primaryBusinessEntitiesValue,
+      selectedPrimaryBe,
       this.secondaryBusinessUnitsValue,
       this.secondaryBusinessEntitiesValue,
       this.strategyReviewDateValue,
@@ -245,16 +245,11 @@ this.createOfferService.getDistincBU().subscribe(data => {
       offerCreatedBy,
       offerCreationDate,
       status);
-    console.log(createoffer);
     if (!this.offerId) {
-      console.log('creating new offer')
       this.createOffer(createoffer);
-    }
-    else {
-      console.log('updating offer')
+    } else {
       this.updateOffer(createoffer);
     }
-
   }
 
   createOffer(createoffer) {
