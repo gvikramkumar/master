@@ -84,6 +84,7 @@
                                 class="form-control"
                                 name="primaryBUList"
                                 [options]="primaryBusinessUnits"
+                                (onPanelHide)="getSecondaryBusinessUnitsFiltered()" 
                                 [(ngModel)]="primaryBusinessUnitsValue"
                                 [style]="{'width':'100%'}"
                                 required>
@@ -101,7 +102,7 @@
                           id="selectedSeValue"
                           class="form-control"
                           name="secondaryBEList"
-                          [options]="secondaryBusinessEntities"
+                          [options]="secondaryBusinessEntitiesFiltered"
                           [(ngModel)]="secondaryBusinessEntitiesValue"
                           [style]="{'width':'100%'}"
                           required>
@@ -117,7 +118,7 @@
                                   id="selectedSValue"
                                   class="form-control"
                                   name="secondaryBUList"
-                                  [options]="secondaryBusinessUnits"
+                                  [options]="secondaryBusinessUnitsFiltered"
                                   [(ngModel)]="secondaryBusinessUnitsValue"
                                   [style]="{'width':'100%'}"
                                   required>

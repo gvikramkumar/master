@@ -4,7 +4,7 @@ export class CreateOffer {
   userId: string;
   offerName: string;
   offerDesc: string;
-  primaryBUList: string;
+  primaryBUList: string[];
   primaryBEList: string[];
   secondaryBUList: string;
   secondaryBEList: string;
@@ -20,7 +20,7 @@ export class CreateOffer {
               offerOwner:string,
               offerName: string,
               offerDesc: string,
-              primaryBUList: string,
+              primaryBUList: string[],
               primaryBEList: string[],
               secondaryBUList: string,
               secondaryBEList: string,
