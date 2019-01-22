@@ -407,12 +407,13 @@ export class StakeholderFullComponent implements OnInit {
    */
   delteSelectedStakeHolders() {
     this.selectedSh.forEach(shs => {
-      this.deleteStakeHolder(shs._id);
+      if (!shs.stakeholderDefaults) {
+        this.deleteStakeHolder(shs._id);
+      }
     });
   }
 
   deleteStakeHolder(stakeHolderId) {
-    console.log(stakeHolderId);
     this.Stakeholders.splice(this.Stakeholders.findIndex(matchesEl), 1);
     function matchesEl(el) {
       return el._id === stakeHolderId
