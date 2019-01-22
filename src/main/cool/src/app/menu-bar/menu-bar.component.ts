@@ -105,7 +105,6 @@ export class MenuBarComponent implements OnInit {
     }
 
     closePopup(message) {
-        debugger;
         if (message != null && message !== '') {
            let emailNotificationData = {};
             if (message === 'hold') {

@@ -28,6 +28,7 @@ export class StakeholderFullComponent implements OnInit {
   collaboratorsList;
   selectedCollabs;
   currentOfferId;
+  offerName;
   temporaryList;
   lists;
   message = {};
@@ -85,7 +86,6 @@ export class StakeholderFullComponent implements OnInit {
     });
   }
   ngOnInit() {
-    debugger;
     this.message = {
       contentHead: 'Great Work!',
       content: 'Stakeholders message.',
@@ -100,8 +100,10 @@ export class StakeholderFullComponent implements OnInit {
       this.funcionalRoleList = data;
     });
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+  
       this.firstData = data;
       this.data = this.firstData.stakeholders;
+      this.offerName = this.firstData['offerName'];
       this.processStakeHolderData(this.data);
     });
 
@@ -407,13 +409,12 @@ export class StakeholderFullComponent implements OnInit {
    */
   delteSelectedStakeHolders() {
     this.selectedSh.forEach(shs => {
-      if (!shs.stakeholderDefaults) {
-        this.deleteStakeHolder(shs._id);
-      }
+      this.deleteStakeHolder(shs._id);
     });
   }
 
   deleteStakeHolder(stakeHolderId) {
+    console.log(stakeHolderId);
     this.Stakeholders.splice(this.Stakeholders.findIndex(matchesEl), 1);
     function matchesEl(el) {
       return el._id === stakeHolderId
