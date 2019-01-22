@@ -147,7 +147,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
       }
-      this.stakeData = this.stakeHolderInfo;
+      this.stakeData = this.stakeHolderInfo; 
 
       for (const auth in this.stakeData) {
         if (auth === 'Co-Owner' || auth === 'Owner') {

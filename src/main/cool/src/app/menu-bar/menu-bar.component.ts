@@ -119,7 +119,11 @@ export class MenuBarComponent implements OnInit {
                 let stakeHolders = [];
                 for (let prop in this.stakeData) {
                     this.stakeData[prop].forEach(stakeholder => {
-                        stakeHolders.push(stakeholder['emailId']);
+                        if (stakeholder['emailId'] != null) {
+                            stakeHolders.push(stakeholder['emailId']);
+                        } else if (stakeholder['email'] != null) {
+                            stakeHolders.push(stakeholder['email']);
+                        }
                     });
                 }
                 emailNotificationData = {
@@ -142,7 +146,11 @@ export class MenuBarComponent implements OnInit {
                 let stakeHolders = [];
                 for (let prop in this.stakeData) {
                     this.stakeData[prop].forEach(stakeholder => {
-                        stakeHolders.push(stakeholder['emailId']);
+                        if (stakeholder['emailId'] != null) {
+                            stakeHolders.push(stakeholder['emailId']);
+                        } else if (stakeholder['email'] != null) {
+                            stakeHolders.push(stakeholder['email']);
+                        }
                     });
                 }
                 emailNotificationData = {

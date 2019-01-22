@@ -28,6 +28,7 @@ export class StakeholderFullComponent implements OnInit {
   collaboratorsList;
   selectedCollabs;
   currentOfferId;
+  offerName;
   temporaryList;
   lists;
   message = {};
@@ -85,7 +86,6 @@ export class StakeholderFullComponent implements OnInit {
     });
   }
   ngOnInit() {
-
     this.message = {
       contentHead: 'Great Work!',
       content: 'Stakeholders message.',
@@ -100,8 +100,10 @@ export class StakeholderFullComponent implements OnInit {
       this.funcionalRoleList = data;
     });
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+  
       this.firstData = data;
       this.data = this.firstData.stakeholders;
+      this.offerName = this.firstData['offerName'];
       this.processStakeHolderData(this.data);
     });
 
