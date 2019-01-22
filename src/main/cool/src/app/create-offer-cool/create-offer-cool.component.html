@@ -61,16 +61,18 @@
                      <!-- <BE Part> -->
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
-                        <label for="selectedBeValue">Primary Business Entity</label>
-                        <p-multiSelect
-                        id="selectedBeValue"
-                        class="form-control"
-                        name="primaryBEList"
-                        [options]="primaryBusinessEntities"
-                        (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)"
-                        [(ngModel)]="primaryBusinessEntitiesValue"
-                        [style]="{'width':'100%'}">
-                      </p-multiSelect>
+                        <label for="selectedBeValue">Primary Business Entity</label>                   
+                          <p-dropdown 
+                            id="selectedBeValue" 
+                            class="form-control" 
+                            name="primaryBEList" 
+                            [options]="primaryBusinessEntities"
+                            (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)" 
+                            [(ngModel)]="primaryBusinessEntitiesValue" 
+                            [style]="{'width':'100%'}"
+                            filter="true" 
+                            required>
+                          </p-dropdown>
                       </div> 
                     </div>
                     <!-- <BU part> -->
@@ -83,7 +85,8 @@
                                 name="primaryBUList"
                                 [options]="primaryBusinessUnits"
                                 [(ngModel)]="primaryBusinessUnitsValue"
-                                [style]="{'width':'100%'}">
+                                [style]="{'width':'100%'}"
+                                required>
                               </p-multiSelect>
                             </div>
                           </div>
@@ -100,7 +103,8 @@
                           name="secondaryBEList"
                           [options]="secondaryBusinessEntities"
                           [(ngModel)]="secondaryBusinessEntitiesValue"
-                          [style]="{'width':'100%'}">
+                          [style]="{'width':'100%'}"
+                          required>
                         </p-multiSelect>
                       </div>
                     </div>
@@ -115,7 +119,8 @@
                                   name="secondaryBUList"
                                   [options]="secondaryBusinessUnits"
                                   [(ngModel)]="secondaryBusinessUnitsValue"
-                                  [style]="{'width':'100%'}">
+                                  [style]="{'width':'100%'}"
+                                  required>
                                 </p-multiSelect>
                               </div>
                             </div>
