@@ -85,7 +85,7 @@ export class StakeholderFullComponent implements OnInit {
     });
   }
   ngOnInit() {
-
+    debugger;
     this.message = {
       contentHead: 'Great Work!',
       content: 'Stakeholders message.',

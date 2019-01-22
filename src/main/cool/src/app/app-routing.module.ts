@@ -87,11 +87,11 @@ const routes: Routes = [
     path: 'offerSolutioning',
     component: OfferSolutioningComponent
   },
-  {
-    path: 'access_token',
-    redirectTo: '/dashboard',
-    pathMatch: 'full'
-  },
+  // {
+  //   path: 'access_token',
+  //   redirectTo: '/dashboard',
+  //   pathMatch: 'full'
+  // },
   {
     path: '',
     redirectTo: '/dashboard',
