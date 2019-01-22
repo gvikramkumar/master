@@ -50,6 +50,18 @@ export default class PgLookupRepo {
       }));
   }
 
+  getSubmeasurePNLNodes (req) {
+    const sql = `
+            select 
+            distinct sm.measure_id::integer, ms.measure_name, sm.pnlnode_grouping 
+            from fpadfa.dfa_sub_measure sm, fpadfa.dfa_measure ms 
+            where sm.module_id=${Number(req.query.moduleId)} and ms.measure_id=sm.measure_id and sm.pnlnode_grouping is not null
+            order by sm.measure_id::integer, ms.measure_name, sm.pnlnode_grouping;
+          `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+
   getProductHierarchyReport() {
     return pgc.pgdb.query(`
             select 

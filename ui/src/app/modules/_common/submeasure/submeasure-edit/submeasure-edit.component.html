@@ -47,13 +47,13 @@
                               [disabled]="!!sm.groupingSubmeasureId" (modelChange)="clearAllocationRequired()"></fin-checkbox>
               </div>
               <div class="col-6">
-                <fin-checkbox *ngIf="this.sm.indicators.groupFlag === 'Y'" label="Allocation Required" [(model)]="sm.indicators.allocationRequired" trueVal="Y" falseVal="N"
+                <fin-checkbox *ngIf="isGroupingParent()" label="Allocation Required" [(model)]="sm.indicators.allocationRequired" trueVal="Y" falseVal="N"
                               [inline]="true"></fin-checkbox>
               </div>
             </div>
             <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
                         label="Grouping Sub-Measure" empty="true" optionsKey="name"
-                        optionsValue="submeasureKey" [disabled]="isUnallocatedGroup()"></cui-select>
+                        optionsValue="submeasureKey" [disabled]="isGroupingParent()"></cui-select>
           </div>
         </div>
       </div>
@@ -201,8 +201,8 @@
         <cui-select name="processingTime" [(ngModel)]="sm.processingTime" [items]="timings" label="Processing Timing" empty="true"
                     optionsKey="name" optionsValue="name"></cui-select>
 
-        <cui-select name="pnlnodeGrouping" [(ngModel)]="sm.pnlnodeGrouping" [items]="groupings" label="P&L Node Grouping" empty="true"
-                    optionsKey="name" optionsValue="value"></cui-select>
+        <cui-select name="pnlnodeGrouping" [(ngModel)]="sm.pnlnodeGrouping" [items]="pnlNodes" label="P&L Node Grouping" empty="true"
+                    optionsKey="pnlnode_grouping" optionsValue="pnlnode_grouping"></cui-select>
       </div>
       <div class="col-lg-6">
         <fin-input name="reportingLevel{{level}}" type="text" *ngFor="let level of [1,2,3]; let idx=index;"
