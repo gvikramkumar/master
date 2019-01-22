@@ -409,7 +409,9 @@ export class StakeholderFullComponent implements OnInit {
    */
   delteSelectedStakeHolders() {
     this.selectedSh.forEach(shs => {
-      this.deleteStakeHolder(shs._id);
+      if (!shs.stakeholderDefaults) {
+        this.deleteStakeHolder(shs._id);
+      }
     });
   }
 
