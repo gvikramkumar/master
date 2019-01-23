@@ -613,6 +613,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.arrRules.forEach((x, idx) => this.arrRules[idx] = this.sm.rules[idx]);
     this.arrRules = this.arrRules.filter(r => !!r);
     this.sm.rules = _.cloneDeep(this.arrRules);
+    if (this.arrRules.length === 0) {
+      this.arrRules[0] = '';
+    }
     if (this.hasFlashCategory()) {
       this.sm.sourceSystemAdjTypeId = this.flashCategory;
     } else if (this.hasAdjustmentType()) {
