@@ -5,14 +5,11 @@ import { CreateOfferService } from '../services/create-offer.service';
 import { NgForm } from '@angular/forms';
 import { CreateOffer } from './create-offer';
 import { SelectItem } from 'primeng/api';
-import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { UserService } from '../services/user.service';
 import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
-import { ConfigurationService } from '../services/configuration.service';
 import * as moment from 'moment';
-import { getUrlScheme, createOfflineCompileUrlResolver } from '@angular/compiler';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -45,7 +42,7 @@ export class CreateOfferCoolComponent implements OnInit {
   offerDescValue: string;
   primaryBusinessUnitsValue: string[]=[];
   primaryBusinessEntitiesValue: string;
-  secondaryBusinessUnitsValue: string;
+  secondaryBusinessUnitsValue: string[]=[];
   secondaryBusinessEntitiesValue: string;
   strategyReviewDateValue: string;
   designReviewDateValue: string;
@@ -53,6 +50,7 @@ export class CreateOfferCoolComponent implements OnInit {
   expectedLaunchDateValue: string;
   caseId: string;
   userSelectedAllUnits;
+  secondaryBUbackup:SelectItem[] = [];
 
   constructor(private createOfferService: CreateOfferService,
     private offerDetailViewService: OfferDetailViewService,
@@ -93,8 +91,6 @@ this.createOfferService.getDistinctBE().subscribe(data => {
       primaryBeArry.push({ label: element['BE'], value: element['BE'] });
     }
   });
-  // this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
-  // this.secondaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
 
   this.primaryBusinessEntities = primaryBeArry;
   this.secondaryBusinessEntities = primaryBeArry;
@@ -110,23 +106,21 @@ this.createOfferService.getDistincBU().subscribe(data => {
       secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
     }
   });
-  // this.secondaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
   this.secondaryBusinessUnits = secondaryBuArry;
 });
 
-    // Fetch Primary BE's assigned through admin page. 
-    // Show this BE's as selected in Primary BE multiselect list in the offer creation page.
-    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      const primaryBeArray: any[] = [];
-      data.userMappings.forEach(element => {
-        primaryBeArray.push(element.businessEntity);
-      });
-      this.primaryBusinessEntitiesValue = primaryBeArray[0];
-      // Load primary business units when business entities are selected.
-      this.getPrimaryBusinessUnitBasedOnPrimaryBE(this.primaryBusinessEntitiesValue);
-    });
-
-  }
+// Fetch Primary BE's assigned through admin page. 
+// Show this BE's as selected in Primary BE multiselect list in the offer creation page.
+this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+  const primaryBeArray: any[] = [];
+  data.userMappings.forEach(element => {
+    primaryBeArray.push(element.businessEntity);
+  });
+  this.primaryBusinessEntitiesValue = primaryBeArray[0];
+  // Load primary business units when business entities are selected.
+  this.getPrimaryBusinessUnitBasedOnPrimaryBE(this.primaryBusinessEntitiesValue);
+  });
+}
 
   skipSelectedBusinessEntities(selectedPbe) {
     const tmpBusinessEntities = this.secondaryBusinessEntities;
@@ -138,10 +132,12 @@ this.createOfferService.getDistincBU().subscribe(data => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
   }
-// GET SECOND BE
+
+  // GET SECOND BE
   getSecondaryBusinessEntity(event) {
     this.getSecondaryBusinessEntityPromise(event);
   }
+
   getSecondaryBusinessEntityPromise(event) {
     return new Promise((resolve, reject) => {
       this.createOfferService.getSecondaryBusinessEntity(event.toString())
@@ -158,22 +154,30 @@ this.createOfferService.getDistincBU().subscribe(data => {
   }
 
   getSecondaryBusinessUnitsFiltered() {
-    const tmpBusinessUnites = [...this.secondaryBusinessUnits];
-    this.primaryBusinessUnitsValue.forEach(selectedBU => {
-      const index = tmpBusinessUnites.findIndex(o => o.value === selectedBU);
-      if (index !== -1) {
-        tmpBusinessUnites.splice(index, 1);
-      }
-    });
-    this.secondaryBusinessUnitsFiltered = tmpBusinessUnites;
+    if (this.primaryBusinessUnitsValue != null && this.secondaryBUbackup != null
+      && this.secondaryBUbackup.length > 0) {
+      const tmpBusinessUnites = [...this.secondaryBUbackup];
+      this.primaryBusinessUnitsValue.forEach(selectedBU => {
+        const index = tmpBusinessUnites.findIndex(o => o.value === selectedBU);
+        if (index !== -1) {
+          tmpBusinessUnites.splice(index, 1);
+        }
+      });
+      this.secondaryBusinessUnitsValue = null;
+      this.secondaryBusinessUnitsFiltered = tmpBusinessUnites;
+    }
   }
 
   // Lulu's change on Get Primary BU when primary BE changed 
   getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
     this.primaryBusinessUnitsValue = null;
+    this.secondaryBusinessEntitiesValue = null;
+    this.secondaryBusinessUnitsValue = null;
     this.getPrimaryBusinessUnitPromise(event);
   }
+
   getPrimaryBusinessUnitPromise(event) {
+    console.log(event);
     return new Promise((resolve, reject) => {
       this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
         .subscribe(data => {
@@ -191,6 +195,42 @@ this.createOfferService.getDistincBU().subscribe(data => {
     });
   }
 
+/**
+   * Function call to load secondary BU's based on Secondary BE.
+   * @param selectedBEs
+   */
+  getSecondaryBusinessUnitsBasedOnSencondaryBE() {
+    console.log(this.secondaryBusinessEntitiesValue);
+    this.secondaryBusinessUnitsValue = null;
+    if (this.secondaryBusinessEntitiesValue != null) {
+      this.getSecondaryBusinessUnitPromise(this.secondaryBusinessEntitiesValue);
+    }
+  }
+
+  /**
+   * Function call to load secondary BU's based on Secondary BE.
+   * @param selectedBEs
+   */
+  getSecondaryBusinessUnitPromise(event) {
+    console.log(event);
+    return new Promise((resolve, reject) => {
+      this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
+        .subscribe(data => {
+          const primaryBuArry = [];
+          const dataArray = data as Array<any>;
+          dataArray.forEach(element => {
+            if (element.BUSINESS_UNIT !== null) {
+              primaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
+            }
+          });
+          this.secondaryBusinessUnitsFiltered = this.removeDuplicates(primaryBuArry, 'label');
+          this.secondaryBUbackup = this.secondaryBusinessUnitsFiltered;
+          this.getSecondaryBusinessUnitsFiltered();
+          resolve();
+        });
+    });
+  }
+
 // GET PRIMARY BE
   getPrimaryBusinessEntity(event) {
     if (event.toString() === 'All') {
@@ -199,6 +239,7 @@ this.createOfferService.getDistincBU().subscribe(data => {
     this.getPrimaryBusinessEntityPromise(event);
 
   }
+
   getPrimaryBusinessEntityPromise(event) {
 
     return new Promise((resolve, reject) => {
@@ -219,6 +260,7 @@ this.createOfferService.getDistincBU().subscribe(data => {
         });
     });
   }
+
   mModelAssesment() {
     this.router.navigate(['/mmassesment', this.offerId]);
   }
