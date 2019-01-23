@@ -108,14 +108,17 @@
                             <div class="col-md-2 margin-auto">{{subGroup}}</div>
 
                             <div class="col-md-10">
+                           
 
-                              <button *ngFor="let attribute of groupData[activeTabIndex][subGroup]"
+                             <div> <button *ngFor="let attribute of groupData[activeTabIndex][subGroup]"
                               [ngClass]="{
                                 'gray-button':attribute.type===1 && attribute.status===-1,
                                 'mm-model-btn-active':attribute.status===1||attribute.type===2,
                                 'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
                               }" class="btn btn--small"
-                              (click)="toggleSelected(attribute)" >{{attribute.name}}</button>
+                              (click)="toggleSelected(attribute)" > <span tabindex="0"  data-balloon="This will fit the text to the width of the element" data-balloon-pos="up" data-balloon-length="fit">{{attribute.name}}</span></button></div>
+
+                            
                             </div>
                           </div>
 

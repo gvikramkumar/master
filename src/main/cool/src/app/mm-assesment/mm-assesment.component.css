@@ -300,7 +300,12 @@ margin: 0 5px;
   overflow: hidden;
 }
 
-
+.cui [data-balloon][data-balloon-length='fit']:after {
+  background: white !important;
+  color: #666666 !important;
+  white-space: normal;
+  width: 100%;
+}
 
 
 
