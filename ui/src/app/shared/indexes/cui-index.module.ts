@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  CuiButtonModule, CuiDialogModule,
+  CuiButtonModule,
   CuiFooterModule,
   CuiHeaderModule, CuiInputModule, CuiMultiselectModule,
   CuiProgressbarModule,
@@ -21,7 +21,6 @@ import {FromNowPipeModule} from '@cisco-ngx/cui-pipes';
     CuiToastModule,
     CuiSpinnerModule,
     FromNowPipeModule,
-    CuiDialogModule,
     CuiProgressbarModule,
     CuiSelectModule,
     CuiMultiselectModule,
@@ -36,7 +35,6 @@ import {FromNowPipeModule} from '@cisco-ngx/cui-pipes';
     CuiToastModule,
     CuiSpinnerModule,
     FromNowPipeModule,
-    CuiDialogModule,
     CuiProgressbarModule,
     CuiSelectModule,
     CuiMultiselectModule,

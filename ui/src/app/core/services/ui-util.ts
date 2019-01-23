@@ -3,7 +3,6 @@ import {HttpParams} from '@angular/common/http';
 import * as _ from 'lodash';
 import {DialogInputType, DialogSize, DialogType} from '../models/ui-enums';
 import {AppStore} from '../../app/app-store';
-import {CuiDialogConfig, CuiDialogRef, CuiDialogService} from '@cisco-ngx/cui-components';
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';
 import {PromptDialogComponent} from '../../shared/dialogs/prompt-dialog/prompt-dialog.component';
 import {RuleDetailDialogComponent} from '../../modules/_common/dialogs/rule-detail-dialog/rule-detail-dialog.component';
@@ -25,8 +24,6 @@ export class UiUtil {
 
   constructor(
     private store: AppStore,
-    private dialogService:
-      CuiDialogService,
     public dialog: MatDialog,
     private matToast: MatSnackBar) {
   }
