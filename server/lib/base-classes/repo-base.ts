@@ -98,7 +98,7 @@ export default class RepoBase {
   // get the latest version that's active or inactive, but only the actives from those
   getManyLatestGroupByNameActive(moduleId, filter = {}) {
     return this.getManyLatestGroupByNameActiveInactive(moduleId, filter)
-      .then(docs => docs.filter(doc => doc.status = 'A'));
+      .then(docs => docs.filter(doc => doc.status === 'A'));
   }
 
   getManyLatestGroupByNameInactive(moduleId, _filter = {}) {
