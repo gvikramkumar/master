@@ -259,8 +259,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           .then(results => {
             this.flashCategories = results[0];
             this.adjustmentTypes = results[1];
-            // cui-selects will delete properties if not found in selects, so we have to preserve the values and reapply them after the items come in
-            this.sm.categoryType = this.orgSubmeasure.categoryType;
             if (!this.addMode) {
               // if !addMode and draft or pending, then use value from sm, else get value from database (if it exists)
               if (_.includes(['D', 'P'], this.sm.status) && this.sm.manualMixHw && this.sm.manualMixSw) {
@@ -370,12 +368,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
         if (!init) {
           this.sm.groupingSubmeasureId = undefined;
-        } else {
-          // this is a total hack. only way I could get the dropdown to populate on page refresh on cui 6.5.6. Remove for later versions and see if it works
-          this.sm.groupingSubmeasureId = undefined;
-          setTimeout(() => {
-            this.sm.groupingSubmeasureId = this.orgSubmeasure.groupingSubmeasureId;
-          });
         }
       });
 
