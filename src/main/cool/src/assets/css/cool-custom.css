@@ -434,6 +434,17 @@ span.icon-close {
   white-space: pre-wrap;
 }
 
+/* PrimeNG */
+
+/* Overlay */
+.cool.cui .ui-overlaypanel {
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  margin-top: 10px;
+  /* width: 93%; */
+}
+
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
     margin: 10px 40px;
