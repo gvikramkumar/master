@@ -762,6 +762,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   validate() {
     this.errs = [];
 
+    // rules specify if allocation will happen or not, so we'll focus on them only, i.e. not be bothered
+    // if they add an effective date for passthrough, just focus on: should there be rules or not be rules
     if (this.isUnallocatedGroup()) {
       if (this.isUnallocatedGroup() && this.sm.rules.length) {
         this.errs.push('No rules allowed on Grouping Sub-Measures without Allocation Required checked');
@@ -771,6 +773,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.errs.push('No rules allowed on Pass Through Sub-Measures');
       }
     } else {
+      if (!this.sm.rules.length) {
+        this.errs.push('No rules specified');
+      }
+
       if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
         this.errs.push('Duplicate rules entered');
       }
