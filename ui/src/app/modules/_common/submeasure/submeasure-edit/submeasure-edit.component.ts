@@ -46,6 +46,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   orgSubmeasure: Submeasure;
   measures: Measure[] = [];
   currentMeasure: Measure = new Measure;
+  groupingSubmeasuresAll = [];
   groupingSubmeasures = [];
   sources: Source[];
   measureSources: Source[] = [];
@@ -175,12 +176,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     {name: 'WD+4'},
     {name: 'WD+5'},
   ];
-  groupings = [
-    {
-      name: 'Indirect Revenue Adjustments',
-      value: 'Indirect Revenue',
-    }
-  ];
+  pnlNodesAll = [];
+  pnlNodes = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -211,6 +208,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.ruleService.getManyLatestGroupByNameActive().toPromise(),
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinct('name', {moduleId: -1}).toPromise(),
+      this.pgLookupService.callRepoMethod('getSubmeasurePNLNodes', null, {moduleId: this.store.module.moduleId}).toPromise()
     ];
     if (!this.addMode) {
       promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
@@ -221,9 +219,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.rules = _.sortBy(results[1], 'name');
         this.sources = _.sortBy(results[2], 'name');
         this.submeasureNames = results[3];
+        this.pnlNodesAll = results[4];
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.sm = results[4];
+          this.sm = results[5];
         }
         if (this.viewMode) {
           this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
@@ -260,8 +259,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           .then(results => {
             this.flashCategories = results[0];
             this.adjustmentTypes = results[1];
-            // cui-selects will delete properties if not found in selects, so we have to preserve the values and reapply them after the items come in
-            this.sm.categoryType = this.orgSubmeasure.categoryType;
             if (!this.addMode) {
               // if !addMode and draft or pending, then use value from sm, else get value from database (if it exists)
               if (_.includes(['D', 'P'], this.sm.status) && this.sm.manualMixHw && this.sm.manualMixSw) {
@@ -366,15 +363,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
     this.submeasureService.callMethod('getGroupingSubmeasures', {measureId: this.sm.measureId})
       .subscribe(groupingSubmeasures => {
-        this.groupingSubmeasures = groupingSubmeasures;
+        this.groupingSubmeasuresAll = groupingSubmeasures;
+        this.filterGroupingSubmeasuresIfService();
+
         if (!init) {
           this.sm.groupingSubmeasureId = undefined;
-        } else {
-          // this is a total hack. only way I could get the dropdown to populate on page refresh on cui 6.5.6. Remove for later versions and see if it works
-          this.sm.groupingSubmeasureId = undefined;
-          setTimeout(() => {
-            this.sm.groupingSubmeasureId = this.orgSubmeasure.groupingSubmeasureId;
-          });
         }
       });
 
@@ -392,6 +385,20 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.reportingLevels[2] = this.currentMeasure.reportingLevels[2] ? this.currentMeasure.reportingLevels[2] : this.sm.reportingLevels[2];
     }
 
+    this.pnlNodes = this.pnlNodesAll.filter(x => x.measure_id === this.sm.measureId);
+  }
+
+  isService() {
+    return this.sm.indicators.service === 'Y';
+  }
+
+  filterGroupingSubmeasuresIfService() {
+    const sms = _.clone(this.groupingSubmeasuresAll);
+    if (this.isService()) {
+      this.groupingSubmeasures = sms.filter(sm => sm.indicators.service === 'Y');
+    } else {
+      this.groupingSubmeasures = sms;
+    }
   }
 
   updateReportingLevel3() {
