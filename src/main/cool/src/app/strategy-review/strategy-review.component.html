@@ -60,7 +60,6 @@
                 </div>
               </div>
             </div>
-
             <div class="review-status row base-margin-top">
               <div class="col-md-12">
                 <div class="panel">
@@ -91,8 +90,8 @@
                             Comment</div>
                         </div>
                       </p-header>
-                      <div *ngIf="strategyReviewData.status=='Not Reviewed'; then reviewRequiredPlaceHolder">
-                      </div>
+                      <!-- <div *ngIf="strategyReviewData.status=='Not Reviewed'; then reviewRequiredPlaceHolder">
+                      </div> -->
                       <div *ngIf="strategyReviewData.status=='Not Reviewed' && escalateVisibleAvailable; then visibleEscalateTemplate">
                       </div>
                       <ng-template #visibleEscalateTemplate>
@@ -103,8 +102,8 @@
                           <button class="btn btn--secondary" [disabled]="strategyReviewData.flag=='Not Escalate'"
                             (click)="onEscalate()">Escalate</button>
                         </div>
-                      </ng-template>
-                      <ng-template #reviewRequiredPlaceHolder>
+                      </ng-template>                 
+                      <div *ngIf = "approvalButtonsVisibleAvailable">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
                           <div class="panel--header">
                             <h5>Approval Decision</h5>
@@ -395,7 +394,7 @@
                             </div>
                           </div>
                         </section>
-                      </ng-template>
+                      </div>
                     </p-accordionTab>
                   </p-accordion>
                 </div>

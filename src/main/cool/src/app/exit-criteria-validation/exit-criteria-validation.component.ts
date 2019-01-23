@@ -4,6 +4,7 @@ import {MonetizationModelService} from '../services/monetization-model.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {HeaderService} from '../header/header.service';
 import { MessageService } from '../services/message.service';
+import { StrategyReviewService } from '../services/strategy-review.service';
 
 @Component({
   selector: 'app-exit-criteria-validation',
@@ -21,13 +22,16 @@ export class ExitCriteriaValidationComponent implements OnInit {
   ideate = [];
   offerOwner:String = '';
   requestApprovalAvailable:Boolean = true;
+  strategyservice:StrategyReviewService;
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private monetizationModelService: MonetizationModelService,
     private headerService: HeaderService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private strategyReviewService: StrategyReviewService
     ) {
+      this.strategyservice = strategyReviewService;
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
         this.currentCaseId = params['id2'];
@@ -42,7 +46,8 @@ export class ExitCriteriaValidationComponent implements OnInit {
 
       for (let i = 0; i < this.ideate.length; i++) {
         if (this.ideate[i]['status'] !== 'Completed') {
-          this.requestApprovalAvailable = false;
+          // this.requestApprovalAvailable = false;
+          this.strategyservice.requestApproved = false;
           break;
         }
       }
@@ -56,7 +61,8 @@ export class ExitCriteriaValidationComponent implements OnInit {
 
       this.headerService.getCurrentUser().subscribe(user => {
         if (!canRequestUsers.includes(user)) {
-          this.requestApprovalAvailable = false;
+          // this.requestApprovalAvailable = false;
+          this.strategyservice.requestApproved = false;
         }
       });
     });
@@ -80,7 +86,8 @@ requestForApproval() {
   this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
     this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
       this.messageService.sendMessage('Strategy Review');
-      this.requestApprovalAvailable = false;
+      // this.requestApprovalAvailable = false;
+      this.strategyservice.requestApproved = false;
     });
 
   });
