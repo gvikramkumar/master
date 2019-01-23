@@ -121,8 +121,8 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <h5>{{offerName}}&nbsp;<span style="color:indigo">{{currentOfferId}}</span></h5>
-                <h6 style="color: indigo">View Offer Details</h6>
+                <h5>{{offerName}}&nbsp;<span style="color:#005073;cursor:pointer">{{currentOfferId}}</span></h5>
+                <h6 style="color:#005073;cursor:pointer">View Offer Details</h6>
             </div>
             <div class="col-md-6">
                 <h5 class="half-margin-bottom">Offer Phase</h5>
@@ -180,7 +180,7 @@
                                       </thead>
                                       <tbody>
                                           <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
-                                              <td><span style="color: indigo" (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></td>
+                                              <td><span style="color: #005073;cursor:pointer" (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></td>
                                               <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
                                               <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
                                               <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
@@ -202,7 +202,7 @@
                                       </thead>
                                       <tbody>
                                           <tr *ngFor="let planData of offerPhaseDetailsList.plan">
-                                              <td><span style="color: indigo">{{planData.subMilestone}}</span></td>
+                                              <td><span style="color: #005073;cursor:pointer">{{planData.subMilestone}}</span></td>
                                               <td [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">{{planData.status}}</td>
                                               <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>
                                               <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>

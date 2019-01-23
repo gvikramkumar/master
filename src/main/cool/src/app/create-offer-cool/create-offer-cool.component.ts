@@ -10,6 +10,7 @@ import { UserService } from '../services/user.service';
 import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import { ConfigurationService } from '../services/configuration.service';
 import * as moment from 'moment';
 import { getUrlScheme, createOfflineCompileUrlResolver } from '@angular/compiler';
 
@@ -35,12 +36,14 @@ export class CreateOfferCoolComponent implements OnInit {
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   secondaryBusinessUnits: SelectItem[];
   secondaryBusinessEntities: SelectItem[];
+  secondaryBusinessEntitiesFiltered: SelectItem[];
+  secondaryBusinessUnitsFiltered: SelectItem[];
   minDate: Date;
-  primaryBusinessUnits: SelectItem[];
+  primaryBusinessUnits: SelectItem[] = [];
   primaryBusinessEntities: SelectItem[];
   offerNameValue: string;
   offerDescValue: string;
-  primaryBusinessUnitsValue: string;
+  primaryBusinessUnitsValue: string[]=[];
   primaryBusinessEntitiesValue: string;
   secondaryBusinessUnitsValue: string;
   secondaryBusinessEntitiesValue: string;
@@ -55,13 +58,11 @@ export class CreateOfferCoolComponent implements OnInit {
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private _location: Location) {
+    private _location: Location,) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
-      console.log("offerId", this.offerId);
       if (this.offerId) {
         this.offerDetailViewService.offerDetailView(this.offerId).subscribe(offerDetailRes => {
-          console.log("offerDetailView", offerDetailRes);
           this.caseId = offerDetailRes.caseId;
           this.offerNameValue = offerDetailRes.offerName;
           this.offerDescValue = offerDetailRes.offerDesc;
@@ -69,42 +70,67 @@ export class CreateOfferCoolComponent implements OnInit {
           this.getPrimaryBusinessEntityPromise(offerDetailRes.primaryBUList)
             .then(() => {
               this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList;
-            })
-
+            });
           this.secondaryBusinessUnitsValue = offerDetailRes.secondaryBUList;
           this.getSecondaryBusinessEntityPromise(offerDetailRes.secondaryBUList)
             .then(() => {
               this.secondaryBusinessEntitiesValue = offerDetailRes.secondaryBEList;
-            })
+            });
           this.strategyReviewDateValue = moment(offerDetailRes.strategyReviewDate).format('MM/DD/YYYY');
           this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
           this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
-        })
+        });
       }
     });
 
+// Lulu's change GET PRIMARY AND SECONDARY BE
+this.createOfferService.getDistinctBE().subscribe(data => {
+  const primaryBeArry = [];
+  const dataArray = data as Array<any>;
+  dataArray.forEach(element => {
+    if (element['BE'] !== null) {
+      primaryBeArry.push({ label: element['BE'], value: element['BE'] });
+    }
+  });
+  // this.primaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
+  // this.secondaryBusinessEntities = this.removeDuplicates(primaryBeArry, 'label');
+
+  this.primaryBusinessEntities = primaryBeArry;
+  this.secondaryBusinessEntities = primaryBeArry;
+});
+
+
+// lulu's change GET SECONDARY BU
+this.createOfferService.getDistincBU().subscribe(data => {
+  const secondaryBuArry = [];
+  const dataArray = data as Array<any>;
+  dataArray.forEach(element => {
+    if (element['BUSINESS_UNIT'] !== null) {
+      secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
+    }
+  });
+  // this.secondaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
+  this.secondaryBusinessUnits = secondaryBuArry;
+});
+
+    // Fetch Primary BE's assigned through admin page. 
+    // Show this BE's as selected in Primary BE multiselect list in the offer creation page.
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      this.primaryBusinessUnitList = <any>data;
-      const primaryBuArry = [];
-      this.primaryBusinessUnitList.businessUnits.forEach(element => {
-        primaryBuArry.push({ label: element, value: element });
+      const primaryBeArray: any[] = [];
+      data.userMappings.forEach(element => {
+        primaryBeArray.push(element.businessEntity);
       });
-      this.primaryBusinessUnits = primaryBuArry;
+      this.primaryBusinessEntitiesValue = primaryBeArray[0];
+      // Load primary business units when business entities are selected.
+      this.getPrimaryBusinessUnitBasedOnPrimaryBE(this.primaryBusinessEntitiesValue);
     });
 
-    this.createOfferService.getSecondaryBusinessUnit().subscribe(data => {
-      this.secondaryBusinessUnitList = <any>data;
-      const secondaryBuArry = [];
-      this.secondaryBusinessUnitList.forEach(element => {
-        secondaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
-      });
-      this.secondaryBusinessUnits = secondaryBuArry;
-    });
+  }
 
-    this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['id'];
-    });
+  skipSelectedBusinessEntities(selectedPbe) {
+    const tmpBusinessEntities = this.secondaryBusinessEntities;
+    this.secondaryBusinessEntitiesFiltered  = tmpBusinessEntities.filter((obj) => obj.value !== selectedPbe);
   }
 
   removeDuplicates(myArr, prop) {
@@ -112,7 +138,7 @@ export class CreateOfferCoolComponent implements OnInit {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
   }
-
+// GET SECOND BE
   getSecondaryBusinessEntity(event) {
     this.getSecondaryBusinessEntityPromise(event);
   }
@@ -131,6 +157,41 @@ export class CreateOfferCoolComponent implements OnInit {
     });
   }
 
+  getSecondaryBusinessUnitsFiltered() {
+    const tmpBusinessUnites = [...this.secondaryBusinessUnits];
+    this.primaryBusinessUnitsValue.forEach(selectedBU => {
+      const index = tmpBusinessUnites.findIndex(o => o.value === selectedBU);
+      if (index !== -1) {
+        tmpBusinessUnites.splice(index, 1);
+      }
+    });
+    this.secondaryBusinessUnitsFiltered = tmpBusinessUnites;
+  }
+
+  // Lulu's change on Get Primary BU when primary BE changed 
+  getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
+    this.primaryBusinessUnitsValue = null;
+    this.getPrimaryBusinessUnitPromise(event);
+  }
+  getPrimaryBusinessUnitPromise(event) {
+    return new Promise((resolve, reject) => {
+      this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
+        .subscribe(data => {
+          const primaryBuArry = [];
+          const dataArray = data as Array<any>;
+          dataArray.forEach(element => {
+            if (element.BUSINESS_UNIT !== null) {
+              primaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
+            }
+          });
+          this.primaryBusinessUnits = this.removeDuplicates(primaryBuArry, 'label');
+          this.skipSelectedBusinessEntities(event);
+          resolve();
+        });
+    });
+  }
+
+// GET PRIMARY BE
   getPrimaryBusinessEntity(event) {
     if (event.toString() === 'All') {
       this.userSelectedAllUnits = true;
@@ -139,6 +200,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
   }
   getPrimaryBusinessEntityPromise(event) {
+
     return new Promise((resolve, reject) => {
       this.createOfferService.getPrimaryBusinessEntity(event.toString())
         .subscribe(data => {
@@ -161,6 +223,7 @@ export class CreateOfferCoolComponent implements OnInit {
     this.router.navigate(['/mmassesment', this.offerId]);
   }
 
+
   ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
 
@@ -170,7 +233,6 @@ export class CreateOfferCoolComponent implements OnInit {
 
   goBack() {
     this._location.back();
-   
   }
 
   proceedToOfferBuilder() {
@@ -186,13 +248,15 @@ export class CreateOfferCoolComponent implements OnInit {
     status.subMilestone = 'Offer Creation';
 
     const offerCreationDate = new Date().toDateString();
+    const selectedPrimaryBe: string [] = [];
+    selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
       offerOwner,
       this.offerNameValue,
       this.offerDescValue,
       this.primaryBusinessUnitsValue,
-      this.primaryBusinessEntitiesValue,
+      selectedPrimaryBe,
       this.secondaryBusinessUnitsValue,
       this.secondaryBusinessEntitiesValue,
       this.strategyReviewDateValue,
@@ -202,16 +266,11 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreatedBy,
       offerCreationDate,
       status);
-    console.log(createoffer);
     if (!this.offerId) {
-      console.log('creating new offer')
       this.createOffer(createoffer);
-    }
-    else {
-      console.log('updating offer')
+    } else {
       this.updateOffer(createoffer);
     }
-
   }
 
   createOffer(createoffer) {
@@ -238,4 +297,5 @@ export class CreateOfferCoolComponent implements OnInit {
       });
 
   }
+ 
 }

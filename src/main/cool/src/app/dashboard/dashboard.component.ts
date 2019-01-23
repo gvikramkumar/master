@@ -11,6 +11,7 @@ import { NgForm } from '@angular/forms';
 import { CreateActionComment } from '../models/create-action-comment';
 import { ActionsService } from '../services/actions.service';
 import { CreateActionApprove } from '../models/create-action-approve';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,32 +22,25 @@ import { CreateActionApprove } from '../models/create-action-approve';
 export class DashboardComponent implements OnInit {
   @ViewChild('createActionForm') createActionForm: NgForm;
   @ViewChild('createActionApproveForm') createActionApproveForm: NgForm;
-  recentOfferList: Offer[];
-  myActionsList;
-  myOffersList;
-  myOffersListProps: any;
-  myActions;
-  myOfferArray: ActionsAndNotifcations[] = [];
-  myOffers: ActionsAndNotifcations[] = [];
-  pendingActnCount = 0;
-  needImmActnCount = 0;
-  display: Boolean = false;
-  displayPopOver: Boolean = true;
-  displayActionPopOver: Boolean = true;
-  currentOfferId;
-  currentCaseId;
-  currentOfferName;
-  showFeedbackButtons: Boolean = true;
-  doNotApproveSection = false;
+
+
+  myActionsAndNotifications = [];
+  myOffers;
+
+
+  pendingActionCount = 0;
+  needImmediateActionCount = 0;
+
+
+  showDoNotApproveSection = false;
   showConditionalApprovalSection = false;
   showApproveSection = false;
-  hidepopup;
-  public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
-  minDate: Date;
-  cols: any[];
-  selectedrow: any;
-  taskId: any;
-  actionsArray: any[];
+  showActionSection = true;
+
+  minDate = new Date();
+  offerColumns: any[];
+
+  // taskId: any;
   commentValue: string;
   titleValue: string;
   descriptionValue: string;
@@ -54,11 +48,17 @@ export class DashboardComponent implements OnInit {
   functionNameValue: string;
   assigneeValue: Array<any>;
   dueDateValue: any;
+
   functionList;
   assigneeList;
   milestoneList;
   action: any;
-  loading;
+
+
+  selectedCaseId;
+  selectedNotification;
+  selectedAction;
+
   constructor(private dashboardService: DashboardService,
     private router: Router,
     private createOfferService: CreateOfferService,
@@ -67,203 +67,125 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cols = [
+    this.offerColumns = [
       { field: 'offerId', header: 'OFFER ID' },
       { field: 'offerName', header: 'OFFER NAME' },
       { field: 'offerOwner', header: 'OFFER OWNER' },
       { field: 'expectedLaunchDate', header: 'LAUNCH DATE' }
     ];
 
-    this.getMyActionsList();
+    this.getMyActionsAndNotifications();
+    this.getMyOffers();
+    this.getFunctions();
+  }
 
-    this.dashboardService.getMyOffersList()
-      .subscribe(data => {
-        this.myOffersList = data;
-        this.myOffersListProps = Object.keys(this.myOffersList);
+  private getMyActionsAndNotifications() {
+    this.dashboardService.getMyActionsList()
+      .subscribe(resActionsAndNotifications => {
+        let actions = [];
+        let notifications = [];
+        if (resActionsAndNotifications && resActionsAndNotifications.actionList) {
+          actions = this.processActions(resActionsAndNotifications.actionList);
+        }
+        if (resActionsAndNotifications && resActionsAndNotifications.notificationList) {
+          notifications = this.processNotifications(resActionsAndNotifications.notificationList);
+        }
+        this.myActionsAndNotifications = [...actions, ...notifications];
       });
-    this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
-    this.minDate = new Date();
+  }
 
+  private processNotifications(notifications: any) {
+    return notifications.map(notification => {
+      notification.alertType = 'notification';
+      notification.title = notification.notifcationTitle;
+      notification.desc = notification.notificationDesc;
+      notification.assigneeId = notification.assigneeId ? notification.assigneeId.split(',').join(', ') : '';
+
+      return notification;
+    });
+  }
+
+  private processActions(actions: any) {
+    this.needImmediateActionCount = 0;
+    this.pendingActionCount = 0;
+    return actions.map(action => {
+      this.processActionCount(action);
+      action.alertType = 'action';
+      action.title = action.actiontTitle;
+      action.desc = action.actionDesc;
+      action.assigneeId = action.assigneeId ? action.assigneeId.split(',').join(', ') : '';
+
+      return action;
+    });
+  }
+
+  private processActionCount(action: any) {
+    if (action.status && action.status.toLowerCase() === 'red') {
+      ++this.needImmediateActionCount;
+    } else {
+      ++this.pendingActionCount;
+    }
+
+  }
+
+  private getMyOffers() {
+    this.dashboardService.getMyOffersList()
+      .subscribe(resOffers => {
+        this.myOffers = resOffers;
+      });
+  }
+
+  private getFunctions() {
     this.actionsService.getFunction().subscribe(data => {
       this.functionList = data;
     });
   }
 
-  getMyActionsList() {
-    this.dashboardService.getMyActionsList()
-      .subscribe(data => {
-        this.myActions = data;
-        this.processMyActionsList();
-      });
+  showActionPopUp(event, action, overlaypanel: OverlayPanel) {
+    this.selectedAction = action;
+    this.showActionSection = true;
+    this.showDoNotApproveSection = false;
+    this.showConditionalApprovalSection = false;
+    this.showApproveSection = false;
+    overlaypanel.toggle(event);
   }
 
-  processMyActionsList() {
-    this.myOfferArray = [];
-    // Process Actions
-    if (this.myActions.actionList !== undefined) {
-      this.myActions['actionList'].forEach(element => {
-        const obj = new ActionsAndNotifcations();
-        obj.setOfferId(element.offerId);
-        obj.setOfferName(element.offerName);
-        obj.setStyleColor(element.status);
-        obj.setAssigneeId(element.assigneeId);
-        obj.setTriggerDate(this.dateFormat(element.triggerDate));
-        obj.setDueDate(this.dateFormat(element.dueDate));
-        obj.setActionDesc(element.actionDesc);
-        obj.setAlertType(1);
-        obj.setCaseId(element.caseId);
-        obj.setTaskId(element.taskId);
-        obj.setType(element.type);
-        obj.setActiontTitle(element.actiontTitle);
-
-        // Set the status color
-        if (element.status && element.status.toLowerCase() === 'red') {
-          this.needImmActnCount = this.needImmActnCount + 1;
-        } else {
-          this.pendingActnCount = this.pendingActnCount + 1;
-        }
-        this.myOfferArray.push(obj);
+  getActionFormValues() {
+    if (this.selectedAction.offerId && this.selectedAction.caseId) {
+      this.actionsService.getAssignee(this.selectedAction.offerId).subscribe(resAssignee => {
+        this.assigneeList = resAssignee;
       });
-
-      // Process Notifications
-      if (this.myActions.notificationList !== undefined) {
-        this.myActions['notificationList'].forEach(element => {
-          const obj2 = new ActionsAndNotifcations();
-          obj2.setOfferId(element.offerId);
-          obj2.setOfferName(element.offerName);
-          obj2.setAssigneeId(element.assigneeId);
-          obj2.setTriggerDate(this.dateFormat(element.triggerDate));
-          obj2.setDueDate(this.dateFormat(element.dueDate));
-          obj2.setStyleColor(element.status);
-          obj2.setActionDesc(element.actionDesc);
-          obj2.setAlertType(2);
-          obj2.setCaseId(element.caseId);
-          obj2.setTaskId(element.taskId);
-          this.myOfferArray.push(obj2);
-        });
-        this.myActionsList = this.myOfferArray;
-      }
+      this.actionsService.getMilestones(this.selectedAction.caseId).subscribe(resMilestones => {
+        this.milestoneList = Object.keys(resMilestones).reduce((accumulator, current) => accumulator.concat(resMilestones[current]), []);
+      });
     }
   }
 
   doNotApprove() {
-    this.hidepopup = true;
-    this.doNotApproveSection = true;
-    this.action = 'Not Approved';
+    this.showActionSection = false;
+    this.showDoNotApproveSection = true;
+    this.action = 'not approved';
   }
 
   conditionalApprove() {
-    this.hidepopup = true;
+    this.showActionSection = false;
     this.showConditionalApprovalSection = true;
-    this.action = 'Conditionally Approved';
+    this.action = 'conditionally Approved';
   }
 
   approve() {
-    this.hidepopup = true;
+    this.showActionSection = false;
     this.showApproveSection = true;
-    this.action = 'Approved';
+    this.action = 'approved';
   }
 
-  dateFormat(inputDate: string) {
-    return moment(inputDate).format('DD-MMM-YYYY');
-  }
-
-  selectedrownof(actionData) {
-    this.selectedrow = actionData;
-    this.taskId = actionData.taskId;
-    this.currentOfferId = actionData.offerId;
-    this.currentCaseId = actionData.caseId;
-    this.currentOfferName = actionData.offerName;
-    this.actionsService.getAssignee(actionData.offerId).subscribe(data => {
-      this.assigneeList = data;
-    });
-    this.actionsService.getMilestones(actionData.caseId).subscribe(data => {
-      this.milestoneList = [];
-      for (const milestone in data) {
-        if (data) {
-          data[milestone].forEach(element => {
-            this.milestoneList.push(element);
-          });
-        }
-      }
-    });
-  }
-
-  getMyActions() {
-    // reset pending count
-    this.pendingActnCount = 0;
-    this.needImmActnCount = 0;
-
-    this.dashboardService.getMyActionsList()
-      .subscribe(data => {
-        this.myActions = data;
-        this.processMyActionsList();
-      });
-  }
-
-  createNewOffer() {
-    this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
-    this.createOfferService.currenTOffer.next('');
-    this.router.navigate(['/coolOffer']);
-  }
-
-  showDialog() {
-    this.display = true;
-  }
-
-  selectionChange(value) {
-    this.selectedrow = value;
-  }
-
-  dismissNotification(offerId, popover) {
-    const postData = {
-      'taskId': this.selectedrow.taskId,
-      'userId': this.selectedrow.assigneeId,
-      'taskName': 'Notification',
-      'caseId': '',
-      'offerId': '',
-      'action': '',
-      'comment': ''
-    };
-    this.dashboardService.postDismissNotification(postData).subscribe(data => {
-      popover.close();
-      this.getMyActions();
-    });
-  }
-
-  closeNotification() {
-    this.displayPopOver = false;
-  }
-
-  closeActionNotification() {
-    this.displayActionPopOver = false;
-  }
-
-  displayPop() {
-    this.displayPopOver = true;
-  }
-
-  displayActionPop(popover) {
-    this.hidepopup = false;
-    this.doNotApproveSection = false;
-    this.showConditionalApprovalSection = false;
-    this.showApproveSection = false;
-    if (popover.isOpen()) {
-      popover.close();
-    }
-  }
-
-  offerDetailOverView(offerId, caseId) {
-    this.router.navigate(['/offerDetailView', offerId, caseId]);
-  }
-// Not and conditional approve?
-  createAction(popover) {
-        const createActionPayload = {};
-    createActionPayload['offerName'] = this.currentOfferName;
+  createNotAndConditionalAction(overlaypanel: OverlayPanel) {
+    const createActionPayload = {};
+    createActionPayload['offerName'] = this.selectedAction.offerName;
     createActionPayload['owner'] = this.assigneeValue;
     createActionPayload['assignee'] = [this.assigneeValue];
-    createActionPayload['offerId'] = this.currentOfferId;
-    createActionPayload['caseId'] = this.currentCaseId;
+    createActionPayload['offerId'] = this.selectedAction.offerId;
+    createActionPayload['caseId'] = this.selectedAction.caseId;
     createActionPayload['description'] = this.descriptionValue;
     createActionPayload['actionTitle'] = this.titleValue;
     createActionPayload['dueDate'] = this.dueDateValue.toISOString();
@@ -271,7 +193,7 @@ export class DashboardComponent implements OnInit {
     createActionPayload['selectedfunction'] = this.functionNameValue;
     createActionPayload['type'] = 'Manual Action';
     const createCommentPayload = {};
-    createCommentPayload['taskId'] = this.taskId;
+    createCommentPayload['taskId'] = this.selectedAction.taskId;
     createCommentPayload['userId'] = this.userService.getUserId();
     createCommentPayload['taskName'] = 'Action';
     createCommentPayload['action'] = this.action;
@@ -279,17 +201,15 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.postComments(createCommentPayload).subscribe((data) => {
       this.dashboardService.postActionForNapprove(createActionPayload).subscribe(response => {
-        this.displayActionPop(popover);
-        this.getMyActionsList();
+        overlaypanel.hide();
+        this.getMyActionsAndNotifications();
       });
     });
     this.createActionForm.reset();
   }
 
-
-
-  createActionApprove(popover) {
-    const taskId = this.taskId;
+  createApproveAction(overlaypanel: OverlayPanel) {
+    const taskId = this.selectedAction.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
@@ -300,18 +220,36 @@ export class DashboardComponent implements OnInit {
       this.commentValue
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
-      this.displayActionPop(popover);
-      this.getMyActionsList();
+      overlaypanel.hide();
+      this.getMyActionsAndNotifications();
     });
     this.createActionForm.reset();
   }
 
-// Change date format for offer list
-  transferDateFormat(offerData, field) {
-    if (field === 'expectedLaunchDate') {
-      return moment(offerData[field]).format('DD-MMM-YYYY');
-    } else {
-      return offerData[field];
-    }
+  dismissNotification(overlaypanel: OverlayPanel) {
+    const postData = {
+      'taskId': this.selectedAction.taskId,
+      'userId': this.selectedAction.assigneeId,
+      'taskName': 'Notification',
+      'caseId': '',
+      'offerId': '',
+      'action': '',
+      'comment': ''
+    };
+    this.dashboardService.postDismissNotification(postData).subscribe(data => {
+      overlaypanel.hide();
+      this.getMyActionsAndNotifications();
+    });
+  }
+
+  showOfferPopUp(event, action, overlaypanel: OverlayPanel) {
+    this.selectedCaseId = action.caseId;
+    overlaypanel.toggle(event);
+  }
+
+  createNewOffer() {
+    this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
+    this.createOfferService.currenTOffer.next('');
+    this.router.navigate(['/coolOffer']);
   }
 }

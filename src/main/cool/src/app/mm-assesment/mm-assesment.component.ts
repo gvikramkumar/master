@@ -40,6 +40,8 @@ export class MmAssesmentComponent implements OnInit {
   ownerName;
   setFlag;
   backdropCustom;
+  proceedButtonStatusValid = false;
+  backbuttonStatusValid = true;
 
   constructor(private router: Router,
     private sharedService: SharedService,
@@ -94,10 +96,13 @@ export class MmAssesmentComponent implements OnInit {
       if (offerDetailRes['overallStatus'] == null) {
         this.message = { contentHead: '', content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.', color: 'black' };
       } else if (offerDetailRes['overallStatus'] === 'Aligned') {
+        this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerDetailRes['derivedMM']}`, mmModel: offerDetailRes['derivedMM'] };
       } else if (offerDetailRes['overallStatus'] === 'Partially Aligned') {
+        this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerDetailRes['derivedMM']}.`, mmModel: offerDetailRes['derivedMM'] };
       } else {
+        this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'};
       }
 
@@ -342,6 +347,7 @@ export class MmAssesmentComponent implements OnInit {
 
 
       this.monetizationModelService.toNextSetp(postData).subscribe(data => {
+        this.proceedButtonStatusValid = true;
         if (data['mmMapperStatus'] === 'Aligned') {
           this.message = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`, mmModel: data['mmModel'] };
         } else if (data['mmMapperStatus'] === 'Partially Aligned') {
@@ -431,8 +437,12 @@ export class MmAssesmentComponent implements OnInit {
 
     if (message != null && message !== '') {
       if (message === 'hold') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = { contentHead: '', content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
       } else if (message === 'cancel') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = { contentHead: '', content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
       }
     }

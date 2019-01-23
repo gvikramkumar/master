@@ -106,23 +106,18 @@ export class ActionsComponent implements OnInit {
   // }
 
   onChange(offerId) {
-    this.actionsService.getMilestones(this.offerCaseMap[offerId]).subscribe(data => {
+    this.actionsService.getAchievedMilestones(this.offerCaseMap[offerId]).subscribe(resMilestones => {
       this.milestoneList = [];
       this.lastValueInMilestone=[];
-      for (let prop in data) {
-       data[prop].forEach(ele => {
+      for (let prop in resMilestones) {
+       resMilestones[prop].forEach(ele => {
         this.milestoneList.push(ele);
         
         this.lastValueInMilestone=this.milestoneList.slice(-1)[0];
-        console.log("this.lastValueInMilestone",this.lastValueInMilestone);
+        
          let mile=this.lastValueInMilestone
          this.val=mile['subMilestone'];
-         console.log("val",this.val);
-         console.log("mile",mile);
-         console.log(typeof mile);
-       //console.log("this.milestone submilestone",this.milestone['submilestone']);
-      // console.log("this.milestone",this.milestone);
-   
+        
        });
     }
     });

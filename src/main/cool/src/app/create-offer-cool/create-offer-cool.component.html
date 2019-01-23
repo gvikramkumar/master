@@ -61,18 +61,21 @@
                      <!-- <BE Part> -->
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
-                        <label for="selectedBeValue">Primary Business Entity</label>
-                        <p-multiSelect
-                        id="selectedBeValue"
-                        class="form-control"
-                        name="primaryBEList"
-                        [options]="primaryBusinessEntities"
-                        [(ngModel)]="primaryBusinessEntitiesValue"
-                        [style]="{'width':'100%'}">
-                      </p-multiSelect>
-                      </div>
+                        <label for="selectedBeValue">Primary Business Entity</label>                   
+                          <p-dropdown 
+                            id="selectedBeValue" 
+                            class="form-control" 
+                            name="primaryBEList" 
+                            [options]="primaryBusinessEntities"
+                            (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)" 
+                            [(ngModel)]="primaryBusinessEntitiesValue" 
+                            [style]="{'width':'100%'}"
+                            filter="true" 
+                            required>
+                          </p-dropdown>
+                      </div> 
                     </div>
-                    <!-- <BU> -->
+                    <!-- <BU part> -->
                         <div class="col-md-6">
                             <div class="form-group half-margin-bottom">
                               <label for="selectedValue">Primary Business Unit</label>
@@ -81,9 +84,10 @@
                                 class="form-control"
                                 name="primaryBUList"
                                 [options]="primaryBusinessUnits"
-                                (onChange)="getPrimaryBusinessEntity($event.value)"
+                                (onPanelHide)="getSecondaryBusinessUnitsFiltered()" 
                                 [(ngModel)]="primaryBusinessUnitsValue"
-                                [style]="{'width':'100%'}">
+                                [style]="{'width':'100%'}"
+                                required>
                               </p-multiSelect>
                             </div>
                           </div>
@@ -98,7 +102,7 @@
                           id="selectedSeValue"
                           class="form-control"
                           name="secondaryBEList"
-                          [options]="secondaryBusinessEntities"
+                          [options]="secondaryBusinessEntitiesFiltered"
                           [(ngModel)]="secondaryBusinessEntitiesValue"
                           [style]="{'width':'100%'}">
                         </p-multiSelect>
@@ -113,8 +117,7 @@
                                   id="selectedSValue"
                                   class="form-control"
                                   name="secondaryBUList"
-                                  [options]="secondaryBusinessUnits"
-                                  (onChange)="getSecondaryBusinessEntity($event.value)"
+                                  [options]="secondaryBusinessUnitsFiltered"
                                   [(ngModel)]="secondaryBusinessUnitsValue"
                                   [style]="{'width':'100%'}">
                                 </p-multiSelect>

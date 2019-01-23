@@ -28,9 +28,12 @@ export class StakeholderFullComponent implements OnInit {
   collaboratorsList;
   selectedCollabs;
   currentOfferId;
+  offerName;
   temporaryList;
   lists;
   message = {};
+  proceedButtonStatusValid = true;
+  backbuttonStatusValid = true;
   public offerBuilderdata;
   public newData: any[];
   //new update
@@ -83,7 +86,6 @@ export class StakeholderFullComponent implements OnInit {
     });
   }
   ngOnInit() {
-
     this.message = {
       contentHead: '',
       content: 'Stakeholders message.',
@@ -98,8 +100,10 @@ export class StakeholderFullComponent implements OnInit {
       this.funcionalRoleList = data;
     });
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+  
       this.firstData = data;
       this.data = this.firstData.stakeholders;
+      this.offerName = this.firstData['offerName'];
       this.processStakeHolderData(this.data);
     });
 
@@ -203,8 +207,12 @@ export class StakeholderFullComponent implements OnInit {
   updateMessage(message) {
     if (message != null && message !== "") {
       if (message == 'hold') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = { contentHead: "", content: "The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
       } else if (message == 'cancel') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
         this.message = { contentHead: "", content: "The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
       }
     }
@@ -401,7 +409,9 @@ export class StakeholderFullComponent implements OnInit {
    */
   delteSelectedStakeHolders() {
     this.selectedSh.forEach(shs => {
-      this.deleteStakeHolder(shs._id);
+      if (!shs.stakeholderDefaults) {
+        this.deleteStakeHolder(shs._id);
+      }
     });
   }
 

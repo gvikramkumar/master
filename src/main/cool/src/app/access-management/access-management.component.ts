@@ -28,6 +28,7 @@ export class AccessManagementComponent implements OnInit {
   cols: any[];
   registerNewUserfun:any;
   newUser:NewUser [] = [];
+  accessList:any[]=[];
   constructor(private accessManagementService: AccessManagementService) { }
 
   ngOnInit() {
@@ -62,6 +63,9 @@ export class AccessManagementComponent implements OnInit {
     this.accessManagementService.getregisterUserFunction().subscribe(data=>{
             this.registerNewUserfun=data;
     });
+
+    this.accessList.push({ label: 'KeyPOC', value: 'KeyPOC' });
+    this.accessList.push({ label: 'Admin', value: 'Admin' });
   }
 
   getbusinessEntity() {
@@ -98,6 +102,7 @@ export class AccessManagementComponent implements OnInit {
     data.forEach(element => {
       let temp = element;
       let beList: any[] = []
+      let accessList : any[] = [];
       element.userMapping.forEach(userMaps => {
         beList.push(userMaps.businessEntity)
       });
@@ -106,6 +111,13 @@ export class AccessManagementComponent implements OnInit {
       temp['functionalRole'] = element.userMapping[0].functionalRole;
       temp['keyPOC'] = element.userMapping[0].keyPOC;
       temp['functionalAdmin'] = element.userMapping[0].functionalAdmin;
+      if(element.userMapping[0].keyPOC){
+        accessList.push('KeyPOC');
+      }
+      if(element.userMapping[0].functionalAdmin){
+        accessList.push('Admin');
+      }
+      temp['accessList'] = accessList;
       finalAdminData.push(temp);
     });
     this.accessManagementData = finalAdminData;
@@ -144,6 +156,10 @@ export class AccessManagementComponent implements OnInit {
     this.offerCreateForm.reset();
   }
 
+  /**
+   * Function to update BE of the user
+   * @param updatedUserBe
+   */
   updatedAceessManagementBe(updatedUserBe) {
     const userMappings: UserMapping[] = [];
     updatedUserBe.beList.forEach(element => {
@@ -168,12 +184,50 @@ export class AccessManagementComponent implements OnInit {
       });
   }
 
+  /**
+   * Function to Update BU of the user
+   * @param updatedUser 
+   */
   updatedAceessManagement(updatedUser) {
     let updateAdmin = {
       "_id": updatedUser.userId,
       "businessUnits": updatedUser.buList,
       "userMappings": updatedUser.userMapping
     }
+    this.accessManagementService.updateAccessManagement(updateAdmin)
+      .subscribe(data => {
+        console.log('updated successfully');
+      });
+  }
+
+  /**
+   * Function to update access level(KeyPOC/Admin) for the user.
+   * @param user
+   */
+  updatedAccessForUser(user){
+    console.log(user);
+    let isKeyPoC = user.accessList.includes('KeyPOC');
+    let isAdmin = user.accessList.includes('Admin');
+
+    console.log(isAdmin);
+    console.log(isKeyPoC);
+    const userMappings: UserMapping[] = [];
+    user.beList.forEach(element => {
+      const userMapping = new UserMapping(
+        element,
+        user.functionalRole,
+        isAdmin,
+        isKeyPoC
+      );
+      userMappings.push(userMapping);
+    });
+
+    let updateAdmin = {
+      "_id": user.userId,
+      "businessUnits": user.buList,
+      "userMappings": userMappings
+    }
+
     this.accessManagementService.updateAccessManagement(updateAdmin)
       .subscribe(data => {
         console.log('updated successfully');

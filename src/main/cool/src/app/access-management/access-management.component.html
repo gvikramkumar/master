@@ -1,5 +1,3 @@
-
-
 <div class="content">
   <div class="container-fluid">
     <div class="row base-margin-top">
@@ -72,12 +70,16 @@
                       </p-multiSelect>
                     </td>
                     <td>
-                      <div *ngIf="user.userMapping[0].functionalAdmin">
-                        <span>Admin</span>
-                      </div>
-                      <div *ngIf="user.userMapping[0].keyPOC">
-                        <span>KeyPOC</span>
-                      </div>
+                      <p-multiSelect 
+                        [options]="accessList" 
+                        [filter]="false" 
+                        [showHeader]="false" 
+                        [displaySelectedLabel]="true" 
+                        [(ngModel)]="user.accessList" 
+                        (onPanelHide)="updatedAccessForUser(user)"
+                        [style]="{'width':'100%'}"
+                        [appendTo]="body">
+                      </p-multiSelect>
                     </td>
                   </tr>
                 </ng-template>
