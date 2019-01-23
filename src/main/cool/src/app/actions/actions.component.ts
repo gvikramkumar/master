@@ -74,7 +74,6 @@ export class ActionsComponent implements OnInit {
       });
 
     this.dashboardService.getMyOffersList().subscribe(data => {
-      debugger;
       this.myOfferList = data;
       data.forEach(ele => {
         this.offerCaseMap[ele.offerId] = ele.caseId;
@@ -118,7 +117,7 @@ export class ActionsComponent implements OnInit {
   // }
 
   onChange(offerId) {
-    debugger;
+
     this.selectedofferId = offerId;
     if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
@@ -148,7 +147,6 @@ export class ActionsComponent implements OnInit {
   }
 
   getSelectFunctionRole(functionRole) {
-    debugger;
    this.selectedfunctionRole = functionRole;
    if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
     this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
