@@ -55,6 +55,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   doNotApproveSection = false;
   showConditionalApprovalSection = false;
   escalateVisibleAvailable: Boolean = false;
+  approvalButtonsVisibleAvailable: Boolean = true;
   showApproveSection = false;
   action: any;
   currentTaskId: any;
@@ -93,7 +94,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getStrategyReviwInfo();
     const canEscalateUsers = [];
+    const canApproveUsers = [];
     this.subscription = this.messageService.getMessage()
       .subscribe(message => {
         this.getStrategyReviwInfo();
@@ -147,12 +150,13 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
       }
-      this.stakeData = this.stakeHolderInfo; 
+      this.stakeData = this.stakeHolderInfo;
 
       for (const auth in this.stakeData) {
         if (auth === 'Co-Owner' || auth === 'Owner') {
           this.stakeData[auth].forEach(owners => {
             canEscalateUsers.push(owners['_id']);
+            canApproveUsers.push(owners['_id']);
           });
         }
       }
@@ -160,6 +164,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
         this.currentUser = user;
         if (canEscalateUsers.includes(user)) {
           this.escalateVisibleAvailable = true;
+        }
+        if (canApproveUsers.includes(user)) {
+          this.approvalButtonsVisibleAvailable = false;
         }
         this.headerService.getUserInfo(this.currentUser).subscribe(userData => {
           this.managerName = userData[0].manager;
