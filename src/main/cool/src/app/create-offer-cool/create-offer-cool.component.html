@@ -84,8 +84,8 @@
                                 class="form-control"
                                 name="primaryBUList"
                                 [options]="primaryBusinessUnits"
-                                (onPanelHide)="getSecondaryBusinessUnitsFiltered()" 
                                 [(ngModel)]="primaryBusinessUnitsValue"
+                                (onPanelHide)="getSecondaryBusinessUnitsFiltered()" 
                                 [style]="{'width':'100%'}"
                                 required>
                               </p-multiSelect>
@@ -104,6 +104,7 @@
                           name="secondaryBEList"
                           [options]="secondaryBusinessEntitiesFiltered"
                           [(ngModel)]="secondaryBusinessEntitiesValue"
+                          (onPanelHide)="getSecondaryBusinessUnitsBasedOnSencondaryBE()" 
                           [style]="{'width':'100%'}">
                         </p-multiSelect>
                       </div>
@@ -119,6 +120,7 @@
                                   name="secondaryBUList"
                                   [options]="secondaryBusinessUnitsFiltered"
                                   [(ngModel)]="secondaryBusinessUnitsValue"
+                                 			
                                   [style]="{'width':'100%'}">
                                 </p-multiSelect>
                               </div>

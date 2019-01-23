@@ -135,7 +135,7 @@
                                         <ng-template pTemplate="body" let-stakeholder>
                                             <tr>
                                                 <td>
-                                                    <p-tableCheckbox [value]="stakeholder" [disabled]="stakeholder.stakeholderDefaults" ></p-tableCheckbox>
+                                                    <p-tableCheckbox [value]="stakeholder" *ngIf="!stakeholder.stakeholderDefaults" ></p-tableCheckbox>
                                                 </td>
                                                 <td>{{stakeholder.name}}</td>
                                                 <td>{{stakeholder.email}}</td>

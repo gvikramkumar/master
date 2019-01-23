@@ -36,6 +36,9 @@ export class ActionsComponent implements OnInit {
   myOfferList;
   milestoneList = [];
   assigneeList;
+  stakeHolders = {};
+  selectedofferId: string = null;
+  selectedfunctionRole: string = null;
   offerNameValue: string;
   commentValue: string;
   titleValue: string;
@@ -76,7 +79,15 @@ export class ActionsComponent implements OnInit {
         this.offerCaseMap[ele.offerId] = ele.caseId;
         this.offerNameMap[ele.offerId] = ele.offerName;
         this.offerOwnerMap[ele.offerId] = ele.offerCreatedBy;
-
+        this.stakeHolders[ele.offerId] = {};
+        if (ele.stakeholders != null) {
+          ele.stakeholders.forEach(holder => {
+            if (this.stakeHolders[ele.offerId][holder.functionalRole] == null) {
+              this.stakeHolders[ele.offerId][holder.functionalRole] = [];
+            }
+            this.stakeHolders[ele.offerId][holder.functionalRole].push(holder['_id']);
+          })
+        }
       });
     });
 
@@ -106,6 +117,14 @@ export class ActionsComponent implements OnInit {
   // }
 
   onChange(offerId) {
+
+    this.selectedofferId = offerId;
+    if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
+      this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
+    } else {
+      this.assigneeList = [];
+    }
+
     this.actionsService.getAchievedMilestones(this.offerCaseMap[offerId]).subscribe(resMilestones => {
       this.milestoneList = [];
       this.lastValueInMilestone=[];
@@ -122,10 +141,20 @@ export class ActionsComponent implements OnInit {
     }
     });
 
-    this.actionsService.getAssignee(offerId).subscribe(data => {
-      this.assigneeList = data;
-    });
+    // this.actionsService.getAssignee(offerId).subscribe(data => {
+    //   this.assigneeList = data;
+    // });
   }
+
+  getSelectFunctionRole(functionRole) {
+   this.selectedfunctionRole = functionRole;
+   if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
+    this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
+  } else {
+    this.assigneeList = [];
+  }
+  }
+
   processMyActionsList() {
     // Process get Actions data
     if (this.myActions.actionList !== undefined) {
