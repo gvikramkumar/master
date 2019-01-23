@@ -137,12 +137,12 @@ export class MenuBarComponent implements OnInit {
             if (message === 'cancel') {
                 this.holdStatusValid = false;
                 this.cancelStatusValid = false;
-                let emailSubject = `[${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}]`;
+                let emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
                 let emailBody = `Hello,
-                [${this.offerName}]([${this.offerId}]) has been canceled by [${this.userService.getUserId()}].
+                ${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}.
                 All related actions have been disabled.
                 Click here to view canceled offer in COOL.
-                You are receiving this email because you have been identified as a stakeholder for [${this.offerName}].`;
+                You are receiving this email because you have been identified as a stakeholder for ${this.offerName}.`;
                 let stakeHolders = [];
                 for (let prop in this.stakeData) {
                     this.stakeData[prop].forEach(stakeholder => {
