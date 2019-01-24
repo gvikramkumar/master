@@ -398,7 +398,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (this.isService()) {
       this.groupingSubmeasures = sms.filter(sm => sm.indicators.service === 'Y');
     } else {
-      this.groupingSubmeasures = sms;
+      this.groupingSubmeasures = sms.filter(sm => sm.indicators.service === 'N');
     }
   }
 
