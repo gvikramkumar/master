@@ -94,7 +94,7 @@ export class MmAssesmentComponent implements OnInit {
         this.canClickNextStep = true;
       }
       if (offerDetailRes['overallStatus'] == null) {
-        this.message = { contentHead: 'Great Work!', content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.', color: 'black' };
+        this.message = { contentHead: '', content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.', color: 'black' };
       } else if (offerDetailRes['overallStatus'] === 'Aligned') {
         this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerDetailRes['derivedMM']}`, mmModel: offerDetailRes['derivedMM'] };
