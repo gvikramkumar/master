@@ -15,9 +15,9 @@
 .panel.panel--bordered.panel--raised-small {
   margin: 15px auto;
 }
-.content .card:last-of-type {
+/* .content .card:last-of-type {
   margin-bottom: 25px;
-}
+} */
 .cui table td .ui-steps {
   margin: 0 auto 0px auto;
   padding: 0px 0;
