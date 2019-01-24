@@ -17,6 +17,7 @@ export class MenuBarPopupComponent implements OnInit {
   currentOfferId: String;
   caseId: String;
   reason: String = '';
+ 
 
 
   constructor(private activatedRoute: ActivatedRoute,
