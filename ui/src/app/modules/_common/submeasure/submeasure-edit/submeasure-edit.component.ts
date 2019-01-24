@@ -346,7 +346,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return measure && measure.isCogsMeasure === 'Y';
   }
 
-  measureChange(init) {
+  measureChange(init?) {
     if (!this.sm.measureId) { // no measure in "add" mode
       return;
     }
