@@ -1,10 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {ExitCriteriaValidationService} from '../services/exit-criteria-validation.service';
-import {MonetizationModelService} from '../services/monetization-model.service';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import {HeaderService} from '../header/header.service';
+import { ExitCriteriaValidationService } from '../services/exit-criteria-validation.service';
+import { ActivatedRoute } from '@angular/router';
+import { HeaderService } from '../header/header.service';
 import { MessageService } from '../services/message.service';
-import { StrategyReviewService } from '../services/strategy-review.service';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-exit-criteria-validation',
@@ -14,40 +13,42 @@ import { StrategyReviewService } from '../services/strategy-review.service';
 })
 
 export class ExitCriteriaValidationComponent implements OnInit {
-  @Input() stakeData:object;
+  @Input() stakeData: object;
   @Input() offerBuilderdata;
   currentOfferId;
   currentCaseId;
   exitCriteriaData;
   ideate = [];
-  offerOwner:String = '';
-  requestApprovalAvailable:Boolean = true;
-  strategyservice:StrategyReviewService;
+  offerOwner: String = '';
+  requestApprovalAvailable: Boolean = true;
+  approvedOfferId;
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
-    private monetizationModelService: MonetizationModelService,
     private headerService: HeaderService,
     private messageService: MessageService,
-    private strategyReviewService: StrategyReviewService
-    ) {
-      this.strategyservice = strategyReviewService;
-      this.activatedRoute.params.subscribe(params => {
-        this.currentOfferId = params['id'];
-        this.currentCaseId = params['id2'];
-      });
-     }
+    private localStorage: LocalStorageService
+  ) {
+    this.activatedRoute.params.subscribe(params => {
+      this.currentOfferId = params['id'];
+      this.currentCaseId = params['id2'];
+    });
+  }
 
   ngOnInit() {
-      this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
+    this.approvedOfferId = this.localStorage.retrieve('approvedOfferId');
+    if (this.approvedOfferId === this.currentOfferId) {
+      this.requestApprovalAvailable = false;
+    }
+
+    this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
       const canRequestUsers = [];
-      this.exitCriteriaData=data;
+      this.exitCriteriaData = data;
       this.ideate = data['ideate'];
 
       for (let i = 0; i < this.ideate.length; i++) {
         if (this.ideate[i]['status'] !== 'Completed') {
-          // this.requestApprovalAvailable = false;
-          this.strategyservice.requestApproved = false;
+          this.requestApprovalAvailable = false;
           break;
         }
       }
@@ -61,8 +62,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
 
       this.headerService.getCurrentUser().subscribe(user => {
         if (!canRequestUsers.includes(user)) {
-          // this.requestApprovalAvailable = false;
-          this.strategyservice.requestApproved = false;
+          this.requestApprovalAvailable = false;
         }
       });
     });
@@ -75,22 +75,20 @@ export class ExitCriteriaValidationComponent implements OnInit {
       return 'red';
     } else {
       return 'grey';
+    }
   }
-}
 
-
-requestForApproval() {
-  let payload = {};
-  payload['offerName'] = this.offerBuilderdata['offerName'];
-  payload['owner'] = this.offerBuilderdata['offerOwner'];
-  this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
-    this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
-      this.messageService.sendMessage('Strategy Review');
-      // this.requestApprovalAvailable = false;
-      this.strategyservice.requestApproved = false;
+  requestForApproval() {
+    const payload = {};
+    payload['offerName'] = this.offerBuilderdata['offerName'];
+    payload['owner'] = this.offerBuilderdata['offerOwner'];
+    this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
+      this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
+        this.messageService.sendMessage('Strategy Review');
+        this.localStorage.store('approvedOfferId', this.currentOfferId);
+        this.requestApprovalAvailable = false;
+      });
     });
-
-  });
-}
+  }
 
 }
