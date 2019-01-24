@@ -136,10 +136,13 @@ export class MmAssesmentComponent implements OnInit {
           group['subGroup'].forEach(g => {
             curGroup[g['subGroupName']] = [];
             g.choices.forEach((c) => {
+              const splitArr = c.split('#');
+              const attrName = splitArr[0];
+              const description = splitArr[1];
               if (selectedCharacteristics[group['groupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)) {
-                curGroup[g['subGroupName']].push({ name: c, type: 0, status: 1 });
+                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
               } else {
-                curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
+                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
               }
             });
           });
