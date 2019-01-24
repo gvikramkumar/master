@@ -5,15 +5,32 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-
-
-function isValidFiscalMonth(strOrNum) {
-  return /^\d{6}$/.test(strOrNum.toString().trim());
+// clear the object's property if not in list. Uses lodash path for obj and list
+function clearPropertyIfNotInList(obj, prop, list, listProp?) {
+  if (!obj || !prop || !list) {
+    console.error('uiUtil.clearPropertyIfNotInList called with no obj, prop, or list');
+    return;
+  }
+  if (listProp) {
+    if (_.findIndex(list, p => _.get(p, listProp) === _.get(obj, prop)) === -1) {
+      _.unset(obj, prop);
+    }
+  } else if (_.indexOf(list, _.get(obj, prop)) === -1) {
+    _.unset(obj, prop);
+  }
 }
 
-console.log(isValidFiscalMonth(1234567));
-console.log(isValidFiscalMonth('1234567'));
-
+const li = ['one', 'two'];
+/*
+const li = [
+  {indicators: {color: 'one'}},
+  {indicators: {color: 'two'}}
+];
+*/
+const ob = {first: {val: 'One'}};
+// clearPropertyIfNotInList(ob, 'first.val', li, 'indicators.color');
+clearPropertyIfNotInList(ob, 'first.val', li);
+console.log(ob);
 
 
 
