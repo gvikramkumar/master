@@ -28,6 +28,11 @@
         <div class="col-lg-6 text-ellipsis" [matTooltip]="sm.desc" matTooltipPosition="above"
              [matTooltipDisabled]="sm.desc?.length < 15">{{sm.desc}}</div>
       </div>
+
+      <div class="row">
+        <div class="col-lg-6">Category Type:</div>
+        <div class="col-lg-6">{{sm.categoryType}}</div>
+      </div>
     </div> <!--End of first row first column-->
 
 
@@ -38,11 +43,6 @@
         <div class="col-lg-6">{{}}</div>
       </div>
 -->
-
-      <div class="row">
-        <div class="col-lg-6">Category Type:</div>
-        <div class="col-lg-6">{{sm.categoryType}}</div>
-      </div>
 
       <div *ngIf="sm.categoryType === 'Manual Mix'" class="row">
         <div class="col-lg-6">Manual Mix:</div>
@@ -63,15 +63,23 @@
         <div class="col-lg-6">Is Group Sub-Measure:</div>
         <div class="col-lg-6">{{sm.indicators.groupFlag}}</div>
       </div>
-      <div class="row">
-        <div class="col-lg-6">Is Service Sub-Measure:</div>
-        <div class="col-lg-6">{{sm.indicators.service}}</div>
+      <div *ngIf="sm.indicators.groupFlag === 'Y'" class="row">
+        <div class="col-lg-6">Allocation Required:</div>
+        <div class="col-lg-6">{{sm.indicators.allocationRequired}}</div>
       </div>
-
       <div *ngIf="sm.groupingSubmeasureId" class="row">
         <div class="col-lg-6">Grouping Sub-Measure:</div>
         <div class="col-lg-6">{{groupingSubmeasureName}}</div>
       </div>
+      <div class="row">
+        <div class="col-lg-6">Is Service Sub-Measure:</div>
+        <div class="col-lg-6">{{sm.indicators.service}}</div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">Pass Through:</div>
+        <div class="col-lg-6">{{sm.indicators.passThrough}}</div>
+      </div>
+
     </div> <!--End of first row second column-->
   </div> <!--End of first row-->
 

@@ -33,7 +33,9 @@ db.dfa_submeasure.insertMany([
       dualGaap: 'N',
       twoTier: 'N',
       deptAcct: 'N',
-      service: 'N'
+      service: 'N',
+      allocationRequired: 'N',
+      passThrough: 'N'
     },
     rules: ['RULE1', 'RULE2'],
     activeStatus: "A",
@@ -77,7 +79,9 @@ db.dfa_submeasure.insertMany([
       dualGaap: 'N',
       twoTier: 'N',
       deptAcct: 'N',
-      service: 'N'
+      service: 'N',
+      allocationRequired: 'N',
+      passThrough: 'N'
     },
     rules: ['RULE1', 'RULE3'],
     activeStatus: "A",
