@@ -16,6 +16,7 @@ const schema = new Schema(
     beMatch: String,
     countryMatch: String,
     extTheaterMatch: String,
+    glSegmentsMatch: [String],
     sl1Select: String,
     sl2Select: String,
     sl3Select: String,

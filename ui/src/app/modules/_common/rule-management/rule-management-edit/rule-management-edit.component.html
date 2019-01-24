@@ -46,8 +46,10 @@
                             empty="true" optionsKey="match" optionsValue="match"></cui-select>
                 <cui-select name="cntyMatch" [(ngModel)]="rule.countryMatch" [items]="countryMatches" dropdownMaxHeight="300"
                             optionsKey="name" optionsValue="value" empty="true" label="Country"></cui-select>
-                <cui-select name="extTheaterMatch" [(ngModel)]="rule.extTheaterMatch" [items]="extTheaterMatches"
-                            optionsKey="name" optionsValue="value" empty="true" label="External Theater"></cui-select>
+              <cui-select name="extTheaterMatch" [(ngModel)]="rule.extTheaterMatch" [items]="extTheaterMatches"
+                          optionsKey="name" optionsValue="value" empty="true" label="External Theater"></cui-select>
+              <cui-multiselect name="glSegmentsMatch" [(ngModel)]="rule.glSegmentsMatch" [items]="glSegmentMatches"
+                          optionsKey="name" optionsValue="name" empty="true" label="GL Segments"></cui-multiselect>
             </div>
           </div>
         </div>

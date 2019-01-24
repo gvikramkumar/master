@@ -13,6 +13,7 @@ export class AllocationRule {
   beMatch?: string;
   countryMatch?: string;
   extTheaterMatch?: string;
+  glSegmentsMatch: string[] = [];
   sl1Select?: string;
   sl2Select?: string;
   sl3Select?: string;
