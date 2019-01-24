@@ -28,12 +28,20 @@ export class UiUtil {
     private matToast: MatSnackBar) {
   }
 
-  /*
-    approvedOnce is no help here as we can have draft mode status D and approvedOnce
-    copy or add >> add
-    edit >> I/A and editMode >> add
-    edit >> D/P and editMode >> update
-  */
+// clear the object's property if not in list. Uses lodash path for obj and list
+  static clearPropertyIfNotInList(obj, prop, list, listProp?) {
+    if (!obj || !prop || !list) {
+      console.error('uiUtil.clearPropertyIfNotInList called with no obj, prop, or list');
+      return;
+    }
+    if (listProp) {
+      if (_.findIndex(list, p => _.get(p, listProp) === _.get(obj, prop)) === -1) {
+        _.unset(obj, prop);
+      }
+    } else if (_.indexOf(list, _.get(obj, prop)) === -1) {
+      _.unset(obj, prop);
+    }
+  }
 
   static isValidFiscalMonth(strOrNum) {
     if (!strOrNum) {
@@ -46,6 +54,12 @@ export class UiUtil {
     router.navigate([], {relativeTo: route, queryParamsHandling: 'merge', queryParams, replaceUrl: true});
   }
 
+  /*
+    approvedOnce is no help here as we can have draft mode status D and approvedOnce
+    copy or add >> add
+    edit >> I/A and editMode >> add
+    edit >> D/P and editMode >> update
+  */
   static getApprovalSaveMode(status, add, edit, copy) {
     if ((add || copy)) {
       return 'add';

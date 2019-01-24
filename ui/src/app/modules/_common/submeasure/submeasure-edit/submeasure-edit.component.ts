@@ -226,6 +226,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         }
         if (this.viewMode) {
           this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
+        } else {
+          // they need to pick a new effective month is it's not in the last 6 months.
+          UiUtil.clearPropertyIfNotInList(this.sm, 'startFiscalMonth', this.yearmos, 'fiscalMonth');
         }
         if (this.copyMode) {
           this.sm.approvedOnce = 'N';
@@ -343,7 +346,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return measure && measure.isCogsMeasure === 'Y';
   }
 
-  measureChange(init = false) {
+  measureChange(init) {
     if (!this.sm.measureId) { // no measure in "add" mode
       return;
     }
@@ -365,10 +368,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .subscribe(groupingSubmeasures => {
         this.groupingSubmeasuresAll = groupingSubmeasures;
         this.filterGroupingSubmeasuresIfService();
-
-        if (!init) {
-          this.sm.groupingSubmeasureId = undefined;
-        }
+        UiUtil.clearPropertyIfNotInList(this.sm, 'groupingSubmeasureId', this.groupingSubmeasures, 'submeasureKey');
       });
 
     this.currentMeasure = _.find(this.measures, {measureId: this.sm.measureId});
@@ -386,6 +386,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
 
     this.pnlNodes = this.pnlNodesAll.filter(x => x.measure_id === this.sm.measureId);
+    UiUtil.clearPropertyIfNotInList(this.sm, 'pnlnodeGrouping', this.pnlNodes, 'pnlnode_grouping');
   }
 
   isService() {

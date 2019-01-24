@@ -136,9 +136,14 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     }
   */
 
-  public save() {
+  cleanUp() {
+    this.measure.sources = this.measure.sources.filter(sourceId => !!_.find(this.moduleSources, {sourceId}));
+  }
+
+  save() {
     UiUtil.triggerBlur('');
     if (this.form.valid) {
+      this.cleanUp();
       this.uiUtil.confirmSave()
         .subscribe(resp => {
           if (resp) {

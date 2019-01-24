@@ -61,6 +61,8 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
   save() {
     const promises = [];
     this.modules.forEach((module, idx) => {
+      this.selectedSources[idx] = this.selectedSources[idx].filter(sourceId => !!_.find(this.sources, {sourceId}));
+
       if (!_.isEqual(this.selectedSources[idx], this.orgSelectedSources[idx])) {
         let moduleSource = _.find(this.moduleSources, {moduleId: module.moduleId});
         if (moduleSource) {
