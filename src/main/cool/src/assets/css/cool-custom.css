@@ -340,6 +340,9 @@
   font-size: 22px;
 }
 /* Form Elements */
+.cool.cui .ui-multiselect {
+  display: block;
+}
 
 /* date picker */
 .cui .theme-blue .bs-datepicker-head {
@@ -364,10 +367,24 @@
   margin-top: 5px;
 }
 /* modals */
-span.icon-close {
+.cool.cui span.icon-close {
+  cursor: pointer;
+  color:#017CAD
+}
+.cool.cui span.icon-close:hover {
+  cursor: pointer;
+  color:#016a94;
+}
+.cool.cui .ui-overlaypanel-close {
+  position: absolute;
+  top: 0em;
+  right: 0em;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
   cursor: pointer;
 }
-
 
 /* Strategy Review Status */
 .cui .review-status .ui-accordion .ui-accordion-content {

@@ -57,7 +57,7 @@
                         [displaySelectedLabel]="true"
                         [(ngModel)]="user.beList"
                         (onPanelHide)="updatedAceessManagementBe(user)"
-                        [style]="{'width':'100%'}"
+
                         [appendTo]="body"
                         >
                       </p-multiSelect>
@@ -95,14 +95,14 @@
         <section id="formSection" *ngIf="showFormSection">
           <div class="card card--raised base-margin-top">
             <div class="panel">
-              <div class="pull-right base-margin-top">
+              <div class="pull-right">
                 <span class="icon-close" (click)="closeForm()"></span>
               </div>
-              <div class="card__header" style="margin-top: 1%">
+              <div class="card__header">
                 <h5 class="card__title">Register User</h5>
               </div>
-              <div style="margin-top: 1%">
-                <div class="row base-margin-top">
+              <div>
+                <div class="row half-margin-top">
                   <div class="col-md-12">
                     <div class="panel panel--mdgray">
                       <span class="text-uppercase">New User</span>
@@ -154,7 +154,7 @@
                       <div class="form-group half-margin-bottom">
                         <label for="selectedSeValue">Business Entity</label>
                         <p-multiSelect id="selectedSeValue" class="form-control" name="primaryBEList" [options]="businessEntities"
-                          [(ngModel)]="businessEntityValue" [style]="{'width':'100%'}">
+                          [(ngModel)]="businessEntityValue">
                         </p-multiSelect>
                       </div>
                     </div>
@@ -162,7 +162,7 @@
                       <div class="form-group half-margin-bottom">
                         <label for="selectedSValue">Business Unit</label>
                         <p-multiSelect id="selectedSValue" class="form-control" name="primaryBUList" [options]="businessUnits"
-                          [(ngModel)]="businessUnitValue" [style]="{'width':'100%'}">
+                          [(ngModel)]="businessUnitValue">
                         </p-multiSelect>
                       </div>
                     </div>

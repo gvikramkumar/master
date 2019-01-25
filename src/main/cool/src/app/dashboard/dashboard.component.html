@@ -296,12 +296,12 @@
 </div>
 
 <p-overlayPanel #popturboContent [showCloseIcon]="true">
-  <div *ngIf="selectedCaseId" class="base-padding" style="min-width:700px">
+  <div *ngIf="selectedCaseId" style="min-width:700px">
     <app-turbotaxview [caseId]="selectedCaseId"></app-turbotaxview>
   </div>
 </p-overlayPanel>
 <p-overlayPanel #popCommentContent [showCloseIcon]="true">
-  <div *ngIf="selectedAction" class="base-padding" style="min-width:700px; max-width:700px">
+  <div *ngIf="selectedAction" style="min-width:700px; max-width:700px">
     <div class="popover__body">
       <h5>View/Edit Comment</h5>
       <app-viewcomment [taskId]="selectedAction.taskId" [popContent]="p3"></app-viewcomment>
@@ -309,7 +309,7 @@
   </div>
 </p-overlayPanel>
 <p-overlayPanel #popNotificationContent [showCloseIcon]="true">
-  <div *ngIf="selectedAction" class="base-padding" style="min-width:700px">
+  <div *ngIf="selectedAction" style="min-width:700px">
     <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
     <div class="popover__body">
       <h5>Notification Details</h5>
@@ -324,7 +324,7 @@
   </div>
 </p-overlayPanel>
 <p-overlayPanel #popActionContent [showCloseIcon]="true" (onShow)="getActionFormValues()">
-  <div *ngIf="selectedAction" class="base-padding" style="min-width:700px">
+  <div *ngIf="selectedAction" style="min-width:700px">
     <div *ngIf="showActionSection">
       <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
       <div class="popover__body">
