@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Response, RequestOptions, Headers } from '@angular/http';
-import { Observable ,  BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CreateOffer } from '../create-offer-cool/create-offer';
 import { UserService } from './user.service';
@@ -19,10 +19,10 @@ export class CreateOfferService {
   secondaryBusinessEntityUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_ENTITY_URL;
   secondaryPrimaryBusinessEntityUrl: string = this.environmentService.REST_API_PRIMARY_BUSINESS_ENTITY_URL;
   getBEUrl: string = this.environmentService.REST_API_PRIMARY_BUSINESS_ENTITY_LULU_URL;
-  getPrimaryBUBasedOnBE: string =this.environmentService.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL;
+  getPrimaryBUBasedOnBE: string = this.environmentService.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL;
   getDinstinctBUUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_UNIT_LULU_URL;
 
-  
+
 
 
   coolOffer;
@@ -75,14 +75,14 @@ export class CreateOfferService {
     let url = this.getBEUrl;
     return this.httpClient.get(url, { withCredentials: true });
   }
-// lulu's change on GET SECONDARY BU
-  getDistincBU(){
+  // lulu's change on GET SECONDARY BU
+  getDistincBU() {
     let url = this.getDinstinctBUUrl;
     return this.httpClient.get(url, { withCredentials: true });
   }
 
   //Lulu's change on GET PRIMARY BU BASED ON BE
-  getPrimaryBuBasedOnBe(data){
+  getPrimaryBuBasedOnBe(data) {
     let url = this.getPrimaryBUBasedOnBE + data;
     return this.httpClient.get(url, { withCredentials: true });
   }
@@ -154,6 +154,26 @@ export class CreateOfferService {
     createoffer.offerCreatedBy = this.userService.getUserId();
     createoffer.offerOwner = this.userService.getUserId();
     return this.httpClient.post(this.offerUpdateUrl, createoffer, { withCredentials: true });
+  }
+
+  getIdpid() {
+    let url = this.environmentService.GENERATE_AUTH_IDP_TOKEN_URL;
+    return this.httpClient.get(url);
+  }
+
+
+
+  validateIdpid(header, idpidvalue) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': header
+      }),
+      withCredentials: true 
+    };
+    let url = this.environmentService.REST_API_IDPID_GET_URL + '/' + idpidvalue;
+    return this.httpClient.get(url, httpOptions);
+
+
   }
 
 }

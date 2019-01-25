@@ -11,6 +11,7 @@ import { DashboardService } from '../services/dashboard.service';
 import { NgForm } from '@angular/forms';
 import { CreateAction } from '../models/create-action';
 import { CreateActionService } from '../services/create-action.service';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 
 
@@ -55,6 +56,7 @@ export class ActionsComponent implements OnInit {
   lastValueInMilestone:Array<any>;
   milestone: any;
   val: any;
+  selectedCaseId: any;
 
 
   constructor(private router: Router, private actionsService: ActionsService,
@@ -195,7 +197,8 @@ export class ActionsComponent implements OnInit {
       this.offerCaseMap[this.offerNameValue],
       this.titleValue,
       this.descriptionValue,
-      this.milestoneValue,
+     // this.milestoneValue,
+     this.val,
       this.functionNameValue,
       selectedAssignee,
       this.dueDateValue.toISOString(),
@@ -209,6 +212,10 @@ export class ActionsComponent implements OnInit {
   }
 
 
+  showOfferPopUp(event, action, overlaypanel: OverlayPanel) {
+    this.selectedCaseId = action.caseId;
+    overlaypanel.toggle(event);
+  }
  /*  displayPop() {
     this.displayPopOver = true;
   } */

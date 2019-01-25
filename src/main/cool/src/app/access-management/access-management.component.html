@@ -1,17 +1,21 @@
 <div class="content">
   <div class="container">
-    <div class="row base-margin-top">
+    <div class="row">
       <div class="col-md-12">
-        <div class="panel panel--indigo panel--compressed task--bar">
-          <div class="row">
-            <div class="col-md-4">
-              <h2 class="page--subheading">Access Management</h2>
-            </div>
-            <div class="col-md-8 text-right">
-              <button class="btn btn--white" (click)="registerNewUser()"><span class="icon-add icon-small"></span>&nbsp;Register New Users</button>
+        <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
+         <div class="header-bar__main">
+            <div class="header-heading">
+              <h1 class="page-title">Access Management</h1>
             </div>
           </div>
+
+          <div class="header-toolbar">
+              <button class="btn btn--white" (click)="registerNewUser()"><span class="icon-add icon-small"></span>&nbsp;Register New Users</button>
+          </div>
+
         </div>
+      </div>
+    </div>
         <div class="card card--raised base-margin-top">
           <div class="panel">
             <div class="row card-table-header">
@@ -188,7 +192,7 @@
             </div>
           </div>
         </section>
-      </div>
-    </div>
+
+
   </div>
 </div>
