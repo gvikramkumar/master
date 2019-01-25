@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {OfferBasicInfoComponent} from '../offer-basic-info/offer-basic-info.component';
+import {MmInfoBarComponent} from '../mm-info-bar/mm-info-bar.component';
 
 @Component({
   selector: 'app-offer-solutioning',

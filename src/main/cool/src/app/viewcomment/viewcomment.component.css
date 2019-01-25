@@ -1,4 +1,4 @@
-.addcommentspan{
+.addcomment span{
     color: #007493; 
     font-size: 19px;
 margin-right: 5px;  
@@ -10,11 +10,17 @@ cursor: pointer;
 }
 
 textarea,{
-    width:100%;
+    width:66%;
 }
 
-/* .comments{
+.viewcomment{
+    width:100%;
+    word-wrap: break-word;
+}
+
+.comments{
    max-height: 200px;
+   width:66%;
 overflow-y: scroll;
 
-} */
+}

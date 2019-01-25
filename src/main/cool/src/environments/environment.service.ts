@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Injectable()
 export class EnvironmentService {
@@ -44,6 +45,8 @@ export class EnvironmentService {
     REST_API_DASH_DIFF_APPROVE_URL;
     REST_API_DASH_DIFF_APPROVE_COMMENT_URL;
     REST_API_ESCALATE_NOTIFICATION_URL;
+    REST_API_IDPID_GET_URL;
+    REST_API_DOWNLOAD_PDF_GET_URL;
 
     basepdafapi = '';
 
@@ -62,6 +65,10 @@ export class EnvironmentService {
     client_id;
     redirect_url;
     GENERATE_AUTH_TOKEN_URL;
+    GENERATE_AUTH_IDP_TOKEN_URL;
+    idpclientid;
+    idpclientsecret;
+    baseidpurl: string;
 
 
     constructor() {
@@ -88,6 +95,9 @@ export class EnvironmentService {
                 this.authtokenbaseapi = 'https://cloudsso.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-prd.cisco.com/cool';
+                this.baseidpurl = 'https://idp-prd-api.cisco.com';
+                this.idpclientid = 'cool-idp-nprd';
+                this.idpclientsecret = 'Cool123!';
                 break;
             case 'stage':
                 this.baseapi = 'https://cool-srv-stg.cisco.com/coolsrv';
@@ -95,6 +105,9 @@ export class EnvironmentService {
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-stg.cisco.com/cool';
+                this.baseidpurl = 'https://idp-stage-api.cisco.com';
+                this.idpclientid = 'cool-idp-nprd';
+                this.idpclientsecret = 'Cool123!';
                 break;
             case 'qualityassurance':
                 this.baseapi = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -102,6 +115,9 @@ export class EnvironmentService {
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-qa.cisco.com/cool';
+                this.baseidpurl = 'https://idp-stage-api.cisco.com';
+                this.idpclientid = 'cool-idp-nprd';
+                this.idpclientsecret = 'Cool123!';
                 break;
             case 'development':
                 this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -109,6 +125,9 @@ export class EnvironmentService {
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-dev.cisco.com/cool';
+                this.baseidpurl = 'https://idp-stage-api.cisco.com';
+                this.idpclientid = 'cool-idp-nprd';
+                this.idpclientsecret = 'Cool123!';
                 break;
             default:
                 this.baseapi = '/api';
@@ -116,10 +135,14 @@ export class EnvironmentService {
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'http://localhost.cisco.com:4200';
+                this.baseidpurl = '/idp';
+                this.idpclientid = 'cool-idp-nprd';
+                this.idpclientsecret = 'Cool123!';
         }
 
         this.GENERATE_AUTH_TOKEN_URL = `${this.authtokenbaseapi}/as/authorization.oauth2?client_id=${this.client_id}&response_type=token&redirect_uri=${this.redirect_url}`;
-
+        this.GENERATE_AUTH_IDP_TOKEN_URL = `${this.authtokenbaseapi}/as/token.oauth2?client_id=${this.idpclientid}&client_secret=${this.idpclientsecret}&grant_type=client_credentials`;
+        this.REST_API_IDPID_GET_URL = `${this.baseidpurl}/gravity/spring/board/product_offers/cards`;
         /** PDAF API's */
 
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.1/get/currentUser';
@@ -175,5 +198,7 @@ export class EnvironmentService {
         this.REST_API_DASH_DIFF_APPROVE_URL = this.baseapi + '/action/create/manualAction';
         this.REST_API_DASH_DIFF_APPROVE_COMMENT_URL = this.baseapi + '/action/proceed';
         this.REST_API_ESCALATE_NOTIFICATION_URL = this.baseapi + '/emailNotification/send';
+        this.REST_API_DOWNLOAD_PDF_GET_URL = this.baseapi + '/pdf/offerDetailsPDF';
+
     }
 }

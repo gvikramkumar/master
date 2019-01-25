@@ -58,6 +58,8 @@ export class DashboardComponent implements OnInit {
   selectedCaseId;
   selectedNotification;
   selectedAction;
+  commentEvent: any;
+  selectedActionData: any;
 
   constructor(private dashboardService: DashboardService,
     private router: Router,
@@ -142,6 +144,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showActionPopUp(event, action, overlaypanel: OverlayPanel) {
+    this.commentEvent = event;
     this.selectedAction = action;
     this.showActionSection = true;
     this.showDoNotApproveSection = false;
@@ -159,6 +162,10 @@ export class DashboardComponent implements OnInit {
         this.milestoneList = Object.keys(resMilestones).reduce((accumulator, current) => accumulator.concat(resMilestones[current]), []);
       });
     }
+  }
+
+  manualActioncomplete(){
+
   }
 
   doNotApprove() {
@@ -212,11 +219,12 @@ export class DashboardComponent implements OnInit {
     const taskId = this.selectedAction.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
+    const action ='Approved';
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,
       taskName,
-      this.action,
+      action,
       this.commentValue
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
@@ -243,7 +251,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showOfferPopUp(event, action, overlaypanel: OverlayPanel) {
-    this.selectedCaseId = action.caseId;
+    this.selectedActionData = action;
     overlaypanel.toggle(event);
   }
 

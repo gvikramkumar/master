@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { TurbotaxService } from '../services/turbotax.service';
@@ -8,11 +8,9 @@ import { MenuBarService } from '../services/menu-bar.service'
     templateUrl: './turbotaxview.component.html',
     styleUrls: ['./turbotaxview.component.css']
 })
-export class TurbotaxviewComponent implements OnInit, OnChanges {
-    @Input() caseId: string
-
+export class TurbotaxviewComponent implements OnInit {
+    @Input() data: string;
     public mStoneCntInAllPhases: any[] = ['ideate', 'plan', 'execute', 'launch'];
-
     public mileStoneStatus: any[] = [];
     public currentOfferId: any;
     public ideateCount: any = 0;
@@ -23,17 +21,20 @@ export class TurbotaxviewComponent implements OnInit, OnChanges {
     public offerPhaseDetailsList: any;
     public phaseProcessingCompleted = false;
     checkout: { Message: string; items: { mainVO: { main_title: string; childVO: { title: string; price: string; }[]; discounts: { title: string; price: string; }[]; }; quantity: string; price: string; currency: string; }[]; };
+    navigateHash: Object = {};
 
 
     constructor(private offerPhaseService: OfferPhaseService, private menuBarService: MenuBarService,
-        private activatedRoute: ActivatedRoute, private turbotax: TurbotaxService) {
+        private activatedRoute: ActivatedRoute, private turbotax: TurbotaxService, private router: Router) {
     }
 
     ngOnInit() {
-        this.init(this.caseId);
-    }
-    private init(caseId) {
-        this.menuBarService.getRubboTaxMenu(caseId).subscribe(data => {
+        this.navigateHash['Offer Creation'] = ['/coolOffer', this.data['offerId']];
+        this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.data['offerId'], this.data['caseId']];
+        this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.data['offerId'], this.data['caseId']];
+        this.navigateHash['Strategy Review'] = ['/strategyReview', this.data['offerId'], this.data['caseId']];
+
+        this.menuBarService.getRubboTaxMenu(this.data['caseId']).subscribe(data => {
             this.offerPhaseDetailsList = data;
             this.ideateCount = data['ideate'].length;
             this.planCount = data['plan'].length;
@@ -42,27 +43,17 @@ export class TurbotaxviewComponent implements OnInit, OnChanges {
                     this.ideateCompletedCount = this.ideateCompletedCount + 1;
                 }
             });
+
             data['plan'].forEach(element => {
                 if (element.status === 'Completed') {
                     this.planCompletedCount = this.ideateCompletedCount + 1;
                 }
             });
-        });
-        this.offerPhaseService.getCurrentOfferPhaseInfo(caseId).subscribe(data => {
+        })
+
+        this.offerPhaseService.getCurrentOfferPhaseInfo(this.data['caseId']).subscribe(data => {
             this.processCurrentPhaseInfo(data);
         });
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        const caseId: SimpleChange = changes.caseId;
-        this.offerPhaseDetailsList = null;
-        this.ideateCount = null;
-        this.planCount = null;
-        this.ideateCompletedCount = 0;
-        this.planCompletedCount = 0;
-        this.mileStoneStatus = [];
-        this.phaseProcessingCompleted = false;
-        this.init(caseId.currentValue);
     }
 
     processCurrentPhaseInfo(phaseInfo) {
@@ -91,5 +82,11 @@ export class TurbotaxviewComponent implements OnInit, OnChanges {
             this.mileStoneStatus.push(obj);
         });
         this.phaseProcessingCompleted = true;
+    }
+
+    gotobackTomilestone(value) {
+        if (this.navigateHash[value] != null) {
+            this.router.navigate(this.navigateHash[value]);
+        }
     }
 }
