@@ -5,11 +5,13 @@
       <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
           <div class="col-sm-4">
-            <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span class="icon-back"></span></button>
+            <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span
+                  class="icon-back"></span></button>
               Offer Info</h2>
           </div>
           <div class="col-sm-8 text-right">
-            <button class="btn btn--white" [disabled]="!offerCreateForm.valid" (click)="proceedToOfferBuilder()">Proceed to Offer Builder <span class="icon-chevron-right"></span></button>
+            <button class="btn btn--white" [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to
+              Offer Builder <span class="icon-chevron-right"></span></button>
           </div>
         </div>
       </div>
@@ -18,25 +20,18 @@
 
       <div class="card card--raised base-margin-top">
         <div class="panel">
-        <div class="row">
-          <div class="col-md-2"></div>
-          <div class="col-md-8">
-            <div class="card__body">
-              <form autoComplete="off" #offerCreateForm="ngForm">
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+              <div class="card__body">
+                <form autoComplete="off" #offerCreateForm="ngForm">
                   <div class="row base-margin-top">
                     <div class="col-md-12">
                       <div class="form-group half-margin-bottom">
                         <div class="form-group__text">
                           <label for="offerName">Offer Name</label>
-                          <input
-                            id="offerName"
-                            type="text"
-                            class="form-control"
-                            name="offerName"
-                            required
-                            [(ngModel)]="offerNameValue"
-                            #offerName="ngModel"
-                            ngModel>
+                          <input id="offerName" type="text" class="form-control" name="offerName" required [(ngModel)]="offerNameValue"
+                            #offerName="ngModel" ngModel>
                         </div>
                       </div>
                     </div>
@@ -44,53 +39,33 @@
                       <div class="form-group half-margin-bottom">
                         <div class="form-group__text">
                           <label for="offerDesc">Offer Description</label>
-                          <input
-                            id="offerDesc"
-                            type="text"
-                            class="form-control"
-                            name="offerDesc"
-                            ngModel
-                            required
-                            [(ngModel)]="offerDescValue"
-                            #offerDesc="ngModel">
+                          <input id="offerDesc" type="text" class="form-control" name="offerDesc" ngModel required
+                            [(ngModel)]="offerDescValue" #offerDesc="ngModel">
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="row base-margin-top">
-                     <!-- <BE Part> -->
+                    <!-- <BE Part> -->
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
-                        <label for="selectedBeValue">Primary Business Entity</label>                   
-                          <p-dropdown 
-                            id="selectedBeValue" 
-                            class="form-control" 
-                            name="primaryBEList" 
-                            [options]="primaryBusinessEntities"
-                            (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)" 
-                            [(ngModel)]="primaryBusinessEntitiesValue" 
-                            [style]="{'width':'100%'}"
-                            filter="true" 
-                            required>
-                          </p-dropdown>
-                      </div> 
+                        <label for="selectedBeValue">Primary Business Entity</label>
+                        <p-dropdown id="selectedBeValue" class="form-control" name="primaryBEList" [options]="primaryBusinessEntities"
+                          (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)" [(ngModel)]="primaryBusinessEntitiesValue"
+                          [style]="{'width':'100%'}" filter="true" required>
+                        </p-dropdown>
+                      </div>
                     </div>
                     <!-- <BU part> -->
-                        <div class="col-md-6">
-                            <div class="form-group half-margin-bottom">
-                              <label for="selectedValue">Primary Business Unit</label>
-                              <p-multiSelect
-                                id="selectedBuValue"
-                                class="form-control"
-                                name="primaryBUList"
-                                [options]="primaryBusinessUnits"
-                                [(ngModel)]="primaryBusinessUnitsValue"
-                                (onPanelHide)="getSecondaryBusinessUnitsFiltered()" 
-                                [style]="{'width':'100%'}"
-                                required>
-                              </p-multiSelect>
-                            </div>
-                          </div>
+                    <div class="col-md-6">
+                      <div class="form-group half-margin-bottom">
+                        <label for="selectedValue">Primary Business Unit</label>
+                        <p-multiSelect id="selectedBuValue" class="form-control" name="primaryBUList" [options]="primaryBusinessUnits"
+                          [(ngModel)]="primaryBusinessUnitsValue" (onPanelHide)="getSecondaryBusinessUnitsFiltered()"
+                          [style]="{'width':'100%'}" required>
+                        </p-multiSelect>
+                      </div>
+                    </div>
 
                   </div>
                   <div class="row base-margin-top">
@@ -98,53 +73,30 @@
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
                         <label for="selectedSeValue">Secondary Business Entity</label>
-                        <p-multiSelect
-                          id="selectedSeValue"
-                          class="form-control"
-                          name="secondaryBEList"
-                          [options]="secondaryBusinessEntitiesFiltered"
-                          [(ngModel)]="secondaryBusinessEntitiesValue"
-                          (onPanelHide)="getSecondaryBusinessUnitsBasedOnSencondaryBE()" 
+                        <p-multiSelect id="selectedSeValue" class="form-control" name="secondaryBEList" [options]="secondaryBusinessEntitiesFiltered"
+                          [(ngModel)]="secondaryBusinessEntitiesValue" (onPanelHide)="getSecondaryBusinessUnitsBasedOnSencondaryBE()"
                           [style]="{'width':'100%'}">
                         </p-multiSelect>
                       </div>
                     </div>
 
-                       <!-- <Second BU> -->
-                          <div class="col-md-6">
-                              <div class="form-group half-margin-bottom">
-                                <label for="selectedSValue">Secondary Business Unit</label>
-                                <p-multiSelect
-                                  id="selectedSValue"
-                                  class="form-control"
-                                  name="secondaryBUList"
-                                  [options]="secondaryBusinessUnitsFiltered"
-                                  [(ngModel)]="secondaryBusinessUnitsValue"
-                                 			
-                                  [style]="{'width':'100%'}">
-                                </p-multiSelect>
-                              </div>
-                            </div>
+                    <!-- <Second BU> -->
+                    <div class="col-md-6">
+                      <div class="form-group half-margin-bottom">
+                        <label for="selectedSValue">Secondary Business Unit</label>
+                        <p-multiSelect id="selectedSValue" class="form-control" name="secondaryBUList" [options]="secondaryBusinessUnitsFiltered"
+                          [(ngModel)]="secondaryBusinessUnitsValue" [style]="{'width':'100%'}">
+                        </p-multiSelect>
+                      </div>
+                    </div>
                   </div>
                   <div class="row">
-                  <div class="col-md-6">
-                      <div
-                        class="form-group label--floated input--icon half-margin-bottom">
+                    <div class="col-md-6">
+                      <div class="form-group label--floated input--icon half-margin-bottom">
                         <div class="form-group__text">
-                          <input
-                            class="form-control"
-                            name="strategyReviewDate"
-                            id="strategyReviewDate"
-                            #dp1="bsDatepicker"
-                            bsDatepicker
-                            placement="top"
-                            [minDate]="minDate"
-                            containerClass="custome-date"
-                            [bsConfig]="dpConfig"
-                            ngModel
-                            required
-                            [(ngModel)]="strategyReviewDateValue"
-                            #strategyReviewDate="ngModel">
+                          <input class="form-control" name="strategyReviewDate" id="strategyReviewDate" #dp1="bsDatepicker"
+                            bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                            ngModel required [(ngModel)]="strategyReviewDateValue" #strategyReviewDate="ngModel">
                           <label id="strategyReviewDate" for="strategyReviewDate">Strategy Review Date</label>
                           <button type="button" class="link" tabindex="-1">
                             <span class="icon-month"></span>
@@ -153,23 +105,11 @@
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <div
-                        class="form-group label&#45;&#45;floated input&#45;&#45;icon half-margin-bottom">
+                      <div class="form-group label&#45;&#45;floated input&#45;&#45;icon half-margin-bottom">
                         <div class="form-group__text">
-                          <input
-                            class="form-control"
-                            name="designReviewDate"
-                            id="designReviewDate"
-                            #dp2="bsDatepicker"
-                            bsDatepicker
-                            placement="top"
-                            [minDate]="minDate"
-                            containerClass="custome-date"
-                            [bsConfig]="dpConfig"
-                            ngModel
-                            required
-                            [(ngModel)]="designReviewDateValue"
-                            #designReviewDate="ngModel">
+                          <input class="form-control" name="designReviewDate" id="designReviewDate" #dp2="bsDatepicker"
+                            bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                            ngModel required [(ngModel)]="designReviewDateValue" #designReviewDate="ngModel">
                           <label for="designReviewDate">Design Review Date</label>
                           <button type="button" class="link" tabindex="-1">
                             <span class="icon-month"></span>
@@ -180,23 +120,11 @@
                   </div>
                   <div class="row">
                     <div class="col-md-6">
-                      <div
-                        class="form-group label--floated input--icon half-margin-bottom">
+                      <div class="form-group label--floated input--icon half-margin-bottom">
                         <div class="form-group__text">
-                          <input
-                            class="form-control"
-                            name="readinessReviewDate"
-                            id="readinessReviewDate"
-                            #dp3="bsDatepicker"
-                            bsDatepicker
-                            placement="top"
-                            [minDate]="minDate"
-                            containerClass="custome-date"
-                            [bsConfig]="dpConfig"
-                            ngModel
-                            required
-                            [(ngModel)]="readinessReviewDateValue"
-                            #readinessReviewDate="ngModel">
+                          <input class="form-control" name="readinessReviewDate" id="readinessReviewDate" #dp3="bsDatepicker"
+                            bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                            ngModel required [(ngModel)]="readinessReviewDateValue" #readinessReviewDate="ngModel">
                           <label for="readinessReviewDate">Readiness Review Date</label>
                           <button type="button" class="link" tabindex="-1">
                             <span class="icon-month"></span>
@@ -205,23 +133,11 @@
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <div
-                        class="form-group label--floated input--icon half-margin-bottom">
+                      <div class="form-group label--floated input--icon half-margin-bottom">
                         <div class="form-group__text">
-                          <input
-                            class="form-control"
-                            name="expectedLaunchDate"
-                            id="expectedLaunchDate"
-                            #dp4="bsDatepicker"
-                            bsDatepicker
-                            placement="top"
-                            [minDate]="minDate"
-                            containerClass="custome-date"
-                            [bsConfig]="dpConfig"
-                            ngModel
-                            required
-                            [(ngModel)]="expectedLaunchDateValue"
-                            #expectedLaunchDate="ngModel">
+                          <input class="form-control" name="expectedLaunchDate" id="expectedLaunchDate" #dp4="bsDatepicker"
+                            bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                            ngModel required [(ngModel)]="expectedLaunchDateValue" #expectedLaunchDate="ngModel">
                           <label for="expectedLaunchDate">Launch Date</label>
                           <button type="button" class="link" tabindex="-1">
                             <span class="icon-month"></span>
@@ -230,11 +146,24 @@
                       </div>
                     </div>
                   </div>
-              </form>
+                  <div class="row ">
+                    <div class="col-md-6">
+                      <div class="form-group half-margin-bottom">
+                        <div class="form-group__text">
+                          <label for="idpid">IDP ID</label>
+                          <input id="idpid" type="text" class="form-control" name="offerName" [(ngModel)]="idpvalue"
+                            required (blur)="getidptoken($event)">
+                        </div>
+                        <span class="text-success" *ngIf="idpidValid">Valid</span>
+                        <span class="text-danger" *ngIf="idpidInvalid">Invalid</span>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
+            <div class="col-md-2"></div>
           </div>
-          <div class="col-md-2"></div>
-        </div>
         </div>
       </div>
 

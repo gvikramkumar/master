@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { ViewcommentService } from '../services/viewcomment.service';
+import { OverlayPanel } from 'primeng/overlaypanel';
 import * as moment from 'moment';
 @Component({
   selector: 'app-viewcomment',
@@ -11,7 +12,8 @@ import * as moment from 'moment';
 export class ViewcommentComponent implements OnInit, OnChanges {
   @Input() userName: string;
   @Input() taskId: string;
-  @Input() popContent;
+  @Input() popContent:OverlayPanel;
+  @Input() event;
 
   public onDisable = true;
   public addcomment = false;
@@ -54,10 +56,11 @@ export class ViewcommentComponent implements OnInit, OnChanges {
     });
   }
 
-  private getComments(taskId) {
+  private getComments(taskId) {debugger;
     this.viewcommentService.getViewComment(taskId).subscribe(resComments => {
       this.viewcomment = resComments.map(comment => {
         //comment.date = moment(comment.date).format('MM-DD-YYYY');
+        
         return comment;
       });
     });
@@ -76,7 +79,7 @@ export class ViewcommentComponent implements OnInit, OnChanges {
 
   validateComment(event) {
     const value = event.target.value;
-    if (value.toString().length < 1) {
+    if (value.toString().trim().length < 1) {
       this.onDisable = true;
     } else {
       this.onDisable = false;
@@ -97,7 +100,7 @@ export class ViewcommentComponent implements OnInit, OnChanges {
     this.newComment = '';
     this.onDisable = true;
     this.addcomment = false;
-    this.popContent.close();
+    this.popContent.toggle(this.event);
   }
 
 }

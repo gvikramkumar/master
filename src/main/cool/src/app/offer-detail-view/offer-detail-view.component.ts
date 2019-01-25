@@ -5,6 +5,7 @@ import { StakeHolder } from '../models/stakeholder';
 import {Location} from '@angular/common';
 import { OfferCharacteristics } from '../models/OfferCharacteristics';
 import { StrategyReviewService } from '../services/strategy-review.service';
+import { MonetizationModelService } from '../services/monetization-model.service';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class OfferDetailViewComponent implements OnInit {
   stakeHolderTotalCount: any = 0;
 
   constructor(private activatedRoute: ActivatedRoute,
+    private monetizationModelService: MonetizationModelService,
     private _route:Router,
     private offerDetailViewService: OfferDetailViewService,
     private strategyReviewService: StrategyReviewService,
@@ -148,6 +150,26 @@ export class OfferDetailViewComponent implements OnInit {
   }
 
   onExportPdf() {
+    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data =>{
+      const nameOfFileToDownload = 'offer-details';
+      console.log("nameoffile",nameOfFileToDownload);
+        console.log(data);
+          const blob = new Blob([data], {type: 'application/pdf'});
+         /*  const url= window.URL.createObjectURL(blob);
+            window.open(url);
+          console.log("samplePDF",blob); */
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+           } else {
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = nameOfFileToDownload;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+           
+      }
+    });
     // this.offerDetailViewService.export().subscribe(data => saveAs(data, `pdf report.pdf`));
   }
 

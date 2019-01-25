@@ -7,30 +7,32 @@ export class CreateOffer {
   primaryBUList: string[];
   primaryBEList: string[];
   secondaryBUList: string[];
-  secondaryBEList: string;
+  secondaryBEList: string[];
   strategyReviewDate: string;
   designReviewDate: string;
   readinessReviewDate: string;
   expectedLaunchDate: string;
-  offerOwner:string;
-  offerCreatedBy:string;
-  offerCreationDate:string;
-  status:Status;
+  offerOwner: string;
+  offerCreatedBy: string;
+  offerCreationDate: string;
+  status: Status;
+  idpidvalue: string;
   constructor(userId: string,
-              offerOwner:string,
-              offerName: string,
-              offerDesc: string,
-              primaryBUList: string[],
-              primaryBEList: string[],
-              secondaryBUList: string[],
-              secondaryBEList: string,
-              strategyReviewDate: string,
-              designReviewDate: string,
-              readinessReviewDate: string,
-              expectedLaunchDate: string,
-              offerCreatedBy: string,
-              offerCreationDate: string,
-              status: Status) {
+    offerOwner: string,
+    offerName: string,
+    offerDesc: string,
+    primaryBUList: string[],
+    primaryBEList: string[],
+    secondaryBUList: string[],
+    secondaryBEList: string[],
+    strategyReviewDate: string,
+    designReviewDate: string,
+    readinessReviewDate: string,
+    expectedLaunchDate: string,
+    idpidvalue: string,
+    offerCreatedBy: string,
+    offerCreationDate: string,
+    status: Status) {
     this.userId = userId;
     this.offerOwner = offerOwner;
     this.offerName = offerName;
@@ -43,6 +45,7 @@ export class CreateOffer {
     this.designReviewDate = designReviewDate;
     this.readinessReviewDate = readinessReviewDate;
     this.expectedLaunchDate = expectedLaunchDate;
+    this.idpidvalue = idpidvalue;
     this.offerCreationDate = offerCreationDate;
     this.offerCreatedBy = offerCreatedBy;
     this.status = status;

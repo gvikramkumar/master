@@ -32,24 +32,16 @@
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
                 <p-column field="offerId" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <a  [ngbPopover]="popCommentContent"
-                     (click)="p3.open()" autoClose="'outside'" #p3="ngbPopover"
-                     triggers="manual" pTooltip="TurboTax" placement="right">{{actionData.offerId}}<br /></a>
+                 <a (click)="showOfferPopUp($event,offerData,popturboContent)">>
+                     {{actionData.offerId}}<br /></a>
                     <span>{{actionData.offerName}}</span>
                     <!--new code strarts here-->
 
-                    <ng-template #popCommentContent ptemplate="body">
-                      <div  class="popover" style="width:1000px;">
-
-                        <div class="popover__body">
-
-                          <app-turbotaxview [caseId]="actionData.caseId"></app-turbotaxview>
-                          <a class="modal__close" id="popover_close"><span class="icon-close"
-                            (click)="displayActionPop(p3)"></span></a>
-                        </div>
-
+                    <p-overlayPanel #popturboContent [showCloseIcon]="true">
+                      <div *ngIf="selectedCaseId" class="base-padding" style="min-width:700px">
+                        <app-turbotaxview [data]="actionData"></app-turbotaxview>
                       </div>
-                    </ng-template>
+                    </p-overlayPanel>
 
                     <!--ends here-->
 
@@ -166,7 +158,7 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="milestoneName">MILESTONE</label>
-                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly >
+                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">
                     <!-- <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
                       required ngModel #milestoneName="ngModel">
                       <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
@@ -179,9 +171,7 @@
                 <div class="form-group">
                   <div class="form-group__text select">
                     <label for="functionName">SELECT FUNCTION</label>
-                    <select id="functionName" class="form-control" 
-                    (change)="getSelectFunctionRole($event.target.value)"
-                    name="functionName" [(ngModel)]="functionNameValue"
+                    <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
                       ngModel required>
                       <option *ngFor="let function of functionList" [value]="function">
                         {{function}}</option>

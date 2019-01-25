@@ -2,27 +2,23 @@
   <div class="divider divider--compressed"></div>
   <br>
   <h6>COMMENT</h6>
-  <div class="comments base-padding">
-    <div *ngFor="let data of viewcomment">
-      <div>{{data.comment}}</div>
+  <div class="comments">
+    <div *ngFor="let data of viewcomment" >
+     <div class="viewcomment"> {{data.comment}}</div>
       <div class="divider divider--compressed"></div>
-      <div class="text-small text-muted text-right">
-        {{data.date | date: 'dd-MMM-yyyy'}}
+      <div class="base-margin-bottom commentId" style="float:right;"> <span>{{data.date | date:'dd-MMM-yyyy'}}</span>
+        <span> CEC:{{data.owner}}</span>
       </div>
-    </div>
-    <!-- <div class="divider divider--compressed"></div> -->
+    </div> 
+    <div class="divider divider--compressed"></div>
   </div>
 
   <span class="addcommentspan" *ngIf="onDisable" (click)="addComment()">+</span>
   <label for="comment" class="addcomment" (click)="addComment()">
-    Add Another Comment</label>
+    Add another comment</label>
   <div *ngIf="addcomment">
-    <textarea style="width:100%" [value]="newComment" (input)="validateComment($event)"></textarea><br>
-    <small *ngIf="showError" style="  color:red">
-      Comment should not be more than 300 characters
-    </small><br>
-
-
+    <textarea style="width:100%" [value]="newComment" (input)="validateComment($event)" maxlength="300" placeholder="300 Max characters"></textarea><br>
+    <span style="  color:red" >{{300 - newComment.length}}  characters are left</span>
     <button class="btn btn--primary" style="float:right;" (click)="updateComment()" [disabled]="onDisable" type="submit">Update</button>
     <button class="btn btn--primary" style="float:right;margin-right:12px" (click)="removeComment()" type="submit">Cancel</button>
   </div>
