@@ -1,6 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
-
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { CreateOfferService } from '../services/create-offer.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -10,7 +8,6 @@ import { Collaborators } from '../models/collaborator';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { SharedService } from '../shared-service.service';
-import { templateJitUrl } from '@angular/compiler';
 
 @Component({
   selector: 'app-stakeholder-full',
@@ -68,6 +65,7 @@ export class StakeholderFullComponent implements OnInit {
     { field: 'email', header: 'EMAIL' },
     { field: 'functionalRole', header: 'FUNCTION' }
   ];
+
   constructor(private stakeholderfullService: StakeholderfullService,
     private createOfferService: CreateOfferService,
     private searchCollaboratorService: SearchCollaboratorService,
@@ -85,6 +83,7 @@ export class StakeholderFullComponent implements OnInit {
       this.caseId = params['id2'];
     });
   }
+
   ngOnInit() {
     this.message = {
       contentHead: '',
@@ -119,8 +118,7 @@ export class StakeholderFullComponent implements OnInit {
     })
 
     this.stakeholderForm = new FormGroup({
-      userName: new FormControl(null, Validators.required),
-      functionalRole: new FormControl(null, Validators.required)
+      userName: new FormControl(null, Validators.required)
     });
 
     this.stakeholderfullService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
@@ -221,17 +219,13 @@ export class StakeholderFullComponent implements OnInit {
   onAdd() {
     console.log('onAdd() called');
     let tempCollaboratorList: Collaborators[] = [];
-    const functionalRole = this.stakeholderForm.controls['functionalRole'].value;
-    console.log(functionalRole);
-    console.log(this.val);
-
     const obj = {
       name: this.val['userName'],
       email: this.val['_id'] + '@cisco.com',
       _id: this.val['_id'],
       businessEntity: this.val['userMappings'][0]['businessEntity'],
-      functionalRole: functionalRole,
-      offerRole: functionalRole,
+      functionalRole: this.val['userMappings'][0]['functionalRole'],
+      offerRole: this.val['userMappings'][0]['functionalRole'],
       stakeholderDefaults: false
     };
 

@@ -6,8 +6,6 @@ import { EnvironmentService } from '../../environments/environment.service';
 @Injectable()
 export class StrategyReviewService {
 
-requestApproved: Boolean = true;
-
 constructor(private http: HttpClient, private environmentService: EnvironmentService) {}
 
 getStrategyReview(caseId): Observable<any> {

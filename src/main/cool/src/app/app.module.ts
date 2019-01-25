@@ -79,6 +79,7 @@ import { OffersolutioningCardTwoComponent } from './offersolutioning-card-two/of
 import { OffersolutioningCardThreeComponent } from './offersolutioning-card-three/offersolutioning-card-three.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { MessageService } from './services/message.service';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 
 
 
@@ -149,6 +150,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
     AccordionModule,
     TooltipModule,
     AutoCompleteModule,
+    NgxWebstorageModule.forRoot(),
     OverlayPanelModule
   ],
   providers:

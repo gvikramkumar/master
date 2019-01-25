@@ -1,12 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CreateOfferService } from '../services/create-offer.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
-import { AddEditCollaborator } from '../create-offer-cool/add-edit-collaborator';
 import { StakeHolder } from '../models/stakeholder';
 import { StakeHolderDTO } from '../models/stakeholderdto';
 import { Collaborators } from '../models/collaborator';
@@ -20,7 +19,7 @@ const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
   templateUrl: './right-panel.component.html',
   styleUrls: ['./right-panel.component.css']
 })
-export class RightPanelComponent implements OnInit {
+export class RightPanelComponent implements OnInit, OnDestroy {
   notiFication: Boolean = false;
   @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
@@ -109,7 +108,7 @@ export class RightPanelComponent implements OnInit {
         distinctUntilChanged(),
         map(term => term.length < 0 ? []
           : searchOptions.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-      );
+      )
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -166,16 +165,14 @@ export class RightPanelComponent implements OnInit {
 
     // Get Business Entities
     this.sharedService.getBusinessEntity().subscribe(data => {
-      console.log(data);
-      let businessEntities = <any>data;
-      let beArry = [];
+      const businessEntities = <any>data;
+      const beArry = [];
       businessEntities.forEach(element => {
         if (element.BE !== null) {
           beArry.push(element.BE);
         }
       });
       this.entityList = beArry;
-      console.log(this.entityList);
     });
 
     this.addEditCollaboratorsForm = new FormGroup({
@@ -201,20 +198,22 @@ export class RightPanelComponent implements OnInit {
 
         if (this.OfferOwners) {
           this.OfferOwners.forEach(item => {
-            item.caption = "";
-            item.caption = item.firstName.charAt(0) + "" + item.lastName.charAt(0)
-          })
+            item.caption = '';
+            item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+          });
         }
         if (this.approvars) {
           this.approvars.forEach(item => {
-            item.caption = "";
-            item.caption = item.firstName.charAt(0) + "" + item.lastName.charAt(0)
-          })
+            item.caption = '';
+            item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+          });
         }
-      })
+      });
     }
 
-    this.eventsSubscription = this.events.subscribe((data) => this.storeOwnerId(data))
+    if (this.events !== undefined) {
+      this.eventsSubscription = this.events.subscribe((data) => this.storeOwnerId(data));
+    }
   }
 
   /**
@@ -226,8 +225,9 @@ export class RightPanelComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.eventsSubscription)
-      this.eventsSubscription.unsubscribe()
+    if (this.eventsSubscription) {
+      this.eventsSubscription.unsubscribe();
+    }
   }
 
   processCurrentPhaseInfo(phaseInfo) {
@@ -283,7 +283,7 @@ export class RightPanelComponent implements OnInit {
   }
 
   onSearch() {
-    let tempCollaboratorList: Collaborators[] = [];
+    const tempCollaboratorList: Collaborators[] = [];
 
     const tempVar = this.addEditCollaboratorsForm.controls['name'].value;
     const userName = this.addEditCollaboratorsForm.controls['name'].value;
@@ -296,7 +296,7 @@ export class RightPanelComponent implements OnInit {
     if (userName !== undefined && userName != null && userName.includes('@')) {
       payLoad['emailId'] = userName;
     } else {
-      payLoad['userName'] = userName
+      payLoad['userName'] = userName;
     }
 
     if (businessEntity !== undefined && businessEntity != null) {
@@ -355,14 +355,12 @@ export class RightPanelComponent implements OnInit {
   }
 
   addToStakeData(res) {
-    console.log(res);
-    let keyUsers = res['stakeholders'];
+    const keyUsers = res['stakeholders'];
     keyUsers.forEach(user => {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
-      if (this.alreayAddedStakeHolders.findIndex(k => k == user['_id']) == -1) {
-        console.log(user['_id']);
+      if (this.alreayAddedStakeHolders.findIndex(k => k === user['_id']) === -1) {
         this.stakeData[user['offerRole']].push(
           {
             userName: user['userName'],
@@ -378,9 +376,7 @@ export class RightPanelComponent implements OnInit {
           });
         this.alreayAddedStakeHolders.push(user['_id']);
       }
-    })
-
-    console.log(this.stakeData);
+    });
   }
 
   getUserIdFromEmail(email): any {
@@ -391,10 +387,8 @@ export class RightPanelComponent implements OnInit {
   addCollaborator() {
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
-    console.log(this.selectedCollabs);
     this.selectedCollabs.forEach(element => {
-      console.log(element);
-      let stakeHolder = new StakeHolder();
+      const stakeHolder = new StakeHolder();
       stakeHolder.businessEntity = element.businessEntity;
       stakeHolder.functionalRole = element.functionalRole;
       stakeHolder.offerRole = element.offerRole;
@@ -406,14 +400,13 @@ export class RightPanelComponent implements OnInit {
     this.selectedCollabs = [];
     stakeHolderDto.offerId = this.currentOfferId;
     stakeHolderDto.stakeholders = listOfStakeHolders;
-    console.log(stakeHolderDto);
 
     let that = this;
-    //this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
+    // this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
     // update stakeData from data posted response
     that.addToStakeData(stakeHolderDto);
-    //});
-    this.updateStakeData.next("");
+    // });
+    this.updateStakeData.next('');
     this.display = false;
 
   }
@@ -445,21 +438,23 @@ export class RightPanelComponent implements OnInit {
       this.offerData = data;
     });
 
-    if (this.offerData.offerObj.mmMapperStatus == 'Not Aligned') {
+    if (this.offerData.offerObj.mmMapperStatus === 'Not Aligned') {
 
       alert('Status is \'Not Aligned\'!. You cannot proceed with stakeholder identification.');
 
     } else {
 
-      document.location.href = "http://owb1-stage.cloudapps.cisco.com/owb/owb/showHome#/manageOffer/editPlanReview/" + this.currentOfferId;
+      document.location.href = 'http://owb1-stage.cloudapps.cisco.com/owb/owb/showHome#/manageOffer/editPlanReview/' + this.currentOfferId;
 
     }
   }
 
   getInitialChar(name) {
-    if (name == null) return "";
+    if (name == null) {
+      return '';
+    }
     let names = name.split(' ');
-    let initials = "";
+    let initials = '';
     initials += names[0].charAt(0).toUpperCase();
     if (names.length > 1) {
       initials += names[1].charAt(0).toUpperCase();
@@ -468,16 +463,16 @@ export class RightPanelComponent implements OnInit {
   }
 
   arrToOptions(arr) {
-    let res = [];
+    const res = [];
     arr.forEach(a => {
       res.push({ 'label': a, 'value': a });
-    })
+    });
     return res;
   }
 
   navigate(name) {
-        if (this.navigateHash[name] !== null) {
-            this.router.navigate(this.navigateHash[name]);
-        }
-}
+    if (this.navigateHash[name] !== null) {
+      this.router.navigate(this.navigateHash[name]);
+    }
+  }
 }
