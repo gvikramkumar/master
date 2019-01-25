@@ -122,7 +122,7 @@ export class EnvironmentService {
             case 'development':
                 this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
                 this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
-                this.authtokenbaseapi = 'https://cloudsso-dev.cisco.com';
+                this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-dev.cisco.com/cool';
                 this.baseidpurl = 'https://idp-dev-api.cisco.com';
