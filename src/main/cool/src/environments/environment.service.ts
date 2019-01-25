@@ -115,7 +115,7 @@ export class EnvironmentService {
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-qa.cisco.com/cool';
-                this.baseidpurl = 'https://idp-test-api.cisco.com';
+                this.baseidpurl = 'https://idp-stage-api.cisco.com';
                 this.idpclientid = 'cool-idp-nprd';
                 this.idpclientsecret = 'Cool123!';
                 break;
@@ -125,7 +125,7 @@ export class EnvironmentService {
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-dev.cisco.com/cool';
-                this.baseidpurl = 'https://idp-dev-api.cisco.com';
+                this.baseidpurl = 'https://idp-stage-api.cisco.com';
                 this.idpclientid = 'cool-idp-nprd';
                 this.idpclientsecret = 'Cool123!';
                 break;
