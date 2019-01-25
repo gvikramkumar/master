@@ -161,6 +161,10 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  manualActioncomplete(){
+
+  }
+
   doNotApprove() {
     this.showActionSection = false;
     this.showDoNotApproveSection = true;
@@ -212,11 +216,12 @@ export class DashboardComponent implements OnInit {
     const taskId = this.selectedAction.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
+    const action ='Approved';
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,
       taskName,
-      this.action,
+      action,
       this.commentValue
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
