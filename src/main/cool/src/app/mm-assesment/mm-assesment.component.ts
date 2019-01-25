@@ -94,7 +94,7 @@ export class MmAssesmentComponent implements OnInit {
         this.canClickNextStep = true;
       }
       if (offerDetailRes['overallStatus'] == null) {
-        this.message = { contentHead: '', content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.', color: 'black' };
+        this.message = { contentHead: 'Great Work!', content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.', color: 'black' };
       } else if (offerDetailRes['overallStatus'] === 'Aligned') {
         this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerDetailRes['derivedMM']}`, mmModel: offerDetailRes['derivedMM'] };
@@ -136,13 +136,10 @@ export class MmAssesmentComponent implements OnInit {
           group['subGroup'].forEach(g => {
             curGroup[g['subGroupName']] = [];
             g.choices.forEach((c) => {
-              const splitArr = c.split('#');
-              const attrName = splitArr[0];
-              const description = splitArr[1];
               if (selectedCharacteristics[group['groupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)) {
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+                curGroup[g['subGroupName']].push({ name: c, type: 0, status: 1 });
               } else {
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
+                curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
               }
             });
           });
@@ -152,6 +149,34 @@ export class MmAssesmentComponent implements OnInit {
     });
   }
 
+
+  //downloadPDF
+  downloadPDF(){
+    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data =>{
+    const nameOfFileToDownload = 'offer-details';
+    console.log("nameoffile",nameOfFileToDownload);
+      console.log(data);
+        const blob = new Blob([data], {type: 'application/pdf'});
+      
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+         } else {
+          var a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = nameOfFileToDownload;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+         
+    }
+  });
+  
+  }
+
+    
+
+
+  
 
   // Attributes Selection Rules
 

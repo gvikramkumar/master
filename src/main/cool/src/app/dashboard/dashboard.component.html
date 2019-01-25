@@ -63,7 +63,7 @@
                     </span>
                   </ng-template>
                 </p-column>
-                <p-column field="actions" sortable="true" header="ACTIONS AND NOTIFICATIONS">
+                <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
                       <span class="text-indigo">{{actionData.title}}&nbsp;
@@ -73,8 +73,21 @@
                     </span>
                   </ng-template>
                 </p-column>
-                <p-column field="offerName" sortable="true" header="OFFER NAME">
-                </p-column>
+              
+                    <p-column field="offerName" sortable="true" header="OFFER NAME">
+                        <ng-template let-col let-actionData="rowData" pTemplate="body">
+                            <span>
+                                <span>
+                                    <a (click)="showOfferPopUp($event,actionData,popturboContent)">
+                                      &nbsp; {{actionData.offerName}}
+                                    </a>
+                                  </span>
+                            </span>
+                          </ng-template>
+                     
+                      </p-column>
+                 
+                
                 <p-column field="assigneeId" sortable="true" header="OFFER OWNER">
                   <!-- <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <div style="white-space:pre-wrap;">
@@ -120,7 +133,7 @@
       <!-- My Offers Section -->
 
       <div class="col-md-12">
-        <div class="card card--raised base-margin-top">
+        <div class="card card--raised">
           <div class="panel">
             <div class="row card-table-header">
               <div class="col-md-8">
@@ -296,15 +309,15 @@
 </div>
 
 <p-overlayPanel #popturboContent [showCloseIcon]="true">
-  <div *ngIf="selectedCaseId" class="base-padding" style="min-width:700px">
-    <app-turbotaxview [caseId]="selectedCaseId"></app-turbotaxview>
+  <div *ngIf="selectedActionData" class="base-padding" style="min-width:900px">
+    <app-turbotaxview [data]="selectedActionData"></app-turbotaxview>
   </div>
 </p-overlayPanel>
 <p-overlayPanel #popCommentContent [showCloseIcon]="true">
   <div *ngIf="selectedAction" class="base-padding" style="min-width:700px; max-width:700px">
     <div class="popover__body">
       <h5>View/Edit Comment</h5>
-      <app-viewcomment [taskId]="selectedAction.taskId" [popContent]="p3"></app-viewcomment>
+      <app-viewcomment [taskId]="selectedAction.taskId" [event]="commentEvent" [popContent]="popCommentContent"></app-viewcomment>
     </div>
   </div>
 </p-overlayPanel>

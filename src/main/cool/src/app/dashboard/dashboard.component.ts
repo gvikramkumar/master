@@ -58,6 +58,8 @@ export class DashboardComponent implements OnInit {
   selectedCaseId;
   selectedNotification;
   selectedAction;
+  commentEvent: any;
+  selectedActionData: any;
 
   constructor(private dashboardService: DashboardService,
     private router: Router,
@@ -142,6 +144,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showActionPopUp(event, action, overlaypanel: OverlayPanel) {
+    this.commentEvent = event;
     this.selectedAction = action;
     this.showActionSection = true;
     this.showDoNotApproveSection = false;
@@ -243,7 +246,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showOfferPopUp(event, action, overlaypanel: OverlayPanel) {
-    this.selectedCaseId = action.caseId;
+    this.selectedActionData = action;
     overlaypanel.toggle(event);
   }
 

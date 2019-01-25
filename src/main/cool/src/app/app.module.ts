@@ -80,6 +80,7 @@ import { OffersolutioningCardThreeComponent } from './offersolutioning-card-thre
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { UserIdleModule } from 'angular-user-idle';
 
 
 
@@ -150,8 +151,9 @@ export function app_init(configService: ConfigurationService, userService: UserS
     AccordionModule,
     TooltipModule,
     AutoCompleteModule,
+    OverlayPanelModule,
     NgxWebstorageModule.forRoot(),
-    OverlayPanelModule
+    UserIdleModule.forRoot({idle: 10795,timeout: 10800, ping: 0})
   ],
   providers:
     [
