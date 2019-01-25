@@ -168,7 +168,7 @@ export class CreateOfferService {
       headers: new HttpHeaders({
         'Authorization': header
       }),
-
+      withCredentials: true 
     };
     let url = this.environmentService.REST_API_IDPID_GET_URL + '/' + idpidvalue;
     return this.httpClient.get(url, httpOptions);
