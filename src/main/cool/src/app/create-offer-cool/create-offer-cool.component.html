@@ -10,7 +10,7 @@
               Offer Info</h2>
           </div>
           <div class="col-sm-8 text-right">
-            <button class="btn btn--white" [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to
+            <button class="btn btn--white" [disabled]="!offerCreateForm.valid" (click)="proceedToOfferBuilder()">Proceed to
               Offer Builder <span class="icon-chevron-right"></span></button>
           </div>
         </div>
@@ -146,7 +146,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row ">
+                  <!-- <div class="row ">
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
                         <div class="form-group__text">
@@ -158,7 +158,7 @@
                         <span class="text-danger" *ngIf="idpidInvalid">Invalid</span>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </form>
               </div>
             </div>

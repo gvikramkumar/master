@@ -17,9 +17,12 @@
   <label for="comment" class="addcomment" (click)="addComment()">
     Add another comment</label>
   <div *ngIf="addcomment">
-    <textarea style="width:100%" [value]="newComment" (input)="validateComment($event)" maxlength="300" placeholder="300 Max characters"></textarea><br>
+    <textarea style="width:66%" [value]="newComment" (input)="validateComment($event)" maxlength="300" placeholder="300 Max characters"></textarea><br>
     <span style="  color:red" >{{300 - newComment.length}}  characters are left</span>
-    <button class="btn btn--primary" style="float:right;" (click)="updateComment()" [disabled]="onDisable" type="submit">Update</button>
-    <button class="btn btn--primary" style="float:right;margin-right:12px" (click)="removeComment()" type="submit">Cancel</button>
+    <div style = "margin-left:380px">
+        <button class="btn btn--primary"  (click)="removeComment()" type="submit">Cancel</button>
+    <button class="btn btn--primary" style="margin-right:12px"  (click)="updateComment()" [disabled]="onDisable" type="submit">Update</button>
+   
+  </div>
   </div>
 </div>
