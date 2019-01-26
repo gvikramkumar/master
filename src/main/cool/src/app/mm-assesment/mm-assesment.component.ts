@@ -7,6 +7,7 @@ import { MonetizationModelService } from '../services/monetization-model.service
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { ConfigurationService } from '../services/configuration.service';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import { isDefaultChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -27,6 +28,7 @@ export class MmAssesmentComponent implements OnInit {
   bviewDeckData: any[];
   choiceSelected;
   groupData = [];
+  selectedGroupData = [];
   groupNames = [];
   activeTabIndex = 0;
   message = {};
@@ -42,6 +44,9 @@ export class MmAssesmentComponent implements OnInit {
   backdropCustom;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
+  offerArray:any[] = [] ;
+  match =false;
+  
 
   constructor(private router: Router,
     private sharedService: SharedService,
@@ -65,13 +70,14 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   ngOnInit() {
-
+     this.offerArray = [];
     // Fetch logged in owner name from configurationservice.
     this.ownerName = this.configService.startupData['userName'];
 
 
     // Get Attributes for each group
     this.offerDetailViewService.mmDataRetrive(this.currentOfferId).subscribe(offerDetailRes => {
+      
       let selectedCharacteristics = {};
       if (offerDetailRes['selectedCharacteristics'] != null) {
         offerDetailRes['selectedCharacteristics'].forEach(selected => {
@@ -85,7 +91,10 @@ export class MmAssesmentComponent implements OnInit {
             selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
           });
         });
+       
       }
+      console.log("selectedCharactersistics",selectedCharacteristics); 
+    
       let that = this;
 
       // mm model and message section
@@ -130,24 +139,70 @@ export class MmAssesmentComponent implements OnInit {
 
       this.monetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
+        console.log("selectedCharacteristics",selectedCharacteristics['Offer Characteristics']);
         that.offerData['groups'].forEach(group => {
           that.groupNames.push(group['groupName']);
           let curGroup = {};
           group['subGroup'].forEach(g => {
+            console.log("g:::",g.subGroupName)
+            if(Object.keys(selectedCharacteristics).length != 0){
+            this.offerArray = selectedCharacteristics['Offer Characteristics'][g['subGroupName']];
+            }
+            console.log("offerArra::::y",this.offerArray);
             curGroup[g['subGroupName']] = [];
             g.choices.forEach((c) => {
+               this.match =false;
               const splitArr = c.split('#');
               const attrName = splitArr[0];
               const description = splitArr[1];
-              if (selectedCharacteristics[group['groupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)) {
+              console.log("attrName:::::",attrName)
+
+              if(this.offerArray && this.offerArray.length == 1 && this.offerArray ==attrName ){
+
                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-              } else {
+               this.match =true;
+          }
+
+        
+
+              if(this.offerArray && this.offerArray.length > 1){
+                 this.offerArray.forEach(value =>{
+                     if(attrName == value ){
+                 
+                  curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+                  this.match = true;
+                  
+                 }
+                 if(this.match  == true){
+                  return false;
+                 }
+               });
+              }
+
+              if(this.match == false){
                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
               }
+
+               
+             /*  if (selectedCharacteristics[group['groupName']] != null &&
+               selectedCharacteristics[group['groupName']][g['subGroupName']] != null &&
+                 selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)){
+              
+                
+                
+                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+                 
+              } else {
+                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
+              } */
             });
           });
           that.groupData.push(curGroup);
         });
+        if(this.selectedGroupData.length >0){
+          alert("no final Group data");
+        }
+        console.log("offerData",that.groupData);
       });
     });
   }
@@ -347,6 +402,8 @@ export class MmAssesmentComponent implements OnInit {
         this.canClickNextStep = false;
       }
     }
+    
+    this.selectedGroupData = this.groupData;
   }
 
 
@@ -565,6 +622,7 @@ export class MmAssesmentComponent implements OnInit {
     }];
     proceedToStakeholderPostData['secondaryBUList'] = this.offerBuilderdata['secondaryBUList'];
     proceedToStakeholderPostData['secondaryBEList'] = this.offerBuilderdata['secondaryBEList'];
+    
 
     let that = this;
     this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
