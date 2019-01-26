@@ -171,7 +171,9 @@
                 <div class="form-group">
                   <div class="form-group__text select">
                     <label for="functionName">SELECT FUNCTION</label>
-                    <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
+                    <select id="functionName" class="form-control" name="functionName"
+                    (change)="getSelectFunctionRole($event.target.value)"
+                     [(ngModel)]="functionNameValue"
                       ngModel required>
                       <option *ngFor="let function of functionList" [value]="function">
                         {{function}}</option>
