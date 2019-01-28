@@ -87,7 +87,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
           this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
-          this.idpidvalue = offerDetailRes.idpvalue
+        //  this.idpidvalue = offerDetailRes.idpvalue
         });
       }
     });
@@ -314,7 +314,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.designReviewDateValue,
       this.readinessReviewDateValue,
       this.expectedLaunchDateValue,
-      this.idpidvalue,
+     // this.idpidvalue,
       offerCreatedBy,
       offerCreationDate,
       status);

@@ -81,6 +81,7 @@ import { OfferDimensionComponent } from './offer-dimension/offer-dimension.compo
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
+import { BlueComponent } from './blue/blue.component';
 
 
 
@@ -126,7 +127,8 @@ export function app_init(configService: ConfigurationService, userService: UserS
     OffersolutioningCardOneComponent,
     OffersolutioningCardTwoComponent,
     OffersolutioningCardThreeComponent,
-    OfferDimensionComponent
+    OfferDimensionComponent,
+    BlueComponent
   ],
   imports: [
     BrowserModule,
