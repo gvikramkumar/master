@@ -45,6 +45,11 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
+    path: 'offerDimension/:id/:id2',
+    component: MmAssesmentComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
     path: 'createNewOffer',
     component: CreateNewOfferComponent
   },

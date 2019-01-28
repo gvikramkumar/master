@@ -286,7 +286,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       'comment': ''
     };
     this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
-      this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+      this.router.navigate(['/offerDimension', this.currentOfferId, this.caseId]);
     }, (error) => {
     });
   }
