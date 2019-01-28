@@ -260,4 +260,7 @@ export class DashboardComponent implements OnInit {
     this.createOfferService.currenTOffer.next('');
     this.router.navigate(['/coolOffer']);
   }
+  goToofferSolutioning(){
+    this.router.navigate(['/offerSolutioning'])
+  }
 }

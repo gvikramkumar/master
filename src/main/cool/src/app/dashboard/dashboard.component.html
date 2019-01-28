@@ -66,7 +66,7 @@
                 <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
-                      <span class="text-indigo">{{actionData.title}}&nbsp;
+                      <span class="text-indigo" (click)="goToofferSolutioning()">{{actionData.title}}&nbsp;
                         &nbsp;<span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right qtr-padding"></span><br />
                       </span>
                       <span class="text-small">{{actionData.desc}}</span>
