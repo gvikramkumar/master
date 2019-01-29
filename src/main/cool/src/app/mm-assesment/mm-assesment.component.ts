@@ -694,188 +694,189 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
-  let fakeGroup = { 'groups': [
-    {
-        "groupName": "Offer Characteristics",
-        "subGroup": [
-            {
-                "subGroupName": "Offer Components",
-                "choices": [
-                    "Content",
-                    "Managed Services",
-                    "Services (AS/Professional Service)",
-                    "SW - OS",
-                    "SW - SaaS",
-                    "Hardware (Commodity (x86) / Proprietary)",
-                    "SW - OS Feature / Application / 3rd Part SW / VNF",
-                    "3rd Party SW-SaaS"
-                ],
-                "selected": [
-                    "Content",
-                    "Cloud",
-                    "Cisco",
-                    "Provisioning Fulfillment",
-                    "Subscription: Pre-Commited Quantity",
-                    "Subscription: Usage/ Utility"
-                ],
-                "failed": null,
-                "subGroupStatus": "Aligned",
-                "listGrpQuestions": [
-                  {
-                      "question": "Is this offer commissionable?",
-                      "questionType": "Boolean",
-                      "values": [
-                          "Yes",
-                          "No"
-                      ],
-                      "required": "Mandatory",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ]
-                  },
-                  {
-                      "question": "Who are the target customers?",
-                      "questionType": "Free Text",
-                      "values": [
-                          "SSP"
-                      ],
-                      "required": "Optional",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ]
-                  }
-              ]
-            },
-            {
-                "subGroupName": "Deployment",
-                "choices": [
-                    "Hybrid",
-                    "On-Premise",
-                    "Cloud"
-                ],
-                "selected": [],
-                "failed": null,
-                "subGroupStatus": "Aligned",
-                "listGrpQuestions": [
-                  {
-                      "question": "test question percent?",
-                      "questionType": "Percent",
-                      "values": [
-                      ],
-                      "required": "Mandatory",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ]
-                  },
-                  {
-                      "question": "test question 4?",
-                      "questionType": "Money",
-                      "values": [
-                          "SSP"
-                      ],
-                      "required": "Optional",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ]
-                  }
-              ]
-            },
-            {
-                "subGroupName": "Hosting Party",
-                "choices": [
-                    "Cisco",
-                    "3rd Party",
-                    "Hosting Party - N/A"
-                ],
-                "selected": [],
-                "failed": null,
-                "subGroupStatus": "Aligned"
-            },
-            {
-                "subGroupName": "Delivery",
-                "choices": [
-                    "Electronic Fulfillment",
-                    "Physical Fulfillment",
-                    "Provisioning Fulfillment",
-                    "Embedded Solution",
-                    "Delivery - N/A"
-                ],
-                "selected": [],
-                "failed": null,
-                "subGroupStatus": "Aligned"
-            },
-            {
-                "subGroupName": "Licensing",
-                "choices": [
-                    "Perpetual",
-                    "Subscription: Pre-Commited Quantity",
-                    "Subscription: Usage/ Utility"
-                ],
-                "selected": [],
-                "failed": null,
-                "subGroupStatus": "Aligned",
-                "listGrpQuestions": [
-                  {
-                      "question": "test question 3?",
-                      "questionType": "Dropdown",
-                      "values": [
-                          "op1",
-                          "op2",
-                          "op3"
-                      ],
-                      "required": "Mandatory",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ]
-                  },
-                  {
-                      "question": "test question 4?",
-                      "questionType": "Money",
-                      "values": [
-                          "SSP"
-                      ],
-                      "required": "Optional",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ]
-                  }
-              ]
-            }
-        ]
+//   let fakeGroup = { 'groups': [
+//     {
+//         "groupName": "Offer Characteristics",
+//         "subGroup": [
+//             {
+//                 "subGroupName": "Offer Components",
+//                 "choices": [
+//                     "Content",
+//                     "Managed Services",
+//                     "Services (AS/Professional Service)",
+//                     "SW - OS",
+//                     "SW - SaaS",
+//                     "Hardware (Commodity (x86) / Proprietary)",
+//                     "SW - OS Feature / Application / 3rd Part SW / VNF",
+//                     "3rd Party SW-SaaS"
+//                 ],
+//                 "selected": [
+//                     "Content",
+//                     "Cloud",
+//                     "Cisco",
+//                     "Provisioning Fulfillment",
+//                     "Subscription: Pre-Commited Quantity",
+//                     "Subscription: Usage/ Utility"
+//                 ],
+//                 "failed": null,
+//                 "subGroupStatus": "Aligned",
+//                 "listGrpQuestions": [
+//                   {
+//                       "question": "Is this offer commissionable?",
+//                       "questionType": "Boolean",
+//                       "values": [
+//                           "Yes",
+//                           "No"
+//                       ],
+//                       "required": "Mandatory",
+//                       "primaryPOC": [
+//                           "BUPM",
+//                           "OLE"
+//                       ],
+//                       "secondaryPOC": [
+//                           "Finance",
+//                           "OLE"
+//                       ]
+//                   },
+//                   {
+//                       "question": "Who are the target customers?",
+//                       "questionType": "Free Text",
+//                       "values": [
+//                           "SSP"
+//                       ],
+//                       "required": "Optional",
+//                       "primaryPOC": [
+//                           "BUPM",
+//                           "OLE"
+//                       ],
+//                       "secondaryPOC": [
+//                           "Finance",
+//                           "OLE"
+//                       ]
+//                   }
+//               ]
+//             },
+//             {
+//                 "subGroupName": "Deployment",
+//                 "choices": [
+//                     "Hybrid",
+//                     "On-Premise",
+//                     "Cloud"
+//                 ],
+//                 "selected": [],
+//                 "failed": null,
+//                 "subGroupStatus": "Aligned",
+//                 "listGrpQuestions": [
+//                   {
+//                       "question": "test question percent?",
+//                       "questionType": "Percent",
+//                       "values": [
+//                       ],
+//                       "required": "Mandatory",
+//                       "primaryPOC": [
+//                           "BUPM",
+//                           "OLE"
+//                       ],
+//                       "secondaryPOC": [
+//                           "Finance",
+//                           "OLE"
+//                       ]
+//                   },
+//                   {
+//                       "question": "test question 4?",
+//                       "questionType": "Money",
+//                       "values": [
+//                           "SSP"
+//                       ],
+//                       "required": "Optional",
+//                       "primaryPOC": [
+//                           "BUPM",
+//                           "OLE"
+//                       ],
+//                       "secondaryPOC": [
+//                           "Finance",
+//                           "OLE"
+//                       ]
+//                   }
+//               ]
+//             },
+//             {
+//                 "subGroupName": "Hosting Party",
+//                 "choices": [
+//                     "Cisco",
+//                     "3rd Party",
+//                     "Hosting Party - N/A"
+//                 ],
+//                 "selected": [],
+//                 "failed": null,
+//                 "subGroupStatus": "Aligned"
+//             },
+//             {
+//                 "subGroupName": "Delivery",
+//                 "choices": [
+//                     "Electronic Fulfillment",
+//                     "Physical Fulfillment",
+//                     "Provisioning Fulfillment",
+//                     "Embedded Solution",
+//                     "Delivery - N/A"
+//                 ],
+//                 "selected": [],
+//                 "failed": null,
+//                 "subGroupStatus": "Aligned"
+//             },
+//             {
+//                 "subGroupName": "Licensing",
+//                 "choices": [
+//                     "Perpetual",
+//                     "Subscription: Pre-Commited Quantity",
+//                     "Subscription: Usage/ Utility"
+//                 ],
+//                 "selected": [],
+//                 "failed": null,
+//                 "subGroupStatus": "Aligned",
+//                 "listGrpQuestions": [
+//                   {
+//                       "question": "test question 3?",
+//                       "questionType": "Dropdown",
+//                       "values": [
+//                           "op1",
+//                           "op2",
+//                           "op3"
+//                       ],
+//                       "required": "Mandatory",
+//                       "primaryPOC": [
+//                           "BUPM",
+//                           "OLE"
+//                       ],
+//                       "secondaryPOC": [
+//                           "Finance",
+//                           "OLE"
+//                       ]
+//                   },
+//                   {
+//                       "question": "test question 4?",
+//                       "questionType": "Money",
+//                       "values": [
+//                           "SSP"
+//                       ],
+//                       "required": "Optional",
+//                       "primaryPOC": [
+//                           "BUPM",
+//                           "OLE"
+//                       ],
+//                       "secondaryPOC": [
+//                           "Finance",
+//                           "OLE"
+//                       ]
+//                   }
+//               ]
+//             }
+//         ]
       
-    }
-]};
-  this.offersolutioningService.saveSolutionData(this.currentOfferId, fakeGroup);
+//     }
+// ]};
+debugger;
+  this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
   this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
  })
 
