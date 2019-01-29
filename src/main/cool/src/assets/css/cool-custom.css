@@ -478,6 +478,15 @@
   /* width: 93%; */
 }
 
+/* dialog */
+.cool.cui .ui-dialog {
+  position: fixed;
+  padding: 0;
+  top: 5%;
+  max-height: 80vh;
+  overflow: auto;
+}
+
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
     margin: 10px 40px;
