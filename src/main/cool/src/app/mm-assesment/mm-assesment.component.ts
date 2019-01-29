@@ -8,6 +8,7 @@ import { OfferPhaseService } from '../services/offer-phase.service';
 import { ConfigurationService } from '../services/configuration.service';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { isDefaultChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
+import {OffersolutioningService} from '../services/offersolutioning.service';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -46,7 +47,9 @@ export class MmAssesmentComponent implements OnInit {
   backbuttonStatusValid = true;
   offerArray:any[] = [] ;
   match =false;
-  
+  dimensionMode: Boolean = false;
+  // dimensionFirstGroupData: Object;
+  // dimensionFirstGroupName: string;
 
   constructor(private router: Router,
     private sharedService: SharedService,
@@ -56,6 +59,7 @@ export class MmAssesmentComponent implements OnInit {
     private offerPhaseService: OfferPhaseService,
     private offerDetailViewService: OfferDetailViewService,
     private configService: ConfigurationService,
+    private offersolutioningService:OffersolutioningService,
   ) {
     this.activatedRoute.params.subscribe(params => {
 
@@ -70,14 +74,16 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   ngOnInit() {
-     this.offerArray = [];
+    if (this.router.url.match(/offerDimension/) !== null) {
+      this.dimensionMode = true;
+    }
+    this.offerArray = [];
     // Fetch logged in owner name from configurationservice.
     this.ownerName = this.configService.startupData['userName'];
 
 
     // Get Attributes for each group
     this.offerDetailViewService.mmDataRetrive(this.currentOfferId).subscribe(offerDetailRes => {
-      
       let selectedCharacteristics = {};
       if (offerDetailRes['selectedCharacteristics'] != null) {
         offerDetailRes['selectedCharacteristics'].forEach(selected => {
@@ -144,18 +150,18 @@ export class MmAssesmentComponent implements OnInit {
           that.groupNames.push(group['groupName']);
           let curGroup = {};
           group['subGroup'].forEach(g => {
-            console.log("g:::",g.subGroupName)
+            // console.log("g:::",g.subGroupName)
             if(Object.keys(selectedCharacteristics).length != 0){
             this.offerArray = selectedCharacteristics['Offer Characteristics'][g['subGroupName']];
             }
-            console.log("offerArra::::y",this.offerArray);
+            // console.log("offerArra::::",this.offerArray);
             curGroup[g['subGroupName']] = [];
             g.choices.forEach((c) => {
                this.match =false;
               const splitArr = c.split('#');
               const attrName = splitArr[0];
               const description = splitArr[1];
-              console.log("attrName:::::",attrName)
+              // console.log("attrName:::::",attrName)
 
               if(this.offerArray && this.offerArray.length == 1 && this.offerArray ==attrName ){
 
@@ -201,6 +207,13 @@ export class MmAssesmentComponent implements OnInit {
         });
         if(this.selectedGroupData.length >0){
           alert("no final Group data");
+        }
+        if (this.dimensionMode === true) {
+          // dimension page, remove the first tab
+          // that.dimensionFirstGroupData = that.groupData[0];
+          // that.dimensionFirstGroupName = that.groupNames[0];
+          that.groupData.shift();
+          that.groupNames.shift();
         }
         console.log("offerData",that.groupData);
       });
@@ -381,7 +394,7 @@ export class MmAssesmentComponent implements OnInit {
     }
     attribute.status = -attribute.status;
 
-    if (this.activeTabIndex === 0) {
+    if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
       if (this.groupData[0]['Offer Components'].includes(attribute)) {
         this.changeSubGroupType(this.groupData[0]);
       }
@@ -639,6 +652,43 @@ export class MmAssesmentComponent implements OnInit {
         that.router.navigate(['/stakeholderFull', that.currentOfferId, that.caseId]);
       });
     });
+
+  }
+
+  proceedToOfferSolution() {
+    let postOfferSolutioningData = {};
+    postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
+
+    let groups = [];
+    this.groupData.forEach((group, index) => {
+      let curGroup = {};
+      curGroup['groupName'] = this.groupNames[index];
+      curGroup['subgroup'] = [];
+      for (let prop in group) {
+        let curSubGroup = {};
+        curSubGroup['subGroupName'] = prop;
+        curSubGroup['subGroupStatus'] = this.message['contentHead'];
+        curSubGroup['failed'] = null;
+        curSubGroup['choices'] = [];
+        curSubGroup['selected'] = [];
+
+        group[prop].forEach((characters) => {
+          if (characters['status'] === 1 || characters['type'] === 2) {
+            curSubGroup['selected'].push(characters['name']);
+          }
+          curSubGroup['choices'].push(characters['name']);
+        });
+        curGroup['subgroup'].push(curSubGroup);
+      }
+      groups.push(curGroup);
+    });
+    postOfferSolutioningData['groups'] = groups;
+    postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
+    postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
+    console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
+ this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
+  this.router.navigate(['/offerSolutioning']);
+ })
 
   }
 

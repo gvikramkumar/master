@@ -82,6 +82,7 @@ import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
 import { BlueComponent } from './blue/blue.component';
+import { OffersolutioningService } from './services/offersolutioning.service';
 
 
 
@@ -189,6 +190,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
       StrategyReviewService,
       MessageService,
       MenuBarService,
+      OffersolutioningService,
       {
         provide: APP_INITIALIZER,
         multi: true,
