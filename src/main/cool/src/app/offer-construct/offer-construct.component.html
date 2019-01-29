@@ -37,36 +37,40 @@
         <div class="rightContent" style="margin-top: -5px;">
           <app-right-panel [portfolioFlag]="setFlag" [stakeData]="stakeData" (updateStakeData)="updateStakeData($event)"></app-right-panel>
         </div>
-        <p-dialog header="Add Details for" closable="true" modal="true" showHeader="false" (onHide)="onHide()" [responsive]="true" [width]="900"
-          [minWidth]="200" [minY]="70" [(visible)]="displayAddDetails">
+        <p-dialog header="Add Details for" closable="true" modal="true" showHeader="false" (onHide)="onHide()"
+          [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="displayAddDetails">
           <div class="divider" style="margin-top: -1.5%"></div>
-          <form [formGroup]="questionForm">
+          <form (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
             <!-- Items Top Section -->
             <div *ngFor="let question of questions" class="form-row">
-              <div [ngSwitch]="question.questionType">
-                <div *ngSwitchCase="'Unique Item'">
+              <div [ngSwitch]="question.itemType">
+                <div *ngSwitchCase="'Item'">
                   <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
                 </div>
-                <div class="divider" style="margin-top: 1%"></div>
-                <!-- Unique Item  Mandatory Section -->          
-                <div class="row card-table-header">
-                    <div class="col-md-8">
-                        <a><span class="icon-add-contain"></span> Mandatory Item Attributes</a>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group input--icon half-margin-bottom">
-                        <div class="form-group__text">
-                          <input id="input-type-search" type="text" pInputText size="50" placeholder="Copy Filters"
-                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
-                          <button type="button" class="link">
-                            <span class="icon-search"></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+              </div>
+            </div>
+            <div class="divider" style="margin-top: 1%"></div>
+            <!-- Unique Item  Mandatory Section -->
+            <div class="row">
+              <div class="col-md-8">
+                <a><span class="icon-add-contain"></span> Mandatory Item Attributes</a>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group input--icon half-margin-bottom">
+                  <div class="form-group__text">
+                    <input id="input-type-search" type="text" pInputText size="50" placeholder="Copy Attributes"
+                      (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                    <button type="button" class="link">
+                      <span class="icon-search"></span>
+                    </button>
                   </div>
-                <div class="divider" style="margin-top: 1%"></div>
-                <div *ngSwitchCase="'Unique Item'">
+                </div>
+              </div>
+            </div>
+            <div class="divider" style="margin-top: 1%"></div>
+            <div *ngFor="let question of questions" class="form-row">
+              <div [ngSwitch]="question.itemType">
+                <div *ngSwitchCase="'Unque Item'">
                   <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
                 </div>
               </div>
@@ -75,7 +79,7 @@
             <div class="row">
               <div class="col-md-12 text-right">
                 <button class="btn btn--secondary" (click)="closeDailog()">Cancel</button>
-                <button class="btn btn--primary">Add Details</button>
+                <button class="btn btn--primary" type="submit">Add Details</button>
               </div>
             </div>
           </form>

@@ -4,7 +4,7 @@ import { MonetizationModelService } from '../services/monetization-model.service
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferConstructService } from '../services/offer-construct.service';
 import { Groups } from '../models/groups';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-offer-construct',
@@ -31,7 +31,8 @@ export class OfferConstructComponent  implements OnInit {
   addDetails;
   hardwareName;
   quesionType;
-  questions: any[] = [];
+  @Input() questions: any[] = [];
+  payLoad = '';
 
   public data = [];
   firstData: Object;
@@ -44,6 +45,7 @@ export class OfferConstructComponent  implements OnInit {
     private stakeholderfullService: StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
     private offerConstructService: OfferConstructService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -52,8 +54,7 @@ export class OfferConstructComponent  implements OnInit {
   }
 
   ngOnInit() {
-    this.questionForm = new FormGroup({
-    });
+    this.questionForm = this.offerConstructService.toFormGroup(this.questions);
     this.data = [];
     this.message = {
       contentHead: 'Great Work!',
@@ -101,6 +102,13 @@ export class OfferConstructComponent  implements OnInit {
         this.groupData.push(curGroup);
       });
     });
+  }
+
+  addItemDetails() {
+    console.log('called submit method', this.questionForm);
+    this.payLoad = JSON.stringify(this.questionForm.value);
+    console.log(this.payLoad);
+    this.closeDailog();
   }
 
   processStakeHolderData(stakeHolderData) {
@@ -161,18 +169,16 @@ export class OfferConstructComponent  implements OnInit {
     this.displayAddDetails = true;
     const groups: Groups[] = [];
     const group = new Groups(
-      hardwareName,
-      []
+      hardwareName
     );
     groups.push(group);
     console.log(groups);
     const groupsPayload = {groups};
     this.offerConstructService.addDetails(groupsPayload).subscribe((data) => {
-      this.addDetails = data;
+    this.addDetails = data;
       console.log(this.addDetails);
-      // const questions: any[] = [];
-      this.addDetails.groups.forEach(element => {
-        const quesion = element.listOfferQuestions[0];
+      this.addDetails.groups[0].listOfferQuestions.forEach(element => {
+        const quesion = element;
         this.questions.push(quesion);
       });
       console.log(this.questions);

@@ -1,31 +1,36 @@
 <div [formGroup]="questionForm">
-  <div [ngSwitch]="question.itemType">
-    <div class="row base-margin-top">
-      <div class="col-md-12">
+  <div [ngSwitch]="question.componentType">
+    <div class="row" style="margin-top: 1%">
+      <div class="col-md-6">
         <div class="form-group">
           <div class="form-group__text">
-            <input *ngSwitchCase="'Boolean'" [formControlName]="question.key" [id]="question.key"
-              [type]="question.type" class="form-control">
+            <!--Free Text -->
+            <label [attr.for]="question.key">{{question.label}}</label>
+            <input *ngSwitchCase="'Free Text'" [formControlName]="question.key" [id]="question.key" [type]="question.type">
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row base-margin-top">
+    <div class="row" style="margin-top: 1%">
       <div class="col-md-6">
         <div class="form-group">
-          <div class="form-group__text select">
-            <select [id]="question.key" *ngSwitchCase="'Boolean'" [formControlName]="question.key"
-              class="form-control">
+          <div class="form-group select">
+            <!--Drop-down-->
+            <label [attr.for]="question.key">{{question.label}}</label>
+            <select [id]="question.key" *ngSwitchCase="'Drop-down'" [formControlName]="question.key">
               <option *ngFor="let opt of question.values" [value]="opt">{{opt}}</option>
             </select>
           </div>
         </div>
       </div>
-      <div class="col-md-6" style="margin-top: 1%">
+    </div>
+    <div class="row" style="margin-top: 1%">
+      <div class="col-md-6">
         <div *ngSwitchCase="'Boolean'" class="form-group form-group--inline">
+          <label [attr.for]="question.key">{{question.label}}</label>
           <label class="radio">
-            <input [id]="question.key" type="radio" [formControlName]="question.key" checked class="form-control">
+            <input [id]="question.key" type="radio" [formControlName]="question.key" checked>
             <span class="radio__input"></span>
             <span class="radio__label hidden-xs">Option 1</span>
           </label>
