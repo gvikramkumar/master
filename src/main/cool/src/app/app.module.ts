@@ -75,14 +75,13 @@ import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.com
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
 import { OffersolutioningCardOneComponent } from './offersolutioning-card-one/offersolutioning-card-one.component';
-import { OffersolutioningCardTwoComponent } from './offersolutioning-card-two/offersolutioning-card-two.component';
-import { OffersolutioningCardThreeComponent } from './offersolutioning-card-three/offersolutioning-card-three.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
 import { BlueComponent } from './blue/blue.component';
 import { OffersolutioningService } from './services/offersolutioning.service';
+import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
 
 
 
@@ -126,10 +125,9 @@ export function app_init(configService: ConfigurationService, userService: UserS
     MmInfoBarComponent,
     MmMessageBarComponent,
     OffersolutioningCardOneComponent,
-    OffersolutioningCardTwoComponent,
-    OffersolutioningCardThreeComponent,
     OfferDimensionComponent,
-    BlueComponent
+    BlueComponent,
+    OfferSolutionQuestionComponent
   ],
   imports: [
     BrowserModule,

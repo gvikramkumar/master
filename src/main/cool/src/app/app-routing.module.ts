@@ -93,7 +93,7 @@ const routes: Routes = [
     component: AuthErrorComponent
   },
   {
-    path: 'offerSolutioning',
+    path: 'offerSolutioning/:id/:id2',
     component: OfferSolutioningComponent
   },
   {

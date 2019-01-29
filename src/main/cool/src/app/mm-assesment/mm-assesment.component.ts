@@ -9,6 +9,7 @@ import { ConfigurationService } from '../services/configuration.service';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { isDefaultChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
 import {OffersolutioningService} from '../services/offersolutioning.service';
+import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -48,8 +49,8 @@ export class MmAssesmentComponent implements OnInit {
   offerArray:any[] = [] ;
   match =false;
   dimensionMode: Boolean = false;
-  // dimensionFirstGroupData: Object;
-  // dimensionFirstGroupName: string;
+  dimensionFirstGroupData: Object;
+  dimensionFirstGroupName: string;
 
   constructor(private router: Router,
     private sharedService: SharedService,
@@ -210,8 +211,8 @@ export class MmAssesmentComponent implements OnInit {
         }
         if (this.dimensionMode === true) {
           // dimension page, remove the first tab
-          // that.dimensionFirstGroupData = that.groupData[0];
-          // that.dimensionFirstGroupName = that.groupNames[0];
+          that.dimensionFirstGroupData = that.groupData[0];
+          that.dimensionFirstGroupName = that.groupNames[0];
           that.groupData.shift();
           that.groupNames.shift();
         }
@@ -660,9 +661,15 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
     let groups = [];
-    this.groupData.forEach((group, index) => {
+    let groupDataWithFirst = [];
+    groupDataWithFirst.push(this.dimensionFirstGroupData);
+    groupDataWithFirst = groupDataWithFirst.concat(this.groupData);
+    let groupNamesWithFirst = [];
+    groupNamesWithFirst.push(this.dimensionFirstGroupName);
+    groupNamesWithFirst = groupNamesWithFirst.concat(this.groupNames);
+    groupDataWithFirst.forEach((group, index) => {
       let curGroup = {};
-      curGroup['groupName'] = this.groupNames[index];
+      curGroup['groupName'] = groupNamesWithFirst[index];
       curGroup['subgroup'] = [];
       for (let prop in group) {
         let curSubGroup = {};
@@ -687,7 +694,189 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
-  this.router.navigate(['/offerSolutioning']);
+  let fakeGroup = { 'groups': [
+    {
+        "groupName": "Offer Characteristics",
+        "subGroup": [
+            {
+                "subGroupName": "Offer Components",
+                "choices": [
+                    "Content",
+                    "Managed Services",
+                    "Services (AS/Professional Service)",
+                    "SW - OS",
+                    "SW - SaaS",
+                    "Hardware (Commodity (x86) / Proprietary)",
+                    "SW - OS Feature / Application / 3rd Part SW / VNF",
+                    "3rd Party SW-SaaS"
+                ],
+                "selected": [
+                    "Content",
+                    "Cloud",
+                    "Cisco",
+                    "Provisioning Fulfillment",
+                    "Subscription: Pre-Commited Quantity",
+                    "Subscription: Usage/ Utility"
+                ],
+                "failed": null,
+                "subGroupStatus": "Aligned",
+                "listGrpQuestions": [
+                  {
+                      "question": "Is this offer commissionable?",
+                      "questionType": "Boolean",
+                      "values": [
+                          "Yes",
+                          "No"
+                      ],
+                      "required": "Mandatory",
+                      "primaryPOC": [
+                          "BUPM",
+                          "OLE"
+                      ],
+                      "secondaryPOC": [
+                          "Finance",
+                          "OLE"
+                      ]
+                  },
+                  {
+                      "question": "Who are the target customers?",
+                      "questionType": "Free Text",
+                      "values": [
+                          "SSP"
+                      ],
+                      "required": "Optional",
+                      "primaryPOC": [
+                          "BUPM",
+                          "OLE"
+                      ],
+                      "secondaryPOC": [
+                          "Finance",
+                          "OLE"
+                      ]
+                  }
+              ]
+            },
+            {
+                "subGroupName": "Deployment",
+                "choices": [
+                    "Hybrid",
+                    "On-Premise",
+                    "Cloud"
+                ],
+                "selected": [],
+                "failed": null,
+                "subGroupStatus": "Aligned",
+                "listGrpQuestions": [
+                  {
+                      "question": "test question percent?",
+                      "questionType": "Percent",
+                      "values": [
+                      ],
+                      "required": "Mandatory",
+                      "primaryPOC": [
+                          "BUPM",
+                          "OLE"
+                      ],
+                      "secondaryPOC": [
+                          "Finance",
+                          "OLE"
+                      ]
+                  },
+                  {
+                      "question": "test question 4?",
+                      "questionType": "Money",
+                      "values": [
+                          "SSP"
+                      ],
+                      "required": "Optional",
+                      "primaryPOC": [
+                          "BUPM",
+                          "OLE"
+                      ],
+                      "secondaryPOC": [
+                          "Finance",
+                          "OLE"
+                      ]
+                  }
+              ]
+            },
+            {
+                "subGroupName": "Hosting Party",
+                "choices": [
+                    "Cisco",
+                    "3rd Party",
+                    "Hosting Party - N/A"
+                ],
+                "selected": [],
+                "failed": null,
+                "subGroupStatus": "Aligned"
+            },
+            {
+                "subGroupName": "Delivery",
+                "choices": [
+                    "Electronic Fulfillment",
+                    "Physical Fulfillment",
+                    "Provisioning Fulfillment",
+                    "Embedded Solution",
+                    "Delivery - N/A"
+                ],
+                "selected": [],
+                "failed": null,
+                "subGroupStatus": "Aligned"
+            },
+            {
+                "subGroupName": "Licensing",
+                "choices": [
+                    "Perpetual",
+                    "Subscription: Pre-Commited Quantity",
+                    "Subscription: Usage/ Utility"
+                ],
+                "selected": [],
+                "failed": null,
+                "subGroupStatus": "Aligned",
+                "listGrpQuestions": [
+                  {
+                      "question": "test question 3?",
+                      "questionType": "Dropdown",
+                      "values": [
+                          "op1",
+                          "op2",
+                          "op3"
+                      ],
+                      "required": "Mandatory",
+                      "primaryPOC": [
+                          "BUPM",
+                          "OLE"
+                      ],
+                      "secondaryPOC": [
+                          "Finance",
+                          "OLE"
+                      ]
+                  },
+                  {
+                      "question": "test question 4?",
+                      "questionType": "Money",
+                      "values": [
+                          "SSP"
+                      ],
+                      "required": "Optional",
+                      "primaryPOC": [
+                          "BUPM",
+                          "OLE"
+                      ],
+                      "secondaryPOC": [
+                          "Finance",
+                          "OLE"
+                      ]
+                  }
+              ]
+            }
+        ]
+      
+    }
+]};
+  this.offersolutioningService.saveSolutionData(this.currentOfferId, fakeGroup);
+  this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
  })
 
   }

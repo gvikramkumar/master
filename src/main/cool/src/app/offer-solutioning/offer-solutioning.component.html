@@ -10,13 +10,19 @@
           <app-offer-basic-info></app-offer-basic-info>
           <app-mm-info-bar></app-mm-info-bar>
           <!-- Offer Solutioning Bar -->
-          <app-offersolutioning-card-one></app-offersolutioning-card-one>
-          <app-offersolutioning-card-one></app-offersolutioning-card-one>
-          <app-offersolutioning-card-one></app-offersolutioning-card-one>
+          <div *ngFor="let group of offerSolutionGroups">
+            <app-offersolutioning-card-one
+            [groupData]="group"
+            ></app-offersolutioning-card-one>
+          </div>
           <!-- Right Panel -->
         </div>
         <div class="rightContent col-sm-12 col-md-3" style="margin-top: -5px;">
-          <app-right-panel></app-right-panel>
+          <app-right-panel
+          [portfolioFlag]="setFlag"
+          [stakeData]="stakeData"
+          (updateStakeData)="updateStakeData($event)"
+          ></app-right-panel>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-offersolutioning-card-one',
@@ -6,10 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./offersolutioning-card-one.component.css']
 })
 export class OffersolutioningCardOneComponent implements OnInit {
+  @Input() groupData:Object;
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  checkButtonStatus(btn) {
+    if (this.groupData['selected'] != null && this.groupData['selected'].includes(btn)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
