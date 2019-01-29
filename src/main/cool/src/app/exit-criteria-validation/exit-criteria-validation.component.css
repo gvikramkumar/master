@@ -326,4 +326,16 @@ body.cui {
 .status-center{
     text-align: center !important;
 }
+
+.GREEN {
+    color: #6EBE4A;
+   }
+  
+  .YELLOW {
+    color: #FBAB18;
+  }
+  
+  .RED {
+    color: #E2231A;
+  }
 }

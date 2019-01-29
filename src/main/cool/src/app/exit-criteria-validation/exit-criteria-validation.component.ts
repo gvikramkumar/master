@@ -69,10 +69,10 @@ export class ExitCriteriaValidationComponent implements OnInit {
   }
 
   actionStatusColor(status) {
-    if (status === 'completed') {
-      return 'green';
-    } else if (status === 'pending') {
-      return 'red';
+    if (status.toLowerCase() === 'completed') {
+      return 'GREEN';
+    } else if (status.toLowerCase() === 'pending') {
+      return 'RED';
     } else {
       return 'grey';
     }
