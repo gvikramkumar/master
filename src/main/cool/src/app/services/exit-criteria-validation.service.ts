@@ -14,7 +14,7 @@ export class ExitCriteriaValidationService {
   ) { }
 
   getExitCriteriaData(caseId) {
-    const url =this.environmentService.REST_API_OFFERPHASE_DETAILS_URL+'/'+caseId +'/true';
+    const url =this.environmentService.REST_API_OFFERPHASE_DETAILS_URL+'/'+caseId +'/false';
     return this.http.get(url,{withCredentials: true});
   }
   requestApproval(offerId) {
