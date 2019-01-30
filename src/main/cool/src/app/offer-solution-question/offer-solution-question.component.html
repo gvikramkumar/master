@@ -1,8 +1,23 @@
 <div class="subheader margin-5-0">{{ questionData["question"] }}</div>
+<!-- Free Text -->
 <div *ngIf="questionData['questionType']==='Free Text'">
   <textarea class="textarea" rows="3"></textarea>
 </div>
-<div *ngIf="questionData['questionType']==='Boolean'">
+<!-- checkBox -->
+<div *ngIf="questionData['questionType']==='Multiple Choice'">
+    <div class="col-md-3">
+        <div class="subheader">Loose</div>
+        <div class="form-group form-group--inline form-group--loose" *ngFor="let checkbox of questionData['values']">
+            <label class="checkbox">
+                <input type="checkbox" checked>
+                <span class="checkbox__input"></span>
+                <span class="checkbox__label">{{checkbox}}</span>
+            </label>
+        </div>       
+        </div>
+</div>
+<!-- Radio Button -->
+<div *ngIf="questionData['questionType']==='Radioi Button'">
   <div class="form-group form-group--inline" *ngFor="let radio of questionData['values']">
     <label class="radio">
       <input type="radio" name="{{questionIndex}}_{{questionData['question']}}"/> <span class="radio__input"></span>
@@ -10,12 +25,15 @@
     </label>
   </div>
 </div>
-<div *ngIf="questionData['questionType']==='Money'">
+<!-- Currency Text -->
+<div *ngIf="questionData['questionType']==='Currency Text'">
   $<input type="text"/>
 </div>
-<div *ngIf="questionData['questionType']==='Percent'">
+<!-- Percentage Text -->
+<div *ngIf="questionData['questionType']==='Percentage Text'">
   <input type="text"/>%
 </div>
+<!-- Dropdown -->
 <div *ngIf="questionData['questionType']==='Dropdown'">
   <select class="offer-solution-quesiton-select">
       <option *ngFor="let option of questionData['values']" [value]="option">

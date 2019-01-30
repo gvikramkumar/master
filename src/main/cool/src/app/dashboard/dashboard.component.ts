@@ -82,6 +82,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private getMyActionsAndNotifications() {
+
     this.dashboardService.getMyActionsList()
       .subscribe(resActionsAndNotifications => {
         let actions = [];
@@ -260,7 +261,9 @@ export class DashboardComponent implements OnInit {
     this.createOfferService.currenTOffer.next('');
     this.router.navigate(['/coolOffer']);
   }
-  goToofferSolutioning(){
-    this.router.navigate(['/offerSolutioning'])
+  goToofferSolutioning(offerId,caseId,actiontTitle){
+    if (actiontTitle.toLowerCase() === 'provide details') {
+      this.router.navigate(['/offerSolutioning', offerId, caseId]);
+    }
   }
 }

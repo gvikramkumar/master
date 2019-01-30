@@ -872,7 +872,6 @@ export class MmAssesmentComponent implements OnInit {
       
     }
 ]};
-debugger;
   this.offersolutioningService.saveSolutionData(this.currentOfferId, fakeGroup);
   this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
  })
