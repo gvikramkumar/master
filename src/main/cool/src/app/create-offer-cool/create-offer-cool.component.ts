@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -65,7 +66,8 @@ export class CreateOfferCoolComponent implements OnInit {
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private _location: Location, ) {
+    private _location: Location,
+    private localStorage: LocalStorageService) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       if (this.offerId) {
@@ -330,6 +332,7 @@ export class CreateOfferCoolComponent implements OnInit {
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.offerId = data.offerId;
       this.caseId = data.caseId;
+      this.localStorage.store('currentOfferName', this.offerNameValue);
       this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
     },
       (err) => {
