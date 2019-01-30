@@ -25,7 +25,7 @@
               </ul>
       </div>
 
-  </button> {{currentOfferName}}&nbsp;<span class="offerID">(Offer ID  {{currentOfferId}})</span>
+  </button> {{currentOfferName}}&nbsp;<span *ngIf ="currentOfferId" class="offerID">(Offer ID  {{currentOfferId}})</span>
 </h1>
 
 <app-menu-bar-popup  [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)" ></app-menu-bar-popup>

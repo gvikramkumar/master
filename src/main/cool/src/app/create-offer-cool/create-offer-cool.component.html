@@ -1,7 +1,10 @@
 <div class="content">
   <div class="container">
     <div class="section">
-      <h1 class="page--heading">Create New Offer</h1>
+        <span *ngIf = "!offerId" class="create-offer-heading page--heading">Create New Offer</span>
+        <app-menu-bar
+        (updateMessage)="updateMessage($event)">
+      </app-menu-bar>
       <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
           <div class="col-sm-4">
