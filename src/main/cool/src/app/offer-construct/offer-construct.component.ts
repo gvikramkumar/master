@@ -1,10 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferConstructService } from '../services/offer-construct.service';
-import { Groups } from '../models/groups';
-import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-offer-construct',
@@ -12,7 +10,6 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   styleUrls: ['./offer-construct.component.css']
 })
 export class OfferConstructComponent  implements OnInit {
-  questionForm: FormGroup;
   offerData: any;
   currentOfferId;
   caseId;
@@ -28,25 +25,17 @@ export class OfferConstructComponent  implements OnInit {
   setFlag;
   derivedMM;
   offerName;
-  addDetails;
-  hardwareName;
-  quesionType;
-  @Input() questions: any[] = [];
-  payLoad = '';
 
   public data = [];
   firstData: Object;
   stakeHolderInfo: any;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
-  displayAddDetails: Boolean = false;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
-    private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder,
-    private offerConstructService: OfferConstructService) {
+    private activatedRoute: ActivatedRoute) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -54,7 +43,6 @@ export class OfferConstructComponent  implements OnInit {
   }
 
   ngOnInit() {
-    this.questionForm = this.offerConstructService.toFormGroup(this.questions);
     this.data = [];
     this.message = {
       contentHead: 'Great Work!',
@@ -104,13 +92,6 @@ export class OfferConstructComponent  implements OnInit {
     });
   }
 
-  addItemDetails() {
-    console.log('called submit method', this.questionForm);
-    this.payLoad = JSON.stringify(this.questionForm.value);
-    console.log(this.payLoad);
-    this.closeDailog();
-  }
-
   processStakeHolderData(stakeHolderData) {
     stakeHolderData.forEach(stakeHolder => {
       if (this.stakeHolderInfo[stakeHolder['offerRole']] == null) {
@@ -150,42 +131,6 @@ export class OfferConstructComponent  implements OnInit {
         };
       }
     }
-  }
-
-  closeDailog() {
-    this.displayAddDetails = false;
-    this.questionForm.reset();
-    this.questions = [];
-  }
-
-  onHide() {
-    this.displayAddDetails = false;
-    this.questionForm.reset();
-    this.questions = [];
-  }
-
-  showAddDetailsDailog(hardware) {
-    const hardwareName = hardware;
-    this.displayAddDetails = true;
-    const groups: Groups[] = [];
-    const group = new Groups(
-      hardwareName
-    );
-    groups.push(group);
-    console.log(groups);
-    const groupsPayload = {groups};
-    this.offerConstructService.addDetails(groupsPayload).subscribe((data) => {
-    this.addDetails = data;
-      console.log(this.addDetails);
-      this.addDetails.groups[0].listOfferQuestions.forEach(element => {
-        const quesion = element;
-        this.questions.push(quesion);
-      });
-      console.log(this.questions);
-    },
-      (err) => {
-        console.log(err);
-      });
   }
 
   goBack() {

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -83,6 +83,9 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
+import { OfferconstructCanvasComponent } from './offerconstruct-canvas/offerconstruct-canvas.component';
+import {DragDropModule} from 'primeng/dragdrop';
+import {TreeTableModule} from 'primeng/treetable';
 
 
 
@@ -130,7 +133,8 @@ export function app_init(configService: ConfigurationService, userService: UserS
     OffersolutioningCardThreeComponent,
     OfferDimensionComponent,
     OfferConstructComponent,
-    DynamicFormQuestionComponent
+    DynamicFormQuestionComponent,
+    OfferconstructCanvasComponent
   ],
   imports: [
     BrowserModule,
@@ -156,6 +160,8 @@ export function app_init(configService: ConfigurationService, userService: UserS
     TooltipModule,
     AutoCompleteModule,
     OverlayPanelModule,
+    DragDropModule,
+    TreeTableModule,
     NgxWebstorageModule.forRoot(),
     UserIdleModule.forRoot({idle: 10795,timeout: 10800, ping: 0})
   ],
@@ -198,6 +204,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
         deps: [ConfigurationService]
       }
     ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule { }

@@ -6,7 +6,7 @@
           <div class="form-group__text">
             <!--Free Text -->
             <label [attr.for]="question.key">{{question.label}}</label>
-            <input *ngSwitchCase="'Free Text'" [formControlName]="question.key" [id]="question.key" [type]="question.type">
+            <input *ngSwitchCase="'Free Text'" [formControlName]="obj.name" [id]="obj.id" [type]="obj.type">
           </div>
         </div>
       </div>
