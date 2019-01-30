@@ -42,6 +42,7 @@ export class OfferSolutioningComponent implements OnInit {
    }
 
   ngOnInit() {
+    debugger;
     this.offerSolutionData = this.offersolutioningService.getSolutionData(this.currentOfferId);
     if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
       this.offerSolutionGroups = [];
