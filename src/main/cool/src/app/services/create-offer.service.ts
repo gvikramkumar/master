@@ -163,15 +163,15 @@ export class CreateOfferService {
 
 
 
-  validateIdpid(header, idpidvalue) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': header
-      }),
-      withCredentials: true 
-    };
+  validateIdpid( idpidvalue) {
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Authorization': header
+    //   }),
+    //   withCredentials: true 
+    // };
     let url = this.environmentService.REST_API_IDPID_GET_URL + '/' + idpidvalue;
-    return this.httpClient.get(url, httpOptions);
+    return this.httpClient.get(url);
 
 
   }
