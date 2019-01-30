@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { TieredMenuModule } from 'primeng/tieredmenu';
 import { MenuItem } from 'primeng/api';
 import { MenuBarService } from '../services/menu-bar.service';
 import { UserService } from '../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LocalStorageService } from 'ngx-webstorage';
 
 
 
@@ -28,18 +28,20 @@ export class MenuBarComponent implements OnInit {
     currentOfferId: String = '';
     holdStatusValid = true;
     cancelStatusValid = true;
-
+    currentOfferName;
 
     constructor(private menuBarService: MenuBarService,
         private userService: UserService,
         private router: Router,
-        private activatedRoute: ActivatedRoute) {
+        private activatedRoute: ActivatedRoute,
+        private localStorage: LocalStorageService) {
         this.activatedRoute.params.subscribe(params => {
             this.currentOfferId = params['id'];
         });
     }
 
     ngOnInit() {
+        this.currentOfferName = this.localStorage.retrieve('currentOfferName');
         this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
         this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
