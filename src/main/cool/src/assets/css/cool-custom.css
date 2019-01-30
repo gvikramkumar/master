@@ -223,6 +223,9 @@
 .cool.cui .ui-table .ui-sortable-column.ui-state-highlight .ui-sortable-column-icon {
   color: #1b1d1f;
 }
+th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
+  outline: 0;
+}
 /* Custom 3-segment Progress Bar */
 .cui .td--progress-fitted .row.no-gutters {
   padding: 0 20px;
@@ -365,6 +368,16 @@
 .cui .ui-accordion .ui-accordion-header {
   line-height: 2;
   margin-top: 5px;
+}
+.cool.cui .review-status .btn {
+border-radius:6px;
+}
+span.icon-trash:hover {
+  color: #005073;
+  cursor: pointer;
+}
+span.icon-trash {
+  color: #017cad;
 }
 /* modals */
 .cool.cui span.icon-close {
