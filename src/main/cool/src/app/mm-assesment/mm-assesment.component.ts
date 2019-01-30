@@ -668,7 +668,7 @@ export class MmAssesmentComponent implements OnInit {
     groupDataWithFirst.forEach((group, index) => {
       let curGroup = {};
       curGroup['groupName'] = groupNamesWithFirst[index];
-      curGroup['subgroup'] = [];
+      curGroup['subGroup'] = [];
       for (let prop in group) {
         let curSubGroup = {};
         curSubGroup['subGroupName'] = prop;
@@ -683,15 +683,35 @@ export class MmAssesmentComponent implements OnInit {
           }
           curSubGroup['choices'].push(characters['name']);
         });
-        curGroup['subgroup'].push(curSubGroup);
+        curGroup['subGroup'].push(curSubGroup);
       }
       groups.push(curGroup);
     });
     postOfferSolutioningData['groups'] = groups;
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
-    console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
+    console.log('postForOfferSolutioning Data:',postOfferSolutioningData);
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
+   let notificationPayload = { };
+   notificationPayload['type'] = 'Notification';
+
+//      {
+//     "offerId": "COOL_2102",
+//     "caseId": "CASE-0000000528",
+//     "actionTitle": "fdsaf",
+//     "description": "dss",
+//     "mileStone": "Offer Construct",
+//     "selectedFunction": "BUPM",
+//     "assignee": [
+//         "jbondre","jagondal"                       << This is an Array of Ids of all assignees; 
+//     ],
+//     "dueDate": "2019-01-18T21:29:57.000Z",
+//     "owner": "jagondal",      << Owner of the Offer
+//     "offerName": "Jayraj Offer 1",
+//     "type": "Notification"     << I don’t know about type for right now so just put Notification, for future functionality
+// }
+
+
   let fakeGroup = { 'groups': [
     {
         "groupName": "Offer Characteristics",
@@ -728,9 +748,8 @@ export class MmAssesmentComponent implements OnInit {
                           "Finance",
                           "OLE"
                       ],
-                      "osGroup":[
-                        "SKU"
-                      ]
+                      "osGroup":"SKU"
+                      
                   },
                   {
                       "question": "Who are the target customers?",
