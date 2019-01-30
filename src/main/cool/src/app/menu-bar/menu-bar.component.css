@@ -5,6 +5,11 @@
     color: #666666;
     font-size: 18px;
 }
+
+.offerName{
+    font-weight: 200;
+    font-size: 24px;
+}
 #flyoutmenu{
     padding:0;
     margin:0;
