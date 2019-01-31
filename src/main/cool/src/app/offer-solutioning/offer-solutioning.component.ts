@@ -31,7 +31,8 @@ export class OfferSolutioningComponent implements OnInit {
   offerSolutionGroups:Array<any> = [];
   stakeHolderInfo: any;
   derivedMM: any;
-  
+  updateStakeData: any;
+
 
 
   constructor(private router: Router,
