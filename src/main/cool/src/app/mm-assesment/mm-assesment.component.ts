@@ -694,8 +694,18 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:',postOfferSolutioningData);
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
-   let notificationPayload = { };
-   notificationPayload['type'] = 'Notification';
+   let notificationPayload = {
+    "offerId": this.currentOfferId,
+    "caseId": this.caseId,
+    "actionTitle": "Offer Solutioning",
+    "description": "dss",
+    "mileStone": "Offer Solutioning",
+    "selectedFunction": "BUPM",
+    "type": "Notification",
+
+    };
+  
+
 
 //      {
 //     "offerId": "COOL_2102",
@@ -855,7 +865,7 @@ export class MmAssesmentComponent implements OnInit {
                 "listGrpQuestions": [
                   {
                       "question": "test question Dropdown?",
-                      "questionType": "Dropdown",
+                      "questionType": "LOV",
                       "values": [
                           "op1",
                           "op2",
