@@ -297,7 +297,58 @@ th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
 .cui .ui-step.active {
   cursor: pointer;
 }
+.cool.cui .ui-steps {
+  margin: 0;
+  padding: 0;
+}
+.cool.cui .ui-steps .ui-step .step__label {
+  font-size: 10px;
+}
+.cool.cui .ui-steps--tiny .ui-step .step__icon {
+  width: 16px;
+  min-width: 16px;
+  max-width: 16px;
+  height: 16px;
+  line-height: 2.4rem;
+  font-size: 0.9rem;
+}
+.cool.cui .ui-steps--tiny .ui-step.active:hover .step__icon {
+  background: #51a73c;
+  box-shadow: inset 0 0 0 1px #51a73c;
+  box-shadow: 0 0 0 1px #51a73c;
+}
+.cool.cui .ui-dialog .ui-step.active {
+  cursor: default;
+}
+.cool.cui .ui-dialog .ui-steps--tiny .ui-step.active:hover .step__icon {
+  background: #6ebe4a;
+  box-shadow: inset 0 0 0 1px #6ebe4a;
+  box-shadow: 0 0 0 1px #6ebe4a;
+}
+.cool.cui .widget-header {
+  font-size: 16px;
+  margin: 0 0 0 -100px;
+  position: absolute;
+  border-left: solid 1px #d7d7d7;
+  padding-left: 20px;
+  line-height: 2.5;
+}
+.cool.cui .offerID {
+  display: inline-block;
+  margin: 0 0 0 5px;
+  color: #005073;
+  cursor: pointer;
+}
+.cool.cui .phase-modal .icon-close {
+  position: relative;
+  right: 5px;
+  top: 5px;
+}
 
+.cool.cui .ui-dialog table.table.table--nostripes td{
+  border-top: none;
+  border-bottom: 1px #e5e5e5 solid;
+}
 /* font sizes */
 .cui h4, .cui .h4 {
   font-size: 22px;
@@ -345,6 +396,7 @@ th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
 .cui .label--warning-alt strong {
   font-size: 22px;
 }
+
 /* Form Elements */
 .cool.cui .ui-multiselect {
   display: block;
@@ -420,7 +472,10 @@ span.icon-trash {
   color:#016a94;
 }
 /* buttons */
-.cool.cui .action-bar .btn {
+.cool.cui header .header-toolbar .btn {
+  border-radius: 30px;
+}
+.cool.cui .btn {
   border-radius: 6px;
 }
 .comments-modal {
