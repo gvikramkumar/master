@@ -1,9 +1,4 @@
-/* td{
-    text-align: left;
-    padding-left:10px;
-    padding-top: 0px!important;
-    padding-bottom: 0px!important;
-} */
+
 
 th{
     text-align: left!important;
@@ -14,12 +9,11 @@ th{
     text-align: center;
     left:50%;
     top:50%;
-    background-color: #dfdfdf;
 }
 
 .data-row{
     border-bottom:1px  dashed #dfdfdf;
-    
+
 }
 
 .tax-row{
@@ -32,7 +26,6 @@ table{
 }
 
 .turbo-mileStone{
-    width:70%;
     margin: 0px;
 }
 
