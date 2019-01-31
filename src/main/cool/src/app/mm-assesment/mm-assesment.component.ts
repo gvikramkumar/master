@@ -98,10 +98,10 @@ export class MmAssesmentComponent implements OnInit {
             selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
           });
         });
-       
+
       }
-      console.log("selectedCharactersistics",selectedCharacteristics); 
-    
+      console.log("selectedCharactersistics",selectedCharacteristics);
+
       let that = this;
 
       // mm model and message section
@@ -190,15 +190,15 @@ export class MmAssesmentComponent implements OnInit {
                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
               }
 
-               
+
              /*  if (selectedCharacteristics[group['groupName']] != null &&
                selectedCharacteristics[group['groupName']][g['subGroupName']] != null &&
                  selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)){
-              
-                
-                
+
+
+
                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-                 
+
               } else {
                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
               } */
@@ -413,7 +413,7 @@ export class MmAssesmentComponent implements OnInit {
         this.canClickNextStep = false;
       }
     }
-    
+
     this.selectedGroupData = this.groupData;
   }
 
@@ -473,6 +473,7 @@ export class MmAssesmentComponent implements OnInit {
 
   getStakeData(mmModel) {
     this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
+      console.log(res);
       this.stakeData = {};
       let keyUsers;
       if (res != null) {
@@ -490,21 +491,22 @@ export class MmAssesmentComponent implements OnInit {
           emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
           _id: this.offerBuilderdata['offerOwner'],
           userMappings: [{
-            appRoleList: ['Owner'],
+            appRoleList: [],
             businessEntity: 'Security',
-            functionalRole: 'BUPM'
+            functionalRole: 'BUPM',
+            offerRole:'Owner'
           }
           ],
           stakeholderDefaults: true
         });
 
       keyUsers.forEach(user => {
-        if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
-          this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
+        if (this.stakeData[user['userMappings'][0]['functionalRole']] == null) {
+          this.stakeData[user['userMappings'][0]['functionalRole']] = [];
         }
         let curUser = user;
         curUser['stakeholderDefaults'] = true;
-        this.stakeData[user['userMappings'][0]['appRoleList'][0]].push(curUser);
+        this.stakeData[user['userMappings'][0]['functionalRole']].push(curUser);
       });
 
 
@@ -607,11 +609,12 @@ export class MmAssesmentComponent implements OnInit {
     let stakeHolders = [];
     for (let prop in this.stakeData) {
       this.stakeData[prop].forEach(sh => {
+         console.log(sh);
         stakeHolders.push({
           '_id': sh['_id'],
           'businessEntity': sh['userMappings'][0]['businessEntity'],
           'functionalRole': sh['userMappings'][0]['functionalRole'],
-          'offerRole': sh['userMappings'][0]['appRoleList'][0],
+          'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner': sh['userMappings'][0]['functionalRole'],
           'stakeholderDefaults': sh['stakeholderDefaults'],
           'name': sh['userName']
         });
@@ -633,7 +636,7 @@ export class MmAssesmentComponent implements OnInit {
     }];
     proceedToStakeholderPostData['secondaryBUList'] = this.offerBuilderdata['secondaryBUList'];
     proceedToStakeholderPostData['secondaryBEList'] = this.offerBuilderdata['secondaryBEList'];
-    
+
 
     let that = this;
     this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
@@ -654,7 +657,6 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   proceedToOfferSolution() {
-    debugger;
     let postOfferSolutioningData = {};
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
@@ -692,8 +694,18 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:',postOfferSolutioningData);
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
-   let notificationPayload = { };
-   notificationPayload['type'] = 'Notification';
+   let notificationPayload = {
+    "offerId": this.currentOfferId,
+    "caseId": this.caseId,
+    "actionTitle": "Offer Solutioning",
+    "description": "dss",
+    "mileStone": "Offer Solutioning",
+    "selectedFunction": "BUPM",
+    "type": "Notification",
+
+    };
+  
+
 
 //      {
 //     "offerId": "COOL_2102",
@@ -703,7 +715,7 @@ export class MmAssesmentComponent implements OnInit {
 //     "mileStone": "Offer Construct",
 //     "selectedFunction": "BUPM",
 //     "assignee": [
-//         "jbondre","jagondal"                       << This is an Array of Ids of all assignees; 
+//         "jbondre","jagondal"                       << This is an Array of Ids of all assignees;
 //     ],
 //     "dueDate": "2019-01-18T21:29:57.000Z",
 //     "owner": "jagondal",      << Owner of the Offer
@@ -749,7 +761,7 @@ export class MmAssesmentComponent implements OnInit {
                           "OLE"
                       ],
                       "osGroup":"SKU"
-                      
+
                   },
                   {
                       "question": "Who are the target customers?",
@@ -853,7 +865,7 @@ export class MmAssesmentComponent implements OnInit {
                 "listGrpQuestions": [
                   {
                       "question": "test question Dropdown?",
-                      "questionType": "Dropdown",
+                      "questionType": "LOV",
                       "values": [
                           "op1",
                           "op2",
@@ -911,7 +923,7 @@ export class MmAssesmentComponent implements OnInit {
               ]
             }
         ]
-      
+
     }
 ]};
   this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
@@ -921,7 +933,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   goBackToOffercreation() {
-    this.router.navigate(['/coolOffer', this.currentOfferId]);
+    this.router.navigate(['/coolOffer', this.currentOfferId, this.caseId]);
   }
 }
 

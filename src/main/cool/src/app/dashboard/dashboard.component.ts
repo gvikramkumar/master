@@ -1,14 +1,9 @@
-import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild, ɵConsole, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
-import { Offer } from '../models/offer';
 import { Router } from '@angular/router';
 import { CreateOfferService } from '../services/create-offer.service';
 import { UserService } from '../services/user.service';
-import { ActionsAndNotifcations } from './action';
-import * as moment from 'moment';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { NgForm } from '@angular/forms';
-import { CreateActionComment } from '../models/create-action-comment';
 import { ActionsService } from '../services/actions.service';
 import { CreateActionApprove } from '../models/create-action-approve';
 import { OverlayPanel } from 'primeng/overlaypanel';
@@ -40,7 +35,6 @@ export class DashboardComponent implements OnInit {
   minDate = new Date();
   offerColumns: any[];
 
-  // taskId: any;
   commentValue: string;
   titleValue: string;
   descriptionValue: string;
@@ -51,15 +45,19 @@ export class DashboardComponent implements OnInit {
 
   functionList;
   assigneeList;
-  milestoneList;
+  milestoneList = [];
   action: any;
 
-
-  selectedCaseId;
   selectedNotification;
   selectedAction;
   commentEvent: any;
   selectedActionData: any;
+  selectedfunctionRole: string = null;
+  stakeHolders = {};
+  selectedofferId: string = null;
+  selectedCaseId: string = null;
+  lastValueInMilestone: Array<any>;
+  val: any;
 
   constructor(private dashboardService: DashboardService,
     private router: Router,
@@ -135,6 +133,17 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getMyOffersList()
       .subscribe(resOffers => {
         this.myOffers = resOffers;
+        resOffers.forEach(ele => {
+          this.stakeHolders[ele.offerId] = {};
+          if (ele.stakeholders != null) {
+            ele.stakeholders.forEach(holder => {
+              if (this.stakeHolders[ele.offerId][holder.functionalRole] == null) {
+                this.stakeHolders[ele.offerId][holder.functionalRole] = [];
+              }
+              this.stakeHolders[ele.offerId][holder.functionalRole].push(holder['_id']);
+            });
+          }
+        });
       });
   }
 
@@ -154,14 +163,46 @@ export class DashboardComponent implements OnInit {
     overlaypanel.toggle(event);
   }
 
+  // getActionFormValues() {
+  //   if (this.selectedAction.offerId && this.selectedAction.caseId) {
+  //     this.actionsService.getAssignee(this.selectedAction.offerId).subscribe(resAssignee => {
+  //       this.assigneeList = resAssignee;
+  //     });
+  //     this.actionsService.getMilestones(this.selectedAction.caseId).subscribe(resMilestones => {
+  //       this.milestoneList = Object.keys(resMilestones).reduce((accumulator, current) => accumulator.concat(resMilestones[current]), []);
+  //     });
+  //   }
+  // }
   getActionFormValues() {
-    if (this.selectedAction.offerId && this.selectedAction.caseId) {
-      this.actionsService.getAssignee(this.selectedAction.offerId).subscribe(resAssignee => {
-        this.assigneeList = resAssignee;
-      });
-      this.actionsService.getMilestones(this.selectedAction.caseId).subscribe(resMilestones => {
-        this.milestoneList = Object.keys(resMilestones).reduce((accumulator, current) => accumulator.concat(resMilestones[current]), []);
-      });
+    this.selectedofferId = this.selectedAction.offerId;
+    this.selectedCaseId = this.selectedAction.caseId;
+    if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
+      this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
+    } else {
+      this.assigneeList = [];
+    }
+    this.actionsService.getAchievedMilestones(this.selectedCaseId).subscribe(resMilestones => {
+      this.milestoneList = [];
+      this.lastValueInMilestone = [];
+      for (const prop in resMilestones) {
+        if (prop) {
+          resMilestones[prop].forEach(ele => {
+            this.milestoneList.push(ele);
+            this.lastValueInMilestone = this.milestoneList.slice(-1)[0];
+            const mile = this.lastValueInMilestone;
+            this.val = mile['subMilestone'];
+          });
+        }
+      }
+    });
+  }
+
+  getSelectFunctionRole(functionRole) {
+    this.selectedfunctionRole = functionRole;
+    if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
+      this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
+    } else {
+      this.assigneeList = [];
     }
   }
 

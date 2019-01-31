@@ -18,7 +18,7 @@
 
 
 <!-- Radio Button -->
-<div *ngIf="questionData['questionType']==='Radioi Button'">
+<div *ngIf="questionData['questionType']==='Radio Button'">
   <div class="form-group form-group--inline" *ngFor="let radio of questionData['values']">
     <label class="radio">
       <input type="radio" name="{{questionIndex}}_{{questionData['question']}}"/> <span class="radio__input"></span>
@@ -35,7 +35,7 @@
   <input type="text"/>%
 </div>
 <!-- Dropdown -->
-<div *ngIf="questionData['questionType']==='Dropdown'">
+<div *ngIf="questionData['questionType']==='LOV'">
   <select class="offer-solution-quesiton-select">
       <option *ngFor="let option of questionData['values']" [value]="option">
           {{option}}</option>

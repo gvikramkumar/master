@@ -52,7 +52,7 @@ export class CreateOfferCoolComponent implements OnInit {
   expectedLaunchDateValue: string;
   caseId: string;
   idpid;
-  idpidvalue: string;
+  iDPId: string;
   isIdpIdValid = false;
   enableOfferbuild = true;
   userSelectedAllUnits;
@@ -89,7 +89,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
           this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
-          this.idpidvalue = offerDetailRes.idpvalue
+          this.idpvalue = offerDetailRes.iDPId;
         });
       }
     });
@@ -121,7 +121,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.secondaryBusinessUnits = secondaryBuArry;
     });
 
-    // Fetch Primary BE's assigned through admin page. 
+    // Fetch Primary BE's assigned through admin page.
     // Show this BE's as selected in Primary BE multiselect list in the offer creation page.
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       const primaryBeArray: any[] = [];
@@ -180,7 +180,7 @@ export class CreateOfferCoolComponent implements OnInit {
     }
   }
 
-  // Lulu's change on Get Primary BU when primary BE changed 
+  // Lulu's change on Get Primary BU when primary BE changed
   getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
     this.primaryBusinessUnitsValue = null;
     this.secondaryBusinessEntitiesValue = null;
@@ -316,7 +316,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.designReviewDateValue,
       this.readinessReviewDateValue,
       this.expectedLaunchDateValue,
-      this.idpidvalue,
+      this.iDPId,
       offerCreatedBy,
       offerCreationDate,
       status);
@@ -343,9 +343,9 @@ export class CreateOfferCoolComponent implements OnInit {
   getidptoken(event) {
    // this.createOfferService.getIdpid().subscribe(data => {
     //  this.idpid = data;
-      this.idpidvalue = event.target.value;
+      this.iDPId = event.target.value;
      // let header = `${this.idpid['token_type']} ${this.idpid['access_token']}`;
-      this.createOfferService.validateIdpid( this.idpidvalue).subscribe(data => {
+      this.createOfferService.validateIdpid( this.iDPId).subscribe(data => {
         this.isIdpIdValid = true;
         if (this.offerCreateForm.valid == true && this.isIdpIdValid == true) {
           this.enableOfferbuild = false;

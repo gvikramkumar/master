@@ -151,6 +151,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
           });
       }
       this.stakeData = this.stakeHolderInfo;
+      
 
       for (const auth in this.stakeData) {
         if (auth === 'Co-Owner' || auth === 'Owner') {
