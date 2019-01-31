@@ -48,6 +48,7 @@ export class EnvironmentService {
     REST_API_IDPID_GET_URL;
     REST_API_DOWNLOAD_PDF_GET_URL;
     REST_API_OFFER_SOLUTIONING_POST_URL;
+    REST_API_SEND_EMAIL_NOTIFICATION_POST_URL;
 
     basepdafapi = '';
 
@@ -202,6 +203,7 @@ export class EnvironmentService {
         this.REST_API_DOWNLOAD_PDF_GET_URL = this.baseapi + '/pdf/offerDetailsPDF';
         this.REST_API_OFFER_SOLUTIONING_POST_URL = this.baseapi + '/setOfferSolution';
         this.REST_API_IDPID_GET_URL=this.baseapi+'/offer/productOffers';
+        this.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL = this.baseapi + '/emailNotification/sendEmailNotification/';
 
     }
 }

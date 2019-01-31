@@ -43,4 +43,11 @@ export class StakeholderfullService {
     return this._http.get(url);
   }
 
+  sendEmailNotification(offerId) {
+    let url = this.environmentService.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL;
+    url += offerId;
+    url += '/' + 'Launch In Progress';
+    return this._http.post(url, {withCredentials: true});
+  }
+
 }
