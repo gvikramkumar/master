@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { StakeholderfullService } from '../services/stakeholderfull.service';
 
 @Component({
   selector: 'app-mm-info-bar',
@@ -6,10 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./mm-info-bar.component.css']
 })
 export class MmInfoBarComponent implements OnInit {
+  @Input() derivedMM: any;
+  @Input() currentOfferId;
+  offerData;
+  
 
-  constructor() { }
+  constructor(private stakeholderfullService: StakeholderfullService) { }
 
   ngOnInit() {
-  }
+    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+      this.offerData = data;
+      this.derivedMM = this.offerData['derivedMM'];
+    })
+
+}
 
 }

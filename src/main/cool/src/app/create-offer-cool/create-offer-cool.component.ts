@@ -78,7 +78,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.primaryBusinessUnitsValue = offerDetailRes.primaryBUList;
           this.getPrimaryBusinessEntityPromise(offerDetailRes.primaryBUList)
             .then(() => {
-              this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList;
+              this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList.toString();
             });
           this.secondaryBusinessUnitsValue = offerDetailRes.secondaryBUList;
           this.getSecondaryBusinessEntityPromise(offerDetailRes.secondaryBUList)
@@ -94,7 +94,7 @@ export class CreateOfferCoolComponent implements OnInit {
       }
     });
 
-    // Lulu's change GET PRIMARY AND SECONDARY BE
+  
     this.createOfferService.getDistinctBE().subscribe(data => {
       const primaryBeArry = [];
       const dataArray = data as Array<any>;
@@ -109,7 +109,7 @@ export class CreateOfferCoolComponent implements OnInit {
     });
 
 
-    // lulu's change GET SECONDARY BU
+  
     this.createOfferService.getDistincBU().subscribe(data => {
       const secondaryBuArry = [];
       const dataArray = data as Array<any>;
@@ -180,7 +180,7 @@ export class CreateOfferCoolComponent implements OnInit {
     }
   }
 
-  // Lulu's change on Get Primary BU when primary BE changed
+  
   getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
     this.primaryBusinessUnitsValue = null;
     this.secondaryBusinessEntitiesValue = null;
@@ -300,8 +300,8 @@ export class CreateOfferCoolComponent implements OnInit {
     status.phaseMilestone = 'Ideate';
     status.subMilestone = 'Offer Creation';
 
-    const offerCreationDate = new Date().toDateString();
-    const selectedPrimaryBe: string[] = [];
+    const offerCreationDate = new Date().toISOString();
+    const selectedPrimaryBe= [];
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
