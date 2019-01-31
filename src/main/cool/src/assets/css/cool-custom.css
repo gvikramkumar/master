@@ -175,8 +175,11 @@
   background: #f6f7f9 0 0 repeat-x;
   background: transparent;
 }
-.cui .ui-table .ui-table-thead>tr>th, .ui-table .ui-table-tbody>tr>td, .ui-table .ui-table-tfoot>tr>td {
+.cool.cui .ui-table .ui-table-thead>tr>th, .cool.cui .ui-table .ui-table-tbody>tr>td, .cool.cui.ui-table .ui-table-tfoot>tr>td {
   padding: .25em .75em;
+}
+.cool.cui .ui-datatable .ui-datatable-data>tr>td {
+  padding: .75em .5em;
 }
 
 .cui .ui-table .ui-table-tbody > tr > td {
