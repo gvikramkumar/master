@@ -42,7 +42,7 @@
               </div>
             </div>
             <div class="responsive-table">
-              <p-dataTable [value]="myActionsAndNotifications" scrollable="true" scrollHeight="360px" [globalFilter]="gbforactions"
+              <p-dataTable [value]="myActionsAndNotifications" scrollable="true" scrollHeight="350px" [globalFilter]="gbforactions"
                 [resizableColumns]="true" #dt>
                 <p-column field="offerId" sortable="true" header="OFFER ID">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
@@ -437,7 +437,7 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="functionName">MILESTONE</label>
-                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">           
+                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">
                   </div>
                 </div>
               </div>
@@ -557,7 +557,7 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="functionName">MILESTONE</label>
-                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">           
+                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">
                   </div>
                 </div>
               </div>
