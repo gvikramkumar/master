@@ -471,6 +471,13 @@ span.icon-trash {
 .cool.cui .action-bar label:hover {
   color:#016a94;
 }
+
+
+
+.review-status .ui-accordion .ui-accordion-toggle-icon {
+  position: absolute;
+  top: 15px;
+}
 /* buttons */
 .cool.cui header .header-toolbar .btn {
   border-radius: 30px;
