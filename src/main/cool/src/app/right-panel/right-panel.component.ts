@@ -357,17 +357,17 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   addToStakeData(res) {
     const keyUsers = res['stakeholders'];
     keyUsers.forEach(user => {
-      if (this.stakeData[user['offerRole']] == null) {
-        this.stakeData[user['offerRole']] = [];
+      if (this.stakeData[user['functionalRole']] == null) {
+        this.stakeData[user['functionalRole']] = [];
       }
       if (this.alreayAddedStakeHolders.findIndex(k => k === user['_id']) === -1) {
-        this.stakeData[user['offerRole']].push(
+        this.stakeData[user['functionalRole']].push(
           {
             userName: user['userName'],
             emailId: user['email'],
             _id: user['_id'],
             userMappings: [{
-              appRoleList: [user['offerRole']],
+              appRoleList: [user['functionalRole']],
               businessEntity: user['businessEntity'],
               functionalRole: user['functionalRole']
             }
@@ -377,6 +377,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         this.alreayAddedStakeHolders.push(user['_id']);
       }
     });
+
+    console.log(this.stakeData);
   }
 
   getUserIdFromEmail(email): any {
@@ -385,13 +387,14 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   addCollaborator() {
+    console.log(this.selectedCollabs);
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
     this.selectedCollabs.forEach(element => {
       const stakeHolder = new StakeHolder();
       stakeHolder.businessEntity = element.businessEntity;
       stakeHolder.functionalRole = element.functionalRole;
-      stakeHolder.offerRole = element.offerRole;
+      stakeHolder.offerRole = element.functionalRole;
       stakeHolder._id = this.getUserIdFromEmail(element.email);
       stakeHolder.email = element.email;
       stakeHolder.userName = element.name;
@@ -408,7 +411,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     // });
     this.updateStakeData.next('');
     this.display = false;
-
+    console.log(stakeHolderDto);
   }
 
   show_deliveryDesc() {

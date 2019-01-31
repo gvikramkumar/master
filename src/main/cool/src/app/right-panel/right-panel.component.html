@@ -272,13 +272,13 @@
         <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="email" #dt>
             <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
             <p-column field="functionalRole" header="Function"></p-column>
-            <p-column field="applicationRole" header="Roles">
+            <!-- <p-column field="applicationRole" header="Roles">
                 <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
                     <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
                         [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
                     </p-dropdown>
                 </ng-template>
-            </p-column>
+            </p-column> -->
             <p-column field="name" header="Name"></p-column>
             <p-column field="email" header="Email"></p-column>
             <p-column field="businessEntity" header="BusinessEntity"></p-column>
