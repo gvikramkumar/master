@@ -12,11 +12,11 @@
                   </li>
                   <li> <span>On Hold/Cancel</span>
                       <ul class="panel--indigo">
-                              <li                          
+                              <li
                               [ngClass]="{'disable-item': holdStatusValid !== true}"
                               (click)='showOppupFunc("hold")'><span>On Hold</span>
                               </li>
-                              <li 
+                              <li
                               [ngClass]="{'disable-item': cancelStatusValid !== true}"
                               (click)='showOppupFunc("cancel")'><span>Cancel</span>
                               </li>
@@ -25,7 +25,7 @@
               </ul>
       </div>
 
-  </button> {{currentOfferName}}&nbsp;<span *ngIf ="currentOfferId" class="offerID">(Offer ID  {{currentOfferId}})</span>
+    </button> {{currentOfferName}}&nbsp;<span class="offerID">(Offer ID  {{currentOfferId}})</span>
 </h1>
 
 <app-menu-bar-popup  [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)" ></app-menu-bar-popup>
