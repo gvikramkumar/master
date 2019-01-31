@@ -174,7 +174,7 @@
             <div class="divider" style="margin-top: 1%"></div>
             <div *ngFor="let question of questions" class="form-row">
               <div [ngSwitch]="question.itemType">
-                <div *ngSwitchCase="'Unque Item'">
+                <div *ngSwitchCase="'Unique Item'">
                   <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
                 </div>
               </div>
