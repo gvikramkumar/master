@@ -15,7 +15,6 @@ export class MmInfoBarComponent implements OnInit {
   constructor(private stakeholderfullService: StakeholderfullService) { }
 
   ngOnInit() {
-    debugger;
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.offerData = data;
       this.derivedMM = this.offerData['derivedMM'];
