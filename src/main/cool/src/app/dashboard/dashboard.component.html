@@ -437,11 +437,7 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="functionName">MILESTONE</label>
-                    <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
-                      required ngModel #milestoneName="ngModel">
-                      <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
-                        {{milestone.subMilestone}}</option>
-                    </select>
+                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">           
                   </div>
                 </div>
               </div>
@@ -450,8 +446,8 @@
                   <div class="form-group__text">
                     <div class="form-group__text select">
                       <label for="functionName">SELECT FUNCTION</label>
-                      <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
-                        ngModel required>
+                      <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
+                        [(ngModel)]="functionNameValue" ngModel required>
                         <option *ngFor="let function of functionList" [value]="function">
                           {{function}}</option>
                       </select>
@@ -503,7 +499,7 @@
       </div>
     </section>
     <section *ngIf="showConditionalApprovalSection">
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-md-12">
           <div class="pull-right">
             <span class="icon-close" (click)="popActionContent.hide($event)"></span>
@@ -512,7 +508,14 @@
             <h5 class="card__title">Conditional Approval</h5>
           </div>
         </div>
-      </div>
+      </div> -->
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card__header">
+              <h5 class="card__title">Conditional Approval</h5>
+            </div>
+          </div>
+        </div>
       <div class="divider"></div>
       <div class="row">
         <div class="col-md-12">
@@ -554,11 +557,7 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="functionName">MILESTONE</label>
-                    <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
-                      required ngModel #milestoneName="ngModel">
-                      <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
-                        {{milestone.subMilestone}}</option>
-                    </select>
+                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">           
                   </div>
                 </div>
               </div>
@@ -567,8 +566,8 @@
                   <div class="form-group__text">
                     <div class="form-group__text select">
                       <label for="functionName">SELECT FUNCTION</label>
-                      <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
-                        ngModel required>
+                      <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
+                        [(ngModel)]="functionNameValue" ngModel required>
                         <option *ngFor="let function of functionList" [value]="function">
                           {{function}}</option>
                       </select>
