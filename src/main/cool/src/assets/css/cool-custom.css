@@ -176,10 +176,10 @@
   background: transparent;
 }
 .cool.cui .ui-table .ui-table-thead>tr>th, .cool.cui .ui-table .ui-table-tbody>tr>td, .cool.cui.ui-table .ui-table-tfoot>tr>td {
-  padding: .25em .75em;
+  padding: .25em .65em;
 }
 .cool.cui .ui-datatable .ui-datatable-data>tr>td {
-  padding: .75em .5em;
+  padding: .65em .5em;
 }
 
 .cui .ui-table .ui-table-tbody > tr > td {
