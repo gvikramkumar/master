@@ -175,8 +175,11 @@
   background: #f6f7f9 0 0 repeat-x;
   background: transparent;
 }
-.cui .ui-table .ui-table-thead>tr>th, .ui-table .ui-table-tbody>tr>td, .ui-table .ui-table-tfoot>tr>td {
+.cool.cui .ui-table .ui-table-thead>tr>th, .cool.cui .ui-table .ui-table-tbody>tr>td, .cool.cui.ui-table .ui-table-tfoot>tr>td {
   padding: .25em .75em;
+}
+.cool.cui .ui-datatable .ui-datatable-data>tr>td {
+  padding: .75em .5em;
 }
 
 .cui .ui-table .ui-table-tbody > tr > td {
@@ -392,14 +395,40 @@ span.icon-trash {
   position: absolute;
   top: 0em;
   right: 0em;
-  width: 2em;
-  height: 2em;
-  line-height: 2em;
+  width: 3em;
+  height: 3em;
+  line-height: 3em;
   text-align: center;
   cursor: pointer;
 }
+.cool.cui span.ui-overlaypanel-close-icon {
+  font-size: 20px;
+  line-height: 2;
+}
+.cool.cui h1.modalheader {
+  color: #333;
+  font-size: 18px
+}
+.cool.cui .action-bar {
+  line-height: 4;
+}
+.cool.cui .action-bar label{
+  cursor: pointer;
+  color:#017CAD
+}
+.cool.cui .action-bar label:hover {
+  color:#016a94;
+}
+/* buttons */
+.cool.cui .action-bar .btn {
+  border-radius: 6px;
+}
+.comments-modal {
+  min-width:600px;
+  max-width:600px;
+}
 
-/* Strategy Review Status */
+  /* Strategy Review Status */
 .cui .review-status .ui-accordion .ui-accordion-content {
   padding: 1em;
   border-top: 0;
@@ -499,6 +528,18 @@ span.icon-trash {
   max-height: 80vh;
   overflow: auto;
 }
+/* helpers */
+.divider.divider--compressed.comments {
+  border-top: solid 1px #f4f4f4;
+}
+.cool.cui span.icon-comment:hover {
+  cursor: pointer;
+  color:#005073;
+}
+.cool.cui .ui-overlaypanel-content .popover__body[_ngcontent-c5] {
+  padding-top: 0;
+}
+
 
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {

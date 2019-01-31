@@ -153,7 +153,7 @@
                     <div class="col-md-4">
                       <div class="form-group half-margin-bottom">
                         <label for="selectedSeValue">Business Entity</label>
-                        <p-multiSelect id="selectedSeValue" class="form-control" name="primaryBEList" [options]="businessEntities"
+                        <p-multiSelect id="selectedSeValue" class="form-control" name="primaryBEList" [options]="businessEntities" (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)"
                           [(ngModel)]="businessEntityValue">
                         </p-multiSelect>
                       </div>
@@ -161,7 +161,7 @@
                     <div class="col-md-4">
                       <div class="form-group half-margin-bottom">
                         <label for="selectedSValue">Business Unit</label>
-                        <p-multiSelect id="selectedSValue" class="form-control" name="primaryBUList" [options]="businessUnits"
+                        <p-multiSelect id="selectedSValue" class="form-control" name="primaryBUList" [options]="businessUnitsForCreateuser"
                           [(ngModel)]="businessUnitValue">
                         </p-multiSelect>
                       </div>

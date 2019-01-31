@@ -29,6 +29,8 @@ export class AccessManagementComponent implements OnInit {
   registerNewUserfun:any;
   newUser:NewUser [] = [];
   accessList:any[]=[];
+  businessUnitsForCreateuser;
+
   constructor(private accessManagementService: AccessManagementService) { }
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class AccessManagementComponent implements OnInit {
       { field: 'userMapping', header: 'Business Entity' },
       { field: 'buList', header: 'Business Unit' },
       { field: 'functionalAdmin', header: 'Access' }
-      
+
     ];
 
     this.accessManagementService.accessManagementAll()
@@ -57,6 +59,7 @@ export class AccessManagementComponent implements OnInit {
       });
       buArry.push({ label: 'All', value: 'All' });
       this.businessUnits = buArry;
+      this.businessUnitsForCreateuser = buArry;
     });
 
     this.getbusinessEntity();
@@ -82,6 +85,28 @@ export class AccessManagementComponent implements OnInit {
         this.businessEntities = this.removeDuplicates(beArry, 'label');
       });
   }
+
+    getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
+      this.getPrimaryBusinessUnitPromise(event);
+    }
+
+    getPrimaryBusinessUnitPromise(event) {
+      return new Promise((resolve, reject) => {
+        this.accessManagementService.getPrimaryBuBasedOnBe(event.toString())
+          .subscribe(data => {
+            const primaryBuArry = [];
+            const dataArray = data as Array<any>;
+            dataArray.forEach(element => {
+              if (element.BUSINESS_UNIT !== null) {
+                primaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
+              }
+            });
+            primaryBuArry.push({ label: 'All', value: 'All' });
+            this.businessUnitsForCreateuser = this.removeDuplicates(primaryBuArry, 'label');
+            resolve();
+          });
+      });
+    }
 
   removeDuplicates(myArr, prop) {
     return myArr.filter((obj, pos, arr) => {
@@ -186,7 +211,7 @@ export class AccessManagementComponent implements OnInit {
 
   /**
    * Function to Update BU of the user
-   * @param updatedUser 
+   * @param updatedUser
    */
   updatedAceessManagement(updatedUser) {
     let updateAdmin = {

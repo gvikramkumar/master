@@ -654,6 +654,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   proceedToOfferSolution() {
+    debugger;
     let postOfferSolutioningData = {};
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
@@ -667,7 +668,7 @@ export class MmAssesmentComponent implements OnInit {
     groupDataWithFirst.forEach((group, index) => {
       let curGroup = {};
       curGroup['groupName'] = groupNamesWithFirst[index];
-      curGroup['subgroup'] = [];
+      curGroup['subGroup'] = [];
       for (let prop in group) {
         let curSubGroup = {};
         curSubGroup['subGroupName'] = prop;
@@ -682,15 +683,35 @@ export class MmAssesmentComponent implements OnInit {
           }
           curSubGroup['choices'].push(characters['name']);
         });
-        curGroup['subgroup'].push(curSubGroup);
+        curGroup['subGroup'].push(curSubGroup);
       }
       groups.push(curGroup);
     });
     postOfferSolutioningData['groups'] = groups;
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
-    console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
+    console.log('postForOfferSolutioning Data:',postOfferSolutioningData);
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
+   let notificationPayload = { };
+   notificationPayload['type'] = 'Notification';
+
+//      {
+//     "offerId": "COOL_2102",
+//     "caseId": "CASE-0000000528",
+//     "actionTitle": "fdsaf",
+//     "description": "dss",
+//     "mileStone": "Offer Construct",
+//     "selectedFunction": "BUPM",
+//     "assignee": [
+//         "jbondre","jagondal"                       << This is an Array of Ids of all assignees; 
+//     ],
+//     "dueDate": "2019-01-18T21:29:57.000Z",
+//     "owner": "jagondal",      << Owner of the Offer
+//     "offerName": "Jayraj Offer 1",
+//     "type": "Notification"     << I don’t know about type for right now so just put Notification, for future functionality
+// }
+
+
   let fakeGroup = { 'groups': [
     {
         "groupName": "Offer Characteristics",
@@ -700,27 +721,20 @@ export class MmAssesmentComponent implements OnInit {
                 "choices": [
                     "Content",
                     "Managed Services",
-                    "Services (AS/Professional Service)",
                     "SW - OS",
-                    "SW - SaaS",
-                    "Hardware (Commodity (x86) / Proprietary)",
-                    "SW - OS Feature / Application / 3rd Part SW / VNF",
-                    "3rd Party SW-SaaS"
+                    "SW - SaaS"
                 ],
                 "selected": [
                     "Content",
                     "Cloud",
-                    "Cisco",
-                    "Provisioning Fulfillment",
-                    "Subscription: Pre-Commited Quantity",
-                    "Subscription: Usage/ Utility"
+                    "Cisco"
                 ],
                 "failed": null,
                 "subGroupStatus": "Aligned",
                 "listGrpQuestions": [
                   {
                       "question": "Is this offer commissionable?",
-                      "questionType": "Boolean",
+                      "questionType": "Radioi Button",
                       "values": [
                           "Yes",
                           "No"
@@ -733,7 +747,9 @@ export class MmAssesmentComponent implements OnInit {
                       "secondaryPOC": [
                           "Finance",
                           "OLE"
-                      ]
+                      ],
+                      "osGroup":"SKU"
+                      
                   },
                   {
                       "question": "Who are the target customers?",
@@ -760,13 +776,13 @@ export class MmAssesmentComponent implements OnInit {
                     "On-Premise",
                     "Cloud"
                 ],
-                "selected": [],
+                "selected": [  "Cloud"],
                 "failed": null,
                 "subGroupStatus": "Aligned",
                 "listGrpQuestions": [
                   {
                       "question": "test question percent?",
-                      "questionType": "Percent",
+                      "questionType": "Percentage Text",
                       "values": [
                       ],
                       "required": "Mandatory",
@@ -777,11 +793,14 @@ export class MmAssesmentComponent implements OnInit {
                       "secondaryPOC": [
                           "Finance",
                           "OLE"
+                      ],
+                      "osGroup":[
+                        "FOE"
                       ]
                   },
                   {
-                      "question": "test question 4?",
-                      "questionType": "Money",
+                      "question": "test question Money?",
+                      "questionType": "Currency Text",
                       "values": [
                           "SSP"
                       ],
@@ -804,7 +823,7 @@ export class MmAssesmentComponent implements OnInit {
                     "3rd Party",
                     "Hosting Party - N/A"
                 ],
-                "selected": [],
+                "selected": ["Hosting Party - N/A"],
                 "failed": null,
                 "subGroupStatus": "Aligned"
             },
@@ -817,7 +836,7 @@ export class MmAssesmentComponent implements OnInit {
                     "Embedded Solution",
                     "Delivery - N/A"
                 ],
-                "selected": [],
+                "selected": ["Delivery - N/A"],
                 "failed": null,
                 "subGroupStatus": "Aligned"
             },
@@ -828,12 +847,12 @@ export class MmAssesmentComponent implements OnInit {
                     "Subscription: Pre-Commited Quantity",
                     "Subscription: Usage/ Utility"
                 ],
-                "selected": [],
+                "selected": ["Subscription: Usage/ Utility"],
                 "failed": null,
                 "subGroupStatus": "Aligned",
                 "listGrpQuestions": [
                   {
-                      "question": "test question 3?",
+                      "question": "test question Dropdown?",
                       "questionType": "Dropdown",
                       "values": [
                           "op1",
@@ -848,13 +867,18 @@ export class MmAssesmentComponent implements OnInit {
                       "secondaryPOC": [
                           "Finance",
                           "OLE"
+                      ],
+                      "osGroup":[
+                        "FINANCE"
                       ]
                   },
                   {
-                      "question": "test question 4?",
-                      "questionType": "Optional",
+                      "question": "test question Multiple Choice?",
+                      "questionType": "Multiple Choice",
                       "values": [
-                          "SSP"
+                          "SSP",
+                          "SSP2",
+                          "SSP3",
                       ],
                       "required": "Optional",
                       "primaryPOC": [
@@ -865,15 +889,32 @@ export class MmAssesmentComponent implements OnInit {
                           "Finance",
                           "OLE"
                       ]
-                  }
+                  },
+                  {
+                    "question": "test question Date?",
+                    "questionType": "Date",
+                    "values": [
+                        "SSP",
+                        "SSP2",
+                        "SSP3",
+                    ],
+                    "required": "Optional",
+                    "primaryPOC": [
+                        "BUPM",
+                        "OLE"
+                    ],
+                    "secondaryPOC": [
+                        "Finance",
+                        "OLE"
+                    ]
+                }
               ]
             }
         ]
       
     }
 ]};
-debugger;
-  this.offersolutioningService.saveSolutionData(this.currentOfferId, fakeGroup);
+  this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
   this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
  })
 

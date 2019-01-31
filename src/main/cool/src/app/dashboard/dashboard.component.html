@@ -66,7 +66,7 @@
                 <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
-                      <span class="text-indigo" (click)="goToofferSolutioning()">{{actionData.title}}&nbsp;
+                      <span class="text-indigo" (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
                         &nbsp;<span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right qtr-padding"></span><br />
                       </span>
                       <span class="text-small">{{actionData.desc}}</span>
@@ -314,9 +314,9 @@
   </div>
 </p-overlayPanel>
 <p-overlayPanel #popCommentContent [showCloseIcon]="true">
-  <div *ngIf="selectedAction" style="min-width:700px; max-width:700px">
+  <div *ngIf="selectedAction" class="comments-modal">
     <div class="popover__body">
-      <h5>View/Edit Comment</h5>
+      <h1 class="modalheader">View/Edit Comment</h1>
       <app-viewcomment [taskId]="selectedAction.taskId" [event]="commentEvent" [popContent]="popCommentContent"></app-viewcomment>
     </div>
   </div>
