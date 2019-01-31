@@ -89,7 +89,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
           this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
-          this.iDPId = offerDetailRes.idpvalue
+          this.idpvalue = offerDetailRes.iDPId;
         });
       }
     });
@@ -121,7 +121,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.secondaryBusinessUnits = secondaryBuArry;
     });
 
-    // Fetch Primary BE's assigned through admin page. 
+    // Fetch Primary BE's assigned through admin page.
     // Show this BE's as selected in Primary BE multiselect list in the offer creation page.
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       const primaryBeArray: any[] = [];
@@ -180,7 +180,7 @@ export class CreateOfferCoolComponent implements OnInit {
     }
   }
 
-  // Lulu's change on Get Primary BU when primary BE changed 
+  // Lulu's change on Get Primary BU when primary BE changed
   getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
     this.primaryBusinessUnitsValue = null;
     this.secondaryBusinessEntitiesValue = null;
