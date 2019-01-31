@@ -14,7 +14,7 @@
 
 
   <div *ngIf="addcomment">
-    <label for="comment" class="subheader">COMMENT</label>
+    <label for="comment" class="subheader">Comment</label>
     <textarea class="textarea" [value]="newComment" (input)="validateComment($event)" maxlength="300" placeholder="300 Max Character" rows="5"></textarea><br>
     <div class="text-danger text-right" >{{300 - newComment.length}}  characters are left</div>
     <div class="divider divider--compressed"></div>

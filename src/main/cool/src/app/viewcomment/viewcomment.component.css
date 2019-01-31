@@ -34,6 +34,7 @@
 
 label.subheader {
   color: #9e9ea2;
+  text-transform: uppercase;
 }
 .text-danger.text-right {
   font-size: 12px;
