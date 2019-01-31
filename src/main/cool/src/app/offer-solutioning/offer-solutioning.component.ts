@@ -29,6 +29,9 @@ export class OfferSolutioningComponent implements OnInit {
   currentOfferId;
   offerSolutionData:Object = {};
   offerSolutionGroups:Array<any> = [];
+  stakeHolderInfo: any;
+  derivedMM: any;
+  
 
 
   constructor(private router: Router,
@@ -42,7 +45,6 @@ export class OfferSolutioningComponent implements OnInit {
    }
 
   ngOnInit() {
-    debugger;
     this.offerSolutionData = this.offersolutioningService.getSolutionData(this.currentOfferId);
     if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
       this.offerSolutionGroups = [];
@@ -53,14 +55,15 @@ export class OfferSolutioningComponent implements OnInit {
 
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
+      this.derivedMM = this.firstData['derivedMM'];
       this.data = this.firstData['stakeholders'];
-      this.stakeData = {};
+      this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
       for (let i = 0; i <= this.data.length - 1; i++) {
-        if (this.stakeData[this.data[i]['offerRole']] == null) {
-          this.stakeData[this.data[i]['offerRole']] = [];
+        if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
+          this.stakeHolderInfo[this.data[i]['offerRole']] = [];
         }
-        this.stakeData[this.data[i]['offerRole']].push(
+        this.stakeHolderInfo[this.data[i]['offerRole']].push(
           {
             userName: this.data[i]['name'],
             emailId: this.data[i]['_id'] + '@cisco.com',
@@ -71,10 +74,28 @@ export class OfferSolutioningComponent implements OnInit {
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
       }
+      this.stakeData = this.stakeHolderInfo;
     });
   }
 
-  updateStakeData(data) {
 
+  processStakeHolderData(stakeHolderData) {
+    stakeHolderData.forEach(stakeHolder => {
+      if (this.stakeHolderInfo[stakeHolder['offerRole']] == null) {
+        this.stakeHolderInfo[stakeHolder['offerRole']] = [];
+      }
+      this.stakeHolderInfo[stakeHolder['offerRole']].push(
+        {
+          name: stakeHolder['name'],
+          email: stakeHolder['_id'] + '@cisco.com',
+          _id: stakeHolder['_id'],
+          businessEntity: stakeHolder['businessEntity'],
+          functionalRole: stakeHolder['functionalRole'],
+          offerRole: stakeHolder['offerRole'],
+          stakeholderDefaults: stakeHolder['stakeholderDefaults']
+        });
+      this.stakeData = this.stakeHolderInfo;
+    });
   }
+
 }

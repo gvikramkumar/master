@@ -654,7 +654,6 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   proceedToOfferSolution() {
-    debugger;
     let postOfferSolutioningData = {};
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
@@ -921,7 +920,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   goBackToOffercreation() {
-    this.router.navigate(['/coolOffer', this.currentOfferId]);
+    this.router.navigate(['/coolOffer', this.currentOfferId, this.caseId]);
   }
 }
 
