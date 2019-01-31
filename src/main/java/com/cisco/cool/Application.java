@@ -7,7 +7,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-
+import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 /**
  * Application.java - <Describe the intent of this class>
  * @author K Pandian (pathimoo)
@@ -16,7 +20,8 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  */
 
 
-@SpringBootApplication
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
+@SpringBootApplication(exclude = {MongoDataAutoConfiguration.class,MongoAutoConfiguration.class})
 public class Application extends SpringBootServletInitializer{
 
 	/**
