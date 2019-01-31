@@ -70,7 +70,7 @@ import { ViewcommentComponent } from './viewcomment/viewcomment.component';
 import { ViewcommentService } from './services/viewcomment.service';
 import { HeaderService } from './header/header.service';
 import { TurbotaxviewComponent } from './turbotaxview/turbotaxview.component';
-import {  TurbotaxService } from './services/turbotax.service';
+import { TurbotaxService } from './services/turbotax.service';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
@@ -80,6 +80,7 @@ import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
 import { BlueComponent } from './blue/blue.component';
+import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
 
@@ -154,7 +155,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
     AutoCompleteModule,
     OverlayPanelModule,
     NgxWebstorageModule.forRoot(),
-    UserIdleModule.forRoot({idle: 10795,timeout: 10800, ping: 0})
+    UserIdleModule.forRoot({ idle: 10795, timeout: 10800, ping: 0 })
   ],
   providers:
     [
@@ -188,6 +189,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
       StrategyReviewService,
       MessageService,
       MenuBarService,
+      RightPanelService,
       OffersolutioningService,
       {
         provide: APP_INITIALIZER,

@@ -156,10 +156,12 @@
 
       <div class="rightContent col-sm-12 col-md-3" >
         <app-right-panel
-          [portfolioFlag]="setFlag"
-          [stakeData]="stakeData"
-          (updateStakeData)="updateStakeData($event)"
-          [events]="eventsSubject.asObservable()"
+        [portfolioFlag]="setFlag" 
+        [stakeData]="stakeData" 
+        [displayLeadTime]="displayLeadTime" 
+        [offerBuilderdata]="offerBuilderdata"          
+        (updateStakeData)="updateStakeData($event)" 
+        [events]="eventsSubject.asObservable()" 
         ></app-right-panel>
       </div>
     </div>
