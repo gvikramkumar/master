@@ -116,16 +116,18 @@
 
     <p-dialog [showHeader]="false" [responsive]="true" [width]="1000" [minY]="70"
         [(visible)]="displayOfferPhase" [closable]="true">
-        <div class="pull-right base-margin-top">
+        <div class="pull-right phase-modal">
             <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h5>{{offerName}}&nbsp;<span style="color:#005073;cursor:pointer">{{currentOfferId}}</span></h5>
-                <h6 style="color:#005073;cursor:pointer">View Offer Details</h6>
+        <div class="modalheader">
+          <div class="row">
+            <div class="col-md-8">
+                <h5>{{offerName}}&nbsp;<span class="offerID">{{currentOfferId}}</span></h5>
+                <a>View Offer Details</a>
             </div>
-            <div class="col-md-6">
-                <h5 class="half-margin-bottom">Offer Phase</h5>
+            <!-- Offer Phase widget -->
+            <div class="col-md-4">
+                <h5 class="widget-header">Offer Phase</h5>
                 <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
                         <div class="ui-step {{mileStoneStatus[0].status}}">
                             <div class="step__icon">
@@ -155,17 +157,19 @@
                             </div>
                             <div class="step__label">Launch</div>
                         </div>
-                    </div>
+                </div>
             </div>
+          </div>
+            <div class="divider divider--compressed"></div>
         </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h4>Offer Phase Details</h4>
+                    <h5 class="base-margin-top">Offer Phase Details</h5>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
+                <div class="col-md-12 accordion half-margin-bottom">
+
                         <p-accordion [multiple]="true">
                           <p-accordionTab header="Ideate" [selected]="true">
                               <div class="responsive-table">
@@ -224,7 +228,7 @@
                               </div>
                           </p-accordionTab>
                         </p-accordion>
-                    </div>
+
                 </div>
             </div>
         </p-dialog>
@@ -268,13 +272,13 @@
         <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="email" #dt>
             <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
             <p-column field="functionalRole" header="Function"></p-column>
-            <p-column field="applicationRole" header="Roles">
+            <!-- <p-column field="applicationRole" header="Roles">
                 <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
                     <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
                         [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
                     </p-dropdown>
                 </ng-template>
-            </p-column>
+            </p-column> -->
             <p-column field="name" header="Name"></p-column>
             <p-column field="email" header="Email"></p-column>
             <p-column field="businessEntity" header="BusinessEntity"></p-column>
