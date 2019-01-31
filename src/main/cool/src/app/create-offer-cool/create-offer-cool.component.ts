@@ -52,7 +52,7 @@ export class CreateOfferCoolComponent implements OnInit {
   expectedLaunchDateValue: string;
   caseId: string;
   idpid;
-  idpidvalue: string;
+  iDPId: string;
   isIdpIdValid = false;
   enableOfferbuild = true;
   userSelectedAllUnits;
@@ -89,7 +89,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
           this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
-          this.idpidvalue = offerDetailRes.idpvalue
+          this.iDPId = offerDetailRes.idpvalue
         });
       }
     });
@@ -316,7 +316,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.designReviewDateValue,
       this.readinessReviewDateValue,
       this.expectedLaunchDateValue,
-      this.idpidvalue,
+      this.iDPId,
       offerCreatedBy,
       offerCreationDate,
       status);
@@ -343,9 +343,9 @@ export class CreateOfferCoolComponent implements OnInit {
   getidptoken(event) {
    // this.createOfferService.getIdpid().subscribe(data => {
     //  this.idpid = data;
-      this.idpidvalue = event.target.value;
+      this.iDPId = event.target.value;
      // let header = `${this.idpid['token_type']} ${this.idpid['access_token']}`;
-      this.createOfferService.validateIdpid( this.idpidvalue).subscribe(data => {
+      this.createOfferService.validateIdpid( this.iDPId).subscribe(data => {
         this.isIdpIdValid = true;
         if (this.offerCreateForm.valid == true && this.isIdpIdValid == true) {
           this.enableOfferbuild = false;
