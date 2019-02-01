@@ -307,7 +307,7 @@ margin: 0 5px;
   color: #005073;
 }
 
-span.total[_ngcontent-c10] {
+span.total {
   position: absolute;
   left: 0;
   text-align: center;
