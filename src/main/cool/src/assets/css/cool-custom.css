@@ -381,6 +381,11 @@ th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
   top: 0;
   right: -15px;
 }
+.ribbon button {
+  border: none;
+  background: transparent;
+  outline: none;
+}
 .cui .label--warning-alt {
   background: #ffcc00;
   color: #39393b;
