@@ -658,7 +658,7 @@ span[class*="display-"] {
   color: #005073;
 }
 .cool.cui header .header-toolbar .ui-accordion .ui-accordion-header.ui-state-default a {
-  padding: 0.571em 1em;
+  padding: 0;
   border: none;
   border-bottom: none;
   color: #005073;
@@ -676,10 +676,13 @@ span[class*="display-"] {
 }
 
 /* Offer Solutioning */
-.cool.cui .card .card__header {
+.cool.cui .solutioning .card .card__header {
   margin: -10px;
   padding: 10px 10px 5px;
   background-color: #f5f5f5;
+}
+.cool.cui .subgroup-name {
+  text-transform: uppercase;
 }
 .cool.cui .toggle--label {
   text-transform: uppercase;
@@ -688,7 +691,7 @@ span[class*="display-"] {
   display: block;
   font-size: 10px;
 }
-.cool.cui .list.dimensions--toggle li {
+.cool.cui .solutioning .list.dimensions--toggle li {
   padding: 10px 0;
   border-bottom: dashed 1px #dadada;
 }
