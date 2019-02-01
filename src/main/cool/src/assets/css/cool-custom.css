@@ -434,6 +434,21 @@ span.icon-trash:hover {
 span.icon-trash {
   color: #017cad;
 }
+.accordion-col-heading {
+  text-transform:uppercase;
+  margin: 20px 20px 0;
+}
+
+h6.flex-center-vertical {
+  border-left: solid 1px #DEDEDE;
+  padding-left: 30px;
+}
+
+
+span[class*="display-"] {
+  padding-right: 10px;
+}
+
 /* modals */
 .cool.cui span.icon-close {
   cursor: pointer;
@@ -474,10 +489,7 @@ span.icon-trash {
 
 
 
-.review-status .ui-accordion .ui-accordion-toggle-icon {
-  position: absolute;
-  top: 15px;
-}
+
 /* buttons */
 .cool.cui header .header-toolbar .btn {
   border-radius: 30px;
@@ -516,9 +528,21 @@ span.icon-trash {
   margin-bottom: 0;
 }
 .cui .review-status .panel--ltgray {
-  margin: -15px;
+  margin: -10px -10px 0 -10px;
 }
-
+.review-status .ui-accordion .ui-accordion-toggle-icon {
+  position: absolute;
+  top: 15px;
+}
+.review-status .ui-accordion span[class*="icon-"]{
+  line-height: 2.258rem ;
+  font-size: 2.258rem ;
+  margin-right: 5px;
+}
+.icon-message:before {
+  color: #017CAD;
+  vertical-align: middle;
+}
 .cool.cui [data-balloon][data-balloon-success][data-balloon]:after {
   background: white;
   color: #666666;
@@ -591,6 +615,9 @@ span.icon-trash {
   overflow: auto;
 }
 /* helpers */
+.borderless {
+  border:none!important;
+}
 .divider.divider--compressed.comments {
   border-top: solid 1px #f4f4f4;
 }
@@ -601,8 +628,12 @@ span.icon-trash {
 .cool.cui .ui-overlaypanel-content .popover__body[_ngcontent-c5] {
   padding-top: 0;
 }
-
-
+.cool.cui .text-indigo{
+  color:#005073;
+}
+.cool.cui .text-darkgray{
+  color:#58585B;
+}
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
     margin: 10px 40px;
