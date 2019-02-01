@@ -40,40 +40,47 @@
             <span class="icon-alert"></span>
         </a>
         <a href="javascript:;" class="btn btn--icon" >
-            <span [ngbPopover]="popNotificationContent" placement="bottom">
-           <span class="icon-email">
+           <span class="icon-email" (click)="op1.toggle($event)">
              </span>
-           </span>
         </a>
-        <ng-template  #popNotificationContent ptemplate="body" placement="bottom">
-          <div class="emailPrefSpacing">
-
-                 <p-multiSelect
-                  id="selectedSValue"
-                  class="form-control"
-                  name="secondaryBUList"
-                  [options]="emailPrefOptions"
-                  (onChange)="getSecondaryBusinessEntity($event.value)"
-                  [(ngModel)]="secondaryBusinessUnitsValue"
-                  [panelStyle]="{minWidth:'25em'}">
-                </p-multiSelect>
-
-        </div>
-        </ng-template>
         <a href="javascript:;" class="btn btn--icon">
             <span class="icon-cog"></span>
         </a>
-    </div>
-    <ng-template  #popContent ptemplate="body">
-        <p-accordionTab>
-            <p-header>
-              <div class="row">
-                <div class="col"><span class="icon-check-outline icon-medium text-success"></span>CSPP</div>
 
-              </div>
-            </p-header>
-          </p-accordionTab>
-       </ng-template>
+        <p-overlayPanel [style]="{'width':'300px'}" #op1 (onHide)="onClickedOutside()">
+          <p-accordion>
+            <p-accordionTab [selected]="true">
+                <p-header>
+                    Email Preferences
+                </p-header>
+                  <li *ngFor="let option of emailPrefOptions ; let i = index">
+                      <div class="form-group">
+                          <label class="checkbox">
+                              <input type="checkbox" [disabled]="emailPrefOptions[i].value" (change)="emailCheckBoxClicked(option.name)" >
+                              <span class="checkbox__input"></span>
+                              <span class="checkbox__label hidden-xs">{{option.name}}</span>
+                          </label>
+                      </div>
+                      <hr>
+                  </li>
+            </p-accordionTab>
+            <p-accordionTab>
+                <p-header>
+                    Notification Preferences
+                </p-header>
+                <li *ngFor="let option of notificationPrefOptions ; let i = index">
+                    <div class="form-group">
+                        <label class="checkbox">
+                            <input type="checkbox" [disabled]="notificationPrefOptions[i].value" (change)="notificationCheckBoxClicked(option.name)" >
+                            <span class="checkbox__input"></span>
+                            <span class="checkbox__label hidden-xs">{{option.name}}</span>
+                        </label>
+                    </div>
+                    <hr>
+                </li>
+            </p-accordionTab>
+        </p-accordion>
+      </p-overlayPanel>
+    </div>
   </div>
 </header>
-
