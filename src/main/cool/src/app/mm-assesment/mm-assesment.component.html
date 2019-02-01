@@ -1,5 +1,6 @@
 <div class="content">
     <div class="container-fluid">
+    <div class="container-fluid">
       <app-menu-bar [caseId]="caseId"
       [currentMMModel]="currentMMModel"
       [offerId]="currentOfferId"
@@ -158,7 +159,7 @@
         <app-right-panel
         [portfolioFlag]="setFlag" 
         [stakeData]="stakeData" 
-        [derivedMM] = "derivedMM";                 
+        [derivedMM] = "derivedMM"                 
         [displayLeadTime]="displayLeadTime" 
         [offerBuilderdata]="offerBuilderdata"          
         (updateStakeData)="updateStakeData($event)" 
