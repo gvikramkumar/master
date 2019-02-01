@@ -34,8 +34,12 @@ export class MmAssesmentComponent implements OnInit {
   groupNames = [];
   activeTabIndex = 0;
   message = {};
+
   stakeData = {};
+  derivedMM: string;
   offerBuilderdata = {};
+  displayLeadTime = false;
+
   canClickNextStep = false;
   currentMMModel: string = null;
   currentPrimaryBE: any;
@@ -442,7 +446,7 @@ export class MmAssesmentComponent implements OnInit {
       this.offerData['mmId'] = null;
       // console.log(this.offerData);
       let postData = this.offerData;
-      postData['groups'] = this.offerData['groups'].slice(0, 1);
+      postData['groups'] = this.offerData['groups'];
 
 
       this.monetizationModelService.toNextSetp(postData).subscribe(data => {
@@ -473,8 +477,12 @@ export class MmAssesmentComponent implements OnInit {
 
   getStakeData(mmModel) {
     this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
+      
       console.log(res);
       this.stakeData = {};
+      this.derivedMM = mmModel;
+      this.displayLeadTime = true;      
+
       let keyUsers;
       if (res != null) {
         keyUsers = res;

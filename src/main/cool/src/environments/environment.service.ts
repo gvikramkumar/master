@@ -63,6 +63,9 @@ export class EnvironmentService {
     PDAF_API;
     PDAF_GET_TOKEN_API;
 
+    REST_API_LEAD_TIME_LAUNCH_DATE;
+    REST_API_LEAD_TIME_AVERAGE_WEEKS;
+
     authtokenbaseapi = '';
     client_id;
     redirect_url;
@@ -204,6 +207,9 @@ export class EnvironmentService {
         this.REST_API_OFFER_SOLUTIONING_POST_URL = this.baseapi + '/setOfferSolution';
         this.REST_API_IDPID_GET_URL=this.baseapi+'/offer/productOffers';
         this.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL = this.baseapi + '/emailNotification/sendEmailNotification/';
+
+        this.REST_API_LEAD_TIME_AVERAGE_WEEKS = this.baseapi + '/leadTimeCal/getLTC/';
+        this.REST_API_LEAD_TIME_LAUNCH_DATE = this.baseapi + '/leadTimeCal/getLTC/';
 
     }
 }

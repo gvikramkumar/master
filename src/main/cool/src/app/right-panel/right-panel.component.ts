@@ -12,6 +12,9 @@ import { Collaborators } from '../models/collaborator';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { SharedService } from '../shared-service.service';
+import { RightPanelService } from '../services/right-panel.service';
+import { LeadTime } from './lead-time';
+import * as moment from 'moment';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -23,6 +26,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   notiFication: Boolean = false;
   @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
+  @Input() derivedMM: string;
+  @Input() offerBuilderdata: Object;
+  @Input() displayLeadTime: Boolean = false;
   @Output() updateStakeData = new EventEmitter<string>();
   navigateHash: Object = {};
   backdropCustom: Boolean = false;
@@ -62,6 +68,18 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   ddOwner3 = 'Select Owner';
   flagOwner3 = false;
+
+  mmModel: string;
+  leadTimeYear: number;
+  averageWeekCount: string;
+  expectedLaunchDate: string;
+  noOfWeeksDifference: string;
+
+  displayLeadTimeButton: Boolean = false;
+
+  average = 'Average';
+  tenthPercentile = '10th Percentile';
+  nintyPercentile = '90th Percentile';
 
   offerData;
   dotBox = [
@@ -116,7 +134,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     private searchCollaboratorService: SearchCollaboratorService,
     private offerPhaseService: OfferPhaseService,
     private monetizationModelService: MonetizationModelService,
-    private sharedService: SharedService) {
+    private sharedService: SharedService,
+    private rightPanelService: RightPanelService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -264,6 +283,34 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   showOfferPhaseDailog() {
     this.displayOfferPhase = true;
+  }
+
+  showLeadTimeDailog() {
+
+    this.mmModel = this.derivedMM;
+    const offerId = this.offerBuilderdata['offerId'];
+    this.leadTimeYear = new Date().getFullYear() - 1;
+    const primaryBusinessEntity = this.offerBuilderdata['primaryBEList'][0];
+
+    if (this.displayLeadTime) {
+
+      this.displayLeadTimeButton = true;
+
+      this.rightPanelService.displayLaunchDate(offerId).subscribe(
+        (leadTime: LeadTime) => {
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+          this.expectedLaunchDate = moment(leadTime.expectedLaunchDate).format('MM/DD/YYYY');
+        }
+      );
+
+      this.rightPanelService.displayAverageWeeks(primaryBusinessEntity, this.mmModel).subscribe(
+        (averageWeekCountObj: Object) => {
+          this.averageWeekCount = Number(averageWeekCountObj['AverageWeeks']).toFixed(2);
+        }
+      );
+
+    }
+
   }
 
   onHide() {
@@ -479,3 +526,4 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
   }
 }
+
