@@ -14,6 +14,8 @@ import {mgc} from '../../../../lib/database/mongoose-conn';
 
 @injectable()
 export default class DeptUploadUploadController extends UploadController {
+  submeasureMode: boolean;
+  submeasureName: string;
 
   constructor(
     repo: DeptUploadRepo,
@@ -36,6 +38,12 @@ export default class DeptUploadUploadController extends UploadController {
       nodeValue: 'Node Value',
       glAccount: 'GL Account'
     };
+  }
+
+  upload(req, res, next) {
+    this.submeasureMode = !!req.query.submeasureName;
+    this.submeasureName = req.query.submeasureName;
+    super.upload(req, res, next);
   }
 
   getValidationAndImportData() {
@@ -117,6 +125,7 @@ export default class DeptUploadUploadController extends UploadController {
           imports.push(new DeptUploadImport(
             dept.submeasureName,
             dept.nodeValue,
+            this.submeasureMode ? 'Y' : 'N',
             glAccount
           ));
         });
@@ -124,6 +133,7 @@ export default class DeptUploadUploadController extends UploadController {
         imports.push(new DeptUploadImport(
           dept.submeasureName,
           dept.nodeValue,
+          this.submeasureMode ? 'Y' : 'N'
         ));
       }
     })
@@ -132,17 +142,35 @@ export default class DeptUploadUploadController extends UploadController {
   }
 
   removeDuplicatesFromDatabase(imports: DeptUploadImport[]) {
-    const duplicates = _.uniqWith(imports, (a, b) => a.submeasureName === b.submeasureName && a.nodeValue === b.nodeValue)
-      .map(x => _.pick(x, ['submeasureName', 'nodeValue']))
-    return this.repo.bulkRemove(duplicates);
+    if (this.submeasureMode) {
+      return this.repo.removeMany({submeasureName: this.submeasureName, temp: 'Y'});
+    } else {
+      const duplicates = _.uniqWith(imports, (a, b) => a.submeasureName === b.submeasureName && a.nodeValue === b.nodeValue)
+        .map(x => _.pick(x, ['submeasureName', 'nodeValue']))
+      return this.repo.bulkRemove(duplicates);
+    }
+  }
+
+  validateSubmeasure() {
+    if (this.submeasureMode) {
+      // no submeasure if creating, so verify exists and name matches
+      if (!this.temp.submeasureName) {
+        this.addErrorRequired(this.PropNames.submeasureName);
+      }
+      if (this.temp.submeasureName !== this.submeasureName) {
+        this.addError(this.PropNames.submeasureName, `Sub Measure name doesn't match current name`, this.temp.submeasureName);
+      }
+      return Promise.resolve();
+    } else {
+      return super.validateSubmeasure();
+    }
   }
 
   validateCanDeptUpload() {
-/*
-    if (this.submeasure.indicators.deptAcct.toUpperCase() !== 'Y') {
-      this.addErrorMessageOnly(`Sub Measure doesn't allow department upload`);
+    // have to be dept upload to upload, no way to check as no submeasure if creating
+    if (this.submeasureMode) {
+      return Promise.resolve();
     }
-*/
     // std cogs adj and mfg overhead measures (2 & 4) AND sm has EXPSSOT MFGO source (#3)
     if (!( (this.submeasure.measureId === 2 || this.submeasure.measureId === 4) && this.submeasure.sourceId === 3) ) {
       this.addErrorMessageOnly(`Sub Measure doesn't allow department upload`);

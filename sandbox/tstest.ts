@@ -5,7 +5,47 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+
+
+
+let b;
+const a = b = 'stuff';
+console.log(a, b);
+
+
+
+/*
+function test() {
+
+  return Promise.resolve()
+  .then(() => {
+    throw new Error('bad');
+  })
+    .catch(err => {
+      const i = 5;
+      throw err;
+    });
+
+}
+
+function test2() {
+
+    return test()
+      .then(() => {
+        const i = 5;
+      })
+      .catch(err => {
+        const i = 5;
+      });
+
+}
+
+test2();
+*/
+
+
 // clear the object's property if not in list. Uses lodash path for obj and list
+/*
 function clearPropertyIfNotInList(obj, prop, list, listProp?) {
   if (!obj || !prop || !list) {
     console.error('uiUtil.clearPropertyIfNotInList called with no obj, prop, or list');
@@ -21,16 +61,17 @@ function clearPropertyIfNotInList(obj, prop, list, listProp?) {
 }
 
 const li = ['one', 'two'];
-/*
+/!*
 const li = [
   {indicators: {color: 'one'}},
   {indicators: {color: 'two'}}
 ];
-*/
+*!/
 const ob = {first: {val: 'One'}};
 // clearPropertyIfNotInList(ob, 'first.val', li, 'indicators.color');
 clearPropertyIfNotInList(ob, 'first.val', li);
 console.log(ob);
+*/
 
 
 

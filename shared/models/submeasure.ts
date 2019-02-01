@@ -1,6 +1,7 @@
 
 export class Submeasure {
   id?: string;
+  moduleId?: number;
   submeasureId: number;
   submeasureKey: number;
   name: string;

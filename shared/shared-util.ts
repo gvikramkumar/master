@@ -11,13 +11,18 @@ export const shUtil = {
   getFiscalMonthListForCurYearAndLast,
   getFiscalMonthLongNameFromNumber,
   getCutoffDateStrFromFiscalMonth,
-  getHtmlForLargeSingleMessage
+  getHtmlForLargeSingleMessage,
+  isDeptUpload,
 };
 
 export interface ObjectDiffVal {
   path: string;
   oldVal: any;
   newVal: any;
+}
+
+function isDeptUpload(submeasure) {
+  return (submeasure.measureId === 2 || submeasure.measureId === 4) && submeasure.sourceId === 3;
 }
 
 function getUpdateTable(updates: ObjectDiffVal[]): string {

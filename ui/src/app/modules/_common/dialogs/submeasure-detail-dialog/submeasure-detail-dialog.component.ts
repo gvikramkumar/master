@@ -67,5 +67,9 @@ export class SubmeasureDetailDialogComponent {
     return this.sm.measureId === 1 && this.sm.sourceId === 1;
   }
 
+  isDeptUpload() {
+    return shUtil.isDeptUpload(this.sm);
+  }
+
 }
 

@@ -14,7 +14,12 @@ export enum Statuses {
 }
 
 export enum Directory {
-  businessUpload = 'prof.bu'
+  profBusinessUpload = 'prof.bu',
+  profSubmeasure = 'prof.sm'
+}
+
+export enum FileTypes {
+  excel = 'excel'
 }
 
 export enum BusinessUploadFileType {

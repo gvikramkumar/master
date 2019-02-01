@@ -98,9 +98,9 @@ export class RestBase<T extends AnyObj> {
     return this.httpClient.get<T>(`${this.endpointUrl}/${id}`);
   }
 
-  callMethod(method, data = {}, params = {}) {
+  callMethod(method, data = {}, params = {}, headers = {}) {
     this.addModuleId(data);
-    return this.httpClient.post<any>(`${this.endpointUrl}/call-method/${method}`, data, {params});
+    return this.httpClient.post<any>(`${this.endpointUrl}/call-method/${method}`, data, {params, headers});
   }
 
   callRepoMethod(method, data = {}, params = {}) {

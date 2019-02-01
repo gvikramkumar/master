@@ -52,15 +52,11 @@ export default class ApprovalController extends ControllerBase {
 
   approve(req, res, next) {
     const data = req.body;
-    let promise: Promise<any> = Promise.resolve();
     this.repo.validate(data);
     if (data.approvedOnce === 'Y') {
       data.status = data.activeStatus;
       data.approvedBy = req.user.id;
       data.approvedDate = new Date();
-      if (data.activeStatus === 'I') {
-        promise = this.repo.updateMany({moduleId: data.moduleId, name: data.name}, {$set: {status: 'I', activeStatus: 'I'}});
-      }
     } else if (data.approvedOnce === 'N' && data.status === 'P') {
       data.status = 'A';
       data.activeStatus = 'A';
@@ -68,11 +64,9 @@ export default class ApprovalController extends ControllerBase {
       data.approvedBy = req.user.id;
       data.approvedDate = new Date();
     }
-    promise.then(() => {
+    this.postApproveStep(data, req)
+      .then(() => {
       this.repo.update(data, req.user.id, true, true, false)
-        .then(item => {
-          return this.postApproveStep(item, req);
-        })
         .then(item => {
           return this.sendApprovalEmail(req, ApprovalMode.approve, item)
             .then(() => res.json(item));
@@ -82,11 +76,15 @@ export default class ApprovalController extends ControllerBase {
   }
 
   reject(req, res, next) {
+    const data = req.body;
     req.body.status = 'D';
-    this.updateOneNoValidatePromise(req.body, req.user.id, false)
-      .then(item => {
-        return this.sendApprovalEmail(req, ApprovalMode.reject, item)
-          .then(() => res.json(item));
+    this.postRejectStep(data, req)
+      .then(() => {
+        this.updateOneNoValidatePromise(data, req.user.id, false)
+          .then(item => {
+            return this.sendApprovalEmail(req, ApprovalMode.reject, item)
+              .then(() => res.json(item));
+          });
       });
   }
 
@@ -131,9 +129,14 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
+  // this step can modify the data
+  postApproveStep(data, req) {
+    return Promise.resolve(data);
+  }
+
   // this step can modify the item, so any overrides are responsible for returning the passed item
-  postApproveStep(item, req) {
-    return Promise.resolve(item);
+  postRejectStep(data, req) {
+    return Promise.resolve(data);
   }
 
   sendApprovalEmail(req, mode: ApprovalMode, item: AnyObj): Promise<any> {
@@ -141,7 +144,6 @@ export default class ApprovalController extends ControllerBase {
   }
 
   sendApprovalEmailBase(req, mode: ApprovalMode, item: AnyObj, type: string, endpoint: string, omitProperties): Promise<any> {
-    this.verifyProperties(req.query, ['moduleId']);
     const data = req.body;
     const moduleId = req.dfa.moduleId;
     const url = `${req.headers.origin}/prof/${endpoint}/edit/${item.id};mode=view`;

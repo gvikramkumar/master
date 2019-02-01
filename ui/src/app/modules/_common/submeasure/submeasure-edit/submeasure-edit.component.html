@@ -45,16 +45,15 @@
                     [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="rrr_category_id" optionsValue="adj_type_id"></cui-select>
 
         <div class="margin-top:15px; height: 0px;">&nbsp;</div>
-        <div class="border-outline">
+        <div class="border-and-padding">
           <div style="margin-bottom:-10px;">
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
-                <fin-checkbox label="Is Grouping Sub-Measure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N" [inline]="true"
+                <fin-checkbox label="Is Grouping Sub-Measure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N"
                               [disabled]="!!sm.groupingSubmeasureId" (modelChange)="clearAllocationRequired()"></fin-checkbox>
               </div>
               <div class="col-6">
-                <fin-checkbox *ngIf="isGroupingParent()" label="Allocation Required" [(model)]="sm.indicators.allocationRequired" trueVal="Y" falseVal="N"
-                              [inline]="true"></fin-checkbox>
+                <fin-checkbox *ngIf="isGroupingParent()" label="Allocation Required" [(model)]="sm.indicators.allocationRequired" trueVal="Y" falseVal="N"></fin-checkbox>
               </div>
             </div>
             <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
@@ -62,16 +61,42 @@
                         optionsValue="submeasureKey" [disabled]="isGroupingParent()"></cui-select>
           </div>
         </div>
+
+        <div *ngIf="isDeptUpload()" class="border-and-padding base-margin-top">
+          <fieldset style="position:relative; margin-bottom:0;">
+            <legend>Dept/Acct Upload</legend>
+            <div style="height:6px;" class="spacer-div">&nbsp;</div>
+            <span [fxShow]="!fileInput.files.length">
+              <button class="choose-file upper-right" cuiButton color="primary" [small]="true">
+                <label for="file-input">Choose a File</label>
+              </button>
+              <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".xlsx"
+                     (change)="changeFile(fileInput)" class="ng-hide">
+            </span>
+            <span [fxShow]="fileInput.files.length">
+              <button cuiButton class="upper-right" color="primary" [small]="true" (click)="doDeptUpload(fileInput)">Upload File</button>
+            </span>
+            <div [fxShow]="fileInput.files.length || sm.indicators.deptAcct === 'A'" class="half-margin-top">
+              <span [innerText]="getUploadedText()" style="margin-right: 14px;"></span> <span class="text-darkgreen">{{deptUploadFilename}}</span>
+            </div>
+            <div class="half-margin-top">
+              <a (click)="downloadDeptUploadMapping()" style="margin-right: 30px;">Download Existing Mapping</a>
+              <a [href]="getDeptUploadTemplateDownloadUri()">Download Template</a>
+            </div>
+          </fieldset>
+
+        </div>
+
       </div>
     </div>
 
     <br>
 
-    <div class="row" style="margin-top:30px;">
+    <div class="row">
 
       <div class="col-lg-6  ifl-left-side">
         <div class="form-group-max-width">
-          <div class="border-outline">
+          <div class="border-and-padding">
               <fieldset class="input-filter-level">
                 <legend>Business Input Level</legend>
                 <div class="row half-padding">
@@ -131,12 +156,11 @@
 
       <div class="col-lg-6 mm-right-side">
         <div class="form-group-max-width">
-          <div class="border-outline">
+          <div class="border-and-padding">
         <fieldset class="input-filter-level mm-fieldset">
           <legend>
-            <fin-checkbox class="legend-checkbox" [(model)]="sm.indicators.manualMapping"
+              <fin-checkbox class="legend-checkbox" [(model)]="sm.indicators.manualMapping" label="Manual Mapping"
                           trueVal="Y" falseVal="N" (modelChange)="mmSelect()"></fin-checkbox>
-            Manual Mapping
           </legend>
 
           <div>
@@ -242,28 +266,28 @@
     <div class="row">
       <div class="col-12">
         <div class="inline-check-row">
-          <div class="form-group-check form-group-inline-30">
+          <div class="form-group-check form-group-inline-20">
             <fin-checkbox label="Retained Earnings" [(model)]="sm.indicators.retainedEarnings" trueVal="Y"
                           falseVal="N"></fin-checkbox>
           </div>
-          <div class="form-group-check form-group-inline-30">
+          <div class="form-group-check form-group-inline-20">
             <fin-checkbox label="Transition" [(model)]="sm.indicators.transition" trueVal="Y" falseVal="N"></fin-checkbox>
           </div>
-          <div class="form-group-check form-group-inline-30">
+          <div class="form-group-check form-group-inline-20">
             <fin-checkbox label="Corporate Revenue" [(model)]="sm.indicators.corpRevenue" trueVal="Y"
                           falseVal="N"></fin-checkbox>
           </div>
-          <div class="form-group-check form-group-inline-30">
+          <div class="form-group-check form-group-inline-20">
             <fin-checkbox label="2 Tier" [(model)]="sm.indicators.twoTier" trueVal="Y" falseVal="N"></fin-checkbox>
           </div>
-          <div class="form-group-check form-group-inline-30">
+          <div class="form-group-check form-group-inline-20">
             <fin-checkbox label="Dual Gaap" [(model)]="sm.indicators.dualGaap" trueVal="Y" falseVal="N"></fin-checkbox>
           </div>
-          <div class="form-group-check form-group-inline-30">
+          <div class="form-group-check form-group-inline-20">
             <fin-checkbox label="Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
                           (change)="filterGroupingSubmeasuresIfService()" [inline]="true"></fin-checkbox>
           </div>
-          <div class="form-group-check form-group-inline-30">
+          <div class="form-group-check form-group-inline-20">
             <fin-checkbox label="Pass Through" [(model)]="sm.indicators.passThrough" trueVal="Y" falseVal="N"
                           [inline]="true"></fin-checkbox>
           </div>

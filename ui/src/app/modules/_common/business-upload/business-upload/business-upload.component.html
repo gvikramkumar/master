@@ -29,10 +29,10 @@
 
           <div finAuth="super-user">
             <div>
-              <button id="choose-file" cuiButton color="primary">
+              <button class="choose-file" cuiButton color="primary">
                 <label for="file-input">Choose a File</label>
               </button>
-              <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".csv,.xlsx"
+              <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".xlsx"
                      (change)="changeFile(fileInput)" class="ng-hide"><br>
             </div>
             <div [fxShow]="fileInput.files.length">

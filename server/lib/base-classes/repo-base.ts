@@ -26,7 +26,7 @@ export default class RepoBase {
   // get all that match filter, if yearmo/upperOnly exists, sets date constraints
   getMany(_filter: AnyObj = {}) {
     let filter = _.clone(_filter);
-    this.verifyModuleId(filter);
+    this.verifyFilterModuleId(filter);
     this.convertPropsToNumbers(filter);
     let query;
     const distinct = filter.getDistinct,
@@ -71,7 +71,7 @@ export default class RepoBase {
   private getManyByGroupLatestOrEaliest(_filter: AnyObj = {}, updatedDateSort: number) {
     let filter = _.clone(_filter);
     this.convertPropsToNumbers(filter);
-    this.verifyModuleId(filter);
+    this.verifyFilterModuleId(filter);
     const groupField = filter.groupField;
     delete filter.groupField;
     filter = this.addDateRangeToFilter(filter);
@@ -145,7 +145,7 @@ export default class RepoBase {
   // returns the latest value
   getOneLatest(_filter: AnyObj = {}) {
     let filter = _filter;
-    this.verifyModuleId(filter);
+    this.verifyFilterModuleId(filter);
     delete filter.getLatest;
     filter = this.addDateRangeToFilter(filter);
     return this.Model.find(filter).sort({updatedDate: -1}).limit(1).exec()
@@ -178,6 +178,9 @@ export default class RepoBase {
     if (!docs.length) {
       return Promise.resolve();
     }
+    if (this.isModuleRepo) {
+      docs.forEach(doc => this.verifyAddModuleId(doc));
+    }
     if (!bypassCreatedUpdated) {
       docs.forEach(doc => this.addCreatedByAndUpdatedBy(doc, userId));
     }
@@ -204,6 +207,9 @@ export default class RepoBase {
     if (!_docs.length) {
       return Promise.resolve();
     }
+    if (this.isModuleRepo) {
+      _docs.forEach(doc => this.verifyAddModuleId(doc));
+    }
     const transId = new mg.Types.ObjectId();
     const docs = _docs.map(doc => {
       doc.transactionId = transId;
@@ -219,13 +225,19 @@ export default class RepoBase {
   }
 
   addOne(data, userId, validate = true) {
-    // if versioning items, our edits will actually be adds, so dump the ids in that case
-    delete data._id;
-    delete data.id;
-    const item = new this.Model(data);
-    this.addCreatedByAndUpdatedBy(item, userId);
-    return this.fillAutoIncrementField(item)
-      .then(() => item.save({validateBeforeSave: validate}));
+    return Promise.resolve()
+      .then(() => {
+        // if versioning items, our edits will actually be adds, so dump the ids in that case
+        delete data._id;
+        delete data.id;
+        if (this.isModuleRepo) {
+          this.verifyAddModuleId(data);
+        }
+        const item = new this.Model(data);
+        this.addCreatedByAndUpdatedBy(item, userId);
+        return this.fillAutoIncrementField(item)
+          .then(() => item.save({validateBeforeSave: validate}));
+      });
   }
 
   // so far only diff is "don't bump up the autoIncrement field as we're updating and existing rule/submeasure
@@ -240,7 +252,7 @@ export default class RepoBase {
 
   // update via $set commands
   updateMany(filter, setObj) {
-    this.verifyModuleId(filter);
+    this.verifyFilterModuleId(filter);
     return this.Model.updateMany(filter, setObj).exec();
   }
 
@@ -475,7 +487,16 @@ export default class RepoBase {
     return filter;
   }
 
-  verifyModuleId(filter) {
+  verifyAddModuleId(data) {
+    // we expect repo.isModuleRepo repo's to always specify a moduleId
+    if (this.isModuleRepo) {
+      if (!data.moduleId || data.moduleId === -1) {
+        throw new ApiError(`${this.modelName} repo add call is missing moduleId`, null, 400);
+      }
+    }
+  }
+
+  verifyFilterModuleId(filter) {
 
     if (filter.moduleId && typeof filter.moduleId === 'string') {
       filter.moduleId = Number(filter.moduleId);
@@ -483,7 +504,7 @@ export default class RepoBase {
     // we expect repo.isModuleRepo repo's to always specify a moduleId, they must specify moduleId = -1 to override
     if (this.isModuleRepo) {
       if (!filter.moduleId) {
-        throw new ApiError(`${this.modelName} repo call is missing moduleId`, null, 400);
+        throw new ApiError(`${this.modelName} repo get call is missing moduleId`, null, 400);
       } else if (filter.moduleId === -1) {
         delete filter.moduleId; // get all modules
       }

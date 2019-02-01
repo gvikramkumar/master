@@ -49,6 +49,16 @@ export default class UploadController {
     ) {
   }
 
+// what this needs from sm approve for dept upload:
+  /*
+  req.query.moduleId // add in ui then or add in api from body?
+    uploadType, can just put that in req.query too and look for it in the getUploadType function
+    then done really, if you can handle req, res, next?? can't though?? I..e need to return sm from approve?
+    and what does upload return?? probably upload record count and failures. Hmmm. how to mix the two return types??
+    have to break out upload to 2 functions and use inner return value in approve without res.json call right?
+   */
+
+
   upload(req, res, next) {
     this.verifyProperties(req.query, ['moduleId']);
     this.dfa = req.dfa;
@@ -80,7 +90,7 @@ export default class UploadController {
       .then(() => this.lookForTotalErrors())
       .then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
-      .then(() => this.importRows(req.user.id))
+      .then(() => this.importRows(this.userId))
       .then(() => this.autoSyncOnStaging(req, res, next))
       .then(() => {
         this.sendSuccessEmail();

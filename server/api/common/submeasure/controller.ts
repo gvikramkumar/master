@@ -7,11 +7,10 @@ import * as _ from 'lodash';
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
 import {ApprovalMode} from '../../../../shared/enums';
-import {svrUtil} from '../../../lib/common/svr-util';
 import LookupRepo from '../../lookup/repo';
-import {sendHtmlMail} from '../../../lib/common/mail';
 import {shUtil} from '../../../../shared/shared-util';
 import ProductClassUploadRepo from '../../prof/product-class-upload/repo';
+import DeptUploadRepo from '../../prof/dept-upload/repo';
 
 
 interface FilterLevel {
@@ -30,7 +29,8 @@ export default class SubmeasureController extends ApprovalController {
     protected pgRepo: SubmeasurePgRepo,
     protected inputLevelPgRepo: InputLevelPgRepo,
     private lookupRepo: LookupRepo,
-    private productClassUploadRepo: ProductClassUploadRepo
+    private productClassUploadRepo: ProductClassUploadRepo,
+    private deptUploadRepo: DeptUploadRepo
 ) {
     super(repo);
   }
@@ -149,9 +149,10 @@ export default class SubmeasureController extends ApprovalController {
   }
 
   postApproveStep(sm, req) {
+    const promises = [];
     // remove product class uploads for this submeasure and add new ones
     if (sm.categoryType === 'Manual Mix') {
-      return this.productClassUploadRepo.removeMany({submeasureName: sm.name})
+      promises.push(this.productClassUploadRepo.removeMany({submeasureName: sm.name})
         .then(() => {
           return this.productClassUploadRepo.addManyTransaction([
             {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'HARDWARE', splitPercentage: sm.manualMixHw},
@@ -160,12 +161,45 @@ export default class SubmeasureController extends ApprovalController {
             .then(() => {
               delete sm.manualMixHw;
               delete sm.manualMixSw;
-              return sm;
             });
+        }));
+    }
+    if (shUtil.isDeptUpload(sm) && sm.indicators.deptAcct === 'A') {
+      // find temp=Y records, if found, delete for sm.name && temp = N, then change these to temp Y >> N
+      promises.push(
+        this.deptUploadRepo.getMany({submeasureName: sm.name, temp: 'Y'})
+        .then(tempRecords => {
+          if (tempRecords.length) {
+            return this.deptUploadRepo.removeMany({submeasureName: sm.name, temp: 'N'})
+              .then(() => this.deptUploadRepo.updateMany({submeasureName: sm.name, temp: 'Y'}, {$set: {temp: 'N'}}));
+          }
+        })
+        .then(() => {
+          sm.indicators.deptAcct = 'D';
+        })
+      );
+    }
+    return Promise.all(promises)
+      .then(() => sm);
+  }
+
+  postRejectStep(sm, req) {
+    // two ways to go, leave dept upload or toss it. Thing is: they can upload and not even save the submeasure, so will
+    // always have possiblity of these around. Maybe something small to change and then they'd have to add it again
+    // so leave it for now. The concern is: you leave these around on reject (or upload but never submit), and then
+    // someone edit's one (but deptAcct flag will be Y then)
+    return Promise.resolve(sm);
+    /*
+    if (shUtil.isDeptUpload(sm) && sm.indicators.deptAcct === 'A') {
+      // remove any temp records associated with this submeasure
+      return this.deptUploadRepo.removeMany({submeasureName: sm.name, temp: 'Y'})
+        .then(() => {
+          sm.indicators.deptAcct = 'Y';
         });
     } else {
       return Promise.resolve(sm);
     }
+*/
   }
 
 }

@@ -8,6 +8,7 @@ const schema = new Schema(
     submeasureName: {type: String, required: true},
     nodeValue: {type: String, required: true},
     glAccount: Number,
+    temp: {type: String, enum: ['Y', 'N'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},
