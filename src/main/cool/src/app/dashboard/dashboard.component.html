@@ -313,6 +313,7 @@
     <app-turbotaxview [data]="selectedActionData"></app-turbotaxview>
   </div>
 </p-overlayPanel>
+<!-- comments overlay -->
 <p-overlayPanel #popCommentContent [showCloseIcon]="true">
   <div *ngIf="selectedAction" class="comments-modal">
     <div class="popover__body">
@@ -321,6 +322,7 @@
     </div>
   </div>
 </p-overlayPanel>
+<!-- notifications overlay -->
 <p-overlayPanel #popNotificationContent [showCloseIcon]="true">
   <div *ngIf="selectedAction" style="min-width:700px">
     <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
@@ -336,6 +338,7 @@
     </div>
   </div>
 </p-overlayPanel>
+<!-- actions overlay -->
 <p-overlayPanel #popActionContent [showCloseIcon]="true" (onShow)="getActionFormValues()">
   <div *ngIf="selectedAction" style="min-width:700px">
     <div *ngIf="showActionSection">
