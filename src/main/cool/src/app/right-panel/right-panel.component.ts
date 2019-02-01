@@ -26,6 +26,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   notiFication: Boolean = false;
   @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
+  @Input() derivedMM: string;
   @Input() offerBuilderdata: Object;
   @Input() displayLeadTime: Boolean = false;
   @Output() updateStakeData = new EventEmitter<string>();
@@ -286,7 +287,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   showLeadTimeDailog() {
 
-    this.mmModel = this.stakeData['mmModel'];
+    this.mmModel = this.derivedMM;
     const offerId = this.offerBuilderdata['offerId'];
     this.leadTimeYear = new Date().getFullYear() - 1;
     const primaryBusinessEntity = this.offerBuilderdata['primaryBEList'][0];
@@ -297,7 +298,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
       this.rightPanelService.displayLaunchDate(offerId).subscribe(
         (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' week';
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
           this.expectedLaunchDate = moment(leadTime.expectedLaunchDate).format('MM/DD/YYYY');
         }
       );
@@ -525,3 +526,4 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
   }
 }
+
