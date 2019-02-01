@@ -39,10 +39,14 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   minDate: Date;
   updateStakeData;
   setFlag;
-  derivedMM;
   currentUser;
   managerName;
   offerName;
+
+  derivedMM;
+  offerId:string;
+  primaryBE: string;
+  displayLeadTime = false;
 
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
@@ -130,9 +134,12 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
 
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
-      this.derivedMM = this.firstData['derivedMM'];
+      this.displayLeadTime = true;
+      this.offerId=this.currentOfferId;
       this.data = this.firstData['stakeholders'];
+      this.derivedMM = this.firstData['derivedMM'];
       this.offerName = this.firstData['offerName'];
+      this.primaryBE = this.firstData['primaryBEList'][0];
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
       for (let i = 0; i <= this.data.length - 1; i++) {
@@ -151,7 +158,6 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
           });
       }
       this.stakeData = this.stakeHolderInfo;
-      
 
       for (const auth in this.stakeData) {
         if (auth === 'Co-Owner' || auth === 'Owner') {
@@ -208,6 +214,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
         this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
       }
     });
+
   }
 
   getStrategyReviwInfo() {

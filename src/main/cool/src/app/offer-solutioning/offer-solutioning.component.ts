@@ -30,10 +30,12 @@ export class OfferSolutioningComponent implements OnInit {
   offerSolutionData:Object = {};
   offerSolutionGroups:Array<any> = [];
   stakeHolderInfo: any;
+
   derivedMM: any;
+  offerId: string;
+  primaryBE: string;
   updateStakeData: any;
-
-
+  displayLeadTime = false;
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -55,9 +57,14 @@ export class OfferSolutioningComponent implements OnInit {
     }
 
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+
       this.firstData = data;
-      this.derivedMM = this.firstData['derivedMM'];
+      this.displayLeadTime = true;
+      this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
+      this.derivedMM = this.firstData['derivedMM'];
+      this.primaryBE = this.firstData['primaryBEList'][0];
+
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
       for (let i = 0; i <= this.data.length - 1; i++) {
@@ -75,6 +82,7 @@ export class OfferSolutioningComponent implements OnInit {
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
       }
+
       this.stakeData = this.stakeHolderInfo;
     });
   }

@@ -44,14 +44,30 @@
     <!-- Estimated Lead Time -->
     <div class="card card--raised base-margin-top">
         <h5 class="half-margin-bottom">Estimated Lead Time</h5>
-        <span class="ribbon label label--warning-alt">
+        <!-- <span class="ribbon label label--warning-alt"> -->
 
-            <!-- [disabled]="!displayLeadTime" -->
-            <span>
+        <span>
+
+            <!-- <div *ngIf="displayLeadTime" class="alert alert-success box-msg" role="alert">
+                    <button [disabled]="displayLeadTime" (click)="showLeadTimeDailog()">
+                        Lead Time Calculation?
+                    </button>
+                </div> -->
+
+            <div *ngIf="!displayLeadTime">
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                    <strong><small>{{noOfWeeksDifference}}</small></strong> Lead Time Calculation?
+                    <strong> Lead Time Calculation?</strong>
                 </button>
-            </span>
+            </div>
+
+            <div *ngIf="displayLeadTime">
+                <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
+                    <strong><small>{{noOfWeeksDifference}}</small> Lead Time Calculation?</strong>
+                </button>
+            </div>
+
+
+            <!-- </span> -->
 
         </span>
     </div>
