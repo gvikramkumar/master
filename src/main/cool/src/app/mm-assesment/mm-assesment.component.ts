@@ -36,6 +36,7 @@ export class MmAssesmentComponent implements OnInit {
   message = {};
 
   stakeData = {};
+  derivedMM: string;
   offerBuilderdata = {};
   displayLeadTime = false;
 
@@ -479,8 +480,8 @@ export class MmAssesmentComponent implements OnInit {
       
       console.log(res);
       this.stakeData = {};
-      this.displayLeadTime = true;
-      this.stakeData['mmModel'] = mmModel;
+      this.derivedMM = mmModel;
+      this.displayLeadTime = true;      
 
       let keyUsers;
       if (res != null) {
