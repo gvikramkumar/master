@@ -496,18 +496,28 @@ span[class*="display-"] {
 
 
 /* buttons */
-.cool.cui header .header-toolbar .btn {
+.cool.cui header .header-toolbar .btn, .cool.cui .dimensions--toggle .btn {
   border-radius: 30px;
 }
 .cool.cui .btn {
   border-radius: 6px;
 }
+.cool.cui .btns.btn-group--wide > .btn, .cool.cui .btn-group.btn-group--wide > .btn {
+  border-radius: 0;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+}
+.cool.cui .btns.btn-group--wide > .btn:last-child, .cool.cui .btn-group.btn-group--wide > .btn:last-child {
+  border-radius: 0;
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+
 .comments-modal {
   min-width:600px;
   max-width:600px;
 }
-
-  /* Strategy Review Status */
+  /* Strategy Review Status   */
 .cui .review-status .ui-accordion .ui-accordion-content {
   padding: 1em;
   border-top: 0;
@@ -638,6 +648,31 @@ span[class*="display-"] {
 }
 .cool.cui .text-darkgray{
   color:#58585B;
+}
+.cool.cui header .header-toolbar .ui-accordion-content li {
+  line-height: 2.5;
+}
+.cool.cui header .header-toolbar .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a {
+  background-color: transparent;
+  border: none;
+  color: #005073;
+}
+.cool.cui header .header-toolbar .ui-accordion .ui-accordion-header.ui-state-default a {
+  padding: 0.571em 1em;
+  border: none;
+  border-bottom: none;
+  color: #005073;
+  background-color: transparent;
+  font-weight: 400;
+  -moz-transition: background-color 0.2s;
+  -o-transition: background-color 0.2s;
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+.cui header .header-toolbar .ui-accordion-header.ui-state-default {
+  border: none;
+  background: transparent;
+  color: #555555;
 }
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
