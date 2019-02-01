@@ -172,13 +172,12 @@ span.badge-wrapper.base-margin-left:hover:after {
 .cool.cui header .header-toolbar .ui-accordion-content li {
     line-height: 2.5;
 }
-
-.cool.cui .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a {
+.cool.cui header .header-toolbar .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a {
   background-color: #f7f7f7;
   border: none;
   color: #005073;
 }
-.cool.cui .ui-accordion .ui-accordion-header a {
+.cool.cui header .header-toolbar .ui-accordion .ui-accordion-header.ui-state-default a {
   padding: 0.571em 1em;
   border: none;
   border-bottom: 1px solid #c8c8c8;
