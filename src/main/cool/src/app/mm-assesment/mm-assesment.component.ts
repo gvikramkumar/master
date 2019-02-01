@@ -445,7 +445,7 @@ export class MmAssesmentComponent implements OnInit {
       this.offerData['mmId'] = null;
       // console.log(this.offerData);
       let postData = this.offerData;
-      postData['groups'] = this.offerData['groups'].slice(0, 1);
+      postData['groups'] = this.offerData['groups'];
 
 
       this.monetizationModelService.toNextSetp(postData).subscribe(data => {
