@@ -899,6 +899,20 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       });
   }
 
+  getDeptUploadExistingMappingClick() {
+    if (this.sm.name.trim().length === 0) {
+      this.uiUtil.genericDialog('No submeasure name');
+      return;
+    }
+  }
+
+  getDeptUploadExistingMappingUri() {
+    if (this.sm.name.trim().length === 0) {
+      return 'javascript:void(0)';
+    }
+    return `${environment.apiUrl}/api/submeasure/call-method/downloadDeptUploadMapping?moduleId=1&submeasureName=${encodeURI(this.sm.name)}`;
+  }
+
   getDeptUploadTemplateDownloadUri() {
     if (!this.deptUploadTemplate) {
       return;

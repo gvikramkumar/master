@@ -12,6 +12,6 @@ export const fileRouter = Router()
   .get('/info/:id', ctrl.getInfoOne.bind(ctrl))
 
   // file handlers
-  .delete('/:id', ctrl.remove.bind(ctrl))
   .get('/:id', ctrl.download.bind(ctrl))
   .post('/', upload.array('fileUploadField'), ctrl.uploadMany.bind(ctrl))
+  .delete('/:id', ctrl.remove.bind(ctrl))

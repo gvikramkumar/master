@@ -6,11 +6,17 @@ import InputLevelPgRepo, {SubmeasureInputLvl} from './input-level-pgrepo';
 import * as _ from 'lodash';
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
-import {ApprovalMode} from '../../../../shared/enums';
+import {ApprovalMode, BusinessUploadFileType, Directory} from '../../../../shared/enums';
 import LookupRepo from '../../lookup/repo';
 import {shUtil} from '../../../../shared/shared-util';
 import ProductClassUploadRepo from '../../prof/product-class-upload/repo';
 import DeptUploadRepo from '../../prof/dept-upload/repo';
+import FileRepo from '../../file/repo';
+import {mgc} from '../../../lib/database/mongoose-conn';
+import DeptUploadImport from '../../prof/upload/dept/import';
+import {svrUtil} from '../../../lib/common/svr-util';
+import xlsx from 'xlsx';
+import AnyObj from '../../../../shared/models/any-obj';
 
 
 interface FilterLevel {
@@ -30,7 +36,8 @@ export default class SubmeasureController extends ApprovalController {
     protected inputLevelPgRepo: InputLevelPgRepo,
     private lookupRepo: LookupRepo,
     private productClassUploadRepo: ProductClassUploadRepo,
-    private deptUploadRepo: DeptUploadRepo
+    private deptUploadRepo: DeptUploadRepo,
+    private fileRepo: FileRepo
 ) {
     super(repo);
   }
@@ -200,6 +207,50 @@ export default class SubmeasureController extends ApprovalController {
       return Promise.resolve(sm);
     }
 */
+  }
+
+  downloadDeptUploadMapping(req, res, next) {
+    this.verifyProperties(req.query, ['submeasureName']);
+    const submeasureName = req.query.submeasureName;
+    Promise.all([
+      this.deptUploadRepo.getMany({submeasureName, temp: 'N'}),
+      this.fileRepo.getMany({directory: Directory.profBusinessUpload, buFileType: BusinessUploadFileType.template, buUploadType: 'dept-upload'})
+    ])
+      .then(results => {
+        const records: DeptUploadImport[] = results[0];
+        const fileInfo = results[1][0];
+
+        let sheet1Rows = [];
+        const sheet2Rows = [];
+        records.forEach(rec => {
+          sheet1Rows.push([rec.submeasureName, rec.nodeValue]);
+          if (rec.glAccount) {
+            sheet2Rows.push([rec.submeasureName, rec.glAccount]);
+          }
+          sheet1Rows = _.uniqWith(sheet1Rows, _.isEqual);
+        })
+
+        const gfs = new mgc.mongo.GridFSBucket(mgc.db);
+        const tempStream = gfs.openDownloadStream(new mgc.mongo.ObjectID(fileInfo.id));
+        tempStream.on('error', next);
+        svrUtil.streamToBuffer(tempStream)
+          .then(tempBuffer => {
+            const workbook = xlsx.read(tempBuffer);
+            const deptSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const glaccountSheet = workbook.Sheets[workbook.SheetNames[1]];
+            xlsx.utils.sheet_add_aoa(deptSheet, sheet1Rows, {origin: -1});
+            xlsx.utils.sheet_add_aoa(glaccountSheet, sheet2Rows, {origin: -1});
+
+            const wopts = {bookType: 'xlsx', bookSST: false, type: 'buffer'};
+            const outBuffer = xlsx.write(workbook, <any>wopts);
+            res.set('Content-Type', fileInfo.contentType);
+            const fileName = `dept-upload_${_.snakeCase(submeasureName)}.xlsx`;
+            res.set('Content-Disposition', `attachment; filename="${fileName}"`);
+            const outStream = svrUtil.bufferToStream(outBuffer);
+            outStream.pipe(res);
+          });
+      })
+      .catch(next);
   }
 
 }

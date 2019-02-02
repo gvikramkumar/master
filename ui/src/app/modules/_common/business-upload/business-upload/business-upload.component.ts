@@ -57,6 +57,9 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     ])
       .then(results => {
         this.templates = results[0];
+        if (this.templates.length !== this.uploadTypes.length) {
+          this.uiUtil.genericDialog('Template count mismatch');
+        }
         this.openPeriod = shUtil.getFiscalMonthLongNameFromNumber(results[1].fiscalMonth);
       });
   }

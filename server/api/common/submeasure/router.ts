@@ -7,6 +7,7 @@ const ctrl = injector.get(SubmeasureController);
 
 export const submeasureRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
+  .get('/call-method/:method', ctrl.callMethod.bind(ctrl))
   .post('/', ctrl.addOne.bind(ctrl))
   .post('/call-method/:method', ctrl.callMethod.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))

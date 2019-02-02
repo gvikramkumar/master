@@ -80,7 +80,7 @@
               <span [innerText]="getUploadedText()" style="margin-right: 14px;"></span> <span class="text-darkgreen">{{deptUploadFilename}}</span>
             </div>
             <div class="half-margin-top">
-              <a (click)="downloadDeptUploadMapping()" style="margin-right: 30px;">Download Existing Mapping</a>
+              <a [href]="getDeptUploadExistingMappingUri()" (click)="getDeptUploadExistingMappingClick()" style="margin-right: 30px;">Download Existing Mapping</a>
               <a [href]="getDeptUploadTemplateDownloadUri()">Download Template</a>
             </div>
           </fieldset>
