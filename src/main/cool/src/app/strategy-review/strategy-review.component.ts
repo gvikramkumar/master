@@ -14,6 +14,9 @@ import { SharedService } from '../shared-service.service';
 import { MessageService } from '../services/message.service';
 import { Subscription } from 'rxjs';
 import { HeaderService } from '../header/header.service';
+import { LeadTime } from '../right-panel/lead-time';
+import { RightPanelService } from '../services/right-panel.service';
+
 
 @Component({
   selector: 'app-strategy-review',
@@ -47,6 +50,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   offerId:string;
   primaryBE: string;
   displayLeadTime = false;
+  noOfWeeksDifference: string;
 
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
@@ -90,7 +94,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     private _location: Location,
     private sharedService: SharedService,
     private messageService: MessageService,
-    private headerService: HeaderService) {
+    private headerService: HeaderService,
+    private rightPanelService: RightPanelService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -140,6 +145,12 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.derivedMM = this.firstData['derivedMM'];
       this.offerName = this.firstData['offerName'];
       this.primaryBE = this.firstData['primaryBEList'][0];
+      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+        (leadTime: LeadTime) => {
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+        }
+      );
+
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
       for (let i = 0; i <= this.data.length - 1; i++) {

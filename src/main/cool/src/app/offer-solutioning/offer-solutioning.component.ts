@@ -5,6 +5,9 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { OffersolutioningService } from '../services/offersolutioning.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 
+import { LeadTime } from '../right-panel/lead-time';
+import { RightPanelService } from '../services/right-panel.service';
+
 @Component({
   selector: 'app-offer-solutioning',
   templateUrl: './offer-solutioning.component.html',
@@ -36,11 +39,13 @@ export class OfferSolutioningComponent implements OnInit {
   primaryBE: string;
   updateStakeData: any;
   displayLeadTime = false;
+  noOfWeeksDifference: string;
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private offersolutioningService: OffersolutioningService,
-    private stakeholderfullService: StakeholderfullService) {
+    private stakeholderfullService: StakeholderfullService,
+    private rightPanelService: RightPanelService) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
         this.caseId = params['id2']
@@ -64,6 +69,11 @@ export class OfferSolutioningComponent implements OnInit {
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
       this.primaryBE = this.firstData['primaryBEList'][0];
+      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+        (leadTime: LeadTime) => {
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+        }
+      );
 
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);

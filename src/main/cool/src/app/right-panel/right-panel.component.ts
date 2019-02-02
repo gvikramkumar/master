@@ -70,8 +70,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   leadTimeYear: number;
   averageWeekCount: string;
   expectedLaunchDate: string;
-  noOfWeeksDifference: string;
-
+  weekDifferenceCount: string;
   displayLeadTimeButton: Boolean = false;
 
   average = 'Average';
@@ -83,8 +82,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   @Input() derivedMM: string;
   @Input() primaryBE: string;
   @Input() offerBuilderdata: Object;
+  @Input() noOfWeeksDifference: string;
   @Input() displayLeadTime: Boolean = false;
-  @Output() launchDate = new EventEmitter<string>();
 
   offerData;
   dotBox = [
@@ -150,15 +149,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
     this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
 
-    if (this.displayLeadTime) {
-      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-        (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
-          // this.launchDate.emit(this.noOfWeeksDifference);
-        }
-      );
-    }
-
   }
 
   ngOnInit() {
@@ -216,7 +206,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     });
 
     if (this.currentOfferId) {
+
       this.createOfferService.getMMMapperById(this.currentOfferId).subscribe(data => {
+
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
         this.OfferOwners = this.offerData.offerObj.owners;
@@ -248,6 +240,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     if (this.events !== undefined) {
       this.eventsSubscription = this.events.subscribe((data) => this.storeOwnerId(data));
     }
+
 
 
 
@@ -311,10 +304,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     if (this.displayLeadTime) {
 
       this.displayLeadTimeButton = true;
-
       this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
         (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+          this.noOfWeeksDifference = this.noOfWeeksDifference;
           this.expectedLaunchDate = moment(leadTime.expectedLaunchDate).format('MM/DD/YYYY');
         }
       );

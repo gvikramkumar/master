@@ -159,11 +159,12 @@
         [stakeData]="stakeData" 
         [offerId] = "offerId" 
         [derivedMM] = "derivedMM"   
-        [primaryBE] = "primaryBE"              
+        [primaryBE] = "primaryBE"                  
         [displayLeadTime]="displayLeadTime" 
         [offerBuilderdata]="offerBuilderdata"          
         (updateStakeData)="updateStakeData($event)" 
         [events]="eventsSubject.asObservable()" 
+        [noOfWeeksDifference] = "noOfWeeksDifference"    
         ></app-right-panel>
       </div>
     </div>

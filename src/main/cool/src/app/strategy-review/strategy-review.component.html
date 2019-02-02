@@ -4,7 +4,7 @@
       [currentMMModel]="derivedMM"
       [offerId]="currentOfferId"
       [offerName]="offerName"
-      [stakeData]="stakeData"
+      [stakeData]="stakeData"      
     (updateMessage)="updateMessage($event)">
 
     </app-menu-bar>
@@ -409,7 +409,8 @@
           [primaryBE] = "primaryBE"  
           [portfolioFlag]="setFlag"                     
           [derivedMM] = "derivedMM"                      
-          [displayLeadTime]="displayLeadTime" 
+          [displayLeadTime]="displayLeadTime"
+          [noOfWeeksDifference] = "noOfWeeksDifference"
           (updateStakeData)="updateStakeData($event)">
           </app-right-panel>
         </div>

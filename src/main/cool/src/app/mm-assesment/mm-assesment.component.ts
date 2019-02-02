@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SharedService } from '../shared-service.service';
 import { Subscription, Subject } from 'rxjs';
@@ -9,7 +9,9 @@ import { ConfigurationService } from '../services/configuration.service';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { isDefaultChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
 import { OffersolutioningService } from '../services/offersolutioning.service';
+import { RightPanelService } from '../services/right-panel.service';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
+import { LeadTime } from '../right-panel/lead-time';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -41,6 +43,7 @@ export class MmAssesmentComponent implements OnInit {
   derivedMM: string;
   offerBuilderdata = {};
   displayLeadTime = false;
+  noOfWeeksDifference: string;
 
   canClickNextStep = false;
   currentMMModel: string = null;
@@ -67,6 +70,7 @@ export class MmAssesmentComponent implements OnInit {
     private offerDetailViewService: OfferDetailViewService,
     private configService: ConfigurationService,
     private offersolutioningService: OffersolutioningService,
+    private rightPanelService: RightPanelService
   ) {
     this.activatedRoute.params.subscribe(params => {
 
@@ -431,6 +435,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toNextStep() {
+
     if (this.activeTabIndex === 0) {
       var index = 0;
       var groupKeys = this.getGroupKeys(this.groupData[0]);
@@ -486,6 +491,11 @@ export class MmAssesmentComponent implements OnInit {
       this.displayLeadTime = true;
       this.offerId = this.currentOfferId;
       this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
+      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+        (leadTime: LeadTime) => {
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+        }
+      );
 
       let keyUsers;
       if (res != null) {
