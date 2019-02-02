@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferConstructService } from '../services/offer-construct.service';
+import { RightPanelService } from '../services/right-panel.service';
+import { LeadTime } from '../right-panel/lead-time';
 
 @Component({
   selector: 'app-offer-construct',
@@ -25,6 +27,10 @@ export class OfferConstructComponent  implements OnInit {
   setFlag;
   derivedMM;
   offerName;
+  offerId:string;
+  primaryBE: string;
+  displayLeadTime = false;
+  noOfWeeksDifference: string;
 
   public data = [];
   firstData: Object;
@@ -35,7 +41,8 @@ export class OfferConstructComponent  implements OnInit {
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private rightPanelService: RightPanelService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -51,10 +58,18 @@ export class OfferConstructComponent  implements OnInit {
     };
 
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+      this.displayLeadTime = true;
       this.firstData = data;
+      this.offerId = this.currentOfferId;
       this.derivedMM = this.firstData['derivedMM'];
       this.data = this.firstData['stakeholders'];
       this.offerName = this.firstData['offerName'];
+      this.primaryBE = this.firstData['primaryBEList'][0];
+      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+        (leadTime: LeadTime) => {
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+        }
+      );
       this.stakeHolderInfo = {};
 
       for (let i = 0; i <= this.data.length - 1; i++) {
@@ -134,7 +149,7 @@ export class OfferConstructComponent  implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
+    this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
   }
 
 }

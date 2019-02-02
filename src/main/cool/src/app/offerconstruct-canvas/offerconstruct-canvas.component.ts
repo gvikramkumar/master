@@ -45,14 +45,16 @@ export class OfferconstructCanvasComponent implements OnInit {
   varibableToBind;
   displayAddDetails: Boolean = false;
   addDetails;
-  hardwareName;
+  productName;
   @Input() questions: any[] = [];
   payLoad = '';
-  egineAttribue;
   itemCount;
   nodeToDelete;
   autoFocus;
   selectedItems;
+  showMandatoryDetails: Boolean = false;
+  currentRowClicked;
+
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
     private activatedRoute: ActivatedRoute) {
@@ -285,6 +287,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.questionForm = new FormGroup({
+    });
     this._canvasService.getMMInfo(this.currentOfferId).subscribe((res) => {
 
       console.log(res);
@@ -458,38 +462,61 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.displayAddDetails = false;
     this.questionForm.reset();
     this.questions = [];
+    this.showMandatoryDetails = false;
   }
 
   addItemDetails() {
+    this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.questionForm.value);
     console.log(this.payLoad);
+    console.log(this.currentRowClicked);
+    this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
+    console.log(this.offerConstructItems);
     this.closeDailog();
   }
 
-  showAddDetailsDailog(hardware) {
-    const hardwareName = hardware;
+  showAddDetailsDailog(currentNode) {
+    // const productName = product;
+    this.currentRowClicked = currentNode;
+    console.log(currentNode);
+    let majorLineItemName;
+    // Find parent Product (major item)
+    while(currentNode.parent !== null) {
+      // statements if the condition is true 
+        currentNode = currentNode.parent;
+        majorLineItemName = currentNode.data.productName;
+    }
+    console.log(majorLineItemName);
     this.displayAddDetails = true;
     const groups: Groups[] = [];
     const group = new Groups(
-      hardwareName
+      majorLineItemName
     );
     groups.push(group);
-    console.log(groups);
     const groupsPayload = { groups };
     this.offerConstructService.addDetails(groupsPayload).subscribe((data) => {
       this.addDetails = data;
-      console.log(this.addDetails);
       this.addDetails.groups[0].listOfferQuestions.forEach(element => {
         const quesion = element;
-        this.egineAttribue = element.egineAttribue;
-        console.log(this.egineAttribue);
         this.questions.push(quesion);
       });
-      console.log(this.questions);
       this.questionForm = this.offerConstructService.toFormGroup(this.questions);
     },
       (err) => {
         console.log(err);
       });
   }
+
+  openMandatory() {
+    this.showMandatoryDetails = !this.showMandatoryDetails;
+  }
+
+  saveOfferConstructChanges() {
+    const constructDetails: any[] = [];
+    const constructDetailsPayload = {};
+
+    this._canvasService.saveOfferConstructChanges(constructDetailsPayload).subscribe(data => {
+    });
+  }
+
 }

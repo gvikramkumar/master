@@ -57,7 +57,7 @@
                     <h6>Offer Configuration </h6>
                   </div>
                   <div class="col text-right">
-                    <span><a href="javascript:;">+ Add All Item Detail&nbsp;&nbsp;</a></span>
+                    <span><a href="javascript:;"><span class="icon-add-contain"></span> Add All Item Detail&nbsp;&nbsp;</a></span>
                     <span class="vertical-divider" *ngIf="expandView">|</span>
                     <a *ngIf="expandView" href="javascript:;" (click)="toggleSidebar()">
                       <span class="icon-fullscreen icon-small"></span>
@@ -89,7 +89,7 @@
                                 <span class="treetable--product-name">{{rowData['productName']}}</span>
                                 <span *ngIf="rowData['isMajorLineItem']">({{itemCount}})</span>
                                 <a *ngIf="!rowData['isMajorLineItem'] && !rowData['isGroupNode']" class="pull-right"
-                                  (click)="showAddDetailsDailog('Hardware')"><span class="icon-add-contain"></span> Add
+                                  (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
                                   Details</a>
                               </div>
                               <div *ngIf="rowData['isGroupNode']">
@@ -148,7 +148,7 @@
   <div class="row base-margin-top">
     <div class="col-md-12 task--bar">
       <button class="btn btn--primary">Discard Changes</button>
-      <button class="btn btn--primary">Save Changes</button>
+      <button class="btn btn--primary" (click)="saveOfferConstructChanges()">Save Changes</button>
     </div>
 
   </div>
@@ -168,7 +168,7 @@
       <!-- Unique Item  Mandatory Section -->
       <div class="row">
         <div class="col-md-8">
-          <a><span class="icon-add-contain"></span> Mandatory Item Attributes</a>
+          <a (click)="openMandatory()"><span class="icon-add-contain"></span> Mandatory Item Attributes</a>
         </div>
         <div class="col-md-4">
           <div class="form-group input--icon half-margin-bottom">
@@ -183,12 +183,14 @@
         </div>
       </div>
       <div class="divider" style="margin-top: 1%"></div>
+      <div *ngIf="showMandatoryDetails">
       <div *ngFor="let question of questions" class="form-row">
         <div [ngSwitch]="question.itemType">
           <div *ngSwitchCase="'Unique Item'">
             <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
           </div>
         </div>
+      </div>
       </div>
       <div class="divider" style="margin-top: 1%"></div>
       <div class="row">
