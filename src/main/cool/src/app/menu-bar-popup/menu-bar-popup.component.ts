@@ -17,7 +17,9 @@ export class MenuBarPopupComponent implements OnInit {
   currentOfferId: String;
   caseId: String;
   reason: String = '';
- 
+  allowSubmit: boolean = false;
+  passedString : String = '';
+  buttonIsDisabled: boolean = false;
 
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -27,12 +29,22 @@ export class MenuBarPopupComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
+
     });
   }
 
   ngOnInit() {
   }
 
+  enableSubmit(event): void {
+   let passedString = event.target.value;
+   let inputValue = passedString.trim();
+   if(inputValue === "" || inputValue === null) {
+    this.buttonIsDisabled=false;
+   } else {
+    this.buttonIsDisabled=true;
+   }
+}
 
   getPopupTitle() {
     if (this.popupType === 'hold') {
@@ -46,6 +58,7 @@ export class MenuBarPopupComponent implements OnInit {
 
   close() {
     this.closePopup.next('');
+   
   }
 
   submit() {
@@ -76,6 +89,7 @@ export class MenuBarPopupComponent implements OnInit {
         this.closePopup.next('cancel');
       });
     }
+    
   }
 
 }

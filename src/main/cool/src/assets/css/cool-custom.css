@@ -496,18 +496,28 @@ span[class*="display-"] {
 
 
 /* buttons */
-.cool.cui header .header-toolbar .btn {
+.cool.cui header .header-toolbar .btn, .cool.cui .dimensions--toggle .btn {
   border-radius: 30px;
 }
 .cool.cui .btn {
   border-radius: 6px;
 }
+.cool.cui .btns.btn-group--wide > .btn, .cool.cui .btn-group.btn-group--wide > .btn {
+  border-radius: 0;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+}
+.cool.cui .btns.btn-group--wide > .btn:last-child, .cool.cui .btn-group.btn-group--wide > .btn:last-child {
+  border-radius: 0;
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+
 .comments-modal {
   min-width:600px;
   max-width:600px;
 }
-
-  /* Strategy Review Status */
+  /* Strategy Review Status   */
 .cui .review-status .ui-accordion .ui-accordion-content {
   padding: 1em;
   border-top: 0;
@@ -608,7 +618,6 @@ span[class*="display-"] {
   margin: 0;
   position: absolute;
   margin-top: 10px;
-  /* width: 93%; */
 }
 
 /* dialog */
@@ -638,6 +647,89 @@ span[class*="display-"] {
 }
 .cool.cui .text-darkgray{
   color:#58585B;
+}
+.cool.cui header .header-toolbar .ui-accordion .ui-accordion-content.ui-widget-content {
+  padding: 0 1em .5em 1em;
+  border-top: solid 1px #d4d4d4;
+  border-bottom: solid 1px #d4d4d4;
+}
+.cool.cui header .header-toolbar .ui-accordion-content li {
+  border-bottom: dashed 1px #d2d2d2;
+}
+.cool.cui header .header-toolbar .ui-accordion-content li:last-child {
+  border-bottom: none;
+}
+.cool.cui header .header-toolbar .ui-accordion-content li {
+  line-height: 2.5;
+}
+.cool.cui header .header-toolbar .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a {
+  background-color: transparent;
+  border: none;
+  color: #005073;
+}
+.cool.cui header .header-toolbar .ui-accordion .ui-accordion-header.ui-state-default a {
+  padding: 0;
+  border: none;
+  border-bottom: none;
+  color: #005073;
+  background-color: transparent;
+  font-weight: 400;
+  -moz-transition: background-color 0.2s;
+  -o-transition: background-color 0.2s;
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+.cool.cui header .header-toolbar .ui-accordion-header.ui-state-default {
+  border: none;
+  background: transparent;
+  color: #555555;
+}
+.cool.cui header .header-toolbar .ui-overlaypanel{
+  margin-left: 15px;
+  margin-top: 15px;
+}
+.cool.cui header .header-toolbar .ui-overlaypanel:after {
+  border-width: 8px;
+  margin-left: -8px;
+  border-color: rgba(255, 255, 255, 0);
+  border-bottom-color: #ffffff;
+  right: 14px;
+  left: initial;
+}
+.cool.cui header .header-toolbar .ui-overlaypanel:before {
+  border-width: 10px;
+  margin-left: -10px;
+  border-color: rgba(200, 200, 200, 0);
+  border-bottom-color: #c8c8c8;
+  right: 12px;
+  left: initial;
+}
+/* Offer Solutioning */
+.cool.cui .solutioning .card .card__header {
+  margin: -10px;
+  padding: 10px 10px 5px;
+  background-color: #f5f5f5;
+}
+.cool.cui .subgroup-name {
+  text-transform: uppercase;
+}
+.cool.cui .toggle--label {
+  text-transform: uppercase;
+}
+.cool.cui span.sub--label {
+  display: block;
+  font-size: 10px;
+}
+.cool.cui .solutioning .list.dimensions--toggle li {
+  padding: 10px 0;
+  border-bottom: dashed 1px #dadada;
+}
+.cool.cui .subheader {
+  text-transform: capitalize;
+  font-weight: normal;
+}
+.cool.cui .dimensions-questions {
+  margin:20px auto;
 }
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
