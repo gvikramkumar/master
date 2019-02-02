@@ -1,0 +1,202 @@
+<div class="offer-construct-container base-margin-top">
+  <div class="row">
+    <div class="col">
+      <div class="panel panel--ltgray">
+        <span class="mt-5">Offer Construct</span>
+        <span (click)='downloadCsv()' class="icon-download pull-right"></span>
+      </div>
+    </div>
+  </div>
+  <div class="row base-top-margin">
+    <div class="col">
+      <div class="card card--raised">
+        <div class="row">
+          <div class="col-md-3 panel-category-list" *ngIf="expandView">
+            <div class="row">
+              <div class="col">
+                <div class="panel panel--ltgray panel--loose">
+                  <h5 class="heading">Add Items by Category</h5>
+                  <h6 class="subheading">Drag and Drop a category to add items to your offer</h6>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <ul class="list list--highlight">
+                  <li *ngFor="let item of itemCategories" class="ui-helper-clearfix list-item" pDraggable="dragItem"
+                    dragEffect="copyMove" (onDragStart)="dragStart($event,item)" (onDragEnd)="dragEnd($event)">
+                    <div class="panel panel--bordered"><span class="icon-dial icon-small"></span>
+                      {{item.categoryName}}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row" *ngIf="expandView">
+              <div class="col">
+                <div class="panel panel--ltgray panel--loose">
+                  <div class="row">
+                    <div class="col-md-10">
+                      <span class="ui-fluid">
+                        <p-autoComplete [(ngModel)]="searchInput" [suggestions]="results" (completeMethod)="searchForItem($event)"
+                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" forceSelection="true"></p-autoComplete>
+                      </span>
+                    </div>
+                    <div class="col-md-2">
+                      <button class="btn btn--small">Add</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row base-margin-top">
+                  <div class="col-md-3">
+                    <h6>Offer Configuration </h6>
+                  </div>
+                  <div class="col text-right">
+                    <span><a href="javascript:;">+ Add All Item Detail&nbsp;&nbsp;</a></span>
+                    <span class="vertical-divider" *ngIf="expandView">|</span>
+                    <a *ngIf="expandView" href="javascript:;" (click)="toggleSidebar()">
+                      <span class="icon-fullscreen icon-small"></span>
+                    </a>
+                    <button *ngIf="!expandView" class="btn btn--small" (click)="addMore()">Add More Details</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div pDroppable="dragItem" dropEffect="move" (onDrop)="dropItem($event)" class="canvas">
+                      <p-treeTable [value]="offerConstructItems" [columns]="cols" dataKey='uniqueKey' selectionMode="checkbox"
+                        [(selection)]="selected" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"
+                        [hidden]="initalRowAdded" [scrollHeight]="500" styleClass="table--highlight">
+                        <ng-template pTemplate="header" let-columns>
+                          <tr>
+                            <th *ngFor="let col of columns">
+                              {{col.header}}
+                            </th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-index="rowIndex" let-rowNode let-rowData="rowData"
+                          let-columns="columns">
+                          <tr pDroppable="dragItem" (onDrop)="dropOnRow($event,rowNode,rowData)" pDraggable="dragItem"
+                            dragEffect="copyMove" (onDragStart)="dragStartRow($event,rowNode)">
+                            <td *ngIf="rowData['productName']">
+                              <div *ngIf="!rowData['isGroupNode']">
+                                <p-treeTableCheckbox (click)='selectNodeToRemove(rowNode)' [value]="rowNode"></p-treeTableCheckbox>
+                                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                <span class="treetable--product-name">{{rowData['productName']}}</span>
+                                <span *ngIf="rowData['isMajorLineItem']">({{itemCount}})</span>
+                                <a *ngIf="!rowData['isMajorLineItem'] && !rowData['isGroupNode']" class="pull-right"
+                                  (click)="showAddDetailsDailog('Hardware')"><span class="icon-add-contain"></span> Add
+                                  Details</a>
+                              </div>
+                              <div *ngIf="rowData['isGroupNode']">
+                                <p-treeTableCheckbox (click)='selectNodeToRemove(rowNode)' [value]="rowNode"></p-treeTableCheckbox>
+                                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                <span (focusout)='editData=true' (click)='enableEdit()'>
+                                  <input [id]='rowData["uniqueKey"]' autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
+                                    (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
+                                    [disabled]="editData ? true : null" value="{{rowData['productName']}}" [autofocus]='autoFocus'>
+                                  <span [id]='rowData["uniqueKey"]' (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
+                                    class="icon-edit"></span>
+                                  <a [id]='rowData["uniqueKey"]' *ngIf='buttonId == rowData["uniqueKey"] && showButtons'
+                                    (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
+                                  <a [id]='rowData["uniqueKey"]' (click)='disableButtons()' *ngIf='buttonId == rowData["uniqueKey"] && showButtons'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
+                                </span>
+                              </div>
+                            </td>
+                            <!-- to copy -->
+                            <td *ngIf="rowData['productName']">
+                              {{rowData['productFamily']}}
+                              <!-- <div *ngIf="rowData['isMajorLineItem']">
+                                <a> Add Details</a>
+                              </div> -->
+                            </td>
+                            <!-- to copy -->
+                            <td *ngIf="rowData['productName']">
+                              <span class="list-price">{{rowData['listPrice']}}</span>
+                              <div *ngIf="rowData['isMajorLineItem']">
+                                <a (click)="createGroup(rowNode)"> Create a Group</a>
+                              </div>
+
+                              <!-- added to copy delete node -->
+                              <span (click)='deleteNode(rowNode)' class="icon-delete icon-small"></span>
+                            </td>
+                          </tr>
+                        </ng-template>
+                      </p-treeTable>
+                      <div class="pane--container-empty" [hidden]="!initalRowAdded">
+                        <div class="pane--message-group">
+                          <span class="icon-cart"></span>
+                          <h4 class="subheading">No SKU Items have been added</h4>
+                          <p>Start adding the products by searching or drag and drop from a category</p>
+                        </div>
+                      </div>
+                    </div>
+                    <button (click)='removeSelected()' class="btn btn--primary">Remove</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row base-margin-top">
+    <div class="col-md-12 task--bar">
+      <button class="btn btn--primary">Discard Changes</button>
+      <button class="btn btn--primary">Save Changes</button>
+    </div>
+
+  </div>
+  <p-dialog header="Add Details for" closable="true" modal="true" showHeader="false" (onHide)="onHide()" [responsive]="true"
+    [width]="900" [minWidth]="200" [minY]="70" [(visible)]="displayAddDetails">
+    <div class="divider" style="margin-top: -1.5%"></div>
+    <form (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
+      <!-- Items Top Section -->
+      <div *ngFor="let question of questions" class="form-row">
+        <div [ngSwitch]="question.itemType">
+          <div *ngSwitchCase="'Item'">
+            <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
+          </div>
+        </div>
+      </div>
+      <div class="divider" style="margin-top: 1%"></div>
+      <!-- Unique Item  Mandatory Section -->
+      <div class="row">
+        <div class="col-md-8">
+          <a><span class="icon-add-contain"></span> Mandatory Item Attributes</a>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group input--icon half-margin-bottom">
+            <div class="form-group__text">
+              <input id="input-type-search" type="text" pInputText size="50" placeholder="Copy Attributes" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                style="width:auto">
+              <button type="button" class="link">
+                <span class="icon-search"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="divider" style="margin-top: 1%"></div>
+      <div *ngFor="let question of questions" class="form-row">
+        <div [ngSwitch]="question.itemType">
+          <div *ngSwitchCase="'Unique Item'">
+            <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
+          </div>
+        </div>
+      </div>
+      <div class="divider" style="margin-top: 1%"></div>
+      <div class="row">
+        <div class="col-md-12 text-right">
+          <button class="btn btn--secondary" (click)="closeDailog()">Cancel</button>
+          <button class="btn btn--primary" type="submit">Add Details</button>
+        </div>
+      </div>
+    </form>
+  </p-dialog>
+</div>
