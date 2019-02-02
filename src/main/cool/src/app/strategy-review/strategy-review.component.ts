@@ -310,10 +310,6 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  offerConstruct() {
-    this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
-  }
-
   onTabOpen(taskId) {
     this.currentTaskId = taskId;
   }
