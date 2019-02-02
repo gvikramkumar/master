@@ -42,7 +42,7 @@ export class MenuBarComponent implements OnInit {
 
     ngOnInit() {
         this.currentOfferName = this.localStorage.retrieve('currentOfferName');
-        this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId];
+        this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
         this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
         this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];

@@ -22,7 +22,7 @@ import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
 import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { CreateOfferService } from './services/create-offer.service';
-import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule } from 'primeng/primeng';
+import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule, FileUploadModule } from 'primeng/primeng';
 import { DialogModule } from 'primeng/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchCollaboratorService } from './services/search-collaborator.service';
@@ -148,6 +148,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
     BrowserAnimationsModule,
     DataTableModule,
     DropdownModule,
+    FileUploadModule,
     TableModule,
     CalendarModule,
     AccordionModule,
