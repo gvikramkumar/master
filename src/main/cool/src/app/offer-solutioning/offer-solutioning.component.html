@@ -24,10 +24,15 @@
           <!-- Right Panel -->
         </div>
         <div class="rightContent col-sm-12 col-md-3" style="margin-top: -5px;">
-          <app-right-panel
-          [portfolioFlag]="setFlag"
+          <app-right-panel          
           [stakeData]="stakeData"
+          [offerId]="offerId" 
+          [derivedMM] = "derivedMM"
+          [primaryBE] = "primaryBE"   
+          [portfolioFlag]="setFlag"
+          [displayLeadTime]="displayLeadTime" 
           (updateStakeData)="updateStakeData($event)"
+          [noOfWeeksDifference] = "noOfWeeksDifference"  
           ></app-right-panel>
         </div>
       </div>
