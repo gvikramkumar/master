@@ -7,21 +7,20 @@ import { EnvironmentService } from '../../../environments/environment.service';
   providedIn: 'root'
 })
 export class OfferconstructCanvasService {
-  url = 'https://cool-srv-dev.cisco.com/coolsrv/offer/getOffersDetails/';
-  setOfferConstructURL = "https://cool-srv-dev.cisco.com/coolsrv/setOfferConstruct";
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {}
 
   getMMInfo(offerId: string): Observable<any> {
-    return this.http.get(this.url + offerId);
+    return this.http.get(this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId);
   }
 
   getOfferConstructItems(mmInfo: any): Observable<any> {
-    return this.http.post(this.setOfferConstructURL,mmInfo, { withCredentials: true });
+    return this.http.post(this.environmentService.REST_API_SET_OFFERCONSTRUCT_POST_URL,mmInfo, { withCredentials: true });
   }
 
   searchEgenie(keyword: String): Observable<any> {
-    return this.http.get(this.url);
+    // return this.http.get(this.setOfferConstructURL);
+    return null;
   }
 
   saveOfferConstructChanges(offerConstructChnages: any): Observable<any> {
