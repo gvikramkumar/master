@@ -235,14 +235,15 @@ export default class SubmeasureController extends ApprovalController {
         tempStream.on('error', next);
         svrUtil.streamToBuffer(tempStream)
           .then(tempBuffer => {
-            const workbook = xlsx.read(tempBuffer);
+            const readOptions = {cellNF: true, cellStyles: true, cellHTML: true, cellText: true};
+            const workbook = xlsx.read(tempBuffer, readOptions);
             const deptSheet = workbook.Sheets[workbook.SheetNames[0]];
             const glaccountSheet = workbook.Sheets[workbook.SheetNames[1]];
             xlsx.utils.sheet_add_aoa(deptSheet, sheet1Rows, {origin: -1});
             xlsx.utils.sheet_add_aoa(glaccountSheet, sheet2Rows, {origin: -1});
 
-            const wopts = {bookType: 'xlsx', bookSST: false, type: 'buffer'};
-            const outBuffer = xlsx.write(workbook, <any>wopts);
+            const writeOptions = {bookType: 'xlsx', bookSST: false, type: 'buffer'};
+            const outBuffer = xlsx.write(workbook, <any>writeOptions);
             res.set('Content-Type', fileInfo.contentType);
             const fileName = `dept-upload_${_.snakeCase(submeasureName)}.xlsx`;
             res.set('Content-Disposition', `attachment; filename="${fileName}"`);
