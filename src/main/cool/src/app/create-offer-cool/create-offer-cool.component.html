@@ -1,7 +1,17 @@
 <div class="content">
   <div class="container">
     <div class="section">
-      <h1 class="page--heading">Create New Offer</h1>
+      <span *ngIf="!offerId" class="create-offer-heading page--heading">Create New Offer</span>
+      <app-menu-bar *ngIf="!offerId"
+      (updateMessage)="updateMessage($event)">
+      </app-menu-bar>
+      <app-menu-bar *ngIf="offerId" [caseId]="caseId"
+      [currentMMModel]="derivedMM"
+      [offerId]="offerId"
+      [offerName]="offerName"
+      [stakeData]="stakeData"
+      (updateMessage)="updateMessage($event)">
+      </app-menu-bar>
       <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
           <div class="col-sm-4">
@@ -10,7 +20,7 @@
               Offer Info</h2>
           </div>
           <div class="col-sm-8 text-right">
-            <button class="btn btn--white" [disabled]="!offerCreateForm.valid" (click)="proceedToOfferBuilder()">Proceed to
+            <button class="btn btn--white" [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to
               Offer Builder <span class="icon-chevron-right"></span></button>
           </div>
         </div>
@@ -149,7 +159,7 @@
                         <div class="form-group__text">
                           <label for="idpid">IDP ID</label>
                           <input id="idpid" type="text" class="form-control" name="idpid" [(ngModel)]="idpvalue"
-                          required (blur)="getidptoken($event)">
+                          required (keyup)="getidptoken($event)">
                         </div>
                         <span class="text-success" *ngIf="idpidValid">Valid</span>
                         <span class="text-danger" *ngIf="idpidInvalid">Invalid</span>
