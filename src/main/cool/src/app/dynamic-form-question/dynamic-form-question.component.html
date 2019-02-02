@@ -1,12 +1,12 @@
 <div [formGroup]="questionForm">
-  <div [ngSwitch]="question.componentType">
+  <label [attr.for]="question.egineAttribue">{{question.egineAttribue}}</label>
+  <div [ngSwitch]="question.componentType" style="margin-top: -1%">
     <div class="row" style="margin-top: 1%">
       <div class="col-md-6">
         <div class="form-group">
           <div class="form-group__text">
             <!--Free Text -->
-            <label [attr.for]="question.key">{{question.label}}</label>
-            <input *ngSwitchCase="'Free Text'" [formControlName]="obj.name" [id]="obj.id" [type]="obj.type">
+            <input *ngSwitchCase="'Free Text'" [formControlName]="question.egineAttribue" [id]="question.egineAttribue" class="form-control">
           </div>
         </div>
       </div>
@@ -17,8 +17,7 @@
         <div class="form-group">
           <div class="form-group select">
             <!--Drop-down-->
-            <label [attr.for]="question.key">{{question.label}}</label>
-            <select [id]="question.key" *ngSwitchCase="'Drop-down'" [formControlName]="question.key">
+            <select [id]="question.egineAttribue" *ngSwitchCase="'Drop-down'" [formControlName]="question.egineAttribue" class="form-control">
               <option *ngFor="let opt of question.values" [value]="opt">{{opt}}</option>
             </select>
           </div>
@@ -28,9 +27,8 @@
     <div class="row" style="margin-top: 1%">
       <div class="col-md-6">
         <div *ngSwitchCase="'Boolean'" class="form-group form-group--inline">
-          <label [attr.for]="question.key">{{question.label}}</label>
           <label class="radio">
-            <input [id]="question.key" type="radio" [formControlName]="question.key" checked>
+            <input [id]="question.egineAttribue" type="radio" [formControlName]="question.egineAttribue" checked class="form-control">
             <span class="radio__input"></span>
             <span class="radio__label hidden-xs">Option 1</span>
           </label>

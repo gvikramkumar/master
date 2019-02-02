@@ -17,8 +17,9 @@ export class OfferConstructService {
 
     toFormGroup(questions) {
         const group: any = {};
+        console.log(questions);
         questions.forEach(question => {
-          group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
+          group[question.egineAttribue] = question.required ? new FormControl(question.value || '', Validators.required)
                                                   : new FormControl(question.value || '');
         });
         return new FormGroup(group);

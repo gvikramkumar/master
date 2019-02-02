@@ -10,6 +10,8 @@
 input.text-input-box{
   background: white;
   border: none;
+  line-height: 20px;
+  padding: 5px;
 }
 
 .add-items {
@@ -45,7 +47,7 @@ ul.list.list--highlight li {
 }
 .list-item:active {
   background: #E6F3FA;
-  /* cursor: url("https://www.google.com/intl/en_ALL/mapfiles/openhand.cur"), all-scroll; */
+  cursor: url("https://www.google.com/intl/en_ALL/mapfiles/openhand.cur"), all-scroll;
   cursor: -webkit-grab;
   cursor: -moz-grab;
   cursor: -o-grab;
@@ -114,6 +116,7 @@ span.icon-cart {
   margin:0 10px;
   color:#D9D9D9;
 }
+
 @media only screen and (min-width: 768px) {
 ul.list.list--highlight {
   height: 520px;
