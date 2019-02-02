@@ -3,15 +3,13 @@ import {
   OnInit,
   ChangeDetectorRef,
   ElementRef,
-  ViewChild,
   Input
 } from '@angular/core';
 import { TreeNode, MessageService } from 'primeng/api';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
 import { MMItems } from './model/MMItems';
-import { ResolveEnd, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SubGroup } from './model/SubGroup';
-import { DOCUMENT } from '@angular/common';
 import { Group } from './model/Group';
 import { Groups } from '../models/groups';
 import { FormGroup } from '@angular/forms';
@@ -60,7 +58,6 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
     });
-
   }
 
   /**
@@ -69,11 +66,6 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param $event
    */
   dropItem($event) {
-    // if(this.draggedItem.parent){
-    //   if(this.draggedItem.parent.children){
-    //     this.itemCount = this.draggedItem.parent.children.length;
-    //   }
-    // }
     this.initalRowAdded = false;
     if (this.draggedItem['isMajorLineItem']) {
       const obj = Object.create(null);
@@ -89,27 +81,12 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   deleteNode(node) {
-    console.log('here');
-    console.log(node);
     node.node.data = {};
     node.node.children = {};
     this.offerConstructItems = [...this.offerConstructItems];
   }
 
   enableEdit() {
-
-    // for(let i=0; i<document.getElementsByClassName("new").length; i++){
-    // var x = document.getElementsByClassName("new")[i].id;
-    // this.buttonId = x;
-    // if(id === this.buttonId){
-    //   this.showButtons = true;
-    // } else {
-    //   this.showButtons = false;
-    // }
-
-    // }
-
-
     this.editData = false;
     this.showButtons = true;
     this.cd.detectChanges();
@@ -123,8 +100,6 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   saveData(rowNode) {
     if (rowNode.node.data.name) {
-      console.log('daaaaataaaa');
-      console.log(rowNode);
       rowNode.node.data.catergoryName = rowNode.node.data.name;
       rowNode.node.data.lablel = rowNode.node.data.name;
       rowNode.node.data.productName = rowNode.node.data.name;
@@ -163,9 +138,6 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param rowData
    */
   dropOnRow($event, rowNode, rowData) {
-    console.log('here');
-    console.log(rowNode.node.data.uniqueKey);
-    console.log(this.draggedItem.parent);
     if (this.draggedItem.parent) {
       if (this.draggedItem.parent.children) {
         this.itemCount = this.draggedItem.parent.children.length;
@@ -179,7 +151,6 @@ export class OfferconstructCanvasComponent implements OnInit {
         !this.draggedItem['isMajorLineItem']
       ) {
         if (this.draggedItem.parent !== undefined) {
-          console.log('node with parent');
           // If dragged node is a tree node,meaning the node which is moved between the canvas
           const obj = Object.create(null);
           obj['uniqueKey'] = ++this.counter;
@@ -192,7 +163,6 @@ export class OfferconstructCanvasComponent implements OnInit {
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
         } else {
-          console.log('node with out parent');
           // If dragged node is not an actual tree node
           const obj = Object.create(null);
           obj['uniqueKey'] = ++this.counter;
@@ -218,14 +188,11 @@ export class OfferconstructCanvasComponent implements OnInit {
         obj['label'] = this.draggedItem.data.label;
         obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
         obj['listPrice'] = this.draggedItem.data.listPrice;
-        console.log(obj);
         rowNode.node.children.push(this.itemToTreeNode(obj));
         this.delteFromParentObject(rowNode, this.draggedItem.data);
       }
 
       this.offerConstructItems = [...this.offerConstructItems];
-
-      console.log(this.offerConstructItems);
     }
   }
 
@@ -235,17 +202,13 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param child
    */
   delteFromParentObject(rowNode, child) {
-    console.log(this.draggedItem);
     let tempChildArray = this.draggedItem.parent.children;
-    console.log(tempChildArray);
     let index = -1;
     for (let i = 0; i < tempChildArray.length; i++) {
       if (
         this.draggedItem.data.uniqueKey === tempChildArray[i].data.uniqueKey
       ) {
-        console.log(tempChildArray[i]);
         index = i;
-        console.log(index);
         break;
       }
     }
@@ -261,7 +224,6 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.itemCount = rowNode.node.children.length;
     }
     this.showButtons = false;
-    console.log(rowNode);
     const obj = Object.create(null);
     const counter = ++this.counter;
     obj['uniqueKey'] = counter;
@@ -285,52 +247,52 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // Prepare payload to fetch item categories. Obtain MM information.
     this._canvasService.getMMInfo(this.currentOfferId).subscribe((res) => {
-
-      console.log(res);
-
       let reqObj: MMItems;
       reqObj = new MMItems('offerdimensions', res.offerId, res.derivedMM, []);
-      // console.log(JSON.stringify(obj));
-
-
       if (res.selectedCharacteristics !== undefined && res.selectedCharacteristics.length > 0) {
         res.selectedCharacteristics.forEach(characterstic => {
-          // console.log(characterstic);
-          let found = reqObj.groups.some(function (el) {
+          const found = reqObj.groups.some(function (el) {
             return el.groupName === characterstic.group;
           });
 
           if (!found) {
-            let grp = new Group(characterstic.group, []);
+            const grp = new Group(characterstic.group, []);
             reqObj.groups.push(grp);
           } else {
-
+            // Do nothing
           }
         });
       }
 
       if (res.selectedCharacteristics !== undefined && res.selectedCharacteristics.length > 0) {
         res.selectedCharacteristics.forEach(characterstic => {
-          console.log(characterstic);
-
           reqObj.groups.forEach((element) => {
             if (element.groupName === characterstic.group) {
-              let sgrp = new SubGroup(characterstic.subgroup, characterstic.characteristics);
+              const sgrp = new SubGroup(characterstic.subgroup, characterstic.characteristics);
               element.subGroup.push(sgrp);
             }
           });
-
         });
       }
 
-      console.log(JSON.stringify(reqObj));
-
-      // call offerconstruct request
+      // Call offerconstruct request to get Major/Minor Line Items
       this._canvasService.getOfferConstructItems(reqObj).subscribe((data) => {
-        console.log(data);
+        const itemData = data['listOfferCatagory'];
+        itemData.forEach(item => {
+          const itemObj = {
+            categoryName: item.type,
+            isMajorLineItem: item.isMajorLineItem,
+            productName: item.type,
+            listPrice: ''
+          };
+          this.itemCategories.push(itemObj);
+        });
       });
     });
+
     this.itemCount = 0;
     const obj = {
       categoryName: 'HARDWARE',
@@ -377,12 +339,10 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   dragStartRow($event, item) {
-    console.log(item);
     this.draggedItem = item.node;
   }
 
   dragStart(event, item: any) {
-    // console.log(item);
     this.draggedItem = item;
   }
 
@@ -390,23 +350,16 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   removeSelected(node) {
-    console.log(node);
-    console.log(this.selected);
     if (this.selected.length) {
       this.selected = this.selected.slice(this.selected.length);
-      //this.selected = [];
       this.offerConstructItems.push(this.itemToTreeNode(this.selected));
       this.offerConstructItems = [...this.offerConstructItems];
       this.selected = [...this.selected];
 
     }
-    //empty your array
-    // this.nodeToDelete = {};
-    // this.offerConstructItems = [...this.offerConstructItems];
   }
 
   nodeSelect(event) {
-    console.log(event)
     this.messageService.add({ severity: 'info', summary: 'Node Selected', detail: event.node.data.name });
   }
 
@@ -415,11 +368,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   selectNodeToRemove(node) {
-    // node.node.data = {};
-    // node.node.children = {};
-    console.log(node);
     this.nodeToDelete = node;
-    // node = {}
     this.offerConstructItems = [...this.offerConstructItems];
   }
 
@@ -436,7 +385,6 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   dragEnd(event) {
     this.draggedItem = null;
-    console.log(this.offerConstructItems);
   }
 
   toggleSidebar() {
@@ -444,7 +392,6 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   addMore() {
-    console.log('addmore');
     this.expandView = !this.expandView;
   }
 
@@ -462,7 +409,6 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   addItemDetails() {
     this.payLoad = JSON.stringify(this.questionForm.value);
-    console.log(this.payLoad);
     this.closeDailog();
   }
 
@@ -474,18 +420,14 @@ export class OfferconstructCanvasComponent implements OnInit {
       hardwareName
     );
     groups.push(group);
-    console.log(groups);
     const groupsPayload = { groups };
     this.offerConstructService.addDetails(groupsPayload).subscribe((data) => {
       this.addDetails = data;
-      console.log(this.addDetails);
       this.addDetails.groups[0].listOfferQuestions.forEach(element => {
         const quesion = element;
         this.egineAttribue = element.egineAttribue;
-        console.log(this.egineAttribue);
         this.questions.push(quesion);
       });
-      console.log(this.questions);
       this.questionForm = this.offerConstructService.toFormGroup(this.questions);
     },
       (err) => {
