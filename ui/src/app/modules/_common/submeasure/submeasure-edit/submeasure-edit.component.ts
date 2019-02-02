@@ -652,6 +652,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.manualMixSw = this.manualMixSw;
     }
     this.clearAllocationRequired();
+    if (this.isDeptUpload() && this.sm.indicators.deptAcct === 'N') {
+      this.sm.indicators.deptAcct = 'Y';
+    }
+
   }
 
   hasChanges() {
@@ -884,7 +888,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   doDeptUpload(fileInput) {
-    if (this.sm.name.trim().length === 0) {
+    if (!this.sm.name || this.sm.name.trim().length === 0) {
       this.uiUtil.genericDialog('No submeasure name');
       return;
     }
