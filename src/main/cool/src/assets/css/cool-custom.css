@@ -618,7 +618,6 @@ span[class*="display-"] {
   margin: 0;
   position: absolute;
   margin-top: 10px;
-  /* width: 93%; */
 }
 
 /* dialog */
@@ -680,12 +679,31 @@ span[class*="display-"] {
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
-.cui header .header-toolbar .ui-accordion-header.ui-state-default {
+.cool.cui header .header-toolbar .ui-accordion-header.ui-state-default {
   border: none;
   background: transparent;
   color: #555555;
 }
-
+.cool.cui header .header-toolbar .ui-overlaypanel{
+  margin-left: 15px;
+  margin-top: 15px;
+}
+.cool.cui header .header-toolbar .ui-overlaypanel:after {
+  border-width: 8px;
+  margin-left: -8px;
+  border-color: rgba(255, 255, 255, 0);
+  border-bottom-color: #ffffff;
+  right: 14px;
+  left: initial;
+}
+.cool.cui header .header-toolbar .ui-overlaypanel:before {
+  border-width: 10px;
+  margin-left: -10px;
+  border-color: rgba(200, 200, 200, 0);
+  border-bottom-color: #c8c8c8;
+  right: 12px;
+  left: initial;
+}
 /* Offer Solutioning */
 .cool.cui .solutioning .card .card__header {
   margin: -10px;
