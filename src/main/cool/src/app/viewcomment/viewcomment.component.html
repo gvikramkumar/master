@@ -1,28 +1,30 @@
-<div class="container">
+<div>
   <div class="divider divider--compressed"></div>
-  <br>
-  <h6>COMMENT</h6>
+
   <div class="comments">
     <div *ngFor="let data of viewcomment" >
      <div class="viewcomment"> {{data.comment}}</div>
-      <div class="divider divider--compressed"></div>
-      <div class="base-margin-bottom commentId" style="float:right;"> <span>{{data.date | date:'dd-MMM-yyyy'}}</span>
+      <div class="divider divider--compressed comments"></div>
+      <div class="base-margin-bottom commentId" class="datestamp text-right"> <span>{{data.date | date:'dd-MMM-yyyy'}}</span>
         <span> CEC:{{data.owner}}</span>
       </div>
-    </div> 
-    <div class="divider divider--compressed"></div>
+    </div>
+
   </div>
 
-  <span class="addcommentspan" *ngIf="onDisable" (click)="addComment()">+</span>
-  <label for="comment" class="addcomment" (click)="addComment()">
-    Add another comment</label>
+
   <div *ngIf="addcomment">
-    <textarea style="width:66%" [value]="newComment" (input)="validateComment($event)" maxlength="300" placeholder="300 Max characters"></textarea><br>
-    <span style="  color:red" >{{300 - newComment.length}}  characters are left</span>
-    <div style = "margin-left:380px">
-        <button class="btn btn--primary"  (click)="removeComment()" type="submit">Cancel</button>
-    <button class="btn btn--primary" style="margin-right:12px"  (click)="updateComment()" [disabled]="onDisable" type="submit">Update</button>
-   
+    <label for="comment" class="subheader">Comment</label>
+    <textarea class="textarea" [value]="newComment" (input)="validateComment($event)" maxlength="300" placeholder="300 Max Character" rows="5"></textarea><br>
+    <div class="text-danger text-right" >{{300 - newComment.length}}  characters are left</div>
+    <div class="divider divider--compressed"></div>
+      <div class="action-bar text-right">
+      <button class="btn btn--secondary"  (click)="removeComment()" type="submit">Cancel</button>
+      <button class="btn btn--primary"  (click)="updateComment()" [disabled]="onDisable" type="submit">Update</button>
+    </div>
   </div>
+  <div class="action-bar">
+    <label class="addcomment" (click)="addComment()">
+      <span class="icon-add icon-small"></span> Add another comment</label>
   </div>
 </div>

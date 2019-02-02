@@ -11,6 +11,7 @@ import { UserService } from './user.service';
 export class AccessManagementService {
     businessUnitUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_UNIT_URL;
     businessEntityUrl: string = this.environmentService.PDAF_API+'?columns=BE&distinct=true';
+    getPrimaryBUBasedOnBE: string = this.environmentService.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL;
 
     constructor(private httpClient: HttpClient, private environmentService: EnvironmentService, private userService:UserService) {}
 
@@ -52,7 +53,13 @@ export class AccessManagementService {
     }
 
     checkAdminAccess():Observable<any>{
-        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL+'/'+ this.userService.getUserId(), 
+        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL+'/'+ this.userService.getUserId(),
             {withCredentials:true});
     }
+
+  // change on GET PRIMARY BU BASED ON BE
+  getPrimaryBuBasedOnBe(data) {
+    let url = this.getPrimaryBUBasedOnBE + data;
+    return this.httpClient.get(url, { withCredentials: true });
+  }
 }

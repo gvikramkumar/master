@@ -56,7 +56,7 @@ export class ViewcommentComponent implements OnInit, OnChanges {
     });
   }
 
-  private getComments(taskId) {debugger;
+  private getComments(taskId) {;
     this.viewcommentService.getViewComment(taskId).subscribe(resComments => {
       this.viewcomment = resComments.map(comment => {
         //comment.date = moment(comment.date).format('MM-DD-YYYY');

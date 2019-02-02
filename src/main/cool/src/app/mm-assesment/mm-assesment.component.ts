@@ -1,12 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SharedService } from '../shared-service.service';
-import { Subscription ,  Subject } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { CreateOfferService } from '../services/create-offer.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { ConfigurationService } from '../services/configuration.service';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import { isDefaultChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
+import { OffersolutioningService } from '../services/offersolutioning.service';
+import { RightPanelService } from '../services/right-panel.service';
+import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
+import { LeadTime } from '../right-panel/lead-time';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -27,11 +32,19 @@ export class MmAssesmentComponent implements OnInit {
   bviewDeckData: any[];
   choiceSelected;
   groupData = [];
+  selectedGroupData = [];
   groupNames = [];
   activeTabIndex = 0;
   message = {};
+
   stakeData = {};
+  offerId: string;
+  primaryBE: string;
+  derivedMM: string;
   offerBuilderdata = {};
+  displayLeadTime = false;
+  noOfWeeksDifference: string;
+
   canClickNextStep = false;
   currentMMModel: string = null;
   currentPrimaryBE: any;
@@ -42,6 +55,11 @@ export class MmAssesmentComponent implements OnInit {
   backdropCustom;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
+  offerArray: any[] = [];
+  match = false;
+  dimensionMode: Boolean = false;
+  dimensionFirstGroupData: Object;
+  dimensionFirstGroupName: string;
 
   constructor(private router: Router,
     private sharedService: SharedService,
@@ -51,6 +69,8 @@ export class MmAssesmentComponent implements OnInit {
     private offerPhaseService: OfferPhaseService,
     private offerDetailViewService: OfferDetailViewService,
     private configService: ConfigurationService,
+    private offersolutioningService: OffersolutioningService,
+    private rightPanelService: RightPanelService
   ) {
     this.activatedRoute.params.subscribe(params => {
 
@@ -65,7 +85,10 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    if (this.router.url.match(/offerDimension/) !== null) {
+      this.dimensionMode = true;
+    }
+    this.offerArray = [];
     // Fetch logged in owner name from configurationservice.
     this.ownerName = this.configService.startupData['userName'];
 
@@ -85,7 +108,10 @@ export class MmAssesmentComponent implements OnInit {
             selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
           });
         });
+
       }
+      console.log("selectedCharactersistics", selectedCharacteristics);
+
       let that = this;
 
       // mm model and message section
@@ -103,7 +129,7 @@ export class MmAssesmentComponent implements OnInit {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerDetailRes['derivedMM']}.`, mmModel: offerDetailRes['derivedMM'] };
       } else {
         this.proceedButtonStatusValid = true;
-        this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'};
+        this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
       }
 
       this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
@@ -130,56 +156,106 @@ export class MmAssesmentComponent implements OnInit {
 
       this.monetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
+        console.log("selectedCharacteristics", selectedCharacteristics['Offer Characteristics']);
         that.offerData['groups'].forEach(group => {
           that.groupNames.push(group['groupName']);
           let curGroup = {};
           group['subGroup'].forEach(g => {
+            // console.log("g:::",g.subGroupName)
+            if (Object.keys(selectedCharacteristics).length != 0) {
+              this.offerArray = selectedCharacteristics['Offer Characteristics'][g['subGroupName']];
+            }
+            // console.log("offerArra::::",this.offerArray);
             curGroup[g['subGroupName']] = [];
             g.choices.forEach((c) => {
+              this.match = false;
               const splitArr = c.split('#');
               const attrName = splitArr[0];
               const description = splitArr[1];
-              if (selectedCharacteristics[group['groupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']] != null && selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)) {
+              // console.log("attrName:::::",attrName)
+
+              if (this.offerArray && this.offerArray.length == 1 && this.offerArray == attrName) {
+
                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-              } else {
+                this.match = true;
+              }
+
+
+
+              if (this.offerArray && this.offerArray.length > 1) {
+                this.offerArray.forEach(value => {
+                  if (attrName == value) {
+
+                    curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+                    this.match = true;
+
+                  }
+                  if (this.match == true) {
+                    return false;
+                  }
+                });
+              }
+
+              if (this.match == false) {
                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
               }
+
+
+              /*  if (selectedCharacteristics[group['groupName']] != null &&
+                selectedCharacteristics[group['groupName']][g['subGroupName']] != null &&
+                  selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)){
+ 
+ 
+ 
+                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+ 
+               } else {
+                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
+               } */
             });
           });
           that.groupData.push(curGroup);
         });
+        if (this.selectedGroupData.length > 0) {
+          alert("no final Group data");
+        }
+        if (this.dimensionMode === true) {
+          // dimension page, remove the first tab
+          that.dimensionFirstGroupData = that.groupData[0];
+          that.dimensionFirstGroupName = that.groupNames[0];
+          that.groupData.shift();
+          that.groupNames.shift();
+        }
+        console.log("offerData", that.groupData);
       });
     });
   }
 
 
   //downloadPDF
-  downloadPDF(){
-    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data =>{
-    const nameOfFileToDownload = 'offer-details';
-    console.log("nameoffile",nameOfFileToDownload);
+  downloadPDF() {
+    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data => {
+      const nameOfFileToDownload = 'offer-details';
+      console.log("nameoffile", nameOfFileToDownload);
       console.log(data);
-        const blob = new Blob([data], {type: 'application/pdf'});
-      
-        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-          window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
-         } else {
-          var a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = nameOfFileToDownload;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-         
-    }
-  });
-  
+      const blob = new Blob([data], { type: 'application/pdf' });
+
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+      } else {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nameOfFileToDownload;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+      }
+    });
+
   }
 
-    
 
-
-  
 
   // Attributes Selection Rules
 
@@ -326,7 +402,7 @@ export class MmAssesmentComponent implements OnInit {
     }
     attribute.status = -attribute.status;
 
-    if (this.activeTabIndex === 0) {
+    if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
       if (this.groupData[0]['Offer Components'].includes(attribute)) {
         this.changeSubGroupType(this.groupData[0]);
       }
@@ -347,6 +423,8 @@ export class MmAssesmentComponent implements OnInit {
         this.canClickNextStep = false;
       }
     }
+
+    this.selectedGroupData = this.groupData;
   }
 
 
@@ -357,6 +435,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toNextStep() {
+
     if (this.activeTabIndex === 0) {
       var index = 0;
       var groupKeys = this.getGroupKeys(this.groupData[0]);
@@ -374,7 +453,7 @@ export class MmAssesmentComponent implements OnInit {
       this.offerData['mmId'] = null;
       // console.log(this.offerData);
       let postData = this.offerData;
-      postData['groups'] = this.offerData['groups'].slice(0, 1);
+      postData['groups'] = this.offerData['groups'];
 
 
       this.monetizationModelService.toNextSetp(postData).subscribe(data => {
@@ -404,8 +483,20 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   getStakeData(mmModel) {
+
     this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
+
       this.stakeData = {};
+      this.derivedMM = mmModel;
+      this.displayLeadTime = true;
+      this.offerId = this.currentOfferId;
+      this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
+      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+        (leadTime: LeadTime) => {
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+        }
+      );
+
       let keyUsers;
       if (res != null) {
         keyUsers = res;
@@ -422,21 +513,22 @@ export class MmAssesmentComponent implements OnInit {
           emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
           _id: this.offerBuilderdata['offerOwner'],
           userMappings: [{
-            appRoleList: ['Owner'],
+            appRoleList: [],
             businessEntity: 'Security',
-            functionalRole: 'BUPM'
+            functionalRole: 'BUPM',
+            offerRole: 'Owner'
           }
           ],
           stakeholderDefaults: true
         });
 
       keyUsers.forEach(user => {
-        if (this.stakeData[user['userMappings'][0]['appRoleList'][0]] == null) {
-          this.stakeData[user['userMappings'][0]['appRoleList'][0]] = [];
+        if (this.stakeData[user['userMappings'][0]['functionalRole']] == null) {
+          this.stakeData[user['userMappings'][0]['functionalRole']] = [];
         }
         let curUser = user;
         curUser['stakeholderDefaults'] = true;
-        this.stakeData[user['userMappings'][0]['appRoleList'][0]].push(curUser);
+        this.stakeData[user['userMappings'][0]['functionalRole']].push(curUser);
       });
 
 
@@ -539,11 +631,12 @@ export class MmAssesmentComponent implements OnInit {
     let stakeHolders = [];
     for (let prop in this.stakeData) {
       this.stakeData[prop].forEach(sh => {
+        console.log(sh);
         stakeHolders.push({
           '_id': sh['_id'],
           'businessEntity': sh['userMappings'][0]['businessEntity'],
           'functionalRole': sh['userMappings'][0]['functionalRole'],
-          'offerRole': sh['userMappings'][0]['appRoleList'][0],
+          'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['userMappings'][0]['functionalRole'],
           'stakeholderDefaults': sh['stakeholderDefaults'],
           'name': sh['userName']
         });
@@ -566,6 +659,7 @@ export class MmAssesmentComponent implements OnInit {
     proceedToStakeholderPostData['secondaryBUList'] = this.offerBuilderdata['secondaryBUList'];
     proceedToStakeholderPostData['secondaryBEList'] = this.offerBuilderdata['secondaryBEList'];
 
+
     let that = this;
     this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
       let proceedPayload = {
@@ -584,8 +678,286 @@ export class MmAssesmentComponent implements OnInit {
 
   }
 
+  proceedToOfferSolution() {
+    let postOfferSolutioningData = {};
+    postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
+
+    let groups = [];
+    let groupDataWithFirst = [];
+    groupDataWithFirst.push(this.dimensionFirstGroupData);
+    groupDataWithFirst = groupDataWithFirst.concat(this.groupData);
+    let groupNamesWithFirst = [];
+    groupNamesWithFirst.push(this.dimensionFirstGroupName);
+    groupNamesWithFirst = groupNamesWithFirst.concat(this.groupNames);
+    groupDataWithFirst.forEach((group, index) => {
+      let curGroup = {};
+      curGroup['groupName'] = groupNamesWithFirst[index];
+      curGroup['subGroup'] = [];
+      for (let prop in group) {
+        let curSubGroup = {};
+        curSubGroup['subGroupName'] = prop;
+        curSubGroup['subGroupStatus'] = this.message['contentHead'];
+        curSubGroup['failed'] = null;
+        curSubGroup['choices'] = [];
+        curSubGroup['selected'] = [];
+
+        group[prop].forEach((characters) => {
+          if (characters['status'] === 1 || characters['type'] === 2) {
+            curSubGroup['selected'].push(characters['name']);
+          }
+          curSubGroup['choices'].push(characters['name']);
+        });
+        curGroup['subGroup'].push(curSubGroup);
+      }
+      groups.push(curGroup);
+    });
+    postOfferSolutioningData['groups'] = groups;
+    postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
+    postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
+    console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
+    this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
+      let notificationPayload = {
+        "offerId": this.currentOfferId,
+        "caseId": this.caseId,
+        "actionTitle": "Offer Solutioning",
+        "description": "dss",
+        "mileStone": "Offer Solutioning",
+        "selectedFunction": "BUPM",
+        "type": "Notification",
+
+      };
+
+
+
+      //      {
+      //     "offerId": "COOL_2102",
+      //     "caseId": "CASE-0000000528",
+      //     "actionTitle": "fdsaf",
+      //     "description": "dss",
+      //     "mileStone": "Offer Construct",
+      //     "selectedFunction": "BUPM",
+      //     "assignee": [
+      //         "jbondre","jagondal"                       << This is an Array of Ids of all assignees;
+      //     ],
+      //     "dueDate": "2019-01-18T21:29:57.000Z",
+      //     "owner": "jagondal",      << Owner of the Offer
+      //     "offerName": "Jayraj Offer 1",
+      //     "type": "Notification"     << I don’t know about type for right now so just put Notification, for future functionality
+      // }
+
+
+      let fakeGroup = {
+        'groups': [
+          {
+            "groupName": "Offer Characteristics",
+            "subGroup": [
+              {
+                "subGroupName": "Offer Components",
+                "choices": [
+                  "Content",
+                  "Managed Services",
+                  "SW - OS",
+                  "SW - SaaS"
+                ],
+                "selected": [
+                  "Content",
+                  "Cloud",
+                  "Cisco"
+                ],
+                "failed": null,
+                "subGroupStatus": "Aligned",
+                "listGrpQuestions": [
+                  {
+                    "question": "Is this offer commissionable?",
+                    "questionType": "Radioi Button",
+                    "values": [
+                      "Yes",
+                      "No"
+                    ],
+                    "required": "Mandatory",
+                    "primaryPOC": [
+                      "BUPM",
+                      "OLE"
+                    ],
+                    "secondaryPOC": [
+                      "Finance",
+                      "OLE"
+                    ],
+                    "osGroup": "SKU"
+
+                  },
+                  {
+                    "question": "Who are the target customers?",
+                    "questionType": "Free Text",
+                    "values": [
+                      "SSP"
+                    ],
+                    "required": "Optional",
+                    "primaryPOC": [
+                      "BUPM",
+                      "OLE"
+                    ],
+                    "secondaryPOC": [
+                      "Finance",
+                      "OLE"
+                    ]
+                  }
+                ]
+              },
+              {
+                "subGroupName": "Deployment",
+                "choices": [
+                  "Hybrid",
+                  "On-Premise",
+                  "Cloud"
+                ],
+                "selected": ["Cloud"],
+                "failed": null,
+                "subGroupStatus": "Aligned",
+                "listGrpQuestions": [
+                  {
+                    "question": "test question percent?",
+                    "questionType": "Percentage Text",
+                    "values": [
+                    ],
+                    "required": "Mandatory",
+                    "primaryPOC": [
+                      "BUPM",
+                      "OLE"
+                    ],
+                    "secondaryPOC": [
+                      "Finance",
+                      "OLE"
+                    ],
+                    "osGroup": [
+                      "FOE"
+                    ]
+                  },
+                  {
+                    "question": "test question Money?",
+                    "questionType": "Currency Text",
+                    "values": [
+                      "SSP"
+                    ],
+                    "required": "Optional",
+                    "primaryPOC": [
+                      "BUPM",
+                      "OLE"
+                    ],
+                    "secondaryPOC": [
+                      "Finance",
+                      "OLE"
+                    ]
+                  }
+                ]
+              },
+              {
+                "subGroupName": "Hosting Party",
+                "choices": [
+                  "Cisco",
+                  "3rd Party",
+                  "Hosting Party - N/A"
+                ],
+                "selected": ["Hosting Party - N/A"],
+                "failed": null,
+                "subGroupStatus": "Aligned"
+              },
+              {
+                "subGroupName": "Delivery",
+                "choices": [
+                  "Electronic Fulfillment",
+                  "Physical Fulfillment",
+                  "Provisioning Fulfillment",
+                  "Embedded Solution",
+                  "Delivery - N/A"
+                ],
+                "selected": ["Delivery - N/A"],
+                "failed": null,
+                "subGroupStatus": "Aligned"
+              },
+              {
+                "subGroupName": "Licensing",
+                "choices": [
+                  "Perpetual",
+                  "Subscription: Pre-Commited Quantity",
+                  "Subscription: Usage/ Utility"
+                ],
+                "selected": ["Subscription: Usage/ Utility"],
+                "failed": null,
+                "subGroupStatus": "Aligned",
+                "listGrpQuestions": [
+                  {
+                    "question": "test question Dropdown?",
+                    "questionType": "LOV",
+                    "values": [
+                      "op1",
+                      "op2",
+                      "op3"
+                    ],
+                    "required": "Mandatory",
+                    "primaryPOC": [
+                      "BUPM",
+                      "OLE"
+                    ],
+                    "secondaryPOC": [
+                      "Finance",
+                      "OLE"
+                    ],
+                    "osGroup": [
+                      "FINANCE"
+                    ]
+                  },
+                  {
+                    "question": "test question Multiple Choice?",
+                    "questionType": "Multiple Choice",
+                    "values": [
+                      "SSP",
+                      "SSP2",
+                      "SSP3",
+                    ],
+                    "required": "Optional",
+                    "primaryPOC": [
+                      "BUPM",
+                      "OLE"
+                    ],
+                    "secondaryPOC": [
+                      "Finance",
+                      "OLE"
+                    ]
+                  },
+                  {
+                    "question": "test question Date?",
+                    "questionType": "Date",
+                    "values": [
+                      "SSP",
+                      "SSP2",
+                      "SSP3",
+                    ],
+                    "required": "Optional",
+                    "primaryPOC": [
+                      "BUPM",
+                      "OLE"
+                    ],
+                    "secondaryPOC": [
+                      "Finance",
+                      "OLE"
+                    ]
+                  }
+                ]
+              }
+            ]
+
+          }
+        ]
+      };
+      this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
+      this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+    })
+
+  }
+
   goBackToOffercreation() {
-    this.router.navigate(['/coolOffer', this.currentOfferId]);
+    this.router.navigate(['/coolOffer', this.currentOfferId, this.caseId]);
   }
 }
 

@@ -34,7 +34,7 @@ export class TurbotaxviewComponent implements OnInit {
         this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.data['offerId'], this.data['caseId']];
         this.navigateHash['Strategy Review'] = ['/strategyReview', this.data['offerId'], this.data['caseId']];
 
-        this.menuBarService.getRubboTaxMenu(this.data['caseId']).subscribe(data => {
+        this.turbotax.getRubboTaxMenu(this.data['caseId']).subscribe(data => {
             this.offerPhaseDetailsList = data;
             this.ideateCount = data['ideate'].length;
             this.planCount = data['plan'].length;

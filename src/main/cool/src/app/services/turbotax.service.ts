@@ -8,11 +8,10 @@ import { EnvironmentService } from '../../environments/environment.service';
 @Injectable()
 export class TurbotaxService {
 
-  constructor( private _http:HttpClient) { }
+  constructor( private _http:HttpClient,private  environmentService:EnvironmentService) { }
 
-  getTurboTaxDetails() {
-  const url='https://cool-srv-dev.cisco.com/coolsrv/bpmApi/getMilestones/CASE-0000000040/false';
-    return this._http.get(url,{withCredentials:true});
+  getRubboTaxMenu(caseId):any {
+    return this._http.get(this.environmentService.REST_API_TURBO_TAX_MENU + caseId + '/false');
   }
 
 }

@@ -1,5 +1,4 @@
 <div class="content">
-    <div class="container-fluid">
       <app-menu-bar [caseId]="caseId"
       [currentMMModel]="currentMMModel"
       [offerId]="currentOfferId"
@@ -18,7 +17,10 @@
             <div class="col-md-8 text-right">
                 <button class="btn btn--white"> Save </button>
                 <button class="btn btn--white" (click) = "downloadPDF()"> Export </button>
-                <button class="btn btn--white" [disabled]="!proceedButtonStatusValid" (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
+                <button *ngIf="!dimensionMode" class="btn btn--white" 
+                [disabled]="!proceedButtonStatusValid" (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
+                <button *ngIf="dimensionMode" class="btn btn--white" 
+                [disabled]="!proceedButtonStatusValid" (click)='proceedToOfferSolution()'>Proceed to Offer Solutioning <span class="icon-chevron-right"></span></button>
             </div>
         </div>
     </div>
@@ -37,6 +39,7 @@
                 </div>
               </div>
             </div>
+            
             <div class="row">
               <div class="col-md-3">
                 <div class="flex-fluid text-left half-margin-left">
@@ -115,7 +118,7 @@
                                 'mm-model-btn-active':attribute.status===1||attribute.type===2,
                                 'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
                               }" 
-                              class="btn btn--small  tooltip"
+                              class="btn btn--small tooltip"
                               placement="top"
                               (click)="toggleSelected(attribute)" >
                               {{attribute.name}}
@@ -152,10 +155,16 @@
 
       <div class="rightContent col-sm-12 col-md-3" >
         <app-right-panel
-          [portfolioFlag]="setFlag"
-          [stakeData]="stakeData"
-          (updateStakeData)="updateStakeData($event)"
-          [events]="eventsSubject.asObservable()"
+        [portfolioFlag]="setFlag" 
+        [stakeData]="stakeData" 
+        [offerId] = "offerId" 
+        [derivedMM] = "derivedMM"   
+        [primaryBE] = "primaryBE"                  
+        [displayLeadTime]="displayLeadTime" 
+        [offerBuilderdata]="offerBuilderdata"          
+        (updateStakeData)="updateStakeData($event)" 
+        [events]="eventsSubject.asObservable()" 
+        [noOfWeeksDifference] = "noOfWeeksDifference"    
         ></app-right-panel>
       </div>
     </div>

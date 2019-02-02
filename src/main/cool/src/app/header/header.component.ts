@@ -1,12 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { CreateOfferService } from '../services/create-offer.service';
 import { HeaderService } from './header.service';
-import { UserService } from '../services/user.service'
-import { SelectItem } from 'primeng/api';
-import { AccessManagementService } from '../services/access-management.service';
 import { ConfigurationService } from '../services/configuration.service';
-import {OverlayPanelModule} from 'primeng/overlaypanel';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -15,22 +12,49 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
 })
 export class HeaderComponent implements OnInit {
 
-  toggleLogout = false;
-
   userInfo;
   userName;
   functionalRole;
   userId;
-  emailPrefOptions: SelectItem[];
+  emailPrefOptions: any[] = [];
+  notificationPrefOptions: any[] = [];
   isBupmUser: Boolean = false;
   hasAdminAccess:boolean = false;
-
+  selectedValues;
 
   ngOnInit() {
+
+    this.emailPrefOptions = [
+      {
+        name: 'Real Time',
+        value: false
+    },
+    {
+        name: 'Once Weekly',
+        value: false
+    },
+    {
+        name: 'Once Daily',
+        value: false
+    }];
+
+    this.notificationPrefOptions = [
+      {
+        name: 'Real Time',
+        value: false
+    },
+    {
+        name: 'Once Weekly',
+        value: false
+    },
+    {
+        name: 'Once Daily',
+        value: false
+    }];
   }
 
   constructor(private headerService: HeaderService, private router: Router,
-    private createOfferService: CreateOfferService, private userService: UserService,
+    private createOfferService: CreateOfferService,
     private startupService:ConfigurationService) {
 
       this.headerService.getCurrentUser().subscribe((user: any) => {
@@ -50,21 +74,28 @@ export class HeaderComponent implements OnInit {
       }
     });
 
-
-
-
-    this.emailPrefOptions= [
-      {label: 'Realtime', value: 'Realtime' },
-      {label: 'Once Weekly', value: 'Once Weekly' },
-      {label: 'Once Daily', value: 'Once Daily' }
-    ]
   }
 
-  getPage(p) {
-    return this.router.url.search(p) > -1;
+  emailCheckBoxClicked(name) {
+    this.emailPrefOptions.forEach(pref => {
+      if (pref.name !== name) {
+        pref.value = !pref.value;
+      }
+    });
   }
 
+  notificationCheckBoxClicked(name) {
+    this.notificationPrefOptions.forEach(pref => {
+      if (pref.name !== name) {
+        pref.value = !pref.value;
+      }
+    });
+  }
+
+  /**
+   * Logic when user closes the panel.
+   */
   onClickedOutside() {
-    this.toggleLogout = false;
+
   }
 }

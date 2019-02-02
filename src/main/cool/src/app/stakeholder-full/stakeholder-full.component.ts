@@ -289,10 +289,12 @@ export class StakeholderFullComponent implements OnInit {
         "comment": ""
       };
       this.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(result => {
-        this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
-      }, (error) => {
-        console.log(error);
-      })
+        this.stakeholderfullService.sendEmailNotification(this.currentOfferId).subscribe(data => {
+          this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
+        }, (error) => {
+          console.log(error);
+        });
+      });
     },
       (error) => {
         console.log(error);

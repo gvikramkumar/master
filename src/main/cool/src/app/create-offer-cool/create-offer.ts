@@ -16,7 +16,7 @@ export class CreateOffer {
   offerCreatedBy: string;
   offerCreationDate: string;
   status: Status;
-  idpidvalue: string;
+  iDPId: string;
   constructor(userId: string,
     offerOwner: string,
     offerName: string,
@@ -29,7 +29,7 @@ export class CreateOffer {
     designReviewDate: string,
     readinessReviewDate: string,
     expectedLaunchDate: string,
-    idpidvalue: string,
+    iDPId: string,
     offerCreatedBy: string,
     offerCreationDate: string,
     status: Status) {
@@ -45,7 +45,7 @@ export class CreateOffer {
     this.designReviewDate = designReviewDate;
     this.readinessReviewDate = readinessReviewDate;
     this.expectedLaunchDate = expectedLaunchDate;
-    this.idpidvalue = idpidvalue;
+    this.iDPId = iDPId;
     this.offerCreationDate = offerCreationDate;
     this.offerCreatedBy = offerCreatedBy;
     this.status = status;

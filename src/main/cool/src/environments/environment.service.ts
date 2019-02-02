@@ -48,6 +48,8 @@ export class EnvironmentService {
     REST_API_IDPID_GET_URL;
     REST_API_DOWNLOAD_PDF_GET_URL;
     REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL;
+    REST_API_OFFER_SOLUTIONING_POST_URL;
+    REST_API_SEND_EMAIL_NOTIFICATION_POST_URL;
 
     basepdafapi = '';
 
@@ -61,6 +63,9 @@ export class EnvironmentService {
     REST_API_SECONDARY_BUSINESS_ENTITY_URL;
     PDAF_API;
     PDAF_GET_TOKEN_API;
+
+    REST_API_LEAD_TIME_LAUNCH_DATE;
+    REST_API_LEAD_TIME_AVERAGE_WEEKS;
 
     authtokenbaseapi = '';
     client_id;
@@ -143,7 +148,7 @@ export class EnvironmentService {
 
         this.GENERATE_AUTH_TOKEN_URL = `${this.authtokenbaseapi}/as/authorization.oauth2?client_id=${this.client_id}&response_type=token&redirect_uri=${this.redirect_url}`;
         this.GENERATE_AUTH_IDP_TOKEN_URL = `${this.authtokenbaseapi}/as/token.oauth2?client_id=${this.idpclientid}&client_secret=${this.idpclientsecret}&grant_type=client_credentials`;
-        this.REST_API_IDPID_GET_URL = `${this.baseidpurl}/gravity/spring/board/product_offers/cards`;
+        //this.REST_API_IDPID_GET_URL = `${this.baseidpurl}/gravity/spring/board/product_offers/cards`;
         /** PDAF API's */
 
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.1/get/currentUser';
@@ -201,6 +206,12 @@ export class EnvironmentService {
         this.REST_API_ESCALATE_NOTIFICATION_URL = this.baseapi + '/emailNotification/send';
         this.REST_API_DOWNLOAD_PDF_GET_URL = this.baseapi + '/pdf/offerDetailsPDF';
         this.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL = this.baseapi + '/setOfferConstructAttribute';
+        this.REST_API_OFFER_SOLUTIONING_POST_URL = this.baseapi + '/setOfferSolution';
+        this.REST_API_IDPID_GET_URL=this.baseapi+'/offer/productOffers';
+        this.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL = this.baseapi + '/emailNotification/sendEmailNotification/';
+
+        this.REST_API_LEAD_TIME_AVERAGE_WEEKS = this.baseapi + '/leadTimeCal/getLTC/';
+        this.REST_API_LEAD_TIME_LAUNCH_DATE = this.baseapi + '/leadTimeCal/getLTC/';
 
     }
 }

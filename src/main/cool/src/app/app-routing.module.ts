@@ -37,11 +37,16 @@ const routes: Routes = [
     canActivate: [BupmGuard]
   },
   {
-    path: 'coolOffer/:id',
+    path: 'coolOffer/:id/:id2',
     component: CreateOfferCoolComponent
   },
   {
     path: 'mmassesment/:id/:id2',
+    component: MmAssesmentComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'offerDimension/:id/:id2',
     component: MmAssesmentComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
@@ -89,8 +94,9 @@ const routes: Routes = [
     component: AuthErrorComponent
   },
   {
-    path: 'offerSolutioning',
-    component: OfferSolutioningComponent
+    path: 'offerSolutioning/:id/:id2',
+    component: OfferSolutioningComponent,
+    resolve: { offerData: OfferOverViewResolver }
   },
   {
     path: 'access_token',

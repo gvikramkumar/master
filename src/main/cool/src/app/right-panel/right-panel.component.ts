@@ -12,6 +12,9 @@ import { Collaborators } from '../models/collaborator';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { SharedService } from '../shared-service.service';
+import { RightPanelService } from '../services/right-panel.service';
+import { LeadTime } from './lead-time';
+import * as moment from 'moment';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -21,8 +24,8 @@ const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 })
 export class RightPanelComponent implements OnInit, OnDestroy {
   notiFication: Boolean = false;
+
   @Input() portfolioFlag: Boolean = false;
-  @Input() stakeData: Object;
   @Output() updateStakeData = new EventEmitter<string>();
   navigateHash: Object = {};
   backdropCustom: Boolean = false;
@@ -62,6 +65,25 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   ddOwner3 = 'Select Owner';
   flagOwner3 = false;
+
+  mmModel: string;
+  leadTimeYear: number;
+  averageWeekCount: string;
+  expectedLaunchDate: string;
+  weekDifferenceCount: string;
+  displayLeadTimeButton: Boolean = false;
+
+  average = 'Average';
+  tenthPercentile = '10th Percentile';
+  nintyPercentile = '90th Percentile';
+
+  @Input() offerId: string;
+  @Input() stakeData: Object;
+  @Input() derivedMM: string;
+  @Input() primaryBE: string;
+  @Input() offerBuilderdata: Object;
+  @Input() noOfWeeksDifference: string;
+  @Input() displayLeadTime: Boolean = false;
 
   offerData;
   dotBox = [
@@ -116,7 +138,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     private searchCollaboratorService: SearchCollaboratorService,
     private offerPhaseService: OfferPhaseService,
     private monetizationModelService: MonetizationModelService,
-    private sharedService: SharedService) {
+    private sharedService: SharedService,
+    private rightPanelService: RightPanelService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -125,11 +148,12 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.currentOfferId = this.createOfferService.coolOffer.offerId;
     }
     this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
+
   }
 
   ngOnInit() {
 
-    this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId];
+    this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
     this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
     this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
@@ -182,7 +206,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     });
 
     if (this.currentOfferId) {
+
       this.createOfferService.getMMMapperById(this.currentOfferId).subscribe(data => {
+
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
         this.OfferOwners = this.offerData.offerObj.owners;
@@ -214,6 +240,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     if (this.events !== undefined) {
       this.eventsSubscription = this.events.subscribe((data) => this.storeOwnerId(data));
     }
+
+
+
+
   }
 
   /**
@@ -264,6 +294,31 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   showOfferPhaseDailog() {
     this.displayOfferPhase = true;
+  }
+
+  showLeadTimeDailog() {
+
+    this.mmModel = this.derivedMM;
+    this.leadTimeYear = new Date().getFullYear() - 1;
+
+    if (this.displayLeadTime) {
+
+      this.displayLeadTimeButton = true;
+      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+        (leadTime: LeadTime) => {
+          this.noOfWeeksDifference = this.noOfWeeksDifference;
+          this.expectedLaunchDate = moment(leadTime.expectedLaunchDate).format('MM/DD/YYYY');
+        }
+      );
+
+      this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).subscribe(
+        (averageWeekCountObj: Object) => {
+          this.averageWeekCount = Number(averageWeekCountObj['AverageWeeks']).toFixed(2);
+        }
+      );
+
+    }
+
   }
 
   onHide() {
@@ -357,17 +412,17 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   addToStakeData(res) {
     const keyUsers = res['stakeholders'];
     keyUsers.forEach(user => {
-      if (this.stakeData[user['offerRole']] == null) {
-        this.stakeData[user['offerRole']] = [];
+      if (this.stakeData[user['functionalRole']] == null) {
+        this.stakeData[user['functionalRole']] = [];
       }
       if (this.alreayAddedStakeHolders.findIndex(k => k === user['_id']) === -1) {
-        this.stakeData[user['offerRole']].push(
+        this.stakeData[user['functionalRole']].push(
           {
             userName: user['userName'],
             emailId: user['email'],
             _id: user['_id'],
             userMappings: [{
-              appRoleList: [user['offerRole']],
+              appRoleList: [user['functionalRole']],
               businessEntity: user['businessEntity'],
               functionalRole: user['functionalRole']
             }
@@ -377,6 +432,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         this.alreayAddedStakeHolders.push(user['_id']);
       }
     });
+
+    console.log(this.stakeData);
   }
 
   getUserIdFromEmail(email): any {
@@ -385,13 +442,14 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   addCollaborator() {
+    console.log(this.selectedCollabs);
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
     this.selectedCollabs.forEach(element => {
       const stakeHolder = new StakeHolder();
       stakeHolder.businessEntity = element.businessEntity;
       stakeHolder.functionalRole = element.functionalRole;
-      stakeHolder.offerRole = element.offerRole;
+      stakeHolder.offerRole = element.functionalRole;
       stakeHolder._id = this.getUserIdFromEmail(element.email);
       stakeHolder.email = element.email;
       stakeHolder.userName = element.name;
@@ -408,7 +466,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     // });
     this.updateStakeData.next('');
     this.display = false;
-
+    console.log(stakeHolderDto);
   }
 
   show_deliveryDesc() {
@@ -476,3 +534,4 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
   }
 }
+

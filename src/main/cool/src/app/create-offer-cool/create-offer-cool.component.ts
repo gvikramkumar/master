@@ -10,6 +10,9 @@ import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
+import { LocalStorageService } from 'ngx-webstorage';
+import { HeaderService } from '../header/header.service';
+import { StakeholderfullService } from '../services/stakeholderfull.service';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -51,7 +54,7 @@ export class CreateOfferCoolComponent implements OnInit {
   expectedLaunchDateValue: string;
   caseId: string;
   idpid;
-  idpidvalue: string;
+  iDPId: string;
   isIdpIdValid = false;
   enableOfferbuild = true;
   userSelectedAllUnits;
@@ -59,13 +62,28 @@ export class CreateOfferCoolComponent implements OnInit {
   idpidInvalid = false;
   idpvalue;
   secondaryBUbackup: any;
+  proceedButtonStatusValid = false;
+  backbuttonStatusValid = true;
+  message = {};
+  stakeData = {};
+  derivedMM;
+  firstData: Object;
+  public data = [];
+  escalateVisibleAvailable: Boolean = false;
+  currentUser;
+  approvalButtonsVisibleAvailable: Boolean = true;
+  managerName;
+  stakeHolderInfo: any;
 
 
   constructor(private createOfferService: CreateOfferService,
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private _location: Location, ) {
+    private headerService: HeaderService,
+    private stakeholderfullService: StakeholderfullService,
+    private _location: Location,
+    private localStorage: LocalStorageService) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       if (this.offerId) {
@@ -76,7 +94,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.primaryBusinessUnitsValue = offerDetailRes.primaryBUList;
           this.getPrimaryBusinessEntityPromise(offerDetailRes.primaryBUList)
             .then(() => {
-              this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList;
+              this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList.toString();
             });
           this.secondaryBusinessUnitsValue = offerDetailRes.secondaryBUList;
           this.getSecondaryBusinessEntityPromise(offerDetailRes.secondaryBUList)
@@ -87,12 +105,12 @@ export class CreateOfferCoolComponent implements OnInit {
           this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
           this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
-          this.idpidvalue = offerDetailRes.idpvalue
+          this.idpvalue = offerDetailRes.iDPId;
         });
       }
     });
 
-    // Lulu's change GET PRIMARY AND SECONDARY BE
+  
     this.createOfferService.getDistinctBE().subscribe(data => {
       const primaryBeArry = [];
       const dataArray = data as Array<any>;
@@ -107,7 +125,7 @@ export class CreateOfferCoolComponent implements OnInit {
     });
 
 
-    // lulu's change GET SECONDARY BU
+  
     this.createOfferService.getDistincBU().subscribe(data => {
       const secondaryBuArry = [];
       const dataArray = data as Array<any>;
@@ -119,7 +137,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.secondaryBusinessUnits = secondaryBuArry;
     });
 
-    // Fetch Primary BE's assigned through admin page. 
+    // Fetch Primary BE's assigned through admin page.
     // Show this BE's as selected in Primary BE multiselect list in the offer creation page.
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       const primaryBeArray: any[] = [];
@@ -178,7 +196,7 @@ export class CreateOfferCoolComponent implements OnInit {
     }
   }
 
-  // Lulu's change on Get Primary BU when primary BE changed 
+  
   getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
     this.primaryBusinessUnitsValue = null;
     this.secondaryBusinessEntitiesValue = null;
@@ -276,6 +294,55 @@ export class CreateOfferCoolComponent implements OnInit {
 
 
   ngOnInit() {
+    const canEscalateUsers = [];
+    const canApproveUsers = [];
+    this.data = [];
+    this.stakeholderfullService.getdata(this.offerId).subscribe(data => {
+      this.firstData = data;
+      this.derivedMM = this.firstData['derivedMM'];
+      this.data = this.firstData['stakeholders'];
+      this.offerName = this.firstData['offerName'];
+      this.stakeHolderInfo = {};
+      // this.processStakeHolderData(this.data);
+      for (let i = 0; i <= this.data.length - 1; i++) {
+        if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
+          this.stakeHolderInfo[this.data[i]['offerRole']] = [];
+        }
+        this.stakeHolderInfo[this.data[i]['offerRole']].push(
+          {
+            userName: this.data[i]['name'],
+            emailId: this.data[i]['_id'] + '@cisco.com',
+            _id: this.data[i]['_id'],
+            businessEntity: this.data[i]['businessEntity'],
+            functionalRole: this.data[i]['functionalRole'],
+            offerRole: this.data[i]['offerRole'],
+            stakeholderDefaults: this.data[i]['stakeholderDefaults']
+          });
+      }
+      this.stakeData = this.stakeHolderInfo;
+      
+
+      for (const auth in this.stakeData) {
+        if (auth === 'Co-Owner' || auth === 'Owner') {
+          this.stakeData[auth].forEach(owners => {
+            canEscalateUsers.push(owners['_id']);
+            canApproveUsers.push(owners['_id']);
+          });
+        }
+      }
+      this.headerService.getCurrentUser().subscribe(user => {
+        this.currentUser = user;
+        if (canEscalateUsers.includes(user)) {
+          this.escalateVisibleAvailable = true;
+        }
+        if (canApproveUsers.includes(user)) {
+          this.approvalButtonsVisibleAvailable = false;
+        }
+        this.headerService.getUserInfo(this.currentUser).subscribe(userData => {
+          this.managerName = userData[0].manager;
+        });
+      });
+    });
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
 
     this.mmMapperUserChoice = 'DO';
@@ -298,8 +365,8 @@ export class CreateOfferCoolComponent implements OnInit {
     status.phaseMilestone = 'Ideate';
     status.subMilestone = 'Offer Creation';
 
-    const offerCreationDate = new Date().toDateString();
-    const selectedPrimaryBe: string[] = [];
+    const offerCreationDate = new Date().toISOString();
+    const selectedPrimaryBe= [];
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
@@ -314,7 +381,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.designReviewDateValue,
       this.readinessReviewDateValue,
       this.expectedLaunchDateValue,
-      this.idpidvalue,
+      this.iDPId,
       offerCreatedBy,
       offerCreationDate,
       status);
@@ -330,6 +397,7 @@ export class CreateOfferCoolComponent implements OnInit {
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.offerId = data.offerId;
       this.caseId = data.caseId;
+      this.localStorage.store('currentOfferName', this.offerNameValue);
       this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
     },
       (err) => {
@@ -338,11 +406,11 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getidptoken(event) {
-    this.createOfferService.getIdpid().subscribe(data => {
-      this.idpid = data;
-      this.idpidvalue = event.target.value;
-      let header = `${this.idpid['token_type']} ${this.idpid['access_token']}`;
-      this.createOfferService.validateIdpid(header, this.idpidvalue).subscribe(data => {
+   // this.createOfferService.getIdpid().subscribe(data => {
+    //  this.idpid = data;
+      this.iDPId = event.target.value;
+     // let header = `${this.idpid['token_type']} ${this.idpid['access_token']}`;
+      this.createOfferService.validateIdpid( this.iDPId).subscribe(data => {
         this.isIdpIdValid = true;
         if (this.offerCreateForm.valid == true && this.isIdpIdValid == true) {
           this.enableOfferbuild = false;
@@ -355,7 +423,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.idpidInvalid = true;
           this.enableOfferbuild = true;
         })
-    })
+   // })
 
   }
 

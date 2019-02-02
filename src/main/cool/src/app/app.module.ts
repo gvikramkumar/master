@@ -22,7 +22,7 @@ import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
 import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { CreateOfferService } from './services/create-offer.service';
-import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule } from 'primeng/primeng';
+import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule, FileUploadModule } from 'primeng/primeng';
 import { DialogModule } from 'primeng/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchCollaboratorService } from './services/search-collaborator.service';
@@ -70,13 +70,11 @@ import { ViewcommentComponent } from './viewcomment/viewcomment.component';
 import { ViewcommentService } from './services/viewcomment.service';
 import { HeaderService } from './header/header.service';
 import { TurbotaxviewComponent } from './turbotaxview/turbotaxview.component';
-import {  TurbotaxService } from './services/turbotax.service';
+import { TurbotaxService } from './services/turbotax.service';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
 import { OffersolutioningCardOneComponent } from './offersolutioning-card-one/offersolutioning-card-one.component';
-import { OffersolutioningCardTwoComponent } from './offersolutioning-card-two/offersolutioning-card-two.component';
-import { OffersolutioningCardThreeComponent } from './offersolutioning-card-three/offersolutioning-card-three.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
@@ -86,6 +84,10 @@ import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-fo
 import { OfferconstructCanvasComponent } from './offerconstruct-canvas/offerconstruct-canvas.component';
 import {DragDropModule} from 'primeng/dragdrop';
 import {TreeTableModule} from 'primeng/treetable';
+import { BlueComponent } from './blue/blue.component';
+import { RightPanelService } from './services/right-panel.service';
+import { OffersolutioningService } from './services/offersolutioning.service';
+import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
 
 
 
@@ -129,12 +131,12 @@ export function app_init(configService: ConfigurationService, userService: UserS
     MmInfoBarComponent,
     MmMessageBarComponent,
     OffersolutioningCardOneComponent,
-    OffersolutioningCardTwoComponent,
-    OffersolutioningCardThreeComponent,
     OfferDimensionComponent,
     OfferConstructComponent,
     DynamicFormQuestionComponent,
-    OfferconstructCanvasComponent
+    OfferconstructCanvasComponent,
+    BlueComponent,
+    OfferSolutionQuestionComponent
   ],
   imports: [
     BrowserModule,
@@ -154,6 +156,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
     BrowserAnimationsModule,
     DataTableModule,
     DropdownModule,
+    FileUploadModule,
     TableModule,
     CalendarModule,
     AccordionModule,
@@ -163,7 +166,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
     DragDropModule,
     TreeTableModule,
     NgxWebstorageModule.forRoot(),
-    UserIdleModule.forRoot({idle: 10795,timeout: 10800, ping: 0})
+    UserIdleModule.forRoot({ idle: 10795, timeout: 10800, ping: 0 })
   ],
   providers:
     [
@@ -183,7 +186,6 @@ export function app_init(configService: ConfigurationService, userService: UserS
       ExitCriteriaValidationService,
       DashboardService,
       ActionsService,
-
       StakeholderfullService,
       AccessManagementService,
       BupmGuard,
@@ -197,6 +199,8 @@ export function app_init(configService: ConfigurationService, userService: UserS
       StrategyReviewService,
       MessageService,
       MenuBarService,
+      RightPanelService,
+      OffersolutioningService,
       {
         provide: APP_INITIALIZER,
         multi: true,
