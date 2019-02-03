@@ -26,4 +26,8 @@ export class OffersolutioningService {
       return null;
     }
   }
+  notificationPost(data) {
+    const url =this.environmentService.REST_API_NOTIFICATION_PRIMARYPOC_POST_URL;
+    return this.httpClient.post(url,data);
+  }
 }
