@@ -51,6 +51,7 @@ export class EnvironmentService {
     REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL;
     REST_API_OFFER_SOLUTIONING_POST_URL;
     REST_API_SEND_EMAIL_NOTIFICATION_POST_URL;
+    REST_API_SET_OFFERCONSTRUCT_POST_URL;
 
     basepdafapi = '';
 
@@ -214,6 +215,7 @@ export class EnvironmentService {
 
         this.REST_API_LEAD_TIME_AVERAGE_WEEKS = this.baseapi + '/leadTimeCal/getLTC/';
         this.REST_API_LEAD_TIME_LAUNCH_DATE = this.baseapi + '/leadTimeCal/getLTC/';
+        this.REST_API_SET_OFFERCONSTRUCT_POST_URL = this.baseapi + '/setOfferConstruct';
 
     }
 }

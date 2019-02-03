@@ -34,7 +34,16 @@
           </div>
         </div>
         <div class="rightContent" style="margin-top: -5px;">
-          <app-right-panel [portfolioFlag]="setFlag" [stakeData]="stakeData" (updateStakeData)="updateStakeData($event)"></app-right-panel>
+          <app-right-panel
+            [offerId]="offerId"
+            [portfolioFlag]="setFlag" 
+            [stakeData]="stakeData"
+            [primaryBE] = "primaryBE" 
+            [derivedMM] = "derivedMM"                      
+            [displayLeadTime]="displayLeadTime"
+            [noOfWeeksDifference] = "noOfWeeksDifference"
+            (updateStakeData)="updateStakeData($event)">
+          </app-right-panel>
         </div>
       </div>
     </div>
