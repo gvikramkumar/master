@@ -307,7 +307,7 @@ export default class ReportController extends ControllerBase {
       case 'rule-submeasure':
         // multiSheetReport = true; ?? if multisheet report uncomment this line
         excelSheetname = ['History'];
-        excelHeaders = ['Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System', 'Sales Level', 'Product Level', 'SCMS Level',
+        excelHeaders = ['Report Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System', 'Sales Level', 'Product Level', 'SCMS Level',
           'Legal Entity Level', 'BE Level',
           'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
           'SM Status', 'SM Updated By', 'SM Updated Date',
@@ -315,7 +315,7 @@ export default class ReportController extends ControllerBase {
           'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Rule Status', 'Rule Updated By', 'Rule Updated Date'];
 
         excelProperties = [
-          'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.measureName', 'sm.sourceName',
+          'fiscalMonth', 'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.measureName', 'sm.sourceName',
           'sm.inputFilterLevel.salesLevel', 'sm.inputFilterLevel.productLevel', 'sm.inputFilterLevel.scmsLevel', 'sm.inputFilterLevel.entityLevel', 'sm.inputFilterLevel.internalBELevel',
           'sm.rules[0]', 'sm.rules[1]', 'sm.rules[2]', 'sm.rules[3]', 'sm.rules[4]', 'sm.rules[5]', 'sm.rules[6]', 'sm.rules[7]', 'sm.rules[8]', 'sm.rules[9]', 'sm.rules[10]', 'sm.rules[11]', 'sm.rules[12]', 'sm.rules[13]', 'sm.rules[14]',
           'sm.status', 'sm.updatedBy', 'sm.updatedDate',
@@ -337,6 +337,7 @@ export default class ReportController extends ControllerBase {
               // get upper date for filter
               // refactor getManyLatestGroupByNameActive to take filter or do new function or just use getmanyLatest
               promises.push(Promise.all([
+                Promise.resolve(fimo),
                 this.submeasureRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
                 this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
               ]));
@@ -346,15 +347,16 @@ export default class ReportController extends ControllerBase {
           .then(results => {
             const rows: AnyObj[] = [];
             results.forEach(result => {
-              this.submeasures = result[0];
-              this.rules = _.sortBy(result[1], 'name');
+              const fiscalMonth = result[0];
+              this.submeasures = result[1];
+              this.rules = _.sortBy(result[2], 'name');
               const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
               const rules = this.rules.map(rule => this.transformRule(rule)); // update this for more props if needed
               let ruleSms: AnyObj[];
               rules.forEach(rule => {
                 ruleSms = _.sortBy(sms.filter(sm => _.includes(sm.rules, rule.name)), 'name');
                 ruleSms.forEach(sm => {
-                  rows.push({sm, rule});
+                  rows.push({fiscalMonth, sm, rule});
                 });
               });
             });
