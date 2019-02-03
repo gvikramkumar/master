@@ -6,15 +6,15 @@
     groupData['listGrpQuestions'].length !== 0
   "
 >
-  <div class="card card--raised margin-top-10">
+  <div class="card card--raised half-margin-top">
     <div class="card__header"><h4 class="card__title">{{groupData['listGrpQuestions'][0]['osGroup']}}</h4></div>
     <div class="card__body">
       <ul class="list dimensions--toggle">
         <li>
           <div class="row">
             <div class="col-md-3 margin-auto">
-              {{ groupData["subGroupName"] }}
-              <span class="sub--label"
+              <span class="subgroup-name">{{ groupData["subGroupName"] }}</span>
+              <span class="sub--label text-success"
                 ><span class="icon-check"></span> Perfectly Aligned</span
               >
             </div>

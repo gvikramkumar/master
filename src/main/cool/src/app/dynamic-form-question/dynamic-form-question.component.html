@@ -1,0 +1,43 @@
+<div [formGroup]="questionForm">
+  <div [ngSwitch]="question.componentType">
+    <label [attr.for]="question.egineAttribue">{{question.egineAttribue}}</label>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class="form-group__text">
+            <!--Free Text -->
+            <input *ngSwitchCase="'Free Text'" [formControlName]="question.egineAttribue" [id]="question.egineAttribue"
+              class="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class="form-group select">
+            <!--Drop-down-->
+            <select [id]="question.egineAttribue" *ngSwitchCase="'Drop-down'" [formControlName]="question.egineAttribue"
+              class="form-control">
+              <option *ngFor="let opt of question.values" [value]="opt">{{opt}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <div *ngSwitchCase="'Radio Button'" class="form-group form-group--inline">
+            <label class="radio">
+              <input [id]="question.egineAttribue" type="radio" [formControlName]="question.egineAttribue" class="form-control"
+                [value]="question.egineAttribue" checked>
+              <span class="radio__input"></span>
+              <span class="radio__label">{{question.egineAttribue}}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

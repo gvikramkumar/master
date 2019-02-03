@@ -21,16 +21,13 @@ export class DashboardComponent implements OnInit {
 
   myActionsAndNotifications = [];
   myOffers;
-
-
   pendingActionCount = 0;
   needImmediateActionCount = 0;
-
-
   showDoNotApproveSection = false;
   showConditionalApprovalSection = false;
   showApproveSection = false;
   showActionSection = true;
+  showProvideDetailsPopUp = false;
 
   minDate = new Date();
   offerColumns: any[];
@@ -58,6 +55,8 @@ export class DashboardComponent implements OnInit {
   selectedCaseId: string = null;
   lastValueInMilestone: Array<any>;
   val: any;
+  buttonIsDisabled: boolean = false;
+  reason: String = '';
 
   constructor(private dashboardService: DashboardService,
     private router: Router,
@@ -163,6 +162,7 @@ export class DashboardComponent implements OnInit {
     overlaypanel.toggle(event);
   }
 
+ 
   // getActionFormValues() {
   //   if (this.selectedAction.offerId && this.selectedAction.caseId) {
   //     this.actionsService.getAssignee(this.selectedAction.offerId).subscribe(resAssignee => {
@@ -276,6 +276,10 @@ export class DashboardComponent implements OnInit {
     this.createActionForm.reset();
   }
 
+  showprovideDetails(event, overlaypanel1: OverlayPanel, overlaypanel2: OverlayPanel) {
+    overlaypanel1.hide();
+    overlaypanel2.show(event);
+  }
   dismissNotification(overlaypanel: OverlayPanel) {
     const postData = {
       'taskId': this.selectedAction.taskId,
@@ -307,4 +311,45 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/offerSolutioning', offerId, caseId]);
     }
   }
+
+  enableSubmit(event): void {
+    let passedString = event.target.value;
+    let inputValue = passedString.trim();
+    if(inputValue === "" || inputValue === null) {
+     this.buttonIsDisabled=false;
+    } else {
+     this.buttonIsDisabled=true;
+    }
+ }
+
+//  submit() {
+//   let holdData= {};
+//   holdData['taskId'] = '';
+//   holdData['userId'] = this.userService.getUserId();
+//   holdData['caseId'] = this.caseId;
+//   holdData['offerId'] = this.currentOfferId;
+//   holdData['taskName'] = 'discard';
+//   holdData['action'] = 'hold';
+//   holdData['comment'] = this.reason;
+
+//   let cancelData={};
+//   cancelData['taskId'] = '';
+//   cancelData['userId'] = this.userService.getUserId();
+//   cancelData['caseId'] = this.caseId;
+//   cancelData['offerId'] = this.currentOfferId;
+//   cancelData['taskName'] = 'discard';
+//   cancelData['action'] = 'cancel';
+//   cancelData['comment'] = this.reason;
+
+//   if (this.popupType === 'hold') {
+//     this.menuBarService.holdOffer(holdData).subscribe(res => {
+//       this.closePopup.next('hold');
+//     });
+//   } else if (this.popupType === 'cancel') {
+//     this.menuBarService.cancelOffer(cancelData).subscribe(res => {
+//       this.closePopup.next('cancel');
+//     });
+//   }
+  
+// }
 }

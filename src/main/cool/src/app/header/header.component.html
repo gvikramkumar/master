@@ -11,20 +11,20 @@
       <div class="header-menus">
         <ul class="nav nav-tabs">
           <li routerLinkActive="active">
-            <a routerLink="/dashboard"><div class="tab__heading" title="Basic">Dashboard</div></a>
+            <a routerLink="/dashboard"><div class="tab__heading" title="Dashboard">Dashboard</div></a>
           </li>
           <li routerLinkActive="active">
-            <a routerLink="/coolOffer"><div class="tab__heading" title="Wide" *ngIf="isBupmUser">Offers</div></a>
+            <a routerLink="/coolOffer"><div class="tab__heading" title="Offers" *ngIf="isBupmUser">Offers</div></a>
           </li>
           <li routerLinkActive="active">
-            <a><div class="tab__heading" title="Sidebar">Analytics</div></a>
+            <a><div class="tab__heading" title="Analytics">Analytics</div></a>
           </li>
           <li routerLinkActive="active">
 
-              <a routerLink="/action"><div class="tab__heading" title="Sidebar">Actions</div></a>
+              <a routerLink="/action"><div class="tab__heading" title="Actions">Actions</div></a>
             </li>
           <li routerLinkActive="active">
-              <a routerLink="/accessManagement"><div class="tab__heading" title="Sidebar" *ngIf="hasAdminAccess">Access Management</div></a>
+              <a routerLink="/accessManagement"><div class="tab__heading" title="Access Management" *ngIf="hasAdminAccess">Access Management</div></a>
           </li>
 
         </ul>
@@ -61,7 +61,7 @@
                               <span class="checkbox__label hidden-xs">{{option.name}}</span>
                           </label>
                       </div>
-                      <hr>
+
                   </li>
             </p-accordionTab>
             <p-accordionTab>
@@ -76,7 +76,7 @@
                             <span class="checkbox__label hidden-xs">{{option.name}}</span>
                         </label>
                     </div>
-                    <hr>
+
                 </li>
             </p-accordionTab>
         </p-accordion>

@@ -67,7 +67,7 @@
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
                       <span class="text-indigo" (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
-                        &nbsp;<span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right qtr-padding"></span><br />
+                        &nbsp;<span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right"></span><br />
                       </span>
                       <span class="text-small">{{actionData.desc}}</span>
                     </span>
@@ -375,8 +375,9 @@
       <div class="popover__footer">
         <div *ngIf="selectedAction.type == 'Manual Action'">
           <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="createApproveAction(popActionContent)">Complete</button>
-          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="popActionContent.hide($event)">Provide
-            Feedback</button>
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="popActionContent.hide($event)">Provide Feedback</button>
+            <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>
+
         </div>
         <div *ngIf="selectedAction.type == 'Strategy Review'">
           <button class="btn btn--primary base-margin-top" (click)="doNotApprove()">
@@ -658,3 +659,19 @@
     </section>
   </div>
 </p-overlayPanel>
+
+<p-overlayPanel #popProvideDetailsContent [showCloseIcon]="true">
+  <div style="min-width:700px; min-height:300px">
+    <div class="form-group label--floated">
+        <div class="form-group__text">
+            <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
+            <label>ADD A REASON</label>
+        </div>
+        <p-fileUpload name="provideDetails[]" url="./Documents/"></p-fileUpload>
+    </div>
+    <button class="btn" (click)="popProvideDetailsContent.hide($event)">Cancel</button>
+                <button 
+                [disabled]="!buttonIsDisabled"
+                class="btn btn--primary" (click)="createApproveAction(popProvideDetailsContent)">Save</button>
+              </div>
+  </p-overlayPanel>
