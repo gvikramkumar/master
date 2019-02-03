@@ -43,14 +43,16 @@ export class OfferconstructCanvasComponent implements OnInit {
   varibableToBind;
   displayAddDetails: Boolean = false;
   addDetails;
-  hardwareName;
+  productName;
   @Input() questions: any[] = [];
   payLoad = '';
-  egineAttribue;
   itemCount;
   nodeToDelete;
   autoFocus;
   selectedItems;
+  showMandatoryDetails: Boolean = false;
+  currentRowClicked;
+
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
     private activatedRoute: ActivatedRoute) {
@@ -247,6 +249,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.questionForm = new FormGroup({
+    });
 
     // Prepare payload to fetch item categories. Obtain MM information.
     this._canvasService.getMMInfo(this.currentOfferId).subscribe((res) => {
@@ -405,19 +409,30 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.displayAddDetails = false;
     this.questionForm.reset();
     this.questions = [];
+    this.showMandatoryDetails = false;
   }
 
   addItemDetails() {
+    this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.questionForm.value);
+    this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
     this.closeDailog();
   }
 
-  showAddDetailsDailog(hardware) {
-    const hardwareName = hardware;
+  showAddDetailsDailog(currentNode) {
+    // const productName = product;
+    this.currentRowClicked = currentNode;
+    let majorLineItemName;
+    // Find parent Product (major item)
+    while(currentNode.parent !== null) {
+      // statements if the condition is true 
+        currentNode = currentNode.parent;
+        majorLineItemName = currentNode.data.productName;
+    }
     this.displayAddDetails = true;
     const groups: Groups[] = [];
     const group = new Groups(
-      hardwareName
+      majorLineItemName
     );
     groups.push(group);
     const groupsPayload = { groups };
@@ -425,7 +440,6 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.addDetails = data;
       this.addDetails.groups[0].listOfferQuestions.forEach(element => {
         const quesion = element;
-        this.egineAttribue = element.egineAttribue;
         this.questions.push(quesion);
       });
       this.questionForm = this.offerConstructService.toFormGroup(this.questions);
@@ -434,4 +448,17 @@ export class OfferconstructCanvasComponent implements OnInit {
         console.log(err);
       });
   }
+
+  openMandatory() {
+    this.showMandatoryDetails = !this.showMandatoryDetails;
+  }
+
+  saveOfferConstructChanges() {
+    const constructDetails: any[] = [];
+    const constructDetailsPayload = {};
+
+    this._canvasService.saveOfferConstructChanges(constructDetailsPayload).subscribe(data => {
+    });
+  }
+
 }

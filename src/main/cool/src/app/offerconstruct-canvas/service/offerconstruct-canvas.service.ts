@@ -8,8 +8,7 @@ import { EnvironmentService } from '../../../environments/environment.service';
 })
 export class OfferconstructCanvasService {
 
-  constructor(private http: HttpClient,
-    private environmentService: EnvironmentService) {}
+  constructor(private http: HttpClient, private environmentService: EnvironmentService) {}
 
   getMMInfo(offerId: string): Observable<any> {
     return this.http.get(this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId);
@@ -22,5 +21,9 @@ export class OfferconstructCanvasService {
   searchEgenie(keyword: String): Observable<any> {
     // return this.http.get(this.setOfferConstructURL);
     return null;
+  }
+
+  saveOfferConstructChanges(offerConstructChnages: any): Observable<any> {
+    return this.http.post(this.environmentService.REST_API_UPDATE_OFFER, offerConstructChnages, { withCredentials: true });
   }
 }
