@@ -1,28 +1,28 @@
 /*tslint:disable max-line-length  */
 import {injectable} from 'inversify';
 import * as _ from 'lodash';
-import DollarUploadController from '../dollar-upload/controller';
-import MappingUploadController from '../mapping-upload/controller';
-import DeptUploadController from '../dept-upload/controller';
+import DollarUploadController from '../../prof/dollar-upload/controller';
+import MappingUploadController from '../../prof/mapping-upload/controller';
+import DeptUploadController from '../../prof/dept-upload/controller';
 import PgLookupRepo from '../../pg-lookup/repo';
 import {ApiError} from '../../../lib/common/api-error';
 import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'node-xlsx';
 import ControllerBase from '../../../lib/base-classes/controller-base';
 import {shUtil} from '../../../../shared/shared-util';
-import SubmeasureRepo from '../../common/submeasure/repo';
-import AllocationRuleRepo from '../../common/allocation-rule/repo';
-import MeasureRepo from '../../common/measure/repo';
-import SourceRepo from '../../common/source/repo';
+import SubmeasureRepo from '../submeasure/repo';
+import AllocationRuleRepo from '../allocation-rule/repo';
+import MeasureRepo from '../measure/repo';
+import SourceRepo from '../source/repo';
 import AnyObj from '../../../../shared/models/any-obj';
-import DollarUploadRepo from '../dollar-upload/repo';
-import MappingUploadRepo from '../mapping-upload/repo';
-import DeptUploadRepo from '../dept-upload/repo';
-import {DollarUploadPgRepo} from '../dollar-upload/pgrepo';
-import {MappingUploadPgRepo} from '../mapping-upload/pgrepo';
-import {DeptUploadPgRepo} from '../dept-upload/pgrepo';
+import DollarUploadRepo from '../../prof/dollar-upload/repo';
+import MappingUploadRepo from '../../prof/mapping-upload/repo';
+import DeptUploadRepo from '../../prof/dept-upload/repo';
+import {DollarUploadPgRepo} from '../../prof/dollar-upload/pgrepo';
+import {MappingUploadPgRepo} from '../../prof/mapping-upload/pgrepo';
+import {DeptUploadPgRepo} from '../../prof/dept-upload/pgrepo';
 import {Submeasure} from '../../../../shared/models/submeasure';
-import {ProductClassUploadPgRepo} from '../product-class-upload/pgrepo';
+import {ProductClassUploadPgRepo} from '../../prof/product-class-upload/pgrepo';
 
 @injectable()
 export default class ReportController extends ControllerBase {
@@ -305,11 +305,9 @@ export default class ReportController extends ControllerBase {
         break;
 
       case 'rule-submeasure':
-        // multiSheetReport = true; ?? if multisheet report uncomment this line
         excelSheetname = ['History'];
-        excelHeaders = ['Report Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System', 'Sales Level', 'Product Level', 'SCMS Level',
-          'Legal Entity Level', 'BE Level',
-          'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
+        excelHeaders = ['Report Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System',
+          'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
           'SM Status', 'SM Updated By', 'SM Updated Date',
           'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country Match', 'Ext Theater Match', 'GL Segments',
           'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Rule Status', 'Rule Updated By', 'Rule Updated Date'];
@@ -317,7 +315,6 @@ export default class ReportController extends ControllerBase {
         excelProperties = [
           'fiscalMonth', 'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.measureName', 'sm.sourceName',
           'sm.inputFilterLevel.salesLevel', 'sm.inputFilterLevel.productLevel', 'sm.inputFilterLevel.scmsLevel', 'sm.inputFilterLevel.entityLevel', 'sm.inputFilterLevel.internalBELevel',
-          'sm.rules[0]', 'sm.rules[1]', 'sm.rules[2]', 'sm.rules[3]', 'sm.rules[4]', 'sm.rules[5]', 'sm.rules[6]', 'sm.rules[7]', 'sm.rules[8]', 'sm.rules[9]', 'sm.rules[10]', 'sm.rules[11]', 'sm.rules[12]', 'sm.rules[13]', 'sm.rules[14]',
           'sm.status', 'sm.updatedBy', 'sm.updatedDate',
           'rule.name', 'rule.driverName', 'rule.period', 'rule.salesMatch', 'rule.productMatch', 'rule.scmsMatch', 'rule.legalEntityMatch', 'rule.beMatch', 'rule.countryMatch', 'rule.extTheaterMatch', 'rule.glSegmentsMatch',
           'rule.sl1Select', 'rule.sl2Select', 'rule.sl2Select', 'rule.prodTGSelect', 'rule.prodBUSelect', 'rule.prodPFSelect', 'rule.scmsSelect', 'rule.beSelect',
@@ -348,14 +345,13 @@ export default class ReportController extends ControllerBase {
             const rows: AnyObj[] = [];
             results.forEach(result => {
               const fiscalMonth = result[0];
-              this.submeasures = result[1];
-              this.rules = _.sortBy(result[2], 'name');
+              this.submeasures = _.sortBy(result[1], 'name');
+              this.rules = result[2];
               const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
               const rules = this.rules.map(rule => this.transformRule(rule)); // update this for more props if needed
-              let ruleSms: AnyObj[];
-              rules.forEach(rule => {
-                ruleSms = _.sortBy(sms.filter(sm => _.includes(sm.rules, rule.name)), 'name');
-                ruleSms.forEach(sm => {
+              sms.forEach(sm => {
+                const smRules = sm.rules.map(rule => _.find(rules, {name: rule}));
+                smRules.forEach(rule => {
                   rows.push({fiscalMonth, sm, rule});
                 });
               });

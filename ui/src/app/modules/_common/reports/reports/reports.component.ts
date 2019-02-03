@@ -267,7 +267,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       params.fiscalMonthMultiSels = this.fiscalMonthMultiSels;
     }
     params.moduleId = this.store.module.moduleId;
-    const url = `${environment.apiUrl}/api/prof/report/${this.report.type}`;
+    const url = `${environment.apiUrl}/api/report/${this.report.type}`;
     UiUtil.submitForm(url, params);
   }
 

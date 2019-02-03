@@ -8,7 +8,7 @@ import cors from 'cors';
 import notFound from './lib/middleware/not-found';
 import {errorHandler} from './lib/middleware/error-handler';
 import {moduleLookupRouter} from './api/common/module-lookup/router';
-import {reportRouter} from './api/prof/report/router';
+import {reportRouter} from './api/common/report/router';
 import {salesSplitUploadRouter} from './api/prof/sales-split-upload/router';
 import {deptUploadRouter} from './api/prof/dept-upload/router';
 import {mappingUploadRouter} from './api/prof/mapping-upload/router';
@@ -118,6 +118,7 @@ export default function () {
   app.use('/api/module-source', moduleSourceRouter);
   app.use('/api/open-period', openPeriodRouter);
   app.use('/api/pg-lookup', pgLookupRouter);
+  app.use('/api/report', reportRouter);
   app.use('/api/source', sourceRouter);
   app.use('/api/submeasure', submeasureRouter);
   app.use('/api/user', userRouter);
@@ -127,7 +128,6 @@ export default function () {
   app.use('/api/prof/dollar-upload', dollarUploadRouter);
   app.use('/api/prof/mapping-upload', mappingUploadRouter);
   app.use('/api/prof/product-class-upload', productClassUploadRouter);
-  app.use('/api/prof/report', reportRouter);
   app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
   app.use('/api/prof/upload', profUploadRouter);
   app.use('/api/prof/disti-direct-upload', distiDirectUploadRouter);
