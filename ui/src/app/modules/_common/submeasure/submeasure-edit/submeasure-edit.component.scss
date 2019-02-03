@@ -16,6 +16,24 @@
     margin-right: 30px;
   }
 
+  button.choose-file {
+    label {
+      display: block;
+      margin: 0 -16px;
+      padding: 0 16px;
+      //height: 100%;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  button.upper-right {
+    position: absolute !important;
+    top: -3px;
+    right: 0px;
+  }
+
   .input-filter-level {
     max-width: $form-group-max-width;
     margin-bottom: -13px;

@@ -12,14 +12,10 @@ import {UiUtil} from '../../../../core/services/ui-util';
 import {OpenPeriodService} from '../../services/open-period.service';
 import {OpenPeriod} from '../../models/open-period';
 import {shUtil} from '../../../../../../../shared/shared-util';
+import {UploadResults} from '../../models/upload-results';
+import {BusinessUploadService} from '../../services/business-upload.service';
 
 const apiUrl = environment.apiUrl;
-
-interface UploadResults {
-  status: string;
-  uploadName?: string;
-  rowCount?: number;
-}
 
 @Component({
   selector: 'fin-business-upload',
@@ -49,50 +45,28 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     private route: ActivatedRoute,
     private fsFileService: FsFileService,
     private uiUtil: UiUtil,
-    private openPeriodService: OpenPeriodService) {
+    private openPeriodService: OpenPeriodService,
+    private businessUploadService: BusinessUploadService) {
     super(store, route);
   }
 
   ngOnInit() {
     Promise.all([
-      this.fsFileService.getInfoMany({
-        directory: Directory.businessUpload,
-        buFileType: BusinessUploadFileType.template,
-        groupField: 'buUploadType'
-      }).toPromise(),
+      this.fsFileService.getInfoMany({directory: Directory.profBusinessUpload, buFileType: BusinessUploadFileType.template}).toPromise(),
       this.openPeriodService.getQueryOne({moduleId: this.store.module.moduleId}).toPromise()
     ])
       .then(results => {
         this.templates = results[0];
+        if (this.templates.length !== this.uploadTypes.length) {
+          this.uiUtil.genericDialog('Template count mismatch');
+        }
         this.openPeriod = shUtil.getFiscalMonthLongNameFromNumber(results[1].fiscalMonth);
       });
   }
 
   uploadFile(fileInput) {
-    if (!fileInput.files.length) {
-      return;
-    }
-    const file = fileInput.files[0];
-    const formData: FormData = new FormData();
-    formData.append('fileUploadField', file, file.name);
-    const params = new HttpParams().set('showProgress', 'true').set('moduleId', this.store.module.moduleId.toString());
-    const options = {headers: {Accept: 'application/json'}, params};
-    const url = `${apiUrl}/api/prof/upload/${this.uploadType.type}`;
-    this.httpClient.post<{ status: string, numRows?: number }>(url, formData, options)
-      .subscribe((result: UploadResults) => {
-        fileInput.value = '';
-        let title;
-        let message;
-        if (result.status === 'success') {
-          // title = `${result.uploadName} - success`; // for cui toasts
-          title = 'Success';
-          message = `${result.rowCount} rows have been processed.`;
-        } else if (result.status === 'failure') {
-          // title = `${result.uploadName} - failure`;
-          title = 'Failure';
-          message = 'Errors have been emailed to your email account.';
-        }
-        this.uiUtil.toast(message, title);
+    this.businessUploadService.uploadFile(fileInput, this.uploadType.type)
+      .then(result => {
       });
   }
 

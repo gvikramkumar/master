@@ -3,6 +3,7 @@ import {environment} from '../../../environments/environment';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {AppStore} from '../../app/app-store';
 import {RestBase} from './rest-base';
+import {shUtil} from '../../../../../shared/shared-util';
 
 const apiUrl = environment.apiUrl;
 
@@ -18,26 +19,22 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
   }
 
   saveToDraft(data, params: AnyObj = {}) {
-    params.moduleId = this.store.getNonAdminModuleId();
     return this.callMethod('saveToDraft', data, params);
   }
 
   submitForApproval(data, params: AnyObj = {}) {
-    params.moduleId = this.store.getNonAdminModuleId();
     params.showProgress = true;
     return this.callMethod('submitForApproval', data, params);
   }
 
   approve(data) {
     const params: AnyObj = {};
-    params.moduleId = this.store.getNonAdminModuleId();
     params.showProgress = true;
     return this.callMethod('approve', data, params);
   }
 
   reject(data) {
     const params: AnyObj = {};
-    params.moduleId = this.store.getNonAdminModuleId();
     params.showProgress = true;
     return this.callMethod('reject', data, params);
   }

@@ -6,12 +6,17 @@ import InputLevelPgRepo, {SubmeasureInputLvl} from './input-level-pgrepo';
 import * as _ from 'lodash';
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
-import {ApprovalMode} from '../../../../shared/enums';
-import {svrUtil} from '../../../lib/common/svr-util';
+import {ApprovalMode, BusinessUploadFileType, Directory} from '../../../../shared/enums';
 import LookupRepo from '../../lookup/repo';
-import {sendHtmlMail} from '../../../lib/common/mail';
 import {shUtil} from '../../../../shared/shared-util';
 import ProductClassUploadRepo from '../../prof/product-class-upload/repo';
+import DeptUploadRepo from '../../prof/dept-upload/repo';
+import FileRepo from '../../file/repo';
+import {mgc} from '../../../lib/database/mongoose-conn';
+import DeptUploadImport from '../../prof/upload/dept/import';
+import {svrUtil} from '../../../lib/common/svr-util';
+import xlsx from 'xlsx';
+import AnyObj from '../../../../shared/models/any-obj';
 
 
 interface FilterLevel {
@@ -30,7 +35,9 @@ export default class SubmeasureController extends ApprovalController {
     protected pgRepo: SubmeasurePgRepo,
     protected inputLevelPgRepo: InputLevelPgRepo,
     private lookupRepo: LookupRepo,
-    private productClassUploadRepo: ProductClassUploadRepo
+    private productClassUploadRepo: ProductClassUploadRepo,
+    private deptUploadRepo: DeptUploadRepo,
+    private fileRepo: FileRepo
 ) {
     super(repo);
   }
@@ -149,9 +156,10 @@ export default class SubmeasureController extends ApprovalController {
   }
 
   postApproveStep(sm, req) {
+    const promises = [];
     // remove product class uploads for this submeasure and add new ones
     if (sm.categoryType === 'Manual Mix') {
-      return this.productClassUploadRepo.removeMany({submeasureName: sm.name})
+      promises.push(this.productClassUploadRepo.removeMany({submeasureName: sm.name})
         .then(() => {
           return this.productClassUploadRepo.addManyTransaction([
             {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'HARDWARE', splitPercentage: sm.manualMixHw},
@@ -160,12 +168,90 @@ export default class SubmeasureController extends ApprovalController {
             .then(() => {
               delete sm.manualMixHw;
               delete sm.manualMixSw;
-              return sm;
             });
+        }));
+    }
+    if (shUtil.isDeptUpload(sm) && sm.indicators.deptAcct === 'A') {
+      // find temp=Y records, if found, delete for sm.name && temp = N, then change these to temp Y >> N
+      promises.push(
+        this.deptUploadRepo.getMany({submeasureName: sm.name, temp: 'Y'})
+        .then(tempRecords => {
+          if (tempRecords.length) {
+            return this.deptUploadRepo.removeMany({submeasureName: sm.name, temp: 'N'})
+              .then(() => this.deptUploadRepo.updateMany({submeasureName: sm.name, temp: 'Y'}, {$set: {temp: 'N'}}));
+          }
+        })
+        .then(() => {
+          sm.indicators.deptAcct = 'D';
+        })
+      );
+    }
+    return Promise.all(promises)
+      .then(() => sm);
+  }
+
+  postRejectStep(sm, req) {
+    // two ways to go, leave dept upload or toss it. Thing is: they can upload and not even save the submeasure, so will
+    // always have possiblity of these around. Maybe something small to change and then they'd have to add it again
+    // so leave it for now. The concern is: you leave these around on reject (or upload but never submit), and then
+    // someone edit's one (but deptAcct flag will be Y then)
+    return Promise.resolve(sm);
+    /*
+    if (shUtil.isDeptUpload(sm) && sm.indicators.deptAcct === 'A') {
+      // remove any temp records associated with this submeasure
+      return this.deptUploadRepo.removeMany({submeasureName: sm.name, temp: 'Y'})
+        .then(() => {
+          sm.indicators.deptAcct = 'Y';
         });
     } else {
       return Promise.resolve(sm);
     }
+*/
+  }
+
+  downloadDeptUploadMapping(req, res, next) {
+    this.verifyProperties(req.query, ['submeasureName']);
+    const submeasureName = req.query.submeasureName;
+    Promise.all([
+      this.deptUploadRepo.getMany({submeasureName, temp: 'N'}),
+      this.fileRepo.getMany({directory: Directory.profBusinessUpload, buFileType: BusinessUploadFileType.template, buUploadType: 'dept-upload'})
+    ])
+      .then(results => {
+        const records: DeptUploadImport[] = results[0];
+        const fileInfo = results[1][0];
+
+        let sheet1Rows = [];
+        const sheet2Rows = [];
+        records.forEach(rec => {
+          sheet1Rows.push([rec.submeasureName, rec.nodeValue]);
+          if (rec.glAccount) {
+            sheet2Rows.push([rec.submeasureName, rec.glAccount]);
+          }
+          sheet1Rows = _.uniqWith(sheet1Rows, _.isEqual);
+        })
+
+        const gfs = new mgc.mongo.GridFSBucket(mgc.db);
+        const tempStream = gfs.openDownloadStream(new mgc.mongo.ObjectID(fileInfo.id));
+        tempStream.on('error', next);
+        svrUtil.streamToBuffer(tempStream)
+          .then(tempBuffer => {
+            const readOptions = {cellNF: true, cellStyles: true, cellHTML: true, cellText: true};
+            const workbook = xlsx.read(tempBuffer, readOptions);
+            const deptSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const glaccountSheet = workbook.Sheets[workbook.SheetNames[1]];
+            xlsx.utils.sheet_add_aoa(deptSheet, sheet1Rows, {origin: -1});
+            xlsx.utils.sheet_add_aoa(glaccountSheet, sheet2Rows, {origin: -1});
+
+            const writeOptions = {bookType: 'xlsx', bookSST: false, type: 'buffer'};
+            const outBuffer = xlsx.write(workbook, <any>writeOptions);
+            res.set('Content-Type', fileInfo.contentType);
+            const fileName = `dept-upload_${_.snakeCase(submeasureName)}.xlsx`;
+            res.set('Content-Disposition', `attachment; filename="${fileName}"`);
+            const outStream = svrUtil.bufferToStream(outBuffer);
+            outStream.pipe(res);
+          });
+      })
+      .catch(next);
   }
 
 }

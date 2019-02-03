@@ -13,12 +13,16 @@ import {UiUtil} from '../../../../core/services/ui-util';
 import {SourceService} from '../../services/source.service';
 import {Source} from '../../../../../../../shared/models/source';
 import {DialogInputType, DialogSize, DialogType} from '../../../../core/models/ui-enums';
-import {GroupingSubmeasure} from '../../../../../../../server/api/common/submeasure/grouping-submeasure';
 import {NgForm} from '@angular/forms';
 import {Submeasure} from '../../../../../../../shared/models/submeasure';
 import {shUtil} from '../../../../../../../shared/shared-util';
 import {PgLookupService} from '../../services/pg-lookup.service';
 import {ProductClassUploadService} from '../../../prof/services/product-class.service';
+import {environment} from '../../../../../environments/environment';
+import {FsFile} from '../../models/fsfile';
+import {BusinessUploadFileType, Directory} from '../../../../../../../shared/enums';
+import {FsFileService} from '../../../../core/services/fsfile.service';
+import {BusinessUploadService} from '../../services/business-upload.service';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -26,6 +30,8 @@ import {ProductClassUploadService} from '../../../prof/services/product-class.se
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  deptUploadFilename: string;
+  deptUploadTemplate: FsFile;
   manualMixHw: number;
   manualMixSw: number;
   startFiscalMonth: string;
@@ -37,6 +43,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   arrRules: string[] = [];
   UiUtil = UiUtil;
   @ViewChild('form') form: NgForm;
+  @ViewChild('fileInput') fileInput;
   addMode = false;
   viewMode = false;
   editMode = false;
@@ -189,7 +196,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     private sourceService: SourceService,
     private uiUtil: UiUtil,
     private pgLookupService: PgLookupService,
-    private productClassUploadService: ProductClassUploadService
+    private fsFileService: FsFileService,
+    private productClassUploadService: ProductClassUploadService,
+    private businessUploadService: BusinessUploadService
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -208,7 +217,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.ruleService.getManyLatestGroupByNameActive().toPromise(),
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinct('name', {moduleId: -1}).toPromise(),
-      this.pgLookupService.callRepoMethod('getSubmeasurePNLNodes', null, {moduleId: this.store.module.moduleId}).toPromise()
+      this.pgLookupService.callRepoMethod('getSubmeasurePNLNodes', null, {moduleId: this.store.module.moduleId}).toPromise(),
+      this.fsFileService.getInfoMany({directory: Directory.profBusinessUpload, buFileType: BusinessUploadFileType.template, buUploadType: 'dept-upload'}).toPromise()
     ];
     if (!this.addMode) {
       promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
@@ -220,9 +230,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.sources = _.sortBy(results[2], 'name');
         this.submeasureNames = results[3];
         this.pnlNodesAll = results[4];
+        this.deptUploadTemplate = results[5][0];
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.sm = results[5];
+          this.sm = results[6];
         }
         if (this.viewMode) {
           this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
@@ -239,11 +250,17 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           // we'll reset these for each edit
           this.sm.manualMixHw = undefined;
           this.sm.manualMixSw = undefined;
+          if (this.isDeptUpload()) {
+            this.sm.indicators.deptAcct = 'Y';
+          }
         }
         if (this.editMode) {
           if (_.includes(['A', 'I'], this.sm.status)) {
             delete this.sm.createdBy;
             delete this.sm.createdDate;
+            if (this.isDeptUpload()) {
+              this.sm.indicators.deptAcct = 'Y';
+            }
           }
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
         }
@@ -296,6 +313,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     } else
     if (this.hasAdjustmentType()) {
       this.adjustmentType = this.sm.sourceSystemAdjTypeId;
+    }
+
+    this.deptUploadFilename = '';
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
     }
   }
 
@@ -376,13 +398,14 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       throw new Error(`Measure not found for measureId: ${this.sm.measureId}`);
     }
     this.measureSources = this.sources.filter(source => _.includes(this.currentMeasure.sources, source.sourceId));
+    UiUtil.clearPropertyIfNotInList(this.sm, 'sourceId', this.measureSources, 'sourceId');
 
-    this.sm.reportingLevels[0] = this.currentMeasure.reportingLevels[0] ? this.currentMeasure.reportingLevels[0] : this.sm.reportingLevels[0];
-    this.sm.reportingLevels[1] = this.currentMeasure.reportingLevels[1] ? this.currentMeasure.reportingLevels[1] : this.sm.reportingLevels[1];
+    this.sm.reportingLevels[0] = this.currentMeasure.reportingLevels[0] ? this.currentMeasure.reportingLevels[0] : (init ? this.sm.reportingLevels[0] : undefined);
+    this.sm.reportingLevels[1] = this.currentMeasure.reportingLevels[1] ? this.currentMeasure.reportingLevels[1] : (init ? this.sm.reportingLevels[1] : undefined);
     if (this.currentMeasure.reportingLevel3SetToSubmeasureName) {
       this.sm.reportingLevels[2] = this.sm.name;
     } else {
-      this.sm.reportingLevels[2] = this.currentMeasure.reportingLevels[2] ? this.currentMeasure.reportingLevels[2] : this.sm.reportingLevels[2];
+      this.sm.reportingLevels[2] = this.currentMeasure.reportingLevels[2] ? this.currentMeasure.reportingLevels[2] : (init ? this.sm.reportingLevels[2] : undefined);
     }
 
     this.pnlNodes = this.pnlNodesAll.filter(x => x.measure_id === this.sm.measureId);
@@ -629,6 +652,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.manualMixSw = this.manualMixSw;
     }
     this.clearAllocationRequired();
+    if (this.isDeptUpload() && this.sm.indicators.deptAcct === 'N') {
+      this.sm.indicators.deptAcct = 'Y';
+    }
+
   }
 
   hasChanges() {
@@ -823,6 +850,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
+  // std cogs adj and mfg overhead measures (2 & 4) AND sm has EXPSSOT MFGO source (#3)
+  isDeptUpload() {
+    return shUtil.isDeptUpload(this.sm);
+  }
+  
   isGroupingParent() {
     return this.sm.indicators.groupFlag === 'Y';
   }
@@ -841,6 +873,55 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   isAllocatedGroup() {
     return this.sm.indicators.groupFlag === 'Y' && this.sm.indicators.allocationRequired === 'Y';
+  }
+
+  changeFile(fileInput) {
+    this.deptUploadFilename = fileInput.files[0] && fileInput.files[0].name;
+  }
+
+  getUploadedText() {
+    if (this.deptUploadFilename) {
+      return 'File:';
+    } else if (this.sm.indicators.deptAcct === 'A') {
+      return 'Uploaded';
+    }
+  }
+
+  doDeptUpload(fileInput) {
+    if (!this.sm.name || this.sm.name.trim().length === 0) {
+      this.uiUtil.genericDialog('No submeasure name');
+      return;
+    }
+    this.businessUploadService.uploadFile(fileInput, 'dept-upload', this.sm.name)
+      .then(result => {
+        if (result.status === 'success') {
+          this.sm.indicators.deptAcct = 'A';
+        } else {
+          this.sm.indicators.deptAcct = 'Y';
+        }
+        this.deptUploadFilename = '';
+      });
+  }
+
+  getDeptUploadExistingMappingClick() {
+    if (!this.sm.name || this.sm.name.trim().length === 0) {
+      this.uiUtil.genericDialog('No submeasure name');
+      return;
+    }
+  }
+
+  getDeptUploadExistingMappingUri() {
+    if (!this.sm.name || this.sm.name.trim().length === 0) {
+      return 'javascript:void(0)';
+    }
+    return `${environment.apiUrl}/api/submeasure/call-method/downloadDeptUploadMapping?moduleId=1&submeasureName=${encodeURI(this.sm.name)}`;
+  }
+
+  getDeptUploadTemplateDownloadUri() {
+    if (!this.deptUploadTemplate) {
+      return;
+    }
+    return `${environment.apiUrl}/api/file/${this.deptUploadTemplate.id}`;
   }
 
 }

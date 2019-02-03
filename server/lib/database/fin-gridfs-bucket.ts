@@ -3,15 +3,19 @@ import {mgc} from './mongoose-conn';
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
+import FileRepo from '../../api/file/repo';
+import * as Q from 'q';
+import {injectable} from 'inversify';
 
-
+@injectable()
 // todo: needs testing. Only uploadFile has been tested so far
-export default class GridFSBucket {
+export default class FinGridFSBucket {
   gfs;
 
-  constructor() {
+  constructor(private fileRepo: FileRepo) {
   }
 
+  // we get compile errors as mgc.mongo isn't ready yet, so we have to delay the creation
   getGfs() {
     if (!this.gfs) {
       this.gfs = new mgc.mongo.GridFSBucket(mgc.db);
@@ -31,7 +35,7 @@ export default class GridFSBucket {
           })
 
    */
-  uploadFile(file, metadata: AnyObj = {}) {
+  addOne(file, metadata: AnyObj = {}) {
     this.getGfs();
     if (!metadata.directory) {
       throw new ApiError('metadata.directory required');
@@ -55,17 +59,17 @@ export default class GridFSBucket {
     });
   }
 
-  uploadFiles(files, _metadata) {
+  addMany(files, _metadata) {
     this.getGfs();
     const promises = [];
     files.forEach((file, idx) => {
       const metadata = _.isArray(_metadata) ? _metadata[idx] : _metadata;
-      promises.push(this.uploadFile(file, metadata));
+      promises.push(this.addOne(file, metadata));
     })
     return Promise.all(promises); // returns an array of file ids
   }
 
-  downloadFile(fileId, writableStream) {
+  getOne(fileId, writableStream) {
     this.getGfs();
     return new Promise((resolve, reject) => {
       this.gfs.openDownloadStream(new mgc.mongo.ObjectID(fileId))
@@ -79,13 +83,30 @@ export default class GridFSBucket {
     });
   }
 
-  downloadFiles(fileIds, writableStream) {
+  getMany(fileIds, writableStream) {
     this.getGfs();
     const promises = [];
     fileIds.forEach(fileId => {
-      promises.push(this.downloadFile(fileId, writableStream));
+      promises.push(this.getOne(fileId, writableStream));
     })
     return Promise.all(promises);
+  }
+
+  removeManyPerSingleMetadata(metadata) {
+    this.getGfs();
+
+    return this.fileRepo.getMany(metadata)
+      .then(files => {
+        const deletePromises = [];
+        files.forEach(file => {
+          deletePromises.push(this.removeOne(file._id));
+        });
+        return Promise.all(deletePromises);
+      });
+  }
+
+  removeOne(fileId) {
+    return Q.ninvoke(this.gfs, 'delete', fileId);
   }
 
 }

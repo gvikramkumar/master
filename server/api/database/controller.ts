@@ -80,7 +80,8 @@ export default class DatabaseController {
             this.submeasureRepo.getManyLatestGroupByNameActiveInactive(-1)));
         }
         if (syncMap.dfa_prof_dept_acct_map_upld) {
-          promises.push(this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', userId, log, elog)); // deletes all on upload and pgsync
+          promises.push(this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', userId, log, elog,
+            {temp: 'N'})); // deletes all on pgsync
         }
         if (syncMap.dfa_prof_input_amnt_upld) {
           promises.push(this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', userId, log, elog,

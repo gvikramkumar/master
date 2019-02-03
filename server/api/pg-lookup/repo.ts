@@ -41,6 +41,7 @@ export default class PgLookupRepo {
   }
 */
 
+  // not used anymore. This was used to get submeasure sourceSystemAdjTypeId description, but they pulled that column out of reports, so desc went too
   getAdjustmentTypeIdDesc() {
     return pgc.pgdb.query('select source_system_id, adj_type_id, adj_type_description from fpadfa.dfa_prof_source_adj_type_all')
       .then(resp => resp.rows.map(x => {

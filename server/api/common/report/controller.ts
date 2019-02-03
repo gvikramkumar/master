@@ -1,28 +1,28 @@
 /*tslint:disable max-line-length  */
 import {injectable} from 'inversify';
 import * as _ from 'lodash';
-import DollarUploadController from '../dollar-upload/controller';
-import MappingUploadController from '../mapping-upload/controller';
-import DeptUploadController from '../dept-upload/controller';
+import DollarUploadController from '../../prof/dollar-upload/controller';
+import MappingUploadController from '../../prof/mapping-upload/controller';
+import DeptUploadController from '../../prof/dept-upload/controller';
 import PgLookupRepo from '../../pg-lookup/repo';
 import {ApiError} from '../../../lib/common/api-error';
 import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'node-xlsx';
 import ControllerBase from '../../../lib/base-classes/controller-base';
 import {shUtil} from '../../../../shared/shared-util';
-import SubmeasureRepo from '../../common/submeasure/repo';
-import AllocationRuleRepo from '../../common/allocation-rule/repo';
-import MeasureRepo from '../../common/measure/repo';
-import SourceRepo from '../../common/source/repo';
+import SubmeasureRepo from '../submeasure/repo';
+import AllocationRuleRepo from '../allocation-rule/repo';
+import MeasureRepo from '../measure/repo';
+import SourceRepo from '../source/repo';
 import AnyObj from '../../../../shared/models/any-obj';
-import DollarUploadRepo from '../dollar-upload/repo';
-import MappingUploadRepo from '../mapping-upload/repo';
-import DeptUploadRepo from '../dept-upload/repo';
-import {DollarUploadPgRepo} from '../dollar-upload/pgrepo';
-import {MappingUploadPgRepo} from '../mapping-upload/pgrepo';
-import {DeptUploadPgRepo} from '../dept-upload/pgrepo';
+import DollarUploadRepo from '../../prof/dollar-upload/repo';
+import MappingUploadRepo from '../../prof/mapping-upload/repo';
+import DeptUploadRepo from '../../prof/dept-upload/repo';
+import {DollarUploadPgRepo} from '../../prof/dollar-upload/pgrepo';
+import {MappingUploadPgRepo} from '../../prof/mapping-upload/pgrepo';
+import {DeptUploadPgRepo} from '../../prof/dept-upload/pgrepo';
 import {Submeasure} from '../../../../shared/models/submeasure';
-import {ProductClassUploadPgRepo} from '../product-class-upload/pgrepo';
+import {ProductClassUploadPgRepo} from '../../prof/product-class-upload/pgrepo';
 
 @injectable()
 export default class ReportController extends ControllerBase {
@@ -30,7 +30,6 @@ export default class ReportController extends ControllerBase {
   submeasures: AnyObj[];
   measures: AnyObj[];
   sources: AnyObj[];
-  adjustmentTypeIdDescs: AnyObj[];
 
   constructor(
     private dollarUploadPgRepo: DollarUploadPgRepo,
@@ -203,7 +202,7 @@ export default class ReportController extends ControllerBase {
       case 'submeasure':
         multiSheetReport = true;
         excelSheetname = [['Original'], ['SM History'], ['As Of Now']];
-        excelHeaders = [['Measure Name', 'Sub-Measure Name', 'Description', 'Source', 'Adjustment Type ID', 'Adjustment Type Description',
+        excelHeaders = [['Measure Name', 'Sub-Measure Name', 'Description', 'Source',
           'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL BE Level',
           'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
           'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM BE Level',
@@ -211,7 +210,7 @@ export default class ReportController extends ControllerBase {
           'Is Group Sub-Measure', 'Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
           , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'],
 
-          ['Measure Name', 'Sub-Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Adjustment Type Description',
+          ['Measure Name', 'Sub-Measure Name', 'Description', 'Source',
             'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL BE Level',
             'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
             'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM BE Level',
@@ -219,7 +218,7 @@ export default class ReportController extends ControllerBase {
             'Is Group Sub-Measure', 'Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
             , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'],
 
-          ['Measure Name', 'Sub-Measure Name', 'Description', 'Source', 'Adjustment Type Id', 'Adjustment Type Description',
+          ['Measure Name', 'Sub-Measure Name', 'Description', 'Source',
             'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL BE Level',
             'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
             'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM BE Level',
@@ -227,21 +226,21 @@ export default class ReportController extends ControllerBase {
             'Is Group Sub-Measure', 'Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
             , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date']];
 
-        excelProperties = [['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', 'adjTypeDesc',
+        excelProperties = [['measureName', 'name', 'desc', 'sourceName',
           'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.entityLevel', 'inputFilterLevel.internalBELevel',
           'startFiscalMonth', 'endFiscalMonth', 'processingTime', 'pnlnodeGrouping', 'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]',
           'indicators.manualMapping', 'manualMapping.salesLevel', 'manualMapping.productLevel', 'manualMapping.scmsLevel', 'manualMapping.entityLevel', 'manualMapping.internalBELevel',
           'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'rules[5]', 'rules[6]', 'rules[7]', 'rules[8]', 'rules[9]', 'rules[10]', 'rules[11]', 'rules[12]', 'rules[13]', 'rules[14]',
           'indicators.groupFlag', 'allocationRequired', 'groupingSubmeasureName', 'categoryType', 'indicators.retainedEarnings', 'indicators.transition', 'indicators.service', 'indicators.passThrough', 'indicators.corpRevenue', 'indicators.dualGaap', 'indicators.twoTier', 'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-          ['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', 'adjTypeDesc',
+          ['measureName', 'name', 'desc', 'sourceName',
             'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.entityLevel', 'inputFilterLevel.internalBELevel',
             'startFiscalMonth', 'endFiscalMonth', 'processingTime', 'pnlnodeGrouping', 'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]',
             'indicators.manualMapping', 'manualMapping.salesLevel', 'manualMapping.productLevel', 'manualMapping.scmsLevel', 'manualMapping.entityLevel', 'manualMapping.internalBELevel',
             'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'rules[5]', 'rules[6]', 'rules[7]', 'rules[8]', 'rules[9]', 'rules[10]', 'rules[11]', 'rules[12]', 'rules[13]', 'rules[14]',
             'indicators.groupFlag', 'allocationRequired', 'groupingSubmeasureName', 'categoryType', 'indicators.retainedEarnings', 'indicators.transition', 'indicators.service', 'indicators.passThrough', 'indicators.corpRevenue', 'indicators.dualGaap', 'indicators.twoTier', 'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-          ['measureName', 'name', 'desc', 'sourceName', 'sourceSystemAdjTypeId', 'adjTypeDesc',
+          ['measureName', 'name', 'desc', 'sourceName',
             'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.entityLevel', 'inputFilterLevel.internalBELevel',
             'startFiscalMonth', 'endFiscalMonth', 'processingTime', 'pnlnodeGrouping', 'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]',
             'indicators.manualMapping', 'manualMapping.salesLevel', 'manualMapping.productLevel', 'manualMapping.scmsLevel', 'manualMapping.entityLevel', 'manualMapping.internalBELevel',
@@ -250,14 +249,12 @@ export default class ReportController extends ControllerBase {
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.sourceRepo.getManyActive(),
-          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.pgLookupRepo.getAdjustmentTypeIdDesc()
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
         ])
           .then(results => {
             this.measures = results[0];
             this.sources = results[1];
             this.submeasures = results[2];
-            this.adjustmentTypeIdDescs = results[3];
             return Promise.all([
               this.submeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
                 .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
@@ -308,19 +305,16 @@ export default class ReportController extends ControllerBase {
         break;
 
       case 'rule-submeasure':
-        // multiSheetReport = true; ?? if multisheet report uncomment this line
         excelSheetname = ['History'];
-        excelHeaders = ['Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System', 'Sales Level', 'Product Level', 'SCMS Level',
-          'Legal Entity Level', 'BE Level',
-          'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
+        excelHeaders = ['Report Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System',
+          'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
           'SM Status', 'SM Updated By', 'SM Updated Date',
           'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country Match', 'Ext Theater Match', 'GL Segments',
           'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Rule Status', 'Rule Updated By', 'Rule Updated Date'];
 
         excelProperties = [
-          'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.measureName', 'sm.sourceName',
+          'fiscalMonth', 'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.measureName', 'sm.sourceName',
           'sm.inputFilterLevel.salesLevel', 'sm.inputFilterLevel.productLevel', 'sm.inputFilterLevel.scmsLevel', 'sm.inputFilterLevel.entityLevel', 'sm.inputFilterLevel.internalBELevel',
-          'sm.rules[0]', 'sm.rules[1]', 'sm.rules[2]', 'sm.rules[3]', 'sm.rules[4]', 'sm.rules[5]', 'sm.rules[6]', 'sm.rules[7]', 'sm.rules[8]', 'sm.rules[9]', 'sm.rules[10]', 'sm.rules[11]', 'sm.rules[12]', 'sm.rules[13]', 'sm.rules[14]',
           'sm.status', 'sm.updatedBy', 'sm.updatedDate',
           'rule.name', 'rule.driverName', 'rule.period', 'rule.salesMatch', 'rule.productMatch', 'rule.scmsMatch', 'rule.legalEntityMatch', 'rule.beMatch', 'rule.countryMatch', 'rule.extTheaterMatch', 'rule.glSegmentsMatch',
           'rule.sl1Select', 'rule.sl2Select', 'rule.sl2Select', 'rule.prodTGSelect', 'rule.prodBUSelect', 'rule.prodPFSelect', 'rule.scmsSelect', 'rule.beSelect',
@@ -329,19 +323,18 @@ export default class ReportController extends ControllerBase {
 
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
-          this.sourceRepo.getManyActive(),
-          this.pgLookupRepo.getAdjustmentTypeIdDesc()
+          this.sourceRepo.getManyActive()
         ])
           .then(results => {
             this.measures = results[0];
             this.sources = results[1];
-            this.adjustmentTypeIdDescs = results[2];
             const promises = [];
             const fiscalMonthMultiSels = shUtil.stringToArray(body.fiscalMonthMultiSels, 'number').sort().reverse();
             fiscalMonthMultiSels.forEach(fimo => {
               // get upper date for filter
               // refactor getManyLatestGroupByNameActive to take filter or do new function or just use getmanyLatest
               promises.push(Promise.all([
+                Promise.resolve(fimo),
                 this.submeasureRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
                 this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
               ]));
@@ -351,15 +344,15 @@ export default class ReportController extends ControllerBase {
           .then(results => {
             const rows: AnyObj[] = [];
             results.forEach(result => {
-              this.submeasures = result[0];
-              this.rules = _.sortBy(result[1], 'name');
+              const fiscalMonth = result[0];
+              this.submeasures = _.sortBy(result[1], 'name');
+              this.rules = result[2];
               const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
               const rules = this.rules.map(rule => this.transformRule(rule)); // update this for more props if needed
-              let ruleSms: AnyObj[];
-              rules.forEach(rule => {
-                ruleSms = _.sortBy(sms.filter(sm => _.includes(sm.rules, rule.name)), 'name');
-                ruleSms.forEach(sm => {
-                  rows.push({sm, rule});
+              sms.forEach(sm => {
+                const smRules = sm.rules.map(rule => _.find(rules, {name: rule}));
+                smRules.forEach(rule => {
+                  rows.push({fiscalMonth, sm, rule});
                 });
               });
             });
@@ -446,11 +439,8 @@ export default class ReportController extends ControllerBase {
     sm = svrUtil.docToObject(sm);
     const measure = _.find(this.measures, {measureId: sm.measureId});
     const source = _.find(this.sources, {sourceId: sm.sourceId});
-    // source_system_id, adj_type_id, adj_type_description
-    const adjType = _.find(this.adjustmentTypeIdDescs, {source_system_id: sm.sourceId, adj_type_id: sm.sourceSystemAdjTypeId});
     sm.measureName = measure && measure.name;
     sm.sourceName = source && source.name;
-    sm.adjTypeDesc = adjType && adjType.adj_type_description;
     if (sm.groupingSubmeasureId) {
       const parent = _.find(this.submeasures, {submeasureKey: sm.groupingSubmeasureId});
       sm.groupingSubmeasureName = parent && parent.name;

@@ -22,15 +22,15 @@ Promise.all([mgc.promise, pgc.promise])
   .then(databaseUpdate)
   .then(() => {
 
-      const app = expressSetup();
+    const app = expressSetup();
 
-      const port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
+    const port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
       let server, protocol;
       if (config.ssl) {
         protocol = 'https';
         const options = {
-          key: fs.readFileSync(path.join(__dirname, `keys/${config.ssl.key}`)),
-          cert: fs.readFileSync(path.join(__dirname, `keys/${config.ssl.cert}`))
+          key: fs.readFileSync(path.join(__dirname, `ssl_cert/${config.ssl.key}`)),
+          cert: fs.readFileSync(path.join(__dirname, `ssl_cert/${config.ssl.cert}`))
         };
         server = https.createServer(options, app);
       } else {

@@ -65,7 +65,7 @@ export function addGlobalData() {
           fiscalMonths
         });
         if (req.query.moduleId || req.body.moduleId) {
-          dfa.module = _.find(modules, {moduleId: Number(req.query.moduleId)});
+          dfa.module = _.find(modules, {moduleId: Number(req.query.moduleId || req.body.moduleId)});
         }
         req.dfa = dfa;
         next();

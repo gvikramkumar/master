@@ -203,6 +203,12 @@ i {
   border-radius: 12px;
 }
 
+.border-and-padding {
+  border: 2px solid lightgray;
+  border-radius: 10px;
+  padding: 10px;
+}
+
 // debug outlines
 .outline {
   @include outline;

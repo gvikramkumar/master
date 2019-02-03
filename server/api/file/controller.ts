@@ -47,7 +47,7 @@ export default class FileController {
           next(new ApiError('Not found', null, 404));
         }
       })
-      .catch(next)
+      .catch(next);
   }
 
   // file upload/download/remove
