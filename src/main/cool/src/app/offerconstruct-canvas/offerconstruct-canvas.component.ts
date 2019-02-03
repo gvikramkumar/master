@@ -97,19 +97,6 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   enableEdit() {
-
-    // for(let i=0; i<document.getElementsByClassName("new").length; i++){
-    // var x = document.getElementsByClassName("new")[i].id;
-    // this.buttonId = x;
-    // if(id === this.buttonId){
-    //   this.showButtons = true;
-    // } else {
-    //   this.showButtons = false;
-    // }
-
-    // }
-
-
     this.editData = false;
     this.showButtons = true;
     this.cd.detectChanges();
@@ -123,7 +110,6 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   saveData(rowNode) {
     if (rowNode.node.data.name) {
-      console.log('daaaaataaaa');
       console.log(rowNode);
       rowNode.node.data.catergoryName = rowNode.node.data.name;
       rowNode.node.data.lablel = rowNode.node.data.name;
@@ -379,6 +365,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   dragStartRow($event, item) {
     console.log(item);
     this.draggedItem = item.node;
+    this.selected = [...this.selected];
   }
 
   dragStart(event, item: any) {
@@ -386,40 +373,57 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.draggedItem = item;
   }
 
-  downloadCsv() {
+  //donwnload Zip file
+  downloadZip(offerId) {
+    this._canvasService.downloadZip(this.currentOfferId).subscribe((res) => {
+      const nameOfFileToDownload = 'offer-construct';
+      const blob = new Blob([res], { type: 'application/zip' });
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+      } else {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nameOfFileToDownload;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    })
   }
 
-  removeSelected(node) {
-    console.log(node);
+  removeSelected() {
     console.log(this.selected);
+    console.log(this.offerConstructItems);
     if (this.selected.length) {
-      this.selected = this.selected.slice(this.selected.length);
-      //this.selected = [];
-      this.offerConstructItems.push(this.itemToTreeNode(this.selected));
+      let newObj = [];
+      newObj = this.offerConstructItems;
+      for (let i = 0; i < this.selected.length; i++) {
+        if (this.selected[i].parent != null) {
+          let uniqKey = this.selected[i].data.uniqueKey;
+          for (let m = 0; m < newObj.length; m++) {
+            console.log(newObj[m]);
+            for (let k = 0; k < newObj[m].children.length; k++) {
+              if (uniqKey == newObj[m].children[k].data.uniqueKey) {
+                newObj[m].children.splice(k, 1);
+              }
+            }
+          }
+        }
+        if (this.selected[i].parent === null) {
+          let uKey = this.selected[i].data.uniqueKey;
+          for (let j = 0; j < newObj.length; j++) {
+            if (uKey == newObj[j].data.uniqueKey) {
+              newObj.splice(j, 1);
+            }
+          }
+        }
+      }
+      this.offerConstructItems = newObj;
+      console.log(this.offerConstructItems)
       this.offerConstructItems = [...this.offerConstructItems];
       this.selected = [...this.selected];
-
     }
-    //empty your array
-    // this.nodeToDelete = {};
-    // this.offerConstructItems = [...this.offerConstructItems];
-  }
-
-  nodeSelect(event) {
-    console.log(event)
-    this.messageService.add({ severity: 'info', summary: 'Node Selected', detail: event.node.data.name });
-  }
-
-  nodeUnselect(event) {
-    this.messageService.add({ severity: 'info', summary: 'Node Unselected', detail: event.node.data.name });
-  }
-
-  selectNodeToRemove(node) {
-    // node.node.data = {};
-    // node.node.children = {};
-    console.log(node);
-    this.nodeToDelete = node;
-    // node = {}
+    this.nodeToDelete = {};
     this.offerConstructItems = [...this.offerConstructItems];
   }
 
