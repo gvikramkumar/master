@@ -108,7 +108,19 @@ export class MmAssesmentComponent implements OnInit {
             selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
           });
         });
-
+      }
+      if (offerDetailRes['additionalCharacteristics'] != null) {
+        offerDetailRes['additionalCharacteristics'].forEach(selected => {
+          if (selectedCharacteristics[selected['group']] == null) {
+            selectedCharacteristics[selected['group']] = {};
+          }
+          if (selectedCharacteristics[selected['group']][selected['subgroup']] == null) {
+            selectedCharacteristics[selected['group']][selected['subgroup']] = [];
+          }
+          selected['characteristics'].forEach(character => {
+            selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
+          });
+        });
       }
       console.log("selectedCharactersistics", selectedCharacteristics);
 
@@ -161,57 +173,49 @@ export class MmAssesmentComponent implements OnInit {
           that.groupNames.push(group['groupName']);
           let curGroup = {};
           group['subGroup'].forEach(g => {
-            // console.log("g:::",g.subGroupName)
-            if (Object.keys(selectedCharacteristics).length != 0) {
+            if (Object.keys(selectedCharacteristics).length !== 0) {
               this.offerArray = selectedCharacteristics['Offer Characteristics'][g['subGroupName']];
             }
-            // console.log("offerArra::::",this.offerArray);
             curGroup[g['subGroupName']] = [];
             g.choices.forEach((c) => {
               this.match = false;
               const splitArr = c.split('#');
               const attrName = splitArr[0];
               const description = splitArr[1];
-              // console.log("attrName:::::",attrName)
 
-              if (this.offerArray && this.offerArray.length == 1 && this.offerArray == attrName) {
+              // if (this.offerArray && this.offerArray.length == 1 && this.offerArray == attrName) {
 
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-                this.match = true;
-              }
+              //   curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+              //   this.match = true;
+              // }
 
+              // if (this.offerArray && this.offerArray.length > 1) {
+              //   this.offerArray.forEach(value => {
+              //     if (attrName === value) {
 
+              //       curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+              //       this.match = true;
 
-              if (this.offerArray && this.offerArray.length > 1) {
-                this.offerArray.forEach(value => {
-                  if (attrName == value) {
+              //     }
+              //     if (this.match === true) {
+              //       return false;
+              //     }
+              //   });
+              // }
 
-                    curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-                    this.match = true;
-
-                  }
-                  if (this.match == true) {
-                    return false;
-                  }
-                });
-              }
-
-              if (this.match == false) {
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
-              }
+              // if (this.match === false) {
+              //   curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
+              // }
 
 
-              /*  if (selectedCharacteristics[group['groupName']] != null &&
+              if (selectedCharacteristics[group['groupName']] != null &&
                 selectedCharacteristics[group['groupName']][g['subGroupName']] != null &&
-                  selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)){
- 
- 
- 
+                  (selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c) || selectedCharacteristics[group['groupName']][g['subGroupName']].includes(attrName))
+                  ){
                  curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
- 
                } else {
                  curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
-               } */
+               }
             });
           });
           that.groupData.push(curGroup);
@@ -601,6 +605,7 @@ export class MmAssesmentComponent implements OnInit {
 
     let selectedCharacteristics = [];
     let additionalCharacteristics = [];
+
     this.groupData.forEach((group, index) => {
       for (let prop in group) {
         let subselectedCharacteristics = {};
@@ -621,11 +626,15 @@ export class MmAssesmentComponent implements OnInit {
             notSubselectedCharacteristics['characteristics'].push(characters['name']);
           }
         });
-        selectedCharacteristics.push(subselectedCharacteristics);
-        additionalCharacteristics.push(notSubselectedCharacteristics);
+        if (index === 0) {
+          selectedCharacteristics.push(subselectedCharacteristics);
+        } else {
+          additionalCharacteristics.push(subselectedCharacteristics);
+        }
       }
     });
     proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
+    proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
     proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
     proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
     let stakeHolders = [];
@@ -714,44 +723,15 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['groups'] = groups;
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
-    console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
-    this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
-      let notificationPayload = {
-        "offerId": this.currentOfferId,
-        "caseId": this.caseId,
-        "actionTitle": "Offer Solutioning",
-        "description": "dss",
-        "mileStone": "Offer Solutioning",
-        "selectedFunction": "BUPM",
-        "type": "Notification",
-
-      };
+    console.log('postForOfferSolutioning Data:',postOfferSolutioningData);
+ this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
 
 
-
-      //      {
-      //     "offerId": "COOL_2102",
-      //     "caseId": "CASE-0000000528",
-      //     "actionTitle": "fdsaf",
-      //     "description": "dss",
-      //     "mileStone": "Offer Construct",
-      //     "selectedFunction": "BUPM",
-      //     "assignee": [
-      //         "jbondre","jagondal"                       << This is an Array of Ids of all assignees;
-      //     ],
-      //     "dueDate": "2019-01-18T21:29:57.000Z",
-      //     "owner": "jagondal",      << Owner of the Offer
-      //     "offerName": "Jayraj Offer 1",
-      //     "type": "Notification"     << I don’t know about type for right now so just put Notification, for future functionality
-      // }
-
-
-      let fakeGroup = {
-        'groups': [
-          {
-            "groupName": "Offer Characteristics",
-            "subGroup": [
-              {
+  let fakeGroup = { 'groups': [
+    {
+        "groupName": "Offer Characteristics",
+        "subGroup": [
+            {
                 "subGroupName": "Offer Components",
                 "choices": [
                   "Content",

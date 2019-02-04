@@ -47,9 +47,12 @@ export class EnvironmentService {
     REST_API_ESCALATE_NOTIFICATION_URL;
     REST_API_IDPID_GET_URL;
     REST_API_DOWNLOAD_PDF_GET_URL;
+    REST_API_DOWNLOAD_ZIP_GET_URL;
     REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL;
     REST_API_OFFER_SOLUTIONING_POST_URL;
     REST_API_SEND_EMAIL_NOTIFICATION_POST_URL;
+    REST_API_NOTIFICATION_PRIMARYPOC_POST_URL;
+    REST_API_ACTION_PRIMARYPOC_POST_URL;
     REST_API_SET_OFFERCONSTRUCT_POST_URL;
 
     basepdafapi = '';
@@ -206,13 +209,15 @@ export class EnvironmentService {
         this.REST_API_DASH_DIFF_APPROVE_COMMENT_URL = this.baseapi + '/action/proceed';
         this.REST_API_ESCALATE_NOTIFICATION_URL = this.baseapi + '/emailNotification/send';
         this.REST_API_DOWNLOAD_PDF_GET_URL = this.baseapi + '/pdf/offerDetailsPDF';
+        this.REST_API_DOWNLOAD_ZIP_GET_URL = this.baseapi + '/eGenie/zip/';
         this.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL = this.baseapi + '/setOfferConstructAttribute';
         this.REST_API_OFFER_SOLUTIONING_POST_URL = this.baseapi + '/setOfferSolution';
         this.REST_API_IDPID_GET_URL=this.baseapi+'/offer/productOffers';
         this.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL = this.baseapi + '/emailNotification/sendEmailNotification/';
-
         this.REST_API_LEAD_TIME_AVERAGE_WEEKS = this.baseapi + '/leadTimeCal/getLTC/';
         this.REST_API_LEAD_TIME_LAUNCH_DATE = this.baseapi + '/leadTimeCal/getLTC/';
+        this.REST_API_NOTIFICATION_PRIMARYPOC_POST_URL = this.baseapi + '/action/create/user/task';
+        this.REST_API_ACTION_PRIMARYPOC_POST_URL = this.baseapi + '/action/create/user/task';
         this.REST_API_SET_OFFERCONSTRUCT_POST_URL = this.baseapi + '/setOfferConstruct';
 
     }
