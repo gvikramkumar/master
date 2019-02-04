@@ -350,10 +350,17 @@ export default class ReportController extends ControllerBase {
               const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
               const rules = this.rules.map(rule => this.transformRule(rule)); // update this for more props if needed
               sms.forEach(sm => {
-                const smRules = sm.rules.map(rule => _.find(rules, {name: rule}));
-                smRules.forEach(rule => {
-                  rows.push({fiscalMonth, sm, rule});
+                const smRules = sm.rules.map(ruleName => {
+                  const rule = _.find(rules, {name: ruleName});
+                  return rule || {name: ruleName};
                 });
+                if (!smRules.length) {
+                  rows.push({fiscalMonth, sm, rule: {}});
+                } else {
+                  smRules.forEach(rule => {
+                    rows.push({fiscalMonth, sm, rule});
+                  });
+                }
               });
             });
             return rows;
