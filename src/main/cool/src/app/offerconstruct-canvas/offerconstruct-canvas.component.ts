@@ -52,6 +52,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   selectedItems;
   showMandatoryDetails: Boolean = false;
   currentRowClicked;
+  selectedPids;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
@@ -288,7 +289,7 @@ export class OfferconstructCanvasComponent implements OnInit {
         itemData.forEach(item => {
           const itemObj = {
             categoryName: item.type,
-            isMajorLineItem: item.isMajorLineItem,
+            isMajorLineItem: item.majorLineItem,
             productName: item.type,
             listPrice: ''
           };
@@ -298,42 +299,6 @@ export class OfferconstructCanvasComponent implements OnInit {
     });
 
     this.itemCount = 0;
-    const obj = {
-      categoryName: 'HARDWARE',
-      isMajorLineItem: true,
-      productName: 'hardware',
-      listPrice: ''
-    };
-    const obj2 = {
-      categoryName: 'MINOR LINE BUNDLE',
-      productName: 'minor-line-bundle',
-      isMajorLineItem: false,
-      listPrice: '23233'
-    };
-    const obj3 = {
-      categoryName: 'XAAS',
-      isMajorLineItem: true,
-      productName: 'xaas',
-      listPrice: ''
-    };
-    const obj4 = {
-      categoryName: 'SOFTWARE',
-      isMajorLineItem: true,
-      productName: 'software',
-      listPrice: ''
-    };
-    const obj5 = {
-      categoryName: 'SUBSCRIPTIONS',
-      isMajorLineItem: true,
-      productName: 'subscriptions',
-      listPrice: ''
-    };
-
-    this.itemCategories.push(obj);
-    this.itemCategories.push(obj2);
-    this.itemCategories.push(obj3);
-    this.itemCategories.push(obj4);
-    this.itemCategories.push(obj5);
 
     this.cols = [
       { field: 'productName', header: 'PRODUCTS' },
@@ -409,7 +374,17 @@ export class OfferconstructCanvasComponent implements OnInit {
    *
    * @param $event Search for PID
    */
-  searchForItem($event) { }
+  searchForItem(event) {
+    console.log(event);
+    this._canvasService.searchEgenie(event.query).subscribe ((results)=> {
+      console.log(results);
+      this.results = [...results];
+    },
+    (error) => {
+      this.results = [];
+    }
+    );
+  }
 
   drop(event, rowdata) {
     rowdata.node.children.push(this.draggedItem);
@@ -454,7 +429,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     let majorLineItemName;
     // Find parent Product (major item)
     while(currentNode.parent !== null) {
-      // statements if the condition is true 
+      // statements if the condition is true
         currentNode = currentNode.parent;
         majorLineItemName = currentNode.data.productName;
     }
