@@ -7,7 +7,7 @@
 <div>
     <h5 class="half-margin-bottom">Offer Phase
     </h5>
-   
+
     <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
         <div class="ui-step {{mileStoneStatus[0].status}}">
             <div class="step__icon">
@@ -53,7 +53,7 @@
                               <tr>
                                   <th style = "width:38%">Ideate - <span [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'"> {{ideateCompletedCount}} of {{ideateCount}} <span class="icon-check-outline icon-medium"></span></span></th>
                                   <th>STATUS</th>
-                               
+
                                   <th>COMPLETION DATE</th>
                               </tr>
                           </thead>
@@ -61,7 +61,7 @@
                               <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
                                   <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
                                   <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
-                              
+
                                   <td>{{ideateData.completionDate}}</td>
                               </tr>
                           </tbody>
@@ -75,7 +75,7 @@
                               <tr>
                                   <th style = "width:38%;">Plan - <span class="text-success"> {{planCompletedCount}} of {{planCount}} <span class="icon-check-outline icon-medium"></span></span></th>
                                   <th>STATUS</th>
-                              
+
                                   <th>COMPLETION DATE</th>
                               </tr>
                           </thead>
@@ -83,7 +83,7 @@
                               <tr *ngFor="let planData of offerPhaseDetailsList.plan">
                                   <td><span style="color: indigo">{{planData.subMilestone}}</span></td>
                                   <td [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">{{planData.status}}</td>
-                                 
+
                                   <td>{{planData.completionDate}}</td>
                               </tr>
                           </tbody>
@@ -171,17 +171,19 @@
                                     </span>
                                 </span>
                             </td>
-                            <td colspan="3" style="border:1px solid #dfdfdf">
-                                <table #data style="border-collapse: collapse;width: 100%;">
+                            <td colspan="3" >
+                                <div class="responsive-table">
+                                  <table #data class="table table--nostripes">
                                     <tbody>
-                                       
+
                                         <tr [class.innerrow] = "ideateCount -1  > i  "  *ngFor="let ideateData of offerPhaseDetailsList.ideate; let i = index">
-                                            <td style="width:25%;padding-left:10px;text-align: left"><span style="color: indigo"  (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></td>
-                                            <td style="width:25%;padding-left:10px;text-align: left" [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
-                                            <td style="width:25%;padding-left:10px;text-align: left">{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
+                                            <td><span class="text-indigo"  (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></td>
+                                            <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
+                                            <td>{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -191,16 +193,18 @@
                                     </span>
                                 </span>
                             </td>
-                            <td *ngIf = "planCount > 1" colspan="3" style="border:1px solid #dfdfdf">
-                                <table #data style="border-collapse: collapse;width: 100%;" >
+                            <td *ngIf = "planCount > 1" colspan="3">
+                                <div class="responsive-table">
+                                  <table #data class="table table--nostripes">
                                     <tbody>
                                         <tr [class.innerrow] = "planCount -1  > i  " class= "innerrow"  *ngFor="let ideateData of offerPhaseDetailsList.plan; let i = index">
-                                            <td style="width:25%;padding-left:10px;text-align: left" ><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
-                                            <td style="width:25%;padding-left:10px;text-align: left" [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
-                                            <td style="width:25%;padding-left:10px;text-align: left">{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
+                                            <td><span class="text-indigo">{{ideateData.subMilestone}}</span></td>
+                                            <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
+                                            <td>{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                </div>
                             </td>
                         </tr>
                         <!-- <tr *ngFor="let ideateData of offerPhaseDetailsList.plan">
