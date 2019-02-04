@@ -27,9 +27,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
     const assignees = [];
-    console.log( this.questionData);
     if (this.questionData['primaryPOC'] != null && this.questionData['primaryPOC'].length > 0) {
       this.questionData['primaryPOC'].forEach(element => {
         if (this.stakeData[element] != null && this.stakeData[element].length > 0) {
@@ -58,7 +56,6 @@ export class OfferSolutionQuestionComponent implements OnInit {
       "offerName": this.offerData['offerName'],
       "type": "Notification",
       };
-      debugger;
       this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
         console.log(notificationPayload);
       });
