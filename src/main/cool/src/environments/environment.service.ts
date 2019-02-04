@@ -67,7 +67,7 @@ export class EnvironmentService {
     REST_API_SECONDARY_BUSINESS_ENTITY_URL;
     PDAF_API;
     PDAF_GET_TOKEN_API;
-
+    PDAF_SEARCH_EGINIE;
     REST_API_LEAD_TIME_LAUNCH_DATE;
     REST_API_LEAD_TIME_AVERAGE_WEEKS;
 
@@ -164,7 +164,7 @@ export class EnvironmentService {
         this.REST_API_SECONDARY_BUSINESS_UNIT_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?columns=business_unit&distinct=true';
         this.REST_API_SECONDARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
         this.PDAF_API = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy';
-
+        this.PDAF_SEARCH_EGINIE = this.basepdafapi + '/product/1.0/getPIDsdata?item_name=';
         /** COOL SRV API"S */
 
         this.REST_API_GETFUNCTIONAL_ROLE_URL = this.baseapi + '/LOV/getFunctionalRoles';

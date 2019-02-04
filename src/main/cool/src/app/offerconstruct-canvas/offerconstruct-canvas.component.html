@@ -39,8 +39,24 @@
                   <div class="row">
                     <div class="col-md-10">
                       <span class="ui-fluid">
-                        <p-autoComplete [(ngModel)]="searchInput" [suggestions]="results" (completeMethod)="searchForItem($event)"
-                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" forceSelection="true"></p-autoComplete>
+                        <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results" (completeMethod)="searchForItem($event)"
+                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9">
+                          <ng-template pTemplate="body" let-item>
+                              <tbody>
+                                  <tr>
+                                      <td>
+                                          {{item.PID}}
+                                      </td>
+                                      <td>
+                                          {{item.PRODUCT_FAMILY}}
+                                      </td>
+                                      <td>
+                                          {{item.TECHNOLOGY_GROUP}}
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </ng-template>
+                        </p-autoComplete>
                       </span>
                     </div>
                     <div class="col-md-2">
@@ -62,7 +78,7 @@
                     <a *ngIf="expandView" href="javascript:;" (click)="toggleSidebar()">
                       <span class="icon-fullscreen icon-small"></span>
                     </a>
-                    <button *ngIf="!expandView" class="btn btn--small" (click)="addMore()">Add More Details</button>
+                    <button *ngIf="!expandView" class="btn btn--small" (click)="addMore()">Add More Items</button>
                   </div>
                 </div>
                 <div class="row">
@@ -147,13 +163,13 @@
   </div>
   <div class="row base-margin-top">
     <div class="col-md-12 task--bar">
-      <button class="btn btn--primary">Discard Changes</button>
+      <button class="btn btn--primary" (click)="discardChanges()">Discard Changes</button>
       <button class="btn btn--primary" (click)="saveOfferConstructChanges()">Save Changes</button>
     </div>
 
   </div>
   <p-dialog header="Add Details for" closable="true" modal="true" showHeader="false" (onHide)="onHide()" [responsive]="true"
-    [width]="900" [minWidth]="200" [minY]="70" [(visible)]="displayAddDetails">
+  [(visible)]="displayAddDetails" [contentStyle]="{'height': '450px', 'max-height':'450px', 'min-width':'700px'}" positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
     <form (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
       <!-- Items Top Section -->
