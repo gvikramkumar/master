@@ -271,10 +271,15 @@ CREATE TABLE fpadfa.dfa_sub_measure (
 	dual_gaap_flag bpchar(1) NULL DEFAULT 'N'::bpchar,
 	twotier_flag bpchar(1) NULL DEFAULT 'N'::bpchar,
 	service_flag bpchar(1) NULL,
+	smeasure_grouping_flag bpchar(1) NULL,
+	allocation_reqd_flag bpchar(1) NULL,
+	pass_through_flag bpchar(1) NULL,
 	gross_mgn_rollup1 varchar(50) NULL,
 	gross_mgn_rollup2 varchar(50) NULL,
 	gross_mgn_rollup3 varchar(70) NULL,
 	gl_acct_number varchar(5) NULL,
+	input_product_family varchar(40) NULL,
+	alloc_product_family varchar(40) NULL,
 	rule1 varchar(100) NULL,
 	rule2 varchar(100) NULL,
 	rule3 varchar(100) NULL,
@@ -301,6 +306,7 @@ WITH (
 ) ;
 CREATE INDEX ndx_dfa_grpby_msr_key ON fpadfa.dfa_sub_measure USING btree (grouped_by_smeasure_key) ;
 CREATE INDEX ndx_dfa_sub_measure_id ON fpadfa.dfa_sub_measure USING btree (sub_measure_id) ;
+CREATE INDEX ndx_dfa_sub_measure_key ON fpadfa.dfa_sub_measure USING btree (sub_measure_key) ;
 
 CREATE TABLE fpadfa.dfa_submeasure_input_lvl (
 	module_id numeric(10) NULL,

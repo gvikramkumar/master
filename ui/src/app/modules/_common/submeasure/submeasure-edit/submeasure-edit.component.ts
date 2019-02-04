@@ -259,6 +259,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           if (this.isDeptUpload()) {
             this.sm.indicators.deptAcct = 'Y';
           }
+          delete this.sm.inputProductFamily;
+          delete this.sm.allocProductFamily;
         }
         if (this.editMode) {
           if (_.includes(['A', 'I'], this.sm.status)) {

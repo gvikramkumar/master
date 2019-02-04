@@ -1,4 +1,27 @@
 
+class InputFilterLevel {
+  productLevel: string;
+  salesLevel: string;
+  scmsLevel: string;
+  internalBELevel: string;
+  entityLevel: string;
+}
+
+class Indicators {
+  dollarUploadFlag = 'N';
+  manualMapping = 'N';
+  groupFlag = 'N';
+  retainedEarnings = 'N';
+  transition = 'N';
+  corpRevenue = 'Y';
+  dualGaap = 'N';
+  twoTier = 'N';
+  service = 'N';
+  deptAcct = 'N';
+  allocationRequired = 'N';
+  passThrough = 'N';
+}
+
 export class Submeasure {
   id?: string;
   moduleId?: number;
@@ -22,6 +45,8 @@ export class Submeasure {
   sourceSystemAdjTypeId: number;
   manualMixHw: number;
   manualMixSw: number;
+  inputProductFamily: string;
+  allocProductFamily: string;
   activeStatus = 'I';
   status = 'D';
   approvedOnce = 'N';
@@ -33,25 +58,3 @@ export class Submeasure {
   approveRejectMessage?: string;
 }
 
-class InputFilterLevel {
-  productLevel: string;
-  salesLevel: string;
-  scmsLevel: string;
-  internalBELevel: string;
-  entityLevel: string;
-}
-
-class Indicators {
-  dollarUploadFlag = 'N';
-  manualMapping = 'N';
-  groupFlag = 'N';
-  retainedEarnings = 'N';
-  transition = 'N';
-  corpRevenue = 'Y';
-  dualGaap = 'N';
-  twoTier = 'N';
-  service = 'N';
-  deptAcct = 'N';
-  allocationRequired = 'N';
-  passThrough = 'N';
-}
