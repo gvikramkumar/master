@@ -13,7 +13,7 @@
     <mat-form-field>
       <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event.target.value)" placeholder="Search">
     </mat-form-field>
-    <a finAuth="super-user" [routerLink]="['add', {mode: 'add'}]">
+    <a finAuth="super-user" [routerLink]="['add', {mode: 'add', measureId: measureId?.toString() || ''}]">
       <button cuiButton color="primary">Add New</button>
     </a>
   </div>

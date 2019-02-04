@@ -235,6 +235,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         if (this.viewMode || this.editMode || this.copyMode) {
           this.sm = results[6];
         }
+        if (this.addMode) {
+          if (this.route.snapshot.params.measureId) {
+            this.sm.measureId = Number(this.route.snapshot.params.measureId);
+          }
+
+        }
         if (this.viewMode) {
           this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
         } else {
