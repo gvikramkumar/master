@@ -19,8 +19,7 @@ export class OfferconstructCanvasService {
   }
 
   searchEgenie(keyword: String): Observable<any> {
-    // return this.http.get(this.setOfferConstructURL);
-    return null;
+    return this.http.get(this.environmentService.PDAF_SEARCH_EGINIE + keyword);
   }
 
   saveOfferConstructChanges(offerConstructChnages: any): Observable<any> {
