@@ -1,10 +1,17 @@
 <div class="content solutioning">
   <div class="container-fluid">
-    <app-menu-bar> </app-menu-bar>
+    <app-menu-bar
+    [caseId]="caseId"
+    [currentMMModel]="derivedMM"
+    [offerId]="currentOfferId"
+    [offerName]="firstData['offerName']"
+    [stakeData]="stakeData"
+   
+    > </app-menu-bar>
 
     <div class="panel-wrapper mt-15">
       <!-- Blue Bar -->
-      <app-blue></app-blue>
+      <app-blue [currentOfferId]="currentOfferId" [currentCaseId]="caseId"></app-blue>
       <div class="row">
         <div class="leftContent col-sm-12 col-md-9">
           <app-offer-create-detail></app-offer-create-detail>
@@ -14,11 +21,14 @@
                   {{derivedMM}} Aligned</span></div>
             </li>
           </ul>
+        
           <!-- <app-mm-info-bar></app-mm-info-bar> -->
           <!-- Offer Solutioning Bar -->
           <div *ngFor="let group of offerSolutionGroups">
             <app-offersolutioning-card-one
             [groupData]="group"
+            [stakeData]="stakeData"
+            [offerData]="firstData"
             ></app-offersolutioning-card-one>
           </div>
           <!-- Right Panel -->

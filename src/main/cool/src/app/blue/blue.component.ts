@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blue',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./blue.component.css']
 })
 export class BlueComponent implements OnInit {
-
-  constructor() { }
+  @Input() currentOfferId: string;
+  @Input() currentCaseId: string;
+  constructor(private router: Router) { }
 
   ngOnInit() {
+  }
+
+  offerConstruct() {
+    this.router.navigate(['/offerConstruct', this.currentOfferId, this.currentCaseId]);
   }
 
 }

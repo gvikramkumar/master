@@ -26,7 +26,6 @@ export class OfferSolutioningComponent implements OnInit {
   notReviewedCount;
   strategyReviewList;
   setFlag;
-  updateMessage;
   goBack;
   offerDetailOverView;
   currentOfferId;
@@ -38,6 +37,11 @@ export class OfferSolutioningComponent implements OnInit {
   offerId: string;
   primaryBE: string;
   updateStakeData: any;
+  proceedButtonStatusValid = true;
+  backbuttonStatusValid = true;
+  offerName;
+
+
   displayLeadTime = false;
   noOfWeeksDifference: string;
 
@@ -61,9 +65,12 @@ export class OfferSolutioningComponent implements OnInit {
       });
     }
 
+    
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
 
       this.firstData = data;
+      this.offerName = this.firstData['offerName'];
+      this.derivedMM = this.firstData['derivedMM'];
       this.displayLeadTime = true;
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
@@ -95,6 +102,21 @@ export class OfferSolutioningComponent implements OnInit {
 
       this.stakeData = this.stakeHolderInfo;
     });
+  }
+
+  updateMessage(message) {
+
+    if (message != null && message !== '') {
+      if (message === 'hold') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
+        this.message = { contentHead: '', content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
+      } else if (message === 'cancel') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
+        this.message = { contentHead: '', content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
+      }
+    }
   }
 
 

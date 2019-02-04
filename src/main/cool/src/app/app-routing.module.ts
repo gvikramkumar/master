@@ -22,6 +22,7 @@ import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning
 import {MmInfoBarComponent} from './mm-info-bar/mm-info-bar.component';
 import {OfferBasicInfoComponent} from './offer-basic-info/offer-basic-info.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
+import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 
 
 const routes: Routes = [
@@ -118,6 +119,11 @@ const routes: Routes = [
   {
     path: 'mm-message',
     component: MmMessageBarComponent
+  },
+  {
+    path: 'offerConstruct/:id/:id2',
+    component: OfferConstructComponent,
+    resolve: { offerData: OfferOverViewResolver }
   }
 
 ];

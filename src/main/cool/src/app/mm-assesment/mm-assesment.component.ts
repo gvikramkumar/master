@@ -714,44 +714,14 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['groups'] = groups;
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
-    console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
-    this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
-      let notificationPayload = {
-        "offerId": this.currentOfferId,
-        "caseId": this.caseId,
-        "actionTitle": "Offer Solutioning",
-        "description": "dss",
-        "mileStone": "Offer Solutioning",
-        "selectedFunction": "BUPM",
-        "type": "Notification",
+    console.log('postForOfferSolutioning Data:',postOfferSolutioningData);
+ this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
 
-      };
-
-
-
-      //      {
-      //     "offerId": "COOL_2102",
-      //     "caseId": "CASE-0000000528",
-      //     "actionTitle": "fdsaf",
-      //     "description": "dss",
-      //     "mileStone": "Offer Construct",
-      //     "selectedFunction": "BUPM",
-      //     "assignee": [
-      //         "jbondre","jagondal"                       << This is an Array of Ids of all assignees;
-      //     ],
-      //     "dueDate": "2019-01-18T21:29:57.000Z",
-      //     "owner": "jagondal",      << Owner of the Offer
-      //     "offerName": "Jayraj Offer 1",
-      //     "type": "Notification"     << I don’t know about type for right now so just put Notification, for future functionality
-      // }
-
-
-      let fakeGroup = {
-        'groups': [
-          {
-            "groupName": "Offer Characteristics",
-            "subGroup": [
-              {
+  let fakeGroup = { 'groups': [
+    {
+        "groupName": "Offer Characteristics",
+        "subGroup": [
+            {
                 "subGroupName": "Offer Components",
                 "choices": [
                   "Content",
