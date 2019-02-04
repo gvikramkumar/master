@@ -39,7 +39,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
     }
     let owner = '';
     if (this.stakeData['Owner'] != null && this.stakeData['Owner'].length > 0) {
-      owner = this.stakeData['Owner'][0];
+      owner = this.stakeData['Owner'][0]['_id'];
     }
     let dueDate = new Date();
     dueDate.setDate(dueDate.getDate() + 5);
@@ -56,8 +56,26 @@ export class OfferSolutionQuestionComponent implements OnInit {
       "offerName": this.offerData['offerName'],
       "type": "Notification",
       };
+
+      let actionPayload = {
+        "offerId": this.currentOfferId,
+        "caseId": this.caseId,
+        "actionTitle": "Provide Details",
+        "description": "This offer need more information",
+        "mileStone": "Offer Solutioning",
+        "selectedFunction": this.questionData['primaryPOC'] !=null ? this.questionData['primaryPOC'].join(',') : '' ,
+        "assignee": assignees,
+        "dueDate": dueDate.toISOString(),
+        "owner": owner,
+        "offerName": this.offerData['offerName'],
+        "type": "Action",
+        };
+
       this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
         console.log(notificationPayload);
+        this.offersolutioningService.notificationPost(actionPayload).subscribe(res => {
+          console.log(actionPayload);
+        })
       });
 
   }

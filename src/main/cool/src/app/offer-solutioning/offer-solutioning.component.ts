@@ -29,7 +29,7 @@ export class OfferSolutioningComponent implements OnInit {
   goBack;
   offerDetailOverView;
   currentOfferId;
-  offerSolutionData:Object = {};
+  offerSolutionData:Object = null;
   offerSolutionGroups:Array<any> = [];
   stakeHolderInfo: any;
 
@@ -65,10 +65,15 @@ export class OfferSolutioningComponent implements OnInit {
       });
     }
 
-    
+    debugger;
+    let that = this;
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
-
       this.firstData = data;
+      // get question group data if it's null
+      if (this.offerSolutionData == null) {
+
+      }
+
       this.offerName = this.firstData['offerName'];
       this.derivedMM = this.firstData['derivedMM'];
       this.displayLeadTime = true;
