@@ -70,8 +70,8 @@
           </div>
         </div>
 
-        <div *ngIf="isDeptUpload()" class="border-and-padding base-margin-top">
-          <fieldset style="position:relative; margin-bottom:0;">
+        <div *ngIf="isDeptUploadMeasure()" class="border-and-padding base-margin-top">
+          <fieldset style="position:relative; margin-bottom:0;" [class.disabled]="!isDeptUpload()">
             <legend>Dept/Acct Upload</legend>
             <div style="height:6px;" class="spacer-div">&nbsp;</div>
             <span [fxShow]="!fileInput.files.length">

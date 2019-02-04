@@ -860,7 +860,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   isDeptUpload() {
     return shUtil.isDeptUpload(this.sm);
   }
-  
+
+  isDeptUploadMeasure() {
+    return shUtil.isDeptUploadMeasure(this.sm);
+  }
+
   isGroupingParent() {
     return this.sm.indicators.groupFlag === 'Y';
   }

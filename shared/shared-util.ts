@@ -13,6 +13,7 @@ export const shUtil = {
   getCutoffDateStrFromFiscalMonth,
   getHtmlForLargeSingleMessage,
   isDeptUpload,
+  isDeptUploadMeasure
 };
 
 export interface ObjectDiffVal {
@@ -23,6 +24,10 @@ export interface ObjectDiffVal {
 
 function isDeptUpload(submeasure) {
   return (submeasure.measureId === 2 || submeasure.measureId === 4) && submeasure.sourceId === 3;
+}
+
+function isDeptUploadMeasure(submeasure) {
+  return (submeasure.measureId === 2 || submeasure.measureId === 4);
 }
 
 function getUpdateTable(updates: ObjectDiffVal[]): string {
