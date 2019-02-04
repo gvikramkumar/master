@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-
 import { Router, ActivatedRoute } from '@angular/router';
 import { CreateOfferService } from '../services/create-offer.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -15,6 +15,7 @@ import { SharedService } from '../shared-service.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { LeadTime } from './lead-time';
 import * as moment from 'moment';
+import { async } from '@angular/core/testing';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -24,11 +25,8 @@ const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 })
 export class RightPanelComponent implements OnInit, OnDestroy {
   notiFication: Boolean = false;
+
   @Input() portfolioFlag: Boolean = false;
-  @Input() stakeData: Object;
-  @Input() derivedMM: string;
-  @Input() offerBuilderdata: Object;
-  @Input() displayLeadTime: Boolean = false;
   @Output() updateStakeData = new EventEmitter<string>();
   navigateHash: Object = {};
   backdropCustom: Boolean = false;
@@ -71,15 +69,23 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   mmModel: string;
   leadTimeYear: number;
+  progressBarWidth: number;
   averageWeekCount: string;
   expectedLaunchDate: string;
-  noOfWeeksDifference: string;
-
+  weekDifferenceCount: string;
   displayLeadTimeButton: Boolean = false;
 
   average = 'Average';
   tenthPercentile = '10th Percentile';
   nintyPercentile = '90th Percentile';
+
+  @Input() offerId: string;
+  @Input() stakeData: Object;
+  @Input() derivedMM: string;
+  @Input() primaryBE: string;
+  @Input() offerBuilderdata: Object;
+  @Input() noOfWeeksDifference: string;
+  @Input() displayLeadTime: Boolean = false;
 
   offerData;
   dotBox = [
@@ -144,11 +150,12 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.currentOfferId = this.createOfferService.coolOffer.offerId;
     }
     this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
+
   }
 
   ngOnInit() {
 
-    this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId,this.caseId];
+    this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
     this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
     this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
@@ -201,7 +208,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     });
 
     if (this.currentOfferId) {
+
       this.createOfferService.getMMMapperById(this.currentOfferId).subscribe(data => {
+
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
         this.OfferOwners = this.offerData.offerObj.owners;
@@ -233,6 +242,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     if (this.events !== undefined) {
       this.eventsSubscription = this.events.subscribe((data) => this.storeOwnerId(data));
     }
+
+
+
+
   }
 
   /**
@@ -285,33 +298,31 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     this.displayOfferPhase = true;
   }
 
-  showLeadTimeDailog() {
 
+
+  async showLeadTimeDailog() {
+
+    const maxWeekDuration = 20;
     this.mmModel = this.derivedMM;
-    const offerId = this.offerBuilderdata['offerId'];
     this.leadTimeYear = new Date().getFullYear() - 1;
-    const primaryBusinessEntity = this.offerBuilderdata['primaryBEList'][0];
 
     if (this.displayLeadTime) {
 
       this.displayLeadTimeButton = true;
+      const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.offerId).toPromise();
+      this.expectedLaunchDate = moment(expectedLaunchDateObject['expectedLaunchDate']).format('MM/DD/YYYY');
 
-      this.rightPanelService.displayLaunchDate(offerId).subscribe(
-        (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
-          this.expectedLaunchDate = moment(leadTime.expectedLaunchDate).format('MM/DD/YYYY');
-        }
-      );
-
-      this.rightPanelService.displayAverageWeeks(primaryBusinessEntity, this.mmModel).subscribe(
-        (averageWeekCountObj: Object) => {
-          this.averageWeekCount = Number(averageWeekCountObj['AverageWeeks']).toFixed(2);
-        }
-      );
+      const averageWeekCountObject = await this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).toPromise();
+      this.averageWeekCount = Number(averageWeekCountObject['AverageWeeks']).toFixed(2);
 
     }
 
+    this.progressBarWidth = Math.floor((Number(this.averageWeekCount) / maxWeekDuration * 100));
+    console.log(this.progressBarWidth);
+    const a: number = 1 + 2;
+
   }
+
 
   onHide() {
     this.display = false;

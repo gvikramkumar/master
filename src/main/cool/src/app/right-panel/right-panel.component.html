@@ -44,14 +44,31 @@
     <!-- Estimated Lead Time -->
     <div class="card card--raised base-margin-top">
         <h5 class="half-margin-bottom">Estimated Lead Time</h5>
-        <span class="ribbon label label--warning-alt">
+        <!-- <span class="ribbon label label--warning-alt"> -->
 
-            <!-- [disabled]="!displayLeadTime" -->
-            <span>
+        <span>
+
+            <!-- <div *ngIf="displayLeadTime" class="alert alert-success box-msg" role="alert">
+                    <button [disabled]="displayLeadTime" (click)="showLeadTimeDailog()">
+                        Lead Time Calculation?
+                    </button>
+                </div> -->
+
+            <div *ngIf="!displayLeadTime">
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                    <strong><small>{{noOfWeeksDifference}}</small></strong> Lead Time Calculation?
+                    <strong> Lead Time Calculation?</strong>
                 </button>
-            </span>
+            </div>
+
+            <div *ngIf="displayLeadTime">
+                <strong><small>{{noOfWeeksDifference}}</small></strong>
+                <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
+                    <strong> Lead Time Calculation?</strong>
+                </button>
+            </div>
+
+
+            <!-- </span> -->
 
         </span>
     </div>
@@ -319,7 +336,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <h5>Lead Time Accessd for Your Offer</h5>
+                                        <h5>Lead Time Accessed for Your Offer</h5>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="row  base-margin-top">
@@ -390,7 +407,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <div class="progressbar progressbar--danger" data-percentage="20">
+                                        <div class="progressbar progressbar--danger" data-percentage="26">
                                             <div class="progressbar__fill"></div>
                                         </div>
                                     </div>
@@ -412,9 +429,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <div class="progressbar progressbar--success" data-percentage="46">
-                                            <div class="progressbar__fill"></div>
-                                        </div>
+                                        <p-progressBar [value]="progressBarWidth" ></p-progressBar>
                                     </div>
                                     <div class="col-md-2">
                                         <h6>{{averageWeekCount}} WEEKS</h6>

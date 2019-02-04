@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SharedService } from '../shared-service.service';
-import { Subscription ,  Subject } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { CreateOfferService } from '../services/create-offer.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { ConfigurationService } from '../services/configuration.service';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { isDefaultChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
-import {OffersolutioningService} from '../services/offersolutioning.service';
+import { OffersolutioningService } from '../services/offersolutioning.service';
+import { RightPanelService } from '../services/right-panel.service';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
+import { LeadTime } from '../right-panel/lead-time';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -36,9 +38,12 @@ export class MmAssesmentComponent implements OnInit {
   message = {};
 
   stakeData = {};
+  offerId: string;
+  primaryBE: string;
   derivedMM: string;
   offerBuilderdata = {};
   displayLeadTime = false;
+  noOfWeeksDifference: string;
 
   canClickNextStep = false;
   currentMMModel: string = null;
@@ -50,8 +55,8 @@ export class MmAssesmentComponent implements OnInit {
   backdropCustom;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
-  offerArray:any[] = [] ;
-  match =false;
+  offerArray: any[] = [];
+  match = false;
   dimensionMode: Boolean = false;
   dimensionFirstGroupData: Object;
   dimensionFirstGroupName: string;
@@ -64,7 +69,8 @@ export class MmAssesmentComponent implements OnInit {
     private offerPhaseService: OfferPhaseService,
     private offerDetailViewService: OfferDetailViewService,
     private configService: ConfigurationService,
-    private offersolutioningService:OffersolutioningService,
+    private offersolutioningService: OffersolutioningService,
+    private rightPanelService: RightPanelService
   ) {
     this.activatedRoute.params.subscribe(params => {
 
@@ -102,9 +108,21 @@ export class MmAssesmentComponent implements OnInit {
             selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
           });
         });
-
       }
-      console.log("selectedCharactersistics",selectedCharacteristics);
+      if (offerDetailRes['additionalCharacteristics'] != null) {
+        offerDetailRes['additionalCharacteristics'].forEach(selected => {
+          if (selectedCharacteristics[selected['group']] == null) {
+            selectedCharacteristics[selected['group']] = {};
+          }
+          if (selectedCharacteristics[selected['group']][selected['subgroup']] == null) {
+            selectedCharacteristics[selected['group']][selected['subgroup']] = [];
+          }
+          selected['characteristics'].forEach(character => {
+            selectedCharacteristics[selected['group']][selected['subgroup']].push(character);
+          });
+        });
+      }
+      console.log("selectedCharactersistics", selectedCharacteristics);
 
       let that = this;
 
@@ -123,7 +141,7 @@ export class MmAssesmentComponent implements OnInit {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerDetailRes['derivedMM']}.`, mmModel: offerDetailRes['derivedMM'] };
       } else {
         this.proceedButtonStatusValid = true;
-        this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'};
+        this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
       }
 
       this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
@@ -150,67 +168,59 @@ export class MmAssesmentComponent implements OnInit {
 
       this.monetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
-        console.log("selectedCharacteristics",selectedCharacteristics['Offer Characteristics']);
+        console.log("selectedCharacteristics", selectedCharacteristics['Offer Characteristics']);
         that.offerData['groups'].forEach(group => {
           that.groupNames.push(group['groupName']);
           let curGroup = {};
           group['subGroup'].forEach(g => {
-            // console.log("g:::",g.subGroupName)
-            if(Object.keys(selectedCharacteristics).length != 0){
-            this.offerArray = selectedCharacteristics['Offer Characteristics'][g['subGroupName']];
+            if (Object.keys(selectedCharacteristics).length !== 0) {
+              this.offerArray = selectedCharacteristics['Offer Characteristics'][g['subGroupName']];
             }
-            // console.log("offerArra::::",this.offerArray);
             curGroup[g['subGroupName']] = [];
             g.choices.forEach((c) => {
-               this.match =false;
+              this.match = false;
               const splitArr = c.split('#');
               const attrName = splitArr[0];
               const description = splitArr[1];
-              // console.log("attrName:::::",attrName)
 
-              if(this.offerArray && this.offerArray.length == 1 && this.offerArray ==attrName ){
+              // if (this.offerArray && this.offerArray.length == 1 && this.offerArray == attrName) {
 
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-               this.match =true;
-          }
+              //   curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+              //   this.match = true;
+              // }
 
+              // if (this.offerArray && this.offerArray.length > 1) {
+              //   this.offerArray.forEach(value => {
+              //     if (attrName === value) {
 
+              //       curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+              //       this.match = true;
 
-              if(this.offerArray && this.offerArray.length > 1){
-                 this.offerArray.forEach(value =>{
-                     if(attrName == value ){
+              //     }
+              //     if (this.match === true) {
+              //       return false;
+              //     }
+              //   });
+              // }
 
-                  curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-                  this.match = true;
-
-                 }
-                 if(this.match  == true){
-                  return false;
-                 }
-               });
-              }
-
-              if(this.match == false){
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
-              }
+              // if (this.match === false) {
+              //   curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
+              // }
 
 
-             /*  if (selectedCharacteristics[group['groupName']] != null &&
-               selectedCharacteristics[group['groupName']][g['subGroupName']] != null &&
-                 selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c)){
-
-
-
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-
-              } else {
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
-              } */
+              if (selectedCharacteristics[group['groupName']] != null &&
+                selectedCharacteristics[group['groupName']][g['subGroupName']] != null &&
+                  (selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c) || selectedCharacteristics[group['groupName']][g['subGroupName']].includes(attrName))
+                  ){
+                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+               } else {
+                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
+               }
             });
           });
           that.groupData.push(curGroup);
         });
-        if(this.selectedGroupData.length >0){
+        if (this.selectedGroupData.length > 0) {
           alert("no final Group data");
         }
         if (this.dimensionMode === true) {
@@ -220,32 +230,32 @@ export class MmAssesmentComponent implements OnInit {
           that.groupData.shift();
           that.groupNames.shift();
         }
-        console.log("offerData",that.groupData);
+        console.log("offerData", that.groupData);
       });
     });
   }
 
 
   //downloadPDF
-  downloadPDF(){
-    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data =>{
-    const nameOfFileToDownload = 'offer-details';
-    console.log("nameoffile",nameOfFileToDownload);
+  downloadPDF() {
+    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data => {
+      const nameOfFileToDownload = 'offer-details';
+      console.log("nameoffile", nameOfFileToDownload);
       console.log(data);
-        const blob = new Blob([data], {type: 'application/pdf'});
+      const blob = new Blob([data], { type: 'application/pdf' });
 
-        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-          window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
-         } else {
-          var a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = nameOfFileToDownload;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+      } else {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nameOfFileToDownload;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
 
-    }
-  });
+      }
+    });
 
   }
 
@@ -429,6 +439,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toNextStep() {
+
     if (this.activeTabIndex === 0) {
       var index = 0;
       var groupKeys = this.getGroupKeys(this.groupData[0]);
@@ -476,12 +487,19 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   getStakeData(mmModel) {
+
     this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
-      
-      console.log(res);
+
       this.stakeData = {};
       this.derivedMM = mmModel;
-      this.displayLeadTime = true;      
+      this.displayLeadTime = true;
+      this.offerId = this.currentOfferId;
+      this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
+      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+        (leadTime: LeadTime) => {
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+        }
+      );
 
       let keyUsers;
       if (res != null) {
@@ -502,7 +520,7 @@ export class MmAssesmentComponent implements OnInit {
             appRoleList: [],
             businessEntity: 'Security',
             functionalRole: 'BUPM',
-            offerRole:'Owner'
+            offerRole: 'Owner'
           }
           ],
           stakeholderDefaults: true
@@ -587,6 +605,7 @@ export class MmAssesmentComponent implements OnInit {
 
     let selectedCharacteristics = [];
     let additionalCharacteristics = [];
+
     this.groupData.forEach((group, index) => {
       for (let prop in group) {
         let subselectedCharacteristics = {};
@@ -607,22 +626,26 @@ export class MmAssesmentComponent implements OnInit {
             notSubselectedCharacteristics['characteristics'].push(characters['name']);
           }
         });
-        selectedCharacteristics.push(subselectedCharacteristics);
-        additionalCharacteristics.push(notSubselectedCharacteristics);
+        if (index === 0) {
+          selectedCharacteristics.push(subselectedCharacteristics);
+        } else {
+          additionalCharacteristics.push(subselectedCharacteristics);
+        }
       }
     });
     proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
+    proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
     proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
     proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
     let stakeHolders = [];
     for (let prop in this.stakeData) {
       this.stakeData[prop].forEach(sh => {
-         console.log(sh);
+        console.log(sh);
         stakeHolders.push({
           '_id': sh['_id'],
           'businessEntity': sh['userMappings'][0]['businessEntity'],
           'functionalRole': sh['userMappings'][0]['functionalRole'],
-          'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner': sh['userMappings'][0]['functionalRole'],
+          'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['userMappings'][0]['functionalRole'],
           'stakeholderDefaults': sh['stakeholderDefaults'],
           'name': sh['userName']
         });
@@ -702,242 +725,119 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:',postOfferSolutioningData);
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
-   let notificationPayload = {
-    "offerId": this.currentOfferId,
-    "caseId": this.caseId,
-    "actionTitle": "Offer Solutioning",
-    "description": "dss",
-    "mileStone": "Offer Solutioning",
-    "selectedFunction": "BUPM",
-    "type": "Notification",
 
-    };
-  
+  let proceedToStakeholderPostData = {};
+  proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
+  proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'] == null ? '' : this.offerBuilderdata['offerName'];
+  proceedToStakeholderPostData['offerDesc'] = this.offerBuilderdata['offerDesc'] == null ? '' : this.offerBuilderdata['offerDesc'];
+  proceedToStakeholderPostData['offerCreatedBy'] = this.offerBuilderdata['offerCreatedBy'] == null ? '' : this.offerBuilderdata['offerCreatedBy'];
+  proceedToStakeholderPostData['offerCreationDate'] = this.offerBuilderdata['offerCreationDate'] == null ? '' : this.offerBuilderdata['offerCreationDate'];
+  proceedToStakeholderPostData['offerOwner'] = this.offerBuilderdata['offerOwner'] == null ? '' : this.offerBuilderdata['offerOwner'];
+  proceedToStakeholderPostData['clonedOfferId'] = this.offerBuilderdata['clonedOfferId'] == null ? '' : this.offerBuilderdata['clonedOfferId'];
+  proceedToStakeholderPostData['primaryBUList'] = this.offerBuilderdata['primaryBUList'] == null ? '' : this.offerBuilderdata['primaryBUList'];
+  proceedToStakeholderPostData['primaryBEList'] = this.offerBuilderdata['primaryBEList'] == null ? '' : this.offerBuilderdata['primaryBEList'];
+  proceedToStakeholderPostData['strategyReviewDate'] = this.offerBuilderdata['strategyReviewDate'] == null ? '' : this.offerBuilderdata['strategyReviewDate'];
+  proceedToStakeholderPostData['designReviewDate'] = this.offerBuilderdata['designReviewDate'] == null ? '' : this.offerBuilderdata['designReviewDate'];
+  proceedToStakeholderPostData['readinessReviewDate'] = this.offerBuilderdata['readinessReviewDate'] == null ? '' : this.offerBuilderdata['readinessReviewDate'];
 
+  let selectedCharacteristics = [];
+  let additionalCharacteristics = [];
 
-//      {
-//     "offerId": "COOL_2102",
-//     "caseId": "CASE-0000000528",
-//     "actionTitle": "fdsaf",
-//     "description": "dss",
-//     "mileStone": "Offer Construct",
-//     "selectedFunction": "BUPM",
-//     "assignee": [
-//         "jbondre","jagondal"                       << This is an Array of Ids of all assignees;
-//     ],
-//     "dueDate": "2019-01-18T21:29:57.000Z",
-//     "owner": "jagondal",      << Owner of the Offer
-//     "offerName": "Jayraj Offer 1",
-//     "type": "Notification"     << I don’t know about type for right now so just put Notification, for future functionality
-// }
+  groupDataWithFirst.forEach((group, index) => {
+    for (let prop in group) {
+      let subselectedCharacteristics = {};
+      let notSubselectedCharacteristics = {};
+      subselectedCharacteristics['group'] = groupNamesWithFirst[index];
+      subselectedCharacteristics['subgroup'] = prop;
+      subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
+      subselectedCharacteristics['characteristics'] = [];
 
-
-  let fakeGroup = { 'groups': [
-    {
-        "groupName": "Offer Characteristics",
-        "subGroup": [
-            {
-                "subGroupName": "Offer Components",
-                "choices": [
-                    "Content",
-                    "Managed Services",
-                    "SW - OS",
-                    "SW - SaaS"
-                ],
-                "selected": [
-                    "Content",
-                    "Cloud",
-                    "Cisco"
-                ],
-                "failed": null,
-                "subGroupStatus": "Aligned",
-                "listGrpQuestions": [
-                  {
-                      "question": "Is this offer commissionable?",
-                      "questionType": "Radioi Button",
-                      "values": [
-                          "Yes",
-                          "No"
-                      ],
-                      "required": "Mandatory",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ],
-                      "osGroup":"SKU"
-
-                  },
-                  {
-                      "question": "Who are the target customers?",
-                      "questionType": "Free Text",
-                      "values": [
-                          "SSP"
-                      ],
-                      "required": "Optional",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ]
-                  }
-              ]
-            },
-            {
-                "subGroupName": "Deployment",
-                "choices": [
-                    "Hybrid",
-                    "On-Premise",
-                    "Cloud"
-                ],
-                "selected": [  "Cloud"],
-                "failed": null,
-                "subGroupStatus": "Aligned",
-                "listGrpQuestions": [
-                  {
-                      "question": "test question percent?",
-                      "questionType": "Percentage Text",
-                      "values": [
-                      ],
-                      "required": "Mandatory",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ],
-                      "osGroup":[
-                        "FOE"
-                      ]
-                  },
-                  {
-                      "question": "test question Money?",
-                      "questionType": "Currency Text",
-                      "values": [
-                          "SSP"
-                      ],
-                      "required": "Optional",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ]
-                  }
-              ]
-            },
-            {
-                "subGroupName": "Hosting Party",
-                "choices": [
-                    "Cisco",
-                    "3rd Party",
-                    "Hosting Party - N/A"
-                ],
-                "selected": ["Hosting Party - N/A"],
-                "failed": null,
-                "subGroupStatus": "Aligned"
-            },
-            {
-                "subGroupName": "Delivery",
-                "choices": [
-                    "Electronic Fulfillment",
-                    "Physical Fulfillment",
-                    "Provisioning Fulfillment",
-                    "Embedded Solution",
-                    "Delivery - N/A"
-                ],
-                "selected": ["Delivery - N/A"],
-                "failed": null,
-                "subGroupStatus": "Aligned"
-            },
-            {
-                "subGroupName": "Licensing",
-                "choices": [
-                    "Perpetual",
-                    "Subscription: Pre-Commited Quantity",
-                    "Subscription: Usage/ Utility"
-                ],
-                "selected": ["Subscription: Usage/ Utility"],
-                "failed": null,
-                "subGroupStatus": "Aligned",
-                "listGrpQuestions": [
-                  {
-                      "question": "test question Dropdown?",
-                      "questionType": "LOV",
-                      "values": [
-                          "op1",
-                          "op2",
-                          "op3"
-                      ],
-                      "required": "Mandatory",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ],
-                      "osGroup":[
-                        "FINANCE"
-                      ]
-                  },
-                  {
-                      "question": "test question Multiple Choice?",
-                      "questionType": "Multiple Choice",
-                      "values": [
-                          "SSP",
-                          "SSP2",
-                          "SSP3",
-                      ],
-                      "required": "Optional",
-                      "primaryPOC": [
-                          "BUPM",
-                          "OLE"
-                      ],
-                      "secondaryPOC": [
-                          "Finance",
-                          "OLE"
-                      ]
-                  },
-                  {
-                    "question": "test question Date?",
-                    "questionType": "Date",
-                    "values": [
-                        "SSP",
-                        "SSP2",
-                        "SSP3",
-                    ],
-                    "required": "Optional",
-                    "primaryPOC": [
-                        "BUPM",
-                        "OLE"
-                    ],
-                    "secondaryPOC": [
-                        "Finance",
-                        "OLE"
-                    ]
-                }
-              ]
-            }
-        ]
-
+      notSubselectedCharacteristics['group'] = groupNamesWithFirst[index];
+      notSubselectedCharacteristics['subgroup'] = prop;
+      notSubselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
+      notSubselectedCharacteristics['characteristics'] = [];
+      group[prop].forEach((characters) => {
+        if (characters['status'] === 1 || characters['type'] === 2) {
+          subselectedCharacteristics['characteristics'].push(characters['name']);
+        } else {
+          notSubselectedCharacteristics['characteristics'].push(characters['name']);
+        }
+      });
+      if (index === 0) {
+        selectedCharacteristics.push(subselectedCharacteristics);
+      } else {
+        additionalCharacteristics.push(subselectedCharacteristics);
+      }
     }
-]};
-  this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
-  this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
- })
+  });
+  proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
+  proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
+  proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
+  proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
+  let stakeHolders = [];
+  for (let prop in this.stakeData) {
+    this.stakeData[prop].forEach(sh => {
+      console.log(sh);
+      stakeHolders.push({
+        '_id': sh['_id'],
+        'businessEntity': sh['userMappings'][0]['businessEntity'],
+        'functionalRole': sh['userMappings'][0]['functionalRole'],
+        'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['userMappings'][0]['functionalRole'],
+        'stakeholderDefaults': sh['stakeholderDefaults'],
+        'name': sh['userName']
+      });
+    });
+  }
+  proceedToStakeholderPostData['stakeholders'] = stakeHolders;
 
+  proceedToStakeholderPostData['expectedLaunchDate'] = this.offerBuilderdata['expectedLaunchDate'];
+  proceedToStakeholderPostData['status'] = {
+    'offerPhase': 'PreLaunch',
+    'offerMilestone': 'Launch In Progress',
+    'phaseMilestone': 'ideate',
+    'subMilestone': 'Offer Model Evaluation'
+  };
+  proceedToStakeholderPostData['ideate'] = [{
+    'subMilestone': 'Offer Model Evaluation',
+    'status': 'completed',
+    'completionDate': new Date().toDateString(),
+  }];
+  proceedToStakeholderPostData['secondaryBUList'] = this.offerBuilderdata['secondaryBUList'];
+  proceedToStakeholderPostData['secondaryBEList'] = this.offerBuilderdata['secondaryBEList'];
+
+  proceedToStakeholderPostData['solutioningDetails'] = [];
+  result['groups'].forEach(group => {
+    group['subGroup'].forEach(subGroup => {
+      let solutioningDetail =  {
+        'dimensionGroup': group['groupName'],
+        'dimensionSubgroup': subGroup['subGroupName'],
+        'dimensionAttribute': subGroup['selected'],
+        'primaryFunctions':[],
+        'secondaryFunctions':[],
+        'Details':[]
+      };
+      if (subGroup['listGrpQuestions'] != null && subGroup['listGrpQuestions'].length > 0) {
+        solutioningDetail['primaryFunctions'] = subGroup['listGrpQuestions'][0]['primaryPOC'];
+        solutioningDetail['secondaryFunctions'] = subGroup['listGrpQuestions'][0]['secondaryPOC'];
+        subGroup['listGrpQuestions'].forEach(question => {
+          let detail = {
+            'solutioninQuestion' : question['question'],
+            'egenieAttributeName' : question['egineAttribue'],
+            'oSGroup' : question['osGroup']
+          };
+          solutioningDetail['Details'].push(detail);
+        });
+      }
+      proceedToStakeholderPostData['solutioningDetails'].push(solutioningDetail);
+    });
+  });
+    // proceedToStakeholderPostData['solutioningDetails'] = result;
+    this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
+      this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
+      this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+    });
+
+    })
   }
 
   goBackToOffercreation() {
