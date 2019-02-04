@@ -49,6 +49,8 @@ const schema = new Schema({
     glAcctNumber: Number,
     manualMixHw: Number,
     manualMixSw: Number,
+    inputProductFamily: String,
+    allocProductFamily: String,
     activeStatus: {type: String, enum: ['A', 'I'], required: true},
     status: {type: String, enum: ['A', 'I', 'P', 'D'], required: true},
     approvedOnce: {type: String, enum: ['Y', 'N'], required: true},

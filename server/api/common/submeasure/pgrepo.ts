@@ -33,6 +33,8 @@ const ormMap: OrmMap[] = [
   {prop: 'reportingLevels[0]', field: 'gross_mgn_rollup1'},
   {prop: 'reportingLevels[1]', field: 'gross_mgn_rollup2'},
   {prop: 'reportingLevels[2]', field: 'gross_mgn_rollup3'},
+  {prop: 'inputProductFamily', field: 'input_product_family'},
+  {prop: 'allocProductFamily', field: 'alloc_product_family'},
   {prop: 'rules[0]', field: 'rule1'},
   {prop: 'rules[1]', field: 'rule2'},
   {prop: 'rules[2]', field: 'rule3'},

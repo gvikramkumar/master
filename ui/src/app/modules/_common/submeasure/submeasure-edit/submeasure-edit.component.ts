@@ -235,6 +235,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         if (this.viewMode || this.editMode || this.copyMode) {
           this.sm = results[6];
         }
+        if (this.addMode) {
+          if (this.route.snapshot.params.measureId) {
+            this.sm.measureId = Number(this.route.snapshot.params.measureId);
+          }
+
+        }
         if (this.viewMode) {
           this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
         } else {
@@ -253,6 +259,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           if (this.isDeptUpload()) {
             this.sm.indicators.deptAcct = 'Y';
           }
+          delete this.sm.inputProductFamily;
+          delete this.sm.allocProductFamily;
         }
         if (this.editMode) {
           if (_.includes(['A', 'I'], this.sm.status)) {
@@ -854,7 +862,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   isDeptUpload() {
     return shUtil.isDeptUpload(this.sm);
   }
-  
+
+  isDeptUploadMeasure() {
+    return shUtil.isDeptUploadMeasure(this.sm);
+  }
+
   isGroupingParent() {
     return this.sm.indicators.groupFlag === 'Y';
   }
