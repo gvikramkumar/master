@@ -11,7 +11,7 @@
 
       <div class="col-lg-6">
         <cui-select name="measure" [(ngModel)]="sm.measureId" [items]="measures" label="Measure*" empty="true" [required]="true"
-                    optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
+                    optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()" [disabled]="editMode"></cui-select>
         <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name"
                    [notInList]="submeasureNames" notInListMessage="Sub-Measure name already exists" [required]="true" (blur)="updateReportingLevel3()"></fin-input>
         <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" [label]="!isUnallocatedGroup()?'Source*':'Source'" empty="true" [disabled]="!sm.measureId"
