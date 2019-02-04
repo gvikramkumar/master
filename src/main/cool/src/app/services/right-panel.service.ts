@@ -24,11 +24,11 @@ export class RightPanelService {
 
   }
 
-// -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
 
   displayLaunchDate(offerId: string) {
 
-    return this.httpClient.get<LeadTime>(this.launchDateUrl + offerId, {
+    return this.httpClient.get(this.launchDateUrl + offerId, {
       observe: 'body',
       responseType: 'json'
     }).pipe(
@@ -38,7 +38,7 @@ export class RightPanelService {
 
   }
 
-  displayAverageWeeks(be: string, mm: string ) {
+  displayAverageWeeks(be: string, mm: string) {
 
     return this.httpClient.get(this.averageWeekUrl + be + '/' + mm, {
       observe: 'body',

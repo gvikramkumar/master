@@ -131,6 +131,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
     OfferSolutionQuestionComponent
   ],
   imports: [
+    NgbModule,
     BrowserModule,
     HttpClientModule,
     RouterModule,
