@@ -75,7 +75,7 @@ export class ActionsService {
   downloadActionDetailsFile(caseid) {
     const url = `${this.environmentService.REST_API_FILE_DOWNLOAD_FOR_ACTION}/${caseid}`;
     let headers = new HttpHeaders();
-    headers = headers.set('Accept', 'application/pdf');
+    headers = headers.set('Accept', 'application/octet-stream');
     return this.http.get(url, { headers: headers, responseType: 'blob' });
   }
 }
