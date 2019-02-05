@@ -667,7 +667,7 @@
             <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
             <label>ADD A REASON</label>
         </div>
-        <input #advancedfileinput type="file" (change)="uploadFile($event)" [accept]="accept" [disabled]="disabled" (focus)="onFocus()" (blur)="onBlur()">
+        <input #advancedfileinput type="file" (change)="uploadFile($event)">
     </div>
     <button class="btn" (click)="popProvideDetailsContent.hide($event)">Cancel</button>
                 <button
