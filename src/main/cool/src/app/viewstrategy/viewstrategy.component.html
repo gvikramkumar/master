@@ -1,0 +1,18 @@
+<h4>Comments</h4>
+<div *ngIf = "comments.length > 0">
+       <div class="comments">
+        <div *ngFor="let data of comments" >
+         <div class="viewcomment"> {{data.comment}}</div>
+          <div class="divider divider--compressed comments"></div>
+          <div class="base-margin-bottom commentId" class="datestamp text-right"> <span>{{data.date | date:'dd-MMM-yyyy'}}</span>
+            <span> Owner:{{data.owner}}</span>
+          </div>
+        </div>
+    
+      </div>
+</div> 
+<div *ngIf = "comments.length == 0">
+  No comments Addded....
+
+</div>
+

@@ -3,7 +3,7 @@
     <div class="col">
       <div class="panel panel--ltgray">
         <span class="mt-5">Offer Construct</span>
-        <span (click)='downloadCsv()' class="icon-download pull-right"></span>
+        <span (click)='downloadZip(currentOfferId)' class="icon-download pull-right"></span>
       </div>
     </div>
   </div>
@@ -39,8 +39,24 @@
                   <div class="row">
                     <div class="col-md-10">
                       <span class="ui-fluid">
-                        <p-autoComplete [(ngModel)]="searchInput" [suggestions]="results" (completeMethod)="searchForItem($event)"
-                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" forceSelection="true"></p-autoComplete>
+                        <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results" (completeMethod)="searchForItem($event)"
+                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9">
+                          <ng-template pTemplate="body" let-item>
+                              <tbody>
+                                  <tr>
+                                      <td>
+                                          {{item.PID}}
+                                      </td>
+                                      <td>
+                                          {{item.PRODUCT_FAMILY}}
+                                      </td>
+                                      <td>
+                                          {{item.TECHNOLOGY_GROUP}}
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </ng-template>
+                        </p-autoComplete>
                       </span>
                     </div>
                     <div class="col-md-2">
@@ -62,14 +78,14 @@
                     <a *ngIf="expandView" href="javascript:;" (click)="toggleSidebar()">
                       <span class="icon-fullscreen icon-small"></span>
                     </a>
-                    <button *ngIf="!expandView" class="btn btn--small" (click)="addMore()">Add More Details</button>
+                    <button *ngIf="!expandView" class="btn btn--small" (click)="addMore()">Add More Items</button>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-12">
                     <div pDroppable="dragItem" dropEffect="move" (onDrop)="dropItem($event)" class="canvas">
                       <p-treeTable [value]="offerConstructItems" [columns]="cols" dataKey='uniqueKey' selectionMode="checkbox"
-                        [(selection)]="selected" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"
+                        [(selection)]="selected"
                         [hidden]="initalRowAdded" [scrollHeight]="500" styleClass="table--highlight">
                         <ng-template pTemplate="header" let-columns>
                           <tr>
@@ -84,16 +100,16 @@
                             dragEffect="copyMove" (onDragStart)="dragStartRow($event,rowNode)">
                             <td *ngIf="rowData['productName']">
                               <div *ngIf="!rowData['isGroupNode']">
-                                <p-treeTableCheckbox (click)='selectNodeToRemove(rowNode)' [value]="rowNode"></p-treeTableCheckbox>
+                                <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                                 <span class="treetable--product-name">{{rowData['productName']}}</span>
-                                <span *ngIf="rowData['isMajorLineItem']">({{itemCount}})</span>
+                                <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
                                 <a *ngIf="!rowData['isMajorLineItem'] && !rowData['isGroupNode']" class="pull-right"
                                   (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
                                   Details</a>
                               </div>
                               <div *ngIf="rowData['isGroupNode']">
-                                <p-treeTableCheckbox (click)='selectNodeToRemove(rowNode)' [value]="rowNode"></p-treeTableCheckbox>
+                                <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                                 <span (focusout)='editData=true' (click)='enableEdit()'>
                                   <input [id]='rowData["uniqueKey"]' autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
@@ -135,7 +151,7 @@
                         </div>
                       </div>
                     </div>
-                    <button class="btn btn--primary">Remove</button>
+                    <button (click)='removeSelected()' class="btn btn--primary">Remove</button>
                   </div>
                 </div>
               </div>
@@ -147,13 +163,13 @@
   </div>
   <div class="row base-margin-top">
     <div class="col-md-12 task--bar">
-      <button class="btn btn--primary">Discard Changes</button>
+      <button class="btn btn--primary" (click)="discardChanges()">Discard Changes</button>
       <button class="btn btn--primary" (click)="saveOfferConstructChanges()">Save Changes</button>
     </div>
 
   </div>
   <p-dialog header="Add Details for" closable="true" modal="true" showHeader="false" (onHide)="onHide()" [responsive]="true"
-    [width]="900" [minWidth]="200" [minY]="70" [(visible)]="displayAddDetails">
+  [(visible)]="displayAddDetails" [contentStyle]="{'height': '450px', 'max-height':'450px', 'min-width':'700px'}" positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
     <form (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
       <!-- Items Top Section -->

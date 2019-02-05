@@ -226,9 +226,40 @@
 .cool.cui .ui-table .ui-sortable-column.ui-state-highlight .ui-sortable-column-icon {
   color: #1b1d1f;
 }
-th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
+.cool.cui th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
   outline: 0;
 }
+
+/* Tables in phase popovers  */
+.cool.cui table.phase-popover {
+  border-collapse: collapse;
+}
+.cool.cui table.phase-popover tr {
+  border:solid 1px #d4d4d4;
+  border-collapse: collapse;
+}
+.cool.cui table.phase-popover thead tr {
+  border: none;
+}
+.cool.cui table.phase-popover tr td table tr td:first-child {
+  border-left: none;
+}
+.cool.cui table.phase-popover tr td table tr td {
+  border-bottom:dashed 1px #d4d4d4;
+}
+.cool.cui table.phase-popover tr td table tr:last-child td {
+  border-bottom:none;
+}
+.cool.cui .table.phase-popover tr td:first-child {
+  width: 200px;
+  border-color: #d4d4d4;
+}
+.cool.cui .overlay-phases h6{
+  white-space: nowrap;
+  padding-top: 10px;
+}
+
+
 /* Custom 3-segment Progress Bar */
 .cui .td--progress-fitted .row.no-gutters {
   padding: 0 20px;

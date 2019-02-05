@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvironmentService } from '../../../environments/environment.service';
 
 @Injectable({
@@ -19,11 +19,17 @@ export class OfferconstructCanvasService {
   }
 
   searchEgenie(keyword: String): Observable<any> {
-    // return this.http.get(this.setOfferConstructURL);
-    return null;
+    return this.http.get(this.environmentService.PDAF_SEARCH_EGINIE + keyword);
   }
 
   saveOfferConstructChanges(offerConstructChnages: any): Observable<any> {
     return this.http.post(this.environmentService.REST_API_UPDATE_OFFER, offerConstructChnages, { withCredentials: true });
+  }
+
+  downloadZip(offerId) {
+    let url = this.environmentService.REST_API_DOWNLOAD_ZIP_GET_URL + offerId + '?files=billing&files=hardware';
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/octet-stream');
+    return this.http.get(url, { headers: headers, responseType: 'blob' });
   }
 }

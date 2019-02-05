@@ -7,6 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class OffersolutioningCardOneComponent implements OnInit {
   @Input() groupData:Object;
+  @Input() stakeData:Object;
+  @Input() offerData:Object;
 
   constructor() { }
 

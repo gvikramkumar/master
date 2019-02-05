@@ -14,6 +14,9 @@ import { Group } from './model/Group';
 import { Groups } from '../models/groups';
 import { FormGroup } from '@angular/forms';
 import { OfferConstructService } from '../services/offer-construct.service';
+import { ConstructDetails } from './model/ConstructDetails';
+import { ConstructDetail } from './model/ConstructDetail';
+import { ItemDetail } from './model/ItemDetail';
 
 @Component({
   selector: 'app-offerconstruct-canvas',
@@ -52,6 +55,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   selectedItems;
   showMandatoryDetails: Boolean = false;
   currentRowClicked;
+  selectedPids;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
@@ -288,7 +292,7 @@ export class OfferconstructCanvasComponent implements OnInit {
         itemData.forEach(item => {
           const itemObj = {
             categoryName: item.type,
-            isMajorLineItem: item.isMajorLineItem,
+            isMajorLineItem: item.majorLineItem,
             productName: item.type,
             listPrice: ''
           };
@@ -298,42 +302,6 @@ export class OfferconstructCanvasComponent implements OnInit {
     });
 
     this.itemCount = 0;
-    const obj = {
-      categoryName: 'HARDWARE',
-      isMajorLineItem: true,
-      productName: 'hardware',
-      listPrice: ''
-    };
-    const obj2 = {
-      categoryName: 'MINOR LINE BUNDLE',
-      productName: 'minor-line-bundle',
-      isMajorLineItem: false,
-      listPrice: '23233'
-    };
-    const obj3 = {
-      categoryName: 'XAAS',
-      isMajorLineItem: true,
-      productName: 'xaas',
-      listPrice: ''
-    };
-    const obj4 = {
-      categoryName: 'SOFTWARE',
-      isMajorLineItem: true,
-      productName: 'software',
-      listPrice: ''
-    };
-    const obj5 = {
-      categoryName: 'SUBSCRIPTIONS',
-      isMajorLineItem: true,
-      productName: 'subscriptions',
-      listPrice: ''
-    };
-
-    this.itemCategories.push(obj);
-    this.itemCategories.push(obj2);
-    this.itemCategories.push(obj3);
-    this.itemCategories.push(obj4);
-    this.itemCategories.push(obj5);
 
     this.cols = [
       { field: 'productName', header: 'PRODUCTS' },
@@ -344,35 +312,60 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   dragStartRow($event, item) {
     this.draggedItem = item.node;
+    //this.selected = [...this.selected];
   }
 
   dragStart(event, item: any) {
     this.draggedItem = item;
   }
 
-  downloadCsv() {
+  //donwnload Zip file
+  downloadZip(offerId) {
+    this._canvasService.downloadZip(this.currentOfferId).subscribe((res) => {
+      const nameOfFileToDownload = 'offer-construct';
+      const blob = new Blob([res], { type: 'application/zip' });
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+      } else {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nameOfFileToDownload;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    })
   }
 
-  removeSelected(node) {
+  removeSelected() {
     if (this.selected.length) {
-      this.selected = this.selected.slice(this.selected.length);
-      this.offerConstructItems.push(this.itemToTreeNode(this.selected));
+      let newObj = [];
+      newObj = this.offerConstructItems;
+      for (let i = 0; i < this.selected.length; i++) {
+        if (this.selected[i].parent != null) {
+          let uniqKey = this.selected[i].data.uniqueKey;
+          for (let m = 0; m < newObj.length; m++) {
+            for (let k = 0; k < newObj[m].children.length; k++) {
+              if (uniqKey == newObj[m].children[k].data.uniqueKey) {
+                newObj[m].children.splice(k, 1);
+              }
+            }
+          }
+        }
+        if (this.selected[i].parent === null) {
+          let uKey = this.selected[i].data.uniqueKey;
+          for (let j = 0; j < newObj.length; j++) {
+            if (uKey == newObj[j].data.uniqueKey) {
+              newObj.splice(j, 1);
+            }
+          }
+        }
+      }
+      this.offerConstructItems = newObj;
       this.offerConstructItems = [...this.offerConstructItems];
       this.selected = [...this.selected];
-
     }
-  }
-
-  nodeSelect(event) {
-    this.messageService.add({ severity: 'info', summary: 'Node Selected', detail: event.node.data.name });
-  }
-
-  nodeUnselect(event) {
-    this.messageService.add({ severity: 'info', summary: 'Node Unselected', detail: event.node.data.name });
-  }
-
-  selectNodeToRemove(node) {
-    this.nodeToDelete = node;
+    this.nodeToDelete = {};
     this.offerConstructItems = [...this.offerConstructItems];
   }
 
@@ -380,7 +373,15 @@ export class OfferconstructCanvasComponent implements OnInit {
    *
    * @param $event Search for PID
    */
-  searchForItem($event) { }
+  searchForItem(event) {
+    this._canvasService.searchEgenie(event.query).subscribe ((results)=> {
+      this.results = [...results];
+    },
+    (error) => {
+      this.results = [];
+    }
+    );
+  }
 
   drop(event, rowdata) {
     rowdata.node.children.push(this.draggedItem);
@@ -425,7 +426,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     let majorLineItemName;
     // Find parent Product (major item)
     while(currentNode.parent !== null) {
-      // statements if the condition is true 
+      // statements if the condition is true
         currentNode = currentNode.parent;
         majorLineItemName = currentNode.data.productName;
     }
@@ -453,11 +454,86 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.showMandatoryDetails = !this.showMandatoryDetails;
   }
 
-  saveOfferConstructChanges() {
-    const constructDetails: any[] = [];
-    const constructDetailsPayload = {};
+  discardChanges() {
+    this.offerConstructItems = [];
+  }
 
-    this._canvasService.saveOfferConstructChanges(constructDetailsPayload).subscribe(data => {
+  saveOfferConstructChanges() {
+
+    this.offerConstructItems = [... this.offerConstructItems];
+    let cds: ConstructDetails  = new ConstructDetails([]);
+
+    this.offerConstructItems.forEach( (node) => {
+      let cd:ConstructDetail;
+      // check if this item is major item
+      if (node.parent === null) {
+        cd = new ConstructDetail();
+        cd.constructItem = 'Major';
+        cd.constructItemName = node.data.productName;
+        cd.constructType = node.data.productName;
+        cd.productFamily = node.data.productName;
+        cd.groupName = [];
+        cds.constructDetails.push(cd);
+      }
+
+      // minor items
+      if (node.children !== undefined && node.children !== null) {
+        node.children.forEach((child) => {
+          if (!child.data.isGroupNode) {
+            cd = new ConstructDetail();
+            cd.constructItem = 'Minor';
+            cd.constructItemName = child.data.productName;
+            cd.constructType = child.data.productName;
+            cd.productFamily = child.data.productName;
+            cd.groupName = [];
+            if (child.data.itemDetails !== undefined) {
+              let props = Object.keys(child.data.itemDetails);
+              let id: ItemDetail;
+              props.forEach((prop) => {
+                id = new ItemDetail();
+                id.attributeName = prop;
+                id.attributeValue = child.data.itemDetails.prop;
+                id.attributeType = 'Unique';
+                id.existingFromEgenie = false;
+                cd.itemDetails.push(id);
+              });
+            }
+            cds.constructDetails.push(cd);
+          } else {
+            if (child.children !== undefined && child.children !== null) {
+              child.children.forEach((gchild) => {
+                  cd = new ConstructDetail();
+                  cd.constructItem = 'Minor';
+                  cd.constructItemName = gchild.data.productName;
+                  cd.constructType = gchild.data.productName;
+                  cd.productFamily = gchild.data.productName;
+                  cd.groupName.push(child.data.productName);
+                  if (gchild.data.itemDetails !== undefined) {
+                    let props = Object.keys(gchild.data.itemDetails);
+                    let id: ItemDetail;
+                    props.forEach((prop) => {
+                      id = new ItemDetail();
+                      id.attributeName = prop;
+                      id.attributeValue = gchild.data.itemDetails.prop;
+                      id.attributeType = 'Unique';
+                      id.existingFromEgenie = false;
+                      cd.itemDetails.push(id);
+                    });
+                  }
+                  cds.constructDetails.push(cd);
+                });
+              }
+            }
+        });
+      }
+
+
+    });
+
+    this._canvasService.saveOfferConstructChanges(cds).subscribe(data => {
+    },
+    (error) => {
+      console.log(error);
     });
   }
 

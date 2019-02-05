@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-
 import { Router, ActivatedRoute } from '@angular/router';
 import { CreateOfferService } from '../services/create-offer.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -15,6 +15,7 @@ import { SharedService } from '../shared-service.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { LeadTime } from './lead-time';
 import * as moment from 'moment';
+import { async } from '@angular/core/testing';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -68,6 +69,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   mmModel: string;
   leadTimeYear: number;
+  progressBarWidth: number;
   averageWeekCount: string;
   expectedLaunchDate: string;
   weekDifferenceCount: string;
@@ -296,30 +298,38 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     this.displayOfferPhase = true;
   }
 
-  showLeadTimeDailog() {
 
+
+  async showLeadTimeDailog() {
+
+    // Initialize Params
+    const maxWeekDuration = 20;
     this.mmModel = this.derivedMM;
     this.leadTimeYear = new Date().getFullYear() - 1;
 
     if (this.displayLeadTime) {
 
+      // Compute Expected Launch Date
       this.displayLeadTimeButton = true;
-      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-        (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = this.noOfWeeksDifference;
-          this.expectedLaunchDate = moment(leadTime.expectedLaunchDate).format('MM/DD/YYYY');
-        }
-      );
+      const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.offerId).toPromise();
+      this.expectedLaunchDate = moment(expectedLaunchDateObject['expectedLaunchDate']).format('MM/DD/YYYY');
 
-      this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).subscribe(
-        (averageWeekCountObj: Object) => {
-          this.averageWeekCount = Number(averageWeekCountObj['AverageWeeks']).toFixed(2);
-        }
-      );
+      // Compute Average Week Count
+      const averageWeekCountObject = await this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).toPromise();
+      this.averageWeekCount = Number(averageWeekCountObject['AverageWeeks']).toFixed(2);
+
+       // Initialize Average Week Count To N/A When Applicable
+      if (parseInt(this.averageWeekCount, 2) === 0) {
+        this.averageWeekCount = 'N/A';
+      }
 
     }
 
+    // Compute Progree Bar Width
+    this.progressBarWidth = Math.floor((Number(this.averageWeekCount) / maxWeekDuration * 100));
+
   }
+
 
   onHide() {
     this.display = false;
