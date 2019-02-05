@@ -5,6 +5,7 @@ class InputFilterLevel {
   scmsLevel: string;
   internalBELevel: string;
   entityLevel: string;
+  glSegLevel: string[];
 }
 
 class Indicators {

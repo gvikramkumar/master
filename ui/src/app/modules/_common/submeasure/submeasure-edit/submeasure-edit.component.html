@@ -34,7 +34,7 @@
         <fin-input name="desc" [textarea]="true" [(ngModel)]="sm.desc" [label]="!isUnallocatedGroup()?'Description*':'Description'" [rows]="2" [required]="!isUnallocatedGroup()"></fin-input>
       </div>
 
-      <div class="col-lg-6 form-group-max-width">
+      <div class="col-lg-6">
         <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes" [required]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()"
                     [label]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'" empty="true" optionsKey="name" optionsValue="value"></cui-select>
         <div *ngIf="isManualMix()" fxLayout="row" fxLayoutAlign="start start">
@@ -52,8 +52,8 @@
                     [label]="!isUnallocatedGroup() && !isPassThrough()?'Adjustment Type*':'Adjustment Type'" empty="true"
                     [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="rrr_category_id" optionsValue="adj_type_id"></cui-select>
 
-        <div class="margin-top:15px; height: 0px;">&nbsp;</div>
-        <div class="border-and-padding">
+        <!--<div class="margin-top:10px; height: 0px;">&nbsp;</div>-->
+        <div class="border-and-padding form-group-max-width">
           <div style="margin-bottom:-10px;">
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
@@ -70,7 +70,7 @@
           </div>
         </div>
 
-        <div *ngIf="isDeptUploadMeasure()" class="border-and-padding base-margin-top">
+        <div *ngIf="isDeptUploadMeasure()" class="border-and-padding half-margin-top form-group-max-width">
           <fieldset style="position:relative; margin-bottom:0;" [class.disabled]="!isDeptUpload()">
             <legend>Dept/Acct Upload</legend>
             <div style="height:6px;" class="spacer-div">&nbsp;</div>
@@ -133,6 +133,9 @@
                     <div class="check-wrap">
                       <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')" [disabled]="ScmsIflDisabled"></fin-checkbox>
                     </div>
+                    <div class="check-wrap">
+                      <fin-checkbox [(model)]="ifl_switch_glseg" label="GL Segments" (modelChange)="iflChange('glseg')"></fin-checkbox>
+                    </div>
                   </div>
                   <div class="col-6">
                     <div class="sel-wrap">
@@ -154,6 +157,10 @@
                     <div class="sel-wrap">
                       <cui-select name="scmsLevel" [(ngModel)]="sm.inputFilterLevel.scmsLevel" [required]="ifl_switch_scms" class="option"
                                   [items]="scms_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_scms"></cui-select>
+                    </div>
+                    <div class="sel-wrap">
+                      <cui-multiselect name="glSegLevel" [(ngModel)]="sm.inputFilterLevel.glSegLevel" [required]="ifl_switch_glseg" class="option"
+                                       [items]="glseg_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_glseg"></cui-multiselect>
                     </div>
                   </div>
                 </div>
