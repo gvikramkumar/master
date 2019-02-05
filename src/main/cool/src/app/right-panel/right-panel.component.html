@@ -46,7 +46,7 @@
         <h5 class="half-margin-bottom">Estimated Lead Time</h5>
         <!-- <span class="ribbon label label--warning-alt"> -->
 
-        <span>
+        <span class="ribbon label label--warning-alt">
 
             <!-- <div *ngIf="displayLeadTime" class="alert alert-success box-msg" role="alert">
                     <button [disabled]="displayLeadTime" (click)="showLeadTimeDailog()">
@@ -56,14 +56,14 @@
 
             <div *ngIf="!displayLeadTime">
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                    <strong> Lead Time Calculation?</strong>
+                     Lead Time Calculation?
                 </button>
             </div>
 
             <div *ngIf="displayLeadTime">
                 <strong><small>{{noOfWeeksDifference}}</small></strong>
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                    <strong> Lead Time Calculation?</strong>
+                    Lead Time Calculation?
                 </button>
             </div>
 

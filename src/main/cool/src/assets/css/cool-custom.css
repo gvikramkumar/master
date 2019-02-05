@@ -210,9 +210,19 @@
 .cui .ui-cell-data span.icon-small {
   color: #005073;
 }
-.cui .card.card--raised, .cui a.card.card--raised {
-  -webkit-box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 10px 4px -6px rgba(0, 0, 0, 0.05);
+.cool.cui .card, .cool.cui a.card {
+  color: #58585b;
+  position: relative;
+  background: #ffffff;
+  box-shadow: none;
+  border: 1px solid #ededed;
+  padding: 10px;
+  display: block;
+  border-radius: 2px;
+}
+.cool.cui .card.card--raised, .cui a.card.card--raised {
+  -webkit-box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.025);
+  box-shadow: 0 10px 4px -6px rgba(0, 0, 0, 0.025);
 }
 .cui .ui-datatable .ui-datatable-thead>tr.tr--th-small>th, .cui .ui-table .ui-table-thead>tr.tr--th-small>th {
   font-size:10px;
@@ -226,9 +236,40 @@
 .cool.cui .ui-table .ui-sortable-column.ui-state-highlight .ui-sortable-column-icon {
   color: #1b1d1f;
 }
-th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
+.cool.cui th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
   outline: 0;
 }
+
+/* Tables in phase popovers  */
+.cool.cui table.phase-popover {
+  border-collapse: collapse;
+}
+.cool.cui table.phase-popover tr {
+  border:solid 1px #d4d4d4;
+  border-collapse: collapse;
+}
+.cool.cui table.phase-popover thead tr {
+  border: none;
+}
+.cool.cui table.phase-popover tr td table tr td:first-child {
+  border-left: none;
+}
+.cool.cui table.phase-popover tr td table tr td {
+  border-bottom:dashed 1px #d4d4d4;
+}
+.cool.cui table.phase-popover tr td table tr:last-child td {
+  border-bottom:none;
+}
+.cool.cui .table.phase-popover tr td:first-child {
+  width: 200px;
+  border-color: #d4d4d4;
+}
+.cool.cui .overlay-phases h6{
+  white-space: nowrap;
+  padding-top: 10px;
+}
+
+
 /* Custom 3-segment Progress Bar */
 .cui .td--progress-fitted .row.no-gutters {
   padding: 0 20px;
@@ -294,7 +335,11 @@ th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
   font-size: 14px;
 }
 /* phases widget */
-.cui .ui-step.active {
+.cool.cui .ui-steps .ui-step:before {
+  height: 5px;
+  top: 9px;
+}
+.cool.cui .ui-step.active,.cool.cui .ui-step.visited {
   cursor: pointer;
 }
 .cool.cui .ui-steps {
@@ -360,7 +405,15 @@ th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
 }
 
 /* Estimated Lead Time Ribbon */
-.ribbon {
+.cool.cui .ribbon:hover button {
+  color:#000;
+}
+.cool.cui .ribbon:hover {
+  padding-right:20px;
+  -webkit-transition: all .175s ease-out; /* Safari */
+  transition: all .175s ease-out;
+}
+.cool.cui .ribbon {
   background: #ffcc00;
   width: auto;
   display: inline-block;
@@ -368,11 +421,12 @@ th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
   margin: auto;
   position: relative;
   color: #39393b;
-
+  cursor: pointer;
   text-align: center;
-  margin-left: 100px;
+  -webkit-transition: all .175s ease-out; /* Safari */
+  transition: all .175s ease-out;
 }
-.ribbon:after {
+.cool.cui .ribbon:after {
   content: '';
   border: 15px solid #ffcc00;
   border-right-color: transparent;
@@ -381,24 +435,28 @@ th.ui-state-default.ui-sortable-column, th.ui-sortable-column.ng-star-inserted {
   top: 0;
   right: -15px;
 }
-.ribbon button {
+.cool.cui .ribbon button {
   border: none;
   background: transparent;
   outline: none;
+  cursor: pointer;
 }
-.cui .label--warning-alt {
+.cool.cui .ribbon button:hover {
+  color:#000;
+}
+.cool.cui .ribbon.label--warning-alt {
   background: #ffcc00;
   color: #39393b;
   font-size: 16px;
   text-transform: uppercase;
   display: inline-block;
-  line-height: 1.4;
+  line-height: 1.2;
   position: relative;
-  left: -10px;
+  left: -11px;
   padding-left: 15px;
   height: 30px;
 }
-.cui .label--warning-alt strong {
+.cool.cui .ribbon.label--warning-alt strong {
   font-size: 22px;
 }
 
@@ -730,6 +788,43 @@ span[class*="display-"] {
 }
 .cool.cui .dimensions-questions {
   margin:20px auto;
+}
+
+/* Offer Construct */
+ /* tree table styles */
+ .cool.cui .offer-construct-container .canvas .ui-treetable .ui-treetable-thead>tr>th:first-child {
+  width: 50%;
+}
+.cool.cui .offer-construct-container .canvas .ui-treetable .ui-treetable-thead > tr > th {
+  border: 0!important;
+  background-color: #f7f7f7;
+  font-weight: normal;
+  font-size: 14px;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr:first-child {
+  background: #ffffff;
+  color: #333333;
+  border-bottom: solid 1px #cacaca;
+  text-transform: capitalize;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr {
+  background: #ffffff;
+  color: #333333;
+  border-bottom: dashed 1px #cacaca;
+  text-transform: capitalize;
+  line-height: 2;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr > td {
+ border:transparent;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr:hover  {
+  cursor: pointer;
+  background-color:#E6F3FA;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr td a.remove {
+  opacity: 0;
+}.cool.cui .ui-treetable .ui-treetable-tbody > tr:hover td a.remove {
+  opacity: 1;
 }
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
