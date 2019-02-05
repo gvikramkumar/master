@@ -459,10 +459,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   saveOfferConstructChanges() {
-
     this.offerConstructItems = [... this.offerConstructItems];
-    let cds: ConstructDetails  = new ConstructDetails([]);
-
+    let cds: ConstructDetails  = new ConstructDetails(this.currentOfferId, []);
     this.offerConstructItems.forEach( (node) => {
       let cd:ConstructDetail;
       // check if this item is major item

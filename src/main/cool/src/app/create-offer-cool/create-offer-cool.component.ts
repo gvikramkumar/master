@@ -386,6 +386,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
     const offerCreationDate = new Date().toISOString();
     const selectedPrimaryBe= [];
+    const constructDetails = [];
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
@@ -403,7 +404,8 @@ export class CreateOfferCoolComponent implements OnInit {
       this.iDPId,
       offerCreatedBy,
       offerCreationDate,
-      status);
+      status,
+      constructDetails);
     if (!this.offerId) {
       this.createOffer(createoffer);
     } else {
