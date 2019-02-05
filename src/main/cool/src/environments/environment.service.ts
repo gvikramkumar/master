@@ -222,6 +222,6 @@ export class EnvironmentService {
         this.REST_API_ACTION_PRIMARYPOC_POST_URL = this.baseapi + '/action/create/user/task';
         this.REST_API_SET_OFFERCONSTRUCT_POST_URL = this.baseapi + '/setOfferConstruct';
         this.REST_API_FILE_UPLOAD_FOR_ACTION = this.baseapi + '/upload/file';
-        this.REST_API_FILE_DOWNLOAD_FOR_ACTION = this.baseapi + '/download/provideDetails/';
+        this.REST_API_FILE_DOWNLOAD_FOR_ACTION = this.baseapi + '/download/provideDetails';
     }
 }

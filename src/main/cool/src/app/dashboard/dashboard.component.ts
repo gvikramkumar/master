@@ -318,7 +318,7 @@ export class DashboardComponent implements OnInit {
       taskName,
       action,
       commentValue,
-      false
+      true
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
       overlaypanel.hide();

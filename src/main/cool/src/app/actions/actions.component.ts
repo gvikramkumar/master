@@ -169,6 +169,7 @@ export class ActionsComponent implements OnInit {
         obj.setTriggerDate(this.dateFormat(element.triggerDate));
         obj.setDueDate(this.dateFormat(element.dueDate));
         obj.setActionDesc(element.actionDesc);
+        obj.setAttachment(element.attachment);
         obj.setAlertType(1);
         obj.setCaseId(element.caseId);
         obj.setCreatedBy(element.createdBy);
@@ -237,6 +238,27 @@ export class ActionsComponent implements OnInit {
 
   dateFormat(inputDate: string) {
     return moment(inputDate).format('DD-MMM-YYYY');
+  }
+
+  getActionDetailsFile(caseid) {
+    this.actionsService.downloadActionDetailsFile(caseid).subscribe(data => {
+      const nameOfFileToDownload = 'offer-details';
+      console.log("nameoffile", nameOfFileToDownload);
+      console.log(data);
+      const blob = new Blob([data], { type: 'application/pdf' });
+
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+      } else {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nameOfFileToDownload;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+      }
+    });
   }
 
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
@@ -70,5 +70,12 @@ export class ActionsService {
   escalateNotification(emailPayload) {
     let url = this.environmentService.REST_API_ESCALATE_NOTIFICATION_URL;
     return this.http.post(url, emailPayload);
+  }
+
+  downloadActionDetailsFile(caseid) {
+    const url = `${this.environmentService.REST_API_FILE_DOWNLOAD_FOR_ACTION}/${caseid}`;
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    return this.http.get(url, { headers: headers, responseType: 'blob' });
   }
 }
