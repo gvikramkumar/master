@@ -302,24 +302,31 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   async showLeadTimeDailog() {
 
+    // Initialize Params
     const maxWeekDuration = 20;
     this.mmModel = this.derivedMM;
     this.leadTimeYear = new Date().getFullYear() - 1;
 
     if (this.displayLeadTime) {
 
+      // Compute Expected Launch Date
       this.displayLeadTimeButton = true;
       const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.offerId).toPromise();
       this.expectedLaunchDate = moment(expectedLaunchDateObject['expectedLaunchDate']).format('MM/DD/YYYY');
 
+      // Compute Average Week Count
       const averageWeekCountObject = await this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).toPromise();
       this.averageWeekCount = Number(averageWeekCountObject['AverageWeeks']).toFixed(2);
 
+       // Initialize Average Week Count To N/A
+      if (parseInt(this.averageWeekCount, 2) === 0) {
+        this.averageWeekCount = 'N/A';
+      }
+
     }
 
+    // Compute Progree Bar Width
     this.progressBarWidth = Math.floor((Number(this.averageWeekCount) / maxWeekDuration * 100));
-    console.log(this.progressBarWidth);
-    const a: number = 1 + 2;
 
   }
 
