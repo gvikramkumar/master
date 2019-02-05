@@ -1,10 +1,10 @@
 <div class="content">
-  <div class="container-fluid">
+  <div class="container">
     <app-menu-bar [caseId]="caseId"
       [currentMMModel]="derivedMM"
       [offerId]="currentOfferId"
       [offerName]="offerName"
-      [stakeData]="stakeData"      
+      [stakeData]="stakeData"
     (updateMessage)="updateMessage($event)">
 
     </app-menu-bar>
@@ -96,6 +96,7 @@
                       </div>
                       <ng-template #visibleEscalateTemplate>
                         <div class="panel panel--bordered not-reviewed">
+                            <app-viewstrategy [caseId]="caseId" [comments] = "strategyReviewData.comments"></app-viewstrategy>
                           <p>This is the strategy review milestone and the content is a placeholder for
                             milestone summary.
                             This is the strategy review milestone and the content is ... </p>
@@ -403,12 +404,12 @@
           </div>
         </div>
         <div class="rightContent" style="margin-top: -5px;">
-          <app-right-panel 
-          [offerId]="offerId"               
+          <app-right-panel
+          [offerId]="offerId"
           [stakeData]="stakeData"
-          [primaryBE] = "primaryBE"  
-          [portfolioFlag]="setFlag"                     
-          [derivedMM] = "derivedMM"                      
+          [primaryBE] = "primaryBE"
+          [portfolioFlag]="setFlag"
+          [derivedMM] = "derivedMM"
           [displayLeadTime]="displayLeadTime"
           [noOfWeeksDifference] = "noOfWeeksDifference"
           (updateStakeData)="updateStakeData($event)">

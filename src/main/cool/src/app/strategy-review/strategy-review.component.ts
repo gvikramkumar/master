@@ -377,7 +377,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       userId,
       taskName,
       this.action,
-      this.commentValue
+      this.commentValue,
+      false
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
       this.closeForm();

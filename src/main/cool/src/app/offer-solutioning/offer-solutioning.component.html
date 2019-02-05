@@ -1,12 +1,12 @@
 <div class="content solutioning">
-  <div class="container-fluid">
+  <div class="container">
     <app-menu-bar
     [caseId]="caseId"
     [currentMMModel]="derivedMM"
     [offerId]="currentOfferId"
     [offerName]="firstData['offerName']"
     [stakeData]="stakeData"
-   
+
     > </app-menu-bar>
 
     <div class="panel-wrapper mt-15">
@@ -24,7 +24,7 @@
                   {{derivedMM}} Aligned</span></div>
             </li>
           </ul>
-        
+
           <!-- <app-mm-info-bar></app-mm-info-bar> -->
           <!-- Offer Solutioning Bar -->
           <div *ngFor="let group of offerSolutionGroups">
@@ -37,15 +37,15 @@
           <!-- Right Panel -->
         </div>
         <div class="rightContent col-sm-12 col-md-3" style="margin-top: -5px;">
-          <app-right-panel          
+          <app-right-panel
           [stakeData]="stakeData"
-          [offerId]="offerId" 
+          [offerId]="offerId"
           [derivedMM] = "derivedMM"
-          [primaryBE] = "primaryBE"   
+          [primaryBE] = "primaryBE"
           [portfolioFlag]="setFlag"
-          [displayLeadTime]="displayLeadTime" 
+          [displayLeadTime]="displayLeadTime"
           (updateStakeData)="updateStakeData($event)"
-          [noOfWeeksDifference] = "noOfWeeksDifference"  
+          [noOfWeeksDifference] = "noOfWeeksDifference"
           ></app-right-panel>
         </div>
       </div>

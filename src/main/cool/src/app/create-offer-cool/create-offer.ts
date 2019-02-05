@@ -17,6 +17,7 @@ export class CreateOffer {
   offerCreationDate: string;
   status: Status;
   iDPId: string;
+  constructDetails: any[];
   constructor(userId: string,
     offerOwner: string,
     offerName: string,
@@ -32,7 +33,8 @@ export class CreateOffer {
     iDPId: string,
     offerCreatedBy: string,
     offerCreationDate: string,
-    status: Status) {
+    status: Status,
+    constructDetails: any[]) {
     this.userId = userId;
     this.offerOwner = offerOwner;
     this.offerName = offerName;
@@ -49,5 +51,6 @@ export class CreateOffer {
     this.offerCreationDate = offerCreationDate;
     this.offerCreatedBy = offerCreatedBy;
     this.status = status;
+    this.constructDetails = constructDetails;
   }
 }

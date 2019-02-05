@@ -26,6 +26,17 @@ export class DashboardService {
     return this.http.post(this.environmentService.REST_API_DISMISS_NOTIFICATION, data);
   }
 
+  postFileUploadForAction(caseid, data) {
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Content-Type': 'multipart/form-data',
+    //   }),
+    //   withCredentials: true,
+    // };
+    const url = `${this.environmentService.REST_API_FILE_UPLOAD_FOR_ACTION}/${caseid}`;
+    return this.http.post(url, data);
+  }
+
   postComments(data) {
     return this.http.post(this.environmentService.REST_API_DASH_DIFF_APPROVE_COMMENT_URL, data);
   }
