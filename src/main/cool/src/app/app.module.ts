@@ -88,6 +88,8 @@ import { BlueComponent } from './blue/blue.component';
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
+import { EditfieldsComponent } from './editfields/editfields.component';
+import { ViewstrategyComponent } from './viewstrategy/viewstrategy.component';
 
 
 
@@ -136,7 +138,9 @@ export function app_init(configService: ConfigurationService, userService: UserS
     DynamicFormQuestionComponent,
     OfferconstructCanvasComponent,
     BlueComponent,
-    OfferSolutionQuestionComponent
+    OfferSolutionQuestionComponent,
+    EditfieldsComponent,
+    ViewstrategyComponent
   ],
   imports: [
     NgbModule,

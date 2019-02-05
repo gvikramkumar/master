@@ -46,7 +46,7 @@
         <h5 class="half-margin-bottom">Estimated Lead Time</h5>
         <!-- <span class="ribbon label label--warning-alt"> -->
 
-        <span>
+        <span class="ribbon label label--warning-alt">
 
             <!-- <div *ngIf="displayLeadTime" class="alert alert-success box-msg" role="alert">
                     <button [disabled]="displayLeadTime" (click)="showLeadTimeDailog()">
@@ -56,14 +56,14 @@
 
             <div *ngIf="!displayLeadTime">
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                    <strong> Lead Time Calculation?</strong>
+                     Lead Time Calculation?
                 </button>
             </div>
 
             <div *ngIf="displayLeadTime">
                 <strong><small>{{noOfWeeksDifference}}</small></strong>
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                    <strong> Lead Time Calculation?</strong>
+                    Lead Time Calculation?
                 </button>
             </div>
 
@@ -396,7 +396,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <div class="form-group__text">
-                                                <input id="input-size-default" type="text" [(ngModel)]="tenthPercentile">
+                                                <label>10th Percentile</label>
                                             </div>
                                         </div>
                                     </div>
@@ -414,50 +414,41 @@
                                     <div class="col-md-2">
                                         <h6>2.2 WEEKS</h6>
                                     </div>
-                                    <div class="col-md-2">
-                                        <h6 style="color:red">-8W</h6>
-                                    </div>
                                 </div>
                                 <div class="row base-margin-top">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <div class="form-group__text">
-                                                <input id="input-size-default" type="text" [(ngModel)]="average">
+                                                <label>Average</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <p-progressBar [value]="progressBarWidth" ></p-progressBar>
+                                        <p-progressBar [value]="progressBarWidth"></p-progressBar>
                                     </div>
                                     <div class="col-md-2">
                                         <h6>{{averageWeekCount}} WEEKS</h6>
                                     </div>
-                                    <div class="col-md-2">
-                                        <h6 style="color:green">1.2W</h6>
-                                    </div>
                                 </div>
                                 <div class="row base-margin-top">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <div class="form-group__text">
-                                                <input id="input-size-default" type="text" [(ngModel)]="nintyPercentile">
+                                                <label>90th Percentile</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <div class="progressbar progressbar--success" data-percentage="66">
+                                        <div class="progressbar progressbar--success" data-percentage="85">
                                             <div class="progressbar__fill"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <h6>5.7 WEEKS</h6>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h6 style="color:green">2.7W</h6>
                                     </div>
                                 </div>
                                 <div class="row">

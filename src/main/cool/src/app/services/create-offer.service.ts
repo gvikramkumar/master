@@ -175,5 +175,19 @@ export class CreateOfferService {
 
 
   }
+  getEditOfferUpdate(obj){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }),
+      withCredentials: true
+    };
+    if(this.environmentService.REST_API_UPDATE_OFFER ){
+    let url=this.environmentService.REST_API_UPDATE_OFFER ;
+    console.log("edit offer url",url);
+    return this.httpClient.post(url,obj,httpOptions);
+  }
+}
 
 }
