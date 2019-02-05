@@ -307,9 +307,9 @@
     </div>
   </div>
 </div>
-
+<!-- Phases Overlay -->
 <p-overlayPanel #popturboContent [showCloseIcon]="true">
-  <div *ngIf="selectedActionData" class="base-padding" style="min-width:900px">
+  <div *ngIf="selectedActionData" class="overlay-phases" style="min-width:900px">
     <app-turbotaxview [data]="selectedActionData"></app-turbotaxview>
   </div>
 </p-overlayPanel>
@@ -670,7 +670,7 @@
         <p-fileUpload name="provideDetails[]" url="./Documents/"></p-fileUpload>
     </div>
     <button class="btn" (click)="popProvideDetailsContent.hide($event)">Cancel</button>
-                <button 
+                <button
                 [disabled]="!buttonIsDisabled"
                 class="btn btn--primary" (click)="createApproveAction(popProvideDetailsContent)">Save</button>
               </div>

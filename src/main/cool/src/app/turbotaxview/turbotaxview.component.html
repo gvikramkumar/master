@@ -112,72 +112,88 @@
 <!--turbo tax view-->
 
 <div>
-    <h5 class="half-margin-bottom">Offer Phase
-    </h5>
-    <!-- <div class="divider divider--compressed"></div> -->
-    <div class="ui-steps ui-steps--success ui-steps--tiny turbo-mileStone" *ngIf="phaseProcessingCompleted">
-        <div class="ui-step {{mileStoneStatus[0].status}}">
-            <div class="step__icon">
-                <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
-                <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
-            </div>
-            <div class="step__label">Ideate</div>
-        </div>
-        <div class="ui-step {{mileStoneStatus[1].status}}">
-            <div class="step__icon">
-                <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
-                <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
-            </div>
-            <div class="step__label">Plan</div>
-        </div>
-        <div class="ui-step {{mileStoneStatus[2].status}}">
-            <div class="step__icon">
-                <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
-                <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
-            </div>
-            <div class="step__label">Execute</div>
-        </div>
-        <div class="ui-step {{mileStoneStatus[3].status}}">
-            <div class="step__icon">
-                <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
-                <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
-            </div>
-            <div class="step__label">Launch</div>
-        </div>
-        <button class="btn btn--primary">Reinitiate Offer</button>
+    <div class="row">
+<!-- Offer Phase widget -->
+<div class="col-md-12">
+  <!-- <h5>Offer Name <small>ID 123</small></h5> -->
+</div>
+
     </div>
 
+
+    <div class="row">
+    <div class="col-sm-2">
+        <h6>Offer Phase Details </h6>
+    </div>
+    <div class="col-sm-7">
+
+        <div class="ui-steps ui-steps--success ui-steps--tiny turbo-mileStone" *ngIf="phaseProcessingCompleted">
+          <div class="ui-step {{mileStoneStatus[0].status}}">
+              <div class="step__icon">
+                  <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
+                  <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
+              </div>
+              <div class="step__label">Ideate</div>
+          </div>
+          <div class="ui-step {{mileStoneStatus[1].status}}">
+              <div class="step__icon">
+                  <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
+                  <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
+              </div>
+              <div class="step__label">Plan</div>
+          </div>
+          <div class="ui-step {{mileStoneStatus[2].status}}">
+              <div class="step__icon">
+                  <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
+                  <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
+              </div>
+              <div class="step__label">Execute</div>
+          </div>
+          <div class="ui-step {{mileStoneStatus[3].status}}">
+              <div class="step__icon">
+                  <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
+                  <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
+              </div>
+              <div class="step__label">Launch</div>
+          </div>
+
+      </div>
+      </div>
+      <div class="col-sm-3">
+          <button class="btn btn--small btn--primary">Reinitiate Offer</button>
+        </div>
+    </div>
+    <div class="divider divider--compressed"></div>
 </div>
 
 <div class="row">
     <div class="col-md-12">
         <div>
-            <div class="responsive-table">
-                <table style="border:none;border-collapse: separate;border-spacing: 0px 10px;">
+                <table class="table table--compressed table--nostripes phase-popover">
                     <thead>
-                        <tr style = "padding-left:10px;text-align: left">
-                            <th style="width:25%"></th>
-                            <th style="width:25%">MILESTONE</th>
-                            <th style="width:25%">STATUS</th>
-                            <th style="width:25%">COMPLETION DATE</th>
+                        <tr>
+                            <th></th>
+                            <th>MILESTONE</th>
+                            <th>STATUS</th>
+                            <th>COMPLETION DATE</th>
                         </tr>
                     </thead>
                     <tbody *ngIf="offerPhaseDetailsList">
-                        <tr style = "padding-left:10px;text-align: left;border-color: 1px solid #dfdfdf">
-                            <td class=" panel panel--ltgray panel--bordered ">
-                                <span class ="head">
+                        <tr>
+                            <td class="panel--ltgray">
+                                <span class="head text-indigo">
                                     Ideate<br>
-                                    <span> {{ideateCompletedCount}} of {{ideateCount}} Completed
+                                    <span class="text-small text-dkgray-1"> {{ideateCompletedCount}} of {{ideateCount}} Completed
                                     </span>
                                 </span>
                             </td>
                             <td colspan="3" >
                                 <div class="responsive-table">
-                                  <table #data class="table table--nostripes">
+                                  <table #data class="table table--hover table--compressed table--nostripes">
                                     <tbody>
 
                                         <tr [class.innerrow] = "ideateCount -1  > i  "  *ngFor="let ideateData of offerPhaseDetailsList.ideate; let i = index">
-                                            <td><span class="text-indigo"  (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></td>
+                                            <td><a><span (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a></td>
                                             <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
                                             <td>{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
@@ -187,18 +203,18 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class=" panel panel--ltgray panel--bordered" >
-                                <span class ="head">Plan<br>
-                                    <span > {{planCompletedCount}} of {{planCount}} Completed
+                            <td class="panel--ltgray" >
+                                <span class="head text-indigo">Plan<br>
+                                    <span class="text-small text-dkgray-1"> {{planCompletedCount}} of {{planCount}} Completed
                                     </span>
                                 </span>
                             </td>
                             <td *ngIf = "planCount > 1" colspan="3">
                                 <div class="responsive-table">
-                                  <table #data class="table table--nostripes">
+                                  <table #data class="table table--hover table--compressed table--nostripes">
                                     <tbody>
                                         <tr [class.innerrow] = "planCount -1  > i  " class= "innerrow"  *ngFor="let ideateData of offerPhaseDetailsList.plan; let i = index">
-                                            <td><span class="text-indigo">{{ideateData.subMilestone}}</span></td>
+                                            <td><a><span>{{ideateData.subMilestone}}</span></a></td>
                                             <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
                                             <td>{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
@@ -233,6 +249,5 @@
 
                     </tbody>
                 </table>
-            </div>
         </div>
     </div>
