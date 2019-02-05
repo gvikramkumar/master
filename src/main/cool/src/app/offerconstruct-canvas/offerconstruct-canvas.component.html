@@ -1,4 +1,4 @@
-<div class="offer-construct-container base-margin-top">
+<div class="offer-construct-container">
   <div class="row">
     <div class="col">
       <div class="panel panel--ltgray">
@@ -133,11 +133,11 @@
                             <td *ngIf="rowData['productName']">
                               <span class="list-price">{{rowData['listPrice']}}</span>
                               <div *ngIf="rowData['isMajorLineItem']">
-                                <a (click)="createGroup(rowNode)"> Create a Group</a>
+                                <a (click)="createGroup(rowNode)"><span class="icon-folder icon-small"></span> Create a Group</a>
                               </div>
 
                               <!-- added to copy delete node -->
-                              <span (click)='deleteNode(rowNode)' class="icon-trash icon-small"></span>
+                              <a (click)='deleteNode(rowNode)' class="remove"><span class="icon-trash icon-small"></span> <small>Remove Item</small></a>
                             </td>
                           </tr>
                         </ng-template>

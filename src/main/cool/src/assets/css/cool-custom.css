@@ -210,9 +210,19 @@
 .cui .ui-cell-data span.icon-small {
   color: #005073;
 }
-.cui .card.card--raised, .cui a.card.card--raised {
-  -webkit-box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 10px 4px -6px rgba(0, 0, 0, 0.05);
+.cool.cui .card, .cool.cui a.card {
+  color: #58585b;
+  position: relative;
+  background: #ffffff;
+  box-shadow: none;
+  border: 1px solid #ededed;
+  padding: 10px;
+  display: block;
+  border-radius: 2px;
+}
+.cool.cui .card.card--raised, .cui a.card.card--raised {
+  -webkit-box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.025);
+  box-shadow: 0 10px 4px -6px rgba(0, 0, 0, 0.025);
 }
 .cui .ui-datatable .ui-datatable-thead>tr.tr--th-small>th, .cui .ui-table .ui-table-thead>tr.tr--th-small>th {
   font-size:10px;
@@ -802,9 +812,19 @@ span[class*="display-"] {
   color: #333333;
   border-bottom: dashed 1px #cacaca;
   text-transform: capitalize;
+  line-height: 2;
 }
 .cool.cui .ui-treetable .ui-treetable-tbody > tr > td {
  border:transparent;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr:hover  {
+  cursor: pointer;
+  background-color:#E6F3FA;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr td a.remove {
+  opacity: 0;
+}.cool.cui .ui-treetable .ui-treetable-tbody > tr:hover td a.remove {
+  opacity: 1;
 }
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
