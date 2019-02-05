@@ -631,6 +631,10 @@ span[class*="display-"] {
 }
 
 /* Offer Detail */
+.cool.cui .offer-header.card .row:last-child div[class*="col-"] {
+  border-bottom: none;
+}
+
 .cui .timeline__icon {
   border-radius: 50%;
   width: 34px;
