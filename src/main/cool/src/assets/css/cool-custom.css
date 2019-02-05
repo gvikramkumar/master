@@ -325,7 +325,11 @@
   font-size: 14px;
 }
 /* phases widget */
-.cui .ui-step.active {
+.cool.cui .ui-steps .ui-step:before {
+  height: 5px;
+  top: 9px;
+}
+.cool.cui .ui-step.active,.cool.cui .ui-step.visited {
   cursor: pointer;
 }
 .cool.cui .ui-steps {
@@ -761,6 +765,33 @@ span[class*="display-"] {
 }
 .cool.cui .dimensions-questions {
   margin:20px auto;
+}
+
+/* Offer Construct */
+ /* tree table styles */
+ .cool.cui .offer-construct-container .canvas .ui-treetable .ui-treetable-thead>tr>th:first-child {
+  width: 50%;
+}
+.cool.cui .offer-construct-container .canvas .ui-treetable .ui-treetable-thead > tr > th {
+  border: 0!important;
+  background-color: #f7f7f7;
+  font-weight: normal;
+  font-size: 14px;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr:first-child {
+  background: #ffffff;
+  color: #333333;
+  border-bottom: solid 1px #cacaca;
+  text-transform: capitalize;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr {
+  background: #ffffff;
+  color: #333333;
+  border-bottom: dashed 1px #cacaca;
+  text-transform: capitalize;
+}
+.cool.cui .ui-treetable .ui-treetable-tbody > tr > td {
+ border:transparent;
 }
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {

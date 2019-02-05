@@ -35,7 +35,7 @@
           <div class="col">
             <div class="row" *ngIf="expandView">
               <div class="col">
-                <div class="panel panel--ltgray panel--loose">
+                <div class="panel panel--ltgray panel--compressed">
                   <div class="row">
                     <div class="col-md-10">
                       <span class="ui-fluid">
@@ -84,9 +84,8 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div pDroppable="dragItem" dropEffect="move" (onDrop)="dropItem($event)" class="canvas">
-                      <p-treeTable [value]="offerConstructItems" [columns]="cols" dataKey='uniqueKey' selectionMode="checkbox"
-                        [(selection)]="selected"
-                        [hidden]="initalRowAdded" [scrollHeight]="500" styleClass="table--highlight">
+                      <p-treeTable [value]="offerConstructItems" [columns]="cols" dataKey='uniqueKey' tableStyleClass="table table--highlight" selectionMode="checkbox"
+                        [(selection)]="selected" [hidden]="initalRowAdded" [scrollHeight]="500">
                         <ng-template pTemplate="header" let-columns>
                           <tr>
                             <th *ngFor="let col of columns">
@@ -138,7 +137,7 @@
                               </div>
 
                               <!-- added to copy delete node -->
-                              <span (click)='deleteNode(rowNode)' class="icon-delete icon-small"></span>
+                              <span (click)='deleteNode(rowNode)' class="icon-trash icon-small"></span>
                             </td>
                           </tr>
                         </ng-template>
