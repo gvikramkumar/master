@@ -323,6 +323,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.offerName = this.firstData['offerName'];
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
+      if(this.data) {
       for (let i = 0; i <= this.data.length - 1; i++) {
         if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
           this.stakeHolderInfo[this.data[i]['offerRole']] = [];
@@ -338,6 +339,7 @@ export class CreateOfferCoolComponent implements OnInit {
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
       }
+    }
       this.stakeData = this.stakeHolderInfo;
       
 
@@ -449,7 +451,20 @@ export class CreateOfferCoolComponent implements OnInit {
 
   }
 
-
+  updateMessage(message) {
+    
+        if (message != null && message !== '') {
+          if (message === 'hold') {
+            this.proceedButtonStatusValid = false;
+            this.backbuttonStatusValid = false;
+            this.message = { contentHead: '', content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
+          } else if (message === 'cancel') {
+            this.proceedButtonStatusValid = false;
+            this.backbuttonStatusValid = false;
+            this.message = { contentHead: '', content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
+          }
+        }
+      }
 
   updateOffer(createoffer) {
     createoffer.offerId = this.offerId;

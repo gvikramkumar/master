@@ -375,8 +375,8 @@
       <div class="popover__footer">
         <div *ngIf="selectedAction.type == 'Manual Action'">
           <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="createApproveAction(popActionContent)">Complete</button>
-          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="popActionContent.hide($event)">Provide Feedback</button>
-            <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide Feedback</button>
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>
 
         </div>
         <div *ngIf="selectedAction.type == 'Strategy Review'">
@@ -667,11 +667,26 @@
             <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
             <label>ADD A REASON</label>
         </div>
-        <p-fileUpload name="provideDetails[]" url="./Documents/"></p-fileUpload>
+        <input #advancedfileinput type="file" (change)="uploadFile($event)" [accept]="accept" [disabled]="disabled" (focus)="onFocus()" (blur)="onBlur()">
     </div>
     <button class="btn" (click)="popProvideDetailsContent.hide($event)">Cancel</button>
                 <button
                 [disabled]="!buttonIsDisabled"
-                class="btn btn--primary" (click)="createApproveAction(popProvideDetailsContent)">Save</button>
+                class="btn btn--primary" (click)= "createApproveActionWithDetails(popProvideDetailsContent)">Save</button>
               </div>
   </p-overlayPanel>
+
+  <p-overlayPanel #popProvideFeedbackContent [showCloseIcon]="true" style="position: relative; left:50px; top: -1000px;">
+            <div style="min-width:700px; min-height:300px; margin-left:30px">
+              <div class="form-group label--floated">
+                  <div class="form-group__text">
+                      <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
+                      <label>ADD A REASON</label>
+                  </div>
+              </div>
+              <button class="btn" (click)="popProvideFeedbackContent.hide($event)">Cancel</button>
+                        <button 
+                          [disabled]="!buttonIsDisabled"
+                          class="btn btn--primary" (click)="createApproveActionWithFeedback(popProvideFeedbackContent)">Save</button>
+                        </div>
+            </p-overlayPanel>
