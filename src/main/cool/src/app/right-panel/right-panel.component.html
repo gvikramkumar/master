@@ -43,20 +43,14 @@
 
     <!-- Estimated Lead Time -->
     <div class="card card--raised base-margin-top">
+
         <h5 class="half-margin-bottom">Estimated Lead Time</h5>
-        <!-- <span class="ribbon label label--warning-alt"> -->
 
         <span class="ribbon label label--warning-alt">
 
-            <!-- <div *ngIf="displayLeadTime" class="alert alert-success box-msg" role="alert">
-                    <button [disabled]="displayLeadTime" (click)="showLeadTimeDailog()">
-                        Lead Time Calculation?
-                    </button>
-                </div> -->
-
             <div *ngIf="!displayLeadTime">
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                     Lead Time Calculation?
+                    Lead Time Calculation?
                 </button>
             </div>
 
@@ -71,6 +65,7 @@
             <!-- </span> -->
 
         </span>
+
     </div>
 
     <!-- People Involved -->
