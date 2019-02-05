@@ -116,7 +116,7 @@
                         <div class="col-md-10">
 
                           <button *ngFor="let attribute of groupData[activeTabIndex][subGroup]"
-                          [class.disablebuttons] = "disablefields"
+
                           [ngClass]="{
                             'gray-button':attribute.type===1 && attribute.status===-1,
                             'mm-model-btn-active':attribute.status===1||attribute.type===2,
