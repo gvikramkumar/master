@@ -318,7 +318,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       const averageWeekCountObject = await this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).toPromise();
       this.averageWeekCount = Number(averageWeekCountObject['AverageWeeks']).toFixed(2);
 
-       // Initialize Average Week Count To N/A
+       // Initialize Average Week Count To N/A When Applicable
       if (parseInt(this.averageWeekCount, 2) === 0) {
         this.averageWeekCount = 'N/A';
       }
