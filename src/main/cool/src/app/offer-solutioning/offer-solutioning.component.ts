@@ -144,4 +144,83 @@ export class OfferSolutioningComponent implements OnInit {
     });
   }
 
+  proceedToNextStep(msg) {
+    debugger;
+    let nextStepPostData = {};
+    nextStepPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
+    nextStepPostData['offerName'] = this.firstData['offerName'] == null ? '' : this.firstData['offerName'];
+    nextStepPostData['offerDesc'] = this.firstData['offerDesc'] == null ? '' : this.firstData['offerDesc'];
+    nextStepPostData['offerCreatedBy'] = this.firstData['offerCreatedBy'] == null ? '' : this.firstData['offerCreatedBy'];
+    nextStepPostData['offerCreationDate'] = this.firstData['offerCreationDate'] == null ? '' : this.firstData['offerCreationDate'];
+    nextStepPostData['offerOwner'] = this.firstData['offerOwner'] == null ? '' : this.firstData['offerOwner'];
+    nextStepPostData['clonedOfferId'] = this.firstData['clonedOfferId'] == null ? '' : this.firstData['clonedOfferId'];
+    nextStepPostData['primaryBUList'] = this.firstData['primaryBUList'] == null ? '' : this.firstData['primaryBUList'];
+    nextStepPostData['primaryBEList'] = this.firstData['primaryBEList'] == null ? '' : this.firstData['primaryBEList'];
+    nextStepPostData['strategyReviewDate'] = this.firstData['strategyReviewDate'] == null ? '' : this.firstData['strategyReviewDate'];
+    nextStepPostData['designReviewDate'] = this.firstData['designReviewDate'] == null ? '' : this.firstData['designReviewDate'];
+    nextStepPostData['readinessReviewDate'] = this.firstData['readinessReviewDate'] == null ? '' : this.firstData['readinessReviewDate'];
+  
+    nextStepPostData['derivedMM'] = this.derivedMM == null ? '' : this.derivedMM;
+    nextStepPostData['overallStatus'] = this.firstData['overallStatus'];
+    let stakeHolders = [];
+    for (let prop in this.stakeData) {
+      this.stakeData[prop].forEach(sh => {
+        console.log(sh);
+        stakeHolders.push({
+          '_id': sh['_id'],
+          'businessEntity': sh['businessEntity'],
+          'functionalRole': sh['functionalRole'],
+          'offerRole': sh['offerRole'],
+          'stakeholderDefaults': sh['stakeholderDefaults'],
+          'name': sh['userName']
+        });
+      });
+    }
+    nextStepPostData['stakeholders'] = stakeHolders;
+    nextStepPostData['expectedLaunchDate'] = this.firstData['expectedLaunchDate'];
+    nextStepPostData['status'] = {
+      'offerPhase': 'PreLaunch',
+      'offerMilestone': 'Launch In Progress',
+      'phaseMilestone': 'ideate',
+      'subMilestone': 'Offer Solutioning'
+    };
+    nextStepPostData['ideate'] = [{
+      'subMilestone': 'Offer Solutioning',
+      'status': 'completed',
+      'completionDate': new Date().toDateString(),
+    }];
+    nextStepPostData['secondaryBUList'] = this.firstData['secondaryBUList'];
+    nextStepPostData['secondaryBEList'] = this.firstData['secondaryBEList'];
+  
+    nextStepPostData['solutioningDetails'] = [];
+    // result['groups'].forEach(group => {
+    //   group['subGroup'].forEach(subGroup => {
+    //     let solutioningDetail =  {
+    //       'dimensionGroup': group['groupName'],
+    //       'dimensionSubgroup': subGroup['subGroupName'],
+    //       'dimensionAttribute': subGroup['selected'],
+    //       'primaryFunctions':[],
+    //       'secondaryFunctions':[],
+    //       'Details':[]
+    //     };
+    //     if (subGroup['listGrpQuestions'] != null && subGroup['listGrpQuestions'].length > 0) {
+    //       solutioningDetail['primaryFunctions'] = subGroup['listGrpQuestions'][0]['primaryPOC'];
+    //       solutioningDetail['secondaryFunctions'] = subGroup['listGrpQuestions'][0]['secondaryPOC'];
+    //       subGroup['listGrpQuestions'].forEach(question => {
+    //         let detail = {
+    //           'solutioninQuestion' : question['question'],
+    //           'egenieAttributeName' : question['egineAttribue'],
+    //           'oSGroup' : question['osGroup']
+    //         };
+    //         solutioningDetail['Details'].push(detail);
+    //       });
+    //     }
+    //     nextStepPostData['solutioningDetails'].push(solutioningDetail);
+    //   });
+    // });
+    console.log(nextStepPostData);
+
+
+    // this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+  }
 }

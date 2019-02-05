@@ -2,13 +2,13 @@
 <div class="subheader margin-5-0">{{ questionData["question"] }}</div>
 <!-- Free Text -->
 <div *ngIf="questionData['questionType']==='Free Text'">
-  <textarea class="textarea" rows="3"></textarea>
+  <textarea class="textarea" [value]="questionData['answer']" [(ngModel)]="questionData['answer']" rows="3"></textarea>
 </div>
 <!-- checkBox -->
 <div *ngIf="questionData['questionType']==='Multiple Choice'">
         <div class="form-group form-group--inline" *ngFor="let checkbox of questionData['values']">
               <label class="checkbox">
-                  <input type="checkbox">
+                  <input type="checkbox" [value]="checkbox" [(ngModel)]="questionData['answer']">
                   <span class="checkbox__input"></span>
                   <span class="checkbox__label hidden-xs">{{checkbox}}</span>
               </label>
@@ -22,22 +22,22 @@
 <div *ngIf="questionData['questionType']==='Radio Button'">
   <div class="form-group form-group--inline" *ngFor="let radio of questionData['values']">
     <label class="radio">
-      <input type="radio" name="{{questionIndex}}_{{questionData['question']}}"/> <span class="radio__input"></span>
+      <input type="radio" [value]="radio" [(ngModel)]="questionData['answer']" name="{{questionIndex}}_{{questionData['question']}}"/> <span class="radio__input"></span>
       <span class="radio__label hidden-xs">{{radio}}</span>
     </label>
   </div>
 </div>
 <!-- Currency Text -->
 <div *ngIf="questionData['questionType']==='Currency Text'">
-  $<input type="text"/>
+  $<input type="text" [value]="questionData['answer']" [(ngModel)]="questionData['answer']"/>
 </div>
 <!-- Percentage Text -->
 <div *ngIf="questionData['questionType']==='Percentage Text'">
-  <input type="text"/>%
+  <input type="text" [value]="questionData['answer']" [(ngModel)]="questionData['answer']"/>%
 </div>
 <!-- Dropdown -->
 <div *ngIf="questionData['questionType']==='LOV'">
-  <select class="offer-solution-quesiton-select">
+  <select class="offer-solution-quesiton-select" [(ngModel)]="questionData['answer']" [value]="questionData['answer']">
       <option *ngFor="let option of questionData['values']" [value]="option">
           {{option}}</option>
   </select>
@@ -45,7 +45,7 @@
 <!-- Data Picker -->
 <div *ngIf="questionData['questionType']==='Date'">
 <div class="form-group__text">
-  <input name="dueDateName" class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
+  <input name="dueDateName" [(ngModel)]="questionData['answer']" [value]="questionData['answer']" class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top"
     [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig" [(ngModel)]="dueDateValue"
     required ngModel #dueDateName="ngModel">
   <button type="button" class="link" tabindex="-1">

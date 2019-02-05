@@ -79,5 +79,4 @@ export class OfferSolutionQuestionComponent implements OnInit {
       });
 
   }
-
 }

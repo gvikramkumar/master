@@ -11,7 +11,10 @@
 
     <div class="panel-wrapper mt-15">
       <!-- Blue Bar -->
-      <app-blue [currentOfferId]="currentOfferId" [currentCaseId]="caseId"></app-blue>
+      <app-blue [currentOfferId]="currentOfferId" 
+      [currentCaseId]="caseId"
+      (proceedToNextStep)="proceedToNextStep($event)"
+      ></app-blue>
       <div class="row">
         <div class="leftContent col-sm-12 col-md-9">
           <app-offer-create-detail></app-offer-create-detail>
