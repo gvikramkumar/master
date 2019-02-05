@@ -173,26 +173,38 @@ export default class ApprovalController extends ControllerBase {
               body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
             return sendHtmlMail(req.user.email, ppmtEmail, adminEmail,
-              `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`, body);
+              `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, `${ppmtEmail},${adminEmail}`,
-              `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`, body);
+              `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, `${ppmtEmail},${adminEmail}`,
-              `DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
+              `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
         }
       });
 
   }
 
+  getEnv() {
+    switch (process.env.NODE_ENV) {
+      case 'dev':
+        return 'LOCAL: ';
+      case 'sdev':
+        return 'DEV: ';
+      case 'stage':
+        return 'STAGE: ';
+      default:
+        return '';
+    }
+  }
 
 }
 
