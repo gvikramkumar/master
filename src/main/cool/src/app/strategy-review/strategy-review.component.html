@@ -96,6 +96,7 @@
                       </div>
                       <ng-template #visibleEscalateTemplate>
                         <div class="panel panel--bordered not-reviewed">
+                            <app-viewstrategy [caseId]="caseId" [comments] = "strategyReviewData.comments"></app-viewstrategy>
                           <p>This is the strategy review milestone and the content is a placeholder for
                             milestone summary.
                             This is the strategy review milestone and the content is ... </p>

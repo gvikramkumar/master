@@ -395,7 +395,15 @@
 }
 
 /* Estimated Lead Time Ribbon */
-.ribbon {
+.cool.cui .ribbon:hover button {
+  color:#000;
+}
+.cool.cui .ribbon:hover {
+  padding-right:20px;
+  -webkit-transition: all .175s ease-out; /* Safari */
+  transition: all .175s ease-out;
+}
+.cool.cui .ribbon {
   background: #ffcc00;
   width: auto;
   display: inline-block;
@@ -403,11 +411,12 @@
   margin: auto;
   position: relative;
   color: #39393b;
-
+  cursor: pointer;
   text-align: center;
-  margin-left: 100px;
+  -webkit-transition: all .175s ease-out; /* Safari */
+  transition: all .175s ease-out;
 }
-.ribbon:after {
+.cool.cui .ribbon:after {
   content: '';
   border: 15px solid #ffcc00;
   border-right-color: transparent;
@@ -416,24 +425,28 @@
   top: 0;
   right: -15px;
 }
-.ribbon button {
+.cool.cui .ribbon button {
   border: none;
   background: transparent;
   outline: none;
+  cursor: pointer;
 }
-.cui .label--warning-alt {
+.cool.cui .ribbon button:hover {
+  color:#000;
+}
+.cool.cui .ribbon.label--warning-alt {
   background: #ffcc00;
   color: #39393b;
   font-size: 16px;
   text-transform: uppercase;
   display: inline-block;
-  line-height: 1.4;
+  line-height: 1.2;
   position: relative;
-  left: -10px;
+  left: -11px;
   padding-left: 15px;
   height: 30px;
 }
-.cui .label--warning-alt strong {
+.cool.cui .ribbon.label--warning-alt strong {
   font-size: 22px;
 }
 

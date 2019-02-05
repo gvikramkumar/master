@@ -29,13 +29,15 @@ export class TurbotaxviewComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.navigateHash['Offer Creation'] = ['/coolOffer', this.data['offerId']];
+    
+        this.navigateHash['Offer Creation'] = ['/coolOffer', this.data['offerId'],this.data['caseId']];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.data['offerId'], this.data['caseId']];
         this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.data['offerId'], this.data['caseId']];
         this.navigateHash['Strategy Review'] = ['/strategyReview', this.data['offerId'], this.data['caseId']];
 
         this.turbotax.getRubboTaxMenu(this.data['caseId']).subscribe(data => {
             this.offerPhaseDetailsList = data;
+            console.log("turbotax view",this.offerPhaseDetailsList);
             this.ideateCount = data['ideate'].length;
             this.planCount = data['plan'].length;
             data['ideate'].forEach(element => {

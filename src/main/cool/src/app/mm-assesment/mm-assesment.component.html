@@ -1,281 +1,298 @@
+<div class="content">
 <div class="container">
-    <div class="content">
-        <app-menu-bar [caseId]="caseId"
-        [currentMMModel]="currentMMModel"
-        [offerId]="currentOfferId"
-        [offerName]="offerBuilderdata['offerName']"
-        [stakeData]="stakeData"
-        (updateMessage)="updateMessage($event)">
-        </app-menu-bar>
-  <div class="panel-wrapper mt-15">
+  <app-menu-bar [caseId]="caseId"
+  [currentMMModel]="currentMMModel"
+  [offerId]="currentOfferId"
+  [offerName]="offerBuilderdata['offerName']"
+  [stakeData]="stakeData"
+  (updateMessage)="updateMessage($event)">
+  </app-menu-bar>
+<div class="panel-wrapper mt-15">
 
-      <!-- Blue bar -->
-      <div class="panel panel--indigo panel--compressed task--bar">
-          <div class="row">
-              <div class="col-md-4">
-                  <h4><button [disabled]="!backbuttonStatusValid" (click)='goBackToOffercreation()' class="btn--back btn btn--icon btn--white"><span class="icon-back" ></span></button> Offer Builder</h4>
-              </div>
-              <div class="col-md-8 text-right">
-                  <button class="btn btn--white"> Save </button>
-                  <button class="btn btn--white" (click) = "downloadPDF()"> Export </button>
-                  <button *ngIf="!dimensionMode" class="btn btn--white"
-                  [disabled]="!proceedButtonStatusValid" (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
-                  <button *ngIf="dimensionMode" class="btn btn--white"
-                  [disabled]="!proceedButtonStatusValid" (click)='proceedToOfferSolution()'>Proceed to Offer Solutioning <span class="icon-chevron-right"></span></button>
-              </div>
-          </div>
-      </div>
+<!-- Blue bar -->
+<div class="panel panel--indigo panel--compressed task--bar">
+    <div class="row">
+        <div class="col-md-4">
+            <h4><button [disabled]="!backbuttonStatusValid" (click)='goBackToOffercreation()' class="btn--back btn btn--icon btn--white"><span class="icon-back" ></span></button> Offer Builder</h4>
+        </div>
+        <div class="col-md-8 text-right">
+          <span *ngIf = "showEditbutton">
+            <app-editfields (onEdit)="editOffer()" (onSave)="show()"  (onDiscard)="PreviousValues()"  ></app-editfields>
+          </span>
+            <button class="btn btn--white" (click) = "downloadPDF()"> Export </button>
+            <button *ngIf="!dimensionMode" class="btn btn--white"
+            [disabled]="!proceedButtonStatusValid" (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span class="icon-chevron-right"></span></button>
+            <button *ngIf="dimensionMode" class="btn btn--white"
+            [disabled]="!proceedButtonStatusValid" (click)='proceedToOfferSolution()'>Proceed to Offer Solutioning <span class="icon-chevron-right"></span></button>
+        </div>
+    </div>
+</div>
 
-      <div class="contentBox mt-10">
+<div class="contentBox mt-10">
+  <div class="row">
+  <div class="leftContent col-sm-12 col-md-9">
+    <div class="panel-wrapper">
+      <!-- <div class="panel-body mt-10 offerData" *ngIf="panels.panel1"> -->
+      <div class="offer-header card card--raised base-margin-top">
         <div class="row">
-        <div class="leftContent col-sm-12 col-md-9">
-          <div class="panel-wrapper">
-            <!-- <div class="panel-body mt-10 offerData" *ngIf="panels.panel1"> -->
-            <div class="offer-header card card--raised base-margin-top">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="flex-fluid text-left half-margin-left">
-                    <div class="text-bold">Offer Description</div>
-                    <div>{{ offerBuilderdata["offerDesc"] }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="flex-fluid text-left half-margin-left">
-                    <div class="text-bold">Expected Launch Date</div>
-                    <div>
-                      {{
-                        offerBuilderdata["expectedLaunchDate"]
-                          | date: "dd-MMM-y"
-                      }}
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="flex-fluid text-left half-margin-left">
-                    <div class="text-bold">Business Entity</div>
-                    <div>
-                      {{
-                        offerBuilderdata["BEList"] != null
-                          ? offerBuilderdata["BEList"].join(", ")
-                          : ""
-                      }}
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="flex-fluid text-left half-margin-left">
-                    <div class="text-bold">Business Unit</div>
-                    <div>
-                      {{
-                        offerBuilderdata["BUList"] != null
-                          ? offerBuilderdata["BUList"].join(", ")
-                          : ""
-                      }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="alert base-margin-top half-margin-bottom" [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
-            <div class="alert__icon mm-alert-icon" [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}"></div>
-            <div class="alert__message" [ngStyle]="{'color': message['color']}"><b>{{message['contentHead']}}</b>{{message['content']}}</div>
-          </div>
-
-
-          <div class="panel-wrapper mt-20">
-            <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" style="z-index: 0">
-              <li
-                class="tab"
-                *ngFor="let groupName of groupNames; let i = index"
-                [ngClass]="{ active: i == activeTabIndex }"
-                (click)="changeTab(i)"
-              >
-                <a tabindex="0" class="padding-5-20 margin-right-10">
-                  <div class="tab__heading" style="margin:auto">{{ groupName }}</div>
-                </a>
-              </li>
-            </ul>
-
-            <div class="card card--raised">
-              <h4>{{ groupNames[activeTabIndex] }}</h4>
-              <div class="panel">
-                  <div id="tabsv6-content" class="tab-content">
-                      <div id="tabsv6-1-content" class="tab-pane active">
-                        <ul class="list dimensions--toggle">
-                          <li *ngFor="let subGroup of getGroupKeys(groupData[activeTabIndex]) ">
-                            <div class="row">
-                              <div class="col-md-2 margin-auto">{{subGroup}}</div>
-
-                              <div class="col-md-10">
-
-                                <button *ngFor="let attribute of groupData[activeTabIndex][subGroup]"
-                                [ngClass]="{
-                                  'gray-button':attribute.type===1 && attribute.status===-1,
-                                  'mm-model-btn-active':attribute.status===1||attribute.type===2,
-                                  'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
-                                }"
-                                class="btn btn--small tooltip"
-                                placement="top"
-                                (click)="toggleSelected(attribute)" >
-                                {{attribute.name}}
-                                <span class="tooltiptext" *ngIf="attribute.tooltip!=null && attribute.tooltip!=''">
-                                  {{attribute.tooltip}}</span></button>
-                              </div>
-                              </div>
-
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                <div class="panel-footer base-margin-top">
-                  <div
-                    class="btn-group btn-group--wide"
-                    style="margin: auto;width: 100%;"
-                  >
-                    <button (click)="toPrevStep()" class="btn btn--gray-ghost">
-                      <span class="icon-chevron-left"></span>
-                    </button>
-                    <button
-                      (click)="toNextStep()"
-                      [disabled]="!canClickNextStep"
-                      class="btn btn--gray"
-                    >
-                      <span class="icon-chevron-right"></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+          <div class="col-md-12">
+            <div class="flex-fluid text-left half-margin-left">
+              <div class="text-bold">Offer Description</div>
+              <div>{{ offerBuilderdata["offerDesc"] }}</div>
             </div>
           </div>
         </div>
 
-        <div class="rightContent col-sm-12 col-md-3" >
-          <app-right-panel
-          [portfolioFlag]="setFlag"
-          [stakeData]="stakeData"
-          [offerId] = "offerId"
-          [derivedMM] = "derivedMM"
-          [primaryBE] = "primaryBE"
-          [displayLeadTime]="displayLeadTime"
-          [offerBuilderdata]="offerBuilderdata"
-          (updateStakeData)="updateStakeData($event)"
-          [events]="eventsSubject.asObservable()"
-          [noOfWeeksDifference] = "noOfWeeksDifference"
-          ></app-right-panel>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="flex-fluid text-left half-margin-left">
+              <div class="text-bold">Expected Launch Date</div>
+              <div>
+                {{
+                  offerBuilderdata["expectedLaunchDate"]
+                    | date: "dd-MMM-y"
+                }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="flex-fluid text-left half-margin-left">
+              <div class="text-bold">Business Entity</div>
+              <div>
+                {{
+                  offerBuilderdata["BEList"] != null
+                    ? offerBuilderdata["BEList"].join(", ")
+                    : ""
+                }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="flex-fluid text-left half-margin-left">
+              <div class="text-bold">Business Unit</div>
+              <div>
+                {{
+                  offerBuilderdata["BUList"] != null
+                    ? offerBuilderdata["BUList"].join(", ")
+                    : ""
+                }}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
       </div>
     </div>
 
-    <!-- Roles description custom popup -->
-    <div class="custom-modal delivery_desc_popup" *ngIf="backdropCustom">
-      <h5 class="headerTittle arrowBack">
-        Add Collaborators
-        <span
-          class="TOESprite close-icon pull-right curPointer"
-          (click)="backdropCustom = false"
+    <div class="alert base-margin-top half-margin-bottom" [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
+      <div class="alert__icon mm-alert-icon" [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}"></div>
+      <div class="alert__message" [ngStyle]="{'color': message['color']}"><b>{{message['contentHead']}}</b>{{message['content']}}</div>
+    </div>
+
+
+    <div class="panel-wrapper mt-20">
+      <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" style="z-index: 0">
+        <li
+          class="tab"
+          *ngFor="let groupName of groupNames; let i = index"
+          [ngClass]="{ active: i == activeTabIndex }"
+          (click)="changeTab(i)"
         >
-        </span>
-      </h5>
-      <div class="custom-modal-body">
-        <div class="txtDesc searchSec">
-          <div class="panel-wrapper">
-            <h6 class="innerTittle">Search Collaborators</h6>
-            <div class="panel-body">
-              <div class="row mt-10 width100">
-                <div class="d-inline col-md-6">
-                  <input
-                    id="typeahead-basic"
-                    type="text"
-                    class="form-control autocomplete"
-                    [(ngModel)]="model"
-                    [ngbTypeahead]="search"
-                    placeholder="Search by name, email or function "
-                  />
-                  <span class="icon-search icon-small v-small curPointer"></span>
-                </div>
-                <div class="d-inline col-md-4">
-                  <div class="form-group">
-                    <div class="form-group__text select">
-                      <select name="select1">
-                        <option value="0" selected>Select Function</option>
-                        <option value="option1">Pricing</option>
-                        <option value="option2">Finance</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <button class="btn btn--small btn--primary btn-analytic">
-                    Search
-                  </button>
+          <a tabindex="0" class="padding-5-20 margin-right-10">
+            <div class="tab__heading" style="margin:auto">{{ groupName }}</div>
+          </a>
+        </li>
+      </ul>
+
+      <div class="card card--raised">
+        <h4>{{ groupNames[activeTabIndex] }}</h4>
+        <div class="panel">
+            <div id="tabsv6-content" class="tab-content">
+                <div id="tabsv6-1-content" class="tab-pane active">
+                  <ul class="list dimensions--toggle">
+                    <li *ngFor="let subGroup of getGroupKeys(groupData[activeTabIndex]) ">
+                      <div class="row">
+                        <div class="col-md-2 margin-auto">{{subGroup}}</div>
+
+                        <div class="col-md-10">
+
+                          <button *ngFor="let attribute of groupData[activeTabIndex][subGroup]"
+                          [class.disablebuttons] = "disablefields"
+                          [ngClass]="{
+                            'gray-button':attribute.type===1 && attribute.status===-1,
+                            'mm-model-btn-active':attribute.status===1||attribute.type===2,
+                            'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
+                          }"
+                          class="btn btn--small tooltip"
+                          placement="top"
+                          (click)="toggleSelected(attribute)" >
+                          {{attribute.name}}
+                          <span class="tooltiptext" *ngIf="attribute.tooltip!=null && attribute.tooltip!=''">
+                            {{attribute.tooltip}}</span></button>
+                        </div>
+                        </div>
+
+                    </li>
+                  </ul>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="panel-wrapper mt-10">
-            <h6 class="innerTittle">Search Results</h6>
-            <table class="table table-cool table-modal mt-10">
-              <thead>
-                <tr>
-                  <th style="width:6%">
-                    <label class="checkbox">
-                      <input type="checkbox" />
-                      <span class="checkbox__input"></span>
-                    </label>
-                  </th>
-                  <th>Name</th>
-                  <th>Email Id</th>
-                  <th>Function</th>
-                  <th>Position</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let x of resultTable">
-                  <td>
-                    <label class="checkbox">
-                      <input type="checkbox" />
-                      <span class="checkbox__input"></span>
-                    </label>
-                  </td>
-                  <td>{{ x.name }}</td>
-                  <td>{{ x.id }}</td>
-                  <td>{{ x.function }}</td>
-                  <td>
-                    <div class="form-group">
-                      <div class="form-group__text select">
-                        <select name="select1">
-                          <option value="0" selected>Select Owner</option>
-                          <option value="option1">Owner</option>
-                          <option value="option2">Co-Owner</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <div class="pull-right">
-              <button class="btn btn--small" (click)="onCancelClick()">
-                Cancel
+          <div class="panel-footer base-margin-top">
+            <div
+              class="btn-group btn-group--wide"
+              style="margin: auto;width: 100%;"
+            >
+              <button (click)="toPrevStep()" class="btn btn--gray-ghost">
+                <span class="icon-chevron-left"></span>
               </button>
-              <button class="btn btn--small btn--primary" (click)="onSaveClick()">
-                Save
+              <button
+                (click)="toNextStep()"
+                [disabled]="!canClickNextStep"
+                class="btn btn--gray"
+              >
+                <span class="icon-chevron-right"></span>
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="backdrop-custom" *ngIf="backdropCustom"></div>
   </div>
 
+  <div class="rightContent col-sm-12 col-md-3" >
+    <app-right-panel
+    [portfolioFlag]="setFlag"
+    [stakeData]="stakeData"
+    [offerId] = "offerId"
+    [derivedMM] = "derivedMM"
+    [primaryBE] = "primaryBE"
+    [displayLeadTime]="displayLeadTime"
+    [offerBuilderdata]="offerBuilderdata"
+    (updateStakeData)="updateStakeData($event)"
+    [events]="eventsSubject.asObservable()"
+    [noOfWeeksDifference] = "noOfWeeksDifference"
+    ></app-right-panel>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Roles description custom popup -->
+<div class="custom-modal delivery_desc_popup" *ngIf="backdropCustom">
+<h5 class="headerTittle arrowBack">
+  Add Collaborators
+  <span
+    class="TOESprite close-icon pull-right curPointer"
+    (click)="backdropCustom = false"
+  >
+  </span>
+</h5>
+<div class="custom-modal-body">
+  <div class="txtDesc searchSec">
+    <div class="panel-wrapper">
+      <h6 class="innerTittle">Search Collaborators</h6>
+      <div class="panel-body">
+        <div class="row mt-10 width100">
+          <div class="d-inline col-md-6">
+            <input
+              id="typeahead-basic"
+              type="text"
+              class="form-control autocomplete"
+              [(ngModel)]="model"
+              [ngbTypeahead]="search"
+              placeholder="Search by name, email or function "
+            />
+            <span class="icon-search icon-small v-small curPointer"></span>
+          </div>
+          <div class="d-inline col-md-4">
+            <div class="form-group">
+              <div class="form-group__text select">
+                <select name="select1">
+                  <option value="0" selected>Select Function</option>
+                  <option value="option1">Pricing</option>
+                  <option value="option2">Finance</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn--small btn--primary btn-analytic">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-wrapper mt-10">
+      <h6 class="innerTittle">Search Results</h6>
+      <table class="table table-cool table-modal mt-10">
+        <thead>
+          <tr>
+            <th style="width:6%">
+              <label class="checkbox">
+                <input type="checkbox" />
+                <span class="checkbox__input"></span>
+              </label>
+            </th>
+            <th>Name</th>
+            <th>Email Id</th>
+            <th>Function</th>
+            <th>Position</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let x of resultTable">
+            <td>
+              <label class="checkbox">
+                <input type="checkbox" />
+                <span class="checkbox__input"></span>
+              </label>
+            </td>
+            <td>{{ x.name }}</td>
+            <td>{{ x.id }}</td>
+            <td>{{ x.function }}</td>
+            <td>
+              <div class="form-group">
+                <div class="form-group__text select">
+                  <select name="select1">
+                    <option value="0" selected>Select Owner</option>
+                    <option value="option1">Owner</option>
+                    <option value="option2">Co-Owner</option>
+                  </select>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <div class="pull-right">
+        <button class="btn btn--small" (click)="onCancelClick()">
+          Cancel
+        </button>
+        <button class="btn btn--small btn--primary" (click)="onSaveClick()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="backdrop-custom" *ngIf="backdropCustom"></div>
+
+</div>
+</div>
+<div class="container">
+<p-dialog header="Warning" [(visible)]="display" [style]="{width: '700px', height: '300px'}">
+<h5>Switching the monetization model may result in losing the changes you have made.
+    This may also increase Lead Time. Do you still want switch your model evaluation?</h5>
+    <div style= "padding: 20px 200px;">
+    <button  class="btn btn--small" (click) = "showWarning()" >Switch</button>
+    <button class="btn btn--small" (click)="display=false">Cancel</button>
+  </div>
+  <p style="color:red" *ngIf = "showWarningSave">
+    During this pilot period, changes resulting in a Monetization Model re-alignment are not allowed.
+       If you wish to change Monetization Models, please create a new offer
+  </p>
+</p-dialog>
 </div>
