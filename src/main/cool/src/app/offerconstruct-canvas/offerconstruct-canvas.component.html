@@ -96,7 +96,7 @@
                         <ng-template pTemplate="body" let-index="rowIndex" let-rowNode let-rowData="rowData"
                           let-columns="columns">
                           <tr pDroppable="dragItem" (onDrop)="dropOnRow($event,rowNode,rowData)" pDraggable="dragItem"
-                            dragEffect="copyMove" (onDragStart)="dragStartRow($event,rowNode)">
+                            dragEffect="copyMove" (onDragStart)="dragStartRow($event,rowNode)" [ngClass]="{'bold-row': rowData.isMajorLineItem}">
                             <td *ngIf="rowData['productName']">
                               <div *ngIf="!rowData['isGroupNode']">
                                 <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
