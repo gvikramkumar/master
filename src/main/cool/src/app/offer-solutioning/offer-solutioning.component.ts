@@ -39,7 +39,7 @@ export class OfferSolutioningComponent implements OnInit {
   updateStakeData: any;
   proceedButtonStatusValid = true;
   backbuttonStatusValid = true;
-  offerName;
+  offerName: string;
 
 
   displayLeadTime = false;
@@ -52,7 +52,7 @@ export class OfferSolutioningComponent implements OnInit {
     private rightPanelService: RightPanelService) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
-        this.caseId = params['id2']
+        this.caseId = params['id2'];
       });
    }
 
@@ -61,26 +61,29 @@ export class OfferSolutioningComponent implements OnInit {
     if (this.offerSolutionData == null) {
       this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
         this.offerSolutionData = data;
+        if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
+          this.offerSolutionGroups = [];
+          this.offerSolutionData['groups'].forEach(group => {
+            this.offerSolutionGroups = this.offerSolutionGroups.concat(group['subGroup']);
+          });
+        }
       })
+    } else {
+      if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
+        this.offerSolutionGroups = [];
+        this.offerSolutionData['groups'].forEach(group => {
+          this.offerSolutionGroups = this.offerSolutionGroups.concat(group['subGroup']);
+        });
+      }
     }
-    if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-      this.offerSolutionGroups = [];
-      this.offerSolutionData['groups'].forEach(group => {
-        this.offerSolutionGroups = this.offerSolutionGroups.concat(group['subGroup']);
-      });
-    }
+
 
     debugger;
     let that = this;
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
-      // get question group data if it's null
-      if (this.offerSolutionData == null) {
-
-      }
-
-      this.offerName = this.firstData['offerName'];
-      this.derivedMM = this.firstData['derivedMM'];
+      this.offerName = data['offerName'];
+      this.derivedMM = data['derivedMM'];
       this.displayLeadTime = true;
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
@@ -226,4 +229,5 @@ export class OfferSolutioningComponent implements OnInit {
     console.log(nextStepPostData);
     this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
   }
+
 }

@@ -30,7 +30,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
     const assignees = [];
     if (this.questionData['primaryPOC'] != null && this.questionData['primaryPOC'].length > 0) {
       this.questionData['primaryPOC'].forEach(element => {
-        if (this.stakeData[element] != null && this.stakeData[element].length > 0) {
+        if (this.stakeData != null && this.stakeData[element] != null && this.stakeData[element].length > 0) {
           this.stakeData[element].forEach(assignee => {
             assignees.push(assignee);
           });
@@ -38,7 +38,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
       });
     }
     let owner = '';
-    if (this.stakeData['Owner'] != null && this.stakeData['Owner'].length > 0) {
+    if (this.stakeData != null && this.stakeData['Owner'] != null && this.stakeData['Owner'].length > 0) {
       owner = this.stakeData['Owner'][0]['_id'];
     }
     let dueDate = new Date();
@@ -53,9 +53,11 @@ export class OfferSolutionQuestionComponent implements OnInit {
       "assignee": assignees,
       "dueDate": dueDate.toISOString(),
       "owner": owner,
-      "offerName": this.offerData['offerName'],
       "type": "Notification",
       };
+      if (this.offerData != null) {
+        notificationPayload['offerName'] = this.offerData['offerName'];
+      }
 
       let actionPayload = {
         "offerId": this.currentOfferId,
@@ -67,9 +69,11 @@ export class OfferSolutionQuestionComponent implements OnInit {
         "assignee": assignees,
         "dueDate": dueDate.toISOString(),
         "owner": owner,
-        "offerName": this.offerData['offerName'],
         "type": "Action",
         };
+        if (this.offerData != null) {
+          actionPayload['offerName'] = this.offerData['offerName'];
+        }
 
       this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
         console.log(notificationPayload);
