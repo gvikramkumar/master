@@ -740,7 +740,7 @@ export class MmAssesmentComponent implements OnInit {
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
    let postRuleResultData = result;
    postRuleResultData['offerId'] = this.currentOfferId;
-   this.monetizationModelService.postRuleResult(postRuleResultData).subscribe(res => {})
+   this.monetizationModelService.postRuleResult(postRuleResultData).subscribe(res => {});
 
   let proceedToStakeholderPostData = {};
   proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;

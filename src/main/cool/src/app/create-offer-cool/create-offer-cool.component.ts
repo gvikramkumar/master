@@ -507,7 +507,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
   
   
- finalChanges(){debugger;
+ finalChanges(){
    this.editOfferbuild =false;
 
  if(this.compare(this.previousPrimaryBusinessUnitsValue,this.primaryBusinessUnitsValue) == true){
@@ -625,7 +625,7 @@ ideate : [],
 
 
 
- DiscardChanges(){  debugger;
+ DiscardChanges(){ 
    
    this.PreviousValues();
   
