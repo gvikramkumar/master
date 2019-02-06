@@ -634,7 +634,12 @@ span[class*="display-"] {
 .cool.cui .offer-header.card .row:last-child div[class*="col-"] {
   border-bottom: none;
 }
-
+.offer-header.card *[class^='col-'] {
+  border-bottom: 1px solid #ededed;
+  border-collapse: collapse;
+  border-right: 1px solid #ededed;
+  padding: 10px;
+}
 .cui .timeline__icon {
   border-radius: 50%;
   width: 34px;
@@ -680,8 +685,18 @@ span[class*="display-"] {
   margin: 0;
   position: absolute;
   margin-top: 10px;
+  box-shadow: 0 10px 30px 5px rgba(0,0,0,0.3);
 }
-
+.cool.cui header .ui-overlaypanel {
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  margin-top: 10px;
+  box-shadow: 0 5px 20px 0px rgba(0,0,0,0.3);
+}
+.cool.cui .content .ui-dialog.ui-shadow {
+  box-shadow: 0 10px 30px 5px rgba(0,0,0,0.3);
+}
 /* dialog */
 .cool.cui .ui-dialog {
   position: fixed;

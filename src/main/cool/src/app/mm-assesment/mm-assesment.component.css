@@ -72,15 +72,7 @@
 }
 
 
-/* .gray-button {
-  opacity: 0.5;
-    color: #9e9ea2;
-    outline: 0;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    background-color: transparent;
-    border: 1px solid #9e9ea2;
-} */
+
 
 /**Group Table CSS Start Here**/
 .grouptable {
@@ -175,30 +167,7 @@
 .partial-aligned {
   color: #e87127;
 }
-/*
-.mm-model-btn-active {
-  border: 1px solid transparent;
-    background: #017CAD;
-    color: #ffffff;
-    text-decoration: none;
-    -webkit-tap-highlight-color: transparent
 
-}
-.mm-model-btn-active:hover {
-  background: #04adf1;
-}
-
-.mm-model-btn-inactive {
-  border: 1px solid transparent;
-    background: white;
-    color: #017CAD;
-    text-decoration: none;
-    box-shadow: inset 0 0 0 1px #017CAD;
-    -webkit-tap-highlight-color: transparent
-}
-.mm-model-btn-inactive:hover {
-  background: #04adf1;
-} */
 
 .cui .alert__icon {
   color: #ffffff;
@@ -293,12 +262,7 @@ span.avatar-ico {
 .cui ul.tabs.tabs--bordered  {
 margin: 0 5px;
 }
-.offer-header.card *[class^='col-'] {
-  border-bottom: 1px solid #ededed;
-  border-collapse: collapse;
-  border-right: 1px solid #ededed;
-  padding: 10px;
-}
+
 .offer-header.card {
   padding: 0;
   overflow: hidden;
