@@ -833,6 +833,13 @@ span[class*="display-"] {
   text-transform: capitalize;
   line-height: 2;
 }
+.cool.cui .ui-treetable .ui-treetable-tbody > tr.bold-row {
+  background: #ffffff;
+  color: #333333;
+  border-bottom: solid 1px #cacaca;
+  text-transform: capitalize;
+  line-height: 2;
+}
 .cool.cui .ui-treetable .ui-treetable-tbody > tr > td {
  border:transparent;
 }
