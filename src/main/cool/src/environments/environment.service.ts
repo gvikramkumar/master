@@ -74,6 +74,7 @@ export class EnvironmentService {
     REST_API_FILE_DOWNLOAD_FOR_ACTION;
     REST_API_POST_RULE_RESULT_URL;
     REST_API_GET_RULE_RESULT_URL;
+    REST_API_OWB_CONTROLLER;
 
     authtokenbaseapi = '';
     client_id;
@@ -227,5 +228,6 @@ export class EnvironmentService {
         this.REST_API_FILE_DOWNLOAD_FOR_ACTION = this.baseapi + '/download/provideDetails';
         this.REST_API_POST_RULE_RESULT_URL = this.baseapi + '/offer/offerDimensions';
         this.REST_API_GET_RULE_RESULT_URL = this.baseapi + '/offer/offerDimensions/';
+        this.REST_API_OWB_CONTROLLER = this.baseapi + '/owb/create';
     }
 }

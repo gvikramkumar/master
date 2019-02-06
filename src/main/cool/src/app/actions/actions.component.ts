@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActionsAndNotifcations } from '../dashboard/action';
 import * as moment from 'moment';
 import { ActionsService } from '../services/actions.service';
@@ -242,10 +242,8 @@ export class ActionsComponent implements OnInit {
 
   getActionDetailsFile(caseid) {
     this.actionsService.downloadActionDetailsFile(caseid).subscribe(data => {
-      const nameOfFileToDownload = 'offer-details';
-      console.log("nameoffile", nameOfFileToDownload);
-      console.log(data);
-      const blob = new Blob([data], { type: 'application/pdf' });
+      const nameOfFileToDownload = 'offer-details_' + caseid;
+      const blob = new Blob([data], { type: 'application/octet-stream' });
 
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
@@ -260,5 +258,4 @@ export class ActionsComponent implements OnInit {
       }
     });
   }
-
 }
