@@ -59,8 +59,30 @@ export default class SubmeasureController extends ApprovalController {
   }
 
   addFilterLevelRecords(flag, fl, sub, records, log, elog) {
-    ['productLevel', 'salesLevel', 'scmsLevel', 'internalBELevel', 'entityLevel'].forEach(flProp => {
-      if (fl[flProp]) {
+    ['productLevel', 'salesLevel', 'scmsLevel', 'internalBELevel', 'entityLevel', 'glSegLevel'].forEach(flProp => {
+
+      if (flag === 'I' && flProp === 'glSegLevel' && fl[flProp] && fl[flProp].length) {
+        fl[flProp].forEach(glsegProp => {
+          const map = _.find(filterLevelMap, {prop: flProp, levelName: glsegProp});
+          if (!map) {
+            elog.push(`dfa_submeasure_input_lvl: no filterLevelMap for flag/prop/levelName: ${flag}/${flProp}/${glsegProp}`);
+            return;
+          }
+          records.push(new SubmeasureInputLvl(
+            sub.moduleId,
+            sub.submeasureKey,
+            map.hierarchyId,
+            flag,
+            map.levelId,
+            map.levelName,
+            sub.createdBy,
+            sub.createdDate,
+            sub.updatedBy,
+            sub.updatedDate
+          ));
+
+        });
+      } else if (flProp !== 'glSegLevel' && fl[flProp]) {
         const map = _.find(filterLevelMap, {prop: flProp, levelName: fl[flProp]});
         if (!map) {
           elog.push(`dfa_submeasure_input_lvl: no filterLevelMap for flag/prop/levelName: ${flag}/${flProp}/${fl[flProp]}`);
@@ -122,13 +144,25 @@ export default class SubmeasureController extends ApprovalController {
       let path: string;
       if (fl.inputLevelFlag === 'I') {
         path = 'inputFilterLevel.' + map.prop;
+        // glseg is ifl only, not in mm section
+        // glseg is an array of strings (one per record) whereas the rest are just strings
+        if (map.prop === 'glSegLevel') {
+          const arr = _.get(sub, path);
+          if (arr) {
+            arr.push(fl.levelName);
+          } else {
+            _.set(sub, path, [fl.levelName]);
+          }
+        } else {
+          _.set(sub, path, fl.levelName);
+        }
       } else if (fl.inputLevelFlag === 'M') {
         path = 'manualMapping.' + map.prop;
+        _.set(sub, path, fl.levelName);
       } else {
         elog.push(`setFilterLevels: invalid inputLevelFlag: ${fl.inputLevelFlag}`);
         return;
       }
-      _.set(sub, path, fl.levelName);
     });
   }
 

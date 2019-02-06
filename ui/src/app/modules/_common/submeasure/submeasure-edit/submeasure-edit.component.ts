@@ -598,6 +598,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.ifl_switch_le = !!this.sm.inputFilterLevel.entityLevel;
     this.ifl_switch_s = !!this.sm.inputFilterLevel.salesLevel;
     this.ifl_switch_scms = !!this.sm.inputFilterLevel.scmsLevel;
+    this.ifl_switch_glseg = !!(this.sm.inputFilterLevel.glSegLevel && this.sm.inputFilterLevel.glSegLevel.length);
   }
 
   syncManualMapSwitches() {

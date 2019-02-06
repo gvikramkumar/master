@@ -27,7 +27,6 @@ select * from fpadfa.dfa_prof_swalloc_manualmix_upld;
 select * from fpadfa.dfa_sub_measure;
 select * from fpadfa.dfa_submeasure_input_lvl;
 
-
 select * from fpadfa.dfa_data_sources;
 select * from fpadfa.dfa_measure;
 select * from fpadfa.dfa_module;
@@ -48,3 +47,5 @@ select create_owner, create_datetimestamp, update_owner, update_datetimestamp fr
 
 select * from fpadfa.dfa_data_sources;
 
+select measure_id, sub_measure_key, sub_measure_name, input_product_family, alloc_product_family from fpadfa.dfa_sub_measure 
+where sub_measure_key = 1055647;
