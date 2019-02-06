@@ -164,7 +164,7 @@ export default class SubmeasureController extends ApprovalController {
           return this.productClassUploadRepo.addManyTransaction([
             {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'HARDWARE', splitPercentage: sm.manualMixHw},
             {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'SOFTWARE', splitPercentage: sm.manualMixSw}
-          ], req.user.id)
+          ], sm.updatedBy)
             .then(() => {
               delete sm.manualMixHw;
               delete sm.manualMixSw;
