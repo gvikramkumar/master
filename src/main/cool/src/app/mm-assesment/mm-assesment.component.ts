@@ -738,6 +738,9 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:',postOfferSolutioningData);
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
+   let postRuleResultData = result;
+   postRuleResultData['offerId'] = this.currentOfferId;
+   this.monetizationModelService.postRuleResult(postRuleResultData).subscribe(res => {});
 
   let proceedToStakeholderPostData = {};
   proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
@@ -844,8 +847,8 @@ export class MmAssesmentComponent implements OnInit {
       proceedToStakeholderPostData['solutioningDetails'].push(solutioningDetail);
     });
   });
-    // proceedToStakeholderPostData['solutioningDetails'] = result;
     this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
+
       this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
       this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
     });

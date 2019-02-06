@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HeaderService } from '../header/header.service';
 import { MessageService } from '../services/message.service';
 import { LocalStorageService } from 'ngx-webstorage';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-exit-criteria-validation',
@@ -27,7 +28,8 @@ export class ExitCriteriaValidationComponent implements OnInit {
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private headerService: HeaderService,
     private messageService: MessageService,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    private userService : UserService
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -82,6 +84,13 @@ export class ExitCriteriaValidationComponent implements OnInit {
     const payload = {};
     payload['offerName'] = this.offerBuilderdata['offerName'];
     payload['owner'] = this.offerBuilderdata['offerOwner'];
+    const userId = this.userService.getUserId();
+    this.exitCriteriaValidationService.updateOwbController(this.currentOfferId,userId).subscribe(data => {
+      console.log(data);
+    },
+    error => {
+      console.log('error occured');
+    });
     this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
       this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
         this.messageService.sendMessage('Strategy Review');
