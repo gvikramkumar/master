@@ -738,6 +738,7 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:',postOfferSolutioningData);
  this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
+   this.monetizationModelService.postRuleResult(result).subscribe(res => {})
 
   let proceedToStakeholderPostData = {};
   proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;

@@ -66,4 +66,11 @@ export class MonetizationModelService {
 
     return this.http.post(url, data, httpOptions);
   }
+
+
+  postRuleResult(data) {
+    let url = this.environmentService. REST_API_POST_RULE_RESULT_URL;
+
+    return this.http.post(url, data);
+  }
 }

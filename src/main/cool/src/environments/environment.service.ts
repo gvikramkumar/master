@@ -72,6 +72,8 @@ export class EnvironmentService {
     REST_API_LEAD_TIME_AVERAGE_WEEKS;
     REST_API_FILE_UPLOAD_FOR_ACTION;
     REST_API_FILE_DOWNLOAD_FOR_ACTION;
+    REST_API_POST_RULE_RESULT_URL;
+    REST_API_GET_RULE_RESULT_URL;
 
     authtokenbaseapi = '';
     client_id;
@@ -223,5 +225,7 @@ export class EnvironmentService {
         this.REST_API_SET_OFFERCONSTRUCT_POST_URL = this.baseapi + '/setOfferConstruct';
         this.REST_API_FILE_UPLOAD_FOR_ACTION = this.baseapi + '/upload/file';
         this.REST_API_FILE_DOWNLOAD_FOR_ACTION = this.baseapi + '/download/provideDetails';
+        this.REST_API_POST_RULE_RESULT_URL = this.baseapi + '/offer/offerDimensions';
+        this.REST_API_GET_RULE_RESULT_URL = this.baseapi + '/offer/offerDimensions/';
     }
 }
