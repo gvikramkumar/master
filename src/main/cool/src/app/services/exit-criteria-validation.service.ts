@@ -30,4 +30,8 @@ export class ExitCriteriaValidationService {
     return this.http.post(url, payload);
   }
 
+  updateOwbController(offerid, userid) {
+    const url = `${this.environmentService.REST_API_OWB_CONTROLLER}/${offerid}/${userid}`;
+    return this.http.get(url,{ withCredentials: true });
+  }
 }

@@ -58,6 +58,11 @@ export class OfferSolutioningComponent implements OnInit {
 
   ngOnInit() {
     this.offerSolutionData = this.offersolutioningService.getSolutionData(this.currentOfferId);
+    if (this.offerSolutionData == null) {
+      this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
+        this.offerSolutionData = data;
+      })
+    }
     if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
       this.offerSolutionGroups = [];
       this.offerSolutionData['groups'].forEach(group => {
@@ -219,8 +224,6 @@ export class OfferSolutioningComponent implements OnInit {
     //   });
     // });
     console.log(nextStepPostData);
-
-
-    // this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+    this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
   }
 }
