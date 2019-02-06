@@ -39,7 +39,7 @@ export class OfferSolutioningComponent implements OnInit {
   updateStakeData: any;
   proceedButtonStatusValid = true;
   backbuttonStatusValid = true;
-  offerName;
+  offerName: string;
 
 
   displayLeadTime = false;
@@ -52,35 +52,17 @@ export class OfferSolutioningComponent implements OnInit {
     private rightPanelService: RightPanelService) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
-        this.caseId = params['id2']
+        this.caseId = params['id2'];
       });
    }
 
   ngOnInit() {
     this.offerSolutionData = this.offersolutioningService.getSolutionData(this.currentOfferId);
-    if (this.offerSolutionData == null) {
-      this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
-        this.offerSolutionData = data;
-      })
-    }
-    if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-      this.offerSolutionGroups = [];
-      this.offerSolutionData['groups'].forEach(group => {
-        this.offerSolutionGroups = this.offerSolutionGroups.concat(group['subGroup']);
-      });
-    }
-
-    debugger;
     let that = this;
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
-      // get question group data if it's null
-      if (this.offerSolutionData == null) {
-
-      }
-
-      this.offerName = this.firstData['offerName'];
-      this.derivedMM = this.firstData['derivedMM'];
+      this.offerName = data['offerName'];
+      this.derivedMM = data['derivedMM'];
       this.displayLeadTime = true;
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
@@ -91,6 +73,7 @@ export class OfferSolutioningComponent implements OnInit {
           this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
         }
       );
+
 
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
@@ -111,11 +94,94 @@ export class OfferSolutioningComponent implements OnInit {
       }
 
       this.stakeData = this.stakeHolderInfo;
+
+      if (this.offerSolutionData == null) {
+        this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
+          this.offerSolutionData = data;
+          if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
+            this.getSolutionGroups();
+            this.createActionAndNotification();
+          }
+        });
+      } else {
+        if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
+          this.getSolutionGroups();
+          this.createActionAndNotification();
+        }
+      }
     });
   }
 
-  updateMessage(message) {
+  getSolutionGroups() {
+    this.offerSolutionGroups = [];
+    this.offerSolutionData['groups'].forEach(group => {
+      this.offerSolutionGroups = this.offerSolutionGroups.concat(group['subGroup']);
+    });
+  }
 
+  createActionAndNotification() {
+    let primaryPOC = [];
+    for(let group of this.offerSolutionGroups) {
+      if (group['listGrpQuestions'] != null && group['listGrpQuestions'].length > 0) {
+        primaryPOC = group['listGrpQuestions'][0]['primaryPOC'];
+        break;
+      }
+    }
+    if (primaryPOC.length > 0) {
+      const assignees = [];
+      if (primaryPOC != null && primaryPOC.length > 0) {
+        primaryPOC.forEach(element => {
+          if (this.stakeData != null && this.stakeData[element] != null && this.stakeData[element].length > 0) {
+            this.stakeData[element].forEach(assignee => {
+              assignees.push(assignee);
+            });
+          }
+        });
+      }
+      let owner = '';
+      if (this.stakeData != null && this.stakeData['Owner'] != null && this.stakeData['Owner'].length > 0) {
+        owner = this.stakeData['Owner'][0]['_id'];
+      }
+      let dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + 5);
+      let notificationPayload = {
+        "offerId": this.currentOfferId,
+        "caseId": this.caseId,
+        "actionTitle": "Provide Details",
+        "description": "This offer need more information",
+        "mileStone": "Offer Solutioning",
+        "selectedFunction": primaryPOC !=null ? primaryPOC.join(',') : '' ,
+        "assignee": assignees,
+        "dueDate": dueDate.toISOString(),
+        'offerName': this.offerName,
+        "owner": owner,
+        "type": "Notification",
+        };
+  
+        let actionPayload = {
+          "offerId": this.currentOfferId,
+          "caseId": this.caseId,
+          "actionTitle": "Provide Details",
+          "description": "This offer need more information",
+          "mileStone": "Offer Solutioning",
+          "selectedFunction": primaryPOC !=null ? primaryPOC.join(',') : '' ,
+          "assignee": assignees,
+          "dueDate": dueDate.toISOString(),
+          'offerName': this.offerName,
+          "owner": owner,
+          "type": "Action",
+          };
+  
+        this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
+          console.log(notificationPayload);
+          this.offersolutioningService.notificationPost(actionPayload).subscribe(res => {
+            console.log(actionPayload);
+          })
+        });
+    }
+  }
+
+  updateMessage(message) {
     if (message != null && message !== '') {
       if (message === 'hold') {
         this.proceedButtonStatusValid = false;
@@ -150,7 +216,6 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   proceedToNextStep(msg) {
-    debugger;
     let nextStepPostData = {};
     nextStepPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
     nextStepPostData['offerName'] = this.firstData['offerName'] == null ? '' : this.firstData['offerName'];
@@ -226,4 +291,5 @@ export class OfferSolutioningComponent implements OnInit {
     console.log(nextStepPostData);
     this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
   }
+
 }

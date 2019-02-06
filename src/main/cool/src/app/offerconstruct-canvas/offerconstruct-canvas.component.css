@@ -123,3 +123,7 @@ ul.list.list--highlight {
   overflow: auto;
 }
 }
+
+.bold-row{
+  font-weight: bold;
+}

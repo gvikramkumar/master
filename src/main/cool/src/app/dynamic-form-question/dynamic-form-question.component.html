@@ -1,42 +1,22 @@
-<div [formGroup]="questionForm">
-  <div [ngSwitch]="question.componentType">
-    <label [attr.for]="question.egineAttribue">{{question.egineAttribue}}</label>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <div class="form-group__text">
-            <!--Free Text -->
-            <input *ngSwitchCase="'Free Text'" [formControlName]="question.egineAttribue" [id]="question.egineAttribue"
-              class="form-control">
-          </div>
-        </div>
+<div class="form-group">
+  <div [formGroup]="questionForm">
+    <div [ngSwitch]="question.componentType">
+      <div class="form-group__text" *ngSwitchCase="'Free Text'">
+        <input [formControlName]="question.egineAttribue" [id]="question.egineAttribue" class="form-control">
+        <label for="questionLabel">{{question.egineAttribue}}</label>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <div class="form-group select">
-            <!--Drop-down-->
-            <select [id]="question.egineAttribue" *ngSwitchCase="'Drop-down'" [formControlName]="question.egineAttribue"
-              class="form-control">
-              <option *ngFor="let opt of question.values" [value]="opt">{{opt}}</option>
-            </select>
-          </div>
-        </div>
+      <div class="form-group__text select" *ngSwitchCase="'Drop-down'">
+        <select [id]="question.egineAttribue" [formControlName]="question.egineAttribue" class="form-control">
+          <option *ngFor="let opt of question.values" [value]="opt">{{opt}}</option>
+        </select>
+        <label for="questionLabel">{{question.egineAttribue}}</label>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <div *ngSwitchCase="'Radio Button'" class="form-group form-group--inline">
-            <label class="radio">
-              <input [id]="question.egineAttribue" type="radio" [formControlName]="question.egineAttribue" class="form-control"
-                [value]="question.egineAttribue" checked>
-              <span class="radio__input"></span>
-              <span class="radio__label">{{question.egineAttribue}}</span>
-            </label>
-          </div>
-        </div>
+      <div *ngSwitchCase="'Radio Button'" style="margin-top: 5%">
+        <label for="questionLabel">{{question.egineAttribue}}</label><br>
+        <label *ngFor="let rad of question.values">
+          <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue" [formControlName]="question.egineAttribue"
+            class="form-control" [value]="rad"> {{rad}}
+        </label>
       </div>
     </div>
   </div>

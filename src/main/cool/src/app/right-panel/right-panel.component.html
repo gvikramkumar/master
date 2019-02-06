@@ -43,20 +43,14 @@
 
     <!-- Estimated Lead Time -->
     <div class="card card--raised base-margin-top">
+
         <h5 class="half-margin-bottom">Estimated Lead Time</h5>
-        <!-- <span class="ribbon label label--warning-alt"> -->
 
         <span class="ribbon label label--warning-alt">
 
-            <!-- <div *ngIf="displayLeadTime" class="alert alert-success box-msg" role="alert">
-                    <button [disabled]="displayLeadTime" (click)="showLeadTimeDailog()">
-                        Lead Time Calculation?
-                    </button>
-                </div> -->
-
             <div *ngIf="!displayLeadTime">
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                     Lead Time Calculation?
+                    Lead Time Calculation?
                 </button>
             </div>
 
@@ -71,6 +65,7 @@
             <!-- </span> -->
 
         </span>
+
     </div>
 
     <!-- People Involved -->
@@ -407,7 +402,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <div class="progressbar progressbar--danger" data-percentage="26">
+                                        <div class="progressbar" data-percentage="35">
                                             <div class="progressbar__fill"></div>
                                         </div>
                                     </div>
@@ -426,7 +421,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <p-progressBar [value]="progressBarWidth"></p-progressBar>
+                                        <div class="progressbar">
+                                            <div class="customProgressBarFill" [ngStyle]="{'width.%':progressBarWidth}"></div>
+                                        </div>
                                     </div>
                                     <div class="col-md-2">
                                         <h6>{{averageWeekCount}} WEEKS</h6>
