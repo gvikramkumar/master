@@ -276,12 +276,44 @@ export class OfferconstructCanvasComponent implements OnInit {
         });
       }
 
+      // extract selected charecterstics
       if (res.selectedCharacteristics !== undefined && res.selectedCharacteristics.length > 0) {
         res.selectedCharacteristics.forEach(characterstic => {
           reqObj.groups.forEach((element) => {
-            if (element.groupName === characterstic.group) {
-              const sgrp = new SubGroup(characterstic.subgroup, characterstic.characteristics);
-              element.subGroup.push(sgrp);
+            if (characterstic.characteristics.length > 0) {
+              if (element.groupName === characterstic.group) {
+                const sgrp = new SubGroup(characterstic.subgroup, characterstic.characteristics);
+                element.subGroup.push(sgrp);
+              }
+            }
+          });
+        });
+      }
+
+      if (res.additionalCharacteristics !== undefined && res.additionalCharacteristics.length > 0) {
+        res.additionalCharacteristics.forEach(characterstic => {
+          const found = reqObj.groups.some(function (el) {
+            return el.groupName === characterstic.group;
+          });
+
+          if (!found) {
+            const grp = new Group(characterstic.group, []);
+            reqObj.groups.push(grp);
+          } else {
+            // Do nothing
+          }
+        });
+      }
+
+      // extract additional charecterstics
+      if (res.additionalCharacteristics !== undefined && res.additionalCharacteristics.length > 0) {
+        res.additionalCharacteristics.forEach(characterstic => {
+          reqObj.groups.forEach((element) => {
+            if (characterstic.characteristics.length > 0) {
+              if (element.groupName === characterstic.group) {
+                const sgrp = new SubGroup(characterstic.subgroup, characterstic.characteristics);
+                element.subGroup.push(sgrp);
+              }
             }
           });
         });
@@ -335,7 +367,7 @@ export class OfferconstructCanvasComponent implements OnInit {
         a.click();
         document.body.removeChild(a);
       }
-    })
+    });
   }
 
   removeSelected() {
