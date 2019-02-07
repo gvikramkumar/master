@@ -95,7 +95,10 @@
         <li
           class="tab"
           *ngFor="let groupName of groupNames; let i = index"
-          [ngClass]="{ active: i == activeTabIndex }"
+          [ngClass]="{ 
+            active: i == activeTabIndex,
+            disabled: !canClickNextStep && i!=0
+           }"
           (click)="changeTab(i)"
         >
           <a tabindex="0" class="padding-5-20 margin-right-10">
