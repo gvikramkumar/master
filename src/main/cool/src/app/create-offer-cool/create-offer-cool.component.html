@@ -1,17 +1,13 @@
 <div class="content">
   <div class="container">
-    <div class="section">
-        <span *ngIf="!offerId" class="create-offer-heading page--heading">Create New Offer</span>
-        <app-menu-bar *ngIf="!offerId">
-        </app-menu-bar>
-        <app-menu-bar *ngIf="offerId" [caseId]="caseId"
+            <app-menu-bar [caseId]="caseId"
         [currentMMModel]="derivedMM"
         [offerId]="offerId"
         [offerName]="offerName"
         [stakeData]="stakeData"
         (updateMessage)="updateMessage($event)">
         </app-menu-bar>
-      <div class="panel panel--indigo panel--compressed task--bar">
+      <div class="panel panel--indigo panel--compressed task--bar panel-wrapper mt-15">
         <div class="row">
           <div class="col-sm-4">
             <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span
@@ -179,6 +175,5 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </div>
