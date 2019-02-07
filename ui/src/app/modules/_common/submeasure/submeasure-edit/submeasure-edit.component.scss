@@ -31,18 +31,6 @@
     }
   }
 
-  button.choose-file {
-    label {
-      display: block;
-      margin: 0 -16px;
-      padding: 0 16px;
-      //height: 100%;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-
   button.upper-right {
     position: absolute !important;
     top: -3px;

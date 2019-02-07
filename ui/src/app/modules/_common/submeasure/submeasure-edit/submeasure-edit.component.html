@@ -78,10 +78,8 @@
               <legend>Dept/Acct Upload</legend>
               <div style="height:6px;" class="spacer-div">&nbsp;</div>
               <span [fxShow]="!fileInput.files.length">
-              <button class="choose-file upper-right" cuiButton color="primary" [small]="true">
-                <label for="file-input">Choose a File</label>
-              </button>
-              <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".xlsx"
+              <button class="upper-right" cuiButton color="primary" [small]="true" (click)="fileInput.click()">Choose a File</button>
+              <input #fileInput type="file" placeholder="Upload file" accept=".xlsx"
                      (change)="changeFile(fileInput)" class="ng-hide">
             </span>
               <span [fxShow]="fileInput.files.length">

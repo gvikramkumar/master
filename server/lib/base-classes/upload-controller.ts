@@ -72,6 +72,10 @@ export default class UploadController {
     this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 0);
     this.rows2 = [];
     if (this.hasTwoSheets) {
+      if (!sheets[1]) {
+        next(new ApiError('Upload expects 2 sheets in upload file', null, 400));
+        return;
+      }
       this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 0);
     }
     this.totalErrors = {};
