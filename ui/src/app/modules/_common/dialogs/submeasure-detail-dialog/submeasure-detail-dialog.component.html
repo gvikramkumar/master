@@ -109,6 +109,11 @@
         <div class="col-lg-6">SCMS:</div>
         <div class="col-lg-6">{{sm.inputFilterLevel.scmsLevel}}</div>
       </div>
+
+      <div class="row">
+        <div class="col-lg-6">GL Segments:</div>
+        <div class="col-lg-6 text-ellipsis" [matTooltip]="sm.inputFilterLevel?.glSegLevel" matTooltipPosition="above">{{sm.inputFilterLevel.glSegLevel}}</div>
+      </div>
     </div> <!--End of Second row first column-->
 
     <div class="col-lg-6"> <!--Second column-->

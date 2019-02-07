@@ -14,4 +14,7 @@ export const filterLevelMap: {prop: string, hierarchyId: number, levelId: number
   {prop: 'entityLevel',	hierarchyId: 3, levelId:	1, levelName: 'BE'},
   {prop: 'internalBELevel',	hierarchyId: 8, levelId:	1, levelName: 'INTERNAL BE'},
   {prop: 'internalBELevel',	hierarchyId: 8, levelId:	2, levelName: 'INTERNAL SUB BE'},
+  {prop: 'glSegLevel',	hierarchyId: 9, levelId:	1, levelName: 'ACCOUNT'},
+  {prop: 'glSegLevel',	hierarchyId: 9, levelId:	1, levelName: 'SUB ACCOUNT'},
+  {prop: 'glSegLevel',	hierarchyId: 9, levelId:	1, levelName: 'COMPANY'},
 ];

@@ -34,11 +34,12 @@
         <fin-input name="desc" [textarea]="true" [(ngModel)]="sm.desc" [label]="!isUnallocatedGroup()?'Description*':'Description'" [rows]="2" [required]="!isUnallocatedGroup()"></fin-input>
       </div>
 
-      <div class="col-lg-6 form-group-max-width">
-        <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes" [required]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()"
-                    [label]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'" empty="true" optionsKey="name" optionsValue="value"></cui-select>
-        <div *ngIf="isManualMix()" fxLayout="row" fxLayoutAlign="start start">
-          <div class="form-group-text form-group-inline-30">Manual Mix HW/SW:</div>
+      <div class="col-lg-6">
+        <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes"
+                    [required]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()"
+                    [label]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'"
+                    empty="true" optionsKey="name" optionsValue="value" [class.cat-type]="isManualMix()"></cui-select>
+        <div class="manual-mix" *ngIf="isManualMix()">
           <fin-input name="manualMixHw" [label]="!isUnallocatedGroup() && !isPassThrough()?'HW*':'HW'" [(ngModel)]="manualMixHw"
                      [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true" class="hwsw-inputs"></fin-input>
           <fin-input name="manualMixSw" [label]="!isUnallocatedGroup() && !isPassThrough()?'SW*':'SW'" [(ngModel)]="manualMixSw"
@@ -52,8 +53,8 @@
                     [label]="!isUnallocatedGroup() && !isPassThrough()?'Adjustment Type*':'Adjustment Type'" empty="true"
                     [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="rrr_category_id" optionsValue="adj_type_id"></cui-select>
 
-        <div class="margin-top:15px; height: 0px;">&nbsp;</div>
-        <div class="border-and-padding">
+        <!--<div class="margin-top:10px; height: 0px;">&nbsp;</div>-->
+        <div class="border-and-padding form-group-max-width">
           <div style="margin-bottom:-10px;">
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
@@ -70,29 +71,29 @@
           </div>
         </div>
 
-        <div *ngIf="isDeptUploadMeasure()" class="border-and-padding base-margin-top">
-          <fieldset style="position:relative; margin-bottom:0;" [class.disabled]="!isDeptUpload()">
-            <legend>Dept/Acct Upload</legend>
-            <div style="height:6px;" class="spacer-div">&nbsp;</div>
-            <span [fxShow]="!fileInput.files.length">
-              <button class="choose-file upper-right" cuiButton color="primary" [small]="true">
-                <label for="file-input">Choose a File</label>
-              </button>
-              <input #fileInput id="file-input" type="file" placeholder="Upload file" accept=".xlsx"
+        <div *ngIf="isDeptUploadMeasure()" class="border-and-padding half-margin-top form-group-max-width">
+          <!--we want to position this button relative to fieldset, but fails on firefox, so we'll add this for a relative position-->
+          <div style="position:relative">
+            <fieldset style="margin-bottom:0;" [class.disabled]="!isDeptUpload()">
+              <legend>Dept/Acct Upload</legend>
+              <div style="height:6px;" class="spacer-div">&nbsp;</div>
+              <span [fxShow]="!fileInput.files.length">
+              <button class="upper-right" cuiButton color="primary" [small]="true" (click)="fileInput.click()">Choose a File</button>
+              <input #fileInput type="file" placeholder="Upload file" accept=".xlsx"
                      (change)="changeFile(fileInput)" class="ng-hide">
             </span>
-            <span [fxShow]="fileInput.files.length">
+              <span [fxShow]="fileInput.files.length">
               <button cuiButton class="upper-right" color="primary" [small]="true" (click)="doDeptUpload(fileInput)">Upload File</button>
             </span>
-            <div [fxShow]="fileInput.files.length || sm.indicators.deptAcct === 'A'" class="half-margin-top">
-              <span [innerText]="getUploadedText()" style="margin-right: 14px;"></span> <span class="text-darkgreen">{{deptUploadFilename}}</span>
-            </div>
-            <div class="half-margin-top">
-              <a [href]="getDeptUploadExistingMappingUri()" (click)="getDeptUploadExistingMappingClick()" style="margin-right: 30px;">Download Existing Mapping</a>
-              <a [href]="getDeptUploadTemplateDownloadUri()">Download Template</a>
-            </div>
-          </fieldset>
-
+              <div [fxShow]="fileInput.files.length || sm.indicators.deptAcct === 'A'" class="half-margin-top">
+                <span [innerText]="getUploadedText()" style="margin-right: 14px;"></span> <span class="text-darkgreen">{{deptUploadFilename}}</span>
+              </div>
+              <div class="half-margin-top">
+                <a [href]="getDeptUploadExistingMappingUri()" (click)="getDeptUploadExistingMappingClick()" style="margin-right: 30px;">Download Existing Mapping</a>
+                <a [href]="getDeptUploadTemplateDownloadUri()">Download Template</a>
+              </div>
+            </fieldset>
+          </div>
         </div>
 
       </div>
@@ -133,6 +134,9 @@
                     <div class="check-wrap">
                       <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')" [disabled]="ScmsIflDisabled"></fin-checkbox>
                     </div>
+                    <div class="check-wrap">
+                      <fin-checkbox [(model)]="ifl_switch_glseg" label="GL Segments" (modelChange)="iflChange('glseg')"></fin-checkbox>
+                    </div>
                   </div>
                   <div class="col-6">
                     <div class="sel-wrap">
@@ -154,6 +158,10 @@
                     <div class="sel-wrap">
                       <cui-select name="scmsLevel" [(ngModel)]="sm.inputFilterLevel.scmsLevel" [required]="ifl_switch_scms" class="option"
                                   [items]="scms_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_scms"></cui-select>
+                    </div>
+                    <div class="sel-wrap">
+                      <cui-multiselect name="glSegLevel" [(ngModel)]="sm.inputFilterLevel.glSegLevel" [required]="ifl_switch_glseg" class="option"
+                                       [items]="glseg_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_glseg"></cui-multiselect>
                     </div>
                   </div>
                 </div>

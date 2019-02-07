@@ -61,7 +61,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   beMatches = [{match: 'BE'}, {match: 'Sub BE'}];
   countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name'}];
   extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name'}];
-  glSegmentMatches = [{name: 'Account'}, {name: 'Sub Account'}, {name: 'Company'}];
+  glSegmentMatches = [{name: 'Account', value: 'ACCOUNT'}, {name: 'Sub Account', value: 'SUB ACCOUNT'}, {name: 'Company', value: 'COMPANY'}];
   // SELECT options to be taken from Postgres
   salesSL1Choices: { name: string }[] = [];
   prodTgChoices: { name: string }[] = [];

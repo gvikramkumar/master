@@ -16,7 +16,7 @@ const schema = new Schema(
     beMatch: String,
     countryMatch: String,
     extTheaterMatch: String,
-    glSegmentsMatch: [String],
+    glSegmentsMatch: {type: [String], enum: ['ACCOUNT', 'SUB ACCOUNT', 'COMPANY']},
     sl1Select: String,
     sl2Select: String,
     sl3Select: String,

@@ -11,20 +11,23 @@
     max-width: $form-group-max-width;
   }
 
-  .hwsw-inputs {
-    width: 70px;
-    margin-right: 30px;
+  .cat-type {
+    display: inline-flex;
+    & ::ng-deep .form-group {
+      min-width: 217px;
+    }
   }
 
-  button.choose-file {
-    label {
-      display: block;
-      margin: 0 -16px;
-      padding: 0 16px;
-      //height: 100%;
-      &:hover {
-        cursor: pointer;
-      }
+  .manual-mix {
+    display: inline-flex;
+    place-content: flex-start;
+    align-items: flex-start;
+    flex-direction: row;
+    box-sizing: border-box;
+
+    .hwsw-inputs {
+      width: 70px;
+      margin-left: 26px;
     }
   }
 

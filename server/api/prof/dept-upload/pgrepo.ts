@@ -6,7 +6,6 @@ const ormMap: OrmMap[] = [
   {prop: 'submeasureKey', field: 'sub_measure_key', type: OrmTypes.number},
   {prop: 'nodeValue', field: 'node_value'},
   {prop: 'glAccount', field: 'gl_account', type: OrmTypes.number},
-  {prop: 'temp', field: null},
   {prop: 'createdBy', field: 'create_owner'},
   {prop: 'createdDate', field: 'create_datetimestamp', type: OrmTypes.date},
   {prop: 'updatedBy', field: 'update_owner'},

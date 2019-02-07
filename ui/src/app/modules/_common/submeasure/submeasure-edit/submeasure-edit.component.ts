@@ -77,6 +77,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   ifl_switch_p = false;
   ifl_switch_s = false;
   ifl_switch_scms = false;
+  ifl_switch_glseg = false;
   mm_switch_ibe = false;
   mm_switch_le = false;
   mm_switch_p = false;
@@ -165,6 +166,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       name: 'SCMS',
       value: 'SCMS',
     }
+  ];
+  glseg_items = [
+    {name: 'Account', value: 'ACCOUNT'},
+    {name: 'Sub Account', value: 'SUB ACCOUNT'},
+    {name: 'Company', value: 'COMPANY'}
   ];
   timings = [
     {name: 'Daily'},
@@ -497,6 +503,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.ScmsMmDisabled = false;
         }
         break;
+      case 'glseg':
+        if (this.ifl_switch_scms) {
+        } else {
+          this.sm.inputFilterLevel.glSegLevel = undefined;
+        }
+        break;
     }
   }
 
@@ -586,6 +598,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.ifl_switch_le = !!this.sm.inputFilterLevel.entityLevel;
     this.ifl_switch_s = !!this.sm.inputFilterLevel.salesLevel;
     this.ifl_switch_scms = !!this.sm.inputFilterLevel.scmsLevel;
+    this.ifl_switch_glseg = !!(this.sm.inputFilterLevel.glSegLevel && this.sm.inputFilterLevel.glSegLevel.length);
   }
 
   syncManualMapSwitches() {
@@ -611,6 +624,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     if (!this.ifl_switch_scms) {
       delete this.sm.inputFilterLevel.scmsLevel;
+    }
+    if (!this.ifl_switch_glseg) {
+      delete this.sm.inputFilterLevel.glSegLevel;
     }
   }
 
@@ -641,6 +657,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   cleanUp() {
     this.cleanIflSwitchChoices();
     this.cleanMMSwitchChoices();
+
     // the list size is governed by arrRules, BUT, the values are in sm.rules
     this.arrRules.forEach((x, idx) => this.arrRules[idx] = this.sm.rules[idx]);
     this.arrRules = this.arrRules.filter(r => !!r);
@@ -648,6 +665,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (this.arrRules.length === 0) {
       this.arrRules[0] = '';
     }
+
     if (this.hasFlashCategory()) {
       this.sm.sourceSystemAdjTypeId = this.flashCategory;
     } else if (this.hasAdjustmentType()) {
@@ -655,13 +673,19 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     } else {
       this.sm.sourceSystemAdjTypeId = undefined;
     }
+
     if (this.isManualMix()) {
       this.sm.manualMixHw = this.manualMixHw;
       this.sm.manualMixSw = this.manualMixSw;
     }
+
     this.clearAllocationRequired();
+
     if (this.isDeptUpload() && this.sm.indicators.deptAcct === 'N') {
       this.sm.indicators.deptAcct = 'Y';
+    } else {
+      this.sm.indicators.deptAcct = 'N';
+      this.deptUploadFilename = '';
     }
 
   }

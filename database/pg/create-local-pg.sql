@@ -308,18 +308,27 @@ CREATE INDEX ndx_dfa_grpby_msr_key ON fpadfa.dfa_sub_measure USING btree (groupe
 CREATE INDEX ndx_dfa_sub_measure_id ON fpadfa.dfa_sub_measure USING btree (sub_measure_id) ;
 CREATE INDEX ndx_dfa_sub_measure_key ON fpadfa.dfa_sub_measure USING btree (sub_measure_key) ;
 
+drop table fpadfa.dfa_submeasure_input_lvl;
+-- Drop table
+
+-- DROP TABLE fpadfa.dfa_submeasure_input_lvl
+
+-- Drop table
+
+-- DROP TABLE fpadfa.dfa_submeasure_input_lvl
+
 CREATE TABLE fpadfa.dfa_submeasure_input_lvl (
 	module_id numeric(10) NULL,
 	sub_measure_key numeric(22) NOT NULL,
 	hierarchy_id numeric(10) NOT NULL,
 	input_level_flag varchar(3) NOT NULL,
 	level_id numeric(10) NULL,
-	level_name varchar(30) NULL,
+	level_name varchar(30) NOT NULL,
 	create_owner varchar(30) NULL,
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
 	update_datetimestamp timestamp NULL,
-	CONSTRAINT dfa_submeasure_input_lvl_pkey PRIMARY KEY (sub_measure_key, hierarchy_id, input_level_flag)
+	CONSTRAINT dfa_submeasure_input_lvl_pkey PRIMARY KEY (sub_measure_key, hierarchy_id, input_level_flag, level_name)
 )
 WITH (
 	OIDS=FALSE

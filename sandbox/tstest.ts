@@ -6,13 +6,8 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {take, first} from 'rxjs/operators';
 
 
-
-
-let b;
-const a = b = 'stuff';
-console.log(a, b);
-
-
+console.log(Number('a') === Number('a'));
+console.log(NaN === NaN);
 
 /*
 function test() {
