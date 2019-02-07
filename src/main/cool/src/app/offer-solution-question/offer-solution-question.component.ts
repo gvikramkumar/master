@@ -12,6 +12,8 @@ export class OfferSolutionQuestionComponent implements OnInit {
   @Input() questionIndex:number;
   @Input() stakeData:Object;
   @Input() offerData:Object;
+  @Input() groupIndex:any;
+
   currentOfferId:string;
   caseId:string;
 

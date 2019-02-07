@@ -22,7 +22,7 @@
 <div *ngIf="questionData['questionType']==='Radio Button'">
   <div class="form-group form-group--inline" *ngFor="let radio of questionData['values']">
     <label class="radio">
-      <input type="radio" [value]="radio" [(ngModel)]="questionData['answer']" name="{{questionIndex}}_{{questionData['question']}}"/> <span class="radio__input"></span>
+      <input type="radio" [value]="radio" [(ngModel)]="questionData['answer']" name="G{{groupIndex}}_I{{questionIndex}}"/> <span class="radio__input"></span>
       <span class="radio__label hidden-xs">{{radio}}</span>
     </label>
   </div>
