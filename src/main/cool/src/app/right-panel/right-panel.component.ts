@@ -333,13 +333,13 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   onHide() {
     this.display = false;
-    this.collaboratorsList = [];
+    // this.collaboratorsList = [];
     this.addEditCollaboratorsForm.reset();
   }
 
   closeDailog() {
     this.display = false;
-    this.collaboratorsList = [];
+    // this.collaboratorsList = [];
     this.addEditCollaboratorsForm.reset();
   }
 
