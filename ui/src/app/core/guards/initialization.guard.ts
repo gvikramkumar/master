@@ -68,13 +68,24 @@ export class InitializationGuard implements CanActivate {
     return Promise.all([
       this.moduleService.refreshStore(),
       this.userService.refreshUser(),
-      this.userService.isLocalEnv().toPromise()
+      this.userService.getEnv().toPromise()
     ])
       .then(results => {
         this.afterInit();
-        this.store.isLocalEnv = results[2];
+        this.store.env = results[2];
         this.store.pubInitialized();
         console.log('app initialized');
+
+        // temporary art check for staging issue
+        if (this.store.isDevEnv() || this.store.isStageEnv()) {
+          setInterval(() => {
+            this.userService.getArtRoles()
+              .subscribe(resp => {
+                // console.log(`getArtRoles: ${resp.userId}, ${resp.roles}`);
+              });
+          }, 5 * 60 * 1000);
+        }
+
         return true;
       })
       .catch(err => {
