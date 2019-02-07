@@ -103,7 +103,7 @@
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                                 <span class="treetable--product-name">{{rowData['productName']}}</span>
                                 <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
-                                <a *ngIf="!rowData['isMajorLineItem'] && !rowData['isGroupNode']" class="pull-right"
+                                <a *ngIf="!rowData['isGroupNode']" class="pull-right"
                                   (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
                                   Details</a>
                               </div>
@@ -199,7 +199,7 @@
     </div>
 
   </div>
-  <p-dialog header="Add Details for" closable="true" modal="true" showHeader="false" (onHide)="onHide()" [responsive]="true"
+  <p-dialog header="Add Details for {{this.lineItemName}}" closable="true" modal="true" showHeader="false" (onHide)="onHide()" [responsive]="true"
     [(visible)]="displayAddDetails" [contentStyle]="{'height': '450px', 'max-height':'450px', 'max-width':'700px'}"
     positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
