@@ -912,69 +912,69 @@ export class MmAssesmentComponent implements OnInit {
   //   let obj={
 
   //   offerId : this.currentOfferId == null ? '' : this.currentOfferId,
-  
+
   //   offerName :this.offerBuilderdata['offerDesc'] == null ? '' : this.offerBuilderdata['offerDesc'],
-  
+
   //   offerDesc :this.offerBuilderdata['offerCreatedBy'] == null ? '' : this.offerBuilderdata['offerCreatedBy'],
-  
+
   //   offerCreatedBy : this.offerBuilderdata['offerOwner'] == null ? '' : this.offerBuilderdata['offerOwner'],
-  
+
   //   offerCreationDate :  this.offerBuilderdata['offerCreationDate'] == null ? '' : this.offerBuilderdata['offerCreationDate'],
-  
+
   //   offerOwner :  this.offerBuilderdata['offerOwner'] == null ? '' : this.offerBuilderdata['offerOwner'],
-  
+
   //   clonedOfferId :  this.offerBuilderdata['clonedOfferId'] == null ? '' : this.offerBuilderdata['clonedOfferId'],
-  
+
   //   primaryBUList :this.offerBuilderdata['primaryBUList'] == null ? '' : this.offerBuilderdata['primaryBUList'],
-  
+
   //   primaryBEList : this.offerBuilderdata['primaryBEList'] == null ? '' : this.offerBuilderdata['primaryBEList'],
-  
+
   //   strategyReviewDate : this.offerBuilderdata['strategyReviewDate'] == null ? '' : this.offerBuilderdata['strategyReviewDate'],
-  
+
   //   designReviewDate :  this.offerBuilderdata['designReviewDate'] == null ? '' : this.offerBuilderdata['designReviewDate'],
-  
+
   //   readinessReviewDate : this.offerBuilderdata['readinessReviewDate'] == null ? '' : this.offerBuilderdata['readinessReviewDate'],
-  
-   
+
+
   //   selectedCharacteristics :selectedCharacteristics,
   //   derivedMM : this.currentMMModel == null ? '' : this.currentMMModel,
-  
+
   //   overallStatus :this.message['contentHead'],
-  
+
   //   additionalCharacteristics :additionalCharacteristics,
- 
+
   //     stakeholders :stakeHolders,
   //   expectedLaunchDate :this.offerBuilderdata['expectedLaunchDate'] ,
-  
+
   //  status : {
-  
+
   //     offerPhase : "PreLaunch",
-  
+
   //       offerMilestone : "Launch In Progress",
-  
+
   //       phaseMilestone : "Execute",
-  
+
   //       subMilestone: "Offer Set Up and Design"
-  
+
   //   },
-  
+
   //  ideate : [],
-  
+
   //   "plan" : [],
-   
+
   //   secondaryBUList :this.offerBuilderdata['secondaryBUList'] ,
-  
+
   //   secondaryBEList :this.offerBuilderdata['secondaryBEList'],
-  
+
   //   offerStatus : "Offer service completion"
-  
-  // } 
+
+  // }
   // console.log("finalObjecydata::::::::::",obj);
   // this.createOfferService.getEditOfferUpdate(obj).subscribe(data=>{
   //   let finaldata=data;
   //   console.log("after submit edit",finaldata);
   // })
-   
+
   }
   showWarning(){
     this.showWarningSave = true;
@@ -983,9 +983,9 @@ export class MmAssesmentComponent implements OnInit {
 
   PreviousValues(){
     this.proceedButtonStatusValid = true;
-   
+
     let newArray = [];
-    
+
     this.monetizationModelService.getAttributes().subscribe(data => {
       this.offerData = data;
       this.groupData =[];
@@ -1015,7 +1015,7 @@ export class MmAssesmentComponent implements OnInit {
               newArray.forEach(value =>{
                    if(attrName == value ){
                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-                this.match = true; 
+                this.match = true;
                }
                if(this.match  == true){
                 return false;
@@ -1031,12 +1031,12 @@ export class MmAssesmentComponent implements OnInit {
        this.groupData.push(curGroup);
       });
     });
-   /*    
+   /*
     this.groupNames = this.groupNames.filter(function(elem, index, self) {
       return index == self.indexOf(elem);
-   }); */ 
+   }); */
    console.log("groupNames",this.groupNames);
-    
+
   }
 
 
