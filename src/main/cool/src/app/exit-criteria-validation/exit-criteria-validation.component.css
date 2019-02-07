@@ -209,6 +209,7 @@ td span.status_label {
 table.table.table--nostripes.offer-dimensions td {
     border-top: none;
     border-bottom: 1px #dee2e6 dashed;
+    padding: 5px;
 }
 table.table.table--nostripes.offer-dimensions tr:last-child td {
     border-bottom-style: solid;
@@ -330,11 +331,11 @@ body.cui {
 .GREEN {
     color: #6EBE4A;
    }
-  
+
   .YELLOW {
     color: #FBAB18;
   }
-  
+
   .RED {
     color: #E2231A;
   }

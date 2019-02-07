@@ -30,4 +30,10 @@ export class OffersolutioningService {
     const url =this.environmentService.REST_API_NOTIFICATION_PRIMARYPOC_POST_URL;
     return this.httpClient.post(url,data);
   }
+
+  getSolutioningPayload(offerId){
+    let url = this.environmentService.REST_API_GET_RULE_RESULT_URL;
+    url += offerId;
+    return  this.httpClient.get(url);
+  }
 }

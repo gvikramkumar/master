@@ -13,7 +13,8 @@
 <div class="panel panel--indigo panel--compressed task--bar">
     <div class="row">
         <div class="col-md-4">
-            <h4><button [disabled]="!backbuttonStatusValid" (click)='goBackToOffercreation()' class="btn--back btn btn--icon btn--white"><span class="icon-back" ></span></button> Offer Builder</h4>
+            <h4 *ngIf="!dimensionMode"><button [disabled]="!backbuttonStatusValid" (click)='goBackToOffercreation()' class="btn--back btn btn--icon btn--white"><span class="icon-back" ></span></button> Offer Builder</h4>
+            <h4  *ngIf="dimensionMode"><button [disabled]="!backbuttonStatusValid" (click)='goBackToStrategyReview()' class="btn--back btn btn--icon btn--white"><span class="icon-back" ></span></button> Offer Builder</h4>
         </div>
         <div class="col-md-8 text-right">
           <span *ngIf = "showEditbutton">
@@ -94,7 +95,10 @@
         <li
           class="tab"
           *ngFor="let groupName of groupNames; let i = index"
-          [ngClass]="{ active: i == activeTabIndex }"
+          [ngClass]="{ 
+            active: i == activeTabIndex,
+            disabled: !canClickNextStep && i!=0
+           }"
           (click)="changeTab(i)"
         >
           <a tabindex="0" class="padding-5-20 margin-right-10">

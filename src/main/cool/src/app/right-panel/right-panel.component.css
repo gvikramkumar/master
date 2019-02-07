@@ -18,6 +18,13 @@
     margin-bottom: 30px;
   }
 
+
+  .customProgressBarFill{
+    height:7px;
+    border-radius:2rem;
+    background: #009200;
+  }
+
   .ui-progressbar { 
     height: 1.2em; 
     text-align: left; 

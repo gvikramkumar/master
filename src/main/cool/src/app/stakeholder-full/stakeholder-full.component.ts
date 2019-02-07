@@ -238,6 +238,41 @@ export class StakeholderFullComponent implements OnInit {
       this.stakeHolderInfo[obj['offerRole']].push(obj);
     }
 
+    let stakeholdersPayLoad = {
+      offerId: this.currentOfferId,
+      caseId: this.caseId,
+      stakeholders: []
+    }
+
+
+    const keys: any[] = Object.keys(this.stakeHolderInfo);
+
+    keys.forEach(key => {
+        this.stakeHolderInfo[key].forEach(element => {
+          let obj = {
+            "_id": element._id,
+            "businessEntity": element.businessEntity,
+            "functionalRole": element.functionalRole,
+            "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
+            "offerRole": element.offerRole,
+            "name": element.name
+          }
+          stakeholdersPayLoad['stakeholders'].push(obj);
+        })
+    });
+
+    this.stakeholderfullService.proceedToStrageyReview(stakeholdersPayLoad).subscribe(data => {
+      let proceedPayload = {
+        "taskId": "",
+        "userId": this.offerBuilderdata['offerOwner'],
+        "caseId": this.caseId,
+        "offerId": this.currentOfferId,
+        "taskName": "Stake Holders",
+        "action": "",
+        "comment": ""
+      }
+    });
+
     this.stakeholderForm.reset();
   }
 

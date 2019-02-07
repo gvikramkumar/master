@@ -133,6 +133,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       label: item.categoryName,
       data: item,
       draggable: true,
+      expanded: true,
       children: []
     };
   }
@@ -236,7 +237,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     obj['productName'] =
       rowNode.node.data.productName + ' ' + 'Group' + ' ' + counter;
     obj['catergoryName'] = 'Billing';
-    obj['lablel'] = 'Billing';
+    obj['label'] = 'Billing';
     obj['isGroupNode'] = true;
     rowNode.node.children.push(this.itemToTreeNode(obj));
     this.offerConstructItems = [...this.offerConstructItems];
@@ -459,10 +460,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   saveOfferConstructChanges() {
-
     this.offerConstructItems = [... this.offerConstructItems];
-    let cds: ConstructDetails  = new ConstructDetails([]);
-
+    let cds: ConstructDetails  = new ConstructDetails(this.currentOfferId, []);
     this.offerConstructItems.forEach( (node) => {
       let cd:ConstructDetail;
       // check if this item is major item

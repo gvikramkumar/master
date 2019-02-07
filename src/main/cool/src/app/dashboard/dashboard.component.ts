@@ -56,7 +56,10 @@ export class DashboardComponent implements OnInit {
   lastValueInMilestone: Array<any>;
   val: any;
   buttonIsDisabled: boolean = false;
-  reason: String = '';
+  reason: string = '';
+  fileToUpload: File = null;
+  selectedFile: any;
+
 
   constructor(private dashboardService: DashboardService,
     private router: Router,
@@ -267,13 +270,69 @@ export class DashboardComponent implements OnInit {
       userId,
       taskName,
       action,
-      this.commentValue
+      "",
+      false,
+    );
+    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+      overlaypanel.hide();
+      this.getMyActionsAndNotifications();
+    });
+    // this.createActionForm.reset();
+  }
+
+  createApproveActionWithFeedback(overlaypanel: OverlayPanel) {
+    const taskId = this.selectedAction.taskId;
+    const userId = this.userService.getUserId();
+    const taskName = 'Action';
+    const action ='Approved';
+    const commentValue = this.reason;
+    const createActionApprove: CreateActionApprove = new CreateActionApprove(
+      taskId,
+      userId,
+      taskName,
+      action,
+      commentValue,
+      false
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
       overlaypanel.hide();
       this.getMyActionsAndNotifications();
     });
     this.createActionForm.reset();
+  }
+
+  createApproveActionWithDetails(overlaypanel: OverlayPanel) {
+    const fd = new FormData();
+    fd.append('file', this.selectedFile, this.selectedFile.name);
+    this.dashboardService.postFileUploadForAction(this.selectedCaseId,fd).subscribe(data => {
+    });
+
+    const taskId = this.selectedAction.taskId;
+    const userId = this.userService.getUserId();
+    const taskName = 'Action';
+    const action ='Approved';
+    const commentValue = this.reason;
+    const createActionApprove: CreateActionApprove = new CreateActionApprove(
+      taskId,
+      userId,
+      taskName,
+      action,
+      commentValue,
+      true
+    );
+    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+      overlaypanel.hide();
+      this.getMyActionsAndNotifications();
+    });
+    this.createActionForm.reset();
+  }
+
+  uploadFile(e) {
+    this.fileToUpload = e.target.files;
+    this.selectedFile = this.fileToUpload[0];
+    console.log(this.fileToUpload);
+    console.log(this.selectedFile.name);
+
   }
 
   showprovideDetails(event, overlaypanel1: OverlayPanel, overlaypanel2: OverlayPanel) {
@@ -310,6 +369,10 @@ export class DashboardComponent implements OnInit {
     if (actiontTitle.toLowerCase() === 'provide details') {
       this.router.navigate(['/offerSolutioning', offerId, caseId]);
     }
+  }
+
+  onBasicUpload(event) {
+    console.log("milsss");
   }
 
   enableSubmit(event): void {
