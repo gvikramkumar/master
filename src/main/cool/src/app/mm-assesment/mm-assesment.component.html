@@ -13,7 +13,8 @@
 <div class="panel panel--indigo panel--compressed task--bar">
     <div class="row">
         <div class="col-md-4">
-            <h4><button [disabled]="!backbuttonStatusValid" (click)='goBackToOffercreation()' class="btn--back btn btn--icon btn--white"><span class="icon-back" ></span></button> Offer Builder</h4>
+            <h4 *ngIf="!dimensionMode"><button [disabled]="!backbuttonStatusValid" (click)='goBackToOffercreation()' class="btn--back btn btn--icon btn--white"><span class="icon-back" ></span></button> Offer Builder</h4>
+            <h4  *ngIf="dimensionMode"><button [disabled]="!backbuttonStatusValid" (click)='goBackToStrategyReview()' class="btn--back btn btn--icon btn--white"><span class="icon-back" ></span></button> Offer Builder</h4>
         </div>
         <div class="col-md-8 text-right">
           <span *ngIf = "showEditbutton">
