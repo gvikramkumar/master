@@ -1,4 +1,5 @@
 <div class="content">
+
   <div class="container">
     <div class="row">
       <div class="col-md-12">
@@ -19,6 +20,120 @@
         </div>
       </div>
     </div>
+
+
+
+    <!-- OSA -->
+
+    <p-tabMenu [model]="items" [activeItem]="items[0]">
+      {{items[i]}}
+    </p-tabMenu>
+
+    <p-accordion>
+      <p-accordionTab *ngFor="let primaryFactor of oasPrimaryFactorsList" header="{{primaryFactor['primaryFactorName']}}">
+        {{primaryFactor['primaryCharactertsics']}}
+      </p-accordionTab>
+    </p-accordion>
+
+    <button type="button" pButton icon="pi pi-chevron-up" (click)="openPrev()"></button>
+    <button type="button" pButton icon="pi pi-chevron-down" (click)="openNext()"></button>
+
+
+    <p-card header="Advanced Card" subheader="Subheader" [style]="{width: '360px'}" styleClass="ui-card-shadow">
+      <p-header>
+        <img src="Card" src="assets/showcase/images/usercard.png">
+      </p-header>
+      <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae
+        numquam deserunt
+        quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+        quas!</div>
+      <p-footer>
+        <button pButton type="button" label="Save" icon="pi pi-check" style="margin-right: .25em"></button>
+        <button pButton type="button" label="Cancel" icon="pi pi-times" class="ui-button-secondary"></button>
+      </p-footer>
+    </p-card>
+
+
+    <div class="panel-wrapper mt-20">
+
+      <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" role="tablist" style="z-index: 0">
+        <li class="tab active" *ngFor="let primaryFactor of oasPrimaryFactorsList; let first = first;" [ngClass]="{firstItem: first}"
+          role="presentation" [class.active]="selectedPrimaryOffer===primaryFactor['primaryFactorName']">
+          <a (click)="selectedPrimaryOffer = primaryFactor['primaryFactorName']" aria-controls="one" role="tab"
+            data-toggle="tab">{{primaryFactor['primaryFactorName']}}</a>
+        </li>
+      </ul>
+
+
+      <div *ngFor="let primaryFactor of oasPrimaryFactorsList">
+
+        <div class=" tab-pane active" *ngIf="selectedPrimaryOffer === primaryFactor['primaryFactorName']" role="tabpanel"
+          id="one">
+
+          <div class="row">
+            <div *ngFor="let secondaryFactor of primaryFactor['primaryCharactertsics']">
+
+              <div class="col-ml-4">
+
+                <div class="card">
+                  <div class="card-block">
+
+                    <h3 class="card-title"> {{secondaryFactor['secondaryFactorName']}} </h3>
+                    <p-accordion>
+                      <p-accordionTab *ngFor="let char of secondaryFactor['secondaryCharactertsics']" header="{{char}}">
+                        {{char}}
+
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                      </p-accordionTab>
+                    </p-accordion>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- <div class="col-sm-3">
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Commercial Set Up</h3>
+                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Commercial Delivery</h3>
+                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Customer Experience</h3>
+                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+            </div> -->
+
+
+
     <!-- My Actions & Notifications Section -->
     <div class="row">
       <div class="col-md-12">
@@ -74,25 +189,25 @@
                   </ng-template>
                 </p-column>
 
-                    <p-column field="offerName" sortable="true" header="OFFER NAME">
-                        <ng-template let-col let-actionData="rowData" pTemplate="body">
-                            <span>
-                                <span>
-                                    <a (click)="showOfferPopUp($event,actionData,popturboContent)">
-                                      &nbsp; {{actionData.offerName}}
-                                    </a>
-                                  </span>
-                            </span>
-                          </ng-template>
+                <p-column field="offerName" sortable="true" header="OFFER NAME">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span>
+                      <span>
+                        <a (click)="showOfferPopUp($event,actionData,popturboContent)">
+                          &nbsp; {{actionData.offerName}}
+                        </a>
+                      </span>
+                    </span>
+                  </ng-template>
 
-                      </p-column>
+                </p-column>
 
 
                 <p-column field="assigneeId" sortable="true" header="OFFER OWNER">
                   <!-- <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <div style="white-space:pre-wrap;">
-                      {{actionData.assigneeId}}</div>
-                  </ng-template> -->
+                      <div style="white-space:pre-wrap;">
+                        {{actionData.assigneeId}}</div>
+                    </ng-template> -->
                 </p-column>
                 <p-column field="status" sortable="true" header="STATUS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
@@ -270,7 +385,8 @@
                       <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL In Progress'"
                         class="row no-gutters">
                         <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL in progress</div>
+                          <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL
+                            in progress</div>
                         </div>
                         <div class="progressbar progressbar--success" data-percentage="100">
                           <div class="progressbar__fill"></div>
@@ -375,8 +491,10 @@
       <div class="popover__footer">
         <div *ngIf="selectedAction.type == 'Manual Action'">
           <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="createApproveAction(popActionContent)">Complete</button>
-          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="popActionContent.hide($event)">Provide Feedback</button>
-            <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide
+            Feedback</button>
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide
+            Details</button>
 
         </div>
         <div *ngIf="selectedAction.type == 'Strategy Review'">
@@ -441,7 +559,8 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="functionName">MILESTONE</label>
-                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">
+                    <input type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}}
+                      readonly [(ngModel)]="val">
                   </div>
                 </div>
               </div>
@@ -480,12 +599,12 @@
                   <label for="dueDate">DUE DATE</label>
                   <div class="form-group__text">
                     <!-- <input type="date" name="dueDateName" class="form-control" [(ngModel)]="dueDateValue" required
-                      ngModel #dueDateName="ngModel"> -->
+                        ngModel #dueDateName="ngModel"> -->
                     <p-calendar [(ngModel)]="dateValue" [minDate]="minDate" name="dueDateName" class="form-control"
                       [(ngModel)]="dueDateValue" required ngModel #dueDateName="ngModel"></p-calendar>
                     <!-- <button type="button" class="link" tabindex="-1">
-                      <span class="icon-month"></span>
-                    </button> -->
+                        <span class="icon-month"></span>
+                      </button> -->
                   </div>
                 </div>
               </div>
@@ -504,22 +623,22 @@
     </section>
     <section *ngIf="showConditionalApprovalSection">
       <!-- <div class="row">
-        <div class="col-md-12">
-          <div class="pull-right">
-            <span class="icon-close" (click)="popActionContent.hide($event)"></span>
-          </div>
-          <div class="card__header">
-            <h5 class="card__title">Conditional Approval</h5>
-          </div>
-        </div>
-      </div> -->
-      <div class="row">
           <div class="col-md-12">
+            <div class="pull-right">
+              <span class="icon-close" (click)="popActionContent.hide($event)"></span>
+            </div>
             <div class="card__header">
               <h5 class="card__title">Conditional Approval</h5>
             </div>
           </div>
+        </div> -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card__header">
+            <h5 class="card__title">Conditional Approval</h5>
+          </div>
         </div>
+      </div>
       <div class="divider"></div>
       <div class="row">
         <div class="col-md-12">
@@ -561,7 +680,8 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="functionName">MILESTONE</label>
-                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">
+                    <input type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}}
+                      readonly [(ngModel)]="val">
                   </div>
                 </div>
               </div>
@@ -663,15 +783,26 @@
 <p-overlayPanel #popProvideDetailsContent [showCloseIcon]="true">
   <div style="min-width:700px; min-height:300px">
     <div class="form-group label--floated">
-        <div class="form-group__text">
-            <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
-            <label>ADD A REASON</label>
-        </div>
-        <p-fileUpload name="provideDetails[]" url="./Documents/"></p-fileUpload>
+      <div class="form-group__text">
+        <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
+        <label>ADD A REASON</label>
+      </div>
+      <input #advancedfileinput type="file" (change)="uploadFile($event)">
     </div>
     <button class="btn" (click)="popProvideDetailsContent.hide($event)">Cancel</button>
-                <button
-                [disabled]="!buttonIsDisabled"
-                class="btn btn--primary" (click)="createApproveAction(popProvideDetailsContent)">Save</button>
-              </div>
-  </p-overlayPanel>
+    <button [disabled]="!buttonIsDisabled" class="btn btn--primary" (click)="createApproveActionWithDetails(popProvideDetailsContent)">Save</button>
+  </div>
+</p-overlayPanel>
+
+<p-overlayPanel #popProvideFeedbackContent [showCloseIcon]="true" style="position: relative; left:50px; top: -1000px;">
+  <div style="min-width:700px; min-height:300px; margin-left:30px">
+    <div class="form-group label--floated">
+      <div class="form-group__text">
+        <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
+        <label>ADD A REASON</label>
+      </div>
+    </div>
+    <button class="btn" (click)="popProvideFeedbackContent.hide($event)">Cancel</button>
+    <button [disabled]="!buttonIsDisabled" class="btn btn--primary" (click)="createApproveActionWithFeedback(popProvideFeedbackContent)">Save</button>
+  </div>
+</p-overlayPanel>

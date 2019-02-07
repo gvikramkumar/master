@@ -38,7 +38,10 @@ import { ExitCriteriaValidationService } from './services/exit-criteria-validati
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { TieredMenuModule } from 'primeng/tieredmenu';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { MenuItem } from 'primeng/api';
+import { CardModule } from 'primeng/card';
+import { PanelModule } from 'primeng/panel';
 import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
 import { ActionsComponent } from './actions/actions.component';
 import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
@@ -82,14 +85,15 @@ import { UserIdleModule } from 'angular-user-idle';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
 import { OfferconstructCanvasComponent } from './offerconstruct-canvas/offerconstruct-canvas.component';
-import {DragDropModule} from 'primeng/dragdrop';
-import {TreeTableModule} from 'primeng/treetable';
+import { DragDropModule } from 'primeng/dragdrop';
+import { TreeTableModule } from 'primeng/treetable';
 import { BlueComponent } from './blue/blue.component';
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
 import { EditfieldsComponent } from './editfields/editfields.component';
 import { ViewstrategyComponent } from './viewstrategy/viewstrategy.component';
+import { OasComponent } from './oas/oas.component';
 
 
 
@@ -140,7 +144,8 @@ export function app_init(configService: ConfigurationService, userService: UserS
     BlueComponent,
     OfferSolutionQuestionComponent,
     EditfieldsComponent,
-    ViewstrategyComponent
+    ViewstrategyComponent,
+    OasComponent
   ],
   imports: [
     NgbModule,
@@ -170,6 +175,10 @@ export function app_init(configService: ConfigurationService, userService: UserS
     OverlayPanelModule,
     DragDropModule,
     TreeTableModule,
+    CardModule,
+    PanelModule,
+    TabMenuModule,
+    TieredMenuModule,
     NgxWebstorageModule.forRoot(),
     UserIdleModule.forRoot({ idle: 10795, timeout: 10800, ping: 0 })
   ],
@@ -214,6 +223,6 @@ export function app_init(configService: ConfigurationService, userService: UserS
       }
     ],
   bootstrap: [AppComponent],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

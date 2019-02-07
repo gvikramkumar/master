@@ -1041,5 +1041,8 @@ export class MmAssesmentComponent implements OnInit {
   goBackToOffercreation() {
     this.router.navigate(['/coolOffer', this.currentOfferId, this.caseId]);
   }
+
+
+
 }
 
