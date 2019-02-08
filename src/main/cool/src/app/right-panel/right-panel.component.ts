@@ -161,20 +161,24 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
 
 
-
+    if(this.offerPhaseDetailsList) {
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
+    }
+    if(this.offerPhaseDetailsList) {
     this.offerPhaseDetailsList.ideate.forEach(element => {
       if (element.status === 'Completed') {
         this.ideateCompletedCount = this.ideateCompletedCount + 1;
       }
     });
-
+  }
+  if(this.offerPhaseDetailsList) {
     this.offerPhaseDetailsList.plan.forEach(element => {
       if (element.status === 'Completed') {
         this.planCompletedCount = this.ideateCompletedCount + 1;
       }
     });
+  }
 
     this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
       this.offerName = data['offerName'];
@@ -210,7 +214,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     if (this.currentOfferId) {
 
       this.createOfferService.getMMMapperById(this.currentOfferId).subscribe(data => {
-
+if(data) {
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
         this.OfferOwners = this.offerData.offerObj.owners;
@@ -236,6 +240,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
             item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
           });
         }
+      }
       });
     }
 
@@ -263,6 +268,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   processCurrentPhaseInfo(phaseInfo) {
+    if(phaseInfo) {
     this.mStoneCntInAllPhases.forEach(element => {
       const obj = {};
       let count = 0;
@@ -287,10 +293,11 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       }
       this.mileStoneStatus.push(obj);
     });
+  }
     this.phaseProcessingCompleted = true;
   }
 
-  showDialog() {
+  showialog() {
     this.display = true;
   }
 
