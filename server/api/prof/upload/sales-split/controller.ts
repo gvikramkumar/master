@@ -163,7 +163,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
   }
 
   validateSplitPercentage() {
-    if (this.validatePercentageValue(this.PropNames.splitPercentage, this.temp.splitPercentage, true)) {
+    if (this.validateNumberValue(this.PropNames.splitPercentage, this.temp.splitPercentage, true)) {
       this.temp.splitPercentage = Number(this.temp.splitPercentage);
     }
     return Promise.resolve();

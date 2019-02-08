@@ -366,8 +366,8 @@ export default class UploadController {
   validatePercentageValue(prop, val, required) {
     if (!this.validateNumberValue(prop, val, required)) {
       return false;
-    } else if (!(Number(val) <= 1.0)) {
-      this.addError(prop, 'Not a valid percentage, should be <= 1', val);
+    } else if (!(Number(val) >= 0.0 && Number(val) <= 1.0)) {
+      this.addError(prop, 'Not a valid percentage, should be >= 0 and <= 1', val);
       return false;
     }
     return true;
