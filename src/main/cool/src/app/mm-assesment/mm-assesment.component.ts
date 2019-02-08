@@ -1048,4 +1048,3 @@ export class MmAssesmentComponent implements OnInit {
     this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
   }
 }
-
