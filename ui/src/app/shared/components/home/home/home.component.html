@@ -16,7 +16,7 @@
         <button cuiButton color="primary" [wide]="true" (click)="moduleChange(adminModule)"
                 [class.fin-selected]="adminModule === selectedModule">Administration</button>
       </div>
-      <div *ngIf="store.isLocalEnv" class="view-as" fxLayout="row" fxLayoutAlign="start start">
+      <div *ngIf="store.isLocalEnv()" class="view-as" fxLayout="row" fxLayoutAlign="start start">
         <div fxFlex="1 1 auto" style="color:white;margin-right: 15px;">View As:</div>
         <div class="role-list"  fxFlex="1 1 auto">
           <div class="form-group" *ngFor="let role of roles">

@@ -5,9 +5,13 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+import * as fs from 'fs';
+import * as path from 'path';
 
-console.log(Number('a') === Number('a'));
-console.log(NaN === NaN);
+const pwd = '/apps/sparkadm/dfa/dfa_ui/dist/server';
+
+console.log(path.resolve(pwd, '../../../../DFA/ssl_cert/dfaSSL.csr'));
+
 
 /*
 function test() {

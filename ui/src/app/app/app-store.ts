@@ -22,8 +22,21 @@ import {Location} from '@angular/common';
  */
 export class AppStore extends StoreBase {
   initialBreakpoint: string;
-  isLocalEnv = false;
+  env: string;
   location: Location;
+
+  isLocalEnv() {
+    return _.includes(['dev', 'ldev', 'unit'], this.env);
+  }
+  isDevEnv() {
+    return this.env === 'sdev';
+  }
+  isStageEnv() {
+    return this.env === 'stage';
+  }
+  isProdEnv() {
+    return this.env === 'prod';
+  }
 
   showProgress$: Subject<boolean> = new Subject();
   showProgressBar(val = true) {

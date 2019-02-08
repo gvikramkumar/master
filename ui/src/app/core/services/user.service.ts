@@ -18,7 +18,7 @@ export class UserService extends RestBase<DfaUser> {
   }
 
   refreshUser() {
-    return this.callMethod('getUser').toPromise()
+    return this.callMethod('getUser', undefined, {uiInitialization: true}).toPromise()
       .then((user: DfaUser) => {
         const usr = new DfaUser(
           user.id,
@@ -34,8 +34,12 @@ export class UserService extends RestBase<DfaUser> {
       });
   }
 
-  isLocalEnv() {
-    return this.callMethod('isLocalEnv');
+  getEnv() {
+    return this.callMethod('getEnv');
+  }
+
+  getArtRoles() {
+    return this.callMethod('getArtRoles');
   }
 
 }

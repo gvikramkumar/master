@@ -71,18 +71,22 @@ export function addSsoUser() {
           }
           return userListRepo.getOneLatest({userId})
             .then(userList => {
-              // we'll cache the users in database and if less than one minute old, we'll get the roles from there
-              if (userList && Date.now() - userList.updatedDate.getTime() <= config.art.timeout) {
+              // we check ART on app init otherwise use cache. If no roles from art, use cache if there
+              if (userList &&  !req.query.uiInitialization) { // && Date.now() - userList.updatedDate.getTime() <= config.art.timeout) {
                 return userList.roles;
               } else {
                 updateUserList = true;
                 return getArtRoles(userId)
                   .then(roles => {
-                    if (!roles || roles.length === 0) {
-                      const msg = `No user roles set up for user: ${userId}`;
-                      console.error(msg);
-                      res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
-                      return Promise.reject(new DisregardError());
+                    if (!roles || roles.length === 0)  {
+                      if (userList) {
+                        return userList.roles;
+                      } else {
+                        const msg = `No user roles set up for user: ${userId}`;
+                        console.error(msg);
+                        res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
+                        return Promise.reject(new DisregardError());
+                      }
                     }
                     return roles;
                   });
@@ -125,7 +129,7 @@ export function addSsoUser() {
 
 }
 
-function getArtRoles(userId) {
+export function getArtRoles(userId) {
   const artUser = process.env.ART_USER;
   const artPassword = process.env.ART_PASSWORD;
   if (!artUser || !artPassword) {
