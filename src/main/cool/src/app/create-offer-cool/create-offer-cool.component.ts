@@ -74,6 +74,18 @@ export class CreateOfferCoolComponent implements OnInit {
   approvalButtonsVisibleAvailable: Boolean = true;
   managerName;
   stakeHolderInfo: any;
+  showEditbutton: boolean;
+  disableInput:boolean;
+  disablefewInput:boolean;
+  editOfferbuild:boolean;
+  previousPrimaryBusinessUnitsValue: string[] = [];
+  previousSecondaryBusinessUnitsValue: string[] = [];
+  previousSecondaryBusinessEntitiesValue: string[] = [];
+  previousDesignReviewDateValue:string;
+  previousReadinessReviewDateValue:string;
+  previousExpectedLaunchDateValue: string;
+
+
   constructor(private createOfferService: CreateOfferService,
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
@@ -82,16 +94,19 @@ export class CreateOfferCoolComponent implements OnInit {
     private stakeholderfullService: StakeholderfullService,
     private _location: Location,
     private localStorage: LocalStorageService) {
-     
+      this.disableInput =false;
+      this.disablefewInput=false;
+      this.showEditbutton =false;
+      this.editOfferbuild =false;
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       if (this.offerId) {
-        
+        this.showEditbutton = true;
         this.offerDetailViewService.offerDetailView(this.offerId).subscribe(offerDetailRes => {
           this.caseId = offerDetailRes.caseId;
           this.offerNameValue = offerDetailRes.offerName;
           this.offerDescValue = offerDetailRes.offerDesc;
-          //this.primaryBusinessUnitsValue = offerDetailRes.primaryBUList;
+          this.primaryBusinessUnitsValue = offerDetailRes.primaryBUList;
           this.getPrimaryBusinessEntityPromise(offerDetailRes.primaryBUList)
             .then(() => {
               this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList.toString();
@@ -107,10 +122,10 @@ export class CreateOfferCoolComponent implements OnInit {
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
           this.idpvalue = offerDetailRes.iDPId;
         });
-        if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
-          this.enableOfferbuild = false;
-        }
-
+        this.enableOfferbuild = true;
+        this.disableInput = true;
+        this.disablefewInput =true;
+        this.showEditbutton= true;
       }
     });
 
@@ -172,7 +187,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
   getSecondaryBusinessEntityPromise(event) {
     return new Promise((resolve, reject) => {
-      this.createOfferService.getSecondaryBusinessEntity(event)
+      this.createOfferService.getSecondaryBusinessEntity(event.toString())
         .subscribe(data => {
           this.secondaryBusinessEntityList = <any>data;
           const secondaryBeArry = [];
@@ -349,8 +364,6 @@ export class CreateOfferCoolComponent implements OnInit {
         });
       });
     });
-
-    
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
 
     this.mmMapperUserChoice = 'DO';
@@ -464,27 +477,190 @@ export class CreateOfferCoolComponent implements OnInit {
       });
 
   }
+  editOffer(){
+    this.disablefewInput=false;
+    this.editOfferbuild =true;
+  } 
 
-  proceedCheck(event) {
-    if(event.target.value == "") {
-      this.enableOfferbuild = true;
-    }
-    if(!this.offerNameValue) {
-      this.enableOfferbuild = true;
-    }
-       if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
-      this.enableOfferbuild = false;
-      console.log("MILI");
-    }
+
+  compare(arr1,arr2){
+ 
+   if(!arr1  || !arr2) return
+  
+    let result;
+  
+  arr1.forEach((e1,i)=>arr2.forEach(e2=>{
+    
+         if(e1.length > 1 && e2.length){
+            result = this.compare(e1,e2);
+         }else if(e1 !== e2 ){
+            result = false
+         }else{
+            result = true
+         }
+    })
+  )
+  
+  return result
   
 }
 
-proceedCheckBu(e){
-  if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
-    this.enableOfferbuild = false;
-    console.log("MILI");
-  }
-  console.log(e + "SHARMILI");
-}
   
+  
+ finalChanges(){
+   this.editOfferbuild =false;
+
+ if(this.compare(this.previousPrimaryBusinessUnitsValue,this.primaryBusinessUnitsValue) == true){
+   this.primaryBusinessUnitsValue = this.previousPrimaryBusinessUnitsValue;
+ }
+ if(this.compare(this.previousSecondaryBusinessUnitsValue,this.secondaryBusinessUnitsValue) == true){
+   this.secondaryBusinessUnitsValue = this.previousSecondaryBusinessUnitsValue;
+
+ }
+
+ if(this.compare(this.previousSecondaryBusinessEntitiesValue,this.secondaryBusinessEntitiesValue) == true){
+   this.secondaryBusinessEntitiesValue = this.previousSecondaryBusinessEntitiesValue;
+ }
+
+ if(this.previousDesignReviewDateValue == this.designReviewDateValue){
+   this.designReviewDateValue = this.previousDesignReviewDateValue
+ }
+
+ if(this.previousReadinessReviewDateValue == this.readinessReviewDateValue){
+   this.readinessReviewDateValue = this.previousReadinessReviewDateValue
+ }
+
+ if(this.previousExpectedLaunchDateValue == this.expectedLaunchDateValue){
+     this.expectedLaunchDateValue = this.previousExpectedLaunchDateValue
+ }
+//   let obj = {
+//     offerId : "COOL_2119",
+//     caseId : "CASE-0000000545",
+//     offerName : "OfferTypeNew",
+//    offerDesc : "OfferType_Leadtime",
+//     offerCreatedBy : "snawathe",
+//     offerCreationDate : "Tue Jan 29 2019",
+//     offerOwner : "snawathe",
+//     expectedLaunchDate : "2019-05-09T07:00:00.000Z",
+//     primaryBUList : [ 
+//         "EMAILBU"
+//     ],
+//     primaryBEList : [ 
+//         "Security"
+//     ],
+//     secondaryBUList : [ 
+//         "CBABU"
+//     ],
+//     secondaryBEList : [ 
+//         "Collaboration"
+//     ],
+//     strategyReviewDate : "2019-01-30T05:31:44.000Z",
+//     designReviewDate : "2019-01-31T05:31:44.000Z",
+//     readinessReviewDate : "2019-02-01T05:31:44.000Z",
+//     offerStatus : "ACTIVE",
+//     status : {
+//          offerPhase : "PreLaunch",
+//          offerMilestone : "Launch In Progress",
+//          phaseMilestone : "Ideate",
+//        subMilestone : "Offer Creation"
+//     }
+// }
+const primeBE=[];
+primeBE[0] = this.primaryBusinessEntitiesValue ;
+console.log("checking value foe pe",primeBE);
+let obj={
+ 
+
+ offerId : this.offerId,
+ //caseId: this.caseId,
+
+ offerName : this.offerNameValue,
+
+ offerDesc :  this.offerDescValue,
+ iDPId:this.iDPId,
+
+ offerCreatedBy : "Sharmili Singh",
+
+ offerCreationDate : "2018-11-23T19:30:01.000Z",
+
+ offerOwner : "Eeranna Kuruva",
+
+ clonedOfferId : "",
+
+ primaryBUList :this.primaryBusinessUnitsValue,
+
+ primaryBEList :primeBE,
+
+ strategyReviewDate : moment(this.strategyReviewDateValue).toISOString(),
+
+ designReviewDate : moment(this.designReviewDateValue).toISOString(),
+
+ readinessReviewDate :moment(this.readinessReviewDateValue).toISOString(),
+
+ selectedCharacteristics : [],
+   derivedMM : "",
+
+ overallStatus : "",
+
+ additionalCharacteristics : [],
+stakeholders : [],
+ expectedLaunchDate :moment(this.expectedLaunchDateValue).toISOString() ,
+status : {},
+ideate : [],
+ plan : [],
+ secondaryBUList :this.secondaryBusinessUnitsValue ,
+ secondaryBEList :this.secondaryBusinessEntitiesValue,
+ offerStatus : "Offer service completion"
+
+} 
+
+ this.createOfferService.getEditOfferUpdate(obj).subscribe(data=>{
+  
+   let finaldata=data;
+ 
+ })
+
+
+}
+
+
+
+ DiscardChanges(){ 
+   
+   this.PreviousValues();
+  
+  
+
+ }
+
+  PreviousValues(){
+   this.editOfferbuild =false;
+   this.disableInput= false;
+   this.disablefewInput=false;
+     this.offerDetailViewService.offerDetailView(this.offerId).subscribe(offerDetailRes => {
+        this.caseId = offerDetailRes.caseId;
+        this.offerNameValue = offerDetailRes.offerName;
+                 this.offerDescValue = offerDetailRes.offerDesc;
+                          this.primaryBusinessUnitsValue = offerDetailRes.primaryBUList;
+        this.getPrimaryBusinessEntityPromise(offerDetailRes.primaryBUList)
+          .then(() => {
+            this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList;
+          });
+        this.secondaryBusinessUnitsValue = offerDetailRes.secondaryBUList;
+       this.getSecondaryBusinessEntityPromise(offerDetailRes.secondaryBUList)
+          .then(() => {
+            this.secondaryBusinessEntitiesValue = offerDetailRes.secondaryBEList;
+          });
+        this.strategyReviewDateValue = moment(offerDetailRes.strategyReviewDate).format('MM/DD/YYYY');
+        this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
+        this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
+        this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
+        this.idpvalue = offerDetailRes.iDPId
+      });
+
+  } 
+  
+
+  
+
 }
