@@ -56,7 +56,7 @@
         <mat-cell style="flex: 0 0 auto;" *matCellDef="let row">
           <div style="width:70px;whitespace: nowrap;">
             <i finAuth="super-user" class="icon-edit icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'edit'}]"
-               matTooltip="edit" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
+               matTooltip="edit" matTooltipPosition="above" [matTooltipShowDelay]="500" [class.disabled]="!canEdit(row)"></i>
             <i finAuth="super-user" class="icon-applications icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'copy'}]"
                matTooltip="copy" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
             <i finAuth="super-user" class="icon-exit-outline icon-small" (click)="remove(row)" [fxShow]="showDeleteIcon(row)"

@@ -161,7 +161,7 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['Disti to Direct'];
         excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'External Theater', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
         excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'ext_theater_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
-        promise = this.pgLookupRepo.getDistiToDirectMappingReport();
+        promise = this.pgLookupRepo.getDistiToDirectMappingReport(body.fiscalMonth);
         break;
       case 'alternate-sl2':
         excelSheetname = ['Alternate SL2'];

@@ -104,7 +104,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Corp_Adjustment_Report'
     },
     {
-      type: 'disti-direct', text: 'Disty to Direct Mapping', disabled: false,
+      type: 'disti-direct', hasFiscalMonthOnly: true, text: 'Disty to Direct Mapping', disabled: false,
       filename: 'Disty_to_Direct_Mapping_Report'
     }
   ];
@@ -163,6 +163,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'corp-adjustment':
         obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_corpadj_map_upld', 'fiscal_month_id');
+        break;
+      case 'disti-direct':
+        obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_disti_to_direct_map_upld', 'fiscal_month_id');
         break;
       case 'dollar-upload':
         obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', null, true);
