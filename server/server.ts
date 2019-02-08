@@ -27,12 +27,18 @@ Promise.all([mgc.promise, pgc.promise])
     const port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
       let server, protocol;
       if (config.ssl) {
-        protocol = 'https';
-        const options = {
-          key: fs.readFileSync(path.join(__dirname, `ssl_cert/${config.ssl.key}`)),
-          cert: fs.readFileSync(path.join(__dirname, `ssl_cert/${config.ssl.cert}`))
-        };
-        server = https.createServer(options, app);
+        try {
+          protocol = 'https';
+          const options = {
+            key: fs.readFileSync(path.resolve(__dirname, config.ssl.key)),
+            cert: fs.readFileSync(path.resolve(__dirname, config.ssl.cert))
+          };
+          server = https.createServer(options, app);
+        } catch (e) {
+          console.log('https fail, falling back to http...')
+          protocol = 'http';
+          server = http.createServer(app);
+        }
       } else {
         protocol = 'http';
         server = http.createServer(app);
