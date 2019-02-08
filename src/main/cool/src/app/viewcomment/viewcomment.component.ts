@@ -39,7 +39,7 @@ export class ViewcommentComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.newComment = '';
     this.onDisable = true;
-    this.viewcomment = [];
+    // this.viewcomment = [];
     // this.getComments(this.taskId);
     this.viewCommentForm = new FormGroup({
       comment: new FormControl(null, Validators.required)
@@ -49,7 +49,7 @@ export class ViewcommentComponent implements OnInit, OnChanges {
     const taskId: SimpleChange = changes.taskId;
     this.newComment = '';
     this.onDisable = true;
-    this.viewcomment = [];
+    // this.viewcomment = [];
     this.getComments(taskId.currentValue);
     this.viewCommentForm = new FormGroup({
       comment: new FormControl(null, Validators.required)
