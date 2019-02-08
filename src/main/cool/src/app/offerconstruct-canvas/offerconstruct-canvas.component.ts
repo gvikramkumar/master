@@ -56,7 +56,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   showMandatoryDetails: Boolean = false;
   currentRowClicked;
   selectedPids;
-
+  lineItemName;
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
     private activatedRoute: ActivatedRoute) {
@@ -456,17 +456,11 @@ export class OfferconstructCanvasComponent implements OnInit {
   showAddDetailsDailog(currentNode) {
     // const productName = product;
     this.currentRowClicked = currentNode;
-    let majorLineItemName;
-    // Find parent Product (major item)
-    while(currentNode.parent !== null) {
-      // statements if the condition is true
-        currentNode = currentNode.parent;
-        majorLineItemName = currentNode.data.productName;
-    }
+    this.lineItemName = currentNode.node.data.productName;
     this.displayAddDetails = true;
     const groups: Groups[] = [];
     const group = new Groups(
-      majorLineItemName
+      this.lineItemName
     );
     groups.push(group);
     const groupsPayload = { groups };
