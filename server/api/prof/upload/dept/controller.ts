@@ -49,9 +49,40 @@ export default class DeptUploadUploadController extends UploadController {
   getValidationAndImportData() {
     return Promise.all([
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_account', 'financial_account_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level01_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level02_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level03_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level04_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level05_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level06_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level07_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level08_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level09_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level10_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level11_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level12_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level13_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level14_value'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level15_value'),
     ])
       .then(results => {
         this.data.glAccounts = results[0];
+        this.data.nodeValues = _.sortBy(
+          results[1]
+            .concat(results[2])
+            .concat(results[3])
+            .concat(results[4])
+            .concat(results[5])
+            .concat(results[6])
+            .concat(results[7])
+            .concat(results[8])
+            .concat(results[9])
+            .concat(results[10])
+            .concat(results[11])
+            .concat(results[12])
+            .concat(results[13])
+            .concat(results[14])
+            .concat(results[15]), _.identity);
       });
   }
 
@@ -179,12 +210,13 @@ export default class DeptUploadUploadController extends UploadController {
   }
 
   validateNodeValue() {
-    return this.pgRepo.verifyNodeValueInPlOrMgmtHierarchies(this.temp.nodeValue)
-      .then(valid => {
-        if (!valid) {
-          this.addErrorInvalid(this.PropNames.nodeValue, this.temp.nodeValue);
-        }
-      });
+    const nodeValue = this.temp.nodeValue;
+    if (!nodeValue) {
+      this.addErrorRequired(this.PropNames.nodeValue);
+    } else if (this.notExists(this.data.nodeValues, nodeValue)) {
+      this.addErrorInvalid(this.PropNames.nodeValue, nodeValue);
+    }
+    return Promise.resolve();
   }
 
   validateSubmeasureNameInSheet1() {
