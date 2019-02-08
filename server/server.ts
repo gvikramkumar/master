@@ -35,7 +35,8 @@ Promise.all([mgc.promise, pgc.promise])
           };
           server = https.createServer(options, app);
         } catch (e) {
-          console.log('https fail, falling back to http...')
+          console.error(e);
+          console.log('https fail, falling back to http...');
           protocol = 'http';
           server = http.createServer(app);
         }
