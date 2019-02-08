@@ -111,6 +111,10 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     UiUtil.updateUrl(this.router, this.route, {pageIndex: page.pageIndex, pageSize: page.pageSize});
   }
 
+  canEdit(sm) {
+    return this.store.user.isModuleAdminOrGreater() || (this.store.user.isModuleSuperUser() && (sm.status === 'D' || sm.status === 'P'));
+  }
+
 }
 
 
