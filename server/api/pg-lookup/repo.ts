@@ -139,7 +139,7 @@ export default class PgLookupRepo {
           `);
   }
 
-  getDistiToDirectMappingReport() {
+  getDistiToDirectMappingReport(fiscalMonth) {
     return pgc.pgdb.query(`
             select 
             group_id, 
@@ -156,8 +156,7 @@ export default class PgLookupRepo {
             update_owner,
             update_datetimestamp
             from fpadfa.dfa_prof_disti_to_direct_map_upld            
-            where fiscal_month_id in (select fiscal_month_id from fpadfa.dfa_open_period                               
-                                                      where module_id =1 and open_flag = 'Y')              
+            where fiscal_month_id = ${fiscalMonth}
           `);
   }
 
