@@ -93,6 +93,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.offerNameValue = offerDetailRes.offerName;
           this.offerDescValue = offerDetailRes.offerDesc;
           this.primaryBusinessUnitsValue = offerDetailRes.primaryBUList;
+         
           this.getPrimaryBusinessEntityPromise(offerDetailRes.primaryBUList)
             .then(() => {
               this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList.toString();
@@ -108,7 +109,10 @@ export class CreateOfferCoolComponent implements OnInit {
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
           this.idpvalue = offerDetailRes.iDPId;
         });
-        this.enableOfferbuild = true;
+        if(this.primaryBusinessUnitsValue) {
+          this.enableOfferbuild = false;
+        }
+        //this.enableOfferbuild = true;
       }
     });
 
@@ -170,7 +174,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
   getSecondaryBusinessEntityPromise(event) {
     return new Promise((resolve, reject) => {
-      this.createOfferService.getSecondaryBusinessEntity(event.toString())
+      this.createOfferService.getSecondaryBusinessEntity(event)
         .subscribe(data => {
           this.secondaryBusinessEntityList = <any>data;
           const secondaryBeArry = [];
@@ -204,6 +208,9 @@ export class CreateOfferCoolComponent implements OnInit {
     this.secondaryBusinessEntitiesValue = null;
     this.secondaryBusinessUnitsValue = null;
     this.getPrimaryBusinessUnitPromise(event);
+    if(this.primaryBusinessUnitsValue) {
+      this.enableOfferbuild = false;
+    }
   }
 
   getPrimaryBusinessUnitPromise(event) {
@@ -359,7 +366,6 @@ export class CreateOfferCoolComponent implements OnInit {
   proceedCheckBu(e){
     if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
       this.enableOfferbuild = false;
-      console.log("MILI");
     }
   }
 
@@ -372,7 +378,6 @@ export class CreateOfferCoolComponent implements OnInit {
     }
        if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
       this.enableOfferbuild = false;
-      console.log("MILI");
     }
   }
 
