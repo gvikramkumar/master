@@ -3,7 +3,7 @@
       <div id='flyoutmenu'>
               <ul class="panel--indigo">
                   <li *ngFor="let item of items" ><span>{{item['label']}}</span>
-                      <ul class="panel--indigo">
+                      <ul class="panel--vibblue">
                           <li *ngFor="let subItem of item['items']"
                           [ngClass]="{'disable-item': itemShow[subItem['label']] !== true}"
                           (click)="navigate(subItem['label'])"><span>{{subItem['label']}}</span>
@@ -12,22 +12,22 @@
                   </li>
                   <li> <span>On Hold/Cancel</span>
                     <ul *ngIf ="!currentOfferId" class="panel--indigo">
-                            <li                          
+                            <li
                             [ngClass]="{'disable-item': holdStatusValid == true}"
                             (click)='showOppupFunc("hold")'><span>On Hold</span>
                             </li>
-                            <li 
+                            <li
                             [ngClass]="{'disable-item': cancelStatusValid == true}"
                             (click)='showOppupFunc("cancel")'><span>Cancel</span>
                             </li>
                      </ul>
 
                      <ul *ngIf ="currentOfferId" class="panel--indigo">
-                          <li                          
+                          <li
                           [ngClass]="{'disable-item': holdStatusValid !== true}"
                           (click)='showOppupFunc("hold")'><span>On Hold</span>
                           </li>
-                          <li 
+                          <li
                           [ngClass]="{'disable-item': cancelStatusValid !== true}"
                           (click)='showOppupFunc("cancel")'><span>Cancel</span>
                           </li>
@@ -44,7 +44,7 @@
     <ng-template #oldOffer>
             <span> {{currentOfferName}}&nbsp;<span class="offerID">(Offer ID  {{currentOfferId}})</span></span>
         </ng-template>
-    
+
 </h1>
 
 <app-menu-bar-popup  [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)" ></app-menu-bar-popup>
