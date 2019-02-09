@@ -161,7 +161,7 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
-                  
+
 
                 });
             }
