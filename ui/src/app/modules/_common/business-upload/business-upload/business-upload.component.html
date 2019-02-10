@@ -29,7 +29,7 @@
 
           <div finAuth="super-user">
             <div>
-              <button cuiButton color="primary" (click)="fileInput.click()">Choose a File</button>
+              <button cuiButton color="primary" (click)="fileInput.click()" [disabled]="!uploadType">Choose a File</button>
               <input #fileInput type="file" placeholder="Upload file" accept=".xlsx"
                      (change)="changeFile(fileInput)" class="ng-hide"><br>
             </div>
