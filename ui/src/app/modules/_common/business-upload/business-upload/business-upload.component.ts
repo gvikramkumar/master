@@ -17,6 +17,12 @@ import {BusinessUploadService} from '../../services/business-upload.service';
 
 const apiUrl = environment.apiUrl;
 
+interface UploadType {
+  type: string;
+  text: string;
+  disabled: boolean;
+}
+
 @Component({
   selector: 'fin-business-upload',
   templateUrl: './business-upload.component.html',
@@ -37,7 +43,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     {type: 'corp-adjustments-upload', text: 'Corp Adjustments Mapping', disabled: false},
     {type: 'disti-direct-upload', text: 'Disty to Direct Mapping', disabled: false},
   ];
-  uploadType = this.uploadTypes[0];
+  uploadType: UploadType;
 
   constructor(
     private httpClient: HttpClient,
@@ -71,7 +77,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   }
 
   getDownloadUri() {
-    if (!this.templates) {
+    if (!this.templates || !this.uploadType) {
       return;
     }
     const template = _.find(this.templates, item => _.get(item, 'metadata.buUploadType') === this.uploadType.type);
