@@ -29,11 +29,11 @@
 
     <div class="col-md-7 file-upload">
       <div class="fin-content">
-        <div class="selected-value"> {{report.text}}</div>
+        <div class="selected-value"> {{report?.text}}</div>
 
         <br>
         <div>
-          <div *ngIf="report.hasSubmeasureOnly || report.hasSmAndFiscalMonth">
+          <div *ngIf="report?.hasSubmeasureOnly || report?.hasSmAndFiscalMonth">
 
               <cui-select label="Measure" [items]="measures" [(ngModel)]="measureId"
                           optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
@@ -41,11 +41,11 @@
               <cui-select label="Sub Measure" [items]="submeasures" [(ngModel)]="submeasureName"
                           optionsKey="name" optionsValue="name" (ngModelChange)="submeasureChange()" [disabled]="!this.measureId"></cui-select>
           </div>
-          <div *ngIf="report.hasSmAndFiscalMonth || report.hasFiscalMonthOnly">
+          <div *ngIf="report?.hasSmAndFiscalMonth || report?.hasFiscalMonthOnly">
             <cui-select label="Fiscal Month" [items]="fiscalMonths" [(ngModel)]="fiscalMonth"
-                        optionsKey="name" optionsValue="fiscalMonth" [disabled]="report.hasSmAndFiscalMonth && !this.submeasureName"></cui-select>
+                        optionsKey="name" optionsValue="fiscalMonth" [disabled]="report?.hasSmAndFiscalMonth && !this.submeasureName"></cui-select>
           </div>
-          <div *ngIf="report.hasMultiFiscalMonthOnly">
+          <div *ngIf="report?.hasMultiFiscalMonthOnly">
             <cui-multiselect label="Fiscal Month" [items]="fiscalMonthMultis" [(ngModel)]="fiscalMonthMultiSels"
                         (ngModelChange)="fiscalMonthMultiChange()"  optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-multiselect>
           </div>
@@ -55,7 +55,7 @@
             <button (click)="downloadReport()" [disabled]="disableDownload"
                     cuiButton color="primary">Download Report
             </button>
-            <button *ngIf="report.hasSubmeasureOnly || report.hasSmAndFiscalMonth" (click)="reset()"
+            <button *ngIf="report?.hasSubmeasureOnly || report?.hasSmAndFiscalMonth" (click)="reset()"
                     cuiButton color="secondary">Reset
             </button>
           </div>
