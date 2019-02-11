@@ -1,45 +1,143 @@
-<p>
-  oas works!
-</p>
+<!-- OSA -->
+
+<div class="container">
+
+    <p-messages [(value)]="msgs"></p-messages>
+
+    <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" role="tablist" style="z-index: 0">
+        <li class="tab active" *ngFor="let primaryFactor of oasPrimaryFactorsList; let first = first;"
+            [ngClass]="{firstItem: first}" role="presentation"
+            [class.active]="selectedPrimaryOffer===primaryFactor['primaryFactorName']">
+            <a (click)="selectedPrimaryOffer = primaryFactor['primaryFactorName']" aria-controls="one" role="tab"
+                data-toggle="tab">{{primaryFactor['primaryFactorName']}}</a>
+        </li>
+    </ul>
 
 
-<ul id="tabsv6" class="tabs tabs--bordered">
-    <li id="tabsv6-1" class="tab active">
-        <a tabindex="0">
-            <div class="tab__heading">Detracto</div>
-        </a>
-    </li>
-    <li id="tabsv6-2" class="tab">
-        <a tabindex="0">
-            <div class="tab__heading">Sea et</div>
-        </a>
-    </li>
-    <li id="tabsv6-3" class="tab">
-        <a tabindex="0">
-            <div class="tab__heading">Omittantur</div>
-        </a>
-    </li>
-    <li id="tabsv6-4" class="tab">
-        <a tabindex="0">
-            <div class="tab__heading">Accommodare</div>
-        </a>
-    </li>
-</ul>
-<div id="tabsv6-content" class="tab-content">
-    <div id="tabsv6-1-content" class="tab-pane active">
-        <p>Equidem recteque sea et. Per detracto iracundia ea, duo nusquam denique omittantur in. Nam ex quas saperet, solum convenire vel in, dicant atomorum his ne. Putant bonorum in nam, nostrud neglegentur accommodare eam ad. Quo cu primis delenit.</p>
-        <p>Nam ut viris disputando dissentiunt, sumo vocent ad mea. Vel justo debitis neglegentur an. Facer doctus inimicus et est, sed ea sint dicant. Per soleat pertinax complectitur et, pro no porro cetero, mea probo apeirian torquatos ut. Habeo dicat errem quo et, ut democritum sententiae eloquentiam cum. Sit ad oblique inciderint reformidans, homero albucius voluptatum pro te, saepe laoreet in est.</p>
+    <div *ngFor="let primaryFactor of oasPrimaryFactorsList">
+
+        <div class=" tab-pane active" *ngIf="selectedPrimaryOffer === primaryFactor['primaryFactorName']"
+            role="tabpanel" id="one">
+
+            <div *ngFor="let secondaryFactor of primaryFactor['primaryCharactertsics']">
+
+                <div class="card">
+                    <div class="card-block">
+
+                        <h3 class="card-title">
+                            {{secondaryFactor['secondaryFactorName']}}
+                            <span class="pull-right">({{secondaryFactor['secondaryCharactertsics'].length}})</span>
+                        </h3>
+
+                        <p-accordion>
+
+                            <p-accordionTab *ngFor="let char of secondaryFactor['secondaryCharactertsics']"
+                                header="{{char}}">
+
+                                <div>
+
+                                    <br> Your Selection <br><br>
+
+                                    <button pButton type="button" *ngFor="let attribute of selectedAttribute" [ngClass]="{
+                               'style2':attribute!=null}" class="ui-button-rounded btn btn--small tooltip"
+                                        (click)="removeAttribute(attribute)">
+                                        <span class="pi pi-exclamation-triangle"> {{attribute}} </span><span
+                                            class="pi pi-times"></span>
+                                    </button>
+
+                                </div>
+
+                                <hr><br><br>
+
+                                <div>
+
+                                    Additional Attributes <br><br>
+
+                                    <button pButton type="button"
+                                        *ngFor="let attribute of secondaryFactor['additionalAttributes']"
+                                        [ngClass]="{'style1':attribute!=null}"
+                                        class="ui-button-rounded btn btn--small tooltip"
+                                        (click)="addAttribute(attribute)">
+                                        {{attribute}}
+                                    </button>
+
+                                </div>
+
+                                <hr><br>
+
+                                <div>
+
+                                    <div class="clearfix">
+                                        <p class="pull-left">Challenges</p>
+                                        <p class="pull-right"><a (click)="viewAllChallenges()">
+                                                View All
+                                            </a></p>
+                                    </div>
+
+                                    <ng-hide [hidden]="!showChallenges"><span
+                                            class="pi pi-exclamation-triangle">02</span>
+                                        Challenges for Appliance
+                                    </ng-hide>
+
+                                </div>
+
+                                <hr><br>
+
+                                <div>
+
+                                    <br>Addresed Challenges Comments<br><br>
+
+                                    <div class="ui-g" *ngFor="let selectedCheckBox of selectedCheckBoxValues">
+                                        <div class="ui-g-12">
+                                            <p-checkbox value="{{selectedCheckBox}}" label="{{selectedCheckBox}}">
+                                            </p-checkbox>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                </div>
+
+                                <br>
+                                <hr><br>
+
+                                <div>
+
+                                    <p-dialog name="events" [(visible)]="showDialog" width="300">
+                                        <h3 class="text-center"><span class="pi pi-exclamation-triangle"></span></h3>
+                                        <p class="text-center"><b>Are You Sure?</b></p>
+                                        <p class="text-center">Confirm To Proceed</p>
+                                        <p-footer>
+                                            <div class="clearfix text-center">
+                                                <button type="button" pButton
+                                                    [ngStyle]="{'color': 'white', 'background':'gray'}"
+                                                    (click)="onComplete()" label="No"></button>
+                                                <button type="button" pButton
+                                                    [ngStyle]="{'color': 'white', 'background':'green'}"
+                                                    (click)="onComplete()" label="Yes"></button>
+                                            </div>
+                                        </p-footer>
+                                    </p-dialog>
+
+                                    <div class="text-center clearfix">
+                                        <button pButton type="button" class="btn btn--small tooltip "><span
+                                                class="pi pi-times"></span>
+                                            Cancel</button>
+                                        <button pButton type="button" class="btn btn--small tooltip"
+                                            (click)="showDialogBox()">Update
+                                            <span class="pi pi-check"></span></button>
+                                    </div>
+
+                                </div>
+
+                            </p-accordionTab>
+
+                        </p-accordion>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
-    <div id="tabsv6-2-content" class="tab-pane">
-        <p>Equidem recteque sea et. Per detracto iracundia ea, duo nusquam denique omittantur in. Nam ex quas saperet, solum convenire vel in, dicant atomorum his ne. Putant bonorum in nam, nostrud neglegentur accommodare eam ad. Quo cu primis delenit.</p>
-        <p>Nam ut viris disputando dissentiunt, sumo vocent ad mea. Vel justo debitis neglegentur an. Facer doctus inimicus et est, sed ea sint dicant. Per soleat pertinax complectitur et, pro no porro cetero, mea probo apeirian torquatos ut. Habeo dicat errem quo et, ut democritum sententiae eloquentiam cum. Sit ad oblique inciderint reformidans, homero albucius voluptatum pro te, saepe laoreet in est.</p>
-    </div>
-    <div id="tabsv6-3-content" class="tab-pane">
-        <p>Equidem recteque sea et. Per detracto iracundia ea, duo nusquam denique omittantur in. Nam ex quas saperet, solum convenire vel in, dicant atomorum his ne. Putant bonorum in nam, nostrud neglegentur accommodare eam ad. Quo cu primis delenit.</p>
-        <p>Nam ut viris disputando dissentiunt, sumo vocent ad mea. Vel justo debitis neglegentur an. Facer doctus inimicus et est, sed ea sint dicant. Per soleat pertinax complectitur et, pro no porro cetero, mea probo apeirian torquatos ut. Habeo dicat errem quo et, ut democritum sententiae eloquentiam cum. Sit ad oblique inciderint reformidans, homero albucius voluptatum pro te, saepe laoreet in est.</p>
-    </div>
-    <div id="tabsv6-4-content" class="tab-pane">
-        <p>Equidem recteque sea et. Per detracto iracundia ea, duo nusquam denique omittantur in. Nam ex quas saperet, solum convenire vel in, dicant atomorum his ne. Putant bonorum in nam, nostrud neglegentur accommodare eam ad. Quo cu primis delenit.</p>
-        <p>Nam ut viris disputando dissentiunt, sumo vocent ad mea. Vel justo debitis neglegentur an. Facer doctus inimicus et est, sed ea sint dicant. Per soleat pertinax complectitur et, pro no porro cetero, mea probo apeirian torquatos ut. Habeo dicat errem quo et, ut democritum sententiae eloquentiam cum. Sit ad oblique inciderint reformidans, homero albucius voluptatum pro te, saepe laoreet in est.</p>
-    </div>
+
 </div>

@@ -94,8 +94,13 @@ import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-
 import { EditfieldsComponent } from './editfields/editfields.component';
 import { ViewstrategyComponent } from './viewstrategy/viewstrategy.component';
 import { OasComponent } from './oas/oas.component';
-
-
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import {ToastModule} from 'primeng/toast';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import { NgCircleProgressModule } from 'ng-circle-progress';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 export function app_init(configService: ConfigurationService, userService: UserService, envService: EnvironmentService) {
   return () => { return configService.init(); };
@@ -179,6 +184,13 @@ export function app_init(configService: ConfigurationService, userService: UserS
     PanelModule,
     TabMenuModule,
     TieredMenuModule,
+    ConfirmDialogModule,
+    ButtonModule,
+    CheckboxModule,
+    ToastModule,
+    ProgressSpinnerModule,
+    NgCircleProgressModule.forRoot(),
+    FlexLayoutModule,
     NgxWebstorageModule.forRoot(),
     UserIdleModule.forRoot({ idle: 10795, timeout: 10800, ping: 0 })
   ],

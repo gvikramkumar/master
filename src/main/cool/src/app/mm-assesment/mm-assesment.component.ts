@@ -413,6 +413,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
+
     if (attribute.type === 2 && attribute.status === -1) {
       attribute.type = 0;
       return;

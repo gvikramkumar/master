@@ -7,52 +7,20 @@ import { NgForm } from '@angular/forms';
 import { ActionsService } from '../services/actions.service';
 import { CreateActionApprove } from '../models/create-action-approve';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import {TabMenuModule} from 'primeng/tabmenu';
-import {MenuItem} from 'primeng/api';
-
-export class OasPrimaryFactors {
-
-  primaryFactorName: string;
-  primaryCharactertsics: OasSecondaryFactors[];
-
-  constructor(primaryFactorName: string, primaryCharactertsics: OasSecondaryFactors[]) {
-    this.primaryFactorName = primaryFactorName;
-    this.primaryCharactertsics = primaryCharactertsics;
-  }
-
-}
-
-export class OasSecondaryFactors {
-
-  secondaryFactorName: string;
-  secondaryCharactertsics: string[];
-
-  constructor(secondaryFactorName: string, secondaryCharactertsics: string[]) {
-    this.secondaryFactorName = secondaryFactorName;
-    this.secondaryCharactertsics = secondaryCharactertsics;
-  }
-
-}
+import { TabMenuModule } from 'primeng/tabmenu';
+import { MenuItem } from 'primeng/api';
+import { CheckboxModule } from 'primeng/checkbox';
+import { TableModule } from 'primeng/table';
+import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  providers: [DashboardService]
+  providers: [DashboardService, MessageService, ConfirmationService]
 })
 export class DashboardComponent implements OnInit {
-
-  items: MenuItem[];
-  activeItem: MenuItem;
-
-  oasPrimaryFactorsList: OasPrimaryFactors[] = [];
-  oasSecondaryFactorsList: OasSecondaryFactors[] = [];
-
-  offerFactors: string[] = ['UnSupported Offer Factors', 'Supported Offer Factors', 'Advanced Offer Factors', 'All Offer Factors'];
-  secondaryOfferFactors: string[] = ['Offer Construct', 'Commercial Set Up', 'Commercial Delivery', 'Customer Experience'];
-
-  selectedPrimaryOffer = this.offerFactors[3];
-  selectedSecondaryOffer = this.secondaryOfferFactors[0];
 
   @ViewChild('createActionForm') createActionForm: NgForm;
   @ViewChild('createActionApproveForm') createActionApproveForm: NgForm;
@@ -97,14 +65,19 @@ export class DashboardComponent implements OnInit {
   buttonIsDisabled: boolean = false;
   reason: String = '';
 
+
   constructor(private dashboardService: DashboardService,
     private router: Router,
     private createOfferService: CreateOfferService,
     private userService: UserService,
-    private actionsService: ActionsService) {
+    private actionsService: ActionsService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) {
   }
 
   ngOnInit() {
+
 
     this.offerColumns = [
       { field: 'offerId', header: 'OFFER ID' },
@@ -113,56 +86,15 @@ export class DashboardComponent implements OnInit {
       { field: 'expectedLaunchDate', header: 'LAUNCH DATE' }
     ];
 
-    const oasFactorS11 = new OasSecondaryFactors('Offer Construct', ['A1', 'AA1', 'AAA1']);
-    const oasFactorS12 = new OasSecondaryFactors('Commercial Set Up', ['B1', 'BB1', 'BBB1']);
-    const oasFactorS13 = new OasSecondaryFactors('Commercial Delivery', ['C1', 'CC1', 'CCC1']);
-    const oasFactorS14 = new OasSecondaryFactors('Customer Experience', ['D1', 'DD1', 'DDD1']);
-
-    const oasFactorS21 = new OasSecondaryFactors('Offer Construct', ['A2', 'AA2', 'AAA2']);
-    const oasFactorS22 = new OasSecondaryFactors('Commercial Set Up', ['B2', 'BB2', 'BBB2']);
-    const oasFactorS23 = new OasSecondaryFactors('Commercial Delivery', ['C2', 'CC2', 'CCC2']);
-    const oasFactorS24 = new OasSecondaryFactors('Customer Experience', ['D2', 'DD2', 'DDD2']);
-
-    const oasFactorS31 = new OasSecondaryFactors('Offer Construct', ['A3', 'AA3', 'AAA3']);
-    const oasFactorS32 = new OasSecondaryFactors('Commercial Set Up', ['B3', 'BB3', 'BBB3']);
-    const oasFactorS33 = new OasSecondaryFactors('Commercial Delivery', ['C3', 'CC13', 'CCC3']);
-    const oasFactorS34 = new OasSecondaryFactors('Customer Experience', ['D3', 'DD3', 'DDD3']);
-
-    const oasFactorS41 = new OasSecondaryFactors('Offer Construct', ['A4', 'AA4', 'AAA4']);
-    const oasFactorS42 = new OasSecondaryFactors('Commercial Set Up', ['B4', 'BB4', 'BBB4']);
-    const oasFactorS43 = new OasSecondaryFactors('Commercial Delivery', ['C4', 'CC4', 'CCC4']);
-    const oasFactorS44 = new OasSecondaryFactors('Customer Experience', ['D4', 'DD4', 'DDD4']);
-
-    const oasFactor1 = new OasPrimaryFactors('UnSupported Offer Factors', [oasFactorS11, oasFactorS12, oasFactorS13, oasFactorS14]);
-    const oasFactor2 = new OasPrimaryFactors('Supported Offer Factors', [oasFactorS21, oasFactorS22, oasFactorS23, oasFactorS24]);
-    const oasFactor3 = new OasPrimaryFactors('Advanced Offer Factors', [oasFactorS31, oasFactorS32, oasFactorS33, oasFactorS34]);
-    const oasFactor4 = new OasPrimaryFactors('All Offer Factors', [oasFactorS41, oasFactorS42, oasFactorS43, oasFactorS44]);
-
-    this.oasPrimaryFactorsList.push(oasFactor1, oasFactor2, oasFactor3, oasFactor4);
-
-    this.items = [
-      {label: 'UnSupported Offer Factors', icon: 'fa fa-fw fa-bar-chart'},
-      {label: 'Supported Offer Factors', icon: 'fa fa-fw fa-calendar'},
-      {label: 'Advanced Offer Factors', icon: 'fa fa-fw fa-book'},
-      {label: 'All Offer Factors', icon: 'fa fa-fw fa-support'}
-  ];
-  
-  this.activeItem = this.items[2];
 
     this.getMyActionsAndNotifications();
     this.getMyOffers();
     this.getFunctions();
+
   }
 
-  index: number= 0;
 
-  openNext() {
-    this.index = (this.index === 2) ? 0 : this.index + 1;
-  }
 
-  openPrev() {
-    this.index = (this.index === 0) ? 2 : this.index - 1;
-  }
 
   private getMyActionsAndNotifications() {
 
@@ -406,10 +338,16 @@ export class DashboardComponent implements OnInit {
     } else {
       this.buttonIsDisabled = true;
     }
-
-
-
   }
+
+  // confirm() {
+  //   this.confirmationService.confirm({
+  //     message: 'Are you sure that you want to perform this action?',
+  //     accept: () => {
+  //       //Actual logic to perform a confirmation
+  //     }
+  //   });
+  // }
 
   //  submit() {
   //   let holdData= {};
