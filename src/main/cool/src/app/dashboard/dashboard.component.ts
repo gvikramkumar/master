@@ -302,7 +302,7 @@ export class DashboardComponent implements OnInit {
     const taskId = this.selectedAction.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
-    const action ='Approved';
+    const action = 'Approved';
     const commentValue = this.reason;
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
@@ -322,13 +322,13 @@ export class DashboardComponent implements OnInit {
   createApproveActionWithDetails(overlaypanel: OverlayPanel) {
     const fd = new FormData();
     fd.append('file', this.selectedFile, this.selectedFile.name);
-    this.dashboardService.postFileUploadForAction(this.selectedCaseId,fd).subscribe(data => {
+    this.dashboardService.postFileUploadForAction(this.selectedCaseId, fd).subscribe(data => {
     });
 
     const taskId = this.selectedAction.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
-    const action ='Approved';
+    const action = 'Approved';
     const commentValue = this.reason;
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
