@@ -116,9 +116,9 @@ export class CreateOfferCoolComponent implements OnInit {
       }
     });
 
-  
+  // Get Primary BE (hard code 'all')
     this.createOfferService.getDistinctBE().subscribe(data => {
-      const primaryBeArry = [];
+      const primaryBeArry = [{ label: 'All', value: 'All' }];
       const dataArray = data as Array<any>;
       dataArray.forEach(element => {
         if (element['BE'] !== null) {
@@ -131,7 +131,7 @@ export class CreateOfferCoolComponent implements OnInit {
     });
 
 
-  
+  // Get distinct BU for primary BU list
     this.createOfferService.getDistincBU().subscribe(data => {
       const secondaryBuArry = [];
       const dataArray = data as Array<any>;
@@ -214,21 +214,35 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getPrimaryBusinessUnitPromise(event) {
-    return new Promise((resolve, reject) => {
-      this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
-        .subscribe(data => {
-          const primaryBuArry = [];
-          const dataArray = data as Array<any>;
-          dataArray.forEach(element => {
-            if (element.BUSINESS_UNIT !== null) {
-              primaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
-            }
-          });
-          this.primaryBusinessUnits = this.removeDuplicates(primaryBuArry, 'label');
-          this.skipSelectedBusinessEntities(event);
-          resolve();
-        });
+    if (event == 'All') {
+        // Get distinct BU for primary BU list
+    this.createOfferService.getDistincBU().subscribe(data => {
+      const secondaryBuArry = [];
+      const dataArray = data as Array<any>;
+      dataArray.forEach(element => {
+        if (element['BUSINESS_UNIT'] !== null) {
+          secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
+        }
+      });
+      this.primaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
     });
+    } else {
+      return new Promise((resolve, reject) => {
+        this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
+          .subscribe(data => {
+            const primaryBuArry = [];
+            const dataArray = data as Array<any>;
+            dataArray.forEach(element => {
+              if (element.BUSINESS_UNIT !== null) {
+                primaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
+              }
+            });
+            this.primaryBusinessUnits = this.removeDuplicates(primaryBuArry, 'label');
+            this.skipSelectedBusinessEntities(event);
+            resolve();
+          });
+      });
+    }
   }
 
   /**
@@ -281,7 +295,7 @@ export class CreateOfferCoolComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.createOfferService.getPrimaryBusinessEntity(event.toString())
         .subscribe(data => {
-          const primaryBeArry = [];
+          const primaryBeArry = [{label: 'All', value: 'All'}];
           // When primary business unit is selected as 'All'
           // then entities are displayed as 'all
           if (data.length === 0 && this.userSelectedAllUnits) {
@@ -331,7 +345,6 @@ export class CreateOfferCoolComponent implements OnInit {
       }
     }
       this.stakeData = this.stakeHolderInfo;
-      
 
       for (const auth in this.stakeData) {
         if (auth === 'Co-Owner' || auth === 'Owner') {
@@ -370,13 +383,13 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   proceedCheck(event) {
-    if(event.target.value == "") {
+    let inputText = event.target.value;
+    let inputValue = inputText.trim();
+
+    if(inputValue === "" || inputValue === null) {
       this.enableOfferbuild = true;
-    }
-    if(!this.offerNameValue) {
-      this.enableOfferbuild = true;
-    }
-       if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
+    } 
+       else if (this.offerCreateForm.valid == true && this.idpvalue !== "" && this.offerNameValue !== "" && this.offerDescValue !== "") {
       this.enableOfferbuild = false;
     }
   }

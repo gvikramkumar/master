@@ -114,11 +114,17 @@ export class MenuBarComponent implements OnInit {
                 this.holdStatusValid = false;
                 this.cancelStatusValid = false;
                 this.currentUsername = this.userService.getName();
+
+                let textValue = document.createElement('a');
+                textValue.innerText='here';
+                textValue.href = 'cool/#/offerDetailView/'+ this.offerId +'/'+ this.caseId;
+
+            
                 let emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
                 let emailBody = `Hello ${this.currentUsername},
                 ${this.offerName}(${this.offerId}) has been on hold by ${this.userService.getName()}.
                 All related actions have been disabled.
-                Click here to view on hold offer in COOL.
+                Click ${textValue.href} to view on hold offer in COOL.
                 You are receiving this email because you have been identified as a stakeholder for ${this.offerName}.`;
                 let stakeHolders = [];
                 for (let prop in this.stakeData) {
@@ -142,11 +148,16 @@ export class MenuBarComponent implements OnInit {
                 this.holdStatusValid = false;
                 this.cancelStatusValid = false;
                 this.currentUsername = this.userService.getName();
+
+                let textValue = document.createElement('a');
+                textValue.innerText='here';
+                textValue.href = '/cool/#/offerDetailView/'+ this.offerId +'/'+ this.caseId;
+
                 let emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
                 let emailBody = `Hello ${this.currentUsername},
                 ${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getName()}.
                 All related actions have been disabled.
-                Click here to view canceled offer in COOL.
+                Click ${textValue} to view canceled offer in COOL.
                 You are receiving this email because you have been identified as a stakeholder for ${this.offerName}.`;
                 let stakeHolders = [];
                 for (let prop in this.stakeData) {
