@@ -4,6 +4,7 @@ import {MmInfoBarComponent} from '../mm-info-bar/mm-info-bar.component';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { OffersolutioningService } from '../services/offersolutioning.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
+import { OfferPhaseService } from '../services/offer-phase.service';
 
 import { LeadTime } from '../right-panel/lead-time';
 import { RightPanelService } from '../services/right-panel.service';
@@ -40,6 +41,7 @@ export class OfferSolutioningComponent implements OnInit {
   proceedButtonStatusValid = true;
   backbuttonStatusValid = true;
   offerName: string;
+  offerOwner: string;
 
 
   displayLeadTime = false;
@@ -49,6 +51,7 @@ export class OfferSolutioningComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private offersolutioningService: OffersolutioningService,
     private stakeholderfullService: StakeholderfullService,
+    private offerPhaseService: OfferPhaseService,
     private rightPanelService: RightPanelService) {
       this.activatedRoute.params.subscribe(params => {
         this.currentOfferId = params['id'];
@@ -62,6 +65,7 @@ export class OfferSolutioningComponent implements OnInit {
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
       this.offerName = data['offerName'];
+      this.offerOwner = data['offerOwner'];
       this.derivedMM = data['derivedMM'];
       this.displayLeadTime = true;
       this.offerId = this.currentOfferId;
@@ -289,7 +293,18 @@ export class OfferSolutioningComponent implements OnInit {
     //   });
     // });
     console.log(nextStepPostData);
+    let solutioningProceedPayload = {
+      'taskId': '',
+      'userId': this.offerOwner,
+      'caseId': this.caseId,
+      'offerId': this.currentOfferId,
+      'taskName': 'Offer Solutioning',
+      'action': '',
+      'comment': ''
+    };
+    this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
     this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+    });
   }
 
 }
