@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   pageName: any;
   pageName_temp: any;
   timeStart = false;
-  seconds = 10800;
+  seconds = 600;
   clientX = 0;
   clientY = 0;
 
@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
 
   stop() {
     this.userIdle.stopTimer();
-    this.seconds = 10800;
+    this.seconds = 600;
     this.timeStart = false;
   }
 

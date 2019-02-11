@@ -27,11 +27,12 @@
 
           <!-- <app-mm-info-bar></app-mm-info-bar> -->
           <!-- Offer Solutioning Bar -->
-          <div *ngFor="let group of offerSolutionGroups">
+          <div *ngFor="let group of offerSolutionGroups, let i = index">
             <app-offersolutioning-card-one
             [groupData]="group"
             [stakeData]="stakeData"
             [offerData]="firstData"
+            [groupIndex]="i"
             ></app-offersolutioning-card-one>
           </div>
           <!-- Right Panel -->

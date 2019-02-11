@@ -57,6 +57,8 @@ export class ActionsComponent implements OnInit {
   milestone: any;
   val: any;
   selectedCaseId: any;
+  commentEvent: any;
+  selectedAction;
 
 
   constructor(private router: Router, private actionsService: ActionsService,
@@ -210,6 +212,12 @@ export class ActionsComponent implements OnInit {
     this.actionsService.createNewAction(createAction).subscribe((data) => {
       this.closeActionDailog();
     });
+  }
+
+  showActionPopUp(event, action, overlaypanel: OverlayPanel) {
+    this.commentEvent = event;
+    this.selectedAction = action;
+    overlaypanel.toggle(event);
   }
 
 

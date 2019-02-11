@@ -9,6 +9,7 @@ export class OffersolutioningCardOneComponent implements OnInit {
   @Input() groupData:Object;
   @Input() stakeData:Object;
   @Input() offerData:Object;
+  @Input() groupIndex:any;
 
   constructor() { }
 

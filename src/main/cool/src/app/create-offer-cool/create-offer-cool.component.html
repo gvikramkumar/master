@@ -1,17 +1,13 @@
 <div class="content">
   <div class="container">
-    <div class="section">
-        <span *ngIf="!offerId" class="create-offer-heading page--heading">Create New Offer</span>
-        <app-menu-bar *ngIf="!offerId">
-        </app-menu-bar>
-        <app-menu-bar *ngIf="offerId" [caseId]="caseId"
+            <app-menu-bar [caseId]="caseId"
         [currentMMModel]="derivedMM"
         [offerId]="offerId"
         [offerName]="offerName"
         [stakeData]="stakeData"
         (updateMessage)="updateMessage($event)">
         </app-menu-bar>
-      <div class="panel panel--indigo panel--compressed task--bar">
+      <div class="panel panel--indigo panel--compressed task--bar panel-wrapper mt-15">
         <div class="row">
           <div class="col-sm-4">
             <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span
@@ -19,12 +15,12 @@
               Offer Info</h2>
           </div>
           <div class="col-sm-8 text-right">
-            <span *ngIf = "showEditbutton">
+            <!-- <span *ngIf = "showEditbutton">
               <app-editfields (onEdit)="editOffer()" (onSave)="finalChanges()"  (onDiscard)="PreviousValues()"  ></app-editfields>
-            </span> 
+            </span>  -->
              
             <!-- <button class="btn btn--white" [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to Offer Builder <span class="icon-chevron-right"></span></button> -->
-            <span [class.disable-button]="editOfferbuild">
+            <span>
             <button class="btn btn--white"   [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to
               Offer Builder <span class="icon-chevron-right"></span></button>
             </span>
@@ -43,8 +39,7 @@
                       <div class="form-group half-margin-bottom">
                         <div class="form-group__text">
                           <label for="offerName">Offer Name</label>
-                          <input id="offerName" type="text" [disabled] = "disableInput" class="form-control" name="offerName" required [(ngModel)]="offerNameValue"
-                            #offerName="ngModel" ngModel>
+                          <input [minlength]="2" id="offerName" type="text" (keyup)="proceedCheck($event)" class="form-control" name="offerName" required [(ngModel)]="offerNameValue">
                         </div>
                       </div>
                     </div>
@@ -52,8 +47,8 @@
                       <div class="form-group half-margin-bottom">
                         <div class="form-group__text">
                           <label for="offerDesc">Offer Description</label>
-                          <input id="offerDesc" type="text" [disabled] = "disableInput" class="form-control" name="offerDesc" ngModel required
-                            [(ngModel)]="offerDescValue" #offerDesc="ngModel">
+                          <input id="offerDesc" [minlength]="2"  type="text" (keyup)="proceedCheck($event)" class="form-control" name="offerDesc" ngModel required
+                            [(ngModel)]="offerDescValue">
                         </div>
                       </div>
                     </div>
@@ -63,7 +58,7 @@
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
                         <label for="selectedBeValue">Primary Business Entity</label>
-                        <p-dropdown id="selectedBeValue" class="form-control" [disabled]="disableInput" name="primaryBEList" [options]="primaryBusinessEntities"
+                        <p-dropdown id="selectedBeValue" class="form-control" name="primaryBEList" [options]="primaryBusinessEntities"
                           (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)" [(ngModel)]="primaryBusinessEntitiesValue"
                           [style]="{'width':'100%'}" filter="true" required>
                         </p-dropdown>
@@ -73,8 +68,9 @@
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
                         <label for="selectedValue">Primary Business Unit</label>
-                        <p-multiSelect id="selectedBuValue" class="form-control" [disabled]="disablefewInput" name="primaryBUList" [options]="primaryBusinessUnits"
+                        <p-multiSelect id="selectedBuValue" class="form-control" name="primaryBUList" [options]="primaryBusinessUnits"
                           [(ngModel)]="primaryBusinessUnitsValue" (onPanelHide)="getSecondaryBusinessUnitsFiltered()"
+                          (onChange)="proceedCheckBu($event.value)"
                           [style]="{'width':'100%'}" required>
                         </p-multiSelect>
                       </div>
@@ -86,7 +82,7 @@
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
                         <label for="selectedSeValue">Secondary Business Entity</label>
-                        <p-multiSelect id="selectedSeValue" class="form-control" [disabled]="disablefewInput" name="secondaryBEList" [options]="secondaryBusinessEntitiesFiltered"
+                        <p-multiSelect id="selectedSeValue" class="form-control" name="secondaryBEList" [options]="secondaryBusinessEntitiesFiltered"
                           [(ngModel)]="secondaryBusinessEntitiesValue" (onPanelHide)="getSecondaryBusinessUnitsBasedOnSencondaryBE()"
                           [style]="{'width':'100%'}">
                         </p-multiSelect>
@@ -97,7 +93,7 @@
                     <div class="col-md-6">
                       <div class="form-group half-margin-bottom">
                         <label for="selectedSValue">Secondary Business Unit</label>
-                        <p-multiSelect id="selectedSValue" [disabled]="disablefewInput" class="form-control" name="secondaryBUList" [options]="secondaryBusinessUnitsFiltered"
+                        <p-multiSelect id="selectedSValue" class="form-control" name="secondaryBUList" [options]="secondaryBusinessUnitsFiltered"
                           [(ngModel)]="secondaryBusinessUnitsValue" [style]="{'width':'100%'}">
                         </p-multiSelect>
                       </div>
@@ -106,9 +102,10 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group label--floated input--icon half-margin-bottom">
-                        <div class="form-group__text" [class.disableDate] = "disablefewInput">
+                        <div class="form-group__text">
                           <input class="form-control"  name="strategyReviewDate" id="strategyReviewDate" #dp1="bsDatepicker"
                             bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                            (click)="proceedCheck($event)" (blur)="proceedCheck($event)"
                             ngModel required [(ngModel)]="strategyReviewDateValue" #strategyReviewDate="ngModel">
                           <label id="strategyReviewDate" for="strategyReviewDate">Strategy Review Date</label>
                           <button type="button" class="link" tabindex="-1">
@@ -119,9 +116,10 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group label&#45;&#45;floated input&#45;&#45;icon half-margin-bottom">
-                        <div class="form-group__text" [class.disableDate] = "disablefewInput">
+                        <div class="form-group__text">
                           <input  class="form-control" name="designReviewDate" id="designReviewDate" #dp2="bsDatepicker"
                             bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                            (click)="proceedCheck($event)" (blur)="proceedCheck($event)"
                             ngModel required [(ngModel)]="designReviewDateValue" #designReviewDate="ngModel">
                           <label for="designReviewDate">Design Review Date</label>
                           <button type="button" class="link" tabindex="-1">
@@ -134,9 +132,10 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group label--floated input--icon half-margin-bottom">
-                        <div class="form-group__text" [class.disableDate] = "disablefewInput">
+                        <div class="form-group__text">
                           <input class="form-control"  name="readinessReviewDate" id="readinessReviewDate" #dp3="bsDatepicker"
                             bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                            (click)="proceedCheck($event)" (blur)="proceedCheck($event)"
                             ngModel required [(ngModel)]="readinessReviewDateValue" #readinessReviewDate="ngModel">
                           <label for="readinessReviewDate">Readiness Review Date</label>
                           <button type="button" class="link" tabindex="-1">
@@ -147,9 +146,11 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group label--floated input--icon half-margin-bottom">
-                        <div class="form-group__text" [class.disableDate] = "disablefewInput">
+                        <div class="form-group__text">
                           <input class="form-control" name="expectedLaunchDate"  id="expectedLaunchDate" #dp4="bsDatepicker"
                             bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+                            (click)="proceedCheck($event)" (blur)="proceedCheck($event)" (changeDate)="proceedCheck($event)"
+                            (hide)="proceedCheck($event)" (changeDate)="proceedCheck($event)"
                             ngModel required [(ngModel)]="expectedLaunchDateValue" #expectedLaunchDate="ngModel">
                           <label for="expectedLaunchDate">Launch Date</label>
                           <button type="button" class="link" tabindex="-1">
@@ -164,7 +165,7 @@
                       <div class="form-group half-margin-bottom" >
                         <div class="form-group__text">
                           <label for="idpid">IDP ID</label>
-                          <input  id="idpid" type="text" [disabled] = "disableInput" class="form-control" name="iDPId" [(ngModel)]="idpvalue"
+                          <input  id="idpid" type="text" class="form-control" name="iDPId" [(ngModel)]="idpvalue"
                           (keyup)="getidptoken($event)" required>
                         </div>
                         <span class="text-success" *ngIf="idpidValid">Valid</span>
@@ -179,6 +180,5 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </div>

@@ -850,8 +850,20 @@ export class MmAssesmentComponent implements OnInit {
   });
     this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
 
+      let dimensionProceedPayload = {
+        'taskId': '',
+        'userId': this.offerBuilderdata['offerOwner'],
+        'caseId': this.caseId,
+        'offerId': this.currentOfferId,
+        'taskName': 'Offer Dimension',
+        'action': '',
+        'comment': ''
+      };
+      this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
+
       this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
       this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+      })
     });
 
     })
@@ -1049,4 +1061,3 @@ export class MmAssesmentComponent implements OnInit {
     this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
   }
 }
-
