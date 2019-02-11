@@ -398,6 +398,7 @@
       </div>
       <div class="popover__footer">
         <div *ngIf="selectedAction.type == 'Manual Action'">
+<<<<<<< HEAD
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
             (click)="createApproveAction(popActionContent)">Complete</button>
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
@@ -406,6 +407,11 @@
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
             (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide
             Details</button>
+=======
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="createApproveAction(popActionContent)">Complete</button>
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide Feedback</button>
+          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>
+>>>>>>> a33cafa8251f1b7c78619614fff0605908a19956
 
         </div>
         <div *ngIf="selectedAction.type == 'Strategy Review'">

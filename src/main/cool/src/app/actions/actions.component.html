@@ -50,7 +50,10 @@
                 <p-column field="actions" sortable="true" header="ACTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span class="offerName">{{actionData.actiontTitle}} <br /></span>
-                    <span class="offerDesc">{{actionData.actionDesc}}</span>
+                      <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
+                      <span *ngIf="actionData.attachment == true" class="offerDesc" (click) = "getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
+          
+                  
                     <!-- my new code coming here -->
                     <ng-template #popCommentContent ptemplate="body">
                       <div  class="popover" style="width:501px;left:230px">
@@ -59,6 +62,7 @@
                           <h5>View/Edit Comment</h5>
 
                           <app-viewcomment [taskId] = "actionData.taskId" [popContent] = "p4"></app-viewcomment>
+                        
                           <a class="modal__close" id="popover_close"
                           ><span class="icon-close"
                             (click)="displayActionPop(p4)"></span></a>

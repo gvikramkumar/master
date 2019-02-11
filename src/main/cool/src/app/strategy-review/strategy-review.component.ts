@@ -51,6 +51,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   primaryBE: string;
   displayLeadTime = false;
   noOfWeeksDifference: string;
+  lastValueInMilestone:Array<any>;
+  milestone: any;
+  val: any; 
 
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
@@ -123,14 +126,14 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     });
 
     this.actionsService.getMilestones(this.caseId).subscribe(data => {
+     
+      let result=data.ideate;
+      
       this.milestoneList = [];
-      for (const milestone in data) {
-        if (data) {
-          data[milestone].forEach(element => {
-            this.milestoneList.push(element);
-          });
-        }
-      }
+      this.lastValueInMilestone=result.slice(-1)[0];
+      
+      let mile=this.lastValueInMilestone
+             this.val=mile['subMilestone'];
     });
 
     this.actionsService.getAssignee(this.currentOfferId).subscribe(data => {
@@ -377,7 +380,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       userId,
       taskName,
       this.action,
-      this.commentValue
+      this.commentValue,
+      false
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
       this.closeForm();

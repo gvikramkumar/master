@@ -2,8 +2,7 @@
   <div class="container">
     <div class="section">
         <span *ngIf="!offerId" class="create-offer-heading page--heading">Create New Offer</span>
-        <app-menu-bar *ngIf="!offerId"
-        (updateMessage)="updateMessage($event)">
+        <app-menu-bar *ngIf="!offerId">
         </app-menu-bar>
         <app-menu-bar *ngIf="offerId" [caseId]="caseId"
         [currentMMModel]="derivedMM"
@@ -26,7 +25,7 @@
              
             <!-- <button class="btn btn--white" [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to Offer Builder <span class="icon-chevron-right"></span></button> -->
             <span [class.disable-button]="editOfferbuild">
-            <button class="btn btn--white"   [disabled]="!offerCreateForm.valid " (click)="proceedToOfferBuilder()">Proceed to
+            <button class="btn btn--white"   [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to
               Offer Builder <span class="icon-chevron-right"></span></button>
             </span>
           </div>

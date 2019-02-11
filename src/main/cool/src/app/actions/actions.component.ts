@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActionsAndNotifcations } from '../dashboard/action';
 import * as moment from 'moment';
 import { ActionsService } from '../services/actions.service';
@@ -169,6 +169,7 @@ export class ActionsComponent implements OnInit {
         obj.setTriggerDate(this.dateFormat(element.triggerDate));
         obj.setDueDate(this.dateFormat(element.dueDate));
         obj.setActionDesc(element.actionDesc);
+        obj.setAttachment(element.attachment);
         obj.setAlertType(1);
         obj.setCaseId(element.caseId);
         obj.setCreatedBy(element.createdBy);
@@ -239,4 +240,22 @@ export class ActionsComponent implements OnInit {
     return moment(inputDate).format('DD-MMM-YYYY');
   }
 
+  getActionDetailsFile(caseid) {
+    this.actionsService.downloadActionDetailsFile(caseid).subscribe(data => {
+      const nameOfFileToDownload = 'offer-details_' + caseid;
+      const blob = new Blob([data], { type: 'application/octet-stream' });
+
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+      } else {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nameOfFileToDownload;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+      }
+    });
+  }
 }

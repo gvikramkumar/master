@@ -13,11 +13,15 @@ export class ActionsAndNotifcations{
     caseId:string;
     createdBy:string;
     defaultFunction:string;
+    attachment: boolean;
     type:string;
     constructor() {
 
     }
 
+    setAttachment(attachment) {
+        this.attachment = attachment;
+    }
     setType(type) {
         this.type = type;
     }
