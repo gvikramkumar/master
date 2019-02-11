@@ -385,12 +385,14 @@ export class CreateOfferCoolComponent implements OnInit {
   proceedCheck(event) {
     let inputText = event.target.value;
     let inputValue = inputText.trim();
+    let offerDescField = this.offerDescValue.trim();
+    let offerNameValueField = this.offerNameValue.trim();
 
     if(inputValue === "" || inputValue === null) {
       this.enableOfferbuild = true;
     } 
-       else if (this.offerCreateForm.valid == true && this.idpvalue !== "" && this.offerNameValue !== "" && this.offerDescValue !== "") {
-      this.enableOfferbuild = false;
+  else if (offerNameValueField !== "" && offerDescField !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
+     this.enableOfferbuild = false;
     }
   }
 
