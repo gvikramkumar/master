@@ -328,6 +328,10 @@
 .cool.cui .lead-time h6.display-6 {
   font-size: 1.26rem;
 }
+.cool.cui .lead-time h5.label {
+  background: transparent;
+  padding: 0;
+}
 /* Lead Time Custom 3-segment Progress Bar */
 .cool.cui .progress-group {
   padding: 0 10px;
@@ -357,19 +361,19 @@
 
 .cool.cui .progress-group .col-md-3:last-of-type .progressbar {
   border-radius: 0 2rem 2rem 0;
-  overflow: hidden;
+
 }
 .cool.cui .progress-group .col-md-3:first-of-type .progressbar {
   border-radius: 2rem 0 0 2rem;
-  overflow: hidden;
+
 }
 .cool.cui .progress-group .col-md-3:nth-child(2) .progressbar {
   border-radius: 0;
-  overflow: hidden;
+
 }
 .cool.cui .progress-group .col-md-3:nth-child(3) .progressbar {
   border-radius: 0;
-  overflow: hidden;
+
 }
 .cool.cui .progress-group .col-md-3:first-of-type .progressbar .progressbar__fill {
   border-radius: 2rem 0 0 2rem;
