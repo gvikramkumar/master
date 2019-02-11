@@ -39,7 +39,7 @@
                       <div class="form-group half-margin-bottom">
                         <div class="form-group__text">
                           <label for="offerName">Offer Name</label>
-                          <input id="offerName" type="text" (keyup)="proceedCheck($event)" class="form-control" name="offerName" required [(ngModel)]="offerNameValue">
+                          <input [minlength]="2" id="offerName" type="text" (keyup)="proceedCheck($event)" class="form-control" name="offerName" required [(ngModel)]="offerNameValue">
                         </div>
                       </div>
                     </div>
@@ -47,7 +47,7 @@
                       <div class="form-group half-margin-bottom">
                         <div class="form-group__text">
                           <label for="offerDesc">Offer Description</label>
-                          <input id="offerDesc" type="text" (keyup)="proceedCheck($event)" class="form-control" name="offerDesc" ngModel required
+                          <input id="offerDesc" [minlength]="2"  type="text" (keyup)="proceedCheck($event)" class="form-control" name="offerDesc" ngModel required
                             [(ngModel)]="offerDescValue">
                         </div>
                       </div>
