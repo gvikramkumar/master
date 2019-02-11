@@ -383,13 +383,13 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   proceedCheck(event) {
-    if(event.target.value == "") {
+    let inputText = event.target.value;
+    let inputValue = inputText.trim();
+
+    if(inputValue === "" || inputValue === null) {
       this.enableOfferbuild = true;
-    }
-    if(!this.offerNameValue) {
-      this.enableOfferbuild = true;
-    }
-       if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
+    } 
+       else if (this.offerCreateForm.valid == true && this.idpvalue !== "" && this.offerNameValue !== "" && this.offerDescValue !== "") {
       this.enableOfferbuild = false;
     }
   }
