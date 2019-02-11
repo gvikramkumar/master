@@ -11,7 +11,7 @@
                       </ul>
                   </li>
                   <li> <span>On Hold/Cancel</span>
-                    <ul *ngIf ="!currentOfferId" class="panel--indigo">
+                    <ul *ngIf ="!currentOfferId" class="panel--vibblue">
                             <li
                             [ngClass]="{'disable-item': holdStatusValid == true}"
                             (click)='showOppupFunc("hold")'><span>On Hold</span>
@@ -22,7 +22,7 @@
                             </li>
                      </ul>
 
-                     <ul *ngIf ="currentOfferId" class="panel--indigo">
+                     <ul *ngIf ="currentOfferId" class="panel--vibblue">
                           <li
                           [ngClass]="{'disable-item': holdStatusValid !== true}"
                           (click)='showOppupFunc("hold")'><span>On Hold</span>
