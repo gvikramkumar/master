@@ -105,7 +105,7 @@
                         <div class="form-group__text">
                           <input class="form-control"  name="strategyReviewDate" id="strategyReviewDate" #dp1="bsDatepicker"
                             bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
-                            (changeDate)="proceedCheckDate($event)" (ngModelChange)="proceedCheckDate($event)" (blur)="expectedLaunchDateValue = bsDatepicker.value"
+                            (changeDate)="proceedCheckDate($event)" (ngModelChange)="proceedCheckDate($event)"
                             ngModel required [(ngModel)]="strategyReviewDateValue" #strategyReviewDate="ngModel">
                           <label id="strategyReviewDate" for="strategyReviewDate">Strategy Review Date</label>
                           <button type="button" class="link" tabindex="-1">
@@ -119,7 +119,7 @@
                         <div class="form-group__text">
                           <input  class="form-control" name="designReviewDate" id="designReviewDate" #dp2="bsDatepicker"
                             bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
-                            (changeDate)="proceedCheckDate($event)" (ngModelChange)="proceedCheckDate($event)" (blur)="expectedLaunchDateValue = bsDatepicker.value"
+                            (changeDate)="proceedCheckDate($event)" (ngModelChange)="proceedCheckDate($event)"
                             ngModel required [(ngModel)]="designReviewDateValue" #designReviewDate="ngModel">
                           <label for="designReviewDate">Design Review Date</label>
                           <button type="button" class="link" tabindex="-1">
@@ -135,7 +135,7 @@
                         <div class="form-group__text">
                           <input class="form-control"  name="readinessReviewDate" id="readinessReviewDate" #dp3="bsDatepicker"
                             bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
-                            (changeDate)="proceedCheckDate($event)" (ngModelChange)="proceedCheckDate($event)" (blur)="expectedLaunchDateValue = bsDatepicker.value"
+                            (changeDate)="proceedCheckDate($event)" (ngModelChange)="proceedCheckDate($event)"
                             ngModel required [(ngModel)]="readinessReviewDateValue" #readinessReviewDate="ngModel">
                           <label for="readinessReviewDate">Readiness Review Date</label>
                           <button type="button" class="link" tabindex="-1">
@@ -149,7 +149,7 @@
                         <div class="form-group__text">
                           <input class="form-control" name="expectedLaunchDate"  id="expectedLaunchDate" #dp4="bsDatepicker"
                             bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
-                            (changeDate)="proceedCheckDate($event)" (ngModelChange)="proceedCheckDate($event)" (blur)="expectedLaunchDateValue = bsDatepicker.value"
+                            (changeDate)="proceedCheckDate($event)" (ngModelChange)="proceedCheckDate($event)"
                             ngModel required [(ngModel)]="expectedLaunchDateValue" #expectedLaunchDate="ngModel">
                           <label for="expectedLaunchDate">Launch Date</label>
                           <button type="button" class="link" tabindex="-1">
