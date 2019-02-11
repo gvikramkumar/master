@@ -1,534 +1,509 @@
 <div class="content">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
-          <div class="header-bar__main col-md-6">
-            <div class="header-heading">
-              <h1 class="page-title"><span class="action--value">{{pendingActionCount}}</span> <span
-                  class="action--value-label">Pending
-                  Actions</span></h1>
-              <span class="vertical-divider"></span>
-              <h1 class="page-title"><span class="action--value">{{needImmediateActionCount}}</span> <span
-                  class="action--value-label">Need
-                  Immediate Action</span></h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
+            <div class="header-bar__main col-md-6">
+              <div class="header-heading">
+                <h1 class="page-title"><span class="action--value">{{pendingActionCount}}</span> <span class="action--value-label">Pending
+                    Actions</span></h1>
+                <span class="vertical-divider"></span>
+                <h1 class="page-title"><span class="action--value">{{needImmediateActionCount}}</span> <span class="action--value-label">Need
+                    Immediate Action</span></h1>
+              </div>
             </div>
-          </div>
-          <div class="header-toolbar col-md-6">
-            <button (click)="createNewOffer()" class="btn btn--white cta--action"><span
-                class="icon-add icon-small"></span>
-              <span class="button--label">New Offer</span></button>
+            <div class="header-toolbar col-md-6">
+              <button (click)="createNewOffer()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
+                <span class="button--label">New Offer</span></button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- My Actions & Notifications Section -->
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card card--raised base-margin-top">
-          <div class="panel">
-            <div class="row card-table-header">
-              <div class="col-md-8">
-                <h2 class="page--subheading">My Actions &amp; Notifications</h2>
-                <label class="header-link"><a href="">View All<span
-                      class="icon-chevron-right inline-icon"></span></a></label>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group input--icon half-margin-bottom">
-                  <div class="form-group__text">
-                    <i id="input-type-search" type="search"></i>
-                    <input #gbforactions type="text" pInputText size="50" placeholder="Search by keywords">
-                    <button type="button" class="link">
-                      <span class="icon-search"></span>
-                    </button>
+      <!-- My Actions & Notifications Section -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card--raised base-margin-top">
+            <div class="panel">
+              <div class="row card-table-header">
+                <div class="col-md-8">
+                  <h2 class="page--subheading">My Actions &amp; Notifications</h2>
+                  <label class="header-link"><a href="">View All<span class="icon-chevron-right inline-icon"></span></a></label>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group input--icon half-margin-bottom">
+                    <div class="form-group__text">
+                      <i id="input-type-search" type="search"></i>
+                      <input #gbforactions type="text" pInputText size="50" placeholder="Search by keywords">
+                      <button type="button" class="link">
+                        <span class="icon-search"></span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="responsive-table">
-              <p-dataTable [value]="myActionsAndNotifications" scrollable="true" scrollHeight="350px"
-                [globalFilter]="gbforactions" [resizableColumns]="true" #dt>
-                <p-column field="offerId" sortable="true" header="OFFER ID">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span *ngIf="actionData.alertType == 'action'">
-                      <span (click)="showActionPopUp($event,actionData,popActionContent)">
-                        <span class="icon-clock icon-small"></span></span>
-                      <span>
-                        <a (click)="showOfferPopUp($event,actionData,popturboContent)">
+              <div class="responsive-table">
+                <p-dataTable [value]="myActionsAndNotifications" scrollable="true" scrollHeight="350px" [globalFilter]="gbforactions"
+                  [resizableColumns]="true" #dt>
+                  <p-column field="offerId" sortable="true" header="OFFER ID">
+                    <ng-template let-col let-actionData="rowData" pTemplate="body">
+                      <span *ngIf="actionData.alertType == 'action'">
+                        <span (click)="showActionPopUp($event,actionData,popActionContent)">
+                          <span class="icon-clock icon-small"></span></span>
+                        <span>
+                          <a (click)="showOfferPopUp($event,actionData,popturboContent)">
+                            &nbsp; {{actionData.offerId}}
+                          </a>
+                        </span>
+                      </span>
+                      <span *ngIf="actionData.alertType == 'notification'">
+                        <span (click)="showActionPopUp($event,actionData,popNotificationContent)">
+                          <span class="icon-alert icon-small"></span>
                           &nbsp; {{actionData.offerId}}
-                        </a>
+                        </span>
                       </span>
-                    </span>
-                    <span *ngIf="actionData.alertType == 'notification'">
-                      <span (click)="showActionPopUp($event,actionData,popNotificationContent)">
-                        <span class="icon-alert icon-small"></span>
-                        &nbsp; {{actionData.offerId}}
-                      </span>
-                    </span>
-                  </ng-template>
-                </p-column>
-                <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>
-                      <span (click)="showActionPopUp($event,actionData,popActionContent)" style="cursor: pointer;">
-                        <span class="text-indigo"
-                          (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
-                          &nbsp;</span></span><span (click)="showActionPopUp($event,actionData,popCommentContent)"
-                        class="icon-comment pull-right"></span><br />
-                      <span class="text-small">{{actionData.desc}}</span>
-                    </span>
-                  </ng-template>
-                </p-column>
-
-                <p-column field="offerName" sortable="true" header="OFFER NAME">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>
+                    </ng-template>
+                  </p-column>
+                  <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
+                    <ng-template let-col let-actionData="rowData" pTemplate="body">
                       <span>
-                        <a (click)="showOfferPopUp($event,actionData,popturboContent)">
-                          &nbsp; {{actionData.offerName}}
-                        </a>
+                        <span (click)="showActionPopUp($event,actionData,popActionContent)" style="cursor: pointer;">
+                        <span class="text-indigo" (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
+                          &nbsp;</span></span><span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right"></span><br />                
+                        <span class="text-small">{{actionData.desc}}</span>
                       </span>
-                    </span>
-                  </ng-template>
-
-                </p-column>
-
-
-                <p-column field="assigneeId" sortable="true" header="OFFER OWNER">
-                  <!-- <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    </ng-template>
+                  </p-column>
+  
+                      <p-column field="offerName" sortable="true" header="OFFER NAME">
+                          <ng-template let-col let-actionData="rowData" pTemplate="body">
+                              <span>
+                                  <span>
+                                      <a (click)="showOfferPopUp($event,actionData,popturboContent)">
+                                        &nbsp; {{actionData.offerName}}
+                                      </a>
+                                    </span>
+                              </span>
+                            </ng-template>
+  
+                        </p-column>
+  
+  
+                  <p-column field="assigneeId" sortable="true" header="OFFER OWNER">
+                    <!-- <ng-template let-col let-actionData="rowData" pTemplate="body">
                       <div style="white-space:pre-wrap;">
                         {{actionData.assigneeId}}</div>
                     </ng-template> -->
-                </p-column>
-                <p-column field="status" sortable="true" header="STATUS">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span *ngIf="actionData.alertType == 'action'">
-                      <div class="text-center">
-                        <span class="{{actionData.status}}">
-                          <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
-                        </span>
-                      </div>
-                    </span>
-                    <span *ngIf="actionData.alertType == 'notification'">
-                      <div class="text-center">
-                        <span>--</span>
-                      </div>
-                    </span>
-                  </ng-template>
-                </p-column>
-                <p-column field="triggerDate" sortable="true" header="TRIGGER DATE">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.triggerDate | date:'dd-MMM-yyyy'}} <br /></span>
-                  </ng-template>
-                </p-column>
-                <p-column field="dueDate" header="DUE DATE" sortable="true">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span class="text-center" *ngIf="actionData.alertType == 'action'">{{actionData.dueDate|
+                  </p-column>
+                  <p-column field="status" sortable="true" header="STATUS">
+                    <ng-template let-col let-actionData="rowData" pTemplate="body">
+                      <span *ngIf="actionData.alertType == 'action'">
+                        <div class="text-center">
+                          <span class="{{actionData.status}}">
+                            <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
+                          </span>
+                        </div>
+                      </span>
+                      <span *ngIf="actionData.alertType == 'notification'">
+                        <div class="text-center">
+                          <span>--</span>
+                        </div>
+                      </span>
+                    </ng-template>
+                  </p-column>
+                  <p-column field="triggerDate" sortable="true" header="TRIGGER DATE">
+                    <ng-template let-col let-actionData="rowData" pTemplate="body">
+                      <span>{{actionData.triggerDate | date:'dd-MMM-yyyy'}} <br /></span>
+                    </ng-template>
+                  </p-column>
+                  <p-column field="dueDate" header="DUE DATE" sortable="true">
+                    <ng-template let-col let-actionData="rowData" pTemplate="body">
+                      <span class="text-center" *ngIf="actionData.alertType == 'action'">{{actionData.dueDate|
                         date:'dd-MMM-yyyy'}} <br /></span>
-                    <span *ngIf="actionData.alertType == 'notification'">
-                      <span>--</span>
-                    </span>
-                  </ng-template>
-                </p-column>
-              </p-dataTable>
+                      <span *ngIf="actionData.alertType == 'notification'">
+                        <span>--</span>
+                      </span>
+                    </ng-template>
+                  </p-column>
+                </p-dataTable>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- My Offers Section -->
-
-      <div class="col-md-12">
-        <div class="card card--raised">
-          <div class="panel">
-            <div class="row card-table-header">
-              <div class="col-md-8">
-                <h2 class="page--subheading">My Offers</h2>
-                <label class="header-link"><a href="">View All Offers<span
-                      class="icon-chevron-right inline-icon"></span></a></label>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group input--icon half-margin-bottom">
-                  <div class="form-group__text">
-                    <i id="input-type-search" type="search"></i>
-                    <input type="text" pInputText size="50" placeholder="Search by keywords"
-                      (input)="dt.filterGlobal($event.target.value, 'contains')">
-                    <button type="button" class="link">
-                      <span class="icon-search"></span>
-                    </button>
+  
+        <!-- My Offers Section -->
+  
+        <div class="col-md-12">
+          <div class="card card--raised">
+            <div class="panel">
+              <div class="row card-table-header">
+                <div class="col-md-8">
+                  <h2 class="page--subheading">My Offers</h2>
+                  <label class="header-link"><a href="">View All Offers<span class="icon-chevron-right inline-icon"></span></a></label>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group input--icon half-margin-bottom">
+                    <div class="form-group__text">
+                      <i id="input-type-search" type="search"></i>
+                      <input type="text" pInputText size="50" placeholder="Search by keywords" (input)="dt.filterGlobal($event.target.value, 'contains')">
+                      <button type="button" class="link">
+                        <span class="icon-search"></span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="responsive-table">
-              <p-table [columns]="offerColumns" #dt [value]="myOffers" [scrollable]="true" scrollHeight="400px"
-                [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">
-                <ng-template pTemplate="header" let-columns>
-                  <tr>
-                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" rowspan="2"
-                      style="width:10%; text-align: center">
-                      {{col.header}}
-                      <p-sortIcon [field]="col.field"></p-sortIcon>
-                    </th>
-                    <th colspan="1" style="width:20%; text-align: center">LIFE CYCLE STATUS</th>
-                  </tr>
-                  <tr class="tr--th-small">
-                    <th colspan="1">
-                      <div class="row">
-                        <div class="col">
-                          PRE-LAUNCH
+              <div class="responsive-table">
+                <p-table [columns]="offerColumns" #dt [value]="myOffers" [scrollable]="true" scrollHeight="400px"
+                  [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns" [pSortableColumn]="col.field" rowspan="2" style="width:10%; text-align: center">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                      </th>
+                      <th colspan="1" style="width:20%; text-align: center">LIFE CYCLE STATUS</th>
+                    </tr>
+                    <tr class="tr--th-small">
+                      <th colspan="1">
+                        <div class="row">
+                          <div class="col">
+                            PRE-LAUNCH
+                          </div>
+                          <div class="col">
+                            IN MARKET
+                          </div>
+                          <div class="col">
+                            END OF LIFE
+                          </div>
                         </div>
-                        <div class="col">
-                          IN MARKET
-                        </div>
-                        <div class="col">
-                          END OF LIFE
-                        </div>
-                      </div>
-                    </th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-offerData let-columns="columns">
-                  <tr>
-                    <td *ngFor="let col of columns" style="width:10%">
-                      <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
-                        <a (click)="showOfferPopUp($event,offerData,popturboContent)">
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-offerData let-columns="columns">
+                    <tr>
+                      <td *ngFor="let col of columns" style="width:10%">
+                        <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
+                          <a (click)="showOfferPopUp($event,offerData,popturboContent)">
+                            {{offerData[col.field]}}
+                          </a>
+                        </span>
+                        <span *ngIf="col.field == 'expectedLaunchDate'">
+                          {{offerData[col.field] | date:'dd-MMM-yyyy'}}
+                        </span>
+                        <span *ngIf="col.field == 'offerOwner'">
                           {{offerData[col.field]}}
-                        </a>
-                      </span>
-                      <span *ngIf="col.field == 'expectedLaunchDate'">
-                        {{offerData[col.field] | date:'dd-MMM-yyyy'}}
-                      </span>
-                      <span *ngIf="col.field == 'offerOwner'">
-                        {{offerData[col.field]}}
-                      </span>
-                    </td>
-                    <td style="width:20%" class="td--progress-fitted">
-                      <div
-                        *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'"
-                        class="row no-gutters">
-                        <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>
+                        </span>
+                      </td>
+                      <td style="width:20%" class="td--progress-fitted">
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'"
+                          class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-warning">Launch in Progress</div>
+                          </div>
+                          <div class="progressbar progressbar--warning" data-percentage="100">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--warning" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
                         </div>
-                        <div class="progressbar progressbar--warning" data-percentage="100">
-                          <div class="progressbar__fill"></div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'hold'" class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-cancelled">Hold</div>
+                          </div>
+                          <div class="progressbar progressbar--warning" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--warning" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
                         </div>
-                        <div class="progressbar progressbar--warning" data-percentage="0">
-                          <div class="progressbar__fill"></div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'cancel'" class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-cancelled">Cancelled</div>
+                          </div>
+                          <div class="progressbar progressbar--warning" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--warning" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
                         </div>
-                        <div class="progressbar progressbar--success" data-percentage="0">
-                          <div class="progressbar__fill"></div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'In Market'" class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-inMarket">In Market</div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="100">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="100">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
                         </div>
-                      </div>
-                      <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'hold'"
-                        class="row no-gutters">
-                        <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-cancelled">Hold</div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Update in progress'"
+                          class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-warning">Update in progress</div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="100">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--warning" data-percentage="100">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
                         </div>
-                        <div class="progressbar progressbar--warning" data-percentage="0">
-                          <div class="progressbar__fill"></div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL In Progress'"
+                          class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL in progress</div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="100">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="100">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--warning" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
                         </div>
-                        <div class="progressbar progressbar--warning" data-percentage="0">
-                          <div class="progressbar__fill"></div>
+                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL'" class="row no-gutters">
+                          <div class="col-md-12">
+                            <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL</div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="100">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="100">
+                            <div class="progressbar__fill"></div>
+                          </div>
+                          <div class="progressbar progressbar--success" data-percentage="0">
+                            <div class="progressbar__fill"></div>
+                          </div>
                         </div>
-                        <div class="progressbar progressbar--success" data-percentage="0">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                      </div>
-                      <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'cancel'"
-                        class="row no-gutters">
-                        <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-cancelled">Cancelled</div>
-                        </div>
-                        <div class="progressbar progressbar--warning" data-percentage="0">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--warning" data-percentage="0">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="0">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                      </div>
-                      <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'In Market'"
-                        class="row no-gutters">
-                        <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-inMarket">In Market</div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="100">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="100">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="0">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                      </div>
-                      <div
-                        *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Update in progress'"
-                        class="row no-gutters">
-                        <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-warning">Update in progress</div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="100">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--warning" data-percentage="100">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="0">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                      </div>
-                      <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL In Progress'"
-                        class="row no-gutters">
-                        <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL in progress</div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="100">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="100">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--warning" data-percentage="0">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                      </div>
-                      <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL'"
-                        class="row no-gutters">
-                        <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL</div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="100">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="100">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                        <div class="progressbar progressbar--success" data-percentage="0">
-                          <div class="progressbar__fill"></div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!-- Phases Overlay -->
-<p-overlayPanel #popturboContent [showCloseIcon]="true">
-  <div *ngIf="selectedActionData" class="base-padding overlay-phases" style="min-width:900px">
-    <app-turbotaxview [data]="selectedActionData"></app-turbotaxview>
-  </div>
-</p-overlayPanel>
-<!-- comments overlay -->
-<p-overlayPanel #popCommentContent [showCloseIcon]="true">
-  <div *ngIf="selectedAction" class="comments-modal">
-    <div class="popover__body">
-      <h1 class="modalheader">View/Edit Comment</h1>
-      <app-viewcomment [taskId]="selectedAction.taskId" [event]="commentEvent" [popContent]="popCommentContent">
-      </app-viewcomment>
+  <!-- Phases Overlay -->
+  <p-overlayPanel #popturboContent [showCloseIcon]="true">
+    <div *ngIf="selectedActionData" class="base-padding overlay-phases" style="min-width:900px">
+      <app-turbotaxview [data]="selectedActionData"></app-turbotaxview>
     </div>
-  </div>
-</p-overlayPanel>
-<!-- notifications overlay -->
-<p-overlayPanel #popNotificationContent [showCloseIcon]="true">
-  <div *ngIf="selectedAction" style="min-width:700px">
-    <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
-    <div class="popover__body">
-      <h5>Notification Details</h5>
-      <p>{{selectedAction.actionDesc}}</p>
-      <button class="btn btn--secondary base-margin-top"
-        [routerLink]="['/offerDetailView',selectedAction.offerId, selectedAction.caseId]">View
-        Offer</button>
+  </p-overlayPanel>
+  <!-- comments overlay -->
+  <p-overlayPanel #popCommentContent [showCloseIcon]="true">
+    <div *ngIf="selectedAction" class="comments-modal">
+      <div class="popover__body">
+        <h1 class="modalheader">View/Edit Comment</h1>
+        <app-viewcomment [taskId]="selectedAction.taskId" [event]="commentEvent" [popContent]="popCommentContent"></app-viewcomment>
+      </div>
     </div>
-    <div class="popover__footer">
-      <button class="btn btn--primary base-margin-top" id="popover_close_btn"
-        (click)="dismissNotification(popNotificationContent)">Dismiss
-        Notification</button>
-    </div>
-  </div>
-</p-overlayPanel>
-<!-- actions overlay -->
-<p-overlayPanel #popActionContent [showCloseIcon]="true" (onShow)="getActionFormValues()">
-  <div *ngIf="selectedAction" style="min-width:700px">
-    <div *ngIf="showActionSection">
+  </p-overlayPanel>
+  <!-- notifications overlay -->
+  <p-overlayPanel #popNotificationContent [showCloseIcon]="true">
+    <div *ngIf="selectedAction" style="min-width:700px">
       <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
       <div class="popover__body">
-        <div class="responsive-table half-margin-bottom">
-          <table class="table table--nostripes actionPop">
-            <thead>
-              <tr>
-                <th>Offer Name </th>
-                <th>Action Title </th>
-                <th>Offer Owner </th>
-                <th>Due Date </th>
-                <th>Action Completion Phase </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{selectedAction.offerName}}</td>
-                <td>{{selectedAction.actiontTitle}}</td>
-                <td>{{selectedAction.assigneeId}}</td>
-                <td>{{selectedAction.dueDate | date:'dd-MMM-yyyy'}}</td>
-                <td>{{selectedAction.milestone}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <h5>Action Description</h5>
+        <h5>Notification Details</h5>
         <p>{{selectedAction.actionDesc}}</p>
-        <button class="btn btn--secondary "
-          [routerLink]="['/offerDetailView',selectedAction.offerId, selectedAction.caseId]">
-          View Offer
-        </button>
+        <button class="btn btn--secondary base-margin-top" [routerLink]="['/offerDetailView',selectedAction.offerId, selectedAction.caseId]">View
+          Offer</button>
       </div>
       <div class="popover__footer">
-        <div *ngIf="selectedAction.type == 'Manual Action'">
-          <button class="btn btn--primary base-margin-top" id="popover_close_btn"
-            (click)="createApproveAction(popActionContent)">Complete</button>
-          <button class="btn btn--primary base-margin-top" id="popover_close_btn"
-            (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide Feedback</button>
-          <button class="btn btn--primary base-margin-top" id="popover_close_btn"
-            (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>
-
-        </div>
-        <div *ngIf="selectedAction.type == 'Strategy Review'">
-          <button class="btn btn--primary base-margin-top" (click)="doNotApprove()">
-            Do Not Approve
-          </button>
-          <button class="btn btn--primary base-margin-top" (click)="conditionalApprove()">
-            Conditional Approval
-          </button>
-          <button class="btn btn--primary base-margin-top" (click)="approve()">
-            Approve
-          </button>
-        </div>
+        <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="dismissNotification(popNotificationContent)">Dismiss
+          Notification</button>
       </div>
     </div>
-    <section *ngIf="showDoNotApproveSection">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card__header">
-            <h5 class="card__title">Add a Reason for Not Approving</h5>
+  </p-overlayPanel>
+  <!-- actions overlay -->
+  <p-overlayPanel #popActionContent [showCloseIcon]="true" (onShow)="getActionFormValues()">
+    <div *ngIf="selectedAction" style="min-width:700px">
+      <div *ngIf="showActionSection">
+        <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
+        <div class="popover__body">
+          <div class="responsive-table half-margin-bottom">
+            <table class="table table--nostripes actionPop">
+              <thead>
+                <tr>
+                  <th>Offer Name </th>
+                  <th>Action Title </th>
+                  <th>Offer Owner </th>
+                  <th>Due Date </th>
+                  <th>Action Completion Phase </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{selectedAction.offerName}}</td>
+                  <td>{{selectedAction.actiontTitle}}</td>
+                  <td>{{selectedAction.assigneeId}}</td>
+                  <td>{{selectedAction.dueDate | date:'dd-MMM-yyyy'}}</td>
+                  <td>{{selectedAction.milestone}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h5>Action Description</h5>
+          <p>{{selectedAction.actionDesc}}</p>
+          <button class="btn btn--secondary " [routerLink]="['/offerDetailView',selectedAction.offerId, selectedAction.caseId]">
+            View Offer
+          </button>
+        </div>
+        <div class="popover__footer">
+          <div *ngIf="selectedAction.type == 'Manual Action'">
+            <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="createApproveAction(popActionContent)">Complete</button>
+            <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide Feedback</button>
+            <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>
+  
+          </div>
+          <div *ngIf="selectedAction.type == 'Strategy Review'">
+            <button class="btn btn--primary base-margin-top" (click)="doNotApprove()">
+              Do Not Approve
+            </button>
+            <button class="btn btn--primary base-margin-top" (click)="conditionalApprove()">
+              Conditional Approval
+            </button>
+            <button class="btn btn--primary base-margin-top" (click)="approve()">
+              Approve
+            </button>
           </div>
         </div>
       </div>
-      <div class="divider"></div>
-      <div class="row">
-        <div class="col-md-12">
-          <form autoComplete="off" #createActionForm="ngForm">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <label for="action">ADD A COMMENT</label>
-                    <input id="commentName" type="text" class="form-control" name="commentName"
-                      [(ngModel)]="commentValue" required ngModel #titleName="ngModel">
-                  </div>
-                </div>
-              </div>
+      <section *ngIf="showDoNotApproveSection">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card__header">
+              <h5 class="card__title">Add a Reason for Not Approving</h5>
             </div>
-            <h5 class="card__title">Create an Action Item</h5>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <label for="action">ACTION TITLE</label>
-                    <input id="titleName" type="text" class="form-control" name="titleName" [(ngModel)]="titleValue"
-                      required ngModel #titleName="ngModel">
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-8">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <label for="action">ACTION DESCRIPTION</label>
-                    <input id="descriptionName" type="text" class="form-control" name="descriptionName"
-                      [(ngModel)]="descriptionValue" required ngModel #descriptionName="ngModel">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text select">
-                    <label for="functionName">MILESTONE</label>
-                    <input type="text" id="select-state-disabled" class="form-control" name="milestoneName"
-                      value={{val}} readonly [(ngModel)]="val">
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <div class="form-group__text select">
-                      <label for="functionName">SELECT FUNCTION</label>
-                      <select id="functionName" class="form-control" name="functionName"
-                        (change)="getSelectFunctionRole($event.target.value)" [(ngModel)]="functionNameValue" ngModel
-                        required>
-                        <option *ngFor="let function of functionList" [value]="function">
-                          {{function}}</option>
-                      </select>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="row">
+          <div class="col-md-12">
+            <form autoComplete="off" #createActionForm="ngForm">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <label for="action">ADD A COMMENT</label>
+                      <input id="commentName" type="text" class="form-control" name="commentName" [(ngModel)]="commentValue"
+                        required ngModel #titleName="ngModel">
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <div class="form-group__text select">
-                      <label for="functionName">ASSIGNEE</label>
-                      <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
-                        required ngModel>
-                        <option *ngFor="let assignee of assigneeList" [value]="assignee">
-                          {{assignee}}</option>
-                      </select>
+              <h5 class="card__title">Create an Action Item</h5>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <label for="action">ACTION TITLE</label>
+                      <input id="titleName" type="text" class="form-control" name="titleName" [(ngModel)]="titleValue"
+                        required ngModel #titleName="ngModel">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <label for="action">ACTION DESCRIPTION</label>
+                      <input id="descriptionName" type="text" class="form-control" name="descriptionName" [(ngModel)]="descriptionValue"
+                        required ngModel #descriptionName="ngModel">
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group label--floated input--icon half-margin-bottom">
-                  <label for="dueDate">DUE DATE</label>
-                  <div class="form-group__text">
-                    <!-- <input type="date" name="dueDateName" class="form-control" [(ngModel)]="dueDateValue" required
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text select">
+                      <label for="functionName">MILESTONE</label>
+                      <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <div class="form-group__text select">
+                        <label for="functionName">SELECT FUNCTION</label>
+                        <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
+                          [(ngModel)]="functionNameValue" ngModel required>
+                          <option *ngFor="let function of functionList" [value]="function">
+                            {{function}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <div class="form-group__text select">
+                        <label for="functionName">ASSIGNEE</label>
+                        <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
+                          required ngModel>
+                          <option *ngFor="let assignee of assigneeList" [value]="assignee">
+                            {{assignee}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group label--floated input--icon half-margin-bottom">
+                    <label for="dueDate">DUE DATE</label>
+                    <div class="form-group__text">
+                      <!-- <input type="date" name="dueDateName" class="form-control" [(ngModel)]="dueDateValue" required
                         ngModel #dueDateName="ngModel"> -->
-                    <p-calendar [(ngModel)]="dateValue" [minDate]="minDate" name="dueDateName" class="form-control"
-                      [(ngModel)]="dueDateValue" required ngModel #dueDateName="ngModel"></p-calendar>
-                    <!-- <button type="button" class="link" tabindex="-1">
+                      <p-calendar [(ngModel)]="dateValue" [minDate]="minDate" name="dueDateName" class="form-control"
+                        [(ngModel)]="dueDateValue" required ngModel #dueDateName="ngModel"></p-calendar>
+                      <!-- <button type="button" class="link" tabindex="-1">
                         <span class="icon-month"></span>
                       </button> -->
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="divider"></div>
-            <div class="row">
-              <div class="col-md-12 text-right">
-                <button class="btn btn--secondary" (click)="popActionContent.hide($event)">Cancel</button>
-                <button class="btn btn--primary" [disabled]="!createActionForm.valid"
-                  (click)="createNotAndConditionalAction(popActionContent)">Create
-                  an Action</button>
+              <div class="divider"></div>
+              <div class="row">
+                <div class="col-md-12 text-right">
+                  <button class="btn btn--secondary" (click)="popActionContent.hide($event)">Cancel</button>
+                  <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createNotAndConditionalAction(popActionContent)">Create
+                    an Action</button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
-    <section *ngIf="showConditionalApprovalSection">
-      <!-- <div class="row">
+      </section>
+      <section *ngIf="showConditionalApprovalSection">
+        <!-- <div class="row">
           <div class="col-md-12">
             <div class="pull-right">
               <span class="icon-close" (click)="popActionContent.hide($event)"></span>
@@ -538,184 +513,180 @@
             </div>
           </div>
         </div> -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card__header">
-            <h5 class="card__title">Conditional Approval</h5>
+        <div class="row">
+            <div class="col-md-12">
+              <div class="card__header">
+                <h5 class="card__title">Conditional Approval</h5>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="row">
-        <div class="col-md-12">
-          <form autoComplete="off" #createActionForm="ngForm">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <label for="action">ADD A COMMENT</label>
-                    <input id="commentName" type="text" class="form-control" name="commentName"
-                      [(ngModel)]="commentValue" required ngModel #titleName="ngModel">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <h5 class="card__title">Create an Action Item</h5>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <label for="action">ACTION TITLE</label>
-                    <input id="titleName" type="text" class="form-control" name="titleName" [(ngModel)]="titleValue"
-                      required ngModel #titleName="ngModel">
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-8">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <label for="action">ACTION DESCRIPTION</label>
-                    <input id="descriptionName" type="text" class="form-control" name="descriptionName"
-                      [(ngModel)]="descriptionValue" required ngModel #descriptionName="ngModel">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text select">
-                    <label for="functionName">MILESTONE</label>
-                    <input type="text" id="select-state-disabled" class="form-control" name="milestoneName"
-                      value={{val}} readonly [(ngModel)]="val">
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <div class="form-group__text select">
-                      <label for="functionName">SELECT FUNCTION</label>
-                      <select id="functionName" class="form-control" name="functionName"
-                        (change)="getSelectFunctionRole($event.target.value)" [(ngModel)]="functionNameValue" ngModel
-                        required>
-                        <option *ngFor="let function of functionList" [value]="function">
-                          {{function}}</option>
-                      </select>
+        <div class="divider"></div>
+        <div class="row">
+          <div class="col-md-12">
+            <form autoComplete="off" #createActionForm="ngForm">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <label for="action">ADD A COMMENT</label>
+                      <input id="commentName" type="text" class="form-control" name="commentName" [(ngModel)]="commentValue"
+                        required ngModel #titleName="ngModel">
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <div class="form-group__text select">
-                      <label for="functionName">ASSIGNEE</label>
-                      <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
-                        required ngModel>
-                        <option *ngFor="let assignee of assigneeList" [value]="assignee">
-                          {{assignee}}</option>
-                      </select>
+              <h5 class="card__title">Create an Action Item</h5>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <label for="action">ACTION TITLE</label>
+                      <input id="titleName" type="text" class="form-control" name="titleName" [(ngModel)]="titleValue"
+                        required ngModel #titleName="ngModel">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <label for="action">ACTION DESCRIPTION</label>
+                      <input id="descriptionName" type="text" class="form-control" name="descriptionName" [(ngModel)]="descriptionValue"
+                        required ngModel #descriptionName="ngModel">
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group label--floated input--icon half-margin-bottom">
-                  <label for="dueDate">DUE DATE</label>
-                  <div class="form-group__text">
-                    <p-calendar name="dueDateName" class="form-control" [minDate]="minDate" [(ngModel)]="dueDateValue"
-                      required ngModel #dueDateName="ngModel"></p-calendar>
-                    <button type="button" class="link" tabindex="-1">
-                      <!-- <span class="icon-month"></span> -->
-                    </button>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text select">
+                      <label for="functionName">MILESTONE</label>
+                      <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <div class="form-group__text select">
+                        <label for="functionName">SELECT FUNCTION</label>
+                        <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
+                          [(ngModel)]="functionNameValue" ngModel required>
+                          <option *ngFor="let function of functionList" [value]="function">
+                            {{function}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <div class="form-group__text select">
+                        <label for="functionName">ASSIGNEE</label>
+                        <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
+                          required ngModel>
+                          <option *ngFor="let assignee of assigneeList" [value]="assignee">
+                            {{assignee}}</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="divider"></div>
-            <div class="row">
-              <div class="col-md-12 text-right">
-                <button class="btn btn--secondary" (click)="popActionContent.hide($event)">Cancel</button>
-                <button class="btn btn--primary" [disabled]="!createActionForm.valid"
-                  (click)="createNotAndConditionalAction(popActionContent)">Create
-                  an Action</button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-    <section *ngIf="showApproveSection">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="pull-right">
-            <span class="icon-close" (click)="popActionContent.hide($event)"></span>
-          </div>
-          <div class="card__header">
-            <h5 class="card__title">Add Comment</h5>
-          </div>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="row">
-        <div class="col-md-12">
-          <form autoComplete="off" #createActionApproveForm="ngForm">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group half-margin-bottom">
-                  <div class="form-group__text">
-                    <label for="action">ADD A COMMENT</label>
-                    <input id="commentName" type="text" class="form-control" name="commentName"
-                      [(ngModel)]="commentValue" required ngModel #titleName="ngModel">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group label--floated input--icon half-margin-bottom">
+                    <label for="dueDate">DUE DATE</label>
+                    <div class="form-group__text">
+                      <p-calendar name="dueDateName" class="form-control" [minDate]="minDate" [(ngModel)]="dueDateValue"
+                        required ngModel #dueDateName="ngModel"></p-calendar>
+                      <button type="button" class="link" tabindex="-1">
+                        <!-- <span class="icon-month"></span> -->
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="divider"></div>
-            <div class="row">
-              <div class="col-md-12 text-right">
-                <button class="btn btn--secondary" (click)="popActionContent.hide($event)">Cancel</button>
-                <button class="btn btn--primary" [disabled]="!createActionApproveForm.valid"
-                  (click)="createApproveAction(popActionContent)">Submit</button>
+              <div class="divider"></div>
+              <div class="row">
+                <div class="col-md-12 text-right">
+                  <button class="btn btn--secondary" (click)="popActionContent.hide($event)">Cancel</button>
+                  <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createNotAndConditionalAction(popActionContent)">Create
+                    an Action</button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
-  </div>
-</p-overlayPanel>
-
-<p-overlayPanel #popProvideDetailsContent [showCloseIcon]="true">
-  <div style="min-width:700px; min-height:300px">
-    <div class="form-group label--floated">
-      <div class="form-group__text">
-        <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason"
-          required></textarea>
-        <label>ADD A REASON</label>
-      </div>
-      <input #advancedfileinput type="file" (change)="uploadFile($event)">
+      </section>
+      <section *ngIf="showApproveSection">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="pull-right">
+              <span class="icon-close" (click)="popActionContent.hide($event)"></span>
+            </div>
+            <div class="card__header">
+              <h5 class="card__title">Add Comment</h5>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="row">
+          <div class="col-md-12">
+            <form autoComplete="off" #createActionApproveForm="ngForm">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group half-margin-bottom">
+                    <div class="form-group__text">
+                      <label for="action">ADD A COMMENT</label>
+                      <input id="commentName" type="text" class="form-control" name="commentName" [(ngModel)]="commentValue"
+                        required ngModel #titleName="ngModel">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div class="row">
+                <div class="col-md-12 text-right">
+                  <button class="btn btn--secondary" (click)="popActionContent.hide($event)">Cancel</button>
+                  <button class="btn btn--primary" [disabled]="!createActionApproveForm.valid" (click)="createApproveAction(popActionContent)">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
     </div>
-    <button class="btn" (click)="popProvideDetailsContent.hide($event)">Cancel</button>
-    <button [disabled]="!buttonIsDisabled" class="btn btn--primary"
-      (click)="createApproveActionWithDetails(popProvideDetailsContent)">Save</button>
-  </div>
-</p-overlayPanel>
-
-<p-overlayPanel #popProvideFeedbackContent [showCloseIcon]="true" style="position: relative; left:50px; top: -1000px;">
-  <div style="min-width:700px; min-height:300px; margin-left:30px">
-    <div class="form-group label--floated">
-      <div class="form-group__text">
-        <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason"
-          required></textarea>
-        <label>ADD A REASON</label>
+  </p-overlayPanel>
+  
+  <p-overlayPanel #popProvideDetailsContent [showCloseIcon]="true">
+    <div style="min-width:700px; min-height:300px">
+      <div class="form-group label--floated">
+          <div class="form-group__text">
+              <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
+              <label>ADD A REASON</label>
+          </div>
+          <input #advancedfileinput type="file" (change)="uploadFile($event)">
       </div>
-    </div>
-    <button class="btn" (click)="popProvideFeedbackContent.hide($event)">Cancel</button>
-    <button [disabled]="!buttonIsDisabled" class="btn btn--primary"
-      (click)="createApproveActionWithFeedback(popProvideFeedbackContent)">Save</button>
-  </div>
-</p-overlayPanel>
+      <button class="btn" (click)="popProvideDetailsContent.hide($event)">Cancel</button>
+                  <button
+                  [disabled]="!buttonIsDisabled"
+                  class="btn btn--primary" (click)= "createApproveActionWithDetails(popProvideDetailsContent)">Save</button>
+                </div>
+    </p-overlayPanel>
+  
+    <p-overlayPanel #popProvideFeedbackContent [showCloseIcon]="true" style="position: relative; left:50px; top: -1000px;">
+              <div style="min-width:700px; min-height:300px; margin-left:30px">
+                <div class="form-group label--floated">
+                    <div class="form-group__text">
+                        <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
+                        <label>ADD A REASON</label>
+                    </div>
+                </div>
+                <button class="btn" (click)="popProvideFeedbackContent.hide($event)">Cancel</button>
+                          <button 
+                            [disabled]="!buttonIsDisabled"
+                            class="btn btn--primary" (click)="createApproveActionWithFeedback(popProvideFeedbackContent)">Save</button>
+                          </div>
+              </p-overlayPanel>
