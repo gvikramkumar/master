@@ -579,35 +579,38 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
-  getSortedListFromColumn(table, column, whereClause?, isNumber?) {
-    let query = `select distinct ${column} as col from ${table}`;
+  getListFromColumn(table, column, whereClause?, isNumber?, upper?) {
+    let query;
+    if (upper) {
+      query = `select distinct upper(${column}) as col from ${table}`;
+    } else {
+      query = `select distinct ${column} as col from ${table}`;
+    }
     if (whereClause) {
       query += ` where ${whereClause} and ${column} is not null `;
     } else {
       query += ` where ${column} is not null `;
     }
-    query += ` order by ${column}`;
+    if (upper) {
+      query += ` order by upper(${column})`;
+    } else {
+      query += ` order by ${column}`;
+    }
 
     return pgc.pgdb.query(query)
       .then(results => results.rows.map(obj => obj.col))
-      .then(vals => isNumber ? vals.map(val => Number(val)) : vals)
+      .then(vals => isNumber ? vals.map(val => Number(val)) : vals);
+  }
+
+  getSortedListFromColumn(table, column, whereClause?, isNumber?) {
+    return this.getListFromColumn(table, column, whereClause, isNumber)
       .then(vals => _.sortBy(vals, _.identity));
   }
 
   getSortedUpperListFromColumn(table, column, whereClause?) {
-    let query = `select distinct upper(${column}) as col from ${table}`;
-    if (whereClause) {
-      query += ` where ${whereClause} and ${column} is not null `;
-    } else {
-      query += ` where ${column} is not null `;
-    }
-    query += ` order by upper(${column})`;
-
-    return pgc.pgdb.query(query)
-      .then(results => results.rows.map(obj => obj.col))
+    return this.getListFromColumn(table, column, whereClause, false, true)
       .then(vals => _.sortBy(vals, _.identity));
   }
-
 
   verifyNodeValueInPlOrMgmtHierarchies(nodeValue): Promise<boolean> {
     const sqlPlHierarchy = `
