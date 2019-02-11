@@ -1,7 +1,5 @@
 <div class="content">
-
   <div class="container">
-
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
@@ -24,8 +22,6 @@
         </div>
       </div>
     </div>
-
-
     <!-- My Actions & Notifications Section -->
     <div class="row">
       <div class="col-md-12">
@@ -74,11 +70,11 @@
                 <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
-                      <span class="text-indigo"
-                        (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
-                        &nbsp;<span (click)="showActionPopUp($event,actionData,popCommentContent)"
-                          class="icon-comment pull-right"></span><br />
-                      </span>
+                      <span (click)="showActionPopUp($event,actionData,popActionContent)" style="cursor: pointer;">
+                        <span class="text-indigo"
+                          (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
+                          &nbsp;</span></span><span (click)="showActionPopUp($event,actionData,popCommentContent)"
+                        class="icon-comment pull-right"></span><br />
                       <span class="text-small">{{actionData.desc}}</span>
                     </span>
                   </ng-template>
@@ -128,7 +124,7 @@
                 <p-column field="dueDate" header="DUE DATE" sortable="true">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span class="text-center" *ngIf="actionData.alertType == 'action'">{{actionData.dueDate|
-                      date:'dd-MMM-yyyy'}} <br /></span>
+                        date:'dd-MMM-yyyy'}} <br /></span>
                     <span *ngIf="actionData.alertType == 'notification'">
                       <span>--</span>
                     </span>
@@ -288,8 +284,7 @@
                       <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL In Progress'"
                         class="row no-gutters">
                         <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL
-                            in progress</div>
+                          <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL in progress</div>
                         </div>
                         <div class="progressbar progressbar--success" data-percentage="100">
                           <div class="progressbar__fill"></div>
@@ -398,20 +393,12 @@
       </div>
       <div class="popover__footer">
         <div *ngIf="selectedAction.type == 'Manual Action'">
-<<<<<<< HEAD
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
             (click)="createApproveAction(popActionContent)">Complete</button>
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
-            (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide
-            Feedback</button>
+            (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide Feedback</button>
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
-            (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide
-            Details</button>
-=======
-          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="createApproveAction(popActionContent)">Complete</button>
-          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide Feedback</button>
-          <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>
->>>>>>> a33cafa8251f1b7c78619614fff0605908a19956
+            (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>
 
         </div>
         <div *ngIf="selectedAction.type == 'Strategy Review'">
