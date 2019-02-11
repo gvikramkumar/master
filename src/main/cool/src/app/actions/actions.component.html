@@ -32,8 +32,7 @@
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
                 <p-column field="offerId" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                 <a (click)="showOfferPopUp($event,offerData,popturboContent)">>
-                     {{actionData.offerId}}<br /></a>
+                 <a (click)="showOfferPopUp($event,offerData,popturboContent)">{{actionData.offerId}}</a><br />
                     <span>{{actionData.offerName}}</span>
                     <!--new code strarts here-->
 
@@ -49,11 +48,11 @@
                 </p-column>
                 <p-column field="actions" sortable="true" header="ACTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span class="offerName">{{actionData.actiontTitle}} <br /></span>
+                    <span class="offerName">{{actionData.titleValue}} <br /></span>
                       <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
                       <span *ngIf="actionData.attachment == true" class="offerDesc" (click) = "getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
-          
-                  
+
+
                     <!-- my new code coming here -->
                     <!-- <ng-template #popCommentContent ptemplate="body">
                       <div  class="popover" style="width:501px;left:230px">
@@ -62,11 +61,11 @@
                           <h5>View/Edit Comment</h5>
 
                           <app-viewcomment [taskId] = "actionData.taskId" [popContent] = "p4"></app-viewcomment>
-                        
+
                           <a class="modal__close" id="popover_close"
                           ><span class="icon-close"
                             (click)="displayActionPop(p4)"></span></a>
-                        </div> 
+                        </div>
 
                       </div>
                     </ng-template> -->
