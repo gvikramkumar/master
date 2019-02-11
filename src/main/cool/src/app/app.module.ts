@@ -171,7 +171,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
     DragDropModule,
     TreeTableModule,
     NgxWebstorageModule.forRoot(),
-    UserIdleModule.forRoot({ idle: 595, timeout: 600, ping: 0 })
+    UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 })
   ],
   providers:
     [
