@@ -1,7 +1,7 @@
 <div class="content">
   <div class="container">
-    <app-menu-bar [caseId]="caseId" [currentMMModel]="currentMMModel" [offerId]="currentOfferId" [offerName]="offerBuilderdata['offerName']"
-      [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
+    <app-menu-bar [caseId]="caseId" [currentMMModel]="currentMMModel" [offerId]="currentOfferId"
+      [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
     </app-menu-bar>
     <div class="panel-wrapper mt-15">
 
@@ -9,23 +9,23 @@
       <div class="panel panel--indigo panel--compressed task--bar">
         <div class="row">
           <div class="col-md-4">
-            <h4><button [disabled]="!backbuttonStatusValid" (click)='goBackToOffercreation()' class="btn--back btn btn--icon btn--white"><span
-                  class="icon-back"></span></button> Offer Builder</h4>
+            <h4 *ngIf="!dimensionMode"><button [disabled]="!backbuttonStatusValid" (click)='goBackToOffercreation()'
+                class="btn--back btn btn--icon btn--white"><span class="icon-back"></span></button> Offer Builder</h4>
+            <h4 *ngIf="dimensionMode"><button [disabled]="!backbuttonStatusValid" (click)='goBackToStrategyReview()'
+                class="btn--back btn btn--icon btn--white"><span class="icon-back"></span></button> Offer Builder</h4>
           </div>
           <div class="col-md-8 text-right">
-            <span *ngIf="showEditbutton">
-              <app-editfields (onEdit)="editOffer()" (onSave)="show()" (onDiscard)="PreviousValues()"></app-editfields>
-            </span>
+            <button class="btn btn--white"> Save </button>
             <button class="btn btn--white" (click)="downloadPDF()"> Export </button>
-            <button *ngIf="!dimensionMode" class="btn btn--white" [disabled]="!proceedButtonStatusValid" (click)='proceedToStakeholder()'>Proceed
-              to Stakeholder Identification <span class="icon-chevron-right"></span></button>
-            <button *ngIf="dimensionMode" class="btn btn--white" [disabled]="!proceedButtonStatusValid" (click)='proceedToOfferSolution()'>Proceed
-              to Offer Solutioning <span class="icon-chevron-right"></span></button>
+            <button *ngIf="!dimensionMode" class="btn btn--white" [disabled]="!proceedButtonStatusValid"
+              (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span
+                class="icon-chevron-right"></span></button>
+            <button *ngIf="dimensionMode" class="btn btn--white" [disabled]="!proceedButtonStatusValid"
+              (click)='proceedToOfferSolution()'>Proceed to Offer Solutioning <span
+                class="icon-chevron-right"></span></button>
           </div>
         </div>
       </div>
-
-
 
       <div class="contentBox mt-10">
         <div class="row">
@@ -48,9 +48,9 @@
                       <div class="text-bold">Expected Launch Date</div>
                       <div>
                         {{
-                        offerBuilderdata["expectedLaunchDate"]
-                        | date: "dd-MMM-y"
-                        }}
+                    offerBuilderdata["expectedLaunchDate"]
+                      | date: "dd-MMM-y"
+                  }}
                       </div>
                     </div>
                   </div>
@@ -59,10 +59,10 @@
                       <div class="text-bold">Business Entity</div>
                       <div>
                         {{
-                        offerBuilderdata["BEList"] != null
-                        ? offerBuilderdata["BEList"].join(", ")
-                        : ""
-                        }}
+                    offerBuilderdata["BEList"] != null
+                      ? offerBuilderdata["BEList"].join(", ")
+                      : ""
+                  }}
                       </div>
                     </div>
                   </div>
@@ -71,10 +71,10 @@
                       <div class="text-bold">Business Unit</div>
                       <div>
                         {{
-                        offerBuilderdata["BUList"] != null
-                        ? offerBuilderdata["BUList"].join(", ")
-                        : ""
-                        }}
+                    offerBuilderdata["BUList"] != null
+                      ? offerBuilderdata["BUList"].join(", ")
+                      : ""
+                  }}
                       </div>
                     </div>
                   </div>
@@ -82,11 +82,11 @@
               </div>
             </div>
 
-            <div class="alert base-margin-top half-margin-bottom" [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green',
-            'alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
-              <div class="alert__icon mm-alert-icon" [ngClass]="{'icon-info-outline': message['color']==='black',
-               'icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 
-               'icon-warning-outline': message['color']==='yellow'}"></div>
+            <div class="alert base-margin-top half-margin-bottom"
+              [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
+              <div class="alert__icon mm-alert-icon"
+                [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}">
+              </div>
               <div class="alert__message" [ngStyle]="{'color': message['color']}">
                 <b>{{message['contentHead']}}</b>{{message['content']}}</div>
             </div>
@@ -94,8 +94,8 @@
 
             <div class="panel-wrapper mt-20">
               <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" style="z-index: 0">
-                <li class="tab" *ngFor="let groupName of groupNames; let i = index" [ngClass]="{ active: i == activeTabIndex }"
-                  (click)="changeTab(i)">
+                <li class="tab" *ngFor="let groupName of groupNames; let i = index" [ngClass]="{ active: i == activeTabIndex,
+              disabled: !canClickNextStep && i!=0 }" (click)="changeTab(i)">
                   <a tabindex="0" class="padding-5-20 margin-right-10">
                     <div class="tab__heading" style="margin:auto">{{ groupName }}</div>
                   </a>
@@ -115,11 +115,10 @@
                             <div class="col-md-10">
 
                               <button *ngFor="let attribute of groupData[activeTabIndex][subGroup]" [ngClass]="{
-                            'gray-button':attribute.type===1 && attribute.status===-1,
-                            'mm-model-btn-active':attribute.status===1||attribute.type===2,
-                            'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
-                          }"
-                                class="btn btn--small tooltip" placement="top" (click)="toggleSelected(attribute)">
+                              'gray-button':attribute.type===1 && attribute.status===-1,
+                              'mm-model-btn-active':attribute.status===1||attribute.type===2,
+                              'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
+                            }" class="btn btn--small tooltip" placement="top" (click)="toggleSelected(attribute)">
                                 {{attribute.name}}
                                 <span class="tooltiptext" *ngIf="attribute.tooltip!=null && attribute.tooltip!=''">
                                   {{attribute.tooltip}}</span></button>
@@ -146,9 +145,10 @@
           </div>
 
           <div class="rightContent col-sm-12 col-md-3">
-            <app-right-panel [portfolioFlag]="setFlag" [stakeData]="stakeData" [offerId]="offerId" [derivedMM]="derivedMM"
-              [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [offerBuilderdata]="offerBuilderdata"
-              (updateStakeData)="updateStakeData($event)" [events]="eventsSubject.asObservable()" [noOfWeeksDifference]="noOfWeeksDifference"></app-right-panel>
+            <app-right-panel [portfolioFlag]="setFlag" [stakeData]="stakeData" [offerId]="offerId"
+              [derivedMM]="derivedMM" [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime"
+              [offerBuilderdata]="offerBuilderdata" (updateStakeData)="updateStakeData($event)"
+              [events]="eventsSubject.asObservable()" [noOfWeeksDifference]="noOfWeeksDifference"></app-right-panel>
           </div>
         </div>
       </div>
@@ -249,20 +249,5 @@
     </div>
 
     <div class="backdrop-custom" *ngIf="backdropCustom"></div>
-
   </div>
-</div>
-<div class="container">
-  <p-dialog header="Warning" [(visible)]="display" [style]="{width: '700px', height: '300px'}">
-    <h5>Switching the monetization model may result in losing the changes you have made.
-      This may also increase Lead Time. Do you still want switch your model evaluation?</h5>
-    <div style="padding: 20px 200px;">
-      <button class="btn btn--small" (click)="showWarning()">Switch</button>
-      <button class="btn btn--small" (click)="display=false">Cancel</button>
-    </div>
-    <p style="color:red" *ngIf="showWarningSave">
-      During this pilot period, changes resulting in a Monetization Model re-alignment are not allowed.
-      If you wish to change Monetization Models, please create a new offer
-    </p>
-  </p-dialog>
 </div>
