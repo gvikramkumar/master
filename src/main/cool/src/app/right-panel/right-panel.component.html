@@ -67,13 +67,13 @@
         </span>
 
     </div>
-    
+
 <!-- <Scalapbility Index> -->
         <div class="card card--raised base-margin-top">
 
                 <h5 class="half-margin-bottom">Scalability Index</h5>
-        
-                
+
+
             </div>
 
     <!-- People Involved -->
@@ -323,19 +323,19 @@
             </div>
         </p-dialog>
 
-        <p-dialog header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400" [minWidth]="500"
+        <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400" [minWidth]="500"
             [minY]="70" [(visible)]="displayLeadTimeButton">
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="card">
-                                <div class="row base-margin-top">
+                            <div class="card base-padding">
+                                <div class="row">
                                     <div class="col-md-8">
                                         <div class="row">
-                                            <div class="col-md-2">
-                                                <div class="row base-margin-top">
-                                                    <h4 class="text-bold">{{noOfWeeksDifference}}</h4>
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <h4 class="display-1 text-success">{{noOfWeeksDifference}}</h4>
                                                 </div>
                                             </div>
                                         </div>
@@ -343,7 +343,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="row  base-margin-top">
-                                            <h2 style="color:green">{{expectedLaunchDate}}</h2>
+                                            <h2 class="text-success">{{expectedLaunchDate}}</h2>
                                             <h5>Offer Launch Date</h5>
                                         </div>
                                     </div>
@@ -352,44 +352,44 @@
                                 <div class="divider"></div>
                                 <div class="row base-margin-top">
                                     <div class="col-md-12">
-                                        <h6 style="color: indigo">Edit Milestones</h6>
+                                        <h6 class="text-indigo">Edit Milestones</h6>
                                     </div>
                                 </div>
-                                <div class="row base-margin-top">
+                                <div class="row base-margin-top progress-group">
                                     <div class="col-md-3">
-                                        <h6>Strategy Review</h6>
-                                        <h6>08-OCT-2018</h6>
+                                        <h6 class="subheader">Strategy Review</h6>
+                                        <h6 class="display-6">08-OCT-2018</h6>
                                         <div class="progressbar progressbar--large" data-percentage="0">
                                             <div class="progressbar__fill"></div>
                                             <div class="progressbar__label">YOU ARE HERE</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <h6>Design Review</h6>
-                                        <h6>26-OCT-2018</h6>
+                                        <h6 class="subheader">Design Review</h6>
+                                        <h6 class="display-6">26-OCT-2018</h6>
                                         <div class="progressbar progressbar--large" data-percentage="0">
                                             <div class="progressbar__fill"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <h6>Readiness Review</h6>
-                                        <h6>26-OCT-2018</h6>
+                                        <h6 class="subheader">Readiness Review</h6>
+                                        <h6 class="display-6">26-OCT-2018</h6>
                                         <div class="progressbar progressbar--large" data-percentage="0">
                                             <div class="progressbar__fill"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <h6>LAUNCH</h6>
-                                        <h6>01-NOV-2018</h6>
+                                        <h6 class="subheader">LAUNCH</h6>
+                                        <h6 class="display-6">01-NOV-2018</h6>
                                         <div class="progressbar progressbar--large" data-percentage="0">
                                             <div class="progressbar__fill"></div>
                                             <div class="progressbar__label">LEAD TIME</div>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- <div class="row base-margin-top"></div>
                                 <div class="row base-margin-top"></div>
-                                <div class="row base-margin-top"></div>
-                                <div class="row base-margin-top"></div>
+                                <div class="row base-margin-top"></div> -->
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -471,3 +471,4 @@
         </p-dialog>
 
     </div>
+

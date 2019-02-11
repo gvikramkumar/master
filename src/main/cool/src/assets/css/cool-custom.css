@@ -320,6 +320,75 @@
 }
 /* End Custom Progress Bar */
 
+
+.cool.cui .lead-time h6.subheader {
+  margin-bottom: 0;
+  text-transform: uppercase;
+}
+.cool.cui .lead-time h6.display-6 {
+  font-size: 1.26rem;
+}
+/* Lead Time Custom 3-segment Progress Bar */
+.cool.cui .progress-group {
+  padding: 0 10px;
+}
+.cool.cui .progress-group .col-md-3 {
+  padding: 0;
+}
+.cui .progressbar__label {
+  display: block;
+  margin-top: 10px;
+  font-size: 10px;
+  margin-bottom: -5px;
+}
+.cui .progressbar {
+  margin: 10px 1px 20px;
+  background: #dfdfdf;
+  border-radius: 2rem;
+  height: 7px;
+}
+.cui .progressbar .progressbar__fill {
+  height: 7px;
+}
+/* .cui .ui-table .ui-table-tbody > tr > td .row.no-gutters .progressbar {
+  width: 32%;
+  display: inline-block;
+} */
+
+.cool.cui .progress-group .col-md-3:last-of-type .progressbar {
+  border-radius: 0 2rem 2rem 0;
+  overflow: hidden;
+}
+.cool.cui .progress-group .col-md-3:first-of-type .progressbar {
+  border-radius: 2rem 0 0 2rem;
+  overflow: hidden;
+}
+.cool.cui .progress-group .col-md-3:nth-child(2) .progressbar {
+  border-radius: 0;
+  overflow: hidden;
+}
+.cool.cui .progress-group .col-md-3:nth-child(3) .progressbar {
+  border-radius: 0;
+  overflow: hidden;
+}
+.cool.cui .progress-group .col-md-3:first-of-type .progressbar .progressbar__fill {
+  border-radius: 2rem 0 0 2rem;
+  overflow: hidden;
+}
+.cool.cui .progress-group .col-md-3:last-of-type .progressbar .progressbar__fill {
+  border-radius: 0 2rem 2rem 0;
+  overflow: hidden;
+}
+.cool.cui .progress-group .col-md-3:nth-child(3) .progressbar .progressbar__fill {
+  border-radius: 0;
+  overflow: hidden;
+}
+.cool.cui .progress-group .col-md-3:nth-child(2) .progressbar .progressbar__fill {
+  border-radius: 0;
+  overflow: hidden;
+}
+/* End Custom Progress Bar */
+
 /* MM */
 .cui .list.dimensions--toggle li {
   padding: 10px 0;
