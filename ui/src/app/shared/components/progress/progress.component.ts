@@ -20,7 +20,7 @@ export class ProgressComponent {
           if (this.value < 101) {
             this.value += 1;
           }
-        }, 100);
+        }, 300);
       } else {
         this.show = false;
         clearInterval(this.timer);

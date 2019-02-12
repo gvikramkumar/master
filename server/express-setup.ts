@@ -31,6 +31,8 @@ import {databaseRouter} from './api/database/router';
 import {addGlobalData} from './lib/middleware/add-global-data';
 import {healthcheck} from './lib/middleware/healthcheck';
 import {distiDirectUploadRouter} from './api/prof/disti-direct-upload/router';
+import AnyObj from '../shared/models/any-obj';
+import Q from 'q';
 
 export default function () {
 
@@ -64,6 +66,13 @@ export default function () {
 */
 
   app.get('/healthcheck', healthcheck());
+
+  app.get('/timeout/:delay', function (req: AnyObj, res, next) {
+    const delay = Number(req.params.delay);
+    Q().delay(delay)
+      .then(() => res.json({delay}));
+  });
+
   app.use(addSsoUser())
   app.use(addGlobalData());
   // app.use(siteRestriction());
@@ -87,8 +96,6 @@ export default function () {
     ].join(' ');
   }));
 
-
-
 /*
   app.get('/cause-error', function (req, res, next) {
     if (svrUtil.isLocalEnv()) {
@@ -107,6 +114,7 @@ export default function () {
       }
     })
 */
+
 
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/database', databaseRouter);

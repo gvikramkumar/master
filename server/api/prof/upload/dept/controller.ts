@@ -49,21 +49,21 @@ export default class DeptUploadUploadController extends UploadController {
   getValidationAndImportData() {
     return Promise.all([
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_account', 'financial_account_code'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level01_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level02_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level03_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level04_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level05_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level06_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level07_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level08_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level09_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level10_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level11_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level12_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level13_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level14_value'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level15_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level01_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level02_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level03_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level04_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level05_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level06_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level07_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level08_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level09_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level10_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level11_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level12_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level13_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level14_value'),
+      this.pgRepo.getListFromColumn('fpacon.vw_fpa_pl_hierarchy', 'node_level15_value'),
     ])
       .then(results => {
         this.data.glAccounts = results[0];
@@ -240,5 +240,14 @@ export default class DeptUploadUploadController extends UploadController {
     return Promise.resolve();
   }
 
+  autoSync() {
+    // no reason to autosync if uploading from submeasure edit page, as temp=Y. only temp=N gets synced
+    // we delay that autosync until submeasure approval postApproveStep
+    if (!this.submeasureMode) {
+      super.autoSync();
+    } else {
+      return Promise.resolve();
+    }
+  }
 }
 

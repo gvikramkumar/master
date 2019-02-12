@@ -86,27 +86,35 @@ export default class ReportController extends ControllerBase {
         // but for module specific collections like these, having a moduleId will
         // get no results as it's not included in the collection, so we need to remove it from filter
         excelSheetname = ['Manual Uploaded Data'];
-        excelHeaders = ['Fiscal Month', 'Sub-Measure Name', 'Input Product Value', 'Input Sales Value', 'Legal Entity', 'Int Business Entity', 'SCMS', 'Amount'];
-        excelProperties = ['fiscalMonth', 'submeasureName', 'productValue', 'salesValue', 'leValue', 'beValue', 'scmsValue', 'amount'];
-
-        promise = this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
-          .then(submeasures => {
-            this.submeasures = submeasures;
-            return this.dollarUploadPgRepo.getMany(body)
-              .then(docs => docs.map(doc => this.transformAddSubmeasureName(doc)));
-          })
+        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Product', 'Sales', 'Legal Business Entity', 'Internal Business Entity',
+          'SCMS', 'Amount', 'Revenue Classification', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['measure.name', 'sm.name', 'productValue', 'salesValue', 'leValue', 'beValue',
+          'scmsValue', 'amount', 'revenueClassification', 'fiscalMonth', 'updatedBy', 'updatedDate'];
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.dollarUploadPgRepo.getMany(body)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            return results[2].map(doc => this.transformAddMeasureAndSubmeasureName(doc));
+          });
         break;
       case 'mapping-upload':
         excelSheetname = ['Manual Mapping Data'];
-        excelHeaders = ['Fiscal Month', 'Sub-Measure Name', 'Input Product Value', 'Input Sales Value', 'Legal Entity', 'Int Business Entity', 'SCMS', 'Percentage'];
-        excelProperties = ['fiscalMonth', 'submeasureName', 'productValue', 'salesValue', 'leValue', 'beValue', 'scmsValue', 'percentage'];
-        promise = this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
-          .then(submeasures => {
-            this.submeasures = submeasures;
-            return this.mappingUploadPgRepo.getMany(body)
-              .then(docs => docs.map(doc => this.transformAddSubmeasureName(doc)));
-          })
-
+        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Product', 'Sales', 'Legal Business Entity', 'Internal Business Entity', 'SCMS', 'Percentage', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['measure.name', 'sm.name', 'productValue', 'salesValue', 'leValue', 'beValue', 'scmsValue', 'percentage', 'fiscalMonth', 'updatedBy', 'updatedDate'];
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.mappingUploadPgRepo.getMany(body)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            return results[2].map(doc => this.transformAddMeasureAndSubmeasureName(doc));
+          });
         break;
       case 'product-hierarchy':
         excelSheetname = ['Product Hierarchy'];
@@ -123,26 +131,33 @@ export default class ReportController extends ControllerBase {
         break;
       case 'dept-upload':
         excelSheetname = ['Dept Upload'];
-        excelHeaders = ['Sub-Measure Name', 'Node Value', 'GL Account'];
-        excelProperties = ['submeasureName', 'nodeValue', 'glAccount'];
-        promise = this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
-          .then(submeasures => {
-            this.submeasures = submeasures;
-            return this.deptUploadPgRepo.getMany(body)
-              .then(docs => docs.map(doc => this.transformAddSubmeasureName(doc)));
-          })
-
+        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Sub-Measure Description', 'Sub-Measure Key', 'Node Value', 'GL Account', 'Report Level 1', 'Report Level 2', 'Report Level 3', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['measure.name', 'sm.name', 'sm.desc', 'sm.submeasureKey', 'nodeValue', 'glAccount', 'sm.reportingLevels[0]', 'sm.reportingLevels[1]', 'sm.reportingLevels[2]', 'updatedBy', 'updatedDate'];
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.deptUploadPgRepo.getMany(body)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            return results[2].map(doc => this.transformAddMeasureAndSubmeasureName(doc));
+          });
         break;
       case 'product-classification':
         excelSheetname = ['Product Classification'];
-        excelHeaders = ['Sub-Measure Name', 'Split Category', 'Split Percentage'];
-        excelProperties = ['submeasureName', 'splitCategory', 'splitPercentage'];
-        promise = this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
-          .then(submeasures => {
-            this.submeasures = submeasures;
-            return this.productClassUploadPgRepo.getMany(body)
-              .then(docs => docs.map(doc => this.transformAddSubmeasureName(doc)));
-          })
+        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Split Category', 'Split Percentage', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['measure.name', 'sm.name', 'splitCategory', 'splitPercentage', 'fiscalMonth', 'updatedBy', 'updatedDate'];
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.productClassUploadPgRepo.getMany(body)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            return results[2].map(doc => this.transformAddMeasureAndSubmeasureName(doc));
+          });
         break;
       case 'submeasure-grouping':
         excelSheetname = ['Sub-Measure Grouping'];
@@ -152,33 +167,33 @@ export default class ReportController extends ControllerBase {
         break;
       case '2t-submeasure-list':
         excelSheetname = ['2t Submeasure List'];
-        excelHeaders = ['Submeasure Name', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
+        excelHeaders = ['Submeasure Name', 'Fiscal Month', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
         excelProperties = ['sub_measure_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         excelFilename = `2T_Sub_Measure_List_Report_${req.dfa.fiscalMonths.prof}.xlsx`;
         promise = this.pgLookupRepo.get2TSebmeasureListReport(req.dfa.fiscalMonths.prof);
         break;
       case 'disti-direct':
         excelSheetname = ['Disti to Direct'];
-        excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'External Theater', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'ext_theater_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
+        excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'External Theater', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'ext_theater_name', 'fiscal_month_id', 'updatedBy', 'updatedDate'];
         promise = this.pgLookupRepo.getDistiToDirectMappingReport(body.fiscalMonth);
         break;
       case 'alternate-sl2':
         excelSheetname = ['Alternate SL2'];
-        excelHeaders = ['Actual SL2', 'Alternate SL2', 'Alternate Country', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
+        excelHeaders = ['Actual SL2', 'Alternate SL2', 'Alternate Country', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'updatedBy', 'updatedDate'];
         promise = this.pgLookupRepo.getAlternateSL2Report(body.fiscalMonth);
         break;
       case 'corp-adjustment':
         excelSheetname = ['Corp Adjustment'];
-        excelHeaders = ['Country Name', 'Sales Territory Code', 'SCMS Value', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
+        excelHeaders = ['Country Name', 'Sales Territory Code', 'SCMS Value', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'updatedBy', 'updatedDate'];
         promise = this.pgLookupRepo.getCorpAdjustmentReport(body.fiscalMonth);
         break;
       case 'sales-split-percentage':
         excelSheetname = ['Sales Split Percentage'];
-        excelHeaders = ['Account Id', 'Company Code', 'Sub Account Code', 'Sales Territory Code', 'Percentage Value', 'Fiscal Month Id', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['account_code', 'company_code', 'sub_account_code', 'sales_territory_code', 'split_percentage', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
+        excelHeaders = ['Account Id', 'Company Code', 'Sub Account Code', 'Sales Territory Code', 'Percentage Value', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['account_code', 'company_code', 'sub_account_code', 'sales_territory_code', 'split_percentage', 'fiscal_month_id', 'updatedBy', 'updatedDate'];
         promise = this.pgLookupRepo.getSalesSplitPercentageReport(body.fiscalMonth);
         break;
       case 'valid-driver':
@@ -306,7 +321,7 @@ export default class ReportController extends ControllerBase {
 
       case 'rule-submeasure':
         excelSheetname = ['History'];
-        excelHeaders = ['Report Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System',
+        excelHeaders = ['Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System',
           'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
           'SM Status', 'SM Updated By', 'SM Updated Date',
           'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country Match', 'Ext Theater Match', 'GL Segments',
@@ -435,13 +450,15 @@ export default class ReportController extends ControllerBase {
 
   }
 
-  transformAddSubmeasureName(obj) {
+  // postgres sm
+  transformAddMeasureAndSubmeasureName(obj) {
     obj = svrUtil.docToObject(obj);
-    const sm = _.find(this.submeasures, {submeasureKey: obj.submeasureKey});
-    obj.submeasureName = sm && sm.name;
+    obj.sm = _.find(this.submeasures, {submeasureKey: obj.submeasureKey});
+    obj.measure = _.find(this.measures, {measureId: obj.sm && obj.sm.measureId}); // some tables have measure_id (dollar), some don't (dept)
     return obj;
   }
 
+  // mongo sm
   transformSubmeasure(sm) {
     sm = svrUtil.docToObject(sm);
     const measure = _.find(this.measures, {measureId: sm.measureId});

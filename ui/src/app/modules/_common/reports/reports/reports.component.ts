@@ -23,6 +23,17 @@ interface ReportSettings {
   moduleId: number;
 }
 
+interface Report {
+  type: string;
+  text: string;
+  disabled: boolean;
+  filename: string;
+  hasSubmeasureOnly: boolean;
+  hasSmAndFiscalMonth: boolean;
+  hasFiscalMonthOnly: boolean;
+  hasMultiFiscalMonthOnly: boolean;
+}
+
 @Component({
   selector: 'fin-reports',
   templateUrl: './reports.component.html',
@@ -108,7 +119,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Disty_to_Direct_Mapping_Report'
     }
   ];
-  report = this.reports[0];
+  report: Report;
 
   constructor(
     private route: ActivatedRoute,
@@ -130,22 +141,24 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       this.measuresAll = _.sortBy(results[0], 'name');
       this.submeasuresAll = _.sortBy(results[1], 'name');
     });
-    this.reset();
+    this.reset(true);
   }
 
-  reset() {
+  reset(init?) {
     this.measureId = undefined;
     this.submeasureName = undefined;
     this.fiscalMonth = undefined;
     this.fiscalMonthMultiSels = [this.fiscalMonthMultis[0].fiscalMonth];
     this.submeasures = [];
     this.fiscalMonths = [];
-    if (this.report.hasSubmeasureOnly || this.report.hasSmAndFiscalMonth || this.report.hasFiscalMonthOnly) {
+    if (!this.report || this.report.hasSubmeasureOnly || this.report.hasSmAndFiscalMonth || this.report.hasFiscalMonthOnly) {
       this.disableDownload = true;
     } else {
       this.disableDownload = false;
     }
-    this.getInitialData();
+    if (!init) {
+      this.getInitialData();
+    }
   }
 
   getInitialData() {

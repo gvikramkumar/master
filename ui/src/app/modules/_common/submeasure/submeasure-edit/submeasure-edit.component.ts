@@ -682,8 +682,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.clearAllocationRequired();
 
     if (this.isDeptUpload() && this.sm.indicators.deptAcct === 'N') {
-      this.sm.indicators.deptAcct = 'Y';
-    } else {
+        this.sm.indicators.deptAcct = 'Y';
+    } else if (!this.isDeptUpload()) {
       this.sm.indicators.deptAcct = 'N';
       this.deptUploadFilename = '';
     }

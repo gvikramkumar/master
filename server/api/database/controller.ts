@@ -1,4 +1,4 @@
-import {injectable} from 'inversify';
+import {inject, injectable, LazyServiceIdentifer} from 'inversify';
 import MeasureController from '../common/measure/controller';
 import ModuleController from '../common/module/controller';
 import {OpenPeriodController} from '../common/open-period/controller';
@@ -20,6 +20,7 @@ import {ApiDfaData} from '../../lib/middleware/add-global-data';
 import * as _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
 import DistiDirectUploadController from '../prof/disti-direct-upload/controller';
+import config from '../../config/get-config';
 
 @injectable()
 export default class DatabaseController {
@@ -30,7 +31,13 @@ export default class DatabaseController {
     private moduleCtrl: ModuleController,
     private moduleSourceCtrl: ModuleSourceController,
     private openPeriodCtrl: OpenPeriodController,
-    private submeasureCtrl: SubmeasureController,
+    // needed to get past circular ref injection error, message was: "missing required @inject or @multiInject annotation"
+    // when trying to injector.get(DatabaseController) in submeasureController. The formal circular reference obtained when both
+    // were injecting each other. Tried @lazyInject, but it appeared to do nothing as submeasureCtrl was null in database controller,
+    // tried this line in submeasureController, but got circular reference as well. Only thing that worked was injector.get in the
+    // submeasureController method (postApproveStep). Surely injector.get used in all methods probabably would have worked?? ... yes
+    // but this is better, at least one has a class wide value
+    @inject(new LazyServiceIdentifer(() => SubmeasureController)) private submeasureCtrl: SubmeasureController,
     private deptUploadCtrl: DeptUploadController,
     private dollarUploadCtrl: DollarUploadController,
     private mappingUploadCtrl: MappingUploadController,
@@ -168,6 +175,39 @@ export default class DatabaseController {
       });
   }
 
+  autoSync(req): Promise<any> {
+    if (config.autoSyncOn) {
+      const syncMap = this.getSyncMapFromUploadType(req);
+      return this.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id)
+        .catch(err => {
+          throw new ApiError('AutoSync error', Object.assign({message: err.message}, err));
+        });
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  getSyncMapFromUploadType(req) {
+    const uploadTypes = {
+      prof: [
+        {type: 'dollar-upload', syncMapProp: 'dfa_prof_input_amnt_upld'},
+        {type: 'mapping-upload', syncMapProp: 'dfa_prof_manual_map_upld'},
+        {type: 'dept-upload', syncMapProp: 'dfa_prof_dept_acct_map_upld'},
+        {type: 'sales-split-upload', syncMapProp: 'dfa_prof_sales_split_pctmap_upld'},
+        {type: 'product-class-upload', syncMapProp: 'dfa_prof_swalloc_manualmix_upld'},
+        {type: 'alternate-sl2-upload', syncMapProp: 'dfa_prof_scms_triang_altsl2_map_upld'},
+        {type: 'corp-adjustments-upload', syncMapProp: 'dfa_prof_scms_triang_corpadj_map_upld'},
+        {type: 'disti-direct-upload', syncMapProp: 'dfa_prof_disti_to_direct_map_upld'},
+      ]
+    };
+    const syncMap = new SyncMap();
+    const syncProp = _.find(uploadTypes[req.dfa.module.abbrev], {type: req.query.uploadType}).syncMapProp;
+    if (!syncProp) {
+      throw new ApiError(`getSyncMapFromUploadType: no syncProp`);
+    }
+    syncMap[syncProp] = true;
+    return syncMap;
+  }
 
 
 }

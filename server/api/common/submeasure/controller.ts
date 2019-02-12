@@ -1,4 +1,4 @@
-import {injectable} from 'inversify';
+import {inject, injectable, LazyServiceIdentifer} from 'inversify';
 import SubmeasureRepo from './repo';
 import {ApiError} from '../../../lib/common/api-error';
 import SubmeasurePgRepo from './pgrepo';
@@ -17,6 +17,8 @@ import DeptUploadImport from '../../prof/upload/dept/import';
 import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'xlsx';
 import AnyObj from '../../../../shared/models/any-obj';
+import {injector, lazyInject} from '../../../lib/common/inversify.config';
+import DatabaseController from '../../database/controller';
 
 
 interface FilterLevel {
@@ -29,6 +31,7 @@ interface FilterLevel {
 
 @injectable()
 export default class SubmeasureController extends ApprovalController {
+  @lazyInject(DatabaseController) databaseController;
 
   constructor(
     protected repo: SubmeasureRepo,
@@ -38,7 +41,7 @@ export default class SubmeasureController extends ApprovalController {
     private productClassUploadRepo: ProductClassUploadRepo,
     private deptUploadRepo: DeptUploadRepo,
     private fileRepo: FileRepo
-) {
+  ) {
     super(repo);
   }
 
@@ -189,7 +192,7 @@ export default class SubmeasureController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'submeasure', 'submeasure', omitProperties);
   }
 
-  postApproveStep(sm, req) {
+  preApproveStep(sm, req) {
     const promises = [];
     // remove product class uploads for this submeasure and add new ones
     if (sm.categoryType === 'Manual Mix') {
@@ -209,22 +212,30 @@ export default class SubmeasureController extends ApprovalController {
       // find temp=Y records, if found, delete for sm.name && temp = N, then change these to temp Y >> N
       promises.push(
         this.deptUploadRepo.getMany({submeasureName: sm.name, temp: 'Y'})
-        .then(tempRecords => {
-          if (tempRecords.length) {
-            return this.deptUploadRepo.removeMany({submeasureName: sm.name, temp: 'N'})
-              .then(() => this.deptUploadRepo.updateMany({submeasureName: sm.name, temp: 'Y'}, {$set: {temp: 'N'}}));
-          }
-        })
-        .then(() => {
-          sm.indicators.deptAcct = 'D';
-        })
+          .then(tempRecords => {
+            if (tempRecords.length) {
+              return this.deptUploadRepo.removeMany({submeasureName: sm.name, temp: 'N'})
+                .then(() => this.deptUploadRepo.updateMany({submeasureName: sm.name, temp: 'Y'}, {$set: {temp: 'N'}}));
+            }
+          })
+          .then(() => {
+            sm.indicators.deptAcct = 'D';
+          })
       );
     }
     return Promise.all(promises)
       .then(() => sm);
   }
 
-  postRejectStep(sm, req) {
+  postApproveStep(data, req): Promise<any> {
+    // we have to avoid circular reference between DatabaseController and SubmeasureController. This required changes in both places
+    // to overcome. See DatabaseController constructor for more info
+    const databaseCtrl = injector.get(DatabaseController);
+    req.query.uploadType = 'dept-upload';
+    return this.databaseController.autoSync(req);
+  }
+
+  preRejectStep(sm, req) {
     // two ways to go, leave dept upload or toss it. Thing is: they can upload and not even save the submeasure, so will
     // always have possiblity of these around. Maybe something small to change and then they'd have to add it again
     // so leave it for now. The concern is: you leave these around on reject (or upload but never submit), and then

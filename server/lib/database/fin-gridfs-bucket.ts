@@ -4,7 +4,7 @@ import {ApiError} from '../common/api-error';
 import _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
 import FileRepo from '../../api/file/repo';
-import * as Q from 'q';
+import Q from 'q';
 import {injectable} from 'inversify';
 
 @injectable()
