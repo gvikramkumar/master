@@ -5,7 +5,6 @@ import {svrUtil} from '../common/svr-util';
 import {ApiError} from '../common/api-error';
 import AnyObj from '../../../shared/models/any-obj';
 import {mgc} from '../database/mongoose-conn';
-import * as Q from 'q';
 
 export default class RepoBase {
   protected Model: Model<any>;

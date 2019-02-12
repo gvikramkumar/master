@@ -52,7 +52,7 @@ Promise.all([mgc.promise, pgc.promise])
         }
       });
 
-      return server.listen(port, '127.0.0.1', function (err) {
+      return server.listen(port, function (err) {
         if (err) {
           console.error('server listen creation error:', err);
           mg.connection.close();
