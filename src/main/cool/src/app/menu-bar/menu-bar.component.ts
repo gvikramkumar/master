@@ -120,7 +120,7 @@ export class MenuBarComponent implements OnInit {
 
                 let textValue = document.createElement('a');
                 textValue.innerText = 'here';
-                textValue.href = '/offerDetailView/' + this.offerId + '/' + this.caseId;
+                textValue.href = 'cool/#/offerDetailView/' + this.offerId + '/' + this.caseId;
 
 
                 let emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
