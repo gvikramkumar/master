@@ -18,8 +18,8 @@
 
         <div class=" tab-pane active" *ngIf="selectedPrimaryOffer === primaryFactor['primaryFactorName']"
             role="tabpanel" id="one">
-
-            <div *ngFor="let secondaryFactor of primaryFactor['primaryCharactertsics']">
+            <div class="row">
+            <div class="col-sm-3" *ngFor="let secondaryFactor of primaryFactor['primaryCharactertsics']">
 
                 <div class="card">
                     <div class="card-block">
@@ -137,6 +137,13 @@
                 </div>
 
             </div>
+            </div>
+
+
+
+
+
+
         </div>
     </div>
 
