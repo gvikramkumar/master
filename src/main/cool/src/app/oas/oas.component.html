@@ -13,131 +13,149 @@
         </li>
     </ul>
 
-
     <div *ngFor="let primaryFactor of oasPrimaryFactorsList">
 
         <div class=" tab-pane active" *ngIf="selectedPrimaryOffer === primaryFactor['primaryFactorName']"
             role="tabpanel" id="one">
 
-            <div *ngFor="let secondaryFactor of primaryFactor['primaryCharactertsics']">
+            <div class="row">
+                <div class="col-sm-3" *ngFor="let secondaryFactor of primaryFactor['primaryCharactertsics']">
 
-                <div class="card">
-                    <div class="card-block">
+                    <div class="card">
+                        <div class="card-block">
 
-                        <h3 class="card-title">
-                            {{secondaryFactor['secondaryFactorName']}}
-                            <span class="pull-right">({{secondaryFactor['secondaryCharactertsics'].length}})</span>
-                        </h3>
+                            <h3 class="card-title">
+                                {{secondaryFactor['secondaryFactorName']}}
+                                <span class="pull-right">({{secondaryFactor['secondaryCharactertsics'].length}})</span>
+                            </h3>
 
-                        <p-accordion>
+                            <p-accordion>
+                                <blockquote class="blockquote--blue">
+                                    <p-accordionTab *ngFor="let char of secondaryFactor['secondaryCharactertsics']"
+                                        header="{{char}}">
 
-                            <p-accordionTab *ngFor="let char of secondaryFactor['secondaryCharactertsics']"
-                                header="{{char}}">
+                                        <form (ngSubmit)="showDialogBox(f)" #f="ngForm">
 
-                                <div>
+                                            <div class="form-group">
 
-                                    <br> Your Selection <br><br>
+                                                <br> Your Selection <br><br>
 
-                                    <button pButton type="button" *ngFor="let attribute of selectedAttribute" [ngClass]="{
+                                                <button pButton type="button"
+                                                    *ngFor="let attribute of selectedAttribute" [ngClass]="{
                                'style2':attribute!=null}" class="ui-button-rounded btn btn--small tooltip"
-                                        (click)="removeAttribute(attribute)">
-                                        <span class="pi pi-exclamation-triangle"> {{attribute}} </span><span
-                                            class="pi pi-times"></span>
-                                    </button>
+                                                    (click)="removeAttribute(attribute)">
+                                                    <span class="pi pi-exclamation-triangle">
+                                                        {{attribute}}
+                                                    </span><span class="pi pi-times"></span>
+                                                </button>
 
-                                </div>
-
-                                <hr><br><br>
-
-                                <div>
-
-                                    Additional Attributes <br><br>
-
-                                    <button pButton type="button"
-                                        *ngFor="let attribute of secondaryFactor['additionalAttributes']"
-                                        [ngClass]="{'style1':attribute!=null}"
-                                        class="ui-button-rounded btn btn--small tooltip"
-                                        (click)="addAttribute(attribute)">
-                                        {{attribute}}
-                                    </button>
-
-                                </div>
-
-                                <hr><br>
-
-                                <div>
-
-                                    <div class="clearfix">
-                                        <p class="pull-left">Challenges</p>
-                                        <p class="pull-right"><a (click)="viewAllChallenges()">
-                                                View All
-                                            </a></p>
-                                    </div>
-
-                                    <ng-hide [hidden]="!showChallenges"><span
-                                            class="pi pi-exclamation-triangle">02</span>
-                                        Challenges for Appliance
-                                    </ng-hide>
-
-                                </div>
-
-                                <hr><br>
-
-                                <div>
-
-                                    <br>Addresed Challenges Comments<br><br>
-
-                                    <div class="ui-g" *ngFor="let selectedCheckBox of selectedCheckBoxValues">
-                                        <div class="ui-g-12">
-                                            <p-checkbox value="{{selectedCheckBox}}" label="{{selectedCheckBox}}">
-                                            </p-checkbox>
-                                        </div>
-                                    </div>
-
-                                    <br>
-                                </div>
-
-                                <br>
-                                <hr><br>
-
-                                <div>
-
-                                    <p-dialog name="events" [(visible)]="showDialog" width="300">
-                                        <h3 class="text-center"><span class="pi pi-exclamation-triangle"></span></h3>
-                                        <p class="text-center"><b>Are You Sure?</b></p>
-                                        <p class="text-center">Confirm To Proceed</p>
-                                        <p-footer>
-                                            <div class="clearfix text-center">
-                                                <button type="button" pButton
-                                                    [ngStyle]="{'color': 'white', 'background':'gray'}"
-                                                    (click)="onComplete()" label="No"></button>
-                                                <button type="button" pButton
-                                                    [ngStyle]="{'color': 'white', 'background':'green'}"
-                                                    (click)="onComplete()" label="Yes"></button>
                                             </div>
-                                        </p-footer>
-                                    </p-dialog>
 
-                                    <div class="text-center clearfix">
-                                        <button pButton type="button" class="btn btn--small tooltip "><span
-                                                class="pi pi-times"></span>
-                                            Cancel</button>
-                                        <button pButton type="button" class="btn btn--small tooltip"
-                                            (click)="showDialogBox()">Update
-                                            <span class="pi pi-check"></span></button>
-                                    </div>
+                                            <br>
+                                            <hr><br>
 
-                                </div>
+                                            <div class="form-group">
 
-                            </p-accordionTab>
+                                                Additional Attributes <br><br>
 
-                        </p-accordion>
+                                                <button pButton type="button"
+                                                    *ngFor="let attribute of secondaryFactor['additionalAttributes']"
+                                                    [ngClass]="{'style1':attribute!=null}"
+                                                    class="ui-button-rounded btn btn--small tooltip"
+                                                    (click)="addAttribute(attribute)">
+                                                    {{attribute}}
+                                                </button>
 
+                                            </div>
+
+                                            <br>
+                                            <hr><br>
+
+                                            <div class="form-group">
+
+                                                <div class="clearfix">
+                                                    <p class="pull-left">Challenges</p>
+                                                    <p class="pull-right"><a (click)="viewAllChallenges()">
+                                                            View All
+                                                        </a></p>
+                                                </div>
+
+                                                <ng-hide [hidden]="!showChallenges"><span
+                                                        class="pi pi-exclamation-triangle">02</span>
+                                                    Challenges for Appliance
+                                                </ng-hide><br>
+
+                                            </div>
+
+                                            <br>
+                                            <hr><br>
+
+                                            <div class="form-group">
+
+                                                <div class="clearfix">
+                                                    <p class="pull-left">Addresed Challenges</p>
+                                                    <p class="pull-right"> <a (click)="viewAllChallenges()">
+                                                            <i class="icon-comment"></i> Comments
+                                                        </a></p>
+                                                </div>
+
+                                                <div class="ui-g"
+                                                    *ngFor="let selectedCheckBox of selectedCheckBoxValues">
+                                                    <div class="ui-g-12">
+                                                        <p-checkbox value="{{selectedCheckBox}}"
+                                                            label="{{selectedCheckBox}}">
+                                                        </p-checkbox>
+                                                    </div>
+                                                </div>
+
+                                                <br>
+                                            </div>
+
+                                            <br>
+                                            <hr><br>
+
+                                            <div class="form-group">
+
+                                                <p-dialog name="events" [(visible)]="showDialog" width="300">
+                                                    <h3 class="text-center"><span
+                                                            class="pi pi-exclamation-triangle"></span>
+                                                    </h3>
+                                                    <p class="text-center"><b>Are You Sure?</b></p>
+                                                    <p class="text-center">Confirm To Proceed</p>
+                                                    <p-footer>
+                                                        <div class="clearfix text-center">
+                                                            <button type="button" pButton
+                                                                [ngStyle]="{'color': 'white', 'background':'gray'}"
+                                                                (click)="onComplete()" label="No"></button>
+                                                            <button type="button" pButton
+                                                                [ngStyle]="{'color': 'white', 'background':'green'}"
+                                                                (click)="onComplete()" label="Yes"></button>
+                                                        </div>
+                                                    </p-footer>
+                                                </p-dialog>
+
+                                                <div class="text-center clearfix">
+                                                    <button pButton type="button" class="btn btn--small tooltip "><span
+                                                            type="reset" class="pi pi-times"></span>
+                                                        Cancel</button>
+                                                    <button pButton type="button" class="btn btn--small tooltip"
+                                                        type="submit">Update
+                                                        <span class="pi pi-check"></span></button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+
+                                    </p-accordionTab>
+                                </blockquote>
+                            </p-accordion>
+
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
