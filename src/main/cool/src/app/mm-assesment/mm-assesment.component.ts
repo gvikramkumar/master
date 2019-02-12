@@ -180,58 +180,7 @@ export class MmAssesmentComponent implements OnInit {
         that.offerData = data;
         console.log("selectedCharacteristics", selectedCharacteristics['Offer Characteristics']);
         that.offerData['groups'].forEach(group => {
-          that.groupNames.push(group['groupName']);
-          let curGroup = {};
-          group['subGroup'].forEach(g => {
-            // console.log("g:::",g.subGroupName)
-            if (Object.keys(selectedCharacteristics).length != 0) {
-              this.showEditbutton = true;
-              this.disablefields = true;
-              this.offerArray = selectedCharacteristics['Offer Characteristics'][g['subGroupName']];
-            }
-            curGroup[g['subGroupName']] = [];
-            g.choices.forEach((c) => {
-              this.match = false;
-              const splitArr = c.split('#');
-              const attrName = splitArr[0];
-              const description = splitArr[1];
-
-              // if (this.offerArray && this.offerArray.length == 1 && this.offerArray == attrName) {
-
-              //   curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-              //   this.match = true;
-              // }
-
-              // if (this.offerArray && this.offerArray.length > 1) {
-              //   this.offerArray.forEach(value => {
-              //     if (attrName === value) {
-
-              //       curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-              //       this.match = true;
-
-              //     }
-              //     if (this.match === true) {
-              //       return false;
-              //     }
-              //   });
-              // }
-
-              // if (this.match === false) {
-              //   curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
-              // }
-
-
-              if (selectedCharacteristics[group['groupName']] != null &&
-                selectedCharacteristics[group['groupName']][g['subGroupName']] != null &&
-                  (selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c) || selectedCharacteristics[group['groupName']][g['subGroupName']].includes(attrName))
-                  ){
-                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-               } else {
-                 curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
-               }
-            });
-          });
-          that.groupData.push(curGroup);
+          this.getGroupData(group, selectedCharacteristics);
         });
         if (this.selectedGroupData.length > 0) {
           alert("no final Group data");
@@ -248,6 +197,32 @@ export class MmAssesmentComponent implements OnInit {
     });
   }
 
+  getGroupData(group, selectedCharacteristics, nextSetpFlag = false) {
+    if (nextSetpFlag && group['groupName'] === 'Offer Characteristics') {
+      // if it's from to next step api, skip the first group data
+      return;
+    }
+    this.groupNames.push(group['groupName']);
+    let curGroup = {};
+    group['subGroup'].forEach(g => {
+      curGroup[g['subGroupName']] = [];
+      g.choices.forEach((c) => {
+        this.match = false;
+        const splitArr = c.split('#');
+        const attrName = splitArr[0];
+        const description = splitArr[1];
+        if (selectedCharacteristics[group['groupName']] != null &&
+          selectedCharacteristics[group['groupName']][g['subGroupName']] != null &&
+            (selectedCharacteristics[group['groupName']][g['subGroupName']].includes(c) || selectedCharacteristics[group['groupName']][g['subGroupName']].includes(attrName))
+            ){
+           curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
+         } else {
+           curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
+         }
+      });
+    });
+    this.groupData.push(curGroup);
+  }
 
   //downloadPDF
   downloadPDF() {
@@ -275,7 +250,6 @@ export class MmAssesmentComponent implements OnInit {
 
 
   // Attributes Selection Rules
-
   getSubgroupAttributes(curGroup, groupName) {
     let offerComponentAttrs = curGroup[groupName];
     let res = [];
@@ -452,7 +426,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toNextStep() {
-
+debugger;
     if (this.activeTabIndex === 0) {
       var index = 0;
       var groupKeys = this.getGroupKeys(this.groupData[0]);
@@ -489,6 +463,15 @@ export class MmAssesmentComponent implements OnInit {
         }
         this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
         this.getStakeData(data['mmModel']);
+
+        // get group data
+        // pre process
+        this.groupNames.splice(1);
+        this.groupData.splice(1);
+        data['groups'].forEach(group => {
+          this.getGroupData(group, {}, true);
+        });
+        
       });
     } else {
       if (this.activeTabIndex < this.groupNames.length - 1) {
