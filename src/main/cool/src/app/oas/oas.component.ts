@@ -5,6 +5,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { Message } from 'primeng/components/common/api';
+import { NgForm } from '@angular/forms';
 
 
 export class OasPrimaryFactors {
@@ -43,9 +44,7 @@ export class OasSecondaryFactors {
 })
 export class OasComponent implements OnInit {
 
-
-  gauge: number;
-
+  cols: any[];
   items: MenuItem[];
   activeItem: MenuItem;
 
@@ -70,7 +69,6 @@ export class OasComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService) {
 
-    this.gauge = 75;
     this.showDialog = false;
     this.showChallenges = false;
 
@@ -118,9 +116,19 @@ export class OasComponent implements OnInit {
 
     this.activeItem = this.items[2];
 
+    this.cols = [
+      { field: 'vin', header: 'Vin' },
+      { field: 'year', header: 'Year' },
+      { field: 'brand', header: 'Brand' },
+      { field: 'color', header: 'Color' }
+    ];
+
 
   }
-  showDialogBox() {
+  showDialogBox(form: NgForm) {
+
+
+    console.log(form);
 
     if (this.showDialog) {
       this.showDialog = false;
