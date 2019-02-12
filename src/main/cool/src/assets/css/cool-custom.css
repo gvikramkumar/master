@@ -933,6 +933,7 @@ span[class*="display-"] {
 .cool.cui .gauge.gauge--small {
   width: 30px;
   height: 30px;
+  top: -8px;
 }
 .cool.cui .gauge.gauge--small .gauge__inset {
   width: 26px;

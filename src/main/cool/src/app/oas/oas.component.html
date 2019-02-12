@@ -25,7 +25,21 @@
 
                             <h3 class="card-title">
                                 {{secondaryFactor['secondaryFactorName']}}
-                                <span class="pull-right">({{secondaryFactor['secondaryCharactertsics'].length}})</span>
+
+                                <div class="pull-right gauge gauge--small gauge--success" data-percentage="25">
+                                  <div class="gauge__circle">
+                                      <div class="mask full">
+                                          <div class="fill"></div>
+                                      </div>
+                                      <div class="mask half">
+                                          <div class="fill"></div>
+                                          <div class="fill fix"></div>
+                                      </div>
+                                  </div>
+                                  <div class="gauge__inset">
+                                      <div class="gauge__percentage">{{secondaryFactor['secondaryCharactertsics'].length}}</div>
+                                  </div>
+                              </div>
                             </h3>
 
                             <p-accordion>
