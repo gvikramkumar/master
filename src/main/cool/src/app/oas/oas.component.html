@@ -1,0 +1,178 @@
+<!-- OSA -->
+
+<div class="container">
+
+    <p-messages [(value)]="msgs"></p-messages>
+
+    <ul id="tabsv6" class="tabs tabs--bordered base-margin-top base-margin-bottom" role="tablist" style="z-index: 0">
+        <li class="tab active" *ngFor="let primaryFactor of oasPrimaryFactorsList; let first = first;"
+            [ngClass]="{firstItem: first}" role="presentation"
+            [class.active]="selectedPrimaryOffer===primaryFactor['primaryFactorName']">
+            <a (click)="selectedPrimaryOffer = primaryFactor['primaryFactorName']" aria-controls="one" role="tab"
+                data-toggle="tab">{{primaryFactor['primaryFactorName']}}</a>
+        </li>
+    </ul>
+
+    <div class="oas" *ngFor="let primaryFactor of oasPrimaryFactorsList">
+
+        <div class=" tab-pane active" *ngIf="selectedPrimaryOffer === primaryFactor['primaryFactorName']"
+            role="tabpanel" id="one">
+            <div class="row">
+                <div class="col-sm-3" *ngFor="let secondaryFactor of primaryFactor['primaryCharactertsics']">
+
+                    <div class="card">
+                        <div class="card-block">
+
+                            <h3 class="card-title">
+                                {{secondaryFactor['secondaryFactorName']}}
+
+                                <div class="pull-right gauge gauge--small gauge--success" data-percentage="25">
+                                    <div class="gauge__circle">
+                                        <div class="mask full">
+                                            <div class="fill"></div>
+                                        </div>
+                                        <div class="mask half">
+                                            <div class="fill"></div>
+                                            <div class="fill fix"></div>
+                                        </div>
+                                    </div>
+                                    <div class="gauge__inset">
+                                        <div class="gauge__percentage">
+                                            {{secondaryFactor['secondaryCharactertsics'].length}}</div>
+                                    </div>
+                                </div>
+                            </h3>
+
+                            <p-accordion>
+                                <blockquote class="blockquote--blue">
+                                    <p-accordionTab *ngFor="let char of secondaryFactor['secondaryCharactertsics']"
+                                        header="{{char}}">
+
+                                        <form (ngSubmit)="showDialogBox(f)" #f="ngForm">
+
+                                            <div class="form-group">
+
+                                                <span class="form-group--label">Your Selection </span>
+
+                                                <button pButton type="button"
+                                                    *ngFor="let attribute of selectedAttribute" [ngClass]="{
+                               'style2':attribute!=null}" class="ui-button-rounded btn btn--small tooltip"
+                                                    (click)="removeAttribute(attribute)">
+                                                    <span class="pi pi-exclamation-triangle"></span>
+                                                    {{attribute}}
+                                                    <span class="pi pi-times"></span>
+                                                </button>
+
+                                            </div>
+
+                                            <hr class="divider divider--compressed" />
+
+                                            <div class="form-group">
+
+                                                <span class="form-group--label">Additional Attributes </span>
+
+                                                <button pButton type="button"
+                                                    *ngFor="let attribute of secondaryFactor['additionalAttributes']"
+                                                    [ngClass]="{'style1':attribute!=null}"
+                                                    class="ui-button-rounded btn btn--small tooltip"
+                                                    (click)="addAttribute(attribute)">
+                                                    {{attribute}}
+                                                </button>
+
+                                            </div>
+
+                                            <hr class="divider divider--compressed" />
+
+                                            <div class="form-group">
+
+                                                <div class="clearfix">
+                                                    <p class="pull-left"><span
+                                                            class="form-group--label">Challenges</span></p>
+                                                    <p class="pull-right"><a (click)="viewAllChallenges()">
+                                                            View All
+                                                        </a></p>
+                                                </div>
+
+                                                <ng-hide [hidden]="!showChallenges"><span
+                                                        class="pi pi-exclamation-triangle text-warning"></span>02
+                                                    Challenges for Appliance
+                                                </ng-hide><br>
+
+                                            </div>
+
+                                            <hr class="divider divider--compressed" />
+
+                                            <div class="form-group">
+
+                                                <div class="clearfix">
+                                                    <p class="pull-left"><span class="form-group--label">Addresed
+                                                            Challenges</span></p>
+                                                    <p class="pull-right"> <a (click)="viewAllChallenges()">
+                                                            <i class="icon-comment"></i> Comments
+                                                        </a></p>
+                                                </div>
+
+                                                <div class="form-group form-group--inline form-group--compressed">
+
+
+                                                    <p-checkbox value="{{ selectedCheckBox }}"
+                                                        label="{{ selectedCheckBox }}"
+                                                        *ngFor="let selectedCheckBox of selectedCheckBoxValues">
+                                                    </p-checkbox>
+
+
+                                                </div>
+
+
+                                            </div>
+
+                                            <hr class="divider divider--compressed" />
+
+                                            <div class="form-group">
+
+                                                <p-dialog name="events" [(visible)]="showDialog" width="300">
+                                                    <h3 class="text-center"><span
+                                                            class="pi pi-exclamation-triangle text-warning"></span>
+                                                    </h3>
+                                                    <p class="text-center"><b>Are You Sure?</b></p>
+                                                    <p class="text-center">Confirm To Proceed</p>
+                                                    <p-footer>
+                                                        <div class="clearfix text-center">
+                                                            <button type="button" pButton
+                                                                [ngStyle]="{'color': 'white', 'background':'gray'}"
+                                                                (click)="onComplete()" label="No"></button>
+                                                            <button type="button" pButton
+                                                                [ngStyle]="{'color': 'white', 'background':'green'}"
+                                                                (click)="onComplete()" label="Yes"></button>
+                                                        </div>
+                                                    </p-footer>
+                                                </p-dialog>
+
+                                                <div class="btn-group btn-group--square">
+                                                    <button pButton type="button" class="btn btn--secondary tooltip ">
+                                                        <span class="pi pi-times"></span> Cancel
+                                                    </button>
+                                                    <button pButton type="button" class="btn btn--secondary tooltip"
+                                                        (click)="showDialogBox()">
+                                                        <span class="pi pi-check"></span> Update
+                                                    </button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+
+                                    </p-accordionTab>
+                                </blockquote>
+                            </p-accordion>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -16,6 +16,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
   currentOfferId:string;
   caseId:string;
+  
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -29,5 +30,6 @@ export class OfferSolutionQuestionComponent implements OnInit {
   }
 
   ngOnInit() {
+    debugger;
   }
 }
