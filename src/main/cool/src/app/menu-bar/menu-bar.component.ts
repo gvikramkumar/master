@@ -14,11 +14,11 @@ import { LocalStorageService } from 'ngx-webstorage';
 })
 export class MenuBarComponent implements OnInit {
 
-    @Input() caseId:string;
-    @Input() currentMMModel:string;
-    @Input() offerId:string;
-    @Input() offerName:string;
-    @Input() stakeData:object;
+    @Input() caseId: string;
+    @Input() currentMMModel: string;
+    @Input() offerId: string;
+    @Input() offerName: string;
+    @Input() stakeData: object;
     @Output() updateMessage = new EventEmitter<string>();
     items: MenuItem[];
     showPopup = false;
@@ -28,6 +28,7 @@ export class MenuBarComponent implements OnInit {
     currentOfferId: String = '';
     holdStatusValid = true;
     cancelStatusValid = true;
+    currentUsername: any;
     currentOfferName;
 
     constructor(private menuBarService: MenuBarService,
@@ -37,15 +38,8 @@ export class MenuBarComponent implements OnInit {
         private localStorage: LocalStorageService) {
         this.activatedRoute.params.subscribe(params => {
             this.currentOfferId = params['id'];
+            this.caseId = params['id2'];
         });
-    }
-
-    ngOnInit() {
-        this.currentOfferName = this.localStorage.retrieve('currentOfferName');
-        this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
-        this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
-        this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
-        this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
 
         this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
             if (data != null) {
@@ -59,6 +53,16 @@ export class MenuBarComponent implements OnInit {
             }
 
         });
+    }
+
+    ngOnInit() {
+        this.currentOfferName = this.localStorage.retrieve('currentOfferName');
+        this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
+        this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
+        this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
+        this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
+
+
 
         this.items = [
             {
@@ -108,15 +112,22 @@ export class MenuBarComponent implements OnInit {
 
     closePopup(message) {
         if (message != null && message !== '') {
-           let emailNotificationData = {};
+            let emailNotificationData = {};
             if (message === 'hold') {
                 this.holdStatusValid = false;
                 this.cancelStatusValid = false;
+                this.currentUsername = this.userService.getName();
+
+                let textValue = document.createElement('a');
+                textValue.innerText = 'here';
+                textValue.href = 'cool/#/offerDetailView/' + this.offerId + '/' + this.caseId;
+
+
                 let emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
-                let emailBody = `Hello,
-                ${this.offerName}(${this.offerId}) has been on hold by ${this.userService.getUserId()}.
+                let emailBody = `Hello ${this.currentUsername},
+                ${this.offerName}(${this.offerId}) has been on hold by ${this.userService.getName()}.
                 All related actions have been disabled.
-                Click here to view on hold offer in COOL.
+                Click ${textValue.href} to view on hold offer in COOL.
                 You are receiving this email because you have been identified as a stakeholder for ${this.offerName}.`;
                 let stakeHolders = [];
                 for (let prop in this.stakeData) {
@@ -139,11 +150,17 @@ export class MenuBarComponent implements OnInit {
             if (message === 'cancel') {
                 this.holdStatusValid = false;
                 this.cancelStatusValid = false;
+                this.currentUsername = this.userService.getName();
+
+                let textValue = document.createElement('a');
+                textValue.innerText = 'here';
+                textValue.href = 'cool/#/offerDetailView/' + this.offerId + '/' + this.caseId;
+
                 let emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
-                let emailBody = `Hello,
-                ${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}.
+                let emailBody = `Hello ${this.currentUsername},
+                ${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getName()}.
                 All related actions have been disabled.
-                Click here to view canceled offer in COOL.
+                Click ${textValue} to view canceled offer in COOL.
                 You are receiving this email because you have been identified as a stakeholder for ${this.offerName}.`;
                 let stakeHolders = [];
                 for (let prop in this.stakeData) {
@@ -161,7 +178,7 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
-                  
+
 
                 });
             }

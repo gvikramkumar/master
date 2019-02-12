@@ -7,14 +7,21 @@ import { NgForm } from '@angular/forms';
 import { ActionsService } from '../services/actions.service';
 import { CreateActionApprove } from '../models/create-action-approve';
 import { OverlayPanel } from 'primeng/overlaypanel';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { MenuItem } from 'primeng/api';
+import { CheckboxModule } from 'primeng/checkbox';
+import { TableModule } from 'primeng/table';
+import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  providers: [DashboardService]
+  providers: [DashboardService, MessageService, ConfirmationService]
 })
 export class DashboardComponent implements OnInit {
+
   @ViewChild('createActionForm') createActionForm: NgForm;
   @ViewChild('createActionApproveForm') createActionApproveForm: NgForm;
 
@@ -61,14 +68,20 @@ export class DashboardComponent implements OnInit {
   selectedFile: any;
 
 
+
   constructor(private dashboardService: DashboardService,
     private router: Router,
     private createOfferService: CreateOfferService,
     private userService: UserService,
-    private actionsService: ActionsService) {
+    private actionsService: ActionsService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) {
   }
 
   ngOnInit() {
+
+
     this.offerColumns = [
       { field: 'offerId', header: 'OFFER ID' },
       { field: 'offerName', header: 'OFFER NAME' },
@@ -76,10 +89,15 @@ export class DashboardComponent implements OnInit {
       { field: 'expectedLaunchDate', header: 'LAUNCH DATE' }
     ];
 
+
     this.getMyActionsAndNotifications();
     this.getMyOffers();
     this.getFunctions();
+
   }
+
+
+
 
   private getMyActionsAndNotifications() {
 
@@ -165,7 +183,7 @@ export class DashboardComponent implements OnInit {
     overlaypanel.toggle(event);
   }
 
- 
+
   // getActionFormValues() {
   //   if (this.selectedAction.offerId && this.selectedAction.caseId) {
   //     this.actionsService.getAssignee(this.selectedAction.offerId).subscribe(resAssignee => {
@@ -209,7 +227,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  manualActioncomplete(){
+  manualActioncomplete() {
 
   }
 
@@ -264,7 +282,7 @@ export class DashboardComponent implements OnInit {
     const taskId = this.selectedAction.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
-    const action ='Approved';
+    const action = 'Approved';
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,
@@ -284,7 +302,7 @@ export class DashboardComponent implements OnInit {
     const taskId = this.selectedAction.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
-    const action ='Approved';
+    const action = 'Approved';
     const commentValue = this.reason;
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
@@ -304,13 +322,13 @@ export class DashboardComponent implements OnInit {
   createApproveActionWithDetails(overlaypanel: OverlayPanel) {
     const fd = new FormData();
     fd.append('file', this.selectedFile, this.selectedFile.name);
-    this.dashboardService.postFileUploadForAction(this.selectedCaseId,fd).subscribe(data => {
+    this.dashboardService.postFileUploadForAction(this.selectedCaseId, fd).subscribe(data => {
     });
 
     const taskId = this.selectedAction.taskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
-    const action ='Approved';
+    const action = 'Approved';
     const commentValue = this.reason;
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
@@ -365,7 +383,7 @@ export class DashboardComponent implements OnInit {
     this.createOfferService.currenTOffer.next('');
     this.router.navigate(['/coolOffer']);
   }
-  goToofferSolutioning(offerId,caseId,actiontTitle){
+  goToofferSolutioning(offerId, caseId, actiontTitle) {
     if (actiontTitle.toLowerCase() === 'provide details') {
       this.router.navigate(['/offerSolutioning', offerId, caseId]);
     }
@@ -378,41 +396,50 @@ export class DashboardComponent implements OnInit {
   enableSubmit(event): void {
     let passedString = event.target.value;
     let inputValue = passedString.trim();
-    if(inputValue === "" || inputValue === null) {
-     this.buttonIsDisabled=false;
+    if (inputValue === "" || inputValue === null) {
+      this.buttonIsDisabled = false;
     } else {
-     this.buttonIsDisabled=true;
+      this.buttonIsDisabled = true;
     }
- }
+  }
 
-//  submit() {
-//   let holdData= {};
-//   holdData['taskId'] = '';
-//   holdData['userId'] = this.userService.getUserId();
-//   holdData['caseId'] = this.caseId;
-//   holdData['offerId'] = this.currentOfferId;
-//   holdData['taskName'] = 'discard';
-//   holdData['action'] = 'hold';
-//   holdData['comment'] = this.reason;
+  // confirm() {
+  //   this.confirmationService.confirm({
+  //     message: 'Are you sure that you want to perform this action?',
+  //     accept: () => {
+  //       //Actual logic to perform a confirmation
+  //     }
+  //   });
+  // }
 
-//   let cancelData={};
-//   cancelData['taskId'] = '';
-//   cancelData['userId'] = this.userService.getUserId();
-//   cancelData['caseId'] = this.caseId;
-//   cancelData['offerId'] = this.currentOfferId;
-//   cancelData['taskName'] = 'discard';
-//   cancelData['action'] = 'cancel';
-//   cancelData['comment'] = this.reason;
+  //  submit() {
+  //   let holdData= {};
+  //   holdData['taskId'] = '';
+  //   holdData['userId'] = this.userService.getUserId();
+  //   holdData['caseId'] = this.caseId;
+  //   holdData['offerId'] = this.currentOfferId;
+  //   holdData['taskName'] = 'discard';
+  //   holdData['action'] = 'hold';
+  //   holdData['comment'] = this.reason;
 
-//   if (this.popupType === 'hold') {
-//     this.menuBarService.holdOffer(holdData).subscribe(res => {
-//       this.closePopup.next('hold');
-//     });
-//   } else if (this.popupType === 'cancel') {
-//     this.menuBarService.cancelOffer(cancelData).subscribe(res => {
-//       this.closePopup.next('cancel');
-//     });
-//   }
-  
-// }
+  //   let cancelData={};
+  //   cancelData['taskId'] = '';
+  //   cancelData['userId'] = this.userService.getUserId();
+  //   cancelData['caseId'] = this.caseId;
+  //   cancelData['offerId'] = this.currentOfferId;
+  //   cancelData['taskName'] = 'discard';
+  //   cancelData['action'] = 'cancel';
+  //   cancelData['comment'] = this.reason;
+
+  //   if (this.popupType === 'hold') {
+  //     this.menuBarService.holdOffer(holdData).subscribe(res => {
+  //       this.closePopup.next('hold');
+  //     });
+  //   } else if (this.popupType === 'cancel') {
+  //     this.menuBarService.cancelOffer(cancelData).subscribe(res => {
+  //       this.closePopup.next('cancel');
+  //     });
+  //   }
+
+  // }
 }

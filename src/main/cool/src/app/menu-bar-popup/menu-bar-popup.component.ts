@@ -58,7 +58,7 @@ export class MenuBarPopupComponent implements OnInit {
 
   close() {
     this.closePopup.next('');
-   
+    this.reason = '';
   }
 
   submit() {

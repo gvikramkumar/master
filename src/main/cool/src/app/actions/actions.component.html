@@ -32,8 +32,7 @@
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
                 <p-column field="offerId" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                 <a (click)="showOfferPopUp($event,offerData,popturboContent)">>
-                     {{actionData.offerId}}<br /></a>
+                 <a (click)="showOfferPopUp($event,offerData,popturboContent)">{{actionData.offerId}}</a><br />
                     <span>{{actionData.offerName}}</span>
                     <!--new code strarts here-->
 
@@ -49,30 +48,31 @@
                 </p-column>
                 <p-column field="actions" sortable="true" header="ACTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span class="offerName">{{actionData.actiontTitle}} <br /></span>
+                    <span class="offerName">{{actionData.titleValue}} <br /></span>
                       <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
                       <span *ngIf="actionData.attachment == true" class="offerDesc" (click) = "getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
-          
-                  
+
+
                     <!-- my new code coming here -->
-                    <ng-template #popCommentContent ptemplate="body">
+                    <!-- <ng-template #popCommentContent ptemplate="body">
                       <div  class="popover" style="width:501px;left:230px">
 
                         <div class="popover__body">
                           <h5>View/Edit Comment</h5>
 
                           <app-viewcomment [taskId] = "actionData.taskId" [popContent] = "p4"></app-viewcomment>
-                        
+
                           <a class="modal__close" id="popover_close"
                           ><span class="icon-close"
                             (click)="displayActionPop(p4)"></span></a>
-                        </div> 
+                        </div>
 
                       </div>
-                    </ng-template>
-                    <span [ngbPopover]="popCommentContent" (click)="p4.open()" autoClose="'outside'" #p4="ngbPopover"
-                      triggers="manual" pTooltip="Comments" placement="top" class="icon-comment" aria-hidden="true"></span>
+                    </ng-template> -->
+                    <!-- <span [ngbPopover]="popCommentContent" (click)="p4.open()" autoClose="'outside'" #p4="ngbPopover"
+                      triggers="manual" pTooltip="Comments" placement="top" class="icon-comment" aria-hidden="true"></span> -->
                     <!--new code ending here-->
+                   <span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right" pTooltip="Comments" placement="top"></span>
                   </ng-template>
                 </p-column>
                 <p-column field="createdBy" sortable="true" header="OFFER CREATED BY">
@@ -111,6 +111,15 @@
         </div>
       </div>
     </div>
+    <!-- comments overlay -->
+    <p-overlayPanel #popCommentContent [showCloseIcon]="true">
+      <div *ngIf="selectedAction" class="comments-modal">
+        <div class="popover__body">
+          <h1 class="modalheader">View/Edit Comment</h1>
+          <app-viewcomment [taskId]="selectedAction.taskId" [event]="commentEvent" [popContent]="popCommentContent"></app-viewcomment>
+        </div>
+      </div>
+    </p-overlayPanel>
     <p-dialog [showHeader]="false" [responsive]="true" [width]="700" [height]="500" [minY]="70" [(visible)]="displayActionPhase"
       [closable]="true">
       <div class="row">
@@ -162,7 +171,7 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="milestoneName">MILESTONE</label>
-                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val">
+                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val" required>
                     <!-- <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
                       required ngModel #milestoneName="ngModel">
                       <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
