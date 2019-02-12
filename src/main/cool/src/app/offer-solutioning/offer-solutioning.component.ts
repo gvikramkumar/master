@@ -43,7 +43,6 @@ export class OfferSolutioningComponent implements OnInit {
   offerName: string;
   offerOwner: string;
 
-
   displayLeadTime = false;
   noOfWeeksDifference: string;
 
@@ -60,7 +59,14 @@ export class OfferSolutioningComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.offerSolutionData = this.offersolutioningService.getSolutionData(this.currentOfferId);
+    // this.offerSolutionData = this.offersolutioningService.getSolutionData(this.currentOfferId);
+    this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
+      this.offerSolutionData = data;
+      if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
+        this.getSolutionGroups();
+        this.createActionAndNotification();
+      }
+    });
     let that = this;
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
@@ -77,7 +83,6 @@ export class OfferSolutioningComponent implements OnInit {
           this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
         }
       );
-
 
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
@@ -99,20 +104,20 @@ export class OfferSolutioningComponent implements OnInit {
 
       this.stakeData = this.stakeHolderInfo;
 
-      if (this.offerSolutionData == null) {
-        this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
-          this.offerSolutionData = data;
-          if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-            this.getSolutionGroups();
-            this.createActionAndNotification();
-          }
-        });
-      } else {
-        if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-          this.getSolutionGroups();
-          this.createActionAndNotification();
-        }
-      }
+      // if (this.offerSolutionData == null) {
+      //   this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
+      //     this.offerSolutionData = data;
+      //     if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
+      //       this.getSolutionGroups();
+      //       this.createActionAndNotification();
+      //     }
+      //   });
+      // } else {
+      //   if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
+      //     this.getSolutionGroups();
+      //     this.createActionAndNotification();
+      //   }
+      // }
     });
   }
 
@@ -199,7 +204,6 @@ export class OfferSolutioningComponent implements OnInit {
     }
   }
 
-
   processStakeHolderData(stakeHolderData) {
     stakeHolderData.forEach(stakeHolder => {
       if (this.stakeHolderInfo[stakeHolder['offerRole']] == null) {
@@ -267,32 +271,34 @@ export class OfferSolutioningComponent implements OnInit {
     nextStepPostData['secondaryBEList'] = this.firstData['secondaryBEList'];
   
     nextStepPostData['solutioningDetails'] = [];
-    // result['groups'].forEach(group => {
-    //   group['subGroup'].forEach(subGroup => {
-    //     let solutioningDetail =  {
-    //       'dimensionGroup': group['groupName'],
-    //       'dimensionSubgroup': subGroup['subGroupName'],
-    //       'dimensionAttribute': subGroup['selected'],
-    //       'primaryFunctions':[],
-    //       'secondaryFunctions':[],
-    //       'Details':[]
-    //     };
-    //     if (subGroup['listGrpQuestions'] != null && subGroup['listGrpQuestions'].length > 0) {
-    //       solutioningDetail['primaryFunctions'] = subGroup['listGrpQuestions'][0]['primaryPOC'];
-    //       solutioningDetail['secondaryFunctions'] = subGroup['listGrpQuestions'][0]['secondaryPOC'];
-    //       subGroup['listGrpQuestions'].forEach(question => {
-    //         let detail = {
-    //           'solutioninQuestion' : question['question'],
-    //           'egenieAttributeName' : question['egineAttribue'],
-    //           'oSGroup' : question['osGroup']
-    //         };
-    //         solutioningDetail['Details'].push(detail);
-    //       });
-    //     }
-    //     nextStepPostData['solutioningDetails'].push(solutioningDetail);
-    //   });
-    // });
-    console.log(nextStepPostData);
+    this.offerSolutionData['groups'].forEach(group => {
+      group['subGroup'].forEach(subGroup => {
+        let solutioningDetail =  {
+          'dimensionGroup': group['groupName'],
+          'dimensionSubgroup': subGroup['subGroupName'],
+          'dimensionAttribute': subGroup['selected'],
+          'primaryFunctions':[],
+          'secondaryFunctions':[],
+          'Details':[]
+        };
+        if (subGroup['listGrpQuestions'] != null && subGroup['listGrpQuestions'].length > 0) {
+          solutioningDetail['primaryFunctions'] = subGroup['listGrpQuestions'][0]['primaryPOC'];
+          solutioningDetail['secondaryFunctions'] = subGroup['listGrpQuestions'][0]['secondaryPOC'];
+          subGroup['listGrpQuestions'].forEach(question => {
+            let detail = {
+              'solutioninQuestion' : question['question'],
+              'egenieAttributeName' : question['egineAttribue'],
+              'oSGroup' : question['osGroup'],
+              'solutioningAnswer': question['answer']
+            };
+            solutioningDetail['Details'].push(detail);
+          });
+        }
+        nextStepPostData['solutioningDetails'].push(solutioningDetail);
+      });
+    });
+    
+    this.offersolutioningService.updateOfferDetails(nextStepPostData).subscribe(res => {
     let solutioningProceedPayload = {
       'taskId': '',
       'userId': this.offerOwner,
@@ -302,9 +308,11 @@ export class OfferSolutioningComponent implements OnInit {
       'action': '',
       'comment': ''
     };
-    this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
-    this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
-    });
-  }
+      this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
+      this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+      });
 
+    });
+
+  }
 }

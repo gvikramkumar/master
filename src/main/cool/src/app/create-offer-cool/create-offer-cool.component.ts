@@ -74,7 +74,8 @@ export class CreateOfferCoolComponent implements OnInit {
   approvalButtonsVisibleAvailable: Boolean = true;
   managerName;
   stakeHolderInfo: any;
-
+  offerDescValueTrim: string = '';
+  offerNameValueTrim: string = '';
 
   constructor(private createOfferService: CreateOfferService,
     private offerDetailViewService: OfferDetailViewService,
@@ -109,6 +110,11 @@ export class CreateOfferCoolComponent implements OnInit {
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
           this.idpvalue = offerDetailRes.iDPId;
         });
+
+        if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
+          this.enableOfferbuild = false;
+         }
+
         if(this.primaryBusinessUnitsValue) {
           this.enableOfferbuild = false;
         }
@@ -385,13 +391,23 @@ export class CreateOfferCoolComponent implements OnInit {
   proceedCheck(event) {
     let inputText = event.target.value;
     let inputValue = inputText.trim();
-    let offerDescField = this.offerDescValue.trim();
-    let offerNameValueField = this.offerNameValue.trim();
+    this.offerDescValueTrim = this.offerDescValue.trim();
+    this.offerNameValueTrim = this.offerNameValue.trim();
 
     if(inputValue === "" || inputValue === null) {
       this.enableOfferbuild = true;
     } 
-  else if (offerNameValueField !== "" && offerDescField !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
+  else if (this.offerDescValueTrim !== "" && this.offerNameValueTrim !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
+     this.enableOfferbuild = false;
+    }
+  }
+
+
+  proceedCheckDate(event) {
+    if(!event) {
+      this.enableOfferbuild = true;
+    } 
+  else if (this.offerNameValueTrim !== "" && this.offerNameValueTrim !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
      this.enableOfferbuild = false;
     }
   }

@@ -192,7 +192,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
     NgCircleProgressModule.forRoot(),
     FlexLayoutModule,
     NgxWebstorageModule.forRoot(),
-    UserIdleModule.forRoot({ idle: 595, timeout: 600, ping: 0 })
+    UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 })
   ],
   providers:
     [
