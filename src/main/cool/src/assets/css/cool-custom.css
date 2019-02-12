@@ -770,6 +770,9 @@ span[class*="display-"] {
 .cool.cui .content .ui-dialog.ui-shadow {
   box-shadow: 0 10px 30px 5px rgba(0,0,0,0.3);
 }
+.cool.cui .ui-shadow {
+  box-shadow: 0 10px 30px 5px rgba(0,0,0,0.3);
+}
 /* dialog */
 .cool.cui .ui-dialog {
   position: fixed;
@@ -978,9 +981,13 @@ span[class*="display-"] {
 }
 .cool.cui .oas .btn-group.btn-group--square .btn {
   border-radius: 0;
+  margin: 0;
+  width: 50%;
+  max-width: 100%;
 }
 .cool.cui .oas .btn {
   border-radius: 30px;
+  margin: 2px;
 }
 .cool.cui .oas .ui-accordion .ui-accordion-header:not(.ui-state-active):not(.ui-state-disabled):hover {
   border-color: transparent;
@@ -998,6 +1005,11 @@ span[class*="display-"] {
 }
 .cool.cui .oas blockquote {
   padding: 0;
+}
+.cool.cui .oas .form-group--label {
+  text-transform: uppercase;
+  font-weight: normal;
+  color: #585858
 }
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
