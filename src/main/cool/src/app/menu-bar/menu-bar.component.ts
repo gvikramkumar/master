@@ -112,7 +112,7 @@ export class MenuBarComponent implements OnInit {
 
     closePopup(message) {
         if (message != null && message !== '') {
-            let emailNotificationData = {};
+           let emailNotificationData = {};
             if (message === 'hold') {
                 this.holdStatusValid = false;
                 this.cancelStatusValid = false;
@@ -122,7 +122,7 @@ export class MenuBarComponent implements OnInit {
                 textValue.innerText='here';
                 textValue.href = 'cool/#/offerDetailView/'+ this.offerId +'/'+ this.caseId;
 
-
+            
                 let emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
                 let emailBody = `Hello ${this.currentUsername},
                 ${this.offerName}(${this.offerId}) has been on hold by ${this.userService.getName()}.
@@ -153,8 +153,8 @@ export class MenuBarComponent implements OnInit {
                 this.currentUsername = this.userService.getName();
 
                 let textValue = document.createElement('a');
-                textValue.innerText = 'here';
-                textValue.href = '/offerDetailView/' + this.offerId + '/' + this.caseId;
+                textValue.innerText='here';
+                textValue.href = 'cool/#/offerDetailView/'+ this.offerId +'/'+ this.caseId;
 
                 let emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
                 let emailBody = `Hello ${this.currentUsername},
