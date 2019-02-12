@@ -925,6 +925,18 @@ span[class*="display-"] {
 }.cool.cui .ui-treetable .ui-treetable-tbody > tr:hover td a.remove {
   opacity: 1;
 }
+
+.cool.cui p-dialog.lead-time .ui-dialog.ui-widget .ui-dialog-titlebar {
+  cursor: -webkit-move;
+  cursor: move;
+}
+.cool.cui p-dialog.lead-time .ui-dialog.ui-widget .ui-dialog-titlebar:active {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+.cool.cui p-dialog.lead-time .ui-dialog.ui-widget .ui-dialog-content{
+  padding-top: 0;
+}
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
     margin: 10px 40px;

@@ -36,4 +36,8 @@ export class OffersolutioningService {
     url += offerId;
     return  this.httpClient.get(url);
   }
+  updateOfferDetails(data){
+    let url = this.environmentService.REST_API_UPDATE_OFFER;
+    return this.httpClient.post(url, data);
+  }
 }
