@@ -64,9 +64,13 @@ export default class ApprovalController extends ControllerBase {
       data.approvedBy = req.user.id;
       data.approvedDate = new Date();
     }
-    this.postApproveStep(data, req)
+    this.preApproveStep(data, req)
       .then(() => {
       this.repo.update(data, req.user.id, true, true, false)
+        .then(item => {
+          return this.postApproveStep(data, req)
+            .then(() => item);
+        })
         .then(item => {
           return this.sendApprovalEmail(req, ApprovalMode.approve, item)
             .then(() => res.json(item));
@@ -78,7 +82,7 @@ export default class ApprovalController extends ControllerBase {
   reject(req, res, next) {
     const data = req.body;
     req.body.status = 'D';
-    this.postRejectStep(data, req)
+    this.preRejectStep(data, req)
       .then(() => {
         this.updateOneNoValidatePromise(data, req.user.id, false)
           .then(item => {
@@ -129,13 +133,18 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
-  // this step can modify the data
+  // this step can modify the data, as it's pre-save
+  preApproveStep(data, req) {
+    return Promise.resolve(data);
+  }
+
+  // this "doesn't" modify data as it's already saved
   postApproveStep(data, req) {
     return Promise.resolve(data);
   }
 
   // this step can modify the item, so any overrides are responsible for returning the passed item
-  postRejectStep(data, req) {
+  preRejectStep(data, req) {
     return Promise.resolve(data);
   }
 

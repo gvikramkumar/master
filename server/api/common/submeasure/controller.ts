@@ -189,7 +189,7 @@ export default class SubmeasureController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'submeasure', 'submeasure', omitProperties);
   }
 
-  postApproveStep(sm, req) {
+  preApproveStep(sm, req) {
     const promises = [];
     // remove product class uploads for this submeasure and add new ones
     if (sm.categoryType === 'Manual Mix') {
@@ -209,22 +209,36 @@ export default class SubmeasureController extends ApprovalController {
       // find temp=Y records, if found, delete for sm.name && temp = N, then change these to temp Y >> N
       promises.push(
         this.deptUploadRepo.getMany({submeasureName: sm.name, temp: 'Y'})
-        .then(tempRecords => {
-          if (tempRecords.length) {
-            return this.deptUploadRepo.removeMany({submeasureName: sm.name, temp: 'N'})
-              .then(() => this.deptUploadRepo.updateMany({submeasureName: sm.name, temp: 'Y'}, {$set: {temp: 'N'}}));
-          }
-        })
-        .then(() => {
-          sm.indicators.deptAcct = 'D';
-        })
+          .then(tempRecords => {
+            if (tempRecords.length) {
+              return this.deptUploadRepo.removeMany({submeasureName: sm.name, temp: 'N'})
+                .then(() => this.deptUploadRepo.updateMany({submeasureName: sm.name, temp: 'Y'}, {$set: {temp: 'N'}}));
+            }
+          })
+          .then(() => {
+            sm.indicators.deptAcct = 'D';
+          })
       );
     }
     return Promise.all(promises)
       .then(() => sm);
   }
 
-  postRejectStep(sm, req) {
+  postApproveStep(data, req): Promise<any> {
+    /*
+    // this failed miserably for injection errors (missing @inject or @multiInject) and no way to get around it.
+    // appears to be circular reference, but no circular refrence as was injecting here, not in controller. Also, tried both of these to no avail:
+    // @lazyInject(DatabaseController) databaseController;
+    // @inject(new LazyServiceIdentifer(() => DatabaseController)) private databaseController: DatabaseController
+
+    req.query.uploadType = 'dept-upload';
+    // return this.databaseController.autoSync(req);
+    return Promise.resolve();
+*/
+    return Promise.resolve();
+  }
+
+  preRejectStep(sm, req) {
     // two ways to go, leave dept upload or toss it. Thing is: they can upload and not even save the submeasure, so will
     // always have possiblity of these around. Maybe something small to change and then they'd have to add it again
     // so leave it for now. The concern is: you leave these around on reject (or upload but never submit), and then
