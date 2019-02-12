@@ -1012,6 +1012,10 @@ span[class*="display-"] {
   font-weight: normal;
   color: #585858
 }
+.cool.cui .card .oas .card__subtitle.display-6 {
+  font-size: 32px;
+  line-height: 1;
+}
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
     margin: 10px 40px;
