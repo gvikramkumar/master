@@ -61,12 +61,12 @@ export default class UploadController {
 
   upload(req, res, next) {
     this.verifyProperties(req.query, ['moduleId']);
+    this.req = req;
     this.dfa = req.dfa;
     this.moduleId = Number(req.query.moduleId);
     this.user = req.user;
-    this.uploadType = this.getUploadType(req);
+    this.setUploadType();
     this.startUpload = Date.now();
-    this.req = req;
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
     this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 0);
@@ -95,7 +95,7 @@ export default class UploadController {
       .then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
       .then(() => this.importRows(this.userId))
-      .then(() => this.autoSyncOnStaging(req, res, next))
+      .then(() => this.autoSync())
       .then(() => {
         this.sendSuccessEmail();
         res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
@@ -414,48 +414,17 @@ export default class UploadController {
     return Promise.resolve();
   }
 
-  getUploadType(req) {
-    const uploadType = req.path.substr(req.path.lastIndexOf('/') + 1);
+  setUploadType() {
+    const uploadType = this.req.path.substr(this.req.path.lastIndexOf('/') + 1);
     if (uploadType.length < 3) {
-      throw new ApiError(`autoSyncOnStaging: no uploadType: ${uploadType}`);
+      throw new ApiError(`no uploadType: ${uploadType}`);
     }
-    return uploadType;
+    this.req.query.uploadType = uploadType; // set for autoSync
   }
 
-  getSyncMapFromUploadType(req) {
-    const uploadTypes = {
-      prof: [
-        {type: 'dollar-upload', syncMapProp: 'dfa_prof_input_amnt_upld'},
-        {type: 'mapping-upload', syncMapProp: 'dfa_prof_manual_map_upld'},
-        {type: 'dept-upload', syncMapProp: 'dfa_prof_dept_acct_map_upld'},
-        {type: 'sales-split-upload', syncMapProp: 'dfa_prof_sales_split_pctmap_upld'},
-        {type: 'product-class-upload', syncMapProp: 'dfa_prof_swalloc_manualmix_upld'},
-        {type: 'alternate-sl2-upload', syncMapProp: 'dfa_prof_scms_triang_altsl2_map_upld'},
-        {type: 'corp-adjustments-upload', syncMapProp: 'dfa_prof_scms_triang_corpadj_map_upld'},
-        {type: 'disti-direct-upload', syncMapProp: 'dfa_prof_disti_to_direct_map_upld'},
-      ]
-    };
-    const syncMap = new SyncMap();
-    const syncProp = _.find(uploadTypes[req.dfa.module.abbrev], {type: this.uploadType}).syncMapProp;
-    if (!syncProp) {
-      throw new ApiError(`getSyncMapFromUploadType: no syncProp`);
-    }
-    syncMap[syncProp] = true;
-    return syncMap;
-  }
-
-  autoSyncOnStaging(req, res, next): Promise<any> {
-    if (config.autoSyncOn) {
-      const syncMap = this.getSyncMapFromUploadType(req);
-      const databaseCtrl = injector.get(DatabaseController);
-      return databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id)
-        .catch(err => {
-          throw new ApiError('AutoSync error', Object.assign({message: err.message}, err));
-        });
-    } else {
-      return Promise.resolve();
-    }
-
+  autoSync() {
+    const databaseCtrl = injector.get(DatabaseController);
+    return databaseCtrl.autoSync(this.req);
   }
 
   verifyProperties(data, arr) {

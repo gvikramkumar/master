@@ -1,4 +1,4 @@
-import {injectable} from 'inversify';
+import {inject, injectable, LazyServiceIdentifer} from 'inversify';
 import SubmeasureRepo from './repo';
 import {ApiError} from '../../../lib/common/api-error';
 import SubmeasurePgRepo from './pgrepo';
@@ -17,6 +17,8 @@ import DeptUploadImport from '../../prof/upload/dept/import';
 import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'xlsx';
 import AnyObj from '../../../../shared/models/any-obj';
+import {injector, lazyInject} from '../../../lib/common/inversify.config';
+import DatabaseController from '../../database/controller';
 
 
 interface FilterLevel {
@@ -29,6 +31,7 @@ interface FilterLevel {
 
 @injectable()
 export default class SubmeasureController extends ApprovalController {
+  @lazyInject(DatabaseController) databaseController;
 
   constructor(
     protected repo: SubmeasureRepo,
@@ -38,7 +41,7 @@ export default class SubmeasureController extends ApprovalController {
     private productClassUploadRepo: ProductClassUploadRepo,
     private deptUploadRepo: DeptUploadRepo,
     private fileRepo: FileRepo
-) {
+  ) {
     super(repo);
   }
 
@@ -225,17 +228,11 @@ export default class SubmeasureController extends ApprovalController {
   }
 
   postApproveStep(data, req): Promise<any> {
-    /*
-    // this failed miserably for injection errors (missing @inject or @multiInject) and no way to get around it.
-    // appears to be circular reference, but no circular refrence as was injecting here, not in controller. Also, tried both of these to no avail:
-    // @lazyInject(DatabaseController) databaseController;
-    // @inject(new LazyServiceIdentifer(() => DatabaseController)) private databaseController: DatabaseController
-
+    // we have to avoid circular reference between DatabaseController and SubmeasureController. This required changes in both places
+    // to overcome. See DatabaseController constructor for more info
+    const databaseCtrl = injector.get(DatabaseController);
     req.query.uploadType = 'dept-upload';
-    // return this.databaseController.autoSync(req);
-    return Promise.resolve();
-*/
-    return Promise.resolve();
+    return this.databaseController.autoSync(req);
   }
 
   preRejectStep(sm, req) {

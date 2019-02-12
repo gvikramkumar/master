@@ -7,7 +7,6 @@ export const injector = new Container({
   skipBaseClassChecks: true
 });
 
-export const {
-  lazyInject,
-} = getDecorators(injector);
+const decorators = getDecorators(injector);
+export const lazyInject = decorators.lazyInject;
 
