@@ -946,19 +946,23 @@ span[class*="display-"] {
   background: #f2f2f2;
   margin: -10px 0 0;
   padding: 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: normal;
+  color: #585858;
 }
 .cool.cui .oas .card {
-  padding: 10px 0;
+  padding: 10px 0 0;
+  overflow: hidden;
 }
 .cool.cui .oas .ui-accordion-content.ui-widget-content {
   box-shadow: 0 2px 10px rgba(0,0,0,.25);
 }
-.cool.cui .oas .card  {
-  overflow: hidden;
-}
 .cool.cui .oas hr.divider {
   border-top: none;
   border-bottom: 1px dashed #b6b9bb;
+  height: auto;
+  margin: 10px 0;
 }
 .cool.cui .oas .ui-accordion-header.ui-state-default {
   background: transparent;
@@ -972,8 +976,11 @@ span[class*="display-"] {
 .cool.cui .oas .ui-accordion .ui-accordion-header {
   margin-top: 0;
 }
-.cool.cui .oas .btn-group .btn--secondary {
+.cool.cui .oas .btn-group.btn-group--square .btn {
   border-radius: 0;
+}
+.cool.cui .oas .btn {
+  border-radius: 30px;
 }
 .cool.cui .oas .ui-accordion .ui-accordion-header:not(.ui-state-active):not(.ui-state-disabled):hover {
   border-color: transparent;
@@ -988,6 +995,9 @@ span[class*="display-"] {
 }
 .cool.cui p-dialog.lead-time .ui-dialog.ui-widget .ui-dialog-content{
   padding-top: 0;
+}
+.cool.cui .oas blockquote {
+  padding: 0;
 }
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {

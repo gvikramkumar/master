@@ -4,7 +4,7 @@
 
     <p-messages [(value)]="msgs"></p-messages>
 
-    <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" role="tablist" style="z-index: 0">
+    <ul id="tabsv6" class="tabs tabs--bordered base-margin-top base-margin-bottom" role="tablist" style="z-index: 0">
         <li class="tab active" *ngFor="let primaryFactor of oasPrimaryFactorsList; let first = first;"
             [ngClass]="{firstItem: first}" role="presentation"
             [class.active]="selectedPrimaryOffer===primaryFactor['primaryFactorName']">
