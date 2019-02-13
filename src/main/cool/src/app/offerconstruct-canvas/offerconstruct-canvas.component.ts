@@ -12,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SubGroup } from './model/SubGroup';
 import { Group } from './model/Group';
 import { Groups } from '../models/groups';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { OfferConstructService } from '../services/offer-construct.service';
 import { ConstructDetails } from './model/ConstructDetails';
 import { ConstructDetail } from './model/ConstructDetail';
@@ -57,13 +57,32 @@ export class OfferconstructCanvasComponent implements OnInit {
   currentRowClicked;
   selectedPids;
   lineItemName;
+  multipleForms: FormGroup;
+  display: boolean = false;
+  majorLineItemsActive = true;
+  minorLineItemsActive;
+  majorItemData: any[] = [];
+  minorItemData: any[] = [];
+  number;
+  majorItemsGroup;
+  majorLineGroup: any[] = [];
+  formGroupData= [];
+  formGroupDataMinorItems = [];
+  count = 1;
+  displayMandatory;
+  toggleMandatory = true;
+  myForm: FormGroup;
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute, private _fb: FormBuilder) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
     });
+    this.myForm = this._fb.group({
+      // you can also set initial formgroup inside if you like
+      companies: this._fb.array([])
+    })
   }
 
   /**
@@ -84,6 +103,92 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.offerConstructItems.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
     }
+  }
+
+  majorLine(){
+    this.minorLineItemsActive = false;
+    this.majorLineItemsActive = true;
+  }
+
+  minorLine() {
+    this.majorLineItemsActive = false;
+    this.minorLineItemsActive = true;
+  }
+
+  showMandatory(event, id) {
+    this.toggleMandatory = this.toggleMandatory?false:true;
+    this.displayMandatory = event.target.id;
+    this.cd.detectChanges();
+  }
+
+  showDialog() {
+    this.majorItemData = [];
+    this.display = true;
+    let tempObj= [];
+    this.offerConstructItems = [...this.offerConstructItems]
+    tempObj = null;
+    this.formGroupData = [];
+    this.formGroupDataMinorItems = [];
+    tempObj = this.offerConstructItems;
+    console.log(tempObj);
+    tempObj.forEach(item => {
+      if(item.parent==null){
+        const majorItem = {
+          productName: item.data.productName
+        };
+        if(item.children.length){
+        let tempChildObj = []
+        tempChildObj = item.children;
+        tempChildObj.forEach(item => {
+          if(!item.data.isGroupNode){
+            const minorItem = {
+              productName: item.data.productName
+            }
+            this.minorItemData.push(minorItem);
+          }
+        })
+        }
+        this.majorItemData.push(majorItem);
+        console.log(this.majorItemData)
+      }
+    })
+    this.displayAddDetails = true;
+    let groups = [];
+    for(let i=0; i<this.majorItemData.length; i++){
+      let groupName = {groupName: this.majorItemData[i].productName}
+      groups.push(groupName);
+    }
+    let minorGroups = []
+    for(let i=0; i<this.minorItemData.length; i++){
+      let minorGroupName = {groupName: this.minorItemData[i].productName}
+      minorGroups.push(minorGroupName);
+    }
+    console.log(groups)
+    let groupsPayload = groups;
+    let m = this;
+    for (let i = 0; i < minorGroups.length; i++) {
+      let payLoad = {groups: [minorGroups[i]]}
+      m.offerConstructService.addDetails(payLoad).subscribe(
+        (data) => {
+          this.formGroupDataMinorItems.push(data.groups[0]);
+          console.log(this.formGroupDataMinorItems);
+      console.log(this.questions)
+      this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
+        }, err => console.log('error ' + err),
+        () => console.log('Ok ')
+      );
+      }
+    for (let i = 0; i < groups.length; i++) {
+      let payLoad = {groups: [groups[i]]}
+      m.offerConstructService.addDetails(payLoad).subscribe(
+        (data) => {
+      this.formGroupData.push(data.groups[0]);
+      this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
+        }, err => console.log('error ' + err),
+        () => console.log('Ok ')
+      );
+      }
+      console.log(this.formGroupData);
   }
 
   deleteNode(node) {
@@ -107,7 +212,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   saveData(rowNode) {
     if (rowNode.node.data.name) {
       rowNode.node.data.catergoryName = rowNode.node.data.name;
-      rowNode.node.data.lablel = rowNode.node.data.name;
+      rowNode.node.data.label = rowNode.node.data.name;
       rowNode.node.data.productName = rowNode.node.data.name;
       this.offerConstructItems.push(this.itemToTreeNode(rowNode));
       this.offerConstructItems = [...this.offerConstructItems];
@@ -255,6 +360,9 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   ngOnInit() {
     this.questionForm = new FormGroup({
+    });
+
+    this.multipleForms = new FormGroup({
     });
 
     // Prepare payload to fetch item categories. Obtain MM information.
@@ -449,6 +557,14 @@ export class OfferconstructCanvasComponent implements OnInit {
   addItemDetails() {
     this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.questionForm.value);
+    this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
+    this.closeDailog();
+  }
+
+  addAllItemDetails(details) {
+    this.showMandatoryDetails = false;
+    this.payLoad = JSON.stringify(this.multipleForms.value);
+    alert(JSON.stringify(this.multipleForms.value))
     this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
     this.closeDailog();
   }

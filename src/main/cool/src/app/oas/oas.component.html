@@ -1,6 +1,49 @@
 <!-- OSA -->
 
 <div class="container">
+        <div class="row base-margin-top" >
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card__body">
+                                <div class="row oas">
+                                    <div class="col-md-6">
+                                     <h4 class="display-1 text-success">59%</h4>
+                                     </div>
+                                     <div class="col-md-6">
+                                     <div class="card__subtitle display-6">Offer Scalability Score</div>
+                                     <div class="card__subtitle">Increased from 53% at Launch to 59%</div>
+                                   </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card__header">
+                            <h4 class="card__title">Card Title</h4>
+                            <div class="card__subtitle">Card Subtitle</div>
+                        </div>
+                        <div class="card__body">Equidem recteque sea et. Per detracto iracundia ea, duo nusquam denique omittantur in.</div>
+                        <div class="card__footer">
+                            <a href="javascript:;">Link</a>
+                            <a href="javascript:;" class="half-margin-left">Another Link</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card__header">
+                            <h4 class="card__title">Card Title</h4>
+                            <div class="card__subtitle">Card Subtitle</div>
+                        </div>
+                        <div class="card__body">Equidem recteque sea et. Per detracto iracundia ea, duo nusquam denique omittantur in.</div>
+                        <div class="card__footer">
+                            <a href="javascript:;">Link</a>
+                            <a href="javascript:;" class="half-margin-left">Another Link</a>
+                        </div>
+                    </div>
+                </div>
+        </div>
 
     <div class="row base-margin-top">
         <div class="col-md-4">
@@ -54,8 +97,8 @@
         <li class="tab active" *ngFor="let primaryFactor of oasPrimaryFactorsList; let first = first;"
             [ngClass]="{firstItem: first}" role="presentation"
             [class.active]="selectedPrimaryOffer===primaryFactor['primaryFactorName']">
-            <a (click)="selectedPrimaryOffer = primaryFactor['primaryFactorName']" aria-controls="one" role="tab"
-                data-toggle="tab">{{primaryFactor['primaryFactorName']}}</a>
+            <a class="padding-5-20 margin-right-10" (click)="selectedPrimaryOffer = primaryFactor['primaryFactorName']" aria-controls="one" role="tab"
+                data-toggle="tab"><div class="tab__heading">{{primaryFactor['primaryFactorName']}}</div></a>
         </li>
     </ul>
 
@@ -72,7 +115,7 @@
                             <h3 class="card-title">
                                 {{secondaryFactor['secondaryFactorName']}}
 
-                                <div class="pull-right gauge gauge--small gauge--success" data-percentage="25">
+                                <div class="pull-right gauge gauge--x-small gauge--success" data-percentage="25">
                                     <div class="gauge__circle">
                                         <div class="mask full">
                                             <div class="fill"></div>
