@@ -46,7 +46,6 @@ export class CreateOfferCoolComponent implements OnInit {
   primaryBusinessUnitsValue: string[] = [];
   primaryBusinessEntitiesValue: string;
   secondaryBusinessUnitsValue: string[] = [];
-
   secondaryBusinessEntitiesValue: string[] = [];
   strategyReviewDateValue: string;
   designReviewDateValue: string;
@@ -74,6 +73,7 @@ export class CreateOfferCoolComponent implements OnInit {
   approvalButtonsVisibleAvailable: Boolean = true;
   managerName;
   stakeHolderInfo: any;
+  offerDetailRes;
   offerDescValueTrim: string = '';
   offerNameValueTrim: string = '';
 
@@ -88,78 +88,81 @@ export class CreateOfferCoolComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       if (this.offerId) {
-       
         this.offerDetailViewService.offerDetailView(this.offerId).subscribe(offerDetailRes => {
+          this.offerDetailRes = offerDetailRes;
           this.caseId = offerDetailRes.caseId;
           this.offerNameValue = offerDetailRes.offerName;
           this.offerDescValue = offerDetailRes.offerDesc;
           this.primaryBusinessUnitsValue = offerDetailRes.primaryBUList;
-         
-          this.getPrimaryBusinessEntityPromise(offerDetailRes.primaryBUList)
-            .then(() => {
-              this.primaryBusinessEntitiesValue = offerDetailRes.primaryBEList.toString();
-            });
-          this.secondaryBusinessUnitsValue = offerDetailRes.secondaryBUList;
-          this.getSecondaryBusinessEntityPromise(offerDetailRes.secondaryBUList)
-            .then(() => {
-              this.secondaryBusinessEntitiesValue = offerDetailRes.secondaryBEList;
-            });
+          this.secondaryBusinessEntitiesValue = offerDetailRes.secondaryBEList;
           this.strategyReviewDateValue = moment(offerDetailRes.strategyReviewDate).format('MM/DD/YYYY');
           this.designReviewDateValue = moment(offerDetailRes.designReviewDate).format('MM/DD/YYYY');
           this.readinessReviewDateValue = moment(offerDetailRes.readinessReviewDate).format('MM/DD/YYYY');
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
           this.idpvalue = offerDetailRes.iDPId;
+          this.loadPrimaryBe();
         });
 
-        if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
-          this.enableOfferbuild = false;
-         }
+        // if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
+        //   this.enableOfferbuild = false;
+        //  }
 
         if(this.primaryBusinessUnitsValue) {
           this.enableOfferbuild = false;
         }
-        //this.enableOfferbuild = true;
       }
     });
+  } // constructor ends
 
-  // Get Primary BE (hard code 'all')
-    this.createOfferService.getDistinctBE().subscribe(data => {
-      const primaryBeArry = [{ label: 'All', value: 'All' }];
-      const dataArray = data as Array<any>;
-      dataArray.forEach(element => {
-        if (element['BE'] !== null) {
-          primaryBeArry.push({ label: element['BE'], value: element['BE'] });
+  loadPrimaryBe() {
+    // Get Primary BE (hard code 'all')
+      this.createOfferService.getDistinctBE().subscribe(data => {
+        const primaryBeArry = [{ label: 'All', value: 'All' }];
+        const dataArray = data as Array<any>;
+        dataArray.forEach(element => {
+          if (element['BE'] !== null) {
+            primaryBeArry.push({ label: element['BE'], value: element['BE'] });
+          }
+        });
+
+        this.primaryBusinessEntities = primaryBeArry;
+        this.secondaryBusinessEntities = primaryBeArry;
+        // This if condition executes only when user moves back from mm page to offer creation page.
+        if (this.offerId !== undefined) {
+          this.primaryBusinessEntitiesValue = this.offerDetailRes.primaryBEList[0];
+          this.getPrimaryBusinessUnitPromise(this.offerDetailRes.primaryBEList[0]);
+          this.getSecondaryBusinessUnitsBasedOnSencondaryBE();
+          this.secondaryBusinessUnitsValue = this.offerDetailRes.secondaryBUList.slice();
         }
       });
+    }
 
-      this.primaryBusinessEntities = primaryBeArry;
-      this.secondaryBusinessEntities = primaryBeArry;
-    });
-
-
-  // Get distinct BU for primary BU list
-    this.createOfferService.getDistincBU().subscribe(data => {
-      const secondaryBuArry = [];
-      const dataArray = data as Array<any>;
-      dataArray.forEach(element => {
-        if (element['BUSINESS_UNIT'] !== null) {
-          secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
-        }
+  loadSecondaryBu() {
+     // Get distinct BU for primary BU list
+      this.createOfferService.getDistincBU().subscribe(data => {
+        const secondaryBuArry = [];
+        const dataArray = data as Array<any>;
+        dataArray.forEach(element => {
+          if (element['BUSINESS_UNIT'] !== null) {
+            secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
+          }
+        });
+        this.secondaryBusinessUnits = secondaryBuArry;
       });
-      this.secondaryBusinessUnits = secondaryBuArry;
-    });
+  }
 
+  autoSelectBE() {
     // Fetch Primary BE's assigned through admin page.
     // Show this BE's as selected in Primary BE multiselect list in the offer creation page.
-    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      const primaryBeArray: any[] = [];
-      data.userMappings.forEach(element => {
-        primaryBeArray.push(element.businessEntity);
+      this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+        const primaryBeArray: any[] = [];
+        data.userMappings.forEach(element => {
+          primaryBeArray.push(element.businessEntity);
+        });
+        this.primaryBusinessEntitiesValue = primaryBeArray[0];
+        // Load primary business units when business entities are selected.
+        this.getPrimaryBusinessUnitBasedOnPrimaryBE(this.primaryBusinessEntitiesValue);
       });
-      this.primaryBusinessEntitiesValue = primaryBeArray[0];
-      // Load primary business units when business entities are selected.
-      this.getPrimaryBusinessUnitBasedOnPrimaryBE(this.primaryBusinessEntitiesValue);
-    });
   }
 
   skipSelectedBusinessEntities(selectedPbe) {
@@ -203,12 +206,12 @@ export class CreateOfferCoolComponent implements OnInit {
           tmpBusinessUnites.splice(index, 1);
         }
       });
-      this.secondaryBusinessUnitsValue = null;
+      // this.secondaryBusinessUnitsValue = null;
       this.secondaryBusinessUnitsFiltered = tmpBusinessUnites;
     }
   }
 
-  
+
   getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
     this.primaryBusinessUnitsValue = null;
     this.secondaryBusinessEntitiesValue = null;
@@ -220,7 +223,7 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getPrimaryBusinessUnitPromise(event) {
-    if (event == 'All') {
+    if (event === 'All') {
         // Get distinct BU for primary BU list
     this.createOfferService.getDistincBU().subscribe(data => {
       const secondaryBuArry = [];
@@ -326,6 +329,13 @@ export class CreateOfferCoolComponent implements OnInit {
     const canEscalateUsers = [];
     const canApproveUsers = [];
     this.data = [];
+
+    if (this.offerId === undefined) {
+      this.loadPrimaryBe();
+      this.loadSecondaryBu();
+      this.autoSelectBE();
+    }
+
     this.stakeholderfullService.getdata(this.offerId).subscribe(data => {
       this.firstData = data;
       this.derivedMM = this.firstData['derivedMM'];
@@ -396,7 +406,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
     if(inputValue === "" || inputValue === null) {
       this.enableOfferbuild = true;
-    } 
+    }
   else if (this.offerDescValueTrim !== "" && this.offerNameValueTrim !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
      this.enableOfferbuild = false;
     }
@@ -406,7 +416,7 @@ export class CreateOfferCoolComponent implements OnInit {
   proceedCheckDate(event) {
     if(!event) {
       this.enableOfferbuild = true;
-    } 
+    }
   else if (this.offerNameValueTrim !== "" && this.offerNameValueTrim !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
      this.enableOfferbuild = false;
     }
@@ -490,7 +500,7 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   updateMessage(message) {
-    
+
         if (message != null && message !== '') {
           if (message === 'hold') {
             this.proceedButtonStatusValid = false;
