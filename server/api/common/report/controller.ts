@@ -131,8 +131,8 @@ export default class ReportController extends ControllerBase {
         break;
       case 'dept-upload':
         excelSheetname = ['Dept Upload'];
-        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Sub-Measure Description', 'Sub-Measure Key', 'Node Value', 'GL Account', 'Report Level 1', 'Report Level 2', 'Report Level 3', 'Uploaded By', 'Uploaded Date'];
-        excelProperties = ['measure.name', 'sm.name', 'sm.desc', 'sm.submeasureKey', 'nodeValue', 'glAccount', 'sm.reportingLevels[0]', 'sm.reportingLevels[1]', 'sm.reportingLevels[2]', 'updatedBy', 'updatedDate'];
+        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Sub-Measure Description', 'Department Code', 'Excluded GL Account', 'Start Account', 'End Account', 'Report Level 1', 'Report Level 2', 'Report Level 3', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['measure.name', 'sm.name', 'sm.desc', 'nodeValue', 'glAccount', 'startAccount', 'endAccount', 'sm.reportingLevels[0]', 'sm.reportingLevels[1]', 'sm.reportingLevels[2]', 'updatedBy', 'updatedDate'];
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
@@ -141,7 +141,11 @@ export default class ReportController extends ControllerBase {
           .then(results => {
             this.measures = results[0];
             this.submeasures = results[1];
-            return results[2].map(doc => this.transformAddMeasureAndSubmeasureName(doc));
+            return results[2].map(doc => {
+              doc.startAccount = doc.glAccount ? '' : 60000;
+              doc.EndAccount = doc.glAccount ? '' : 69999;
+              return this.transformAddMeasureAndSubmeasureName(doc);
+            });
           });
         break;
       case 'product-classification':
@@ -321,14 +325,14 @@ export default class ReportController extends ControllerBase {
 
       case 'rule-submeasure':
         excelSheetname = ['History'];
-        excelHeaders = ['Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System',
+        excelHeaders = ['Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Name', 'Measure Name', 'Source System',
           'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
           'SM Status', 'SM Updated By', 'SM Updated Date',
           'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country Match', 'Ext Theater Match', 'GL Segments',
           'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Rule Status', 'Rule Updated By', 'Rule Updated Date'];
 
         excelProperties = [
-          'fiscalMonth', 'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.measureName', 'sm.sourceName',
+          'fiscalMonth', 'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.name', 'sm.measureName', 'sm.sourceName',
           'sm.inputFilterLevel.salesLevel', 'sm.inputFilterLevel.productLevel', 'sm.inputFilterLevel.scmsLevel', 'sm.inputFilterLevel.entityLevel', 'sm.inputFilterLevel.internalBELevel',
           'sm.status', 'sm.updatedBy', 'sm.updatedDate',
           'rule.name', 'rule.driverName', 'rule.period', 'rule.salesMatch', 'rule.productMatch', 'rule.scmsMatch', 'rule.legalEntityMatch', 'rule.beMatch', 'rule.countryMatch', 'rule.extTheaterMatch', 'rule.glSegmentsMatch',
