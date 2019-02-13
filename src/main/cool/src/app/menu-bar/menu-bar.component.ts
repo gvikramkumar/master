@@ -79,8 +79,8 @@ export class MenuBarComponent implements OnInit {
                 items: [
                     { label: 'Offer Dimension Completion' },
                     { label: 'Offer Solutioning' },
-                    { label: 'Offer Construct' },
-                    { label: 'Offer Construct Details' },
+                    { label: 'Offer Components' },
+                    { label: 'Offer Components Details' },
                     { label: 'Design Review' }
                 ]
             },
