@@ -1,6 +1,6 @@
 <!-- OSA -->
 
-<div class="container"> 
+<div class="container">
         <div class="row base-margin-top" >
                 <div class="col-md-4">
                     <div class="card">
@@ -51,8 +51,8 @@
         <li class="tab active" *ngFor="let primaryFactor of oasPrimaryFactorsList; let first = first;"
             [ngClass]="{firstItem: first}" role="presentation"
             [class.active]="selectedPrimaryOffer===primaryFactor['primaryFactorName']">
-            <a (click)="selectedPrimaryOffer = primaryFactor['primaryFactorName']" aria-controls="one" role="tab"
-                data-toggle="tab">{{primaryFactor['primaryFactorName']}}</a>
+            <a class="padding-5-20 margin-right-10" (click)="selectedPrimaryOffer = primaryFactor['primaryFactorName']" aria-controls="one" role="tab"
+                data-toggle="tab"><div class="tab__heading">{{primaryFactor['primaryFactorName']}}</div></a>
         </li>
     </ul>
 
@@ -69,7 +69,7 @@
                             <h3 class="card-title">
                                 {{secondaryFactor['secondaryFactorName']}}
 
-                                <div class="pull-right gauge gauge--small gauge--success" data-percentage="25">
+                                <div class="pull-right gauge gauge--x-small gauge--success" data-percentage="25">
                                     <div class="gauge__circle">
                                         <div class="mask full">
                                             <div class="fill"></div>
