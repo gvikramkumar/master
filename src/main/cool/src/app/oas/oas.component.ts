@@ -47,6 +47,7 @@ export class OasComponent implements OnInit {
   cols: any[];
   items: MenuItem[];
   activeItem: MenuItem;
+  @ViewChild('f') form: NgForm;
 
   showDialog: boolean;
   showChallenges: boolean;
@@ -125,10 +126,13 @@ export class OasComponent implements OnInit {
 
 
   }
-  showDialogBox(form: NgForm) {
 
+  resetForm() {
+    this.form.reset();
+    this.selectedAttribute = [];
+  }
 
-    console.log(form);
+  showDialogBox() {
 
     if (this.showDialog) {
       this.showDialog = false;

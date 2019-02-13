@@ -28,9 +28,17 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     //Start watching for user inactivity.
     this.userIdle.startWatching();
+    console.log("this.userIdle.startWatching() in ngOnit",this.userIdle.startWatching());
 
     // Start watching when user idle is starting.
-    this.userIdle.onTimerStart().subscribe(() => { this.seconds = this.seconds - 1; this.timeStart = true; /* console.log(count) */ });
+    this.userIdle.onTimerStart().subscribe(() => {
+      console.log("seconds before onTimerStart",this.seconds);
+       this.seconds = this.seconds - 1;
+       console.log("seconds  after onTimerStart",this.seconds);
+
+        this.timeStart = true; 
+        console.log("   this.timeStart in ngOnInit",  this.timeStart);
+        /* console.log(count) */ });
 
     // Start watch when time is up.
     this.userIdle.onTimeout().subscribe(() =>
@@ -40,30 +48,39 @@ export class AppComponent implements OnInit {
 
   stop() {
     this.userIdle.stopTimer();
+    console.log("seconds in  before stop method", this.seconds);
     this.seconds = 600;
+    console.log("seconds in  after stop method", this.seconds);
     this.timeStart = false;
+    console.log("this.timeStart in stop method",this.timeStart);
   }
 
   stopWatching() {
     this.userIdle.stopWatching();
+    console.log("In stopWtching  this.userIdle.stopWatching()", this.userIdle.stopWatching());
   }
 
   startWatching() {
     this.userIdle.startWatching();
+    console.log(" this.userIdle.startWatching()", this.userIdle.startWatching());
   }
 
   restart() {
     this.userIdle.resetTimer();
+    console.log("this.userIdle.resetTimer()",this.userIdle.resetTimer());
   }
 
   coordinates(event: MouseEvent): void {
     this.clientX = event.clientX;
+    console.log("this.clientX",this.clientX)
     this.clientY = event.clientY;
+    console.log("this.clientY",this.clientY)
 
   }
 
   @HostListener('keypress') onKeyPress() {
     this.stop();
+    console.log("this.stop() in HostListener", this.stop());
   }
 
 }

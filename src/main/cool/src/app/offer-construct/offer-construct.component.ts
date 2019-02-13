@@ -53,7 +53,7 @@ export class OfferConstructComponent  implements OnInit {
     this.data = [];
     this.message = {
       contentHead: 'Great Work!',
-      content: 'Offer Construct message.',
+      content: 'Offer Components message.',
       color: 'black'
     };
 
