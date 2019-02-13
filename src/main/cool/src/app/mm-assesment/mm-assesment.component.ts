@@ -36,6 +36,7 @@ export class MmAssesmentComponent implements OnInit {
   groupNames = [];
   activeTabIndex = 0;
   message = {};
+  withRouter = true;
 
   stakeData = {};
   offerId: string;
@@ -505,6 +506,7 @@ export class MmAssesmentComponent implements OnInit {
         data['groups'].forEach(group => {
           this.getGroupData(group, {}, true);
         });
+        this.proceedToStakeholder(false);
       });
     } else {
       if (this.activeTabIndex < this.groupNames.length - 1) {
@@ -617,7 +619,7 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
 
-  proceedToStakeholder() {
+  proceedToStakeholder(withRouter = true) {
     let proceedToStakeholderPostData = {};
     proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
     proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'] == null ? '' : this.offerBuilderdata['offerName'];
@@ -710,7 +712,9 @@ export class MmAssesmentComponent implements OnInit {
         'comment': ''
       };
       that.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(result => {
+        if (withRouter === true){
         that.router.navigate(['/stakeholderFull', that.currentOfferId, that.caseId]);
+      }
       });
     });
 
