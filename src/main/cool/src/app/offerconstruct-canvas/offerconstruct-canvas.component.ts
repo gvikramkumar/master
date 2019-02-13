@@ -86,7 +86,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   /**
-   * Called when Item is dragged into Offer Construct Tree table
+   * Called when Item is dragged into Offer Components Tree table
    * When major line item is dragged from left to right
    * @param $event
    */
