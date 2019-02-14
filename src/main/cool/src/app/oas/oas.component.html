@@ -1,258 +1,268 @@
 <!-- OSA -->
-
-<div class="container">
-        <div class="row base-margin-top" >
+<div class="content">
+    <div class="container">
+        <div class="card">
+            <div class="panel panel--indigo panel--compressed task--bar">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span class="icon-back"></span></button>
+                            Scalability Index</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row base-margin-top">
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card__body">
-                                <div class="row oas">
-                                    <div class="col-md-6">
-                                     <h4 class="display-1 text-success">59%</h4>
-                                     </div>
-                                     <div class="col-md-6">
-                                     <div class="card__subtitle display-6">Offer Scalability Score</div>
-                                     <div class="card__subtitle">Increased from 53% at Launch to 59%</div>
-                                   </div>
+                            <div class="row oas">
+                                <div class="col-md-6">
+                                    <h4 class="display-1 text-success">59%</h4>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="card__subtitle display-6">Operational Assessment Score</div><br>
+                                    <div class="card__subtitle">Assessed from offer factors and attributes</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card">
-                        <div class="card__header">
-                            <h4 class="card__title">Card Title</h4>
-                            <div class="card__subtitle">Card Subtitle</div>
-                        </div>
-                        <div class="card__body">Equidem recteque sea et. Per detracto iracundia ea, duo nusquam denique omittantur in.</div>
-                        <div class="card__footer">
-                            <a href="javascript:;">Link</a>
-                            <a href="javascript:;" class="half-margin-left">Another Link</a>
-                        </div>
+                    <div class="panel panel--loose panel--bordered">
+                        <span class="icon-error-outline text-danger"></span>&nbsp;<span>12</span>&nbsp;<span>UnSupported
+                            Offer Factors</span>
+                    </div>
+                    <div class="panel panel--loose panel--bordered">
+                        <span class="icon-check-outline text-success"></span>&nbsp;<span>7</span>&nbsp;<span>Supported
+                            Offer Factors</span>
+                    </div>
+                    <div class="panel panel--loose panel--bordered">
+                        <span class="icon-error-outline text-danger"></span>&nbsp;<span>0</span>&nbsp;<span>Advanced
+                            Offer
+                            Factors</span>
+                    </div>
+                    <div class="panel panel--loose panel--bordered">
+                        <span class="icon-error-outline text-success"></span>&nbsp;<span>19</span>&nbsp;<span>All Offer
+                            Factors</span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <div class="card__header">
-                            <h4 class="card__title">Card Title</h4>
-                            <div class="card__subtitle">Card Subtitle</div>
-                        </div>
-                        <div class="card__body">Equidem recteque sea et. Per detracto iracundia ea, duo nusquam denique omittantur in.</div>
-                        <div class="card__footer">
-                            <a href="javascript:;">Link</a>
-                            <a href="javascript:;" class="half-margin-left">Another Link</a>
-                        </div>
-                    </div>
-                </div>
-        </div>
-
-    <div class="row base-margin-top">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card__body">
-                    <div class="row oas">
-                        <div class="col-md-6">
-                            <h4 class="display-1 text-success">59%</h4>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card__subtitle display-6">Offer Scalability Score</div>
-                            <div class="card__subtitle">Increased from 53% at Launch to 59%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card__header">
-                    <h4 class="card__title">Card Title</h4>
-                    <div class="card__subtitle">Card Subtitle</div>
-                </div>
-                <div class="card__body">Equidem recteque sea et. Per detracto iracundia ea, duo nusquam denique
-                    omittantur in.</div>
-                <div class="card__footer">
-                    <a href="javascript:;">Link</a>
-                    <a href="javascript:;" class="half-margin-left">Another Link</a>
-                </div>
-            </div>
-        </div>       
-    </div>
-
-    <p-messages [(value)]="msgs"></p-messages>
-
-    <ul id="tabsv6" class="tabs tabs--bordered base-margin-top base-margin-bottom" role="tablist" style="z-index: 0">
-        <li class="tab active" *ngFor="let primaryFactor of oasPrimaryFactorsList; let first = first;"
-            [ngClass]="{firstItem: first}" role="presentation"
-            [class.active]="selectedPrimaryOffer===primaryFactor['primaryFactorName']">
-            <a class="padding-5-20 margin-right-10" (click)="selectedPrimaryOffer = primaryFactor['primaryFactorName']" aria-controls="one" role="tab"
-                data-toggle="tab"><div class="tab__heading">{{primaryFactor['primaryFactorName']}}</div></a>
-        </li>
-    </ul>
-
-    <div class="oas" *ngFor="let primaryFactor of oasPrimaryFactorsList">
-
-        <div class=" tab-pane active" *ngIf="selectedPrimaryOffer === primaryFactor['primaryFactorName']"
-            role="tabpanel" id="one">
-            <div class="row">
-                <div class="col-sm-3" *ngFor="let secondaryFactor of primaryFactor['primaryCharactertsics']">
-
-                    <div class="card">
-                        <div class="card-block">
-
-                            <h3 class="card-title">
-                                {{secondaryFactor['secondaryFactorName']}}
-
-                                <div class="pull-right gauge gauge--x-small gauge--success" data-percentage="25">
-                                    <div class="gauge__circle">
-                                        <div class="mask full">
-                                            <div class="fill"></div>
-                                        </div>
-                                        <div class="mask half">
-                                            <div class="fill"></div>
-                                            <div class="fill fix"></div>
-                                        </div>
-                                    </div>
-                                    <div class="gauge__inset">
-                                        <div class="gauge__percentage">
-                                            {{secondaryFactor['secondaryCharactertsics'].length}}</div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="form-group__text">
+                                        <label>Offer Construct</label>
                                     </div>
                                 </div>
-                            </h3>
-
-                            <p-accordion>
-                                <blockquote class="blockquote--blue">
-
-                                    <form #f="ngForm">
-
-                                        <p-accordionTab *ngFor="let char of secondaryFactor['secondaryCharactertsics']"
-                                            header="{{char}}">
-
-
-
-                                            <div class="form-group">
-
-                                                <span class="form-group--label">Your Selection </span>
-
-                                                <button pButton type="button"
-                                                    *ngFor="let attribute of selectedAttribute" [ngClass]="{
-                               'style2':attribute!=null}" class="ui-button-rounded btn btn--small tooltip"
-                                                    (click)="removeAttribute(attribute)">
-                                                    <span class="pi pi-exclamation-triangle"></span>
-                                                    {{attribute}}
-                                                    <span class="pi pi-times"></span>
-                                                </button>
-
-                                            </div>
-
-                                            <hr class="divider divider--compressed" />
-
-                                            <div class="form-group">
-
-                                                <span class="form-group--label">Additional Attributes </span>
-
-                                                <button pButton type="button"
-                                                    *ngFor="let attribute of secondaryFactor['additionalAttributes']"
-                                                    [ngClass]="{'style1':attribute!=null}"
-                                                    class="ui-button-rounded btn btn--small tooltip"
-                                                    (click)="addAttribute(attribute)">
-                                                    {{attribute}}
-                                                </button>
-
-                                            </div>
-
-                                            <hr class="divider divider--compressed" />
-
-                                            <div class="form-group">
-
-                                                <div class="clearfix">
-                                                    <p class="pull-left"><span
-                                                            class="form-group--label">Challenges</span></p>
-                                                    <p class="pull-right"><a (click)="viewAllChallenges()">
-                                                            View All
-                                                        </a></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="progressbar progressbar--warning" data-percentage="45">
+                                    <div class="progressbar__fill"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <span class="icon-error-outline text-danger"></span>&nbsp;<span>4</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="form-group__text">
+                                        <label>Commercial Set Up</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="progressbar">
+                                    <div class="progressbar progressbar--warning" data-percentage="25">
+                                        <div class="progressbar__fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <span class="icon-error-outline text-danger"></span>&nbsp;<span>2</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="form-group__text">
+                                        <label>Commercial Delivery</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="progressbar progressbar--warning" data-percentage="25">
+                                    <div class="progressbar__fill"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <span class="icon-error-outline text-danger"></span>&nbsp;<span>2</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="form-group__text">
+                                        <label>Customer Experience</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="progressbar progressbar--warning" data-percentage="25">
+                                    <div class="progressbar__fill"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <span class="icon-error-outline text-danger"></span>&nbsp;<span>2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="divider divider--compressed"></div>
+            <p-messages [(value)]="msgs"></p-messages>
+            <ul id="tabsv6" class="tabs tabs--bordered base-margin-top base-margin-bottom" role="tablist" style="z-index: 0">
+                <li class="tab active" *ngFor="let primaryFactor of oasPrimaryFactorsList; let first = first;"
+                    [ngClass]="{firstItem: first}" role="presentation" [class.active]="selectedPrimaryOffer===primaryFactor['primaryFactorName']">
+                    <a class="padding-5-20 margin-right-10" (click)="selectedPrimaryOffer = primaryFactor['primaryFactorName']"
+                        aria-controls="one" role="tab" data-toggle="tab">
+                        <div class="tab__heading">{{primaryFactor['primaryFactorName']}}</div>
+                    </a>
+                </li>
+                <li class="pull-right">
+                    <button class="btn btn--primary">Advanced Edit</button>
+                </li>
+            </ul>
+            <div class="oas" *ngFor="let primaryFactor of oasPrimaryFactorsList">
+                <div class=" tab-pane active" *ngIf="selectedPrimaryOffer === primaryFactor['primaryFactorName']" role="tabpanel"
+                    id="one">
+                    <div class="row">
+                        <div class="col-sm-3" *ngFor="let secondaryFactor of primaryFactor['primaryCharactertsics']">
+                            <div class="card">
+                                <div class="card-block">
+                                    <h3 class="card-title">
+                                        {{secondaryFactor['secondaryFactorName']}}
+                                        <div class="pull-right gauge gauge--x-small gauge--success" data-percentage="25">
+                                            <div class="gauge__circle">
+                                                <div class="mask full">
+                                                    <div class="fill"></div>
                                                 </div>
-
-                                                <ng-hide [hidden]="!showChallenges"><span
-                                                        class="pi pi-exclamation-triangle text-warning"></span>02
-                                                    Challenges for Appliance
-                                                </ng-hide><br>
-
-                                            </div>
-
-                                            <hr class="divider divider--compressed" />
-
-                                            <div class="form-group">
-
-                                                <div class="clearfix">
-                                                    <p class="pull-left"><span class="form-group--label">Addresed
-                                                            Challenges</span></p>
-                                                    <p class="pull-right"> <a (click)="viewAllChallenges()">
-                                                            <i class="icon-comment"></i> Comments
-                                                        </a></p>
+                                                <div class="mask half">
+                                                    <div class="fill"></div>
+                                                    <div class="fill fix"></div>
                                                 </div>
-
-                                                <div class="form-group form-group--inline form-group--compressed">
-
-                                                    <p-checkbox value="{{ selectedCheckBox }}"
-                                                        label="{{ selectedCheckBox }}"
-                                                        *ngFor="let selectedCheckBox of selectedCheckBoxValues" ngModel
-                                                        class="form-control" name="selectedCheckBox">
-                                                    </p-checkbox>
-
-                                                </div>
-
                                             </div>
-
-                                            <hr class="divider divider--compressed" />
-
-                                            <div>
-
-                                                <p-dialog name="events" [(visible)]="showDialog" width="300">
-                                                    <h3 class="text-center"><span
-                                                            class="pi pi-exclamation-triangle text-warning"></span>
-                                                    </h3>
-                                                    <p class="text-center"><b>Are You Sure?</b></p>
-                                                    <p class="text-center">Confirm To Proceed</p>
-                                                    <p-footer>
-                                                        <div class="clearfix text-center">
-                                                            <button type="button" pButton
-                                                                [ngStyle]="{'color': 'white', 'background':'gray'}"
-                                                                (click)="onComplete()" label="No"></button>
-                                                            <button type="button" pButton
-                                                                [ngStyle]="{'color': 'white', 'background':'green'}"
-                                                                (click)="onComplete()" label="Yes"></button>
+                                            <div class="gauge__inset">
+                                                <div class="gauge__percentage">
+                                                    {{secondaryFactor['secondaryCharactertsics'].length}}</div>
+                                            </div>
+                                        </div>
+                                    </h3>
+                                    <p-accordion>
+                                        <blockquote class="blockquote--blue">
+                                            <form #f="ngForm">
+                                                <p-accordionTab *ngFor="let char of secondaryFactor['secondaryCharactertsics']"
+                                                    header="{{char}}">
+                                                    <div class="form-group">
+                                                        <span class="form-group--label">Your Selection </span>
+                                                        <button pButton type="button" *ngFor="let attribute of selectedAttribute"
+                                                            [ngClass]="{
+                               'style2':attribute!=null}"
+                                                            class="ui-button-rounded btn btn--small tooltip" (click)="removeAttribute(attribute)">
+                                                            <span class="pi pi-exclamation-triangle"></span>
+                                                            {{attribute}}
+                                                            <span class="pi pi-times"></span>
+                                                        </button>
+                                                    </div>
+                                                    <hr class="divider divider--compressed" />
+                                                    <div class="form-group">
+                                                        <span class="form-group--label">Additional Attributes </span>
+                                                        <button pButton type="button" *ngFor="let attribute of secondaryFactor['additionalAttributes']"
+                                                            [ngClass]="{'style1':attribute!=null}" class="ui-button-rounded btn btn--small tooltip"
+                                                            (click)="addAttribute(attribute)">
+                                                            {{attribute}}
+                                                        </button>
+                                                    </div>
+                                                    <hr class="divider divider--compressed" />
+                                                    <div class="form-group">
+                                                        <div class="clearfix">
+                                                            <p class="pull-left"><span class="form-group--label">Challenges</span></p>
+                                                            <p class="pull-right"><a (click)="viewAllChallenges()">
+                                                                    View All
+                                                                </a></p>
                                                         </div>
-                                                    </p-footer>
-                                                </p-dialog>
-
-                                                <div class="btn-group btn-group--square">
-                                                    <button pButton type="button" class="btn btn--secondary tooltip"
-                                                        (click)=resetForm()>
-                                                        <span class="pi pi-times"></span> Cancel
-                                                    </button>
-                                                    <button pButton type="button" class="btn btn--secondary tooltip"
-                                                        (click)=showDialogBox()>
-                                                        <span class="pi pi-check"></span> Update
-                                                    </button>
-                                                </div>
-
-                                            </div>
-
-
-
-                                        </p-accordionTab>
-
-                                    </form>
-
-                                </blockquote>
-                            </p-accordion>
-
+                                                        <ng-hide [hidden]="!showChallenges"><span class="pi pi-exclamation-triangle text-warning"></span>02
+                                                            Challenges for Appliance
+                                                        </ng-hide><br>
+                                                    </div>
+                                                    <hr class="divider divider--compressed" />
+                                                    <div class="form-group">
+                                                        <div class="clearfix">
+                                                            <p class="pull-left"><span class="form-group--label">Addresed
+                                                                    Challenges</span></p>
+                                                            <p class="pull-right"> <a (click)="viewAllChallenges()">
+                                                                    <i class="icon-comment"></i> Comments
+                                                                </a></p>
+                                                        </div>
+                                                        <div class="form-group form-group--inline form-group--compressed">
+                                                            <p-checkbox value="{{ selectedCheckBox }}" label="{{ selectedCheckBox }}"
+                                                                *ngFor="let selectedCheckBox of selectedCheckBoxValues"
+                                                                ngModel class="form-control" name="selectedCheckBox">
+                                                            </p-checkbox>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="divider divider--compressed" />
+                                                    <div>
+                                                        <p-dialog name="events" [(visible)]="showDialog" width="300">
+                                                            <h3 class="text-center"><span class="pi pi-exclamation-triangle text-warning"></span>
+                                                            </h3>
+                                                            <p class="text-center"><b>Are You Sure?</b></p>
+                                                            <p class="text-center">Confirm To Proceed</p>
+                                                            <p-footer>
+                                                                <div class="clearfix text-center">
+                                                                    <button type="button" pButton [ngStyle]="{'color': 'white', 'background':'gray'}"
+                                                                        (click)="onComplete()" label="No"></button>
+                                                                    <button type="button" pButton [ngStyle]="{'color': 'white', 'background':'green'}"
+                                                                        (click)="onComplete()" label="Yes"></button>
+                                                                </div>
+                                                            </p-footer>
+                                                        </p-dialog>
+                                                        <div class="btn-group btn-group--square">
+                                                            <button pButton type="button" class="btn btn--secondary tooltip"
+                                                                (click)=resetForm()>
+                                                                <span class="pi pi-times"></span> Cancel
+                                                            </button>
+                                                            <button pButton type="button" class="btn btn--secondary tooltip"
+                                                                (click)=showDialogBox()>
+                                                                <span class="pi pi-check"></span> Update
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </p-accordionTab>
+                                            </form>
+                                        </blockquote>
+                                    </p-accordion>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
+                </div>
+            </div>
+            <div class="row base-margin-top">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn--secondary">Discard Changes</button>
+                    <button class="btn btn--primary">Save Changes</button>
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>

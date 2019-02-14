@@ -63,3 +63,23 @@
   clear: both;
   display: table;
 }
+
+.card, a.card {
+  color: #58585b;
+  position: relative;
+  background: #ffffff;
+  box-shadow: none;
+  border: 1px solid #ededed;
+  padding: 10px;
+  display: block;
+  border-radius: 2px;
+  height: 100% !important;
+}
+
+.progressbar.progressbar--warning .progressbar__fill {
+  background-color: red;
+}
+
+blockquote.blockquote--blue {
+  border-color: red !important;
+}
