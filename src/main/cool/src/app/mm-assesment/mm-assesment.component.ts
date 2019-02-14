@@ -199,15 +199,16 @@ export class MmAssesmentComponent implements OnInit {
           this.offerData['offerId'] = this.currentOfferId;
           this.offerData['mmChoice'] = 'REVALIDATE';
           this.offerData['mmId'] = null;
-          // console.log(this.offerData);
           let postData = this.offerData;
           postData['groups'] = this.offerData['groups'];
           this.monetizationModelService.toNextSetp(postData).subscribe(data => {
+            if (this.dimensionMode === false) {
             this.groupData.splice(1);
             this.groupNames.splice(1);
             data['groups'].forEach(group => {
               this.getGroupData(group, selectedCharacteristics, true);
             });
+          }
           });
         }
 
@@ -221,7 +222,6 @@ export class MmAssesmentComponent implements OnInit {
           that.groupData.shift();
           that.groupNames.shift();
         }
-        console.log("offerData", that.groupData);
 
 
       });
@@ -887,191 +887,6 @@ export class MmAssesmentComponent implements OnInit {
 
     })
   }
-
-
-
-  editOffer(){
-    this.proceedButtonStatusValid = false;
-    this.disablefields = false;
-
-  }
-
-  show() {
-    this.proceedButtonStatusValid = true;
-    this.display =true;
-
-  //   let selectedCharacteristics = [];
-  //   let additionalCharacteristics = [];
-  //   this.groupData.forEach((group, index) => {
-  //     for (let prop in group) {
-  //       let subselectedCharacteristics = {};
-  //       let notSubselectedCharacteristics = {};
-  //       subselectedCharacteristics['group'] = this.groupNames[index];
-  //       subselectedCharacteristics['subgroup'] = prop;
-  //       subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
-  //       subselectedCharacteristics['characteristics'] = [];
-
-  //       notSubselectedCharacteristics['group'] = this.groupNames[index];
-  //       notSubselectedCharacteristics['subgroup'] = prop;
-  //       notSubselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
-  //       notSubselectedCharacteristics['characteristics'] = [];
-  //       group[prop].forEach((characters) => {
-  //         if (characters['status'] === 1 || characters['type'] === 2) {
-  //           subselectedCharacteristics['characteristics'].push(characters['name']);
-  //         } else {
-  //           notSubselectedCharacteristics['characteristics'].push(characters['name']);
-  //         }
-  //       });
-  //       selectedCharacteristics.push(subselectedCharacteristics);
-  //       additionalCharacteristics.push(notSubselectedCharacteristics);
-  //     }
-  //   });
-
-  //   let stakeHolders = [];
-  //   for (let prop in this.stakeData) {
-  //     this.stakeData[prop].forEach(sh => {
-  //       stakeHolders.push({
-  //         '_id': sh['_id'],
-  //         'businessEntity': sh['userMappings'][0]['businessEntity'],
-  //         'functionalRole': sh['userMappings'][0]['functionalRole'],
-  //         'offerRole': sh['userMappings'][0]['appRoleList'][0],
-  //         'stakeholderDefaults': sh['stakeholderDefaults'],
-  //         'name': sh['userName']
-  //       });
-  //     });
-  //   }
-
-  //   let obj={
-
-  //   offerId : this.currentOfferId == null ? '' : this.currentOfferId,
-  
-  //   offerName :this.offerBuilderdata['offerDesc'] == null ? '' : this.offerBuilderdata['offerDesc'],
-  
-  //   offerDesc :this.offerBuilderdata['offerCreatedBy'] == null ? '' : this.offerBuilderdata['offerCreatedBy'],
-  
-  //   offerCreatedBy : this.offerBuilderdata['offerOwner'] == null ? '' : this.offerBuilderdata['offerOwner'],
-  
-  //   offerCreationDate :  this.offerBuilderdata['offerCreationDate'] == null ? '' : this.offerBuilderdata['offerCreationDate'],
-  
-  //   offerOwner :  this.offerBuilderdata['offerOwner'] == null ? '' : this.offerBuilderdata['offerOwner'],
-  
-  //   clonedOfferId :  this.offerBuilderdata['clonedOfferId'] == null ? '' : this.offerBuilderdata['clonedOfferId'],
-  
-  //   primaryBUList :this.offerBuilderdata['primaryBUList'] == null ? '' : this.offerBuilderdata['primaryBUList'],
-  
-  //   primaryBEList : this.offerBuilderdata['primaryBEList'] == null ? '' : this.offerBuilderdata['primaryBEList'],
-  
-  //   strategyReviewDate : this.offerBuilderdata['strategyReviewDate'] == null ? '' : this.offerBuilderdata['strategyReviewDate'],
-  
-  //   designReviewDate :  this.offerBuilderdata['designReviewDate'] == null ? '' : this.offerBuilderdata['designReviewDate'],
-  
-  //   readinessReviewDate : this.offerBuilderdata['readinessReviewDate'] == null ? '' : this.offerBuilderdata['readinessReviewDate'],
-  
-   
-  //   selectedCharacteristics :selectedCharacteristics,
-  //   derivedMM : this.currentMMModel == null ? '' : this.currentMMModel,
-  
-  //   overallStatus :this.message['contentHead'],
-  
-  //   additionalCharacteristics :additionalCharacteristics,
- 
-  //     stakeholders :stakeHolders,
-  //   expectedLaunchDate :this.offerBuilderdata['expectedLaunchDate'] ,
-  
-  //  status : {
-  
-  //     offerPhase : "PreLaunch",
-  
-  //       offerMilestone : "Launch In Progress",
-  
-  //       phaseMilestone : "Execute",
-  
-  //       subMilestone: "Offer Set Up and Design"
-  
-  //   },
-  
-  //  ideate : [],
-  
-  //   "plan" : [],
-   
-  //   secondaryBUList :this.offerBuilderdata['secondaryBUList'] ,
-  
-  //   secondaryBEList :this.offerBuilderdata['secondaryBEList'],
-  
-  //   offerStatus : "Offer service completion"
-  
-  // } 
-  // console.log("finalObjecydata::::::::::",obj);
-  // this.createOfferService.getEditOfferUpdate(obj).subscribe(data=>{
-  //   let finaldata=data;
-  //   console.log("after submit edit",finaldata);
-  // })
-   
-  }
-  showWarning(){
-    this.showWarningSave = true;
-
-  }
-
-  PreviousValues(){
-    this.proceedButtonStatusValid = true;
-   
-    let newArray = [];
-    
-    this.monetizationModelService.getAttributes().subscribe(data => {
-      this.offerData = data;
-      this.groupData =[];
-      console.log("selectedCharacteristics",this. oldselectedCharacteristics['Offer Characteristics']);
-      this.offerData['groups'].forEach(group => {
-        let curGroup = {};
-        group['subGroup'].forEach(g => {
-          // console.log("g:::",g.subGroupName)
-          if(Object.keys(this. oldselectedCharacteristics).length != 0){
-          newArray = this. oldselectedCharacteristics['Offer Characteristics'][g['subGroupName']];
-          }
-          // console.log("offerArra::::",this.offerArray);
-          curGroup[g['subGroupName']] = [];
-          g.choices.forEach((c) => {
-             this.match =false;
-            const splitArr = c.split('#');
-            const attrName = splitArr[0];
-            const description = splitArr[1];
-            // console.log("attrName:::::",attrName)
-
-            if(newArray && newArray.length == 1 && newArray ==attrName ){
-
-              curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-             this.match =true;
-        }
-            if(newArray && newArray.length > 1){
-              newArray.forEach(value =>{
-                   if(attrName == value ){
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-                this.match = true; 
-               }
-               if(this.match  == true){
-                return false;
-               }
-             });
-            }
-            if(this.match == false){
-              curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
-            }
-
-          });
-        });
-       this.groupData.push(curGroup);
-      });
-    });
-   /*    
-    this.groupNames = this.groupNames.filter(function(elem, index, self) {
-      return index == self.indexOf(elem);
-   }); */ 
-   console.log("groupNames",this.groupNames);
-    
-  }
-
-
 
   goBackToOffercreation() {
     this.router.navigate(['/coolOffer', this.currentOfferId, this.caseId]);
