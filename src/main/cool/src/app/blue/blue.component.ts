@@ -17,7 +17,7 @@ export class BlueComponent implements OnInit {
   }
 
   // offerConstruct() {
-  //   
+  //
   // }
 
 goBack(){
