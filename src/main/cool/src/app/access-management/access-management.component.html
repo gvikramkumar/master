@@ -169,7 +169,7 @@
                   <div class="btn-group btn-group--wide pull-right base-margin-top">
                     <div class="panel--footer">
                       <button class="btn btn--secondary" (click)="closeForm()">Cancel</button>
-                      <button class="btn btn--primary" [disabled] = "!registerUserForm.valid" type="submit">Save</button>
+                      <button class="btn btn--primary" [disabled] = "!registerUserForm.valid || !userIdAvailable" type="submit">Save</button>
                     </div>
                   </div>
                 </div>
