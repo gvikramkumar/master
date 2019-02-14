@@ -176,7 +176,7 @@ export class MmAssesmentComponent implements OnInit {
           this.getStakeData(offerDetailRes['derivedMM']);
         }
       });
-
+       // Get Attributes
       this.monetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
         console.log("selectedCharacteristics", selectedCharacteristics['Offer Characteristics']);
@@ -202,13 +202,18 @@ export class MmAssesmentComponent implements OnInit {
           let postData = this.offerData;
           postData['groups'] = this.offerData['groups'];
           this.monetizationModelService.toNextSetp(postData).subscribe(data => {
-            if (this.dimensionMode === false) {
             this.groupData.splice(1);
             this.groupNames.splice(1);
             data['groups'].forEach(group => {
               this.getGroupData(group, selectedCharacteristics, true);
             });
-          }
+            if (this.dimensionMode === true) {
+              // dimension page, remove the first tab
+              that.dimensionFirstGroupData = that.groupData[0];
+              that.dimensionFirstGroupName = that.groupNames[0];
+              that.groupData.shift();
+              that.groupNames.shift();
+            }
           });
         }
 
@@ -479,7 +484,6 @@ export class MmAssesmentComponent implements OnInit {
       this.offerData['offerId'] = this.currentOfferId;
       this.offerData['mmChoice'] = 'REVALIDATE';
       this.offerData['mmId'] = null;
-      // console.log(this.offerData);
       let postData = this.offerData;
       postData['groups'] = this.offerData['groups'];
 
@@ -495,7 +499,7 @@ export class MmAssesmentComponent implements OnInit {
         }
 
         this.currentMMModel = data['mmModel'];
-        if (data['mmModel'] !== null && this.activeTabIndex < this.groupNames.length - 1) {
+        if (this.activeTabIndex < this.groupNames.length - 1) {
           this.activeTabIndex += 1;
         }
         this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
@@ -614,7 +618,7 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
   changeTab(index) {
-    if (this.canClickNextStep === true && this.currentMMModel !== null) {
+    if (this.canClickNextStep === true) {
       this.activeTabIndex = index;
     }
   }
