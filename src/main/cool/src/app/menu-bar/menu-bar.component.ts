@@ -4,7 +4,7 @@ import { MenuBarService } from '../services/menu-bar.service';
 import { UserService } from '../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
-
+import { EnvironmentService } from '../../environments/environment.service';
 
 
 @Component({
@@ -35,7 +35,8 @@ export class MenuBarComponent implements OnInit {
         private userService: UserService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private localStorage: LocalStorageService) {
+        private localStorage: LocalStorageService,
+        private environmentService: EnvironmentService) {
 
         this.activatedRoute.params.subscribe(params => {
             this.currentOfferId = params['id'];
@@ -126,7 +127,7 @@ export class MenuBarComponent implements OnInit {
 
                 let textValue = document.createElement('a');
                 textValue.innerText = 'here';
-                textValue.href = 'cool/#/dashboard';
+                textValue.href = this.environmentService.redirect_url;
 
 
                 let emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
@@ -162,7 +163,7 @@ export class MenuBarComponent implements OnInit {
 
                 let textValue = document.createElement('a');
                 textValue.innerText = 'here';
-                textValue.href = 'cool/#/dashboard';
+                textValue.href = this.environmentService.redirect_url;
 
                 let emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
                 let emailBody = `Hello ${this.currentUsername},

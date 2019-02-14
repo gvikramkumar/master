@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { Message } from 'primeng/components/common/api';
 import { NgForm } from '@angular/forms';
+import { Location } from '@angular/common';
 
 
 export class OasPrimaryFactors {
@@ -68,7 +69,8 @@ export class OasComponent implements OnInit {
   constructor(
     private router: Router,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService) {
+    private confirmationService: ConfirmationService,
+    private _location: Location) {
 
     this.showDialog = false;
     this.showChallenges = false;
@@ -164,6 +166,10 @@ export class OasComponent implements OnInit {
     if (index !== -1) {
       this.selectedAttribute.splice(index, 1);
     }
+  }
+
+  goBack() {
+    this._location.back();
   }
 
 }
