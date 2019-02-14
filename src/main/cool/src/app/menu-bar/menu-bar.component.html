@@ -1,6 +1,6 @@
-<h1 class="display-4 base-margin-top half-margin-bottom">
+<h1 class="relative display-4 base-margin-top half-margin-bottom">
   <button class="btn btn--icon btn--white" id="flyOut"><span class="icon-list-menu"></span>
-      <div id='flyoutmenu'>
+       </button>  <div id='flyoutmenu'>
               <ul class="panel--indigo">
                   <li *ngFor="let item of items" ><span>{{item['label']}}</span>
                       <ul class="panel--vibblue">
@@ -36,15 +36,15 @@
               </ul>
       </div>
 
-    </button>
+
     <span *ngIf="!currentOfferId; then newOffer else oldOffer"></span>
     <ng-template #newOffer>
         <span>Create New Offer</span>
     </ng-template>
     <ng-template #oldOffer>
-            <span> {{currentOfferName}}&nbsp;<span class="offerID">(Offer ID  {{currentOfferId}})</span></span>
-        </ng-template>
+        <span> {{currentOfferName}}&nbsp;<span class="offerID">(Offer ID {{currentOfferId}})</span></span>
+    </ng-template>
 
 </h1>
 
-<app-menu-bar-popup  [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)" ></app-menu-bar-popup>
+<app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
