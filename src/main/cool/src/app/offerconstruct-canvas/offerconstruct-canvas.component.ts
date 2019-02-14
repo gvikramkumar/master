@@ -22,7 +22,7 @@ import { ItemDetail } from './model/ItemDetail';
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offerconstruct-canvas.component.html',
   styleUrls: ['./offerconstruct-canvas.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, OfferConstructService]
 })
 export class OfferconstructCanvasComponent implements OnInit {
   questionForm: FormGroup;
@@ -67,13 +67,14 @@ export class OfferconstructCanvasComponent implements OnInit {
   majorItemsGroup;
   majorLineGroup: any[] = [];
   formGroupData= [];
+  mandatoryFields=[];
   formGroupDataMinorItems = [];
   count = 1;
   displayMandatory;
   toggleMandatory = true;
   myForm: FormGroup;
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
-    private offerConstructService: OfferConstructService,
+    private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -83,6 +84,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       // you can also set initial formgroup inside if you like
       companies: this._fb.array([])
     })
+    
   }
 
   /**
@@ -123,6 +125,7 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   showDialog() {
     this.majorItemData = [];
+    this.minorItemData = [];
     this.display = true;
     let tempObj= [];
     this.offerConstructItems = [...this.offerConstructItems]
@@ -170,7 +173,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       let payLoad = {groups: [minorGroups[i]]}
       m.offerConstructService.addDetails(payLoad).subscribe(
         (data) => {
-          this.formGroupDataMinorItems.push(data.groups[0]);
+          this.formGroupDataMinorItems.push(data);
           console.log(this.formGroupDataMinorItems);
       console.log(this.questions)
       this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
@@ -179,16 +182,18 @@ export class OfferconstructCanvasComponent implements OnInit {
       );
       }
     for (let i = 0; i < groups.length; i++) {
-      let payLoad = {groups: [groups[i]]}
-      m.offerConstructService.addDetails(payLoad).subscribe(
+      let payLoadMajor = {groups: [groups[i]]}
+      m.offerConstructService.addDetails(payLoadMajor).subscribe(
         (data) => {
-      this.formGroupData.push(data.groups[0]);
+      this.formGroupData.push(data);
+      this.mandatoryFields.push(data.groups[0]);
       this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
         }, err => console.log('error ' + err),
         () => console.log('Ok ')
       );
       }
       console.log(this.formGroupData);
+      console.log(this.mandatoryFields);
   }
 
   deleteNode(node) {
@@ -359,6 +364,32 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.offerConstructService.space.subscribe((val) => {
+      console.log(val);
+      console.log(this.offerConstructItems);
+      this.offerConstructItems.forEach(item=>{
+        if(item.data.productName == val[0]){
+          item.data['itemDetails'] = val[1];
+        }
+      })
+      this.offerConstructItems.forEach(value=>{
+        value.children.forEach(itm=>{
+          if(itm.data.productName == val[0]){
+            itm.data['itemDetails'] = val[1];
+            console.log('asdfafdadf ',itm);
+          }
+        })
+      })
+
+      this.offerConstructService.closeDialog.subscribe((val) => {
+        if(val=='close'){
+          this.display = false;
+        }
+      })
+
+      this.offerConstructItems = [...this.offerConstructItems];
+      console.log(this.offerConstructItems);
+    });
     this.questionForm = new FormGroup({
     });
 
@@ -548,6 +579,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   onHide() {
+    this.offerConstructService.changeForm('reset');
     this.displayAddDetails = false;
     this.questionForm.reset();
     this.questions = [];
@@ -557,7 +589,9 @@ export class OfferconstructCanvasComponent implements OnInit {
   addItemDetails() {
     this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.questionForm.value);
+    console.log(this.questionForm.value);
     this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
+    console.log(this.offerConstructItems);
     this.closeDailog();
   }
 
@@ -603,6 +637,7 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   saveOfferConstructChanges() {
     this.offerConstructItems = [... this.offerConstructItems];
+    console.log('this is the object', this.offerConstructItems)
     let cds: ConstructDetails  = new ConstructDetails(this.currentOfferId, []);
     this.offerConstructItems.forEach( (node) => {
       let cd:ConstructDetail;
@@ -614,6 +649,17 @@ export class OfferconstructCanvasComponent implements OnInit {
         cd.constructType = node.data.productName;
         cd.productFamily = node.data.productName;
         cd.groupName = [];
+        if (node.data.itemDetails !== undefined) {
+          let id: ItemDetail;
+          for (const key in node.data.itemDetails) {
+            id = new ItemDetail();
+            id.attributeName = key;
+            id.attributeValue = node.data.itemDetails[key];
+            id.attributeType = 'Unique';
+            id.existingFromEgenie = false;
+            cd.itemDetails.push(id);
+          };
+        }
         cds.constructDetails.push(cd);
       }
 
@@ -628,16 +674,15 @@ export class OfferconstructCanvasComponent implements OnInit {
             cd.productFamily = child.data.productName;
             cd.groupName = [];
             if (child.data.itemDetails !== undefined) {
-              let props = Object.keys(child.data.itemDetails);
               let id: ItemDetail;
-              props.forEach((prop) => {
+              for (const key in child.data.itemDetails) {
                 id = new ItemDetail();
-                id.attributeName = prop;
-                id.attributeValue = child.data.itemDetails.prop;
+                id.attributeName = key;
+                id.attributeValue = child.data.itemDetails[key];
                 id.attributeType = 'Unique';
                 id.existingFromEgenie = false;
                 cd.itemDetails.push(id);
-              });
+              };
             }
             cds.constructDetails.push(cd);
           } else {
@@ -650,16 +695,15 @@ export class OfferconstructCanvasComponent implements OnInit {
                   cd.productFamily = gchild.data.productName;
                   cd.groupName.push(child.data.productName);
                   if (gchild.data.itemDetails !== undefined) {
-                    let props = Object.keys(gchild.data.itemDetails);
                     let id: ItemDetail;
-                    props.forEach((prop) => {
+                    for (const key in gchild.data.itemDetails) {
                       id = new ItemDetail();
-                      id.attributeName = prop;
-                      id.attributeValue = gchild.data.itemDetails.prop;
+                      id.attributeName = key;
+                      id.attributeValue = gchild.data.itemDetails[key];
                       id.attributeType = 'Unique';
                       id.existingFromEgenie = false;
                       cd.itemDetails.push(id);
-                    });
+                    };
                   }
                   cds.constructDetails.push(cd);
                 });
