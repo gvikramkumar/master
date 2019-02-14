@@ -75,6 +75,7 @@ export class EnvironmentService {
     REST_API_POST_RULE_RESULT_URL;
     REST_API_GET_RULE_RESULT_URL;
     REST_API_OWB_CONTROLLER;
+    REST_API_USER_DETAILS;
 
     authtokenbaseapi = '';
     client_id;
@@ -217,7 +218,7 @@ export class EnvironmentService {
         this.REST_API_DOWNLOAD_ZIP_GET_URL = this.baseapi + '/eGenie/zip/';
         this.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL = this.baseapi + '/setOfferConstructAttribute';
         this.REST_API_OFFER_SOLUTIONING_POST_URL = this.baseapi + '/setOfferSolution';
-        this.REST_API_IDPID_GET_URL=this.baseapi+'/offer/productOffers';
+        this.REST_API_IDPID_GET_URL = this.baseapi + '/offer/productOffers';
         this.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL = this.baseapi + '/emailNotification/sendEmailNotification/';
         this.REST_API_LEAD_TIME_AVERAGE_WEEKS = this.baseapi + '/leadTimeCal/getLTC/';
         this.REST_API_LEAD_TIME_LAUNCH_DATE = this.baseapi + '/leadTimeCal/getLTC/';
@@ -229,5 +230,6 @@ export class EnvironmentService {
         this.REST_API_POST_RULE_RESULT_URL = this.baseapi + '/offer/offerDimensions';
         this.REST_API_GET_RULE_RESULT_URL = this.baseapi + '/offer/offerDimensions/';
         this.REST_API_OWB_CONTROLLER = this.baseapi + '/owb/create';
+        this.REST_API_USER_DETAILS = this.basepdafapi + '/user/1.0/getLdapUserInfo';
     }
 }

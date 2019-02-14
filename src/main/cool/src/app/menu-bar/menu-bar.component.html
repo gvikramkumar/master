@@ -42,9 +42,9 @@
         <span>Create New Offer</span>
     </ng-template>
     <ng-template #oldOffer>
-            <span> {{currentOfferName}}&nbsp;<span class="offerID">(Offer ID  {{currentOfferId}})</span></span>
-        </ng-template>
+        <span> {{currentOfferName}}&nbsp;<span class="offerID">(Offer ID {{currentOfferId}})</span></span>
+    </ng-template>
 
 </h1>
 
-<app-menu-bar-popup  [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)" ></app-menu-bar-popup>
+<app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
