@@ -27,7 +27,11 @@
 #flyoutmenu:hover {
     visibility: visible;
 }
-#flyOut:hover > #flyoutmenu, #flyOut:focus-within > #flyoutmenu, #flyOut > #flyoutmenu:focus-within {
+/* #flyOut:hover > #flyoutmenu, #flyOut:focus-within > #flyoutmenu, #flyOut > #flyoutmenu:focus-within {
+    visibility: visible;
+    display: block;
+} */
+#flyOut:hover + #flyoutmenu, #flyOut:focus-within + #flyoutmenu, #flyOut + #flyoutmenu:focus-within {
     visibility: visible;
     display: block;
 }
