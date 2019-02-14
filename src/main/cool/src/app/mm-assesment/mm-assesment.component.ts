@@ -209,10 +209,12 @@ export class MmAssesmentComponent implements OnInit {
             });
             if (this.dimensionMode === true) {
               // dimension page, remove the first tab
-              that.dimensionFirstGroupData = that.groupData[0];
-              that.dimensionFirstGroupName = that.groupNames[0];
-              that.groupData.shift();
-              that.groupNames.shift();
+              // that.dimensionFirstGroupData = that.groupData[0];
+              // that.dimensionFirstGroupName = that.groupNames[0];
+              // that.groupData.shift();
+              // that.groupNames.shift();
+              this.groupData.shift();
+              this.groupNames.shift();
             }
           });
         }
