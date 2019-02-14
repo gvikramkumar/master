@@ -5,6 +5,7 @@ import { SelectItem } from 'primeng/api';
 import { NgForm } from '@angular/forms';
 import { NewUser } from '../models/newuser';
 import { UserMapping } from '../models/usermapping';
+import { User } from './user';
 
 @Component({
   selector: 'app-access-management',
@@ -26,14 +27,18 @@ export class AccessManagementComponent implements OnInit {
   showFormSection = false;
   Obj;
   cols: any[];
-  registerNewUserfun:any;
-  newUser:NewUser [] = [];
-  accessList:any[]=[];
+  registerNewUserfun: any;
+  newUser: NewUser[] = [];
+  accessList: any[] = [];
   businessUnitsForCreateuser;
+
+  userIdAvailable: boolean;
 
   constructor(private accessManagementService: AccessManagementService) { }
 
   ngOnInit() {
+
+    this.userIdAvailable = false;
     this.showFormSection = false;
     this.cols = [
       { field: 'emailId', header: 'Cisco ID' },
@@ -63,8 +68,8 @@ export class AccessManagementComponent implements OnInit {
     });
 
     this.getbusinessEntity();
-    this.accessManagementService.getregisterUserFunction().subscribe(data=>{
-            this.registerNewUserfun=data;
+    this.accessManagementService.getregisterUserFunction().subscribe(data => {
+      this.registerNewUserfun = data;
     });
 
     this.accessList.push({ label: 'KeyPOC', value: 'KeyPOC' });
@@ -77,7 +82,7 @@ export class AccessManagementComponent implements OnInit {
         this.businessEntities = <any>data;
         const beArry = [];
         this.businessEntities.forEach(element => {
-          if (element.BE != null){
+          if (element.BE != null) {
             beArry.push({ label: element.BE, value: element.BE });
           }
         });
@@ -86,27 +91,27 @@ export class AccessManagementComponent implements OnInit {
       });
   }
 
-    getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
-      this.getPrimaryBusinessUnitPromise(event);
-    }
+  getPrimaryBusinessUnitBasedOnPrimaryBE(event) {
+    this.getPrimaryBusinessUnitPromise(event);
+  }
 
-    getPrimaryBusinessUnitPromise(event) {
-      return new Promise((resolve, reject) => {
-        this.accessManagementService.getPrimaryBuBasedOnBe(event.toString())
-          .subscribe(data => {
-            const primaryBuArry = [];
-            const dataArray = data as Array<any>;
-            dataArray.forEach(element => {
-              if (element.BUSINESS_UNIT !== null) {
-                primaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
-              }
-            });
-            primaryBuArry.push({ label: 'All', value: 'All' });
-            this.businessUnitsForCreateuser = this.removeDuplicates(primaryBuArry, 'label');
-            resolve();
+  getPrimaryBusinessUnitPromise(event) {
+    return new Promise((resolve, reject) => {
+      this.accessManagementService.getPrimaryBuBasedOnBe(event.toString())
+        .subscribe(data => {
+          const primaryBuArry = [];
+          const dataArray = data as Array<any>;
+          dataArray.forEach(element => {
+            if (element.BUSINESS_UNIT !== null) {
+              primaryBuArry.push({ label: element.BUSINESS_UNIT, value: element.BUSINESS_UNIT });
+            }
           });
-      });
-    }
+          primaryBuArry.push({ label: 'All', value: 'All' });
+          this.businessUnitsForCreateuser = this.removeDuplicates(primaryBuArry, 'label');
+          resolve();
+        });
+    });
+  }
 
   removeDuplicates(myArr, prop) {
     return myArr.filter((obj, pos, arr) => {
@@ -127,7 +132,7 @@ export class AccessManagementComponent implements OnInit {
     data.forEach(element => {
       let temp = element;
       let beList: any[] = []
-      let accessList : any[] = [];
+      let accessList: any[] = [];
       element.userMapping.forEach(userMaps => {
         beList.push(userMaps.businessEntity)
       });
@@ -136,10 +141,10 @@ export class AccessManagementComponent implements OnInit {
       temp['functionalRole'] = element.userMapping[0].functionalRole;
       temp['keyPOC'] = element.userMapping[0].keyPOC;
       temp['functionalAdmin'] = element.userMapping[0].functionalAdmin;
-      if(element.userMapping[0].keyPOC){
+      if (element.userMapping[0].keyPOC) {
         accessList.push('KeyPOC');
       }
-      if(element.userMapping[0].functionalAdmin){
+      if (element.userMapping[0].functionalAdmin) {
         accessList.push('Admin');
       }
       temp['accessList'] = accessList;
@@ -229,7 +234,7 @@ export class AccessManagementComponent implements OnInit {
    * Function to update access level(KeyPOC/Admin) for the user.
    * @param user
    */
-  updatedAccessForUser(user){
+  updatedAccessForUser(user) {
     console.log(user);
     let isKeyPoC = user.accessList.includes('KeyPOC');
     let isAdmin = user.accessList.includes('Admin');
@@ -273,6 +278,29 @@ export class AccessManagementComponent implements OnInit {
       res.push({ 'label': a, 'value': a });
     });
     return res;
+  }
+
+  async checkUserIdAvailability(userId) {
+
+    // Initiailize User
+    const user = new User(userId.toString());
+
+    // Retireve User Details
+    this.accessManagementService.getUserDetails(user).subscribe(
+      data => {
+
+        if (Object.keys(data).length == 0 || data['errorMsg'] !=null) {
+          this.userIdAvailable = false;
+        } else {
+          this.userIdAvailable = true;
+        }
+
+      }, error => {
+        this.userIdAvailable = false;
+      }
+
+    );
+
   }
 
 }
