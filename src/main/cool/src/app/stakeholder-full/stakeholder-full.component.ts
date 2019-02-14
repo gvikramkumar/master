@@ -99,7 +99,7 @@ export class StakeholderFullComponent implements OnInit {
       this.funcionalRoleList = data;
     });
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
-  
+
       this.firstData = data;
       this.data = this.firstData.stakeholders;
       this.offerName = this.firstData['offerName'];
@@ -336,7 +336,7 @@ export class StakeholderFullComponent implements OnInit {
       })
   }
 
-  gotoMMpage() {
+  goBack() {
     this.router.navigate(['/mmassesment', this.currentOfferId, this.caseId]);
   }
 
