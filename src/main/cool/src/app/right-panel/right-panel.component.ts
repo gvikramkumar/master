@@ -543,5 +543,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.router.navigate(this.navigateHash[name]);
     }
   }
+
+  goScalabilityIndex() {
+    this.router.navigate(['/oas']);
+  }
 }
 
