@@ -95,7 +95,7 @@
             <div class="panel-wrapper mt-20">
               <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" style="z-index: 0">
                 <li class="tab" *ngFor="let groupName of groupNames; let i = index" [ngClass]="{ active: i == activeTabIndex,
-              disabled: !canClickNextStep && i!=0 }" (click)="changeTab(i)">
+              disabled: !canClickTab && i!=0 }" (click)="changeTab(i)">
                   <a tabindex="0" class="padding-5-20 margin-right-10">
                     <div class="tab__heading" style="margin:auto">{{ groupName }}</div>
                   </a>

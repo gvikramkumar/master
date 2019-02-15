@@ -12,6 +12,7 @@ import { OffersolutioningService } from '../services/offersolutioning.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { LeadTime } from '../right-panel/lead-time';
+import { StakeholderfullService } from '../services/stakeholderfull.service';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -22,6 +23,8 @@ export class MmAssesmentComponent implements OnInit {
 
 
   public model: any;
+  public firstData: any;
+  public data: any[];
   aligned: boolean;
   proceedFlag = false;
   alignedFlag = false;
@@ -45,8 +48,13 @@ export class MmAssesmentComponent implements OnInit {
   offerBuilderdata = {};
   displayLeadTime = false;
   noOfWeeksDifference: string;
+  stakeHolderInfo = {};
+  Stakeholders: any[] = [];
+  offerName;
+  offerOwner;
 
   canClickNextStep = false;
+  canClickTab = false;
   currentMMModel: string = null;
   currentPrimaryBE: any;
   userName;
@@ -76,7 +84,8 @@ export class MmAssesmentComponent implements OnInit {
     private offerDetailViewService: OfferDetailViewService,
     private configService: ConfigurationService,
     private offersolutioningService: OffersolutioningService,
-    private rightPanelService: RightPanelService
+    private rightPanelService: RightPanelService,
+    private stakeholderfullService: StakeholderfullService
   ) {
     this.showEditbutton= false;
     this.display =false;
@@ -96,6 +105,9 @@ export class MmAssesmentComponent implements OnInit {
   ngOnInit() {
     if (this.router.url.match(/offerDimension/) !== null) {
       this.dimensionMode = true;
+    }
+    if (this.dimensionMode) {
+      this.canClickTab = true;
     }
     this.offerArray = [];
     // Fetch logged in owner name from configurationservice.
@@ -145,12 +157,15 @@ export class MmAssesmentComponent implements OnInit {
       if (offerDetailRes['overallStatus'] == null) {
         this.message = { contentHead: 'Great Work!', content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.', color: 'black' };
       } else if (offerDetailRes['overallStatus'] === 'Aligned') {
+        this.canClickNextStep = true;
         this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerDetailRes['derivedMM']}`, mmModel: offerDetailRes['derivedMM'] };
       } else if (offerDetailRes['overallStatus'] === 'Partially Aligned') {
+        this.canClickNextStep = true;
         this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerDetailRes['derivedMM']}.`, mmModel: offerDetailRes['derivedMM'] };
       } else {
+        this.canClickNextStep = true;
         this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
       }
@@ -179,11 +194,10 @@ export class MmAssesmentComponent implements OnInit {
        // Get Attributes
       this.monetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
-        console.log("selectedCharacteristics", selectedCharacteristics['Offer Characteristics']);
         that.offerData['groups'].forEach(group => {
           this.getGroupData(group, selectedCharacteristics);
         });
-
+        
         if (offerDetailRes['derivedMM'] != null) {
           var index = 0;
           var groupKeys = this.getGroupKeys(this.groupData[0]);
@@ -233,6 +247,45 @@ export class MmAssesmentComponent implements OnInit {
 
       });
     });
+// Get StakeHolder
+let that = this;
+this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+  this.firstData = data;
+  this.offerName = data['offerName'];
+  this.offerOwner = data['offerOwner'];
+  this.derivedMM = data['derivedMM'];
+  this.displayLeadTime = true;
+  this.offerId = this.currentOfferId;
+  this.data = this.firstData['stakeholders'];
+  this.derivedMM = this.firstData['derivedMM'];
+  this.primaryBE = this.firstData['primaryBEList'][0];
+  this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+    (leadTime: LeadTime) => {
+      this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+    }
+  );
+
+  this.stakeHolderInfo = {};
+  // this.processStakeHolderData(this.data);
+  for (let i = 0; i <= this.data.length - 1; i++) {
+    if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
+      this.stakeHolderInfo[this.data[i]['offerRole']] = [];
+    }
+    this.stakeHolderInfo[this.data[i]['offerRole']].push(
+      {
+        userName: this.data[i]['name'],
+        emailId: this.data[i]['_id'] + '@cisco.com',
+        _id: this.data[i]['_id'],
+        businessEntity: this.data[i]['businessEntity'],
+        functionalRole: this.data[i]['functionalRole'],
+        offerRole: this.data[i]['offerRole'],
+        stakeholderDefaults: this.data[i]['stakeholderDefaults']
+      });
+  }
+
+  this.stakeData = this.stakeHolderInfo;
+
+});
   }
 
   getGroupData(group, selectedCharacteristics, toNextSetpFlag = false) {
@@ -266,6 +319,7 @@ export class MmAssesmentComponent implements OnInit {
     });
     this.groupData.push(curGroup);
   }
+
 
   //downloadPDF
   downloadPDF() {
@@ -466,12 +520,15 @@ export class MmAssesmentComponent implements OnInit {
   toPrevStep() {
     if (this.activeTabIndex > 0) {
       this.activeTabIndex -= 1;
+      if (this.activeTabIndex === 0 && !this.dimensionMode) {
+        this.canClickTab = false;
+      }
     }
   }
 
   toNextStep() {
-
-    if (this.activeTabIndex === 0) {
+    if (this.activeTabIndex === 0 && !this.dimensionMode) {
+      this.canClickTab = true;
       var index = 0;
       var groupKeys = this.getGroupKeys(this.groupData[0]);
       groupKeys.forEach((key) => {
@@ -574,6 +631,7 @@ export class MmAssesmentComponent implements OnInit {
 
 
     });
+    console.log(this.stakeData);
   }
 
   emitEventToChild() {
@@ -622,6 +680,9 @@ export class MmAssesmentComponent implements OnInit {
   changeTab(index) {
     if (this.canClickNextStep === true) {
       this.activeTabIndex = index;
+      if (index === 0 && !this.dimensionMode) {
+        this.canClickTab = false;
+      }
     }
   }
 
