@@ -3,13 +3,13 @@
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
-          <div class="header-bar__main">
+          <div class="header-bar__main col-md-6">
             <div class="header-heading">
               <h1 class="page-title">Access Management</h1>
             </div>
           </div>
 
-          <div class="header-toolbar">
+          <div class="header-toolbar col-md-6">
             <button class="btn btn--white" (click)="registerNewUser()"><span
                 class="icon-add icon-small"></span>&nbsp;Register New Users</button>
           </div>
@@ -166,7 +166,7 @@
               </div>
               <div class="row">
                 <div class="col-md-12">
-                  <div class="btn-group btn-group--wide pull-right base-margin-top">
+                  <div class="btn-group--wide text-right base-margin-top">
                     <div class="panel--footer">
                       <button class="btn btn--secondary" (click)="closeForm()">Cancel</button>
                       <button class="btn btn--primary" [disabled] = "!registerUserForm.valid || !userIdAvailable" type="submit">Save</button>
