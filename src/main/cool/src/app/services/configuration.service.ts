@@ -31,9 +31,10 @@ export class ConfigurationService {
 
                         // check for admin access
                         this.accessMgmtService.checkAdminAccess().toPromise().then((data) => {
-                            console.log(data);
-                            this._startupData.hasAdminAccess = true;
-                            this._startupData.userName = data.userName;
+                          this._startupData.userName = data.userName;
+                            if (data.userMapping[0].functionalAdmin) {
+                                this._startupData.hasAdminAccess = true;
+                            }
                         }, (err) => {
                             console.log(err);
                             this._startupData.hasAdminAccess = false;
