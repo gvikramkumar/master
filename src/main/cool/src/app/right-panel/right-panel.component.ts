@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import { RightPanelService } from '../services/right-panel.service';
 import { LeadTime } from './lead-time';
 import * as moment from 'moment';
 import { async } from '@angular/core/testing';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -125,14 +126,12 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     'panel2': true
   };
 
-  search = (text$: Observable<string>) =>
-    text$
-      .pipe(
-        debounceTime(200),
-        distinctUntilChanged(),
-        map(term => term.length < 0 ? []
-          : searchOptions.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-      )
+  editIdeateTargetDate = false;
+  editPlanTargetDate = false;
+  editExecuteTargetDate = false;
+  editLanchTargetDate = false;
+  public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+  minDate: Date;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -154,13 +153,13 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
+    this.minDate = new Date();
 
     this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
     this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
     this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
-
-
 
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
@@ -347,6 +346,89 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     this.displayOfferPhase = false;
   }
 
+
+/**
+ * Edit the tagetdate
+ * @param phase
+ */
+  editDate(phase) {
+    switch (phase) {
+      case 'ideate': {
+        this.editIdeateTargetDate = true;
+        break;
+      }
+      case 'plan': {
+        this.editPlanTargetDate = true;
+        break;
+      }
+      case 'execute': {
+        this.editExecuteTargetDate = true;
+        break;
+      }
+      case 'launch': {
+        this.editLanchTargetDate = true;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
+  /**
+   * target date for the phase is updated.
+   * @param phase
+   * @param value
+   */
+  onValueChange(phase, value: Date): void {
+    const payLoad = {
+      caseId: this.caseId
+    };
+
+    switch (phase) {
+      case 'ideate': {
+        this.editIdeateTargetDate = false;
+        payLoad['strategyReviewDate'] = value;
+        break;
+      }
+      case 'plan': {
+        this.editPlanTargetDate = false;
+        payLoad['designReviewDate'] = value;
+        break;
+      }
+      case 'execute': {
+        this.editExecuteTargetDate = false;
+        payLoad['launchDate'] = value;
+        break;
+      }
+      case 'launch': {
+        this.editLanchTargetDate = false;
+        payLoad['readinessReviewDate'] = value;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    this.rightPanelService.updatePhaseTargetDate(payLoad).subscribe((data) => {
+      if (phase === 'ideate') {
+        this.offerPhaseDetailsList['ideate'][3].targetDate = value;
+      } else if (phase === 'plan') {
+        this.offerPhaseDetailsList['plan'][4].targetDate = value;
+      } else if (phase === 'execute') {
+        this.offerPhaseDetailsList['execute'][3].targetDate = value;
+      } else if (phase === 'launch') {
+        this.offerPhaseDetailsList['launch'][3].targetDate = value;
+      }
+    },
+      (error) => {
+      });
+  }
+
+  show(e:any) {
+    console.log('focus came');
+  }
   onSearch() {
     const tempCollaboratorList: Collaborators[] = [];
 
