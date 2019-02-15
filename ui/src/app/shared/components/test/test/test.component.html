@@ -1,5 +1,11 @@
-tst comp
 
+
+
+<cui-select  [(ngModel)]="sel" [items]="items"
+             empty="true" [required]="true" optionsKey="name" (ngModelChange)="doit()" ></cui-select>
+
+<div>sel: {{sel|json}}</div>
+<pre>{{items|json}}</pre>
 
 
 

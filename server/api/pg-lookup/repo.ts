@@ -41,6 +41,44 @@ export default class PgLookupRepo {
   }
 */
 
+
+  getDollarUploadReport(fiscalMonth, submeasureKeys) {
+    const sql = `
+      SELECT fiscal_month_id, measure_id, sub_measure_key, input_internal_be_hier_level_id, input_internal_be_hier_level_name, input_internal_be_value, input_end_cust_hier_level_id,
+      input_end_cust_hier_level_name, input_end_cust_value, input_entity_hier_level_id, input_entity_hier_level_name, input_entity_value, input_product_hier_level_id,
+      input_product_hier_level_name, input_product_value, input_sales_hier_level_id, input_sales_hier_level_name, input_sales_value, input_scms_hier_level_id,
+      input_scms_hier_level_name, input_scms_value, deal_id, gross_unbilled_accrued_rev_flg, revenue_classification, amount_value, create_owner, create_datetimestamp, 
+      update_owner, update_datetimestamp
+      FROM fpadfa.dfa_prof_input_amnt_upld
+      where fiscal_month_id = ${fiscalMonth} and sub_measure_key in ( ${submeasureKeys} )
+    `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+
+  getMappingUploadReport(fiscalMonth, submeasureKeys) {
+    const sql = `
+      SELECT fiscal_month_id, measure_id, sub_measure_key, input_internal_be_hier_level_id, input_internal_be_hier_level_name, input_internal_be_value, input_end_cust_hier_level_id,
+      input_end_cust_hier_level_name, input_end_cust_value, input_entity_hier_level_id, input_entity_hier_level_name, input_entity_value, input_product_hier_level_id, 
+      input_product_hier_level_name, input_product_value, input_sales_hier_level_id, input_sales_hier_level_name, input_sales_value, input_scms_hier_level_id, 
+      input_scms_hier_level_name, input_scms_value, percentage_value, system_roll_over_flag, create_owner, create_datetimestamp, update_owner, update_datetimestamp
+      FROM fpadfa.dfa_prof_manual_map_upld
+      where fiscal_month_id = ${fiscalMonth} and sub_measure_key in ( ${submeasureKeys} )
+    `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+
+  getDeptUploadReport(submeasureKeys) {
+    const sql = `
+          SELECT sub_measure_key, node_value, gl_account, create_owner, create_datetimestamp, update_owner, update_datetimestamp
+          FROM fpadfa.dfa_prof_dept_acct_map_upld
+          where sub_measure_key in ( ${submeasureKeys} )
+    `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+
   // not used anymore. This was used to get submeasure sourceSystemAdjTypeId description, but they pulled that column out of reports, so desc went too
   getAdjustmentTypeIdDesc() {
     return pgc.pgdb.query('select source_system_id, adj_type_id, adj_type_description from fpadfa.dfa_prof_source_adj_type_all')
@@ -71,7 +109,8 @@ export default class PgLookupRepo {
             product_family_id
             from fpacon.vw_fpa_products
             group by 1,2,3 order by 1,2,3    
-          `);
+          `)
+      .then(results => results.rows);
   }
 
   getCountryNamesFromSalesHierarchy() {
@@ -100,8 +139,11 @@ export default class PgLookupRepo {
             where sales_territory_type_code in ('CORP. REVENUE')
             group by 1,2,3,4,5,6
             order by 1,2,3,4,5,6          
-          `);
+          `)
+      .then(results => results.rows);
   }
+/*
+  // no longer used, getting from mongo now
   getSubmeasureGroupingReport() {
     return pgc.pgdb.query(`
             select 
@@ -124,8 +166,9 @@ export default class PgLookupRepo {
             and sbm.grouped_by_smeasure_key=group1.groupkey
           `);
   }
+*/
 
-  get2TSebmeasureListReport(fiscalMonth) {
+  get2TSubmeasureListReport(fiscalMonth) {
     return pgc.pgdb.query(`
             select 
             sub_measure_name, 
@@ -157,7 +200,8 @@ export default class PgLookupRepo {
             update_datetimestamp
             from fpadfa.dfa_prof_disti_to_direct_map_upld            
             where fiscal_month_id = ${fiscalMonth}
-          `);
+          `)
+          .then(results => results.rows);
   }
 
   getAlternateSL2Report(fiscalMonth) {
@@ -173,7 +217,8 @@ export default class PgLookupRepo {
             update_datetimestamp
             from fpadfa.dfa_prof_scms_triang_altsl2_map_upld
             where fiscal_month_id = ${fiscalMonth}
-          `);
+          `)
+          .then(results => results.rows);
   }
 
   getCorpAdjustmentReport(fiscalMonth) {
@@ -189,7 +234,8 @@ export default class PgLookupRepo {
             update_datetimestamp
             from fpadfa.dfa_prof_scms_triang_corpadj_map_upld
             where fiscal_month_id = ${fiscalMonth}
-          `);
+          `)
+          .then(results => results.rows);
   }
 
   getSalesSplitPercentageReport(fiscalMonth) {
@@ -207,7 +253,8 @@ export default class PgLookupRepo {
             update_datetimestamp
             from fpadfa.dfa_prof_sales_split_pctmap_upld
             where fiscal_month_id = ${fiscalMonth}
-          `);
+          `)
+          .then(results => results.rows);
   }
 
   getAdjustmentPFReport() {
@@ -222,7 +269,8 @@ export default class PgLookupRepo {
             AND ph.product_id LIKE '%_ADJ_PROD'
             GROUP by 1,2,3
             ORDER by 1,2,3
-          `);
+          `)
+          .then(results => results.rows);
   }
 
   getDriverSL3Report() {
@@ -257,7 +305,8 @@ export default class PgLookupRepo {
             sh.l2_sales_territory_descr,
             sh.l3_sales_territory_name_code,
             sh.l3_sales_territory_descr
-          `);
+          `)
+          .then(results => results.rows);
   }
 
   getShipmentDriverPFReport() {
@@ -288,7 +337,8 @@ export default class PgLookupRepo {
               group by ph.technology_group_id, ph.business_unit_id,ph.product_family_id) product_hier
             WHERE driver.PRODUCT_FAMILY = product_hier.product_family_id 
             order by product_hier.technology_group_id,product_hier.business_unit_id, product_hier.product_family_id
-          `);
+          `)
+          .then(results => results.rows);
   }
 
   getRoll3DriverWithBEReport() {
@@ -325,7 +375,8 @@ export default class PgLookupRepo {
               group by ph.technology_group_id, ph.business_unit_id,ph.product_family_id) product_hier 
             WHERE driver.PRODUCT_FAMILY = product_hier.product_family_id 
             order by DRIVER_TYPE, product_hier.technology_group_id,product_hier.business_unit_id, product_hier.product_family_id
-          `);
+          `)
+          .then(results => results.rows);
   }
 
   getSubmeasureFlashCategories(req) {

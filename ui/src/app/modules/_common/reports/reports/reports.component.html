@@ -33,29 +33,27 @@
 
         <br>
         <div>
-          <div *ngIf="report?.hasSubmeasureOnly || report?.hasSmAndFiscalMonth">
+          <div *ngIf="report?.hasSubmeasureOnly || report?.hasSmAndFiscalMonth || report?.hasMultiSubmeasureOnly || report?.hasMultiSmAndFiscalMonth">
 
               <cui-select label="Measure" [items]="measures" [(ngModel)]="measureId"
                           optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()"></cui-select>
 
-              <cui-select label="Sub Measure" [items]="submeasures" [(ngModel)]="submeasureName"
-                          optionsKey="name" optionsValue="name" (ngModelChange)="submeasureChange()" [disabled]="!this.measureId"></cui-select>
+              <cui-select *ngIf="report?.hasSmAndFiscalMonth || report?.hasSubmeasureOnly" label="Sub-Measure" [items]="submeasures" [(ngModel)]="submeasureKey"
+                          optionsKey="name" optionsValue="submeasureKey" (ngModelChange)="submeasureChange()" [disabled]="!this.measureId"></cui-select>
+              <cui-multiselect *ngIf="report?.hasMultiSmAndFiscalMonth || report?.hasMultiSubmeasureOnly" label="Sub-Measure" [items]="submeasures" [(ngModel)]="submeasureKeys"
+                               optionsKey="name" optionsValue="submeasureKey" (ngModelChange)="submeasureMultiChange()"></cui-multiselect>
           </div>
-          <div *ngIf="report?.hasSmAndFiscalMonth || report?.hasFiscalMonthOnly">
-            <cui-select label="Fiscal Month" [items]="fiscalMonths" [(ngModel)]="fiscalMonth"
-                        optionsKey="name" optionsValue="fiscalMonth" [disabled]="report?.hasSmAndFiscalMonth && !this.submeasureName"></cui-select>
-          </div>
-          <div *ngIf="report?.hasMultiFiscalMonthOnly">
-            <cui-multiselect label="Fiscal Month" [items]="fiscalMonthMultis" [(ngModel)]="fiscalMonthMultiSels"
-                        (ngModelChange)="fiscalMonthMultiChange()"  optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-multiselect>
-          </div>
-
+          <cui-select *ngIf="report?.hasSmAndFiscalMonth || report?.hasMultiSmAndFiscalMonth || report?.hasFiscalMonthOnly" label="Fiscal Month" [items]="fiscalMonths" [(ngModel)]="fiscalMonth"
+                      optionsKey="name" optionsValue="fiscalMonth"
+                      [disabled]="(report?.hasSmAndFiscalMonth && !this.submeasureKey) || (report?.hasMultiSmAndFiscalMonth && !this.submeasureKeys.length)"></cui-select>
+          <cui-multiselect *ngIf="report?.hasMultiFiscalMonthOnly" label="Fiscal Month" [items]="fiscalMonthMultis" [(ngModel)]="fiscalMonthMultiSels"
+                      (ngModelChange)="fiscalMonthMultiChange()"  optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-multiselect>
 
           <div class="fin-footer-buttons">
             <button (click)="downloadReport()" [disabled]="disableDownload"
                     cuiButton color="primary">Download Report
             </button>
-            <button *ngIf="report?.hasSubmeasureOnly || report?.hasSmAndFiscalMonth" (click)="reset()"
+            <button *ngIf="!report?.hasNoChoices" (click)="reset()"
                     cuiButton color="secondary">Reset
             </button>
           </div>

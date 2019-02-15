@@ -88,40 +88,46 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['Manual Uploaded Data'];
         excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Product', 'Sales', 'Legal Business Entity', 'Internal Business Entity',
           'SCMS', 'Amount', 'Revenue Classification', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
-        excelProperties = ['measure.name', 'sm.name', 'productValue', 'salesValue', 'leValue', 'beValue',
-          'scmsValue', 'amount', 'revenueClassification', 'fiscalMonth', 'updatedBy', 'updatedDate'];
+        excelProperties = ['measure.name', 'sm.name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_internal_be_value',
+          'input_scms_value', 'amount_value', 'revenue_classification', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.dollarUploadPgRepo.getMany(body)
+          this.pgLookupRepo.getDollarUploadReport(body.fiscalMonth, body.submeasureKeys)
         ])
           .then(results => {
             this.measures = results[0];
             this.submeasures = results[1];
-            return results[2].map(doc => this.transformAddMeasureAndSubmeasureName(doc));
+            const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
+            return _.orderBy(rtn, ['measure.name', 'sm.name'], ['asc', 'asc']);
           });
         break;
+
       case 'mapping-upload':
         excelSheetname = ['Manual Mapping Data'];
         excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Product', 'Sales', 'Legal Business Entity', 'Internal Business Entity', 'SCMS', 'Percentage', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
-        excelProperties = ['measure.name', 'sm.name', 'productValue', 'salesValue', 'leValue', 'beValue', 'scmsValue', 'percentage', 'fiscalMonth', 'updatedBy', 'updatedDate'];
+        excelProperties = ['measure.name', 'sm.name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_internal_be_value',
+          'input_scms_value', 'percentage_value', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.mappingUploadPgRepo.getMany(body)
+          this.pgLookupRepo.getDollarUploadReport(body.fiscalMonth, body.submeasureKeys)
         ])
           .then(results => {
             this.measures = results[0];
             this.submeasures = results[1];
-            return results[2].map(doc => this.transformAddMeasureAndSubmeasureName(doc));
+            const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
+            return _.orderBy(rtn, ['measure.name', 'sm.name'], ['asc', 'asc']);
           });
         break;
+
       case 'product-hierarchy':
         excelSheetname = ['Product Hierarchy'];
         excelHeaders = ['Technology Group', 'Business Unit', 'Product Family'];
         excelProperties = ['technology_group_id', 'business_unit_id', 'product_family_id'];
         promise = this.pgLookupRepo.getProductHierarchyReport();
         break;
+
       case 'sales-hierarchy':
         excelSheetname = ['Sales Hierarchy'];
         excelHeaders = ['Sales Territory 1', 'Sales Territory 2', 'Sales Territory 3', 'Sales Territory 4', 'Sales Territory 5', 'Sales Territory 6'];
@@ -129,25 +135,29 @@ export default class ReportController extends ControllerBase {
           'l5_sales_territory_descr', 'l6_sales_territory_descr'];
         promise = this.pgLookupRepo.getSalesHierarchyReport();
         break;
+
       case 'dept-upload':
         excelSheetname = ['Dept Upload'];
         excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Sub-Measure Description', 'Department Code', 'Excluded GL Account', 'Start Account', 'End Account', 'Report Level 1', 'Report Level 2', 'Report Level 3', 'Uploaded By', 'Uploaded Date'];
-        excelProperties = ['measure.name', 'sm.name', 'sm.desc', 'nodeValue', 'glAccount', 'startAccount', 'endAccount', 'sm.reportingLevels[0]', 'sm.reportingLevels[1]', 'sm.reportingLevels[2]', 'updatedBy', 'updatedDate'];
+        excelProperties = ['measure.name', 'sm.name', 'sm.desc', 'node_value', 'gl_account', 'startAccount', 'endAccount', 'sm.reportingLevels[0]', 'sm.reportingLevels[1]', 'sm.reportingLevels[2]',
+          'update_owner', 'update_datetimestamp'];
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.deptUploadPgRepo.getMany(body)
+          this.pgLookupRepo.getDeptUploadReport(body.submeasureKeys)
         ])
           .then(results => {
             this.measures = results[0];
             this.submeasures = results[1];
-            return results[2].map(doc => {
-              doc.startAccount = doc.glAccount ? '' : 60000;
-              doc.EndAccount = doc.glAccount ? '' : 69999;
-              return this.transformAddMeasureAndSubmeasureName(doc);
+            const rtn = results[2].map(obj => {
+              obj.startAccount = obj.gl_account ? '' : 60000;
+              obj.endAccount = obj.gl_account ? '' : 69999;
+              return this.transformAddMeasureAndSubmeasure(obj);
             });
+            return _.orderBy(rtn, ['measure.name', 'sm.name', 'node_value'], ['asc', 'asc', 'asc']);
           });
         break;
+
       case 'product-classification':
         excelSheetname = ['Product Classification'];
         excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Split Category', 'Split Percentage', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
@@ -160,46 +170,82 @@ export default class ReportController extends ControllerBase {
           .then(results => {
             this.measures = results[0];
             this.submeasures = results[1];
-            return results[2].map(doc => this.transformAddMeasureAndSubmeasureName(doc));
+            const rtn = results[2].map(doc => this.transformAddMeasureAndSubmeasure(doc));
+            return _.orderBy(rtn, ['measure.name', 'sm.name', 'splitCategory'], ['asc', 'asc', 'asc']);
           });
         break;
+
       case 'submeasure-grouping':
         excelSheetname = ['Sub-Measure Grouping'];
-        excelHeaders = ['Sub-Measure Name', 'Group Sub-Measure Name', 'Created By', 'Create Time', 'Updated By', 'Update Time'];
-        excelProperties = ['sub_measure_name', 'group_sub_measure_name', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
-        promise = this.pgLookupRepo.getSubmeasureGroupingReport();
+        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Group Sub-Measure Name', 'Created By', 'Create Time', 'Updated By', 'Update Time'];
+        excelProperties = ['measureName', 'name', 'groupingSubmeasureName', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            const rtn = this.submeasures.filter(doc => !!doc.groupingSubmeasureId)
+              .map(sm => this.transformSubmeasure(sm));
+            return _.orderBy(rtn, ['measureName', 'name']);
+          })
+
         break;
+
       case '2t-submeasure-list':
         excelSheetname = ['2t Submeasure List'];
-        excelHeaders = ['Submeasure Name', 'Fiscal Month', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['sub_measure_name', 'fiscal_month_id', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
+        excelHeaders = ['Measure Name', 'Submeasure Name', 'Fiscal Month', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
+        excelProperties = ['measureName', 'name', 'fiscalMonth', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
         excelFilename = `2T_Sub_Measure_List_Report_${req.dfa.fiscalMonths.prof}.xlsx`;
-        promise = this.pgLookupRepo.get2TSebmeasureListReport(req.dfa.fiscalMonths.prof);
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            const rtn = this.submeasures.filter(doc => doc.indicators.twoTier === 'Y')
+              .map(sm => this.transformSubmeasure(sm))
+              .map(sm => {
+                sm.fiscalMonth = req.dfa.fiscalMonths.prof;
+                return sm;
+              });
+            return _.orderBy(rtn, ['measureName', 'name']);
+          })
+
         break;
+
       case 'disti-direct':
         excelSheetname = ['Disti to Direct'];
         excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'External Theater', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
-        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'ext_theater_name', 'fiscal_month_id', 'updatedBy', 'updatedDate'];
+        excelProperties = ['group_id', 'node_type', 'sales_finance_hierarchy', 'node_code', 'ext_theater_name', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = this.pgLookupRepo.getDistiToDirectMappingReport(body.fiscalMonth);
         break;
+
       case 'alternate-sl2':
         excelSheetname = ['Alternate SL2'];
         excelHeaders = ['Actual SL2', 'Alternate SL2', 'Alternate Country', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
-        excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'updatedBy', 'updatedDate'];
-        promise = this.pgLookupRepo.getAlternateSL2Report(body.fiscalMonth);
+        excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
+        promise = this.pgLookupRepo.getAlternateSL2Report(body.fiscalMonth)
+          .then(rows => _.orderBy(rows, ['actual_sl2_code'], ['asc']));
         break;
+
       case 'corp-adjustment':
         excelSheetname = ['Corp Adjustment'];
         excelHeaders = ['Country Name', 'Sales Territory Code', 'SCMS Value', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
-        excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'updatedBy', 'updatedDate'];
-        promise = this.pgLookupRepo.getCorpAdjustmentReport(body.fiscalMonth);
+        excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
+        promise = this.pgLookupRepo.getCorpAdjustmentReport(body.fiscalMonth)
+          .then(rows => _.orderBy(rows, ['sales_country_name', 'sales_territory_code', 'scms_value'], ['asc', 'asc', 'asc']));
         break;
+
       case 'sales-split-percentage':
         excelSheetname = ['Sales Split Percentage'];
         excelHeaders = ['Account Id', 'Company Code', 'Sub Account Code', 'Sales Territory Code', 'Percentage Value', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
-        excelProperties = ['account_code', 'company_code', 'sub_account_code', 'sales_territory_code', 'split_percentage', 'fiscal_month_id', 'updatedBy', 'updatedDate'];
+        excelProperties = ['account_code', 'company_code', 'sub_account_code', 'sales_territory_code', 'split_percentage', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = this.pgLookupRepo.getSalesSplitPercentageReport(body.fiscalMonth);
         break;
+
       case 'valid-driver':
         multiSheetReport = true;
         excelSheetname = [['Adjustment PF Report'], ['Driver SL3 Report'], ['Shipment Driver PF Report'], ['Roll3 Driver With BE']],
@@ -218,6 +264,7 @@ export default class ReportController extends ControllerBase {
           this.pgLookupRepo.getRoll3DriverWithBEReport()
         ]);
         break;
+
       case 'submeasure':
         multiSheetReport = true;
         excelSheetname = [['Original'], ['SM History'], ['As Of Now']];
@@ -276,16 +323,19 @@ export default class ReportController extends ControllerBase {
             this.submeasures = results[2];
             return Promise.all([
               this.submeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
-                .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
+                .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
+                .then(vals => _.orderBy(vals, ['measureName', 'name'], ['asc', 'asc'])),
               this.submeasureRepo.getMany({setSort: 'name', moduleId})
-                .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
+                .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
+                .then(vals => _.orderBy(vals, ['measureName', 'name'], ['asc', 'asc'])),
               this.submeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
-                .then(docs => docs.map(doc => this.transformSubmeasure(doc))),
+                .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
+                .then(vals => _.orderBy(vals, ['measureName', 'name'], ['asc', 'asc']))
             ]);
 
           })
-
         break;
+
       case 'allocation-rule':
         multiSheetReport = true;
         excelSheetname = [['Original'], ['Rule History'], ['As Of Now']];
@@ -315,11 +365,14 @@ export default class ReportController extends ControllerBase {
 
         promise = Promise.all([
           this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
-            .then(docs => docs.map(doc => this.transformRule(doc))),
+            .then(docs => docs.map(doc => this.transformRule(doc)))
+            .then(vals => _.orderBy(vals, ['name'], ['asc'])),
           this.allocationRuleRepo.getMany({setSort: 'name', moduleId})
-            .then(docs => docs.map(doc => this.transformRule(doc))),
+            .then(docs => docs.map(doc => this.transformRule(doc)))
+            .then(vals => _.orderBy(vals, ['name'], ['asc'])),
           this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
-            .then(docs => docs.map(doc => this.transformRule(doc))),
+            .then(docs => docs.map(doc => this.transformRule(doc)))
+            .then(vals => _.orderBy(vals, ['name'], ['asc']))
         ]);
         break;
 
@@ -339,7 +392,6 @@ export default class ReportController extends ControllerBase {
           'rule.sl1Select', 'rule.sl2Select', 'rule.sl2Select', 'rule.prodTGSelect', 'rule.prodBUSelect', 'rule.prodPFSelect', 'rule.scmsSelect', 'rule.beSelect',
           'rule.status', 'rule.updatedBy', 'rule.updatedDate'
         ];
-
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.sourceRepo.getManyActive()
@@ -382,9 +434,10 @@ export default class ReportController extends ControllerBase {
                 }
               });
             });
-            return rows;
+            return _.orderBy(rows, ['fiscalMonth', 'sm.measureName', 'sm.name'], ['asc', 'asc', 'asc']);
           })
         break;
+
       default:
         next(new ApiError('Bad report type', null, 400));
         return;
@@ -455,10 +508,12 @@ export default class ReportController extends ControllerBase {
   }
 
   // postgres sm
-  transformAddMeasureAndSubmeasureName(obj) {
+  transformAddMeasureAndSubmeasure(obj) {
     obj = svrUtil.docToObject(obj);
-    obj.sm = _.find(this.submeasures, {submeasureKey: obj.submeasureKey});
-    obj.measure = _.find(this.measures, {measureId: obj.sm && obj.sm.measureId}); // some tables have measure_id (dollar), some don't (dept)
+    // sm could be from pg  query or mongo so check for both keys
+    obj.sm = _.find(this.submeasures, {submeasureKey: obj.submeasureKey || Number(obj.sub_measure_key)});
+    // some tables have measure_id (dollar), some don't (dept), so get it from sm always
+    obj.measure = _.find(this.measures, {measureId: obj.sm && obj.sm.measureId});
     return obj;
   }
 
@@ -531,7 +586,7 @@ export default class ReportController extends ControllerBase {
         promise = this.pgLookupRepo.getSubmeasureGroupingReport();
         break
       case '2t-submeasure-list':
-        promise = this.pgLookupRepo.get2TSebmeasureListReport();
+        promise = this.pgLookupRepo.get2TSubmeasureListReport();
         break
       case 'disti-direct':
         promise = this.pgLookupRepo.getDistiToDirectMappingReport();

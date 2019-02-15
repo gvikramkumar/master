@@ -9,19 +9,20 @@ import {environment} from '../../../../../environments/environment';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
+  sel;
+  items = [
+    {name: 'dank', age: 50},
+    {name: 'carl', age: 60},
+  ]
 
   constructor(private uiUtil: UiUtil) { }
 
   ngOnInit() {
-    this.downloadReport();
   }
 
-  downloadReport() {
-    const url = `${environment.apiUrl}/api/prof/report/call-method/reportTest`;
-    console.log(url);
-    UiUtil.submitForm(url, {});
+  doit() {
+    console.log('sel', this.sel);
   }
-
 
 
 

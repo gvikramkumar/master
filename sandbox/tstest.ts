@@ -5,12 +5,24 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+
+
+const arr = [{}, {}]
+
+_.set(arr[0], 'one.two', 'alpha');
+_.set(arr[1], 'one.two', 'beta');
+
+const out = _.orderBy(arr, ['one.two'], ['desc']);
+console.log(arr);
+console.log(out);
+/*
 import * as fs from 'fs';
 import * as path from 'path';
 
 const pwd = '/apps/sparkadm/dfa/dfa_ui/dist/server';
 
 console.log(path.resolve(pwd, '../../../../DFA/ssl_cert/dfaSSL.csr'));
+*/
 
 
 /*
