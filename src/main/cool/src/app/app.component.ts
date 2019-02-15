@@ -79,8 +79,14 @@ export class AppComponent implements OnInit {
   }
 
   @HostListener('keypress') onKeyPress() {
-    this.stop();
+    this.restart();
     console.log("this.stop() in HostListener", this.stop());
   }
+
+  @HostListener('mouseover') onMouseOver() {
+    console.log("in mouseover..................!")
+    this.restart();
+    console.log("this.stop() in HostListener", this.stop()); 
+}
 
 }
