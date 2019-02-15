@@ -621,7 +621,10 @@ span[class*="display-"] {
 .cool.cui .action-bar label:hover {
   color:#016a94;
 }
-
+.form-actions {
+  display:block;
+  width:100%;
+}
 
 
 
