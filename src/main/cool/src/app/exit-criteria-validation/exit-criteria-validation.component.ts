@@ -29,7 +29,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
     private headerService: HeaderService,
     private messageService: MessageService,
     private localStorage: LocalStorageService,
-    private userService : UserService
+    private userService: UserService
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -85,12 +85,12 @@ export class ExitCriteriaValidationComponent implements OnInit {
     payload['offerName'] = this.offerBuilderdata['offerName'];
     payload['owner'] = this.offerBuilderdata['offerOwner'];
     const userId = this.userService.getUserId();
-    this.exitCriteriaValidationService.updateOwbController(this.currentOfferId,userId).subscribe(data => {
+    this.exitCriteriaValidationService.updateOwbController(this.currentOfferId, userId).subscribe(data => {
       console.log(data);
     },
-    error => {
-      console.log('error occured');
-    });
+      error => {
+        console.log('error occured');
+      });
     this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
       this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
         this.messageService.sendMessage('Strategy Review');

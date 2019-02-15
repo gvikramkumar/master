@@ -22,7 +22,7 @@ export class AccessManagementService {
     }
 
     getUserDetails(user: User) {
-        return this.httpClient.post(this.environmentService.REST_API_USER_DETAILS, user, { withCredentials: true });
+        return this.httpClient.post<[]>(this.environmentService.REST_API_USER_DETAILS, user, { withCredentials: true });
     }
 
     registerUser(newUser: NewUser[]): Observable<any> {

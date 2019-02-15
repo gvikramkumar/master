@@ -16,6 +16,8 @@ import { Subscription } from 'rxjs';
 import { HeaderService } from '../header/header.service';
 import { LeadTime } from '../right-panel/lead-time';
 import { RightPanelService } from '../services/right-panel.service';
+import { User } from '../access-management/user';
+import { AccessManagementService } from '../services/access-management.service';
 
 
 @Component({
@@ -47,13 +49,13 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   offerName;
 
   derivedMM;
-  offerId:string;
+  offerId: string;
   primaryBE: string;
   displayLeadTime = false;
   noOfWeeksDifference: string;
-  lastValueInMilestone:Array<any>;
+  lastValueInMilestone: Array<any>;
   milestone: any;
-  val: any; 
+  val: any;
 
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
@@ -98,7 +100,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private messageService: MessageService,
     private headerService: HeaderService,
-    private rightPanelService: RightPanelService) {
+    private rightPanelService: RightPanelService,
+    private accessManagementService: AccessManagementService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -126,14 +129,14 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     });
 
     this.actionsService.getMilestones(this.caseId).subscribe(data => {
-     
-      let result=data.ideate;
-      
+
+      let result = data.ideate;
+
       this.milestoneList = [];
-      this.lastValueInMilestone=result.slice(-1)[0];
-      
-      let mile=this.lastValueInMilestone
-             this.val=mile['subMilestone'];
+      this.lastValueInMilestone = result.slice(-1)[0];
+
+      let mile = this.lastValueInMilestone
+      this.val = mile['subMilestone'];
     });
 
     this.actionsService.getAssignee(this.currentOfferId).subscribe(data => {
@@ -143,7 +146,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
       this.displayLeadTime = true;
-      this.offerId=this.currentOfferId;
+      this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
       this.offerName = this.firstData['offerName'];
@@ -390,15 +393,37 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.createActionApproveForm.reset();
   }
 
-  onEscalate() {
-    const mailList = [this.managerName];
+  async onEscalate(functionName: string) {
+
+    // Initialize Variables
+    const mailList = [];
+    const functionNameMap = this.stakeData[functionName];
+
+    // Iterate - Function Names
+    for (const employee of Array.from(functionNameMap.values())) {
+
+      // Compute Manager List
+      const userId = employee['_id'];
+      const managerDetailsList = await this.accessManagementService.getUserDetails(new User(userId)).toPromise();
+
+      // Iterate - Manager Names
+      for (const manager of Array.from(managerDetailsList.values())) {
+        mailList.push(manager['userid']);
+      }
+
+    }
+
+    // Initialize Email Variables
     const emailPayload = {};
     emailPayload['subject'] = 'Immediate Attention needed! ' + this.currentOfferId + ' + ' + this.offerName + ' Approval pending';
     emailPayload['emailBody'] = 'Hello You are receiving this message because the below offer has a pending approval that requires review from a member of your team. Offer ID: ' + this.currentOfferId + ' Offer Name: ' + this.offerName + ' Your immediate attention is highly appreciated. Thanks';
     emailPayload['toMailLists'] = mailList;
+
+    // Send EMail
     this.actionsService.escalateNotification(emailPayload).subscribe(data => {
       this.getStrategyReviwInfo();
     });
+
   }
 
   ngOnDestroy() {

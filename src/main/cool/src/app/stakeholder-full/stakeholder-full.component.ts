@@ -96,8 +96,10 @@ export class StakeholderFullComponent implements OnInit {
 
 
     this.sharedService.getFunctionalRoles().subscribe(data => {
+      
       this.funcionalRoleList = data;
     });
+
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
 
       this.firstData = data;
