@@ -360,7 +360,7 @@ export class DashboardComponent implements OnInit {
   dismissNotification(overlaypanel: OverlayPanel) {
     const postData = {
       'taskId': this.selectedAction.taskId,
-      'userId': this.selectedAction.assigneeId,
+      'userId': this.userService.getUserId(),
       'taskName': 'Notification',
       'caseId': '',
       'offerId': '',
