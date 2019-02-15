@@ -216,7 +216,25 @@
                                             <td
                                                 [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">
                                                 {{ideateData.status}}</td>
-                                            <td>{{ideateData.targetDate | date: "dd-MMM-y"}}</td>
+                                            <td>
+                                              <span *ngIf="!editIdeateTargetDate">
+                                                {{ideateData.targetDate | date: "dd-MMM-y"}}
+                                              </span>
+                                              <span *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
+                                                  <input type="text"
+                                                  class="form-control"
+                                                  #dp="bsDatepicker"
+                                                  autofocus
+                                                  bsDatepicker
+                                                  [minDate]="minDate"
+                                                  (bsValueChange)="onValueChange('ideate',$event)"
+                                                  [value]='ideateData.targetDate | date: "dd-MMM-y"'
+                                                  >
+                                              </span>
+                                              <span *ngIf="ideateData.subMilestone === 'Strategy Review'">
+                                                <a (click)="editDate('ideate')"><span class="icon-pencil"></span>Edit</a>
+                                              </span>
+                                            </td>
                                             <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
                                         </tr>
                                     </tbody>
@@ -244,7 +262,24 @@
                                             <td
                                                 [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">
                                                 {{planData.status}}</td>
-                                            <td>{{planData.targetDate | date: "dd-MMM-y"}}</td>
+                                            <td>
+                                                <span *ngIf="!editPlanTargetDate">
+                                                    {{planData.targetDate | date: "dd-MMM-y"}}
+                                                </span>
+                                                <span *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
+                                                    <input type="text"
+                                                    class="form-control"
+                                                    #dp="bsDatepicker"
+                                                    bsDatepicker
+                                                    [minDate]="minDate"
+                                                    (bsValueChange)="onValueChange('plan',$event)"
+                                                    [value]='planData.targetDate | date: "dd-MMM-y"'
+                                                    >
+                                                </span>
+                                                <span *ngIf="planData.subMilestone === 'Design Review'">
+                                                    <a (click)="editDate('plan')"><span class="icon-pencil"></span>Edit</a>
+                                                  </span>
+                                            </td>
                                             <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>
                                         </tr>
                                     </tbody>
