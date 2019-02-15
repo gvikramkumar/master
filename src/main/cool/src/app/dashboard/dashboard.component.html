@@ -61,7 +61,7 @@
                     </span>
                     <span *ngIf="actionData.alertType == 'notification'">
                       <span (click)="showActionPopUp($event,actionData,popNotificationContent)">
-                        <span class="icon-alert icon-small"></span>
+                        <span class="icon-alert icon-small" pTooltip="Notification" tooltipPosition="top"></span>
                         &nbsp; {{actionData.offerId}}
                       </span>
                     </span>
