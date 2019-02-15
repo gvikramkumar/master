@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { EnvironmentService } from '../../environments/environment.service';
 import { LeadTime } from '../right-panel/lead-time';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { DecimalPipe } from '@angular/common';
 
 @Injectable({
@@ -14,6 +14,7 @@ export class RightPanelService {
 
   launchDateUrl: string;
   averageWeekUrl: string;
+  updateOfferPhaseUrl:string;
 
   constructor(
     private httpClient: HttpClient,
@@ -21,6 +22,7 @@ export class RightPanelService {
 
     this.launchDateUrl = this.environmentService.REST_API_LEAD_TIME_LAUNCH_DATE;
     this.averageWeekUrl = this.environmentService.REST_API_LEAD_TIME_AVERAGE_WEEKS;
+    this.updateOfferPhaseUrl  = this.environmentService.REST_API_UPDATE_OFFER_TARGET_DATE;
 
   }
 
@@ -73,5 +75,9 @@ export class RightPanelService {
   }
 
   // -------------------------------------------------------------------------------------
+
+  updatePhaseTargetDate(payLoad:any): Observable<any> {
+    return this.httpClient.post(this.updateOfferPhaseUrl, payLoad, { withCredentials: true });
+  }
 
 }

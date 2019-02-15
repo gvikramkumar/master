@@ -30,6 +30,5 @@ export class OfferSolutionQuestionComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
   }
 }

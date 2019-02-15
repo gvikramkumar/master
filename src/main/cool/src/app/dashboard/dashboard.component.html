@@ -52,7 +52,7 @@
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span *ngIf="actionData.alertType == 'action'">
                       <span (click)="showActionPopUp($event,actionData,popActionContent)">
-                        <span class="icon-clock icon-small"></span></span>
+                        <span class="icon-clock icon-small"  pTooltip="Action" tooltipPosition="top"></span></span>
                       <span>
                         <a (click)="showOfferPopUp($event,actionData,popturboContent)">
                           &nbsp; {{actionData.offerId}}
@@ -61,7 +61,7 @@
                     </span>
                     <span *ngIf="actionData.alertType == 'notification'">
                       <span (click)="showActionPopUp($event,actionData,popNotificationContent)">
-                        <span class="icon-alert icon-small"></span>
+                        <span class="icon-alert icon-small" pTooltip="Notification" tooltipPosition="top"></span>
                         &nbsp; {{actionData.offerId}}
                       </span>
                     </span>
@@ -223,7 +223,7 @@
                       <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'hold'"
                         class="row no-gutters">
                         <div class="col-md-12">
-                          <div class="progressbar__label progressbarLabel-cancelled">Hold</div>
+                          <div class="progressbar__label progressbarLabel-cancelled">On Hold</div>
                         </div>
                         <div class="progressbar progressbar--warning" data-percentage="0">
                           <div class="progressbar__fill"></div>
@@ -332,7 +332,7 @@
 <p-overlayPanel #popCommentContent [showCloseIcon]="true">
   <div *ngIf="selectedAction" class="comments-modal">
     <div class="popover__body">
-      <h1 class="modalheader">View/Edit Comment</h1>
+      <h1 class="modalheader">View/Add Comment</h1>
       <app-viewcomment [taskId]="selectedAction.taskId" [event]="commentEvent" [popContent]="popCommentContent">
       </app-viewcomment>
     </div>

@@ -16,7 +16,7 @@ export class ViewcommentComponent implements OnInit, OnChanges {
   @Input() event;
 
   public onDisable = true;
-  public addcomment = false;
+  public addcomment = true;
   public showError = false;
   public newComment: string;
   public viewcomment;
@@ -60,7 +60,7 @@ export class ViewcommentComponent implements OnInit, OnChanges {
     this.viewcommentService.getViewComment(taskId).subscribe(resComments => {
       this.viewcomment = resComments.map(comment => {
         //comment.date = moment(comment.date).format('MM-DD-YYYY');
-        
+
         return comment;
       });
     });

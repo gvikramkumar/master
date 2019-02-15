@@ -12,6 +12,7 @@ import { OffersolutioningService } from '../services/offersolutioning.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { LeadTime } from '../right-panel/lead-time';
+import { StakeholderfullService } from '../services/stakeholderfull.service';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -22,6 +23,8 @@ export class MmAssesmentComponent implements OnInit {
 
 
   public model: any;
+  public firstData: any;
+  public data: any[];
   aligned: boolean;
   proceedFlag = false;
   alignedFlag = false;
@@ -45,8 +48,13 @@ export class MmAssesmentComponent implements OnInit {
   offerBuilderdata = {};
   displayLeadTime = false;
   noOfWeeksDifference: string;
+  stakeHolderInfo = {};
+  Stakeholders: any[] = [];
+  offerName;
+  offerOwner;
 
   canClickNextStep = false;
+  canClickTab = false;
   currentMMModel: string = null;
   currentPrimaryBE: any;
   userName;
@@ -76,7 +84,8 @@ export class MmAssesmentComponent implements OnInit {
     private offerDetailViewService: OfferDetailViewService,
     private configService: ConfigurationService,
     private offersolutioningService: OffersolutioningService,
-    private rightPanelService: RightPanelService
+    private rightPanelService: RightPanelService,
+    private stakeholderfullService: StakeholderfullService
   ) {
     this.showEditbutton= false;
     this.display =false;
@@ -96,6 +105,9 @@ export class MmAssesmentComponent implements OnInit {
   ngOnInit() {
     if (this.router.url.match(/offerDimension/) !== null) {
       this.dimensionMode = true;
+    }
+    if (this.dimensionMode) {
+      this.canClickTab = true;
     }
     this.offerArray = [];
     // Fetch logged in owner name from configurationservice.
@@ -145,12 +157,15 @@ export class MmAssesmentComponent implements OnInit {
       if (offerDetailRes['overallStatus'] == null) {
         this.message = { contentHead: 'Great Work!', content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.', color: 'black' };
       } else if (offerDetailRes['overallStatus'] === 'Aligned') {
+        this.canClickNextStep = true;
         this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerDetailRes['derivedMM']}`, mmModel: offerDetailRes['derivedMM'] };
       } else if (offerDetailRes['overallStatus'] === 'Partially Aligned') {
+        this.canClickNextStep = true;
         this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerDetailRes['derivedMM']}.`, mmModel: offerDetailRes['derivedMM'] };
       } else {
+        this.canClickNextStep = true;
         this.proceedButtonStatusValid = true;
         this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
       }
@@ -176,14 +191,13 @@ export class MmAssesmentComponent implements OnInit {
           this.getStakeData(offerDetailRes['derivedMM']);
         }
       });
-
+       // Get Attributes
       this.monetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
-        console.log("selectedCharacteristics", selectedCharacteristics['Offer Characteristics']);
         that.offerData['groups'].forEach(group => {
           this.getGroupData(group, selectedCharacteristics);
         });
-
+        
         if (offerDetailRes['derivedMM'] != null) {
           var index = 0;
           var groupKeys = this.getGroupKeys(this.groupData[0]);
@@ -199,7 +213,6 @@ export class MmAssesmentComponent implements OnInit {
           this.offerData['offerId'] = this.currentOfferId;
           this.offerData['mmChoice'] = 'REVALIDATE';
           this.offerData['mmId'] = null;
-          // console.log(this.offerData);
           let postData = this.offerData;
           postData['groups'] = this.offerData['groups'];
           this.monetizationModelService.toNextSetp(postData).subscribe(data => {
@@ -208,6 +221,15 @@ export class MmAssesmentComponent implements OnInit {
             data['groups'].forEach(group => {
               this.getGroupData(group, selectedCharacteristics, true);
             });
+            if (this.dimensionMode === true) {
+              // dimension page, remove the first tab
+              // that.dimensionFirstGroupData = that.groupData[0];
+              // that.dimensionFirstGroupName = that.groupNames[0];
+              // that.groupData.shift();
+              // that.groupNames.shift();
+              this.groupData.shift();
+              this.groupNames.shift();
+            }
           });
         }
 
@@ -221,11 +243,49 @@ export class MmAssesmentComponent implements OnInit {
           that.groupData.shift();
           that.groupNames.shift();
         }
-        console.log("offerData", that.groupData);
 
 
       });
     });
+// Get StakeHolder
+let that = this;
+this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+  this.firstData = data;
+  this.offerName = data['offerName'];
+  this.offerOwner = data['offerOwner'];
+  this.derivedMM = data['derivedMM'];
+  this.displayLeadTime = true;
+  this.offerId = this.currentOfferId;
+  this.data = this.firstData['stakeholders'];
+  this.derivedMM = this.firstData['derivedMM'];
+  this.primaryBE = this.firstData['primaryBEList'][0];
+  this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+    (leadTime: LeadTime) => {
+      this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+    }
+  );
+
+  this.stakeHolderInfo = {};
+  // this.processStakeHolderData(this.data);
+  for (let i = 0; i <= this.data.length - 1; i++) {
+    if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
+      this.stakeHolderInfo[this.data[i]['offerRole']] = [];
+    }
+    this.stakeHolderInfo[this.data[i]['offerRole']].push(
+      {
+        userName: this.data[i]['name'],
+        emailId: this.data[i]['_id'] + '@cisco.com',
+        _id: this.data[i]['_id'],
+        businessEntity: this.data[i]['businessEntity'],
+        functionalRole: this.data[i]['functionalRole'],
+        offerRole: this.data[i]['offerRole'],
+        stakeholderDefaults: this.data[i]['stakeholderDefaults']
+      });
+  }
+
+  this.stakeData = this.stakeHolderInfo;
+
+});
   }
 
   getGroupData(group, selectedCharacteristics, toNextSetpFlag = false) {
@@ -259,6 +319,7 @@ export class MmAssesmentComponent implements OnInit {
     });
     this.groupData.push(curGroup);
   }
+
 
   //downloadPDF
   downloadPDF() {
@@ -459,12 +520,15 @@ export class MmAssesmentComponent implements OnInit {
   toPrevStep() {
     if (this.activeTabIndex > 0) {
       this.activeTabIndex -= 1;
+      if (this.activeTabIndex === 0 && !this.dimensionMode) {
+        this.canClickTab = false;
+      }
     }
   }
 
   toNextStep() {
-
-    if (this.activeTabIndex === 0) {
+    if (this.activeTabIndex === 0 && !this.dimensionMode) {
+      this.canClickTab = true;
       var index = 0;
       var groupKeys = this.getGroupKeys(this.groupData[0]);
       groupKeys.forEach((key) => {
@@ -479,7 +543,6 @@ export class MmAssesmentComponent implements OnInit {
       this.offerData['offerId'] = this.currentOfferId;
       this.offerData['mmChoice'] = 'REVALIDATE';
       this.offerData['mmId'] = null;
-      // console.log(this.offerData);
       let postData = this.offerData;
       postData['groups'] = this.offerData['groups'];
 
@@ -495,7 +558,7 @@ export class MmAssesmentComponent implements OnInit {
         }
 
         this.currentMMModel = data['mmModel'];
-        if (data['mmModel'] !== null && this.activeTabIndex < this.groupNames.length - 1) {
+        if (this.activeTabIndex < this.groupNames.length - 1) {
           this.activeTabIndex += 1;
         }
         this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
@@ -568,6 +631,7 @@ export class MmAssesmentComponent implements OnInit {
 
 
     });
+    console.log(this.stakeData);
   }
 
   emitEventToChild() {
@@ -614,8 +678,11 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
   changeTab(index) {
-    if (this.canClickNextStep === true && this.currentMMModel !== null) {
+    if (this.canClickNextStep === true) {
       this.activeTabIndex = index;
+      if (index === 0 && !this.dimensionMode) {
+        this.canClickTab = false;
+      }
     }
   }
 
@@ -887,191 +954,6 @@ export class MmAssesmentComponent implements OnInit {
 
     })
   }
-
-
-
-  editOffer(){
-    this.proceedButtonStatusValid = false;
-    this.disablefields = false;
-
-  }
-
-  show() {
-    this.proceedButtonStatusValid = true;
-    this.display =true;
-
-  //   let selectedCharacteristics = [];
-  //   let additionalCharacteristics = [];
-  //   this.groupData.forEach((group, index) => {
-  //     for (let prop in group) {
-  //       let subselectedCharacteristics = {};
-  //       let notSubselectedCharacteristics = {};
-  //       subselectedCharacteristics['group'] = this.groupNames[index];
-  //       subselectedCharacteristics['subgroup'] = prop;
-  //       subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
-  //       subselectedCharacteristics['characteristics'] = [];
-
-  //       notSubselectedCharacteristics['group'] = this.groupNames[index];
-  //       notSubselectedCharacteristics['subgroup'] = prop;
-  //       notSubselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
-  //       notSubselectedCharacteristics['characteristics'] = [];
-  //       group[prop].forEach((characters) => {
-  //         if (characters['status'] === 1 || characters['type'] === 2) {
-  //           subselectedCharacteristics['characteristics'].push(characters['name']);
-  //         } else {
-  //           notSubselectedCharacteristics['characteristics'].push(characters['name']);
-  //         }
-  //       });
-  //       selectedCharacteristics.push(subselectedCharacteristics);
-  //       additionalCharacteristics.push(notSubselectedCharacteristics);
-  //     }
-  //   });
-
-  //   let stakeHolders = [];
-  //   for (let prop in this.stakeData) {
-  //     this.stakeData[prop].forEach(sh => {
-  //       stakeHolders.push({
-  //         '_id': sh['_id'],
-  //         'businessEntity': sh['userMappings'][0]['businessEntity'],
-  //         'functionalRole': sh['userMappings'][0]['functionalRole'],
-  //         'offerRole': sh['userMappings'][0]['appRoleList'][0],
-  //         'stakeholderDefaults': sh['stakeholderDefaults'],
-  //         'name': sh['userName']
-  //       });
-  //     });
-  //   }
-
-  //   let obj={
-
-  //   offerId : this.currentOfferId == null ? '' : this.currentOfferId,
-  
-  //   offerName :this.offerBuilderdata['offerDesc'] == null ? '' : this.offerBuilderdata['offerDesc'],
-  
-  //   offerDesc :this.offerBuilderdata['offerCreatedBy'] == null ? '' : this.offerBuilderdata['offerCreatedBy'],
-  
-  //   offerCreatedBy : this.offerBuilderdata['offerOwner'] == null ? '' : this.offerBuilderdata['offerOwner'],
-  
-  //   offerCreationDate :  this.offerBuilderdata['offerCreationDate'] == null ? '' : this.offerBuilderdata['offerCreationDate'],
-  
-  //   offerOwner :  this.offerBuilderdata['offerOwner'] == null ? '' : this.offerBuilderdata['offerOwner'],
-  
-  //   clonedOfferId :  this.offerBuilderdata['clonedOfferId'] == null ? '' : this.offerBuilderdata['clonedOfferId'],
-  
-  //   primaryBUList :this.offerBuilderdata['primaryBUList'] == null ? '' : this.offerBuilderdata['primaryBUList'],
-  
-  //   primaryBEList : this.offerBuilderdata['primaryBEList'] == null ? '' : this.offerBuilderdata['primaryBEList'],
-  
-  //   strategyReviewDate : this.offerBuilderdata['strategyReviewDate'] == null ? '' : this.offerBuilderdata['strategyReviewDate'],
-  
-  //   designReviewDate :  this.offerBuilderdata['designReviewDate'] == null ? '' : this.offerBuilderdata['designReviewDate'],
-  
-  //   readinessReviewDate : this.offerBuilderdata['readinessReviewDate'] == null ? '' : this.offerBuilderdata['readinessReviewDate'],
-  
-   
-  //   selectedCharacteristics :selectedCharacteristics,
-  //   derivedMM : this.currentMMModel == null ? '' : this.currentMMModel,
-  
-  //   overallStatus :this.message['contentHead'],
-  
-  //   additionalCharacteristics :additionalCharacteristics,
- 
-  //     stakeholders :stakeHolders,
-  //   expectedLaunchDate :this.offerBuilderdata['expectedLaunchDate'] ,
-  
-  //  status : {
-  
-  //     offerPhase : "PreLaunch",
-  
-  //       offerMilestone : "Launch In Progress",
-  
-  //       phaseMilestone : "Execute",
-  
-  //       subMilestone: "Offer Set Up and Design"
-  
-  //   },
-  
-  //  ideate : [],
-  
-  //   "plan" : [],
-   
-  //   secondaryBUList :this.offerBuilderdata['secondaryBUList'] ,
-  
-  //   secondaryBEList :this.offerBuilderdata['secondaryBEList'],
-  
-  //   offerStatus : "Offer service completion"
-  
-  // } 
-  // console.log("finalObjecydata::::::::::",obj);
-  // this.createOfferService.getEditOfferUpdate(obj).subscribe(data=>{
-  //   let finaldata=data;
-  //   console.log("after submit edit",finaldata);
-  // })
-   
-  }
-  showWarning(){
-    this.showWarningSave = true;
-
-  }
-
-  PreviousValues(){
-    this.proceedButtonStatusValid = true;
-   
-    let newArray = [];
-    
-    this.monetizationModelService.getAttributes().subscribe(data => {
-      this.offerData = data;
-      this.groupData =[];
-      console.log("selectedCharacteristics",this. oldselectedCharacteristics['Offer Characteristics']);
-      this.offerData['groups'].forEach(group => {
-        let curGroup = {};
-        group['subGroup'].forEach(g => {
-          // console.log("g:::",g.subGroupName)
-          if(Object.keys(this. oldselectedCharacteristics).length != 0){
-          newArray = this. oldselectedCharacteristics['Offer Characteristics'][g['subGroupName']];
-          }
-          // console.log("offerArra::::",this.offerArray);
-          curGroup[g['subGroupName']] = [];
-          g.choices.forEach((c) => {
-             this.match =false;
-            const splitArr = c.split('#');
-            const attrName = splitArr[0];
-            const description = splitArr[1];
-            // console.log("attrName:::::",attrName)
-
-            if(newArray && newArray.length == 1 && newArray ==attrName ){
-
-              curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-             this.match =true;
-        }
-            if(newArray && newArray.length > 1){
-              newArray.forEach(value =>{
-                   if(attrName == value ){
-                curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: 1, tooltip: description });
-                this.match = true; 
-               }
-               if(this.match  == true){
-                return false;
-               }
-             });
-            }
-            if(this.match == false){
-              curGroup[g['subGroupName']].push({ name: attrName, type: 0, status: -1, tooltip: description });
-            }
-
-          });
-        });
-       this.groupData.push(curGroup);
-      });
-    });
-   /*    
-    this.groupNames = this.groupNames.filter(function(elem, index, self) {
-      return index == self.indexOf(elem);
-   }); */ 
-   console.log("groupNames",this.groupNames);
-    
-  }
-
-
 
   goBackToOffercreation() {
     this.router.navigate(['/coolOffer', this.currentOfferId, this.caseId]);

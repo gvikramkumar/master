@@ -90,7 +90,6 @@
 .cui .task--bar span {
   color: lightslategray;
   margin:auto 3px;
-  display: inline-block;
 }
 .cui .task--bar .btn--back.btn:hover {
     background: rgba(0,0,0, .15);
@@ -622,8 +621,15 @@ span[class*="display-"] {
 .cool.cui .action-bar label:hover {
   color:#016a94;
 }
+.form-actions {
+  display:block;
+  width:100%;
+}
 
 
+.add-comment-field + .action-bar {
+  display:none;
+}
 
 
 /* buttons */
@@ -784,6 +790,9 @@ span[class*="display-"] {
 /* helpers */
 .borderless {
   border:none!important;
+}
+.relative {
+  position:relative!important;
 }
 .divider.divider--compressed.comments {
   border-top: solid 1px #f4f4f4;

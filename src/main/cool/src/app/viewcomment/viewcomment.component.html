@@ -13,14 +13,14 @@
   </div>
 
 
-  <div *ngIf="addcomment">
+  <div class="add-comment-field" *ngIf="addcomment">
     <label for="comment" class="subheader">Comment</label>
     <textarea class="textarea" [value]="newComment" (input)="validateComment($event)" maxlength="300" placeholder="300 Max Character" rows="5"></textarea><br>
     <div class="text-danger text-right" >{{300 - newComment.length}}  characters are left</div>
     <div class="divider divider--compressed"></div>
       <div class="action-bar text-right">
       <button class="btn btn--secondary"  (click)="removeComment()" type="submit">Cancel</button>
-      <button class="btn btn--primary"  (click)="updateComment()" [disabled]="onDisable" type="submit">Update</button>
+      <button class="btn btn--primary"  (click)="updateComment()" [disabled]="onDisable" type="submit">Add</button>
     </div>
   </div>
   <div class="action-bar">
