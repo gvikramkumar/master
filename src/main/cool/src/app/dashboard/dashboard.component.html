@@ -332,7 +332,7 @@
 <p-overlayPanel #popCommentContent [showCloseIcon]="true">
   <div *ngIf="selectedAction" class="comments-modal">
     <div class="popover__body">
-      <h1 class="modalheader">View/Edit Comment</h1>
+      <h1 class="modalheader">View/Add Comment</h1>
       <app-viewcomment [taskId]="selectedAction.taskId" [event]="commentEvent" [popContent]="popCommentContent">
       </app-viewcomment>
     </div>
