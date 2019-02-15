@@ -232,6 +232,6 @@ export class EnvironmentService {
         this.REST_API_GET_RULE_RESULT_URL = this.baseapi + '/offer/offerDimensions/';
         this.REST_API_OWB_CONTROLLER = this.baseapi + '/owb/create';
         this.REST_API_USER_DETAILS = this.basepdafapi + '/user/1.0/getLdapUserInfo';
-        this.REST_API_UPDATE_OFFER_TARGET_DATE = this.baseapi + 'offer/updateDates';
+        this.REST_API_UPDATE_OFFER_TARGET_DATE = this.baseapi + '/offer/updateDates';
     }
 }
