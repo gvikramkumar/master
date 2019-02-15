@@ -627,6 +627,10 @@ span[class*="display-"] {
 }
 
 
+.add-comment-field + .action-bar {
+  display:none;
+}
+
 
 /* buttons */
 .cool.cui header .header-toolbar .btn, .cool.cui .dimensions--toggle .btn {
