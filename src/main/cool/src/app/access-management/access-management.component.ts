@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AccessManagementService } from '../services/access-management.service';
-import { CreateOfferService } from '../services/create-offer.service';
-import { SelectItem } from 'primeng/api';
+import { ConfigurationService } from '../services/configuration.service'
 import { NgForm } from '@angular/forms';
 import { NewUser } from '../models/newuser';
 import { UserMapping } from '../models/usermapping';
@@ -34,7 +33,7 @@ export class AccessManagementComponent implements OnInit {
 
   userIdAvailable: boolean;
 
-  constructor(private accessManagementService: AccessManagementService) { }
+  constructor(private accessManagementService: AccessManagementService, private configurationService: ConfigurationService) { }
 
   ngOnInit() {
 
@@ -52,7 +51,6 @@ export class AccessManagementComponent implements OnInit {
 
     this.accessManagementService.accessManagementAll()
       .subscribe(data => {
-        // this.accessManagementData = data;
         this.processAdminData(data);
       });
 
@@ -68,12 +66,26 @@ export class AccessManagementComponent implements OnInit {
     });
 
     this.getbusinessEntity();
-    this.accessManagementService.getregisterUserFunction().subscribe(data => {
-      this.registerNewUserfun = data;
-    });
+
+    this.populateFunctionDropdown();
 
     this.accessList.push({ label: 'KeyPOC', value: 'KeyPOC' });
     this.accessList.push({ label: 'Admin', value: 'Admin' });
+  }
+
+  private populateFunctionDropdown() {
+
+    // If super admin then all the function values should show up 
+    // Else if the user if functional Admin dropdown should show values the user is funcional admin for
+    // other wise don't show up any values
+
+    if (this.configurationService.startupData.isSuperAdmin) {
+      this.accessManagementService.getregisterUserFunction().subscribe(data => {
+        this.registerNewUserfun = data;
+      });
+    } else if (this.configurationService.startupData.isFunctionalAdmin) {
+      this.registerNewUserfun = this.configurationService.startupData.functionsUserCanAddTo;
+    }
   }
 
   getbusinessEntity() {
@@ -96,7 +108,7 @@ export class AccessManagementComponent implements OnInit {
   }
 
   getPrimaryBusinessUnitPromise(event) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.accessManagementService.getPrimaryBuBasedOnBe(event.toString())
         .subscribe(data => {
           const primaryBuArry = [];
@@ -177,7 +189,7 @@ export class AccessManagementComponent implements OnInit {
     this.newUser.push(user);
 
 
-    this.accessManagementService.registerUser(this.newUser).subscribe((data) => {
+    this.accessManagementService.registerUser(this.newUser).subscribe(() => {
       this.getAllUpdate();
     },
       (err) => {
@@ -209,7 +221,7 @@ export class AccessManagementComponent implements OnInit {
     }
 
     this.accessManagementService.updateAccessManagement(updateAdmin)
-      .subscribe(data => {
+      .subscribe(() => {
         console.log('updated successfully');
       });
   }
@@ -225,7 +237,7 @@ export class AccessManagementComponent implements OnInit {
       "userMappings": updatedUser.userMapping
     }
     this.accessManagementService.updateAccessManagement(updateAdmin)
-      .subscribe(data => {
+      .subscribe(() => {
         console.log('updated successfully');
       });
   }
@@ -259,7 +271,7 @@ export class AccessManagementComponent implements OnInit {
     }
 
     this.accessManagementService.updateAccessManagement(updateAdmin)
-      .subscribe(data => {
+      .subscribe(() => {
         console.log('updated successfully');
       });
   }
@@ -289,13 +301,13 @@ export class AccessManagementComponent implements OnInit {
     this.accessManagementService.getUserDetails(user).subscribe(
       data => {
 
-        if (Object.keys(data).length == 0 || data['errorMsg'] !=null) {
+        if (Object.keys(data).length == 0 || data['errorMsg'] != null) {
           this.userIdAvailable = false;
         } else {
           this.userIdAvailable = true;
         }
 
-      }, error => {
+      }, () => {
         this.userIdAvailable = false;
       }
 
