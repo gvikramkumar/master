@@ -80,6 +80,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   tenthPercentile = '10th Percentile';
   nintyPercentile = '90th Percentile';
 
+  attribute: boolean;
+
   @Input() offerId: string;
   @Input() stakeData: Object;
   @Input() derivedMM: string;
@@ -150,6 +152,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
     this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
 
+    this.attribute = true;
+
   }
 
   ngOnInit() {
@@ -160,6 +164,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
     this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
     this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
+
+    this.navigateHash['Offer Dimension'] = ['/offerDimension', this.currentOfferId, this.caseId];
+    this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.currentOfferId, this.caseId];
+    this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
 
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
@@ -317,7 +325,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       const averageWeekCountObject = await this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).toPromise();
       this.averageWeekCount = Number(averageWeekCountObject['AverageWeeks']).toFixed(2);
 
-       // Initialize Average Week Count To N/A When Applicable
+      // Initialize Average Week Count To N/A When Applicable
       if (parseInt(this.averageWeekCount, 2) === 0) {
         this.averageWeekCount = 'N/A';
       }
@@ -347,10 +355,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
 
-/**
- * Edit the tagetdate
- * @param phase
- */
+  /**
+   * Edit the tagetdate
+   * @param phase
+   */
   editDate(phase) {
     switch (phase) {
       case 'ideate': {
@@ -426,7 +434,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       });
   }
 
-  show(e:any) {
+  show(e: any) {
     console.log('focus came');
   }
   onSearch() {

@@ -19,11 +19,12 @@ import { OfferOverViewResolver } from './services/offer-overview-resolver.servic
 import { AuthGuard } from './auth/gaurds/auth-guard';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
 //Temperoary
-import {MmInfoBarComponent} from './mm-info-bar/mm-info-bar.component';
-import {OfferBasicInfoComponent} from './offer-basic-info/offer-basic-info.component';
+import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
+import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { OasComponent } from './oas/oas.component';
+import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 
 
 const routes: Routes = [
@@ -130,6 +131,16 @@ const routes: Routes = [
     path: 'oas',
     component: OasComponent
   },
+  {
+    path: 'offerDimension/:id/:id2',
+    component: OfferDimensionComponent
+  }, {
+    path: 'offerSolutioning/:id/:id2',
+    component: OfferSolutioningComponent
+  }, {
+    path: 'offerConstruct/:id/:id2',
+    component: OfferConstructComponent
+  }
 
 ];
 
