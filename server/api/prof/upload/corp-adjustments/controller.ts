@@ -63,21 +63,15 @@ export default class CorpAdjustmentsUploadUploadController extends UploadControl
     this.imports = this.rows1.map(row => new CorpAdjustmentsUploadImport(row, this.fiscalMonth));
     const obj = {};
     this.imports.forEach((val: CorpAdjustmentsUploadImport) => {
-      const arr = _.get(obj, `${val.salesCountryName.toUpperCase()}.${val.salesTerritoryCode.toUpperCase()}`);
-      const entry = val.scmsValue && val.scmsValue.toUpperCase();
-      if (arr) {
-        if (arr.indexOf(entry) !== -1) {
-          this.addErrorMessageOnly(`${val.salesCountryName} / ${val.salesTerritoryCode} / ${val.scmsValue}`);
-        } else {
-          arr.push(entry);
-        }
+      if (obj[val.salesCountryName.toUpperCase()]) {
+        this.addErrorMessageOnly(val.salesCountryName);
       } else {
-        _.set(obj, `${val.salesCountryName.toUpperCase()}.${val.salesTerritoryCode.toUpperCase()}`, [entry]);
+        obj[val.salesCountryName.toUpperCase()] = true;
       }
     });
 
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Country Name/Sales Territory Code/SCMS Value entries in your upload', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Duplicate Country Name entries in your upload', this.errors));
     }
 
     return Promise.resolve();
@@ -89,13 +83,8 @@ export default class CorpAdjustmentsUploadUploadController extends UploadControl
   }
 
   removeDuplicatesFromDatabase(imports: CorpAdjustmentsUploadImport[]) {
-    const duplicates = _.uniqWith(imports, (a, b) => {
-      return a.salesCountryName === b.salesCountryName &&
-        a.salesTerritoryCode === b.salesTerritoryCode &&
-        a.scmsValue === b.scmsValue;
-    })
-      .map(x => _.pick(x, ['salesCountryName', 'salesTerritoryCode', 'scmsValue']))
-    return this.repo.bulkRemove(duplicates);
+    const list = _.map(imports, 'salesCountryName');
+    return this.repo.removeMany({salesCountryName: {$in: list}});
   }
 
   validateCountryName() {
