@@ -39,10 +39,12 @@ export default class AlternateSl2UploadUploadController extends UploadController
     return Promise.all([
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_iso_country', 'iso_country_name'),
+      this.pgRepo.getDistinctAltSl2AltCountryPairs()
     ])
       .then(results => {
         this.data.salesTerritoryNameCodes = results[0];
         this.data.alternateCountryNames = results[1];
+        this.data.altSL2AltCountryPairs = results[2];
       });
   }
 
@@ -51,7 +53,8 @@ export default class AlternateSl2UploadUploadController extends UploadController
     return Promise.all([
       this.validateActualSl2Code(),
       this.validateAlternateSl2Code(),
-      this.validateAlternateCountryName()
+      this.validateAlternateCountryName(),
+      this.validateAltSl2AltCountryPairs()
     ])
       .then(() => this.lookForErrors());
   }
@@ -115,6 +118,18 @@ export default class AlternateSl2UploadUploadController extends UploadController
     if (this.temp.alternateCountryName && this.notExists(this.data.alternateCountryNames, this.temp.alternateCountryName)) {
       this.addErrorInvalid(this.PropNames.alternateCountryName, this.temp.alternateCountryName);
     }
+    return Promise.resolve();
+  }
+
+  validateAltSl2AltCountryPairs() {
+    if (this.temp.alternateCountryName) {
+      const text = `${this.temp.alternateSl2Code} / ${this.temp.alternateCountryName}`;
+      const val = `${this.temp.alternateSl2Code}::${this.temp.alternateCountryName}`.toUpperCase();
+      if (this.notExists(this.data.altSL2AltCountryPairs, val)) {
+        this.addErrorInvalid(`${this.PropNames.alternateSl2Code} / ${this.PropNames.alternateCountryName}`, text);
+      }
+    }
+
     return Promise.resolve();
   }
 
