@@ -10,7 +10,6 @@ import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
-import { LocalStorageService } from 'ngx-webstorage';
 import { HeaderService } from '../header/header.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 
@@ -83,8 +82,7 @@ export class CreateOfferCoolComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private headerService: HeaderService,
     private stakeholderfullService: StakeholderfullService,
-    private _location: Location,
-    private localStorage: LocalStorageService) {
+    private _location: Location) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       if (this.offerId) {
@@ -469,7 +467,6 @@ export class CreateOfferCoolComponent implements OnInit {
     this.createOfferService.registerOffer(createoffer).subscribe((data) => {
       this.offerId = data.offerId;
       this.caseId = data.caseId;
-      this.localStorage.store('currentOfferName', this.offerNameValue);
       this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
     },
       (err) => {
