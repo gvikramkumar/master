@@ -48,7 +48,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
       this.exitCriteriaData = data;
       this.ideate = data['ideate'];
 
-      for (let i = 0; i < this.ideate.length; i++) {
+      for (let i = 0; i < this.ideate.length-1; i++) {
         if (this.ideate[i]['status'] !== 'Completed') {
           this.requestApprovalAvailable = false;
           break;
