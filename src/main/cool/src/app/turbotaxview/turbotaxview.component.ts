@@ -23,21 +23,27 @@ export class TurbotaxviewComponent implements OnInit {
     checkout: { Message: string; items: { mainVO: { main_title: string; childVO: { title: string; price: string; }[]; discounts: { title: string; price: string; }[]; }; quantity: string; price: string; currency: string; }[]; };
     navigateHash: Object = {};
 
+    attribute: boolean;
 
     constructor(private offerPhaseService: OfferPhaseService, private menuBarService: MenuBarService,
         private activatedRoute: ActivatedRoute, private turbotax: TurbotaxService, private router: Router) {
     }
 
     ngOnInit() {
-    
-        this.navigateHash['Offer Creation'] = ['/coolOffer', this.data['offerId'],this.data['caseId']];
+
+        this.attribute = false;
+        this.navigateHash['Offer Creation'] = ['/coolOffer', this.data['offerId'], this.data['caseId']];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.data['offerId'], this.data['caseId']];
         this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.data['offerId'], this.data['caseId']];
         this.navigateHash['Strategy Review'] = ['/strategyReview', this.data['offerId'], this.data['caseId']];
 
+        this.navigateHash['Offer Dimension'] = ['/offerDimension', this.data['offerId'], this.data['caseId']];
+        this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.data['offerId'], this.data['caseId']];
+        this.navigateHash['Offer Components'] = ['/offerConstruct', this.data['offerId'], this.data['caseId']];
+
         this.turbotax.getRubboTaxMenu(this.data['caseId']).subscribe(data => {
             this.offerPhaseDetailsList = data;
-            console.log("turbotax view",this.offerPhaseDetailsList);
+            console.log("turbotax view", this.offerPhaseDetailsList);
             this.ideateCount = data['ideate'].length;
             this.planCount = data['plan'].length;
             data['ideate'].forEach(element => {
