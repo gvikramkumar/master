@@ -3,9 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { MenuBarService } from '../services/menu-bar.service';
 import { UserService } from '../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from 'ngx-webstorage';
 import { EnvironmentService } from '../../environments/environment.service';
-
 
 @Component({
     selector: 'app-menu-bar',
@@ -29,13 +27,11 @@ export class MenuBarComponent implements OnInit {
     holdStatusValid = true;
     cancelStatusValid = true;
     currentUsername: any;
-    currentOfferName;
 
     constructor(private menuBarService: MenuBarService,
         private userService: UserService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private localStorage: LocalStorageService,
         private environmentService: EnvironmentService) {
 
         this.activatedRoute.params.subscribe(params => {
@@ -55,8 +51,6 @@ export class MenuBarComponent implements OnInit {
             }
 
         });
-
-        this.currentOfferName = this.localStorage.retrieve('currentOfferName');
         this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
         this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
@@ -65,7 +59,6 @@ export class MenuBarComponent implements OnInit {
     }
 
     ngOnInit() {
-
         this.items = [
             {
                 label: 'Ideate',
