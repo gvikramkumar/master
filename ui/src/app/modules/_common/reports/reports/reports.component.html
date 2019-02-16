@@ -29,7 +29,7 @@
 
     <div class="col-md-7 file-upload">
       <div class="fin-content">
-        <div class="selected-value"> {{report?.text}}</div>
+        <div class="selected-value"> {{report?.text}}&nbsp;</div><!-- need this &nbsp; here as a placeholder for initial entry -->
 
         <br>
         <div>
@@ -53,7 +53,7 @@
             <button (click)="downloadReport()" [disabled]="disableDownload"
                     cuiButton color="primary">Download Report
             </button>
-            <button *ngIf="!report?.hasNoChoices" (click)="reset()"
+            <button *ngIf="report && !report.hasNoChoices" (click)="reset()"
                     cuiButton color="secondary">Reset
             </button>
           </div>
