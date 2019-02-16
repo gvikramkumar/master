@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { flatMap } from 'rxjs/operators';
 import { UserService } from './user.service';
 import { EnvironmentService } from '../../environments/environment.service';
 import { CreateAction } from '../models/create-action';
@@ -14,68 +14,80 @@ export class ActionsService {
   // baseMyOfferssUrl: string = environment.REST_API_MYOFFERS_URL;
   // baseDismissNotificationUrl: string = environment.REST_API_DISMISS_NOTIFICATION;
 
-  constructor(private http: HttpClient, private userService: UserService, private environmentService: EnvironmentService) { }
+  constructor(private _http: HttpClient, private userService: UserService, private environmentService: EnvironmentService) { }
 
   getActionsTracker(): Observable<any> {
-    let url = this.environmentService.REST_API_ACTIONSTRACKER_URL + this.userService.getUserId() + '/true';
-    return this.http.get(url, { withCredentials: true });
+    const url = this.environmentService.REST_API_ACTIONSTRACKER_URL + this.userService.getUserId() + '/true';
+    return this._http.get(url, { withCredentials: true });
   }
 
   getMilestones(caseId): Observable<any> {
-    let url = this.environmentService.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL;
-    url += "/" + caseId;
-    url += "/" + false;
+    const url = `${this.environmentService.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL}/${caseId}/false`;
 
-    return this.http.get(url, { withCredentials: true });
+    return this._http.get(url, { withCredentials: true });
   }
   getAchievedMilestones(caseId): Observable<any> {
     const url = `${this.environmentService.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL}/${caseId}/true`;
-    return this.http.get(url);
+    return this._http.get(url);
   }
 
   getFunction(): Observable<any> {
-    let url = this.environmentService.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL;
-    return this.http.get(url, { withCredentials: true });
+    const url = this.environmentService.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL;
+    return this._http.get(url, { withCredentials: true });
   }
 
   getAssignee(offerId): Observable<any> {
-    let url = this.environmentService.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
-    url += offerId;
-    return this.http.get(url, { withCredentials: true });
+    const url = `${this.environmentService.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL}${offerId}`;
+    return this._http.get(url, { withCredentials: true });
   }
 
 
   createNewAction(newActionData: CreateAction): Observable<any> {
-    let url = this.environmentService.REST_API_CREATE_NEW_ACTION_POST_URL;
-    return this.http.post(url, newActionData);
+    const url = this.environmentService.REST_API_CREATE_NEW_ACTION_POST_URL;
+    return this._http.post(url, newActionData).pipe(
+      flatMap(res => {
+        return this.sendNotification(newActionData.assignee, newActionData.offerId, newActionData.actionTitle, newActionData.description);
+      })
+    );
   }
 
   createNotAndConditional(createActionComment: CreateActionComment): Observable<any> {
-    let url = this.environmentService.REST_API_CREATE_BPM_APPROVAL_URL;
-    return this.http.post(url, createActionComment);
+    const url = this.environmentService.REST_API_CREATE_BPM_APPROVAL_URL;
+    return this._http.post(url, createActionComment);
   }
 
   createActionApprove(createActionApprove: CreateActionApprove): Observable<any> {
-    let url = this.environmentService.REST_API_CREATE_BPM_APPROVAL_URL;
-    return this.http.post(url, createActionApprove);
+    const url = this.environmentService.REST_API_CREATE_BPM_APPROVAL_URL;
+    return this._http.post(url, createActionApprove);
+  }
+
+  sendNotification(userId, offerId, actionTitle, actionDescription): Observable<any> {
+    const emailPayload = {};
+    emailPayload['subject'] = 'You have been assigned an action';
+    emailPayload['emailBody'] = `
+    You have been assigned an action for Offer ID:${offerId}
+    Title: ${actionTitle}
+    Description: ${actionDescription}
+    `;
+    emailPayload['toMailLists'] = userId;
+    const url = this.environmentService.REST_API_ESCALATE_NOTIFICATION_URL;
+    return this._http.post(url, emailPayload);
   }
 
   postForNewAction(offerId, caseId, createActionPayload) {
-    let url = this.environmentService.REST_API_EXITCRITERIA_REQUEST_ACTION_AUTO_CREATION_URL;
-    url += offerId;
-    url += '/' + caseId;
-    return this.http.post(url, createActionPayload);
+    const url = `${this.environmentService.REST_API_EXITCRITERIA_REQUEST_ACTION_AUTO_CREATION_URL}${offerId}/${caseId}`;
+    return this._http.post(url, createActionPayload);
   }
 
   escalateNotification(emailPayload) {
-    let url = this.environmentService.REST_API_ESCALATE_NOTIFICATION_URL;
-    return this.http.post(url, emailPayload);
+    const url = this.environmentService.REST_API_ESCALATE_NOTIFICATION_URL;
+    return this._http.post(url, emailPayload);
   }
 
   downloadActionDetailsFile(caseid) {
     const url = `${this.environmentService.REST_API_FILE_DOWNLOAD_FOR_ACTION}/${caseid}`;
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/octet-stream');
-    return this.http.get(url, { headers: headers, responseType: 'blob' });
+    return this._http.get(url, { headers: headers, responseType: 'blob' });
   }
 }

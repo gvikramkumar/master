@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
       notification.alertType = 'notification';
       notification.title = notification.notifcationTitle;
       notification.desc = notification.notificationDesc;
-      notification.assigneeId = notification.assigneeId ? notification.assigneeId.split(',').join(', ') : '';
+      // notification.assigneeId = notification.offerOwner ? notification.assigneeId.split(',').join(', ') : '';
 
       return notification;
     });
@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit {
       action.alertType = 'action';
       action.title = action.actiontTitle;
       action.desc = action.actionDesc;
-      action.assigneeId = action.assigneeId ? action.assigneeId.split(',').join(', ') : '';
+      // action.assigneeId = action.assigneeId ? action.assigneeId.split(',').join(', ') : '';
 
       return action;
     });
@@ -269,10 +269,16 @@ export class DashboardComponent implements OnInit {
     createCommentPayload['action'] = this.action;
     createCommentPayload['comment'] = this.commentValue;
 
+    const assignee = [this.assigneeValue];
+    const offerId = this.selectedAction.offerId;
+    const actionTitle = this.titleValue;
+    const actionDescription = this.descriptionValue;
+
     this.dashboardService.postComments(createCommentPayload).subscribe((data) => {
       this.dashboardService.postActionForNapprove(createActionPayload).subscribe(response => {
         overlaypanel.hide();
         this.getMyActionsAndNotifications();
+        this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
       });
     });
     this.createActionForm.reset();
@@ -360,7 +366,7 @@ export class DashboardComponent implements OnInit {
   dismissNotification(overlaypanel: OverlayPanel) {
     const postData = {
       'taskId': this.selectedAction.taskId,
-      'userId': this.selectedAction.assigneeId,
+      'userId': this.userService.getUserId(),
       'taskName': 'Notification',
       'caseId': '',
       'offerId': '',

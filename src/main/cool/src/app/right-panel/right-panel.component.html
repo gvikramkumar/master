@@ -69,7 +69,7 @@
     </div>
 
     <!-- <Scalapbility Index> -->
-   <!-- <div class="card card--raised base-margin-top">
+    <!-- <div class="card card--raised base-margin-top">
         <h5 class="half-margin-bottom">Scalability Index</h5>
         <div class="card__footer">
             <a href="javascript:;" (click)="goScalabilityIndex()">View Offer Scalability Details</a>
@@ -210,30 +210,34 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
-                                            <td><span style="color: #005073;cursor:pointer"
-                                                    (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span>
-                                            </td>
-                                            <td
-                                                [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">
-                                                {{ideateData.status}}</td>
                                             <td>
-                                              <span *ngIf="!editIdeateTargetDate">
-                                                {{ideateData.targetDate | date: "dd-MMM-y"}}
-                                              </span>
-                                              <span *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
-                                                  <input type="text"
-                                                  class="form-control"
-                                                  #dp="bsDatepicker"
-                                                  autofocus
-                                                  bsDatepicker
-                                                  [minDate]="minDate"
-                                                  (bsValueChange)="onValueChange('ideate',$event)"
-                                                  [value]='ideateData.targetDate | date: "dd-MMM-y"'
-                                                  >
-                                              </span>
-                                              <span *ngIf="ideateData.subMilestone === 'Strategy Review'">
-                                                <a (click)="editDate('ideate')"><span class="icon-pencil"></span>Edit</a>
-                                              </span>
+                                                <div *ngIf="!ideateData.enable; else enableOfferPhase">
+                                                    <span style="color: gray;">{{ideateData.subMilestone}}</span>
+                                                </div>
+                                                <ng-template #enableOfferPhase>
+                                                    <span style="color: #005073;"
+                                                        (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span>
+                                                </ng-template>
+                                            </td>
+                                            <td [ngClass]=" (ideateData.status=='Completed'
+                                                        )?'text-success':'text-warning'">
+                                                {{ideateData.status}}
+                                            </td>
+                                            <td>
+                                                <span *ngIf="!editIdeateTargetDate">
+                                                    {{ideateData.targetDate | date: "dd-MMM-y"}}
+                                                </span>
+                                                <span
+                                                    *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
+                                                    <input type="text" class="form-control" #dp="bsDatepicker" autofocus
+                                                        bsDatepicker [minDate]="minDate"
+                                                        (bsValueChange)="onValueChange('ideate',$event)"
+                                                        [value]='ideateData.targetDate | date: "dd-MMM-y"'>
+                                                </span>
+                                                <span *ngIf="ideateData.subMilestone === 'Strategy Review'">
+                                                    <a (click)="editDate('ideate')"><span
+                                                            class="icon-pencil"></span>Edit</a>
+                                                </span>
                                             </td>
                                             <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
                                         </tr>
@@ -256,9 +260,17 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let planData of offerPhaseDetailsList.plan">
-                                            <td><span
-                                                    style="color: #005073;cursor:pointer">{{planData.subMilestone}}</span>
+
+                                            <td>
+                                                <div *ngIf="!planData.enable; else enableOfferPhase">
+                                                    <span style="color: gray;">{{planData.subMilestone}}</span>
+                                                </div>
+                                                <ng-template #enableOfferPhase>
+                                                    <span style="color: #005073;"
+                                                        (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span>
+                                                </ng-template>
                                             </td>
+
                                             <td
                                                 [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">
                                                 {{planData.status}}</td>
@@ -266,19 +278,17 @@
                                                 <span *ngIf="!editPlanTargetDate">
                                                     {{planData.targetDate | date: "dd-MMM-y"}}
                                                 </span>
-                                                <span *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
-                                                    <input type="text"
-                                                    class="form-control"
-                                                    #dp="bsDatepicker"
-                                                    bsDatepicker
-                                                    [minDate]="minDate"
-                                                    (bsValueChange)="onValueChange('plan',$event)"
-                                                    [value]='planData.targetDate | date: "dd-MMM-y"'
-                                                    >
+                                                <span
+                                                    *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
+                                                    <input type="text" class="form-control" #dp="bsDatepicker"
+                                                        bsDatepicker [minDate]="minDate"
+                                                        (bsValueChange)="onValueChange('plan',$event)"
+                                                        [value]='planData.targetDate | date: "dd-MMM-y"'>
                                                 </span>
                                                 <span *ngIf="planData.subMilestone === 'Design Review'">
-                                                    <a (click)="editDate('plan')"><span class="icon-pencil"></span>Edit</a>
-                                                  </span>
+                                                    <a (click)="editDate('plan')"><span
+                                                            class="icon-pencil"></span>Edit</a>
+                                                </span>
                                             </td>
                                             <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>
                                         </tr>
