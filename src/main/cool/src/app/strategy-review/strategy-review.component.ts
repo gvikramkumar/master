@@ -408,7 +408,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
 
       // Iterate - Manager Names
       for (const manager of Array.from(managerDetailsList.values())) {
-        mailList.push(manager['userid']);
+        mailList.push(manager['manager']);
       }
 
     }
