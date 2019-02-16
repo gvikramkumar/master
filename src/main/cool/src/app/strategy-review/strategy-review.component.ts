@@ -298,7 +298,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     // this.router.navigate(['/stakeholderFull',this.currentOfferId]);
     this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
   }
-
+  gotoOfferviewDetails() {
+    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+  }
 
   offerDetailOverView() {
     const proceedPayload = {
