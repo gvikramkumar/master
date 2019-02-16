@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
       notification.alertType = 'notification';
       notification.title = notification.notifcationTitle;
       notification.desc = notification.notificationDesc;
-      notification.assigneeId = notification.assigneeId ? notification.assigneeId.split(',').join(', ') : '';
+      // notification.assigneeId = notification.offerOwner ? notification.assigneeId.split(',').join(', ') : '';
 
       return notification;
     });
@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit {
       action.alertType = 'action';
       action.title = action.actiontTitle;
       action.desc = action.actionDesc;
-      action.assigneeId = action.assigneeId ? action.assigneeId.split(',').join(', ') : '';
+      // action.assigneeId = action.assigneeId ? action.assigneeId.split(',').join(', ') : '';
 
       return action;
     });
