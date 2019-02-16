@@ -269,10 +269,16 @@ export class DashboardComponent implements OnInit {
     createCommentPayload['action'] = this.action;
     createCommentPayload['comment'] = this.commentValue;
 
+    const assignee = [this.assigneeValue];
+    const offerId = this.selectedAction.offerId;
+    const actionTitle = this.titleValue;
+    const actionDescription = this.descriptionValue;
+
     this.dashboardService.postComments(createCommentPayload).subscribe((data) => {
       this.dashboardService.postActionForNapprove(createActionPayload).subscribe(response => {
         overlaypanel.hide();
         this.getMyActionsAndNotifications();
+        this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
       });
     });
     this.createActionForm.reset();
