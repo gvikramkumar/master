@@ -12,6 +12,7 @@ import { NgForm } from '@angular/forms';
 import { CreateAction } from '../models/create-action';
 import { CreateActionService } from '../services/create-action.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
+import { EnvironmentService } from '../../environments/environment.service';
 
 
 
@@ -66,6 +67,7 @@ export class ActionsComponent implements OnInit {
     private createOfferService: CreateOfferService,
     private dashboardService: DashboardService,
     private createActionService: CreateActionService,
+    private environmentService: EnvironmentService,
     ) { }
 
   ngOnInit() {
@@ -249,6 +251,7 @@ export class ActionsComponent implements OnInit {
   }
 
   getActionDetailsFile(caseid) {
+    debugger;
     this.actionsService.downloadActionDetailsFile(caseid).subscribe(data => {
       const nameOfFileToDownload = 'offer-details_' + caseid;
       const blob = new Blob([data], { type: 'application/octet-stream' });
@@ -256,8 +259,9 @@ export class ActionsComponent implements OnInit {
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
       } else {
+        const url = `${this.environmentService.REST_API_FILE_DOWNLOAD_FOR_ACTION}/${caseid}`;
         var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
+        a.href = url;
         a.download = nameOfFileToDownload;
         document.body.appendChild(a);
         a.click();
