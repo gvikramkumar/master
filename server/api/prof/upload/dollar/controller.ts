@@ -73,7 +73,8 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
         this.validateInputBusinessEntityValue(true),
         this.validateSCMSSegment(true),
         this.validateAmount(),
-        this.validateDealId()
+        this.validateDealId(),
+        // this.validateRevenueClassification(),
       ]))
       .then(() => this.lookForErrors());
   }
@@ -125,6 +126,14 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
     if (this.temp.dealId &&
       this.notExists(this.data.dealIds, this.temp.dealId)) {
       this.addErrorInvalid(this.PropNames.dealId, this.temp.dealId);
+    }
+    return Promise.resolve();
+  }
+
+  validateRevenueClassification() {
+    if (this.temp.revenueClassification &&
+      this.notExists(['one', 'two', 'three'], this.temp.revenueClassification)) {
+      this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
     return Promise.resolve();
   }
