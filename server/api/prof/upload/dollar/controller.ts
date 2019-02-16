@@ -74,7 +74,7 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
         this.validateSCMSSegment(true),
         this.validateAmount(),
         this.validateDealId(),
-        // this.validateRevenueClassification(),
+        this.validateRevenueClassification(),
       ]))
       .then(() => this.lookForErrors());
   }
@@ -131,8 +131,8 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
   }
 
   validateRevenueClassification() {
-    if (this.temp.revenueClassification &&
-      this.notExists(['one', 'two', 'three'], this.temp.revenueClassification)) {
+    const vals = ['Non Recurring', 'Recurring Deferred', 'Recurring Non Deferred', 'Recurring Other'].map(x => x.toUpperCase());
+    if (this.temp.revenueClassification && this.notExists(vals, this.temp.revenueClassification)) {
       this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
     return Promise.resolve();
