@@ -16,7 +16,8 @@ import {PgLookupService} from '../../services/pg-lookup.service';
 import * as moment from 'moment';
 
 interface ReportSettings {
-  submeasureKey: number;
+  submeasureKey?: number;
+  submeasureKeys?: number[];
   fiscalMonth?: number;
   fiscalMonthMultiSels?: number[];
   excelFilename: string;
@@ -28,10 +29,13 @@ interface Report {
   text: string;
   disabled: boolean;
   filename: string;
+  hasNoChoices: boolean;
   hasSubmeasureOnly: boolean;
-  hasSmAndFiscalMonth: boolean;
+  hasMultiSubmeasureOnly: boolean;
   hasFiscalMonthOnly: boolean;
   hasMultiFiscalMonthOnly: boolean;
+  hasSmAndFiscalMonth: boolean;
+  hasMultiSmAndFiscalMonth: boolean;
 }
 
 @Component({
@@ -41,7 +45,8 @@ interface Report {
 })
 export class ReportsComponent extends RoutingComponentBase implements OnInit {
   measureId: number;
-  submeasureName: string;
+  submeasureKey: number;
+  submeasureKeys: number[] = [];
   fiscalMonth: number;
   fiscalMonths: {fiscalMonth: number}[] = [];
   fiscalMonthMultiSels: number[];
@@ -52,34 +57,35 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   submeasuresInData: Submeasure[] = [];
   submeasures: Submeasure[] = [];
   disableDownload = true;
+  handleHasMultiSmAndFiscalMonth;
 
   reports: any[] = [
     {
-      type: 'product-hierarchy', text: 'Valid Product Hierarchy', disabled: false,
+      type: 'product-hierarchy', hasNoChoices: true, text: 'Valid Product Hierarchy', disabled: false,
       filename: 'Product_Hierarchy_Report'
     },
     {
-      type: 'sales-hierarchy', text: 'Valid Sales Hierarchy', disabled: false,
+      type: 'sales-hierarchy', hasNoChoices: true, text: 'Valid Sales Hierarchy', disabled: false,
       filename: 'Sales_Hierarchy_Report'
     },
     {
-      type: 'valid-driver', text: 'Valid Driver', disabled: false,
+      type: 'valid-driver', hasNoChoices: true, text: 'Valid Driver', disabled: false,
       filename: 'Valid_Driver_Report'
     },
     {
-      type: 'submeasure', text: 'Sub-Measure Updates', disabled: false,
+      type: 'submeasure', hasNoChoices: true, text: 'Sub-Measure Updates', disabled: false,
       filename: 'Submeasure_Update_Report'
     },
     {
-      type: 'submeasure-grouping', text: 'Sub-Measure Grouping', disabled: false,
+      type: 'submeasure-grouping', hasNoChoices: true, text: 'Sub-Measure Grouping', disabled: false,
       filename: 'Submeasure_Grouping_Report'
     },
     {
-      type: '2t-submeasure-list', text: '2T Sub-Measure List', disabled: false,
+      type: '2t-submeasure-list', hasNoChoices: true, text: '2T Sub-Measure List', disabled: false,
       filename: '2T_Sub_Measure_List_Report'
     },
     {
-      type: 'allocation-rule', text: 'Rule Updates', disabled: false,
+      type: 'allocation-rule', hasNoChoices: true, text: 'Rule Updates', disabled: false,
       filename: 'Rule_Update_Report'
     },
     {
@@ -87,15 +93,15 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Rule_Submeasure_Report'
     },
     {
-      type: 'dollar-upload', hasSmAndFiscalMonth: true, text: 'Input Dollar Adjustments Data', disabled: false,
+      type: 'dollar-upload', hasMultiSmAndFiscalMonth: true, text: 'Input Dollar Adjustments Data', disabled: false,
       filename: 'Manual_Uploaded_Data_Report'
     },
     {
-      type: 'mapping-upload', hasSmAndFiscalMonth: true, text: 'Manual Mapping Split Percentage', disabled: false,
+      type: 'mapping-upload', hasMultiSmAndFiscalMonth: true, text: 'Manual Mapping Split Percentage', disabled: false,
       filename: 'Manual_Mapping_Data_Report'
     },
     {
-      type: 'dept-upload', hasSubmeasureOnly: true, text: 'Department/Account Exclusion Mapping', disabled: false,
+      type: 'dept-upload', hasMultiSubmeasureOnly: true, text: 'Department/Account Exclusion Mapping', disabled: false,
       filename: 'Department_Mapping_Data_Report'
     },
     {
@@ -133,6 +139,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   ngOnInit() {
+    this.handleHasMultiSmAndFiscalMonth = _.debounce(this._handleHasMultiSmAndFiscalMonth, 1000);
     Promise.all([
       this.measureService.getManyActive().toPromise(),
       this.submeasureService.getManyLatestGroupByNameActive().toPromise()
@@ -146,12 +153,13 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   reset(init?) {
     this.measureId = undefined;
-    this.submeasureName = undefined;
+    this.submeasureKey = undefined;
+    this.submeasureKeys = [];
     this.fiscalMonth = undefined;
     this.fiscalMonthMultiSels = [this.fiscalMonthMultis[0].fiscalMonth];
     this.submeasures = [];
     this.fiscalMonths = [];
-    if (!this.report || this.report.hasSubmeasureOnly || this.report.hasSmAndFiscalMonth || this.report.hasFiscalMonthOnly) {
+    if (!this.report || !this.report.hasNoChoices) {
       this.disableDownload = true;
     } else {
       this.disableDownload = false;
@@ -210,7 +218,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   measureChange() {
     this.disableDownload = true;
-    this.submeasureName = undefined;
+    this.submeasureKey = undefined;
+    this.submeasureKeys = [];
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
@@ -218,7 +227,11 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   submeasureChange() {
-    if (this.report.hasSmAndFiscalMonth) {
+    if (!this.submeasureKey) {
+      this.disableDownload = true;
+    } else if (this.report.hasSubmeasureOnly && this.submeasureKey) {
+      this.disableDownload = false;
+    } else if (this.report.hasSmAndFiscalMonth && this.submeasureKey) {
       this.disableDownload = true;
       this.fiscalMonth = undefined;
       this.fiscalMonths = [];
@@ -226,11 +239,11 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       switch (this.report.type) {
         case 'dollar-upload':
           obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
-            `sub_measure_key = ${_.find(this.submeasures, {name: this.submeasureName}).submeasureKey}`);
+            `sub_measure_key = ${this.submeasureKey}`);
           break;
         case 'mapping-upload':
           obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
-            `sub_measure_key = ${_.find(this.submeasures, {name: this.submeasureName}).submeasureKey}`);
+            `sub_measure_key = ${this.submeasureKey}`);
           break;
       }
       obs.subscribe(fiscalMonths => {
@@ -241,8 +254,41 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           this.disableDownload = false;
         }
       });
-    } else {
+    }
+  }
+
+  _handleHasMultiSmAndFiscalMonth() {
+    let obs;
+    switch (this.report.type) {
+      case 'dollar-upload':
+        obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
+          `sub_measure_key in ( ${this.submeasureKeys} )`);
+        break;
+      case 'mapping-upload':
+        obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
+          `sub_measure_key in ( ${this.submeasureKeys} )`);
+        break;
+    }
+    obs.subscribe(fiscalMonths => {
+      this.fiscalMonths = fiscalMonths.map(fm => Number(fm)).sort().reverse().slice(0, 24)
+        .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
+      if (this.fiscalMonths.length) {
+        this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
+        this.disableDownload = false;
+      }
+    });
+  }
+
+  submeasureMultiChange() {
+    if (!this.submeasureKeys.length) { // if they clear the values, disable the
+      this.disableDownload = true;
+    } else if (this.report.hasMultiSubmeasureOnly && this.submeasureKeys.length) {
       this.disableDownload = false;
+    } else if (this.report.hasMultiSmAndFiscalMonth && this.submeasureKeys.length) {
+      this.disableDownload = true;
+      this.fiscalMonth = undefined;
+      this.fiscalMonths = [];
+      this.handleHasMultiSmAndFiscalMonth();
     }
   }
 
@@ -256,11 +302,12 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   getFilename() {
     const dateStr = new Date().toISOString().substr(0, 10);
+    const sm = this.submeasureKey ? _.find(this.submeasures, {submeasureKey: this.submeasureKey}) : null;
     if (this.report.hasSmAndFiscalMonth) {
-      return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${this.fiscalMonth}.xlsx`;
+      return this.report.filename + `_${_.snakeCase(sm.name)}_${this.fiscalMonth}.xlsx`;
     } else if (this.report.hasSubmeasureOnly) {
-      return this.report.filename + `_${_.snakeCase(this.submeasureName)}_${dateStr}.xlsx`;
-    } else if (this.report.hasFiscalMonthOnly) {
+      return this.report.filename + `_${_.snakeCase(sm.name)}_${dateStr}.xlsx`;
+    } else if (this.report.hasFiscalMonthOnly || this.report.hasMultiSmAndFiscalMonth) {
       return this.report.filename + `_${this.fiscalMonth}.xlsx`;
     } else {
       return this.report.filename + `_${dateStr}.xlsx`;
@@ -273,10 +320,14 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     };
 
     if (this.report.hasSubmeasureOnly || this.report.hasSmAndFiscalMonth) {
-      params.submeasureKey = _.find(this.submeasuresInData, {name: this.submeasureName}).submeasureKey;
+      params.submeasureKey = this.submeasureKey;
     }
 
-    if (this.report.hasSmAndFiscalMonth || this.report.hasFiscalMonthOnly) {
+    if (this.report.hasMultiSubmeasureOnly || this.report.hasMultiSmAndFiscalMonth) {
+      params.submeasureKeys = this.submeasureKeys;
+    }
+
+    if (this.report.hasSmAndFiscalMonth || this.report.hasMultiSmAndFiscalMonth || this.report.hasFiscalMonthOnly) {
       params.fiscalMonth = this.fiscalMonth;
     }
     if (this.report.hasMultiFiscalMonthOnly) {

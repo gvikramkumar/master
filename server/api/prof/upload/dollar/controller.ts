@@ -10,17 +10,18 @@ import {Source} from '../../../../../shared/models/source';
 import {ApiError} from '../../../../lib/common/api-error';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import AnyObj from '../../../../../shared/models/any-obj';
+import PgLookupRepo from '../../../pg-lookup/repo';
 
 
 @injectable()
 export default class DollarUploadUploadController extends InputFilterLevelUploadController {
-  sources: Source[];
 
   constructor(
     repo: DollarUploadRepo,
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
-    private sourceRepo: SourceRepo
+    private sourceRepo: SourceRepo,
+    private pgLookupRepo: PgLookupRepo
   ) {
     super(
       repo,
@@ -40,16 +41,16 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
       amount: 'Amount',
       dealId: 'Deal ID',
       revenueClassification: 'Revenue Classification'
-    }
+    };
   }
 
   getValidationAndImportData() {
     return Promise.all([
       super.getValidationAndImportData(),
-      this.sourceRepo.getMany()
+      this.pgLookupRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_fcm_deal_mapping', 'bk_deal_id', `bk_dv_fiscal_year_mth_num_int = ${this.req.dfa.fiscalMonths.prof}`),
     ])
       .then(results => {
-        this.sources = results[1];
+        this.data.dealIds = results[1];
       });
   }
 
@@ -72,7 +73,8 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
         this.validateInputBusinessEntityValue(true),
         this.validateSCMSSegment(true),
         this.validateAmount(),
-        this.validateRevenueClassification(),
+        this.validateDealId(),
+        // this.validateRevenueClassification(),
       ]))
       .then(() => this.lookForErrors());
   }
@@ -92,8 +94,7 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
   }
 
   validateSubmeasureCanManualUpload() {
-    const source = _.find(this.sources, {typeCode: 'EXCEL'}); // manual upload source
-    if (!source || this.submeasure.sourceId !== source.sourceId) {
+    if (this.submeasure.sourceId !== 4) {// manual upload source
       this.addErrorMessageOnly(`Sub Measure doesn't allow manual upload`);
     }
     return Promise.resolve();
@@ -121,9 +122,17 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
     return Promise.resolve();
   }
 
+  validateDealId() {
+    if (this.temp.dealId &&
+      this.notExists(this.data.dealIds, this.temp.dealId)) {
+      this.addErrorInvalid(this.PropNames.dealId, this.temp.dealId);
+    }
+    return Promise.resolve();
+  }
+
   validateRevenueClassification() {
     if (this.temp.revenueClassification &&
-      this.notExists(this.data.revClassifications, this.temp.revenueClassification)) {
+      this.notExists(['one', 'two', 'three'], this.temp.revenueClassification)) {
       this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
     return Promise.resolve();
