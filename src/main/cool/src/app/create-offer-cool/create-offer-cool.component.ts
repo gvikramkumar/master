@@ -218,6 +218,9 @@ export class CreateOfferCoolComponent implements OnInit {
     if(this.primaryBusinessUnitsValue) {
       this.enableOfferbuild = false;
     }
+    if(this.primaryBusinessUnitsValue === null) {
+      this.enableOfferbuild = true;
+    }
   }
 
   getPrimaryBusinessUnitPromise(event) {
@@ -457,8 +460,8 @@ export class CreateOfferCoolComponent implements OnInit {
     if (!this.offerId) {
       this.createOffer(createoffer);
     } else {
-      // this.updateOffer(createoffer);
-      this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
+      this.updateOffer(createoffer);
+      // this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
     }
   }
 
