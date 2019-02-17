@@ -96,7 +96,7 @@ export class StakeholderFullComponent implements OnInit {
 
 
     this.sharedService.getFunctionalRoles().subscribe(data => {
-      
+
       this.funcionalRoleList = data;
     });
 
@@ -219,6 +219,7 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   onAdd() {
+
     console.log('onAdd() called');
     let tempCollaboratorList: Collaborators[] = [];
     const obj = {
@@ -250,17 +251,17 @@ export class StakeholderFullComponent implements OnInit {
     const keys: any[] = Object.keys(this.stakeHolderInfo);
 
     keys.forEach(key => {
-        this.stakeHolderInfo[key].forEach(element => {
-          let obj = {
-            "_id": element._id,
-            "businessEntity": element.businessEntity,
-            "functionalRole": element.functionalRole,
-            "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
-            "offerRole": element.offerRole,
-            "name": element.name
-          }
-          stakeholdersPayLoad['stakeholders'].push(obj);
-        })
+      this.stakeHolderInfo[key].forEach(element => {
+        let obj = {
+          "_id": element._id,
+          "businessEntity": element.businessEntity,
+          "functionalRole": element.functionalRole,
+          "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
+          "offerRole": element.offerRole,
+          "name": element.name
+        }
+        stakeholdersPayLoad['stakeholders'].push(obj);
+      })
     });
 
     this.stakeholderfullService.proceedToStrageyReview(stakeholdersPayLoad).subscribe(data => {
@@ -290,6 +291,7 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   addCollaborator() {
+
     console.log("finalcolabrattiondata::::::", this.data);
     const listOfStakeHolders: StakeHolder[] = [];
     let stakeholdersPayLoad = {
@@ -298,21 +300,20 @@ export class StakeholderFullComponent implements OnInit {
       stakeholders: []
     }
 
-
     const keys: any[] = Object.keys(this.stakeHolderInfo);
 
     keys.forEach(key => {
-        this.stakeHolderInfo[key].forEach(element => {
-          let obj = {
-            "_id": element._id,
-            "businessEntity": element.businessEntity,
-            "functionalRole": element.functionalRole,
-            "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
-            "offerRole": element.offerRole,
-            "name": element.name
-          }
-          stakeholdersPayLoad['stakeholders'].push(obj);
-        })
+      this.stakeHolderInfo[key].forEach(element => {
+        let obj = {
+          "_id": element._id,
+          "businessEntity": element.businessEntity,
+          "functionalRole": element.functionalRole,
+          "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
+          "offerRole": element.offerRole,
+          "name": element.name
+        }
+        stakeholdersPayLoad['stakeholders'].push(obj);
+      })
     });
 
     this.stakeholderfullService.proceedToStrageyReview(stakeholdersPayLoad).subscribe(data => {
@@ -469,7 +470,7 @@ export class StakeholderFullComponent implements OnInit {
       }
 
       this.stakeHolderInfo[key] = tmp;
-      if (tmp.length  === 0){
+      if (tmp.length === 0) {
         delete this.stakeHolderInfo[key];
       }
     });
