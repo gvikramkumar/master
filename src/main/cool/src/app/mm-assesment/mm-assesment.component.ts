@@ -638,23 +638,6 @@ export class MmAssesmentComponent implements OnInit {
     this.eventsSubject.next(this.offerBuilderdata['offerOwner']);
   }
 
-  updateStakeData(data) {
-    //  this.monetizationModelService.showStakeholders(this.currentMMModel, this.currentPrimaryBE).subscribe(res => {
-    //   this.stakeData = {};
-    //   // console.log(res);
-    //   let keyUsers = [];
-    //   if (res != null && res[0] != null) {
-    //     keyUsers = res[0]['coolRoleKeyUser'];
-    //   }
-    //   keyUsers.forEach(user => {
-    //     if (this.stakeData[user['offerRole']] == null) {
-    //       this.stakeData[user['offerRole']] = [];
-    //     }
-    //     this.stakeData[user['offerRole']].push({name: user['keyUser'], email: user['email']});
-    //   })
-    // }) 
-  }
-
   updateMessage(message) {
 
     if (message != null && message !== '') {
