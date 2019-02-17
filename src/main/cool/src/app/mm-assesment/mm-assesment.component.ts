@@ -770,7 +770,7 @@ export class MmAssesmentComponent implements OnInit {
 
   }
 
-  proceedToOfferSolution() {
+proceedToOfferSolution() {
     let postOfferSolutioningData = {};
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
@@ -785,7 +785,7 @@ export class MmAssesmentComponent implements OnInit {
       let curGroup = {};
       curGroup['groupName'] = groupNamesWithFirst[index];
       curGroup['subGroup'] = [];
-      for (let prop in group) {
+      for (const prop of Object.keys(group)) {
         let curSubGroup = {};
         curSubGroup['subGroupName'] = prop;
         curSubGroup['subGroupStatus'] = this.message['contentHead'];
@@ -830,7 +830,7 @@ export class MmAssesmentComponent implements OnInit {
       let additionalCharacteristics = [];
 
       groupDataWithFirst.forEach((group, index) => {
-        for (let prop in group) {
+        for (const prop of Object.keys(group)) {
           let subselectedCharacteristics = {};
           let notSubselectedCharacteristics = {};
           subselectedCharacteristics['group'] = groupNamesWithFirst[index];
@@ -861,14 +861,14 @@ export class MmAssesmentComponent implements OnInit {
       proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
       proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
       let stakeHolders = [];
-      for (let prop in this.stakeData) {
+      for (const prop of Object.keys(this.stakeData)) {
         this.stakeData[prop].forEach(sh => {
           console.log(sh);
           stakeHolders.push({
             '_id': sh['_id'],
-            'businessEntity': sh['userMappings'][0]['businessEntity'],
-            'functionalRole': sh['userMappings'][0]['functionalRole'],
-            'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['userMappings'][0]['functionalRole'],
+            'businessEntity': sh['businessEntity'],
+            'functionalRole': sh['functionalRole'],
+            'offerRole': sh['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['functionalRole'],
             'stakeholderDefaults': sh['stakeholderDefaults'],
             'name': sh['userName']
           });
@@ -943,8 +943,5 @@ export class MmAssesmentComponent implements OnInit {
   }
   goBackToStrategyReview() {
     this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
-  }
-  gotoOfferviewDetails() {
-    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
   }
 }
