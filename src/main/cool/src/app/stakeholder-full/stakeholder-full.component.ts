@@ -8,6 +8,7 @@ import { Collaborators } from '../models/collaborator';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { SharedService } from '../shared-service.service';
+import { ConfigurationService } from '../services/configuration.service';
 
 @Component({
   selector: 'app-stakeholder-full',
@@ -71,7 +72,8 @@ export class StakeholderFullComponent implements OnInit {
     private searchCollaboratorService: SearchCollaboratorService,
     private activatedRoute: ActivatedRoute,
     private router: Router, private offerPhaseService: OfferPhaseService,
-    private sharedService: SharedService) {
+    private sharedService: SharedService,
+    private configurationService: ConfigurationService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
     });
@@ -142,9 +144,23 @@ export class StakeholderFullComponent implements OnInit {
 
   search(event) {
     this.searchCollaboratorService.searchCollaborator({ 'userName': event.query })
-      .subscribe(data => {
-        console.log(data);
-        this.results = data;
+      .subscribe(resCollaborators => {
+        const userFunctions = this.configurationService.startupData.functionsUserCanAddTo;
+        if (userFunctions.includes('BUPM')) {
+          this.results = resCollaborators;
+        } else {
+          this.results = resCollaborators.filter(collaborator => {
+            let isCollaboratorInUserFunction = false;
+            for (const userFunction of userFunctions) {
+              if (collaborator.userMappings.some(userMapping => userMapping.functionalRole === userFunction)) {
+                isCollaboratorInUserFunction = true;
+                break;
+              }
+            }
+            return isCollaboratorInUserFunction;
+          }
+          )
+        }
 
       });
   }

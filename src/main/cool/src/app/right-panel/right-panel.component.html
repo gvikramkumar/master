@@ -136,8 +136,8 @@
                 </div>
             </li>
         </ul>
-
-        <p-dialog [showHeader]="false" [responsive]="true" [width]="1000" [minY]="70" [(visible)]="displayOfferPhase"
+   <!-- Dialog - Phase Process  -->
+        <p-dialog [showHeader]="false" [responsive]="true" [minY]="70" [(visible)]="displayOfferPhase"
             [closable]="true">
             <div class="pull-right phase-modal">
                 <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
@@ -313,7 +313,7 @@
                 </div>
             </div>
         </p-dialog>
-
+    <!-- Dialog - Add / Edit Collaborators  -->
         <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
             [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">
             <form [formGroup]="addEditCollaboratorsForm" (ngSubmit)="onSearch()">
@@ -372,7 +372,7 @@
                 </div>
             </div>
         </p-dialog>
-
+    <!-- Dialog - Lead Time Calculation  -->
         <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
             [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
             <div class="row">

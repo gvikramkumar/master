@@ -960,4 +960,7 @@ export class MmAssesmentComponent implements OnInit {
   goBackToStrategyReview() {
     this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
   }
+  gotoOfferviewDetails() {
+    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+  }
 }

@@ -43,10 +43,17 @@ export class MenuBarComponent implements OnInit {
             if (data != null) {
                 if (data['ideate'] != null) {
                     data['ideate'].forEach(element => {
-                        if (element['status'] === 'Completed' || element['status'] === 'In progress') {
+                        if (element['enable'] === true) {
                             this.itemShow[element['subMilestone']] = true;
                         }
                     });
+                    if (data['plan'] != null) {
+                        data['plan'].forEach(element => {
+                            if (element['enable'] === true) {
+                                this.itemShow[element['subMilestone']] = true;
+                            }
+                        });
+                    }
                 }
             }
 
@@ -55,6 +62,9 @@ export class MenuBarComponent implements OnInit {
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
         this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
         this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
+        this.navigateHash['Offer Dimension'] = ['/offerDimension', this.currentOfferId, this.caseId];
+        this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.currentOfferId, this.caseId];
+        this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
 
     }
 
@@ -71,10 +81,10 @@ export class MenuBarComponent implements OnInit {
             {
                 label: 'Plan',
                 items: [
-                    { label: 'Offer Dimension Completion' },
+                    { label: 'Offer Dimension' },
                     { label: 'Offer Solutioning' },
                     { label: 'Offer Components' },
-                    { label: 'Offer Components Details' },
+                    { label: 'Operational Assessment' },
                     { label: 'Design Review' }
                 ]
             },
