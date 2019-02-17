@@ -73,7 +73,11 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
           this.measureNameMap.set(measures[i].measureId, measures[i].name);
         }
       });
+    this.refreshRules();
+    this.refreshSubmeasures();
+  }
 
+  refreshRules() {
     this.ruleService.getManyPending()
       .subscribe(rules => {
         this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
@@ -81,7 +85,10 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
         this.ruleDataSource.paginator = this.rulePaginator;
         this.ruleDataSource.sort = this.ruleSort;
       });
+    this.ruleSelection.clear();
+  }
 
+  refreshSubmeasures() {
     this.submeasureService.getManyPending()
       .subscribe(submeasures => {
         this.submeasures = _.orderBy(submeasures, ['updatedDate'], ['desc']);
@@ -89,7 +96,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
         this.submeasureDataSource.paginator = this.submeasurePaginator;
         this.submeasureDataSource.sort = this.submeasureSort;
       });
-
+    this.submeasureSelection.clear();
   }
 
   applyRuleFilter(filterValue: string) {
@@ -119,7 +126,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
                 Promise.all(promises)
                   .then(result => {
                     this.uiUtil.toast('Rule(s) approved, user(s) notified.');
-                    this.ngOnInit(); // refreshes data
+                    this.refreshRules();
                   });
               }
             });
@@ -142,7 +149,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
                 Promise.all(promises)
                   .then(result => {
                     this.uiUtil.toast('Submeasure(s) approved, user(s) notified.');
-                    this.ngOnInit(); // refreshes data
+                    this.refreshSubmeasures();
                   });
               }
             });
@@ -165,7 +172,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
                 Promise.all(promises)
                   .then(result => {
                     this.uiUtil.toast('Rule(s) rejected, user(s) notified.');
-                    this.ngOnInit(); // refreshes data
+                    this.refreshRules();
                   });
               }
             });
@@ -188,7 +195,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
                 Promise.all(promises)
                   .then(result => {
                     this.uiUtil.toast('Submeasure(s) rejected, user(s) notified.');
-                    this.ngOnInit(); // refreshes data
+                    this.refreshSubmeasures();
                   });
               }
             });
