@@ -8,6 +8,7 @@ import { Collaborators } from '../models/collaborator';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { SharedService } from '../shared-service.service';
+import { ConfigurationService } from '../services/configuration.service';
 
 @Component({
   selector: 'app-stakeholder-full',
@@ -71,7 +72,8 @@ export class StakeholderFullComponent implements OnInit {
     private searchCollaboratorService: SearchCollaboratorService,
     private activatedRoute: ActivatedRoute,
     private router: Router, private offerPhaseService: OfferPhaseService,
-    private sharedService: SharedService) {
+    private sharedService: SharedService,
+    private configurationService: ConfigurationService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
     });
@@ -96,7 +98,7 @@ export class StakeholderFullComponent implements OnInit {
 
 
     this.sharedService.getFunctionalRoles().subscribe(data => {
-      
+
       this.funcionalRoleList = data;
     });
 
@@ -142,9 +144,23 @@ export class StakeholderFullComponent implements OnInit {
 
   search(event) {
     this.searchCollaboratorService.searchCollaborator({ 'userName': event.query })
-      .subscribe(data => {
-        console.log(data);
-        this.results = data;
+      .subscribe(resCollaborators => {
+        const userFunctions = this.configurationService.startupData.functionsUserCanAddTo;
+        if (userFunctions.includes('BUPM')) {
+          this.results = resCollaborators;
+        } else {
+          this.results = resCollaborators.filter(collaborator => {
+            let isCollaboratorInUserFunction = false;
+            for (const userFunction of userFunctions) {
+              if (collaborator.userMappings.some(userMapping => userMapping.functionalRole === userFunction)) {
+                isCollaboratorInUserFunction = true;
+                break;
+              }
+            }
+            return isCollaboratorInUserFunction;
+          }
+          )
+        }
 
       });
   }
@@ -219,6 +235,7 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   onAdd() {
+
     console.log('onAdd() called');
     let tempCollaboratorList: Collaborators[] = [];
     const obj = {
@@ -250,17 +267,17 @@ export class StakeholderFullComponent implements OnInit {
     const keys: any[] = Object.keys(this.stakeHolderInfo);
 
     keys.forEach(key => {
-        this.stakeHolderInfo[key].forEach(element => {
-          let obj = {
-            "_id": element._id,
-            "businessEntity": element.businessEntity,
-            "functionalRole": element.functionalRole,
-            "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
-            "offerRole": element.offerRole,
-            "name": element.name
-          }
-          stakeholdersPayLoad['stakeholders'].push(obj);
-        })
+      this.stakeHolderInfo[key].forEach(element => {
+        let obj = {
+          "_id": element._id,
+          "businessEntity": element.businessEntity,
+          "functionalRole": element.functionalRole,
+          "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
+          "offerRole": element.offerRole,
+          "name": element.name
+        }
+        stakeholdersPayLoad['stakeholders'].push(obj);
+      })
     });
 
     this.stakeholderfullService.proceedToStrageyReview(stakeholdersPayLoad).subscribe(data => {
@@ -290,6 +307,7 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   addCollaborator() {
+
     console.log("finalcolabrattiondata::::::", this.data);
     const listOfStakeHolders: StakeHolder[] = [];
     let stakeholdersPayLoad = {
@@ -298,21 +316,20 @@ export class StakeholderFullComponent implements OnInit {
       stakeholders: []
     }
 
-
     const keys: any[] = Object.keys(this.stakeHolderInfo);
 
     keys.forEach(key => {
-        this.stakeHolderInfo[key].forEach(element => {
-          let obj = {
-            "_id": element._id,
-            "businessEntity": element.businessEntity,
-            "functionalRole": element.functionalRole,
-            "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
-            "offerRole": element.offerRole,
-            "name": element.name
-          }
-          stakeholdersPayLoad['stakeholders'].push(obj);
-        })
+      this.stakeHolderInfo[key].forEach(element => {
+        let obj = {
+          "_id": element._id,
+          "businessEntity": element.businessEntity,
+          "functionalRole": element.functionalRole,
+          "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
+          "offerRole": element.offerRole,
+          "name": element.name
+        }
+        stakeholdersPayLoad['stakeholders'].push(obj);
+      })
     });
 
     this.stakeholderfullService.proceedToStrageyReview(stakeholdersPayLoad).subscribe(data => {
@@ -469,7 +486,7 @@ export class StakeholderFullComponent implements OnInit {
       }
 
       this.stakeHolderInfo[key] = tmp;
-      if (tmp.length  === 0){
+      if (tmp.length === 0) {
         delete this.stakeHolderInfo[key];
       }
     });

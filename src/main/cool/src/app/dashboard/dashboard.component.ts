@@ -197,25 +197,12 @@ export class DashboardComponent implements OnInit {
   getActionFormValues() {
     this.selectedofferId = this.selectedAction.offerId;
     this.selectedCaseId = this.selectedAction.caseId;
+    this.milestoneValue = this.selectedAction.milestone;
     if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
     } else {
       this.assigneeList = [];
     }
-    this.actionsService.getAchievedMilestones(this.selectedCaseId).subscribe(resMilestones => {
-      this.milestoneList = [];
-      this.lastValueInMilestone = [];
-      for (const prop in resMilestones) {
-        if (prop) {
-          resMilestones[prop].forEach(ele => {
-            this.milestoneList.push(ele);
-            this.lastValueInMilestone = this.milestoneList.slice(-1)[0];
-            const mile = this.lastValueInMilestone;
-            this.val = mile['subMilestone'];
-          });
-        }
-      }
-    });
   }
 
   getSelectFunctionRole(functionRole) {

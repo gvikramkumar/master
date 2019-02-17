@@ -1,26 +1,19 @@
 <div class="content solutioning">
   <div class="container">
-    <app-menu-bar
-    [caseId]="caseId"
-    [currentMMModel]="derivedMM"
-    [offerId]="currentOfferId"
-    [offerName]="offerName"
-    [stakeData]="stakeData"
-    (updateMessage)="updateMessage($event)"
-    > </app-menu-bar>
+    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
+      [stakeData]="stakeData" (updateMessage)="updateMessage($event)"> </app-menu-bar>
 
     <div class="panel-wrapper mt-15">
       <!-- Blue Bar -->
-      <app-blue [currentOfferId]="currentOfferId" 
-      [currentCaseId]="caseId"
-      (proceedToNextStep)="proceedToNextStep($event)"
-      ></app-blue>
+      <app-blue [currentOfferId]="currentOfferId" [currentCaseId]="caseId"
+        (proceedToNextStep)="proceedToNextStep($event)"></app-blue>
       <div class="row">
         <div class="leftContent col-sm-12 col-md-9">
           <app-offer-create-detail></app-offer-create-detail>
           <ul class="list list--highlight base-margin-top">
             <li>
-              <div class="panel panel--bordered"><span class="text-success"><span class="icon-check-outline icon-medium"></span>
+              <div class="panel panel--bordered"><span class="text-success"><span
+                    class="icon-check-outline icon-medium"></span>
                   {{derivedMM}} Aligned</span></div>
             </li>
           </ul>
@@ -28,26 +21,15 @@
           <!-- <app-mm-info-bar></app-mm-info-bar> -->
           <!-- Offer Solutioning Bar -->
           <div *ngFor="let group of offerSolutionGroups, let i = index">
-            <app-offersolutioning-card-one
-            [groupData]="group"
-            [stakeData]="stakeData"
-            [offerData]="firstData"
-            [groupIndex]="i"
-            ></app-offersolutioning-card-one>
+            <app-offersolutioning-card-one [groupData]="group" [stakeData]="stakeData" [offerData]="firstData"
+              [groupIndex]="i"></app-offersolutioning-card-one>
           </div>
           <!-- Right Panel -->
         </div>
         <div class="rightContent col-sm-12 col-md-3" style="margin-top: -5px;">
-          <app-right-panel
-          [stakeData]="stakeData"
-          [offerId]="offerId"
-          [derivedMM] = "derivedMM"
-          [primaryBE] = "primaryBE"
-          [portfolioFlag]="setFlag"
-          [displayLeadTime]="displayLeadTime"
-          (updateStakeData)="updateStakeData($event)"
-          [noOfWeeksDifference] = "noOfWeeksDifference"
-          ></app-right-panel>
+          <app-right-panel [stakeData]="stakeData" [offerId]="offerId" [derivedMM]="derivedMM" [primaryBE]="primaryBE"
+            [portfolioFlag]="setFlag" [displayLeadTime]="displayLeadTime" (updateStakeData)="updateStakeData($event)"
+            [noOfWeeksDifference]="noOfWeeksDifference"></app-right-panel>
         </div>
       </div>
     </div>

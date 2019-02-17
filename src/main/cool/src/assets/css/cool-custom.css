@@ -781,11 +781,12 @@ span[class*="display-"] {
 }
 /* dialog */
 .cool.cui .ui-dialog {
-  position: fixed;
+  position: absolute;
   padding: 0;
-  top: 5%;
   max-height: 80vh;
   overflow: auto;
+  left: -200%!important;
+  top: -30%!important;
 }
 /* helpers */
 .borderless {
