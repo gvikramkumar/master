@@ -11,7 +11,7 @@ export class MenuBarService {
     ) { }
 
     getRubboTaxMenu(caseId):any {
-      return this.httpClient.get(this.environmentService.REST_API_TURBO_TAX_MENU + caseId + '/true');
+      return this.httpClient.get(this.environmentService.REST_API_TURBO_TAX_MENU + caseId + '/false');
     }
 
     holdOffer(data):any {
