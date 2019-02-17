@@ -846,7 +846,7 @@ export class MmAssesmentComponent implements OnInit {
       let additionalCharacteristics = [];
 
       groupDataWithFirst.forEach((group, index) => {
-        for (const prop of Object.keys(group)) {
+        for (let prop in group) {
           let subselectedCharacteristics = {};
           let notSubselectedCharacteristics = {};
           subselectedCharacteristics['group'] = groupNamesWithFirst[index];
@@ -877,7 +877,7 @@ export class MmAssesmentComponent implements OnInit {
       proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
       proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
       let stakeHolders = [];
-      for (const prop of Object.keys(this.stakeData)) {
+      for (let prop in this.stakeData) {
         this.stakeData[prop].forEach(sh => {
           console.log(sh);
           stakeHolders.push({
