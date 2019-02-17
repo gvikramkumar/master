@@ -594,59 +594,59 @@ export class MmAssesmentComponent implements OnInit {
     );
 
     // Populate Stake Holders Data, If Empty
-    if (Object.keys(this.stakeData).length === 0) {
+    // if (Object.keys(this.stakeData).length === 0) {
 
-      this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
+    this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
 
-        this.stakeData = {};
-        this.derivedMM = mmModel;
-        this.displayLeadTime = true;
-        this.offerId = this.currentOfferId;
-        this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
-        this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-          (leadTime: LeadTime) => {
-            this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
-          }
-        );
-
-        let keyUsers;
-        if (res != null) {
-          keyUsers = res;
+      this.stakeData = {};
+      this.derivedMM = mmModel;
+      this.displayLeadTime = true;
+      this.offerId = this.currentOfferId;
+      this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
+      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
+        (leadTime: LeadTime) => {
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
         }
+      );
 
-        // Build data for owner
-        if (this.stakeData['Owner'] == null) {
-          this.stakeData['Owner'] = [];
-        }
+      let keyUsers;
+      if (res != null) {
+        keyUsers = res;
+      }
 
-        this.stakeData['Owner'].push(
-          {
-            userName: this.ownerName,
-            emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
-            _id: this.offerBuilderdata['offerOwner'],
-            userMappings: [{
-              appRoleList: [],
-              businessEntity: 'Security',
-              functionalRole: 'BUPM',
-              offerRole: 'Owner'
-            }
-            ],
-            stakeholderDefaults: true
-          });
+      // Build data for owner
+      if (this.stakeData['Owner'] == null) {
+        this.stakeData['Owner'] = [];
+      }
 
-        keyUsers.forEach(user => {
-          if (this.stakeData[user['userMappings'][0]['functionalRole']] == null) {
-            this.stakeData[user['userMappings'][0]['functionalRole']] = [];
+      this.stakeData['Owner'].push(
+        {
+          userName: this.ownerName,
+          emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
+          _id: this.offerBuilderdata['offerOwner'],
+          userMappings: [{
+            appRoleList: [],
+            businessEntity: 'Security',
+            functionalRole: 'BUPM',
+            offerRole: 'Owner'
           }
-          const curUser = user;
-          curUser['stakeholderDefaults'] = true;
-          this.stakeData[user['userMappings'][0]['functionalRole']].push(curUser);
+          ],
+          stakeholderDefaults: true
         });
 
-
+      keyUsers.forEach(user => {
+        if (this.stakeData[user['userMappings'][0]['functionalRole']] == null) {
+          this.stakeData[user['userMappings'][0]['functionalRole']] = [];
+        }
+        const curUser = user;
+        curUser['stakeholderDefaults'] = true;
+        this.stakeData[user['userMappings'][0]['functionalRole']].push(curUser);
       });
 
-    }
+
+    });
+
+    // }
 
   }
 
@@ -740,9 +740,9 @@ export class MmAssesmentComponent implements OnInit {
       this.stakeData[prop].forEach(sh => {
         stakeHolders.push({
           '_id': sh['_id'],
-          'businessEntity': sh['businessEntity'],
-          'functionalRole': sh['functionalRole'],
-          'offerRole': sh['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['functionalRole'],
+          'businessEntity': sh['userMappings'][0]['businessEntity'],
+          'functionalRole': sh['userMappings'][0]['functionalRole'],
+          'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['userMappings'][0]['functionalRole'],
           'stakeholderDefaults': sh['stakeholderDefaults'],
           'name': sh['userName']
         });
@@ -882,9 +882,9 @@ export class MmAssesmentComponent implements OnInit {
           console.log(sh);
           stakeHolders.push({
             '_id': sh['_id'],
-            'businessEntity': sh['businessEntity'],
-            'functionalRole': sh['functionalRole'],
-            'offerRole': sh['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['functionalRole'],
+            'businessEntity': sh['userMappings'][0]['businessEntity'],
+            'functionalRole': sh['userMappings'][0]['functionalRole'],
+            'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['userMappings'][0]['functionalRole'],
             'stakeholderDefaults': sh['stakeholderDefaults'],
             'name': sh['userName']
           });
