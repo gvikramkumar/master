@@ -882,9 +882,9 @@ export class MmAssesmentComponent implements OnInit {
           console.log(sh);
           stakeHolders.push({
             '_id': sh['_id'],
-            'businessEntity': sh['userMappings'][0]['businessEntity'],
-            'functionalRole': sh['userMappings'][0]['functionalRole'],
-            'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['userMappings'][0]['functionalRole'],
+            'businessEntity': sh['businessEntity'],
+            'functionalRole': sh['functionalRole'],
+            'offerRole': sh['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['functionalRole'],
             'stakeholderDefaults': sh['stakeholderDefaults'],
             'name': sh['userName']
           });
