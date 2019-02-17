@@ -159,10 +159,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.fiscalMonthMultiSels = [this.fiscalMonthMultis[0].fiscalMonth];
     this.submeasures = [];
     this.fiscalMonths = [];
-    if (!this.report || !this.report.hasNoChoices) {
-      this.disableDownload = true;
-    } else {
+    if (this.report && (this.report.hasNoChoices || this.report.type === 'rule-submeasure')) {
       this.disableDownload = false;
+    } else {
+      this.disableDownload = true;
     }
     if (!init) {
       this.getInitialData();

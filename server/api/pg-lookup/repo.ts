@@ -41,6 +41,14 @@ export default class PgLookupRepo {
   }
 */
 
+  getDistinctAltSl2AltCountryPairs() {
+    const sql = `
+        select distinct upper(dsh.l2_sales_territory_name_code)||'::'||upper(cnt.iso_country_name) as col
+        from fpacon.vw_fpa_sales_hierarchy dsh, fpacon.vw_fpa_iso_country cnt
+        where dsh.iso_country_code = cnt.bk_iso_country_code
+    `;
+    return this.getSortedUpperListFromSql(sql);
+  }
 
   getDollarUploadReport(fiscalMonth, submeasureKeys) {
     const sql = `
@@ -660,6 +668,13 @@ export default class PgLookupRepo {
 
   getSortedUpperListFromColumn(table, column, whereClause?) {
     return this.getListFromColumn(table, column, whereClause, false, true)
+      .then(vals => _.sortBy(vals, _.identity));
+  }
+
+  // must name the column: "col"
+  getSortedUpperListFromSql(sql) {
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows.map(row => row.col))
       .then(vals => _.sortBy(vals, _.identity));
   }
 
