@@ -86,19 +86,18 @@
                                                             field="userName" [minLength]="2" scrollHeight="150px"
                                                             placeholder="SEARCH BY STAKEHOLDER NAME" required>
                                                             <ng-template pTemplate="body" let-stakes>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>
-                                                                            {{stakes.userName}}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{stakes.emailId}}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{stakes.userMappings[0].functionalRole}}
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
+                                                                <div>
+                                                                    <span>
+                                                                        {{stakes.userName}}
+                                                                    </span>
+                                                                    <span>
+                                                                        {{stakes.emailId}}
+                                                                    </span>
+                                                                    <span>
+                                                                        {{stakes.userMappings[0].functionalRole}}
+                                                                    </span>
+
+                                                                </div>
                                                             </ng-template>
                                                         </p-autoComplete>
                                                     </div>

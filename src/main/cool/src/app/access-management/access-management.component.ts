@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AccessManagementService } from '../services/access-management.service';
-import { ConfigurationService } from '../services/configuration.service'
+import { ConfigurationService } from '../services/configuration.service';
 import { NgForm } from '@angular/forms';
 import { NewUser } from '../models/newuser';
 import { UserMapping } from '../models/usermapping';
