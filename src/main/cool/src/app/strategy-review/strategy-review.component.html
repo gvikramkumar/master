@@ -122,7 +122,7 @@
                             (click)="onEscalate(strategyReviewData.function)">Escalate</button>
                         </div>
                       </ng-template>
-                      <div *ngIf="approvalButtonsVisibleAvailable">
+                      <div *ngIf="strategyReviewData.function === currentFunctionalRole">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
                           <div class="panel--header">
                             <h5>Approval Decision</h5>
@@ -204,7 +204,12 @@
                                         <div class="form-group__text">
                                           <div class="form-group__text select">
                                             <label for="functionName">SELECT FUNCTION</label>
-                                            <select id="functionName" class="form-control" name="functionName"
+                                            <!-- <select id="functionName" class="form-control" name="functionName"
+                                              [(ngModel)]="functionNameValue" ngModel required>
+                                              <option *ngFor="let function of functionList" [value]="function">
+                                                {{function}}</option>
+                                            </select> -->
+                                            <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
                                               [(ngModel)]="functionNameValue" ngModel required>
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>
@@ -328,7 +333,12 @@
                                         <div class="form-group__text">
                                           <div class="form-group__text select">
                                             <label for="functionName">SELECT FUNCTION</label>
-                                            <select id="functionName" class="form-control" name="functionName"
+                                            <!-- <select id="functionName" class="form-control" name="functionName"
+                                              [(ngModel)]="functionNameValue" ngModel required>
+                                              <option *ngFor="let function of functionList" [value]="function">
+                                                {{function}}</option>
+                                            </select> -->
+                                            <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
                                               [(ngModel)]="functionNameValue" ngModel required>
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>
