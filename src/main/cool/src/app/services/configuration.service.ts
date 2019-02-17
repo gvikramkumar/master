@@ -23,20 +23,25 @@ export class ConfigurationService {
     init() {
         return new Promise((resolve, reject) => {
             if (this._startupData.token || window.location.hash.indexOf('access_token') !== -1) {
-                this._startupData.token = window.location.hash.split("&")[0].split("=")[1];
+                this._startupData.token = window.location.hash.split('&')[0].split('=')[1];
 
                 this.httpClient.get(this.urlGetCurrentUser).toPromise()
                     .then((user) => {
                         this.userService.setUserId(user);
 
                         // check for admin access
-                        this.accessMgmtService.checkAdminAccess().toPromise().then((data) => {
-                          this._startupData.userName = data.userName;
-                            if (data.userMapping[0].functionalAdmin) {
+                        this.accessMgmtService.checkAdminAccess().toPromise().then((resUserInfo) => {
+                            this._startupData.userName = resUserInfo.userName;
+                            this._startupData.isSuperAdmin = resUserInfo.superAdmin;
+                            this._startupData.isFunctionalAdmin = (resUserInfo.userMapping && resUserInfo.userMapping.some(mapping => mapping.functionalAdmin));
+                            this._startupData.functionsUserCanAddTo = resUserInfo.userMapping.reduce((accumulator, mapping) => {
+                                accumulator = [...accumulator, mapping.functionalRole];
+                                return accumulator;
+                            }, []);
+                            if (this._startupData.isSuperAdmin || this._startupData.isFunctionalAdmin) {
                                 this._startupData.hasAdminAccess = true;
                             }
                         }, (err) => {
-                            console.log(err);
                             this._startupData.hasAdminAccess = false;
                         });
 
@@ -47,10 +52,10 @@ export class ConfigurationService {
                     .then((response) => resolve(true))
                     .catch(this.handleError());
             } else {
-                let url = this.environmentService.GENERATE_AUTH_TOKEN_URL;
+                const url = this.environmentService.GENERATE_AUTH_TOKEN_URL;
                 window.location.replace(url);
             }
-        })
+        });
     }
 
     private handleError(data?: any) {

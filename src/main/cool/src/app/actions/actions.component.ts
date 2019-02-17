@@ -251,7 +251,6 @@ export class ActionsComponent implements OnInit {
   }
 
   getActionDetailsFile(caseid) {
-    debugger;
     this.actionsService.downloadActionDetailsFile(caseid).subscribe(data => {
       const nameOfFileToDownload = 'offer-details_' + caseid;
       const blob = new Blob([data], { type: 'application/octet-stream' });
