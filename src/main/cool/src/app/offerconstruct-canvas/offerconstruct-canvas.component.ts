@@ -101,6 +101,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       obj['productName'] = this.draggedItem.productName;
       obj['isGroupNode'] = false;
       obj['label'] = this.draggedItem.label;
+      obj['title'] = this.draggedItem.productName;
       obj['isMajorLineItem'] = this.draggedItem.isMajorLineItem;
       this.offerConstructItems.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
@@ -218,7 +219,8 @@ export class OfferconstructCanvasComponent implements OnInit {
     if (rowNode.node.data.name) {
       rowNode.node.data.catergoryName = rowNode.node.data.name;
       rowNode.node.data.label = rowNode.node.data.name;
-      rowNode.node.data.productName = rowNode.node.data.name;
+      rowNode.node.data.title = rowNode.node.data.name;
+      //rowNode.node.data.productName = rowNode.node.data.name;
       this.offerConstructItems.push(this.itemToTreeNode(rowNode));
       this.offerConstructItems = [...this.offerConstructItems];
       this.cd.detectChanges();
@@ -277,6 +279,7 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['label'] = this.draggedItem.data.label;
           obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
           obj['listPrice'] = this.draggedItem.data.listPrice;
+          obj['title'] = this.draggedItem.data.productName;
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
         } else {
@@ -289,6 +292,7 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['label'] = this.draggedItem.label;
           obj['isMajorLineItem'] = this.draggedItem.isMajorLineItem;
           obj['listPrice'] = this.draggedItem.listPrice;
+          obj['title'] = this.draggedItem.productName;
           rowNode.node.children.push(this.itemToTreeNode(obj));
         }
       }
@@ -305,6 +309,7 @@ export class OfferconstructCanvasComponent implements OnInit {
         obj['label'] = this.draggedItem.data.label;
         obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
         obj['listPrice'] = this.draggedItem.data.listPrice;
+        obj['title'] = this.draggedItem.data.productName;
         rowNode.node.children.push(this.itemToTreeNode(obj));
         this.delteFromParentObject(rowNode, this.draggedItem.data);
       }
@@ -348,6 +353,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       rowNode.node.data.productName + ' ' + 'Group' + ' ' + counter;
     obj['catergoryName'] = 'Billing';
     obj['label'] = 'Billing';
+    obj['title'] = rowNode.node.data.productName + ' ' + 'Group' + ' ' + counter;
     obj['isGroupNode'] = true;
     rowNode.node.children.push(this.itemToTreeNode(obj));
     this.offerConstructItems = [...this.offerConstructItems];
