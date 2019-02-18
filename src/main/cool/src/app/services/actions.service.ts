@@ -41,7 +41,6 @@ export class ActionsService {
     return this._http.get(url, { withCredentials: true });
   }
 
-
   createNewAction(newActionData: CreateAction): Observable<any> {
     const url = this.environmentService.REST_API_CREATE_NEW_ACTION_POST_URL;
     return this._http.post(url, newActionData).pipe(
@@ -49,6 +48,11 @@ export class ActionsService {
         return this.sendNotification(newActionData.assignee, newActionData.offerId, newActionData.actionTitle, newActionData.description);
       })
     );
+  }
+
+  createConditionalApprovalAction(createActionPayload) {
+    const url = this.environmentService.REST_API_CREATE_NEW_ACTION_POST_URL;
+    return this._http.post(url, createActionPayload);
   }
 
   createNotAndConditional(createActionComment: CreateActionComment): Observable<any> {
