@@ -62,7 +62,11 @@
                     <span *ngIf="actionData.alertType == 'notification'">
                       <span (click)="showActionPopUp($event,actionData,popNotificationContent)">
                         <span class="icon-alert icon-small" pTooltip="Notification" tooltipPosition="top"></span>
-                        &nbsp; {{actionData.offerId}}
+                        <span>
+                          <a (click)="showOfferPopUp($event,actionData,popturboContent)">
+                            &nbsp; {{actionData.offerId}}
+                          </a>
+                        </span>
                       </span>
                     </span>
                   </ng-template>
@@ -70,10 +74,18 @@
                 <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
-                      <span (click)="showActionPopUp($event,actionData,popActionContent)" style="cursor: pointer;">
+                      <a *ngIf="actionData.alertType == 'action'"
+                        (click)="showActionPopUp($event,actionData,popActionContent)">
                         <span class="text-indigo"
                           (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
-                          &nbsp;</span></span><span (click)="showActionPopUp($event,actionData,popCommentContent)"
+                          &nbsp;</span>
+                      </a>
+                      <a *ngIf="actionData.alertType == 'notification'"
+                        (click)="showActionPopUp($event,actionData,popNotificationContent)">
+                        <span>{{actionData.title}}&nbsp;
+                          &nbsp;</span>
+                      </a>
+                      <span (click)="showActionPopUp($event,actionData,popCommentContent)"
                         class="icon-comment pull-right"></span><br />
                       <span class="text-small">{{actionData.desc}}</span>
                     </span>
@@ -330,7 +342,7 @@
 <!-- Phases Overlay -->
 <p-overlayPanel #popturboContent [showCloseIcon]="true">
   <div *ngIf="selectedActionData" class="base-padding overlay-phases" style="min-width:900px">
-    <app-turbotaxview [data]="selectedActionData"></app-turbotaxview>
+    <app-turbotaxview [caseId]="selectedActionData.caseId" [offerId]="selectedActionData.offerId"></app-turbotaxview>
   </div>
 </p-overlayPanel>
 <!-- comments overlay -->
