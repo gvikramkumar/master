@@ -780,13 +780,16 @@ span[class*="display-"] {
   box-shadow: 0 10px 30px 5px rgba(0,0,0,0.3);
 }
 /* dialog */
-.cool.cui .ui-dialog {
+/* .cool.cui .ui-dialog {
   position: absolute;
   padding: 0;
   max-height: 80vh;
   overflow: auto;
   left: -200%!important;
   top: -30%!important;
+} */
+.cool.cui .overlay-phases {
+  min-width:900px;
 }
 /* helpers */
 .borderless {
