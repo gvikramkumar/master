@@ -99,31 +99,35 @@
                           <tr pDroppable="dragItem" (onDrop)="dropOnRow($event,rowNode,rowData)" pDraggable="dragItem"
                             dragEffect="copyMove" (onDragStart)="dragStartRow($event,rowNode)" [ngClass]="{'bold-row': rowData.isMajorLineItem}">
                             <td *ngIf="rowData['productName']">
-                              <div *ngIf="!rowData['isGroupNode']">
-                                <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
-                                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                                <span class="treetable--product-name">{{rowData['productName']}}</span>
-                                <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
-                                <a *ngIf="!rowData['isGroupNode']" class="pull-right" (click)="showAddDetailsDailog(rowNode)"><span
-                                    class="icon-add-contain"></span> Add
-                                  Details</a>
-                              </div>
-                              <div *ngIf="rowData['isGroupNode']">
-                                <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
-                                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                                <span (focusout)='editData=true' (click)='enableEdit()'>
-                                  <input [id]='rowData["uniqueKey"]' autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
-                                    (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
-                                    [disabled]="editData ? true : null" value="{{rowData['productName']}}" [autofocus]='autoFocus'>
-                                  <span [id]='rowData["uniqueKey"]' (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
-                                    class="icon-edit"></span>
-                                  <a [id]='rowData["uniqueKey"]' *ngIf='buttonId == rowData["uniqueKey"] && showButtons'
-                                    (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
-                                  <a [id]='rowData["uniqueKey"]' (click)='disableButtons()' *ngIf='buttonId == rowData["uniqueKey"] && showButtons'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
-                                </span>
-                              </div>
-                            </td>
-                            <!-- to copy -->
+                                <!-- <div *ngIf="!rowData['isGroupNode']">
+                                  <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
+                                  <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                  <span class="treetable--product-name">{{rowData['productName']}}</span>
+                                  <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
+                                  <a *ngIf="!rowData['isGroupNode']" class="pull-right" (click)="showAddDetailsDailog(rowNode)"><span
+                                      class="icon-add-contain"></span> Add
+                                    Details</a>
+                                </div> -->
+                                <div>
+                                  <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
+                                  <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                  <span (focusout)='editData=true' (click)='enableEdit()'>
+                                    <input [id]='rowData["uniqueKey"]' autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
+                                      (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
+                                      [disabled]="editData ? true : null" value="{{rowData['title']}}" [autofocus]='autoFocus'>
+                                      <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
+                                  <a *ngIf="!rowData['isGroupNode']" class="pull-right" (click)="showAddDetailsDailog(rowNode)"><span
+                                      class="icon-add-contain"></span> Add
+                                    Details</a>
+                                    <span [id]='rowData["uniqueKey"]' (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
+                                      class="icon-edit"></span>
+                                    <a [id]='rowData["uniqueKey"]' *ngIf='buttonId == rowData["uniqueKey"] && showButtons'
+                                      (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
+                                    <a [id]='rowData["uniqueKey"]' (click)='disableButtons()' *ngIf='buttonId == rowData["uniqueKey"] && showButtons'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
+                                  </span>
+                                </div>
+                              </td>
+                              <!-- to copy -->
                             <td *ngIf="rowData['productName']">
                               {{rowData['productFamily']}}
                               <!-- <div *ngIf="rowData['isMajorLineItem']">
@@ -280,7 +284,7 @@
             <div *ngFor='let groupsMinor of formGroupDataMinorItems.groups'>
                 <div class="row half-margin-bottom">
                     <div class="col-md-12">
-                     <dynamic-form-multiple class='col-md-6' [group]='groupsMinor' [groupName]='groupsMinor.groupName' [dataObject]="groupsMinor.listOfferQuestions"></dynamic-form-multiple>
+                     <dynamic-form-multiple [group]='groupsMinor' [groupName]='groupsMinor.groupName' [dataObject]="groupsMinor.listOfferQuestions"></dynamic-form-multiple>
               </div>
             </div>
             </div>
@@ -291,7 +295,7 @@
         <div *ngFor='let groups of formGroupData.groups'>
             <div class="row half-margin-bottom">
                 <div class="col-md-12">
-                 <dynamic-form-multiple class='col-md-6' [group]='groups' [dataObject]="groups.listOfferQuestions"></dynamic-form-multiple>
+                 <dynamic-form-multiple [group]='groups' [dataObject]="groups.listOfferQuestions"></dynamic-form-multiple>
                 </div>
           </div>
         </div>

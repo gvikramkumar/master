@@ -321,28 +321,28 @@ export class MmAssesmentComponent implements OnInit {
   }
 
 
-  //downloadPDF
-  downloadPDF() {
-    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data => {
-      const nameOfFileToDownload = 'offer-details';
-      console.log("nameoffile", nameOfFileToDownload);
-      console.log(data);
-      const blob = new Blob([data], { type: 'application/pdf' });
+  // //downloadPDF
+  // downloadPDF() {
+  //   this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data => {
+  //     const nameOfFileToDownload = 'offer-details';
+  //     console.log("nameoffile", nameOfFileToDownload);
+  //     console.log(data);
+  //     const blob = new Blob([data], { type: 'application/pdf' });
 
-      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
-      } else {
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = nameOfFileToDownload;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+  //     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+  //       window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+  //     } else {
+  //       var a = document.createElement('a');
+  //       a.href = URL.createObjectURL(blob);
+  //       a.download = nameOfFileToDownload;
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       document.body.removeChild(a);
 
-      }
-    });
+  //     }
+  //   });
 
-  }
+  // }
 
 
 
@@ -593,23 +593,17 @@ export class MmAssesmentComponent implements OnInit {
       }
     );
 
-    // Populate Stake Holders Data, If Empty
-    if (Object.keys(this.stakeData).length === 0) {
 
-      this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
 
-        this.stakeData = {};
-        this.derivedMM = mmModel;
-        this.displayLeadTime = true;
-        this.offerId = this.currentOfferId;
-        this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
-        this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-          (leadTime: LeadTime) => {
-            this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
-          }
-        );
+
+    this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
+
+      // Populate Stake Holders Data, If Empty
+      if (Object.keys(this.stakeData).length === 0) {
 
         let keyUsers;
+        this.stakeData = {};
+
         if (res != null) {
           keyUsers = res;
         }
@@ -643,10 +637,46 @@ export class MmAssesmentComponent implements OnInit {
           this.stakeData[user['userMappings'][0]['functionalRole']].push(curUser);
         });
 
+      } else {
 
-      });
+        // ReFormat Stake Holders Data, When Non Empty
+        const newStakeData = {};
 
-    }
+        // Iterate - Owner Names
+        for (const ownerName of Object.keys(this.stakeData)) {
+
+          // Retrieve Owner Details And Map It To New Stake Data
+          for (const ownerDetails of Array.from(this.stakeData[ownerName])) {
+
+            newStakeData[ownerName] = [
+              {
+                userName: ownerDetails['userName'],
+                emailId: ownerDetails['_id'] + '@cisco.com',
+                _id: ownerDetails['_id'],
+                userMappings: [{
+                  appRoleList: [],
+                  businessEntity: ownerDetails['businessEntity'],
+                  functionalRole: ownerDetails['functionalRole'],
+                  offerRole: ownerDetails['functionalRole']
+                }
+                ],
+                stakeholderDefaults: true
+              }];
+
+          }
+
+        }
+
+        // ReInitialize Stake Data
+        this.stakeData = {};
+        this.stakeData = newStakeData;
+
+      }
+
+
+    });
+
+    // }
 
   }
 
@@ -686,6 +716,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   proceedToStakeholder(withRouter = true) {
+
     let proceedToStakeholderPostData = {};
     proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
     proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'] == null ? '' : this.offerBuilderdata['offerName'];
@@ -704,9 +735,11 @@ export class MmAssesmentComponent implements OnInit {
     let additionalCharacteristics = [];
 
     this.groupData.forEach((group, index) => {
+
       for (const prop of Object.keys(group)) {
-        let subselectedCharacteristics = {};
-        let notSubselectedCharacteristics = {};
+
+        const subselectedCharacteristics = {};
+        const notSubselectedCharacteristics = {};
         subselectedCharacteristics['group'] = this.groupNames[index];
         subselectedCharacteristics['subgroup'] = prop;
         subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
@@ -740,9 +773,9 @@ export class MmAssesmentComponent implements OnInit {
       this.stakeData[prop].forEach(sh => {
         stakeHolders.push({
           '_id': sh['_id'],
-          'businessEntity': sh['businessEntity'],
-          'functionalRole': sh['functionalRole'],
-          'offerRole': sh['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['functionalRole'],
+          'businessEntity': sh['userMappings'][0]['businessEntity'],
+          'functionalRole': sh['userMappings'][0]['functionalRole'],
+          'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['userMappings'][0]['functionalRole'],
           'stakeholderDefaults': sh['stakeholderDefaults'],
           'name': sh['userName']
         });
@@ -882,9 +915,9 @@ export class MmAssesmentComponent implements OnInit {
           console.log(sh);
           stakeHolders.push({
             '_id': sh['_id'],
-            'businessEntity': sh['businessEntity'],
-            'functionalRole': sh['functionalRole'],
-            'offerRole': sh['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['functionalRole'],
+            'businessEntity': sh['userMappings'][0]['businessEntity'],
+            'functionalRole': sh['userMappings'][0]['functionalRole'],
+            'offerRole': sh['userMappings'][0]['functionalRole'] === 'BUPM' && sh['_id'] === this.offerBuilderdata['offerOwner'] ? 'Owner' : sh['userMappings'][0]['functionalRole'],
             'stakeholderDefaults': sh['stakeholderDefaults'],
             'name': sh['userName']
           });

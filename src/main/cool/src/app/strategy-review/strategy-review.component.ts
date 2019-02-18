@@ -18,6 +18,9 @@ import { LeadTime } from '../right-panel/lead-time';
 import { RightPanelService } from '../services/right-panel.service';
 import { User } from '../access-management/user';
 import { AccessManagementService } from '../services/access-management.service';
+import { DashboardService } from '../services/dashboard.service';
+import { CreateOfferService } from '../services/create-offer.service';
+import { element } from '@angular/core/src/render3';
 
 
 @Component({
@@ -56,6 +59,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   lastValueInMilestone: Array<any>;
   milestone: any;
   val: any;
+  selectedfunctionRole: string = null;
+  stakeHolders = {};
 
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
@@ -68,7 +73,6 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   doNotApproveSection = false;
   showConditionalApprovalSection = false;
   escalateVisibleAvailable: Boolean = false;
-  approvalButtonsVisibleAvailable: Boolean = true;
   showApproveSection = false;
   action: any;
   currentTaskId: any;
@@ -88,6 +92,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   proceedButtonStatusValid = true;
   backbuttonStatusValid = true;
+  currentFunctionalRole;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
@@ -101,7 +106,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private headerService: HeaderService,
     private rightPanelService: RightPanelService,
-    private accessManagementService: AccessManagementService) {
+    private accessManagementService: AccessManagementService,
+    private dashboardService: DashboardService,
+    private createOfferService: CreateOfferService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -109,6 +116,23 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+      this.currentFunctionalRole = data.userMappings[0].functionalRole;
+    });
+    this.dashboardService.getMyOffersList()
+      .subscribe(resOffers => {
+        resOffers.forEach(ele => {
+          this.stakeHolders[ele.offerId] = {};
+          if (ele.stakeholders != null) {
+            ele.stakeholders.forEach(holder => {
+              if (this.stakeHolders[ele.offerId][holder.functionalRole] == null) {
+                this.stakeHolders[ele.offerId][holder.functionalRole] = [];
+              }
+              this.stakeHolders[ele.offerId][holder.functionalRole].push(holder['_id']);
+            });
+          }
+        });
+      });
     this.getStrategyReviwInfo();
     const canEscalateUsers = [];
     const canApproveUsers = [];
@@ -189,9 +213,6 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
         if (canEscalateUsers.includes(user)) {
           this.escalateVisibleAvailable = true;
         }
-        if (canApproveUsers.includes(user)) {
-          this.approvalButtonsVisibleAvailable = false;
-        }
         this.headerService.getUserInfo(this.currentUser).subscribe(userData => {
           this.managerName = userData[0].manager;
         });
@@ -232,6 +253,15 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       }
     });
 
+  }
+
+  getSelectFunctionRole(functionRole) {
+    this.selectedfunctionRole = functionRole;
+    if (this.currentOfferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.currentOfferId] != null && this.stakeHolders[this.currentOfferId][this.selectedfunctionRole] != null) {
+      this.assigneeList = this.stakeHolders[this.currentOfferId][this.selectedfunctionRole];
+    } else {
+      this.assigneeList = [];
+    }
   }
 
   getStrategyReviwInfo() {
@@ -351,9 +381,22 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const taskId = this.currentTaskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
+
     const createActionPayload = {};
-    createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
+    createActionPayload['caseId'] = this.caseId;
+    createActionPayload['offerId'] = this.offerId;
     createActionPayload['owner'] = this.assigneeValue;
+    createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
+    createActionPayload['actionTitle']=this.titleValue;
+    createActionPayload['assignee']=this.assigneeValue;
+    createActionPayload['mileStone']=this.milestoneValue;
+    createActionPayload['description']=this.descriptionValue;
+    createActionPayload['selectedFunction']=this.functionNameValue;
+    createActionPayload['dueDate']=this.dueDateValue.toISOString();
+
+    createActionPayload['type'];
+    createActionPayload['actionCreator'];
+
     const createActionComment: CreateActionComment = new CreateActionComment(
       taskId,
       userId,
@@ -368,7 +411,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.dueDateValue.toISOString(),
     );
     this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
-      this.actionsService.postForNewAction(this.currentOfferId, this.caseId, createActionPayload).subscribe(response => {
+      // this.actionsService.postForNewAction(this.currentOfferId, this.caseId, createActionPayload).subscribe(response => {
+      this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
         this.closeForm();
         this.getStrategyReviwInfo();
       });
