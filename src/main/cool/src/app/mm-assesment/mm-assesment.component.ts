@@ -321,28 +321,28 @@ export class MmAssesmentComponent implements OnInit {
   }
 
 
-  //downloadPDF
-  downloadPDF() {
-    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data => {
-      const nameOfFileToDownload = 'offer-details';
-      console.log("nameoffile", nameOfFileToDownload);
-      console.log(data);
-      const blob = new Blob([data], { type: 'application/pdf' });
+  // //downloadPDF
+  // downloadPDF() {
+  //   this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data => {
+  //     const nameOfFileToDownload = 'offer-details';
+  //     console.log("nameoffile", nameOfFileToDownload);
+  //     console.log(data);
+  //     const blob = new Blob([data], { type: 'application/pdf' });
 
-      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
-      } else {
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = nameOfFileToDownload;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+  //     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+  //       window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+  //     } else {
+  //       var a = document.createElement('a');
+  //       a.href = URL.createObjectURL(blob);
+  //       a.download = nameOfFileToDownload;
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       document.body.removeChild(a);
 
-      }
-    });
+  //     }
+  //   });
 
-  }
+  // }
 
 
 

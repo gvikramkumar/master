@@ -192,8 +192,16 @@
             </div>
             <div class="row">
                 <div class="col-md-12 accordion half-margin-bottom">
-
-                    <p-accordion [multiple]="true">
+                  <!-- <div class="col-md-12"> -->
+                    <div class="alert alert--danger" role="alert" *ngIf="showAlert">
+                        <div class="alert__icon icon-error-outline"></div>
+                        <div class="alert__message">
+                            <div>Choose appropriate target date for each phase.</div>
+                        </div>
+                        <a href="javascript:;" class="alert__close icon-close" (click)="removeAlert()"></a>
+                    </div>
+                <!-- </div> -->
+                    <p-accordion>
                         <p-accordionTab header="Ideate" [selected]="true">
                             <div class="responsive-table">
                                 <table class="table table--nostripes">
@@ -232,7 +240,8 @@
                                                     <input type="text" class="form-control" #dp="bsDatepicker" autofocus
                                                         bsDatepicker [minDate]="minDate"
                                                         (bsValueChange)="onValueChange('ideate',$event)"
-                                                        [value]='ideateData.targetDate | date: "dd-MMM-y"'>
+                                                        [value]='ideateData.targetDate | date: "dd-MMM-y"'
+                                                        placement="top">
                                                 </span>
                                                 <span *ngIf="ideateData.subMilestone === 'Strategy Review'">
                                                     <a (click)="editDate('ideate')"><span
@@ -283,7 +292,8 @@
                                                     <input type="text" class="form-control" #dp="bsDatepicker"
                                                         bsDatepicker [minDate]="minDate"
                                                         (bsValueChange)="onValueChange('plan',$event)"
-                                                        [value]='planData.targetDate | date: "dd-MMM-y"'>
+                                                        [value]='planData.targetDate | date: "dd-MMM-y"'
+                                                        placement="top">
                                                 </span>
                                                 <span *ngIf="planData.subMilestone === 'Design Review'">
                                                     <a (click)="editDate('plan')"><span
