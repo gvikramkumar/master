@@ -81,10 +81,6 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Submeasure_Grouping_Report'
     },
     {
-      type: '2t-submeasure-list', hasNoChoices: true, text: '2T Sub-Measure List', disabled: false,
-      filename: '2T_Sub_Measure_List_Report'
-    },
-    {
       type: 'allocation-rule', hasNoChoices: true, text: 'Rule Updates', disabled: false,
       filename: 'Rule_Update_Report'
     },

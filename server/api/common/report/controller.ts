@@ -193,29 +193,6 @@ export default class ReportController extends ControllerBase {
 
         break;
 
-      case '2t-submeasure-list':
-        excelSheetname = ['2t Submeasure List'];
-        excelHeaders = ['Measure Name', 'Submeasure Name', 'Fiscal Month', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['measureName', 'name', 'fiscalMonth', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
-        excelFilename = `2T_Sub_Measure_List_Report_${req.dfa.fiscalMonths.prof}.xlsx`;
-        promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
-          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
-        ])
-          .then(results => {
-            this.measures = results[0];
-            this.submeasures = results[1];
-            const rtn = this.submeasures.filter(doc => doc.indicators.twoTier === 'Y')
-              .map(sm => this.transformSubmeasure(sm))
-              .map(sm => {
-                sm.fiscalMonth = req.dfa.fiscalMonths.prof;
-                return sm;
-              });
-            return _.orderBy(rtn, ['measureName', 'name']);
-          })
-
-        break;
-
       case 'disti-direct':
         excelSheetname = ['Disti to Direct'];
         excelHeaders = ['Group ID', 'Node Type', 'Sales Finance Hierarchy', 'Node Code', 'External Theater', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
@@ -536,87 +513,6 @@ export default class ReportController extends ControllerBase {
 
     return rule;
   }
-
-
-
-  // CSV REPORT: once we moved to multiple sheet reports, the csv report was replaced by excel report.
-  // this code continues to stagnate and would need considerably update to be current, but we'll
-  // leave it for reverence in case we need a csv output for some reason.
-
-  // for Csv reports we expect:
-  // * excelFilename: name of file it will download to
-  // * excelProperties: an array of property names to determine the properties downloaded and order
-  // * excelHeaders (optional) an array of header names for the first row of download
-  // we push headers, convert json to csv using properties, concat csv, join with line terminator and send
-  /*
-  getCsvReport(req, res, next) {
-    const body = req.body; // post request, params are in the body
-    req.query = _.omit(body, ['excelFilename', 'excelProperties', 'excelHeaders']);
-
-    if (!excelFilename || !excelProperties) {
-      next(new ApiError('Missing properties for excelDownload. Require: excelFilename, excelProperties.', null, 400));
-      return;
-    }
-    let arrRtn = [];
-    if (excelHeaders) {
-      arrRtn.push(svrUtil.cleanCsv(excelHeaders));
-    }
-
-    let promise;
-    switch (req.params.report) {
-      case 'dollar-upload':
-        delete req.query.moduleId;
-        promise = this.dollarUploadCtrl.getManyPromise(req);
-        break;
-      case 'mapping-upload':
-        delete req.query.moduleId;
-        promise = this.mappingUploadCtrl.getManyPromise(req);
-        break;
-      case 'product-hierarchy':
-        promise = this.pgLookupRepo.getProductHierarchyReport();
-        break
-      case 'sales-hierarchy':
-        promise = this.pgLookupRepo.getSalesHierarchyReport();
-        break
-      case 'dept-upload':
-        delete req.query.moduleId;
-        promise = this.deptUploadCtrl.getManyPromise(req);
-        break
-      case 'submeasure-grouping':
-        promise = this.pgLookupRepo.getSubmeasureGroupingReport();
-        break
-      case '2t-submeasure-list':
-        promise = this.pgLookupRepo.get2TSubmeasureListReport();
-        break
-      case 'disti-direct':
-        promise = this.pgLookupRepo.getDistiToDirectMappingReport();
-        break
-      case 'alternate-sl2':
-        promise = this.pgLookupRepo.getAlternateSL2Report();
-        break
-      case 'corp-adjustment':
-        promise = this.pgLookupRepo.getCorpAdjustmentReport();
-        break
-      case 'sales-split-percentage':
-        promise = this.pgLookupRepo.getSalesSplitPercentageReport();
-        break
-      default:
-        next(new ApiError('Bad report type', null, 400));
-        return;
-    }
-
-    promise
-      .then(results => results.rows || results)
-      .then(docs => svrUtil.convertJsonToCsv(docs, svrUtil.cleanCsvArr(excelProperties)))
-      .then(arrCsv => {
-        arrRtn = arrRtn.concat(arrCsv);
-        res.set('Content-Type', 'text/csv');
-        res.set('Content-Disposition', 'attachment; filename="' + excelFilename + '"');
-        res.send(arrRtn.join('\n'));
-      })
-      .catch(next);
-  }
-*/
 
 }
 
