@@ -52,7 +52,8 @@
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span *ngIf="actionData.alertType == 'action'">
                       <span (click)="showActionPopUp($event,actionData,popActionContent)">
-                        <span class="icon-clock icon-small" pTooltip="Action" tooltipPosition="top"></span></span>
+                        <span class="icon-clock icon-small" pTooltip="Action" tooltipPosition="top"></span>
+                      </span>
                       <span>
                         <a (click)="showOfferPopUp($event,actionData,popturboContent)">
                           &nbsp; {{actionData.offerId}}
@@ -62,12 +63,12 @@
                     <span *ngIf="actionData.alertType == 'notification'">
                       <span (click)="showActionPopUp($event,actionData,popNotificationContent)">
                         <span class="icon-alert icon-small" pTooltip="Notification" tooltipPosition="top"></span>
-                        <span>
+                      </span>
+                      <span>
                           <a (click)="showOfferPopUp($event,actionData,popturboContent)">
                             &nbsp; {{actionData.offerId}}
                           </a>
                         </span>
-                      </span>
                     </span>
                   </ng-template>
                 </p-column>
