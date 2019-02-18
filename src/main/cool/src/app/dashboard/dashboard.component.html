@@ -65,10 +65,10 @@
                         <span class="icon-alert icon-small" pTooltip="Notification" tooltipPosition="top"></span>
                       </span>
                       <span>
-                          <a (click)="showOfferPopUp($event,actionData,popturboContent)">
-                            &nbsp; {{actionData.offerId}}
-                          </a>
-                        </span>
+                        <a (click)="showOfferPopUp($event,actionData,popturboContent)">
+                          &nbsp; {{actionData.offerId}}
+                        </a>
+                      </span>
                     </span>
                   </ng-template>
                 </p-column>
@@ -205,10 +205,12 @@
                   <tr>
                     <td *ngFor="let col of columns" style="width:10%">
                       <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
-                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] === 'cancel'">
+                        <div
+                          *ngIf="offerData.status !== null && (offerData.status['offerMilestone'] === 'cancel' || offerData.status['offerMilestone'] === 'hold' )">
                           {{offerData[col.field]}}
                         </div>
-                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'">
+                        <div
+                          *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'  && offerData.status['offerMilestone'] !== 'hold'">
                           <a (click)="showOfferPopUp($event,offerData,popturboContent)">
                             {{offerData[col.field]}}
                           </a>
