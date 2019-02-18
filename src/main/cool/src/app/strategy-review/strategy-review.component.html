@@ -209,7 +209,8 @@
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>
                                             </select> -->
-                                            <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
+                                            <select id="functionName" class="form-control" name="functionName"
+                                              (change)="getSelectFunctionRole($event.target.value)"
                                               [(ngModel)]="functionNameValue" ngModel required>
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>
@@ -338,7 +339,8 @@
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>
                                             </select> -->
-                                            <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
+                                            <select id="functionName" class="form-control" name="functionName"
+                                              (change)="getSelectFunctionRole($event.target.value)"
                                               [(ngModel)]="functionNameValue" ngModel required>
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>

@@ -301,7 +301,7 @@ export class AccessManagementComponent implements OnInit {
     this.accessManagementService.getUserDetails(user).subscribe(
       data => {
 
-        if (Object.keys(data).length == 0 || data['errorMsg'] != null) {
+        if (Object.keys(data).length === 0 || data['errorMsg'] != null) {
           this.userIdAvailable = false;
         } else {
           this.userIdAvailable = true;
