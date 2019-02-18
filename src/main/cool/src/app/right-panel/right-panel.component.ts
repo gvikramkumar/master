@@ -271,7 +271,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   processCurrentPhaseInfo(phaseInfo) {
-    console.log(phaseInfo);
     this.mStoneCntInAllPhases.forEach(element => {
       const obj = {};
       let count = 0;
