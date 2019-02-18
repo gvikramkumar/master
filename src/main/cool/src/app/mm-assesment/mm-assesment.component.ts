@@ -305,7 +305,10 @@ export class MmAssesmentComponent implements OnInit {
         this.match = false;
         const splitArr = c.split('#');
         const attrName = splitArr[0];
-        const description = splitArr[1];
+        let description = splitArr[1];
+        if (description == null || description == '') {
+          description = attrName;
+        }
 
         if (selectedCharacteristics[group['groupName']] != null &&
           selectedCharacteristics[group['groupName']][g['subGroupName']] != null &&
