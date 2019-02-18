@@ -128,12 +128,13 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     'panel2': true
   };
 
-  editIdeateTargetDate = false;
-  editPlanTargetDate = false;
-  editExecuteTargetDate = false;
-  editLanchTargetDate = false;
+  editIdeateTargetDate: Boolean = false;
+  editPlanTargetDate: Boolean  = false;
+  editExecuteTargetDate: Boolean  = false;
+  editLanchTargetDate: Boolean  = false;
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   minDate: Date;
+  showAlert:Boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -270,6 +271,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   processCurrentPhaseInfo(phaseInfo) {
+    console.log(phaseInfo);
     this.mStoneCntInAllPhases.forEach(element => {
       const obj = {};
       let count = 0;
@@ -384,11 +386,44 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * target date for the phase is updated.
+   * validate target dates.
+   * @param stratReviewDate
+   * @param designReviewDate
+   * @param executeReviewDate
+   * @param launchReviewDate
+   */
+  validateTargetDates(stratReviewDate, designReviewDate, executeReviewDate, launchReviewDate): boolean {
+    const srDate = moment(stratReviewDate).format('MM-DD-YYYY');
+    const drDate = moment(designReviewDate).format('MM-DD-YYYY');
+    // const erDate = moment(executeReviewDate).format('MM-DD-YYYY');
+    // const lrDate = moment(launchReviewDate).format('MM-DD-YYYY');
+
+    if (srDate < drDate ) {
+      return true;
+    }
+  }
+
+  /**
+   * Target date for the phase is updated.
    * @param phase
    * @param value
    */
   onValueChange(phase, value: Date): void {
+
+    // Strategy review date
+    const stratReviewDate = this.offerPhaseDetailsList['ideate'][3].targetDate;
+
+    // Design review date
+    const designReviewDate = this.offerPhaseDetailsList['plan'][4].targetDate;
+
+    // execute review date
+    // const executereviewdate = this.offerPhaseDetailsList['execute'][3].targetDate;
+
+    // readiness review date
+    // const launchreviewdate = this.offerPhaseDetailsList['launch'][3].targetDate;
+
+    let updateDate = true;
+
     const payLoad = {
       caseId: this.caseId
     };
@@ -397,11 +432,19 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       case 'ideate': {
         this.editIdeateTargetDate = false;
         payLoad['strategyReviewDate'] = value;
+        if (! this.validateTargetDates(value, designReviewDate, null, null )) {
+          updateDate = false;
+          this.showAlert = true;
+        }
         break;
       }
       case 'plan': {
         this.editPlanTargetDate = false;
         payLoad['designReviewDate'] = value;
+        if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
+          updateDate = false;
+          this.showAlert = true;
+        }
         break;
       }
       case 'execute': {
@@ -419,24 +462,27 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.rightPanelService.updatePhaseTargetDate(payLoad).subscribe((data) => {
-      if (phase === 'ideate') {
-        this.offerPhaseDetailsList['ideate'][3].targetDate = value;
-      } else if (phase === 'plan') {
-        this.offerPhaseDetailsList['plan'][4].targetDate = value;
-      } else if (phase === 'execute') {
-        this.offerPhaseDetailsList['execute'][3].targetDate = value;
-      } else if (phase === 'launch') {
-        this.offerPhaseDetailsList['launch'][3].targetDate = value;
-      }
-    },
-      (error) => {
-      });
+    if (updateDate) {
+      this.rightPanelService.updatePhaseTargetDate(payLoad).subscribe((data) => {
+        if (phase === 'ideate') {
+          this.offerPhaseDetailsList['ideate'][3].targetDate = value;
+        } else if (phase === 'plan') {
+          this.offerPhaseDetailsList['plan'][4].targetDate = value;
+        } else if (phase === 'execute') {
+          this.offerPhaseDetailsList['execute'][3].targetDate = value;
+        } else if (phase === 'launch') {
+          this.offerPhaseDetailsList['launch'][3].targetDate = value;
+        }
+      },
+        (error) => {
+        });
+    }
   }
 
-  show(e: any) {
-    console.log('focus came');
+  removeAlert() {
+    this.showAlert = false;
   }
+
   onSearch() {
     const tempCollaboratorList: Collaborators[] = [];
 
