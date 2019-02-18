@@ -381,9 +381,22 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const taskId = this.currentTaskId;
     const userId = this.userService.getUserId();
     const taskName = 'Action';
+
     const createActionPayload = {};
-    createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
+    createActionPayload['caseId'] = this.caseId;
+    createActionPayload['offerId'] = this.offerId;
     createActionPayload['owner'] = this.assigneeValue;
+    createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
+    createActionPayload['actionTitle']=this.titleValue;
+    createActionPayload['assignee']=this.assigneeValue;
+    createActionPayload['mileStone']=this.milestoneValue;
+    createActionPayload['description']=this.descriptionValue;
+    createActionPayload['selectedFunction']=this.functionNameValue;
+    createActionPayload['dueDate']=this.dueDateValue.toISOString();
+
+    createActionPayload['type'];
+    createActionPayload['actionCreator'];
+
     const createActionComment: CreateActionComment = new CreateActionComment(
       taskId,
       userId,
@@ -398,7 +411,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.dueDateValue.toISOString(),
     );
     this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
-      this.actionsService.postForNewAction(this.currentOfferId, this.caseId, createActionPayload).subscribe(response => {
+      // this.actionsService.postForNewAction(this.currentOfferId, this.caseId, createActionPayload).subscribe(response => {
+      this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
         this.closeForm();
         this.getStrategyReviwInfo();
       });
