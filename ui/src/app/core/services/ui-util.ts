@@ -28,6 +28,9 @@ export class UiUtil {
     private matToast: MatSnackBar) {
   }
 
+  static alphanumRegex = `[A-Z0-9_\\- ]*`;
+  static alphanumMessage = 'Only capital alphanumeric/underscore/dash/space allowed';
+
 // clear the object's property if not in list. Uses lodash path for obj and list
   static clearPropertyIfNotInList(obj, prop, list, listProp?) {
     if (!obj || !prop || !list) {
