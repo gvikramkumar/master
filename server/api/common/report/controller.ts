@@ -111,7 +111,7 @@ export default class ReportController extends ControllerBase {
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.pgLookupRepo.getDollarUploadReport(body.fiscalMonth, body.submeasureKeys)
+          this.pgLookupRepo.getMappingUploadReport(body.fiscalMonth, body.submeasureKeys)
         ])
           .then(results => {
             this.measures = results[0];
@@ -130,9 +130,10 @@ export default class ReportController extends ControllerBase {
 
       case 'sales-hierarchy':
         excelSheetname = ['Sales Hierarchy'];
-        excelHeaders = ['Sales Territory 1', 'Sales Territory 2', 'Sales Territory 3', 'Sales Territory 4', 'Sales Territory 5', 'Sales Territory 6'];
-        excelProperties = ['l1_sales_territory_descr', 'l2_sales_territory_descr', 'l3_sales_territory_descr', 'l4_sales_territory_descr',
-          'l5_sales_territory_descr', 'l6_sales_territory_descr'];
+        excelHeaders = ['Sales Level 1', 'Sales Level 2', 'Sales Level 3', 'Sales Level 4', 'Sales Level 5', 'Sales Level 6',
+          'L1 Sales Territory Name Code', 'L2 Sales Territory Name Code', 'L3 Sales Territory Name Code', 'L4 Sales Territory Name Code', 'L5 Sales Territory Name Code', 'L6 Sales Territory Name Code', ];
+        excelProperties = ['l1_sales_territory_descr', 'l2_sales_territory_descr', 'l3_sales_territory_descr', 'l4_sales_territory_descr', 'l5_sales_territory_descr', 'l6_sales_territory_descr',
+          'l1_sales_territory_name_code', 'l2_sales_territory_name_code', 'l3_sales_territory_name_code', 'l4_sales_territory_name_code', 'l5_sales_territory_name_code', 'l6_sales_territory_name_code'];
         promise = this.pgLookupRepo.getSalesHierarchyReport();
         break;
 
