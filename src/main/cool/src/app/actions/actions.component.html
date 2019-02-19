@@ -5,15 +5,18 @@
         <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
           <div class="header-bar__main col-md-6">
             <div class="header-heading">
-              <h1 class="page-title"><span class="action--value">{{pendingActnCount}}</span> <span class="action--value-label">Pending
+              <h1 class="page-title"><span class="action--value">{{pendingActnCount}}</span> <span
+                  class="action--value-label">Pending
                   Actions</span></h1>
               <span class="vertical-divider"></span>
-              <h1 class="page-title"><span class="action--value">{{needImmActnCount}}</span> <span class="action--value-label">Need
+              <h1 class="page-title"><span class="action--value">{{needImmActnCount}}</span> <span
+                  class="action--value-label">Need
                   Immediate Action</span></h1>
             </div>
           </div>
           <div class="header-toolbar col-md-6">
-            <button (click)="createNewAction()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
+            <button (click)="createNewAction()" class="btn btn--white cta--action"><span
+                class="icon-add icon-small"></span>
               <span class="button--label">New Actions</span></button>
           </div>
         </div>
@@ -32,7 +35,7 @@
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
                 <p-column field="offerId" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                 <a (click)="showOfferPopUp($event,offerData,popturboContent)">{{actionData.offerId}}</a><br />
+                    <a (click)="showOfferPopUp($event,offerData,popturboContent)">{{actionData.offerId}}</a><br />
                     <span>{{actionData.offerName}}</span>
                     <!--new code strarts here-->
 
@@ -49,8 +52,9 @@
                 <p-column field="actions" sortable="true" header="ACTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span class="offerName">{{actionData.titleValue}} <br /></span>
-                      <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
-                      <span *ngIf="actionData.attachment == true" class="offerDesc" (click) = "getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
+                    <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
+                    <span *ngIf="actionData.attachment == true" class="offerDesc"
+                      (click)="getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
 
 
                     <!-- my new code coming here -->
@@ -72,15 +76,16 @@
                     <!-- <span [ngbPopover]="popCommentContent" (click)="p4.open()" autoClose="'outside'" #p4="ngbPopover"
                       triggers="manual" pTooltip="Comments" placement="top" class="icon-comment" aria-hidden="true"></span> -->
                     <!--new code ending here-->
-                   <span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right" pTooltip="Comments" placement="top"></span>
+                    <span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right"
+                      pTooltip="Comments" placement="top"></span>
                   </ng-template>
                 </p-column>
                 <p-column field="createdBy" sortable="true" header="OFFER CREATED BY">
                 </p-column>
                 <p-column field="" sortable="true" header="FUNCTION">
-                    <ng-template let-col let-actionData="rowData" pTemplate="body">
-                        <span>{{actionData.defaultFunction}} <br /></span>
-                      </ng-template>
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span>{{actionData.defaultFunction}} <br /></span>
+                  </ng-template>
                 </p-column>
                 <p-column field="assigneeId" sortable="true" header="ASSIGNED USER">
                 </p-column>
@@ -116,12 +121,13 @@
       <div *ngIf="selectedAction" class="comments-modal">
         <div class="popover__body">
           <h1 class="modalheader">View/Edit Comment</h1>
-          <app-viewcomment [taskId]="selectedAction.taskId" [event]="commentEvent" [popContent]="popCommentContent"></app-viewcomment>
+          <app-viewcomment [taskId]="selectedAction.taskId" [event]="commentEvent" [popContent]="popCommentContent">
+          </app-viewcomment>
         </div>
       </div>
     </p-overlayPanel>
-    <p-dialog [showHeader]="false" [responsive]="true" [width]="700" [height]="500" [minY]="70" [(visible)]="displayActionPhase"
-      [closable]="true">
+    <p-dialog [showHeader]="false" [responsive]="true" [width]="700" [height]="500" [minY]="70"
+      [(visible)]="displayActionPhase" [closable]="true">
       <div class="row">
         <div class="col-md-12">
           <div class="pull-right">
@@ -141,8 +147,9 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="offerName">SELECT OFFER NAME</label>
-                    <select id="offerName" type="text" class="form-control" name="offerName" [(ngModel)]="offerNameValue" (change)="onChange($event.target.value)"
-                      required ngModel #offerName="ngModel">
+                    <select id="offerName" type="text" class="form-control" name="offerName"
+                      [(ngModel)]="offerNameValue" (change)="onChange($event.target.value)" required ngModel
+                      #offerName="ngModel">
                       <option *ngFor="let offer of myOfferList" [value]="offer.offerId">
                         {{offer.offerName}}</option>
                     </select>
@@ -162,8 +169,8 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text">
                     <label for="descriptionName">DESCRIPTION</label>
-                    <input id="descriptionName" type="text" class="form-control" name="descriptionName" [(ngModel)]="descriptionValue"
-                      required ngModel #descriptionName="ngModel">
+                    <input id="descriptionName" type="text" class="form-control" name="descriptionName"
+                      [(ngModel)]="descriptionValue" required ngModel #descriptionName="ngModel">
                   </div>
                 </div>
               </div>
@@ -171,7 +178,8 @@
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
                     <label for="milestoneName">MILESTONE</label>
-                    <input  type="text" id="select-state-disabled" class="form-control" name="milestoneName" value={{val}} readonly  [(ngModel)]="val" required>
+                    <input type="text" id="select-state-disabled" class="form-control" name="milestoneName"
+                      value={{val}} readonly [(ngModel)]="val" required>
                     <!-- <select id="milestoneName" type="text" class="form-control" name="milestoneName" [(ngModel)]="milestoneValue"
                       required ngModel #milestoneName="ngModel">
                       <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
@@ -185,9 +193,8 @@
                   <div class="form-group__text select">
                     <label for="functionName">SELECT FUNCTION</label>
                     <select id="functionName" class="form-control" name="functionName"
-                    (change)="getSelectFunctionRole($event.target.value)"
-                     [(ngModel)]="functionNameValue"
-                      ngModel required>
+                      (change)="getSelectFunctionRole($event.target.value)" [(ngModel)]="functionNameValue" ngModel
+                      required>
                       <option *ngFor="let function of functionList" [value]="function">
                         {{function}}</option>
                     </select>
@@ -224,7 +231,8 @@
             <div class="row text-right">
               <div class="form-actions">
                 <button class="btn btn--secondary" (click)="closeActionDailog()">Cancel</button>
-                <button class="btn btn--primary" type="submit" [disabled]="!createActionForm.valid">Create
+                <button class="btn btn--primary" type="submit"
+                  [disabled]="!createActionForm.valid">Create
                   an Action</button>
               </div>
             </div>
@@ -234,5 +242,3 @@
     </p-dialog>
   </div>
 </div>
-
-
