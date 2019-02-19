@@ -77,9 +77,13 @@
                         Add All Item Detail&nbsp;&nbsp;</a></span>
                     <span class="vertical-divider" *ngIf="expandView">|</span>
                     <a *ngIf="expandView" href="javascript:;" (click)="toggleSidebar()">
-                      <span class="icon-fullscreen icon-small" title="Expand View"></span>
+                      <span class="icon-expand icon-small" title="Expand View"></span>
                     </a>
-                    <button *ngIf="!expandView" class="btn btn--small" (click)="addMore()">Add More Items</button>
+                    <span class="vertical-divider" *ngIf="!expandView">|</span>
+                    <a *ngIf="!expandView" (click)="addMore()">
+                    <!-- <button class="btn btn--small">Add More Items</button> -->
+                    <span class="icon-collapse icon-small" title="Collapse View"></span>
+                  </a>
                   </div>
                 </div>
                 <div class="row">
