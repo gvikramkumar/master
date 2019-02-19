@@ -115,7 +115,7 @@
                                     <input [id]='rowData["uniqueKey"]' autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
                                       (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
                                       [disabled]="editData ? true : null" value="{{rowData['title']}}" [autofocus]='autoFocus'>
-                                      <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
+                                      <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <a *ngIf="!rowData['isGroupNode']" class="pull-right" (click)="showAddDetailsDailog(rowNode)"><span
                                       class="icon-add-contain"></span> Add
                                     Details</a>

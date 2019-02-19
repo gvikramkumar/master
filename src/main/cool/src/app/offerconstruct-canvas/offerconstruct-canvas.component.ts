@@ -3,7 +3,8 @@ import {
   OnInit,
   ChangeDetectorRef,
   ElementRef,
-  Input
+  Input,
+  OnChanges
 } from '@angular/core';
 import { TreeNode, MessageService } from 'primeng/api';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
@@ -17,6 +18,7 @@ import { OfferConstructService } from '../services/offer-construct.service';
 import { ConstructDetails } from './model/ConstructDetails';
 import { ConstructDetail } from './model/ConstructDetail';
 import { ItemDetail } from './model/ItemDetail';
+import { group } from '@angular/animations';
 
 @Component({
   selector: 'app-offerconstruct-canvas',
@@ -73,6 +75,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   displayMandatory;
   toggleMandatory = true;
   myForm: FormGroup;
+  countableItems:Number[] = [];
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder) {
@@ -84,7 +87,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       // you can also set initial formgroup inside if you like
       companies: this._fb.array([])
     })
-    
+
   }
 
   /**
@@ -103,8 +106,11 @@ export class OfferconstructCanvasComponent implements OnInit {
       obj['label'] = this.draggedItem.label;
       obj['title'] = this.draggedItem.productName;
       obj['isMajorLineItem'] = this.draggedItem.isMajorLineItem;
+      obj['childCount'] = 0;
       this.offerConstructItems.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
+      this.countableItems.push(this.uniqueId);
+      this.updateChildCount();
     }
   }
 
@@ -201,6 +207,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     node.node.data = {};
     node.node.children = {};
     this.offerConstructItems = [...this.offerConstructItems];
+    this.updateChildCount();
   }
 
   enableEdit() {
@@ -279,7 +286,7 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['label'] = this.draggedItem.data.label;
           obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
           obj['listPrice'] = this.draggedItem.data.listPrice;
-          obj['title'] = this.draggedItem.data.productName;
+          obj['title'] = this.draggedItem.data.title?this.draggedItem.data.title: this.draggedItem.data.productName;
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
         } else {
@@ -316,6 +323,7 @@ export class OfferconstructCanvasComponent implements OnInit {
 
       this.offerConstructItems = [...this.offerConstructItems];
     }
+    this.updateChildCount();
   }
 
   /**
@@ -335,6 +343,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       }
     }
     this.draggedItem.parent.children.splice(index, 1);
+    this.updateChildCount();
   }
 
   /**
@@ -345,18 +354,30 @@ export class OfferconstructCanvasComponent implements OnInit {
     if (rowNode.node.children) {
       this.itemCount = rowNode.node.children.length;
     }
+
+    let countGroup = 1;
+    if (rowNode.node.children) {
+      rowNode.node.children.forEach(item=> {
+        if(item.data.isGroupNode === true) {
+          countGroup += 1;
+        }
+      });
+    }
+
     this.showButtons = false;
     const obj = Object.create(null);
     const counter = ++this.counter;
     obj['uniqueKey'] = counter;
     obj['productName'] =
-      rowNode.node.data.productName + ' ' + 'Group' + ' ' + counter;
+      rowNode.node.data.productName + ' ' + 'Group' + ' ' + countGroup;
     obj['catergoryName'] = 'Billing';
     obj['label'] = 'Billing';
-    obj['title'] = rowNode.node.data.productName + ' ' + 'Group' + ' ' + counter;
+    obj['title'] = rowNode.node.data.productName + ' ' + 'Group' + ' ' + countGroup;
     obj['isGroupNode'] = true;
     rowNode.node.children.push(this.itemToTreeNode(obj));
     this.offerConstructItems = [...this.offerConstructItems];
+    this.countableItems.push(counter);
+    this.updateChildCount();
   }
 
   showButton(event, id) {
@@ -545,6 +566,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
     this.nodeToDelete = {};
     this.offerConstructItems = [...this.offerConstructItems];
+    this.updateChildCount();
   }
 
   /**
@@ -639,6 +661,7 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   discardChanges() {
     this.offerConstructItems = [];
+    this.countableItems = [];
   }
 
   saveOfferConstructChanges() {
@@ -728,4 +751,33 @@ export class OfferconstructCanvasComponent implements OnInit {
     });
   }
 
+  /**
+   * Update Count of children under each Major Line Item.
+   */
+  updateChildCount() {
+    this.countableItems.forEach((index) => {
+      this.offerConstructItems.forEach((item) => {
+        if (item.data.uniqueKey === index) {
+          // First find total no of children under root node.
+          let totalChildren = item.children.length;
+          let totalNoOfGroups = 0;
+          // then find count of total children in each group if group exists, and
+          // the number of groups
+          if (item.children.length > 0) {
+            item.children.forEach((child) => {
+              if (child.data.isGroupNode) {
+                totalNoOfGroups = ++totalNoOfGroups;
+                totalChildren = totalChildren + child.children.length;
+              } else  {
+                // do nothing
+              }
+            });
+          }
+          // then total count - number of groups will be the actual count
+          totalChildren = totalChildren - totalNoOfGroups;
+          item.data['childCount'] = totalChildren;
+        }
+      });
+    });
+  }
 }
