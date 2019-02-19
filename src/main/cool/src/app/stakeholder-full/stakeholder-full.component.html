@@ -35,8 +35,7 @@
                         <li *ngFor="let key of getKeys(stakeHolderInfo)">
                             <div *ngIf="key !== 'Stakeholders'">
                                 <div class="ui-accordion-header"><span class="text-uppercase">{{key}}
-                                        ({{stakeHolderInfo[key].length}})</span><span
-                                        class="icon-chevron-up icon-small pull-right"></span></div>
+                                        ({{stakeHolderInfo[key].length}})</span></div>
                                 <div class="ui-accordion-content">
                                     <div *ngFor="let coOwners of stakeHolderInfo[key]">
                                         <div class="flex-center-vertical">
@@ -70,8 +69,7 @@
                         <!-- Here goes stakeholders list-->
                         <li>
                             <div class="ui-accordion-header"><span class="text-uppercase"> Stakeholders
-                                    ({{Stakeholders.length}})</span><span
-                                    class="icon-chevron-up icon-small pull-right"></span></div>
+                                    ({{Stakeholders.length}})</span></div>
                             <div class="ui-accordion-content">
                                 <div class="panel panel--compressed panel--ltgray panel--loose">
                                     <span>Add Stakeholders</span>
