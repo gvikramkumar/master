@@ -60,6 +60,7 @@ export class ActionsComponent implements OnInit {
   selectedCaseId: any;
   commentEvent: any;
   selectedAction;
+  selectedOffer;
 
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
@@ -218,7 +219,10 @@ export class ActionsComponent implements OnInit {
 
 
   showOfferPopUp(event, action, overlaypanel: OverlayPanel) {
-    this.selectedCaseId = action.caseId;
+    this.selectedOffer = {
+      caseId: action.caseId,
+      offerId: action.offerId
+    }
     overlaypanel.toggle(event);
   }
 

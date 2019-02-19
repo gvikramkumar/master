@@ -35,18 +35,8 @@
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
                 <p-column field="offerId" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <a (click)="showOfferPopUp($event,offerData,popturboContent)">{{actionData.offerId}}</a><br />
+                    <a (click)="showOfferPopUp($event,actionData,popturboContent)">{{actionData.offerId}}</a><br />
                     <span>{{actionData.offerName}}</span>
-                    <!--new code strarts here-->
-
-                    <p-overlayPanel #popturboContent [showCloseIcon]="true">
-                      <div *ngIf="selectedCaseId" class="base-padding" style="min-width:700px">
-                        <app-turbotaxview [data]="actionData"></app-turbotaxview>
-                      </div>
-                    </p-overlayPanel>
-
-                    <!--ends here-->
-
                   </ng-template>
                 </p-column>
                 <p-column field="actions" sortable="true" header="ACTION">
@@ -244,5 +234,16 @@
         </div>
       </div>
     </p-dialog>
+
+    <!--Offer Details Pop up-->
+
+    <p-overlayPanel #popturboContent [showCloseIcon]="true">
+      <div *ngIf="selectedOffer" class="base-padding" style="min-width:700px">
+        <app-turbotaxview [caseId]="selectedOffer.caseId" [offerId]="selectedOffer.offerId"></app-turbotaxview>
+      </div>
+    </p-overlayPanel>
+
+
+
   </div>
 </div>
