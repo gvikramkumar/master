@@ -129,6 +129,7 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   createActionAndNotification() {
+   
     let primaryPOC = [];
     for(let group of this.offerSolutionGroups) {
       if (group['listGrpQuestions'] != null && group['listGrpQuestions'].length > 0) {
@@ -140,6 +141,7 @@ export class OfferSolutioningComponent implements OnInit {
       const assignees = [];
       if (primaryPOC != null && primaryPOC.length > 0) {
         primaryPOC.forEach(element => {
+        
           if (this.stakeData != null && this.stakeData[element] != null && this.stakeData[element].length > 0) {
             this.stakeData[element].forEach(assignee => {
               assignees.push(assignee);
@@ -180,7 +182,6 @@ export class OfferSolutioningComponent implements OnInit {
           "owner": owner,
           "type": "Action",
           };
-  
         this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
           console.log(notificationPayload);
           this.offersolutioningService.notificationPost(actionPayload).subscribe(res => {

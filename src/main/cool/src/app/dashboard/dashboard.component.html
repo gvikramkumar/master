@@ -52,7 +52,8 @@
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span *ngIf="actionData.alertType == 'action'">
                       <span (click)="showActionPopUp($event,actionData,popActionContent)">
-                        <span class="icon-clock icon-small" pTooltip="Action" tooltipPosition="top"></span></span>
+                        <span class="icon-clock icon-small" pTooltip="Action" tooltipPosition="top"></span>
+                      </span>
                       <span>
                         <a (click)="showOfferPopUp($event,actionData,popturboContent)">
                           &nbsp; {{actionData.offerId}}
@@ -62,11 +63,11 @@
                     <span *ngIf="actionData.alertType == 'notification'">
                       <span (click)="showActionPopUp($event,actionData,popNotificationContent)">
                         <span class="icon-alert icon-small" pTooltip="Notification" tooltipPosition="top"></span>
-                        <span>
-                          <a (click)="showOfferPopUp($event,actionData,popturboContent)">
-                            &nbsp; {{actionData.offerId}}
-                          </a>
-                        </span>
+                      </span>
+                      <span>
+                        <a (click)="showOfferPopUp($event,actionData,popturboContent)">
+                          &nbsp; {{actionData.offerId}}
+                        </a>
                       </span>
                     </span>
                   </ng-template>
@@ -204,10 +205,12 @@
                   <tr>
                     <td *ngFor="let col of columns" style="width:10%">
                       <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
-                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] === 'cancel'">
+                        <div
+                          *ngIf="offerData.status !== null && (offerData.status['offerMilestone'] === 'cancel' || offerData.status['offerMilestone'] === 'hold' )">
                           {{offerData[col.field]}}
                         </div>
-                        <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'">
+                        <div
+                          *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'  && offerData.status['offerMilestone'] !== 'hold'">
                           <a (click)="showOfferPopUp($event,offerData,popturboContent)">
                             {{offerData[col.field]}}
                           </a>

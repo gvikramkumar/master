@@ -134,7 +134,7 @@ export class MenuBarComponent implements OnInit {
 
 
                 let emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
-                let emailBody = `Hello ${this.currentUsername},
+                let emailBody = `Hello All,
                 ${this.offerName}(${this.offerId}) has been on hold by ${this.userService.getName()}.
                 All related actions have been disabled.
                 Click ${textValue.href} to view on hold offer in COOL.
@@ -155,6 +155,7 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                    this.router.navigate(['/dashboard']);
                 });
             }
 
@@ -169,7 +170,7 @@ export class MenuBarComponent implements OnInit {
                 textValue.href = this.environmentService.redirect_url;
 
                 let emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
-                let emailBody = `Hello ${this.currentUsername},
+                let emailBody = `Hello All,
                 ${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getName()}.
                 All related actions have been disabled.
                 Click ${textValue} to view canceled offer in COOL.
@@ -190,8 +191,9 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                    this.router.navigate(['/dashboard']);
 
-
+      
                 });
             }
             this.updateMessage.next(message);
