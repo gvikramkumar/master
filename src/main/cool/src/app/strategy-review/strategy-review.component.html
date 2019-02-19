@@ -124,6 +124,7 @@
                       </ng-template>
                       <div *ngIf="strategyReviewData.function === currentFunctionalRole">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
+                          <app-viewstrategy [caseId]="caseId" [comments]="strategyReviewData.comments"></app-viewstrategy>
                           <div class="panel--header">
                             <h5>Approval Decision</h5>
                           </div>
