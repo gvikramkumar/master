@@ -139,6 +139,7 @@
    <!-- Dialog - Phase Process  -->
         <p-dialog [showHeader]="false" [responsive]="true" [minY]="70" [(visible)]="displayOfferPhase"
             [closable]="true">
+            <div class="overlay-phases">
             <div class="pull-right phase-modal">
                 <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
             </div>
@@ -322,6 +323,7 @@
 
                 </div>
             </div>
+          </div>
         </p-dialog>
     <!-- Dialog - Add / Edit Collaborators  -->
         <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
