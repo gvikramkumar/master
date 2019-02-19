@@ -228,7 +228,11 @@ export class ActionsComponent implements OnInit {
     if (popover.isOpen()) {
       popover.close();
     }
+  }
 
+  closeActionDailog() {
+    this.displayActionPhase = false;
+    this.createActionForm.reset();
   }
 
   createNewAction() {
