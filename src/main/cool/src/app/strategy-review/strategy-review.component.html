@@ -122,7 +122,7 @@
                         </div>
                       </ng-template>
                       <div
-                        *ngIf="strategyReviewData.function === currentFunctionalRole && strategyReviewData.status && strategyReviewData.status.toUpperCase() !== 'APPROVED'">
+                        *ngIf="strategyReviewData.function === currentFunctionalRole && strategyReviewData.status && strategyReviewData.status.toUpperCase() === 'NOT REVIEWED'">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
                           <app-viewstrategy [caseId]="caseId" [comments]="strategyReviewData.comments">
                           </app-viewstrategy>
