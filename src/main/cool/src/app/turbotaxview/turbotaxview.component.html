@@ -1,126 +1,11 @@
-<!-- <div class="row">
-        <div class="col-md-6">
-            <h4>AMP(Advanced Malware Protection)</h4>
-            <p style="color:blue">view offer details</p>
-        </div>
-        <div class="col-md-6">
-<div>
-    <h5 class="half-margin-bottom">Offer Phase
-    </h5>
-
-    <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
-        <div class="ui-step {{mileStoneStatus[0].status}}">
-            <div class="step__icon">
-                <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
-                <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
-            </div>
-            <div class="step__label">Ideate</div>
-        </div>
-        <div class="ui-step {{mileStoneStatus[1].status}}">
-            <div class="step__icon">
-                <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
-                <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
-            </div>
-            <div class="step__label">Plan</div>
-        </div>
-        <div class="ui-step {{mileStoneStatus[2].status}}">
-            <div class="step__icon">
-                <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
-                <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
-            </div>
-            <div class="step__label">Execute</div>
-        </div>
-        <div class="ui-step {{mileStoneStatus[3].status}}">
-            <div class="step__icon">
-                <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
-                <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
-            </div>
-            <div class="step__label">Launch</div>
-        </div>
-    </div>
-</div>
-</div>
-</div> -->
-<!-- <div class="container">
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <p-accordion [multiple]="true">
-              <p-accordionTab header="Ideate" [selected]="true">
-                  <div class="responsive-table">
-                      <table class="table table--nostripes">
-                          <thead>
-                              <tr>
-                                  <th style = "width:38%">Ideate - <span [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'"> {{ideateCompletedCount}} of {{ideateCount}} <span class="icon-check-outline icon-medium"></span></span></th>
-                                  <th>STATUS</th>
-
-                                  <th>COMPLETION DATE</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
-                                  <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
-                                  <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
-
-                                  <td>{{ideateData.completionDate}}</td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </div>
-              </p-accordionTab>
-              <p-accordionTab header="Plan">
-                  <div class="responsive-table">
-                      <table class="table table--nostripes">
-                          <thead>
-                              <tr>
-                                  <th style = "width:38%;">Plan - <span class="text-success"> {{planCompletedCount}} of {{planCount}} <span class="icon-check-outline icon-medium"></span></span></th>
-                                  <th>STATUS</th>
-
-                                  <th>COMPLETION DATE</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr *ngFor="let planData of offerPhaseDetailsList.plan">
-                                  <td><span style="color: indigo">{{planData.subMilestone}}</span></td>
-                                  <td [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">{{planData.status}}</td>
-
-                                  <td>{{planData.completionDate}}</td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </div>
-              </p-accordionTab>
-              <p-accordionTab header="Execute">
-                  <div class="responsive-table">
-                      <table class="table table--nostripes">
-                      </table>
-                  </div>
-              </p-accordionTab>
-              <p-accordionTab header="Launch">
-                  <div class="responsive-table">
-                      <table class="table table--nostripes">
-                      </table>
-                  </div>
-              </p-accordionTab>
-            </p-accordion>
-        </div>
-    </div>
-</div>
-
-</div>  -->
-
 <!--turbo tax view-->
-
 <div>
     <div class="row">
         <!-- Offer Phase widget -->
         <div class="col-md-12">
             <!-- <h5>Offer Name <small>ID 123</small></h5> -->
         </div>
-
     </div>
-
-
     <div class="row">
         <div class="col-sm-2">
             <h6>Offer Phase Details </h6>
@@ -160,7 +45,6 @@
             </div>
         </div>
         <div class="col-sm-3">
-
         </div>
     </div>
     <div class="divider divider--compressed"></div>
@@ -201,8 +85,8 @@
                                                     <span style="color: grey">{{ideateData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
-                                                    <a><span
-                                                            style="color: #005073;" (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
+                                                    <a><span style="color: #005073;"
+                                                            (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
 
@@ -230,17 +114,15 @@
                                     <tbody>
                                         <tr [class.innerrow]="planCount -1  > i  " class="innerrow"
                                             *ngFor="let ideateData of offerPhaseDetailsList.plan; let i = index">
-
                                             <td>
                                                 <div *ngIf="!ideateData.enable; else enableOfferPhase">
                                                     <span style="color: grey">{{ideateData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
-                                                    <a><span
-                                                            style="color: #005073;" (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
+                                                    <a><span style="color: #005073;"
+                                                            (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
-
                                             <td
                                                 [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">
                                                 {{ideateData.status}}</td>
@@ -251,30 +133,6 @@
                             </div>
                         </td>
                     </tr>
-                    <!-- <tr *ngFor="let ideateData of offerPhaseDetailsList.plan">
-                            <td>Plan</td>
-                            <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
-                            <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
-
-                            <td>{{ideateData.completionDate| date:'dd-MMM-yyyy'}}</td>
-                        </tr>
-                        <span *ngIf="offerPhaseDetailsList.execute">
-                            <tr *ngFor="let ideateData of offerPhaseDetailsList.execute">
-                                <td>Execute</td>
-                                <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
-                                <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
-                                <td>{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
-                            </tr>
-                        </span>
-                        <span *ngIf="offerPhaseDetailsList.launch">
-                            <tr *ngFor="let ideateData of offerPhaseDetailsList.launch">
-                                <td>Launch</td>
-                                <td><span style="color: indigo">{{ideateData.subMilestone}}</span></td>
-                                <td [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">{{ideateData.status}}</td>
-                                <td>{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
-                            </tr>
-                        </span> -->
-
                 </tbody>
             </table>
         </div>
