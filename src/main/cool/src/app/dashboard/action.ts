@@ -2,6 +2,7 @@ export class ActionsAndNotifcations{
     offerId:string;
     actiontTitle:string;
     offerName:string;
+    offerOwner:string;
     assigneeId:string;
     triggerDate:string;
     dueDate:string;
@@ -85,4 +86,13 @@ export class ActionsAndNotifcations{
     setDefaultFunctione(defaultFunction) {
         this.defaultFunction = defaultFunction;
     }
+
+    getOfferOwner(){
+        return this.offerOwner;
+    }
+
+    setOfferOwner(offerOwner:string) {
+        this.offerOwner = offerOwner;
+    }
+
 }

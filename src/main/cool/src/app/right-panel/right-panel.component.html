@@ -136,196 +136,196 @@
                 </div>
             </li>
         </ul>
-   <!-- Dialog - Phase Process  -->
+        <!-- Dialog - Phase Process  -->
         <p-dialog [showHeader]="false" [responsive]="true" [minY]="70" [(visible)]="displayOfferPhase"
             [closable]="true">
             <div class="overlay-phases">
-            <div class="pull-right phase-modal">
-                <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
-            </div>
-            <div class="modalheader">
+                <div class="pull-right phase-modal">
+                    <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
+                </div>
+                <div class="modalheader">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>{{offerName}}&nbsp;<span class="offerID">{{currentOfferId}}</span></h5>
+                            <a>View Offer Details</a>
+                        </div>
+                        <!-- Offer Phase widget -->
+                        <div class="col-md-4">
+                            <h5 class="widget-header">Offer Phase</h5>
+                            <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
+                                <div class="ui-step {{mileStoneStatus[0].status}}">
+                                    <div class="step__icon">
+                                        <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
+                                        <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
+                                    </div>
+                                    <div class="step__label">Ideate</div>
+                                </div>
+                                <div class="ui-step {{mileStoneStatus[1].status}}">
+                                    <div class="step__icon">
+                                        <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
+                                        <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
+                                    </div>
+                                    <div class="step__label">Plan</div>
+                                </div>
+                                <div class="ui-step {{mileStoneStatus[2].status}}">
+                                    <div class="step__icon">
+                                        <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
+                                        <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
+                                    </div>
+                                    <div class="step__label">Execute</div>
+                                </div>
+                                <div class="ui-step {{mileStoneStatus[3].status}}">
+                                    <div class="step__icon">
+                                        <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
+                                        <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
+                                    </div>
+                                    <div class="step__label">Launch</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider divider--compressed"></div>
+                </div>
                 <div class="row">
-                    <div class="col-md-8">
-                        <h5>{{offerName}}&nbsp;<span class="offerID">{{currentOfferId}}</span></h5>
-                        <a>View Offer Details</a>
-                    </div>
-                    <!-- Offer Phase widget -->
-                    <div class="col-md-4">
-                        <h5 class="widget-header">Offer Phase</h5>
-                        <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
-                            <div class="ui-step {{mileStoneStatus[0].status}}">
-                                <div class="step__icon">
-                                    <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
-                                    <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
-                                </div>
-                                <div class="step__label">Ideate</div>
-                            </div>
-                            <div class="ui-step {{mileStoneStatus[1].status}}">
-                                <div class="step__icon">
-                                    <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
-                                    <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
-                                </div>
-                                <div class="step__label">Plan</div>
-                            </div>
-                            <div class="ui-step {{mileStoneStatus[2].status}}">
-                                <div class="step__icon">
-                                    <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
-                                    <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
-                                </div>
-                                <div class="step__label">Execute</div>
-                            </div>
-                            <div class="ui-step {{mileStoneStatus[3].status}}">
-                                <div class="step__icon">
-                                    <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
-                                    <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
-                                </div>
-                                <div class="step__label">Launch</div>
-                            </div>
-                        </div>
+                    <div class="col-md-12">
+                        <h5 class="base-margin-top">Offer Phase Details</h5>
                     </div>
                 </div>
-                <div class="divider divider--compressed"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h5 class="base-margin-top">Offer Phase Details</h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 accordion half-margin-bottom">
-                  <!-- <div class="col-md-12"> -->
-                    <div class="alert alert--danger" role="alert" *ngIf="showAlert">
-                        <div class="alert__icon icon-error-outline"></div>
-                        <div class="alert__message">
-                            <div>Choose appropriate target date for each phase.</div>
+                <div class="row">
+                    <div class="col-md-12 accordion half-margin-bottom">
+                        <!-- <div class="col-md-12"> -->
+                        <div class="alert alert--danger" role="alert" *ngIf="showAlert">
+                            <div class="alert__icon icon-error-outline"></div>
+                            <div class="alert__message">
+                                <div>Choose appropriate target date for each phase.</div>
+                            </div>
+                            <a href="javascript:;" class="alert__close icon-close" (click)="removeAlert()"></a>
                         </div>
-                        <a href="javascript:;" class="alert__close icon-close" (click)="removeAlert()"></a>
-                    </div>
-                <!-- </div> -->
-                    <p-accordion>
-                        <p-accordionTab header="Ideate" [selected]="true">
-                            <div class="responsive-table">
-                                <table class="table table--nostripes">
-                                    <thead>
-                                        <tr>
-                                            <th>Ideate - <span
-                                                    [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'">
-                                                    {{ideateCompletedCount}} of {{ideateCount}} <span
-                                                        class="icon-check-outline icon-medium"></span></span></th>
-                                            <th>STATUS</th>
-                                            <th>TARGET DATE</th>
-                                            <th>COMPLETION DATE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
-                                            <td>
-                                                <div *ngIf="!ideateData.enable; else enableOfferPhase">
-                                                    <span style="color: gray;">{{ideateData.subMilestone}}</span>
-                                                </div>
-                                                <ng-template #enableOfferPhase>
-                                                    <span style="color: #005073;"
-                                                        (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span>
-                                                </ng-template>
-                                            </td>
-                                            <td [ngClass]=" (ideateData.status=='Completed'
+                        <!-- </div> -->
+                        <p-accordion>
+                            <p-accordionTab header="Ideate" [selected]="true">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                        <thead>
+                                            <tr>
+                                                <th>Ideate - <span
+                                                        [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'">
+                                                        {{ideateCompletedCount}} of {{ideateCount}} <span
+                                                            class="icon-check-outline icon-medium"></span></span></th>
+                                                <th>STATUS</th>
+                                                <th>TARGET DATE</th>
+                                                <th>COMPLETION DATE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
+                                                <td>
+                                                    <div *ngIf="!ideateData.enable; else enableOfferPhase">
+                                                        <span style="color: gray;">{{ideateData.subMilestone}}</span>
+                                                    </div>
+                                                    <ng-template #enableOfferPhase>
+                                                        <span style="color: #005073;"
+                                                            (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span>
+                                                    </ng-template>
+                                                </td>
+                                                <td [ngClass]=" (ideateData.status=='Completed'
                                                         )?'text-success':'text-warning'">
-                                                {{ideateData.status}}
-                                            </td>
-                                            <td>
-                                                <span *ngIf="!editIdeateTargetDate">
-                                                    {{ideateData.targetDate | date: "dd-MMM-y"}}
-                                                </span>
-                                                <span
-                                                    *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
-                                                    <input type="text" class="form-control" #dp="bsDatepicker" autofocus
-                                                        bsDatepicker [minDate]="minDate"
-                                                        (bsValueChange)="onValueChange('ideate',$event)"
-                                                        [value]='ideateData.targetDate | date: "dd-MMM-y"'
-                                                        placement="top">
-                                                </span>
-                                                <span *ngIf="ideateData.subMilestone === 'Strategy Review'">
-                                                    <a (click)="editDate('ideate')"><span
-                                                            class="icon-pencil"></span>Edit</a>
-                                                </span>
-                                            </td>
-                                            <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </p-accordionTab>
-                        <p-accordionTab header="Plan">
-                            <div class="responsive-table">
-                                <table class="table table--nostripes">
-                                    <thead>
-                                        <tr>
-                                            <th>Plan - <span class="text-success"> {{planCompletedCount}} of
-                                                    {{planCount}} <span
-                                                        class="icon-check-outline icon-medium"></span></span></th>
-                                            <th>STATUS</th>
-                                            <th>TARGET DATE</th>
-                                            <th>COMPLETION DATE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let planData of offerPhaseDetailsList.plan">
+                                                    {{ideateData.status}}
+                                                </td>
+                                                <td>
+                                                    <span *ngIf="!editIdeateTargetDate">
+                                                        {{ideateData.targetDate | date: "dd-MMM-y"}}
+                                                    </span>
+                                                    <span
+                                                        *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
+                                                        <input type="text" class="form-control" #dp="bsDatepicker"
+                                                            autofocus bsDatepicker [minDate]="minDate"
+                                                            (bsValueChange)="onValueChange('ideate',$event)"
+                                                            [value]='ideateData.targetDate | date: "dd-MMM-y"'
+                                                            placement="top">
+                                                    </span>
+                                                    <span *ngIf="ideateData.subMilestone === 'Strategy Review'">
+                                                        <a (click)="editDate('ideate')"><span
+                                                                class="icon-pencil"></span>Edit</a>
+                                                    </span>
+                                                </td>
+                                                <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Plan">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                        <thead>
+                                            <tr>
+                                                <th>Plan - <span class="text-success"> {{planCompletedCount}} of
+                                                        {{planCount}} <span
+                                                            class="icon-check-outline icon-medium"></span></span></th>
+                                                <th>STATUS</th>
+                                                <th>TARGET DATE</th>
+                                                <th>COMPLETION DATE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let planData of offerPhaseDetailsList.plan">
 
-                                            <td>
-                                                <div *ngIf="!planData.enable; else enableOfferPhase">
-                                                    <span style="color: gray;">{{planData.subMilestone}}</span>
-                                                </div>
-                                                <ng-template #enableOfferPhase>
-                                                    <span style="color: #005073;"
-                                                        (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span>
-                                                </ng-template>
-                                            </td>
+                                                <td>
+                                                    <div *ngIf="!planData.enable; else enableOfferPhase">
+                                                        <span style="color: gray;">{{planData.subMilestone}}</span>
+                                                    </div>
+                                                    <ng-template #enableOfferPhase>
+                                                        <span style="color: #005073;"
+                                                            (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span>
+                                                    </ng-template>
+                                                </td>
 
-                                            <td
-                                                [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">
-                                                {{planData.status}}</td>
-                                            <td>
-                                                <span *ngIf="!editPlanTargetDate">
-                                                    {{planData.targetDate | date: "dd-MMM-y"}}
-                                                </span>
-                                                <span
-                                                    *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
-                                                    <input type="text" class="form-control" #dp="bsDatepicker"
-                                                        bsDatepicker [minDate]="minDate"
-                                                        (bsValueChange)="onValueChange('plan',$event)"
-                                                        [value]='planData.targetDate | date: "dd-MMM-y"'
-                                                        placement="top">
-                                                </span>
-                                                <span *ngIf="planData.subMilestone === 'Design Review'">
-                                                    <a (click)="editDate('plan')"><span
-                                                            class="icon-pencil"></span>Edit</a>
-                                                </span>
-                                            </td>
-                                            <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </p-accordionTab>
-                        <p-accordionTab header="Execute">
-                            <div class="responsive-table">
-                                <table class="table table--nostripes">
-                                </table>
-                            </div>
-                        </p-accordionTab>
-                        <p-accordionTab header="Launch">
-                            <div class="responsive-table">
-                                <table class="table table--nostripes">
-                                </table>
-                            </div>
-                        </p-accordionTab>
-                    </p-accordion>
+                                                <td
+                                                    [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">
+                                                    {{planData.status}}</td>
+                                                <td>
+                                                    <span *ngIf="!editPlanTargetDate">
+                                                        {{planData.targetDate | date: "dd-MMM-y"}}
+                                                    </span>
+                                                    <span
+                                                        *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
+                                                        <input type="text" class="form-control" #dp="bsDatepicker"
+                                                            bsDatepicker [minDate]="minDate"
+                                                            (bsValueChange)="onValueChange('plan',$event)"
+                                                            [value]='planData.targetDate | date: "dd-MMM-y"'
+                                                            placement="top">
+                                                    </span>
+                                                    <span *ngIf="planData.subMilestone === 'Design Review'">
+                                                        <a (click)="editDate('plan')"><span
+                                                                class="icon-pencil"></span>Edit</a>
+                                                    </span>
+                                                </td>
+                                                <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Execute">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Launch">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                        </p-accordion>
 
+                    </div>
                 </div>
             </div>
-          </div>
         </p-dialog>
-    <!-- Dialog - Add / Edit Collaborators  -->
+        <!-- Dialog - Add / Edit Collaborators  -->
         <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
             [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">
             <form [formGroup]="addEditCollaboratorsForm" (ngSubmit)="onSearch()">
@@ -384,7 +384,7 @@
                 </div>
             </div>
         </p-dialog>
-    <!-- Dialog - Lead Time Calculation  -->
+        <!-- Dialog - Lead Time Calculation  -->
         <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
             [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
             <div class="row">

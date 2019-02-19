@@ -142,12 +142,14 @@ export class ActionsComponent implements OnInit {
   }
 
   processMyActionsList() {
+
     // Process get Actions data
     if (this.myActions.actionList !== undefined) {
       this.myActions['actionList'].forEach(element => {
         const obj = new ActionsAndNotifcations();
         obj.setOfferId(element.offerId);
         obj.setOfferName(element.offerName);
+        obj.setOfferOwner(element.offerOwner);
         obj.setStyleColor(element.status);
         obj.setAssigneeId(element.assigneeId);
         obj.setTriggerDate(this.dateFormat(element.triggerDate));
@@ -174,9 +176,16 @@ export class ActionsComponent implements OnInit {
   }
   // Create New Action
   createAction() {
+
+    // Close Dialog Box
+    this.displayActionPhase = false;
+    this.closeActionDailog();
+
     // Process post data
-    const selectedAssignee = [this.assigneeValue];
     const type = 'Manual Action';
+    const selectedAssignee = [this.assigneeValue];
+
+    // Initialize CreateAction POJO
     const createAction: CreateAction = new CreateAction(
       this.offerNameValue,
       this.offerCaseMap[this.offerNameValue],
@@ -191,11 +200,12 @@ export class ActionsComponent implements OnInit {
       this.offerNameMap[this.offerNameValue],
       type,
     );
+
+    // Call CreateAction API
     this.actionsService.createNewAction(createAction).subscribe((data) => {
-      this.closeActionDailog();
     });
 
-    this.displayActionPhase = false;
+    // Reset The Form
     this.createActionForm.reset();
 
   }
@@ -218,6 +228,7 @@ export class ActionsComponent implements OnInit {
     }
 
   }
+
   createNewAction() {
     this.displayActionPhase = true;
   }
