@@ -1,6 +1,6 @@
-<span class="pull-right panel-right mb-10" *ngIf="!portfolioFlag">
+<span class="pull-right panel-right" *ngIf="!portfolioFlag">
 </span>
-<div class="mb-10">
+<div>
     <!-- Offer Phase Steps -->
     <div class="card card--raised base-margin-top" (click)="showOfferPhaseDailog()">
         <h5 class="half-margin-bottom">Offer Phase
@@ -102,7 +102,7 @@
             <li *ngFor="let key of getKeys(stakeData)">
                 <div class="half-margin-bottom">{{key}} ({{stakeData[key].length}})</div>
                 <div class="half-margin-bottom">
-                    <div *ngFor="let coOwners of stakeData[key]">
+                    <div class="half-margin-bottom" *ngFor="let coOwners of stakeData[key]">
                         <div class="flex-center-vertical">
                             <!-- Team Member Name Avatar -->
                             <span class="avatar-ico">
