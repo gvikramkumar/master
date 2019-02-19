@@ -287,7 +287,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.pgLookupService.getSubmeasureAdjustmentTypes(this.sm.submeasureKey || 0).toPromise(),
         ]
         if (!this.addMode) {
-          promises2.push(this.productClassUploadService.callMethod('getManualMixValuesForSubmeasureName', {submeasureName: this.sm.name}).toPromise());
+          promises2.push(this.pgLookupService.callRepoMethod('getManualMixHwSwBySubmeasureKey',
+            {submeasureKey: this.sm.submeasureKey, moduleId: this.store.module.moduleId}).toPromise());
         }
         return Promise.all(promises2)
           .then(results => {
@@ -298,9 +299,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               if (_.includes(['D', 'P'], this.sm.status) && this.sm.manualMixHw && this.sm.manualMixSw) {
                 this.manualMixHw = this.sm.manualMixHw;
                 this.manualMixSw = this.sm.manualMixSw;
-              } else if (results[2]) {
-                this.manualMixHw = results[2].HW;
-                this.manualMixSw = results[2].SW;
+              } else {
+                this.manualMixHw = results[2][0];
+                this.manualMixSw = results[2][1];
               }
             }
           });
