@@ -50,17 +50,16 @@ export class ActionsComponent implements OnInit {
   assigneeValue: Array<any>;
   dueDateValue: any;
   ownerValue: string;
-  offerCaseMap:object = {};
+  offerCaseMap: object = {};
   offerNameMap: object = {};
   offerOwnerMap: object = {};
   actionOwner: string;
-  lastValueInMilestone:Array<any>;
+  lastValueInMilestone: Array<any>;
   milestone: any;
   val: any;
   selectedCaseId: any;
   commentEvent: any;
   selectedAction;
-
 
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
@@ -68,11 +67,14 @@ export class ActionsComponent implements OnInit {
     private dashboardService: DashboardService,
     private createActionService: CreateActionService,
     private environmentService: EnvironmentService,
-    ) { }
+  ) { }
 
   ngOnInit() {
-    this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
+
     this.minDate = new Date();
+    this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
+
+
     this.actionsService.getActionsTracker()
       .subscribe(data => {
         this.myActions = data;
@@ -97,30 +99,11 @@ export class ActionsComponent implements OnInit {
       });
     });
 
-   this.actionsService.getFunction().subscribe(data => {
-     this.functionList = data;
-  });
-
-  // this.userService.getName().subscribe(data => {
-  //   this.actionOwner = data;
-  // })
+    this.actionsService.getFunction().subscribe(data => {
+      this.functionList = data;
+    });
 
   }
-// Lulu's Code
-  // onChange(offerId) {
-  //   this.actionsService.getMilestones(this.offerCaseMap[offerId]).subscribe(data => {
-  //     this.milestoneList = [];
-  //     for (let prop in data) {
-  //      data[prop].forEach(ele => {
-  //       this.milestoneList.push(ele);
-  //      });
-  //   }
-  //   });
-
-  //   this.actionsService.getAssignee(offerId).subscribe(data => {
-  //     this.assigneeList = data;
-  //   });
-  // }
 
   onChange(offerId) {
 
@@ -133,32 +116,29 @@ export class ActionsComponent implements OnInit {
 
     this.actionsService.getAchievedMilestones(this.offerCaseMap[offerId]).subscribe(resMilestones => {
       this.milestoneList = [];
-      this.lastValueInMilestone=[];
+      this.lastValueInMilestone = [];
       for (let prop in resMilestones) {
-       resMilestones[prop].forEach(ele => {
-        this.milestoneList.push(ele);
-        
-        this.lastValueInMilestone=this.milestoneList.slice(-1)[0];
-        
-         let mile=this.lastValueInMilestone
-         this.val=mile['subMilestone'];
-        
-       });
-    }
+        resMilestones[prop].forEach(ele => {
+          this.milestoneList.push(ele);
+
+          this.lastValueInMilestone = this.milestoneList.slice(-1)[0];
+
+          let mile = this.lastValueInMilestone
+          this.val = mile['subMilestone'];
+
+        });
+      }
     });
 
-    // this.actionsService.getAssignee(offerId).subscribe(data => {
-    //   this.assigneeList = data;
-    // });
   }
 
   getSelectFunctionRole(functionRole) {
-   this.selectedfunctionRole = functionRole;
-   if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
-    this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
-  } else {
-    this.assigneeList = [];
-  }
+    this.selectedfunctionRole = functionRole;
+    if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
+      this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
+    } else {
+      this.assigneeList = [];
+    }
   }
 
   processMyActionsList() {
@@ -181,7 +161,7 @@ export class ActionsComponent implements OnInit {
         obj.setTaskId(element.taskId);
         obj.setDefaultFunctione(element.function);
         // Set the status color
-        if ( element.status && element.status.toLowerCase() === 'red') {
+        if (element.status && element.status.toLowerCase() === 'red') {
           this.needImmActnCount = this.needImmActnCount + 1;
         } else {
           this.pendingActnCount = this.pendingActnCount + 1;
@@ -192,9 +172,9 @@ export class ActionsComponent implements OnInit {
       this.myActionsList = this.myOfferArray;
     }
   }
-// Create New Action
+  // Create New Action
   createAction() {
-     // Process post data
+    // Process post data
     const selectedAssignee = [this.assigneeValue];
     const type = 'Manual Action';
     const createAction: CreateAction = new CreateAction(
@@ -202,8 +182,8 @@ export class ActionsComponent implements OnInit {
       this.offerCaseMap[this.offerNameValue],
       this.titleValue,
       this.descriptionValue,
-     // this.milestoneValue,
-     this.val,
+      // this.milestoneValue,
+      this.val,
       this.functionNameValue,
       selectedAssignee,
       this.dueDateValue.toISOString(),
@@ -214,6 +194,10 @@ export class ActionsComponent implements OnInit {
     this.actionsService.createNewAction(createAction).subscribe((data) => {
       this.closeActionDailog();
     });
+
+    this.displayActionPhase = false;
+    this.createActionForm.reset();
+
   }
 
   showActionPopUp(event, action, overlaypanel: OverlayPanel) {
@@ -227,9 +211,6 @@ export class ActionsComponent implements OnInit {
     this.selectedCaseId = action.caseId;
     overlaypanel.toggle(event);
   }
- /*  displayPop() {
-    this.displayPopOver = true;
-  } */
 
   displayActionPop(popover) {
     if (popover.isOpen()) {
