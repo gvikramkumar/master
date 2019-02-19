@@ -180,7 +180,6 @@ export class ActionsComponent implements OnInit {
 
     // Close Dialog Box
     this.displayActionPhase = false;
-    this.closeActionDailog();
 
     // Process post data
     const type = 'Manual Action';
@@ -203,8 +202,7 @@ export class ActionsComponent implements OnInit {
     );
 
     // Call CreateAction API
-    this.actionsService.createNewAction(createAction).subscribe((data) => {
-    });
+    this.actionsService.createNewAction(createAction).subscribe((data) => { });
 
     // Reset The Form
     this.createActionForm.reset();
@@ -235,11 +233,6 @@ export class ActionsComponent implements OnInit {
 
   createNewAction() {
     this.displayActionPhase = true;
-  }
-
-  closeActionDailog() {
-    this.displayActionPhase = false;
-    this.createActionForm.reset();
   }
 
   dateFormat(inputDate: string) {
