@@ -137,16 +137,22 @@ export default class PgLookupRepo {
   getSalesHierarchyReport() {
     return pgc.pgdb.query(`
             select 
-            l1_sales_territory_descr,
+            l1_sales_territory_descr, 
             l2_sales_territory_descr,
             l3_sales_territory_descr,
             l4_sales_territory_descr,
             l5_sales_territory_descr,
-            l6_sales_territory_descr
+            l6_sales_territory_descr,
+            l1_sales_territory_name_code, 
+            l2_sales_territory_name_code,
+            l3_sales_territory_name_code,
+            l4_sales_territory_name_code,
+            l5_sales_territory_name_code,
+            l6_sales_territory_name_code
             from fpacon.vw_fpa_sales_hierarchy
             where sales_territory_type_code in ('CORP. REVENUE')
-            group by 1,2,3,4,5,6
-            order by 1,2,3,4,5,6          
+			group by 1,2,3,4,5,6,7,8,9,10,11,12            
+			order by 1,2,3,4,5,6,7,8,9,10,11,12;            
           `)
       .then(results => results.rows);
   }

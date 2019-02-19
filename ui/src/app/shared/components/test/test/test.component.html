@@ -1,11 +1,19 @@
 
 
 
+
+<form>
+  <fin-input [(ngModel)]="val" name="pat" pattern="[A-Z0-9_\- ]*" patternMessage="Only capital alphanumeric/underscore/dash/space allowed." [required]="true"></fin-input> val: {{val}}
+</form>
+
+
+<!--
 <cui-select  [(ngModel)]="sel" [items]="items"
              empty="true" [required]="true" optionsKey="name" (ngModelChange)="doit()" ></cui-select>
 
 <div>sel: {{sel|json}}</div>
 <pre>{{items|json}}</pre>
+-->
 
 
 

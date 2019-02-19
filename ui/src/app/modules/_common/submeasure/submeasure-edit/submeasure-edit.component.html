@@ -27,7 +27,7 @@
 
       <div class="row">
       <div class="col-lg-6">
-        <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name"
+        <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name" [pattern]="UiUtil.alphanumRegex" [patternMessage]="UiUtil.alphanumMessage"
                    [notInList]="submeasureNames" notInListMessage="Sub-Measure name already exists" [required]="true" (blur)="updateReportingLevel3()"></fin-input>
         <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" [label]="!isUnallocatedGroup()?'Source*':'Source'" empty="true"
                     optionsKey="name" optionsValue="sourceId" [required]="!isUnallocatedGroup()" (ngModelChange)=sourceChange()></cui-select>

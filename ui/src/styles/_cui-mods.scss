@@ -79,6 +79,10 @@
   padding: 6px 0;
 }
 
+.fin.cui.template--cdc footer {
+  display: flex;
+}
+
 @media (min-width: $breakpoint-lg) {
   .fin.cui .header-breadcrumbs {
     margin: 16px 0;

@@ -111,7 +111,7 @@ export default class ReportController extends ControllerBase {
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.pgLookupRepo.getDollarUploadReport(body.fiscalMonth, body.submeasureKeys)
+          this.pgLookupRepo.getMappingUploadReport(body.fiscalMonth, body.submeasureKeys)
         ])
           .then(results => {
             this.measures = results[0];
@@ -130,9 +130,10 @@ export default class ReportController extends ControllerBase {
 
       case 'sales-hierarchy':
         excelSheetname = ['Sales Hierarchy'];
-        excelHeaders = ['Sales Territory 1', 'Sales Territory 2', 'Sales Territory 3', 'Sales Territory 4', 'Sales Territory 5', 'Sales Territory 6'];
-        excelProperties = ['l1_sales_territory_descr', 'l2_sales_territory_descr', 'l3_sales_territory_descr', 'l4_sales_territory_descr',
-          'l5_sales_territory_descr', 'l6_sales_territory_descr'];
+        excelHeaders = ['Sales Level 1', 'Sales Level 2', 'Sales Level 3', 'Sales Level 4', 'Sales Level 5', 'Sales Level 6',
+          'L1 Sales Territory Name Code', 'L2 Sales Territory Name Code', 'L3 Sales Territory Name Code', 'L4 Sales Territory Name Code', 'L5 Sales Territory Name Code', 'L6 Sales Territory Name Code', ];
+        excelProperties = ['l1_sales_territory_descr', 'l2_sales_territory_descr', 'l3_sales_territory_descr', 'l4_sales_territory_descr', 'l5_sales_territory_descr', 'l6_sales_territory_descr',
+          'l1_sales_territory_name_code', 'l2_sales_territory_name_code', 'l3_sales_territory_name_code', 'l4_sales_territory_name_code', 'l5_sales_territory_name_code', 'l6_sales_territory_name_code'];
         promise = this.pgLookupRepo.getSalesHierarchyReport();
         break;
 
@@ -188,29 +189,6 @@ export default class ReportController extends ControllerBase {
             this.submeasures = results[1];
             const rtn = this.submeasures.filter(doc => !!doc.groupingSubmeasureId)
               .map(sm => this.transformSubmeasure(sm));
-            return _.orderBy(rtn, ['measureName', 'name']);
-          })
-
-        break;
-
-      case '2t-submeasure-list':
-        excelSheetname = ['2t Submeasure List'];
-        excelHeaders = ['Measure Name', 'Submeasure Name', 'Fiscal Month', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'];
-        excelProperties = ['measureName', 'name', 'fiscalMonth', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
-        excelFilename = `2T_Sub_Measure_List_Report_${req.dfa.fiscalMonths.prof}.xlsx`;
-        promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
-          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
-        ])
-          .then(results => {
-            this.measures = results[0];
-            this.submeasures = results[1];
-            const rtn = this.submeasures.filter(doc => doc.indicators.twoTier === 'Y')
-              .map(sm => this.transformSubmeasure(sm))
-              .map(sm => {
-                sm.fiscalMonth = req.dfa.fiscalMonths.prof;
-                return sm;
-              });
             return _.orderBy(rtn, ['measureName', 'name']);
           })
 
@@ -380,18 +358,14 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['History'];
         excelHeaders = ['Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System',
           'Sales Level', 'Product Level', 'SCMS Level', 'Legal Entity Level', 'BE Level',
-          'SM Status', 'SM Updated By', 'SM Updated Date',
-          'RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country Match', 'Ext Theater Match', 'GL Segments',
-          'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Rule Status', 'Rule Updated By', 'Rule Updated Date'];
+          'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
+          'Status', 'Updated By', 'Updated Date'];
 
         excelProperties = [
           'fiscalMonth', 'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.measureName', 'sm.sourceName',
           'sm.inputFilterLevel.salesLevel', 'sm.inputFilterLevel.productLevel', 'sm.inputFilterLevel.scmsLevel', 'sm.inputFilterLevel.entityLevel', 'sm.inputFilterLevel.internalBELevel',
-          'sm.status', 'sm.updatedBy', 'sm.updatedDate',
-          'rule.name', 'rule.driverName', 'rule.period', 'rule.salesMatch', 'rule.productMatch', 'rule.scmsMatch', 'rule.legalEntityMatch', 'rule.beMatch', 'rule.countryMatch', 'rule.extTheaterMatch', 'rule.glSegmentsMatch',
-          'rule.sl1Select', 'rule.sl2Select', 'rule.sl2Select', 'rule.prodTGSelect', 'rule.prodBUSelect', 'rule.prodPFSelect', 'rule.scmsSelect', 'rule.beSelect',
-          'rule.status', 'rule.updatedBy', 'rule.updatedDate'
-        ];
+          'sm.rules[0]', 'sm.rules[1]', 'sm.rules[2]', 'sm.rules[3]', 'sm.rules[4]', 'sm.rules[5]', 'sm.rules[6]', 'sm.rules[7]', 'sm.rules[8]', 'sm.rules[9]', 'sm.rules[10]', 'sm.rules[11]', 'sm.rules[12]', 'sm.rules[13]', 'sm.rules[14]',
+          'sm.status', 'sm.updatedBy', 'sm.updatedDate'];
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.sourceRepo.getManyActive()
@@ -407,7 +381,6 @@ export default class ReportController extends ControllerBase {
               promises.push(Promise.all([
                 Promise.resolve(fimo),
                 this.submeasureRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
-                this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
               ]));
             });
             return Promise.all(promises);
@@ -417,21 +390,9 @@ export default class ReportController extends ControllerBase {
             results.forEach(result => {
               const fiscalMonth = result[0];
               this.submeasures = _.sortBy(result[1], 'name');
-              this.rules = result[2];
               const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
-              const rules = this.rules.map(rule => this.transformRule(rule)); // update this for more props if needed
               sms.forEach(sm => {
-                const smRules = sm.rules.map(ruleName => {
-                  const rule = _.find(rules, {name: ruleName});
-                  return rule || {name: ruleName};
-                });
-                if (!smRules.length) {
-                  rows.push({fiscalMonth, sm, rule: {}});
-                } else {
-                  smRules.forEach(rule => {
-                    rows.push({fiscalMonth, sm, rule});
-                  });
-                }
+                rows.push({fiscalMonth, sm});
               });
             });
             return _.orderBy(rows, ['fiscalMonth', 'sm.measureName', 'sm.name'], ['asc', 'asc', 'asc']);
@@ -536,87 +497,6 @@ export default class ReportController extends ControllerBase {
 
     return rule;
   }
-
-
-
-  // CSV REPORT: once we moved to multiple sheet reports, the csv report was replaced by excel report.
-  // this code continues to stagnate and would need considerably update to be current, but we'll
-  // leave it for reverence in case we need a csv output for some reason.
-
-  // for Csv reports we expect:
-  // * excelFilename: name of file it will download to
-  // * excelProperties: an array of property names to determine the properties downloaded and order
-  // * excelHeaders (optional) an array of header names for the first row of download
-  // we push headers, convert json to csv using properties, concat csv, join with line terminator and send
-  /*
-  getCsvReport(req, res, next) {
-    const body = req.body; // post request, params are in the body
-    req.query = _.omit(body, ['excelFilename', 'excelProperties', 'excelHeaders']);
-
-    if (!excelFilename || !excelProperties) {
-      next(new ApiError('Missing properties for excelDownload. Require: excelFilename, excelProperties.', null, 400));
-      return;
-    }
-    let arrRtn = [];
-    if (excelHeaders) {
-      arrRtn.push(svrUtil.cleanCsv(excelHeaders));
-    }
-
-    let promise;
-    switch (req.params.report) {
-      case 'dollar-upload':
-        delete req.query.moduleId;
-        promise = this.dollarUploadCtrl.getManyPromise(req);
-        break;
-      case 'mapping-upload':
-        delete req.query.moduleId;
-        promise = this.mappingUploadCtrl.getManyPromise(req);
-        break;
-      case 'product-hierarchy':
-        promise = this.pgLookupRepo.getProductHierarchyReport();
-        break
-      case 'sales-hierarchy':
-        promise = this.pgLookupRepo.getSalesHierarchyReport();
-        break
-      case 'dept-upload':
-        delete req.query.moduleId;
-        promise = this.deptUploadCtrl.getManyPromise(req);
-        break
-      case 'submeasure-grouping':
-        promise = this.pgLookupRepo.getSubmeasureGroupingReport();
-        break
-      case '2t-submeasure-list':
-        promise = this.pgLookupRepo.get2TSubmeasureListReport();
-        break
-      case 'disti-direct':
-        promise = this.pgLookupRepo.getDistiToDirectMappingReport();
-        break
-      case 'alternate-sl2':
-        promise = this.pgLookupRepo.getAlternateSL2Report();
-        break
-      case 'corp-adjustment':
-        promise = this.pgLookupRepo.getCorpAdjustmentReport();
-        break
-      case 'sales-split-percentage':
-        promise = this.pgLookupRepo.getSalesSplitPercentageReport();
-        break
-      default:
-        next(new ApiError('Bad report type', null, 400));
-        return;
-    }
-
-    promise
-      .then(results => results.rows || results)
-      .then(docs => svrUtil.convertJsonToCsv(docs, svrUtil.cleanCsvArr(excelProperties)))
-      .then(arrCsv => {
-        arrRtn = arrRtn.concat(arrCsv);
-        res.set('Content-Type', 'text/csv');
-        res.set('Content-Disposition', 'attachment; filename="' + excelFilename + '"');
-        res.send(arrRtn.join('\n'));
-      })
-      .catch(next);
-  }
-*/
 
 }
 

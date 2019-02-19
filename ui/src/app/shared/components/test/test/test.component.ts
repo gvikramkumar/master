@@ -9,11 +9,14 @@ import {environment} from '../../../../../environments/environment';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
+val: string;
+  /*
   sel;
   items = [
     {name: 'dank', age: 50},
     {name: 'carl', age: 60},
   ]
+*/
 
   constructor(private uiUtil: UiUtil) { }
 
@@ -21,7 +24,7 @@ export class TestComponent implements OnInit {
   }
 
   doit() {
-    console.log('sel', this.sel);
+    // console.log('sel', this.sel);
   }
 
 
