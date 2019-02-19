@@ -93,20 +93,15 @@
     </div> -->
 
     <!-- People Involved -->
-    <div class="card card--raised base-margin-top">
-
-        <h5 class="half-margin-bottom">People Involved
-            <!-- <a href="javascript:;" class="pull-right" (click)="showDialog()">
-                <span class="icon-pencil"></span> Edit</a> -->
-        </h5>
-        <div class="divider divider--compressed"></div>
+    <div class="card card--raised base-margin-top stakeholders">
+      <p-accordion>
+      <p-accordionTab header="People Involved" [selected]="true">
 
         <ul class="list">
 
             <li *ngFor="let key of getKeys(stakeData)">
-                <div class="ui-accordion-header">{{key}} ({{stakeData[key].length}})<span
-                        class="icon-chevron-up icon-small pull-right"></span></div>
-                <div class="ui-accordion-content">
+                <div class="half-margin-bottom">{{key}} ({{stakeData[key].length}})</div>
+                <div class="half-margin-bottom">
                     <div *ngFor="let coOwners of stakeData[key]">
                         <div class="flex-center-vertical">
                             <!-- Team Member Name Avatar -->
@@ -131,11 +126,14 @@
                                 <div>{{coOwners['emailId']}}</div>
                             </div>
                         </div>
-                        <div class="divider divider--compressed"></div>
+                        <!-- <div class="divider divider--compressed"></div> -->
                     </div>
                 </div>
             </li>
         </ul>
+        </p-accordionTab>
+        </p-accordion>
+        </div>
    <!-- Dialog - Phase Process  -->
         <p-dialog [showHeader]="false" [responsive]="true" [minY]="70" [(visible)]="displayOfferPhase"
             [closable]="true">

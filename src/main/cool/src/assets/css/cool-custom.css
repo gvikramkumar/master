@@ -584,6 +584,27 @@ span[class*="display-"] {
   padding-right: 10px;
 }
 
+
+.cool.cui .stakeholders span.ui-accordion-header-text {
+  font-size: 2rem;
+  font-weight: 100;
+  color: #58585b;
+  padding-left: 20px;
+ }
+.cool.cui .card.stakeholders {
+  padding: 0;
+}
+.cool.cui .card.stakeholders ul li{
+  border-bottom:1px solid #dfdfdf;
+  margin-bottom: 15px;
+}
+.cool.cui .card.stakeholders ul li:last-child{
+  border-bottom:none;
+}
+.cool.cui .card.stakeholders .ui-accordion .ui-accordion-header {
+  margin-top: 0;
+}
+
 /* modals */
 .cool.cui span.icon-close {
   cursor: pointer;
