@@ -385,7 +385,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const createActionPayload = {};
     createActionPayload['caseId'] = this.caseId;
     createActionPayload['offerId'] = this.offerId;
-    createActionPayload['owner'] = this.assigneeValue;
+    createActionPayload['owner'] = this.offerBuilderdata['offerOwner'];
     createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
     createActionPayload['actionTitle']=this.titleValue;
     createActionPayload['assignee']=this.assigneeValue;
