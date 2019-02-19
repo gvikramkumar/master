@@ -238,6 +238,7 @@ export class StakeholderFullComponent implements OnInit {
 
     console.log('onAdd() called');
     let tempCollaboratorList: Collaborators[] = [];
+
     const obj = {
       name: this.val['userName'],
       email: this.val['_id'] + '@cisco.com',
@@ -248,7 +249,7 @@ export class StakeholderFullComponent implements OnInit {
       stakeholderDefaults: false
     };
 
-    if (this.Stakeholders.findIndex(k => k._id === this.val['_id']) == -1) {
+    if (this.Stakeholders.findIndex(k => k._id === this.val['_id']) === -1) {
       this.Stakeholders.push(obj);
       if (this.stakeHolderInfo[obj['offerRole']] == null) {
         this.stakeHolderInfo[obj['offerRole']] = [];
@@ -275,12 +276,12 @@ export class StakeholderFullComponent implements OnInit {
           "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
           "offerRole": element.offerRole,
           "name": element.name
-        }
+        };
         stakeholdersPayLoad['stakeholders'].push(obj);
-      })
+      });
     });
 
-    this.stakeholderfullService.proceedToStrageyReview(stakeholdersPayLoad).subscribe(data => {
+    this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe(data => {
       let proceedPayload = {
         "taskId": "",
         "userId": this.offerBuilderdata['offerOwner'],
@@ -293,17 +294,18 @@ export class StakeholderFullComponent implements OnInit {
     });
 
     this.stakeholderForm.reset();
+
   }
 
   addToStakeData(res) {
-    console.log(res);
+
     let keyUsers = res['stakeholders'];
     keyUsers.forEach(user => {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
       this.stakeData[user['offerRole']].push({ name: user['_id'], email: "sample@sample.com" });
-    })
+    });
   }
 
   addCollaborator() {
@@ -332,7 +334,7 @@ export class StakeholderFullComponent implements OnInit {
       })
     });
 
-    this.stakeholderfullService.proceedToStrageyReview(stakeholdersPayLoad).subscribe(data => {
+    this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe(data => {
       let proceedPayload = {
         "taskId": "",
         "userId": this.offerBuilderdata['offerOwner'],

@@ -56,7 +56,6 @@
                     <span *ngIf="actionData.attachment == true" class="offerDesc"
                       (click)="getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
 
-
                     <!-- my new code coming here -->
                     <!-- <ng-template #popCommentContent ptemplate="body">
                       <div  class="popover" style="width:501px;left:230px">
@@ -81,6 +80,9 @@
                   </ng-template>
                 </p-column>
                 <p-column field="createdBy" sortable="true" header="OFFER CREATED BY">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span>{{actionData.offerOwner}} <br /></span>
+                  </ng-template>
                 </p-column>
                 <p-column field="" sortable="true" header="FUNCTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
@@ -88,6 +90,9 @@
                   </ng-template>
                 </p-column>
                 <p-column field="assigneeId" sortable="true" header="ASSIGNED USER">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span>{{actionData.assigneeId}} <br /></span>
+                  </ng-template>
                 </p-column>
                 <p-column field="dueDate" header="DUE DATE" sortable="true">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
@@ -231,8 +236,7 @@
             <div class="row text-right">
               <div class="form-actions">
                 <button class="btn btn--secondary" (click)="closeActionDailog()">Cancel</button>
-                <button class="btn btn--primary" type="submit"
-                  [disabled]="!createActionForm.valid">Create
+                <button class="btn btn--primary" type="submit" [disabled]="!createActionForm.valid">Create
                   an Action</button>
               </div>
             </div>
