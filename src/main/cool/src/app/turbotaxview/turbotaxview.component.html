@@ -1,5 +1,17 @@
 <!--turbo tax view-->
-<div>
+<div class="row" *ngIf="!phaseProcessingCompleted">
+    <div class="loader">
+        <div class="loading-dots loading-dots--muted" aria-label="Loading, please wait...">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<div class="row text-xlarge text-center text-muted" *ngIf=" phaseProcessingCompleted && isOfferPhaseBlank">
+    No Content Available
+</div>
+<div *ngIf="phaseProcessingCompleted && !isOfferPhaseBlank">
     <div class="row">
         <!-- Offer Phase widget -->
         <div class="col-md-12">
@@ -11,8 +23,7 @@
             <h6>Offer Phase Details </h6>
         </div>
         <div class="col-sm-7">
-
-            <div class="ui-steps ui-steps--success ui-steps--tiny turbo-mileStone" *ngIf="phaseProcessingCompleted">
+            <div class="ui-steps ui-steps--success ui-steps--tiny turbo-mileStone">
                 <div class="ui-step {{mileStoneStatus[0].status}}">
                     <div class="step__icon">
                         <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
@@ -50,7 +61,7 @@
     <div class="divider divider--compressed"></div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf=" phaseProcessingCompleted && !isOfferPhaseBlank">
     <div class="col-md-12">
         <div>
             <table class="table table--compressed table--nostripes phase-popover half-margin-top">
@@ -137,3 +148,4 @@
             </table>
         </div>
     </div>
+</div>

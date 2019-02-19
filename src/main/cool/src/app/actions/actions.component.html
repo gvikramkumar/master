@@ -35,18 +35,8 @@
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
                 <p-column field="offerId" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <a (click)="showOfferPopUp($event,offerData,popturboContent)">{{actionData.offerId}}</a><br />
+                    <a (click)="showOfferPopUp($event,actionData,popturboContent)">{{actionData.offerId}}</a><br />
                     <span>{{actionData.offerName}}</span>
-                    <!--new code strarts here-->
-
-                    <p-overlayPanel #popturboContent [showCloseIcon]="true">
-                      <div *ngIf="selectedCaseId" class="base-padding" style="min-width:700px">
-                        <app-turbotaxview [data]="actionData"></app-turbotaxview>
-                      </div>
-                    </p-overlayPanel>
-
-                    <!--ends here-->
-
                   </ng-template>
                 </p-column>
                 <p-column field="actions" sortable="true" header="ACTION">
@@ -55,7 +45,6 @@
                     <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
                     <span *ngIf="actionData.attachment == true" class="offerDesc"
                       (click)="getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
-
 
                     <!-- my new code coming here -->
                     <!-- <ng-template #popCommentContent ptemplate="body">
@@ -80,7 +69,10 @@
                       pTooltip="Comments" placement="top"></span>
                   </ng-template>
                 </p-column>
-                <p-column field="createdBy" sortable="true" header="OFFER CREATED BY">
+                <p-column field="createdBy" sortable="true" header="ACTION CREATED BY">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span>{{actionData.createdBy}} <br /></span>
+                  </ng-template>
                 </p-column>
                 <p-column field="" sortable="true" header="FUNCTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
@@ -88,6 +80,9 @@
                   </ng-template>
                 </p-column>
                 <p-column field="assigneeId" sortable="true" header="ASSIGNED USER">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <span>{{actionData.assigneeId}} <br /></span>
+                  </ng-template>
                 </p-column>
                 <p-column field="dueDate" header="DUE DATE" sortable="true">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
@@ -231,8 +226,7 @@
             <div class="row text-right">
               <div class="form-actions">
                 <button class="btn btn--secondary" (click)="closeActionDailog()">Cancel</button>
-                <button class="btn btn--primary" type="submit"
-                  [disabled]="!createActionForm.valid">Create
+                <button class="btn btn--primary" type="submit" [disabled]="!createActionForm.valid">Create
                   an Action</button>
               </div>
             </div>
@@ -240,5 +234,16 @@
         </div>
       </div>
     </p-dialog>
+
+    <!--Offer Details Pop up-->
+
+    <p-overlayPanel #popturboContent [showCloseIcon]="true">
+      <div *ngIf="selectedOffer" class="base-padding" style="min-width:700px">
+        <app-turbotaxview [caseId]="selectedOffer.caseId" [offerId]="selectedOffer.offerId"></app-turbotaxview>
+      </div>
+    </p-overlayPanel>
+
+
+
   </div>
 </div>

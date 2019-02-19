@@ -70,74 +70,73 @@
 
     <!-- <Scalapbility Index> -->
     <!-- <div class="card card--raised base-margin-top">
-        <h5 class="half-margin-bottom">Scalability Index</h5>
-        <div class="card__footer">
-            <a href="javascript:;" (click)="goScalabilityIndex()">View Offer Scalability Details</a>
-        </div>
-        <div class="gauge-container">
-            <div class="gauge gauge--small gauge--success" data-percentage="50">
-                <div class="gauge__circle">
-                    <div class="mask full">
-                        <div class="fill"></div>
+            <h5 class="half-margin-bottom">Scalability Index</h5>
+            <div class="card__footer">
+                <a href="javascript:;" (click)="goScalabilityIndex()">View Offer Scalability Details</a>
+            </div>
+            <div class="gauge-container">
+                <div class="gauge gauge--small gauge--success" data-percentage="50">
+                    <div class="gauge__circle">
+                        <div class="mask full">
+                            <div class="fill"></div>
+                        </div>
+                        <div class="mask half">
+                            <div class="fill"></div>
+                            <div class="fill fix"></div>
+                        </div>
                     </div>
-                    <div class="mask half">
-                        <div class="fill"></div>
-                        <div class="fill fix"></div>
+                    <div class="gauge__inset">
+                        <div class="gauge__percentage">50</div>
                     </div>
-                </div>
-                <div class="gauge__inset">
-                    <div class="gauge__percentage">50</div>
                 </div>
             </div>
-        </div>
-    </div> -->
+        </div> -->
 
     <!-- People Involved -->
     <div class="card card--raised base-margin-top stakeholders">
-      <p-accordion>
-      <p-accordionTab header="People Involved" [selected]="true">
+        <p-accordion>
+            <p-accordionTab header="People Involved" [selected]="true">
 
-        <ul class="list">
+                <ul class="list">
 
-            <li *ngFor="let key of getKeys(stakeData)">
-                <div class="half-margin-bottom">{{key}} ({{stakeData[key].length}})</div>
-                <div class="half-margin-bottom">
-                    <div class="half-margin-bottom" *ngFor="let coOwners of stakeData[key]">
-                        <div class="flex-center-vertical">
-                            <!-- Team Member Name Avatar -->
-                            <span class="avatar-ico">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"
-                                    id="fwt-profile-button-loggedin" role="img">
-                                    <title id="fwt-profile-button-loggedin-title"></title>
-                                    <g fill="none" fill-rule="evenodd">
-                                        <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
-                                            x="0" y="0"></path>
-                                        <text fill="#007493" font-family="CiscoSans, Arial, sans-serif"
-                                            font-weight="300" font-size="16" x="50%" y="50%" dy=".35em"
-                                            text-anchor="middle"
-                                            id="fwt-initials">{{getInitialChar(coOwners['userName'])}}</text>
-                                    </g>
-                                </svg>
-                            </span>
-                            <div class="flex-fluid text-left half-margin-left">
-                                <div class="text-bold">{{coOwners['userName']}}</div>
-                                <div>{{coOwners['emailId']}}</div>
+                    <li *ngFor="let key of getKeys(stakeData)">
+                        <div class="half-margin-bottom">{{key}} ({{stakeData[key].length}})</div>
+                        <div class="half-margin-bottom">
+                            <div class="half-margin-bottom" *ngFor="let coOwners of stakeData[key]">
+                                <div class="flex-center-vertical">
+                                    <!-- Team Member Name Avatar -->
+                                    <span class="avatar-ico">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                            viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
+                                            <title id="fwt-profile-button-loggedin-title"></title>
+                                            <g fill="none" fill-rule="evenodd">
+                                                <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
+                                                    x="0" y="0"></path>
+                                                <text fill="#007493" font-family="CiscoSans, Arial, sans-serif"
+                                                    font-weight="300" font-size="16" x="50%" y="50%" dy=".35em"
+                                                    text-anchor="middle"
+                                                    id="fwt-initials">{{getInitialChar(coOwners['userName'])}}</text>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <div class="flex-fluid text-left half-margin-left">
+                                        <div class="text-bold">{{coOwners['userName']}}</div>
+                                        <div>{{coOwners['emailId']}}</div>
+                                    </div>
+                                </div>
+                                <!-- <div class="divider divider--compressed"></div> -->
                             </div>
                         </div>
-                        <!-- <div class="divider divider--compressed"></div> -->
-                    </div>
-                </div>
-            </li>
-        </ul>
-        </p-accordionTab>
+                    </li>
+                </ul>
+            </p-accordionTab>
         </p-accordion>
-        </div>
-   <!-- Dialog - Phase Process  -->
-        <p-dialog [showHeader]="false" [responsive]="true" [minY]="70" [(visible)]="displayOfferPhase"
-            [closable]="true">
-            <div class="overlay-phases">
+    </div>
+    <!-- Dialog - Phase Process  -->
+    <p-dialog [showHeader]="false" [responsive]="true" [minY]="70" [(visible)]="displayOfferPhase" [closable]="true">
+        <div class="overlay-phases">
             <div class="pull-right phase-modal">
                 <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
             </div>
@@ -191,7 +190,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12 accordion half-margin-bottom">
-                  <!-- <div class="col-md-12"> -->
+                    <!-- <div class="col-md-12"> -->
                     <div class="alert alert--danger" role="alert" *ngIf="showAlert">
                         <div class="alert__icon icon-error-outline"></div>
                         <div class="alert__message">
@@ -199,7 +198,7 @@
                         </div>
                         <a href="javascript:;" class="alert__close icon-close" (click)="removeAlert()"></a>
                     </div>
-                <!-- </div> -->
+                    <!-- </div> -->
                     <p-accordion>
                         <p-accordionTab header="Ideate" [selected]="true">
                             <div class="responsive-table">
@@ -227,7 +226,7 @@
                                                 </ng-template>
                                             </td>
                                             <td [ngClass]=" (ideateData.status=='Completed'
-                                                        )?'text-success':'text-warning'">
+                                                            )?'text-success':'text-warning'">
                                                 {{ideateData.status}}
                                             </td>
                                             <td>
@@ -321,216 +320,216 @@
 
                 </div>
             </div>
-          </div>
-        </p-dialog>
+        </div>
+    </p-dialog>
     <!-- Dialog - Add / Edit Collaborators  -->
-        <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
-            [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">
-            <form [formGroup]="addEditCollaboratorsForm" (ngSubmit)="onSearch()">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group half-margin-bottom">
-                            <div class="form-group__text">
-                                <input id="name" placeholder="Search by Name, Email" class="form-control"
-                                    formControlName="name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group half-margin-bottom">
-                            <div class="form-group__text select">
-                                <select id="selectedSearchBe" class="form-control" formControlName="businessEntity">
-                                    <option [ngValue]="null">Business Entity</option>
-                                    <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
-                                        {{businessEntity}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group half-margin-bottom">
-                            <div class="form-group__text select">
-                                <select id="selectedFunction" class="form-control" formControlName="functionName">
-                                    <option [ngValue]="null">Function</option>
-                                    <option *ngFor="let functionalRole of funcionalRoleList" value={{functionalRole}}>
-                                        {{functionalRole}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn&#45;&#45;secondary" type="submit">Search</button>
-                </div>
-            </form>
-            <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="email" #dt>
-                <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
-                <p-column field="functionalRole" header="Function"></p-column>
-                <!-- <p-column field="applicationRole" header="Roles">
-                    <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
-                        <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
-                            [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
-                        </p-dropdown>
-                    </ng-template>
-                </p-column> -->
-                <p-column field="name" header="Name"></p-column>
-                <p-column field="email" header="Email"></p-column>
-                <p-column field="businessEntity" header="BusinessEntity"></p-column>
-            </p-dataTable>
-            <div class="modal__footer">
-                <div class="card__footer form-actions">
-                    <button class="btn base-margin-top" (click)="closeDailog()">Cancel</button>
-                    <button class="btn btn&#45;&#45;primary base-margin-top" (click)="addCollaborator()">Add</button>
-                </div>
-            </div>
-        </p-dialog>
-    <!-- Dialog - Lead Time Calculation  -->
-        <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
-            [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
+    <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
+        [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">
+        <form [formGroup]="addEditCollaboratorsForm" (ngSubmit)="onSearch()">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card base-padding">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="row">
-                                                    <h4 class="display-1 text-success">{{noOfWeeksDifference}}</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h5 class="label">Lead Time Accessed for Your Offer</h5>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="row  base-margin-top">
-                                            <h2 class="text-success">{{expectedLaunchDate}}</h2>
-                                            <h5>Offer Launch Date</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row base-margin-top"></div>
-                                <div class="divider"></div>
-                                <div class="row base-margin-top">
-                                    <div class="col-md-12">
-                                        <h6 class="text-indigo">Edit Milestones</h6>
-                                    </div>
-                                </div>
-                                <div class="row base-margin-top progress-group">
-                                    <div class="col-md-3">
-                                        <h6 class="subheader">Strategy Review</h6>
-                                        <h6 class="display-6">08-OCT-2018</h6>
-                                        <div class="progressbar progressbar--large" data-percentage="0">
-                                            <div class="progressbar__fill"></div>
-                                            <div class="progressbar__label">YOU ARE HERE</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h6 class="subheader">Design Review</h6>
-                                        <h6 class="display-6">26-OCT-2018</h6>
-                                        <div class="progressbar progressbar--large" data-percentage="0">
-                                            <div class="progressbar__fill"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h6 class="subheader">Readiness Review</h6>
-                                        <h6 class="display-6">26-OCT-2018</h6>
-                                        <div class="progressbar progressbar--large" data-percentage="0">
-                                            <div class="progressbar__fill"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h6 class="subheader">LAUNCH</h6>
-                                        <h6 class="display-6">01-NOV-2018</h6>
-                                        <div class="progressbar progressbar--large" data-percentage="0">
-                                            <div class="progressbar__fill"></div>
-                                            <div class="progressbar__label">LEAD TIME</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="row base-margin-top"></div>
-                                    <div class="row base-margin-top"></div>
-                                    <div class="row base-margin-top"></div> -->
-                            </div>
+                <div class="col-md-3">
+                    <div class="form-group half-margin-bottom">
+                        <div class="form-group__text">
+                            <input id="name" placeholder="Search by Name, Email" class="form-control"
+                                formControlName="name">
                         </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <h5>Lead Time Statistics for {{mmModel}} (SAAS) in {{leadTimeYear}}</h5>
-                                <div class="row base-margin-top">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <div class="form-group__text">
-                                                <label>10th Percentile</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group half-margin-bottom">
+                        <div class="form-group__text select">
+                            <select id="selectedSearchBe" class="form-control" formControlName="businessEntity">
+                                <option [ngValue]="null">Business Entity</option>
+                                <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
+                                    {{businessEntity}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group half-margin-bottom">
+                        <div class="form-group__text select">
+                            <select id="selectedFunction" class="form-control" formControlName="functionName">
+                                <option [ngValue]="null">Function</option>
+                                <option *ngFor="let functionalRole of funcionalRoleList" value={{functionalRole}}>
+                                    {{functionalRole}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn&#45;&#45;secondary" type="submit">Search</button>
+            </div>
+        </form>
+        <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="email" #dt>
+            <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
+            <p-column field="functionalRole" header="Function"></p-column>
+            <!-- <p-column field="applicationRole" header="Roles">
+                        <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
+                            <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
+                                [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
+                            </p-dropdown>
+                        </ng-template>
+                    </p-column> -->
+            <p-column field="name" header="Name"></p-column>
+            <p-column field="email" header="Email"></p-column>
+            <p-column field="businessEntity" header="BusinessEntity"></p-column>
+        </p-dataTable>
+        <div class="modal__footer">
+            <div class="card__footer form-actions">
+                <button class="btn base-margin-top" (click)="closeDailog()">Cancel</button>
+                <button class="btn btn&#45;&#45;primary base-margin-top" (click)="addCollaborator()">Add</button>
+            </div>
+        </div>
+    </p-dialog>
+    <!-- Dialog - Lead Time Calculation  -->
+    <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
+        [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card base-padding">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <h4 class="display-1 text-success">{{noOfWeeksDifference}}</h4>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <span>Your Lead Time</span>
-                                        <h6>{{noOfWeeksDifference}}</h6>
+                                    <h5 class="label">Lead Time Accessed for Your Offer</h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row  base-margin-top">
+                                        <h2 class="text-success">{{expectedLaunchDate}}</h2>
+                                        <h5>Offer Launch Date</h5>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="progressbar" data-percentage="35">
-                                            <div class="progressbar__fill"></div>
+                            </div>
+                            <div class="row base-margin-top"></div>
+                            <div class="divider"></div>
+                            <div class="row base-margin-top">
+                                <div class="col-md-12">
+                                    <h6 class="text-indigo">Edit Milestones</h6>
+                                </div>
+                            </div>
+                            <div class="row base-margin-top progress-group">
+                                <div class="col-md-3">
+                                    <h6 class="subheader">Strategy Review</h6>
+                                    <h6 class="display-6">08-OCT-2018</h6>
+                                    <div class="progressbar progressbar--large" data-percentage="0">
+                                        <div class="progressbar__fill"></div>
+                                        <div class="progressbar__label">YOU ARE HERE</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="subheader">Design Review</h6>
+                                    <h6 class="display-6">26-OCT-2018</h6>
+                                    <div class="progressbar progressbar--large" data-percentage="0">
+                                        <div class="progressbar__fill"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="subheader">Readiness Review</h6>
+                                    <h6 class="display-6">26-OCT-2018</h6>
+                                    <div class="progressbar progressbar--large" data-percentage="0">
+                                        <div class="progressbar__fill"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="subheader">LAUNCH</h6>
+                                    <h6 class="display-6">01-NOV-2018</h6>
+                                    <div class="progressbar progressbar--large" data-percentage="0">
+                                        <div class="progressbar__fill"></div>
+                                        <div class="progressbar__label">LEAD TIME</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row base-margin-top"></div>
+                                        <div class="row base-margin-top"></div>
+                                        <div class="row base-margin-top"></div> -->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <h5>Lead Time Statistics for {{mmModel}} (SAAS) in {{leadTimeYear}}</h5>
+                            <div class="row base-margin-top">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="form-group__text">
+                                            <label>10th Percentile</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <h6>2.2 WEEKS</h6>
+                                </div>
+                                <div class="col-md-4">
+                                    <span>Your Lead Time</span>
+                                    <h6>{{noOfWeeksDifference}}</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="progressbar" data-percentage="35">
+                                        <div class="progressbar__fill"></div>
                                     </div>
                                 </div>
-                                <div class="row base-margin-top">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <div class="form-group__text">
-                                                <label>Average</label>
-                                            </div>
+                                <div class="col-md-2">
+                                    <h6>2.2 WEEKS</h6>
+                                </div>
+                            </div>
+                            <div class="row base-margin-top">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="form-group__text">
+                                            <label>Average</label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="progressbar">
-                                            <div class="customProgressBarFill" [ngStyle]="{'width.%':progressBarWidth}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h6>{{averageWeekCount}} WEEKS</h6>
-                                    </div>
-                                </div>
-                                <div class="row base-margin-top">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <div class="form-group__text">
-                                                <label>90th Percentile</label>
-                                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="progressbar">
+                                        <div class="customProgressBarFill" [ngStyle]="{'width.%':progressBarWidth}">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="progressbar progressbar--success" data-percentage="85">
-                                            <div class="progressbar__fill"></div>
+                                <div class="col-md-2">
+                                    <h6>{{averageWeekCount}} WEEKS</h6>
+                                </div>
+                            </div>
+                            <div class="row base-margin-top">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="form-group__text">
+                                            <label>90th Percentile</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <h6>5.7 WEEKS</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="progressbar progressbar--success" data-percentage="85">
+                                        <div class="progressbar__fill"></div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <span>0 WEEKS</span>&nbsp;<span>1 WEEKS</span>&nbsp;<span>2
-                                            WEEKS</span>&nbsp;<span>3
-                                            WEEKS</span>&nbsp;<span>4 WEEKS</span>&nbsp;<span>5
-                                            WEEKS</span>&nbsp;<span>6
-                                            WEEKS</span>
-                                    </div>
+                                <div class="col-md-2">
+                                    <h6>5.7 WEEKS</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span>0 WEEKS</span>&nbsp;<span>1 WEEKS</span>&nbsp;<span>2
+                                        WEEKS</span>&nbsp;<span>3
+                                        WEEKS</span>&nbsp;<span>4 WEEKS</span>&nbsp;<span>5
+                                        WEEKS</span>&nbsp;<span>6
+                                        WEEKS</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </p-dialog>
+        </div>
+    </p-dialog>
 
-    </div>
+</div>

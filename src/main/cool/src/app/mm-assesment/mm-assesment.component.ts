@@ -41,17 +41,19 @@ export class MmAssesmentComponent implements OnInit {
   message = {};
   withRouter = true;
 
-  stakeData = {};
   offerId: string;
+  offerName:string;
+  offerOwner:string;
+
   primaryBE: string;
   derivedMM: string;
   offerBuilderdata = {};
   displayLeadTime = false;
   noOfWeeksDifference: string;
+
+  stakeData = {};
   stakeHolderInfo = {};
   Stakeholders: any[] = [];
-  offerName;
-  offerOwner;
 
   canClickNextStep = false;
   canClickTab = false;
@@ -106,9 +108,11 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   ngOnInit() {
+
     if (this.router.url.match(/offerDimension/) !== null) {
       this.dimensionMode = true;
     }
+
     if (this.dimensionMode) {
       this.canClickTab = true;
     }
@@ -133,6 +137,7 @@ export class MmAssesmentComponent implements OnInit {
           });
         });
       }
+
       if (offerDetailRes['additionalCharacteristics'] != null) {
         offerDetailRes['additionalCharacteristics'].forEach(selected => {
           if (selectedCharacteristics[selected['group']] == null) {
@@ -146,7 +151,6 @@ export class MmAssesmentComponent implements OnInit {
           });
         });
       }
-      console.log("selectedCharactersistics", selectedCharacteristics);
 
       this.oldselectedCharacteristics = selectedCharacteristics;
 
@@ -157,6 +161,7 @@ export class MmAssesmentComponent implements OnInit {
       if (offerDetailRes['derivedMM'] != null && offerDetailRes['derivedMM'] !== '') {
         this.canClickNextStep = true;
       }
+
       if (offerDetailRes['overallStatus'] == null) {
         this.message = { contentHead: 'Great Work!', content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.', color: 'black' };
       } else if (offerDetailRes['overallStatus'] === 'Aligned') {
@@ -174,18 +179,23 @@ export class MmAssesmentComponent implements OnInit {
       }
 
       this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
+
         that.offerBuilderdata = data;
         that.offerBuilderdata['BEList'] = [];
         that.offerBuilderdata['BUList'] = [];
+
         if (that.offerBuilderdata['primaryBEList'] != null) {
           that.offerBuilderdata['BEList'] = that.offerBuilderdata['BEList'].concat(that.offerBuilderdata['primaryBEList']);
         }
+
         if (that.offerBuilderdata['secondaryBEList'] != null) {
           that.offerBuilderdata['BEList'] = that.offerBuilderdata['BEList'].concat(that.offerBuilderdata['secondaryBEList']);
         }
+
         if (that.offerBuilderdata['primaryBUList'] != null) {
           that.offerBuilderdata['BUList'] = that.offerBuilderdata['BUList'].concat(that.offerBuilderdata['primaryBUList']);
         }
+
         if (that.offerBuilderdata['secondaryBUList'] != null) {
           that.offerBuilderdata['BUList'] = that.offerBuilderdata['BUList'].concat(that.offerBuilderdata['secondaryBUList']);
         }
@@ -194,6 +204,7 @@ export class MmAssesmentComponent implements OnInit {
           this.getStakeData(offerDetailRes['derivedMM']);
         }
       });
+
       // Get Attributes
       this.monetizationModelService.getAttributes().subscribe(data => {
         that.offerData = data;
@@ -213,32 +224,32 @@ export class MmAssesmentComponent implements OnInit {
             });
             index += 1;
           });
+
           this.offerData['offerId'] = this.currentOfferId;
           this.offerData['mmChoice'] = 'REVALIDATE';
           this.offerData['mmId'] = null;
           let postData = this.offerData;
           postData['groups'] = this.offerData['groups'];
+
           this.monetizationModelService.toNextSetp(postData).subscribe(data => {
             this.groupData.splice(1);
             this.groupNames.splice(1);
             data['groups'].forEach(group => {
               this.getGroupData(group, selectedCharacteristics, true);
             });
+
             if (this.dimensionMode === true) {
-              // dimension page, remove the first tab
-              // that.dimensionFirstGroupData = that.groupData[0];
-              // that.dimensionFirstGroupName = that.groupNames[0];
-              // that.groupData.shift();
-              // that.groupNames.shift();
               this.groupData.shift();
               this.groupNames.shift();
             }
+
           });
         }
 
         if (this.selectedGroupData.length > 0) {
           alert("no final Group data");
         }
+
         if (this.dimensionMode === true) {
           // dimension page, remove the first tab
           that.dimensionFirstGroupData = that.groupData[0];
@@ -250,9 +261,11 @@ export class MmAssesmentComponent implements OnInit {
 
       });
     });
+
     // Get StakeHolder
     let that = this;
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+
       this.firstData = data;
       this.offerName = data['offerName'];
       this.offerOwner = data['offerOwner'];
@@ -269,11 +282,13 @@ export class MmAssesmentComponent implements OnInit {
       );
 
       this.stakeHolderInfo = {};
-      // this.processStakeHolderData(this.data);
+
       for (let i = 0; i <= this.data.length - 1; i++) {
+
         if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
           this.stakeHolderInfo[this.data[i]['offerRole']] = [];
         }
+
         this.stakeHolderInfo[this.data[i]['offerRole']].push(
           {
             userName: this.data[i]['name'],
@@ -289,14 +304,18 @@ export class MmAssesmentComponent implements OnInit {
       this.stakeData = this.stakeHolderInfo;
 
     });
+
   }
 
   getGroupData(group, selectedCharacteristics, toNextSetpFlag = false) {
+
     if (toNextSetpFlag && group['groupName'] === 'Offer Characteristics') {
       return;
     }
-    this.groupNames.push(group['groupName']);
+
     let curGroup = {};
+    this.groupNames.push(group['groupName']);
+
     group['subGroup'].forEach(g => {
       if (Object.keys(selectedCharacteristics).length !== 0) {
         this.showEditbutton = true;
@@ -329,8 +348,10 @@ export class MmAssesmentComponent implements OnInit {
   // Attributes Selection Rules
 
   getSubgroupAttributes(curGroup, groupName) {
-    let offerComponentAttrs = curGroup[groupName];
+
     let res = [];
+    let offerComponentAttrs = curGroup[groupName];
+
     offerComponentAttrs.forEach(function (attr) {
       if (attr.status === 1) {
         res.push(attr.name);
@@ -355,8 +376,10 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   changeSubGroupType(curGroup) {
+
     let selectedAttrs = this.getSubgroupAttributes(curGroup, 'Offer Components');
     this.clearSubGroupType(curGroup);
+
     if (selectedAttrs.length === 1 && selectedAttrs.indexOf('SW - SaaS') !== -1) {
       let perpetual = curGroup['Licensing'].find(obj => {
         return obj.name === 'Perpetual';
@@ -496,7 +519,6 @@ export class MmAssesmentComponent implements OnInit {
     this.selectedGroupData = this.groupData;
   }
 
-
   toPrevStep() {
     if (this.activeTabIndex > 0) {
       this.activeTabIndex -= 1;
@@ -507,6 +529,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toNextStep() {
+
     if (this.activeTabIndex === 0 && !this.dimensionMode) {
       this.canClickTab = true;
       var index = 0;
@@ -573,9 +596,6 @@ export class MmAssesmentComponent implements OnInit {
       }
     );
 
-
-
-
     this.monetizationModelService.showStakeholders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
 
       // Populate Stake Holders Data, If Empty
@@ -609,12 +629,15 @@ export class MmAssesmentComponent implements OnInit {
           });
 
         keyUsers.forEach(user => {
+
+          const curUser = user;
+          curUser['stakeholderDefaults'] = true;
+
           if (this.stakeData[user['userMappings'][0]['functionalRole']] == null) {
             this.stakeData[user['userMappings'][0]['functionalRole']] = [];
           }
-          const curUser = user;
-          curUser['stakeholderDefaults'] = true;
           this.stakeData[user['userMappings'][0]['functionalRole']].push(curUser);
+
         });
 
       } else {

@@ -20,7 +20,8 @@ export class StakeholderfullService {
    }
 
 
-   proceedToStrageyReview(data) {
+   updateOfferDetails(data) {
+
     let url = this.environmentService.REST_API_UPDATE_OFFER;
     const httpOptions = {
       headers: new HttpHeaders({
@@ -29,7 +30,7 @@ export class StakeholderfullService {
       }),
       withCredentials: true
     }; 
-    
+
     return this._http.post(url, data, httpOptions);
   }
 

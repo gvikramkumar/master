@@ -106,8 +106,7 @@
                             Comment</div>
                         </div>
                       </p-header>
-                      <!-- <div *ngIf="strategyReviewData.status=='Not Reviewed'; then reviewRequiredPlaceHolder">
-                      </div> -->
+
                       <div
                         *ngIf="strategyReviewData.status=='Not Reviewed' && escalateVisibleAvailable; then visibleEscalateTemplate">
                       </div>
@@ -122,9 +121,11 @@
                             (click)="onEscalate(strategyReviewData.function)">Escalate</button>
                         </div>
                       </ng-template>
-                      <div *ngIf="strategyReviewData.function === currentFunctionalRole">
+                      <div
+                        *ngIf="strategyReviewData.function === currentFunctionalRole && strategyReviewData.status && strategyReviewData.status.toUpperCase() === 'NOT REVIEWED'">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
-                          <app-viewstrategy [caseId]="caseId" [comments]="strategyReviewData.comments"></app-viewstrategy>
+                          <app-viewstrategy [caseId]="caseId" [comments]="strategyReviewData.comments">
+                          </app-viewstrategy>
                           <div class="panel--header">
                             <h5>Approval Decision</h5>
                           </div>
