@@ -61,9 +61,6 @@ export class ActionsComponent implements OnInit {
   commentEvent: any;
   selectedAction;
 
-  disableCreateActionButton: boolean;
-
-
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
     private createOfferService: CreateOfferService,
@@ -75,7 +72,6 @@ export class ActionsComponent implements OnInit {
   ngOnInit() {
 
     this.minDate = new Date();
-    this.disableCreateActionButton = false;
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
 
 
