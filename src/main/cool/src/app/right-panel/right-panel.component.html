@@ -1,75 +1,75 @@
-<span class="pull-right panel-right mb-10" *ngIf="!portfolioFlag">
-</span>
-<div class="mb-10">
-    <!-- Offer Phase Steps -->
-    <div class="card card--raised base-margin-top" (click)="showOfferPhaseDailog()">
-        <h5 class="half-margin-bottom">Offer Phase
-            <a href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
-                <span class="icon-pencil"></span> Edit</a>
-        </h5>
-        <div class="divider divider--compressed"></div>
-        <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
-            <div class="ui-step {{mileStoneStatus[0].status}}">
-                <div class="step__icon">
-                    <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
-                    <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
+<span class="pull-right panel-right" *ngIf="!portfolioFlag">
+    </span>
+    <div>
+        <!-- Offer Phase Steps -->
+        <div class="card card--raised base-margin-top" (click)="showOfferPhaseDailog()">
+            <h5 class="half-margin-bottom">Offer Phase
+                <a href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
+                    <span class="icon-pencil"></span> Edit</a>
+            </h5>
+            <div class="divider divider--compressed"></div>
+            <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
+                <div class="ui-step {{mileStoneStatus[0].status}}">
+                    <div class="step__icon">
+                        <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
+                        <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
+                    </div>
+                    <div class="step__label">Ideate</div>
                 </div>
-                <div class="step__label">Ideate</div>
-            </div>
-            <div class="ui-step {{mileStoneStatus[1].status}}">
-                <div class="step__icon">
-                    <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
-                    <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
+                <div class="ui-step {{mileStoneStatus[1].status}}">
+                    <div class="step__icon">
+                        <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
+                        <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
+                    </div>
+                    <div class="step__label">Plan</div>
                 </div>
-                <div class="step__label">Plan</div>
-            </div>
-            <div class="ui-step {{mileStoneStatus[2].status}}">
-                <div class="step__icon">
-                    <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
-                    <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
+                <div class="ui-step {{mileStoneStatus[2].status}}">
+                    <div class="step__icon">
+                        <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
+                        <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
+                    </div>
+                    <div class="step__label">Execute</div>
                 </div>
-                <div class="step__label">Execute</div>
-            </div>
-            <div class="ui-step {{mileStoneStatus[3].status}}">
-                <div class="step__icon">
-                    <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
-                    <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
+                <div class="ui-step {{mileStoneStatus[3].status}}">
+                    <div class="step__icon">
+                        <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
+                        <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
+                    </div>
+                    <div class="step__label">Launch</div>
                 </div>
-                <div class="step__label">Launch</div>
             </div>
         </div>
-    </div>
-
-
-    <!-- Estimated Lead Time -->
-    <div class="card card--raised base-margin-top">
-
-        <h5 class="half-margin-bottom">Estimated Lead Time</h5>
-
-        <span class="ribbon label label--warning-alt">
-
-            <div *ngIf="!displayLeadTime">
-                <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                    Lead Time Calculation?
-                </button>
-            </div>
-
-            <div *ngIf="displayLeadTime">
-                <strong><small>{{noOfWeeksDifference}}</small></strong>
-                <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
-                    Lead Time Calculation?
-                </button>
-            </div>
-
-
-            <!-- </span> -->
-
-        </span>
-
-    </div>
-
-    <!-- <Scalapbility Index> -->
-    <!-- <div class="card card--raised base-margin-top">
+    
+    
+        <!-- Estimated Lead Time -->
+        <div class="card card--raised base-margin-top">
+    
+            <h5 class="half-margin-bottom">Estimated Lead Time</h5>
+    
+            <span class="ribbon label label--warning-alt">
+    
+                <div *ngIf="!displayLeadTime">
+                    <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
+                        Lead Time Calculation?
+                    </button>
+                </div>
+    
+                <div *ngIf="displayLeadTime">
+                    <strong><small>{{noOfWeeksDifference}}</small></strong>
+                    <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
+                        Lead Time Calculation?
+                    </button>
+                </div>
+    
+    
+                <!-- </span> -->
+    
+            </span>
+    
+        </div>
+    
+        <!-- <Scalapbility Index> -->
+        <!-- <div class="card card--raised base-margin-top">
             <h5 class="half-margin-bottom">Scalability Index</h5>
             <div class="card__footer">
                 <a href="javascript:;" (click)="goScalabilityIndex()">View Offer Scalability Details</a>
@@ -91,445 +91,446 @@
                 </div>
             </div>
         </div> -->
-
-    <!-- People Involved -->
-    <div class="card card--raised base-margin-top stakeholders">
-        <p-accordion>
-            <p-accordionTab header="People Involved" [selected]="true">
-
-                <ul class="list">
-
-                    <li *ngFor="let key of getKeys(stakeData)">
-                        <div class="half-margin-bottom">{{key}} ({{stakeData[key].length}})</div>
-                        <div class="half-margin-bottom">
-                            <div *ngFor="let coOwners of stakeData[key]">
-                                <div class="flex-center-vertical">
-                                    <!-- Team Member Name Avatar -->
-                                    <span class="avatar-ico">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                            viewBox="0 0 36 36" id="fwt-profile-button-loggedin" role="img">
-                                            <title id="fwt-profile-button-loggedin-title"></title>
-                                            <g fill="none" fill-rule="evenodd">
-                                                <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
-                                                    x="0" y="0"></path>
-                                                <text fill="#007493" font-family="CiscoSans, Arial, sans-serif"
-                                                    font-weight="300" font-size="16" x="50%" y="50%" dy=".35em"
-                                                    text-anchor="middle"
-                                                    id="fwt-initials">{{getInitialChar(coOwners['userName'])}}</text>
-                                            </g>
-                                        </svg>
-                                    </span>
-                                    <div class="flex-fluid text-left half-margin-left">
-                                        <div class="text-bold">{{coOwners['userName']}}</div>
-                                        <div>{{coOwners['emailId']}}</div>
-                                    </div>
+    
+        <!-- People Involved -->
+        <div class="card card--raised base-margin-top stakeholders">
+          <p-accordion>
+          <p-accordionTab header="People Involved" [selected]="true">
+    
+            <ul class="list">
+    
+                <li *ngFor="let key of getKeys(stakeData)">
+                    <div class="half-margin-bottom">{{key}} ({{stakeData[key].length}})</div>
+                    <div class="half-margin-bottom">
+                        <div class="half-margin-bottom" *ngFor="let coOwners of stakeData[key]">
+                            <div class="flex-center-vertical">
+                                <!-- Team Member Name Avatar -->
+                                <span class="avatar-ico">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"
+                                        id="fwt-profile-button-loggedin" role="img">
+                                        <title id="fwt-profile-button-loggedin-title"></title>
+                                        <g fill="none" fill-rule="evenodd">
+                                            <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
+                                                x="0" y="0"></path>
+                                            <text fill="#007493" font-family="CiscoSans, Arial, sans-serif"
+                                                font-weight="300" font-size="16" x="50%" y="50%" dy=".35em"
+                                                text-anchor="middle"
+                                                id="fwt-initials">{{getInitialChar(coOwners['userName'])}}</text>
+                                        </g>
+                                    </svg>
+                                </span>
+                                <div class="flex-fluid text-left half-margin-left">
+                                    <div class="text-bold">{{coOwners['userName']}}</div>
+                                    <div>{{coOwners['emailId']}}</div>
                                 </div>
-                                <!-- <div class="divider divider--compressed"></div> -->
                             </div>
+                            <!-- <div class="divider divider--compressed"></div> -->
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                </li>
+            </ul>
             </p-accordionTab>
-        </p-accordion>
-    </div>
-    <!-- Dialog - Phase Process  -->
-    <p-dialog [showHeader]="false" [responsive]="true" [minY]="70" [(visible)]="displayOfferPhase" [closable]="true">
-        <div class="overlay-phases">
-            <div class="pull-right phase-modal">
-                <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
+            </p-accordion>
             </div>
-            <div class="modalheader">
+       <!-- Dialog - Phase Process  -->
+            <p-dialog [showHeader]="false" [responsive]="true" [minY]="70" [(visible)]="displayOfferPhase"
+                [closable]="true">
+                <div class="overlay-phases">
+                <div class="pull-right phase-modal">
+                    <span class="icon-close" (click)="closeOfferPhaseDailog()"></span>
+                </div>
+                <div class="modalheader">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>{{offerName}}&nbsp;<span class="offerID">{{currentOfferId}}</span></h5>
+                            <a>View Offer Details</a>
+                        </div>
+                        <!-- Offer Phase widget -->
+                        <div class="col-md-4">
+                            <h5 class="widget-header">Offer Phase</h5>
+                            <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
+                                <div class="ui-step {{mileStoneStatus[0].status}}">
+                                    <div class="step__icon">
+                                        <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
+                                        <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
+                                    </div>
+                                    <div class="step__label">Ideate</div>
+                                </div>
+                                <div class="ui-step {{mileStoneStatus[1].status}}">
+                                    <div class="step__icon">
+                                        <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
+                                        <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
+                                    </div>
+                                    <div class="step__label">Plan</div>
+                                </div>
+                                <div class="ui-step {{mileStoneStatus[2].status}}">
+                                    <div class="step__icon">
+                                        <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
+                                        <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
+                                    </div>
+                                    <div class="step__label">Execute</div>
+                                </div>
+                                <div class="ui-step {{mileStoneStatus[3].status}}">
+                                    <div class="step__icon">
+                                        <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
+                                        <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
+                                    </div>
+                                    <div class="step__label">Launch</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider divider--compressed"></div>
+                </div>
                 <div class="row">
-                    <div class="col-md-8">
-                        <h5>{{offerName}}&nbsp;<span class="offerID">{{currentOfferId}}</span></h5>
-                        <a>View Offer Details</a>
-                    </div>
-                    <!-- Offer Phase widget -->
-                    <div class="col-md-4">
-                        <h5 class="widget-header">Offer Phase</h5>
-                        <div class="ui-steps ui-steps--success ui-steps--tiny" *ngIf="phaseProcessingCompleted">
-                            <div class="ui-step {{mileStoneStatus[0].status}}">
-                                <div class="step__icon">
-                                    <span class="icon-check" *ngIf="mileStoneStatus[0].status === 'visited'"></span>
-                                    <span *ngIf="mileStoneStatus[0].status !== 'visited'">1</span>
-                                </div>
-                                <div class="step__label">Ideate</div>
-                            </div>
-                            <div class="ui-step {{mileStoneStatus[1].status}}">
-                                <div class="step__icon">
-                                    <span class="icon-check" *ngIf="mileStoneStatus[1].status === 'visited'"></span>
-                                    <span *ngIf="mileStoneStatus[1].status !== 'visited'">2</span>
-                                </div>
-                                <div class="step__label">Plan</div>
-                            </div>
-                            <div class="ui-step {{mileStoneStatus[2].status}}">
-                                <div class="step__icon">
-                                    <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
-                                    <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
-                                </div>
-                                <div class="step__label">Execute</div>
-                            </div>
-                            <div class="ui-step {{mileStoneStatus[3].status}}">
-                                <div class="step__icon">
-                                    <span class="icon-check" *ngIf="mileStoneStatus[3].status === 'visited'"></span>
-                                    <span *ngIf="mileStoneStatus[3].status !== 'visited'">4</span>
-                                </div>
-                                <div class="step__label">Launch</div>
-                            </div>
-                        </div>
+                    <div class="col-md-12">
+                        <h5 class="base-margin-top">Offer Phase Details</h5>
                     </div>
                 </div>
-                <div class="divider divider--compressed"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h5 class="base-margin-top">Offer Phase Details</h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 accordion half-margin-bottom">
-                    <!-- <div class="col-md-12"> -->
-                    <div class="alert alert--danger" role="alert" *ngIf="showAlert">
-                        <div class="alert__icon icon-error-outline"></div>
-                        <div class="alert__message">
-                            <div>Choose appropriate target date for each phase.</div>
+                <div class="row">
+                    <div class="col-md-12 accordion half-margin-bottom">
+                      <!-- <div class="col-md-12"> -->
+                        <div class="alert alert--danger" role="alert" *ngIf="showAlert">
+                            <div class="alert__icon icon-error-outline"></div>
+                            <div class="alert__message">
+                                <div>Choose appropriate target date for each phase.</div>
+                            </div>
+                            <a href="javascript:;" class="alert__close icon-close" (click)="removeAlert()"></a>
                         </div>
-                        <a href="javascript:;" class="alert__close icon-close" (click)="removeAlert()"></a>
-                    </div>
                     <!-- </div> -->
-                    <p-accordion>
-                        <p-accordionTab header="Ideate" [selected]="true">
-                            <div class="responsive-table">
-                                <table class="table table--nostripes">
-                                    <thead>
-                                        <tr>
-                                            <th>Ideate - <span
-                                                    [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'">
-                                                    {{ideateCompletedCount}} of {{ideateCount}} <span
-                                                        class="icon-check-outline icon-medium"></span></span></th>
-                                            <th>STATUS</th>
-                                            <th>TARGET DATE</th>
-                                            <th>COMPLETION DATE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
-                                            <td>
-                                                <div *ngIf="!ideateData.enable; else enableOfferPhase">
-                                                    <span style="color: gray;">{{ideateData.subMilestone}}</span>
-                                                </div>
-                                                <ng-template #enableOfferPhase>
-                                                    <span style="color: #005073;"
-                                                        (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span>
-                                                </ng-template>
-                                            </td>
-                                            <td [ngClass]=" (ideateData.status=='Completed'
+                        <p-accordion>
+                            <p-accordionTab header="Ideate" [selected]="true">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                        <thead>
+                                            <tr>
+                                                <th>Ideate - <span
+                                                        [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'">
+                                                        {{ideateCompletedCount}} of {{ideateCount}} <span
+                                                            class="icon-check-outline icon-medium"></span></span></th>
+                                                <th>STATUS</th>
+                                                <th>TARGET DATE</th>
+                                                <th>COMPLETION DATE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
+                                                <td>
+                                                    <div *ngIf="!ideateData.enable; else enableOfferPhase">
+                                                        <span style="color: gray;">{{ideateData.subMilestone}}</span>
+                                                    </div>
+                                                    <ng-template #enableOfferPhase>
+                                                        <span style="color: #005073;"
+                                                            (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span>
+                                                    </ng-template>
+                                                </td>
+                                                <td [ngClass]=" (ideateData.status=='Completed'
                                                             )?'text-success':'text-warning'">
-                                                {{ideateData.status}}
-                                            </td>
-                                            <td>
-                                                <span *ngIf="!editIdeateTargetDate">
-                                                    {{ideateData.targetDate | date: "dd-MMM-y"}}
-                                                </span>
-                                                <span
-                                                    *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
-                                                    <input type="text" class="form-control" #dp="bsDatepicker" autofocus
-                                                        bsDatepicker [minDate]="minDate"
-                                                        (bsValueChange)="onValueChange('ideate',$event)"
-                                                        [value]='ideateData.targetDate | date: "dd-MMM-y"'
-                                                        placement="top">
-                                                </span>
-                                                <span *ngIf="ideateData.subMilestone === 'Strategy Review'">
-                                                    <a (click)="editDate('ideate')"><span
-                                                            class="icon-pencil"></span>Edit</a>
-                                                </span>
-                                            </td>
-                                            <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </p-accordionTab>
-                        <p-accordionTab header="Plan">
-                            <div class="responsive-table">
-                                <table class="table table--nostripes">
-                                    <thead>
-                                        <tr>
-                                            <th>Plan - <span class="text-success"> {{planCompletedCount}} of
-                                                    {{planCount}} <span
-                                                        class="icon-check-outline icon-medium"></span></span></th>
-                                            <th>STATUS</th>
-                                            <th>TARGET DATE</th>
-                                            <th>COMPLETION DATE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let planData of offerPhaseDetailsList.plan">
-
-                                            <td>
-                                                <div *ngIf="!planData.enable; else enableOfferPhase">
-                                                    <span style="color: gray;">{{planData.subMilestone}}</span>
-                                                </div>
-                                                <ng-template #enableOfferPhase>
-                                                    <span style="color: #005073;"
-                                                        (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span>
-                                                </ng-template>
-                                            </td>
-
-                                            <td
-                                                [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">
-                                                {{planData.status}}</td>
-                                            <td>
-                                                <span *ngIf="!editPlanTargetDate">
-                                                    {{planData.targetDate | date: "dd-MMM-y"}}
-                                                </span>
-                                                <span
-                                                    *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
-                                                    <input type="text" class="form-control" #dp="bsDatepicker"
-                                                        bsDatepicker [minDate]="minDate"
-                                                        (bsValueChange)="onValueChange('plan',$event)"
-                                                        [value]='planData.targetDate | date: "dd-MMM-y"'
-                                                        placement="top">
-                                                </span>
-                                                <span *ngIf="planData.subMilestone === 'Design Review'">
-                                                    <a (click)="editDate('plan')"><span
-                                                            class="icon-pencil"></span>Edit</a>
-                                                </span>
-                                            </td>
-                                            <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </p-accordionTab>
-                        <p-accordionTab header="Execute">
-                            <div class="responsive-table">
-                                <table class="table table--nostripes">
-                                </table>
-                            </div>
-                        </p-accordionTab>
-                        <p-accordionTab header="Launch">
-                            <div class="responsive-table">
-                                <table class="table table--nostripes">
-                                </table>
-                            </div>
-                        </p-accordionTab>
-                    </p-accordion>
-
-                </div>
-            </div>
-        </div>
-    </p-dialog>
-    <!-- Dialog - Add / Edit Collaborators  -->
-    <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
-        [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">
-        <form [formGroup]="addEditCollaboratorsForm" (ngSubmit)="onSearch()">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group half-margin-bottom">
-                        <div class="form-group__text">
-                            <input id="name" placeholder="Search by Name, Email" class="form-control"
-                                formControlName="name">
-                        </div>
+                                                    {{ideateData.status}}
+                                                </td>
+                                                <td>
+                                                    <span *ngIf="!editIdeateTargetDate">
+                                                        {{ideateData.targetDate | date: "dd-MMM-y"}}
+                                                    </span>
+                                                    <span
+                                                        *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
+                                                        <input type="text" class="form-control" #dp="bsDatepicker" autofocus
+                                                            bsDatepicker [minDate]="minDate"
+                                                            (bsValueChange)="onValueChange('ideate',$event)"
+                                                            [value]='ideateData.targetDate | date: "dd-MMM-y"'
+                                                            placement="top">
+                                                    </span>
+                                                    <span *ngIf="ideateData.subMilestone === 'Strategy Review'">
+                                                        <a (click)="editDate('ideate')"><span
+                                                                class="icon-pencil"></span>Edit</a>
+                                                    </span>
+                                                </td>
+                                                <td>{{ideateData.completionDate | date: "dd-MMM-y"}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Plan">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                        <thead>
+                                            <tr>
+                                                <th>Plan - <span class="text-success"> {{planCompletedCount}} of
+                                                        {{planCount}} <span
+                                                            class="icon-check-outline icon-medium"></span></span></th>
+                                                <th>STATUS</th>
+                                                <th>TARGET DATE</th>
+                                                <th>COMPLETION DATE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let planData of offerPhaseDetailsList.plan">
+    
+                                                <td>
+                                                    <div *ngIf="!planData.enable; else enableOfferPhase">
+                                                        <span style="color: gray;">{{planData.subMilestone}}</span>
+                                                    </div>
+                                                    <ng-template #enableOfferPhase>
+                                                        <span style="color: #005073;"
+                                                            (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span>
+                                                    </ng-template>
+                                                </td>
+    
+                                                <td
+                                                    [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">
+                                                    {{planData.status}}</td>
+                                                <td>
+                                                    <span *ngIf="!editPlanTargetDate">
+                                                        {{planData.targetDate | date: "dd-MMM-y"}}
+                                                    </span>
+                                                    <span
+                                                        *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
+                                                        <input type="text" class="form-control" #dp="bsDatepicker"
+                                                            bsDatepicker [minDate]="minDate"
+                                                            (bsValueChange)="onValueChange('plan',$event)"
+                                                            [value]='planData.targetDate | date: "dd-MMM-y"'
+                                                            placement="top">
+                                                    </span>
+                                                    <span *ngIf="planData.subMilestone === 'Design Review'">
+                                                        <a (click)="editDate('plan')"><span
+                                                                class="icon-pencil"></span>Edit</a>
+                                                    </span>
+                                                </td>
+                                                <td>{{planData.completionDate | date: "dd-MMM-y"}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Execute">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Launch">
+                                <div class="responsive-table">
+                                    <table class="table table--nostripes">
+                                    </table>
+                                </div>
+                            </p-accordionTab>
+                        </p-accordion>
+    
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group half-margin-bottom">
-                        <div class="form-group__text select">
-                            <select id="selectedSearchBe" class="form-control" formControlName="businessEntity">
-                                <option [ngValue]="null">Business Entity</option>
-                                <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
-                                    {{businessEntity}}</option>
-                            </select>
+              </div>
+            </p-dialog>
+        <!-- Dialog - Add / Edit Collaborators  -->
+            <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
+                [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">
+                <form [formGroup]="addEditCollaboratorsForm" (ngSubmit)="onSearch()">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group half-margin-bottom">
+                                <div class="form-group__text">
+                                    <input id="name" placeholder="Search by Name, Email" class="form-control"
+                                        formControlName="name">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group half-margin-bottom">
-                        <div class="form-group__text select">
-                            <select id="selectedFunction" class="form-control" formControlName="functionName">
-                                <option [ngValue]="null">Function</option>
-                                <option *ngFor="let functionalRole of funcionalRoleList" value={{functionalRole}}>
-                                    {{functionalRole}}</option>
-                            </select>
+                        <div class="col-md-3">
+                            <div class="form-group half-margin-bottom">
+                                <div class="form-group__text select">
+                                    <select id="selectedSearchBe" class="form-control" formControlName="businessEntity">
+                                        <option [ngValue]="null">Business Entity</option>
+                                        <option *ngFor="let businessEntity of entityList" value={{businessEntity}}>
+                                            {{businessEntity}}</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group half-margin-bottom">
+                                <div class="form-group__text select">
+                                    <select id="selectedFunction" class="form-control" formControlName="functionName">
+                                        <option [ngValue]="null">Function</option>
+                                        <option *ngFor="let functionalRole of funcionalRoleList" value={{functionalRole}}>
+                                            {{functionalRole}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn&#45;&#45;secondary" type="submit">Search</button>
                     </div>
-                </div>
-                <button class="btn btn&#45;&#45;secondary" type="submit">Search</button>
-            </div>
-        </form>
-        <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="email" #dt>
-            <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
-            <p-column field="functionalRole" header="Function"></p-column>
-            <!-- <p-column field="applicationRole" header="Roles">
+                </form>
+                <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="email" #dt>
+                    <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
+                    <p-column field="functionalRole" header="Function"></p-column>
+                    <!-- <p-column field="applicationRole" header="Roles">
                         <ng-template let-col let-roles="rowData" let-ri="rowIndex" pTemplate="body">
                             <p-dropdown [(ngModel)]="roles.offerRole" [options]="arrToOptions(roles.applicationRole)"
                                 [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
                             </p-dropdown>
                         </ng-template>
                     </p-column> -->
-            <p-column field="name" header="Name"></p-column>
-            <p-column field="email" header="Email"></p-column>
-            <p-column field="businessEntity" header="BusinessEntity"></p-column>
-        </p-dataTable>
-        <div class="modal__footer">
-            <div class="card__footer form-actions">
-                <button class="btn base-margin-top" (click)="closeDailog()">Cancel</button>
-                <button class="btn btn&#45;&#45;primary base-margin-top" (click)="addCollaborator()">Add</button>
-            </div>
-        </div>
-    </p-dialog>
-    <!-- Dialog - Lead Time Calculation  -->
-    <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
-        [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
-        <div class="row">
-            <div class="col-md-12">
+                    <p-column field="name" header="Name"></p-column>
+                    <p-column field="email" header="Email"></p-column>
+                    <p-column field="businessEntity" header="BusinessEntity"></p-column>
+                </p-dataTable>
+                <div class="modal__footer">
+                    <div class="card__footer form-actions">
+                        <button class="btn base-margin-top" (click)="closeDailog()">Cancel</button>
+                        <button class="btn btn&#45;&#45;primary base-margin-top" (click)="addCollaborator()">Add</button>
+                    </div>
+                </div>
+            </p-dialog>
+        <!-- Dialog - Lead Time Calculation  -->
+            <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
+                [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="card base-padding">
-                            <div class="row">
-                                <div class="col-md-8">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card base-padding">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-8">
                                             <div class="row">
-                                                <h4 class="display-1 text-success">{{noOfWeeksDifference}}</h4>
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <h4 class="display-1 text-success">{{noOfWeeksDifference}}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h5 class="label">Lead Time Accessed for Your Offer</h5>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row  base-margin-top">
+                                                <h2 class="text-success">{{expectedLaunchDate}}</h2>
+                                                <h5>Offer Launch Date</h5>
                                             </div>
                                         </div>
                                     </div>
-                                    <h5 class="label">Lead Time Accessed for Your Offer</h5>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="row  base-margin-top">
-                                        <h2 class="text-success">{{expectedLaunchDate}}</h2>
-                                        <h5>Offer Launch Date</h5>
+                                    <div class="row base-margin-top"></div>
+                                    <div class="divider"></div>
+                                    <div class="row base-margin-top">
+                                        <div class="col-md-12">
+                                            <h6 class="text-indigo">Edit Milestones</h6>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row base-margin-top"></div>
-                            <div class="divider"></div>
-                            <div class="row base-margin-top">
-                                <div class="col-md-12">
-                                    <h6 class="text-indigo">Edit Milestones</h6>
-                                </div>
-                            </div>
-                            <div class="row base-margin-top progress-group">
-                                <div class="col-md-3">
-                                    <h6 class="subheader">Strategy Review</h6>
-                                    <h6 class="display-6">08-OCT-2018</h6>
-                                    <div class="progressbar progressbar--large" data-percentage="0">
-                                        <div class="progressbar__fill"></div>
-                                        <div class="progressbar__label">YOU ARE HERE</div>
+                                    <div class="row base-margin-top progress-group">
+                                        <div class="col-md-3">
+                                            <h6 class="subheader">Strategy Review</h6>
+                                            <h6 class="display-6">08-OCT-2018</h6>
+                                            <div class="progressbar progressbar--large" data-percentage="0">
+                                                <div class="progressbar__fill"></div>
+                                                <div class="progressbar__label">YOU ARE HERE</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h6 class="subheader">Design Review</h6>
+                                            <h6 class="display-6">26-OCT-2018</h6>
+                                            <div class="progressbar progressbar--large" data-percentage="0">
+                                                <div class="progressbar__fill"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h6 class="subheader">Readiness Review</h6>
+                                            <h6 class="display-6">26-OCT-2018</h6>
+                                            <div class="progressbar progressbar--large" data-percentage="0">
+                                                <div class="progressbar__fill"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h6 class="subheader">LAUNCH</h6>
+                                            <h6 class="display-6">01-NOV-2018</h6>
+                                            <div class="progressbar progressbar--large" data-percentage="0">
+                                                <div class="progressbar__fill"></div>
+                                                <div class="progressbar__label">LEAD TIME</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <h6 class="subheader">Design Review</h6>
-                                    <h6 class="display-6">26-OCT-2018</h6>
-                                    <div class="progressbar progressbar--large" data-percentage="0">
-                                        <div class="progressbar__fill"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <h6 class="subheader">Readiness Review</h6>
-                                    <h6 class="display-6">26-OCT-2018</h6>
-                                    <div class="progressbar progressbar--large" data-percentage="0">
-                                        <div class="progressbar__fill"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <h6 class="subheader">LAUNCH</h6>
-                                    <h6 class="display-6">01-NOV-2018</h6>
-                                    <div class="progressbar progressbar--large" data-percentage="0">
-                                        <div class="progressbar__fill"></div>
-                                        <div class="progressbar__label">LEAD TIME</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- <div class="row base-margin-top"></div>
+                                    <!-- <div class="row base-margin-top"></div>
                                         <div class="row base-margin-top"></div>
                                         <div class="row base-margin-top"></div> -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <h5>Lead Time Statistics for {{mmModel}} (SAAS) in {{leadTimeYear}}</h5>
-                            <div class="row base-margin-top">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="form-group__text">
-                                            <label>10th Percentile</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <h5>Lead Time Statistics for {{mmModel}} (SAAS) in {{leadTimeYear}}</h5>
+                                    <div class="row base-margin-top">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="form-group__text">
+                                                    <label>10th Percentile</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span>Your Lead Time</span>
+                                            <h6>{{noOfWeeksDifference}}</h6>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <span>Your Lead Time</span>
-                                    <h6>{{noOfWeeksDifference}}</h6>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="progressbar" data-percentage="35">
-                                        <div class="progressbar__fill"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>2.2 WEEKS</h6>
-                                </div>
-                            </div>
-                            <div class="row base-margin-top">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="form-group__text">
-                                            <label>Average</label>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="progressbar" data-percentage="35">
+                                                <div class="progressbar__fill"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <h6>2.2 WEEKS</h6>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="progressbar">
-                                        <div class="customProgressBarFill" [ngStyle]="{'width.%':progressBarWidth}">
+                                    <div class="row base-margin-top">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="form-group__text">
+                                                    <label>Average</label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>{{averageWeekCount}} WEEKS</h6>
-                                </div>
-                            </div>
-                            <div class="row base-margin-top">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="form-group__text">
-                                            <label>90th Percentile</label>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="progressbar">
+                                                <div class="customProgressBarFill" [ngStyle]="{'width.%':progressBarWidth}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <h6>{{averageWeekCount}} WEEKS</h6>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="progressbar progressbar--success" data-percentage="85">
-                                        <div class="progressbar__fill"></div>
+                                    <div class="row base-margin-top">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="form-group__text">
+                                                    <label>90th Percentile</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>5.7 WEEKS</h6>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <span>0 WEEKS</span>&nbsp;<span>1 WEEKS</span>&nbsp;<span>2
-                                        WEEKS</span>&nbsp;<span>3
-                                        WEEKS</span>&nbsp;<span>4 WEEKS</span>&nbsp;<span>5
-                                        WEEKS</span>&nbsp;<span>6
-                                        WEEKS</span>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="progressbar progressbar--success" data-percentage="85">
+                                                <div class="progressbar__fill"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <h6>5.7 WEEKS</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span>0 WEEKS</span>&nbsp;<span>1 WEEKS</span>&nbsp;<span>2
+                                                WEEKS</span>&nbsp;<span>3
+                                                WEEKS</span>&nbsp;<span>4 WEEKS</span>&nbsp;<span>5
+                                                WEEKS</span>&nbsp;<span>6
+                                                WEEKS</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </p-dialog>
+    
         </div>
-    </p-dialog>
-
-</div>
