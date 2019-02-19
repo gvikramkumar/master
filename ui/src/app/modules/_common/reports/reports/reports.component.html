@@ -5,7 +5,7 @@
     <div class="col-md-5 col-xl-4 base-padding-top">
 
       <div class="border-and-padding report-group">
-        <div class="form-group  form-group--loose" *ngFor="let rpt of reports.slice(0, 8)">
+        <div class="form-group  form-group--loose" *ngFor="let rpt of reports.slice(0, 7)">
           <label class="radio" [class.disabled]="rpt.disabled">
             <input type="radio" name="uploadType" [value]="rpt" [(ngModel)]="report" (change)="reset()">
             <span class="radio__input"></span>
@@ -15,7 +15,7 @@
       </div>
 
       <div class="border-and-padding report-group">
-        <div class="form-group  form-group--loose" *ngFor="let rpt of reports.slice(8)">
+        <div class="form-group  form-group--loose" *ngFor="let rpt of reports.slice(7)">
           <label class="radio" [class.disabled]="rpt.disabled">
             <input type="radio" name="uploadType" [value]="rpt" [(ngModel)]="report" (change)="reset()">
             <span class="radio__input"></span>
