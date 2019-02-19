@@ -155,6 +155,7 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                    this.router.navigate(['/dashboard']);
                 });
             }
 
@@ -190,8 +191,9 @@ export class MenuBarComponent implements OnInit {
                     'toMailLists': stakeHolders,
                 };
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                    this.router.navigate(['/dashboard']);
 
-
+      
                 });
             }
             this.updateMessage.next(message);
