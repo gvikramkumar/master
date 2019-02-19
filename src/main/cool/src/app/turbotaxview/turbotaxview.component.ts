@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { TurbotaxService } from '../services/turbotax.service';
@@ -8,9 +8,11 @@ import { MenuBarService } from '../services/menu-bar.service'
     templateUrl: './turbotaxview.component.html',
     styleUrls: ['./turbotaxview.component.css']
 })
-export class TurbotaxviewComponent implements OnInit {
-    @Input() data: string;
-    public mStoneCntInAllPhases: any[] = ['ideate', 'plan', 'execute', 'launch'];
+export class TurbotaxviewComponent implements OnChanges {
+    @Input() caseId: string;
+    @Input() offerId: string;
+
+    public phases: any[] = ['ideate', 'plan', 'execute', 'launch'];
     public mileStoneStatus: any[] = [];
     public currentOfferId: any;
     public ideateCount: any = 0;
@@ -25,71 +27,70 @@ export class TurbotaxviewComponent implements OnInit {
 
     attribute: boolean;
 
-    constructor(private offerPhaseService: OfferPhaseService, private menuBarService: MenuBarService,
-        private activatedRoute: ActivatedRoute, private turbotax: TurbotaxService, private router: Router) {
-    }
+    constructor(
+        private offerPhaseService: OfferPhaseService,
+        private turbotax: TurbotaxService,
+        private router: Router
+    ) { }
 
-    ngOnInit() {
+    ngOnChanges(changes: SimpleChanges) {
+        const caseIdChange: SimpleChange = changes.caseId;
+        const offerIdChange: SimpleChange = changes.offerId;
+
+        const caseId = caseIdChange.currentValue;
+        const offerId = offerIdChange.currentValue;
 
         this.attribute = false;
-        this.navigateHash['Offer Creation'] = ['/coolOffer', this.data['offerId'], this.data['caseId']];
-        this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.data['offerId'], this.data['caseId']];
-        this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', this.data['offerId'], this.data['caseId']];
-        this.navigateHash['Strategy Review'] = ['/strategyReview', this.data['offerId'], this.data['caseId']];
+        this.navigateHash['Offer Creation'] = ['/coolOffer', offerId, caseId];
+        this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', offerId, caseId];
+        this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', offerId, caseId];
+        this.navigateHash['Strategy Review'] = ['/strategyReview', offerId, caseId];
 
-        this.navigateHash['Offer Dimension'] = ['/offerDimension', this.data['offerId'], this.data['caseId']];
-        this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.data['offerId'], this.data['caseId']];
-        this.navigateHash['Offer Components'] = ['/offerConstruct', this.data['offerId'], this.data['caseId']];
+        this.navigateHash['Offer Dimension'] = ['/offerDimension', offerId, caseId];
+        this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', offerId, caseId];
+        this.navigateHash['Offer Components'] = ['/offerConstruct', offerId, caseId];
 
-        this.turbotax.getRubboTaxMenu(this.data['caseId']).subscribe(data => {
-            this.offerPhaseDetailsList = data;
-            console.log("turbotax view", this.offerPhaseDetailsList);
-            this.ideateCount = data['ideate'].length;
-            this.planCount = data['plan'].length;
-            data['ideate'].forEach(element => {
-                if (element.status === 'Completed') {
-                    this.ideateCompletedCount = this.ideateCompletedCount + 1;
-                }
-            });
+        this.turbotax.getRubboTaxMenu(caseId).subscribe(resOfferPhases => {
+            if (resOfferPhases) {
+                this.offerPhaseDetailsList = resOfferPhases;
 
-            data['plan'].forEach(element => {
-                if (element.status === 'Completed') {
-                    this.planCompletedCount = this.ideateCompletedCount + 1;
-                }
-            });
-        })
+                this.ideateCount = resOfferPhases.ideate ? resOfferPhases.ideate.length : 0;
+                this.ideateCompletedCount = resOfferPhases.ideate ? resOfferPhases.ideate.filter(this.isMilestoneCompleted()).length : 0;
 
-        this.offerPhaseService.getCurrentOfferPhaseInfo(this.data['caseId']).subscribe(data => {
-            this.processCurrentPhaseInfo(data);
+                this.planCount = resOfferPhases.plan ? resOfferPhases.plan.length : 0;
+                this.planCompletedCount = resOfferPhases.plan ? resOfferPhases.plan.filter(this.isMilestoneCompleted()).length : 0;
+
+                this.processCurrentPhaseInfo(resOfferPhases);
+            }
         });
+
+        // this.offerPhaseService.getCurrentOfferPhaseInfo(caseId).subscribe(data => {
+        //     this.processCurrentPhaseInfo(data);
+        // });
     }
 
-    processCurrentPhaseInfo(phaseInfo) {
-        this.mStoneCntInAllPhases.forEach(element => {
-            const obj = {};
-            let count = 0;
-            const phase = phaseInfo[element];
-            if (phase !== undefined) {
-                phase.forEach(element => {
-                    if (element.status === 'Completed') {
-                        count = count + 1;
-                    }
-                });
-                obj['phase'] = element;
-                if (count > 0 && count < 4) {
-                    obj['status'] = 'active';
-                } else if (count === 4) {
-                    obj['status'] = 'visited';
-                } else if (count === 0) {
-                    obj['status'] = '';
+    processCurrentPhaseInfo(offerPhaseInfo) {
+        this.mileStoneStatus = this.phases.reduce((accumulator, phase) => {
+            const phaseInfo = {
+                phase: phase,
+                status: ''
+            };
+            const offerMilestone = offerPhaseInfo[phase];
+            if (offerMilestone) {
+                if (offerMilestone.every(this.isMilestoneCompleted())) {
+                    phaseInfo.status = 'visited';
+                } else if (offerMilestone.some(this.isMilestoneCompleted())) {
+                    phaseInfo.status = 'active';
                 }
-            } else {
-                obj['phase'] = element;
-                obj['status'] = '';
             }
-            this.mileStoneStatus.push(obj);
-        });
+            accumulator.push(phaseInfo);
+            return accumulator;
+        }, []);
         this.phaseProcessingCompleted = true;
+    }
+
+    private isMilestoneCompleted(): any {
+        return milestone => milestone.status && milestone.status.toLowerCase() === 'completed';
     }
 
     gotobackTomilestone(value) {
