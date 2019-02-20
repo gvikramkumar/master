@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="locale" content="US">
@@ -15,14 +16,20 @@
   <base href="/">
 
 </head>
-<body class="cool cui cui--wide cui--animated">
-<div class="content-fluid">
-  <main>
-    <app-root>Loading..</app-root>
-  </main>
-</div>
-<script>
 
-</script>
+<body class="cool cui cui--wide cui--animated">
+  <div class="content-fluid">
+    <main>
+      <app-root class="animated">
+          <div class="loader">
+              <div class="loading-dots loading-dots--muted" aria-label="Loading, please wait...">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+      </app-root>
+    </main>
 </body>
+
 </html>

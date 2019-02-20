@@ -59,14 +59,6 @@ export class OfferSolutioningComponent implements OnInit {
    }
 
   ngOnInit() {
-    // this.offerSolutionData = this.offersolutioningService.getSolutionData(this.currentOfferId);
-    this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
-      this.offerSolutionData = data;
-      if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-        this.getSolutionGroups();
-        this.createActionAndNotification();
-      }
-    });
     let that = this;
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
@@ -118,6 +110,15 @@ export class OfferSolutioningComponent implements OnInit {
       //     this.createActionAndNotification();
       //   }
       // }
+
+      // this.offerSolutionData = this.offersolutioningService.getSolutionData(this.currentOfferId);
+      this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
+        this.offerSolutionData = data;
+        if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
+          this.getSolutionGroups();
+          this.createActionAndNotification();
+        }
+      });
     });
   }
 
@@ -129,7 +130,7 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   createActionAndNotification() {
-   
+   debugger;
     let primaryPOC = [];
     for(let group of this.offerSolutionGroups) {
       if (group['listGrpQuestions'] != null && group['listGrpQuestions'].length > 0) {
@@ -144,7 +145,7 @@ export class OfferSolutioningComponent implements OnInit {
         
           if (this.stakeData != null && this.stakeData[element] != null && this.stakeData[element].length > 0) {
             this.stakeData[element].forEach(assignee => {
-              assignees.push(assignee);
+              assignees.push(assignee['_id']);
             });
           }
         });

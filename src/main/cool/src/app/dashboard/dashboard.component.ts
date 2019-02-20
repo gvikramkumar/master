@@ -239,7 +239,7 @@ export class DashboardComponent implements OnInit {
   createNotAndConditionalAction(overlaypanel: OverlayPanel) {
     const createActionPayload = {};
     createActionPayload['offerName'] = this.selectedAction.offerName;
-    createActionPayload['owner'] = this.assigneeValue;
+    createActionPayload['owner'] = this.selectedAction.offerOwner;
     createActionPayload['assignee'] = [this.assigneeValue];
     createActionPayload['offerId'] = this.selectedAction.offerId;
     createActionPayload['caseId'] = this.selectedAction.caseId;
@@ -247,8 +247,10 @@ export class DashboardComponent implements OnInit {
     createActionPayload['actionTitle'] = this.titleValue;
     createActionPayload['dueDate'] = this.dueDateValue.toISOString();
     createActionPayload['mileStone'] = this.milestoneValue;
-    createActionPayload['selectedfunction'] = this.functionNameValue;
+    createActionPayload['selectedFunction'] = this.functionNameValue;
+    createActionPayload['actionCreator'] = this.userService.getUserId();
     createActionPayload['type'] = 'Manual Action';
+
     const createCommentPayload = {};
     createCommentPayload['taskId'] = this.selectedAction.taskId;
     createCommentPayload['userId'] = this.userService.getUserId();
@@ -289,6 +291,26 @@ export class DashboardComponent implements OnInit {
       this.getMyActionsAndNotifications();
     });
     // this.createActionForm.reset();
+  }
+
+  approveAction(overlaypanel: OverlayPanel) {
+    const taskId = this.selectedAction.taskId;
+    const userId = this.userService.getUserId();
+    const taskName = 'Action';
+    const action = 'Approved';
+    const createActionApprove: CreateActionApprove = new CreateActionApprove(
+      taskId,
+      userId,
+      taskName,
+      action,
+      this.commentValue,
+      false,
+    );
+    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+      overlaypanel.hide();
+      this.getMyActionsAndNotifications();
+    });
+    this.createActionForm.reset();
   }
 
   createApproveActionWithFeedback(overlaypanel: OverlayPanel) {

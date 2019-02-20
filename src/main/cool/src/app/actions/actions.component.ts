@@ -56,10 +56,10 @@ export class ActionsComponent implements OnInit {
   actionOwner: string;
   lastValueInMilestone: Array<any>;
   milestone: any;
-  val: any;
   selectedCaseId: any;
   commentEvent: any;
   selectedAction;
+  selectedOffer;
 
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
@@ -124,7 +124,7 @@ export class ActionsComponent implements OnInit {
           this.lastValueInMilestone = this.milestoneList.slice(-1)[0];
 
           let mile = this.lastValueInMilestone
-          this.val = mile['subMilestone'];
+          this.milestoneValue = mile['subMilestone'];
 
         });
       }
@@ -142,12 +142,14 @@ export class ActionsComponent implements OnInit {
   }
 
   processMyActionsList() {
+
     // Process get Actions data
     if (this.myActions.actionList !== undefined) {
       this.myActions['actionList'].forEach(element => {
         const obj = new ActionsAndNotifcations();
         obj.setOfferId(element.offerId);
         obj.setOfferName(element.offerName);
+        obj.setOfferOwner(element.offerOwner);
         obj.setStyleColor(element.status);
         obj.setAssigneeId(element.assigneeId);
         obj.setTriggerDate(this.dateFormat(element.triggerDate));
@@ -174,28 +176,34 @@ export class ActionsComponent implements OnInit {
   }
   // Create New Action
   createAction() {
+
+    // Close Dialog Box
+    this.displayActionPhase = false;
+
     // Process post data
-    const selectedAssignee = [this.assigneeValue];
     const type = 'Manual Action';
+    const selectedAssignee = [this.assigneeValue];
+
+    // Initialize CreateAction POJO
     const createAction: CreateAction = new CreateAction(
       this.offerNameValue,
       this.offerCaseMap[this.offerNameValue],
       this.titleValue,
       this.descriptionValue,
-      // this.milestoneValue,
-      this.val,
+      this.milestoneValue,
       this.functionNameValue,
       selectedAssignee,
       this.dueDateValue.toISOString(),
       this.offerOwnerMap[this.offerNameValue],
       this.offerNameMap[this.offerNameValue],
+      this.userService.getUserId(),
       type,
     );
-    this.actionsService.createNewAction(createAction).subscribe((data) => {
-      this.closeActionDailog();
-    });
 
-    this.displayActionPhase = false;
+    // Call CreateAction API
+    this.actionsService.createNewAction(createAction).subscribe((data) => { });
+
+    // Reset The Form
     this.createActionForm.reset();
 
   }
@@ -208,7 +216,10 @@ export class ActionsComponent implements OnInit {
 
 
   showOfferPopUp(event, action, overlaypanel: OverlayPanel) {
-    this.selectedCaseId = action.caseId;
+    this.selectedOffer = {
+      caseId: action.caseId,
+      offerId: action.offerId
+    }
     overlaypanel.toggle(event);
   }
 
@@ -216,15 +227,15 @@ export class ActionsComponent implements OnInit {
     if (popover.isOpen()) {
       popover.close();
     }
-
-  }
-  createNewAction() {
-    this.displayActionPhase = true;
   }
 
   closeActionDailog() {
     this.displayActionPhase = false;
     this.createActionForm.reset();
+  }
+
+  createNewAction() {
+    this.displayActionPhase = true;
   }
 
   dateFormat(inputDate: string) {

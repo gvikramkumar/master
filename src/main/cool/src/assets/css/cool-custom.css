@@ -584,6 +584,27 @@ span[class*="display-"] {
   padding-right: 10px;
 }
 
+
+.cool.cui .stakeholders span.ui-accordion-header-text {
+  font-size: 2rem;
+  font-weight: 100;
+  color: #58585b;
+  padding-left: 20px;
+ }
+.cool.cui .card.stakeholders {
+  padding: 0;
+}
+.cool.cui .card.stakeholders ul li{
+  border-bottom:1px solid #dfdfdf;
+  margin-bottom: 15px;
+}
+.cool.cui .card.stakeholders ul li:last-child{
+  border-bottom:none;
+}
+.cool.cui .card.stakeholders .ui-accordion .ui-accordion-header {
+  margin-top: 0;
+}
+
 /* modals */
 .cool.cui span.icon-close {
   cursor: pointer;
@@ -1035,6 +1056,27 @@ span[class*="display-"] {
 .cool.cui .card .oas .card__subtitle.display-6 {
   font-size: 32px;
   line-height: 1;
+}
+
+/* Custom Icons */
+.icon-expand:before {
+  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxOCAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTguMzc2OTUgOS42NDk2Nkw3LjAzNjY0IDguMzk0NjhMMi43OTI0MyAxMi4xNTk3TC0xLjQ5MTY5ZS0wOCA5LjY0OTQyTC04Ljk1MTYxZS0wOCAxNS45MjQzTDYuNzAxNTYgMTUuOTI0M0w0LjEzMjc0IDEzLjQxNDdMOC4zNzY5NSA5LjY0OTY2WiIgZmlsbD0iIzU4NTg1QiIvPgo8cGF0aCBkPSJNOC45MzU0MyA2LjUxMTk2TDEwLjI3NTcgNy43NjY5NEwxNC41MiA0LjAwMTkyTDE3LjMxMjQgNi41MTIyTDE3LjMxMjQgMC4yMzczMTRMMTAuNjEwOCAwLjIzNzMxNUwxMy4xNzk2IDIuNzQ2OTRMOC45MzU0MyA2LjUxMTk2WiIgZmlsbD0iIzU4NTg1QiIvPgo8L3N2Zz4K) no-repeat
+  left center;
+  content:'';
+  height: 1.8rem;
+  width: 1.8rem;
+  display: inline-block;
+}
+.icon-collapse:before {
+  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOSAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuNzk5NzdlLTA2IDE2LjY2OTNMMS4zNDAzMiAxNy45MjQzTDUuNTg0NTMgMTQuMTU5Mkw4LjM3Njk1IDE2LjY2OTVMOC4zNzY5NSAxMC4zOTQ2TDEuNjc1MzkgMTAuMzk0Nkw0LjI0NDIyIDEyLjkwNDNMNC43OTk3N2UtMDYgMTYuNjY5M1oiIGZpbGw9IiM1ODU4NUIiLz4KPHBhdGggZD0iTTE4LjMxMjQgMS40OTIyOEwxNi45NzIxIDAuMjM3MzA1TDEyLjcyNzkgNC4wMDIzMkw5LjkzNTQ5IDEuNDkyMDRMOS45MzU0OSA3Ljc2NjkzTDE2LjYzNyA3Ljc2NjkzTDE0LjA2ODIgNS4yNTczTDE4LjMxMjQgMS40OTIyOFoiIGZpbGw9IiM1ODU4NUIiLz4KPC9zdmc+Cg==) no-repeat
+  left center;
+  content:'';
+  height: 1.8rem;
+  width: 1.8rem;
+  display: inline-block;
+}
+span.icon-expand.icon-small:hover, span.icon-collapse.icon-small:hover {
+  opacity: .5;
 }
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {

@@ -77,9 +77,13 @@
                         Add All Item Detail&nbsp;&nbsp;</a></span>
                     <span class="vertical-divider" *ngIf="expandView">|</span>
                     <a *ngIf="expandView" href="javascript:;" (click)="toggleSidebar()">
-                      <span class="icon-fullscreen icon-small" title="Expand View"></span>
+                      <span class="icon-expand icon-small" title="Expand View"></span>
                     </a>
-                    <button *ngIf="!expandView" class="btn btn--small" (click)="addMore()">Add More Items</button>
+                    <span class="vertical-divider" *ngIf="!expandView">|</span>
+                    <a *ngIf="!expandView" (click)="addMore()">
+                    <!-- <button class="btn btn--small">Add More Items</button> -->
+                    <span class="icon-collapse icon-small" title="Collapse View"></span>
+                  </a>
                   </div>
                 </div>
                 <div class="row">
@@ -115,7 +119,7 @@
                                     <input [id]='rowData["uniqueKey"]' autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
                                       (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
                                       [disabled]="editData ? true : null" value="{{rowData['title']}}" [autofocus]='autoFocus'>
-                                      <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
+                                      <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <a *ngIf="!rowData['isGroupNode']" class="pull-right" (click)="showAddDetailsDailog(rowNode)"><span
                                       class="icon-add-contain"></span> Add
                                     Details</a>

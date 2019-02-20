@@ -106,8 +106,7 @@
                             Comment</div>
                         </div>
                       </p-header>
-                      <!-- <div *ngIf="strategyReviewData.status=='Not Reviewed'; then reviewRequiredPlaceHolder">
-                      </div> -->
+
                       <div
                         *ngIf="strategyReviewData.status=='Not Reviewed' && escalateVisibleAvailable; then visibleEscalateTemplate">
                       </div>
@@ -122,8 +121,11 @@
                             (click)="onEscalate(strategyReviewData.function)">Escalate</button>
                         </div>
                       </ng-template>
-                      <div *ngIf="strategyReviewData.function === currentFunctionalRole">
+                      <div
+                        *ngIf="strategyReviewData.function === currentFunctionalRole && strategyReviewData.status && strategyReviewData.status.toUpperCase() === 'NOT REVIEWED'">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
+                          <app-viewstrategy [caseId]="caseId" [comments]="strategyReviewData.comments">
+                          </app-viewstrategy>
                           <div class="panel--header">
                             <h5>Approval Decision</h5>
                           </div>
@@ -195,7 +197,7 @@
                                               {{milestone.subMilestone}}</option>
                                           </select> -->
                                           <input type="text" id="select-state-disabled" class="form-control"
-                                            name="milestoneName" value={{val}} readonly [(ngModel)]="val">
+                                            name="milestoneName" value={{milestoneValue}} readonly [(ngModel)]="milestoneValue">
                                         </div>
                                       </div>
                                     </div>
@@ -319,7 +321,7 @@
                                         <div class="form-group__text select">
                                           <label for="functionName">MILESTONE</label>
                                           <input type="text" id="select-state-disabled" class="form-control"
-                                            name="milestoneName" value={{val}} readonly [(ngModel)]="val">
+                                            name="milestoneName" value={{milestoneValue}} readonly [(ngModel)]="milestoneValue">
                                           <!-- <select id="milestoneName" type="text" class="form-control" name="milestoneName"
                                             [(ngModel)]="milestoneValue" required ngModel #milestoneName="ngModel">
                                             <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
