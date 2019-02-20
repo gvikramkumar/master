@@ -367,6 +367,12 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.showConditionalApprovalSection = false;
     this.showApproveSection = false;
     this.showButtonSection = true;
+    this.commentValue = "";
+    this.titleValue = "";
+    this.descriptionValue = "";
+    this.functionNameValue = "";
+    this.assigneeValue = [];
+    this.dueDateValue = "";
   }
 
   createAction() {
