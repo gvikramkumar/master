@@ -374,7 +374,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.doNotApproveSection = false;
     this.showConditionalApprovalSection = false;
     this.showApproveSection = false;
-    this.showButtonSection = true;
+    this.showButtonSection = false;
   }
 
   createAction() {
@@ -385,7 +385,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const createActionPayload = {};
     createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
     createActionPayload['owner'] = this.offerBuilderdata['offerOwner'];
-    createActionPayload['assignee'] = this.assigneeValue;
+    createActionPayload['assignee'] = [this.assigneeValue];
     createActionPayload['offerId'] = this.offerId;
     createActionPayload['caseId'] = this.caseId;
     createActionPayload['description'] = this.descriptionValue;
@@ -409,11 +409,17 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.assigneeValue,
       this.dueDateValue.toISOString(),
     );
-    this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
-      // this.actionsService.postForNewAction(this.currentOfferId, this.caseId, createActionPayload).subscribe(response => {
-      this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
+
+    const assignee = [this.assigneeValue];
+    const offerId = this.offerId;
+    const actionTitle = this.titleValue;
+    const actionDescription = this.descriptionValue;
+
+    this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
+      this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
         this.closeForm();
         this.getStrategyReviwInfo();
+        this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
       });
     });
     this.createActionForm.reset();
