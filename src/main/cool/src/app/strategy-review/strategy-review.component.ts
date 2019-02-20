@@ -383,19 +383,18 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const taskName = 'Action';
 
     const createActionPayload = {};
-    createActionPayload['caseId'] = this.caseId;
-    createActionPayload['offerId'] = this.offerId;
-    createActionPayload['owner'] = this.offerBuilderdata['offerOwner'];
     createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
-    createActionPayload['actionTitle']=this.titleValue;
-    createActionPayload['assignee']=this.assigneeValue;
-    createActionPayload['mileStone']=this.milestoneValue;
-    createActionPayload['description']=this.descriptionValue;
-    createActionPayload['selectedFunction']=this.functionNameValue;
-    createActionPayload['dueDate']=this.dueDateValue.toISOString();
-
-    createActionPayload['type'];
-    createActionPayload['actionCreator'];
+    createActionPayload['owner'] = this.offerBuilderdata['offerOwner'];
+    createActionPayload['assignee'] = this.assigneeValue;
+    createActionPayload['offerId'] = this.offerId;
+    createActionPayload['caseId'] = this.caseId;
+    createActionPayload['description'] = this.descriptionValue;
+    createActionPayload['actionTitle'] = this.titleValue;
+    createActionPayload['dueDate'] = this.dueDateValue.toISOString();
+    createActionPayload['mileStone'] = this.milestoneValue;
+    createActionPayload['selectedFunction'] = this.functionNameValue;
+    createActionPayload['actionCreator'] = userId;
+    createActionPayload['type'] = 'Manual Action';
 
     const createActionComment: CreateActionComment = new CreateActionComment(
       taskId,

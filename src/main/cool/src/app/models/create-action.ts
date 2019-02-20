@@ -9,9 +9,11 @@ export class CreateAction {
   dueDate: any;
   owner: string;
   offerName: string;
+  actionCreator: string;
   type: string;
 
-  constructor(offerId: string,
+  constructor(
+    offerId: string,
     caseId: string,
     actionTitle: string,
     description: string,
@@ -21,18 +23,20 @@ export class CreateAction {
     dueDate: any,
     owner: string,
     offerName: string,
+    actionCreator: string,
     type: string,
-    ) {
-        this.offerId = offerId;
-        this.caseId=caseId;
-        this.actionTitle = actionTitle;
-        this.description = description;
-        this.mileStone = mileStone;
-        this.selectedFunction = selectedFunction;
-        this.assignee = assignee;
-        this.dueDate = dueDate;
-        this.owner = owner;
-        this.offerName = offerName;
-        this.type = type;
+  ) {
+    this.offerId = offerId;
+    this.caseId = caseId;
+    this.actionTitle = actionTitle;
+    this.description = description;
+    this.mileStone = mileStone;
+    this.selectedFunction = selectedFunction;
+    this.assignee = assignee;
+    this.dueDate = dueDate;
+    this.owner = owner;
+    this.offerName = offerName;
+    this.actionCreator = actionCreator;
+    this.type = type;
   }
 }
