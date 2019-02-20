@@ -602,14 +602,12 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   closeDailog() {
     this.displayAddDetails = false;
-    this.questionForm.reset();
     this.questions = [];
   }
 
   onHide() {
     this.offerConstructService.changeForm('reset');
     this.displayAddDetails = false;
-    this.questionForm.reset();
     this.questions = [];
     this.showMandatoryDetails = false;
   }
@@ -635,6 +633,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     // const productName = product;
     this.currentRowClicked = currentNode;
     this.lineItemName = currentNode.node.data.productName;
+    let itemDetails = currentNode.node.data['itemDetails'];
     this.displayAddDetails = true;
     const groups: Groups[] = [];
     const group = new Groups(
@@ -649,6 +648,9 @@ export class OfferconstructCanvasComponent implements OnInit {
         this.questions.push(quesion);
       });
       this.questionForm = this.offerConstructService.toFormGroup(this.questions);
+      if (itemDetails !== undefined) {
+        this.questionForm.patchValue(itemDetails);
+      }
     },
       (err) => {
         console.log(err);
