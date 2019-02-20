@@ -1,9 +1,13 @@
-export default {
-  port: 3002,
+
+/*
   ssl: {
     key: '../../../../DFA/ssl_cert/dfaSSL.key',
     cert: '../../../../DFA/ssl_cert/dfaSSL.csr'
   },
+ */
+
+export default {
+  port: 3002,
   corsOrigin: [],
   showStack: false,
   artUrl: 'https://wsgi-stage.cisco.com/cepm/pdpservices/authorizationmanagerservice',
