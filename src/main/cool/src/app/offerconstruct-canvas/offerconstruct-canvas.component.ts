@@ -68,14 +68,15 @@ export class OfferconstructCanvasComponent implements OnInit {
   number;
   majorItemsGroup;
   majorLineGroup: any[] = [];
-  formGroupData= [];
-  mandatoryFields=[];
+  formGroupData = [];
+  mandatoryFields = [];
   formGroupDataMinorItems = [];
   count = 1;
   displayMandatory;
   toggleMandatory = true;
   myForm: FormGroup;
-  countableItems:Number[] = [];
+  countableItems: Number[] = [];
+  private map1 = new Map();
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder) {
@@ -107,6 +108,13 @@ export class OfferconstructCanvasComponent implements OnInit {
       obj['title'] = this.draggedItem.productName;
       obj['isMajorLineItem'] = this.draggedItem.isMajorLineItem;
       obj['childCount'] = 0;
+      let data = this.map1.get(this.draggedItem.productName)
+      if (data == undefined) {
+        this.map1.set(this.draggedItem.productName, 1);
+      } else {
+        this.map1.set(this.draggedItem.productName, this.map1.get(this.draggedItem.productName) + 1);
+      }
+      obj['title'] = this.draggedItem.productName + ' ' + this.map1.get(this.draggedItem.productName);
       this.offerConstructItems.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
       this.countableItems.push(this.uniqueId);
@@ -114,7 +122,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
   }
 
-  majorLine(){
+  majorLine() {
     this.minorLineItemsActive = false;
     this.majorLineItemsActive = true;
   }
@@ -125,7 +133,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   showMandatory(event, id) {
-    this.toggleMandatory = this.toggleMandatory?false:true;
+    this.toggleMandatory = this.toggleMandatory ? false : true;
     this.displayMandatory = event.target.id;
     this.cd.detectChanges();
   }
@@ -134,7 +142,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.majorItemData = [];
     this.minorItemData = [];
     this.display = true;
-    let tempObj= [];
+    let tempObj = [];
     this.offerConstructItems = [...this.offerConstructItems]
     tempObj = null;
     this.formGroupData = [];
@@ -142,21 +150,21 @@ export class OfferconstructCanvasComponent implements OnInit {
     tempObj = this.offerConstructItems;
     console.log(tempObj);
     tempObj.forEach(item => {
-      if(item.parent==null){
+      if (item.parent == null) {
         const majorItem = {
           productName: item.data.productName
         };
-        if(item.children.length){
-        let tempChildObj = []
-        tempChildObj = item.children;
-        tempChildObj.forEach(item => {
-          if(!item.data.isGroupNode){
-            const minorItem = {
-              productName: item.data.productName
+        if (item.children.length) {
+          let tempChildObj = []
+          tempChildObj = item.children;
+          tempChildObj.forEach(item => {
+            if (!item.data.isGroupNode) {
+              const minorItem = {
+                productName: item.data.productName
+              }
+              this.minorItemData.push(minorItem);
             }
-            this.minorItemData.push(minorItem);
-          }
-        })
+          })
         }
         this.majorItemData.push(majorItem);
         console.log(this.majorItemData)
@@ -164,43 +172,43 @@ export class OfferconstructCanvasComponent implements OnInit {
     })
     this.displayAddDetails = true;
     let groups = [];
-    for(let i=0; i<this.majorItemData.length; i++){
-      let groupName = {groupName: this.majorItemData[i].productName}
+    for (let i = 0; i < this.majorItemData.length; i++) {
+      let groupName = { groupName: this.majorItemData[i].productName }
       groups.push(groupName);
     }
     let minorGroups = []
-    for(let i=0; i<this.minorItemData.length; i++){
-      let minorGroupName = {groupName: this.minorItemData[i].productName}
+    for (let i = 0; i < this.minorItemData.length; i++) {
+      let minorGroupName = { groupName: this.minorItemData[i].productName }
       minorGroups.push(minorGroupName);
     }
     console.log(groups)
     let groupsPayload = groups;
     let m = this;
     for (let i = 0; i < minorGroups.length; i++) {
-      let payLoad = {groups: [minorGroups[i]]}
+      let payLoad = { groups: [minorGroups[i]] }
       m.offerConstructService.addDetails(payLoad).subscribe(
         (data) => {
           this.formGroupDataMinorItems.push(data);
           console.log(this.formGroupDataMinorItems);
-      console.log(this.questions)
-      this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
+          console.log(this.questions)
+          this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
         }, err => console.log('error ' + err),
         () => console.log('Ok ')
       );
-      }
+    }
     for (let i = 0; i < groups.length; i++) {
-      let payLoadMajor = {groups: [groups[i]]}
+      let payLoadMajor = { groups: [groups[i]] }
       m.offerConstructService.addDetails(payLoadMajor).subscribe(
         (data) => {
-      this.formGroupData.push(data);
-      this.mandatoryFields.push(data.groups[0]);
-      this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
+          this.formGroupData.push(data);
+          this.mandatoryFields.push(data.groups[0]);
+          this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
         }, err => console.log('error ' + err),
         () => console.log('Ok ')
       );
-      }
-      console.log(this.formGroupData);
-      console.log(this.mandatoryFields);
+    }
+    console.log(this.formGroupData);
+    console.log(this.mandatoryFields);
   }
 
   deleteNode(node) {
@@ -286,7 +294,7 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['label'] = this.draggedItem.data.label;
           obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
           obj['listPrice'] = this.draggedItem.data.listPrice;
-          obj['title'] = this.draggedItem.data.title?this.draggedItem.data.title: this.draggedItem.data.productName;
+          obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
         } else {
@@ -300,6 +308,14 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['isMajorLineItem'] = this.draggedItem.isMajorLineItem;
           obj['listPrice'] = this.draggedItem.listPrice;
           obj['title'] = this.draggedItem.productName;
+          let data = this.map1.get(this.draggedItem.productName)
+          if (data == undefined) {
+            this.map1.set(this.draggedItem.productName, 1);
+          } else {
+            this.map1.set(this.draggedItem.productName, this.map1.get(this.draggedItem.productName) + 1);
+          }
+          obj['title'] = this.draggedItem.productName + ' ' + this.map1.get(this.draggedItem.productName);
+
           rowNode.node.children.push(this.itemToTreeNode(obj));
         }
       }
@@ -357,8 +373,8 @@ export class OfferconstructCanvasComponent implements OnInit {
 
     let countGroup = 1;
     if (rowNode.node.children) {
-      rowNode.node.children.forEach(item=> {
-        if(item.data.isGroupNode === true) {
+      rowNode.node.children.forEach(item => {
+        if (item.data.isGroupNode === true) {
           countGroup += 1;
         }
       });
@@ -394,22 +410,22 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.offerConstructService.space.subscribe((val) => {
       console.log(val);
       console.log(this.offerConstructItems);
-      this.offerConstructItems.forEach(item=>{
-        if(item.data.productName == val[0]){
+      this.offerConstructItems.forEach(item => {
+        if (item.data.productName == val[0]) {
           item.data['itemDetails'] = val[1];
         }
       })
-      this.offerConstructItems.forEach(value=>{
-        value.children.forEach(itm=>{
-          if(itm.data.productName == val[0]){
+      this.offerConstructItems.forEach(value => {
+        value.children.forEach(itm => {
+          if (itm.data.productName == val[0]) {
             itm.data['itemDetails'] = val[1];
-            console.log('asdfafdadf ',itm);
+            console.log('asdfafdadf ', itm);
           }
         })
       })
 
       this.offerConstructService.closeDialog.subscribe((val) => {
-        if(val=='close'){
+        if (val == 'close') {
           this.display = false;
         }
       })
@@ -574,12 +590,12 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param $event Search for PID
    */
   searchForItem(event) {
-    this._canvasService.searchEgenie(event.query).subscribe ((results)=> {
+    this._canvasService.searchEgenie(event.query).subscribe((results) => {
       this.results = [...results];
     },
-    (error) => {
-      this.results = [];
-    }
+      (error) => {
+        this.results = [];
+      }
     );
   }
 
@@ -602,14 +618,12 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   closeDailog() {
     this.displayAddDetails = false;
-    this.questionForm.reset();
     this.questions = [];
   }
 
   onHide() {
     this.offerConstructService.changeForm('reset');
     this.displayAddDetails = false;
-    this.questionForm.reset();
     this.questions = [];
     this.showMandatoryDetails = false;
   }
@@ -635,6 +649,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     // const productName = product;
     this.currentRowClicked = currentNode;
     this.lineItemName = currentNode.node.data.productName;
+    let itemDetails = currentNode.node.data['itemDetails'];
     this.displayAddDetails = true;
     const groups: Groups[] = [];
     const group = new Groups(
@@ -649,6 +664,9 @@ export class OfferconstructCanvasComponent implements OnInit {
         this.questions.push(quesion);
       });
       this.questionForm = this.offerConstructService.toFormGroup(this.questions);
+      if (itemDetails !== undefined) {
+        this.questionForm.patchValue(itemDetails);
+      }
     },
       (err) => {
         console.log(err);
@@ -667,9 +685,9 @@ export class OfferconstructCanvasComponent implements OnInit {
   saveOfferConstructChanges() {
     this.offerConstructItems = [... this.offerConstructItems];
     console.log('this is the object', this.offerConstructItems)
-    let cds: ConstructDetails  = new ConstructDetails(this.currentOfferId, []);
-    this.offerConstructItems.forEach( (node) => {
-      let cd:ConstructDetail;
+    let cds: ConstructDetails = new ConstructDetails(this.currentOfferId, []);
+    this.offerConstructItems.forEach((node) => {
+      let cd: ConstructDetail;
       // check if this item is major item
       if (node.parent === null) {
         cd = new ConstructDetail();
@@ -717,27 +735,27 @@ export class OfferconstructCanvasComponent implements OnInit {
           } else {
             if (child.children !== undefined && child.children !== null) {
               child.children.forEach((gchild) => {
-                  cd = new ConstructDetail();
-                  cd.constructItem = 'Minor';
-                  cd.constructItemName = gchild.data.productName;
-                  cd.constructType = gchild.data.productName;
-                  cd.productFamily = gchild.data.productName;
-                  cd.groupName.push(child.data.productName);
-                  if (gchild.data.itemDetails !== undefined) {
-                    let id: ItemDetail;
-                    for (const key in gchild.data.itemDetails) {
-                      id = new ItemDetail();
-                      id.attributeName = key;
-                      id.attributeValue = gchild.data.itemDetails[key];
-                      id.attributeType = 'Unique';
-                      id.existingFromEgenie = false;
-                      cd.itemDetails.push(id);
-                    };
-                  }
-                  cds.constructDetails.push(cd);
-                });
-              }
+                cd = new ConstructDetail();
+                cd.constructItem = 'Minor';
+                cd.constructItemName = gchild.data.productName;
+                cd.constructType = gchild.data.productName;
+                cd.productFamily = gchild.data.productName;
+                cd.groupName.push(child.data.productName);
+                if (gchild.data.itemDetails !== undefined) {
+                  let id: ItemDetail;
+                  for (const key in gchild.data.itemDetails) {
+                    id = new ItemDetail();
+                    id.attributeName = key;
+                    id.attributeValue = gchild.data.itemDetails[key];
+                    id.attributeType = 'Unique';
+                    id.existingFromEgenie = false;
+                    cd.itemDetails.push(id);
+                  };
+                }
+                cds.constructDetails.push(cd);
+              });
             }
+          }
         });
       }
 
@@ -746,9 +764,9 @@ export class OfferconstructCanvasComponent implements OnInit {
 
     this._canvasService.saveOfferConstructChanges(cds).subscribe(data => {
     },
-    (error) => {
-      console.log(error);
-    });
+      (error) => {
+        console.log(error);
+      });
   }
 
   /**
@@ -768,7 +786,7 @@ export class OfferconstructCanvasComponent implements OnInit {
               if (child.data.isGroupNode) {
                 totalNoOfGroups = ++totalNoOfGroups;
                 totalChildren = totalChildren + child.children.length;
-              } else  {
+              } else {
                 // do nothing
               }
             });

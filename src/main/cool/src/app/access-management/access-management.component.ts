@@ -160,7 +160,11 @@ export class AccessManagementComponent implements OnInit {
         accessList.push('Admin');
       }
       temp['accessList'] = accessList;
-      finalAdminData.push(temp);
+      // If user is super admin they should see everything
+      // or if user is functional admin they should see only for their own functions
+      if (this.configurationService.startupData.isSuperAdmin ||
+        (this.configurationService.startupData.isFunctionalAdmin && this.configurationService.startupData.functionsUserCanAddTo.includes(temp['functionalRole'])
+        )) { finalAdminData.push(temp); }
     });
     this.accessManagementData = finalAdminData;
   }

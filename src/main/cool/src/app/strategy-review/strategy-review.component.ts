@@ -58,7 +58,6 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   noOfWeeksDifference: string;
   lastValueInMilestone: Array<any>;
   milestone: any;
-  val: any;
   selectedfunctionRole: string = null;
   stakeHolders = {};
 
@@ -160,7 +159,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.lastValueInMilestone = result.slice(-1)[0];
 
       let mile = this.lastValueInMilestone
-      this.val = mile['subMilestone'];
+      this.milestoneValue = mile['subMilestone'];
     });
 
     this.actionsService.getAssignee(this.currentOfferId).subscribe(data => {
@@ -374,7 +373,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.doNotApproveSection = false;
     this.showConditionalApprovalSection = false;
     this.showApproveSection = false;
-    this.showButtonSection = true;
+    this.showButtonSection = false;
   }
 
   createAction() {
@@ -383,19 +382,18 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const taskName = 'Action';
 
     const createActionPayload = {};
-    createActionPayload['caseId'] = this.caseId;
-    createActionPayload['offerId'] = this.offerId;
-    createActionPayload['owner'] = this.offerBuilderdata['offerOwner'];
     createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
-    createActionPayload['actionTitle']=this.titleValue;
-    createActionPayload['assignee']=this.assigneeValue;
-    createActionPayload['mileStone']=this.milestoneValue;
-    createActionPayload['description']=this.descriptionValue;
-    createActionPayload['selectedFunction']=this.functionNameValue;
-    createActionPayload['dueDate']=this.dueDateValue.toISOString();
-
-    createActionPayload['type'];
-    createActionPayload['actionCreator'];
+    createActionPayload['owner'] = this.offerBuilderdata['offerOwner'];
+    createActionPayload['assignee'] = [this.assigneeValue];
+    createActionPayload['offerId'] = this.offerId;
+    createActionPayload['caseId'] = this.caseId;
+    createActionPayload['description'] = this.descriptionValue;
+    createActionPayload['actionTitle'] = this.titleValue;
+    createActionPayload['dueDate'] = this.dueDateValue.toISOString();
+    createActionPayload['mileStone'] = this.milestoneValue;
+    createActionPayload['selectedFunction'] = this.functionNameValue;
+    createActionPayload['actionCreator'] = userId;
+    createActionPayload['type'] = 'Manual Action';
 
     const createActionComment: CreateActionComment = new CreateActionComment(
       taskId,
@@ -410,11 +408,17 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.assigneeValue,
       this.dueDateValue.toISOString(),
     );
-    this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
-      // this.actionsService.postForNewAction(this.currentOfferId, this.caseId, createActionPayload).subscribe(response => {
-      this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
+
+    const assignee = [this.assigneeValue];
+    const offerId = this.offerId;
+    const actionTitle = this.titleValue;
+    const actionDescription = this.descriptionValue;
+
+    this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
+      this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
         this.closeForm();
         this.getStrategyReviwInfo();
+        this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
       });
     });
     this.createActionForm.reset();

@@ -56,7 +56,6 @@ export class ActionsComponent implements OnInit {
   actionOwner: string;
   lastValueInMilestone: Array<any>;
   milestone: any;
-  val: any;
   selectedCaseId: any;
   commentEvent: any;
   selectedAction;
@@ -125,7 +124,7 @@ export class ActionsComponent implements OnInit {
           this.lastValueInMilestone = this.milestoneList.slice(-1)[0];
 
           let mile = this.lastValueInMilestone
-          this.val = mile['subMilestone'];
+          this.milestoneValue = mile['subMilestone'];
 
         });
       }
@@ -191,13 +190,13 @@ export class ActionsComponent implements OnInit {
       this.offerCaseMap[this.offerNameValue],
       this.titleValue,
       this.descriptionValue,
-      // this.milestoneValue,
-      this.val,
+      this.milestoneValue,
       this.functionNameValue,
       selectedAssignee,
       this.dueDateValue.toISOString(),
       this.offerOwnerMap[this.offerNameValue],
       this.offerNameMap[this.offerNameValue],
+      this.userService.getUserId(),
       type,
     );
 
@@ -228,7 +227,11 @@ export class ActionsComponent implements OnInit {
     if (popover.isOpen()) {
       popover.close();
     }
+  }
 
+  closeActionDailog() {
+    this.displayActionPhase = false;
+    this.createActionForm.reset();
   }
 
   createNewAction() {
