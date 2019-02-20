@@ -2,7 +2,6 @@
   <div class="container">
     <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
       [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
-
     </app-menu-bar>
     <div class="panel-wrapper mt-15">
       <div class="panel panel--indigo panel--compressed task--bar">
@@ -106,14 +105,23 @@
                             Comment</div>
                         </div>
                       </p-header>
+                      <!--
+  If the action is still in 'Not Reviewed' status then 
+  users who belong to the escalate users group will see the escalate section
+  users who the task is assigned to will see the approval section
+
+  everyone will see the comments irrespective of the status of the action
+-->
+                      <div class="panel panel--bordered">
+                        <app-viewstrategy [caseId]="caseId" [comments]="strategyReviewData.comments">
+                        </app-viewstrategy>
+                      </div>
 
                       <div
                         *ngIf="strategyReviewData.status=='Not Reviewed' && escalateVisibleAvailable; then visibleEscalateTemplate">
                       </div>
                       <ng-template #visibleEscalateTemplate>
                         <div class="panel panel--bordered not-reviewed">
-                          <app-viewstrategy [caseId]="caseId" [comments]="strategyReviewData.comments">
-                          </app-viewstrategy>
                           <p>This is the strategy review milestone and the content is a placeholder for
                             milestone summary.
                             This is the strategy review milestone and the content is ... </p>
@@ -124,8 +132,7 @@
                       <div
                         *ngIf="strategyReviewData.function === currentFunctionalRole && strategyReviewData.status && strategyReviewData.status.toUpperCase() === 'NOT REVIEWED'">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
-                          <app-viewstrategy [caseId]="caseId" [comments]="strategyReviewData.comments">
-                          </app-viewstrategy>
+
                           <div class="panel--header">
                             <h5>Approval Decision</h5>
                           </div>
@@ -197,7 +204,8 @@
                                               {{milestone.subMilestone}}</option>
                                           </select> -->
                                           <input type="text" id="select-state-disabled" class="form-control"
-                                            name="milestoneName" value={{val}} readonly [(ngModel)]="val">
+                                            name="milestoneName" value={{milestoneValue}} readonly
+                                            [(ngModel)]="milestoneValue">
                                         </div>
                                       </div>
                                     </div>
@@ -321,7 +329,8 @@
                                         <div class="form-group__text select">
                                           <label for="functionName">MILESTONE</label>
                                           <input type="text" id="select-state-disabled" class="form-control"
-                                            name="milestoneName" value={{val}} readonly [(ngModel)]="val">
+                                            name="milestoneName" value={{milestoneValue}} readonly
+                                            [(ngModel)]="milestoneValue">
                                           <!-- <select id="milestoneName" type="text" class="form-control" name="milestoneName"
                                             [(ngModel)]="milestoneValue" required ngModel #milestoneName="ngModel">
                                             <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">

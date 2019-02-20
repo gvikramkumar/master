@@ -15,6 +15,7 @@ export class RightPanelService {
   launchDateUrl: string;
   averageWeekUrl: string;
   updateOfferPhaseUrl:string;
+  updateOfferPhaseUrlInDBUrl: string;
 
   constructor(
     private httpClient: HttpClient,
@@ -23,6 +24,7 @@ export class RightPanelService {
     this.launchDateUrl = this.environmentService.REST_API_LEAD_TIME_LAUNCH_DATE;
     this.averageWeekUrl = this.environmentService.REST_API_LEAD_TIME_AVERAGE_WEEKS;
     this.updateOfferPhaseUrl  = this.environmentService.REST_API_UPDATE_OFFER_TARGET_DATE;
+    this.updateOfferPhaseUrlInDBUrl = this.environmentService.REST_API_UPDATE_OFFER;
 
   }
 
@@ -78,6 +80,10 @@ export class RightPanelService {
 
   updatePhaseTargetDate(payLoad:any): Observable<any> {
     return this.httpClient.post(this.updateOfferPhaseUrl, payLoad, { withCredentials: true });
+  }
+
+  updatePhaseTargetDateInDB(payLoad:any): Observable<any> {
+    return this.httpClient.post(this.updateOfferPhaseUrlInDBUrl, payLoad, { withCredentials: true });
   }
 
 }
