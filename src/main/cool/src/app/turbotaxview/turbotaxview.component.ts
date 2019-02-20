@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { OfferPhaseService } from '../services/offer-phase.service';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router} from '@angular/router';
 import { TurbotaxService } from '../services/turbotax.service';
-import { MenuBarService } from '../services/menu-bar.service'
 @Component({
     selector: 'app-turbotaxview',
     templateUrl: './turbotaxview.component.html',
@@ -14,33 +13,32 @@ export class TurbotaxviewComponent implements OnChanges {
 
     public phases: any[] = ['ideate', 'plan', 'execute', 'launch'];
     public mileStoneStatus: any[] = [];
-    public currentOfferId: any;
+
     public ideateCount: any = 0;
     public ideateCompletedCount = 0;
     public planCount = 0;
     public planCompletedCount = 0;
 
-    public offerPhaseDetailsList: any;
+    public offerPhaseDetailsList = null;
     public phaseProcessingCompleted = false;
-    checkout: { Message: string; items: { mainVO: { main_title: string; childVO: { title: string; price: string; }[]; discounts: { title: string; price: string; }[]; }; quantity: string; price: string; currency: string; }[]; };
+    public isOfferPhaseBlank = true;
     navigateHash: Object = {};
 
-    attribute: boolean;
 
     constructor(
-        private offerPhaseService: OfferPhaseService,
         private turbotax: TurbotaxService,
         private router: Router
     ) { }
 
     ngOnChanges(changes: SimpleChanges) {
+        this.reset();
+
         const caseIdChange: SimpleChange = changes.caseId;
         const offerIdChange: SimpleChange = changes.offerId;
 
-        const caseId = caseIdChange.currentValue;
-        const offerId = offerIdChange.currentValue;
+        const caseId = caseIdChange ? caseIdChange.currentValue : this.caseId;
+        const offerId = offerIdChange ? offerIdChange.currentValue : this.offerId;
 
-        this.attribute = false;
         this.navigateHash['Offer Creation'] = ['/coolOffer', offerId, caseId];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', offerId, caseId];
         this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', offerId, caseId];
@@ -62,11 +60,9 @@ export class TurbotaxviewComponent implements OnChanges {
 
                 this.processCurrentPhaseInfo(resOfferPhases);
             }
+            this.phaseProcessingCompleted = true;
+            this.isOfferPhaseBlank = resOfferPhases === null || Object.keys(resOfferPhases).length === 0;
         });
-
-        // this.offerPhaseService.getCurrentOfferPhaseInfo(caseId).subscribe(data => {
-        //     this.processCurrentPhaseInfo(data);
-        // });
     }
 
     processCurrentPhaseInfo(offerPhaseInfo) {
@@ -86,7 +82,17 @@ export class TurbotaxviewComponent implements OnChanges {
             accumulator.push(phaseInfo);
             return accumulator;
         }, []);
-        this.phaseProcessingCompleted = true;
+    }
+
+    reset() {
+        this.mileStoneStatus = [];
+        this.ideateCount = 0;
+        this.ideateCompletedCount = 0;
+        this.planCount = 0;
+        this.planCompletedCount = 0;
+        this.offerPhaseDetailsList = null;
+        this.phaseProcessingCompleted = false;
+        this.navigateHash = {};
     }
 
     private isMilestoneCompleted(): any {

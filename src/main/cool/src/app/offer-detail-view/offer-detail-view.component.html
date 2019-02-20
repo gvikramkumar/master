@@ -417,6 +417,22 @@
                       </div>
                     </div>
                   </div>
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[4]?.status != null">
+                      <div
+                        [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                        <span
+                          [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Available')?'icon-warning':'icon-check'"></span>
+                      </div>
+                      <div class="timeline__content">
+                        <div class="text-bold">
+                          <span
+                            [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                          {{offerOverviewDetailsList.plan[4].subMilestone}}
+                        </div>
+                        <div [hidden]="offerOverviewDetailsList.plan[4].status == 'Available'">
+                        </div>
+                      </div>
+                    </div>
                 </div>
               </div>
             </p-accordionTab>
