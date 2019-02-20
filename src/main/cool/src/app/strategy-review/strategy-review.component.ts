@@ -373,7 +373,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.doNotApproveSection = false;
     this.showConditionalApprovalSection = false;
     this.showApproveSection = false;
-    this.showButtonSection = false;
+    this.showButtonSection = true;
   }
 
   createAction() {
