@@ -41,6 +41,32 @@ export default class PgLookupRepo {
   }
 */
 
+  getManualMixHwSwBySubmeasureKey(req) {
+    if (!req.dfa.module) {
+      throw new ApiError('getManualMixHwSwBySubmeasureKey: No module');
+    }
+    this.verifyProperties(req.body, ['submeasureKey']);
+    const module = req.dfa.modules
+    const sqlHw = `
+        SELECT coalesce(sum(split_percentage), 0) split_percentage
+        FROM fpadfa.dfa_prof_swalloc_manualmix_upld 
+        WHERE sub_measure_key = ${req.body.submeasureKey}
+        AND split_category = 'HARDWARE' 
+        AND fiscal_month_id = ${req.dfa.fiscalMonths[req.dfa.module.abbrev]}
+    `;
+    const sqlSw = `
+        SELECT coalesce(sum(split_percentage), 0) split_percentage
+        FROM fpadfa.dfa_prof_swalloc_manualmix_upld 
+        WHERE sub_measure_key = ${req.body.submeasureKey}
+        AND split_category = 'SOFTWARE' 
+        AND fiscal_month_id = ${req.dfa.fiscalMonths[req.dfa.module.abbrev]}
+    `;
+    return Promise.all([
+      pgc.pgdb.query(sqlHw).then(results => Number(results.rows[0].split_percentage)),
+      pgc.pgdb.query(sqlSw).then(results => Number(results.rows[0].split_percentage))
+    ]);
+  }
+
   getDistinctAltSl2AltCountryPairs() {
     const sql = `
         select distinct upper(dsh.l2_sales_territory_name_code)||'::'||upper(cnt.iso_country_name) as col
@@ -804,6 +830,14 @@ export default class PgLookupRepo {
             .then(results => Boolean(results.rows[0] && results.rows[0].column_name));
         }
       });
+  }
+
+  verifyProperties(data, arr) {
+    arr.forEach(prop => {
+      if (!data[prop]) {
+        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+      }
+    });
   }
 
 }

@@ -127,7 +127,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           }
           this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
         }
-        this.orgRule = _.cloneDeep(this.rule);
 
         this.salesSL2ChoiceOptions = {
           asyncValidations: [
@@ -179,12 +178,18 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           ]
         };
 
-        this.init();
+        this.init(true);
       });
   }
 
-  init() {
+  init(initial?) {
     this.createSelectArrays();
+    if (initial) {
+      // we need these statements to be exactly how the ui would generate so they can be compared for changes
+      // so update them right after creating the select arrays, "then" save to orgRule
+      this.updateSelectStatements();
+      this.orgRule = _.cloneDeep(this.rule);
+    }
   }
 
   hasChanges() {
@@ -209,6 +214,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   reset() {
+    // we use the select statements for comparison, so update before compare
+    this.updateSelectStatements();
     this.verifyLosingChanges()
       .subscribe(resp => {
         if (resp) {
@@ -478,57 +485,44 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   createSelectArrays() {
-    if (this.rule.sl1Select && this.rule.sl1Select.trim().length) {
-      const parse = this.parseSelect(this.rule.sl1Select);
-      this.salesSL1CritCond = parse.cond;
-      this.salesSL1CritChoices = parse.arr;
-    }
+    let parse = this.parseSelect(this.rule.sl1Select);
+    this.salesSL1CritCond = parse.cond;
+    this.salesSL1CritChoices = parse.arr;
 
-    if (this.rule.sl2Select && this.rule.sl2Select.trim().length) {
-      const parse = this.parseSelect(this.rule.sl2Select);
-      this.salesSL2CritCond = parse.cond;
-      this.salesSL2CritChoices = parse.arr;
-    }
+    parse = this.parseSelect(this.rule.sl2Select);
+    this.salesSL2CritCond = parse.cond;
+    this.salesSL2CritChoices = parse.arr;
 
-    if (this.rule.sl3Select && this.rule.sl3Select.trim().length) {
-      const parse = this.parseSelect(this.rule.sl3Select);
-      this.salesSL3CritCond = parse.cond;
-      this.salesSL3CritChoices = parse.arr;
-    }
+    parse = this.parseSelect(this.rule.sl3Select);
+    this.salesSL3CritCond = parse.cond;
+    this.salesSL3CritChoices = parse.arr;
 
-    if (this.rule.prodPFSelect && this.rule.prodPFSelect.trim().length) {
-      const parse = this.parseSelect(this.rule.prodPFSelect);
-      this.prodPFCritCond = parse.cond;
-      this.prodPFCritChoices = parse.arr;
-    }
+    parse = this.parseSelect(this.rule.prodPFSelect);
+    this.prodPFCritCond = parse.cond;
+    this.prodPFCritChoices = parse.arr;
 
-    if (this.rule.prodBUSelect && this.rule.prodBUSelect.trim().length) {
-      const parse = this.parseSelect(this.rule.prodBUSelect);
-      this.prodBUCritCond = parse.cond;
-      this.prodBUCritChoices = parse.arr;
-    }
+    parse = this.parseSelect(this.rule.prodBUSelect);
+    this.prodBUCritCond = parse.cond;
+    this.prodBUCritChoices = parse.arr;
 
-    if (this.rule.prodTGSelect && this.rule.prodTGSelect.trim().length) {
-      const parse = this.parseSelect(this.rule.prodTGSelect);
-      this.prodTGCritCond = parse.cond;
-      this.prodTGCritChoices = parse.arr;
-    }
+    parse = this.parseSelect(this.rule.prodTGSelect);
+    this.prodTGCritCond = parse.cond;
+    this.prodTGCritChoices = parse.arr;
 
-    if (this.rule.scmsSelect && this.rule.scmsSelect.trim().length) {
-      const parse = this.parseSelect(this.rule.scmsSelect);
-      this.scmsCritCond = parse.cond;
-      this.scmsCritChoices = parse.arr;
-    }
+    parse = this.parseSelect(this.rule.scmsSelect);
+    this.scmsCritCond = parse.cond;
+    this.scmsCritChoices = parse.arr;
 
-    if (this.rule.beSelect && this.rule.beSelect.trim().length) {
-      const parse = this.parseSelect(this.rule.beSelect);
-      this.beCritCond = parse.cond;
-      this.beCritChoices = parse.arr;
-    }
-
+    parse = this.parseSelect(this.rule.beSelect);
+    this.beCritCond = parse.cond;
+    this.beCritChoices = parse.arr;
   }
 
   parseSelect(str) {
+    // we need to not only parse but also clear off if reset
+    if (!str || !str.trim().length) {
+      return {cond: undefined, arr: []};
+    }
     const rtn: AnyObj = {};
     const idx = str.indexOf('(');
     rtn.cond = str.substr(0, idx).trim();
