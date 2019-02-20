@@ -221,27 +221,33 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
-        this.OfferOwners = this.offerData.offerObj.owners;
-        this.approvars = this.offerData.offerObj.approvars;
+        if(this.offerData.offerObj)
+        {
+          this.OfferOwners = this.offerData.offerObj.owners;
+          this.approvars = this.offerData.offerObj.approvars;
 
-        this.phaseTaskMap = this.offerData.phaseTaskList;
-
-        this.phaseList = Object.keys(this.phaseTaskMap);
-
-        Object.keys(this.phaseTaskMap).forEach(phase => {
-          // console.log(phase);
-        });
-
-        if (this.OfferOwners) {
-          this.OfferOwners.forEach(item => {
-            item.caption = '';
-            item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
-          });
+          if (this.OfferOwners) {
+            this.OfferOwners.forEach(item => {
+              item.caption = '';
+              item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+            });
+          }
+          if (this.approvars) {
+            this.approvars.forEach(item => {
+              item.caption = '';
+              item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+            });
+          }
+          
         }
-        if (this.approvars) {
-          this.approvars.forEach(item => {
-            item.caption = '';
-            item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+        if(this.offerData.phaseTaskList)
+        {
+          this.phaseTaskMap = this.offerData.phaseTaskList;
+
+          this.phaseList = Object.keys(this.phaseTaskMap);
+
+          Object.keys(this.phaseTaskMap).forEach(phase => {
+            // console.log(phase);
           });
         }
       });
@@ -683,7 +689,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.offerData = data;
     });
 
-    if (this.offerData.offerObj.mmMapperStatus === 'Not Aligned') {
+    if (this.offerData.offerObj && this.offerData.offerObj.mmMapperStatus === 'Not Aligned') {
 
       alert('Status is \'Not Aligned\'!. You cannot proceed with stakeholder identification.');
 
