@@ -253,7 +253,7 @@ export class StakeholderFullComponent implements OnInit {
       this.Stakeholders.push(obj);
       if (this.stakeHolderInfo[obj['offerRole']] == null) {
         this.stakeHolderInfo[obj['offerRole']] = [];
-        this.proceedButtonStatusValid = false;
+      
       }
 
       this.stakeHolderInfo[obj['offerRole']].push(obj);
