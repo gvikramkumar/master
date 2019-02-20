@@ -58,7 +58,6 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   noOfWeeksDifference: string;
   lastValueInMilestone: Array<any>;
   milestone: any;
-  val: any;
   selectedfunctionRole: string = null;
   stakeHolders = {};
 
@@ -160,7 +159,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.lastValueInMilestone = result.slice(-1)[0];
 
       let mile = this.lastValueInMilestone
-      this.val = mile['subMilestone'];
+      this.milestoneValue = mile['subMilestone'];
     });
 
     this.actionsService.getAssignee(this.currentOfferId).subscribe(data => {
