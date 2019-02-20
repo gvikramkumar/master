@@ -52,7 +52,9 @@ Promise.all([mgc.promise, pgc.promise])
         }
       });
 
-      return server.listen(port, '127.0.0.1', function (err) {
+    // this is how we keep it from direct hit on server, but looks like we need direct hit now from load balancer as it's on a different box
+      // server.listen(port, '127.0.0.1', function (err) {
+      return server.listen(port, function (err) {
         if (err) {
           console.error('server listen creation error:', err);
           mg.connection.close();
