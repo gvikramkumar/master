@@ -1,6 +1,6 @@
 export class ActionsAndNotifcations{
     offerId:string;
-    actiontTitle:string;
+    actionTitle:string;
     offerName:string;
     offerOwner:string;
     assigneeId:string;
@@ -16,6 +16,7 @@ export class ActionsAndNotifcations{
     defaultFunction:string;
     attachment: boolean;
     type:string;
+
     constructor() {
 
     }
@@ -65,8 +66,8 @@ export class ActionsAndNotifcations{
         this.offerName = offerName;
     }
 
-    setActiontTitle(actiontTitle) {
-        this.actiontTitle = actiontTitle;
+    setActionTitle(actionTitle) {
+        this.actionTitle = actionTitle;
     }
 
     setNotificationTitle(notificationTitle) {

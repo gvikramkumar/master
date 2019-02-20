@@ -264,20 +264,13 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   }
 
   getStrategyReviwInfo() {
-    this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
-      this.strategyReviewList = data;
-      this.totalApprovalsCount = this.strategyReviewList.length;
-      this.strategyReviewList.forEach(element => {
-        if (element.status && element.status.toLowerCase() === 'approved') {
-          this.approvedCount = this.approvedCount + 1;
-        } else if (element.status && element.status.toLowerCase() === 'not approved') {
-          this.notApprovedCount = this.notApprovedCount + 1;
-        } else if (element.status && element.status.toLowerCase() === 'conditionally approved') {
-          this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
-        } else if (element.status && element.status.toLowerCase() === 'not reviewed') {
-          this.notReviewedCount = this.notReviewedCount + 1;
-        }
-      });
+    this.strategyReviewService.getStrategyReview(this.caseId).subscribe(resStrategyReview => {
+      this.strategyReviewList = resStrategyReview;
+      this.totalApprovalsCount = resStrategyReview.length;
+      this.approvedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'APPROVED').length;
+      this.notApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT APPROVED').length;
+      this.conditionallyApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'CONDITIONALLY APPROVED').length;
+      this.notReviewedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT REVIEWED').length;
     });
   }
 
@@ -373,7 +366,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.doNotApproveSection = false;
     this.showConditionalApprovalSection = false;
     this.showApproveSection = false;
-    this.showButtonSection = false;
+    this.showButtonSection = true;
   }
 
   createAction() {
