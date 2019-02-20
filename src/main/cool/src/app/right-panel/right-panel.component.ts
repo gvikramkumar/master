@@ -430,7 +430,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     switch (phase) {
       case 'ideate': {
         this.editIdeateTargetDate = false;
-        payLoad['strategyReviewDate'] = value;
+        payLoad['strategyReviewDate'] = value.toISOString();
         if (! this.validateTargetDates(value, designReviewDate, null, null )) {
           updateDate = false;
           this.showAlert = true;
@@ -439,7 +439,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       }
       case 'plan': {
         this.editPlanTargetDate = false;
-        payLoad['designReviewDate'] = value;
+        payLoad['designReviewDate'] = value.toISOString();
         if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
           updateDate = false;
           this.showAlert = true;
@@ -448,12 +448,51 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       }
       case 'execute': {
         this.editExecuteTargetDate = false;
-        payLoad['launchDate'] = value;
+        payLoad['launchDate'] = value.toISOString();
         break;
       }
       case 'launch': {
         this.editLanchTargetDate = false;
-        payLoad['readinessReviewDate'] = value;
+        payLoad['readinessReviewDate'] = value.toISOString();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+
+    const updateDBpayLoad = {
+      offerId: this.currentOfferId
+    };
+
+    switch (phase) {
+      case 'ideate': {
+        this.editIdeateTargetDate = false;
+        updateDBpayLoad['strategyReviewDate'] = value.toISOString();
+        if (! this.validateTargetDates(value, designReviewDate, null, null )) {
+          updateDate = false;
+          this.showAlert = true;
+        }
+        break;
+      }
+      case 'plan': {
+        this.editPlanTargetDate = false;
+        updateDBpayLoad['designReviewDate'] = value.toISOString();
+        if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
+          updateDate = false;
+          this.showAlert = true;
+        }
+        break;
+      }
+      case 'execute': {
+        this.editExecuteTargetDate = false;
+        updateDBpayLoad['launchDate'] = value.toISOString();
+        break;
+      }
+      case 'launch': {
+        this.editLanchTargetDate = false;
+        updateDBpayLoad['readinessReviewDate'] = value.toISOString();
         break;
       }
       default: {
@@ -472,6 +511,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         } else if (phase === 'launch') {
           this.offerPhaseDetailsList['launch'][3].targetDate = value;
         }
+        this.rightPanelService.updatePhaseTargetDateInDB(updateDBpayLoad).subscribe((data) => {
+          console.log(updateDBpayLoad);
+        })
       },
         (error) => {
         });
