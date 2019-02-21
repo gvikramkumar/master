@@ -130,7 +130,6 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   createActionAndNotification() {
-   debugger;
     let primaryPOC = [];
     for(let group of this.offerSolutionGroups) {
       if (group['listGrpQuestions'] != null && group['listGrpQuestions'].length > 0) {

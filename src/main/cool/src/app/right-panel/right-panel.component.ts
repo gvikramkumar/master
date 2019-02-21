@@ -414,7 +414,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
    * @param value
    */
   onValueChange(phase, value: Date): void {
-    debugger;
     // Strategy review date
     const stratReviewDate = this.offerPhaseDetailsList['ideate'][3].targetDate;
 
