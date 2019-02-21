@@ -130,7 +130,6 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   createActionAndNotification() {
-   debugger;
     let primaryPOC = [];
     for(let group of this.offerSolutionGroups) {
       if (group['listGrpQuestions'] != null && group['listGrpQuestions'].length > 0) {
@@ -167,7 +166,7 @@ export class OfferSolutioningComponent implements OnInit {
         "dueDate": dueDate.toISOString(),
         'offerName': this.offerName,
         "owner": owner,
-        "type": "Notification",
+        "type": "Solutioning Notification",
         };
   
         let actionPayload = {
@@ -181,11 +180,11 @@ export class OfferSolutioningComponent implements OnInit {
           "dueDate": dueDate.toISOString(),
           'offerName': this.offerName,
           "owner": owner,
-          "type": "Action",
+          "type": "Solutioning Action",
           };
         this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
           console.log(notificationPayload);
-          this.offersolutioningService.notificationPost(actionPayload).subscribe(res => {
+          this.offersolutioningService.actionPost(actionPayload).subscribe(res => {
             console.log(actionPayload);
           })
         });

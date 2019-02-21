@@ -223,8 +223,8 @@ export class EnvironmentService {
         this.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL = this.baseapi + '/emailNotification/sendEmailNotification/';
         this.REST_API_LEAD_TIME_AVERAGE_WEEKS = this.baseapi + '/leadTimeCal/getLTC/';
         this.REST_API_LEAD_TIME_LAUNCH_DATE = this.baseapi + '/leadTimeCal/getLTC/';
-        this.REST_API_NOTIFICATION_PRIMARYPOC_POST_URL = this.baseapi + '/action/create/user/task';
-        this.REST_API_ACTION_PRIMARYPOC_POST_URL = this.baseapi + '/action/create/user/task';
+        this.REST_API_NOTIFICATION_PRIMARYPOC_POST_URL = this.baseapi + '/action/create/user/solutioningTask/notification';
+        this.REST_API_ACTION_PRIMARYPOC_POST_URL = this.baseapi + '/action/create/user/solutioningTask/action';
         this.REST_API_SET_OFFERCONSTRUCT_POST_URL = this.baseapi + '/setOfferConstruct';
         this.REST_API_FILE_UPLOAD_FOR_ACTION = this.baseapi + '/upload/file';
         this.REST_API_FILE_DOWNLOAD_FOR_ACTION = this.baseapi + '/download/provideDetails';
