@@ -331,10 +331,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       // Compute Offer Dates
       this.rightPanelService.displayOfferDates(this.caseId).subscribe(
         (leadTimeObj) => {
-          this.launchDate = moment(leadTimeObj['launchDate']).format('MM/DD/YYYY');
-          this.designReviewDate = moment(leadTimeObj['designReviewDate']).format('MM/DD/YYYY');
-          this.strategyReviewDate = moment(leadTimeObj['strategyReviewDate']).format('MM/DD/YYYY');
-          this.readinessReviewDate = moment(leadTimeObj['readinessReviewDate']).format('MM/DD/YYYY');
+          this.launchDate = moment(leadTimeObj['launchDate']).format('DD-MMM-YYYY');
+          this.designReviewDate = moment(leadTimeObj['designReviewDate']).format('DD-MMM-YYYY');
+          this.strategyReviewDate = moment(leadTimeObj['strategyReviewDate']).format('DD-MMM-YYYY');
+          this.readinessReviewDate = moment(leadTimeObj['readinessReviewDate']).format('DD-MMM-YYYY');
         });
 
       // Compute Expected Launch Date
