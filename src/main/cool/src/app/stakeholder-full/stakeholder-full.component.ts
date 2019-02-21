@@ -60,7 +60,7 @@ export class StakeholderFullComponent implements OnInit {
   Stakeholders: any[] = [];
   val;
   selectedSh;
-  alreayAddedStakeHolders;
+
   cols = [
     { field: 'name', header: 'NAME' },
     { field: 'email', header: 'EMAIL' },
