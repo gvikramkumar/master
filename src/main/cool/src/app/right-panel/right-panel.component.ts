@@ -221,27 +221,33 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
-        this.OfferOwners = this.offerData.offerObj.owners;
-        this.approvars = this.offerData.offerObj.approvars;
+        if(this.offerData.offerObj)
+        {
+          this.OfferOwners = this.offerData.offerObj.owners;
+          this.approvars = this.offerData.offerObj.approvars;
 
-        this.phaseTaskMap = this.offerData.phaseTaskList;
-
-        this.phaseList = Object.keys(this.phaseTaskMap);
-
-        Object.keys(this.phaseTaskMap).forEach(phase => {
-          // console.log(phase);
-        });
-
-        if (this.OfferOwners) {
-          this.OfferOwners.forEach(item => {
-            item.caption = '';
-            item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
-          });
+          if (this.OfferOwners) {
+            this.OfferOwners.forEach(item => {
+              item.caption = '';
+              item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+            });
+          }
+          if (this.approvars) {
+            this.approvars.forEach(item => {
+              item.caption = '';
+              item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+            });
+          }
+          
         }
-        if (this.approvars) {
-          this.approvars.forEach(item => {
-            item.caption = '';
-            item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+        if(this.offerData.phaseTaskList)
+        {
+          this.phaseTaskMap = this.offerData.phaseTaskList;
+
+          this.phaseList = Object.keys(this.phaseTaskMap);
+
+          Object.keys(this.phaseTaskMap).forEach(phase => {
+            // console.log(phase);
           });
         }
       });
@@ -408,7 +414,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
    * @param value
    */
   onValueChange(phase, value: Date): void {
-
     // Strategy review date
     const stratReviewDate = this.offerPhaseDetailsList['ideate'][3].targetDate;
 
@@ -430,30 +435,77 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     switch (phase) {
       case 'ideate': {
         this.editIdeateTargetDate = false;
-        payLoad['strategyReviewDate'] = value;
+        payLoad['strategyReviewDate'] = value.toISOString();
         if (! this.validateTargetDates(value, designReviewDate, null, null )) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
       case 'plan': {
         this.editPlanTargetDate = false;
-        payLoad['designReviewDate'] = value;
+        payLoad['designReviewDate'] = value.toISOString();
         if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
       case 'execute': {
         this.editExecuteTargetDate = false;
-        payLoad['launchDate'] = value;
+        payLoad['launchDate'] = value.toISOString();
         break;
       }
       case 'launch': {
         this.editLanchTargetDate = false;
-        payLoad['readinessReviewDate'] = value;
+        payLoad['readinessReviewDate'] = value.toISOString();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+
+    const updateDBpayLoad = {
+      offerId: this.currentOfferId
+    };
+
+    switch (phase) {
+      case 'ideate': {
+        this.editIdeateTargetDate = false;
+        updateDBpayLoad['strategyReviewDate'] = value.toISOString();
+        if (! this.validateTargetDates(value, designReviewDate, null, null )) {
+          updateDate = false;
+          this.showAlert = true;
+        } else {
+          this.showAlert = false;
+        }
+        break;
+      }
+      case 'plan': {
+        this.editPlanTargetDate = false;
+        updateDBpayLoad['designReviewDate'] = value.toISOString();
+        if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
+          updateDate = false;
+          this.showAlert = true;
+        } else {
+          this.showAlert = false;
+        }
+        break;
+      }
+      case 'execute': {
+        this.editExecuteTargetDate = false;
+        updateDBpayLoad['launchDate'] = value.toISOString();
+        break;
+      }
+      case 'launch': {
+        this.editLanchTargetDate = false;
+        updateDBpayLoad['readinessReviewDate'] = value.toISOString();
         break;
       }
       default: {
@@ -472,6 +524,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         } else if (phase === 'launch') {
           this.offerPhaseDetailsList['launch'][3].targetDate = value;
         }
+        this.rightPanelService.updatePhaseTargetDateInDB(updateDBpayLoad).subscribe((data) => {
+          console.log(updateDBpayLoad);
+        })
       },
         (error) => {
         });
@@ -641,7 +696,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.offerData = data;
     });
 
-    if (this.offerData.offerObj.mmMapperStatus === 'Not Aligned') {
+    if (this.offerData.offerObj && this.offerData.offerObj.mmMapperStatus === 'Not Aligned') {
 
       alert('Status is \'Not Aligned\'!. You cannot proceed with stakeholder identification.');
 

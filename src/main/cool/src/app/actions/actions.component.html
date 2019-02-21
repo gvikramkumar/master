@@ -41,7 +41,7 @@
                 </p-column>
                 <p-column field="actions" sortable="true" header="ACTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.actiontTitle}} <br /></span>
+                    <span>{{actionData.actionTitle}} <br /></span>
                     <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
                     <span *ngIf="actionData.attachment == true" class="offerDesc"
                       (click)="getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>

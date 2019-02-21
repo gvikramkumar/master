@@ -133,6 +133,9 @@ export class ActionsComponent implements OnInit {
   }
 
   getSelectFunctionRole(functionRole) {
+    // Reset AssignList and AsigneeValue before service call
+    this.assigneeValue = [];
+    this.assigneeList = [];    
     this.selectedfunctionRole = functionRole;
     if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
@@ -162,6 +165,7 @@ export class ActionsComponent implements OnInit {
         obj.setCaseId(element.caseId);
         obj.setTaskId(element.taskId);
         obj.setDefaultFunctione(element.function);
+        obj.setActionTitle(element.actiontTitle);
         // Set the status color
         if (element.status && element.status.toLowerCase() === 'red') {
           this.needImmActnCount = this.needImmActnCount + 1;
