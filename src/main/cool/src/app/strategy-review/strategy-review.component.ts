@@ -335,10 +335,10 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       'action': '',
       'comment': ''
     };
-    this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
-      this.router.navigate(['/offerDimension', this.currentOfferId, this.caseId]);
-    }, (error) => {
-    });
+    // this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
+    this.router.navigate(['/offerDimension', this.currentOfferId, this.caseId]);
+    // }, (error) => {
+    // });
   }
 
   onTabOpen(taskId) {
