@@ -75,14 +75,16 @@
                 <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
-                      <a *ngIf="actionData.alertType == 'action'"
-                        (click)="showActionPopUp($event,actionData,popActionContent)">
-                        <span class="text-indigo"
-                          (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
-                          &nbsp;</span>
+                      <div *ngIf="actionData.alertType == 'action'">
+                        <a (click)="showActionPopUp($event,actionData,popActionContent)">
+                          <span class="text-indigo"
+                            (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
+                            &nbsp;&nbsp;</span>
+                        </a>
                         <span (click)="showActionPopUp($event,actionData,popCommentContent)"
                           class="icon-comment pull-right"></span>
-                      </a>
+                      </div>
+
                       <a *ngIf="actionData.alertType == 'notification'"
                         (click)="showActionPopUp($event,actionData,popNotificationContent)">
                         <span>{{actionData.title}}&nbsp;
