@@ -278,11 +278,6 @@ export class MmAssesmentComponent implements OnInit {
       // Retrieve New Stake Holder Info
       for (let i = 0; i <= this.firstData['stakeholders'].length - 1; i++) {
 
-        // // Continue If Function Role Is Not Mapped
-        // if (this.firstData['stakeholders'][i]['functionalRole'] === null) {
-        //   continue;
-        // }
-
         // Add New Offer Owner (Stake Holder), If Not Present Earlier
         if (this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] == null) {
           this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] = [];
