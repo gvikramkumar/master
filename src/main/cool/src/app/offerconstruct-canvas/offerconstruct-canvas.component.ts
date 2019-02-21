@@ -77,6 +77,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   myForm: FormGroup;
   countableItems: Number[] = [];
   private map1 = new Map();
+  popHeadName;
+
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder) {
@@ -640,7 +642,6 @@ export class OfferconstructCanvasComponent implements OnInit {
   addAllItemDetails(details) {
     this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.multipleForms.value);
-    alert(JSON.stringify(this.multipleForms.value))
     this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
     this.closeDailog();
   }
@@ -649,6 +650,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     // const productName = product;
     this.currentRowClicked = currentNode;
     this.lineItemName = currentNode.node.data.productName;
+    this.popHeadName = currentNode.node.data.title;
     let itemDetails = currentNode.node.data['itemDetails'];
     this.displayAddDetails = true;
     const groups: Groups[] = [];
