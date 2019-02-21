@@ -39,7 +39,7 @@ export class MonetizationModelService {
     return this.http.post(url, data, httpOptions);
   };
 
-  showStakeholders(model, be) {
+  showDefaultStakeHolders(model, be) {
     let url = this.environmentService.REST_API_MM_STAKEHOLDERS_GET_URL;
     url += model;
     url += "/" + be;
