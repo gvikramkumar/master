@@ -640,7 +640,31 @@ export class MmAssesmentComponent implements OnInit {
 
       });
 
-      // Compare Default Stakeholder With Updated Stake Holder List
+      // Remove Similar Stakeholders From Updated Stake Holder List
+
+      // Retrieve Functional Names
+      for (const ownerName of Object.keys(this.stakeData)) {
+
+        // Retrieve Owner Details Realted To Functiona Names 
+        for (let i = 0; i < this.stakeData[ownerName].length; i++) {
+
+          // Retrieve ith Functional Person
+          const ownerDetails = this.stakeData[ownerName][i];
+
+          // Remove If Stakeholder Is Present In Default List 
+          if (this.stakeData[ownerName] == null) {
+            continue;
+          } else if (this.stakeData[ownerName][i]['_id'] === (ownerDetails['_id'])) {
+            const index = this.stakeData[ownerName].findIndex(item => this.stakeData[ownerName][i]['_id'] === (ownerDetails['_id']));
+            if (this.updatedStakeHolderInfo[ownerName] != null) {
+              this.updatedStakeHolderInfo[ownerName].splice(index, 1);
+            }
+          }
+
+        }
+      }
+
+      // Add Stakeholders to Stake Data That Is Missing From Stake Holder List
 
       // Retrieve Functional Names
       for (const ownerName of Object.keys(this.updatedStakeHolderInfo)) {
@@ -653,7 +677,6 @@ export class MmAssesmentComponent implements OnInit {
 
           // Add If Stakeholder Is Missing In Default List - Parent Level
           if (this.stakeData[ownerName] == null) {
-
             this.stakeData[ownerName] = [
               {
                 userName: ownerDetails['userName'],
@@ -668,12 +691,9 @@ export class MmAssesmentComponent implements OnInit {
                 ],
                 stakeholderDefaults: true
               }];
-
-          } else if (this.stakeData[ownerName][i]['_id'] !== (ownerDetails['_id'])) {
-
+          } else {
             // Add If Stakeholder Is Missing In Default List - Child Level
-
-            this.stakeData[ownerName].push([
+            this.stakeData[ownerName].push(
               {
                 userName: ownerDetails['userName'],
                 emailId: ownerDetails['_id'] + '@cisco.com',
@@ -686,17 +706,11 @@ export class MmAssesmentComponent implements OnInit {
                 }
                 ],
                 stakeholderDefaults: true
-              }]);
-
-          } else {
-            continue;
+              });
           }
 
         }
-
       }
-
-
 
     });
 
