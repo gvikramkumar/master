@@ -413,6 +413,10 @@
         <button class="btn btn--secondary " (click)="getOfferViewLink()">
           View Offer
         </button>
+        <button class="btn btn--secondary" *ngIf="selectedAction.type == 'Solutioning Action'"
+          [routerLink]="['/offerSolutioning', selectedAction.offerId, selectedAction.caseId]">
+          Provide Details
+        </button>
       </div>
       <div class="popover__footer">
         <div *ngIf="selectedAction.type == 'Manual Action'">

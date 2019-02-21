@@ -236,7 +236,7 @@
                                                 <span
                                                     *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
                                                     <input type="text" class="form-control" #dp="bsDatepicker" autofocus
-                                                        bsDatepicker [minDate]="minDate"
+                                                        bsDatepicker [minDate]="minDate" [bsConfig]="dpConfig"
                                                         (bsValueChange)="onValueChange('ideate',$event)"
                                                         [value]='ideateData.targetDate | date: "dd-MMM-y"'
                                                         placement="top">
@@ -288,7 +288,7 @@
                                                 <span
                                                     *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
                                                     <input type="text" class="form-control" #dp="bsDatepicker"
-                                                        bsDatepicker [minDate]="minDate"
+                                                        bsDatepicker [minDate]="minDate" [bsConfig]="dpConfig"
                                                         (bsValueChange)="onValueChange('plan',$event)"
                                                         [value]='planData.targetDate | date: "dd-MMM-y"'
                                                         placement="top">
