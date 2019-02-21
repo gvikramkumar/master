@@ -414,7 +414,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
    * @param value
    */
   onValueChange(phase, value: Date): void {
-
+    debugger;
     // Strategy review date
     const stratReviewDate = this.offerPhaseDetailsList['ideate'][3].targetDate;
 
@@ -440,6 +440,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         if (! this.validateTargetDates(value, designReviewDate, null, null )) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
@@ -449,6 +451,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
@@ -479,6 +483,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         if (! this.validateTargetDates(value, designReviewDate, null, null )) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
@@ -488,6 +494,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
