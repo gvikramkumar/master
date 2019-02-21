@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
+import * as tz from 'moment-timezone';
 import { HeaderService } from '../header/header.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
@@ -76,6 +77,7 @@ export class CreateOfferCoolComponent implements OnInit {
   offerDetailRes;
   offerDescValueTrim: string = '';
   offerNameValueTrim: string = '';
+
 
   constructor(private createOfferService: CreateOfferService,
     private offerDetailViewService: OfferDetailViewService,
@@ -437,7 +439,7 @@ export class CreateOfferCoolComponent implements OnInit {
     status.phaseMilestone = 'Ideate';
     status.subMilestone = 'Offer Creation';
 
-    const offerCreationDate = new Date().toISOString();
+    const offerCreationDate = moment(new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'})).format();
     const selectedPrimaryBe= [];
     const constructDetails = [];
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
