@@ -255,30 +255,37 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   }
 
   getSelectFunctionRole(functionRole) {
+    // Reset AssignList and AsigneeValue before service call
+    this.assigneeValue = [];
+    this.assigneeList = [];
     this.selectedfunctionRole = functionRole;
     if (this.currentOfferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.currentOfferId] != null && this.stakeHolders[this.currentOfferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.currentOfferId][this.selectedfunctionRole];
-    } else {
-      this.assigneeList = [];
     }
   }
 
   getStrategyReviwInfo() {
-    this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
-      this.strategyReviewList = data;
-      this.totalApprovalsCount = this.strategyReviewList.length;
-      this.strategyReviewList.forEach(element => {
-        if (element.status && element.status.toLowerCase() === 'approved') {
-          this.approvedCount = this.approvedCount + 1;
-        } else if (element.status && element.status.toLowerCase() === 'not approved') {
-          this.notApprovedCount = this.notApprovedCount + 1;
-        } else if (element.status && element.status.toLowerCase() === 'conditionally approved') {
-          this.conditionallyApprovedCount = this.conditionallyApprovedCount + 1;
-        } else if (element.status && element.status.toLowerCase() === 'not reviewed') {
-          this.notReviewedCount = this.notReviewedCount + 1;
-        }
-      });
+    this.strategyReviewService.getStrategyReview(this.caseId).subscribe(resStrategyReview => {
+      this.strategyReviewList = resStrategyReview;
+      this.totalApprovalsCount = resStrategyReview.length;
+      this.approvedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'APPROVED').length;
+      this.notApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT APPROVED').length;
+      this.conditionallyApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'CONDITIONALLY APPROVED').length;
+      this.notReviewedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT REVIEWED').length;
     });
+  }
+
+  /**
+   * function returns flag to display Approval Action section
+   * Public
+   *
+   * @param {object} or [Object] strategyReviewData
+   */
+  getshowApprovalDecisionAction(strategyReviewData) {
+    return strategyReviewData.status &&
+      strategyReviewData.status.toUpperCase() === 'NOT REVIEWED' &&
+      strategyReviewData.assignees.includes(this.userService.getUserId()) &&
+      strategyReviewData.function === this.currentFunctionalRole;
   }
 
   processStakeHolderData(stakeHolderData) {
@@ -341,10 +348,10 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       'action': '',
       'comment': ''
     };
-    this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
-      this.router.navigate(['/offerDimension', this.currentOfferId, this.caseId]);
-    }, (error) => {
-    });
+    // this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
+    this.router.navigate(['/offerDimension', this.currentOfferId, this.caseId]);
+    // }, (error) => {
+    // });
   }
 
   onTabOpen(taskId) {
@@ -373,7 +380,13 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.doNotApproveSection = false;
     this.showConditionalApprovalSection = false;
     this.showApproveSection = false;
-    this.showButtonSection = false;
+    this.showButtonSection = true;
+    this.commentValue = "";
+    this.titleValue = "";
+    this.descriptionValue = "";
+    this.functionNameValue = "";
+    this.assigneeValue = [];
+    this.dueDateValue = "";
   }
 
   createAction() {
