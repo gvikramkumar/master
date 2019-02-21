@@ -255,11 +255,12 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   }
 
   getSelectFunctionRole(functionRole) {
+    // Reset AssignList and AsigneeValue before service call
+    this.assigneeValue = [];
+    this.assigneeList = [];
     this.selectedfunctionRole = functionRole;
     if (this.currentOfferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.currentOfferId] != null && this.stakeHolders[this.currentOfferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.currentOfferId][this.selectedfunctionRole];
-    } else {
-      this.assigneeList = [];
     }
   }
 
@@ -367,6 +368,12 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.showConditionalApprovalSection = false;
     this.showApproveSection = false;
     this.showButtonSection = true;
+    this.commentValue = "";
+    this.titleValue = "";
+    this.descriptionValue = "";
+    this.functionNameValue = "";
+    this.assigneeValue = [];
+    this.dueDateValue = "";
   }
 
   createAction() {

@@ -206,6 +206,9 @@ export class DashboardComponent implements OnInit {
   }
 
   getSelectFunctionRole(functionRole) {
+    // Reset AssignList and AsigneeValue before service call
+    this.assigneeValue = [];
+    this.assigneeList = [];    
     this.selectedfunctionRole = functionRole;
     if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
@@ -417,44 +420,17 @@ export class DashboardComponent implements OnInit {
       this.buttonIsDisabled = true;
     }
   }
-
-  // confirm() {
-  //   this.confirmationService.confirm({
-  //     message: 'Are you sure that you want to perform this action?',
-  //     accept: () => {
-  //       //Actual logic to perform a confirmation
-  //     }
-  //   });
-  // }
-
-  //  submit() {
-  //   let holdData= {};
-  //   holdData['taskId'] = '';
-  //   holdData['userId'] = this.userService.getUserId();
-  //   holdData['caseId'] = this.caseId;
-  //   holdData['offerId'] = this.currentOfferId;
-  //   holdData['taskName'] = 'discard';
-  //   holdData['action'] = 'hold';
-  //   holdData['comment'] = this.reason;
-
-  //   let cancelData={};
-  //   cancelData['taskId'] = '';
-  //   cancelData['userId'] = this.userService.getUserId();
-  //   cancelData['caseId'] = this.caseId;
-  //   cancelData['offerId'] = this.currentOfferId;
-  //   cancelData['taskName'] = 'discard';
-  //   cancelData['action'] = 'cancel';
-  //   cancelData['comment'] = this.reason;
-
-  //   if (this.popupType === 'hold') {
-  //     this.menuBarService.holdOffer(holdData).subscribe(res => {
-  //       this.closePopup.next('hold');
-  //     });
-  //   } else if (this.popupType === 'cancel') {
-  //     this.menuBarService.cancelOffer(cancelData).subscribe(res => {
-  //       this.closePopup.next('cancel');
-  //     });
-  //   }
-
-  // }
+  getOfferViewLink() {
+    const actionType = this.selectedAction.type;
+    let page = 'offerDetailView';
+    switch (actionType) {
+      case 'Strategy Review':
+        page = 'strategyReview';
+        break;
+      default:
+        page = 'offerDetailView';
+        break;
+    }
+    this.router.navigate(['/', page, this.selectedAction.offerId, this.selectedAction.caseId]);
+  }
 }

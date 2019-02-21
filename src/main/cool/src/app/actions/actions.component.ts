@@ -133,6 +133,9 @@ export class ActionsComponent implements OnInit {
   }
 
   getSelectFunctionRole(functionRole) {
+    // Reset AssignList and AsigneeValue before service call
+    this.assigneeValue = [];
+    this.assigneeList = [];    
     this.selectedfunctionRole = functionRole;
     if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
