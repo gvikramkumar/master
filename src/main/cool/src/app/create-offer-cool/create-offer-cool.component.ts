@@ -10,7 +10,6 @@ import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
-import * as tz from 'moment-timezone';
 import { HeaderService } from '../header/header.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
