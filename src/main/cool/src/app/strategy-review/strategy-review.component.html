@@ -131,7 +131,7 @@
                         </div>
                       </ng-template>
                       <div
-                        *ngIf="strategyReviewData.function === currentFunctionalRole && strategyReviewData.status && strategyReviewData.status.toUpperCase() === 'NOT REVIEWED'">
+                        *ngIf="getshowApprovalDecisionAction(strategyReviewData)">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
 
                           <div class="panel--header">

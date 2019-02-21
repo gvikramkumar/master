@@ -275,6 +275,19 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * function returns flag to display Approval Action section
+   * Public
+   *
+   * @param {object} or [Object] strategyReviewData
+   */
+  getshowApprovalDecisionAction(strategyReviewData) {
+    return strategyReviewData.status &&
+      strategyReviewData.status.toUpperCase() === 'NOT REVIEWED' &&
+      strategyReviewData.assignees.includes(this.userService.getUserId()) &&
+      strategyReviewData.function === this.currentFunctionalRole;
+  }
+
   processStakeHolderData(stakeHolderData) {
     stakeHolderData.forEach(stakeHolder => {
       if (this.stakeHolderInfo[stakeHolder['offerRole']] == null) {
