@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StakeHolder } from '../models/stakeholder';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 import { OfferCharacteristics } from '../models/OfferCharacteristics';
 import { StrategyReviewService } from '../services/strategy-review.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
@@ -40,31 +40,31 @@ export class OfferDetailViewComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
     private monetizationModelService: MonetizationModelService,
-    private _route:Router,
+    private _route: Router,
     private offerDetailViewService: OfferDetailViewService,
     private strategyReviewService: StrategyReviewService,
     private _location: Location) {
     this.activatedRoute.params.subscribe(params => {
-       this.currentOfferId = params['id'];
-       this.caseId = params['id2'];
-     });
+      this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
+    });
     this.activatedRoute.data.subscribe((data) => {
     });
     this.offerOverviewDetailsList = this.activatedRoute.snapshot.data['offerData'];
   }
 
   ngOnInit() {
-      this.getOfferOVerviewDetails();
-      this.getStrategyReviwInfo();
+    this.getOfferOverviewDetails();
+    this.getStrategyReviewInfo();
   }
 
-  getStrategyReviwInfo() {
+  getStrategyReviewInfo() {
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
       this.strategyReviewList = data;
     });
   }
 
-  getOfferOVerviewDetails() {
+  getOfferOverviewDetails() {
     this.offerDetailViewService.offerDetailView(this.currentOfferId)
       .subscribe(data => {
         this.offerViewData = data;
@@ -98,6 +98,8 @@ export class OfferDetailViewComponent implements OnInit {
           if (element.group === 'Offer Characteristics') {
             this.offerCharacteristicsList.push(offerCharacteristics);
           }
+        });
+        this.offerViewData.additionalCharacteristics.forEach(element => {
           packaging = new OfferCharacteristics();
           packaging.subgroup = element.subgroup;
           packaging.characteristics = element.characteristics;
@@ -150,27 +152,20 @@ export class OfferDetailViewComponent implements OnInit {
   }
 
   onExportPdf() {
-    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data =>{
+    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data => {
       const nameOfFileToDownload = 'offer-details';
-      console.log("nameoffile",nameOfFileToDownload);
-        console.log(data);
-          const blob = new Blob([data], {type: 'application/pdf'});
-         /*  const url= window.URL.createObjectURL(blob);
-            window.open(url);
-          console.log("samplePDF",blob); */
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
-           } else {
-            var a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = nameOfFileToDownload;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-           
+      const blob = new Blob([data], { type: 'application/pdf' });
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+      } else {
+        let a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nameOfFileToDownload;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       }
     });
-    // this.offerDetailViewService.export().subscribe(data => saveAs(data, `pdf report.pdf`));
   }
 
 }
