@@ -505,16 +505,25 @@ export class OfferconstructCanvasComponent implements OnInit {
 
       // Call offerconstruct request to get Major/Minor Line Items
       this._canvasService.getOfferConstructItems(reqObj).subscribe((data) => {
+
         const itemData = data['listOfferCatagory'];
+
         itemData.forEach(item => {
+
           const itemObj = {
             categoryName: item.type,
             isMajorLineItem: item.majorLineItem,
             productName: item.type,
             listPrice: ''
           };
-          this.itemCategories.push(itemObj);
+
+          // Ignore Repeated Items
+          if (!this.itemCategories.includes(item)) {
+            this.itemCategories.push(itemObj);
+          }
+
         });
+
       });
     });
 
