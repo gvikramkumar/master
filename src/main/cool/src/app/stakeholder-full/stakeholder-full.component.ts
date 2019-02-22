@@ -9,7 +9,7 @@ import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { SharedService } from '../shared-service.service';
 import { ConfigurationService } from '../services/configuration.service';
-
+import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-stakeholder-full',
   templateUrl: './stakeholder-full.component.html',
@@ -17,11 +17,11 @@ import { ConfigurationService } from '../services/configuration.service';
 })
 export class StakeholderFullComponent implements OnInit {
   entityList;
-  notiFication: boolean = false;
-  @Input() portfolioFlag: boolean = false;
+  notiFication: Boolean = false;
+  @Input() portfolioFlag: Boolean = false;
   @Input() stakeData: Object;
   @Input() offerOwner: String;
-  @Output() updateStakeData = new EventEmitter<string>();
+  @Output() updateStakeData = new EventEmitter<String>();
   stakeholderForm: FormGroup;
   collaboratorsList;
   selectedCollabs;
@@ -34,25 +34,24 @@ export class StakeholderFullComponent implements OnInit {
   backbuttonStatusValid = true;
   public offerBuilderdata;
   public newData: any[];
-  //new update
   public showDelete = false;
   public tempcoll: any[];
   public lstcoll: any[];
-  public showtemp: boolean;
-  public showdel: boolean;
-  public tempvalue: boolean;
-  public lastvalue: boolean;
+  public showtemp: Boolean;
+  public showdel: Boolean;
+  public tempvalue: Boolean;
+  public lastvalue: Boolean;
   public coll: any[];
   public selectedColl: any[];
-  public firstData: any
+  public firstData: any;
   public data: any[];
   test: any;
   duplicateList: any;
   displayData: any;
-  funcionalRoleList: string[];
+  funcionalRoleList: String[];
   temporaryselectedCollabs: any[];
   finalCollabs: any[];
-  newDatastring: string;
+  newDatastring: String;
   deleteCollabs: any[];
   caseId: any;
   getRole: any;
@@ -60,6 +59,9 @@ export class StakeholderFullComponent implements OnInit {
   Stakeholders: any[] = [];
   val;
   selectedSh;
+  text: String;
+  results: String[];
+  selectedUser;
 
   cols = [
     { field: 'name', header: 'NAME' },
@@ -73,12 +75,13 @@ export class StakeholderFullComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router, private offerPhaseService: OfferPhaseService,
     private sharedService: SharedService,
-    private configurationService: ConfigurationService) {
+    private configurationService: ConfigurationService,
+    private userService: UserService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
     });
     if (!this.currentOfferId) {
-      this.currentOfferId = this.createOfferService.coolOffer.offerId
+      this.currentOfferId = this.createOfferService.coolOffer.offerId;
     }
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -98,7 +101,6 @@ export class StakeholderFullComponent implements OnInit {
 
 
     this.sharedService.getFunctionalRoles().subscribe(data => {
-
       this.funcionalRoleList = data;
     });
 
@@ -112,9 +114,7 @@ export class StakeholderFullComponent implements OnInit {
 
     this.createOfferService.getPrimaryBusinessUnits()
       .subscribe(data => {
-        console.log("create offer Service " + data);
         this.entityList = ['Security', 'IOT', 'Data Center', 'Enterprise'];
-        console.log("create offer service" + this.entityList);
       });
 
     this.stakeholderfullService.getOfferrole().subscribe(data => {
@@ -127,7 +127,6 @@ export class StakeholderFullComponent implements OnInit {
 
     this.stakeholderfullService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
       this.offerBuilderdata = data;
-      console.log("offerOwner", this.offerBuilderdata);
     });
 
 
@@ -138,9 +137,6 @@ export class StakeholderFullComponent implements OnInit {
     this.tempvalue = true;
   }
 
-  text: string;
-
-  results: string[];
 
   search(event) {
     this.searchCollaboratorService.searchCollaborator({ 'userName': event.query })
@@ -158,15 +154,18 @@ export class StakeholderFullComponent implements OnInit {
               }
             }
             return isCollaboratorInUserFunction;
-          }
-          )
+          });
         }
 
       });
   }
-  selectedUser;
+  canUserDeleteStakeHolder(stakeholder) {
+    debugger;
+    const currentUserId = this.userService.getUserId();
+    const userFunctions = this.configurationService.startupData.functionsUserCanAddTo;
+    return !stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId && (userFunctions.includes('BUPM') || userFunctions.includes(stakeholder.functionalRole));
+  }
   selectUser(stakes: any) {
-    console.log(stakes);
     this.selectUser = stakes;
   }
 
@@ -212,7 +211,7 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   getUserIdFromEmail(email): any {
-    var arrayOfStrings = email.split('@');
+    const arrayOfStrings = email.split('@');
     return arrayOfStrings[0];
   }
 
@@ -221,23 +220,21 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   updateMessage(message) {
-    if (message != null && message !== "") {
-      if (message == 'hold') {
+    if (message != null && message !== '') {
+      if (message === 'hold') {
         this.proceedButtonStatusValid = false;
         this.backbuttonStatusValid = false;
-        this.message = { contentHead: "", content: "The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
-      } else if (message == 'cancel') {
+        this.message = { contentHead: '', content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
+      } else if (message === 'cancel') {
         this.proceedButtonStatusValid = false;
         this.backbuttonStatusValid = false;
-        this.message = { contentHead: "", content: "The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.", color: "black" };
+        this.message = { contentHead: '', content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
       }
     }
   }
 
   onAdd() {
-
-    console.log('onAdd() called');
-    let tempCollaboratorList: Collaborators[] = [];
+    const tempCollaboratorList: Collaborators[] = [];
 
     const obj = {
       name: this.val['userName'],
@@ -253,13 +250,13 @@ export class StakeholderFullComponent implements OnInit {
       this.Stakeholders.push(obj);
       if (this.stakeHolderInfo[obj['offerRole']] == null) {
         this.stakeHolderInfo[obj['offerRole']] = [];
-      
+
       }
 
       this.stakeHolderInfo[obj['offerRole']].push(obj);
     }
 
-    let stakeholdersPayLoad = {
+    const stakeholdersPayLoad = {
       offerId: this.currentOfferId,
       caseId: this.caseId,
       stakeholders: []
@@ -271,26 +268,26 @@ export class StakeholderFullComponent implements OnInit {
     keys.forEach(key => {
       this.stakeHolderInfo[key].forEach(element => {
         let obj = {
-          "_id": element._id,
-          "businessEntity": element.businessEntity,
-          "functionalRole": element.functionalRole,
-          "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
-          "offerRole": element.offerRole,
-          "name": element.name
+          '_id': element._id,
+          'businessEntity': element.businessEntity,
+          'functionalRole': element.functionalRole,
+          'stakeholderDefaults': element.stakeholderDefaults === true ? true : false,
+          'offerRole': element.offerRole,
+          'name': element.name
         };
         stakeholdersPayLoad['stakeholders'].push(obj);
       });
     });
 
     this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe(data => {
-      let proceedPayload = {
-        "taskId": "",
-        "userId": this.offerBuilderdata['offerOwner'],
-        "caseId": this.caseId,
-        "offerId": this.currentOfferId,
-        "taskName": "Stake Holders",
-        "action": "",
-        "comment": ""
+      const proceedPayload = {
+        'taskId': '',
+        'userId': this.offerBuilderdata['offerOwner'],
+        'caseId': this.caseId,
+        'offerId': this.currentOfferId,
+        'taskName': 'Stake Holders',
+        'action': '',
+        'comment': ''
       }
     });
 
@@ -300,20 +297,18 @@ export class StakeholderFullComponent implements OnInit {
 
   addToStakeData(res) {
 
-    let keyUsers = res['stakeholders'];
+    const keyUsers = res['stakeholders'];
     keyUsers.forEach(user => {
       if (this.stakeData[user['offerRole']] == null) {
         this.stakeData[user['offerRole']] = [];
       }
-      this.stakeData[user['offerRole']].push({ name: user['_id'], email: "sample@sample.com" });
+      this.stakeData[user['offerRole']].push({ name: user['_id'], email: 'sample@sample.com' });
     });
   }
 
   addCollaborator() {
-
-    console.log("finalcolabrattiondata::::::", this.data);
     const listOfStakeHolders: StakeHolder[] = [];
-    let stakeholdersPayLoad = {
+    const stakeholdersPayLoad = {
       offerId: this.currentOfferId,
       caseId: this.caseId,
       stakeholders: []
@@ -323,38 +318,36 @@ export class StakeholderFullComponent implements OnInit {
 
     keys.forEach(key => {
       this.stakeHolderInfo[key].forEach(element => {
-        let obj = {
-          "_id": element._id,
-          "businessEntity": element.businessEntity,
-          "functionalRole": element.functionalRole,
-          "stakeholderDefaults": element.stakeholderDefaults === true ? true : false,
-          "offerRole": element.offerRole,
-          "name": element.name
-        }
+        const obj = {
+          '_id': element._id,
+          'businessEntity': element.businessEntity,
+          'functionalRole': element.functionalRole,
+          'stakeholderDefaults': element.stakeholderDefaults === true ? true : false,
+          'offerRole': element.offerRole,
+          'name': element.name
+        };
         stakeholdersPayLoad['stakeholders'].push(obj);
-      })
+      });
     });
 
     this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe(data => {
-      let proceedPayload = {
-        "taskId": "",
-        "userId": this.offerBuilderdata['offerOwner'],
-        "caseId": this.caseId,
-        "offerId": this.currentOfferId,
-        "taskName": "Stake Holders",
-        "action": "",
-        "comment": ""
+      const proceedPayload = {
+        'taskId': '',
+        'userId': this.offerBuilderdata['offerOwner'],
+        'caseId': this.caseId,
+        'offerId': this.currentOfferId,
+        'taskName': 'Stake Holders',
+        'action': '',
+        'comment': ''
       };
       this.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(result => {
         this.stakeholderfullService.sendEmailNotification(this.currentOfferId).subscribe(data => {
           this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
         }, (error) => {
-          console.log(error);
         });
       });
     },
       (error) => {
-        console.log(error);
       })
   }
 
@@ -364,7 +357,7 @@ export class StakeholderFullComponent implements OnInit {
 
   onDelete(user) {
 
-    if (this.data.length == 1) {
+    if (this.data.length === 1) {
       this.data.splice(0, 1);
     }
     for (let i = 0; i <= this.data.length - 1; i++) {
@@ -373,8 +366,6 @@ export class StakeholderFullComponent implements OnInit {
       }
     }
     this.finalCollabs = this.data;
-    console.log("finaldata", this.data);
-
   }
 
   onEvent(event, value) {
@@ -394,7 +385,7 @@ export class StakeholderFullComponent implements OnInit {
     if (this.selectedCollabs.length > 0 && this.data.length > 0) {
       this.selectedCollabs.forEach(element => {
         if (this.data.includes(element)) {
-          alert("User already selected -- select ok to delete the user");
+          alert('User already selected -- select ok to delete the user');
           this.selectedCollabs.pop();
           this.deleteCollabs.push(element);
         } else {
@@ -407,25 +398,18 @@ export class StakeholderFullComponent implements OnInit {
 
   addselectedCollabs() {
     if (this.temporaryselectedCollabs.length > 0 && this.newData.length > 0) {
-      //  this.newData = this.newData.concat(this.temporaryselectedCollabs);
       this.data = this.data.concat(this.temporaryselectedCollabs);
-      console.log("newdatsa", this.data);
       this.finalCollabs = this.newData;
-      console.log("newdata", typeof (this.newData));
     }
     if (this.temporaryselectedCollabs.length > 0 && this.newData.length < 1) {
       this.newData = this.temporaryselectedCollabs;
       this.finalCollabs = this.newData;
       this.data = this.data.concat(this.newData);
-      console.log("newdatsa:::::", this.data);
-      console.log("newdata", typeof (this.newData));
       this.newDatastring = JSON.stringify(this.newData);
     }
     if (this.temporaryselectedCollabs.length < 1) {
-      alert("select atleast one");
+      alert('select atleast one');
     }
-
-    console.log("newDatalist", this.newData[0]);
 
     this.temporaryselectedCollabs = [];
     this.selectedCollabs = [];
@@ -434,7 +418,7 @@ export class StakeholderFullComponent implements OnInit {
 
   multideleteCollaborator() {
     if (this.deleteCollabs.length < 1) {
-      alert("select atleast one");
+      alert('select atleast one');
     }
 
     if (this.deleteCollabs.length > 0) {
@@ -447,9 +431,9 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   getInitialChar(name) {
-    if (name == null) return ""
-    let names = name.split(' ');
-    let initials = "";
+    if (name == null) { return '' }
+    const names = name.split(' ');
+    let initials = '';
     initials += names[0].charAt(0).toUpperCase();
     if (names.length > 1) {
       initials += names[1].charAt(0).toUpperCase();
@@ -462,17 +446,16 @@ export class StakeholderFullComponent implements OnInit {
    */
   delteSelectedStakeHolders() {
     this.selectedSh.forEach(shs => {
-      if (!shs.stakeholderDefaults) {
+      if (this.canUserDeleteStakeHolder(shs)) {
         this.deleteStakeHolder(shs._id);
       }
     });
   }
 
   deleteStakeHolder(stakeHolderId) {
-    console.log(stakeHolderId);
     this.Stakeholders.splice(this.Stakeholders.findIndex(matchesEl), 1);
     function matchesEl(el) {
-      return el._id === stakeHolderId
+      return el._id === stakeHolderId;
     }
 
     const keys: any[] = Object.keys(this.stakeHolderInfo);
