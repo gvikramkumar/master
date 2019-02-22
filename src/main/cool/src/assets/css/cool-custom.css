@@ -1080,6 +1080,17 @@ span[class*="display-"] {
   width: 1.8rem;
   display: inline-block;
 }
+
+.cool.cui .ui-tooltip .ui-tooltip-text {
+  background-color: white;
+ 	 	color: black;
+}
+
+.ui-tooltip .ui-tooltip-text:before,.ui-tooltip .ui-tooltip-text:after 
+{
+  border-color:white;
+}
+
 span.icon-expand.icon-small:hover, span.icon-collapse.icon-small:hover {
   opacity: .5;
 }
