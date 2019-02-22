@@ -19,6 +19,9 @@ import { ConstructDetails } from './model/ConstructDetails';
 import { ConstructDetail } from './model/ConstructDetail';
 import { ItemDetail } from './model/ItemDetail';
 import { group } from '@angular/animations';
+import { Observable, Subscription } from 'rxjs';
+import { async } from '@angular/core/testing';
+import { StakeHolder } from '../models/stakeholder';
 
 @Component({
   selector: 'app-offerconstruct-canvas',
@@ -35,7 +38,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   draggedItem: any;
   offerConstructItems: TreeNode[] = [];
   private counter: any = 0;
-  itemCategories: any[] = [];
+  itemCategories = [];
   selected: TreeNode[];
   searchInput: any;
   results;
@@ -408,6 +411,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     document.getElementById(id).focus();
   }
 
+
   ngOnInit() {
     this.offerConstructService.space.subscribe((val) => {
       console.log(val);
@@ -506,26 +510,72 @@ export class OfferconstructCanvasComponent implements OnInit {
       // Call offerconstruct request to get Major/Minor Line Items
       this._canvasService.getOfferConstructItems(reqObj).subscribe((data) => {
 
+        // Fake Data
+        // const itemData = [{ 'type': 'SW Subscription SKU', 'majorLineItem': false },
+        // { 'type': 'Hardware', 'majorLineItem': false },
+        // { 'type': 'Hardware', 'majorLineItem': false },
+        // { 'type': 'License', 'majorLineItem': true }];
+
+        // Extract Offer Category Details
         const itemData = data['listOfferCatagory'];
 
-        itemData.forEach(item => {
+        // Populate Item Categories List
+        for (let i = 0; i < itemData.length; i++) {
 
           const itemObj = {
-            categoryName: item.type,
-            isMajorLineItem: item.majorLineItem,
-            productName: item.type,
+            categoryName: itemData[i].type,
+            isMajorLineItem: itemData[i].majorLineItem,
+            productName: itemData[i].type,
             listPrice: ''
           };
 
-          // Ignore Repeated Items
-          if (!this.itemCategories.includes(item)) {
-            this.itemCategories.push(itemObj);
+          this.itemCategories.push(itemObj);
+
+        }
+
+        // Identify Duplicate Elements In Item Categories List
+        const repeatedList = [];
+
+        for (let i = 0; i < this.itemCategories.length; i++) {
+          let count = 0;
+
+          for (let j = 0; j < this.itemCategories.length; j++) {
+            if ((this.itemCategories[i]['categoryName'] === this.itemCategories[j]['categoryName'])
+              && (
+                // (this.itemCategories[i]['isMinorLineItem'] == this.itemCategories[j]['isMinorLineItem']) ||
+                (this.itemCategories[i]['isMajorLineItem'] == this.itemCategories[j]['isMajorLineItem']))) {
+              count++;
+            }
           }
 
-        });
+          if (count > 1) {
+            repeatedList.push({
+              'categoryName': this.itemCategories[i]['categoryName'],
+              // 'isMinorLineItem': this.itemCategories[i]['isMinorLineItem'] == null ? false : this.itemCategories[i]['isMinorLineItem'],
+              'isMajorLineItem': this.itemCategories[i]['isMajorLineItem'] == null ? false : this.itemCategories[i]['isMajorLineItem']
+            });
+          }
+        }
+
+        // Remove Duplicate Elements From Item Catagories List
+        for (let i = 0; i < repeatedList.length; i = i + 2) {
+
+          for (let j = 0; j < this.itemCategories.length; j++) {
+
+            if ((this.itemCategories[j]['categoryName'] === repeatedList[i]['categoryName'])
+              && (this.itemCategories[j]['isMajorLineItem'] === repeatedList[i]['isMajorLineItem'])
+              // || (this.itemCategories[j]['isMinorLineItem'] == repeatedList[i]['isMinorLineItem'])
+            ) {
+              this.itemCategories.splice(j, 1);
+              break;
+            }
+          }
+        }
 
       });
+
     });
+
 
     this.itemCount = 0;
 
