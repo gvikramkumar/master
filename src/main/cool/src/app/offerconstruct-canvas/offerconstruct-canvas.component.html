@@ -215,14 +215,14 @@
     <form (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
-        <div class="col-md-6" *ngFor="let question of questions">
-          <div [ngSwitch]="question.itemType">
-            <div *ngSwitchCase="'Item'">
-              <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
+          <div class="col-md-6" *ngFor="let question of questions">
+            <div [ngSwitch]="question.itemType">
+              <div *ngSwitchCase="'Unique Item'">
+                <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       <div class="divider" style="margin-top: 1%"></div>
       <!-- Unique Item  Mandatory Section -->
       <div class="row">
@@ -244,14 +244,14 @@
       <div *ngIf="showMandatoryDetails">
         <!-- starts Mandatory Items -->
         <div class="row half-margin-bottom">
-          <div class="col-md-6" *ngFor="let question of questions">
-            <div [ngSwitch]="question.itemType">
-              <div *ngSwitchCase="'Unique Item'">
-                <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
+            <div class="col-md-6" *ngFor="let question of questions">
+              <div [ngSwitch]="question.itemType">
+                <div *ngSwitchCase="'Item'">
+                  <app-dynamic-form-question [question]="question" [questionForm]="questionForm"></app-dynamic-form-question>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         <!-- ends Mandatory Items -->
       </div>
       <div class="divider" style="margin-top: 1%"></div>
@@ -264,8 +264,8 @@
     </form>
   </p-dialog>
   <p-dialog header="Add All Offer Details" closable="true" modal="true" showHeader="false" (onHide)="onHide()"
-    [resizable]="false" [responsive]="false" [(visible)]="display" [contentStyle]="{'height': '450px', 'max-height':'450px', 'width':'100% !important'}"
-    positionTop='150'>
+   [responsive]="false" [(visible)]="display" [contentStyle]="{'height': '450px', 'max-height':'450px', 'width':'100% !important'}"
+    positionTop='150' positionRight='0' positionLeft='0'>
     <div class="divider" style="margin-top: -1.5%"></div>
     <div>
       <ul id="tabsv1" class="tabs">
