@@ -35,4 +35,11 @@ export default class MappingUploadController extends ControllerBase {
       });
   }
 
+  mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa) {
+    const keys = _.uniq(objs.map(sm => sm.submeasureKey));
+    const where = `fiscal_month_id = ${dfa.fiscalMonths.prof} and sub_measure_key in (${keys})`;
+    return this.pgRepo.syncRecordsReplaceAllWhere(where, objs, userId, true)
+      .then(results => results.recordCount);
+  }
+
 }

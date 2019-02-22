@@ -96,7 +96,7 @@ export default class DatabaseController {
         }
         if (syncMap.dfa_prof_manual_map_upld) {
           promises.push(this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
+            {fiscalMonth: dfa.fiscalMonths.prof}, undefined, dfa));
         }
         if (syncMap.dfa_prof_scms_triang_altsl2_map_upld) {
           promises.push(this.alternateSl2UploadCtrl.mongoToPgSync('dfa_prof_scms_triang_altsl2_map_upld', userId, log, elog,
@@ -104,11 +104,11 @@ export default class DatabaseController {
         }
         if (syncMap.dfa_prof_scms_triang_corpadj_map_upld) {
           promises.push(this.corpAdjustmentsUploadCtrl.mongoToPgSync('dfa_prof_scms_triang_corpadj_map_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
+            {fiscalMonth: dfa.fiscalMonths.prof}, undefined, dfa));
         }
         if (syncMap.dfa_prof_swalloc_manualmix_upld) {
           promises.push(this.productClassUploadCtrl.mongoToPgSync('dfa_prof_swalloc_manualmix_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
+            {fiscalMonth: dfa.fiscalMonths.prof}, undefined, dfa));
         }
         if (syncMap.dfa_prof_sales_split_pctmap_upld) {
           promises.push(this.salesSplitUploadCtrl.mongoToPgSync('dfa_prof_sales_split_pctmap_upld', userId, log, elog,

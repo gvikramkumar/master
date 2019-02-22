@@ -49,3 +49,8 @@ select * from fpadfa.dfa_data_sources;
 
 select measure_id, sub_measure_key, sub_measure_name, input_product_family, alloc_product_family from fpadfa.dfa_sub_measure 
 where sub_measure_key = 1055647;
+
+delete from fpadfa.dfa_sub_measure;
+
+
+

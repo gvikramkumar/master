@@ -92,7 +92,7 @@ export class PgRepoBase {
   always updates the updatedDate. What to do? We'll allow turning off the concurrency check in this case,
   so if pg only, then on, and if mongo and pg then off.
    */
-  updateQueryOne(filter, obj, userId, concurrencyCheck = true) {
+  updateQueryOne(filter, obj, userId, concurrencyCheck = true, bypassCreatedUpdated = false) {
     if (Object.keys(filter).length === 0) {
       throw new ApiError('updateQueryOne called with no filter', null, 400);
     }
@@ -107,7 +107,9 @@ export class PgRepoBase {
         if (rows.length > 1) {
           throw new ApiError(`UpdateOne multiple records found.`, null, 400);
         }
-        this.addUpdatedBy(obj, userId)
+        if (!bypassCreatedUpdated) {
+          this.addUpdatedBy(obj, userId);
+        }
         const record = this.orm.objectToRecordUpdate(obj, userId);
         let queryIdx = 0;
         let sql = ` update ${this.table} set `;
@@ -252,7 +254,7 @@ export class PgRepoBase {
   }
 
   // sync using uniqueFilterProps to identify records (instead of id)
-  syncRecordsQueryOne(filter, uniqueFilterProps, records, userId, concurrencyCheck = true) {
+  syncRecordsQueryOne(filter, uniqueFilterProps, records, userId, concurrencyCheck = true, bypassCreatedUpdated = false, remove = true) {
     return this.getSyncArrays(filter, uniqueFilterProps, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
@@ -260,15 +262,25 @@ export class PgRepoBase {
           const uniqueFilter = {};
           uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
           // console.log('update', uniqueFilter);
-          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId, concurrencyCheck));
+          // we're looking at a subset possibly, say fiscalMonth=201905, we need to add that to the uniqueFilter then
+          const fullFilter = Object.assign({}, filter, uniqueFilter);
+          promiseArr.push(this.updateQueryOne(fullFilter, record, userId, concurrencyCheck, bypassCreatedUpdated));
         });
-        promiseArr.push(this.addMany(adds, userId));
-        deletes.forEach(record => {
-          const uniqueFilter = {};
-          uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
-          // console.log('delete', uniqueFilter);
-          promiseArr.push(this.removeQueryOne(uniqueFilter));
-        });
+        promiseArr.push(this.addMany(adds, userId, bypassCreatedUpdated));
+
+        // for uploads that rollover we have "all" data in pg, and only insert/updates in partial uploads in mongo
+        // for a given fiscalmonth. In that case we don't really "sync" we insert/update (no deletes)
+        if (remove) {
+          deletes.forEach(record => {
+            const uniqueFilter = {};
+            uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+            // console.log('delete', uniqueFilter);
+            // we're looking at a subset possibly, say fiscalMonth=201905, we need to add that to the uniqueFilter then
+            const fullFilter = Object.assign({}, filter, uniqueFilter);
+            promiseArr.push(this.removeQueryOne(fullFilter));
+          });
+        }
+
         return Promise.all(promiseArr);
       });
   }
@@ -277,6 +289,13 @@ export class PgRepoBase {
   // and replace
   syncRecordsReplaceAll(filter, records, userId, bypassCreatedUpdated?) {
     return this.removeMany(filter, false)
+      .then(() => this.addMany(records, userId, bypassCreatedUpdated))
+      .then(() => ({recordCount: records.length}));
+  }
+
+  syncRecordsReplaceAllWhere(removeWhere, records, userId, bypassCreatedUpdated?) {
+    const sql = `delete from ${this.table} where ${removeWhere}`;
+    return pgc.pgdb.query(sql)
       .then(() => this.addMany(records, userId, bypassCreatedUpdated))
       .then(() => ({recordCount: records.length}));
   }

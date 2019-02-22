@@ -272,6 +272,11 @@ export default class ControllerBase {
     return objs;
   }
 
+  mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa?) {
+    return this.pgRepo.syncRecordsReplaceAll(pgRemoveFilter, objs, userId, true)
+      .then(results => results.recordCount);
+  }
+
   mongoToPgSync(tableName: string, userId: string, log: string[], elog: string[],
                 mgGetFilter: AnyObj = {}, pgRemoveFilter: AnyObj = {}, dfa?: ApiDfaData) {
     // try {
@@ -289,10 +294,7 @@ export default class ControllerBase {
           }
         })
         .then(objs => this.mongoToPgSyncTransform(objs, userId, log, elog)) // override this to transform
-        .then(objs => {
-          return this.pgRepo.syncRecordsReplaceAll(pgRemoveFilter, objs, userId, true)
-            .then(results => results.recordCount);
-        })
+        .then(objs => this.mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa))
         .then(recordCount => {
           return this.postSyncStep(dfa)
             .then(() => log.push(`${tableName}: ${recordCount} records transferred`));
