@@ -9,7 +9,9 @@ import { OfferConstructService } from '../services/offer-construct.service';
     template: `
     <form novalidate (ngSubmit)="onSubmit(form.value)" [formGroup]="form">
     <div class="form-group">
-      <div *ngFor="let prop of objectProps">
+    <h4>Details for {{group.groupName}}</h4>
+    <div class='row flex-row'>
+      <div class='col-md-6' *ngFor="let prop of objectProps">
       <div [ngSwitch]="prop.itemType">
       <div *ngSwitchCase="'Item'">
         <label [attr.for]="prop">{{prop.egineAttribue}}</label>
@@ -46,6 +48,7 @@ import { OfferConstructService } from '../services/offer-construct.service';
       </div>
       </div>
       </div>
+      </div>
       <div class="divider" style="margin-top: 1%"></div>
       <!-- Unique Item  Mandatory Section -->
       <div class="row">
@@ -65,7 +68,8 @@ import { OfferConstructService } from '../services/offer-construct.service';
       </div>
       <div class="divider" style="margin-top: 1%"></div>
       <div *ngIf="showMandatoryDetails">
-      <div *ngFor="let prop of objectProps; let i=index">
+      <div class='row flex-row'>
+      <div class='col-md-6' *ngFor="let prop of objectProps; let i=index">
       <div [ngSwitch]="prop.itemType">
       <div *ngSwitchCase="'Unique Item'">
         <label [attr.for]="prop">{{prop.egineAttribue}}</label>
@@ -99,6 +103,7 @@ import { OfferConstructService } from '../services/offer-construct.service';
               {{ prop.label }} is required.
             </div>
           </div>
+      </div>
       </div>
       </div>
       </div>

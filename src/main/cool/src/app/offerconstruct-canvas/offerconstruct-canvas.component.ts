@@ -78,6 +78,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   countableItems: Number[] = [];
   private map1 = new Map();
   popHeadName;
+  setFlag = true;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
@@ -281,17 +282,60 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
     if (this.draggedItem.parent === null) {
       this.offerConstructItems = [...this.offerConstructItems];
-    } else {
+    } 
+    else {
       if (
         rowNode.node.data['isMajorLineItem'] &&
         !this.draggedItem['isMajorLineItem']
       ) {
+        if(this.draggedItem.data) { 
+          if(this.draggedItem.data.isGroupNode && this.draggedItem.children.length > 0) {
+            const obj = Object.create(null);
+            obj['uniqueKey'] = ++this.counter;
+            this.uniqueId = obj['uniqueKey'];
+            obj['isGroupNode'] = true;
+            obj['productName'] = this.draggedItem.data.productName;
+            obj['label'] = this.draggedItem.data.label;
+            obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
+            obj['listPrice'] = this.draggedItem.data.listPrice;
+            obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
+            rowNode.node.children.push(this.itemToTreeNode(obj));
+            this.setFlag = false;
+            this.offerConstructItems = [...this.offerConstructItems];
+            this.draggedItem.children.forEach(element1 => {
+            rowNode.node.children.forEach(element => {
+            if(element.data.uniqueKey === obj.uniqueKey && element.data.isGroupNode){
+            const obj1 = Object.create(null);
+            obj1['uniqueKey'] = ++this.counter;
+            this.uniqueId = obj['uniqueKey'];
+            obj1['isGroupNode'] = false;
+            obj1['productName'] = element1.data.productName;
+            obj1['label'] = element1.data.label;
+            obj1['isMajorLineItem'] = element1.data.isMajorLineItem;
+            obj1['listPrice'] = element1.data.listPrice;
+            obj1['title'] = element1.data.title ? element1.data.title : element1.data.productName;
+                  element.children.push(this.itemToTreeNode(obj1));
+                  this.offerConstructItems = [...this.offerConstructItems];
+                }
+              });
+            });
+            this.delteFromParentObject(rowNode, this.draggedItem.data);
+            this.offerConstructItems = [...this.offerConstructItems];
+          }
+        }
         if (this.draggedItem.parent !== undefined) {
+          if(this.setFlag) {
           // If dragged node is a tree node,meaning the node which is moved between the canvas
           const obj = Object.create(null);
           obj['uniqueKey'] = ++this.counter;
           this.uniqueId = obj['uniqueKey'];
-          obj['isGroupNode'] = false;
+          if(this.draggedItem.data){
+            if(this.draggedItem.data.isGroupNode){
+              obj['isGroupNode'] = true;
+            }
+          } else {
+            obj['isGroupNode'] = false;
+          }
           obj['productName'] = this.draggedItem.data.productName;
           obj['label'] = this.draggedItem.data.label;
           obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
@@ -299,7 +343,10 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
-        } else {
+          }
+          this.setFlag = true;
+        }
+        else {
           // If dragged node is not an actual tree node
           const obj = Object.create(null);
           obj['uniqueKey'] = ++this.counter;
@@ -334,7 +381,7 @@ export class OfferconstructCanvasComponent implements OnInit {
         obj['label'] = this.draggedItem.data.label;
         obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
         obj['listPrice'] = this.draggedItem.data.listPrice;
-        obj['title'] = this.draggedItem.data.productName;
+        obj['title'] = this.draggedItem.data.title?this.draggedItem.data.title:this.draggedItem.data.productName;
         rowNode.node.children.push(this.itemToTreeNode(obj));
         this.delteFromParentObject(rowNode, this.draggedItem.data);
       }
