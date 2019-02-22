@@ -126,13 +126,13 @@
                                             <tr>
                                                 <td>
                                                     <p-tableCheckbox [value]="stakeholder"
-                                                        *ngIf="!stakeholder.stakeholderDefaults"></p-tableCheckbox>
+                                                        *ngIf="canUserDeleteStakeHolder(stakeholder)"></p-tableCheckbox>
                                                 </td>
                                                 <td>{{stakeholder.name}}</td>
                                                 <td>{{stakeholder.email}}</td>
                                                 <td>
                                                     {{stakeholder.functionalRole}}
-                                                    <span *ngIf="!stakeholder.stakeholderDefaults"
+                                                    <span *ngIf="canUserDeleteStakeHolder(stakeholder)"
                                                         class="icon-trash icon-small pull-right"
                                                         (click)="deleteStakeHolder(stakeholder._id)"></span>
                                                 </td>
