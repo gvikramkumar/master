@@ -75,19 +75,22 @@
                 <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
-                      <a *ngIf="actionData.alertType == 'action'"
-                        (click)="showActionPopUp($event,actionData,popActionContent)">
-                        <span class="text-indigo"
-                          (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
-                          &nbsp;</span>
-                      </a>
+                      <div *ngIf="actionData.alertType == 'action'">
+                        <a (click)="showActionPopUp($event,actionData,popActionContent)">
+                          <span class="text-indigo"
+                            (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
+                            &nbsp;&nbsp;</span>
+                        </a>
+                        <span (click)="showActionPopUp($event,actionData,popCommentContent)"
+                          class="icon-comment pull-right"></span>
+                      </div>
+
                       <a *ngIf="actionData.alertType == 'notification'"
                         (click)="showActionPopUp($event,actionData,popNotificationContent)">
                         <span>{{actionData.title}}&nbsp;
                           &nbsp;</span>
                       </a>
-                      <span (click)="showActionPopUp($event,actionData,popCommentContent)"
-                        class="icon-comment pull-right"></span><br />
+                      <br />
                       <span class="text-small">{{actionData.desc}}</span>
                     </span>
                   </ng-template>
@@ -109,9 +112,9 @@
 
                 <p-column field="offerOwner" sortable="true" header="OFFER OWNER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                      <div style="white-space:pre-wrap;">
-                        {{actionData.offerOwner}}</div>
-                    </ng-template>
+                    <div style="white-space:pre-wrap;">
+                      {{actionData.offerOwner}}</div>
+                  </ng-template>
                 </p-column>
                 <p-column field="status" sortable="true" header="STATUS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
@@ -363,10 +366,8 @@
   <div *ngIf="selectedAction" style="min-width:700px">
     <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
     <div class="popover__body">
-      <h5>Notification Details</h5>
-      <p>{{selectedAction.actionDesc}}</p>
-      <button class="btn btn--secondary base-margin-top"
-        [routerLink]="['/offerDetailView',selectedAction.offerId, selectedAction.caseId]">View
+      <app-notification-offer-detail-popup [selectedAction]="selectedAction"></app-notification-offer-detail-popup>
+      <button class="btn btn--secondary base-margin-top" (click)="getOfferViewLink()">View
         Offer</button>
     </div>
     <div class="popover__footer">
@@ -376,9 +377,12 @@
     </div>
   </div>
 </p-overlayPanel>
+
+
 <!-- actions overlay -->
 <p-overlayPanel #popActionContent [showCloseIcon]="true" (onShow)="getActionFormValues()">
   <div *ngIf="selectedAction" style="min-width:700px">
+
     <div *ngIf="showActionSection">
       <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
       <div class="popover__body">
@@ -406,16 +410,19 @@
         </div>
         <h5>Action Description</h5>
         <p>{{selectedAction.actionDesc}}</p>
-        <button class="btn btn--secondary "
-          [routerLink]="['/offerDetailView',selectedAction.offerId, selectedAction.caseId]">
+        <button class="btn btn--secondary " (click)="getOfferViewLink()">
           View Offer
+        </button>
+        <button class="btn btn--secondary" *ngIf="selectedAction.type == 'Solutioning Action'"
+          [routerLink]="['/offerSolutioning', selectedAction.offerId, selectedAction.caseId]">
+          Provide Details
         </button>
       </div>
       <div class="popover__footer">
         <div *ngIf="selectedAction.type == 'Manual Action'">
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
             (click)="createApproveAction(popActionContent)">Complete</button>
-            <!-- <button class="btn btn--primary base-margin-top" id="popover_close_btn"
+          <!-- <button class="btn btn--primary base-margin-top" id="popover_close_btn"
               (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide Feedback</button> -->
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
             (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide Details</button>

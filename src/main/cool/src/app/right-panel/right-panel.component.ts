@@ -69,12 +69,18 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   flagOwner3 = false;
 
   mmModel: string;
+  leadTime: LeadTime;
   leadTimeYear: number;
   progressBarWidth: number;
   averageWeekCount: string;
   expectedLaunchDate: string;
   weekDifferenceCount: string;
   displayLeadTimeButton: Boolean = false;
+
+  launchDate: string;
+  designReviewDate: string;
+  strategyReviewDate: string;
+  readinessReviewDate: string;
 
   average = 'Average';
   tenthPercentile = '10th Percentile';
@@ -129,12 +135,12 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   };
 
   editIdeateTargetDate: Boolean = false;
-  editPlanTargetDate: Boolean  = false;
-  editExecuteTargetDate: Boolean  = false;
-  editLanchTargetDate: Boolean  = false;
+  editPlanTargetDate: Boolean = false;
+  editExecuteTargetDate: Boolean = false;
+  editLanchTargetDate: Boolean = false;
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   minDate: Date;
-  showAlert:Boolean = false;
+  showAlert: Boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -158,6 +164,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
 
@@ -221,27 +228,31 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
-        this.OfferOwners = this.offerData.offerObj.owners;
-        this.approvars = this.offerData.offerObj.approvars;
+        if (this.offerData.offerObj) {
+          this.OfferOwners = this.offerData.offerObj.owners;
+          this.approvars = this.offerData.offerObj.approvars;
 
-        this.phaseTaskMap = this.offerData.phaseTaskList;
+          if (this.OfferOwners) {
+            this.OfferOwners.forEach(item => {
+              item.caption = '';
+              item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+            });
+          }
+          if (this.approvars) {
+            this.approvars.forEach(item => {
+              item.caption = '';
+              item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+            });
+          }
 
-        this.phaseList = Object.keys(this.phaseTaskMap);
-
-        Object.keys(this.phaseTaskMap).forEach(phase => {
-          // console.log(phase);
-        });
-
-        if (this.OfferOwners) {
-          this.OfferOwners.forEach(item => {
-            item.caption = '';
-            item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
-          });
         }
-        if (this.approvars) {
-          this.approvars.forEach(item => {
-            item.caption = '';
-            item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
+        if (this.offerData.phaseTaskList) {
+          this.phaseTaskMap = this.offerData.phaseTaskList;
+
+          this.phaseList = Object.keys(this.phaseTaskMap);
+
+          Object.keys(this.phaseTaskMap).forEach(phase => {
+            // console.log(phase);
           });
         }
       });
@@ -316,6 +327,15 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     this.leadTimeYear = new Date().getFullYear() - 1;
 
     if (this.displayLeadTime) {
+
+      // Compute Offer Dates
+      this.rightPanelService.displayOfferDates(this.caseId).subscribe(
+        (leadTimeObj) => {
+          this.launchDate = moment(leadTimeObj['launchDate']).format('DD-MMM-YYYY');
+          this.designReviewDate = moment(leadTimeObj['designReviewDate']).format('DD-MMM-YYYY');
+          this.strategyReviewDate = moment(leadTimeObj['strategyReviewDate']).format('DD-MMM-YYYY');
+          this.readinessReviewDate = moment(leadTimeObj['readinessReviewDate']).format('DD-MMM-YYYY');
+        });
 
       // Compute Expected Launch Date
       this.displayLeadTimeButton = true;
@@ -392,12 +412,13 @@ export class RightPanelComponent implements OnInit, OnDestroy {
    * @param launchReviewDate
    */
   validateTargetDates(stratReviewDate, designReviewDate, executeReviewDate, launchReviewDate): boolean {
+
     const srDate = moment(stratReviewDate).format('MM-DD-YYYY');
     const drDate = moment(designReviewDate).format('MM-DD-YYYY');
     // const erDate = moment(executeReviewDate).format('MM-DD-YYYY');
     // const lrDate = moment(launchReviewDate).format('MM-DD-YYYY');
 
-    if (srDate < drDate ) {
+    if (srDate < drDate) {
       return true;
     }
   }
@@ -431,18 +452,22 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       case 'ideate': {
         this.editIdeateTargetDate = false;
         payLoad['strategyReviewDate'] = value.toISOString();
-        if (! this.validateTargetDates(value, designReviewDate, null, null )) {
+        if (!this.validateTargetDates(value, designReviewDate, null, null)) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
       case 'plan': {
         this.editPlanTargetDate = false;
         payLoad['designReviewDate'] = value.toISOString();
-        if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
+        if (!this.validateTargetDates(stratReviewDate, value, null, null)) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
@@ -470,18 +495,22 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       case 'ideate': {
         this.editIdeateTargetDate = false;
         updateDBpayLoad['strategyReviewDate'] = value.toISOString();
-        if (! this.validateTargetDates(value, designReviewDate, null, null )) {
+        if (!this.validateTargetDates(value, designReviewDate, null, null)) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
       case 'plan': {
         this.editPlanTargetDate = false;
         updateDBpayLoad['designReviewDate'] = value.toISOString();
-        if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
+        if (!this.validateTargetDates(stratReviewDate, value, null, null)) {
           updateDate = false;
           this.showAlert = true;
+        } else {
+          this.showAlert = false;
         }
         break;
       }
@@ -683,7 +712,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.offerData = data;
     });
 
-    if (this.offerData.offerObj.mmMapperStatus === 'Not Aligned') {
+    if (this.offerData.offerObj && this.offerData.offerObj.mmMapperStatus === 'Not Aligned') {
 
       alert('Status is \'Not Aligned\'!. You cannot proceed with stakeholder identification.');
 

@@ -77,6 +77,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   myForm: FormGroup;
   countableItems: Number[] = [];
   private map1 = new Map();
+  popHeadName;
+
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder) {
@@ -386,8 +388,8 @@ export class OfferconstructCanvasComponent implements OnInit {
     obj['uniqueKey'] = counter;
     obj['productName'] =
       rowNode.node.data.productName + ' ' + 'Group' + ' ' + countGroup;
-    obj['catergoryName'] = 'Billing';
-    obj['label'] = 'Billing';
+    obj['catergoryName'] = rowNode.node.data.productName;
+    obj['label'] = rowNode.node.data.productName;
     obj['title'] = rowNode.node.data.productName + ' ' + 'Group' + ' ' + countGroup;
     obj['isGroupNode'] = true;
     rowNode.node.children.push(this.itemToTreeNode(obj));
@@ -640,7 +642,6 @@ export class OfferconstructCanvasComponent implements OnInit {
   addAllItemDetails(details) {
     this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.multipleForms.value);
-    alert(JSON.stringify(this.multipleForms.value))
     this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
     this.closeDailog();
   }
@@ -649,6 +650,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     // const productName = product;
     this.currentRowClicked = currentNode;
     this.lineItemName = currentNode.node.data.productName;
+    this.popHeadName = currentNode.node.data.title;
     let itemDetails = currentNode.node.data['itemDetails'];
     this.displayAddDetails = true;
     const groups: Groups[] = [];
@@ -684,73 +686,89 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   saveOfferConstructChanges() {
     this.offerConstructItems = [... this.offerConstructItems];
-    console.log('this is the object', this.offerConstructItems)
+    console.log('this is the object', this.offerConstructItems);
     let cds: ConstructDetails = new ConstructDetails(this.currentOfferId, []);
+    // Construct all group Nodes.
     this.offerConstructItems.forEach((node) => {
       let cd: ConstructDetail;
       // check if this item is major item
       if (node.parent === null) {
         cd = new ConstructDetail();
         cd.constructItem = 'Major';
-        cd.constructItemName = node.data.productName;
+        cd.constructItemName = node.data.title;
         cd.constructType = node.data.productName;
-        cd.productFamily = node.data.productName;
-        cd.groupName = [];
+        cd.productFamily = '';
+        cd.constructNodeId = node.data.uniqueKey.toString();
+        cd.constructParentId = '0';
+        cd.groupNode = false;
         if (node.data.itemDetails !== undefined) {
           let id: ItemDetail;
           for (const key in node.data.itemDetails) {
             id = new ItemDetail();
             id.attributeName = key;
             id.attributeValue = node.data.itemDetails[key];
-            id.attributeType = 'Unique';
-            id.existingFromEgenie = false;
+            id.eGenieFlag = false;
             cd.itemDetails.push(id);
-          };
+          }
         }
         cds.constructDetails.push(cd);
       }
 
-      // minor items
+      // Construct all minor items
       if (node.children !== undefined && node.children !== null) {
         node.children.forEach((child) => {
           if (!child.data.isGroupNode) {
             cd = new ConstructDetail();
             cd.constructItem = 'Minor';
-            cd.constructItemName = child.data.productName;
+            cd.constructItemName = child.data.title;
             cd.constructType = child.data.productName;
-            cd.productFamily = child.data.productName;
-            cd.groupName = [];
+            cd.productFamily = '';
+            cd.constructNodeId = child.data.uniqueKey.toString();
+            cd.constructParentId =  node.data.uniqueKey.toString();
+            cd.groupNode = false;
             if (child.data.itemDetails !== undefined) {
               let id: ItemDetail;
               for (const key in child.data.itemDetails) {
                 id = new ItemDetail();
                 id.attributeName = key;
                 id.attributeValue = child.data.itemDetails[key];
-                id.attributeType = 'Unique';
-                id.existingFromEgenie = false;
+                id.eGenieFlag = false;
                 cd.itemDetails.push(id);
-              };
+              }
             }
             cds.constructDetails.push(cd);
           } else {
+            // Store Group Information
+            cd = new ConstructDetail();
+            cd.constructItem = 'Group';
+            cd.constructItemName = child.data.title;
+            cd.constructType = 'Group';
+            cd.productFamily = '';
+            cd.constructNodeId = child.data.uniqueKey.toString();
+            cd.constructParentId =  node.data.uniqueKey.toString();
+            cd.groupNode = true;
+            cds.constructDetails.push(cd);
+
+            // Store children under group node.
             if (child.children !== undefined && child.children !== null) {
               child.children.forEach((gchild) => {
                 cd = new ConstructDetail();
                 cd.constructItem = 'Minor';
-                cd.constructItemName = gchild.data.productName;
+                cd.constructItemName = gchild.data.title;
                 cd.constructType = gchild.data.productName;
-                cd.productFamily = gchild.data.productName;
-                cd.groupName.push(child.data.productName);
+                cd.productFamily = '';
+                cd.constructNodeId = gchild.data.uniqueKey.toString();
+                cd.constructParentId =  child.data.uniqueKey.toString();
+                cd.groupNode = false;
                 if (gchild.data.itemDetails !== undefined) {
                   let id: ItemDetail;
                   for (const key in gchild.data.itemDetails) {
                     id = new ItemDetail();
                     id.attributeName = key;
                     id.attributeValue = gchild.data.itemDetails[key];
-                    id.attributeType = 'Unique';
-                    id.existingFromEgenie = false;
+                    id.eGenieFlag = false;
                     cd.itemDetails.push(id);
-                  };
+                  }
                 }
                 cds.constructDetails.push(cd);
               });

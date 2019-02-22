@@ -103,6 +103,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { IdpidValidatorDirective } from './create-offer-cool/idpid-validator.directive';
 import { DynamicFormMultipleComponent } from './offerconstruct-canvas/dynamic-form-multiple';
+import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
 
 export function app_init(configService: ConfigurationService, userService: UserService, envService: EnvironmentService) {
   return () => { return configService.init(); };
@@ -154,7 +155,8 @@ export function app_init(configService: ConfigurationService, userService: UserS
     EditfieldsComponent,
     ViewstrategyComponent,
     OasComponent,
-    IdpidValidatorDirective
+    IdpidValidatorDirective,
+    NotificationOfferDetailPopupComponent
   ],
   imports: [
     NgbModule,

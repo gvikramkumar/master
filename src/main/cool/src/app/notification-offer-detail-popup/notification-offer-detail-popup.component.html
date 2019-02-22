@@ -1,0 +1,24 @@
+<div class="responsive-table half-margin-bottom">
+  <table class="table table--nostripes actionPop">
+    <thead>
+      <tr>
+        <th>Offer Name </th>
+        <th>Notification Title </th>
+        <th>Offer Owner </th>
+        <th>Due Date </th>
+        <th>Milestone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{selectedAction.offerName}}</td>
+        <td>{{selectedAction.notifcationTitle}}</td>
+        <td>{{selectedAction.offerOwner}}</td>
+        <td>{{selectedAction.dueDate | date:'dd-MMM-yyyy'}}</td>
+        <td>{{selectedAction.milestone}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>Notification Description</h5>
+  <p>{{selectedAction.notificationDesc}}</p>
+</div>

@@ -89,15 +89,16 @@
                         <div class="row" style="vertical-align: middle;margin-left: 20px">
                           <div class="col">
                             <span class="icon-check-outline icon-eye-closed text-darkgray"
-                              *ngIf="strategyReviewData.status.toLowerCase() == 'not reviewed'"></span>
+                              *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'not reviewed'"></span>
                             <span class="icon-warning-outline text-warning"
-                              *ngIf="strategyReviewData.status.toLowerCase() == 'conditionally approved'"></span>
+                              *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'conditionally approved'"></span>
                             <span class="icon-error-outline text-danger"
-                              *ngIf="strategyReviewData.status.toLowerCase() == 'not approved'"></span>
+                              *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'not approved'"></span>
                             <span class="icon-check-outline text-success"
-                              *ngIf="strategyReviewData.status.toLowerCase() == 'approved'"></span>
+                              *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'approved'"></span>
                             {{strategyReviewData.function}}</div>
-                          <div class="col">{{strategyReviewData.status | titlecase}}</div>
+                          <div class="col" *ngIf="strategyReviewData.status">{{strategyReviewData.status | titlecase}}
+                          </div>
                           <div class="col">{{strategyReviewData.reviewedOn | date:'dd-MMM-yyyy'}}</div>
                           <div class="col">{{strategyReviewData.reviewedBy}}</div>
                           <div class="reviewed-comments"><span class="icon-message"><span
@@ -130,7 +131,7 @@
                         </div>
                       </ng-template>
                       <div
-                        *ngIf="strategyReviewData.function === currentFunctionalRole && strategyReviewData.status && strategyReviewData.status.toUpperCase() === 'NOT REVIEWED'">
+                        *ngIf="getshowApprovalDecisionAction(strategyReviewData)">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
 
                           <div class="panel--header">

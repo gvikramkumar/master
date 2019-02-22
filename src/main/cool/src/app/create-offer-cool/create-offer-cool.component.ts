@@ -12,6 +12,7 @@ import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
 import { HeaderService } from '../header/header.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
+import { RightPanelService } from '../services/right-panel.service';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -76,12 +77,14 @@ export class CreateOfferCoolComponent implements OnInit {
   offerDescValueTrim: string = '';
   offerNameValueTrim: string = '';
 
+
   constructor(private createOfferService: CreateOfferService,
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private headerService: HeaderService,
     private stakeholderfullService: StakeholderfullService,
+    private rightPanelService: RightPanelService,
     private _location: Location) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
@@ -435,7 +438,7 @@ export class CreateOfferCoolComponent implements OnInit {
     status.phaseMilestone = 'Ideate';
     status.subMilestone = 'Offer Creation';
 
-    const offerCreationDate = new Date().toISOString();
+    const offerCreationDate = moment(new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'})).format();
     const selectedPrimaryBe= [];
     const constructDetails = [];
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
@@ -457,10 +460,33 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreationDate,
       status,
       constructDetails);
+
+      this.strategyReviewDateValue = moment(this.strategyReviewDateValue).toISOString();
+      this.designReviewDateValue = moment(this.designReviewDateValue).toISOString();
+      this.readinessReviewDateValue = moment(this.readinessReviewDateValue).toISOString();
+      this.expectedLaunchDateValue = moment(this.expectedLaunchDateValue).toISOString();
+      const updateoffer: CreateOffer = new CreateOffer(
+        loggedInUserId,
+        offerOwner,
+        this.offerNameValue,
+        this.offerDescValue,
+        this.primaryBusinessUnitsValue,
+        selectedPrimaryBe,
+        this.secondaryBusinessUnitsValue,
+        this.secondaryBusinessEntitiesValue,
+        this.strategyReviewDateValue,
+        this.designReviewDateValue,
+        this.readinessReviewDateValue,
+        this.expectedLaunchDateValue,
+        this.iDPId,
+        offerCreatedBy,
+        offerCreationDate,
+        status,
+        constructDetails);
     if (!this.offerId) {
       this.createOffer(createoffer);
     } else {
-      this.updateOffer(createoffer);
+      this.updateOffer(updateoffer);
       // this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
     }
   }
@@ -514,11 +540,20 @@ export class CreateOfferCoolComponent implements OnInit {
         }
       }
 
-  updateOffer(createoffer) {
-    createoffer.offerId = this.offerId;
-    createoffer.caseId = this.caseId;
-    this.createOfferService.updateOffer(createoffer).subscribe((data) => {
+  updateOffer(updateoffer) {
+    updateoffer.offerId = this.offerId;
+    updateoffer.caseId = this.caseId;
+    const payLoad = {
+      caseId: this.caseId,
+      strategyReviewDate:this.strategyReviewDateValue,
+      designReviewDate:this.designReviewDateValue,
+      launchDate:this.expectedLaunchDateValue,
+      readinessReviewDate:this.readinessReviewDateValue,
+    };
+    this.createOfferService.updateOffer(updateoffer).subscribe((data) => {
+      this.rightPanelService.updatePhaseTargetDate(payLoad).subscribe((data) => {
       this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
+    })
     },
       (err) => {
         console.log(err);
