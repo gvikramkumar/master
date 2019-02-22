@@ -121,6 +121,11 @@ span.icon-cart {
   overflow: hidden;
 }
 
+.flex-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .topnav a {
   float: left;
   display: block;
