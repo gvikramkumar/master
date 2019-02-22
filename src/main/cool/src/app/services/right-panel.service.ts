@@ -14,21 +14,35 @@ export class RightPanelService {
 
   launchDateUrl: string;
   averageWeekUrl: string;
-  updateOfferPhaseUrl:string;
+  getOfferDatesUrl: string;
+  updateOfferPhaseUrl: string;
   updateOfferPhaseUrlInDBUrl: string;
 
   constructor(
     private httpClient: HttpClient,
     private environmentService: EnvironmentService) {
 
+    this.getOfferDatesUrl = this.environmentService.REST_API_GET_OFFER_DATES;
     this.launchDateUrl = this.environmentService.REST_API_LEAD_TIME_LAUNCH_DATE;
     this.averageWeekUrl = this.environmentService.REST_API_LEAD_TIME_AVERAGE_WEEKS;
-    this.updateOfferPhaseUrl  = this.environmentService.REST_API_UPDATE_OFFER_TARGET_DATE;
+    this.updateOfferPhaseUrl = this.environmentService.REST_API_UPDATE_OFFER_TARGET_DATE;
     this.updateOfferPhaseUrlInDBUrl = this.environmentService.REST_API_UPDATE_OFFER;
+
 
   }
 
   // -------------------------------------------------------------------------------------
+
+  displayOfferDates(caseId: string) {
+
+    return this.httpClient.get(this.getOfferDatesUrl + caseId, {
+      observe: 'body',
+      responseType: 'json'
+    }).pipe(
+      retry(3),
+      catchError(this.handleError)
+    );
+  }
 
   displayLaunchDate(offerId: string) {
 
@@ -78,11 +92,11 @@ export class RightPanelService {
 
   // -------------------------------------------------------------------------------------
 
-  updatePhaseTargetDate(payLoad:any): Observable<any> {
+  updatePhaseTargetDate(payLoad: any): Observable<any> {
     return this.httpClient.post(this.updateOfferPhaseUrl, payLoad, { withCredentials: true });
   }
 
-  updatePhaseTargetDateInDB(payLoad:any): Observable<any> {
+  updatePhaseTargetDateInDB(payLoad: any): Observable<any> {
     return this.httpClient.post(this.updateOfferPhaseUrlInDBUrl, payLoad, { withCredentials: true });
   }
 

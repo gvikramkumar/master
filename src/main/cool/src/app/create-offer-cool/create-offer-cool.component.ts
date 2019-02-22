@@ -77,6 +77,7 @@ export class CreateOfferCoolComponent implements OnInit {
   offerDescValueTrim: string = '';
   offerNameValueTrim: string = '';
 
+
   constructor(private createOfferService: CreateOfferService,
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
@@ -437,7 +438,7 @@ export class CreateOfferCoolComponent implements OnInit {
     status.phaseMilestone = 'Ideate';
     status.subMilestone = 'Offer Creation';
 
-    const offerCreationDate = new Date().toISOString();
+    const offerCreationDate = moment(new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'})).format();
     const selectedPrimaryBe= [];
     const constructDetails = [];
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);

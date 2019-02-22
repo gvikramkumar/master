@@ -69,12 +69,18 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   flagOwner3 = false;
 
   mmModel: string;
+  leadTime: LeadTime;
   leadTimeYear: number;
   progressBarWidth: number;
   averageWeekCount: string;
   expectedLaunchDate: string;
   weekDifferenceCount: string;
   displayLeadTimeButton: Boolean = false;
+
+  launchDate: string;
+  designReviewDate: string;
+  strategyReviewDate: string;
+  readinessReviewDate: string;
 
   average = 'Average';
   tenthPercentile = '10th Percentile';
@@ -129,12 +135,12 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   };
 
   editIdeateTargetDate: Boolean = false;
-  editPlanTargetDate: Boolean  = false;
-  editExecuteTargetDate: Boolean  = false;
-  editLanchTargetDate: Boolean  = false;
+  editPlanTargetDate: Boolean = false;
+  editExecuteTargetDate: Boolean = false;
+  editLanchTargetDate: Boolean = false;
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   minDate: Date;
-  showAlert:Boolean = false;
+  showAlert: Boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -158,6 +164,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
 
@@ -221,8 +228,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
         this.createOfferService.subscribeMMAssessment(data);
         this.offerData = data;
-        if(this.offerData.offerObj)
-        {
+        if (this.offerData.offerObj) {
           this.OfferOwners = this.offerData.offerObj.owners;
           this.approvars = this.offerData.offerObj.approvars;
 
@@ -238,10 +244,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
               item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
             });
           }
-          
+
         }
-        if(this.offerData.phaseTaskList)
-        {
+        if (this.offerData.phaseTaskList) {
           this.phaseTaskMap = this.offerData.phaseTaskList;
 
           this.phaseList = Object.keys(this.phaseTaskMap);
@@ -323,6 +328,15 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     if (this.displayLeadTime) {
 
+      // Compute Offer Dates
+      this.rightPanelService.displayOfferDates(this.caseId).subscribe(
+        (leadTimeObj) => {
+          this.launchDate = moment(leadTimeObj['launchDate']).format('DD-MMM-YYYY');
+          this.designReviewDate = moment(leadTimeObj['designReviewDate']).format('DD-MMM-YYYY');
+          this.strategyReviewDate = moment(leadTimeObj['strategyReviewDate']).format('DD-MMM-YYYY');
+          this.readinessReviewDate = moment(leadTimeObj['readinessReviewDate']).format('DD-MMM-YYYY');
+        });
+
       // Compute Expected Launch Date
       this.displayLeadTimeButton = true;
       const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.offerId).toPromise();
@@ -398,12 +412,13 @@ export class RightPanelComponent implements OnInit, OnDestroy {
    * @param launchReviewDate
    */
   validateTargetDates(stratReviewDate, designReviewDate, executeReviewDate, launchReviewDate): boolean {
+
     const srDate = moment(stratReviewDate).format('MM-DD-YYYY');
     const drDate = moment(designReviewDate).format('MM-DD-YYYY');
     // const erDate = moment(executeReviewDate).format('MM-DD-YYYY');
     // const lrDate = moment(launchReviewDate).format('MM-DD-YYYY');
 
-    if (srDate < drDate ) {
+    if (srDate < drDate) {
       return true;
     }
   }
@@ -414,6 +429,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
    * @param value
    */
   onValueChange(phase, value: Date): void {
+
     // Strategy review date
     const stratReviewDate = this.offerPhaseDetailsList['ideate'][3].targetDate;
 
@@ -436,7 +452,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       case 'ideate': {
         this.editIdeateTargetDate = false;
         payLoad['strategyReviewDate'] = value.toISOString();
-        if (! this.validateTargetDates(value, designReviewDate, null, null )) {
+        if (!this.validateTargetDates(value, designReviewDate, null, null)) {
           updateDate = false;
           this.showAlert = true;
         } else {
@@ -447,7 +463,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       case 'plan': {
         this.editPlanTargetDate = false;
         payLoad['designReviewDate'] = value.toISOString();
-        if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
+        if (!this.validateTargetDates(stratReviewDate, value, null, null)) {
           updateDate = false;
           this.showAlert = true;
         } else {
@@ -479,7 +495,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       case 'ideate': {
         this.editIdeateTargetDate = false;
         updateDBpayLoad['strategyReviewDate'] = value.toISOString();
-        if (! this.validateTargetDates(value, designReviewDate, null, null )) {
+        if (!this.validateTargetDates(value, designReviewDate, null, null)) {
           updateDate = false;
           this.showAlert = true;
         } else {
@@ -490,7 +506,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       case 'plan': {
         this.editPlanTargetDate = false;
         updateDBpayLoad['designReviewDate'] = value.toISOString();
-        if (! this.validateTargetDates(stratReviewDate, value, null, null )) {
+        if (!this.validateTargetDates(stratReviewDate, value, null, null)) {
           updateDate = false;
           this.showAlert = true;
         } else {

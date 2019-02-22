@@ -202,7 +202,7 @@
                     <p-accordion>
                         <p-accordionTab header="Ideate" [selected]="true">
                             <div class="responsive-table">
-                                <table class="table table--nostripes">
+                                <table class="table table--hover table--compressed table--nostripes">
                                     <thead>
                                         <tr>
                                             <th>Ideate - <span
@@ -221,8 +221,8 @@
                                                     <span style="color: gray;">{{ideateData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
-                                                    <span style="color: #005073;"
-                                                        (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span>
+                                                  <a><span
+                                                    (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
                                             <td [ngClass]=" (ideateData.status=='Completed'
@@ -236,7 +236,7 @@
                                                 <span
                                                     *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
                                                     <input type="text" class="form-control" #dp="bsDatepicker" autofocus
-                                                        bsDatepicker [minDate]="minDate"
+                                                        bsDatepicker [minDate]="minDate" [bsConfig]="dpConfig"
                                                         (bsValueChange)="onValueChange('ideate',$event)"
                                                         [value]='ideateData.targetDate | date: "dd-MMM-y"'
                                                         placement="top">
@@ -254,7 +254,7 @@
                         </p-accordionTab>
                         <p-accordionTab header="Plan">
                             <div class="responsive-table">
-                                <table class="table table--nostripes">
+                                <table class="table table--hover table--compressed table--nostripes">
                                     <thead>
                                         <tr>
                                             <th>Plan - <span class="text-success"> {{planCompletedCount}} of
@@ -273,8 +273,8 @@
                                                     <span style="color: gray;">{{planData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
-                                                    <span style="color: #005073;"
-                                                        (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span>
+                                                    <a><span
+                                                        (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
 
@@ -288,7 +288,7 @@
                                                 <span
                                                     *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
                                                     <input type="text" class="form-control" #dp="bsDatepicker"
-                                                        bsDatepicker [minDate]="minDate"
+                                                        bsDatepicker [minDate]="minDate" [bsConfig]="dpConfig"
                                                         (bsValueChange)="onValueChange('plan',$event)"
                                                         [value]='planData.targetDate | date: "dd-MMM-y"'
                                                         placement="top">
@@ -306,13 +306,13 @@
                         </p-accordionTab>
                         <p-accordionTab header="Execute">
                             <div class="responsive-table">
-                                <table class="table table--nostripes">
+                                <table class="table table--hover table--compressed table--nostripes">
                                 </table>
                             </div>
                         </p-accordionTab>
                         <p-accordionTab header="Launch">
                             <div class="responsive-table">
-                                <table class="table table--nostripes">
+                                <table class="table table--hover table--compressed table--nostripes">
                                 </table>
                             </div>
                         </p-accordionTab>
@@ -417,7 +417,7 @@
                             <div class="row base-margin-top progress-group">
                                 <div class="col-md-3">
                                     <h6 class="subheader">Strategy Review</h6>
-                                    <h6 class="display-6">08-OCT-2018</h6>
+                                    <h6 class="display-6">{{strategyReviewDate}}</h6>
                                     <div class="progressbar progressbar--large" data-percentage="0">
                                         <div class="progressbar__fill"></div>
                                         <div class="progressbar__label">YOU ARE HERE</div>
@@ -425,21 +425,21 @@
                                 </div>
                                 <div class="col-md-3">
                                     <h6 class="subheader">Design Review</h6>
-                                    <h6 class="display-6">26-OCT-2018</h6>
+                                    <h6 class="display-6">{{designReviewDate}}</h6>
                                     <div class="progressbar progressbar--large" data-percentage="0">
                                         <div class="progressbar__fill"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <h6 class="subheader">Readiness Review</h6>
-                                    <h6 class="display-6">26-OCT-2018</h6>
+                                    <h6 class="display-6">{{readinessReviewDate}}</h6>
                                     <div class="progressbar progressbar--large" data-percentage="0">
                                         <div class="progressbar__fill"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <h6 class="subheader">LAUNCH</h6>
-                                    <h6 class="display-6">01-NOV-2018</h6>
+                                    <h6 class="display-6">{{launchDate}}</h6>
                                     <div class="progressbar progressbar--large" data-percentage="0">
                                         <div class="progressbar__fill"></div>
                                         <div class="progressbar__label">LEAD TIME</div>

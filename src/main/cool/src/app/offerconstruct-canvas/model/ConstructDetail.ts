@@ -6,9 +6,8 @@ export class ConstructDetail {
   constructType: string;
   productFamily: string;
   itemDetails: ItemDetail[] = [];
-  groupName: string[]=[];
-
-  constructor() {
-
-  }
+  constructNodeId: string;
+  constructParentId: string;
+  groupNode: boolean;
+  constructor() {}
 }
