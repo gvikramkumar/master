@@ -542,8 +542,7 @@ export class OfferconstructCanvasComponent implements OnInit {
           for (let j = 0; j < this.itemCategories.length; j++) {
             if ((this.itemCategories[i]['categoryName'] === this.itemCategories[j]['categoryName'])
               && (
-                // (this.itemCategories[i]['isMinorLineItem'] == this.itemCategories[j]['isMinorLineItem']) ||
-                (this.itemCategories[i]['isMajorLineItem'] == this.itemCategories[j]['isMajorLineItem']))) {
+                (this.itemCategories[i]['isMajorLineItem'] === this.itemCategories[j]['isMajorLineItem']))) {
               count++;
             }
           }
@@ -551,8 +550,7 @@ export class OfferconstructCanvasComponent implements OnInit {
           if (count > 1) {
             repeatedList.push({
               'categoryName': this.itemCategories[i]['categoryName'],
-              // 'isMinorLineItem': this.itemCategories[i]['isMinorLineItem'] == null ? false : this.itemCategories[i]['isMinorLineItem'],
-              'isMajorLineItem': this.itemCategories[i]['isMajorLineItem'] == null ? false : this.itemCategories[i]['isMajorLineItem']
+              'isMajorLineItem': this.itemCategories[i]['isMajorLineItem']
             });
           }
         }
@@ -564,7 +562,6 @@ export class OfferconstructCanvasComponent implements OnInit {
 
             if ((this.itemCategories[j]['categoryName'] === repeatedList[i]['categoryName'])
               && (this.itemCategories[j]['isMajorLineItem'] === repeatedList[i]['isMajorLineItem'])
-              // || (this.itemCategories[j]['isMinorLineItem'] == repeatedList[i]['isMinorLineItem'])
             ) {
               this.itemCategories.splice(j, 1);
               break;
