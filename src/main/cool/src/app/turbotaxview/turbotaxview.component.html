@@ -20,6 +20,7 @@
     </div>
     <div class="row">
         <div class="col-sm-2">
+            <h4>{{offerId}}</h4>
             <h6>Offer Phase Details </h6>
         </div>
         <div class="col-sm-7">
@@ -93,7 +94,9 @@
 
                                             <td>
                                                 <div *ngIf="!ideateData.enable; else enableOfferPhase">
-                                                    <span style="color: grey">{{ideateData.subMilestone}}</span>
+                                                    <span class="text-muted"
+                                                        pTooltip="Dependent activities are not yet satisfied"
+                                                        tooltipPosition="top" tooltipStyleClass="hoverToolTip">{{ideateData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
                                                     <a><span style="color: #005073;"
@@ -127,11 +130,13 @@
                                             *ngFor="let ideateData of offerPhaseDetailsList.plan; let i = index">
                                             <td>
                                                 <div *ngIf="!ideateData.enable; else enableOfferPhase">
-                                                    <span style="color: grey">{{ideateData.subMilestone}}</span>
+                                                    <span class="text-muted"
+                                                        pTooltip="Dependent activities are not yet satisfied"
+                                                        tooltipPosition="top">{{ideateData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
                                                     <a><span style="color: #005073;"
-                                                            (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
+                                                            (click)="gotobackTomilestone(planData.subMilestone)">{{ideateData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
                                             <td
