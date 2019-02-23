@@ -13,11 +13,15 @@ import { RightPanelService } from '../services/right-panel.service';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { LeadTime } from '../right-panel/lead-time';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
+import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
   selector: 'app-mm-assesment',
   templateUrl: './mm-assesment.component.html',
-  styleUrls: ['./mm-assesment.component.css']
+  styleUrls: ['./mm-assesment.component.css'],
+  providers: [MessageService, ConfirmationService]
 })
 export class MmAssesmentComponent implements OnInit {
 
@@ -76,8 +80,10 @@ export class MmAssesmentComponent implements OnInit {
   display: boolean;
   showEditbutton: boolean;
   showWarningSave: boolean;
-
-
+  showDialog: boolean;
+  currentOfferResult: any;
+  isChangedAttribute: boolean;
+  showErrorDialog: boolean;
   constructor(private router: Router,
     private sharedService: SharedService,
     private createOfferService: CreateOfferService,
@@ -88,7 +94,8 @@ export class MmAssesmentComponent implements OnInit {
     private configService: ConfigurationService,
     private offersolutioningService: OffersolutioningService,
     private rightPanelService: RightPanelService,
-    private stakeholderfullService: StakeholderfullService
+    private stakeholderfullService: StakeholderfullService,
+    private confirmationService: ConfirmationService
   ) {
 
     this.display = false;
@@ -233,7 +240,7 @@ export class MmAssesmentComponent implements OnInit {
           this.monetizationModelService.toNextSetp(postData).subscribe(data => {
             this.groupData.splice(1);
             this.groupNames.splice(1);
-            data['groups'].forEach(group => {
+            data['dimgroups'].forEach(group => {
               this.getGroupData(group, selectedCharacteristics, true);
             });
 
@@ -299,6 +306,10 @@ export class MmAssesmentComponent implements OnInit {
 
       }
 
+    });
+
+    this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(result => {
+      this.currentOfferResult = result;
     });
 
   }
@@ -484,6 +495,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
+    this.isChangedAttribute = true;
     if (attribute.type === 2 && attribute.status === -1) {
       attribute.type = 0;
       return;
@@ -524,6 +536,22 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
 
+  showDialogBox() {
+    let isCompleted = false;
+    this.currentOfferResult.ideate.forEach(item => {
+      if (item.subMilestone == "Strategy Review" && item.status == "Completed") {
+        isCompleted = true;
+      }
+    });
+
+    if (isCompleted && this.isChangedAttribute) {
+      this.showDialog = true;
+    }
+    else
+      this.toNextStep();
+  }
+
+
   toNextStep() {
 
     if (this.activeTabIndex === 0 && !this.dimensionMode) {
@@ -548,6 +576,27 @@ export class MmAssesmentComponent implements OnInit {
 
       this.monetizationModelService.toNextSetp(postData).subscribe(data => {
         this.proceedButtonStatusValid = true;
+        let tempMessage: any = {};
+        if (data['mmMapperStatus'] === 'Aligned') {
+          tempMessage = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`, mmModel: data['mmModel'] };
+        } else if (data['mmMapperStatus'] === 'Partially Aligned') {
+          tempMessage = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${data['mmModel']}.`, mmModel: data['mmModel'] };
+        } else {
+          tempMessage = { contentHead: data['mmMapperStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
+        }
+
+        let isCompleted = false;
+        this.currentOfferResult.ideate.forEach(item => {
+          if (item.subMilestone == "Strategy Review" && item.status == "Completed") {
+            isCompleted = true;
+          }
+        });
+
+        if (isCompleted && this.isChangedAttribute && (tempMessage["contentHead"] != this.message["contentHead"] || tempMessage["content"] != this.message["content"])) {
+          this.showDialog = true;
+          return;
+        }
+
         if (data['mmMapperStatus'] === 'Aligned') {
           this.message = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`, mmModel: data['mmModel'] };
         } else if (data['mmMapperStatus'] === 'Partially Aligned') {
@@ -567,7 +616,7 @@ export class MmAssesmentComponent implements OnInit {
           this.currentMMModel = data['mmModel'];
           this.groupData.splice(1);
           this.groupNames.splice(1);
-          data['groups'].forEach(group => {
+          data['dimgroups'].forEach(group => {
             this.getGroupData(group, {}, true);
           });
         }
