@@ -47,13 +47,14 @@
                       [ngClass]="(offerOverviewDetailsList.ideate[1].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                       <span
                         [ngClass]="(offerOverviewDetailsList.ideate[1].enable == false)?'icon-warning':'icon-check'"></span>
-                    </div>
+                    </div>                    
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
                           [ngClass]="(offerOverviewDetailsList.ideate[1].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.ideate[1].subMilestone}}
-                      </div>
+                      </div><br>
+                      <div><i>{{allignedStatus}} - {{derivedMM}}</i></div>
                       <div [hidden]="offerOverviewDetailsList.ideate[1].enable == false">
                         <div class="offer-header card base-margin-top">
                           <div class="row">
@@ -241,7 +242,6 @@
                           [ngClass]="(offerOverviewDetailsList.ideate[2].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.ideate[2].subMilestone}}
                       </div><br>
-                      <div><i> Current Offer Status: {{allignedStatus}} - {{derivedMM}}</i></div>
                       <div [hidden]="offerOverviewDetailsList.ideate[2].enable == false">
                         <div class="offer-header card base-margin-top">
                           <div class="row">
