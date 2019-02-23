@@ -142,6 +142,14 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   minDate: Date;
   showAlert: Boolean = false;
 
+  averageOfRemainingNinetyPercentileWeeks;
+  averageOfTopTenPercentileWeeks;
+  averageOverallWeeks;
+  averageOfRemainingNinetyPercentile = 0;
+  averageOfTopTenPercentile = 0;
+  averageOverall = 0;
+  countOfHundredPercentile;
+
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private createOfferService: CreateOfferService,
@@ -158,13 +166,11 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.currentOfferId = this.createOfferService.coolOffer.offerId;
     }
     this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
-
     this.attribute = true;
 
   }
 
   ngOnInit() {
-
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.minDate = new Date();
 
@@ -344,7 +350,15 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
       // Compute Average Week Count
       const averageWeekCountObject = await this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).toPromise();
-      this.averageWeekCount = Number(averageWeekCountObject['AverageWeeks']).toFixed(2);
+      this.averageOfRemainingNinetyPercentileWeeks = averageWeekCountObject['averageOfRemainingNinetyPercentile'] ? Number(averageWeekCountObject['averageOfRemainingNinetyPercentile']).toFixed(2) : 0;
+      this.averageOfTopTenPercentileWeeks = averageWeekCountObject['averageOfTopTenPercentile'] ? Number(averageWeekCountObject['averageOfTopTenPercentile']).toFixed(2) : 0;
+      this.averageOverallWeeks = averageWeekCountObject['averageOverall'] ? Number(averageWeekCountObject['averageOverall']).toFixed(2) : 0;
+      this.countOfHundredPercentile = averageWeekCountObject['countOfHundredPercentile'] ? Number(averageWeekCountObject['countOfHundredPercentile']).toFixed(2) : 0;
+
+      this.averageOfRemainingNinetyPercentile = Math.round(100 * this.averageOfRemainingNinetyPercentileWeeks / Number(averageWeekCountObject['countOfHundredPercentile']));
+      this.averageOfTopTenPercentile = Math.round(this.averageOfTopTenPercentileWeeks * 100 / Number(averageWeekCountObject['countOfHundredPercentile']));
+      this.averageOverall = Math.round(this.averageOverallWeeks * 100 / Number(averageWeekCountObject['countOfHundredPercentile']));
+
 
       // Initialize Average Week Count To N/A When Applicable
       if (parseInt(this.averageWeekCount, 2) === 0) {

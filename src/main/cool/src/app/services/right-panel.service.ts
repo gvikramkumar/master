@@ -57,11 +57,8 @@ export class RightPanelService {
   }
 
   displayAverageWeeks(be: string, mm: string) {
-
-    return this.httpClient.get(this.averageWeekUrl + be + '/' + mm, {
-      observe: 'body',
-      responseType: 'json'
-    }).pipe(
+    const url = `${this.averageWeekUrl}${be}/${mm}`;
+    return this.httpClient.get(url).pipe(
       retry(3),
       catchError(this.handleError)
     );

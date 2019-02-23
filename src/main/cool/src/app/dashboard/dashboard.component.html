@@ -421,7 +421,7 @@
       <div class="popover__footer">
         <div *ngIf="selectedAction.type == 'Manual Action'">
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
-            (click)="createApproveAction(popActionContent)">Complete</button>
+            (click)="createApproveAction($event, popActionContent, popCompleteContent)">Complete</button>
           <!-- <button class="btn btn--primary base-margin-top" id="popover_close_btn"
               (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide Feedback</button> -->
           <button class="btn btn--primary base-margin-top" id="popover_close_btn"
@@ -729,6 +729,21 @@
     <button class="btn" (click)="popProvideDetailsContent.hide($event)">Cancel</button>
     <button [disabled]="!buttonIsDisabled" class="btn btn--primary"
       (click)="createApproveActionWithDetails(popProvideDetailsContent)">Save</button>
+  </div>
+</p-overlayPanel>
+
+<p-overlayPanel #popCompleteContent [showCloseIcon]="true">
+  <div style="min-width:700px; min-height:300px">
+    <div class="form-group label--floated">
+      <div class="form-group__text">
+        <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason"
+          required></textarea>
+        <label>ADD A REASON</label>
+      </div>
+    </div>
+    <button class="btn" (click)="popCompleteContent.hide($event)">Cancel</button>
+    <button [disabled]="!buttonIsDisabled" class="btn btn--primary"
+      (click)="createApproveActionWithDetails(popCompleteContent)">Save</button>
   </div>
 </p-overlayPanel>
 
