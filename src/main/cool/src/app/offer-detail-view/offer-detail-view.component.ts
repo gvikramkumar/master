@@ -67,6 +67,7 @@ export class OfferDetailViewComponent implements OnInit {
   getOfferOverviewDetails() {
     this.offerDetailViewService.offerDetailView(this.currentOfferId)
       .subscribe(data => {
+      
         this.offerViewData = data;
         let stakeholdersInfo = null;
         this.offerOwner = data.offerOwner;
@@ -103,7 +104,7 @@ export class OfferDetailViewComponent implements OnInit {
           packaging = new OfferCharacteristics();
           packaging.subgroup = element.subgroup;
           packaging.characteristics = element.characteristics;
-          if (element.group === 'Packaging') {
+          if (element.group.toLowerCase() === 'packaging') {
             this.packagingList.push(packaging);
           }
           support = new OfferCharacteristics();
@@ -121,7 +122,7 @@ export class OfferDetailViewComponent implements OnInit {
           billingAndComp = new OfferCharacteristics();
           billingAndComp.subgroup = element.subgroup;
           billingAndComp.characteristics = element.characteristics;
-          if (element.group === 'Billing & Comp') {
+          if (element.group === 'Billing&Comp') {
             this.billingAndCompList.push(billingAndComp);
           }
           program = new OfferCharacteristics();
