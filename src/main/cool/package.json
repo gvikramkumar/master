@@ -25,9 +25,7 @@
     "angular-user-idle": "^2.0.0",
     "bootstrap": "^4.2.1",
     "core-js": "^2.6.2",
-    "es6": "0.0.7",
     "font-awesome": "^4.7.0",
-    "global": "^4.3.2",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.23",
     "ng-circle-progress": "^1.4.0",
@@ -42,10 +40,10 @@
     "zone.js": "^0.8.27"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.13.3",
+    "@angular-devkit/build-angular": "^0.12.3",
     "@angular/cdk": "^7.3.1",
     "@angular/cli": "^7.2.3",
-    "@angular/compiler-cli": "^7.2.6",
+    "@angular/compiler-cli": "7.2.0",
     "@angular/language-service": "7.2.0",
     "@ng-bootstrap/ng-bootstrap": "^4.0.2",
     "@types/jasmine": "^2.8.14",
