@@ -55,7 +55,7 @@
             </div>
 
             <div *ngIf="displayLeadTime">
-                <strong><small>{{noOfWeeksDifference}}</small></strong>
+                <strong><small>{{noOfWeeksDifference}} Week</small></strong>
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
                     Lead Time Calculation?
                 </button>
@@ -387,27 +387,32 @@
     <!-- Dialog - Lead Time Calculation  -->
     <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
         [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
-        <div class="row">
+        <div *ngIf="loadingLeadTime">
+            <div class="loader">
+                <div class="loading-dots loading-dots--info" aria-label="Loading, please wait...">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!loadingLeadTime" class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card base-padding">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <h4 class="display-1 text-success">{{noOfWeeksDifference}}</h4>
-                                            </div>
-                                        </div>
+                                        <h4 class="text-huge text-success">{{noOfWeeksDifference}} Week</h4>
                                     </div>
-                                    <h5 class="label">Lead Time Accessed for Your Offer</h5>
+                                    <h5 class="text-large qtr-padding text-muted">Lead Time Assessed for Your Offer</h5>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="row  base-margin-top">
-                                        <h2 class="text-success">{{expectedLaunchDate}}</h2>
-                                        <h5>Offer Launch Date</h5>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <h4 class="text-huge text-success">{{expectedLaunchDate}}</h4>
                                     </div>
+                                    <h5 class="text-large qtr-padding text-muted">Offer Launch Date</h5>
                                 </div>
                             </div>
                             <div class="row base-margin-top"></div>
@@ -456,76 +461,69 @@
                     </div>
                     <div class="col-md-6">
                         <div class="card">
-                            <h5>Lead Time Statistics for {{mmModel}} (SAAS) in {{leadTimeYear}}</h5>
-                            <div class="row base-margin-top">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="form-group__text">
-                                            <label>10th Percentile</label>
+                            <div class="qtr-padding">
+                                <h5>Lead Time Statistics for {{mmModel}} in {{leadTimeYear}}</h5>
+                                <h6>Your presume time is {{Math.abs(overallWeeksCompare)}} weeks
+                                    {{overallWeeksCompare>0?'less':'more'}} than average.
+                                </h6>
+                            </div>
+                            <table class="table table--nostripes">
+                                <tr>
+                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                        <label>10th Percentile</label>
+                                        <div class="progressbar" [attr.data-percentage]="averageOfTopTenPercentile">
+                                            <div class="progressbar__fill"></div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <span>Your Lead Time</span>
-                                    <h6>{{noOfWeeksDifference}}</h6>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="progressbar" [attr.data-percentage]="averageOfTopTenPercentile">
-                                        <div class="progressbar__fill"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>{{averageOfTopTenPercentileWeeks}} WEEKS</h6>
-                                </div>
-                            </div>
-                            <div class="row base-margin-top">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="form-group__text">
-                                            <label>Average</label>
+                                    </td>
+                                    <td width="25%">
+                                        <h6>{{averageOfTopTenPercentileWeeks}} WEEKS
+                                            <span class="pull-right"
+                                                [className]="topTenPercentileWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(topTenPercentileWeeksCompare)}}</span>
+                                        </h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                        <label>Average</label>
+                                        <div class="progressbar" [attr.data-percentage]="averageOverall">
+                                            <div class="progressbar__fill">
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="progressbar" [attr.data-percentage]="averageOverall">
-                                        <div class="progressbar__fill">
+                                    </td>
+                                    <td width="25%">
+                                        <h6>{{averageOverallWeeks}} WEEKS
+                                            <span class="pull-right"
+                                                [className]="overallWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(overallWeeksCompare)}}</span>
+                                        </h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                        <label>90th Percentile</label>
+                                        <div class="progressbar progressbar--success"
+                                            [attr.data-percentage]="averageOfRemainingNinetyPercentile">
+                                            <div class="progressbar__fill"></div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>{{averageOverallWeeks}} WEEKS</h6>
-                                </div>
-                            </div>
-                            <div class="row base-margin-top">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="form-group__text">
-                                            <label>90th Percentile</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="progressbar progressbar--success"
-                                        [attr.data-percentage]="averageOfRemainingNinetyPercentile">
-                                        <div class="progressbar__fill"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>{{averageOfRemainingNinetyPercentileWeeks}} WEEKS</h6>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <span class="pull-right">{{countOfHundredPercentile}}
-                                        WEEKS</span>
-                                </div>
-                            </div>
+                                    </td>
+                                    <td width="25%">
+                                        <h6>{{averageOfRemainingNinetyPercentileWeeks}} WEEKS
+                                            <span class="pull-right"
+                                                [className]="remainingNinetyPercentileCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(remainingNinetyPercentileCompare)}}</span>
+                                        </h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                        <span class="pull-left">0
+                                            WEEKS</span>
+                                        <span class="pull-right">{{countOfHundredPercentile}}
+                                            WEEKS</span></td>
+                                    <td width="25%">
+
+                                    </td>
+                                </tr>
+
+                            </table>
                         </div>
                     </div>
                 </div>
