@@ -605,7 +605,6 @@ export class MmAssesmentComponent implements OnInit {
           this.message = { contentHead: data['mmMapperStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
         }
 
-        this.currentMMModel = data['mmModel'];
         
         if (this.activeTabIndex < this.groupNames.length - 1) {
           this.activeTabIndex += 1;
@@ -613,11 +612,14 @@ export class MmAssesmentComponent implements OnInit {
         this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
         this.getStakeData(data['mmModel']);
 
-        this.groupData.splice(1);
-        this.groupNames.splice(1);
-        data['groups'].forEach(group => {
-          this.getGroupData(group, {}, true);
-        });
+        if (this.currentMMModel !== data['mmModel']) {
+          this.currentMMModel = data['mmModel'];
+          this.groupData.splice(1);
+          this.groupNames.splice(1);
+          data['groups'].forEach(group => {
+            this.getGroupData(group, {}, true);
+          });
+        }
         this.proceedToStakeholder(false);
       });
     } else {

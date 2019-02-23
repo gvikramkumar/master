@@ -19,6 +19,9 @@ import { ConstructDetails } from './model/ConstructDetails';
 import { ConstructDetail } from './model/ConstructDetail';
 import { ItemDetail } from './model/ItemDetail';
 import { group } from '@angular/animations';
+import { Observable, Subscription } from 'rxjs';
+import { async } from '@angular/core/testing';
+import { StakeHolder } from '../models/stakeholder';
 
 @Component({
   selector: 'app-offerconstruct-canvas',
@@ -35,7 +38,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   draggedItem: any;
   offerConstructItems: TreeNode[] = [];
   private counter: any = 0;
-  itemCategories: any[] = [];
+  itemCategories = [];
   selected: TreeNode[];
   searchInput: any;
   results;
@@ -78,6 +81,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   countableItems: Number[] = [];
   private map1 = new Map();
   popHeadName;
+  setFlag = true;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
@@ -281,17 +285,60 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
     if (this.draggedItem.parent === null) {
       this.offerConstructItems = [...this.offerConstructItems];
-    } else {
+    } 
+    else {
       if (
         rowNode.node.data['isMajorLineItem'] &&
         !this.draggedItem['isMajorLineItem']
       ) {
+        if(this.draggedItem.data) { 
+          if(this.draggedItem.data.isGroupNode && this.draggedItem.children.length > 0) {
+            const obj = Object.create(null);
+            obj['uniqueKey'] = ++this.counter;
+            this.uniqueId = obj['uniqueKey'];
+            obj['isGroupNode'] = true;
+            obj['productName'] = this.draggedItem.data.productName;
+            obj['label'] = this.draggedItem.data.label;
+            obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
+            obj['listPrice'] = this.draggedItem.data.listPrice;
+            obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
+            rowNode.node.children.push(this.itemToTreeNode(obj));
+            this.setFlag = false;
+            this.offerConstructItems = [...this.offerConstructItems];
+            this.draggedItem.children.forEach(element1 => {
+            rowNode.node.children.forEach(element => {
+            if(element.data.uniqueKey === obj.uniqueKey && element.data.isGroupNode){
+            const obj1 = Object.create(null);
+            obj1['uniqueKey'] = ++this.counter;
+            this.uniqueId = obj['uniqueKey'];
+            obj1['isGroupNode'] = false;
+            obj1['productName'] = element1.data.productName;
+            obj1['label'] = element1.data.label;
+            obj1['isMajorLineItem'] = element1.data.isMajorLineItem;
+            obj1['listPrice'] = element1.data.listPrice;
+            obj1['title'] = element1.data.title ? element1.data.title : element1.data.productName;
+                  element.children.push(this.itemToTreeNode(obj1));
+                  this.offerConstructItems = [...this.offerConstructItems];
+                }
+              });
+            });
+            this.delteFromParentObject(rowNode, this.draggedItem.data);
+            this.offerConstructItems = [...this.offerConstructItems];
+          }
+        }
         if (this.draggedItem.parent !== undefined) {
+          if(this.setFlag) {
           // If dragged node is a tree node,meaning the node which is moved between the canvas
           const obj = Object.create(null);
           obj['uniqueKey'] = ++this.counter;
           this.uniqueId = obj['uniqueKey'];
-          obj['isGroupNode'] = false;
+          if(this.draggedItem.data){
+            if(this.draggedItem.data.isGroupNode){
+              obj['isGroupNode'] = true;
+            }
+          } else {
+            obj['isGroupNode'] = false;
+          }
           obj['productName'] = this.draggedItem.data.productName;
           obj['label'] = this.draggedItem.data.label;
           obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
@@ -299,7 +346,10 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
-        } else {
+          }
+          this.setFlag = true;
+        }
+        else {
           // If dragged node is not an actual tree node
           const obj = Object.create(null);
           obj['uniqueKey'] = ++this.counter;
@@ -334,7 +384,7 @@ export class OfferconstructCanvasComponent implements OnInit {
         obj['label'] = this.draggedItem.data.label;
         obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
         obj['listPrice'] = this.draggedItem.data.listPrice;
-        obj['title'] = this.draggedItem.data.productName;
+        obj['title'] = this.draggedItem.data.title?this.draggedItem.data.title:this.draggedItem.data.productName;
         rowNode.node.children.push(this.itemToTreeNode(obj));
         this.delteFromParentObject(rowNode, this.draggedItem.data);
       }
@@ -388,8 +438,8 @@ export class OfferconstructCanvasComponent implements OnInit {
     obj['uniqueKey'] = counter;
     obj['productName'] =
       rowNode.node.data.productName + ' ' + 'Group' + ' ' + countGroup;
-    obj['catergoryName'] = 'Billing';
-    obj['label'] = 'Billing';
+    obj['catergoryName'] = rowNode.node.data.productName;
+    obj['label'] = rowNode.node.data.productName;
     obj['title'] = rowNode.node.data.productName + ' ' + 'Group' + ' ' + countGroup;
     obj['isGroupNode'] = true;
     rowNode.node.children.push(this.itemToTreeNode(obj));
@@ -407,6 +457,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   focusMethod(id) {
     document.getElementById(id).focus();
   }
+
 
   ngOnInit() {
     this.offerConstructService.space.subscribe((val) => {
@@ -505,18 +556,70 @@ export class OfferconstructCanvasComponent implements OnInit {
 
       // Call offerconstruct request to get Major/Minor Line Items
       this._canvasService.getOfferConstructItems(reqObj).subscribe((data) => {
+
+        // Fake Data
+        // const itemData = [{ 'type': 'SW Subscription SKU', 'majorLineItem': false },
+        // { 'type': 'Hardware', 'majorLineItem': false },
+        // { 'type': 'Hardware', 'majorLineItem': false },
+        // { 'type': 'License', 'majorLineItem': true }];
+
+        // Extract Offer Category Details
         const itemData = data['listOfferCatagory'];
-        itemData.forEach(item => {
+
+        // Populate Item Categories List
+        for (let i = 0; i < itemData.length; i++) {
+
           const itemObj = {
-            categoryName: item.type,
-            isMajorLineItem: item.majorLineItem,
-            productName: item.type,
+            categoryName: itemData[i].type,
+            isMajorLineItem: itemData[i].majorLineItem,
+            productName: itemData[i].type,
             listPrice: ''
           };
+
           this.itemCategories.push(itemObj);
-        });
+
+        }
+
+        // Identify Duplicate Elements In Item Categories List
+        const repeatedList = [];
+
+        for (let i = 0; i < this.itemCategories.length; i++) {
+          let count = 0;
+
+          for (let j = 0; j < this.itemCategories.length; j++) {
+            if ((this.itemCategories[i]['categoryName'] === this.itemCategories[j]['categoryName'])
+              && (
+                (this.itemCategories[i]['isMajorLineItem'] === this.itemCategories[j]['isMajorLineItem']))) {
+              count++;
+            }
+          }
+
+          if (count > 1) {
+            repeatedList.push({
+              'categoryName': this.itemCategories[i]['categoryName'],
+              'isMajorLineItem': this.itemCategories[i]['isMajorLineItem']
+            });
+          }
+        }
+
+        // Remove Duplicate Elements From Item Catagories List
+        for (let i = 0; i < repeatedList.length; i = i + 2) {
+
+          for (let j = 0; j < this.itemCategories.length; j++) {
+
+            if ((this.itemCategories[j]['categoryName'] === repeatedList[i]['categoryName'])
+              && (this.itemCategories[j]['isMajorLineItem'] === repeatedList[i]['isMajorLineItem'])
+            ) {
+              this.itemCategories.splice(j, 1);
+              break;
+            }
+          }
+        }
+
       });
+
     });
+
 
     this.itemCount = 0;
 
@@ -686,73 +789,89 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   saveOfferConstructChanges() {
     this.offerConstructItems = [... this.offerConstructItems];
-    console.log('this is the object', this.offerConstructItems)
+    console.log('this is the object', this.offerConstructItems);
     let cds: ConstructDetails = new ConstructDetails(this.currentOfferId, []);
+    // Construct all group Nodes.
     this.offerConstructItems.forEach((node) => {
       let cd: ConstructDetail;
       // check if this item is major item
       if (node.parent === null) {
         cd = new ConstructDetail();
         cd.constructItem = 'Major';
-        cd.constructItemName = node.data.productName;
+        cd.constructItemName = node.data.title;
         cd.constructType = node.data.productName;
-        cd.productFamily = node.data.productName;
-        cd.groupName = [];
+        cd.productFamily = '';
+        cd.constructNodeId = node.data.uniqueKey.toString();
+        cd.constructParentId = '0';
+        cd.groupNode = false;
         if (node.data.itemDetails !== undefined) {
           let id: ItemDetail;
           for (const key in node.data.itemDetails) {
             id = new ItemDetail();
             id.attributeName = key;
             id.attributeValue = node.data.itemDetails[key];
-            id.attributeType = 'Unique';
-            id.existingFromEgenie = false;
+            id.eGenieFlag = false;
             cd.itemDetails.push(id);
-          };
+          }
         }
         cds.constructDetails.push(cd);
       }
 
-      // minor items
+      // Construct all minor items
       if (node.children !== undefined && node.children !== null) {
         node.children.forEach((child) => {
           if (!child.data.isGroupNode) {
             cd = new ConstructDetail();
             cd.constructItem = 'Minor';
-            cd.constructItemName = child.data.productName;
+            cd.constructItemName = child.data.title;
             cd.constructType = child.data.productName;
-            cd.productFamily = child.data.productName;
-            cd.groupName = [];
+            cd.productFamily = '';
+            cd.constructNodeId = child.data.uniqueKey.toString();
+            cd.constructParentId =  node.data.uniqueKey.toString();
+            cd.groupNode = false;
             if (child.data.itemDetails !== undefined) {
               let id: ItemDetail;
               for (const key in child.data.itemDetails) {
                 id = new ItemDetail();
                 id.attributeName = key;
                 id.attributeValue = child.data.itemDetails[key];
-                id.attributeType = 'Unique';
-                id.existingFromEgenie = false;
+                id.eGenieFlag = false;
                 cd.itemDetails.push(id);
-              };
+              }
             }
             cds.constructDetails.push(cd);
           } else {
+            // Store Group Information
+            cd = new ConstructDetail();
+            cd.constructItem = 'Group';
+            cd.constructItemName = child.data.title;
+            cd.constructType = 'Group';
+            cd.productFamily = '';
+            cd.constructNodeId = child.data.uniqueKey.toString();
+            cd.constructParentId =  node.data.uniqueKey.toString();
+            cd.groupNode = true;
+            cds.constructDetails.push(cd);
+
+            // Store children under group node.
             if (child.children !== undefined && child.children !== null) {
               child.children.forEach((gchild) => {
                 cd = new ConstructDetail();
                 cd.constructItem = 'Minor';
-                cd.constructItemName = gchild.data.productName;
+                cd.constructItemName = gchild.data.title;
                 cd.constructType = gchild.data.productName;
-                cd.productFamily = gchild.data.productName;
-                cd.groupName.push(child.data.productName);
+                cd.productFamily = '';
+                cd.constructNodeId = gchild.data.uniqueKey.toString();
+                cd.constructParentId =  child.data.uniqueKey.toString();
+                cd.groupNode = false;
                 if (gchild.data.itemDetails !== undefined) {
                   let id: ItemDetail;
                   for (const key in gchild.data.itemDetails) {
                     id = new ItemDetail();
                     id.attributeName = key;
                     id.attributeValue = gchild.data.itemDetails[key];
-                    id.attributeType = 'Unique';
-                    id.existingFromEgenie = false;
+                    id.eGenieFlag = false;
                     cd.itemDetails.push(id);
-                  };
+                  }
                 }
                 cds.constructDetails.push(cd);
               });
