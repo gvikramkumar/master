@@ -10,7 +10,7 @@ const schema = new Schema(
     companyCode: {type: String, required: true},
     subaccountCode: {type: String, required: true},
     salesTerritoryCode: {type: String, required: true},
-    splitPercentage: {type: String, required: true},
+    splitPercentage: {type: Number, required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},

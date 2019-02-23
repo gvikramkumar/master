@@ -18,6 +18,7 @@ select * from fpadfa.dfa_measure;
 select * from fpadfa.dfa_module;
 select * from fpadfa.dfa_open_period;
 select * from fpadfa.dfa_prof_dept_acct_map_upld;
+select * from fpadfa.dfa_prof_disti_to_direct_map_upld;
 select * from fpadfa.dfa_prof_input_amnt_upld;
 select * from fpadfa.dfa_prof_manual_map_upld;
 select * from fpadfa.dfa_prof_sales_split_pctmap_upld;
@@ -26,16 +27,6 @@ select * from fpadfa.dfa_prof_scms_triang_corpadj_map_upld;
 select * from fpadfa.dfa_prof_swalloc_manualmix_upld;
 select * from fpadfa.dfa_sub_measure;
 select * from fpadfa.dfa_submeasure_input_lvl;
-
-select * from fpadfa.dfa_data_sources;
-select * from fpadfa.dfa_measure;
-select * from fpadfa.dfa_module;
-select * from fpadfa.dfa_open_period;
-select * from fpadfa.dfa_sub_measure;
-select * from fpadfa.dfa_submeasure_input_lvl;
-select * from fpadfa.dfa_prof_dept_acct_map_upld;
-
-
 
 
 select * from fpadfa.dfa_sub_measure where sub_measure_name = 'dank4sm';

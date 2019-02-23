@@ -15,8 +15,8 @@ export default class CorpAdjustmentsUploadController extends ControllerBase {
   }
 
   mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa) {
-    const keys = _.uniq(objs.map(obj => `'${obj.salesCountryName}'`));
-    const where = `fiscal_month_id = ${dfa.fiscalMonths.prof} and sales_country_name in (${keys})`;
+    const keys = _.uniq(objs.map(obj => `'${obj.salesCountryName && obj.salesCountryName.toUpperCase()}'`));
+    const where = `fiscal_month_id = ${dfa.fiscalMonths.prof} and upper(sales_country_name) in (${keys})`;
     return this.pgRepo.syncRecordsReplaceAllWhere(where, objs, userId, true)
       .then(results => results.recordCount);
   }
