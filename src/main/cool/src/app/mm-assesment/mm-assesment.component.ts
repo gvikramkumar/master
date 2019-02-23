@@ -81,9 +81,9 @@ export class MmAssesmentComponent implements OnInit {
   showEditbutton: boolean;
   showWarningSave: boolean;
   showDialog: boolean;
-  currentOfferResult:any;
-  isChangedAttribute:boolean;
-  showErrorDialog:boolean;
+  currentOfferResult: any;
+  isChangedAttribute: boolean;
+  showErrorDialog: boolean;
   constructor(private router: Router,
     private sharedService: SharedService,
     private createOfferService: CreateOfferService,
@@ -95,7 +95,7 @@ export class MmAssesmentComponent implements OnInit {
     private offersolutioningService: OffersolutioningService,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService,
-    private confirmationService:ConfirmationService
+    private confirmationService: ConfirmationService
   ) {
 
     this.display = false;
@@ -309,9 +309,9 @@ export class MmAssesmentComponent implements OnInit {
     });
 
     this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(result => {
-    this.currentOfferResult=result;      
+      this.currentOfferResult = result;
     });
-    
+
   }
 
   getGroupData(group, selectedCharacteristics, toNextSetpFlag = false) {
@@ -495,7 +495,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
-    this.isChangedAttribute=true;
+    this.isChangedAttribute = true;
     if (attribute.type === 2 && attribute.status === -1) {
       attribute.type = 0;
       return;
@@ -550,7 +550,7 @@ export class MmAssesmentComponent implements OnInit {
     else
       this.toNextStep();
   }
- 
+
 
   toNextStep() {
 
@@ -576,7 +576,7 @@ export class MmAssesmentComponent implements OnInit {
 
       this.monetizationModelService.toNextSetp(postData).subscribe(data => {
         this.proceedButtonStatusValid = true;
-        let tempMessage:any={};
+        let tempMessage: any = {};
         if (data['mmMapperStatus'] === 'Aligned') {
           tempMessage = { contentHead: data['mmMapperStatus'], content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`, mmModel: data['mmModel'] };
         } else if (data['mmMapperStatus'] === 'Partially Aligned') {
@@ -591,8 +591,8 @@ export class MmAssesmentComponent implements OnInit {
             isCompleted = true;
           }
         });
-    
-        if (isCompleted && this.isChangedAttribute && (tempMessage["contentHead"]!=this.message["contentHead"] || tempMessage["content"]!=this.message["content"]) ) {
+
+        if (isCompleted && this.isChangedAttribute && (tempMessage["contentHead"] != this.message["contentHead"] || tempMessage["content"] != this.message["content"])) {
           this.showDialog = true;
           return;
         }
