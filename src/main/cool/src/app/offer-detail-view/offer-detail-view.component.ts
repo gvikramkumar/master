@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StakeHolder } from '../models/stakeholder';
@@ -14,10 +14,13 @@ import { MonetizationModelService } from '../services/monetization-model.service
   styleUrls: ['./offer-detail-view.component.css']
 })
 export class OfferDetailViewComponent implements OnInit {
-  currentOfferId;
-  offerViewData;
-  offerRole;
-  offerOwner;
+
+  offerRole:string;
+  offerName:string;
+  offerOwnerId:string;
+  offerOwnerName:string;
+  currentOfferId:string;
+
   offerCoOwnerList: StakeHolder[] = [];
   offerStakeHolderList: StakeHolder[] = [];
   offerCharacteristicsList: OfferCharacteristics[] = [];
@@ -32,8 +35,13 @@ export class OfferDetailViewComponent implements OnInit {
   caseId;
   obj = {
   };
-  offerOverviewDetailsList;
+
+  offerViewData;
+  derivedMM:string;
+  allignedStatus:string;
+
   strategyReviewList;
+  offerOverviewDetailsList;
   offerOwnerCount: any = 1;
   coOwnerTotalCount: any = 0;
   stakeHolderTotalCount: any = 0;
@@ -65,27 +73,45 @@ export class OfferDetailViewComponent implements OnInit {
   }
 
   getOfferOverviewDetails() {
+
     this.offerDetailViewService.offerDetailView(this.currentOfferId)
       .subscribe(data => {
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 327819cce74dbaf3f64e58b8bfb5116d642cd8e0
         this.offerViewData = data;
         let stakeholdersInfo = null;
-        this.offerOwner = data.offerOwner;
+        this.offerName = data.offerName;
+        this.derivedMM = data.derivedMM;
+        this.offerOwnerId = data.offerOwner;
+        this.allignedStatus = data.overallStatus;
         this.offerViewData.stakeholders.forEach(element => {
+
           stakeholdersInfo = new StakeHolder();
           stakeholdersInfo._id = element._id;
           stakeholdersInfo.name = element.name;
           stakeholdersInfo.offerRole = element.offerRole;
           stakeholdersInfo.email = element.email;
           stakeholdersInfo.functionalRole = element.functionalRole;
-          if (element.offerRole === 'Co-Owner') {
+
+          if (element._id === this.offerOwnerId) {
+            this.offerOwnerName = element.name;
+          }
+
+          if (element.offerRole === 'Co-Owner' && element._id !== this.offerOwnerId) {
             this.offerCoOwnerList.push(stakeholdersInfo);
             this.coOwnerTotalCount = this.offerCoOwnerList.length;
-          } else {
+          } else if (element._id !== this.offerOwnerId) {
             this.offerStakeHolderList.push(stakeholdersInfo);
             this.stakeHolderTotalCount = this.offerStakeHolderList.length;
           }
         });
+
+        // this.offerOwner = 
+        // this.offerCoOwnerList = this.offerCoOwnerList.reduce(a => a['userName'] !== this.offerOwner);
+
         let offerCharacteristics = null;
         let packaging = null;
         let support = null;

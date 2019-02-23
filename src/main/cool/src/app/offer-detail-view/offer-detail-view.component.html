@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h1 class="display-4 base-margin-top half-margin-bottom">Cisco Data Platform <span class="offerID">(Offer ID
+        <h1 class="display-4 base-margin-top half-margin-bottom">{{offerName}}<span class="offerID">(Offer ID
             {{currentOfferId}})</span></h1>
       </div>
     </div>
@@ -26,35 +26,36 @@
             <p-accordionTab header="Ideate" [selected]="true">
               <div class="timeline timeline--block">
                 <div class="timeline__list">
-                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[0]?.status != null">
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[0]?.enable != null">
                     <div
-                      [ngClass]="(offerOverviewDetailsList.ideate[0].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                      [ngClass]="(offerOverviewDetailsList.ideate[0].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                       <span
-                        [ngClass]="(offerOverviewDetailsList.ideate[0].status == 'Available')?'icon-warning-outline':'icon-check'"></span>
+                        [ngClass]="(offerOverviewDetailsList.ideate[0].enable == false)?'icon-warning-outline':'icon-check'"></span>
                     </div>
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
-                          [ngClass]="(offerOverviewDetailsList.ideate[0].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                          [ngClass]="(offerOverviewDetailsList.ideate[0].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.ideate[0].subMilestone}}
                       </div>
-                      <app-offer-create-detail [hidden]="offerOverviewDetailsList.ideate[0].status == 'Available'">
+                      <app-offer-create-detail [hidden]="offerOverviewDetailsList.ideate[0].enable == false">
                       </app-offer-create-detail>
                     </div>
                   </div>
-                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[1]?.status != null">
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[1]?.enable != null">
                     <div
-                      [ngClass]="(offerOverviewDetailsList.ideate[1].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                      [ngClass]="(offerOverviewDetailsList.ideate[1].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                       <span
-                        [ngClass]="(offerOverviewDetailsList.ideate[1].status == 'Available')?'icon-warning':'icon-check'"></span>
-                    </div>
+                        [ngClass]="(offerOverviewDetailsList.ideate[1].enable == false)?'icon-warning':'icon-check'"></span>
+                    </div>                    
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
-                          [ngClass]="(offerOverviewDetailsList.ideate[1].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                          [ngClass]="(offerOverviewDetailsList.ideate[1].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.ideate[1].subMilestone}}
-                      </div>
-                      <div [hidden]="offerOverviewDetailsList.ideate[1].status == 'Available'">
+                      </div><br>
+                      <div><i>{{allignedStatus}} - {{derivedMM}}</i></div>
+                      <div [hidden]="offerOverviewDetailsList.ideate[1].enable == false">
                         <div class="offer-header card base-margin-top">
                           <div class="row">
                             <div class="col-md-4">
@@ -229,19 +230,19 @@
                       </div>
                     </div>
                   </div>
-                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[2]?.status != null">
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[2]?.enable != null">
                     <div
-                      [ngClass]="(offerOverviewDetailsList.ideate[2].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                      [ngClass]="(offerOverviewDetailsList.ideate[2].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                       <span
-                        [ngClass]="(offerOverviewDetailsList.ideate[2].status == 'Available')?'icon-warning':'icon-check'"></span>
+                        [ngClass]="(offerOverviewDetailsList.ideate[2].enable == false)?'icon-warning':'icon-check'"></span>
                     </div>
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
-                          [ngClass]="(offerOverviewDetailsList.ideate[2].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                          [ngClass]="(offerOverviewDetailsList.ideate[2].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.ideate[2].subMilestone}}
-                      </div>
-                      <div [hidden]="offerOverviewDetailsList.ideate[2].status == 'Available'">
+                      </div><br>
+                      <div [hidden]="offerOverviewDetailsList.ideate[2].enable == false">
                         <div class="offer-header card base-margin-top">
                           <div class="row">
                             <div class="col-md-4">
@@ -261,13 +262,14 @@
                                             x="0" y="0"></path>
                                           <text fill="#007493" font-family="CiscoSans, Arial, sans-serif"
                                             font-weight="300" font-size="16" x="50%" y="50%" dy=".35em"
-                                            text-anchor="middle" id="fwt-initials">{{getInitialChar(offerOwner)}}</text>
+                                            text-anchor="middle"
+                                            id="fwt-initials">{{getInitialChar(offerOwnerId)}}</text>
                                         </g>
                                       </svg>
                                     </span>
                                     <div class="flex-fluid text-left half-margin-left">
-                                      <div class="text-bold">{{offerOwner}}</div>
-                                      <div>{{offerOwner}}@cisco.com</div>
+                                      <div class="text-bold">{{offerOwnerName}}</div>
+                                      <div>{{offerOwnerId}}@cisco.com</div>
                                     </div>
                                   </div>
                                 </div>
@@ -304,19 +306,19 @@
                       </div>
                     </div>
                   </div>
-                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[3]?.status != null">
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[3]?.enable != null">
                     <div
-                      [ngClass]="(offerOverviewDetailsList.ideate[3].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                      [ngClass]="(offerOverviewDetailsList.ideate[3].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                       <span
-                        [ngClass]="(offerOverviewDetailsList.ideate[3].status == 'Available')?'icon-warning':'icon-check'"></span>
+                        [ngClass]="(offerOverviewDetailsList.ideate[3].enable == false)?'icon-warning':'icon-check'"></span>
                     </div>
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
-                          [ngClass]="(offerOverviewDetailsList.ideate[3].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                          [ngClass]="(offerOverviewDetailsList.ideate[3].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.ideate[3].subMilestone}}
                       </div>
-                      <div [hidden]="offerOverviewDetailsList.ideate[3].status == 'Available'">
+                      <div [hidden]="offerOverviewDetailsList.ideate[3].enable == false">
                         <div class="offer-header card base-margin-top">
                           <div class="responsive-table">
                             <table class="table table--nostripes table--highlight table--hover table--selectable">
@@ -324,7 +326,7 @@
                                 <tr>
                                   <th class="sortable">Function <span class="sort-indicator icon-chevron-down"></span>
                                   </th>
-                                  <th class="sortable">Approval Status <span
+                                  <th class="sortable">Approval enable <span
                                       class="sort-indicator icon-chevron-down"></span></th>
                                   <th class="sortable">Reviewed On <span
                                       class="sort-indicator icon-chevron-down"></span></th>
@@ -336,7 +338,7 @@
                                 <tr *ngFor="let strategyReviewData of strategyReviewList">
                                   <td><span class="icon-check-outline icon-medium"></span>
                                     {{ strategyReviewData.function }}</td>
-                                  <td>{{ strategyReviewData.status }}</td>
+                                  <td>{{ strategyReviewData.enable }}</td>
                                   <td>{{ strategyReviewData.reviewedOn | date:'dd-MMM-yyyy' }}</td>
                                   <td>{{ strategyReviewData.reviewedBy }}</td>
                                 </tr>
@@ -353,86 +355,86 @@
             <p-accordionTab header="Plan">
               <div class="timeline">
                 <div class="timeline__list">
-                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[0]?.status != null">
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[0]?.enable != null">
                     <div
-                      [ngClass]="(offerOverviewDetailsList.plan[0].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                      [ngClass]="(offerOverviewDetailsList.plan[0].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                       <span
-                        [ngClass]="(offerOverviewDetailsList.plan[0].status == 'Available')?'icon-warning':'icon-check'"></span>
+                        [ngClass]="(offerOverviewDetailsList.plan[0].enable == false)?'icon-warning':'icon-check'"></span>
                     </div>
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
-                          [ngClass]="(offerOverviewDetailsList.plan[0].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                          [ngClass]="(offerOverviewDetailsList.plan[0].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.plan[0].subMilestone}}
                       </div>
-                      <div [hidden]="offerOverviewDetailsList.plan[0].status == 'Available'">
+                      <div [hidden]="offerOverviewDetailsList.plan[0].enable == false">
                       </div>
                     </div>
                   </div>
-                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[1]?.status != null">
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[1]?.enable != null">
                     <div
-                      [ngClass]="(offerOverviewDetailsList.plan[1].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                      [ngClass]="(offerOverviewDetailsList.plan[1].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                       <span
-                        [ngClass]="(offerOverviewDetailsList.plan[1].status == 'Available')?'icon-warning':'icon-check'"></span>
+                        [ngClass]="(offerOverviewDetailsList.plan[1].enable == false)?'icon-warning':'icon-check'"></span>
                     </div>
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
-                          [ngClass]="(offerOverviewDetailsList.plan[1].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                          [ngClass]="(offerOverviewDetailsList.plan[1].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.plan[1].subMilestone}}
                       </div>
-                      <div [hidden]="offerOverviewDetailsList.plan[1].status == 'Available'">
+                      <div [hidden]="offerOverviewDetailsList.plan[1].enable == false">
                       </div>
                     </div>
                   </div>
-                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[2]?.status != null">
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[2]?.enable != null">
                     <div
-                      [ngClass]="(offerOverviewDetailsList.plan[2].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                      [ngClass]="(offerOverviewDetailsList.plan[2].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                       <span
-                        [ngClass]="(offerOverviewDetailsList.plan[2].status == 'Available')?'icon-warning':'icon-check'"></span>
+                        [ngClass]="(offerOverviewDetailsList.plan[2].enable == false)?'icon-warning':'icon-check'"></span>
                     </div>
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
-                          [ngClass]="(offerOverviewDetailsList.plan[2].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                          [ngClass]="(offerOverviewDetailsList.plan[2].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.plan[2].subMilestone}}
                       </div>
-                      <div [hidden]="offerOverviewDetailsList.plan[2].status == 'Available'">
+                      <div [hidden]="offerOverviewDetailsList.plan[2].enable == false">
                       </div>
                     </div>
                   </div>
-                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[3]?.status != null">
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[3]?.enable != null">
                     <div
-                      [ngClass]="(offerOverviewDetailsList.plan[3].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                      [ngClass]="(offerOverviewDetailsList.plan[3].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
                       <span
-                        [ngClass]="(offerOverviewDetailsList.plan[3].status == 'Available')?'icon-warning':'icon-check'"></span>
+                        [ngClass]="(offerOverviewDetailsList.plan[3].enable == false)?'icon-warning':'icon-check'"></span>
                     </div>
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
-                          [ngClass]="(offerOverviewDetailsList.plan[3].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                          [ngClass]="(offerOverviewDetailsList.plan[3].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.plan[3].subMilestone}}
                       </div>
-                      <div [hidden]="offerOverviewDetailsList.plan[3].status == 'Available'">
+                      <div [hidden]="offerOverviewDetailsList.plan[3].enable == false">
                       </div>
                     </div>
                   </div>
-                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[4]?.status != null">
-                      <div
-                        [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Available')?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                  <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[4]?.enable != null">
+                    <div
+                      [ngClass]="(offerOverviewDetailsList.plan[4].enable == false)?'timeline__icon timeline--warning':'timeline__icon timeline--success'">
+                      <span
+                        [ngClass]="(offerOverviewDetailsList.plan[4].enable == false)?'icon-warning':'icon-check'"></span>
+                    </div>
+                    <div class="timeline__content">
+                      <div class="text-bold">
                         <span
-                          [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Available')?'icon-warning':'icon-check'"></span>
+                          [ngClass]="(offerOverviewDetailsList.plan[4].enable == false)?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                        {{offerOverviewDetailsList.plan[4].subMilestone}}
                       </div>
-                      <div class="timeline__content">
-                        <div class="text-bold">
-                          <span
-                            [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Available')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
-                          {{offerOverviewDetailsList.plan[4].subMilestone}}
-                        </div>
-                        <div [hidden]="offerOverviewDetailsList.plan[4].status == 'Available'">
-                        </div>
+                      <div [hidden]="offerOverviewDetailsList.plan[4].enable == false">
                       </div>
                     </div>
+                  </div>
                 </div>
               </div>
             </p-accordionTab>

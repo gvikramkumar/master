@@ -22,6 +22,7 @@ import { group } from '@angular/animations';
 import { Observable, Subscription } from 'rxjs';
 import { async } from '@angular/core/testing';
 import { StakeHolder } from '../models/stakeholder';
+import { OfferDetailViewService } from '../services/offer-detail-view.service';
 
 @Component({
   selector: 'app-offerconstruct-canvas',
@@ -85,7 +86,7 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
-    private activatedRoute: ActivatedRoute, private _fb: FormBuilder) {
+    private activatedRoute: ActivatedRoute, private _fb: FormBuilder, private offerDetailViewService: OfferDetailViewService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -154,7 +155,6 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.formGroupData = [];
     this.formGroupDataMinorItems = [];
     tempObj = this.offerConstructItems;
-    console.log(tempObj);
     tempObj.forEach(item => {
       if (item.parent == null) {
         const majorItem = {
@@ -173,7 +173,6 @@ export class OfferconstructCanvasComponent implements OnInit {
           })
         }
         this.majorItemData.push(majorItem);
-        console.log(this.majorItemData)
       }
     })
     this.displayAddDetails = true;
@@ -187,7 +186,6 @@ export class OfferconstructCanvasComponent implements OnInit {
       let minorGroupName = { groupName: this.minorItemData[i].productName }
       minorGroups.push(minorGroupName);
     }
-    console.log(groups)
     let groupsPayload = groups;
     let m = this;
     for (let i = 0; i < minorGroups.length; i++) {
@@ -195,8 +193,6 @@ export class OfferconstructCanvasComponent implements OnInit {
       m.offerConstructService.addDetails(payLoad).subscribe(
         (data) => {
           this.formGroupDataMinorItems.push(data);
-          console.log(this.formGroupDataMinorItems);
-          console.log(this.questions)
           this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
         }, err => console.log('error ' + err),
         () => console.log('Ok ')
@@ -213,8 +209,6 @@ export class OfferconstructCanvasComponent implements OnInit {
         () => console.log('Ok ')
       );
     }
-    console.log(this.formGroupData);
-    console.log(this.mandatoryFields);
   }
 
   deleteNode(node) {
@@ -285,14 +279,14 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
     if (this.draggedItem.parent === null) {
       this.offerConstructItems = [...this.offerConstructItems];
-    } 
+    }
     else {
       if (
         rowNode.node.data['isMajorLineItem'] &&
         !this.draggedItem['isMajorLineItem']
       ) {
-        if(this.draggedItem.data) { 
-          if(this.draggedItem.data.isGroupNode && this.draggedItem.children.length > 0) {
+        if (this.draggedItem.data) {
+          if (this.draggedItem.data.isGroupNode && this.draggedItem.children.length > 0) {
             const obj = Object.create(null);
             obj['uniqueKey'] = ++this.counter;
             this.uniqueId = obj['uniqueKey'];
@@ -306,17 +300,17 @@ export class OfferconstructCanvasComponent implements OnInit {
             this.setFlag = false;
             this.offerConstructItems = [...this.offerConstructItems];
             this.draggedItem.children.forEach(element1 => {
-            rowNode.node.children.forEach(element => {
-            if(element.data.uniqueKey === obj.uniqueKey && element.data.isGroupNode){
-            const obj1 = Object.create(null);
-            obj1['uniqueKey'] = ++this.counter;
-            this.uniqueId = obj['uniqueKey'];
-            obj1['isGroupNode'] = false;
-            obj1['productName'] = element1.data.productName;
-            obj1['label'] = element1.data.label;
-            obj1['isMajorLineItem'] = element1.data.isMajorLineItem;
-            obj1['listPrice'] = element1.data.listPrice;
-            obj1['title'] = element1.data.title ? element1.data.title : element1.data.productName;
+              rowNode.node.children.forEach(element => {
+                if (element.data.uniqueKey === obj.uniqueKey && element.data.isGroupNode) {
+                  const obj1 = Object.create(null);
+                  obj1['uniqueKey'] = ++this.counter;
+                  this.uniqueId = obj['uniqueKey'];
+                  obj1['isGroupNode'] = false;
+                  obj1['productName'] = element1.data.productName;
+                  obj1['label'] = element1.data.label;
+                  obj1['isMajorLineItem'] = element1.data.isMajorLineItem;
+                  obj1['listPrice'] = element1.data.listPrice;
+                  obj1['title'] = element1.data.title ? element1.data.title : element1.data.productName;
                   element.children.push(this.itemToTreeNode(obj1));
                   this.offerConstructItems = [...this.offerConstructItems];
                 }
@@ -327,25 +321,25 @@ export class OfferconstructCanvasComponent implements OnInit {
           }
         }
         if (this.draggedItem.parent !== undefined) {
-          if(this.setFlag) {
-          // If dragged node is a tree node,meaning the node which is moved between the canvas
-          const obj = Object.create(null);
-          obj['uniqueKey'] = ++this.counter;
-          this.uniqueId = obj['uniqueKey'];
-          if(this.draggedItem.data){
-            if(this.draggedItem.data.isGroupNode){
-              obj['isGroupNode'] = true;
+          if (this.setFlag) {
+            // If dragged node is a tree node,meaning the node which is moved between the canvas
+            const obj = Object.create(null);
+            obj['uniqueKey'] = ++this.counter;
+            this.uniqueId = obj['uniqueKey'];
+            if (this.draggedItem.data) {
+              if (this.draggedItem.data.isGroupNode) {
+                obj['isGroupNode'] = true;
+              }
+            } else {
+              obj['isGroupNode'] = false;
             }
-          } else {
-            obj['isGroupNode'] = false;
-          }
-          obj['productName'] = this.draggedItem.data.productName;
-          obj['label'] = this.draggedItem.data.label;
-          obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
-          obj['listPrice'] = this.draggedItem.data.listPrice;
-          obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
-          rowNode.node.children.push(this.itemToTreeNode(obj));
-          this.delteFromParentObject(rowNode, this.draggedItem.data);
+            obj['productName'] = this.draggedItem.data.productName;
+            obj['label'] = this.draggedItem.data.label;
+            obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
+            obj['listPrice'] = this.draggedItem.data.listPrice;
+            obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
+            rowNode.node.children.push(this.itemToTreeNode(obj));
+            this.delteFromParentObject(rowNode, this.draggedItem.data);
           }
           this.setFlag = true;
         }
@@ -384,7 +378,7 @@ export class OfferconstructCanvasComponent implements OnInit {
         obj['label'] = this.draggedItem.data.label;
         obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
         obj['listPrice'] = this.draggedItem.data.listPrice;
-        obj['title'] = this.draggedItem.data.title?this.draggedItem.data.title:this.draggedItem.data.productName;
+        obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
         rowNode.node.children.push(this.itemToTreeNode(obj));
         this.delteFromParentObject(rowNode, this.draggedItem.data);
       }
@@ -460,9 +454,17 @@ export class OfferconstructCanvasComponent implements OnInit {
 
 
   ngOnInit() {
+
+    // Check if construct details are availbale in the database for the current offer.
+    this.offerDetailViewService.offerDetailView(this.currentOfferId).subscribe(offerDetailRes => {
+      if (offerDetailRes.constructDetails.length > 0) {
+        this.transformDataToTreeNode(offerDetailRes);
+      }
+    }, (err) => {
+      console.log(err);
+    });
+
     this.offerConstructService.space.subscribe((val) => {
-      console.log(val);
-      console.log(this.offerConstructItems);
       this.offerConstructItems.forEach(item => {
         if (item.data.productName == val[0]) {
           item.data['itemDetails'] = val[1];
@@ -472,7 +474,6 @@ export class OfferconstructCanvasComponent implements OnInit {
         value.children.forEach(itm => {
           if (itm.data.productName == val[0]) {
             itm.data['itemDetails'] = val[1];
-            console.log('asdfafdadf ', itm);
           }
         })
       })
@@ -484,7 +485,6 @@ export class OfferconstructCanvasComponent implements OnInit {
       })
 
       this.offerConstructItems = [...this.offerConstructItems];
-      console.log(this.offerConstructItems);
     });
     this.questionForm = new FormGroup({
     });
@@ -580,41 +580,12 @@ export class OfferconstructCanvasComponent implements OnInit {
 
         }
 
-        // Identify Duplicate Elements In Item Categories List
-        const repeatedList = [];
-
-        for (let i = 0; i < this.itemCategories.length; i++) {
-          let count = 0;
-
-          for (let j = 0; j < this.itemCategories.length; j++) {
-            if ((this.itemCategories[i]['categoryName'] === this.itemCategories[j]['categoryName'])
-              && (
-                (this.itemCategories[i]['isMajorLineItem'] === this.itemCategories[j]['isMajorLineItem']))) {
-              count++;
-            }
-          }
-
-          if (count > 1) {
-            repeatedList.push({
-              'categoryName': this.itemCategories[i]['categoryName'],
-              'isMajorLineItem': this.itemCategories[i]['isMajorLineItem']
-            });
-          }
-        }
-
-        // Remove Duplicate Elements From Item Catagories List
-        for (let i = 0; i < repeatedList.length; i = i + 2) {
-
-          for (let j = 0; j < this.itemCategories.length; j++) {
-
-            if ((this.itemCategories[j]['categoryName'] === repeatedList[i]['categoryName'])
-              && (this.itemCategories[j]['isMajorLineItem'] === repeatedList[i]['isMajorLineItem'])
-            ) {
-              this.itemCategories.splice(j, 1);
-              break;
-            }
-          }
-        }
+        // Self Join To Find Unique Values In Array Of Objects
+        this.itemCategories = this.itemCategories.filter((itemLeft, index, self) =>
+          index === self.findIndex((itemRight) => (
+            itemLeft.categoryName === itemRight.categoryName && itemLeft.isMajorLineItem === itemRight.isMajorLineItem
+          ))
+        );
 
       });
 
@@ -628,6 +599,93 @@ export class OfferconstructCanvasComponent implements OnInit {
       { field: 'productFamily', header: 'PRODUCT FAMILY' },
       { field: 'listPrice', header: 'LIST PRICE(USD)' }
     ];
+  }
+
+  /**
+   * Convert itemdetails array of objets into single object.
+   * @param itemDetails
+   */
+  convertItemDetail(itemDetails): Object{
+    const obj = Object.create(null);
+    itemDetails.forEach(element => {
+      obj[element.attributeName] =  element.attributeValue;
+    });
+    return obj;
+  }
+
+  /**
+   * Method to add parent node to tree.
+   * @param node
+   */
+  addNode(node): TreeNode {
+    const obj = Object.create(null);
+    obj['uniqueKey'] = node.constructNodeId;
+    this.counter = Number(node.constructNodeId);
+    obj['productName'] = node.constructType;
+    obj['isGroupNode'] = node.groupNode;
+    obj['label'] = node.constructItemName;
+    obj['title'] = node.constructItemName;
+    obj['isMajorLineItem'] = true;
+    obj['itemDetails'] = this.convertItemDetail(node.itemDetails);
+    obj['childCount'] = 0;
+    let tempNode = this.itemToTreeNode(obj);
+    this.offerConstructItems.push(tempNode);
+    this.offerConstructItems = [...this.offerConstructItems];
+    this.countableItems.push(node.constructNodeId);
+    return tempNode;
+  }
+
+  /**
+   * Method to add child Node under parent Node  in Tree.
+   * @param parentNode
+   * @param childNode
+   */
+  addChildNode(parentNode, childNode):TreeNode {
+    const obj = Object.create(null);
+    obj['uniqueKey'] = childNode.constructNodeId;
+    this.counter = Number(childNode.constructNodeId);
+    obj['productName'] = childNode.constructType;
+    obj['isGroupNode'] = childNode.groupNode;
+    obj['label'] = childNode.constructItemName;
+    obj['title'] = childNode.constructItemName;
+    obj['isMajorLineItem'] = false;
+    obj['itemDetails'] = this.convertItemDetail(childNode.itemDetails);
+    obj['childCount'] = 0;
+    let tempNode = this.itemToTreeNode(obj);
+    parentNode.children.push(tempNode);
+    this.offerConstructItems = [...this.offerConstructItems];
+    this.updateChildCount();
+    return tempNode;
+  }
+
+  /**
+   * Method to transform construct details into tree form.
+   */
+  transformDataToTreeNode(offerDetailRes:any) {
+    this.offerConstructItems = [];
+    this.initalRowAdded = false;
+    offerDetailRes.constructDetails.forEach(node => {
+      // Loop thorugh Major items.
+      if (node.constructParentId === '0') {
+        let parentNode = this.addNode(node);
+        offerDetailRes.constructDetails.forEach(innerNode => {
+          // Add a child node to parent.
+          if(innerNode.constructParentId === node.constructNodeId){
+            let inChild = this.addChildNode(parentNode,innerNode);
+            // If group Node , need to add respective children nodes under it.
+            if (innerNode.groupNode) {
+              offerDetailRes.constructDetails.forEach(gChildNode => {
+                // Add a child node to parent.
+                if(gChildNode.constructParentId === innerNode.constructNodeId){
+                  this.addChildNode(inChild,gChildNode);
+                }
+              });
+            }
+            }
+        });
+      }
+    });
+    this.updateChildCount();
   }
 
   dragStartRow($event, item) {
@@ -736,9 +794,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   addItemDetails() {
     this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.questionForm.value);
-    console.log(this.questionForm.value);
     this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
-    console.log(this.offerConstructItems);
     this.closeDailog();
   }
 
@@ -789,7 +845,6 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   saveOfferConstructChanges() {
     this.offerConstructItems = [... this.offerConstructItems];
-    console.log('this is the object', this.offerConstructItems);
     let cds: ConstructDetails = new ConstructDetails(this.currentOfferId, []);
     // Construct all group Nodes.
     this.offerConstructItems.forEach((node) => {
@@ -827,7 +882,7 @@ export class OfferconstructCanvasComponent implements OnInit {
             cd.constructType = child.data.productName;
             cd.productFamily = '';
             cd.constructNodeId = child.data.uniqueKey.toString();
-            cd.constructParentId =  node.data.uniqueKey.toString();
+            cd.constructParentId = node.data.uniqueKey.toString();
             cd.groupNode = false;
             if (child.data.itemDetails !== undefined) {
               let id: ItemDetail;
@@ -848,7 +903,7 @@ export class OfferconstructCanvasComponent implements OnInit {
             cd.constructType = 'Group';
             cd.productFamily = '';
             cd.constructNodeId = child.data.uniqueKey.toString();
-            cd.constructParentId =  node.data.uniqueKey.toString();
+            cd.constructParentId = node.data.uniqueKey.toString();
             cd.groupNode = true;
             cds.constructDetails.push(cd);
 
@@ -861,7 +916,7 @@ export class OfferconstructCanvasComponent implements OnInit {
                 cd.constructType = gchild.data.productName;
                 cd.productFamily = '';
                 cd.constructNodeId = gchild.data.uniqueKey.toString();
-                cd.constructParentId =  child.data.uniqueKey.toString();
+                cd.constructParentId = child.data.uniqueKey.toString();
                 cd.groupNode = false;
                 if (gchild.data.itemDetails !== undefined) {
                   let id: ItemDetail;

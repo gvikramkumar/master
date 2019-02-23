@@ -1,8 +1,10 @@
 <div class="content">
   <div class="container">
+
     <app-menu-bar [caseId]="caseId" [currentMMModel]="currentMMModel" [offerId]="currentOfferId"
       [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
     </app-menu-bar>
+    
     <div class="panel-wrapper mt-15">
 
       <!-- Blue bar -->
@@ -16,8 +18,6 @@
           </div>
           <div class="col-md-8 text-right">
             <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
-            <button class="btn btn--white"> Save </button>
-            <!-- <button class="btn btn--white" (click)="downloadPDF()"> Export </button> -->
             <button *ngIf="!dimensionMode" class="btn btn--white" [disabled]="!proceedButtonStatusValid"
               (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span
                 class="icon-chevron-right"></span></button>
@@ -91,7 +91,6 @@
               <div class="alert__message" [ngStyle]="{'color': message['color']}">
                 <b>{{message['contentHead']}}</b>{{message['content']}}</div>
             </div>
-
 
             <div class="panel-wrapper mt-20">
               <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" style="z-index: 0">
