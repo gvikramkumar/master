@@ -74,7 +74,7 @@ export class OfferSolutioningComponent implements OnInit {
       this.primaryBE = this.firstData['primaryBEList'][0];
       this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
         (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference;
         }
       );
 

@@ -26,6 +26,7 @@ const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 })
 export class RightPanelComponent implements OnInit, OnDestroy {
   notiFication: Boolean = false;
+  Math = Math;
 
   @Input() portfolioFlag: Boolean = false;
   @Output() updateStakeData = new EventEmitter<string>();
@@ -149,6 +150,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   averageOfTopTenPercentile = 0;
   averageOverall = 0;
   countOfHundredPercentile;
+  remainingNinetyPercentileCompare;
+  topTenPercentileWeeksCompare;
+  overallWeeksCompare;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -354,6 +358,11 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.averageOfTopTenPercentileWeeks = averageWeekCountObject['averageOfTopTenPercentile'] ? Number(averageWeekCountObject['averageOfTopTenPercentile']).toFixed(2) : 0;
       this.averageOverallWeeks = averageWeekCountObject['averageOverall'] ? Number(averageWeekCountObject['averageOverall']).toFixed(2) : 0;
       this.countOfHundredPercentile = averageWeekCountObject['countOfHundredPercentile'] ? Number(averageWeekCountObject['countOfHundredPercentile']).toFixed(2) : 0;
+
+      this.remainingNinetyPercentileCompare = (Number(this.averageOfRemainingNinetyPercentileWeeks) - Number(this.noOfWeeksDifference)).toFixed(2);
+      this.topTenPercentileWeeksCompare = (Number(this.averageOfTopTenPercentileWeeks) - Number(this.noOfWeeksDifference)).toFixed(2);
+      this.overallWeeksCompare = (Number(this.averageOverallWeeks) - Number(this.noOfWeeksDifference)).toFixed(2);
+
 
       this.averageOfRemainingNinetyPercentile = Math.round(100 * this.averageOfRemainingNinetyPercentileWeeks / Number(averageWeekCountObject['countOfHundredPercentile']));
       this.averageOfTopTenPercentile = Math.round(this.averageOfTopTenPercentileWeeks * 100 / Number(averageWeekCountObject['countOfHundredPercentile']));
