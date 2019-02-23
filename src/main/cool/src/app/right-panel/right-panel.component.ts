@@ -382,7 +382,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         // Compute Progree Bar Width
         this.progressBarWidth = Math.floor((Number(this.averageWeekCount) / maxWeekDuration * 100));
       } catch (err) {
-        this.error = 'Something went wrong while fetching data for lead time. Please contact administrator.';
+        this.error = 'No content found!';
       }
       this.loadingLeadTime = false;
 
