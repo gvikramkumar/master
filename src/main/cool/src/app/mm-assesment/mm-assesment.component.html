@@ -130,6 +130,32 @@
                       </ul>
                     </div>
                   </div>
+                  <p-dialog name="events" [(visible)]="showDialog" width="500">
+                    <h3 class="text-center"><span class="pi pi-exclamation-triangle text-warning"></span>
+                    </h3>
+                    <p class="text-center"><b>Switching the monetization model may result in losing the changes you have made. This may also increase Lead Time. Do you still want switch your model evaluation?</b></p>
+                    <p-footer>
+                        <div class="clearfix text-center">
+                            <button type="button" pButton [ngStyle]="{'color': 'white', 'background':'gray'}"
+                                (click)="showDialog=false;" label="Cancel"></button>
+                            <button type="button" pButton [ngStyle]="{'color': 'white', 'background':'green'}"
+                                (click)="showDialog=false;showErrorDialog=true" label="Switch"></button>
+                        </div>
+                    </p-footer>
+                </p-dialog>
+                <p-dialog name="events" [(visible)]="showErrorDialog" width="500">
+                  <h3 class="text-center"><span class="pi pi-exclamation-triangle text-error"></span>
+                  </h3>
+                  <p class="text-center"><b>During this pilot period, changes resulting in a Monetization Model re-alignment are not allowed. If you wish to change Monetization Models, please create a new offer</b></p>
+                  
+                  <p-footer>
+                      <div class="clearfix text-center">
+                          <button type="button" pButton [ngStyle]="{'color': 'white', 'background':'gray'}"
+                              (click)="showErrorDialog=false;" label="Ok"></button>
+                         
+                      </div>
+                  </p-footer>
+              </p-dialog>
                   <div class="panel-footer base-margin-top">
                     <div class="btn-group btn-group--wide" style="margin: auto;width: 100%;">
                       <button (click)="toPrevStep()" class="btn btn--gray-ghost">
