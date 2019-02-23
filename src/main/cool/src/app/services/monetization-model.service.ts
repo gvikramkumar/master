@@ -8,7 +8,6 @@ import { EnvironmentService } from '../../environments/environment.service';
 @Injectable()
 export class MonetizationModelService {
 
-
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService

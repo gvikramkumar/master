@@ -184,6 +184,7 @@ export class MmAssesmentComponent implements OnInit {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
       }
 
+      // Retrieve Offer Details
       this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
 
         that.offerBuilderdata = data;
@@ -605,7 +606,6 @@ export class MmAssesmentComponent implements OnInit {
           this.message = { contentHead: data['mmMapperStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
         }
 
-        
         if (this.activeTabIndex < this.groupNames.length - 1) {
           this.activeTabIndex += 1;
         }

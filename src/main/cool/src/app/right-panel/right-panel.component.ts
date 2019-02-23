@@ -86,8 +86,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   tenthPercentile = '10th Percentile';
   nintyPercentile = '90th Percentile';
 
-  attribute: boolean;
-
   @Input() offerId: string;
   @Input() stakeData: Object;
   @Input() derivedMM: string;
@@ -166,7 +164,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.currentOfferId = this.createOfferService.coolOffer.offerId;
     }
     this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
-    this.attribute = true;
 
   }
 
