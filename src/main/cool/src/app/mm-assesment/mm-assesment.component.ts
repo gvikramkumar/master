@@ -233,7 +233,7 @@ export class MmAssesmentComponent implements OnInit {
           this.monetizationModelService.toNextSetp(postData).subscribe(data => {
             this.groupData.splice(1);
             this.groupNames.splice(1);
-            data['groups'].forEach(group => {
+            data['dimgroups'].forEach(group => {
               this.getGroupData(group, selectedCharacteristics, true);
             });
 
@@ -567,7 +567,7 @@ export class MmAssesmentComponent implements OnInit {
           this.currentMMModel = data['mmModel'];
           this.groupData.splice(1);
           this.groupNames.splice(1);
-          data['groups'].forEach(group => {
+          data['dimgroups'].forEach(group => {
             this.getGroupData(group, {}, true);
           });
         }
