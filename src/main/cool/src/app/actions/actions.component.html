@@ -39,7 +39,7 @@
                     <span>{{actionData.offerName}}</span>
                   </ng-template>
                 </p-column>
-                <p-column field="actions" sortable="true" header="ACTION">
+                <p-column field="actionTitle" sortable="true" header="ACTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.actionTitle}} <br /></span>
                     <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
@@ -74,7 +74,7 @@
                     <span>{{actionData.createdBy}} <br /></span>
                   </ng-template>
                 </p-column>
-                <p-column field="" sortable="true" header="FUNCTION">
+                <p-column field="defaultFunction" sortable="true" header="FUNCTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.defaultFunction}} <br /></span>
                   </ng-template>
@@ -89,7 +89,7 @@
                     <span>{{actionData.dueDate}} <br /></span>
                   </ng-template>
                 </p-column>
-                <p-column field="status" sortable="true" header="STATUS">
+                <p-column field="styleColor" sortable="true" header="STATUS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span *ngIf="actionData.alertType == 1">
                       <div style="text-align:center">
@@ -111,6 +111,7 @@
         </div>
       </div>
     </div>
+
     <!-- comments overlay -->
     <p-overlayPanel #popCommentContent [showCloseIcon]="true">
       <div *ngIf="selectedAction" class="comments-modal">

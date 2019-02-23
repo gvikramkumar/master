@@ -144,7 +144,6 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h5>{{offerName}}&nbsp;<span class="offerID">{{currentOfferId}}</span></h5>
-                        <a>View Offer Details</a>
                     </div>
                     <!-- Offer Phase widget -->
                     <div class="col-md-4">
@@ -218,11 +217,13 @@
                                         <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
                                             <td>
                                                 <div *ngIf="!ideateData.enable; else enableOfferPhase">
-                                                    <span style="color: gray;">{{ideateData.subMilestone}}</span>
+                                                    <span class="text-muted"
+                                                        pTooltip="Dependent activities are not yet satisfied"
+                                                        tooltipPosition="top">{{ideateData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
-                                                  <a><span
-                                                    (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
+                                                    <a><span
+                                                            (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
                                             <td [ngClass]=" (ideateData.status=='Completed'
@@ -270,11 +271,13 @@
 
                                             <td>
                                                 <div *ngIf="!planData.enable; else enableOfferPhase">
-                                                    <span style="color: gray;">{{planData.subMilestone}}</span>
+                                                    <span class="text-muted"
+                                                        pTooltip="Dependent activities are not yet satisfied"
+                                                        tooltipPosition="top">{{planData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
                                                     <a><span
-                                                        (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span></a>
+                                                            (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
 
@@ -411,7 +414,7 @@
                             <div class="divider"></div>
                             <div class="row base-margin-top">
                                 <div class="col-md-12">
-                                    <h6 class="text-indigo">Edit Milestones</h6>
+                                    <!-- <h6 class="text-indigo">Edit Milestones</h6> -->
                                 </div>
                             </div>
                             <div class="row base-margin-top progress-group">
@@ -469,12 +472,12 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-8">
-                                    <div class="progressbar" data-percentage="35">
+                                    <div class="progressbar" [attr.data-percentage]="averageOfTopTenPercentile">
                                         <div class="progressbar__fill"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <h6>2.2 WEEKS</h6>
+                                    <h6>{{averageOfTopTenPercentileWeeks}} WEEKS</h6>
                                 </div>
                             </div>
                             <div class="row base-margin-top">
@@ -488,13 +491,13 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-8">
-                                    <div class="progressbar">
-                                        <div class="customProgressBarFill" [ngStyle]="{'width.%':progressBarWidth}">
+                                    <div class="progressbar" [attr.data-percentage]="averageOverall">
+                                        <div class="progressbar__fill">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <h6>{{averageWeekCount}} WEEKS</h6>
+                                    <h6>{{averageOverallWeeks}} WEEKS</h6>
                                 </div>
                             </div>
                             <div class="row base-margin-top">
@@ -508,20 +511,18 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-8">
-                                    <div class="progressbar progressbar--success" data-percentage="85">
+                                    <div class="progressbar progressbar--success"
+                                        [attr.data-percentage]="averageOfRemainingNinetyPercentile">
                                         <div class="progressbar__fill"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <h6>5.7 WEEKS</h6>
+                                    <h6>{{averageOfRemainingNinetyPercentileWeeks}} WEEKS</h6>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
-                                    <span>0 WEEKS</span>&nbsp;<span>1 WEEKS</span>&nbsp;<span>2
-                                        WEEKS</span>&nbsp;<span>3
-                                        WEEKS</span>&nbsp;<span>4 WEEKS</span>&nbsp;<span>5
-                                        WEEKS</span>&nbsp;<span>6
+                                <div class="col-md-8">
+                                    <span class="pull-right">{{countOfHundredPercentile}}
                                         WEEKS</span>
                                 </div>
                             </div>
