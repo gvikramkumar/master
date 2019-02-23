@@ -604,7 +604,9 @@ export class MmAssesmentComponent implements OnInit {
         } else {
           this.message = { contentHead: data['mmMapperStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
         }
+
         this.currentMMModel = data['mmModel'];
+        
         if (this.activeTabIndex < this.groupNames.length - 1) {
           this.activeTabIndex += 1;
         }
