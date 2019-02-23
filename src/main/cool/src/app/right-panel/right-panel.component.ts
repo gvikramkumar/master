@@ -154,6 +154,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   topTenPercentileWeeksCompare;
   overallWeeksCompare;
 
+  loadingLeadTime = true;
+
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private createOfferService: CreateOfferService,
@@ -378,7 +380,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     // Compute Progree Bar Width
     this.progressBarWidth = Math.floor((Number(this.averageWeekCount) / maxWeekDuration * 100));
-
+    this.loadingLeadTime = false;
   }
 
 

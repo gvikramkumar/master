@@ -387,7 +387,16 @@
     <!-- Dialog - Lead Time Calculation  -->
     <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
         [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
-        <div class="row">
+        <div *ngIf="loadingLeadTime">
+            <div class="loader">
+                <div class="loading-dots loading-dots--info" aria-label="Loading, please wait...">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!loadingLeadTime" class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6">
