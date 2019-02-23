@@ -15,11 +15,11 @@ import { MonetizationModelService } from '../services/monetization-model.service
 })
 export class OfferDetailViewComponent implements OnInit {
 
-  offerRole:string;
-  offerName:string;
-  offerOwnerId:string;
-  offerOwnerName:string;
-  currentOfferId:string;
+  offerRole: string;
+  offerName: string;
+  offerOwnerId: string;
+  offerOwnerName: string;
+  currentOfferId: string;
 
   offerCoOwnerList: StakeHolder[] = [];
   offerStakeHolderList: StakeHolder[] = [];
@@ -37,8 +37,8 @@ export class OfferDetailViewComponent implements OnInit {
   };
 
   offerViewData;
-  derivedMM:string;
-  allignedStatus:string;
+  derivedMM: string;
+  allignedStatus: string;
 
   strategyReviewList;
   offerOverviewDetailsList;
@@ -76,11 +76,6 @@ export class OfferDetailViewComponent implements OnInit {
 
     this.offerDetailViewService.offerDetailView(this.currentOfferId)
       .subscribe(data => {
-<<<<<<< HEAD
-      
-=======
-
->>>>>>> 327819cce74dbaf3f64e58b8bfb5116d642cd8e0
         this.offerViewData = data;
         let stakeholdersInfo = null;
         this.offerName = data.offerName;
