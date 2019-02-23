@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
     return this.checkAdminAccess();
   }
 
-  // Check if the user is either a super admin or a functional admin
+  // Check if user is either a super admin or a functional admin
   async checkAdminAccess() {
     let hasAdminAcess = false;
     const response = await this.accessMgmtService.checkAdminAccess().toPromise().then((resUserInfo) => {
