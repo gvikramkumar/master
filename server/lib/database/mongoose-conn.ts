@@ -9,6 +9,7 @@ const options = {
   reconnectInterval: 500,
   poolSize: 10,
   bufferMaxEntries: 0,
+  useNewUrlParser: true,
   user: process.env.MONGODB_USER,
   pass: process.env.MONGODB_PASSWORD
 };

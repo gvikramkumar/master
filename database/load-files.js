@@ -4,7 +4,7 @@ const fs = require('fs'),
 const args = process.argv;
 const uri = `mongodb://${args[2]}:${args[3]}/${args[4]}`;
 
-mg.connect(uri)
+mg.connect(uri, {useNewUrlParser: true})
   .then(() => {
     const mongo = mg.mongo;
     const db = mg.connection.db;
