@@ -160,7 +160,6 @@ export class StakeholderFullComponent implements OnInit {
       });
   }
   canUserDeleteStakeHolder(stakeholder) {
-    debugger;
     const currentUserId = this.userService.getUserId();
     const userFunctions = this.configurationService.startupData.functionsUserCanAddTo;
     return !stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId && (userFunctions.includes('BUPM') || userFunctions.includes(stakeholder.functionalRole));

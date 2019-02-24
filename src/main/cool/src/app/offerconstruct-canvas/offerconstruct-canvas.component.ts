@@ -211,9 +211,53 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
   }
 
-  deleteNode(node) {
-    node.node.data = {};
-    node.node.children = {};
+  /* METHOD: deleteNode
+    PARAMS: Selected row node to identify the Parent and their children.
+    PURPOSE: Use to delete the parent Node as well as Child node in case of grouped Offer Category.
+    CREATED ON: 23 Feb 2019
+  */
+  deleteNode(rowNode) {
+    if (rowNode.parent == null) {
+      // If parent not present which means its a Major Item and may contains children.
+      //Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
+      this.offerConstructItems.forEach((element, index) => {
+        if (element.data.uniqueKey == rowNode.node.data.uniqueKey) {
+          this.offerConstructItems.splice(index, 1);
+        }
+      });
+    } else {
+      // Means Remove event occurs on child elements of any parent.
+      // Here we will loop through all offer array and find parent index key then
+      // Another loop of children & find Here we have to remove only that children whose uniquekey = rowData.uniqueKey
+      // Loop through All available offers construct items array
+      this.offerConstructItems.forEach((element, index) => {
+        if (element.data.uniqueKey == rowNode.parent.data.uniqueKey) {
+          // Loop through of all childrens of matched Parent data from Offer array
+          element.children.forEach((childElement, childIndex) => {
+            if (childElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+              element.children.splice(childIndex, 1);
+              // Removed the child element from Parent Array of Offer construct Array
+            }
+          });
+        }
+      });
+      // Check if parent is a group Node.
+      if (rowNode.parent.data.isGroupNode) {
+        this.offerConstructItems.forEach((element, index) => {
+          element.children.forEach((childElement, childIndex) => {
+            if (childElement.data.uniqueKey == rowNode.parent.data.uniqueKey) {
+              // Removed the child element from Parent Array of Offer construct Array
+              childElement.children.forEach((innerChildElement, innerChildIndex) => {
+                if (innerChildElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+                  childElement.children.splice(innerChildIndex, 1);
+                  // Removed the child element from Parent Array of Offer construct Array
+                }
+              });
+            }
+          });
+        });
+      }
+    }
     this.offerConstructItems = [...this.offerConstructItems];
     this.updateChildCount();
   }
@@ -236,7 +280,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       rowNode.node.data.label = rowNode.node.data.name;
       rowNode.node.data.title = rowNode.node.data.name;
       //rowNode.node.data.productName = rowNode.node.data.name;
-      this.offerConstructItems.push(this.itemToTreeNode(rowNode));
+      // this.offerConstructItems.push(this.itemToTreeNode(rowNode));
       this.offerConstructItems = [...this.offerConstructItems];
       this.cd.detectChanges();
     }
@@ -717,36 +761,59 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   removeSelected() {
     if (this.selected.length) {
-      let newObj = [];
-      newObj = this.offerConstructItems;
-      for (let i = 0; i < this.selected.length; i++) {
-        if (this.selected[i].parent != null) {
-          let uniqKey = this.selected[i].data.uniqueKey;
-          for (let m = 0; m < newObj.length; m++) {
-            for (let k = 0; k < newObj[m].children.length; k++) {
-              if (uniqKey == newObj[m].children[k].data.uniqueKey) {
-                newObj[m].children.splice(k, 1);
-              }
+
+      this.selected.forEach((selectedItem) => {
+        if (selectedItem.parent == null) {
+          // If parent not present which means its a Major Item and may contains children.
+          //Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
+          this.offerConstructItems.forEach((element, index) => {
+            if (element.data.uniqueKey == selectedItem.data.uniqueKey) {
+              this.offerConstructItems.splice(index, 1);
             }
-          }
-        }
-        if (this.selected[i].parent === null) {
-          let uKey = this.selected[i].data.uniqueKey;
-          for (let j = 0; j < newObj.length; j++) {
-            if (uKey == newObj[j].data.uniqueKey) {
-              newObj.splice(j, 1);
+          });
+        } else {
+          // Means Remove event occurs on child elements of any parent.
+          // Here we will loop through all offer array and find parent index key then
+          // Another loop of children & find Here we have to remove only that children whose uniquekey = rowData.uniqueKey
+          // Loop through All available offers construct items array
+          this.offerConstructItems.forEach((element, index) => {
+            if (element.data.uniqueKey == selectedItem.parent.data.uniqueKey) {
+              // Loop through of all childrens of matched Parent data from Offer array
+              element.children.forEach((childElement, childIndex) => {
+                if (childElement.data.uniqueKey == selectedItem.data.uniqueKey) {
+                  element.children.splice(childIndex, 1);
+                  // Removed the child element from Parent Array of Offer construct Array
+                }
+              });
             }
-          }
+
+            // Check if parent is a group Node.
+            if (selectedItem.parent.data.isGroupNode) {
+              this.offerConstructItems.forEach((element, index) => {
+                element.children.forEach((childElement, childIndex) => {
+                  if (childElement.data.uniqueKey == selectedItem.parent.data.uniqueKey) {
+                    // Removed the child element from Parent Array of Offer construct Array
+                    childElement.children.forEach((innerChildElement, innerChildIndex) => {
+                      if (innerChildElement.data.uniqueKey == selectedItem.data.uniqueKey) {
+                        childElement.children.splice(innerChildIndex, 1);
+                        // Removed the child element from Parent Array of Offer construct Array
+                      }
+                    });
+                  }
+                });
+              });
+            }
+          });
         }
-      }
-      this.offerConstructItems = newObj;
-      this.offerConstructItems = [...this.offerConstructItems];
-      this.selected = [...this.selected];
+      });
     }
     this.nodeToDelete = {};
     this.offerConstructItems = [...this.offerConstructItems];
+    this.selected = null;
     this.updateChildCount();
   }
+
+
 
   /**
    *
@@ -949,6 +1016,11 @@ export class OfferconstructCanvasComponent implements OnInit {
    * Update Count of children under each Major Line Item.
    */
   updateChildCount() {
+
+    if (this.offerConstructItems.length === 0 ) {
+      this.map1.clear();
+    }
+
     this.countableItems.forEach((index) => {
       this.offerConstructItems.forEach((item) => {
         if (item.data.uniqueKey === index) {
