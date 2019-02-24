@@ -15,11 +15,11 @@ import { MonetizationModelService } from '../services/monetization-model.service
 })
 export class OfferDetailViewComponent implements OnInit {
 
-  offerRole:string;
-  offerName:string;
-  offerOwnerId:string;
-  offerOwnerName:string;
-  currentOfferId:string;
+  offerRole: string;
+  offerName: string;
+  offerOwnerId: string;
+  offerOwnerName: string;
+  currentOfferId: string;
 
   offerCoOwnerList: StakeHolder[] = [];
   offerStakeHolderList: StakeHolder[] = [];
@@ -37,8 +37,8 @@ export class OfferDetailViewComponent implements OnInit {
   };
 
   offerViewData;
-  derivedMM:string;
-  allignedStatus:string;
+  derivedMM: string;
+  allignedStatus: string;
 
   strategyReviewList;
   offerOverviewDetailsList;
@@ -76,7 +76,6 @@ export class OfferDetailViewComponent implements OnInit {
 
     this.offerDetailViewService.offerDetailView(this.currentOfferId)
       .subscribe(data => {
-
         this.offerViewData = data;
         let stakeholdersInfo = null;
         this.offerName = data.offerName;
@@ -126,7 +125,7 @@ export class OfferDetailViewComponent implements OnInit {
           packaging = new OfferCharacteristics();
           packaging.subgroup = element.subgroup;
           packaging.characteristics = element.characteristics;
-          if (element.group === 'Packaging') {
+          if (element.group.toLowerCase() === 'packaging') {
             this.packagingList.push(packaging);
           }
           support = new OfferCharacteristics();
@@ -144,7 +143,7 @@ export class OfferDetailViewComponent implements OnInit {
           billingAndComp = new OfferCharacteristics();
           billingAndComp.subgroup = element.subgroup;
           billingAndComp.characteristics = element.characteristics;
-          if (element.group === 'Billing & Comp') {
+          if (element.group === 'Billing&Comp') {
             this.billingAndCompList.push(billingAndComp);
           }
           program = new OfferCharacteristics();

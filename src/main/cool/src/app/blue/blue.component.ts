@@ -16,15 +16,14 @@ export class BlueComponent implements OnInit {
   ngOnInit() {
   }
 
-  // offerConstruct() {
-  //
-  // }
-
-goBack(){
-  this.router.navigate(['/offerDimension', this.currentOfferId, this.currentCaseId]);
-}
+  goBack() {
+    this.router.navigate(['/offerDimension', this.currentOfferId, this.currentCaseId]);
+  }
   proceed() {
     this.proceedToNextStep.next('');
+  }
+  gotoOfferviewDetails() {
+    this.router.navigate(['/offerDetailView', this.currentOfferId, this.currentCaseId]);
   }
 
 }
