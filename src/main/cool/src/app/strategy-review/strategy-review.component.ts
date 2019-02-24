@@ -12,7 +12,7 @@ import { CreateActionApprove } from '../models/create-action-approve';
 import { UserService } from '../services/user.service';
 import { SharedService } from '../shared-service.service';
 import { MessageService } from '../services/message.service';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { HeaderService } from '../header/header.service';
 import { LeadTime } from '../right-panel/lead-time';
 import { RightPanelService } from '../services/right-panel.service';
@@ -72,6 +72,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   doNotApproveSection = false;
   showConditionalApprovalSection = false;
   escalateVisibleAvailable: Boolean = false;
+  completeStrategyReviewAvailable: Boolean = false;
   showApproveSection = false;
   action: any;
   currentTaskId: any;
@@ -92,6 +93,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   proceedButtonStatusValid = true;
   backbuttonStatusValid = true;
   currentFunctionalRole;
+
+  loadExitCriteria = false;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
@@ -132,7 +135,14 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
           }
         });
       });
-    this.getStrategyReviwInfo();
+
+    forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
+      const [strategyReviewData, milstones] = data;
+      this.getStrategyReview(strategyReviewData);
+      this.getMilestones(milstones);
+      this.completeStrategyReview();
+    })
+
     const canEscalateUsers = [];
     const canApproveUsers = [];
     this.subscription = this.messageService.getMessage()
@@ -151,21 +161,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.functionList = data;
     });
 
-    this.actionsService.getMilestones(this.caseId).subscribe(data => {
-
-      let result = data.ideate;
-
-      this.milestoneList = [];
-      this.lastValueInMilestone = result.slice(-1)[0];
-
-      let mile = this.lastValueInMilestone
-      this.milestoneValue = mile['subMilestone'];
-    });
-
     this.actionsService.getAssignee(this.currentOfferId).subscribe(data => {
       this.assigneeList = data;
     });
-
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
       this.displayLeadTime = true;
@@ -176,7 +174,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.primaryBE = this.firstData['primaryBEList'][0];
       this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
         (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+          this.noOfWeeksDifference = leadTime.noOfWeeksDifference;
         }
       );
 
@@ -211,6 +209,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
         this.currentUser = user;
         if (canEscalateUsers.includes(user)) {
           this.escalateVisibleAvailable = true;
+          this.completeStrategyReviewAvailable = true;
         }
         this.headerService.getUserInfo(this.currentUser).subscribe(userData => {
           this.managerName = userData[0].manager;
@@ -234,6 +233,20 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       });
     });
 
+    this.getOfferDetails();
+
+  }
+
+  private getMilestones(milestones) {
+    const result = milestones.ideate;
+    this.milestoneList = [];
+    this.lastValueInMilestone = result.slice(-1)[0];
+    const mile = this.lastValueInMilestone;
+    this.milestoneValue = mile['subMilestone'];
+  }
+
+  getOfferDetails() {
+    this.offerBuilderdata = {};
     this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
       this.offerBuilderdata = data;
       this.offerBuilderdata['BEList'] = [];
@@ -251,7 +264,6 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
         this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
       }
     });
-
   }
 
   getSelectFunctionRole(functionRole) {
@@ -264,14 +276,17 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     }
   }
 
+  getStrategyReview(resStrategyReview) {
+    this.strategyReviewList = resStrategyReview;
+    this.totalApprovalsCount = resStrategyReview.length;
+    this.approvedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'APPROVED').length;
+    this.notApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT APPROVED').length;
+    this.conditionallyApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'CONDITIONALLY APPROVED').length;
+    this.notReviewedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT REVIEWED').length;
+  }
   getStrategyReviwInfo() {
-    this.strategyReviewService.getStrategyReview(this.caseId).subscribe(resStrategyReview => {
-      this.strategyReviewList = resStrategyReview;
-      this.totalApprovalsCount = resStrategyReview.length;
-      this.approvedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'APPROVED').length;
-      this.notApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT APPROVED').length;
-      this.conditionallyApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'CONDITIONALLY APPROVED').length;
-      this.notReviewedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT REVIEWED').length;
+    this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
+      this.getStrategyReview(resStrategyReview);
     });
   }
 
@@ -337,21 +352,35 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   gotoOfferviewDetails() {
     this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
   }
+  completeStrategyReview() {
+    // if strategy review milestone is availaible and
+    // if total approvals count is greater than 0 and
+    // if not reviewed count is 0
+    // then mark the offer strategy review milestone as complete 
+    if (this.lastValueInMilestone['status'].toUpperCase() === 'AVAILABLE' &&
+      this.totalApprovalsCount > 0 &&
+      this.notReviewedCount === 0
+    ) {
+      const proceedPayload = {
+        'taskId': '',
+        'userId': this.offerBuilderdata['offerOwner'],
+        'caseId': this.caseId,
+        'offerId': this.currentOfferId,
+        'taskName': 'Strategy Review',
+        'action': '',
+        'comment': ''
+      };
+      return this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
+        this.loadExitCriteria = true;
+      }, (error) => {
+      });
+    } else {
+      this.loadExitCriteria = true;
+    }
 
+  }
   offerDetailOverView() {
-    const proceedPayload = {
-      'taskId': '',
-      'userId': this.offerBuilderdata['offerOwner'],
-      'caseId': this.caseId,
-      'offerId': this.currentOfferId,
-      'taskName': 'Strategy Review',
-      'action': '',
-      'comment': ''
-    };
-    // this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
     this.router.navigate(['/offerDimension', this.currentOfferId, this.caseId]);
-    // }, (error) => {
-    // });
   }
 
   onTabOpen(taskId) {
@@ -381,12 +410,12 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     this.showConditionalApprovalSection = false;
     this.showApproveSection = false;
     this.showButtonSection = true;
-    this.commentValue = "";
-    this.titleValue = "";
-    this.descriptionValue = "";
-    this.functionNameValue = "";
+    this.commentValue = '';
+    this.titleValue = '';
+    this.descriptionValue = '';
+    this.functionNameValue = '';
     this.assigneeValue = [];
-    this.dueDateValue = "";
+    this.dueDateValue = '';
   }
 
   createAction() {

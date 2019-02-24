@@ -55,7 +55,7 @@
             </div>
 
             <div *ngIf="displayLeadTime">
-                <strong><small>{{noOfWeeksDifference}}</small></strong>
+                <strong><small>{{noOfWeeksDifference}} Week</small></strong>
                 <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
                     Lead Time Calculation?
                 </button>
@@ -144,7 +144,6 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h5>{{offerName}}&nbsp;<span class="offerID">{{currentOfferId}}</span></h5>
-                        <a>View Offer Details</a>
                     </div>
                     <!-- Offer Phase widget -->
                     <div class="col-md-4">
@@ -218,11 +217,13 @@
                                         <tr *ngFor="let ideateData of offerPhaseDetailsList.ideate">
                                             <td>
                                                 <div *ngIf="!ideateData.enable; else enableOfferPhase">
-                                                    <span style="color: gray;">{{ideateData.subMilestone}}</span>
+                                                    <span class="text-muted"
+                                                        pTooltip="Dependent activities are not yet satisfied"
+                                                        tooltipPosition="top">{{ideateData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
-                                                  <a><span
-                                                    (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
+                                                    <a><span
+                                                            (click)="navigate(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
                                             <td [ngClass]=" (ideateData.status=='Completed'
@@ -270,11 +271,13 @@
 
                                             <td>
                                                 <div *ngIf="!planData.enable; else enableOfferPhase">
-                                                    <span style="color: gray;">{{planData.subMilestone}}</span>
+                                                    <span class="text-muted"
+                                                        pTooltip="Dependent activities are not yet satisfied"
+                                                        tooltipPosition="top">{{planData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
                                                     <a><span
-                                                        (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span></a>
+                                                            (click)="navigate(planData.subMilestone)">{{planData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
 
@@ -384,34 +387,43 @@
     <!-- Dialog - Lead Time Calculation  -->
     <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
         [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
-        <div class="row">
+        <div *ngIf="loadingLeadTime">
+            <div class="loader">
+                <div class="loading-dots loading-dots--info" aria-label="Loading, please wait...">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert--danger" *ngIf="error" role="alert">
+            <div class="alert__icon icon-error-outline"></div>
+            <div class="alert__message">{{error}}</div>
+        </div>
+        <div *ngIf="!loadingLeadTime && !error" class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card base-padding">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <h4 class="display-1 text-success">{{noOfWeeksDifference}}</h4>
-                                            </div>
-                                        </div>
+                                        <h4 class="text-huge text-success">{{noOfWeeksDifference}} Week</h4>
                                     </div>
-                                    <h5 class="label">Lead Time Accessed for Your Offer</h5>
+                                    <h5 class="text-large qtr-padding text-muted">Lead Time Assessed for Your Offer</h5>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="row  base-margin-top">
-                                        <h2 class="text-success">{{expectedLaunchDate}}</h2>
-                                        <h5>Offer Launch Date</h5>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <h4 class="text-huge text-success">{{expectedLaunchDate}}</h4>
                                     </div>
+                                    <h5 class="text-large qtr-padding text-muted">Offer Launch Date</h5>
                                 </div>
                             </div>
                             <div class="row base-margin-top"></div>
                             <div class="divider"></div>
                             <div class="row base-margin-top">
                                 <div class="col-md-12">
-                                    <h6 class="text-indigo">Edit Milestones</h6>
+                                    <!-- <h6 class="text-indigo">Edit Milestones</h6> -->
                                 </div>
                             </div>
                             <div class="row base-margin-top progress-group">
@@ -453,78 +465,69 @@
                     </div>
                     <div class="col-md-6">
                         <div class="card">
-                            <h5>Lead Time Statistics for {{mmModel}} (SAAS) in {{leadTimeYear}}</h5>
-                            <div class="row base-margin-top">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="form-group__text">
-                                            <label>10th Percentile</label>
+                            <div class="qtr-padding">
+                                <h5>Lead Time Statistics for {{mmModel}} in {{leadTimeYear}}</h5>
+                                <h6>Your presume time is {{Math.abs(overallWeeksCompare)}} weeks
+                                    {{overallWeeksCompare>0?'less':'more'}} than average.
+                                </h6>
+                            </div>
+                            <table class="table table--nostripes">
+                                <tr>
+                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                        <label>10th Percentile</label>
+                                        <div class="progressbar" [attr.data-percentage]="averageOfTopTenPercentile">
+                                            <div class="progressbar__fill"></div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <span>Your Lead Time</span>
-                                    <h6>{{noOfWeeksDifference}}</h6>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="progressbar" data-percentage="35">
-                                        <div class="progressbar__fill"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>2.2 WEEKS</h6>
-                                </div>
-                            </div>
-                            <div class="row base-margin-top">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="form-group__text">
-                                            <label>Average</label>
+                                    </td>
+                                    <td width="25%">
+                                        <h6>{{averageOfTopTenPercentileWeeks}} WEEKS
+                                            <span class="pull-right"
+                                                [className]="topTenPercentileWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(topTenPercentileWeeksCompare)}}</span>
+                                        </h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                        <label>Average</label>
+                                        <div class="progressbar" [attr.data-percentage]="averageOverall">
+                                            <div class="progressbar__fill">
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="progressbar">
-                                        <div class="customProgressBarFill" [ngStyle]="{'width.%':progressBarWidth}">
+                                    </td>
+                                    <td width="25%">
+                                        <h6>{{averageOverallWeeks}} WEEKS
+                                            <span class="pull-right"
+                                                [className]="overallWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(overallWeeksCompare)}}</span>
+                                        </h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                        <label>90th Percentile</label>
+                                        <div class="progressbar progressbar--success"
+                                            [attr.data-percentage]="averageOfRemainingNinetyPercentile">
+                                            <div class="progressbar__fill"></div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>{{averageWeekCount}} WEEKS</h6>
-                                </div>
-                            </div>
-                            <div class="row base-margin-top">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="form-group__text">
-                                            <label>90th Percentile</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="progressbar progressbar--success" data-percentage="85">
-                                        <div class="progressbar__fill"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>5.7 WEEKS</h6>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <span>0 WEEKS</span>&nbsp;<span>1 WEEKS</span>&nbsp;<span>2
-                                        WEEKS</span>&nbsp;<span>3
-                                        WEEKS</span>&nbsp;<span>4 WEEKS</span>&nbsp;<span>5
-                                        WEEKS</span>&nbsp;<span>6
-                                        WEEKS</span>
-                                </div>
-                            </div>
+                                    </td>
+                                    <td width="25%">
+                                        <h6>{{averageOfRemainingNinetyPercentileWeeks}} WEEKS
+                                            <span class="pull-right"
+                                                [className]="remainingNinetyPercentileCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(remainingNinetyPercentileCompare)}}</span>
+                                        </h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                        <span class="pull-left">0
+                                            WEEKS</span>
+                                        <span class="pull-right">{{countOfHundredPercentile}}
+                                            WEEKS</span></td>
+                                    <td width="25%">
+
+                                    </td>
+                                </tr>
+
+                            </table>
                         </div>
                     </div>
                 </div>
