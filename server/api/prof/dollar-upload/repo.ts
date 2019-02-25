@@ -14,7 +14,7 @@ const schema = new Schema(
     legalEntity: String,
     intBusinessEntity: String,
     dealId: String,
-    grossUnbilledAccruedFlag: String,
+    grossUnbilledAccruedFlag: {type: String, enum: ['Y', 'N']},
     revenueClassification: String,
     amount: {type: Number, required: true},
     createdBy: {type: String, required: true},
