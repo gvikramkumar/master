@@ -414,6 +414,8 @@ export class OfferconstructCanvasComponent implements OnInit {
         rowNode.node.data['isGroupNode'] &&
         !this.draggedItem['isMajorLineItem']
       ) {
+        if(this.draggedItem.data.isGroupNode){
+        } else {
         const obj = Object.create(null);
         obj['uniqueKey'] = ++this.counter;
         this.uniqueId = obj['uniqueKey'];
@@ -426,6 +428,7 @@ export class OfferconstructCanvasComponent implements OnInit {
         rowNode.node.children.push(this.itemToTreeNode(obj));
         this.delteFromParentObject(rowNode, this.draggedItem.data);
       }
+    }
 
       this.offerConstructItems = [...this.offerConstructItems];
     }
