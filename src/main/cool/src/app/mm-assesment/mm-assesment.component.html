@@ -17,6 +17,7 @@
                 class="btn--back btn btn--icon btn--white"><span class="icon-back"></span></button> Offer Builder</h4>
           </div>
           <div class="col-md-8 text-right">
+              <button *ngIf="dimensionMode" class="btn btn--white" (click)='proceedToOfferSolution(false)'> Save </button>
             <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
             <button *ngIf="!dimensionMode" class="btn btn--white" [disabled]="!proceedButtonStatusValid"
               (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span
