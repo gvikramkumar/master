@@ -909,7 +909,7 @@ export class MmAssesmentComponent implements OnInit {
 
   }
 
-  proceedToOfferSolution() {
+  proceedToOfferSolution(withRouter = true) {
 
     let postOfferSolutioningData = {};
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
@@ -1079,7 +1079,9 @@ export class MmAssesmentComponent implements OnInit {
         this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
 
           this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
-          this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+          if (withRouter === true) {
+            this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+          }
         })
       });
 
