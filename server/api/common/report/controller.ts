@@ -87,9 +87,9 @@ export default class ReportController extends ControllerBase {
         // get no results as it's not included in the collection, so we need to remove it from filter
         excelSheetname = ['Manual Uploaded Data'];
         excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Product', 'Sales', 'Legal Business Entity', 'Internal Business Entity',
-          'SCMS', 'Amount', 'Gross Unbilled Accrued Revenue Flag', 'Revenue Classification', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
+          'SCMS', 'Amount', 'Gross Unbilled Accrued Revenue Flag', 'Deal ID', 'Revenue Classification', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
         excelProperties = ['measure.name', 'sm.name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_internal_be_value',
-          'input_scms_value', 'amount_value', 'gross_unbilled_accrued_rev_flg', 'revenue_classification', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
+          'input_scms_value', 'amount_value', 'gross_unbilled_accrued_rev_flg', 'deal_id', 'revenue_classification', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
