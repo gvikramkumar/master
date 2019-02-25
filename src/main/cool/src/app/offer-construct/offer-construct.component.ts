@@ -148,6 +148,11 @@ export class OfferConstructComponent  implements OnInit {
     }
   }
 
+  // Function to navigate to Offer Detail View
+  gotoOfferviewDetails() {
+    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+  }
+
   goBack() {
     this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
   }
