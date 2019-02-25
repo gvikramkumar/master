@@ -629,6 +629,7 @@ export class MmAssesmentComponent implements OnInit {
     }
 
     this.emitEventToChild();
+    this.proceedToStakeholder(false);
   }
 
   getStakeData(mmModel) {
