@@ -27,6 +27,7 @@ const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 export class RightPanelComponent implements OnInit, OnDestroy {
   notiFication: Boolean = false;
   Math = Math;
+  isNaN = isNaN;
 
   @Input() portfolioFlag: Boolean = false;
   @Output() updateStakeData = new EventEmitter<string>();
@@ -153,7 +154,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   overallWeeksCompare;
 
   loadingLeadTime = true;
-  error = '';
+  // error = '';
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -382,7 +383,17 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         // Compute Progree Bar Width
         this.progressBarWidth = Math.floor((Number(this.averageWeekCount) / maxWeekDuration * 100));
       } catch (err) {
-        this.error = 'No content found!';
+        this.averageOfRemainingNinetyPercentileWeeks = 'N/A';
+        this.averageOfTopTenPercentileWeeks = 'N/A';
+        this.averageOverallWeeks = 'N/A';
+        this.countOfHundredPercentile = 'N/A';
+        this.remainingNinetyPercentileCompare = 'N/A';
+        this.topTenPercentileWeeksCompare = 'N/A';
+        this.overallWeeksCompare = 'N/A';
+        this.averageOfRemainingNinetyPercentile = 0;
+        this.averageOfTopTenPercentile = 0;
+        this.averageOverall = 0;
+        // this.error = 'No content found!';
       }
       this.loadingLeadTime = false;
 

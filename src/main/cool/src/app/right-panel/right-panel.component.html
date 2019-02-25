@@ -396,11 +396,7 @@
                 </div>
             </div>
         </div>
-        <div class="alert alert--danger" *ngIf="error" role="alert">
-            <div class="alert__icon icon-error-outline"></div>
-            <div class="alert__message">{{error}}</div>
-        </div>
-        <div *ngIf="!loadingLeadTime && !error" class="row">
+        <div *ngIf="!loadingLeadTime" class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6">
@@ -467,7 +463,7 @@
                         <div class="card">
                             <div class="qtr-padding">
                                 <h5>Lead Time Statistics for {{mmModel}} in {{leadTimeYear}}</h5>
-                                <h6>Your presume time is {{Math.abs(overallWeeksCompare)}} weeks
+                                <h6 *ngIf="!isNaN(overallWeeksCompare)">Your presume time is {{Math.abs(overallWeeksCompare)}} weeks
                                     {{overallWeeksCompare>0?'less':'more'}} than average.
                                 </h6>
                             </div>
@@ -481,7 +477,7 @@
                                     </td>
                                     <td width="25%">
                                         <h6>{{averageOfTopTenPercentileWeeks}} WEEKS
-                                            <span class="pull-right"
+                                            <span class="pull-right" *ngIf="!isNaN(topTenPercentileWeeksCompare)"
                                                 [className]="topTenPercentileWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(topTenPercentileWeeksCompare)}}</span>
                                         </h6>
                                     </td>
@@ -496,7 +492,7 @@
                                     </td>
                                     <td width="25%">
                                         <h6>{{averageOverallWeeks}} WEEKS
-                                            <span class="pull-right"
+                                            <span class="pull-right" *ngIf="!isNaN(overallWeeksCompare)"
                                                 [className]="overallWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(overallWeeksCompare)}}</span>
                                         </h6>
                                     </td>
@@ -511,7 +507,7 @@
                                     </td>
                                     <td width="25%">
                                         <h6>{{averageOfRemainingNinetyPercentileWeeks}} WEEKS
-                                            <span class="pull-right"
+                                            <span class="pull-right" *ngIf="!isNaN(remainingNinetyPercentileCompare)"
                                                 [className]="remainingNinetyPercentileCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(remainingNinetyPercentileCompare)}}</span>
                                         </h6>
                                     </td>
