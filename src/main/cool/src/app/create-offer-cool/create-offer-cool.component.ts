@@ -56,6 +56,7 @@ export class CreateOfferCoolComponent implements OnInit {
   iDPId: string;
   isIdpIdValid = false;
   enableOfferbuild = true;
+  disablePrimaryBEList: boolean;
   userSelectedAllUnits;
   idpidValid = false;
   idpidInvalid = false;
@@ -90,7 +91,7 @@ export class CreateOfferCoolComponent implements OnInit {
     private stakeholderfullService: StakeholderfullService,
     private rightPanelService: RightPanelService,
     private _location: Location) {
-
+    this.disablePrimaryBEList = createOfferService.disablePrBEList;
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       if (this.offerId) {
@@ -459,7 +460,6 @@ export class CreateOfferCoolComponent implements OnInit {
     const loggedInUserId = '';
     const offerOwner = '';
     const offerCreatedBy = '';
-
     // Set the status for offer creation
     const status = new Status();
     status.offerPhase = 'PreLaunch';
@@ -490,7 +490,7 @@ export class CreateOfferCoolComponent implements OnInit {
       status,
       constructDetails,
       this.stakeholders);
-
+    this.disablePrimaryBEList = true;
     this.strategyReviewDateValue = moment(this.strategyReviewDateValue).toISOString();
     this.designReviewDateValue = moment(this.designReviewDateValue).toISOString();
     this.readinessReviewDateValue = moment(this.readinessReviewDateValue).toISOString();
