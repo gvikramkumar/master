@@ -364,7 +364,10 @@ export class OfferSolutioningComponent implements OnInit {
       'comment': ''
     };
       this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
-      this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+        if (msg !== 'stay_on_this_page') {
+
+          this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+        }
       });
 
     });
