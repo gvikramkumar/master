@@ -68,8 +68,6 @@ export class EnvironmentService {
     PDAF_API;
     PDAF_GET_TOKEN_API;
     PDAF_SEARCH_EGINIE;
-    REST_API_LEAD_TIME_LAUNCH_DATE;
-    REST_API_LEAD_TIME_AVERAGE_WEEKS;
     REST_API_FILE_UPLOAD_FOR_ACTION;
     REST_API_FILE_DOWNLOAD_FOR_ACTION;
     REST_API_POST_RULE_RESULT_URL;
@@ -77,6 +75,10 @@ export class EnvironmentService {
     REST_API_OWB_CONTROLLER;
     REST_API_USER_DETAILS;
     REST_API_UPDATE_OFFER_TARGET_DATE;
+
+    REST_API_GET_OFFER_DATES;
+    REST_API_LEAD_TIME_LAUNCH_DATE;
+    REST_API_LEAD_TIME_AVERAGE_WEEKS;
 
     authtokenbaseapi = '';
     client_id;
@@ -221,7 +223,7 @@ export class EnvironmentService {
         this.REST_API_OFFER_SOLUTIONING_POST_URL = this.baseapi + '/setOfferSolution';
         this.REST_API_IDPID_GET_URL = this.baseapi + '/offer/productOffers';
         this.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL = this.baseapi + '/emailNotification/sendEmailNotification/';
-        this.REST_API_LEAD_TIME_AVERAGE_WEEKS = this.baseapi + '/leadTimeCal/getLTC/';
+        this.REST_API_LEAD_TIME_AVERAGE_WEEKS = this.baseapi + '/leadTimeCal/ttm/getLTC/';
         this.REST_API_LEAD_TIME_LAUNCH_DATE = this.baseapi + '/leadTimeCal/getLTC/';
         this.REST_API_NOTIFICATION_PRIMARYPOC_POST_URL = this.baseapi + '/action/create/user/solutioningTask/notification';
         this.REST_API_ACTION_PRIMARYPOC_POST_URL = this.baseapi + '/action/create/user/solutioningTask/action';
@@ -233,5 +235,6 @@ export class EnvironmentService {
         this.REST_API_OWB_CONTROLLER = this.baseapi + '/owb/create';
         this.REST_API_USER_DETAILS = this.basepdafapi + '/user/1.0/getLdapUserInfo';
         this.REST_API_UPDATE_OFFER_TARGET_DATE = this.baseapi + '/offer/updateDates';
+        this.REST_API_GET_OFFER_DATES = this.baseapi + '/offer/getDates/';
     }
 }

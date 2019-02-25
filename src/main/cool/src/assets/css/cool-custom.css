@@ -1057,7 +1057,12 @@ span[class*="display-"] {
   font-size: 32px;
   line-height: 1;
 }
-
+.cool.cui .ui-dialog .overlay-phases table.table.table--nostripes td {
+  border-bottom: dashed 1px #d4d4d4;
+}
+.cool.cui .ui-dialog .overlay-phases table.table.table--nostripes tr th {
+  border-bottom: solid 1px #ccc;
+}
 /* Custom Icons */
 .icon-expand:before {
   background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxOCAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTguMzc2OTUgOS42NDk2Nkw3LjAzNjY0IDguMzk0NjhMMi43OTI0MyAxMi4xNTk3TC0xLjQ5MTY5ZS0wOCA5LjY0OTQyTC04Ljk1MTYxZS0wOCAxNS45MjQzTDYuNzAxNTYgMTUuOTI0M0w0LjEzMjc0IDEzLjQxNDdMOC4zNzY5NSA5LjY0OTY2WiIgZmlsbD0iIzU4NTg1QiIvPgo8cGF0aCBkPSJNOC45MzU0MyA2LjUxMTk2TDEwLjI3NTcgNy43NjY5NEwxNC41MiA0LjAwMTkyTDE3LjMxMjQgNi41MTIyTDE3LjMxMjQgMC4yMzczMTRMMTAuNjEwOCAwLjIzNzMxNUwxMy4xNzk2IDIuNzQ2OTRMOC45MzU0MyA2LjUxMTk2WiIgZmlsbD0iIzU4NTg1QiIvPgo8L3N2Zz4K) no-repeat
@@ -1075,6 +1080,17 @@ span[class*="display-"] {
   width: 1.8rem;
   display: inline-block;
 }
+
+.cool.cui .ui-tooltip .ui-tooltip-text {
+  background-color: white;
+ 	 	color: black;
+}
+
+.ui-tooltip .ui-tooltip-text:before,.ui-tooltip .ui-tooltip-text:after 
+{
+  border-color:white;
+}
+
 span.icon-expand.icon-small:hover, span.icon-collapse.icon-small:hover {
   opacity: .5;
 }

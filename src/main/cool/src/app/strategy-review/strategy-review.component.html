@@ -37,7 +37,8 @@
               <b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
           </div>
           <!-- <Exit Criteria Validation> -->
-          <app-exit-criteria-validation [stakeData]="stakeData" [offerBuilderdata]='offerBuilderdata'>
+          <app-exit-criteria-validation *ngIf="loadExitCriteria" [stakeData]="stakeData"
+            [offerBuilderdata]='offerBuilderdata'>
           </app-exit-criteria-validation>
           <div class="accordion base-margin-top" id="accordion">
 
@@ -130,8 +131,7 @@
                             (click)="onEscalate(strategyReviewData.function)">Escalate</button>
                         </div>
                       </ng-template>
-                      <div
-                        *ngIf="getshowApprovalDecisionAction(strategyReviewData)">
+                      <div *ngIf="getshowApprovalDecisionAction(strategyReviewData)">
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
 
                           <div class="panel--header">

@@ -1,11 +1,14 @@
 <div class="panel panel--indigo panel--compressed task--bar">
     <div class="row">
         <div class="col-md-4">
-            <h4><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span class="icon-back"></span></button> Offer Solutioning</h4>
+            <h4><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span
+                        class="icon-back"></span></button> Offer Solutioning</h4>
         </div>
         <div class="col-md-8 text-right">
-            <button class="btn btn--white"> Save </button>
-            <button class="btn btn--white" (click)="proceed()">Proceed to Offer Components <span class="icon-chevron-right"></span></button>
+                <button class="btn btn--white" (click)="proceed(false)"> Save </button>
+            <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
+            <button class="btn btn--white" (click)="proceed(true)">Proceed to Offer Components <span
+                    class="icon-chevron-right"></span></button>
         </div>
     </div>
 </div>

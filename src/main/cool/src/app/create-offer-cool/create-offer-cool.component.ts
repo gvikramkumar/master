@@ -56,7 +56,7 @@ export class CreateOfferCoolComponent implements OnInit {
   iDPId: string;
   isIdpIdValid = false;
   enableOfferbuild = true;
-  disablePrimaryBEList : boolean;
+  disablePrimaryBEList: boolean;
   userSelectedAllUnits;
   idpidValid = false;
   idpidInvalid = false;
@@ -64,8 +64,7 @@ export class CreateOfferCoolComponent implements OnInit {
   secondaryBUbackup: any;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
-  message = {};
-  stakeData = {};
+
   derivedMM;
   firstData: Object;
   public data = [];
@@ -73,10 +72,16 @@ export class CreateOfferCoolComponent implements OnInit {
   currentUser;
   approvalButtonsVisibleAvailable: Boolean = true;
   managerName;
+
+  message = {};
+  stakeData = {};
+  stakeholders = {};
   stakeHolderInfo: any;
+
   offerDetailRes;
   offerDescValueTrim: string = '';
   offerNameValueTrim: string = '';
+
 
   constructor(private createOfferService: CreateOfferService,
     private offerDetailViewService: OfferDetailViewService,
@@ -109,7 +114,7 @@ export class CreateOfferCoolComponent implements OnInit {
         //   this.enableOfferbuild = false;
         //  }
 
-        if(this.primaryBusinessUnitsValue) {
+        if (this.primaryBusinessUnitsValue) {
           this.enableOfferbuild = false;
         }
       }
@@ -118,53 +123,75 @@ export class CreateOfferCoolComponent implements OnInit {
 
   loadPrimaryBe() {
     // Get Primary BE (hard code 'all')
-      this.createOfferService.getDistinctBE().subscribe(data => {
-        const primaryBeArry = [{ label: 'All', value: 'All' }];
-        const dataArray = data as Array<any>;
-        dataArray.forEach(element => {
-          if (element['BE'] !== null) {
-            primaryBeArry.push({ label: element['BE'], value: element['BE'] });
-          }
-        });
-
-        this.primaryBusinessEntities = primaryBeArry;
-        this.secondaryBusinessEntities = primaryBeArry;
-        // This if condition executes only when user moves back from mm page to offer creation page.
-        if (this.offerId !== undefined) {
-          this.primaryBusinessEntitiesValue = this.offerDetailRes.primaryBEList[0];
-          this.getPrimaryBusinessUnitPromise(this.offerDetailRes.primaryBEList[0]);
-          this.getSecondaryBusinessUnitsBasedOnSencondaryBE();
-          this.secondaryBusinessUnitsValue = this.offerDetailRes.secondaryBUList.slice();
+    this.createOfferService.getDistinctBE().subscribe(data => {
+      const primaryBeArry = [{ label: 'All', value: 'All' }];
+      const dataArray = data as Array<any>;
+      dataArray.forEach(element => {
+        if (element['BE'] !== null) {
+          primaryBeArry.push({ label: element['BE'], value: element['BE'] });
         }
       });
-    }
+
+      this.primaryBusinessEntities = primaryBeArry;
+      this.secondaryBusinessEntities = primaryBeArry;
+      // This if condition executes only when user moves back from mm page to offer creation page.
+      if (this.offerId !== undefined) {
+        this.primaryBusinessEntitiesValue = this.offerDetailRes.primaryBEList[0];
+        this.getPrimaryBusinessUnitPromise(this.offerDetailRes.primaryBEList[0]);
+        this.getSecondaryBusinessUnitsBasedOnSencondaryBE();
+        this.secondaryBusinessUnitsValue = this.offerDetailRes.secondaryBUList.slice();
+      }
+    });
+  }
 
   loadSecondaryBu() {
-     // Get distinct BU for primary BU list
-      this.createOfferService.getDistincBU().subscribe(data => {
-        const secondaryBuArry = [];
-        const dataArray = data as Array<any>;
-        dataArray.forEach(element => {
-          if (element['BUSINESS_UNIT'] !== null) {
-            secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
-          }
-        });
-        this.secondaryBusinessUnits = secondaryBuArry;
+    // Get distinct BU for primary BU list
+    this.createOfferService.getDistincBU().subscribe(data => {
+      const secondaryBuArry = [];
+      const dataArray = data as Array<any>;
+      dataArray.forEach(element => {
+        if (element['BUSINESS_UNIT'] !== null) {
+          secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
+        }
       });
+      this.secondaryBusinessUnits = secondaryBuArry;
+    });
   }
 
   autoSelectBE() {
     // Fetch Primary BE's assigned through admin page.
     // Show this BE's as selected in Primary BE multiselect list in the offer creation page.
-      this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-        const primaryBeArray: any[] = [];
-        data.userMappings.forEach(element => {
-          primaryBeArray.push(element.businessEntity);
-        });
-        this.primaryBusinessEntitiesValue = primaryBeArray[0];
-        // Load primary business units when business entities are selected.
-        this.getPrimaryBusinessUnitBasedOnPrimaryBE(this.primaryBusinessEntitiesValue);
+    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+
+      const primaryBeArray: any[] = [];
+      data.userMappings.forEach(element => {
+        primaryBeArray.push(element.businessEntity);
       });
+      this.primaryBusinessEntitiesValue = primaryBeArray[0];
+
+      // Load primary business units when business entities are selected.
+      this.getPrimaryBusinessUnitBasedOnPrimaryBE(this.primaryBusinessEntitiesValue);
+
+    });
+  }
+
+
+  populateStakeHoldersData() {
+
+    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+
+      this.stakeholders = [
+        {
+          _id: data._id,
+          offerRole: 'Owner',
+          name: data.userName,
+          stakeholderDefaults: true,
+          businessEntity: data.userMappings[0]['businessEntity'],
+          functionalRole: data.userMappings[0]['functionalRole'],
+        }];
+
+    });
+
   }
 
   skipSelectedBusinessEntities(selectedPbe) {
@@ -219,27 +246,27 @@ export class CreateOfferCoolComponent implements OnInit {
     this.secondaryBusinessEntitiesValue = null;
     this.secondaryBusinessUnitsValue = null;
     this.getPrimaryBusinessUnitPromise(event);
-    if(this.primaryBusinessUnitsValue) {
+    if (this.primaryBusinessUnitsValue) {
       this.enableOfferbuild = false;
     }
-    if(this.primaryBusinessUnitsValue === null) {
+    if (this.primaryBusinessUnitsValue === null) {
       this.enableOfferbuild = true;
     }
   }
 
   getPrimaryBusinessUnitPromise(event) {
     if (event === 'All') {
-        // Get distinct BU for primary BU list
-    this.createOfferService.getDistincBU().subscribe(data => {
-      const secondaryBuArry = [];
-      const dataArray = data as Array<any>;
-      dataArray.forEach(element => {
-        if (element['BUSINESS_UNIT'] !== null) {
-          secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
-        }
+      // Get distinct BU for primary BU list
+      this.createOfferService.getDistincBU().subscribe(data => {
+        const secondaryBuArry = [];
+        const dataArray = data as Array<any>;
+        dataArray.forEach(element => {
+          if (element['BUSINESS_UNIT'] !== null) {
+            secondaryBuArry.push({ label: element['BUSINESS_UNIT'], value: element['BUSINESS_UNIT'] });
+          }
+        });
+        this.primaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
       });
-      this.primaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
-    });
     } else {
       return new Promise((resolve, reject) => {
         this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
@@ -309,7 +336,7 @@ export class CreateOfferCoolComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.createOfferService.getPrimaryBusinessEntity(event.toString())
         .subscribe(data => {
-          const primaryBeArry = [{label: 'All', value: 'All'}];
+          const primaryBeArry = [{ label: 'All', value: 'All' }];
           // When primary business unit is selected as 'All'
           // then entities are displayed as 'all
           if (data.length === 0 && this.userSelectedAllUnits) {
@@ -334,6 +361,7 @@ export class CreateOfferCoolComponent implements OnInit {
     const canEscalateUsers = [];
     const canApproveUsers = [];
     this.data = [];
+    this.populateStakeHoldersData();
 
     if (this.offerId === undefined) {
       this.loadPrimaryBe();
@@ -348,23 +376,23 @@ export class CreateOfferCoolComponent implements OnInit {
       this.offerName = this.firstData['offerName'];
       this.stakeHolderInfo = {};
       // this.processStakeHolderData(this.data);
-      if(this.data) {
-      for (let i = 0; i <= this.data.length - 1; i++) {
-        if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
-          this.stakeHolderInfo[this.data[i]['offerRole']] = [];
+      if (this.data) {
+        for (let i = 0; i <= this.data.length - 1; i++) {
+          if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
+            this.stakeHolderInfo[this.data[i]['offerRole']] = [];
+          }
+          this.stakeHolderInfo[this.data[i]['offerRole']].push(
+            {
+              userName: this.data[i]['name'],
+              emailId: this.data[i]['_id'] + '@cisco.com',
+              _id: this.data[i]['_id'],
+              businessEntity: this.data[i]['businessEntity'],
+              functionalRole: this.data[i]['functionalRole'],
+              offerRole: this.data[i]['offerRole'],
+              stakeholderDefaults: this.data[i]['stakeholderDefaults']
+            });
         }
-        this.stakeHolderInfo[this.data[i]['offerRole']].push(
-          {
-            userName: this.data[i]['name'],
-            emailId: this.data[i]['_id'] + '@cisco.com',
-            _id: this.data[i]['_id'],
-            businessEntity: this.data[i]['businessEntity'],
-            functionalRole: this.data[i]['functionalRole'],
-            offerRole: this.data[i]['offerRole'],
-            stakeholderDefaults: this.data[i]['stakeholderDefaults']
-          });
       }
-    }
       this.stakeData = this.stakeHolderInfo;
 
       for (const auth in this.stakeData) {
@@ -397,7 +425,7 @@ export class CreateOfferCoolComponent implements OnInit {
   goBack() {
     this._location.back();
   }
-  proceedCheckBu(e){
+  proceedCheckBu(e) {
     if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
       this.enableOfferbuild = false;
     }
@@ -409,25 +437,26 @@ export class CreateOfferCoolComponent implements OnInit {
     this.offerDescValueTrim = this.offerDescValue.trim();
     this.offerNameValueTrim = this.offerNameValue.trim();
 
-    if(inputValue === "" || inputValue === null) {
+    if (inputValue === "" || inputValue === null) {
       this.enableOfferbuild = true;
     }
-  else if (this.offerDescValueTrim !== "" && this.offerNameValueTrim !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
-     this.enableOfferbuild = false;
+    else if (this.offerDescValueTrim !== "" && this.offerNameValueTrim !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
+      this.enableOfferbuild = false;
     }
   }
 
 
   proceedCheckDate(event) {
-    if(!event) {
+    if (!event) {
       this.enableOfferbuild = true;
     }
-  else if (this.offerNameValueTrim !== "" && this.offerNameValueTrim !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
-     this.enableOfferbuild = false;
+    else if (this.offerNameValueTrim !== "" && this.offerNameValueTrim !== "" && this.offerCreateForm.valid == true && this.idpvalue !== "") {
+      this.enableOfferbuild = false;
     }
   }
 
   proceedToOfferBuilder() {
+
     const loggedInUserId = '';
     const offerOwner = '';
     const offerCreatedBy = '';
@@ -438,8 +467,8 @@ export class CreateOfferCoolComponent implements OnInit {
     status.phaseMilestone = 'Ideate';
     status.subMilestone = 'Offer Creation';
 
-    const offerCreationDate = new Date().toISOString();
-    const selectedPrimaryBe= [];
+    const offerCreationDate = moment(new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })).format();
+    const selectedPrimaryBe = [];
     const constructDetails = [];
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
     const createoffer: CreateOffer = new CreateOffer(
@@ -459,35 +488,33 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreatedBy,
       offerCreationDate,
       status,
-      constructDetails);
-
-      this.strategyReviewDateValue = moment(this.strategyReviewDateValue).toISOString();
-      this.designReviewDateValue = moment(this.designReviewDateValue).toISOString();
-      this.readinessReviewDateValue = moment(this.readinessReviewDateValue).toISOString();
-      this.expectedLaunchDateValue = moment(this.expectedLaunchDateValue).toISOString();
-      const updateoffer: CreateOffer = new CreateOffer(
-        loggedInUserId,
-        offerOwner,
-        this.offerNameValue,
-        this.offerDescValue,
-        this.primaryBusinessUnitsValue,
-        selectedPrimaryBe,
-        this.secondaryBusinessUnitsValue,
-        this.secondaryBusinessEntitiesValue,
-        this.strategyReviewDateValue,
-        this.designReviewDateValue,
-        this.readinessReviewDateValue,
-        this.expectedLaunchDateValue,
-        this.iDPId,
-        offerCreatedBy,
-        offerCreationDate,
-        status,
-        constructDetails);
-        this.disablePrimaryBEList = true;
-        if(this.primaryBusinessEntitiesValue){
-          this.createOfferService.disablePrBEList = true;
-        }    
-        if (!this.offerId) {
+      constructDetails,
+      this.stakeholders);
+    this.disablePrimaryBEList = true;
+    this.strategyReviewDateValue = moment(this.strategyReviewDateValue).toISOString();
+    this.designReviewDateValue = moment(this.designReviewDateValue).toISOString();
+    this.readinessReviewDateValue = moment(this.readinessReviewDateValue).toISOString();
+    this.expectedLaunchDateValue = moment(this.expectedLaunchDateValue).toISOString();
+    const updateoffer: CreateOffer = new CreateOffer(
+      loggedInUserId,
+      offerOwner,
+      this.offerNameValue,
+      this.offerDescValue,
+      this.primaryBusinessUnitsValue,
+      selectedPrimaryBe,
+      this.secondaryBusinessUnitsValue,
+      this.secondaryBusinessEntitiesValue,
+      this.strategyReviewDateValue,
+      this.designReviewDateValue,
+      this.readinessReviewDateValue,
+      this.expectedLaunchDateValue,
+      this.iDPId,
+      offerCreatedBy,
+      offerCreationDate,
+      status,
+      constructDetails,
+      this.stakeholders);
+    if (!this.offerId) {
       this.createOffer(createoffer);
     } else {
       this.updateOffer(updateoffer);
@@ -508,56 +535,56 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getidptoken(event) {
-   // this.createOfferService.getIdpid().subscribe(data => {
+    // this.createOfferService.getIdpid().subscribe(data => {
     //  this.idpid = data;
-      this.iDPId = event.target.value;
-     // let header = `${this.idpid['token_type']} ${this.idpid['access_token']}`;
-      this.createOfferService.validateIdpid( this.iDPId).subscribe(data => {
-        this.isIdpIdValid = true;
-        if (this.offerCreateForm.valid == true && this.isIdpIdValid == true) {
-          this.enableOfferbuild = false;
-        }
-        this.idpidValid = true;
-        this.idpidInvalid = false;
-      },
-        error => {
-          this.idpidValid = false;
-          this.idpidInvalid = true;
-          this.enableOfferbuild = true;
-        })
-   // })
+    this.iDPId = event.target.value;
+    // let header = `${this.idpid['token_type']} ${this.idpid['access_token']}`;
+    this.createOfferService.validateIdpid(this.iDPId).subscribe(data => {
+      this.isIdpIdValid = true;
+      if (this.offerCreateForm.valid == true && this.isIdpIdValid == true) {
+        this.enableOfferbuild = false;
+      }
+      this.idpidValid = true;
+      this.idpidInvalid = false;
+    },
+      error => {
+        this.idpidValid = false;
+        this.idpidInvalid = true;
+        this.enableOfferbuild = true;
+      })
+    // })
 
   }
 
   updateMessage(message) {
 
-        if (message != null && message !== '') {
-          if (message === 'hold') {
-            this.proceedButtonStatusValid = false;
-            this.backbuttonStatusValid = false;
-            this.message = { contentHead: '', content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
-          } else if (message === 'cancel') {
-            this.proceedButtonStatusValid = false;
-            this.backbuttonStatusValid = false;
-            this.message = { contentHead: '', content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
-          }
-        }
+    if (message != null && message !== '') {
+      if (message === 'hold') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
+        this.message = { contentHead: '', content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
+      } else if (message === 'cancel') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
+        this.message = { contentHead: '', content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
       }
+    }
+  }
 
   updateOffer(updateoffer) {
     updateoffer.offerId = this.offerId;
     updateoffer.caseId = this.caseId;
     const payLoad = {
       caseId: this.caseId,
-      strategyReviewDate:this.strategyReviewDateValue,
-      designReviewDate:this.designReviewDateValue,
-      launchDate:this.expectedLaunchDateValue,
-      readinessReviewDate:this.readinessReviewDateValue,
+      strategyReviewDate: this.strategyReviewDateValue,
+      designReviewDate: this.designReviewDateValue,
+      launchDate: this.expectedLaunchDateValue,
+      readinessReviewDate: this.readinessReviewDateValue,
     };
     this.createOfferService.updateOffer(updateoffer).subscribe((data) => {
       this.rightPanelService.updatePhaseTargetDate(payLoad).subscribe((data) => {
-      this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
-    })
+        this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
+      })
     },
       (err) => {
         console.log(err);
