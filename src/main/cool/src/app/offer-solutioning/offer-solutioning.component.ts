@@ -203,17 +203,17 @@ export class OfferSolutioningComponent implements OnInit {
         };
   
         let actionPayload = {
-          "offerId": this.currentOfferId,
-          "caseId": this.caseId,
-          "actionTitle": "Provide Details",
-          "description": "This offer need more information",
-          "mileStone": "Offer Solutioning",
-          "selectedFunction": primaryPOC !=null ? primaryPOC.join(',') : '' ,
-          "assignee": assignees,
-          "dueDate": dueDate.toISOString(),
+          '  offerId': this.currentOfferId,
+          'caseId': this.caseId,
+          'actionTitle': 'Provide Details',
+          'description': 'This offer need more information',
+          'mileStone': 'Offer Solutioning',
+          'selectedFunction': primaryPOC !=null ? primaryPOC.join(',') : '' ,
+          'assignee': assignees,
+          'dueDate': dueDate.toISOString(),
           'offerName': this.offerName,
-          "owner": owner,
-          "type": "Solutioning Action",
+          'owner': owner,
+          'type': 'Solutioning Action',
           };
         this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
           console.log(notificationPayload);
