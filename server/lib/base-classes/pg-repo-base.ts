@@ -92,7 +92,7 @@ export class PgRepoBase {
   always updates the updatedDate. What to do? We'll allow turning off the concurrency check in this case,
   so if pg only, then on, and if mongo and pg then off.
    */
-  updateQueryOne(filter, obj, userId, concurrencyCheck = true) {
+  updateQueryOne(filter, obj, userId, concurrencyCheck = true, bypassCreatedUpdated = false) {
     if (Object.keys(filter).length === 0) {
       throw new ApiError('updateQueryOne called with no filter', null, 400);
     }
@@ -107,7 +107,9 @@ export class PgRepoBase {
         if (rows.length > 1) {
           throw new ApiError(`UpdateOne multiple records found.`, null, 400);
         }
-        this.addUpdatedBy(obj, userId)
+        if (!bypassCreatedUpdated) {
+          this.addUpdatedBy(obj, userId);
+        }
         const record = this.orm.objectToRecordUpdate(obj, userId);
         let queryIdx = 0;
         let sql = ` update ${this.table} set `;
@@ -125,6 +127,31 @@ export class PgRepoBase {
             .concat(this.getFilterValues(keys, filter)))
           .then(resp => this.orm.recordToObject(resp.rows[0]));
       });
+  }
+
+  updateQueryOneNoCheck(filter, obj, userId, bypassCreatedUpdated = false) {
+    if (Object.keys(filter).length === 0) {
+      throw new ApiError('updateQueryOne called with no filter', null, 400);
+    }
+    if (!bypassCreatedUpdated) {
+      this.addUpdatedBy(obj, userId);
+    }
+    const record = this.orm.objectToRecordUpdate(obj, userId);
+    let queryIdx = 0;
+    let sql = ` update ${this.table} set `;
+    const setArr = [];
+    this.orm.maps.forEach((map, idx) => {
+      setArr.push(`${map.field} = $${idx + 1}`);
+      queryIdx++;
+    });
+    sql += setArr.join(', ');
+    const keys = Object.keys(filter);
+    sql += this.buildParameterizedWhereClause(keys, queryIdx, true);
+    sql += ' returning *'
+    return pgc.pgdb.query(sql,
+      this.orm.maps.map(map => this.orm.getPgValue(null, map.field, record[map.field]))
+        .concat(this.getFilterValues(keys, filter)))
+      .then(resp => this.orm.recordToObject(resp.rows[0]));
   }
 
   removeManyByIds(ids) {
@@ -251,8 +278,8 @@ export class PgRepoBase {
       });
   }
 
-  // sync using uniqueFilterProps to identify records (instead of id)
-  syncRecordsQueryOne(filter, uniqueFilterProps, records, userId, concurrencyCheck = true) {
+  // sync using filter to section off and uniqueFilterProps to identify records in that section (instead of id)
+  syncRecordsQueryOne(filter, uniqueFilterProps, records, userId, concurrencyCheck = true, bypassCreatedUpdated = false, remove = true) {
     return this.getSyncArrays(filter, uniqueFilterProps, records, userId)
       .then(({updates, adds, deletes}) => {
         const promiseArr = [];
@@ -260,16 +287,58 @@ export class PgRepoBase {
           const uniqueFilter = {};
           uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
           // console.log('update', uniqueFilter);
-          promiseArr.push(this.updateQueryOne(uniqueFilter, record, userId, concurrencyCheck));
+          // we're looking at a subset possibly, say fiscalMonth=201905, we need to add that to the uniqueFilter then
+          const fullFilter = Object.assign({}, filter, uniqueFilter);
+          promiseArr.push(this.updateQueryOne(fullFilter, record, userId, concurrencyCheck, bypassCreatedUpdated));
         });
-        promiseArr.push(this.addMany(adds, userId));
-        deletes.forEach(record => {
+        promiseArr.push(this.addMany(adds, userId, bypassCreatedUpdated));
+
+        // for uploads that rollover we have "all" data in pg, and only insert/updates in partial uploads in mongo
+        // for a given fiscalmonth. In that case we don't really "sync" we insert/update (no deletes)
+        if (remove) {
+          deletes.forEach(record => {
+            const uniqueFilter = {};
+            uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+            // console.log('delete', uniqueFilter);
+            // we're looking at a subset possibly, say fiscalMonth=201905, we need to add that to the uniqueFilter then
+            const fullFilter = Object.assign({}, filter, uniqueFilter);
+            promiseArr.push(this.removeQueryOne(fullFilter));
+          });
+        }
+
+        return Promise.all(promiseArr);
+      });
+  }
+
+  // sync using filter to section off (fiscalMonth) and uniqueFilterProps to identify records in that section (instead of id)
+  // syncRecordsQueryOne calls regular queryone methods which get, then verify only one returned, then update/delete. We need a faster
+  // version for update table syncs, these just do the update/delete with no checks. removeMany removes one, no check for duplicates
+  syncRecordsQueryOneDeleteInsertNoChecks(filter, uniqueFilterProps, records, userId, bypassCreatedUpdated = false, remove = true) {
+    return this.getSyncArrays(filter, uniqueFilterProps, records, userId)
+      .then(({updates, adds, deletes}) => {
+        const deleteArr = [];
+        updates.forEach(record => {
           const uniqueFilter = {};
           uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
-          // console.log('delete', uniqueFilter);
-          promiseArr.push(this.removeQueryOne(uniqueFilter));
+          const fullFilter = Object.assign({}, filter, uniqueFilter);
+          deleteArr.push(this.removeMany(fullFilter));
         });
-        return Promise.all(promiseArr);
+
+        // for uploads that rollover we have "all" data in pg, and only insert/updates in partial uploads in mongo
+        // for a given fiscalmonth. In that case we don't really "sync" we insert/update (no deletes)
+        if (remove) {
+          deletes.forEach(record => {
+            const uniqueFilter = {};
+            uniqueFilterProps.forEach(prop => uniqueFilter[prop] = record[prop]);
+            // console.log('delete', uniqueFilter);
+            const fullFilter = Object.assign({}, filter, uniqueFilter);
+            deleteArr.push(this.removeMany(fullFilter));
+          });
+        }
+
+        return Promise.all(deleteArr)
+          .then(() => this.addMany(adds.concat(updates), userId, bypassCreatedUpdated))
+          .then(() => ({recordCount: records.length}));
       });
   }
 
@@ -281,10 +350,23 @@ export class PgRepoBase {
       .then(() => ({recordCount: records.length}));
   }
 
+  syncRecordsReplaceAllWhere(removeWhere, records, userId, bypassCreatedUpdated?) {
+    const sql = `delete from ${this.table} where ${removeWhere}`;
+    return pgc.pgdb.query(sql)
+      .then(() => this.addMany(records, userId, bypassCreatedUpdated))
+      .then(() => ({recordCount: records.length}));
+  }
+
+  // works with buildParameterizedWhereClause to get parameter values
   getFilterValues(keys, filter) {
     // need the same keys as buildParameterizedWhereClause to maintain the same order
     // so pass the same set in
-    return keys.map(key => this.orm.getPgValue(key, null, filter[key]));
+    return keys.map(key => {
+      const val = this.orm.getPgValue(key, null, filter[key]);
+      // we'll convert where clause with upper() if string and if string here... upper as well, to make
+      // case insensitive filters
+      return typeof val === 'string' ? val.toUpperCase() : val;
+    });
   }
 
   buildIdsWhereClause(ids) {
@@ -314,7 +396,11 @@ export class PgRepoBase {
         if (idx !== 0) {
           sql += ' and ';
         }
-        sql += ` ${field} ${operator} $${startIndex + idx + 1} `;
+        if (map.type) { // numbers and dates
+          sql += ` ${field} ${operator} $${startIndex + idx + 1} `;
+        } else { // assume string
+          sql += ` upper(${field}) ${operator} $${startIndex + idx + 1} `;
+        }
       });
     } else {
       if (errorIfEmpty) {
@@ -376,8 +462,16 @@ export class PgRepoBase {
         return false;
       }
       let bool = true;
-      props.forEach(prop => bool = bool &&
-        (a[prop] !== undefined && b[prop] !== undefined && a[prop] === b[prop]));
+      props.forEach(prop => {
+/*
+        console.log(prop, a[prop], b[prop], bool, typeof a[prop] === 'string' && typeof b[prop] === 'string',
+          (typeof a[prop] === 'string' && typeof b[prop] === 'string' ? a[prop].toUpperCase() === b[prop].toUpperCase() : a[prop] === b[prop]));
+*/
+        return bool = bool &&
+          (a[prop] !== undefined && b[prop] !== undefined &&
+            // assumes property exists and if string, compare case insensitive
+            (typeof a[prop] === 'string' && typeof b[prop] === 'string' ? a[prop].toUpperCase() === b[prop].toUpperCase() : a[prop] === b[prop]));
+      });
       return bool;
     };
   }
