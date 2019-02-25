@@ -142,9 +142,30 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   getSolutionGroups() {
+    debugger;
     this.offerSolutionGroups = [];
     this.offerSolutionData['groups'].forEach(group => {
-      this.offerSolutionGroups = this.offerSolutionGroups.concat(group['subGroup']);
+      group['subGroup'].forEach(g => {
+        if (g['listGrpQuestions'] != null && g['listGrpQuestions'].length > 0) {
+          g['listGrpQuestions'].forEach(question => {
+            if (this.firstData != null && this.firstData['solutioningDetails'] != null) {
+              var foundGroup = this.firstData['solutioningDetails'].find(function(element) {
+                return element['dimensionSubgroup'] === g['subGroupName'];
+              });
+              if (foundGroup != null && foundGroup['Details'] != null) {
+                var foundQuestion = foundGroup['Details'].find(function(ele) {
+                  return ele['solutioninQuestion'] === question['question'];
+                });
+                if (foundQuestion != null) {
+                  question['answer'] = foundQuestion['solutioningAnswer'];
+                }
+              }
+            }
+          });
+        }
+        this.offerSolutionGroups.push(g);
+      });
+      // this.offerSolutionGroups = this.offerSolutionGroups.concat(group['subGroup']);
     });
   }
 
@@ -343,7 +364,10 @@ export class OfferSolutioningComponent implements OnInit {
       'comment': ''
     };
       this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
-      this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+        if (msg !== 'stay_on_this_page') {
+
+          this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+        }
       });
 
     });
