@@ -912,9 +912,7 @@ export class MmAssesmentComponent implements OnInit {
 
   proceedToOfferSolution(withRouter = true) {
 
-    let postOfferSolutioningData = {};
-    postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-
+   
     let groups = [];
     let groupDataWithFirst = [];
     groupDataWithFirst.push(this.dimensionFirstGroupData);
@@ -947,8 +945,11 @@ export class MmAssesmentComponent implements OnInit {
       groups.push(curGroup);
     });
 
+    let postOfferSolutioningData = {};
     postOfferSolutioningData['groups'] = groups;
+    postOfferSolutioningData['functionalRole'] = this.configService.startupData.functionalRole;
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
+    postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
 
@@ -958,7 +959,7 @@ export class MmAssesmentComponent implements OnInit {
       postRuleResultData['offerId'] = this.currentOfferId;
       this.monetizationModelService.postRuleResult(postRuleResultData).subscribe(res => { });
 
-      let proceedToStakeholderPostData = {};
+      let proceedToStakeholderPostData = {};     
       proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
       proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'] == null ? '' : this.offerBuilderdata['offerName'];
       proceedToStakeholderPostData['offerDesc'] = this.offerBuilderdata['offerDesc'] == null ? '' : this.offerBuilderdata['offerDesc'];
