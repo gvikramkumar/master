@@ -489,7 +489,8 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreationDate,
       status,
       constructDetails,
-      this.stakeholders);
+      // this.stakeholders
+      );
 
     this.strategyReviewDateValue = moment(this.strategyReviewDateValue).toISOString();
     this.designReviewDateValue = moment(this.designReviewDateValue).toISOString();
@@ -513,7 +514,8 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreationDate,
       status,
       constructDetails,
-      this.stakeholders);
+      // this.stakeholders
+      );
     if (!this.offerId) {
       this.createOffer(createoffer);
     } else {
