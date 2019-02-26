@@ -912,6 +912,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return this.sm.indicators.groupFlag === 'Y' && this.sm.indicators.allocationRequired === 'Y';
   }
 
+  isPassThroughOrGroup() {
+    return this.isPassThrough() || this.isUnallocatedGroup();
+  }
+
   changeFile(fileInput) {
     this.deptUploadFilename = fileInput.files[0] && fileInput.files[0].name;
   }

@@ -26,7 +26,7 @@
     <div [class.disabled]="!sm.measureId">
 
       <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-6" [class.disabled]="isPassThroughOrGroup()">
         <fin-input name="name" [(ngModel)]="sm.name" [disabled]="editMode" type="text" label="Sub-Measure Name" [pattern]="UiUtil.alphanumRegex" [patternMessage]="UiUtil.alphanumMessage"
                    [notInList]="submeasureNames" notInListMessage="Sub-Measure name already exists" [required]="true" (blur)="updateReportingLevel3()"></fin-input>
         <cui-select name="source" [(ngModel)]="sm.sourceId" [items]="measureSources" [label]="!isUnallocatedGroup()?'Source*':'Source'" empty="true"
@@ -35,26 +35,39 @@
       </div>
 
       <div class="col-lg-6">
-        <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories" [items]="categoryTypes"
-                    [required]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()"
-                    [label]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'"
-                    empty="true" optionsKey="name" optionsValue="value" [class.cat-type]="isManualMix()"></cui-select>
-        <div class="manual-mix" *ngIf="isManualMix()">
-          <fin-input name="manualMixHw" [label]="!isUnallocatedGroup() && !isPassThrough()?'HW*':'HW'" [(ngModel)]="manualMixHw"
-                     [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true" class="hwsw-inputs"></fin-input>
-          <fin-input name="manualMixSw" [label]="!isUnallocatedGroup() && !isPassThrough()?'SW*':'SW'" [(ngModel)]="manualMixSw"
-                     [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true" class="hwsw-inputs"></fin-input>
+        <div [class.disabled]="isPassThroughOrGroup()">
+          <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories"
+                      [items]="categoryTypes"
+                      [required]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()"
+                      [label]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'"
+                      empty="true" optionsKey="name" optionsValue="value" [class.cat-type]="isManualMix()"></cui-select>
+          <div class="manual-mix" *ngIf="isManualMix()">
+            <fin-input name="manualMixHw" [label]="!isUnallocatedGroup() && !isPassThrough()?'HW*':'HW'"
+                       [(ngModel)]="manualMixHw"
+                       [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true"
+                       class="hwsw-inputs"></fin-input>
+            <fin-input name="manualMixSw" [label]="!isUnallocatedGroup() && !isPassThrough()?'SW*':'SW'"
+                       [(ngModel)]="manualMixSw"
+                       [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true"
+                       class="hwsw-inputs"></fin-input>
+          </div>
+
+          <cui-select *ngIf="sm.measureId === 3" [disabled]="sm.sourceId !== 2" name="flashCategory"
+                      [(ngModel)]="flashCategory" [items]="flashCategories"
+                      [label]="!isUnallocatedGroup() && !isPassThrough()?'MRAP - Flash Category Id*':'MRAP - Flash Category Id'"
+                      empty="true"
+                      [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="mrap_category_id"
+                      optionsValue="adj_type_id"></cui-select>
+          <cui-select *ngIf="sm.measureId === 1" [disabled]="sm.sourceId !== 1" name="adjustmentType"
+                      [(ngModel)]="adjustmentType" [items]="adjustmentTypes"
+                      [label]="!isUnallocatedGroup() && !isPassThrough()?'Adjustment Type*':'Adjustment Type'"
+                      empty="true"
+                      [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="rrr_category_id"
+                      optionsValue="adj_type_id"></cui-select>
         </div>
 
-        <cui-select *ngIf="sm.measureId === 3" [disabled]="sm.sourceId !== 2" name="flashCategory" [(ngModel)]="flashCategory" [items]="flashCategories"
-                    [label]="!isUnallocatedGroup() && !isPassThrough()?'MRAP - Flash Category Id*':'MRAP - Flash Category Id'" empty="true"
-                    [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="mrap_category_id" optionsValue="adj_type_id"></cui-select>
-        <cui-select *ngIf="sm.measureId === 1"  [disabled]="sm.sourceId !== 1" name="adjustmentType" [(ngModel)]="adjustmentType" [items]="adjustmentTypes"
-                    [label]="!isUnallocatedGroup() && !isPassThrough()?'Adjustment Type*':'Adjustment Type'" empty="true"
-                    [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="rrr_category_id" optionsValue="adj_type_id"></cui-select>
-
         <!--<div class="margin-top:10px; height: 0px;">&nbsp;</div>-->
-        <div class="border-and-padding form-group-max-width">
+        <div class="border-and-padding form-group-max-width" [class.disabled]="isPassThrough()">
           <div style="margin-bottom:-10px;">
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
@@ -71,7 +84,7 @@
           </div>
         </div>
 
-        <div *ngIf="isDeptUploadMeasure()" class="border-and-padding half-margin-top form-group-max-width">
+        <div *ngIf="isDeptUploadMeasure()" class="border-and-padding half-margin-top form-group-max-width" [class.disabled]="isPassThroughOrGroup()">
           <!--we want to position this button relative to fieldset, but fails on firefox, so we'll add this for a relative position-->
           <div style="position:relative">
             <fieldset style="margin-bottom:0;" [class.disabled]="!isDeptUpload()">
@@ -103,7 +116,7 @@
 
       <div class="row">
 
-        <div class="col-lg-6  ifl-left-side">
+        <div class="col-lg-6  ifl-left-side" [class.disabled]="isPassThroughOrGroup()">
           <div class="form-group-max-width">
             <div class="border-and-padding">
               <fieldset class="input-filter-level">
@@ -170,7 +183,7 @@
           </div>
         </div>
 
-        <div class="col-lg-6 mm-right-side">
+        <div class="col-lg-6 mm-right-side" [class.disabled]="isPassThroughOrGroup()">
           <div class="form-group-max-width">
             <div class="border-and-padding">
               <fieldset class="input-filter-level mm-fieldset">
@@ -238,7 +251,7 @@
 
       </div>
 
-      <div class="row" style="margin-top:30px;">
+      <div class="row" style="margin-top:30px;" [class.disabled]="isPassThroughOrGroup()">
         <div class="col-lg-6">
           <fin-input name="startMonth" *ngIf="viewMode" [(ngModel)]="startFiscalMonth" label="Effective Month*"></fin-input>
           <cui-select *ngIf="!viewMode" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos"
@@ -258,7 +271,7 @@
         </div>
       </div>
 
-      <div class="row base-padding-top">
+      <div class="row base-padding-top" [class.disabled]="isPassThroughOrGroup()">
         <div class="col-lg-6">
           <fieldset class="rule-assoc">
             <legend>
@@ -282,28 +295,32 @@
       <div class="row">
         <div class="col-12">
           <div class="inline-check-row">
-            <div class="form-group-check form-group-inline-20">
-              <fin-checkbox label="Retained Earnings" [(model)]="sm.indicators.retainedEarnings" trueVal="Y"
-                            falseVal="N"></fin-checkbox>
+            <div [class.disabled]="isPassThroughOrGroup()">
+              <div class="form-group-check form-group-inline-20">
+                <fin-checkbox label="Retained Earnings" [(model)]="sm.indicators.retainedEarnings" trueVal="Y"
+                              falseVal="N"></fin-checkbox>
+              </div>
+              <div class="form-group-check form-group-inline-20">
+                <fin-checkbox label="Transition" [(model)]="sm.indicators.transition" trueVal="Y"
+                              falseVal="N"></fin-checkbox>
+              </div>
+              <div class="form-group-check form-group-inline-20">
+                <fin-checkbox label="Corporate Revenue" [(model)]="sm.indicators.corpRevenue" trueVal="Y"
+                              falseVal="N"></fin-checkbox>
+              </div>
+              <div class="form-group-check form-group-inline-20">
+                <fin-checkbox label="2 Tier" [(model)]="sm.indicators.twoTier" trueVal="Y" falseVal="N"></fin-checkbox>
+              </div>
+              <div class="form-group-check form-group-inline-20">
+                <fin-checkbox label="Dual Gaap" [(model)]="sm.indicators.dualGaap" trueVal="Y"
+                              falseVal="N"></fin-checkbox>
+              </div>
+              <div class="form-group-check form-group-inline-20">
+                <fin-checkbox label="Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
+                              (change)="filterGroupingSubmeasuresIfService()" [inline]="true"></fin-checkbox>
+              </div>
             </div>
-            <div class="form-group-check form-group-inline-20">
-              <fin-checkbox label="Transition" [(model)]="sm.indicators.transition" trueVal="Y" falseVal="N"></fin-checkbox>
-            </div>
-            <div class="form-group-check form-group-inline-20">
-              <fin-checkbox label="Corporate Revenue" [(model)]="sm.indicators.corpRevenue" trueVal="Y"
-                            falseVal="N"></fin-checkbox>
-            </div>
-            <div class="form-group-check form-group-inline-20">
-              <fin-checkbox label="2 Tier" [(model)]="sm.indicators.twoTier" trueVal="Y" falseVal="N"></fin-checkbox>
-            </div>
-            <div class="form-group-check form-group-inline-20">
-              <fin-checkbox label="Dual Gaap" [(model)]="sm.indicators.dualGaap" trueVal="Y" falseVal="N"></fin-checkbox>
-            </div>
-            <div class="form-group-check form-group-inline-20">
-              <fin-checkbox label="Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
-                            (change)="filterGroupingSubmeasuresIfService()" [inline]="true"></fin-checkbox>
-            </div>
-            <div class="form-group-check form-group-inline-20">
+            <div class="form-group-check form-group-inline-20" [class.disabled]="isUnallocatedGroup()">
               <fin-checkbox label="Pass Through" [(model)]="sm.indicators.passThrough" trueVal="Y" falseVal="N"
                             [inline]="true"></fin-checkbox>
             </div>
