@@ -491,6 +491,7 @@ export class CreateOfferCoolComponent implements OnInit {
       constructDetails,
       this.stakeholders);
     this.disablePrimaryBEList = true;
+    this.createOfferService.disablePrBEList = true;
     this.strategyReviewDateValue = moment(this.strategyReviewDateValue).toISOString();
     this.designReviewDateValue = moment(this.designReviewDateValue).toISOString();
     this.readinessReviewDateValue = moment(this.readinessReviewDateValue).toISOString();
