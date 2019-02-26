@@ -27,6 +27,7 @@ const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 export class RightPanelComponent implements OnInit, OnDestroy {
   notiFication: Boolean = false;
   Math = Math;
+  isNaN = isNaN;
 
   @Input() portfolioFlag: Boolean = false;
   @Output() updateStakeData = new EventEmitter<string>();
@@ -153,7 +154,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   overallWeeksCompare;
 
   loadingLeadTime = true;
-  error = '';
+  // error = '';
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -353,18 +354,19 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         // Compute Expected Launch Date
         this.displayLeadTimeButton = true;
         const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.offerId).toPromise();
-        this.expectedLaunchDate = moment(expectedLaunchDateObject['expectedLaunchDate']).format('MM/DD/YYYY');
+        this.expectedLaunchDate = moment(expectedLaunchDateObject['expectedLaunchDate']).format('DD-MMM-YYYY');
+        const noOfWeeksDifference = expectedLaunchDateObject['noOfWeeksDifference'];
 
         // Compute Average Week Count
         const averageWeekCountObject = await this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).toPromise();
-        this.averageOfRemainingNinetyPercentileWeeks = averageWeekCountObject['averageOfRemainingNinetyPercentile'] ? Number(averageWeekCountObject['averageOfRemainingNinetyPercentile']).toFixed(2) : 0;
-        this.averageOfTopTenPercentileWeeks = averageWeekCountObject['averageOfTopTenPercentile'] ? Number(averageWeekCountObject['averageOfTopTenPercentile']).toFixed(2) : 0;
-        this.averageOverallWeeks = averageWeekCountObject['averageOverall'] ? Number(averageWeekCountObject['averageOverall']).toFixed(2) : 0;
-        this.countOfHundredPercentile = averageWeekCountObject['countOfHundredPercentile'] ? Number(averageWeekCountObject['countOfHundredPercentile']).toFixed(2) : 0;
+        this.averageOfRemainingNinetyPercentileWeeks = averageWeekCountObject['averageOfRemainingNinetyPercentile'] ? Number(averageWeekCountObject['averageOfRemainingNinetyPercentile']).toFixed(1) : 0;
+        this.averageOfTopTenPercentileWeeks = averageWeekCountObject['averageOfTopTenPercentile'] ? Number(averageWeekCountObject['averageOfTopTenPercentile']).toFixed(1) : 0;
+        this.averageOverallWeeks = averageWeekCountObject['averageOverall'] ? Number(averageWeekCountObject['averageOverall']).toFixed(1) : 0;
+        this.countOfHundredPercentile = averageWeekCountObject['countOfHundredPercentile'] ? Number(averageWeekCountObject['countOfHundredPercentile']).toFixed(1) : 0;
 
-        this.remainingNinetyPercentileCompare = (Number(this.averageOfRemainingNinetyPercentileWeeks) - Number(this.noOfWeeksDifference)).toFixed(2);
-        this.topTenPercentileWeeksCompare = (Number(this.averageOfTopTenPercentileWeeks) - Number(this.noOfWeeksDifference)).toFixed(2);
-        this.overallWeeksCompare = (Number(this.averageOverallWeeks) - Number(this.noOfWeeksDifference)).toFixed(2);
+        this.remainingNinetyPercentileCompare = (Number(this.averageOfRemainingNinetyPercentileWeeks) - Number(noOfWeeksDifference)).toFixed(1);
+        this.topTenPercentileWeeksCompare = (Number(this.averageOfTopTenPercentileWeeks) - Number(noOfWeeksDifference)).toFixed(1);
+        this.overallWeeksCompare = (Number(this.averageOverallWeeks) - Number(noOfWeeksDifference)).toFixed(1);
 
 
         this.averageOfRemainingNinetyPercentile = Math.round(100 * this.averageOfRemainingNinetyPercentileWeeks / Number(averageWeekCountObject['countOfHundredPercentile']));
@@ -382,7 +384,17 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         // Compute Progree Bar Width
         this.progressBarWidth = Math.floor((Number(this.averageWeekCount) / maxWeekDuration * 100));
       } catch (err) {
-        this.error = 'No content found!';
+        this.averageOfRemainingNinetyPercentileWeeks = 'N/A';
+        this.averageOfTopTenPercentileWeeks = 'N/A';
+        this.averageOverallWeeks = 'N/A';
+        this.countOfHundredPercentile = 'N/A';
+        this.remainingNinetyPercentileCompare = 'N/A';
+        this.topTenPercentileWeeksCompare = 'N/A';
+        this.overallWeeksCompare = 'N/A';
+        this.averageOfRemainingNinetyPercentile = 0;
+        this.averageOfTopTenPercentile = 0;
+        this.averageOverall = 0;
+        // this.error = 'No content found!';
       }
       this.loadingLeadTime = false;
 

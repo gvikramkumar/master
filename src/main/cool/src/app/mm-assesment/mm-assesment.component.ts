@@ -16,6 +16,7 @@ import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -94,8 +95,7 @@ export class MmAssesmentComponent implements OnInit {
     private configService: ConfigurationService,
     private offersolutioningService: OffersolutioningService,
     private rightPanelService: RightPanelService,
-    private stakeholderfullService: StakeholderfullService,
-    private confirmationService: ConfirmationService
+    private stakeholderfullService: StakeholderfullService
   ) {
 
     this.display = false;
@@ -629,18 +629,22 @@ export class MmAssesmentComponent implements OnInit {
     }
 
     this.emitEventToChild();
+    this.proceedToStakeholder(false);
   }
 
   getStakeData(mmModel) {
 
     // Initialize Right Panel Component Data
     this.derivedMM = mmModel;
-    this.displayLeadTime = true;
     this.offerId = this.currentOfferId;
     this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
-    this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-      (leadTime: LeadTime) => {
-        this.noOfWeeksDifference = leadTime.noOfWeeksDifference;
+    this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
+      (leadTime) => {
+        this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+        this.displayLeadTime = true;
+      },
+      () => {
+        this.noOfWeeksDifference = 'N/A';
       }
     );
 
@@ -661,14 +665,14 @@ export class MmAssesmentComponent implements OnInit {
       // Populate Default Stake Holders - Owner
       this.stakeData['Owner'].push(
         {
-          userName: this.ownerName,
-          emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
-          _id: this.offerBuilderdata['offerOwner'],
+          userName: this.configService.startupData.userName,
+          emailId: this.configService.startupData.userId + '@cisco.com',
+          _id: this.configService.startupData.userId,
           userMappings: [{
             appRoleList: [],
-            businessEntity: 'Security',
-            functionalRole: 'BUPM',
-            offerRole: 'Owner'
+            businessEntity: this.configService.startupData.businessEntity,
+            functionalRole: this.configService.startupData.functionalRole,
+            offerRole: this.configService.startupData.functionalRole,
           }
           ],
           stakeholderDefaults: true
@@ -911,9 +915,7 @@ export class MmAssesmentComponent implements OnInit {
 
   proceedToOfferSolution(withRouter = true) {
 
-    let postOfferSolutioningData = {};
-    postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-
+   
     let groups = [];
     let groupDataWithFirst = [];
     groupDataWithFirst.push(this.dimensionFirstGroupData);
@@ -946,8 +948,11 @@ export class MmAssesmentComponent implements OnInit {
       groups.push(curGroup);
     });
 
+    let postOfferSolutioningData = {};
     postOfferSolutioningData['groups'] = groups;
+    postOfferSolutioningData['functionalRole'] = this.configService.startupData.functionalRole;
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
+    postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
 
@@ -957,7 +962,7 @@ export class MmAssesmentComponent implements OnInit {
       postRuleResultData['offerId'] = this.currentOfferId;
       this.monetizationModelService.postRuleResult(postRuleResultData).subscribe(res => { });
 
-      let proceedToStakeholderPostData = {};
+      let proceedToStakeholderPostData = {};     
       proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
       proceedToStakeholderPostData['offerName'] = this.offerBuilderdata['offerName'] == null ? '' : this.offerBuilderdata['offerName'];
       proceedToStakeholderPostData['offerDesc'] = this.offerBuilderdata['offerDesc'] == null ? '' : this.offerBuilderdata['offerDesc'];

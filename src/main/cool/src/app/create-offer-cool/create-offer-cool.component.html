@@ -57,6 +57,7 @@
                       <label for="selectedBeValue">Primary Business Entity</label>
                       <p-dropdown id="selectedBeValue" class="form-control" name="primaryBEList"
                         [options]="primaryBusinessEntities"
+                        [disabled]="disablePrimaryBEList"
                         (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)"
                         [(ngModel)]="primaryBusinessEntitiesValue" [style]="{'width':'100%'}" filter="true" required>
                       </p-dropdown>
