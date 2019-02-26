@@ -83,6 +83,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   private map1 = new Map();
   popHeadName;
   setFlag = true;
+  downloadEnable = false;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
@@ -284,6 +285,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.offerConstructItems = [...this.offerConstructItems];
       this.cd.detectChanges();
     }
+
     this.showButtons = false;
     this.offerConstructItems = [...this.offerConstructItems];
   }
@@ -914,8 +916,11 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   saveOfferConstructChanges() {
+
+    this.downloadEnable = true;
     this.offerConstructItems = [... this.offerConstructItems];
     let cds: ConstructDetails = new ConstructDetails(this.currentOfferId, []);
+
     // Construct all group Nodes.
     this.offerConstructItems.forEach((node) => {
       let cd: ConstructDetail;

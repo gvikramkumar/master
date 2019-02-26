@@ -3,7 +3,7 @@
     <div class="col">
       <div class="panel panel--ltgray">
         <span class="mt-5">Offer Components</span>
-        <span (click)='downloadZip(currentOfferId)' class="icon-download pull-right"></span>
+        <button class="pull-right borderless" [disabled]="!downloadEnable" title="Download" (click)='downloadZip(currentOfferId)'><span class="icon-download"></span></button>
       </div>
     </div>
   </div>
