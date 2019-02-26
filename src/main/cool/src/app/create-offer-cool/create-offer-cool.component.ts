@@ -488,8 +488,7 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreatedBy,
       offerCreationDate,
       status,
-      constructDetails,
-      this.stakeholders);
+      constructDetails);
     this.disablePrimaryBEList = true;
     this.createOfferService.disablePrBEList = true;
     this.strategyReviewDateValue = moment(this.strategyReviewDateValue).toISOString();
@@ -513,8 +512,8 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreatedBy,
       offerCreationDate,
       status,
-      constructDetails,
-      this.stakeholders);
+      constructDetails
+      );
     if (!this.offerId) {
       this.createOffer(createoffer);
     } else {
