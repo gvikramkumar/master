@@ -346,6 +346,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return this.sm.measureId === 1 && this.sm.sourceId === 1;
   }
 
+  hasSourceRapidRevenue() {
+    // source rapid revenue RRR
+    return this.sm.sourceId === 1;
+  }
+
   isManualMapping() {
     return this.sm.indicators.manualMapping === 'Y';
   }
@@ -375,6 +380,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     if (!this.hasAdjustmentType()) {
       this.adjustmentType = undefined;
+    }
+    if (!this.hasSourceRapidRevenue()) {
+      this.ifl_switch_glseg = false;
+      this.iflChange('glseg');
     }
   }
 
@@ -505,9 +514,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         }
         break;
       case 'glseg':
-        if (this.ifl_switch_scms) {
+        if (this.ifl_switch_glseg) {
         } else {
-          this.sm.inputFilterLevel.glSegLevel = undefined;
+          this.sm.inputFilterLevel.glSegLevel = [];
         }
         break;
     }
@@ -649,16 +658,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
-  clearAllocationRequired() {
-    if (this.sm.indicators.groupFlag === 'N') {
-      this.sm.indicators.allocationRequired = 'N';
-    }
-  }
-
-  cleanUp() {
-    this.cleanIflSwitchChoices();
-    this.cleanMMSwitchChoices();
-
+  cleanupRules() {
     // the list size is governed by arrRules, BUT, the values are in sm.rules
     this.arrRules.forEach((x, idx) => this.arrRules[idx] = this.sm.rules[idx]);
     this.arrRules = this.arrRules.filter(r => !!r);
@@ -666,6 +666,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (this.arrRules.length === 0) {
       this.arrRules[0] = '';
     }
+  }
+
+  cleanUp() {
+    this.cleanIflSwitchChoices();
+    this.cleanMMSwitchChoices();
+    this.cleanupRules();
 
     if (this.hasFlashCategory()) {
       this.sm.sourceSystemAdjTypeId = this.flashCategory;
@@ -826,47 +832,39 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   validate() {
     this.errs = [];
 
-    // rules specify if allocation will happen or not, so we'll focus on them only, i.e. not be bothered
-    // if they add an effective date for passthrough, just focus on: should there be rules or not be rules
-    if (this.isUnallocatedGroup()) {
-      if (this.isUnallocatedGroup() && this.sm.rules.length) {
-        this.errs.push('No rules allowed on Grouping Sub-Measures without Allocation Required checked');
-      }
-    } else if (this.isPassThrough()) {
-      if (this.isPassThrough() && this.sm.rules.length) {
-        this.errs.push('No rules allowed on Pass Through Sub-Measures');
-      }
-    } else {
-      if (!this.sm.rules.length) {
-        this.errs.push('No rules specified');
-      }
+    if (this.isUnallocatedGroup() || this.isPassThrough()) {
+      return null;
+    }
 
-      if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
-        this.errs.push('Duplicate rules entered');
-      }
-      // this shouldn't have to be here, but currently we have a bug where form.valid === true even though this control
-      // is highlighted red with required: true error
-      if (!UiUtil.isValidFiscalMonth(this.sm.startFiscalMonth)) {
-        this.errs.push(`No "Effective Month" value`);
-      }
+    if (!this.sm.rules.length) {
+      this.errs.push('No rules specified');
+    }
 
-      if (this.isManualMix()) {
-        const hw = Number(this.sm.manualMixHw);
-        const sw = Number(this.sm.manualMixSw);
-        if (isNaN(hw)) {
-          this.errs.push(`Manual Mix HW value, not a number: ${this.sm.manualMixHw}`);
-        }
-        if (isNaN(sw)) {
-          this.errs.push(`Manual Mix SW value, not a number: ${this.sm.manualMixSw}`);
-        }
-        if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
-          this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
-        }
-      }
+    if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
+      this.errs.push('Duplicate rules entered');
+    }
+    // this shouldn't have to be here, but currently we have a bug where form.valid === true even though this control
+    // is highlighted red with required: true error
+    if (!UiUtil.isValidFiscalMonth(this.sm.startFiscalMonth)) {
+      this.errs.push(`No "Effective Month" value`);
+    }
 
-      if (!this.validateManualMapping()) {
-        this.errs.push('Manual Mapping selected, but no value entered');
+    if (this.isManualMix()) {
+      const hw = Number(this.sm.manualMixHw);
+      const sw = Number(this.sm.manualMixSw);
+      if (isNaN(hw)) {
+        this.errs.push(`Manual Mix HW value, not a number: ${this.sm.manualMixHw}`);
       }
+      if (isNaN(sw)) {
+        this.errs.push(`Manual Mix SW value, not a number: ${this.sm.manualMixSw}`);
+      }
+      if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
+        this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
+      }
+    }
+
+    if (!this.validateManualMapping()) {
+      this.errs.push('Manual Mapping selected, but no value entered');
     }
 
     this.errs = this.errs.map(err => `* ${err}`)
@@ -910,6 +908,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   isAllocatedGroup() {
     return this.sm.indicators.groupFlag === 'Y' && this.sm.indicators.allocationRequired === 'Y';
+  }
+
+  isPassThroughOrUnallocatedGroup() {
+    return this.isPassThrough() || this.isUnallocatedGroup();
   }
 
   changeFile(fileInput) {
@@ -959,6 +961,41 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       return;
     }
     return `${environment.apiUrl}/api/file/${this.deptUploadTemplate.id}`;
+  }
+
+  verifyNoRulesPassThrough() {
+    this.cleanupRules();
+    if (this.sm.rules.length) {
+      setTimeout(() => this.sm.indicators.passThrough = 'N');
+      this.uiUtil.genericDialog('Not allowed to have rules for pass through Sub-Measure.');
+    }
+  }
+
+  clearAllocationRequired() {
+    if (this.sm.indicators.groupFlag === 'N') {
+      this.sm.indicators.allocationRequired = 'N';
+    }
+  }
+
+  verifyNoRulesGrouping() {
+    this.cleanupRules();
+    if (this.isUnallocatedGroup() && this.sm.rules.length) {
+      setTimeout(() => {
+        this.sm.indicators.groupFlag = 'N';
+        this.sm.indicators.allocationRequired = 'N';
+      });
+      this.uiUtil.genericDialog('Not allowed to have rules for grouping Sub-Measure without allocation required.');
+    } else {
+      this.clearAllocationRequired();
+    }
+  }
+
+  verifyNoRulesGroupingAllocationRequired() {
+    this.cleanupRules();
+    if (this.isUnallocatedGroup() && this.sm.rules.length) {
+      setTimeout(() => this.sm.indicators.allocationRequired = 'Y');
+      this.uiUtil.genericDialog('Not allowed to have rules for grouping Sub-Measure without allocation required.');
+    }
   }
 
 }
