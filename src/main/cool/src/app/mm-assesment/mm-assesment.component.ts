@@ -636,12 +636,15 @@ export class MmAssesmentComponent implements OnInit {
 
     // Initialize Right Panel Component Data
     this.derivedMM = mmModel;
-    this.displayLeadTime = true;
     this.offerId = this.currentOfferId;
     this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
-    this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-      (leadTime: LeadTime) => {
-        this.noOfWeeksDifference = leadTime.noOfWeeksDifference;
+    this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
+      (leadTime) => {
+        this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+        this.displayLeadTime = true;
+      },
+      () => {
+        this.noOfWeeksDifference = 'N/A';
       }
     );
 

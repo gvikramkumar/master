@@ -48,15 +48,15 @@
 
         <span class="ribbon label label--warning-alt">
 
-            <div *ngIf="!displayLeadTime">
-                <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
+            <!-- <div *ngIf="!displayLeadTime">
+                <button [visible]="!displayLeadTime" (click)="showLeadTimeDailog()">
                     Lead Time Calculation?
                 </button>
-            </div>
+            </div> -->
 
-            <div *ngIf="displayLeadTime">
+            <div>
                 <strong><small>{{noOfWeeksDifference}} Week</small></strong>
-                <button [disabled]="!displayLeadTime" (click)="showLeadTimeDailog()">
+                <button *ngIf="displayLeadTime" (click)="showLeadTimeDailog()">
                     Lead Time Calculation?
                 </button>
             </div>
@@ -410,7 +410,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row">
-                                        <h4 class="text-huge text-success">{{expectedLaunchDate}}</h4>
+                                        <h4 class="text-huge text-success">{{expectedLaunchDate}}
+                                        </h4>
                                     </div>
                                     <h5 class="text-large qtr-padding text-muted">Offer Launch Date</h5>
                                 </div>
@@ -428,7 +429,7 @@
                                     <h6 class="display-6">{{strategyReviewDate}}</h6>
                                     <div class="progressbar progressbar--large" data-percentage="0">
                                         <div class="progressbar__fill"></div>
-                                        <div class="progressbar__label">YOU ARE HERE</div>
+                                        <!-- <div class="progressbar__label">YOU ARE HERE</div> -->
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -450,7 +451,7 @@
                                     <h6 class="display-6">{{launchDate}}</h6>
                                     <div class="progressbar progressbar--large" data-percentage="0">
                                         <div class="progressbar__fill"></div>
-                                        <div class="progressbar__label">LEAD TIME</div>
+                                        <!-- <div class="progressbar__label">LEAD TIME</div> -->
                                     </div>
                                 </div>
                             </div>
@@ -463,13 +464,15 @@
                         <div class="card">
                             <div class="qtr-padding">
                                 <h5>Lead Time Statistics for {{mmModel}} in {{leadTimeYear}}</h5>
-                                <h6 *ngIf="!isNaN(overallWeeksCompare)">Your presume time is {{Math.abs(overallWeeksCompare)}} weeks
+                                <!-- <h6 *ngIf="!isNaN(overallWeeksCompare)">Your presume time is
+                                    {{Math.abs(overallWeeksCompare)}} weeks
                                     {{overallWeeksCompare>0?'less':'more'}} than average.
-                                </h6>
+                                </h6> -->
                             </div>
                             <table class="table table--nostripes">
                                 <tr>
-                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                    <td width="75%"
+                                        style="border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3">
                                         <label>10th Percentile</label>
                                         <div class="progressbar" [attr.data-percentage]="averageOfTopTenPercentile">
                                             <div class="progressbar__fill"></div>
@@ -483,7 +486,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                    <td width="75%"
+                                        style="border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3">
                                         <label>Average</label>
                                         <div class="progressbar" [attr.data-percentage]="averageOverall">
                                             <div class="progressbar__fill">
@@ -498,7 +502,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                    <td width="75%" style="border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3">
                                         <label>90th Percentile</label>
                                         <div class="progressbar progressbar--success"
                                             [attr.data-percentage]="averageOfRemainingNinetyPercentile">
@@ -513,7 +517,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="75%" style="border-right:1px solid gray;border-left:1px solid gray">
+                                    <td width="75%" style="border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3">
                                         <span class="pull-left">0
                                             WEEKS</span>
                                         <span class="pull-right">{{countOfHundredPercentile}}
