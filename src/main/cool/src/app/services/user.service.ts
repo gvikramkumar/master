@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class UserService {
+
   private userId;
   private firstName;
   private lastName;

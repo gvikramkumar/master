@@ -416,21 +416,21 @@ export class OfferconstructCanvasComponent implements OnInit {
         rowNode.node.data['isGroupNode'] &&
         !this.draggedItem['isMajorLineItem']
       ) {
-        if(this.draggedItem.data.isGroupNode){
+        if (this.draggedItem.data.isGroupNode) {
         } else {
-        const obj = Object.create(null);
-        obj['uniqueKey'] = ++this.counter;
-        this.uniqueId = obj['uniqueKey'];
-        obj['isGroupNode'] = false;
-        obj['productName'] = this.draggedItem.data.productName;
-        obj['label'] = this.draggedItem.data.label;
-        obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
-        obj['listPrice'] = this.draggedItem.data.listPrice;
-        obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
-        rowNode.node.children.push(this.itemToTreeNode(obj));
-        this.delteFromParentObject(rowNode, this.draggedItem.data);
+          const obj = Object.create(null);
+          obj['uniqueKey'] = ++this.counter;
+          this.uniqueId = obj['uniqueKey'];
+          obj['isGroupNode'] = false;
+          obj['productName'] = this.draggedItem.data.productName;
+          obj['label'] = this.draggedItem.data.label;
+          obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
+          obj['listPrice'] = this.draggedItem.data.listPrice;
+          obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
+          rowNode.node.children.push(this.itemToTreeNode(obj));
+          this.delteFromParentObject(rowNode, this.draggedItem.data);
+        }
       }
-    }
 
       this.offerConstructItems = [...this.offerConstructItems];
     }
@@ -636,6 +636,13 @@ export class OfferconstructCanvasComponent implements OnInit {
           ))
         );
 
+        // Sort Item Categories - Prioritize Major Items First
+        const majorItems = this.itemCategories.filter(m => m.isMajorLineItem === true);
+        const minorItems = this.itemCategories.filter(m => m.isMajorLineItem === false);
+
+        this.itemCategories = [];
+        this.itemCategories = majorItems.concat(minorItems);
+
       });
 
     });
@@ -654,10 +661,10 @@ export class OfferconstructCanvasComponent implements OnInit {
    * Convert itemdetails array of objets into single object.
    * @param itemDetails
    */
-  convertItemDetail(itemDetails): Object{
+  convertItemDetail(itemDetails): Object {
     const obj = Object.create(null);
     itemDetails.forEach(element => {
-      obj[element.attributeName] =  element.attributeValue;
+      obj[element.attributeName] = element.attributeValue;
     });
     return obj;
   }
@@ -689,7 +696,7 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param parentNode
    * @param childNode
    */
-  addChildNode(parentNode, childNode):TreeNode {
+  addChildNode(parentNode, childNode): TreeNode {
     const obj = Object.create(null);
     obj['uniqueKey'] = childNode.constructNodeId;
     this.counter = Number(childNode.constructNodeId);
@@ -710,7 +717,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   /**
    * Method to transform construct details into tree form.
    */
-  transformDataToTreeNode(offerDetailRes:any) {
+  transformDataToTreeNode(offerDetailRes: any) {
     this.offerConstructItems = [];
     this.initalRowAdded = false;
     offerDetailRes.constructDetails.forEach(node => {
@@ -719,18 +726,18 @@ export class OfferconstructCanvasComponent implements OnInit {
         let parentNode = this.addNode(node);
         offerDetailRes.constructDetails.forEach(innerNode => {
           // Add a child node to parent.
-          if(innerNode.constructParentId === node.constructNodeId){
-            let inChild = this.addChildNode(parentNode,innerNode);
+          if (innerNode.constructParentId === node.constructNodeId) {
+            let inChild = this.addChildNode(parentNode, innerNode);
             // If group Node , need to add respective children nodes under it.
             if (innerNode.groupNode) {
               offerDetailRes.constructDetails.forEach(gChildNode => {
                 // Add a child node to parent.
-                if(gChildNode.constructParentId === innerNode.constructNodeId){
-                  this.addChildNode(inChild,gChildNode);
+                if (gChildNode.constructParentId === innerNode.constructNodeId) {
+                  this.addChildNode(inChild, gChildNode);
                 }
               });
             }
-            }
+          }
         });
       }
     });
@@ -1025,7 +1032,7 @@ export class OfferconstructCanvasComponent implements OnInit {
    */
   updateChildCount() {
 
-    if (this.offerConstructItems.length === 0 ) {
+    if (this.offerConstructItems.length === 0) {
       this.map1.clear();
     }
 
