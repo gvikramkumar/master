@@ -16,6 +16,7 @@ import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -94,8 +95,7 @@ export class MmAssesmentComponent implements OnInit {
     private configService: ConfigurationService,
     private offersolutioningService: OffersolutioningService,
     private rightPanelService: RightPanelService,
-    private stakeholderfullService: StakeholderfullService,
-    private confirmationService: ConfirmationService
+    private stakeholderfullService: StakeholderfullService
   ) {
 
     this.display = false;
@@ -665,14 +665,14 @@ export class MmAssesmentComponent implements OnInit {
       // Populate Default Stake Holders - Owner
       this.stakeData['Owner'].push(
         {
-          userName: this.ownerName,
-          emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
-          _id: this.offerBuilderdata['offerOwner'],
+          userName: this.configService.startupData.userName,
+          emailId: this.configService.startupData.userId + '@cisco.com',
+          _id: this.configService.startupData.userId,
           userMappings: [{
             appRoleList: [],
-            businessEntity: 'Security',
-            functionalRole: 'BUPM',
-            offerRole: 'Owner'
+            businessEntity: this.configService.startupData.businessEntity,
+            functionalRole: this.configService.startupData.functionalRole,
+            offerRole: this.configService.startupData.functionalRole,
           }
           ],
           stakeholderDefaults: true
