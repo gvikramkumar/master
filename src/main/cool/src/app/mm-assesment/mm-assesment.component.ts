@@ -281,10 +281,10 @@ export class MmAssesmentComponent implements OnInit {
       for (let i = 0; i <= this.firstData['stakeholders'].length - 1; i++) {
 
         // Add New Offer Owner (Stake Holder), If Not Present Earlier()
-        if (this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] == null) {
-          if (this.firstData['stakeholders'][i]['offerRole'] !== 'Owner') {
-            this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] = [];
-          }
+        if (this.firstData['stakeholders'][i]['offerRole'] === 'Owner') {
+          continue;
+        } else if (this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] == null) {
+          this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] = [];
         }
 
         // Populate New Offer Owner (Stake Holder) Details
