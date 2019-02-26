@@ -346,6 +346,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return this.sm.measureId === 1 && this.sm.sourceId === 1;
   }
 
+  hasSourceRapidRevenue() {
+    // source rapid revenue RRR
+    return this.sm.sourceId === 1;
+  }
+
   isManualMapping() {
     return this.sm.indicators.manualMapping === 'Y';
   }
@@ -375,6 +380,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     if (!this.hasAdjustmentType()) {
       this.adjustmentType = undefined;
+    }
+    if (!this.hasSourceRapidRevenue()) {
+      this.ifl_switch_glseg = false;
+      this.iflChange('glseg');
     }
   }
 
@@ -505,9 +514,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         }
         break;
       case 'glseg':
-        if (this.ifl_switch_scms) {
+        if (this.ifl_switch_glseg) {
         } else {
-          this.sm.inputFilterLevel.glSegLevel = undefined;
+          this.sm.inputFilterLevel.glSegLevel = [];
         }
         break;
     }
