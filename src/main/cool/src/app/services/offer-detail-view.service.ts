@@ -27,6 +27,11 @@ export class OfferDetailViewService {
         return this.httpClient.get(this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId);
       }
 
+    // Service call for Offer Dimensions
+    offerDimensions(offerId):any {
+        return this.httpClient.get(this.environmentService.REST_API_GET_RULE_RESULT_URL + offerId);
+    }
+
     mmDataRetrive(offerId):any {
         return this.httpClient.get(this.environmentService.REST_APT_MMPAGE_RETRIVE_DATA_GET_URL + offerId);
       }
