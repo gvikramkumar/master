@@ -74,7 +74,7 @@ export class MenuBarComponent implements OnInit {
                 label: 'Ideate',
                 items: [{ label: 'Offer Creation' },
                 { label: 'Offer Model Evaluation' },
-                { label: 'StakeHolder Identification' },
+                { label: 'Stakeholder Identification' },
                 { label: 'Strategy Review' }
                 ]
             },
