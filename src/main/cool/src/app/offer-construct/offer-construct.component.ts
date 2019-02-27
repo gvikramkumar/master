@@ -11,7 +11,7 @@ import { LeadTime } from '../right-panel/lead-time';
   templateUrl: './offer-construct.component.html',
   styleUrls: ['./offer-construct.component.css']
 })
-export class OfferConstructComponent  implements OnInit {
+export class OfferConstructComponent implements OnInit {
   offerData: any;
   currentOfferId;
   caseId;
@@ -27,7 +27,7 @@ export class OfferConstructComponent  implements OnInit {
   setFlag;
   derivedMM;
   offerName;
-  offerId:string;
+  offerId: string;
   primaryBE: string;
   displayLeadTime = false;
   noOfWeeksDifference: string;
@@ -58,16 +58,19 @@ export class OfferConstructComponent  implements OnInit {
     };
 
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
-      this.displayLeadTime = true;
       this.firstData = data;
       this.offerId = this.currentOfferId;
       this.derivedMM = this.firstData['derivedMM'];
       this.data = this.firstData['stakeholders'];
       this.offerName = this.firstData['offerName'];
       this.primaryBE = this.firstData['primaryBEList'][0];
-      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-        (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+      this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
+        (leadTime) => {
+          this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+          this.displayLeadTime = true;
+        },
+        () => {
+          this.noOfWeeksDifference = 'N/A';
         }
       );
       this.stakeHolderInfo = {};
@@ -146,6 +149,11 @@ export class OfferConstructComponent  implements OnInit {
         };
       }
     }
+  }
+
+  // Function to navigate to Offer Detail View
+  gotoOfferviewDetails() {
+    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
   }
 
   goBack() {

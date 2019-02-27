@@ -1,6 +1,7 @@
 import { Status } from './status';
 
 export class CreateOffer {
+
   userId: string;
   offerName: string;
   offerDesc: string;
@@ -18,6 +19,7 @@ export class CreateOffer {
   status: Status;
   iDPId: string;
   constructDetails: any[];
+
   constructor(userId: string,
     offerOwner: string,
     offerName: string,
@@ -34,7 +36,10 @@ export class CreateOffer {
     offerCreatedBy: string,
     offerCreationDate: string,
     status: Status,
-    constructDetails: any[]) {
+    constructDetails: any[]
+    // ,
+    // stakeholders:{}
+    ) {
     this.userId = userId;
     this.offerOwner = offerOwner;
     this.offerName = offerName;

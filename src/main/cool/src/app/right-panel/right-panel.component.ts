@@ -26,6 +26,8 @@ const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 })
 export class RightPanelComponent implements OnInit, OnDestroy {
   notiFication: Boolean = false;
+  Math = Math;
+  isNaN = isNaN;
 
   @Input() portfolioFlag: Boolean = false;
   @Output() updateStakeData = new EventEmitter<string>();
@@ -85,8 +87,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   average = 'Average';
   tenthPercentile = '10th Percentile';
   nintyPercentile = '90th Percentile';
-
-  attribute: boolean;
 
   @Input() offerId: string;
   @Input() stakeData: Object;
@@ -149,6 +149,12 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   averageOfTopTenPercentile = 0;
   averageOverall = 0;
   countOfHundredPercentile;
+  remainingNinetyPercentileCompare;
+  topTenPercentileWeeksCompare;
+  overallWeeksCompare;
+
+  loadingLeadTime = true;
+  // error = '';
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -166,7 +172,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       this.currentOfferId = this.createOfferService.coolOffer.offerId;
     }
     this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
-    this.attribute = true;
 
   }
 
@@ -343,33 +348,57 @@ export class RightPanelComponent implements OnInit, OnDestroy {
           this.readinessReviewDate = moment(leadTimeObj['readinessReviewDate']).format('DD-MMM-YYYY');
         });
 
-      // Compute Expected Launch Date
-      this.displayLeadTimeButton = true;
-      const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.offerId).toPromise();
-      this.expectedLaunchDate = moment(expectedLaunchDateObject['expectedLaunchDate']).format('MM/DD/YYYY');
-
-      // Compute Average Week Count
-      const averageWeekCountObject = await this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).toPromise();
-      this.averageOfRemainingNinetyPercentileWeeks = averageWeekCountObject['averageOfRemainingNinetyPercentile'] ? Number(averageWeekCountObject['averageOfRemainingNinetyPercentile']).toFixed(2) : 0;
-      this.averageOfTopTenPercentileWeeks = averageWeekCountObject['averageOfTopTenPercentile'] ? Number(averageWeekCountObject['averageOfTopTenPercentile']).toFixed(2) : 0;
-      this.averageOverallWeeks = averageWeekCountObject['averageOverall'] ? Number(averageWeekCountObject['averageOverall']).toFixed(2) : 0;
-      this.countOfHundredPercentile = averageWeekCountObject['countOfHundredPercentile'] ? Number(averageWeekCountObject['countOfHundredPercentile']).toFixed(2) : 0;
-
-      this.averageOfRemainingNinetyPercentile = Math.round(100 * this.averageOfRemainingNinetyPercentileWeeks / Number(averageWeekCountObject['countOfHundredPercentile']));
-      this.averageOfTopTenPercentile = Math.round(this.averageOfTopTenPercentileWeeks * 100 / Number(averageWeekCountObject['countOfHundredPercentile']));
-      this.averageOverall = Math.round(this.averageOverallWeeks * 100 / Number(averageWeekCountObject['countOfHundredPercentile']));
+      try {
 
 
-      // Initialize Average Week Count To N/A When Applicable
-      if (parseInt(this.averageWeekCount, 2) === 0) {
-        this.averageWeekCount = 'N/A';
+        // Compute Expected Launch Date
+        this.displayLeadTimeButton = true;
+        const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.offerId).toPromise();
+        this.expectedLaunchDate = moment(expectedLaunchDateObject['expectedLaunchDate']).format('DD-MMM-YYYY');
+        const noOfWeeksDifference = expectedLaunchDateObject['noOfWeeksDifference'];
+
+        // Compute Average Week Count
+        const averageWeekCountObject = await this.rightPanelService.displayAverageWeeks(this.primaryBE, this.mmModel).toPromise();
+        this.averageOfRemainingNinetyPercentileWeeks = averageWeekCountObject['averageOfRemainingNinetyPercentile'] ? Number(averageWeekCountObject['averageOfRemainingNinetyPercentile']).toFixed(1) : 0;
+        this.averageOfTopTenPercentileWeeks = averageWeekCountObject['averageOfTopTenPercentile'] ? Number(averageWeekCountObject['averageOfTopTenPercentile']).toFixed(1) : 0;
+        this.averageOverallWeeks = averageWeekCountObject['averageOverall'] ? Number(averageWeekCountObject['averageOverall']).toFixed(1) : 0;
+        this.countOfHundredPercentile = averageWeekCountObject['countOfHundredPercentile'] ? Number(averageWeekCountObject['countOfHundredPercentile']).toFixed(1) : 0;
+
+        this.remainingNinetyPercentileCompare = (Number(Number(noOfWeeksDifference) - this.averageOfRemainingNinetyPercentileWeeks)).toFixed(1);
+        this.topTenPercentileWeeksCompare = (Number(Number(noOfWeeksDifference) - this.averageOfTopTenPercentileWeeks)).toFixed(1);
+        this.overallWeeksCompare = (Number(Number(noOfWeeksDifference) - this.averageOverallWeeks)).toFixed(1);
+
+
+        this.averageOfRemainingNinetyPercentile = Math.round(100 * this.averageOfRemainingNinetyPercentileWeeks / Number(averageWeekCountObject['countOfHundredPercentile']));
+        this.averageOfTopTenPercentile = Math.round(this.averageOfTopTenPercentileWeeks * 100 / Number(averageWeekCountObject['countOfHundredPercentile']));
+        this.averageOverall = Math.round(this.averageOverallWeeks * 100 / Number(averageWeekCountObject['countOfHundredPercentile']));
+
+
+        // Initialize Average Week Count To N/A When Applicable
+        if (parseInt(this.averageWeekCount, 2) === 0) {
+          this.averageWeekCount = 'N/A';
+        }
+
+
+
+        // Compute Progree Bar Width
+        this.progressBarWidth = Math.floor((Number(this.averageWeekCount) / maxWeekDuration * 100));
+      } catch (err) {
+        this.averageOfRemainingNinetyPercentileWeeks = 'N/A';
+        this.averageOfTopTenPercentileWeeks = 'N/A';
+        this.averageOverallWeeks = 'N/A';
+        this.countOfHundredPercentile = 'N/A';
+        this.remainingNinetyPercentileCompare = 'N/A';
+        this.topTenPercentileWeeksCompare = 'N/A';
+        this.overallWeeksCompare = 'N/A';
+        this.averageOfRemainingNinetyPercentile = 0;
+        this.averageOfTopTenPercentile = 0;
+        this.averageOverall = 0;
+        // this.error = 'No content found!';
       }
+      this.loadingLeadTime = false;
 
     }
-
-    // Compute Progree Bar Width
-    this.progressBarWidth = Math.floor((Number(this.averageWeekCount) / maxWeekDuration * 100));
-
   }
 
 

@@ -9,9 +9,11 @@ import { AccessManagementService } from './access-management.service';
 
 @Injectable()
 export class ConfigurationService {
+
     urlGetUserInfo = this.environmentService.REST_API_URL_GET_LDAP_INFO;
     urlGetCurrentUser = this.environmentService.REST_API_URL_GET_CURRENT_USER;
     urlCheckAdminAccess = this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
+
     private _startupData: any = {};
 
     constructor(private httpClient: HttpClient,
@@ -31,6 +33,7 @@ export class ConfigurationService {
 
                         // check for admin access
                         this.accessMgmtService.checkAdminAccess().toPromise().then((resUserInfo) => {
+                            this._startupData.userId = resUserInfo.userId;
                             this._startupData.userName = resUserInfo.userName;
                             this._startupData.isSuperAdmin = resUserInfo.superAdmin;
                             this._startupData.isFunctionalAdmin = (resUserInfo.userMapping && resUserInfo.userMapping.some(mapping => mapping.functionalAdmin));
@@ -38,6 +41,8 @@ export class ConfigurationService {
                                 accumulator = [...accumulator, mapping.functionalRole];
                                 return accumulator;
                             }, []);
+                            this._startupData.functionalRole = this._startupData.functionsUserCanAddTo[0];
+                            this._startupData.businessEntity = resUserInfo.userMapping[0]['businessEntity'];
                             if (this._startupData.isSuperAdmin || this._startupData.isFunctionalAdmin) {
                                 this._startupData.hasAdminAccess = true;
                             }

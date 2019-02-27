@@ -1,5 +1,5 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SharedService } from '../shared-service.service';
 import { Subscription, Subject } from 'rxjs';
 import { CreateOfferService } from '../services/create-offer.service';
@@ -7,10 +7,8 @@ import { MonetizationModelService } from '../services/monetization-model.service
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { ConfigurationService } from '../services/configuration.service';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
-import { isDefaultChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
 import { OffersolutioningService } from '../services/offersolutioning.service';
 import { RightPanelService } from '../services/right-panel.service';
-import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { LeadTime } from '../right-panel/lead-time';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { ConfirmationService } from 'primeng/api';
@@ -87,8 +85,6 @@ export class MmAssesmentComponent implements OnInit {
   showErrorDialog: boolean;
   totalApprovalsCount:Number=0;
   constructor(private router: Router,
-    private sharedService: SharedService,
-    private createOfferService: CreateOfferService,
     private activatedRoute: ActivatedRoute,
     private monetizationModelService: MonetizationModelService,
     private offerPhaseService: OfferPhaseService,
@@ -188,6 +184,7 @@ export class MmAssesmentComponent implements OnInit {
         this.message = { contentHead: offerDetailRes['overallStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
       }
 
+      // Retrieve Offer Details
       this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
 
         that.offerBuilderdata = data;
@@ -244,7 +241,7 @@ export class MmAssesmentComponent implements OnInit {
           this.monetizationModelService.toNextSetp(postData).subscribe(data => {
             this.groupData.splice(1);
             this.groupNames.splice(1);
-            data['groups'].forEach(group => {
+            data['dimgroups'].forEach(group => {
               this.getGroupData(group, selectedCharacteristics, true);
             });
 
@@ -272,8 +269,6 @@ export class MmAssesmentComponent implements OnInit {
       });
     });
 
-    // Get StakeHolder
-    let that = this;
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
 
       this.firstData = data;
@@ -289,8 +284,10 @@ export class MmAssesmentComponent implements OnInit {
       // Retrieve New Stake Holder Info
       for (let i = 0; i <= this.firstData['stakeholders'].length - 1; i++) {
 
-        // Add New Offer Owner (Stake Holder), If Not Present Earlier
-        if (this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] == null) {
+        // Add New Offer Owner (Stake Holder), If Not Present Earlier()
+        if (this.firstData['stakeholders'][i]['offerRole'] === 'Owner') {
+          continue;
+        } else if (this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] == null) {
           this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] = [];
         }
 
@@ -613,7 +610,6 @@ export class MmAssesmentComponent implements OnInit {
           this.message = { contentHead: data['mmMapperStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
         }
 
-        
         if (this.activeTabIndex < this.groupNames.length - 1) {
           this.activeTabIndex += 1;
         }
@@ -624,7 +620,7 @@ export class MmAssesmentComponent implements OnInit {
           this.currentMMModel = data['mmModel'];
           this.groupData.splice(1);
           this.groupNames.splice(1);
-          data['groups'].forEach(group => {
+          data['dimgroups'].forEach(group => {
             this.getGroupData(group, {}, true);
           });
         }
@@ -637,18 +633,22 @@ export class MmAssesmentComponent implements OnInit {
     }
 
     this.emitEventToChild();
+    this.proceedToStakeholder(false);
   }
 
   getStakeData(mmModel) {
 
     // Initialize Right Panel Component Data
     this.derivedMM = mmModel;
-    this.displayLeadTime = true;
     this.offerId = this.currentOfferId;
     this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
-    this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-      (leadTime: LeadTime) => {
-        this.noOfWeeksDifference = leadTime.noOfWeeksDifference + ' Week';
+    this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
+      (leadTime) => {
+        this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+        this.displayLeadTime = true;
+      },
+      () => {
+        this.noOfWeeksDifference = 'N/A';
       }
     );
 
@@ -666,21 +666,25 @@ export class MmAssesmentComponent implements OnInit {
         this.stakeData['Owner'] = [];
       }
 
+
       // Populate Default Stake Holders - Owner
-      this.stakeData['Owner'].push(
-        {
-          userName: this.ownerName,
-          emailId: this.offerBuilderdata['offerOwner'] + '@cisco.com',
-          _id: this.offerBuilderdata['offerOwner'],
-          userMappings: [{
-            appRoleList: [],
-            businessEntity: 'Security',
-            functionalRole: 'BUPM',
-            offerRole: 'Owner'
-          }
-          ],
-          stakeholderDefaults: true
-        });
+      this.accessMgmtService.checkAdminAccess().toPromise().then((resUserInfo) => {
+
+        this.stakeData['Owner'].push(
+          {
+            userName: resUserInfo.userName,
+            emailId: resUserInfo.userId + '@cisco.com',
+            _id: resUserInfo.userId,
+            userMappings: [{
+              appRoleList: [],
+              businessEntity: resUserInfo.userMapping[0]['businessEntity'],
+              functionalRole: resUserInfo.userMapping[0]['functionalRole'],
+              offerRole: resUserInfo.userMapping[0]['functionalRole'],
+            }
+            ],
+            stakeholderDefaults: true
+          });
+      });
 
       // Populate Default Stake Holders - Other Functional Users
       keyUsers.forEach(user => {
@@ -706,11 +710,11 @@ export class MmAssesmentComponent implements OnInit {
           // Retrieve ith Functional Person
           const ownerDetails = this.stakeData[ownerName][i];
 
-          // Remove If Stakeholder Is Present In Default List 
+          // Remove If Stakeholder Is Present In Default List
           if (this.stakeData[ownerName] == null) {
             continue;
           } else if (this.stakeData[ownerName][i]['_id'] === (ownerDetails['_id'])) {
-            const index = this.stakeData[ownerName].findIndex(item => this.stakeData[ownerName][i]['_id'] === (ownerDetails['_id']));
+            const index = this.stakeData[ownerName].findIndex(() => this.stakeData[ownerName][i]['_id'] === (ownerDetails['_id']));
             if (this.updatedStakeHolderInfo[ownerName] != null) {
               this.updatedStakeHolderInfo[ownerName].splice(index, 1);
             }
@@ -898,7 +902,7 @@ export class MmAssesmentComponent implements OnInit {
 
 
     let that = this;
-    this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
+    this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(() => {
       let proceedPayload = {
         'taskId': '',
         'userId': this.offerBuilderdata['offerOwner'],
@@ -908,7 +912,7 @@ export class MmAssesmentComponent implements OnInit {
         'action': '',
         'comment': ''
       };
-      that.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(result => {
+      that.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(() => {
         if (withRouter === true) {
           that.router.navigate(['/stakeholderFull', that.currentOfferId, that.caseId]);
         }
@@ -917,10 +921,8 @@ export class MmAssesmentComponent implements OnInit {
 
   }
 
-  proceedToOfferSolution() {
+  proceedToOfferSolution(withRouter = true) {
 
-    let postOfferSolutioningData = {};
-    postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
     let groups = [];
     let groupDataWithFirst = [];
@@ -954,8 +956,11 @@ export class MmAssesmentComponent implements OnInit {
       groups.push(curGroup);
     });
 
+    let postOfferSolutioningData = {};
     postOfferSolutioningData['groups'] = groups;
+    postOfferSolutioningData['functionalRole'] = this.configService.startupData.functionalRole;
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
+    postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
 
@@ -963,7 +968,7 @@ export class MmAssesmentComponent implements OnInit {
 
       let postRuleResultData = result;
       postRuleResultData['offerId'] = this.currentOfferId;
-      this.monetizationModelService.postRuleResult(postRuleResultData).subscribe(res => { });
+      this.monetizationModelService.postRuleResult(postRuleResultData).subscribe(() => { });
 
       let proceedToStakeholderPostData = {};
       proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
@@ -1073,7 +1078,7 @@ export class MmAssesmentComponent implements OnInit {
           proceedToStakeholderPostData['solutioningDetails'].push(solutioningDetail);
         });
       });
-      this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(res => {
+      this.monetizationModelService.proceedToStakeholder(proceedToStakeholderPostData).subscribe(() => {
 
         let dimensionProceedPayload = {
           'taskId': '',
@@ -1085,9 +1090,10 @@ export class MmAssesmentComponent implements OnInit {
           'comment': ''
         };
         this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
-
           this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
-          this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+          if (withRouter === true) {
+            this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+          }
         })
       });
 

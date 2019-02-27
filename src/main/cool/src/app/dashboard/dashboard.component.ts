@@ -276,24 +276,10 @@ export class DashboardComponent implements OnInit {
     this.createActionForm.reset();
   }
 
-  createApproveAction(overlaypanel: OverlayPanel) {
-    const taskId = this.selectedAction.taskId;
-    const userId = this.userService.getUserId();
-    const taskName = 'Action';
-    const action = 'Approved';
-    const createActionApprove: CreateActionApprove = new CreateActionApprove(
-      taskId,
-      userId,
-      taskName,
-      action,
-      "",
-      false,
-    );
-    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
-      overlaypanel.hide();
-      this.getMyActionsAndNotifications();
-    });
-    // this.createActionForm.reset();
+  // Modified create approve function to add comments as like in Provide Deatils Section
+  createApproveAction(event, overlaypanel1: OverlayPanel, overlaypanel2: OverlayPanel) {
+    overlaypanel1.hide();
+    overlaypanel2.show(event);
   }
 
   approveAction(overlaypanel: OverlayPanel) {
@@ -338,10 +324,12 @@ export class DashboardComponent implements OnInit {
   }
 
   createApproveActionWithDetails(overlaypanel: OverlayPanel) {
-    const fd = new FormData();
-    fd.append('file', this.selectedFile, this.selectedFile.name);
-    this.dashboardService.postFileUploadForAction(this.selectedCaseId, fd).subscribe(data => {
-    });
+    if(this.selectedFile){
+      const fd = new FormData();
+      fd.append('file', this.selectedFile, this.selectedFile.name);
+      this.dashboardService.postFileUploadForAction(this.selectedCaseId, fd).subscribe(data => {
+      });
+    }
 
     const taskId = this.selectedAction.taskId;
     const userId = this.userService.getUserId();
@@ -360,7 +348,9 @@ export class DashboardComponent implements OnInit {
       overlaypanel.hide();
       this.getMyActionsAndNotifications();
     });
-    this.createActionForm.reset();
+    if(this.createActionForm){
+      this.createActionForm.reset();
+    }
   }
 
   uploadFile(e) {
@@ -397,6 +387,7 @@ export class DashboardComponent implements OnInit {
   }
 
   createNewOffer() {
+    this.createOfferService.disablePrBEList = false;
     this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
     this.createOfferService.currenTOffer.next('');
     this.router.navigate(['/coolOffer']);
