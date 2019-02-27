@@ -6,7 +6,6 @@ import { Location } from '@angular/common';
 import { OfferCharacteristics } from '../models/OfferCharacteristics';
 import { StrategyReviewService } from '../services/strategy-review.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
-import { OfferDimensions } from '../models/OfferDimensions';
 
 
 @Component({
@@ -30,23 +29,6 @@ export class OfferDetailViewComponent implements OnInit {
   pricingList: OfferCharacteristics[] = [];
   billingAndCompList: OfferCharacteristics[] = [];
   programList: OfferCharacteristics[] = [];
-  diOfferCharacteristicsList: OfferDimensions[] = [];
-  diPackagingList: OfferDimensions[] = [];
-  diSupportList: OfferDimensions[] = [];
-  diPricingList: OfferDimensions[] = [];
-  diBillingAndCompList: OfferDimensions[] = [];
-  diProgramList: OfferDimensions[] = [];
-  diDetailedOfferAttributesList: OfferDimensions[] = [];
-  diBillingAndCompensationList: OfferDimensions[] = [];
-  diOfferReplacementList: OfferDimensions[] = [];
-  diComplianceList: OfferDimensions[] = [];
-  diCSDLList: OfferDimensions[] = [];
-  diSWOEList: OfferDimensions[] = [];
-  diRevenueAttributesList: OfferDimensions[] = [];
-  diProgramInfoList: OfferDimensions[] = [];
-  dimensionSubGroupList = [];
-  dimensionGroupList = [];
-  offerConstructDetailsList;
   stakeName;
   email;
   functionalRole;
@@ -94,7 +76,6 @@ export class OfferDetailViewComponent implements OnInit {
 
     this.offerDetailViewService.offerDetailView(this.currentOfferId)
       .subscribe(data => {
-        this.offerConstructDetailsList = data.constructDetails;
         this.offerViewData = data;
         let stakeholdersInfo = null;
         this.offerName = data.offerName;
@@ -132,20 +113,6 @@ export class OfferDetailViewComponent implements OnInit {
         let pricing = null;
         let billingAndComp = null;
         let program = null;
-        let diOfferCharacteristics = null;
-        let diPackaging = null;
-        let diSupport = null;
-        let diPricing = null;
-        let diBillingAndComp = null;
-        let diProgram = null;
-        let diDetailedOfferAttributes = null;
-        let diBillingAndCompensation = null;
-        let diOfferReplacement = null;
-        let diCompliance = null;
-        let diCSDL = null;
-        let diSWOE = null;
-        let diRevenueAttributes = null;
-        let diProgramInfo = null;
         this.offerViewData.selectedCharacteristics.forEach(element => {
           offerCharacteristics = new OfferCharacteristics();
           offerCharacteristics.subgroup = element.subgroup;
@@ -186,94 +153,7 @@ export class OfferDetailViewComponent implements OnInit {
             this.programList.push(program);
           }
         });
-
-        this.offerViewData.solutioningDetails.forEach(element => {
-          diOfferCharacteristics = new OfferDimensions();
-          diOfferCharacteristics.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Offer Characteristics') {
-            this.diOfferCharacteristicsList.push(diOfferCharacteristics);
-          }
-          diPackaging = new OfferDimensions();
-          diPackaging.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Packaging') {
-            this.diPackagingList.push(diPackaging);
-          }
-          diSupport = new OfferDimensions();
-          diSupport.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Support') {
-            this.diSupportList.push(diSupport);
-          }
-          diPricing  = new OfferDimensions();
-          diPricing.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Pricing') {
-            this.diPricingList.push(diPricing);
-          }
-          diBillingAndComp  = new OfferDimensions();
-          diBillingAndComp.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Billing&Comp') {
-            this.diBillingAndCompList.push(diBillingAndComp);
-          }
-          diProgram  = new OfferDimensions();
-          diProgram.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Program') {
-            this.diProgramList.push(diProgram);
-          }
-          diDetailedOfferAttributes = new OfferDimensions();
-          diDetailedOfferAttributes.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Detailed Offer Attributes') {
-            this.diDetailedOfferAttributesList.push(diDetailedOfferAttributes );
-          }
-          diBillingAndCompensation = new OfferDimensions();
-          diBillingAndCompensation.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Billing & Compensation') {
-            this.diBillingAndCompensationList.push(diBillingAndCompensation);
-          }
-          diOfferReplacement = new OfferDimensions();
-          diOfferReplacement.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Offer Replacement') {
-            this.diOfferReplacementList.push(diOfferReplacement);
-          }
-          diCompliance = new OfferDimensions();
-          diCompliance.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Compliance') {
-            this.diComplianceList.push(diCompliance);
-          }
-          diCSDL = new OfferDimensions();
-          diCSDL.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'CSDL') {
-            this.diCSDLList.push(diCSDL);
-          }
-          diSWOE = new OfferDimensions();
-          diSWOE.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'SWOE') {
-            this.diSWOEList.push(diSWOE);
-          }
-          diRevenueAttributes  = new OfferDimensions();
-          diRevenueAttributes.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Revenue Attributes') {
-            this.diRevenueAttributesList.push(diRevenueAttributes);
-          }
-          diProgramInfo  = new OfferDimensions();
-          diProgramInfo.dimensionSubgroup = element.dimensionSubgroup;
-          if (element.dimensionGroup === 'Program Info') {
-            this.diProgramInfoList.push(diProgramInfo);
-          }
-        });
-      this.offerViewData.solutioningDetails.forEach(element => {
-        let temp;
-        if(temp !== element.dimensionSubgroup) {
-          this.dimensionSubGroupList.push(element.dimensionSubgroup);
-        }
-        temp = element.dimensionGroup;
       });
-      this.offerViewData.solutioningDetails.forEach(element => {
-        let temp;
-        if(temp !== element.dimensionGroup) {
-          this.dimensionGroupList.push(element.dimensionGroup);
-        }
-        temp = element.dimensionGroup;
-      });
-    });
   }
 
   getInitialChar(name) {

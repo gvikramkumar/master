@@ -54,17 +54,22 @@
                 </button>
             </div> -->
 
-            <div>
-                <strong><small>{{noOfWeeksDifference}} Week</small></strong>
-                <button *ngIf="displayLeadTime" (click)="showLeadTimeDailog()">
-                    Lead Time Calculation?
-                </button>
-            </div>
+            <!-- <div> -->
+            <strong><small *ngIf="noOfWeeksDifference && noOfWeeksDifference!=='N/A'">{{noOfWeeksDifference}}
+                    Weeks</small>
+            </strong>
+            <small *ngIf="noOfWeeksDifference && noOfWeeksDifference==='N/A'">No Data
+                Availaible</small>
+
+            <!-- </div> -->
 
 
             <!-- </span> -->
 
         </span>
+        <span><a *ngIf="displayLeadTime" (click)="showLeadTimeDailog()">
+                Lead Time Calculation?
+            </a></span>
 
     </div>
 
@@ -404,7 +409,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="row">
-                                        <h4 class="text-huge text-success">{{noOfWeeksDifference}} Week</h4>
+                                        <h4 class="text-huge text-success">{{noOfWeeksDifference}} Weeks</h4>
                                     </div>
                                     <h5 class="text-large qtr-padding text-muted">Lead Time Assessed for Your Offer</h5>
                                 </div>
@@ -502,7 +507,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="75%" style="border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3">
+                                    <td width="75%"
+                                        style="border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3">
                                         <label>90th Percentile</label>
                                         <div class="progressbar progressbar--success"
                                             [attr.data-percentage]="averageOfRemainingNinetyPercentile">
@@ -517,7 +523,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="75%" style="border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3">
+                                    <td width="75%"
+                                        style="border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3">
                                         <span class="pull-left">0
                                             WEEKS</span>
                                         <span class="pull-right">{{countOfHundredPercentile}}

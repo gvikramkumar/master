@@ -12,10 +12,10 @@
       <ul class="list dimensions--toggle">
         <li>
           <div class="row">
-            <div class="col-md-3 margin-auto">
-              <span class="subgroup-name">{{ groupData["subGroupName"] }}</span>
-              <span class="sub--label text-success"
-                ><span class="icon-check"></span> Perfectly Aligned</span
+            <div  class="col-md-3 margin-auto">
+              <span *ngIf="groupData['subGroupName'] != 'Always Ask'" class="subgroup-name">{{ groupData["subGroupName"] }}</span>
+              <span  *ngIf="groupData['subGroupName'] != 'Always Ask'" class="sub--label text-success"
+                ><span   *ngIf="groupData['subGroupName'] != 'Always Ask'" class="icon-check"></span> Perfectly Aligned</span
               >
             </div>
 

@@ -36,6 +36,7 @@ export class OfferSolutioningComponent implements OnInit {
   stakeHolderInfo: any;
   stakeFunctionInfo: any;
 
+
   derivedMM: any;
   offerId: string;
   primaryBE: string;
@@ -145,7 +146,7 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   getSolutionGroups() {
-    debugger;
+   
     this.offerSolutionGroups = [];
     this.offerSolutionData['groups'].forEach(group => {
       group['subGroup'].forEach(g => {

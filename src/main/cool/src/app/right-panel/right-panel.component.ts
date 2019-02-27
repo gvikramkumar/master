@@ -364,9 +364,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         this.averageOverallWeeks = averageWeekCountObject['averageOverall'] ? Number(averageWeekCountObject['averageOverall']).toFixed(1) : 0;
         this.countOfHundredPercentile = averageWeekCountObject['countOfHundredPercentile'] ? Number(averageWeekCountObject['countOfHundredPercentile']).toFixed(1) : 0;
 
-        this.remainingNinetyPercentileCompare = (Number(this.averageOfRemainingNinetyPercentileWeeks) - Number(noOfWeeksDifference)).toFixed(1);
-        this.topTenPercentileWeeksCompare = (Number(this.averageOfTopTenPercentileWeeks) - Number(noOfWeeksDifference)).toFixed(1);
-        this.overallWeeksCompare = (Number(this.averageOverallWeeks) - Number(noOfWeeksDifference)).toFixed(1);
+        this.remainingNinetyPercentileCompare = (Number(Number(noOfWeeksDifference) - this.averageOfRemainingNinetyPercentileWeeks)).toFixed(1);
+        this.topTenPercentileWeeksCompare = (Number(Number(noOfWeeksDifference) - this.averageOfTopTenPercentileWeeks)).toFixed(1);
+        this.overallWeeksCompare = (Number(Number(noOfWeeksDifference) - this.averageOverallWeeks)).toFixed(1);
 
 
         this.averageOfRemainingNinetyPercentile = Math.round(100 * this.averageOfRemainingNinetyPercentileWeeks / Number(averageWeekCountObject['countOfHundredPercentile']));
