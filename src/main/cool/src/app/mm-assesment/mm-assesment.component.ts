@@ -668,7 +668,7 @@ export class MmAssesmentComponent implements OnInit {
 
 
       // Populate Default Stake Holders - Owner
-      this.accessMgmtService.checkAdminAccess().toPromise().then((resUserInfo) => {
+      this.accessMgmtService.retrieveUserInfo(this.offerOwner).toPromise().then((resUserInfo) => {
 
         this.stakeData['Owner'].push(
           {
