@@ -41,7 +41,7 @@ export class TurbotaxviewComponent implements OnChanges {
 
         this.navigateHash['Offer Creation'] = ['/coolOffer', offerId, caseId];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', offerId, caseId];
-        this.navigateHash['StakeHolder Identification'] = ['/stakeholderFull', offerId, caseId];
+        this.navigateHash['Stakeholder Identification'] = ['/stakeholderFull', offerId, caseId];
         this.navigateHash['Strategy Review'] = ['/strategyReview', offerId, caseId];
 
         this.navigateHash['Offer Dimension'] = ['/offerDimension', offerId, caseId];
