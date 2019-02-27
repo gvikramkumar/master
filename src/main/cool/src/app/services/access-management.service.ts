@@ -63,6 +63,11 @@ export class AccessManagementService {
             { withCredentials: true });
     }
 
+    retrieveUserInfo(userId: String): Observable<any> {
+        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL + '/' + userId,
+            { withCredentials: true });
+    }
+
     // change on GET PRIMARY BU BASED ON BE
     getPrimaryBuBasedOnBe(data) {
         let url = this.getPrimaryBUBasedOnBE + data;
