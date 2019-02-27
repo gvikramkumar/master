@@ -13,8 +13,9 @@ import { LeadTime } from '../right-panel/lead-time';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { AccessManagementService } from '../services/access-management.service';
-
+import { StrategyReviewService } from '../services/strategy-review.service';
 @Component({
   selector: 'app-mm-assesment',
   templateUrl: './mm-assesment.component.html',
@@ -82,6 +83,7 @@ export class MmAssesmentComponent implements OnInit {
   currentOfferResult: any;
   isChangedAttribute: boolean;
   showErrorDialog: boolean;
+  totalApprovalsCount:Number=0;
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private monetizationModelService: MonetizationModelService,
@@ -91,7 +93,9 @@ export class MmAssesmentComponent implements OnInit {
     private offersolutioningService: OffersolutioningService,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService,
-    private accessMgmtService: AccessManagementService
+    private confirmationService: ConfirmationService,
+    private accessMgmtService: AccessManagementService,
+    private strategyReviewService:StrategyReviewService
   ) {
 
     this.display = false;
@@ -304,10 +308,14 @@ export class MmAssesmentComponent implements OnInit {
       }
 
     });
-
-    this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(result => {
-      this.currentOfferResult = result;
+    this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
+      this.totalApprovalsCount = resStrategyReview.length;
     });
+    
+
+    // this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(result => {
+    //   this.currentOfferResult = result;
+    // });
 
   }
 
@@ -534,14 +542,14 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   showDialogBox() {
-    let isCompleted = false;
-    this.currentOfferResult.ideate.forEach(item => {
-      if (item.subMilestone == "Strategy Review" && item.status == "Completed") {
-        isCompleted = true;
-      }
-    });
+    // let isCompleted = false;
+    // this.currentOfferResult.ideate.forEach(item => {
+    //   if (item.subMilestone == "Strategy Review" && item.status == "Completed") {
+    //     isCompleted = true;
+    //   }
+    // });
 
-    if (isCompleted && this.isChangedAttribute) {
+    if (this.totalApprovalsCount>0 && this.isChangedAttribute) {
       this.showDialog = true;
     }
     else
@@ -582,14 +590,14 @@ export class MmAssesmentComponent implements OnInit {
           tempMessage = { contentHead: data['mmMapperStatus'], content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.' };
         }
 
-        let isCompleted = false;
-        this.currentOfferResult.ideate.forEach(item => {
-          if (item.subMilestone == "Strategy Review" && item.status == "Completed") {
-            isCompleted = true;
-          }
-        });
+        // let isCompleted = false;
+        // this.currentOfferResult.ideate.forEach(item => {
+        //   if (item.subMilestone == "Strategy Review" && item.status == "Completed") {
+        //     isCompleted = true;
+        //   }
+        // });
 
-        if (isCompleted && this.isChangedAttribute && (tempMessage["contentHead"] != this.message["contentHead"] || tempMessage["content"] != this.message["content"])) {
+        if (this.totalApprovalsCount>0 && this.isChangedAttribute && (tempMessage["contentHead"] != this.message["contentHead"] || tempMessage["content"] != this.message["content"])) {
           this.showDialog = true;
           return;
         }
