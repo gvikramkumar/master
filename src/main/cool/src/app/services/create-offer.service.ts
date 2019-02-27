@@ -29,6 +29,7 @@ export class CreateOfferService {
   coolOfferCopy;
   currenTOffer = new BehaviorSubject<any>('');
   routeFlag = new BehaviorSubject<boolean>(false);
+  disablePrimaryBEList: boolean = false;
 
   constructor(private httpClient: HttpClient, private userService: UserService, private environmentService: EnvironmentService) {
     this.coolOffer = {
@@ -184,10 +185,15 @@ export class CreateOfferService {
       withCredentials: true
     };
     if(this.environmentService.REST_API_UPDATE_OFFER ){
-    let url=this.environmentService.REST_API_UPDATE_OFFER ;
-    console.log("edit offer url",url);
-    return this.httpClient.post(url,obj,httpOptions);
+      let url=this.environmentService.REST_API_UPDATE_OFFER ;
+      console.log("edit offer url",url);
+      return this.httpClient.post(url,obj,httpOptions);
+    }
   }
-}
-
+  get disablePrBEList(): boolean {
+    return this.disablePrimaryBEList;
+  }
+  set disablePrBEList(disablePBEList: boolean){
+    this.disablePrimaryBEList = disablePBEList;
+  }
 }

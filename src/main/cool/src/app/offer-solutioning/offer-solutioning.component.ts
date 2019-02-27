@@ -36,6 +36,7 @@ export class OfferSolutioningComponent implements OnInit {
   stakeHolderInfo: any;
   stakeFunctionInfo: any;
 
+
   derivedMM: any;
   offerId: string;
   primaryBE: string;
@@ -67,14 +68,17 @@ export class OfferSolutioningComponent implements OnInit {
       this.offerName = data['offerName'];
       this.offerOwner = data['offerOwner'];
       this.derivedMM = data['derivedMM'];
-      this.displayLeadTime = true;
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
       this.primaryBE = this.firstData['primaryBEList'][0];
-      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-        (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = leadTime.noOfWeeksDifference;
+      this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
+        (leadTime) => {
+          this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+          this.displayLeadTime = true;
+        },
+        () => {
+          this.noOfWeeksDifference = 'N/A';
         }
       );
 
@@ -142,7 +146,7 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   getSolutionGroups() {
-    debugger;
+   
     this.offerSolutionGroups = [];
     this.offerSolutionData['groups'].forEach(group => {
       group['subGroup'].forEach(g => {
@@ -364,7 +368,10 @@ export class OfferSolutioningComponent implements OnInit {
       'comment': ''
     };
       this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
-      this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+        if (msg !== 'stay_on_this_page') {
+
+          this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+        }
       });
 
     });

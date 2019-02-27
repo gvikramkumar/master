@@ -387,6 +387,7 @@ export class DashboardComponent implements OnInit {
   }
 
   createNewOffer() {
+    this.createOfferService.disablePrBEList = false;
     this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
     this.createOfferService.currenTOffer.next('');
     this.router.navigate(['/coolOffer']);

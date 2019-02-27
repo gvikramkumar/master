@@ -493,7 +493,6 @@
   margin: auto;
   position: relative;
   color: #39393b;
-  cursor: pointer;
   text-align: center;
   -webkit-transition: all .175s ease-out; /* Safari */
   transition: all .175s ease-out;
@@ -520,7 +519,6 @@
   background: #ffcc00;
   color: #39393b;
   font-size: 16px;
-  text-transform: uppercase;
   display: inline-block;
   line-height: 1.2;
   position: relative;

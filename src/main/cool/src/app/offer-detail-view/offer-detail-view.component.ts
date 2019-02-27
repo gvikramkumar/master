@@ -20,6 +20,9 @@ export class OfferDetailViewComponent implements OnInit {
   offerOwnerId: string;
   offerOwnerName: string;
   currentOfferId: string;
+  offerDimensionsCharacteristics = {};
+  solutioningDetailsCharacteristics = {};
+  offerComponentCharacterestics = {};
 
   offerCoOwnerList: StakeHolder[] = [];
   offerStakeHolderList: StakeHolder[] = [];
@@ -64,12 +67,40 @@ export class OfferDetailViewComponent implements OnInit {
   ngOnInit() {
     this.getOfferOverviewDetails();
     this.getStrategyReviewInfo();
+    this.getofferDimensions();
   }
 
   getStrategyReviewInfo() {
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
       this.strategyReviewList = data;
     });
+  }
+
+  // Creating Data for Offer Solutioning Details 
+  // Making seperate service call for getting offer dimensions as mentioned
+  getofferDimensions(){
+    this.offerDetailViewService.offerDimensions(this.currentOfferId)
+      .subscribe(data => {
+        data.groups.forEach(element => {
+          if (!(element.dimensionGroup in this.offerDimensionsCharacteristics) && element.groupName != "Offer Characteristics" && element.groupName != "Always Ask"){
+            this.offerDimensionsCharacteristics[element.groupName] = {};
+            this.offerDimensionsCharacteristics[element.groupName]["subGroup"] = [];
+            this.offerDimensionsCharacteristics[element.groupName]["selected"] = [];
+            this.offerDimensionsCharacteristics[element.groupName]["chocies"] = [];
+            this.offerDimensionsCharacteristics[element.groupName]["listGrpQuestions"] = [];
+            this.offerDimensionsCharacteristics[element.groupName]["subGroup"].push(element.subGroup);
+            this.offerDimensionsCharacteristics[element.groupName]["selected"].push(element.selected);
+            this.offerDimensionsCharacteristics[element.groupName]["chocies"].push(element.chocies);
+            this.offerDimensionsCharacteristics[element.groupName]["listGrpQuestions"].push(element.listGrpQuestions);
+          }
+          else if ((element.dimensionGroup in this.offerDimensionsCharacteristics) && element.groupName != "Offer Characteristics" && element.groupName != "Always Ask"){
+            this.offerDimensionsCharacteristics[element.groupName]["subGroup"].push(element.subGroup);
+            this.offerDimensionsCharacteristics[element.groupName]["selected"].push(element.selected);
+            this.offerDimensionsCharacteristics[element.groupName]["chocies"].push(element.chocies);
+            this.offerDimensionsCharacteristics[element.groupName]["listGrpQuestions"].push(element.listGrpQuestions);
+          }
+        });
+      });
   }
 
   getOfferOverviewDetails() {
@@ -121,6 +152,61 @@ export class OfferDetailViewComponent implements OnInit {
             this.offerCharacteristicsList.push(offerCharacteristics);
           }
         });
+
+        // Creating Data for Offer Solutioning Details 
+        this.offerViewData.solutioningDetails.forEach(element => {
+          if (!(element.dimensionGroup in this.solutioningDetailsCharacteristics)&& element.dimensionGroup != "Offer Characteristics" && element.dimensionGroup != "Always Ask"){
+            this.solutioningDetailsCharacteristics[element.dimensionGroup] = {};
+            this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionSubgroup"] = [];
+            this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"] = [];
+            this.solutioningDetailsCharacteristics[element.dimensionGroup]["details"] = [];
+            this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionSubgroup"].push(element.dimensionSubgroup);
+            this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"].push(element.dimensionAttribute);
+            let temp = this.solutioningDetailsCharacteristics;
+            if(element.Details.length){
+              element.Details.forEach(subelement => {
+                let temp_dict = {};
+                Object.keys(subelement).forEach(function(key) {
+                  if (key == "solutioninQuestion" && subelement["solutioningAnswer"]){
+                    temp_dict[subelement[key]] = subelement["solutioningAnswer"];
+                    temp[element.dimensionGroup]["details"].push(temp_dict);
+                  }
+                });
+              });
+              this.solutioningDetailsCharacteristics = temp;
+            }
+
+          }
+          else if ((element.dimensionGroup in this.solutioningDetailsCharacteristics) && element.dimensionGroup != "Offer Characteristics" && element.dimensionGroup != "Always Ask"){
+            this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionSubgroup"].push(element.dimensionSubgroup);
+            this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"].push(element.dimensionAttribute);
+            let temp = this.solutioningDetailsCharacteristics;
+            if(element.Details.length){
+              element.Details.forEach(subelement => {
+                let temp_dict = {};
+                Object.keys(subelement).forEach(function(key) {
+                  if (key == "solutioninQuestion" && subelement["solutioningAnswer"]){
+                    temp_dict[subelement[key]] = subelement["solutioningAnswer"];
+                    temp[element.dimensionGroup]["details"].push(temp_dict);
+                  }
+                });
+              });
+              this.solutioningDetailsCharacteristics = temp;
+            }
+            
+          }
+        });
+        
+        this.offerViewData.constructDetails.forEach(element => {
+          if (!(element.constructItemName in this.offerComponentCharacterestics) || (element.constructItem == "Minor")){
+            this.offerComponentCharacterestics[element.constructItemName] = {};
+            this.offerComponentCharacterestics[element.constructItemName]["Id"] = this.offerViewData.constructDetails.indexOf(element);
+            this.offerComponentCharacterestics[element.constructItemName]["parentId"] = element.constructParentId;
+            this.offerComponentCharacterestics[element.constructItemName]["constructItem"] = element.constructItem;
+            this.offerComponentCharacterestics[element.constructItemName]["itemDetails"] = element.itemDetails;
+          }
+        });
+        
         this.offerViewData.additionalCharacteristics.forEach(element => {
           packaging = new OfferCharacteristics();
           packaging.subgroup = element.subgroup;

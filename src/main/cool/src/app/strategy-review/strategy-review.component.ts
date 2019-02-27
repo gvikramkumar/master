@@ -166,15 +166,18 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     });
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
-      this.displayLeadTime = true;
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
       this.offerName = this.firstData['offerName'];
       this.primaryBE = this.firstData['primaryBEList'][0];
-      this.rightPanelService.displayLaunchDate(this.offerId).subscribe(
-        (leadTime: LeadTime) => {
-          this.noOfWeeksDifference = leadTime.noOfWeeksDifference;
+      this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
+        (leadTime) => {
+          this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+          this.displayLeadTime = true;
+        },
+        () => {
+          this.noOfWeeksDifference = 'N/A';
         }
       );
 
