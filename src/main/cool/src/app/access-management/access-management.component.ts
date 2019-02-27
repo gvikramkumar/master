@@ -80,7 +80,7 @@ export class AccessManagementComponent implements OnInit {
         this.accessManagementData = resUserAccess
           .map(user => {
             user.businessEntities = this.businessEntities;
-            user.businessUnits = this.businessUnits;
+            user.businessUnits = user.buList.map(elementBU => ({ label: elementBU, value: elementBU }));
             return user;
           });
       });
@@ -93,6 +93,12 @@ export class AccessManagementComponent implements OnInit {
         user.businessUnits = resBusinessUnits;
       });
 
+  }
+  getPrimaryBusinessUnitBasedOnPrimaryBEForUserOnBUClick(selectedBusinessEntities, user) {
+    this.accessManagementService.getFormattedBusinessUnitBasedOnBE(selectedBusinessEntities)
+      .subscribe(resBusinessUnits => {
+        user.businessUnits = resBusinessUnits;
+      });
   }
   getPrimaryBusinessUnitBasedOnPrimaryBE(selectedBusinessEntities) {
     this.businessUnitValue = [];

@@ -61,6 +61,7 @@
                 <td>
                   <p-multiSelect [options]="user.businessUnits" [filter]="false" [showHeader]="false"
                     [displaySelectedLabel]="true" [(ngModel)]="user.buList"
+                    (click)="getPrimaryBusinessUnitBasedOnPrimaryBEForUserOnBUClick(user.beList,user)"
                     (onPanelHide)="updatedAccessManagement(user)" [style]="{'width':'100%'}" [appendTo]="body">
                   </p-multiSelect>
                 </td>

@@ -631,12 +631,14 @@ export class MmAssesmentComponent implements OnInit {
         defaultStakeholders = resDefaultStakeholders;
       }
 
+      const objStakeholders = {};
+
       this.accessMgmtService.retrieveUserInfo(this.offerOwner).toPromise().then((resOfferOwnerInfo) => {
 
         const owner = this.formatDefaultUserAsStakeholder(resOfferOwnerInfo);
 
         // Populate Default Stake Holders - Owner
-        this.stakeholders['Owner'] = [owner];
+        objStakeholders['Owner'] = [owner];
 
         // Find the manually added stakeholders
         this.manuallyAddedStakeholders.reduce((accumulator, currentStakeholder) => {
@@ -647,7 +649,7 @@ export class MmAssesmentComponent implements OnInit {
           };
           accumulator[stakeholderFunctionRole] = accumulator[stakeholderFunctionRole] && accumulator[stakeholderFunctionRole].length > 0 ? accumulator[stakeholderFunctionRole].concat(stakeholder) : [stakeholder];
           return accumulator;
-        }, this.stakeholders);
+        }, objStakeholders);
 
 
         // Populate Default Stake Holders - Other Functional Users
@@ -664,7 +666,9 @@ export class MmAssesmentComponent implements OnInit {
             accumulator[stakeholderFunctionRole] = accumulator[stakeholderFunctionRole] && accumulator[stakeholderFunctionRole].length > 0 ? accumulator[stakeholderFunctionRole].concat(stakeholder) : [stakeholder];
           }
           return accumulator;
-        }, this.stakeholders);
+        }, objStakeholders);
+
+        this.stakeholders = objStakeholders;
       });
     });
   }
