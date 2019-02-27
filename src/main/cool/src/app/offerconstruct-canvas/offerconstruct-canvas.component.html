@@ -46,7 +46,7 @@
                     <div class="col-md-10">
                       <span class="ui-fluid">
                         <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results"
-                          (completeMethod)="searchForItem($event)" field="PID"
+                          (completeMethod)="searchForItemFromPdaf($event)" field="PID"
                           placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9">
                           <ng-template pTemplate="body" let-item>
                             <tbody>
@@ -54,12 +54,12 @@
                                 <td>
                                   {{item.PID}}
                                 </td>
-                                <td>
+                                <!-- <td>
                                   {{item.PRODUCT_FAMILY}}
                                 </td>
                                 <td>
                                   {{item.TECHNOLOGY_GROUP}}
-                                </td>
+                                </td> -->
                               </tr>
                             </tbody>
                           </ng-template>
@@ -67,7 +67,7 @@
                       </span>
                     </div>
                     <div class="col-md-2">
-                      <button class="btn btn--small">Add</button>
+                      <button class="btn btn--small" (click)="addSearchedItemToOfferConfig()">Add</button>
                     </div>
                   </div>
                 </div>

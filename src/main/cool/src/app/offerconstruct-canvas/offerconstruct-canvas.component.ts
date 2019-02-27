@@ -83,6 +83,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   private map1 = new Map();
   popHeadName;
   setFlag = true;
+  addedEgineMajorItemsInTree:any[] = [];
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
@@ -259,6 +260,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       }
     }
     this.offerConstructItems = [...this.offerConstructItems];
+    this.removeEginieMajorItemFromListofAlreadyAddedItems(rowNode.node.data.title);
     this.updateChildCount();
   }
 
@@ -744,14 +746,14 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   dragStartRow($event, item) {
     this.draggedItem = item.node;
-    //this.selected = [...this.selected];
+    // this.selected = [...this.selected];
   }
 
   dragStart(event, item: any) {
     this.draggedItem = item;
   }
 
-  //donwnload Zip file
+  // donwnload Zip file
   downloadZip(offerId) {
     this._canvasService.downloadZip(this.currentOfferId).subscribe((res) => {
       const nameOfFileToDownload = 'offer-construct';
@@ -775,8 +777,9 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.selected.forEach((selectedItem) => {
         if (selectedItem.parent == null) {
           // If parent not present which means its a Major Item and may contains children.
-          //Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
+          // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
           this.offerConstructItems.forEach((element, index) => {
+            this.removeEginieMajorItemFromListofAlreadyAddedItems(element.data.title);
             if (element.data.uniqueKey == selectedItem.data.uniqueKey) {
               this.offerConstructItems.splice(index, 1);
             }
@@ -820,18 +823,114 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.nodeToDelete = {};
     this.offerConstructItems = [...this.offerConstructItems];
     this.selected = null;
+    // this.removeEginieMajorItemFromListofAlreadyAddedItems();
     this.updateChildCount();
   }
 
 
+  /**
+   * Called when an Major Item is added in to Offer Components Tree table
+   * after e-ginie search
+   * @param searchResult
+   */
+  addMajorItem(searchResult) {
+    const titleName = this.selectedPids.PID;
+    if (!this.addedEgineMajorItemsInTree.includes(titleName)) {
+      this.initalRowAdded = false;
+      const productName = searchResult['PID Category'];
+      const obj = Object.create(null);
+      obj['uniqueKey'] = ++this.counter;
+      this.uniqueId = obj['uniqueKey'];
+      obj['productName'] = productName; // PID Category
+      obj['isGroupNode'] = false; // Group Node or Not
+      obj['title'] = titleName; // PID Name
+      obj['isMajorLineItem'] = true; // Major/Minor
+      obj['childCount'] = 0;
+      obj['eginieItem'] = true;
+      obj['itemDetails'] = searchResult;
+      const data = this.map1.get(titleName);
+      if (data === undefined) {
+        this.map1.set(titleName, 1);
+      } else {
+        this.map1.set(titleName, this.map1.get(titleName) + 1);
+      }
+      obj['title'] = titleName + ' ' + this.map1.get(titleName);
+      this.offerConstructItems.push(this.itemToTreeNode(obj));
+      this.offerConstructItems = [...this.offerConstructItems];
+      this.countableItems.push(this.uniqueId);
+      this.updateChildCount();
+      this.addedEgineMajorItemsInTree.push(obj['title']);
+    }
+  }
+
+    /**
+   * Called when an Minor Item is added in to Offer Components Tree table
+   * after e-ginie search.
+   * A minor item is added to the last added major item in the canvas
+   * @param searchResult
+   */
+  addMinorItem(searchResult) {
+    const titleName = this.selectedPids.PID;
+    if (this.offerConstructItems.length > 0) {
+      const productName = searchResult['PID Category'];
+      const obj = Object.create(null);
+      obj['uniqueKey'] = ++this.counter;
+      this.uniqueId = obj['uniqueKey'];
+      obj['productName'] = productName; // PID Category
+      obj['isGroupNode'] = false; // Group Node or Not
+      obj['title'] = titleName; // PID Name
+      obj['isMajorLineItem'] = false; // Major/Minor
+      obj['childCount'] = 0;
+      obj['eginieItem'] = true;
+      obj['itemDetails'] = searchResult;
+      // A minor item cannot be added if altleast one major item doesn't exist
+      const lastMajorItem = this.offerConstructItems[this.offerConstructItems.length - 1];
+      lastMajorItem.children.push(this.itemToTreeNode(obj));
+      this.offerConstructItems = [...this.offerConstructItems];
+    }
+  }
+
+  /**
+   * Mehtod to delete major item from list which was added from E-ginie search.
+   * This will help to maitain an unique major item in the tree.
+   * @param itemName
+   */
+  removeEginieMajorItemFromListofAlreadyAddedItems(itemName) {
+    if(this.addedEgineMajorItemsInTree.includes(itemName)) {
+      const index = this.addedEgineMajorItemsInTree.indexOf(itemName);
+      this.addedEgineMajorItemsInTree.splice(index,1);
+    }
+  }
 
   /**
    *
    * @param $event Search for PID
    */
-  searchForItem(event) {
+  searchForItemFromPdaf(event) {
     this._canvasService.searchEgenie(event.query).subscribe((results) => {
       this.results = [...results];
+    },
+      (error) => {
+        this.results = [];
+      }
+    );
+  }
+
+  /**
+   * Get e-ginie attribute, add searched item to offer configuration.
+   * @param $event Search for PID
+   */
+  addSearchedItemToOfferConfig() {
+    this._canvasService.getPidDetails(this.selectedPids.PID).subscribe((results) => {
+      if (results.body['major/minor'] === 'Minor Line') {
+        // Call to add minor line item.
+        this.addMinorItem(results.body);
+      } else if (results.body['major/minor'] === 'Major Line') {
+        // Call to add major line item
+        this.addMajorItem(results.body);
+      } else {
+        // Some problem in the response
+      }
     },
       (error) => {
         this.results = [];
@@ -918,6 +1017,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   discardChanges() {
     this.offerConstructItems = [];
     this.countableItems = [];
+    this.addedEgineMajorItemsInTree = [];
   }
 
   saveOfferConstructChanges() {

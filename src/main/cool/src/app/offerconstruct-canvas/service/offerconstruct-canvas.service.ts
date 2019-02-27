@@ -22,6 +22,10 @@ export class OfferconstructCanvasService {
     return this.http.get(this.environmentService.PDAF_SEARCH_EGINIE + keyword);
   }
 
+  getPidDetails(keyword: String): Observable<any> {
+    return this.http.get(this.environmentService.GET_PID_DETAILS + keyword);
+  }
+
   saveOfferConstructChanges(offerConstructChnages: any): Observable<any> {
     return this.http.post(this.environmentService.REST_API_UPDATE_OFFER, offerConstructChnages, { withCredentials: true });
   }
