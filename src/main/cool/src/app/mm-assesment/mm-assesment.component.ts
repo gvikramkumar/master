@@ -1082,7 +1082,6 @@ export class MmAssesmentComponent implements OnInit {
           'comment': ''
         };
         this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
-
           this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
           if (withRouter === true) {
             this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
