@@ -71,7 +71,9 @@ export class OfferSolutioningComponent implements OnInit {
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
-      this.primaryBE = this.firstData['primaryBEList'][0];
+      if(Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length){
+        this.primaryBE = this.firstData['primaryBEList'][0];
+      }
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
           this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);

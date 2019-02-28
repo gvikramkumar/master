@@ -43,21 +43,21 @@ export class AccessManagementService {
     private formatUser(): (value: any, index: number, array: any[]) => any {
         return user => {
             const accessList: any[] = [];
-            if (user.userMapping[0].keyPOC) {
+            if (user.userMapping && user.userMapping[0].keyPOC) {
                 accessList.push('KeyPOC');
             }
-            if (user.userMapping[0].functionalAdmin) {
+            if (user.userMapping && user.userMapping[0].functionalAdmin) {
                 accessList.push('Admin');
             }
             const formattedUser = {
                 ...user,
-                beList: user.userMapping.reduce((beAccumulator, userMapping) => {
+                beList: user.userMapping ? user.userMapping.reduce((beAccumulator, userMapping) => {
                     beAccumulator.push(userMapping.businessEntity);
                     return beAccumulator;
-                }, []),
-                appRoleList: user.userMapping[0].appRoleList,
-                functionalRole: user.userMapping[0].functionalRole,
-                functionalAdmin: user.userMapping[0].functionalAdmin,
+                }, []) : [],
+                appRoleList: user.userMapping ? user.userMapping[0].appRoleList : null,
+                functionalRole: user.userMapping ? user.userMapping[0].functionalRole : null,
+                functionalAdmin: user.userMapping ? user.userMapping[0].functionalAdmin : null,
                 accessList: accessList
             };
             return formattedUser;
