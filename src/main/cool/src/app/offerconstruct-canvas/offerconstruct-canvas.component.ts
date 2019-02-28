@@ -23,6 +23,7 @@ import { Observable, Subscription } from 'rxjs';
 import { async } from '@angular/core/testing';
 import { StakeHolder } from '../models/stakeholder';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-offerconstruct-canvas',
@@ -89,8 +90,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   viewDetails;
   eGinieSearchForm: FormGroup;
 
-  constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
-    private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
+  constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
+    private offerConstructService: OfferConstructService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder, private offerDetailViewService: OfferDetailViewService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -563,106 +564,59 @@ export class OfferconstructCanvasComponent implements OnInit {
     });
 
     // Prepare payload to fetch item categories. Obtain MM information.
-    this._canvasService.getMMInfo(this.currentOfferId).subscribe((res) => {
-      let reqObj: MMItems;
-      reqObj = new MMItems('offerdimensions', res.offerId, res.derivedMM, []);
-      if (res.selectedCharacteristics !== undefined && res.selectedCharacteristics.length > 0) {
-        res.selectedCharacteristics.forEach(characterstic => {
-          const found = reqObj.groups.some(function (el) {
-            return el.groupName === characterstic.group;
-          });
+    this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
 
-          if (!found) {
-            const grp = new Group(characterstic.group, []);
-            reqObj.groups.push(grp);
-          } else {
-            // Do nothing
-          }
-        });
-      }
+      // Initialize MM ModelICC Request Param Details
+      const mmModel = offerDetails.derivedMM;
 
-      // extract selected charecterstics
-      if (res.selectedCharacteristics !== undefined && res.selectedCharacteristics.length > 0) {
-        res.selectedCharacteristics.forEach(characterstic => {
-          reqObj.groups.forEach((element) => {
-            if (characterstic.characteristics.length > 0) {
-              if (element.groupName === characterstic.group) {
-                const sgrp = new SubGroup(characterstic.subgroup, characterstic.characteristics);
-                element.subGroup.push(sgrp);
-              }
-            }
-          });
-        });
-      }
+      // Initialize Components
+      const componentsObj = offerDetails['solutioningDetails'] == null ? null :
+        offerDetails['solutioningDetails'].filter(sol => sol.dimensionSubgroup === 'Offer Type');
+      const components = componentsObj == null ? null : componentsObj['dimensionAttribute'];
 
-      if (res.additionalCharacteristics !== undefined && res.additionalCharacteristics.length > 0) {
-        res.additionalCharacteristics.forEach(characterstic => {
-          const found = reqObj.groups.some(function (el) {
-            return el.groupName === characterstic.group;
-          });
+      // Initialize Offer Types
+      const offerTypeObj = offerDetails['selectedCharacteristics'].
+        filter(char => char.subgroup === 'Offer Components');
+      const offerType = offerTypeObj == null ? null : offerTypeObj[0]['characteristics'];
 
-          if (!found) {
-            const grp = new Group(characterstic.group, []);
-            reqObj.groups.push(grp);
-          } else {
-            // Do nothing
-          }
-        });
-      }
-
-      // extract additional charecterstics
-      if (res.additionalCharacteristics !== undefined && res.additionalCharacteristics.length > 0) {
-        res.additionalCharacteristics.forEach(characterstic => {
-          reqObj.groups.forEach((element) => {
-            if (characterstic.characteristics.length > 0) {
-              if (element.groupName === characterstic.group) {
-                const sgrp = new SubGroup(characterstic.subgroup, characterstic.characteristics);
-                element.subGroup.push(sgrp);
-              }
-            }
-          });
-        });
-      }
+      // Form ICC Request
+      const iccRequest = {
+        'mmModel': mmModel,
+        'offerType': offerType,
+        'components': components
+      };
 
       // Call offerconstruct request to get Major/Minor Line Items
-      this._canvasService.getOfferConstructItems(reqObj).subscribe((data) => {
+      this.offerConstructCanvasService.retrieveIccDetails(iccRequest).subscribe((iccResponse) => {
 
-        // Fake Data
-        // const itemData = [{ 'type': 'SW Subscription SKU', 'majorLineItem': false },
-        // { 'type': 'Hardware', 'majorLineItem': false },
-        // { 'type': 'Hardware', 'majorLineItem': false },
-        // { 'type': 'License', 'majorLineItem': true }];
+        // Extract Major / Minor Category Details
+        const minorItems = iccResponse['minor'];
+        const majorItems = iccResponse['major'];
 
-        // Extract Offer Category Details
-        const itemData = data['listOfferCatagory'];
+        let majorItemsList = [];
+        let minorItemsList = [];
 
-        // Populate Item Categories List
-        for (let i = 0; i < itemData.length; i++) {
-
-          const itemObj = {
-            categoryName: itemData[i].type,
-            isMajorLineItem: itemData[i].majorLineItem,
-            productName: itemData[i].type,
+        majorItemsList = majorItems.map(function (item) {
+          return {
+            productName: item,
+            categoryName: item,
+            isMajorLineItem: true,
             listPrice: ''
           };
+        });
 
-          this.itemCategories.push(itemObj);
+        minorItemsList = minorItems.map(function (item) {
+          return {
+            productName: item,
+            categoryName: item,
+            isMajorLineItem: false,
+            listPrice: ''
+          };
+        });
 
-        }
+        // Populate Item Categories List
+        this.itemCategories = majorItemsList.concat(minorItemsList);
 
-        // Self Join To Find Unique Values In Array Of Objects
-        this.itemCategories = this.itemCategories.filter((itemLeft, index, self) =>
-          index === self.findIndex((itemRight) => (
-            itemLeft.categoryName === itemRight.categoryName && itemLeft.isMajorLineItem === itemRight.isMajorLineItem
-          ))
-        );
-
-        // Sort Item Categories - Prioritize Major Items First
-        const majorItems = this.itemCategories.filter(m => m.isMajorLineItem === true);
-        const minorItems = this.itemCategories.filter(m => m.isMajorLineItem === false);
-
-        this.itemCategories = [];
-        this.itemCategories = majorItems.concat(minorItems);
 
       });
 
@@ -776,7 +730,7 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   // donwnload Zip file
   downloadZip(offerId) {
-    this._canvasService.downloadZip(this.currentOfferId).subscribe((res) => {
+    this.offerConstructCanvasService.downloadZip(this.currentOfferId).subscribe((res) => {
       const nameOfFileToDownload = 'offer-construct';
       const blob = new Blob([res], { type: 'application/zip' });
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
@@ -878,12 +832,12 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
   }
 
-    /**
-   * Called when an Minor Item is added in to Offer Components Tree table
-   * after e-ginie search.
-   * A minor item is added to the last added major item in the canvas
-   * @param searchResult
-   */
+  /**
+  * Called when an Minor Item is added in to Offer Components Tree table
+  * after e-ginie search.
+  * A minor item is added to the last added major item in the canvas
+  * @param searchResult
+  */
   addMinorItem(searchResult) {
     const titleName = this.selectedPids.PID;
     if (this.offerConstructItems.length > 0) {
@@ -913,9 +867,9 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param itemName
    */
   removeEginieMajorItemFromListofAlreadyAddedItems(itemName) {
-    if(this.addedEgineMajorItemsInTree.includes(itemName)) {
+    if (this.addedEgineMajorItemsInTree.includes(itemName)) {
       const index = this.addedEgineMajorItemsInTree.indexOf(itemName);
-      this.addedEgineMajorItemsInTree.splice(index,1);
+      this.addedEgineMajorItemsInTree.splice(index, 1);
     }
   }
 
@@ -924,7 +878,7 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param $event Search for PID
    */
   searchForItemFromPdaf(event) {
-    this._canvasService.searchEgenie(event.query).subscribe((results) => {
+    this.offerConstructCanvasService.searchEgenie(event.query).subscribe((results) => {
       this.results = [...results];
     },
       (error) => {
@@ -938,7 +892,7 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param $event Search for PID
    */
   addSearchedItemToOfferConfig() {
-    this._canvasService.getPidDetails(this.selectedPids.PID).subscribe((results) => {
+    this.offerConstructCanvasService.getPidDetails(this.selectedPids.PID).subscribe((results) => {
       if (results.body['major/minor'] === 'Minor Line') {
         // Call to add minor line item.
         this.addMinorItem(results.body);
@@ -1143,7 +1097,7 @@ export class OfferconstructCanvasComponent implements OnInit {
 
     });
 
-    this._canvasService.saveOfferConstructChanges(cds).subscribe(data => {
+    this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
     },
       (error) => {
         console.log(error);
