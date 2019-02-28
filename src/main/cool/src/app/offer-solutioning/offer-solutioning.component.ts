@@ -71,7 +71,9 @@ export class OfferSolutioningComponent implements OnInit {
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
-      this.primaryBE = this.firstData['primaryBEList'][0];
+      if(Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length){
+        this.primaryBE = this.firstData['primaryBEList'][0];
+      }
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
           this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
@@ -150,23 +152,30 @@ export class OfferSolutioningComponent implements OnInit {
     this.offerSolutionGroups = [];
     this.offerSolutionData['groups'].forEach(group => {
       group['subGroup'].forEach(g => {
+        var questionList = [];
+        var checkDuplicationList = [];
         if (g['listGrpQuestions'] != null && g['listGrpQuestions'].length > 0) {
           g['listGrpQuestions'].forEach(question => {
-            if (this.firstData != null && this.firstData['solutioningDetails'] != null) {
-              var foundGroup = this.firstData['solutioningDetails'].find(function(element) {
-                return element['dimensionSubgroup'] === g['subGroupName'];
-              });
-              if (foundGroup != null && foundGroup['Details'] != null) {
-                var foundQuestion = foundGroup['Details'].find(function(ele) {
-                  return ele['solutioninQuestion'] === question['question'];
+            if (!checkDuplicationList.includes(question['question'])) {
+              checkDuplicationList.push(question['question']);
+              if (this.firstData != null && this.firstData['solutioningDetails'] != null) {
+                var foundGroup = this.firstData['solutioningDetails'].find(function(element) {
+                  return element['dimensionSubgroup'] === g['subGroupName'];
                 });
-                if (foundQuestion != null) {
-                  question['answer'] = foundQuestion['solutioningAnswer'];
+                if (foundGroup != null && foundGroup['Details'] != null) {
+                  var foundQuestion = foundGroup['Details'].find(function(ele) {
+                    return ele['solutioninQuestion'] === question['question'];
+                  });
+                  if (foundQuestion != null) {
+                    question['answer'] = foundQuestion['solutioningAnswer'];
+                  }
                 }
               }
+              questionList.push(question);
             }
           });
         }
+        g['listGrpQuestions'] = questionList;
         this.offerSolutionGroups.push(g);
       });
       // this.offerSolutionGroups = this.offerSolutionGroups.concat(group['subGroup']);

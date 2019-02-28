@@ -9,5 +9,6 @@ export class ConstructDetail {
   constructNodeId: string;
   constructParentId: string;
   groupNode: boolean;
+  eGenieFlag: boolean;
   constructor() {}
 }
