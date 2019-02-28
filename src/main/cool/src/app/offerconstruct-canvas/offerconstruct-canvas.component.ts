@@ -659,6 +659,10 @@ export class OfferconstructCanvasComponent implements OnInit {
     obj['isMajorLineItem'] = true;
     obj['itemDetails'] = this.convertItemDetail(node.itemDetails);
     obj['childCount'] = 0;
+    if (node['eGenieFlag']) {
+      obj['eginieItem'] = node['eGenieFlag'];
+      // obj['itemDetails'] = this.draggedItem.data['itemDetails'];
+    }
     let tempNode = this.itemToTreeNode(obj);
     this.offerConstructItems.push(tempNode);
     this.offerConstructItems = [...this.offerConstructItems];
@@ -682,6 +686,10 @@ export class OfferconstructCanvasComponent implements OnInit {
     obj['isMajorLineItem'] = false;
     obj['itemDetails'] = this.convertItemDetail(childNode.itemDetails);
     obj['childCount'] = 0;
+    if (childNode['eGenieFlag']) {
+      obj['eginieItem'] = childNode['eGenieFlag'];
+      // obj['itemDetails'] = this.draggedItem.data['itemDetails'];
+    }
     let tempNode = this.itemToTreeNode(obj);
     parentNode.children.push(tempNode);
     this.offerConstructItems = [...this.offerConstructItems];
@@ -1018,13 +1026,17 @@ export class OfferconstructCanvasComponent implements OnInit {
         cd.constructNodeId = node.data.uniqueKey.toString();
         cd.constructParentId = '0';
         cd.groupNode = false;
+        // Checking if item is e-genie item.
+        if (node.data['eginieItem']) {
+          cd.eGenieFlag = true;
+        }
         if (node.data.itemDetails !== undefined) {
           let id: ItemDetail;
           for (const key in node.data.itemDetails) {
             id = new ItemDetail();
             id.attributeName = key;
             id.attributeValue = node.data.itemDetails[key];
-            id.eGenieFlag = false;
+            id.eGenieFlag = cd.eGenieFlag;
             cd.itemDetails.push(id);
           }
         }
@@ -1043,13 +1055,17 @@ export class OfferconstructCanvasComponent implements OnInit {
             cd.constructNodeId = child.data.uniqueKey.toString();
             cd.constructParentId = node.data.uniqueKey.toString();
             cd.groupNode = false;
+            // Checking if item is e-genie item.
+            if (node.data['eginieItem']) {
+              cd.eGenieFlag = true;
+            }
             if (child.data.itemDetails !== undefined) {
               let id: ItemDetail;
               for (const key in child.data.itemDetails) {
                 id = new ItemDetail();
                 id.attributeName = key;
                 id.attributeValue = child.data.itemDetails[key];
-                id.eGenieFlag = false;
+                id.eGenieFlag = cd.eGenieFlag;
                 cd.itemDetails.push(id);
               }
             }
@@ -1077,13 +1093,17 @@ export class OfferconstructCanvasComponent implements OnInit {
                 cd.constructNodeId = gchild.data.uniqueKey.toString();
                 cd.constructParentId = child.data.uniqueKey.toString();
                 cd.groupNode = false;
+                // Checking if item is e-genie item.
+                if (gchild.data['eginieItem']) {
+                  cd.eGenieFlag = true;
+                }
                 if (gchild.data.itemDetails !== undefined) {
                   let id: ItemDetail;
                   for (const key in gchild.data.itemDetails) {
                     id = new ItemDetail();
                     id.attributeName = key;
                     id.attributeValue = gchild.data.itemDetails[key];
-                    id.eGenieFlag = false;
+                    id.eGenieFlag = cd.eGenieFlag;
                     cd.itemDetails.push(id);
                   }
                 }
