@@ -170,7 +170,7 @@ export class OfferDetailViewComponent implements OnInit {
               this.solutioningDetailsCharacteristics[element.dimensionGroup]["details"] = [];
               this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionSubgroup"].push(element.dimensionSubgroup);
               this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"].push(element.dimensionAttribute);
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"] = [].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"]);
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"] = Array.from(new Set([].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"])));
               let temp = this.solutioningDetailsCharacteristics;
               if(element.Details.length){
                 element.Details.forEach(subelement => {
@@ -189,7 +189,7 @@ export class OfferDetailViewComponent implements OnInit {
             else if ((element.dimensionGroup in this.solutioningDetailsCharacteristics) && element.dimensionGroup != "Offer Characteristics"){
               this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionSubgroup"].push(element.dimensionSubgroup);
               this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"].push(element.dimensionAttribute);
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"] = [].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"]);
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"] = Array.from(new Set([].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"])));
               let temp = this.solutioningDetailsCharacteristics;
               if(element.Details.length){
                 element.Details.forEach(subelement => {
