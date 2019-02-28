@@ -5,6 +5,25 @@
   overflow:auto;
 }
 
+.search-icon .icon-search {
+  position: absolute;
+  top: 13px;
+  left: 161px;
+}
+
+.auto-complete-attribute {
+  position: relative;
+}
+
+.search-fa-icon::after{
+  content: '\f0da';
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  margin:0px 0px 0px 10px;
+  text-decoration:none;
+}
+
 .alnright { text-align: right; }
 
 input.text-input-box{

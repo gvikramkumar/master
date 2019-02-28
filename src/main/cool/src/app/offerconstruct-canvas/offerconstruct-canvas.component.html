@@ -42,12 +42,14 @@
             <div class="row" *ngIf="expandView">
               <div class="col">
                 <div class="panel panel--ltgray panel--compressed">
+                    <form [formGroup]="eGinieSearchForm" (ngSubmit)="addSearchedItemToOfferConfig()">
                   <div class="row">
                     <div class="col-md-10">
+
                       <span class="ui-fluid">
                         <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results"
                           (completeMethod)="searchForItemFromPdaf($event)" field="PID"
-                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9">
+                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9" formControlName="searchPID">
                           <ng-template pTemplate="body" let-item>
                             <tbody>
                               <tr>
@@ -67,9 +69,11 @@
                       </span>
                     </div>
                     <div class="col-md-2">
-                      <button class="btn btn--small" (click)="addSearchedItemToOfferConfig()">Add</button>
+                      <button class="btn btn--small" type="submit"
+                      [disabled]="!eGinieSearchForm.valid">Add</button>
                     </div>
                   </div>
+                </form>
                 </div>
               </div>
             </div>
@@ -264,13 +268,15 @@
         </div>
         <div class="col-md-4">
           <div class="form-group input--icon half-margin-bottom">
-            <div class="form-group__text">
-              <input id="input-type-search" type="text" pInputText size="50" placeholder="Copy Attributes"
-                style="width:auto">
-              <button type="button" class="link">
-                <span class="icon-search"></span>
-              </button>
-            </div>
+              <div class="form-group__text search-icon">
+                  <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}" [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
+                              (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
+                              placeholder="Copy Attributes" [size]="100" [minLength]="0">
+                    </p-autoComplete>
+                  <button type="button" class="link">
+                    <span class="icon-search"></span>
+                  </button>
+                </div>
           </div>
         </div>
       </div>
@@ -356,3 +362,4 @@
         </tr>
   </table>
   </p-dialog>
+

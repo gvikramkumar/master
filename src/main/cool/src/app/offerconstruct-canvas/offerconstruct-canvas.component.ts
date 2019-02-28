@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SubGroup } from './model/SubGroup';
 import { Group } from './model/Group';
 import { Groups } from '../models/groups';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { OfferConstructService } from '../services/offer-construct.service';
 import { ConstructDetails } from './model/ConstructDetails';
 import { ConstructDetail } from './model/ConstructDetail';
@@ -23,6 +23,7 @@ import { Observable, Subscription } from 'rxjs';
 import { async } from '@angular/core/testing';
 import { StakeHolder } from '../models/stakeholder';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-offerconstruct-canvas',
@@ -84,12 +85,15 @@ export class OfferconstructCanvasComponent implements OnInit {
   popHeadName;
   setFlag = true;
   downloadEnable = false;
-  addedEgineMajorItemsInTree:any[] = [];
+  addedEgineMajorItemsInTree: any[] = [];
   displayViewDetails: Boolean = false;
   viewDetails;
+  eGinieSearchForm: FormGroup;
+  itemsList;
+  copyAttributeResults;
 
-  constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
-    private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
+  constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
+    private offerConstructService: OfferConstructService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder, private offerDetailViewService: OfferDetailViewService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -131,6 +135,29 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.countableItems.push(this.uniqueId);
       this.updateChildCount();
     }
+  }
+
+  addItms() {
+    this.questionForm.reset();
+    this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(countries => {
+      let itemsData = countries.body;
+      this.questionForm.patchValue(itemsData);
+      this.cd.detectChanges();
+  });
+    //this.questionForm.setValue(this.country);
+    this.cd.detectChanges();
+  }
+
+  //search copy attributes
+
+  searchCopyAttributes(event) {
+    this.offerConstructCanvasService.searchEgenie(event.query).subscribe((results) => {
+      this.copyAttributeResults = [...results];
+    },
+      (error) => {
+        this.results = [];
+      }
+    );
   }
 
   majorLine() {
@@ -361,6 +388,10 @@ export class OfferconstructCanvasComponent implements OnInit {
                   obj1['isMajorLineItem'] = element1.data.isMajorLineItem;
                   obj1['listPrice'] = element1.data.listPrice;
                   obj1['title'] = element1.data.title ? element1.data.title : element1.data.productName;
+                  if (element1.data['eginieItem']) {
+                    obj1['eginieItem'] = element1.data['eginieItem'];
+                    obj1['itemDetails'] = element1.data['itemDetails'];
+                  }
                   element.children.push(this.itemToTreeNode(obj1));
                   this.offerConstructItems = [...this.offerConstructItems];
                 }
@@ -388,6 +419,10 @@ export class OfferconstructCanvasComponent implements OnInit {
             obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
             obj['listPrice'] = this.draggedItem.data.listPrice;
             obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
+            if (this.draggedItem.data['eginieItem']) {
+              obj['eginieItem'] = this.draggedItem.data['eginieItem'];
+              obj['itemDetails'] = this.draggedItem.data['itemDetails'];
+            }
             rowNode.node.children.push(this.itemToTreeNode(obj));
             this.delteFromParentObject(rowNode, this.draggedItem.data);
           }
@@ -431,6 +466,10 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['isMajorLineItem'] = this.draggedItem.data.isMajorLineItem;
           obj['listPrice'] = this.draggedItem.data.listPrice;
           obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
+          if (this.draggedItem.data['eginieItem']) {
+            obj['eginieItem'] = this.draggedItem.data['eginieItem'];
+            obj['itemDetails'] = this.draggedItem.data['itemDetails'];
+          }
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
         }
@@ -508,6 +547,10 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   ngOnInit() {
 
+    this.eGinieSearchForm = new FormGroup({
+      searchPID: new FormControl(null, Validators.required)
+    });
+
     // Check if construct details are availbale in the database for the current offer.
     this.offerDetailViewService.offerDetailView(this.currentOfferId).subscribe(offerDetailRes => {
       if (offerDetailRes.constructDetails.length > 0) {
@@ -546,106 +589,59 @@ export class OfferconstructCanvasComponent implements OnInit {
     });
 
     // Prepare payload to fetch item categories. Obtain MM information.
-    this._canvasService.getMMInfo(this.currentOfferId).subscribe((res) => {
-      let reqObj: MMItems;
-      reqObj = new MMItems('offerdimensions', res.offerId, res.derivedMM, []);
-      if (res.selectedCharacteristics !== undefined && res.selectedCharacteristics.length > 0) {
-        res.selectedCharacteristics.forEach(characterstic => {
-          const found = reqObj.groups.some(function (el) {
-            return el.groupName === characterstic.group;
-          });
+    this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
 
-          if (!found) {
-            const grp = new Group(characterstic.group, []);
-            reqObj.groups.push(grp);
-          } else {
-            // Do nothing
-          }
-        });
-      }
+      // Initialize MM ModelICC Request Param Details
+      const mmModel = offerDetails.derivedMM;
 
-      // extract selected charecterstics
-      if (res.selectedCharacteristics !== undefined && res.selectedCharacteristics.length > 0) {
-        res.selectedCharacteristics.forEach(characterstic => {
-          reqObj.groups.forEach((element) => {
-            if (characterstic.characteristics.length > 0) {
-              if (element.groupName === characterstic.group) {
-                const sgrp = new SubGroup(characterstic.subgroup, characterstic.characteristics);
-                element.subGroup.push(sgrp);
-              }
-            }
-          });
-        });
-      }
+      // Initialize Offer Types
+      const componentsObj = offerDetails['selectedCharacteristics'] == null ? null : offerDetails['selectedCharacteristics'].
+        filter(char => char.subgroup === 'Offer Components');
+      const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
 
-      if (res.additionalCharacteristics !== undefined && res.additionalCharacteristics.length > 0) {
-        res.additionalCharacteristics.forEach(characterstic => {
-          const found = reqObj.groups.some(function (el) {
-            return el.groupName === characterstic.group;
-          });
+      // Initialize Components
+      const offerTypeObj = offerDetails['solutioningDetails'] == null ? null :
+        offerDetails['solutioningDetails'].filter(sol => sol.dimensionSubgroup === 'Offer Type');
+      const offerType = offerTypeObj == null ? null : offerTypeObj[0]['dimensionAttribute'];
 
-          if (!found) {
-            const grp = new Group(characterstic.group, []);
-            reqObj.groups.push(grp);
-          } else {
-            // Do nothing
-          }
-        });
-      }
-
-      // extract additional charecterstics
-      if (res.additionalCharacteristics !== undefined && res.additionalCharacteristics.length > 0) {
-        res.additionalCharacteristics.forEach(characterstic => {
-          reqObj.groups.forEach((element) => {
-            if (characterstic.characteristics.length > 0) {
-              if (element.groupName === characterstic.group) {
-                const sgrp = new SubGroup(characterstic.subgroup, characterstic.characteristics);
-                element.subGroup.push(sgrp);
-              }
-            }
-          });
-        });
-      }
+      // Form ICC Request
+      const iccRequest = {
+        'mmModel': mmModel,
+        'offerType': offerType,
+        'components': components
+      };
 
       // Call offerconstruct request to get Major/Minor Line Items
-      this._canvasService.getOfferConstructItems(reqObj).subscribe((data) => {
+      this.offerConstructCanvasService.retrieveIccDetails(iccRequest).subscribe((iccResponse) => {
 
-        // Fake Data
-        // const itemData = [{ 'type': 'SW Subscription SKU', 'majorLineItem': false },
-        // { 'type': 'Hardware', 'majorLineItem': false },
-        // { 'type': 'Hardware', 'majorLineItem': false },
-        // { 'type': 'License', 'majorLineItem': true }];
+        // Extract Major / Minor Category Details
+        const minorItems = iccResponse['minor'];
+        const majorItems = iccResponse['major'];
 
-        // Extract Offer Category Details
-        const itemData = data['listOfferCatagory'];
+        let majorItemsList = [];
+        let minorItemsList = [];
 
-        // Populate Item Categories List
-        for (let i = 0; i < itemData.length; i++) {
-
-          const itemObj = {
-            categoryName: itemData[i].type,
-            isMajorLineItem: itemData[i].majorLineItem,
-            productName: itemData[i].type,
+        majorItemsList = majorItems.map(function (item) {
+          return {
+            productName: item,
+            categoryName: item,
+            isMajorLineItem: true,
             listPrice: ''
           };
+        });
 
-          this.itemCategories.push(itemObj);
+        minorItemsList = minorItems.map(function (item) {
+          return {
+            productName: item,
+            categoryName: item,
+            isMajorLineItem: false,
+            listPrice: ''
+          };
+        });
 
-        }
+        // Populate Item Categories List
+        this.itemCategories = majorItemsList.concat(minorItemsList);
 
-        // Self Join To Find Unique Values In Array Of Objects
-        this.itemCategories = this.itemCategories.filter((itemLeft, index, self) =>
-          index === self.findIndex((itemRight) => (
-            itemLeft.categoryName === itemRight.categoryName && itemLeft.isMajorLineItem === itemRight.isMajorLineItem
-          ))
-        );
-
-        // Sort Item Categories - Prioritize Major Items First
-        const majorItems = this.itemCategories.filter(m => m.isMajorLineItem === true);
-        const minorItems = this.itemCategories.filter(m => m.isMajorLineItem === false);
-
-        this.itemCategories = [];
-        this.itemCategories = majorItems.concat(minorItems);
 
       });
 
@@ -688,6 +684,10 @@ export class OfferconstructCanvasComponent implements OnInit {
     obj['isMajorLineItem'] = true;
     obj['itemDetails'] = this.convertItemDetail(node.itemDetails);
     obj['childCount'] = 0;
+    if (node['eGenieFlag']) {
+      obj['eginieItem'] = node['eGenieFlag'];
+      // obj['itemDetails'] = this.draggedItem.data['itemDetails'];
+    }
     let tempNode = this.itemToTreeNode(obj);
     this.offerConstructItems.push(tempNode);
     this.offerConstructItems = [...this.offerConstructItems];
@@ -711,6 +711,10 @@ export class OfferconstructCanvasComponent implements OnInit {
     obj['isMajorLineItem'] = false;
     obj['itemDetails'] = this.convertItemDetail(childNode.itemDetails);
     obj['childCount'] = 0;
+    if (childNode['eGenieFlag']) {
+      obj['eginieItem'] = childNode['eGenieFlag'];
+      // obj['itemDetails'] = this.draggedItem.data['itemDetails'];
+    }
     let tempNode = this.itemToTreeNode(obj);
     parentNode.children.push(tempNode);
     this.offerConstructItems = [...this.offerConstructItems];
@@ -759,7 +763,7 @@ export class OfferconstructCanvasComponent implements OnInit {
 
   // donwnload Zip file
   downloadZip(offerId) {
-    this._canvasService.downloadZip(this.currentOfferId).subscribe((res) => {
+    this.offerConstructCanvasService.downloadZip(this.currentOfferId).subscribe((res) => {
       const nameOfFileToDownload = 'offer-construct';
       const blob = new Blob([res], { type: 'application/zip' });
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
@@ -857,15 +861,16 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.countableItems.push(this.uniqueId);
       this.updateChildCount();
       this.addedEgineMajorItemsInTree.push(titleName);
+      this.eGinieSearchForm.reset();
     }
   }
 
-    /**
-   * Called when an Minor Item is added in to Offer Components Tree table
-   * after e-ginie search.
-   * A minor item is added to the last added major item in the canvas
-   * @param searchResult
-   */
+  /**
+  * Called when an Minor Item is added in to Offer Components Tree table
+  * after e-ginie search.
+  * A minor item is added to the last added major item in the canvas
+  * @param searchResult
+  */
   addMinorItem(searchResult) {
     const titleName = this.selectedPids.PID;
     if (this.offerConstructItems.length > 0) {
@@ -885,6 +890,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       lastMajorItem.children.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
       this.updateChildCount();
+      this.eGinieSearchForm.reset();
     }
   }
 
@@ -894,9 +900,9 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param itemName
    */
   removeEginieMajorItemFromListofAlreadyAddedItems(itemName) {
-    if(this.addedEgineMajorItemsInTree.includes(itemName)) {
+    if (this.addedEgineMajorItemsInTree.includes(itemName)) {
       const index = this.addedEgineMajorItemsInTree.indexOf(itemName);
-      this.addedEgineMajorItemsInTree.splice(index,1);
+      this.addedEgineMajorItemsInTree.splice(index, 1);
     }
   }
 
@@ -905,7 +911,7 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param $event Search for PID
    */
   searchForItemFromPdaf(event) {
-    this._canvasService.searchEgenie(event.query).subscribe((results) => {
+    this.offerConstructCanvasService.searchEgenie(event.query).subscribe((results) => {
       this.results = [...results];
     },
       (error) => {
@@ -919,7 +925,7 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param $event Search for PID
    */
   addSearchedItemToOfferConfig() {
-    this._canvasService.getPidDetails(this.selectedPids.PID).subscribe((results) => {
+    this.offerConstructCanvasService.getPidDetails(this.selectedPids.PID).subscribe((results) => {
       if (results.body['major/minor'] === 'Minor Line') {
         // Call to add minor line item.
         this.addMinorItem(results.body);
@@ -1013,6 +1019,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.displayViewDetails = true;
     // let itemDetails = currentNode.node.data['itemDetails'];
     this.viewDetails = currentNode.node.data['itemDetails'];
+    delete this.viewDetails['major/minor'];
   }
 
   openMandatory() {
@@ -1044,13 +1051,17 @@ export class OfferconstructCanvasComponent implements OnInit {
         cd.constructNodeId = node.data.uniqueKey.toString();
         cd.constructParentId = '0';
         cd.groupNode = false;
+        // Checking if item is e-genie item.
+        if (node.data['eginieItem']) {
+          cd.eGenieFlag = true;
+        }
         if (node.data.itemDetails !== undefined) {
           let id: ItemDetail;
           for (const key in node.data.itemDetails) {
             id = new ItemDetail();
             id.attributeName = key;
             id.attributeValue = node.data.itemDetails[key];
-            id.eGenieFlag = false;
+            id.eGenieFlag = cd.eGenieFlag;
             cd.itemDetails.push(id);
           }
         }
@@ -1069,13 +1080,17 @@ export class OfferconstructCanvasComponent implements OnInit {
             cd.constructNodeId = child.data.uniqueKey.toString();
             cd.constructParentId = node.data.uniqueKey.toString();
             cd.groupNode = false;
+            // Checking if item is e-genie item.
+            if (node.data['eginieItem']) {
+              cd.eGenieFlag = true;
+            }
             if (child.data.itemDetails !== undefined) {
               let id: ItemDetail;
               for (const key in child.data.itemDetails) {
                 id = new ItemDetail();
                 id.attributeName = key;
                 id.attributeValue = child.data.itemDetails[key];
-                id.eGenieFlag = false;
+                id.eGenieFlag = cd.eGenieFlag;
                 cd.itemDetails.push(id);
               }
             }
@@ -1103,13 +1118,17 @@ export class OfferconstructCanvasComponent implements OnInit {
                 cd.constructNodeId = gchild.data.uniqueKey.toString();
                 cd.constructParentId = child.data.uniqueKey.toString();
                 cd.groupNode = false;
+                // Checking if item is e-genie item.
+                if (gchild.data['eginieItem']) {
+                  cd.eGenieFlag = true;
+                }
                 if (gchild.data.itemDetails !== undefined) {
                   let id: ItemDetail;
                   for (const key in gchild.data.itemDetails) {
                     id = new ItemDetail();
                     id.attributeName = key;
                     id.attributeValue = gchild.data.itemDetails[key];
-                    id.eGenieFlag = false;
+                    id.eGenieFlag = cd.eGenieFlag;
                     cd.itemDetails.push(id);
                   }
                 }
@@ -1123,7 +1142,7 @@ export class OfferconstructCanvasComponent implements OnInit {
 
     });
 
-    this._canvasService.saveOfferConstructChanges(cds).subscribe(data => {
+    this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
     },
       (error) => {
         console.log(error);
@@ -1165,3 +1184,4 @@ export class OfferconstructCanvasComponent implements OnInit {
     });
   }
 }
+

@@ -37,10 +37,10 @@ export class OfferConstructService {
     toFormGroup(questions) {
         const group: any = {};
         questions.forEach(question => {
-          group[question.egineAttribue] = question.required ? new FormControl(question.value || '', Validators.required)
-                                                  : new FormControl(question.value || '');
+            group[question.egineAttribue] = question.required ? new FormControl(question.value || '', Validators.required)
+                : new FormControl(question.value || '');
         });
         return new FormGroup(group);
-      }
+    }
 
 }
