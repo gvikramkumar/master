@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit {
     this.offerColumns = [
       { field: 'offerId', header: 'OFFER ID' },
       { field: 'offerName', header: 'OFFER NAME' },
-      { field: 'offerOwner', header: 'OFFER OWNER' },
+      { field: 'ownerName', header: 'OFFER OWNER' },
       { field: 'expectedLaunchDate', header: 'LAUNCH DATE' }
     ];
 
