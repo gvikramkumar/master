@@ -68,6 +68,7 @@ export class EnvironmentService {
     PDAF_API;
     PDAF_GET_TOKEN_API;
     PDAF_SEARCH_EGINIE;
+    GET_PID_DETAILS;
     REST_API_FILE_UPLOAD_FOR_ACTION;
     REST_API_FILE_DOWNLOAD_FOR_ACTION;
     REST_API_POST_RULE_RESULT_URL;
@@ -236,5 +237,6 @@ export class EnvironmentService {
         this.REST_API_USER_DETAILS = this.basepdafapi + '/user/1.0/getLdapUserInfo';
         this.REST_API_UPDATE_OFFER_TARGET_DATE = this.baseapi + '/offer/updateDates';
         this.REST_API_GET_OFFER_DATES = this.baseapi + '/offer/getDates/';
+        this.GET_PID_DETAILS = this.baseapi + '/eGenie/getAttribute/';
     }
 }
