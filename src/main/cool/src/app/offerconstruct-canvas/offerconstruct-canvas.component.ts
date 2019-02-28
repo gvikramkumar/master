@@ -85,7 +85,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   popHeadName;
   setFlag = true;
   downloadEnable = false;
-  addedEgineMajorItemsInTree:any[] = [];
+  addedEgineMajorItemsInTree: any[] = [];
   displayViewDetails: Boolean = false;
   viewDetails;
   eGinieSearchForm: FormGroup;
@@ -569,15 +569,15 @@ export class OfferconstructCanvasComponent implements OnInit {
       // Initialize MM ModelICC Request Param Details
       const mmModel = offerDetails.derivedMM;
 
-      // Initialize Components
-      const componentsObj = offerDetails['solutioningDetails'] == null ? null :
-        offerDetails['solutioningDetails'].filter(sol => sol.dimensionSubgroup === 'Offer Type');
-      const components = componentsObj == null ? null : componentsObj['dimensionAttribute'];
-
       // Initialize Offer Types
-      const offerTypeObj = offerDetails['selectedCharacteristics'].
+      const componentsObj = offerDetails['selectedCharacteristics'] == null ? null : offerDetails['selectedCharacteristics'].
         filter(char => char.subgroup === 'Offer Components');
-      const offerType = offerTypeObj == null ? null : offerTypeObj[0]['characteristics'];
+      const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
+
+      // Initialize Components
+      const offerTypeObj = offerDetails['solutioningDetails'] == null ? null :
+        offerDetails['solutioningDetails'].filter(sol => sol.dimensionSubgroup === 'Offer Type');
+      const offerType = offerTypeObj == null ? null : offerTypeObj[0]['dimensionAttribute'];
 
       // Form ICC Request
       const iccRequest = {
