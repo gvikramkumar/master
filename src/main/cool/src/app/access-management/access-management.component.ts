@@ -148,7 +148,6 @@ export class AccessManagementComponent implements OnInit {
     const isKeyPoC = updatedUserBusinessEntity.accessList.includes('KeyPOC');
     const isAdmin = updatedUserBusinessEntity.accessList.includes('Admin');
     const userMappings: UserMapping[] = [];
-    debugger;
     if ((updatedUserBusinessEntity.beList && updatedUserBusinessEntity.beList.length > 0)) {
       updatedUserBusinessEntity.beList.forEach(element => {
         const userMapping = new UserMapping(
@@ -175,68 +174,6 @@ export class AccessManagementComponent implements OnInit {
 
 
   }
-
-  /**
-   * Function to Update BU of the user
-   * @param updatedUser
-   */
-  // updatedAccessManagement(updatedUser) {
-  //   const isKeyPoC = updatedUser.accessList.includes('KeyPOC');
-  //   const isAdmin = updatedUser.accessList.includes('Admin');
-  //   const userMappings: UserMapping[] = [];
-  //   if (updatedUser.beList) {
-  //     updatedUser.beList.forEach(element => {
-  //       const userMapping = new UserMapping(
-  //         element,
-  //         updatedUser.functionalRole,
-  //         isAdmin,
-  //         isKeyPoC
-  //       );
-  //       userMappings.push(userMapping);
-  //     });
-  //   }
-  //   const updateAdmin = {
-  //     '_id': updatedUser.userId,
-  //     'businessUnits': updatedUser.buList ? updatedUser.buList : [],
-  //     'userMappings': userMappings
-  //   }
-  //   this.accessManagementService.updateAccessManagement(updateAdmin)
-  //     .subscribe(() => {
-  //       // console.log('updated successfully');
-  //     });
-  // }
-
-  /**
-   * Function to update access level(KeyPOC/Admin) for the user.
-   * @param user
-   */
-  // updatedAccessForUser(user) {
-  //   const isKeyPoC = user.accessList.includes('KeyPOC');
-  //   const isAdmin = user.accessList.includes('Admin');
-  //   const userMappings: UserMapping[] = [];
-  //   if (user.beList) {
-  //     user.beList.forEach(element => {
-  //       const userMapping = new UserMapping(
-  //         element,
-  //         user.functionalRole,
-  //         isAdmin,
-  //         isKeyPoC
-  //       );
-  //       userMappings.push(userMapping);
-  //     });
-  //   }
-
-  //   const updateAdmin = {
-  //     '_id': user.userId,
-  //     'businessUnits': user.buList ? user.buList : [],
-  //     'userMappings': userMappings
-  //   };
-
-  //   this.accessManagementService.updateAccessManagement(updateAdmin)
-  //     .subscribe(() => {
-  //       // console.log('updated successfully');
-  //     });
-  // }
 
   registerNewUser() {
     this.showFormSection = true;
