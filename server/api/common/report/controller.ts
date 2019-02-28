@@ -82,9 +82,6 @@ export default class ReportController extends ControllerBase {
 
     switch (report) {
       case 'dollar-upload':
-        // we need moduleId for some reports (hit collections will multiple module data),
-        // but for module specific collections like these, having a moduleId will
-        // get no results as it's not included in the collection, so we need to remove it from filter
         excelSheetname = ['Manual Uploaded Data'];
         excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Product', 'Sales', 'Legal Business Entity', 'Internal Business Entity',
           'SCMS', 'Amount', 'Gross Unbilled Accrued Revenue Flag', 'Deal ID', 'Revenue Classification', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
@@ -99,7 +96,25 @@ export default class ReportController extends ControllerBase {
             this.measures = results[0];
             this.submeasures = results[1];
             const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
-            return _.orderBy(rtn, ['measure.name', 'sm.name'], ['asc', 'asc']);
+            return _.sortBy(rtn, 'sm.name');
+          });
+        break;
+
+        // this is the same report as dollar upload with the right 7 columns truncated
+      case 'valid-slpf-driver':
+        excelSheetname = ['SLPF Validation'];
+        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Sales Value', 'Product Value',	'SCMS Value',	'Business Entity Value', 'Internal BE Value'];
+        excelProperties = ['measure.name', 'sm.name', 'input_sales_value', 'input_product_value', 'input_scms_value', 'input_entity_value', 'input_internal_be_value'];
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.pgLookupRepo.getDollarUploadReport(body.fiscalMonth, body.submeasureKeys)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
+            return _.orderBy(rtn, ['sm.name', 'input_sales_value', 'input_product_value', 'input_scms_value', 'input_entity_value', 'input_internal_be_value'], ['asc', 'asc', 'asc', 'asc', 'asc', 'asc']);
           });
         break;
 
@@ -117,7 +132,7 @@ export default class ReportController extends ControllerBase {
             this.measures = results[0];
             this.submeasures = results[1];
             const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
-            return _.orderBy(rtn, ['measure.name', 'sm.name'], ['asc', 'asc']);
+            return _.sortBy(rtn, 'sm.name');
           });
         break;
 
@@ -157,7 +172,7 @@ export default class ReportController extends ControllerBase {
               obj.endAccount = obj.gl_account ? '' : 69999;
               return this.transformAddMeasureAndSubmeasure(obj);
             });
-            return _.orderBy(rtn, ['measure.name', 'sm.name', 'node_value'], ['asc', 'asc', 'asc']);
+            return _.orderBy(rtn, ['sm.name', 'node_value'], ['asc', 'asc']);
           });
         break;
 
@@ -239,9 +254,9 @@ export default class ReportController extends ControllerBase {
                           ['driver_type', 'technology_group_id', 'business_unit_id', 'product_family_id', 'bk_business_entity_name', 'sub_business_entity_name']];
         promise = Promise.all([
           this.pgLookupRepo.getAdjustmentPFReport(),
-          this.pgLookupRepo.getDriverSL3Report(),
-          this.pgLookupRepo.getShipmentDriverPFReport(),
-          this.pgLookupRepo.getRoll3DriverWithBEReport()
+          this.pgLookupRepo.getDriverSL3Report(req.dfa),
+          this.pgLookupRepo.getShipmentDriverPFReport(req.dfa),
+          this.pgLookupRepo.getRoll3DriverWithBEReport(req.dfa)
         ]);
         break;
 

@@ -1,17 +1,11 @@
 
-/*
-  ssl: {
-    key: '../../../../DFA/ssl_cert/dfaSSL.key',
-    cert: '../../../../DFA/ssl_cert/dfaSSL.csr'
-  },
- */
-
 export default {
   port: 3002,
   corsOrigin: [],
   showStack: false,
   artUrl: 'https://wsgi-stage.cisco.com/cepm/pdpservices/authorizationmanagerservice',
   autoSyncOn: true,
+  ssoUrl: 'https://localhost:3443',
   mongo: {
     uri: 'mongodb://findp-stg-01.cisco.com/fin-dfa',
     host: 'findp-stg-01.cisco.com',
@@ -24,4 +18,11 @@ export default {
     database: 'fpastg',
   }
 };
+
+/*
+  ssl: {
+    key: '../../../../DFA/ssl_cert/dfaSSL.key',
+    cert: '../../../../DFA/ssl_cert/dfaSSL.csr'
+  },
+ */
 

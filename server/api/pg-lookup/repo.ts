@@ -78,10 +78,8 @@ export default class PgLookupRepo {
 
   getDollarUploadReport(fiscalMonth, submeasureKeys) {
     const sql = `
-      SELECT fiscal_month_id, measure_id, sub_measure_key, input_internal_be_hier_level_id, input_internal_be_hier_level_name, input_internal_be_value, input_end_cust_hier_level_id,
-      input_end_cust_hier_level_name, input_end_cust_value, input_entity_hier_level_id, input_entity_hier_level_name, input_entity_value, input_product_hier_level_id,
-      input_product_hier_level_name, input_product_value, input_sales_hier_level_id, input_sales_hier_level_name, input_sales_value, input_scms_hier_level_id,
-      input_scms_hier_level_name, input_scms_value, deal_id, gross_unbilled_accrued_rev_flg, revenue_classification, amount_value, create_owner, create_datetimestamp, 
+      SELECT fiscal_month_id, measure_id, sub_measure_key, input_product_value, input_sales_value, input_scms_value, input_entity_value, input_internal_be_value, 
+      deal_id, gross_unbilled_accrued_rev_flg, revenue_classification, amount_value, create_owner, create_datetimestamp, 
       update_owner, update_datetimestamp
       FROM fpadfa.dfa_prof_input_amnt_upld
       where fiscal_month_id = ${fiscalMonth} and sub_measure_key in ( ${submeasureKeys} )
@@ -314,8 +312,8 @@ export default class PgLookupRepo {
           .then(results => results.rows);
   }
 
-  getDriverSL3Report() {
-    return pgc.pgdb.query(`
+  getDriverSL3Report(dfa) {
+    const sql = `
             SELECT
             driver_type,
             sh.l1_sales_territory_name_code,
@@ -331,7 +329,7 @@ export default class PgLookupRepo {
             in (SELECT fiscal_year_month_int 
               FROM (SELECT fiscal_year_month_int 
                   FROM fpacon.vw_fpa_fiscal_month_to_year  
-                  WHERE fiscal_year_month_int in (SELECT FISCAL_MONTH_ID FROM fpadfa.dfa_open_period WHERE OPEN_FLAG = 'Y' and module_id=1)
+                  WHERE fiscal_year_month_int = ${dfa.fiscalMonths.prof}
                   order by fiscal_year_month_int desc) as fm 
               limit 3)
             and drv.sales_territory_code = sh.sales_territory_name
@@ -346,12 +344,13 @@ export default class PgLookupRepo {
             sh.l2_sales_territory_descr,
             sh.l3_sales_territory_name_code,
             sh.l3_sales_territory_descr
-          `)
+          `;
+    return pgc.pgdb.query(sql)
           .then(results => results.rows);
   }
 
-  getShipmentDriverPFReport() {
-    return pgc.pgdb.query(`
+  getShipmentDriverPFReport(dfa) {
+    const sql = `
             SELECT 
             product_hier.technology_group_id,
             product_hier.business_unit_id,
@@ -363,7 +362,7 @@ export default class PgLookupRepo {
             (SELECT fiscal_year_month_int 
               FROM (SELECT fiscal_year_month_int 
                   FROM fpacon.vw_fpa_fiscal_month_to_year  
-                  WHERE fiscal_year_month_int in (SELECT FISCAL_MONTH_ID FROM fpadfa.dfa_open_period WHERE OPEN_FLAG = 'Y' and module_id=1)
+                  WHERE fiscal_year_month_int  = ${dfa.fiscalMonths.prof}
                   order by fiscal_year_month_int desc) as fm 
               limit 3)
             and driver_type ='SHIPMENT' 
@@ -378,12 +377,13 @@ export default class PgLookupRepo {
               group by ph.technology_group_id, ph.business_unit_id,ph.product_family_id) product_hier
             WHERE driver.PRODUCT_FAMILY = product_hier.product_family_id 
             order by product_hier.technology_group_id,product_hier.business_unit_id, product_hier.product_family_id
-          `)
+          `;
+    return pgc.pgdb.query(sql)
           .then(results => results.rows);
   }
 
-  getRoll3DriverWithBEReport() {
-    return pgc.pgdb.query(`
+  getRoll3DriverWithBEReport(dfa) {
+    const sql = `
             SELECT 
             driver.driver_type,
             product_hier.technology_group_id,
@@ -401,7 +401,7 @@ export default class PgLookupRepo {
             (SELECT fiscal_year_month_int 
               FROM (SELECT fiscal_year_month_int 
                   FROM fpacon.vw_fpa_fiscal_month_to_year  
-                  WHERE fiscal_year_month_int in (SELECT FISCAL_MONTH_ID FROM fpadfa.dfa_open_period WHERE OPEN_FLAG = 'Y' and module_id=1)
+                  WHERE fiscal_year_month_int  = ${dfa.fiscalMonths.prof}
                   order by fiscal_year_month_int desc) as fm 
               limit 3)
             and driver_type in ('SHIPMENT','GLREV','REMKTREV')
@@ -416,7 +416,8 @@ export default class PgLookupRepo {
               group by ph.technology_group_id, ph.business_unit_id,ph.product_family_id) product_hier 
             WHERE driver.PRODUCT_FAMILY = product_hier.product_family_id 
             order by DRIVER_TYPE, product_hier.technology_group_id,product_hier.business_unit_id, product_hier.product_family_id
-          `)
+          `;
+    return pgc.pgdb.query(sql)
           .then(results => results.rows);
   }
 

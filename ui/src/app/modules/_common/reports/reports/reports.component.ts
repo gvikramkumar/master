@@ -73,6 +73,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Valid_Driver_Report'
     },
     {
+      type: 'valid-slpf-driver', hasMultiSmAndFiscalMonth: true, text: 'Valid SL/PF Driver Report', disabled: false,
+      filename: 'Valid_SL_PF_Driver_Report'
+    },
+    {
       type: 'submeasure', hasNoChoices: true, text: 'Sub-Measure Updates', disabled: false,
       filename: 'Submeasure_Update_Report'
     },
@@ -184,6 +188,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       case 'disti-direct':
         obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_disti_to_direct_map_upld', 'fiscal_month_id');
         break;
+      case 'valid-slpf-driver':
       case 'dollar-upload':
         obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', null, true);
         break;
@@ -231,6 +236,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       this.disableDownload = true;
       this.fiscalMonth = undefined;
       this.fiscalMonths = [];
+/*
+      // these moved to multisubmeasure choice, but save for reference
       let obs;
       switch (this.report.type) {
         case 'dollar-upload':
@@ -250,6 +257,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           this.disableDownload = false;
         }
       });
+*/
     }
   }
 
@@ -257,6 +265,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     let obs;
     switch (this.report.type) {
       case 'dollar-upload':
+      case 'valid-slpf-driver':
         obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
           `sub_measure_key in ( ${this.submeasureKeys} )`);
         break;
