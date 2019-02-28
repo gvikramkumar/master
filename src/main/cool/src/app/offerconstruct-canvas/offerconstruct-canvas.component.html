@@ -268,13 +268,15 @@
         </div>
         <div class="col-md-4">
           <div class="form-group input--icon half-margin-bottom">
-            <div class="form-group__text">
-              <input id="input-type-search" type="text" pInputText size="50" placeholder="Copy Attributes"
-                style="width:auto">
-              <button type="button" class="link">
-                <span class="icon-search"></span>
-              </button>
-            </div>
+              <div class="form-group__text search-icon">
+                  <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}" [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
+                              (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
+                              placeholder="Copy Attributes" [size]="100" [minLength]="0">
+                    </p-autoComplete>
+                  <button type="button" class="link">
+                    <span class="icon-search"></span>
+                  </button>
+                </div>
           </div>
         </div>
       </div>
