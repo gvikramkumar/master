@@ -254,9 +254,9 @@ export default class ReportController extends ControllerBase {
                           ['driver_type', 'technology_group_id', 'business_unit_id', 'product_family_id', 'bk_business_entity_name', 'sub_business_entity_name']];
         promise = Promise.all([
           this.pgLookupRepo.getAdjustmentPFReport(),
-          this.pgLookupRepo.getDriverSL3Report(),
-          this.pgLookupRepo.getShipmentDriverPFReport(),
-          this.pgLookupRepo.getRoll3DriverWithBEReport()
+          this.pgLookupRepo.getDriverSL3Report(req.dfa),
+          this.pgLookupRepo.getShipmentDriverPFReport(req.dfa),
+          this.pgLookupRepo.getRoll3DriverWithBEReport(req.dfa)
         ]);
         break;
 

@@ -8,10 +8,10 @@ export function finRequest(options) {
 
     request(options, (err, resp, body) => {
       if (err) {
-        throw new ApiError('Request error', {
-          error: err,
+        reject(new ApiError('Request error', {
+          error: Object.assign({message: err.message}, err),
           options: options
-        });
+        }));
       }
       resolve({resp, body});
     });
