@@ -6,7 +6,6 @@ import { NewUser } from '../models/newuser';
 import { UserMapping } from '../models/usermapping';
 import { User } from './user';
 import { forkJoin, Observable, of, from } from 'rxjs';
-
 @Component({
   selector: 'app-access-management',
   templateUrl: './access-management.component.html',
@@ -80,7 +79,7 @@ export class AccessManagementComponent implements OnInit {
         this.accessManagementData = resUserAccess
           .map(user => {
             user.businessEntities = this.businessEntities;
-            user.businessUnits = user.buList.map(elementBU => ({ label: elementBU, value: elementBU }));
+            user.businessUnits = user.buList ? [{ label: 'ALL', value: 'ALL' }, ...user.buList.map(elementBU => ({ label: elementBU, value: elementBU }))] : [{ label: 'ALL', value: 'ALL' }];
             return user;
           });
       });
@@ -146,85 +145,98 @@ export class AccessManagementComponent implements OnInit {
    * @param updatedUserBusinessEntity
    */
   updatedAccessManagementBE(updatedUserBusinessEntity) {
+    const isKeyPoC = updatedUserBusinessEntity.accessList.includes('KeyPOC');
+    const isAdmin = updatedUserBusinessEntity.accessList.includes('Admin');
     const userMappings: UserMapping[] = [];
-    updatedUserBusinessEntity.beList.forEach(element => {
-      const userMapping = new UserMapping(
-        element,
-        updatedUserBusinessEntity.functionalRole,
-        updatedUserBusinessEntity.functionalAdmin,
-        updatedUserBusinessEntity.keyPOC
-      );
-      userMappings.push(userMapping);
-    });
-
-    const updateAdmin = {
-      '_id': updatedUserBusinessEntity.userId,
-      'businessUnits': updatedUserBusinessEntity.buList,
-      'userMappings': userMappings
-    };
-
-    this.accessManagementService.updateAccessManagement(updateAdmin)
-      .subscribe(() => {
-        // console.log('updated successfully');
+    debugger;
+    if ((updatedUserBusinessEntity.beList && updatedUserBusinessEntity.beList.length > 0)) {
+      updatedUserBusinessEntity.beList.forEach(element => {
+        const userMapping = new UserMapping(
+          element,
+          updatedUserBusinessEntity.functionalRole,
+          isAdmin,
+          isKeyPoC
+        );
+        userMappings.push(userMapping);
       });
+      const updateAdmin = {
+        '_id': updatedUserBusinessEntity.userId,
+        'businessUnits': updatedUserBusinessEntity.buList ? updatedUserBusinessEntity.buList : [],
+        'userMappings': userMappings
+      };
+
+      this.accessManagementService.updateAccessManagement(updateAdmin)
+        .subscribe(() => {
+          // console.log('updated successfully');
+        });
+    } else {
+      this.getUserAccessData(this.currentUserData);
+    }
+
+
   }
 
   /**
    * Function to Update BU of the user
    * @param updatedUser
    */
-  updatedAccessManagement(updatedUser) {
-    const userMappings: UserMapping[] = [];
-    updatedUser.beList.forEach(element => {
-      const userMapping = new UserMapping(
-        element,
-        updatedUser.functionalRole,
-        updatedUser.functionalAdmin,
-        updatedUser.keyPOC
-      );
-      userMappings.push(userMapping);
-    });
-
-    const updateAdmin = {
-      '_id': updatedUser.userId,
-      'businessUnits': updatedUser.buList,
-      'userMappings': userMappings
-    }
-    this.accessManagementService.updateAccessManagement(updateAdmin)
-      .subscribe(() => {
-        // console.log('updated successfully');
-      });
-  }
+  // updatedAccessManagement(updatedUser) {
+  //   const isKeyPoC = updatedUser.accessList.includes('KeyPOC');
+  //   const isAdmin = updatedUser.accessList.includes('Admin');
+  //   const userMappings: UserMapping[] = [];
+  //   if (updatedUser.beList) {
+  //     updatedUser.beList.forEach(element => {
+  //       const userMapping = new UserMapping(
+  //         element,
+  //         updatedUser.functionalRole,
+  //         isAdmin,
+  //         isKeyPoC
+  //       );
+  //       userMappings.push(userMapping);
+  //     });
+  //   }
+  //   const updateAdmin = {
+  //     '_id': updatedUser.userId,
+  //     'businessUnits': updatedUser.buList ? updatedUser.buList : [],
+  //     'userMappings': userMappings
+  //   }
+  //   this.accessManagementService.updateAccessManagement(updateAdmin)
+  //     .subscribe(() => {
+  //       // console.log('updated successfully');
+  //     });
+  // }
 
   /**
    * Function to update access level(KeyPOC/Admin) for the user.
    * @param user
    */
-  updatedAccessForUser(user) {
-    const isKeyPoC = user.accessList.includes('KeyPOC');
-    const isAdmin = user.accessList.includes('Admin');
-    const userMappings: UserMapping[] = [];
-    user.beList.forEach(element => {
-      const userMapping = new UserMapping(
-        element,
-        user.functionalRole,
-        isAdmin,
-        isKeyPoC
-      );
-      userMappings.push(userMapping);
-    });
+  // updatedAccessForUser(user) {
+  //   const isKeyPoC = user.accessList.includes('KeyPOC');
+  //   const isAdmin = user.accessList.includes('Admin');
+  //   const userMappings: UserMapping[] = [];
+  //   if (user.beList) {
+  //     user.beList.forEach(element => {
+  //       const userMapping = new UserMapping(
+  //         element,
+  //         user.functionalRole,
+  //         isAdmin,
+  //         isKeyPoC
+  //       );
+  //       userMappings.push(userMapping);
+  //     });
+  //   }
 
-    const updateAdmin = {
-      '_id': user.userId,
-      'businessUnits': user.buList,
-      'userMappings': userMappings
-    };
+  //   const updateAdmin = {
+  //     '_id': user.userId,
+  //     'businessUnits': user.buList ? user.buList : [],
+  //     'userMappings': userMappings
+  //   };
 
-    this.accessManagementService.updateAccessManagement(updateAdmin)
-      .subscribe(() => {
-        // console.log('updated successfully');
-      });
-  }
+  //   this.accessManagementService.updateAccessManagement(updateAdmin)
+  //     .subscribe(() => {
+  //       // console.log('updated successfully');
+  //     });
+  // }
 
   registerNewUser() {
     this.showFormSection = true;
@@ -236,18 +248,21 @@ export class AccessManagementComponent implements OnInit {
 
   async checkUserIdAvailability(userId) {
 
-    // Initiailize User
-    const user = new User(userId.toString());
+    if (userId) {
+      // Initiailize User
+      const user = new User(userId.toString());
 
-    // Retireve User Details
-    this.accessManagementService.getUserDetails(user).subscribe(
-      data => {
-        this.userIdAvailable = data && data.length > 0 && !data['errorMsg'];
-      }, () => {
-        this.userIdAvailable = false;
-      }
+      // Retireve User Details
+      this.accessManagementService.getUserDetails(user).subscribe(
+        data => {
+          this.userIdAvailable = data && data.length > 0 && !data['errorMsg'];
+        }, () => {
+          this.userIdAvailable = false;
+        }
 
-    );
+      );
+    }
+
 
   }
 

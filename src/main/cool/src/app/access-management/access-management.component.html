@@ -50,7 +50,7 @@
               <tr>
                 <td>{{user.emailId}}</td>
                 <td>{{user.userName}}</td>
-                <td>{{user.userMapping[0].functionalRole}}</td>
+                <td>{{user.userMapping && user.userMapping[0] ? user.userMapping[0].functionalRole : ''}}</td>
                 <td>
                   <p-multiSelect [options]="user.businessEntities" [filter]="false" [showHeader]="false"
                     [displaySelectedLabel]="true" [(ngModel)]="user.beList"
@@ -62,13 +62,13 @@
                   <p-multiSelect [options]="user.businessUnits" [filter]="false" [showHeader]="false"
                     [displaySelectedLabel]="true" [(ngModel)]="user.buList"
                     (click)="getPrimaryBusinessUnitBasedOnPrimaryBEForUserOnBUClick(user.beList,user)"
-                    (onPanelHide)="updatedAccessManagement(user)" [style]="{'width':'100%'}" [appendTo]="body">
+                    (onPanelHide)="updatedAccessManagementBE(user)" [style]="{'width':'100%'}" [appendTo]="body">
                   </p-multiSelect>
                 </td>
                 <td>
                   <p-multiSelect [options]="accessList" [filter]="false" [showHeader]="false"
                     [displaySelectedLabel]="true" [(ngModel)]="user.accessList"
-                    (onPanelHide)="updatedAccessForUser(user)" [style]="{'width':'100%'}" [appendTo]="body">
+                    (onPanelHide)="updatedAccessManagementBE(user)" [style]="{'width':'100%'}" [appendTo]="body">
                   </p-multiSelect>
                 </td>
               </tr>
@@ -178,7 +178,5 @@
         </div>
       </div>
     </section>
-
-
   </div>
 </div>
