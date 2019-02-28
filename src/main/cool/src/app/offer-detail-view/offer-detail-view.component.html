@@ -397,7 +397,7 @@
                                     <div class="base-margin-top">
                                     <ul>
                                         <li *ngFor="let subitem of item.value.subGroup">
-                                          <app-stakeholder-identification *ngFor="let item of subitem | keyvalue" [subgroupName]="item.value.subGroupName">
+                                          <app-stakeholder-identification [subgroupName]="subitem">
                                           </app-stakeholder-identification>
                                         </li>
                                       </ul>
@@ -408,8 +408,8 @@
                                   <div class="flex-fluid text-left half-margin-left">
                                     <div class="base-margin-top">
                                       <ul>
-                                          <li *ngFor="let subitem of item.value.subGroup">
-                                              <app-stakeholder-identification *ngFor="let item of subitem | keyvalue" [subgroupName]="item.value.selected">
+                                          <li *ngFor="let subitem of item.value.selected">
+                                              <app-stakeholder-identification *ngFor="let item of subitem" [subgroupName]="item">
                                               </app-stakeholder-identification>
                                           </li>
                                       </ul>
