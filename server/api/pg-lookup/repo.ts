@@ -78,10 +78,8 @@ export default class PgLookupRepo {
 
   getDollarUploadReport(fiscalMonth, submeasureKeys) {
     const sql = `
-      SELECT fiscal_month_id, measure_id, sub_measure_key, input_internal_be_hier_level_id, input_internal_be_hier_level_name, input_internal_be_value, input_end_cust_hier_level_id,
-      input_end_cust_hier_level_name, input_end_cust_value, input_entity_hier_level_id, input_entity_hier_level_name, input_entity_value, input_product_hier_level_id,
-      input_product_hier_level_name, input_product_value, input_sales_hier_level_id, input_sales_hier_level_name, input_sales_value, input_scms_hier_level_id,
-      input_scms_hier_level_name, input_scms_value, deal_id, gross_unbilled_accrued_rev_flg, revenue_classification, amount_value, create_owner, create_datetimestamp, 
+      SELECT fiscal_month_id, measure_id, sub_measure_key, input_product_value, input_sales_value, input_scms_value, input_entity_value, input_internal_be_value, 
+      deal_id, gross_unbilled_accrued_rev_flg, revenue_classification, amount_value, create_owner, create_datetimestamp, 
       update_owner, update_datetimestamp
       FROM fpadfa.dfa_prof_input_amnt_upld
       where fiscal_month_id = ${fiscalMonth} and sub_measure_key in ( ${submeasureKeys} )
