@@ -89,6 +89,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   displayViewDetails: Boolean = false;
   viewDetails;
   eGinieSearchForm: FormGroup;
+  itemsList;
+  copyAttributeResults;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
@@ -133,6 +135,29 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.countableItems.push(this.uniqueId);
       this.updateChildCount();
     }
+  }
+
+  addItms() {
+    this.questionForm.reset();
+    this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(countries => {
+      let itemsData = countries.body;
+      this.questionForm.patchValue(itemsData);
+      this.cd.detectChanges();
+  });
+    //this.questionForm.setValue(this.country);
+    this.cd.detectChanges();
+  }
+
+  //search copy attributes
+
+  searchCopyAttributes(event) {
+    this.offerConstructCanvasService.searchEgenie(event.query).subscribe((results) => {
+      this.copyAttributeResults = [...results];
+    },
+      (error) => {
+        this.results = [];
+      }
+    );
   }
 
   majorLine() {
