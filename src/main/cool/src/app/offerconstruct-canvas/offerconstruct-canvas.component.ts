@@ -83,7 +83,10 @@ export class OfferconstructCanvasComponent implements OnInit {
   private map1 = new Map();
   popHeadName;
   setFlag = true;
+  downloadEnable = false;
   addedEgineMajorItemsInTree:any[] = [];
+  displayViewDetails: Boolean = false;
+  viewDetails;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private _canvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService, private offerConstructCanvasService: OfferConstructService,
@@ -286,6 +289,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.offerConstructItems = [...this.offerConstructItems];
       this.cd.detectChanges();
     }
+
     this.showButtons = false;
     this.offerConstructItems = [...this.offerConstructItems];
   }
@@ -848,18 +852,11 @@ export class OfferconstructCanvasComponent implements OnInit {
       obj['childCount'] = 0;
       obj['eginieItem'] = true;
       obj['itemDetails'] = searchResult;
-      const data = this.map1.get(titleName);
-      if (data === undefined) {
-        this.map1.set(titleName, 1);
-      } else {
-        this.map1.set(titleName, this.map1.get(titleName) + 1);
-      }
-      obj['title'] = titleName + ' ' + this.map1.get(titleName);
       this.offerConstructItems.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
       this.countableItems.push(this.uniqueId);
       this.updateChildCount();
-      this.addedEgineMajorItemsInTree.push(obj['title']);
+      this.addedEgineMajorItemsInTree.push(titleName);
     }
   }
 
@@ -887,6 +884,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       const lastMajorItem = this.offerConstructItems[this.offerConstructItems.length - 1];
       lastMajorItem.children.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
+      this.updateChildCount();
     }
   }
 
@@ -1010,6 +1008,13 @@ export class OfferconstructCanvasComponent implements OnInit {
       });
   }
 
+  showViewDetailsDailog(currentNode) {
+    this.popHeadName = currentNode.node.data.title;
+    this.displayViewDetails = true;
+    // let itemDetails = currentNode.node.data['itemDetails'];
+    this.viewDetails = currentNode.node.data['itemDetails'];
+  }
+
   openMandatory() {
     this.showMandatoryDetails = !this.showMandatoryDetails;
   }
@@ -1021,8 +1026,11 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   saveOfferConstructChanges() {
+
+    this.downloadEnable = true;
     this.offerConstructItems = [... this.offerConstructItems];
     let cds: ConstructDetails = new ConstructDetails(this.currentOfferId, []);
+
     // Construct all group Nodes.
     this.offerConstructItems.forEach((node) => {
       let cd: ConstructDetail;

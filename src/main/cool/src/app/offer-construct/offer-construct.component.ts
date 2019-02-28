@@ -63,7 +63,9 @@ export class OfferConstructComponent implements OnInit {
       this.derivedMM = this.firstData['derivedMM'];
       this.data = this.firstData['stakeholders'];
       this.offerName = this.firstData['offerName'];
-      this.primaryBE = this.firstData['primaryBEList'][0];
+      if(Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length){
+       this.primaryBE = this.firstData['primaryBEList'][0];
+      }
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
           this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);

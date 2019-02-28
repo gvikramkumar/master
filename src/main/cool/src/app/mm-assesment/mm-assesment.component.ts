@@ -54,9 +54,9 @@ export class MmAssesmentComponent implements OnInit {
   displayLeadTime = false;
   noOfWeeksDifference: string;
 
-  stakeData = {};
+  stakeholders = {};
   Stakeholders: any[] = [];
-  updatedStakeHolderInfo = {};
+  currentOfferStakeholders = {};
 
   canClickNextStep = false;
   canClickTab = false;
@@ -83,7 +83,9 @@ export class MmAssesmentComponent implements OnInit {
   currentOfferResult: any;
   isChangedAttribute: boolean;
   showErrorDialog: boolean;
-  totalApprovalsCount:Number=0;
+  totalApprovalsCount: Number = 0;
+  manuallyAddedStakeholders: Array<any> = [];
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private monetizationModelService: MonetizationModelService,
@@ -95,7 +97,7 @@ export class MmAssesmentComponent implements OnInit {
     private stakeholderfullService: StakeholderfullService,
     private confirmationService: ConfirmationService,
     private accessMgmtService: AccessManagementService,
-    private strategyReviewService:StrategyReviewService
+    private strategyReviewService: StrategyReviewService
   ) {
 
     this.display = false;
@@ -272,7 +274,7 @@ export class MmAssesmentComponent implements OnInit {
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
 
       this.firstData = data;
-      this.updatedStakeHolderInfo = {};
+      this.currentOfferStakeholders = {};
       this.offerName = data['offerName'];
       this.derivedMM = data['derivedMM'];
       this.offerId = this.currentOfferId;
@@ -281,41 +283,16 @@ export class MmAssesmentComponent implements OnInit {
       this.derivedMM = this.firstData['derivedMM'];
       this.primaryBE = this.firstData['primaryBEList'][0];
 
-      // Retrieve New Stake Holder Info
-      for (let i = 0; i <= this.firstData['stakeholders'].length - 1; i++) {
 
-        // Add New Offer Owner (Stake Holder), If Not Present Earlier()
-        if (this.firstData['stakeholders'][i]['offerRole'] === 'Owner') {
-          continue;
-        } else if (this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] == null) {
-          this.updatedStakeHolderInfo[this.firstData['stakeholders'][i]['offerRole']] = [];
-        }
+      this.manuallyAddedStakeholders = this.firstData['stakeholders']
+        .filter(stakeholder => !stakeholder.stakeholderDefaults);
 
-        // Populate New Offer Owner (Stake Holder) Details
-        this.updatedStakeHolderInfo[this.data[i]['offerRole']].push(
-          {
-            userName: this.firstData['stakeholders'][i]['name'],
-            emailId: this.firstData['stakeholders'][i]['_id'] + '@cisco.com',
-            _id: this.firstData['stakeholders'][i]['_id'],
-            userMappings: [{
-              appRoleList: [],
-              businessEntity: this.firstData['stakeholders'][i]['businessEntity'],
-              functionalRole: this.firstData['stakeholders'][i]['functionalRole'],
-              stakeholderDefaults: this.firstData['stakeholders'][i]['stakeholderDefaults']
-            }]
-          });
-
-      }
+      this.manuallyAddedStakeholders = this.manuallyAddedStakeholders.map(stakeholder => this.formatManuallyAddedUserAsStakeholder(stakeholder));
 
     });
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
       this.totalApprovalsCount = resStrategyReview.length;
     });
-    
-
-    // this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(result => {
-    //   this.currentOfferResult = result;
-    // });
 
   }
 
@@ -549,7 +526,7 @@ export class MmAssesmentComponent implements OnInit {
     //   }
     // });
 
-    if (this.totalApprovalsCount>0 && this.isChangedAttribute) {
+    if (this.totalApprovalsCount > 0 && this.isChangedAttribute) {
       this.showDialog = true;
     }
     else
@@ -597,7 +574,7 @@ export class MmAssesmentComponent implements OnInit {
         //   }
         // });
 
-        if (this.totalApprovalsCount>0 && this.isChangedAttribute && (tempMessage["contentHead"] != this.message["contentHead"] || tempMessage["content"] != this.message["content"])) {
+        if (this.totalApprovalsCount > 0 && this.isChangedAttribute && (tempMessage["contentHead"] != this.message["contentHead"] || tempMessage["content"] != this.message["content"])) {
           this.showDialog = true;
           return;
         }
@@ -642,142 +619,97 @@ export class MmAssesmentComponent implements OnInit {
     this.derivedMM = mmModel;
     this.offerId = this.currentOfferId;
     this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
-    this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
-      (leadTime) => {
-        this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
-        this.displayLeadTime = true;
-      },
-      () => {
-        this.noOfWeeksDifference = 'N/A';
-      }
-    );
 
-    this.monetizationModelService.showDefaultStakeHolders(mmModel, this.offerBuilderdata['primaryBEList'][0]).subscribe(res => {
+    this.getLeadTimeCalculation();
 
-      let keyUsers;
-      this.stakeData = {};
+    this.monetizationModelService.showDefaultStakeHolders(mmModel, this.primaryBE).subscribe(resDefaultStakeholders => {
 
-      if (res != null) {
-        keyUsers = res;
+      let defaultStakeholders;
+      this.stakeholders = {};
+
+      if (resDefaultStakeholders) {
+        defaultStakeholders = resDefaultStakeholders;
       }
 
-      // Build data for owner
-      if (this.stakeData['Owner'] == null) {
-        this.stakeData['Owner'] = [];
-      }
+      const objStakeholders = {};
+
+      this.accessMgmtService.retrieveUserInfo(this.offerOwner).toPromise().then((resOfferOwnerInfo) => {
+
+        const owner = this.formatDefaultUserAsStakeholder(resOfferOwnerInfo);
+
+        // Populate Default Stake Holders - Owner
+        objStakeholders['Owner'] = [owner];
+
+        // Find the manually added stakeholders
+        this.manuallyAddedStakeholders.reduce((accumulator, currentStakeholder) => {
+          const stakeholderFunctionRole = currentStakeholder['userMappings'][0]['functionalRole'];
+          const stakeholder = {
+            ...currentStakeholder,
+            stakeholderDefaults: false
+          };
+          accumulator[stakeholderFunctionRole] = accumulator[stakeholderFunctionRole] && accumulator[stakeholderFunctionRole].length > 0 ? accumulator[stakeholderFunctionRole].concat(stakeholder) : [stakeholder];
+          return accumulator;
+        }, objStakeholders);
 
 
-      // Populate Default Stake Holders - Owner
-      this.accessMgmtService.retrieveUserInfo(this.offerOwner).toPromise().then((resUserInfo) => {
-
-        this.stakeData['Owner'].push(
-          {
-            userName: resUserInfo.userName,
-            emailId: resUserInfo.userId + '@cisco.com',
-            _id: resUserInfo.userId,
-            userMappings: [{
-              appRoleList: [],
-              businessEntity: resUserInfo.userMapping[0]['businessEntity'],
-              functionalRole: resUserInfo.userMapping[0]['functionalRole'],
-              offerRole: resUserInfo.userMapping[0]['functionalRole'],
-            }
-            ],
+        // Populate Default Stake Holders - Other Functional Users
+        defaultStakeholders.reduce((accumulator, currentStakeholder) => {
+          const stakeholderFunctionRole = currentStakeholder['userMappings'][0]['functionalRole'];
+          const stakeholder = {
+            ...currentStakeholder,
             stakeholderDefaults: true
-          });
-      });
+          };
 
-      // Populate Default Stake Holders - Other Functional Users
-      keyUsers.forEach(user => {
-
-        const curUser = user;
-        curUser['stakeholderDefaults'] = true;
-
-        if (this.stakeData[user['userMappings'][0]['functionalRole']] == null) {
-          this.stakeData[user['userMappings'][0]['functionalRole']] = [];
-        }
-        this.stakeData[user['userMappings'][0]['functionalRole']].push(curUser);
-
-      });
-
-      // Remove Similar Stakeholders From Updated Stake Holder List
-
-      // Retrieve Functional Names
-      for (const ownerName of Object.keys(this.stakeData)) {
-
-        // Retrieve Owner Details Realted To Functiona Names 
-        for (let i = 0; i < this.stakeData[ownerName].length; i++) {
-
-          // Retrieve ith Functional Person
-          const ownerDetails = this.stakeData[ownerName][i];
-
-          // Remove If Stakeholder Is Present In Default List
-          if (this.stakeData[ownerName] == null) {
-            continue;
-          } else if (this.stakeData[ownerName][i]['_id'] === (ownerDetails['_id'])) {
-            const index = this.stakeData[ownerName].findIndex(() => this.stakeData[ownerName][i]['_id'] === (ownerDetails['_id']));
-            if (this.updatedStakeHolderInfo[ownerName] != null) {
-              this.updatedStakeHolderInfo[ownerName].splice(index, 1);
-            }
+          // Add only if stakeholder is not in this.stakeholders.function array
+          const isCurrentUserInStakeholders = accumulator[stakeholderFunctionRole] && accumulator[stakeholderFunctionRole].some(stk => stk._id === currentStakeholder._id);
+          if (!isCurrentUserInStakeholders) {
+            accumulator[stakeholderFunctionRole] = accumulator[stakeholderFunctionRole] && accumulator[stakeholderFunctionRole].length > 0 ? accumulator[stakeholderFunctionRole].concat(stakeholder) : [stakeholder];
           }
+          return accumulator;
+        }, objStakeholders);
 
-        }
-      }
-
-      // Add Stakeholders to Stake Data That Is Missing From Stake Holder List
-
-      // Retrieve Functional Names
-      for (const ownerName of Object.keys(this.updatedStakeHolderInfo)) {
-
-        // Retrieve Owner Details Realted To Functiona Names 
-        for (let i = 0; i < this.updatedStakeHolderInfo[ownerName].length; i++) {
-
-          // Retrieve ith Functional Person
-          const ownerDetails = this.updatedStakeHolderInfo[ownerName][i];
-
-          // Add If Stakeholder Is Missing In Default List - Parent Level
-          if (this.stakeData[ownerName] == null) {
-            this.stakeData[ownerName] = [
-              {
-                userName: ownerDetails['userName'],
-                emailId: ownerDetails['_id'] + '@cisco.com',
-                _id: ownerDetails['_id'],
-                userMappings: [{
-                  appRoleList: [],
-                  businessEntity: ownerDetails['userMappings'][0]['businessEntity'],
-                  functionalRole: ownerDetails['userMappings'][0]['functionalRole'],
-                  offerRole: ownerDetails['userMappings'][0]['functionalRole']
-                }
-                ],
-                stakeholderDefaults: true
-              }];
-          } else {
-            // Add If Stakeholder Is Missing In Default List - Child Level
-            this.stakeData[ownerName].push(
-              {
-                userName: ownerDetails['userName'],
-                emailId: ownerDetails['_id'] + '@cisco.com',
-                _id: ownerDetails['_id'],
-                userMappings: [{
-                  appRoleList: [],
-                  businessEntity: ownerDetails['userMappings'][0]['businessEntity'],
-                  functionalRole: ownerDetails['userMappings'][0]['functionalRole'],
-                  offerRole: ownerDetails['userMappings'][0]['functionalRole']
-                }
-                ],
-                stakeholderDefaults: true
-              });
-          }
-
-        }
-      }
-
+        this.stakeholders = objStakeholders;
+      });
     });
+  }
+  private formatManuallyAddedUserAsStakeholder(resUserInfo: any): any {
+    return {
+      userName: resUserInfo.name,
+      emailId: resUserInfo._id + '@cisco.com',
+      _id: resUserInfo._id,
+      userMappings: [{
+        appRoleList: [],
+        businessEntity: resUserInfo.businessEntity,
+        functionalRole: resUserInfo.functionalRole,
+        offerRole: resUserInfo.offerRole,
+      }
+      ],
+      stakeholderDefaults: false
+    };
+  }
+  private formatDefaultUserAsStakeholder(resUserInfo: any): any {
+    return {
+      userName: resUserInfo.userName,
+      emailId: resUserInfo.userId + '@cisco.com',
+      _id: resUserInfo.userId,
+      userMappings: [{
+        appRoleList: [],
+        businessEntity: resUserInfo.userMapping[0]['businessEntity'],
+        functionalRole: resUserInfo.userMapping[0]['functionalRole'],
+        offerRole: resUserInfo.userMapping[0]['functionalRole'],
+      }
+      ],
+      stakeholderDefaults: true
+    };
+  }
 
-
-
-
-
-
+  private getLeadTimeCalculation() {
+    this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe((leadTime) => {
+      this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+      this.displayLeadTime = true;
+    }, () => {
+      this.noOfWeeksDifference = 'N/A';
+    });
   }
 
   emitEventToChild() {
@@ -869,8 +801,8 @@ export class MmAssesmentComponent implements OnInit {
     proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
 
     const stakeHolders = [];
-    for (const prop of Object.keys(this.stakeData)) {
-      this.stakeData[prop].forEach(sh => {
+    for (const prop of Object.keys(this.stakeholders)) {
+      this.stakeholders[prop].forEach(sh => {
 
         stakeHolders.push({
           '_id': sh['_id'],
@@ -1023,8 +955,8 @@ export class MmAssesmentComponent implements OnInit {
       proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
 
       const stakeHolders = [];
-      for (const prop of Object.keys(this.stakeData)) {
-        this.stakeData[prop].forEach(sh => {
+      for (const prop of Object.keys(this.stakeholders)) {
+        this.stakeholders[prop].forEach(sh => {
           stakeHolders.push({
             '_id': sh['_id'],
             'businessEntity': sh['userMappings'][0]['businessEntity'],

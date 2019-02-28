@@ -3,7 +3,7 @@
     <div class="col">
       <div class="panel panel--ltgray">
         <span class="mt-5">Offer Components</span>
-        <span (click)='downloadZip(currentOfferId)' class="icon-download pull-right"></span>
+        <button class="pull-right borderless" [disabled]="!downloadEnable" title="Download" (click)='downloadZip(currentOfferId)'><span class="icon-download"></span></button>
       </div>
     </div>
   </div>
@@ -130,14 +130,18 @@
                                     (click)='showButton($event, rowData["uniqueKey"]);'
                                     (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
                                     [disabled]="editData ? true : null" value="{{rowData['title']}}"
-                                    [autofocus]='autoFocus'>
+                                    [autofocus]='autoFocus' *ngIf="!rowData['eginieItem']">
+                                    <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
-                                  <a *ngIf="!rowData['isGroupNode']" class="pull-right"
+                                  <a *ngIf="!rowData['isGroupNode'] && !rowData['eginieItem']" class="pull-right"
                                     (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
+                                    Details</a>
+                                    <a *ngIf="rowData['eginieItem']" class="pull-right"
+                                    (click)="showViewDetailsDailog(rowNode)"><span class="icon-add-contain"></span> View
                                     Details</a>
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
-                                    class="icon-edit"></span>
+                                    class="icon-edit" *ngIf="!rowData['eginieItem']"></span>
                                   <a [id]='rowData["uniqueKey"]' *ngIf='buttonId == rowData["uniqueKey"] && showButtons'
                                     (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
                                   <a [id]='rowData["uniqueKey"]' (click)='disableButtons()'
@@ -238,7 +242,7 @@
   </div>
   <p-dialog header="Add Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
     (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
-    [contentStyle]="{'height': '450px', 'max-height':'450px', 'max-width':'700px'}" positionTop='150'>
+    [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}" positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
     <form (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
       <!-- Items Top Section -->
@@ -338,4 +342,17 @@
         </div>
       </div>
     </div>
+  </p-dialog>
+
+  <!-- Dialog for view details-->
+  <p-dialog header="View Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
+  (onHide)="onHide()" [responsive]="true" [(visible)]="displayViewDetails"
+  [contentStyle]="{'height': '450px', 'min-width':'700px'}" positionTop='150'>
+  <div class="divider"></div>
+  <table class="table">
+        <tr *ngFor="let item of viewDetails | keyvalue">
+          <td>{{item.key}}</td>
+          <td>{{item.value}}</td>
+        </tr>
+  </table>
   </p-dialog>

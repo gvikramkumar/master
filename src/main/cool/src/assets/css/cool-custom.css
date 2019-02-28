@@ -919,6 +919,17 @@ span[class*="display-"] {
 
 /* Offer Construct */
  /* tree table styles */
+ .cool.cui .offer-construct-container button.borderless {
+   cursor: pointer;
+   -webkit-transition: all .2s ease-in-out;
+   transition: all .2s ease-in-out;
+ }
+ .cool.cui .offer-construct-container button.borderless:hover span {
+   color:#00bceb;
+ }
+ button.pull-right.borderless[disabled] {
+  opacity: .35;
+}
  .cool.cui .offer-construct-container .canvas .ui-treetable .ui-treetable-thead>tr>th:first-child {
   width: 50%;
 }
@@ -1084,7 +1095,7 @@ span[class*="display-"] {
  	 	color: black;
 }
 
-.ui-tooltip .ui-tooltip-text:before,.ui-tooltip .ui-tooltip-text:after 
+.ui-tooltip .ui-tooltip-text:before,.ui-tooltip .ui-tooltip-text:after
 {
   border-color:white;
 }
