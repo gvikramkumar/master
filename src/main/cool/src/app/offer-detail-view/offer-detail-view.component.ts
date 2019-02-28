@@ -213,8 +213,10 @@ export class OfferDetailViewComponent implements OnInit {
           this.offerViewData.constructDetails.forEach(element => {
             if (!(element.constructItemName in this.offerComponentCharacterestics) || (element.constructItem == "Minor")){
               this.offerComponentCharacterestics[element.constructItemName] = {};
-              this.offerComponentCharacterestics[element.constructItemName]["Id"] = this.offerViewData.constructDetails.indexOf(element);
-              this.offerComponentCharacterestics[element.constructItemName]["parentId"] = element.constructParentId;
+              this.offerComponentCharacterestics[element.constructItemName]["_id"] = this.offerViewData.constructDetails.indexOf(element);
+              this.offerComponentCharacterestics[element.constructItemName]["parent"] = element.constructParentId;
+              this.offerComponentCharacterestics[element.constructItemName]["expanded"] = true;
+              this.offerComponentCharacterestics[element.constructItemName]["editable"] = false;
               this.offerComponentCharacterestics[element.constructItemName]["constructItem"] = element.constructItem;
               this.offerComponentCharacterestics[element.constructItemName]["itemDetails"] = element.itemDetails;
             }

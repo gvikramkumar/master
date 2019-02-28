@@ -447,7 +447,12 @@
                                           <div class="text-bold">Sub Group</div>
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-2">
+                                        <div class="flex-fluid text-left half-margin-left">
+                                          <div class="text-bold">Attributes</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="flex-fluid text-left half-margin-left">
                                           <div class="text-bold">Details</div>
                                         </div>
@@ -460,6 +465,18 @@
                                       </div>
                                     </div>
                                     <div class="col-md-2">
+                                        <div class="flex-fluid text-left half-margin-left">
+                                          <div class="base-margin-top">
+                                          <ul>
+                                              <li *ngFor="let subitem of item.value.dimensionSubgroup">
+                                                <app-stakeholder-identification [subgroupName]="subitem">
+                                                </app-stakeholder-identification>
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    <div class="col-md-2">
                                       <div class="flex-fluid text-left half-margin-left">
                                         <div class="base-margin-top">
                                         <ul>
@@ -471,7 +488,7 @@
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-6">
                                       <div class="flex-fluid text-left half-margin-left">
                                       <div class="base-margin-top">
                                           <ul class="list list--compressed" *ngFor="let subitem of item.value.details | keyvalue">
