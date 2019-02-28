@@ -84,22 +84,22 @@ export class OfferDetailViewComponent implements OnInit {
   //     .subscribe(data => {
   //       if(Array.isArray(data.groups) && data.groups.length){
   //         data.groups.forEach(element => {
-  //           if (!(element.dimensionGroup in this.offerDimensionsCharacteristics) && element.groupName != "Offer Characteristics" && element.groupName != "Always Ask"){
+  //           if (!(element.dimensionGroup in this.offerDimensionsCharacteristics) && element.groupName != 'Offer Characteristics' && element.groupName != 'Always Ask'){
   //             this.offerDimensionsCharacteristics[element.groupName] = {};
-  //             this.offerDimensionsCharacteristics[element.groupName]["subGroup"] = [];
-  //             this.offerDimensionsCharacteristics[element.groupName]["selected"] = [];
-  //             this.offerDimensionsCharacteristics[element.groupName]["chocies"] = [];
-  //             this.offerDimensionsCharacteristics[element.groupName]["listGrpQuestions"] = [];
-  //             this.offerDimensionsCharacteristics[element.groupName]["subGroup"].push(element.subGroup);
-  //             this.offerDimensionsCharacteristics[element.groupName]["selected"].push(element.selected);
-  //             this.offerDimensionsCharacteristics[element.groupName]["chocies"].push(element.chocies);
-  //             this.offerDimensionsCharacteristics[element.groupName]["listGrpQuestions"].push(element.listGrpQuestions);
+  //             this.offerDimensionsCharacteristics[element.groupName]['subGroup'] = [];
+  //             this.offerDimensionsCharacteristics[element.groupName]['selected'] = [];
+  //             this.offerDimensionsCharacteristics[element.groupName]['chocies'] = [];
+  //             this.offerDimensionsCharacteristics[element.groupName]['listGrpQuestions'] = [];
+  //             this.offerDimensionsCharacteristics[element.groupName]['subGroup'].push(element.subGroup);
+  //             this.offerDimensionsCharacteristics[element.groupName]['selected'].push(element.selected);
+  //             this.offerDimensionsCharacteristics[element.groupName]['chocies'].push(element.chocies);
+  //             this.offerDimensionsCharacteristics[element.groupName]['listGrpQuestions'].push(element.listGrpQuestions);
   //           }
-  //           else if ((element.dimensionGroup in this.offerDimensionsCharacteristics) && element.groupName != "Offer Characteristics" && element.groupName != "Always Ask"){
-  //             this.offerDimensionsCharacteristics[element.groupName]["subGroup"].push(element.subGroup);
-  //             this.offerDimensionsCharacteristics[element.groupName]["selected"].push(element.selected);
-  //             this.offerDimensionsCharacteristics[element.groupName]["chocies"].push(element.chocies);
-  //             this.offerDimensionsCharacteristics[element.groupName]["listGrpQuestions"].push(element.listGrpQuestions);
+  //           else if ((element.dimensionGroup in this.offerDimensionsCharacteristics) && element.groupName != 'Offer Characteristics' && element.groupName != 'Always Ask'){
+  //             this.offerDimensionsCharacteristics[element.groupName]['subGroup'].push(element.subGroup);
+  //             this.offerDimensionsCharacteristics[element.groupName]['selected'].push(element.selected);
+  //             this.offerDimensionsCharacteristics[element.groupName]['chocies'].push(element.chocies);
+  //             this.offerDimensionsCharacteristics[element.groupName]['listGrpQuestions'].push(element.listGrpQuestions);
   //           }
   //         });
   //       }
@@ -163,22 +163,22 @@ export class OfferDetailViewComponent implements OnInit {
         // Creating Data for Offer Solutioning Details 
         if (Array.isArray(this.offerViewData.solutioningDetails) && this.offerViewData.solutioningDetails.length) {
           this.offerViewData.solutioningDetails.forEach(element => {
-            if (!(element.dimensionGroup in this.solutioningDetailsCharacteristics) && element.dimensionGroup != "Offer Characteristics") {
+            if (!(element.dimensionGroup in this.solutioningDetailsCharacteristics) && element.dimensionGroup != 'Offer Characteristics') {
               this.solutioningDetailsCharacteristics[element.dimensionGroup] = {};
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionSubgroup"] = [];
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"] = [];
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["details"] = [];
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionSubgroup"].push(element.dimensionSubgroup);
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"].push(element.dimensionAttribute);
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"] = Array.from(new Set([].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"])));
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionSubgroup'] = [];
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'] = [];
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['details'] = [];
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionSubgroup'].push(element.dimensionSubgroup);
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'].push(element.dimensionAttribute);
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'] = Array.from(new Set([].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'])));
               let temp = this.solutioningDetailsCharacteristics;
               if (element.Details.length) {
                 element.Details.forEach(subelement => {
                   let temp_dict = {};
                   Object.keys(subelement).forEach(function (key) {
-                    if (key == "solutioninQuestion" && subelement["solutioningAnswer"]) {
-                      temp_dict[subelement[key]] = subelement["solutioningAnswer"];
-                      temp[element.dimensionGroup]["details"].push(temp_dict);
+                    if (key == 'solutioninQuestion' && subelement['solutioningAnswer']) {
+                      temp_dict[subelement[key]] = subelement['solutioningAnswer'];
+                      temp[element.dimensionGroup]['details'].push(temp_dict);
                     }
                   });
                 });
@@ -186,18 +186,18 @@ export class OfferDetailViewComponent implements OnInit {
               }
 
             }
-            else if ((element.dimensionGroup in this.solutioningDetailsCharacteristics) && element.dimensionGroup != "Offer Characteristics") {
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionSubgroup"].push(element.dimensionSubgroup);
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"].push(element.dimensionAttribute);
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"] = Array.from(new Set([].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]["dimensionAttribute"])));
+            else if ((element.dimensionGroup in this.solutioningDetailsCharacteristics) && element.dimensionGroup != 'Offer Characteristics') {
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionSubgroup'].push(element.dimensionSubgroup);
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'].push(element.dimensionAttribute);
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'] = Array.from(new Set([].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'])));
               let temp = this.solutioningDetailsCharacteristics;
               if (element.Details.length) {
                 element.Details.forEach(subelement => {
                   let temp_dict = {};
                   Object.keys(subelement).forEach(function (key) {
-                    if (key == "solutioninQuestion" && subelement["solutioningAnswer"]) {
-                      temp_dict[subelement[key]] = subelement["solutioningAnswer"];
-                      temp[element.dimensionGroup]["details"].push(temp_dict);
+                    if (key == 'solutioninQuestion' && subelement['solutioningAnswer']) {
+                      temp_dict[subelement[key]] = subelement['solutioningAnswer'];
+                      temp[element.dimensionGroup]['details'].push(temp_dict);
                     }
                   });
                 });
@@ -212,14 +212,14 @@ export class OfferDetailViewComponent implements OnInit {
         if (Array.isArray(this.offerViewData.constructDetails) && this.offerViewData.constructDetails.length) {
           this.offerComponentCharacterestics = this.offerViewData.constructDetails;
           // this.offerViewData.constructDetails.forEach(element => {
-          //   if (!(element.constructItemName in this.offerComponentCharacterestics) || (element.constructItem == "Minor")){
+          //   if (!(element.constructItemName in this.offerComponentCharacterestics) || (element.constructItem == 'Minor')){
           //     this.offerComponentCharacterestics[element.constructItemName] = {};
-          //     this.offerComponentCharacterestics[element.constructItemName]["_id"] = this.offerViewData.constructDetails.indexOf(element);
-          //     this.offerComponentCharacterestics[element.constructItemName]["parent"] = element.constructParentId;
-          //     this.offerComponentCharacterestics[element.constructItemName]["expanded"] = true;
-          //     this.offerComponentCharacterestics[element.constructItemName]["editable"] = false;
-          //     this.offerComponentCharacterestics[element.constructItemName]["constructItem"] = element.constructItem;
-          //     this.offerComponentCharacterestics[element.constructItemName]["itemDetails"] = element.itemDetails;
+          //     this.offerComponentCharacterestics[element.constructItemName]['_id'] = this.offerViewData.constructDetails.indexOf(element);
+          //     this.offerComponentCharacterestics[element.constructItemName]['parent'] = element.constructParentId;
+          //     this.offerComponentCharacterestics[element.constructItemName]['expanded'] = true;
+          //     this.offerComponentCharacterestics[element.constructItemName]['editable'] = false;
+          //     this.offerComponentCharacterestics[element.constructItemName]['constructItem'] = element.constructItem;
+          //     this.offerComponentCharacterestics[element.constructItemName]['itemDetails'] = element.itemDetails;
           //   }
           // });
         }
@@ -257,18 +257,18 @@ export class OfferDetailViewComponent implements OnInit {
               this.programList.push(program);
             }
 
-            if (!(element.group in this.offerDimensionsCharacteristics) && element.group != "Offer Characteristics" && element.group != "Always Ask") {
+            if (!(element.group in this.offerDimensionsCharacteristics) && element.group != 'Offer Characteristics' && element.group != 'Always Ask') {
               this.offerDimensionsCharacteristics[element.group] = {};
-              this.offerDimensionsCharacteristics[element.group]["subGroup"] = [];
-              this.offerDimensionsCharacteristics[element.group]["selected"] = [];
-              this.offerDimensionsCharacteristics[element.group]["chocies"] = [];
-              this.offerDimensionsCharacteristics[element.group]["listGrpQuestions"] = [];
-              this.offerDimensionsCharacteristics[element.group]["subGroup"].push(element.subgroup);
-              this.offerDimensionsCharacteristics[element.group]["selected"].push(element.characteristics);
+              this.offerDimensionsCharacteristics[element.group]['subGroup'] = [];
+              this.offerDimensionsCharacteristics[element.group]['selected'] = [];
+              this.offerDimensionsCharacteristics[element.group]['chocies'] = [];
+              this.offerDimensionsCharacteristics[element.group]['listGrpQuestions'] = [];
+              this.offerDimensionsCharacteristics[element.group]['subGroup'].push(element.subgroup);
+              this.offerDimensionsCharacteristics[element.group]['selected'].push(element.characteristics);
             }
-            else if ((element.group in this.offerDimensionsCharacteristics) && element.group != "Offer Characteristics" && element.group != "Always Ask") {
-              this.offerDimensionsCharacteristics[element.group]["subGroup"].push(element.subgroup);
-              this.offerDimensionsCharacteristics[element.group]["selected"].push(element.characteristics);
+            else if ((element.group in this.offerDimensionsCharacteristics) && element.group != 'Offer Characteristics' && element.group != 'Always Ask') {
+              this.offerDimensionsCharacteristics[element.group]['subGroup'].push(element.subgroup);
+              this.offerDimensionsCharacteristics[element.group]['selected'].push(element.characteristics);
             }
 
           });
