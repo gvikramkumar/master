@@ -111,7 +111,7 @@ export class AccessManagementService {
                 if (currentUserData.isSuperAdmin) {
                     return resFunctions;
                 } else if (currentUserData.isFunctionalAdmin) {
-                    return currentUserData.functionsUserCanAddTo;
+                    return _.uniq(currentUserData.functionsUserCanAddTo);
                 }
             })
         );

@@ -47,7 +47,7 @@
                       [ngClass]="(offerOverviewDetailsList.ideate[1].status == 'Completed')?'timeline__icon timeline--success':'timeline__icon timeline--warning'">
                       <span
                         [ngClass]="(offerOverviewDetailsList.ideate[1].status == 'Completed')?'icon-check':'icon-warning'"></span>
-                    </div>                   
+                    </div>
                     <div class="timeline__content">
                       <div class="text-bold">
                         <span
@@ -368,56 +368,57 @@
                         {{offerOverviewDetailsList.plan[0].subMilestone}}
                       </div>
                       <div>
-                          <div class="offer-header card base-margin-top">
-                              <div class="row">
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">Group</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="flex-fluid text-left half-margin-left">
-                                      <div class="text-bold">Sub Group</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="flex-fluid text-left half-margin-left">
-                                      <div class="text-bold">Selected Choices</div>
-                                    </div>
-                                </div>
+                        <div class="offer-header card base-margin-top">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">Group</div>
                               </div>
-                              <div class="row" *ngFor="let item of offerDimensionsCharacteristics | keyvalue">
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">{{item.key}}</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="base-margin-top">
-                                    <ul>
-                                        <li *ngFor="let subitem of item.value.subGroup">
-                                          <app-stakeholder-identification [subgroupName]="subitem">
-                                          </app-stakeholder-identification>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="base-margin-top">
-                                      <ul>
-                                          <li *ngFor="let subitem of item.value.selected">
-                                              <app-stakeholder-identification *ngFor="let item of subitem" [subgroupName]="item">
-                                              </app-stakeholder-identification>
-                                          </li>
-                                      </ul>
-                                    </div>
-                                  </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">Sub Group</div>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">Selected Choices</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row" *ngFor="let item of offerDimensionsCharacteristics | keyvalue">
+                            <div class="col-md-4">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">{{item.key}}</div>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="base-margin-top">
+                                  <ul>
+                                    <li *ngFor="let subitem of item.value.subGroup">
+                                      <app-stakeholder-identification [subgroupName]="subitem">
+                                      </app-stakeholder-identification>
+                                    </li>
+                                  </ul>
                                 </div>
                               </div>
                             </div>
+                            <div class="col-md-4">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="base-margin-top">
+                                  <ul>
+                                    <li *ngFor="let subitem of item.value.selected">
+                                      <app-stakeholder-identification *ngFor="let item of subitem"
+                                        [subgroupName]="item">
+                                      </app-stakeholder-identification>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -434,70 +435,88 @@
                         {{offerOverviewDetailsList.plan[1].subMilestone}}
                       </div>
                       <div>
-                          <div>
-                              <div class="offer-header card base-margin-top">
-                                  <div class="row">
-                                    <div class="col-md-2">
-                                      <div class="flex-fluid text-left half-margin-left">
-                                        <div class="text-bold">Group</div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="flex-fluid text-left half-margin-left">
-                                          <div class="text-bold">Sub Group</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="flex-fluid text-left half-margin-left">
-                                          <div class="text-bold">Details</div>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <div class="row" *ngFor="let item of solutioningDetailsCharacteristics | keyvalue">
-                                    <div class="col-md-2">
-                                      <div class="flex-fluid text-left half-margin-left">
-                                        <div class="text-bold">{{item.key}}</div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                      <div class="flex-fluid text-left half-margin-left">
-                                        <div class="base-margin-top">
-                                        <ul>
-                                            <li *ngFor="let subitem of item.value.dimensionAttribute">
-                                              <app-stakeholder-identification [subgroupName]="subitem">
-                                              </app-stakeholder-identification>
-                                            </li>
-                                          </ul>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                      <div class="flex-fluid text-left half-margin-left">
-                                      <div class="base-margin-top">
-                                          <ul class="list list--compressed" *ngFor="let subitem of item.value.details | keyvalue">
-                                            <ng-container>
-                                              <li *ngFor="let detail of subitem.value | keyvalue">
-                                                <div class="panel panel--bordered">
-                                                    <div class="text-bold">{{detail.key}}: </div> 
-                                                    <div>{{detail.value}}</div>
-                                                </div>
-                                              </li>
-                                            </ng-container>
-                                          </ul>
-                                        </div>
-                                        <div class="base-margin-top">
-                                          <ul>
-                                              <li *ngFor="let subitem of item.value.details">
-                                                  <app-stakeholder-identification [details]="item.value.details">
-                                                  </app-stakeholder-identification>
-                                              </li>
-                                          </ul>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
+                        <div>
+                          <div class="offer-header card base-margin-top">
+                            <div class="row">
+                              <div class="col-md-2">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="text-bold">Group</div>
+                                </div>
                               </div>
+                              <div class="col-md-2">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="text-bold">Sub Group</div>
+                                </div>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="text-bold">Attributes</div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="text-bold">Details</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row" *ngFor="let item of solutioningDetailsCharacteristics | keyvalue">
+                              <div class="col-md-2">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="text-bold">{{item.key}}</div>
+                                </div>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="base-margin-top">
+                                    <ul>
+                                      <li *ngFor="let subitem of item.value.dimensionSubgroup">
+                                        <app-stakeholder-identification [subgroupName]="subitem">
+                                        </app-stakeholder-identification>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="base-margin-top">
+                                    <ul>
+                                      <li *ngFor="let subitem of item.value.dimensionAttribute">
+                                        <app-stakeholder-identification [subgroupName]="subitem">
+                                        </app-stakeholder-identification>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="flex-fluid text-left half-margin-left">
+                                  <div class="base-margin-top">
+                                    <ul class="list list--compressed"
+                                      *ngFor="let subitem of item.value.details | keyvalue">
+                                      <ng-container>
+                                        <li *ngFor="let detail of subitem.value | keyvalue">
+                                          <div class="panel panel--bordered">
+                                            <div class="text-bold">{{detail.key}}: </div>
+                                            <div>{{detail.value}}</div>
+                                          </div>
+                                        </li>
+                                      </ng-container>
+                                    </ul>
+                                  </div>
+                                  <div class="base-margin-top">
+                                    <ul>
+                                      <li *ngFor="let subitem of item.value.details">
+                                        <app-stakeholder-identification [details]="item.value.details">
+                                        </app-stakeholder-identification>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -514,53 +533,53 @@
                         {{offerOverviewDetailsList.plan[2].subMilestone}}
                       </div>
                       <div>
-                          <div class="offer-header card base-margin-top">
-                              <div class="row">
-                                <div class="col-md-2">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">Construct Name</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="flex-fluid text-left half-margin-left">
-                                      <div class="text-bold">Type</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="flex-fluid text-left half-margin-left">
-                                      <div class="text-bold">Details</div>
-                                    </div>
+                        <div class="offer-header card base-margin-top">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">Construct Name</div>
+                              </div>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">Type</div>
+                              </div>
+                            </div>
+                            <div class="col-md-8">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">Details</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row" *ngFor="let item of offerComponentCharacterestics">
+                            <div class="col-md-2">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">{{item.constructItemName}}</div>
+                              </div>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="text-bold">{{item.constructItem}}</div>
+                              </div>
+                            </div>
+                            <div class="col-md-8">
+                              <div class="flex-fluid text-left half-margin-left">
+                                <div class="base-margin-top">
+                                  <ul class="list list--compressed">
+                                    <li>
+                                      <ng-container *ngFor="let detail of item.itemDetails">
+                                        <div class="panel panel--bordered" *ngIf="detail.attributeValue">
+                                          <div class="text-bold"> {{detail.attributeName}}: </div>
+                                          <div>{{detail.attributeValue}}</div>
+                                        </div>
+                                      </ng-container>
+                                    </li>
+                                  </ul>
                                 </div>
                               </div>
-                              <div class="row" *ngFor="let item of offerComponentCharacterestics | keyvalue">
-                                <div class="col-md-2">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">{{item.key}}</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-2">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="text-bold">{{item.value.constructItem}}</div>
-                                  </div>                                
-                                </div>
-                                <div class="col-md-8">
-                                  <div class="flex-fluid text-left half-margin-left">
-                                    <div class="base-margin-top">
-                                      <ul class="list list--compressed">
-                                        <li >
-                                          <ng-container *ngFor="let item of item.value.itemDetails">
-                                            <div class="panel panel--bordered" *ngIf="item.attributeValue">
-                                              <div class="text-bold"> {{item.attributeName}}: </div> 
-                                              <div>{{item.attributeValue}}</div>
-                                            </div>
-                                          </ng-container>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                          </div>                        
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -1,37 +1,46 @@
 <div class="form-group">
   <div [formGroup]="questionForm">
     <div [ngSwitch]="question.componentType">
-      <div class="form-group__text" *ngSwitchCase="'Free Text'">
+<!-- Input -->
+      <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Free Text'">
         <input [formControlName]="question.egineAttribue" [id]="question.egineAttribue" class="form-control">
-        <label for="questionLabel">{{question.egineAttribue}}</label><br>
-        <!-- <label for="questionLabel">{{question.question}}</label> -->
+        <label for="questionLabel">{{question.egineAttribue}}</label>
       </div>
-      <div class="form-group__text select" *ngSwitchCase="'Drop-down'">
+<!-- Select -->
+      <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Drop-down'">
         <select [id]="question.egineAttribue" [formControlName]="question.egineAttribue" class="form-control">
           <option *ngFor="let opt of question.values" [value]="opt">{{opt}}</option>
         </select>
         <label for="questionLabel">{{question.egineAttribue}}</label>
       </div>
-      <div *ngSwitchCase="'Radio Button'" style="margin-top: 5%">
-        <label for="questionLabel">{{question.egineAttribue}}</label><br>
-        <!-- <label for="questionLabel">{{question.question}}</label> -->
-        <label *ngFor="let rad of question.values">
-          <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue" [formControlName]="question.egineAttribue"
-            class="form-control" [value]="rad"> {{rad}}
-        </label>
+<!-- Radio Button -->
+      <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'" >
+        <label class="radio half-margin-bottom" for="questionLabel">{{question.egineAttribue}}</label>
+          <div>
+            <label class="radio" *ngFor="let rad of question.values">
+              <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue" [formControlName]="question.egineAttribue"
+                class="form-control" [value]="rad">
+                <span class="radio__input"></span>
+                <span class="radio__label hidden-xs">{{rad}}</span>
+            </label>
+          </div>
       </div>
-      <div *ngSwitchCase="'Q&A Radio Button'" style="margin-top: 5%">
-        <!-- <label for="questionLabel">{{question.egineAttribue}}</label><br> -->
-        <label for="questionLabel">{{question.question}}</label>
-        <label *ngFor="let rad of question.values">
+<!-- Radio Button -->
+      <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A Radio Button'" >
+        <label class="radio half-margin-bottom" for="questionLabel">{{question.question}}</label>
+        <div>
+        <label class="radio" *ngFor="let rad of question.values">
           <input type="radio" [id]="question.values" [name]="question.question" [formControlName]="question.question"
-            class="form-control" [value]="rad"> {{rad}}
+            class="form-control" [value]="rad">
+            <span class="radio__input"></span>
+            <span class="radio__label hidden-xs">{{rad}}</span>
         </label>
+       </div>
       </div>
-      <div *ngSwitchCase="'Q&A FreeText'" style="margin-top: 5%">
-        <!-- <label for="questionLabel">{{question.egineAttribue}}</label><br> -->
+<!-- Free Text -->
+      <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A FreeText'" >
         <input [formControlName]="question.question" [id]="question.question" class="form-control">
-        <label for="questionLabel">{{question.question}}</label><br>
+        <label for="questionLabel">{{question.question}}</label>
       </div>
     </div>
   </div>

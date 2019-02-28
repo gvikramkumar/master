@@ -3,7 +3,7 @@
     <div class="col">
       <div class="panel panel--ltgray">
         <span class="mt-5">Offer Components</span>
-        <span (click)='downloadZip(currentOfferId)' class="icon-download pull-right"></span>
+        <button class="pull-right borderless" [disabled]="!downloadEnable" title="Download" (click)='downloadZip(currentOfferId)'><span class="icon-download"></span></button>
       </div>
     </div>
   </div>
@@ -42,12 +42,14 @@
             <div class="row" *ngIf="expandView">
               <div class="col">
                 <div class="panel panel--ltgray panel--compressed">
+                    <form [formGroup]="eGinieSearchForm" (ngSubmit)="addSearchedItemToOfferConfig()">
                   <div class="row">
                     <div class="col-md-10">
+
                       <span class="ui-fluid">
                         <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results"
                           (completeMethod)="searchForItemFromPdaf($event)" field="PID"
-                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9">
+                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9" formControlName="searchPID">
                           <ng-template pTemplate="body" let-item>
                             <tbody>
                               <tr>
@@ -67,9 +69,11 @@
                       </span>
                     </div>
                     <div class="col-md-2">
-                      <button class="btn btn--small" (click)="addSearchedItemToOfferConfig()">Add</button>
+                      <button class="btn btn--small" type="submit"
+                      [disabled]="!eGinieSearchForm.valid">Add</button>
                     </div>
                   </div>
+                </form>
                 </div>
               </div>
             </div>
@@ -242,7 +246,7 @@
   </div>
   <p-dialog header="Add Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
     (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
-    [contentStyle]="{'height': '450px', 'max-height':'450px', 'max-width':'700px'}" positionTop='150'>
+    [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}" positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
     <form (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
       <!-- Items Top Section -->
@@ -356,3 +360,4 @@
         </tr>
   </table>
   </p-dialog>
+
