@@ -178,7 +178,7 @@
             </div>
             <div class="responsive-table">
               <p-table [columns]="offerColumns" #dt [value]="myOffers" [scrollable]="true" scrollHeight="400px"
-                [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">
+                [globalFilterFields]="['offerId','offerName','ownerName','expectedLaunchDate']">
                 <ng-template pTemplate="header" let-columns>
                   <tr>
                     <th *ngFor="let col of columns" [pSortableColumn]="col.field" rowspan="2"
@@ -222,7 +222,7 @@
                       <span *ngIf="col.field == 'expectedLaunchDate'">
                         {{offerData[col.field] | date:'dd-MMM-yyyy'}}
                       </span>
-                      <span *ngIf="col.field == 'offerOwner'">
+                      <span *ngIf="col.field == 'ownerName'">
                         {{offerData[col.field]}}
                       </span>
                     </td>

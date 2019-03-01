@@ -147,6 +147,7 @@ export class CreateOfferService {
     createoffer.userId = this.userService.getUserId();
     createoffer.offerCreatedBy = this.userService.getUserId();
     createoffer.offerOwner = this.userService.getUserId();
+    createoffer.ownerName = this.userService.getName();
     return this.httpClient.post(this.offerCreateUrl, createoffer, { withCredentials: true });
   }
 
