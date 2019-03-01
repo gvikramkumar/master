@@ -1081,7 +1081,7 @@ export class OfferconstructCanvasComponent implements OnInit {
             cd.constructParentId = node.data.uniqueKey.toString();
             cd.groupNode = false;
             // Checking if item is e-genie item.
-            if (node.data['eginieItem']) {
+            if (child.data['eginieItem']) {
               cd.eGenieFlag = true;
             }
             if (child.data.itemDetails !== undefined) {
