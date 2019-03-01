@@ -8,12 +8,14 @@
 .search-icon .icon-search {
   position: absolute;
   top: 13px;
-  left: 161px;
+  left: 350px;
 }
 
 .auto-complete-attribute {
   position: relative;
 }
+
+.display-none{display: none};
 
 .search-fa-icon::after{
   content: '\f0da';
@@ -158,6 +160,16 @@ span.icon-cart {
 
 .topnav a.active {
   border-bottom: 3px solid #005073;
+}
+
+.line-items-nav .active.tab__heading {
+  border-bottom: 4px solid #007493;
+  padding: 15px;
+  height: 45px;
+}
+
+.line-items-nav .tab__heading {
+  padding: 15px !important;
 }
 
 .header-dialog {
