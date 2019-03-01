@@ -39,8 +39,11 @@
       </div>
 <!-- Free Text -->
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A FreeText'" >
+          <div class="form-group">
+              <div class="form-group__text">
         <input [formControlName]="question.question" [id]="question.question" class="form-control">
         <label for="questionLabel">{{question.question}}</label>
+        </div></div>
       </div>
     </div>
   </div>

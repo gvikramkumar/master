@@ -306,6 +306,7 @@
                       </div>
                     </div>
                   </div>
+                  <!-- Strategy Review -->
                   <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[3]?.status != null">
                     <div
                       [ngClass]="(offerOverviewDetailsList.ideate[3].status == 'Completed')?'timeline__icon timeline--success':'timeline__icon timeline--warning'">
@@ -318,25 +319,28 @@
                           [ngClass]="(offerOverviewDetailsList.ideate[3].status == 'Completed')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.ideate[3].subMilestone}}
                       </div>
-                      <div [hidden]="offerOverviewDetailsList.ideate[3].status != 'Completed'">
+                      <div>
                         <div class="offer-header card base-margin-top">
                           <div class="responsive-table">
                             <table class="table table--nostripes table--highlight table--hover table--selectable">
                               <thead>
                                 <tr>
-                                  <th class="sortable">Function <span class="sort-indicator icon-chevron-down"></span>
-                                  </th>
-                                  <th class="sortable">Approval status <span
-                                      class="sort-indicator icon-chevron-down"></span></th>
-                                  <th class="sortable">Reviewed On <span
-                                      class="sort-indicator icon-chevron-down"></span></th>
-                                  <th class="sortable">Reviewed By <span
-                                      class="sort-indicator icon-chevron-down"></span></th>
+                                  <th class="sortable">Function </th>
+                                  <th class="sortable">Approval status </th>
+                                  <th class="sortable">Reviewed On </th>
+                                  <th class="sortable">Reviewed By </th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr *ngFor="let strategyReviewData of strategyReviewList">
-                                  <td><span class="icon-check-outline icon-medium"></span>
+                                  <td><span class="icon-check-outline icon-eye-closed text-darkgray"
+                                      *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'not reviewed'"></span>
+                                    <span class="icon-warning-outline text-warning"
+                                      *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'conditionally approved'"></span>
+                                    <span class="icon-error-outline text-danger"
+                                      *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'not approved'"></span>
+                                    <span class="icon-check-outline text-success"
+                                      *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'approved'"></span>
                                     {{ strategyReviewData.function }}</td>
                                   <td>{{ strategyReviewData.status }}</td>
                                   <td>{{ strategyReviewData.reviewedOn | date:'dd-MMM-yyyy' }}</td>

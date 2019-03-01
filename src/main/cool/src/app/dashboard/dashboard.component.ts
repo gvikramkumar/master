@@ -13,6 +13,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
+import {lifeCycleStatusEnum} from '../enums/lifeCycleStatus.enums';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +25,6 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild('createActionForm') createActionForm: NgForm;
   @ViewChild('createActionApproveForm') createActionApproveForm: NgForm;
-
 
   myActionsAndNotifications = [];
   myOffers;
@@ -85,8 +85,9 @@ export class DashboardComponent implements OnInit {
     this.offerColumns = [
       { field: 'offerId', header: 'OFFER ID' },
       { field: 'offerName', header: 'OFFER NAME' },
-      { field: 'offerOwner', header: 'OFFER OWNER' },
-      { field: 'expectedLaunchDate', header: 'LAUNCH DATE' }
+      { field: 'ownerName', header: 'OFFER OWNER' },
+      { field: 'expectedLaunchDate', header: 'LAUNCH DATE' },
+      { field: 'lifeCyclePriority', header:'LIFE CYCLE STATUS'}
     ];
 
 
@@ -148,11 +149,27 @@ export class DashboardComponent implements OnInit {
     }
 
   }
-
+  private addLifeCycleSortingColumn(resOffers){
+    this.myOffers = resOffers.map((data) => {
+      let priority = 0;
+      switch(data.status.offerMilestone){
+        case lifeCycleStatusEnum.INLAUNCH.value: 
+          priority = lifeCycleStatusEnum.INLAUNCH.priority;
+          break;
+        case lifeCycleStatusEnum.CANCEL.value: 
+          priority = lifeCycleStatusEnum.CANCEL.priority;
+          break; 
+        case lifeCycleStatusEnum.ONHOLD.value: 
+          priority = lifeCycleStatusEnum.ONHOLD.priority;
+          break;
+      }
+     return {...data, "lifeCyclePriority": priority};
+    });
+  }
   private getMyOffers() {
     this.dashboardService.getMyOffersList()
       .subscribe(resOffers => {
-        this.myOffers = resOffers;
+        this.addLifeCycleSortingColumn(resOffers);
         resOffers.forEach(ele => {
           this.stakeHolders[ele.offerId] = {};
           if (ele.stakeholders != null) {

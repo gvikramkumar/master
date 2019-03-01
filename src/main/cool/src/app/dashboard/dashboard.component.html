@@ -178,18 +178,23 @@
             </div>
             <div class="responsive-table">
               <p-table [columns]="offerColumns" #dt [value]="myOffers" [scrollable]="true" scrollHeight="400px"
-                [globalFilterFields]="['offerId','offerName','offerOwner','expectedLaunchDate']">
+                [globalFilterFields]="['offerId','offerName','ownerName','expectedLaunchDate']">
                 <ng-template pTemplate="header" let-columns>
                   <tr>
-                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" rowspan="2"
-                      style="width:10%; text-align: center">
-                      {{col.header}}
-                      <p-sortIcon [field]="col.field"></p-sortIcon>
-                    </th>
-                    <th colspan="1" style="width:20%; text-align: center">LIFE CYCLE STATUS</th>
+                    <ng-container *ngFor="let col of columns">
+                        <th  [pSortableColumn]="col.field" [attr.rowspan]="col.field!='lifeCyclePriority'?2:null"
+                        [attr.colspan]="col.field=='lifeCyclePriority'?1:null"
+                        [ngClass]="{'regColumn':col.field!='lifeCyclePriority', 'lastColumn':col.field=='lifeCyclePriority'}">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                      </th>
+                    </ng-container>
+                    
+                    <!--<th colspan="1" style="" [pSortableColumn]="LIFECYCLEPRIORITY">LIFE CYCLE STATUS
+                        <p-sortIcon [field]="LIFECYCLEPRIORITY"></p-sortIcon></th>-->
                   </tr>
                   <tr class="tr--th-small">
-                    <th colspan="1">
+                    <th colspan="1"  >
                       <div class="row">
                         <div class="col">
                           PRE-LAUNCH
@@ -206,26 +211,29 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-offerData let-columns="columns">
                   <tr>
-                    <td *ngFor="let col of columns" style="width:10%">
-                      <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
-                        <div
-                          *ngIf="offerData.status !== null && (offerData.status['offerMilestone'] === 'cancel' || offerData.status['offerMilestone'] === 'hold' )">
-                          {{offerData[col.field]}}
-                        </div>
-                        <div
-                          *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'  && offerData.status['offerMilestone'] !== 'hold'">
-                          <a (click)="showOfferPopUp($event,offerData,popturboContent)">
-                            {{offerData[col.field]}}
-                          </a>
-                        </div>
-                      </span>
-                      <span *ngIf="col.field == 'expectedLaunchDate'">
-                        {{offerData[col.field] | date:'dd-MMM-yyyy'}}
-                      </span>
-                      <span *ngIf="col.field == 'offerOwner'">
-                        {{offerData[col.field]}}
-                      </span>
-                    </td>
+                    <ng-container *ngFor="let col of columns">
+                        <td style="width:10%" *ngIf="col.field!='lifeCyclePriority'">
+                          <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
+                            <div
+                              *ngIf="offerData.status !== null && (offerData.status['offerMilestone'] === 'cancel' || offerData.status['offerMilestone'] === 'hold' )">
+                              {{offerData[col.field]}}
+                            </div>
+                            <div
+                              *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'  && offerData.status['offerMilestone'] !== 'hold'">
+                              <a (click)="showOfferPopUp($event,offerData,popturboContent)">
+                                {{offerData[col.field]}}
+                              </a>
+                            </div>
+                          </span>
+                          <span *ngIf="col.field == 'expectedLaunchDate'">
+                            {{offerData[col.field] | date:'dd-MMM-yyyy'}}
+                          </span>
+                          <span *ngIf="col.field == 'ownerName' && offerData[col.field]">
+                            {{offerData[col.field]}}<br/>
+                            ({{offerData['offerOwner']}})
+                          </span>
+                        </td>
+                    </ng-container>
                     <td style="width:20%" class="td--progress-fitted">
                       <div
                         *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'Launch In Progress'"
