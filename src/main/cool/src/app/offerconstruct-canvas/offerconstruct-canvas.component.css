@@ -15,6 +15,8 @@
   position: relative;
 }
 
+.display-none{display: none};
+
 .search-fa-icon::after{
   content: '\f0da';
   font-family: FontAwesome;

@@ -332,6 +332,13 @@
           </div>
         </div>
       </div>
+      <div class="row">
+          <div class="col-md-12 text-right">
+              <button class="display-none"></button>
+              <button class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
+              <button class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
+          </div>
+      </div>
     </div>
     <div *ngIf='majorLineItemsActive'>
       <div *ngFor='let formGroupData of formGroupData'>
@@ -342,6 +349,13 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12 text-right">
+              <button class="display-none"></button>
+              <button class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
+              <button class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
+          </div>
       </div>
     </div>
   </p-dialog>

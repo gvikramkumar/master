@@ -137,6 +137,18 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
   }
 
+  submitClickEvent(){
+    this.offerConstructService.submitClickEvent.emit();
+  }
+
+  closeDialog() {
+    this.offerConstructService.closeAction('close');
+  }
+
+  closeAddALLDialog() {
+    this.offerConstructService.closeAction('close');
+  }
+
   addItms() {
     this.questionForm.reset();
     this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(countries => {

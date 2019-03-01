@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
@@ -6,120 +6,10 @@ import { OfferConstructService } from '../services/offer-construct.service';
 
 @Component({
     selector: 'dynamic-form-multiple',
-    template: `
-    <form novalidate (ngSubmit)="onSubmit(form.value)" [formGroup]="form">
-    <div class="form-group">
-    <h4>Details for {{group.groupName}}</h4>
-    <div class='row flex-row'>
-      <div class='col-md-6' *ngFor="let prop of objectProps">
-      <div [ngSwitch]="prop.itemType">
-      <div *ngSwitchCase="'Item'">
-        <label [attr.for]="prop">{{prop.egineAttribue}}</label>
-        <div [ngSwitch]="prop.componentType">
-        <div class='form-group__text'>
-          <input *ngSwitchCase="'Free Text'" 
-            [formControlName]="prop.key"
-            [id]="prop.key" [type]="prop.type" class="form-control">
-            </div>
-          <div *ngSwitchCase="'Radio Button'">
-            <label *ngFor="let option of prop.values">
-              <input
-                type="radio"
-                (change)='ind=i'
-                class="form-control"
-                [name]="prop.key"
-                [formControlName]="prop.key"
-                [value]="option">{{option}}
-            </label>
-          </div>
-          <div class='form-group__text select' *ngSwitchCase="'Drop-down'">
-            <select class="form-control" [formControlName]="prop.key">
-              <option *ngFor="let option of prop.values" [value]="option">
-                {{ option }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="error" *ngIf="form.get(prop.key).invalid && (form.get(prop.key).dirty || form.get(prop.key).touched)">
-            <div *ngIf="form.get(prop.key).errors.required">
-              {{ prop.label }} is required.
-            </div>
-          </div>
-      </div>
-      </div>
-      </div>
-      </div>
-      <div class="divider" style="margin-top: 1%"></div>
-      <!-- Unique Item  Mandatory Section -->
-      <div class="row">
-        <div class="col-md-8">
-          <a (click)="openMandatory()"><span class="icon-add-contain"></span> Mandatory Item Attributes</a>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group input--icon half-margin-bottom">
-            <div class="form-group__text">
-              <input id="input-type-search" type="text" pInputText size="50" placeholder="Copy Attributes" style="width:auto">
-              <button type="button" class="link">
-                <span class="icon-search"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="divider" style="margin-top: 1%"></div>
-      <div *ngIf="showMandatoryDetails">
-      <div class='row flex-row'>
-      <div class='col-md-6' *ngFor="let prop of objectProps; let i=index">
-      <div [ngSwitch]="prop.itemType">
-      <div *ngSwitchCase="'Unique Item'">
-        <label [attr.for]="prop">{{prop.egineAttribue}}</label>
-        <div [ngSwitch]="prop.componentType">
-        <div class='form-group__text'>
-          <input *ngSwitchCase="'Free Text'" 
-            [formControlName]="prop.key"
-            [id]="prop.key" [type]="prop.type" class="form-control">
-            </div>
-          <div *ngSwitchCase="'Radio Button'">
-            <label *ngFor="let option of prop.values">
-              <input
-                type="radio"
-                (change)='ind=i'
-                class="form-control"
-                [name]="prop.key"
-                [formControlName]="prop.key"
-                [value]="option">{{option}}
-            </label>
-          </div>
-          <div class='form-group__text select' *ngSwitchCase="'Drop-down'">
-            <select class="form-control" [formControlName]="prop.key">
-              <option *ngFor="let option of prop.values" [value]="option">
-                {{ option }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="error" *ngIf="form.get(prop.key).invalid && (form.get(prop.key).dirty || form.get(prop.key).touched)">
-            <div *ngIf="form.get(prop.key).errors.required">
-              {{ prop.label }} is required.
-            </div>
-          </div>
-      </div>
-      </div>
-      </div>
-      </div>
-      </div>
-      <div class="row">
-            <div class="col-md-12 text-right">
-              <button class="btn btn--secondary" (click)='closeDialog()'>Cancel</button>
-              <button class="btn btn--primary" type="submit">Add Details</button>
-            </div>
-          </div>
-      </div>
-    </form>
-  `,
-    styles: [
-        `
+    templateUrl: './dynamic-form-multiple.html',
+    styles: [`
     .error { color: red; }
+    .form-group-add-OfferConfiguration .row-button-add-details{display:none}
     `
     ]
 })
@@ -136,9 +26,9 @@ export class DynamicFormMultipleComponent implements OnInit {
     savedData;
     showMandatoryDetails: boolean = false;
     myformcontrols: ['item', 'description', 'type']
-
+    @ViewChild('btnadddetails') btnadddetails:ElementRef;
     
-    constructor(private offerconstructService: OfferConstructService) {
+    constructor(private offerconstructService: OfferConstructService, private renderer: Renderer) {
     }
 
     closeDialog() {
@@ -147,6 +37,7 @@ export class DynamicFormMultipleComponent implements OnInit {
 
 
     onSubmit(val){
+      console.log(this.btnadddetails);
         for (let i = 0; i < this.objectProps.length; i++) {
             this.data.push(this.objectProps[i]);
         }
@@ -173,6 +64,11 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     ngOnInit() {
+      this.offerconstructService.submitClickEvent.subscribe(()=>{
+        let event = new MouseEvent('click', {bubbles: true});
+        this.renderer.invokeElementMethod(
+        this.btnadddetails.nativeElement, 'dispatchEvent', [event]);
+      })
         this.offerconstructService.formReset.subscribe((val) => {
             if(val==='reset'){
             }
