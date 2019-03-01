@@ -6,11 +6,11 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./offersolutioning-card-one.component.css']
 })
 export class OffersolutioningCardOneComponent implements OnInit {
-  @Input() groupData:Object;
-  @Input() stakeData:Object;
-  @Input() offerData:Object;
-  @Input() groupIndex:any;
-
+  @Input() groupData: Object;
+  @Input() stakeData: Object;
+  @Input() offerData: Object;
+  @Input() groupIndex: any;
+  Object = Object;
   constructor() { }
 
   ngOnInit() {
