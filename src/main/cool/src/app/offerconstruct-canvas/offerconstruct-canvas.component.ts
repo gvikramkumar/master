@@ -150,13 +150,11 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   addItms() {
-    this.questionForm.reset();
-    this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(countries => {
-      let itemsData = countries.body;
+    this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(items => {
+      let itemsData = items.body;
       this.questionForm.patchValue(itemsData);
       this.cd.detectChanges();
   });
-    //this.questionForm.setValue(this.country);
     this.cd.detectChanges();
   }
 
