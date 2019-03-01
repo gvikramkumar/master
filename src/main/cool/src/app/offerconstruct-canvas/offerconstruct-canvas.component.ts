@@ -855,7 +855,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     const titleName = this.selectedPids.PID;
     if (!this.addedEgineMajorItemsInTree.includes(titleName)) {
       this.initalRowAdded = false;
-      const productName = searchResult['PID Category'];
+      const productName = searchResult['Item Category'];
       const obj = Object.create(null);
       obj['uniqueKey'] = ++this.counter;
       this.uniqueId = obj['uniqueKey'];
@@ -884,7 +884,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   addMinorItem(searchResult) {
     const titleName = this.selectedPids.PID;
     if (this.offerConstructItems.length > 0) {
-      const productName = searchResult['PID Category'];
+      const productName = searchResult['Item Category'];
       const obj = Object.create(null);
       obj['uniqueKey'] = ++this.counter;
       this.uniqueId = obj['uniqueKey'];
@@ -921,7 +921,8 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param $event Search for PID
    */
   searchForItemFromPdaf(event) {
-    this.offerConstructCanvasService.searchEgenie(event.query).subscribe((results) => {
+    const searchString = event.query.toUpperCase();
+    this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
       this.results = [...results];
     },
       (error) => {
