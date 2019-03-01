@@ -965,6 +965,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   onHide() {
+    this.itemsList = null;
+    this.copyAttributeResults = null;
     this.offerConstructService.changeForm('reset');
     this.displayAddDetails = false;
     this.questions = [];
@@ -972,6 +974,9 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   addItemDetails() {
+    this.itemsList = null;
+    this.copyAttributeResults = null;
+    this.cd.detectChanges();
     this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.questionForm.value);
     this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
