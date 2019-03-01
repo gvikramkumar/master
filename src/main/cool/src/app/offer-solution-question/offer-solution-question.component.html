@@ -53,7 +53,8 @@
   </div>
 
   <!-- Dropdown -->
-  <div *ngIf="questionData['questionType']==='LOV'">
+  <div
+    *ngIf="questionData['questionType']==='LOV' || questionData['questionType']==='LOVOffer' || questionData['questionType']==='LOVProd'">
     <div class="form-group dropdown">
       <div class="form-group__text select">
         <select class="offer-solution-quesiton-select" [(ngModel)]="questionData['answer']"
