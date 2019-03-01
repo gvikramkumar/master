@@ -19,13 +19,12 @@ export class BlueComponent implements OnInit {
   goBack() {
     this.router.navigate(['/offerDimension', this.currentOfferId, this.currentCaseId]);
   }
-  proceed(withRouter=true) {
-    debugger;
+  proceed(withRouter = true) {
     if (withRouter === false) {
-    this.proceedToNextStep.next('stay_on_this_page');
-  } else {
-    this.proceedToNextStep.next('');
-  }
+      this.proceedToNextStep.next('stay_on_this_page');
+    } else {
+      this.proceedToNextStep.next('');
+    }
   }
   gotoOfferviewDetails() {
     this.router.navigate(['/offerDetailView', this.currentOfferId, this.currentCaseId]);

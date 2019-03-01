@@ -6,18 +6,18 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./offersolutioning-card-one.component.css']
 })
 export class OffersolutioningCardOneComponent implements OnInit {
-  @Input() groupData:Object;
-  @Input() stakeData:Object;
-  @Input() offerData:Object;
-  @Input() groupIndex:any;
-
+  @Input() groupData: Object;
+  @Input() stakeData: Object;
+  @Input() offerData: Object;
+  @Input() groupIndex: any;
+  Object = Object;
   constructor() { }
 
   ngOnInit() {
   }
 
-  checkButtonStatus(btn) {
-    if (this.groupData['selected'] != null && this.groupData['selected'].includes(btn)) {
+  checkButtonStatus(attribute, selectedAttribute) {
+    if (selectedAttribute != null && selectedAttribute.includes(attribute)) {
       return true;
     } else {
       return false;
