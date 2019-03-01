@@ -20,9 +20,17 @@
 
           <!-- <app-mm-info-bar></app-mm-info-bar> -->
           <!-- Offer Solutioning Bar -->
-          <div *ngFor="let group of offerSolutionGroups, let i = index">
-            <app-offersolutioning-card-one [groupData]="group" [stakeData]="stakeData" [offerData]="firstData"
-              [groupIndex]="i"></app-offersolutioning-card-one>
+          <div *ngIf="offerSolutionGroups">
+            <div *ngFor="let group of Object.keys(offerSolutionGroups), let i = index">
+              <div class="row">
+                <div class="col-md-12 base-padding-top text-large">
+                  <h3>{{group}}</h3>
+                </div>
+              </div>
+              <div class="divider divider--accent-blue"></div>
+              <app-offersolutioning-card-one [groupData]="offerSolutionGroups[group]" [stakeData]="stakeData"
+                [offerData]="firstData" [groupIndex]="i"></app-offersolutioning-card-one>
+            </div>
           </div>
           <!-- Right Panel -->
         </div>
