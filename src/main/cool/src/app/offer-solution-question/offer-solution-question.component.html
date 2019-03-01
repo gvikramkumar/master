@@ -67,14 +67,15 @@
 
   <!-- Data Picker -->
   <div *ngIf="questionData['questionType']==='Date'">
-    <div class="form-group__text">
-      <input name="dueDateName" [(ngModel)]="questionData['answer']" [value]="questionData['answer']"
-        class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate"
-        containerClass="custome-date" [bsConfig]="dpConfig" [(ngModel)]="dueDateValue" required ngModel
-        #dueDateName="ngModel" [disabled]="!questionData['validUser']">
-      <button type="button" class="link" tabindex="-1">
-        <span class="icon-month"></span>
-      </button>
+    <div class="form-group label--floated input--icon half-margin-bottom">
+      <div class="form-group__text">
+        <input class="form-control" name="dueDateName" id="dueDateName" #dp1="bsDatepicker" bsDatepicker placement="top"
+          [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig" ngModel required
+          [(ngModel)]="questionData['answer']" #strategyReviewDate="ngModel" />
+        <button type="button" class="link" tabindex="-1">
+          <span class="icon-month"></span>
+        </button>
+      </div>
     </div>
   </div>
 
