@@ -53,7 +53,8 @@
   </div>
 
   <!-- Dropdown -->
-  <div *ngIf="questionData['questionType']==='LOV'">
+  <div
+    *ngIf="questionData['questionType']==='LOV' || questionData['questionType']==='LOVOffer' || questionData['questionType']==='LOVProd'">
     <div class="form-group dropdown">
       <div class="form-group__text select">
         <select class="offer-solution-quesiton-select" [(ngModel)]="questionData['answer']"
@@ -66,15 +67,16 @@
   </div>
 
   <!-- Data Picker -->
-  <div *ngIf="questionData['questionType']==='Date'">
-    <div class="form-group__text">
-      <input name="dueDateName" [(ngModel)]="questionData['answer']" [value]="questionData['answer']"
-        class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate"
-        containerClass="custome-date" [bsConfig]="dpConfig" [(ngModel)]="dueDateValue" required ngModel
-        #dueDateName="ngModel" [disabled]="!questionData['validUser']">
-      <button type="button" class="link" tabindex="-1">
-        <span class="icon-month"></span>
-      </button>
+  <div class="form-group label--floated input--icon half-margin-bottom col-md-6">
+    <div *ngIf="questionData['questionType']==='Date'">
+      <div class="form-group__text">
+        <input name="dueDateName" [(ngModel)]="questionData['answer']" class="form-control" #dp4="bsDatepicker"
+          bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date" [bsConfig]="dpConfig"
+          [(ngModel)]="dueDateValue" required ngModel #dueDateName="ngModel" [disabled]="!questionData['validUser']">
+        <button type="button" class="link" tabindex="-1">
+          <span class="icon-month"></span>
+        </button>
+      </div>
     </div>
   </div>
 

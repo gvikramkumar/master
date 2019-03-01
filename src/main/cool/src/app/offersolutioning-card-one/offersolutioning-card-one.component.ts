@@ -16,8 +16,8 @@ export class OffersolutioningCardOneComponent implements OnInit {
   ngOnInit() {
   }
 
-  checkButtonStatus(btn) {
-    if (this.groupData['selected'] != null && this.groupData['selected'].includes(btn)) {
+  checkButtonStatus(attribute, selectedAttribute) {
+    if (selectedAttribute != null && selectedAttribute.includes(attribute)) {
       return true;
     } else {
       return false;

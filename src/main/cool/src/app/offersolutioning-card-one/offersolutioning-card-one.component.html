@@ -9,21 +9,21 @@
         <div *ngFor="let subgroup of Object.keys(groupData[group])">
           <div class="row">
             <div class="col-md-3 margin-auto">
-              <span *ngIf="groupData['subGroupName'] != 'Always Ask'" class="subgroup-name">{{ subgroup}}</span>
-              <span *ngIf="groupData['subGroupName'] != 'Always Ask'" class="sub--label text-success"><span
-                  *ngIf="groupData['subGroupName'] != 'Always Ask'" class="icon-check"></span> Perfectly Aligned</span>
+              <span *ngIf="group != 'Always Ask'" class="subgroup-name">{{ subgroup}}</span>
+              <span *ngIf="group != 'Always Ask'" class="sub--label text-success"><span *ngIf="group != 'Always Ask'"
+                  class="icon-check"></span> Perfectly Aligned</span>
             </div>
 
-            <!-- <div class="col-md-9">
-                      <button *ngFor="let btn of groupData['choices']" [ngClass]="{
-                              'mm-model-btn-active': checkButtonStatus(btn),
-                              'mm-model-btn-inactive': !checkButtonStatus(btn)
+            <div class="col-md-9">
+              <button *ngFor="let btn of groupData[group][subgroup]['subGroupChoicesGiven']" [ngClass]="{
+                              'mm-model-btn-active': checkButtonStatus(btn, groupData[group][subgroup]['subGroupChoicesSelected']),
+                              'mm-model-btn-inactive': !checkButtonStatus(btn, groupData[group][subgroup]['subGroupChoicesSelected'])
                             }" class="btn btn--small">
-                        {{ btn }}
-                      </button>
-                    </div> -->
+                {{ btn }}
+              </button>
+            </div>
           </div>
-          <div *ngFor="let question of groupData[group][subgroup], index as i">
+          <div *ngFor="let question of groupData[group][subgroup].questions, index as i">
             <app-offer-solution-question [questionData]="question" [questionIndex]="i" [groupIndex]="groupIndex"
               [stakeData]="stakeData" [offerData]="offerData"></app-offer-solution-question>
           </div>
