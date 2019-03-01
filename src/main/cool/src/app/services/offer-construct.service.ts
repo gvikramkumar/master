@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '../../environments/environment.service';
@@ -12,6 +12,7 @@ export class OfferConstructService {
     constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
     public space: Subject<string> = new BehaviorSubject<string>(null);
+    submitClickEvent = new EventEmitter();
 
     broadcastTextChange(text) {
         this.space.next(text);

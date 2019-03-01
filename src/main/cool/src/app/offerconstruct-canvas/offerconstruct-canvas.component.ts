@@ -137,14 +137,26 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
   }
 
+  submitClickEvent(){
+    this.offerConstructService.submitClickEvent.emit();
+  }
+
+  closeDialog() {
+    this.offerConstructService.closeAction('close');
+  }
+
+  closeAddALLDialog() {
+    this.offerConstructService.closeAction('close');
+  }
+
   addItms() {
-    this.questionForm.reset();
-    this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(countries => {
-      let itemsData = countries.body;
-      this.questionForm.patchValue(itemsData);
+    this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(items => {
+      let itemsData = items.body;
+      if (this.lineItemName === itemsData['Item Category']) {
+          this.questionForm.patchValue(itemsData);
+      }
       this.cd.detectChanges();
   });
-    //this.questionForm.setValue(this.country);
     this.cd.detectChanges();
   }
 
@@ -845,7 +857,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     const titleName = this.selectedPids.PID;
     if (!this.addedEgineMajorItemsInTree.includes(titleName)) {
       this.initalRowAdded = false;
-      const productName = searchResult['PID Category'];
+      const productName = searchResult['Item Category'];
       const obj = Object.create(null);
       obj['uniqueKey'] = ++this.counter;
       this.uniqueId = obj['uniqueKey'];
@@ -874,7 +886,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   addMinorItem(searchResult) {
     const titleName = this.selectedPids.PID;
     if (this.offerConstructItems.length > 0) {
-      const productName = searchResult['PID Category'];
+      const productName = searchResult['Item Category'];
       const obj = Object.create(null);
       obj['uniqueKey'] = ++this.counter;
       this.uniqueId = obj['uniqueKey'];
@@ -911,7 +923,8 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param $event Search for PID
    */
   searchForItemFromPdaf(event) {
-    this.offerConstructCanvasService.searchEgenie(event.query).subscribe((results) => {
+    const searchString = event.query.toUpperCase();
+    this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
       this.results = [...results];
     },
       (error) => {
@@ -965,6 +978,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   onHide() {
+    this.itemsList = null;
+    this.copyAttributeResults = null;
     this.offerConstructService.changeForm('reset');
     this.displayAddDetails = false;
     this.questions = [];
@@ -972,6 +987,9 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   addItemDetails() {
+    this.itemsList = null;
+    this.copyAttributeResults = null;
+    this.cd.detectChanges();
     this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.questionForm.value);
     this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
@@ -1081,7 +1099,7 @@ export class OfferconstructCanvasComponent implements OnInit {
             cd.constructParentId = node.data.uniqueKey.toString();
             cd.groupNode = false;
             // Checking if item is e-genie item.
-            if (node.data['eginieItem']) {
+            if (child.data['eginieItem']) {
               cd.eGenieFlag = true;
             }
             if (child.data.itemDetails !== undefined) {

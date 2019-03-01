@@ -14,6 +14,7 @@ export class CreateOffer {
   readinessReviewDate: string;
   expectedLaunchDate: string;
   offerOwner: string;
+  ownerName: string;
   offerCreatedBy: string;
   offerCreationDate: string;
   status: Status;
@@ -39,7 +40,7 @@ export class CreateOffer {
     constructDetails: any[]
     // ,
     // stakeholders:{}
-    ) {
+  ) {
     this.userId = userId;
     this.offerOwner = offerOwner;
     this.offerName = offerName;
