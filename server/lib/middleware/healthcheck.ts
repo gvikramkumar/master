@@ -64,7 +64,7 @@ function pingSso() {
       return finRequest({url: config.ssoUrl})
         .then((resp: AnyObj): any => {
           const msg = `status: ${resp.resp.statusCode}`;
-          if (resp.resp.statusCode === 200) {
+          if (resp.resp.statusCode >= 200 && resp.resp.statusCode < 500) {
             return msg;
           } else {
             return Promise.reject(msg);
