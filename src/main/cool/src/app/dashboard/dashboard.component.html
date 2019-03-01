@@ -178,7 +178,7 @@
             </div>
             <div class="responsive-table">
               <p-table [columns]="offerColumns" #dt [value]="myOffers" [scrollable]="true" scrollHeight="400px"
-                [globalFilterFields]="['offerId','offerName','ownerName','expectedLaunchDate']">
+                [globalFilterFields]="['offerId','offerName','ownerName','expectedLaunchDate']" sortMode="multiple">
                 <ng-template pTemplate="header" let-columns>
                   <tr>
                     <ng-container *ngFor="let col of columns">
@@ -189,9 +189,6 @@
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                       </th>
                     </ng-container>
-                    
-                    <!--<th colspan="1" style="" [pSortableColumn]="LIFECYCLEPRIORITY">LIFE CYCLE STATUS
-                        <p-sortIcon [field]="LIFECYCLEPRIORITY"></p-sortIcon></th>-->
                   </tr>
                   <tr class="tr--th-small">
                     <th colspan="1"  >
