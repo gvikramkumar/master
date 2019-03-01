@@ -163,7 +163,8 @@ export class OfferconstructCanvasComponent implements OnInit {
   //search copy attributes
 
   searchCopyAttributes(event) {
-    this.offerConstructCanvasService.searchEgenie(event.query).subscribe((results) => {
+    const searchString = event.query.toUpperCase();
+    this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
       this.copyAttributeResults = [...results];
     },
       (error) => {
