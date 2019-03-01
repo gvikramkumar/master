@@ -921,7 +921,8 @@ export class OfferconstructCanvasComponent implements OnInit {
    * @param $event Search for PID
    */
   searchForItemFromPdaf(event) {
-    this.offerConstructCanvasService.searchEgenie(event.query).subscribe((results) => {
+    const searchString = event.query.toUpperCase();
+    this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
       this.results = [...results];
     },
       (error) => {
