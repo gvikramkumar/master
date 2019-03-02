@@ -976,6 +976,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   closeDailog() {
     this.displayAddDetails = false;
     this.questions = [];
+    this.questionForm.reset();
   }
 
   onHide() {
@@ -985,6 +986,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.displayAddDetails = false;
     this.questions = [];
     this.showMandatoryDetails = false;
+    this.closeDailog();
   }
 
   addItemDetails() {
@@ -1011,6 +1013,11 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.popHeadName = currentNode.node.data.title;
     let itemDetails = currentNode.node.data['itemDetails'];
     this.displayAddDetails = true;
+    if(itemDetails && !itemDetails["Item Name (PID)"]){
+      itemDetails["Item Name (PID)"] = currentNode.node.data.title;
+    }else if(itemDetails === undefined){
+      itemDetails = {"Item Name (PID)": currentNode.node.data.title};
+    }
     const groups: Groups[] = [];
     const group = new Groups(
       this.lineItemName
