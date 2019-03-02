@@ -3,7 +3,8 @@
     <div [ngSwitch]="question.componentType">
 <!-- Input -->
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Free Text'">
-        <input [formControlName]="question.egineAttribue" [id]="question.egineAttribue" class="form-control">
+        <input [formControlName]="question.egineAttribue" [id]="question.egineAttribue" *ngIf='question.egineAttribue === "Item Name (PID)"' [attr.disabled]='true' class="form-control">
+        <input [formControlName]="question.egineAttribue" [id]="question.egineAttribue" *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control">
         <label for="questionLabel">{{question.egineAttribue}}</label>
       </div>
 <!-- Select -->
@@ -30,7 +31,7 @@
         <label class="radio half-margin-bottom" for="questionLabel">{{question.question}}</label>
         <div>
         <label class="radio" *ngFor="let rad of question.values">
-          <input type="radio" [id]="question.values" [name]="question.question" [formControlName]="question.egineAttribue"
+          <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue" [formControlName]="question.egineAttribue"
             class="form-control" [value]="rad">
             <span class="radio__input"></span>
             <span class="radio__label hidden-xs">{{rad}}</span>
