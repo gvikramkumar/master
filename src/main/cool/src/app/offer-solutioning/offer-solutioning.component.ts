@@ -48,7 +48,8 @@ export class OfferSolutioningComponent implements OnInit {
 
   displayLeadTime = false;
   noOfWeeksDifference: string;
-
+  // initialOfferSolutioning;
+  initialSolutioningGroups;
   Object = Object;
 
   constructor(private router: Router,
@@ -73,6 +74,8 @@ export class OfferSolutioningComponent implements OnInit {
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
+      // this.initialOfferSolutioning = ;
+      this.populateInitialQuestion(Object.assign({}, this.firstData['solutioningDetails']));
       if (Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
         this.primaryBE = this.firstData['primaryBEList'][0];
       }
@@ -122,84 +125,99 @@ export class OfferSolutioningComponent implements OnInit {
       this.stakeData = this.stakeHolderInfo;
       this.stake = this.stakeFunctionInfo;
 
-
-      // if (this.offerSolutionData == null) {
-      //   this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
-      //     this.offerSolutionData = data;
-      //     if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-      //       this.getSolutionGroups();
-      //       this.createActionAndNotification();
-      //     }
-      //   });
-      // } else {
-      //   if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-      //     this.getSolutionGroups();
-      //     this.createActionAndNotification();
-      //   }
-      // }
-
-      // this.offerSolutionData = this.offersolutioningService.getSolutionData(this.currentOfferId);
       this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
+        debugger;
         this.offerSolutionData = data;
         if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-          this.getSolutionGroups();
+          this.populateRuleBasedSolutionGroups();
           this.createActionAndNotification();
         }
       });
     });
   }
+  populateInitialQuestion(initialOfferSolutioning: Array<any>) {
+    debugger;
+    this.initialSolutioningGroups = _.chain(initialOfferSolutioning)
+      .groupBy('dimensionGroup')
+      .mapValues(groupValue => _.chain(groupValue)
+        .groupBy('dimensionSubgroup')
+        .mapValues((value, key) => {
+          const returnObj = {
+            questions: value.reduce((acc, val) => {
+              acc = acc.concat(val.Details);
+              return acc;
+            }, [])
+          };
+          return returnObj;
+        })
+        .value()
+      )
+      .value();
 
-  getSolutionGroups() {
+    // debugger;
+    // const arrOfferSolutioning = this.initialOfferSolutioning as Array<any>;
+    // const offerQuestions = _.filter(arrOfferSolutioning, offerQuestion => offerQuestion.dimensionGroup === question.groupName && offerQuestion.dimensionSubgroup === question.subGroupName)
+    // const offerQuestionToBeReturned = offerQuestions[0].Details
+    //   // offerQuestions.reduce((accumulator, offerQuestion) => {
+    //   //   accumulator = accumulator.concat(offerQuestion.Details);
+    //   //   return accumulator;
+    //   // }, [])
+    //   .filter(offerQuestion => offerQuestion.solutioninQuestion = question.question);
+
+    // return offerQuestionToBeReturned && offerQuestionToBeReturned.length > 0 ? offerQuestionToBeReturned[0].answer : '';
+
+  }
+
+  populateRuleBasedSolutionGroups() {
     const arrOfferSolution = this.offerSolutionData['groups'] as Array<any>;
     const questionsAndAnswers = arrOfferSolution.reduce((groupAccumulator, group) => {
-
       const groupName = group.groupName;
       const subgroups = group.subGroup;
 
       const subgroupQuestions = subgroups.reduce((subgroupAccumulator, subgroup) => {
-
         const subgroupName = subgroup.subGroupName;
         const questions = subgroup.listGrpQuestions;
         const subGroupQuestions = _.uniqBy(questions.map(question => {
+
           question.subGroupName = subgroupName;
           question.subGroupChoicesGiven = subgroup.choices;
           question.subGroupChoicesSelected = subgroup.selected;
-
           question.groupName = groupName;
+          const offerQuestions = this.initialSolutioningGroups[groupName][subgroupName].questions;
+          const offerQuestion = _.filter(offerQuestions, q => q.solutioninQuestion === question.question);
+          question.answer = offerQuestion && offerQuestion.length > 0 ? offerQuestion[0].solutioningAnswer : '';
           return question;
+
         }), (q) => q.question);
 
         subgroupAccumulator = subgroupAccumulator.concat(subGroupQuestions);
         return subgroupAccumulator;
-
       }, []);
 
       groupAccumulator = groupAccumulator.concat(subgroupQuestions);
       return groupAccumulator;
-
     }, []);
 
     const groupByOSGroup = _.chain(questionsAndAnswers)
       .groupBy('osGroup')
       .mapValues(osGroupValues => _.chain(osGroupValues)
         .groupBy('groupName')
-        .mapValues(groupValue =>
-          _.chain(groupValue)
-            .groupBy('subGroupName')
-            .mapValues((value, key) => {
-              const returnObj = {
-                questions: value,
-                subGroupChoicesGiven: value[0].subGroupChoicesGiven,
-                subGroupChoicesSelected: value[0].subGroupChoicesSelected
-              };
-              return returnObj;
-            }).value()
-        )
-        .value()
-      )
+        .mapValues(groupValue => _.chain(groupValue)
+          .groupBy('subGroupName')
+          .mapValues((value, key) => {
+            const returnObj = {
+              questions: value,
+              subGroupChoicesGiven: value[0].subGroupChoicesGiven,
+              subGroupChoicesSelected: value[0].subGroupChoicesSelected
+            };
+            return returnObj;
+          }).value())
+        .value())
       .value();
+
     this.offerSolutionGroups = groupByOSGroup;
   }
+
 
   createActionAndNotification() {
     let primaryPOC = [];
@@ -311,56 +329,26 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   proceedToNextStep(msg) {
-    let nextStepPostData = {};
+    debugger;
+    const nextStepPostData = {};
     nextStepPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-    nextStepPostData['offerName'] = this.firstData['offerName'] == null ? '' : this.firstData['offerName'];
-    nextStepPostData['offerDesc'] = this.firstData['offerDesc'] == null ? '' : this.firstData['offerDesc'];
-    nextStepPostData['offerCreatedBy'] = this.firstData['offerCreatedBy'] == null ? '' : this.firstData['offerCreatedBy'];
-    nextStepPostData['offerCreationDate'] = this.firstData['offerCreationDate'] == null ? '' : this.firstData['offerCreationDate'];
-    nextStepPostData['offerOwner'] = this.firstData['offerOwner'] == null ? '' : this.firstData['offerOwner'];
-    nextStepPostData['clonedOfferId'] = this.firstData['clonedOfferId'] == null ? '' : this.firstData['clonedOfferId'];
-    nextStepPostData['primaryBUList'] = this.firstData['primaryBUList'] == null ? '' : this.firstData['primaryBUList'];
-    nextStepPostData['primaryBEList'] = this.firstData['primaryBEList'] == null ? '' : this.firstData['primaryBEList'];
-    nextStepPostData['strategyReviewDate'] = this.firstData['strategyReviewDate'] == null ? '' : this.firstData['strategyReviewDate'];
-    nextStepPostData['designReviewDate'] = this.firstData['designReviewDate'] == null ? '' : this.firstData['designReviewDate'];
-    nextStepPostData['readinessReviewDate'] = this.firstData['readinessReviewDate'] == null ? '' : this.firstData['readinessReviewDate'];
 
-    nextStepPostData['derivedMM'] = this.derivedMM == null ? '' : this.derivedMM;
-    nextStepPostData['overallStatus'] = this.firstData['overallStatus'];
-    let stakeHolders = [];
-    for (let prop in this.stakeData) {
-      this.stakeData[prop].forEach(sh => {
-        console.log(sh);
-        stakeHolders.push({
-          '_id': sh['_id'],
-          'businessEntity': sh['businessEntity'],
-          'functionalRole': sh['functionalRole'],
-          'offerRole': sh['offerRole'],
-          'stakeholderDefaults': sh['stakeholderDefaults'],
-          'name': sh['userName']
-        });
-      });
-    }
-    nextStepPostData['stakeholders'] = stakeHolders;
-    nextStepPostData['expectedLaunchDate'] = this.firstData['expectedLaunchDate'];
-    nextStepPostData['status'] = {
-      'offerPhase': 'PreLaunch',
-      'offerMilestone': 'Launch In Progress',
-      'phaseMilestone': 'ideate',
-      'subMilestone': 'Offer Solutioning'
-    };
-    nextStepPostData['ideate'] = [{
-      'subMilestone': 'Offer Solutioning',
-      'status': 'completed',
-      'completionDate': new Date().toDateString(),
-    }];
-    nextStepPostData['secondaryBUList'] = this.firstData['secondaryBUList'];
-    nextStepPostData['secondaryBEList'] = this.firstData['secondaryBEList'];
+    // nextStepPostData['status'] = {
+    //   'offerPhase': 'PreLaunch',
+    //   'offerMilestone': 'Launch In Progress',
+    //   'phaseMilestone': 'ideate',
+    //   'subMilestone': 'Offer Solutioning'
+    // };
+    // nextStepPostData['ideate'] = [{
+    //   'subMilestone': 'Offer Solutioning',
+    //   'status': 'completed',
+    //   'completionDate': new Date().toDateString(),
+    // }];
 
     nextStepPostData['solutioningDetails'] = [];
     this.offerSolutionData['groups'].forEach(group => {
       group['subGroup'].forEach(subGroup => {
-        let solutioningDetail = {
+        const solutioningDetail = {
           'dimensionGroup': group['groupName'],
           'dimensionSubgroup': subGroup['subGroupName'],
           'dimensionAttribute': subGroup['selected'],
@@ -372,7 +360,7 @@ export class OfferSolutioningComponent implements OnInit {
           solutioningDetail['primaryFunctions'] = subGroup['listGrpQuestions'][0]['primaryPOC'];
           solutioningDetail['secondaryFunctions'] = subGroup['listGrpQuestions'][0]['secondaryPOC'];
           subGroup['listGrpQuestions'].forEach(question => {
-            let detail = {
+            const detail = {
               'solutioninQuestion': question['question'],
               'egenieAttributeName': question['egineAttribue'],
               'oSGroup': question['osGroup'],
@@ -386,7 +374,7 @@ export class OfferSolutioningComponent implements OnInit {
     });
 
     this.offersolutioningService.updateOfferDetails(nextStepPostData).subscribe(res => {
-      let solutioningProceedPayload = {
+      const solutioningProceedPayload = {
         'taskId': '',
         'userId': this.offerOwner,
         'caseId': this.caseId,
