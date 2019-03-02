@@ -403,8 +403,8 @@ export class OfferconstructCanvasComponent implements OnInit {
                   obj1['title'] = element1.data.title ? element1.data.title : element1.data.productName;
                   if (element1.data['eginieItem']) {
                     obj1['eginieItem'] = element1.data['eginieItem'];
-                    obj1['itemDetails'] = element1.data['itemDetails'];
                   }
+                  obj1['itemDetails'] = element1.data['itemDetails'];
                   element.children.push(this.itemToTreeNode(obj1));
                   this.offerConstructItems = [...this.offerConstructItems];
                 }
@@ -434,8 +434,8 @@ export class OfferconstructCanvasComponent implements OnInit {
             obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
             if (this.draggedItem.data['eginieItem']) {
               obj['eginieItem'] = this.draggedItem.data['eginieItem'];
-              obj['itemDetails'] = this.draggedItem.data['itemDetails'];
             }
+            obj['itemDetails'] = this.draggedItem.data['itemDetails'];
             rowNode.node.children.push(this.itemToTreeNode(obj));
             this.delteFromParentObject(rowNode, this.draggedItem.data);
           }
@@ -481,8 +481,8 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
           if (this.draggedItem.data['eginieItem']) {
             obj['eginieItem'] = this.draggedItem.data['eginieItem'];
-            obj['itemDetails'] = this.draggedItem.data['itemDetails'];
           }
+          obj['itemDetails'] = this.draggedItem.data['itemDetails'];
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
         }
@@ -976,7 +976,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   closeDailog() {
     this.displayAddDetails = false;
     this.questions = [];
-    this.questionForm.reset();
+    // this.questionForm.reset();
   }
 
   onHide() {
