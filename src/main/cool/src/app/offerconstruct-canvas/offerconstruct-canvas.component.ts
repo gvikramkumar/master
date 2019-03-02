@@ -403,8 +403,8 @@ export class OfferconstructCanvasComponent implements OnInit {
                   obj1['title'] = element1.data.title ? element1.data.title : element1.data.productName;
                   if (element1.data['eginieItem']) {
                     obj1['eginieItem'] = element1.data['eginieItem'];
-                    obj1['itemDetails'] = element1.data['itemDetails'];
                   }
+                  obj1['itemDetails'] = element1.data['itemDetails'];
                   element.children.push(this.itemToTreeNode(obj1));
                   this.offerConstructItems = [...this.offerConstructItems];
                 }
@@ -434,8 +434,8 @@ export class OfferconstructCanvasComponent implements OnInit {
             obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
             if (this.draggedItem.data['eginieItem']) {
               obj['eginieItem'] = this.draggedItem.data['eginieItem'];
-              obj['itemDetails'] = this.draggedItem.data['itemDetails'];
             }
+            obj['itemDetails'] = this.draggedItem.data['itemDetails'];
             rowNode.node.children.push(this.itemToTreeNode(obj));
             this.delteFromParentObject(rowNode, this.draggedItem.data);
           }
@@ -481,8 +481,8 @@ export class OfferconstructCanvasComponent implements OnInit {
           obj['title'] = this.draggedItem.data.title ? this.draggedItem.data.title : this.draggedItem.data.productName;
           if (this.draggedItem.data['eginieItem']) {
             obj['eginieItem'] = this.draggedItem.data['eginieItem'];
-            obj['itemDetails'] = this.draggedItem.data['itemDetails'];
           }
+          obj['itemDetails'] = this.draggedItem.data['itemDetails'];
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
         }
@@ -976,6 +976,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   closeDailog() {
     this.displayAddDetails = false;
     this.questions = [];
+    // this.questionForm.reset();
   }
 
   onHide() {
@@ -985,6 +986,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.displayAddDetails = false;
     this.questions = [];
     this.showMandatoryDetails = false;
+    this.closeDailog();
   }
 
   addItemDetails() {
@@ -1011,6 +1013,11 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.popHeadName = currentNode.node.data.title;
     let itemDetails = currentNode.node.data['itemDetails'];
     this.displayAddDetails = true;
+    if(itemDetails && !itemDetails["Item Name (PID)"]){
+      itemDetails["Item Name (PID)"] = currentNode.node.data.title;
+    }else if(itemDetails === undefined){
+      itemDetails = {"Item Name (PID)": currentNode.node.data.title};
+    }
     const groups: Groups[] = [];
     const group = new Groups(
       this.lineItemName
