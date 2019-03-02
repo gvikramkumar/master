@@ -248,7 +248,7 @@
     (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
     [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}" positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
-    <form (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
+    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()" (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
         <div class="col-md-6" *ngFor="let question of questions">
@@ -263,15 +263,15 @@
       <div class="divider" style="margin-top: 1%"></div>
       <!-- Unique Item  Mandatory Section -->
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
           <a (click)="openMandatory()"><span class="icon-add-contain"></span> Mandatory Item Attributes</a>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6 search-buffer">
           <div class="form-group input--icon half-margin-bottom">
               <div class="form-group__text search-icon">
                   <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}" [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
                               (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
-                              placeholder="Copy Attributes" [size]="100" [minLength]="0">
+                              placeholder="Copy Attributes" [size]="100" [minLength]="9">
                     </p-autoComplete>
                   <button type="button" class="link">
                     <span class="icon-search"></span>
@@ -309,19 +309,15 @@
     [contentStyle]="{'height': '450px', 'max-height':'450px', 'width':'100% !important'}" positionTop='150'
     positionRight='0' positionLeft='0'>
     <div class="divider" style="margin-top: -1.5%"></div>
-    <div>
-      <ul id="tabsv1" class="tabs">
-        <li id="tabsv1-1" class="tab">
-          <a tabindex="0">
+    <div class="line-items-nav">
+      <ul id="tabsv4" class="tabs tabs--tall">
+        <li id="tabsv4-1" class="tab">
             <a (click)='majorLine()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true}">Add Major Line
               Details</a>
-          </a>
         </li>
-        <li id="tabsv1-2" class="tab">
-          <a tabindex="0">
+        <li id="tabsv4-2" class="tab">
             <a (click)='minorLine()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
               Details</a>
-          </a>
         </li>
       </ul>
     </div>
@@ -336,6 +332,13 @@
           </div>
         </div>
       </div>
+      <div class="row">
+          <div class="col-md-12 text-right">
+              <button class="display-none"></button>
+              <button class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
+              <button class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
+          </div>
+      </div>
     </div>
     <div *ngIf='majorLineItemsActive'>
       <div *ngFor='let formGroupData of formGroupData'>
@@ -347,13 +350,20 @@
           </div>
         </div>
       </div>
+      <div class="row">
+          <div class="col-md-12 text-right">
+              <button class="display-none"></button>
+              <button class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
+              <button class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
+          </div>
+      </div>
     </div>
   </p-dialog>
 
   <!-- Dialog for view details-->
   <p-dialog header="View Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
   (onHide)="onHide()" [responsive]="true" [(visible)]="displayViewDetails"
-  [contentStyle]="{'height': '450px', 'min-width':'700px'}" positionTop='150'>
+  [contentStyle]="{'height': '450px', 'min-width':'700px'}">
   <div class="divider"></div>
   <table class="table">
         <tr *ngFor="let item of viewDetails | keyvalue">

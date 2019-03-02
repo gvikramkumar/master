@@ -30,7 +30,7 @@
         <label class="radio half-margin-bottom" for="questionLabel">{{question.question}}</label>
         <div>
         <label class="radio" *ngFor="let rad of question.values">
-          <input type="radio" [id]="question.values" [name]="question.question" [formControlName]="question.question"
+          <input type="radio" [id]="question.values" [name]="question.question" [formControlName]="question.egineAttribue"
             class="form-control" [value]="rad">
             <span class="radio__input"></span>
             <span class="radio__label hidden-xs">{{rad}}</span>
@@ -41,7 +41,7 @@
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A FreeText'" >
           <div class="form-group">
               <div class="form-group__text">
-        <input [formControlName]="question.question" [id]="question.question" class="form-control">
+        <input [formControlName]="question.egineAttribue" [id]="question.question" class="form-control">
         <label for="questionLabel">{{question.question}}</label>
         </div></div>
       </div>
