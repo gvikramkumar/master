@@ -137,12 +137,6 @@
                                     [autofocus]='autoFocus' *ngIf="!rowData['eginieItem']">
                                     <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
-                                  <a *ngIf="!rowData['isGroupNode'] && !rowData['eginieItem']" class="pull-right"
-                                    (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
-                                    Details</a>
-                                    <a *ngIf="rowData['eginieItem']" class="pull-right"
-                                    (click)="showViewDetailsDailog(rowNode)"><span class="icon-add-contain"></span> View
-                                    Details</a>
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
                                     class="icon-edit" *ngIf="!rowData['eginieItem']"></span>
@@ -151,6 +145,12 @@
                                   <a [id]='rowData["uniqueKey"]' (click)='disableButtons()'
                                     *ngIf='buttonId == rowData["uniqueKey"] && showButtons'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
                                 </span>
+                                <a *ngIf="!rowData['isGroupNode'] && !rowData['eginieItem']" class="pull-right"
+                                    (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
+                                    Details</a>
+                                    <a *ngIf="rowData['eginieItem']" class="pull-right"
+                                    (click)="showViewDetailsDailog(rowNode)"><span class="icon-add-contain"></span> View
+                                    Details</a>
                               </div>
                             </td>
                             <!-- to copy -->
@@ -372,4 +372,3 @@
         </tr>
   </table>
   </p-dialog>
-
