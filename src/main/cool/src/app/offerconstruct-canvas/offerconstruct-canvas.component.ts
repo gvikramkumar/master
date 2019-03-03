@@ -91,6 +91,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   eGinieSearchForm: FormGroup;
   itemsList;
   copyAttributeResults;
+  setTitle;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
@@ -1015,9 +1016,15 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.displayAddDetails = true;
     if(itemDetails && !itemDetails["Item Name (PID)"]){
       itemDetails["Item Name (PID)"] = currentNode.node.data.title;
+      this.cd.detectChanges();
     }else if(itemDetails === undefined){
       itemDetails = {"Item Name (PID)": currentNode.node.data.title};
+      this.cd.detectChanges();
+    } else if(this.setTitle && this.setTitle !== currentNode.node.data.title) {
+      itemDetails["Item Name (PID)"] = currentNode.node.data.title;
     }
+    this.setTitle = null;
+    this.setTitle = currentNode.node.data.title;
     const groups: Groups[] = [];
     const group = new Groups(
       this.lineItemName
