@@ -655,9 +655,9 @@ span[class*="display-"] {
 .cool.cui header .header-toolbar .btn, .cool.cui .dimensions--toggle .btn {
   border-radius: 30px;
 }
-.cool.cui .btn {
+/* .cool.cui .btn {
   border-radius: 6px;
-}
+} */
 .cool.cui .btns.btn-group--wide > .btn, .cool.cui .btn-group.btn-group--wide > .btn {
   border-radius: 0;
   border-top-left-radius: 2rem;
