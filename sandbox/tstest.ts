@@ -6,10 +6,13 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {take, first} from 'rxjs/operators';
 
 
-
-const a = null;
-const b = a.toString();
-
+const users = [
+  {name: 'dank', age: 50},
+  {name: 'dank', age: 45},
+  {name: 'carl', age: 60},
+]
+console.log(users);
+console.log(_.orderBy(users, ['name']));
 
 /*
 const arr = [{}, {}]

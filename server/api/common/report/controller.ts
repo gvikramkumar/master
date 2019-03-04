@@ -100,24 +100,6 @@ export default class ReportController extends ControllerBase {
           });
         break;
 
-        // this is the same report as dollar upload with the right 7 columns truncated
-      case 'valid-slpf-driver':
-        excelSheetname = ['SLPF Validation'];
-        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Sales Value', 'Product Value',	'SCMS Value',	'Business Entity Value', 'Internal BE Value'];
-        excelProperties = ['measure.name', 'sm.name', 'input_sales_value', 'input_product_value', 'input_scms_value', 'input_entity_value', 'input_internal_be_value'];
-        promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
-          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.pgLookupRepo.getDollarUploadReport(body.fiscalMonth, body.submeasureKeys)
-        ])
-          .then(results => {
-            this.measures = results[0];
-            this.submeasures = results[1];
-            const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
-            return _.orderBy(rtn, ['sm.name', 'input_sales_value', 'input_product_value', 'input_scms_value', 'input_entity_value', 'input_internal_be_value'], ['asc', 'asc', 'asc', 'asc', 'asc', 'asc']);
-          });
-        break;
-
       case 'mapping-upload':
         excelSheetname = ['Manual Mapping Data'];
         excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Product', 'Sales', 'Legal Business Entity', 'Internal Business Entity', 'SCMS', 'Percentage', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
@@ -258,6 +240,22 @@ export default class ReportController extends ControllerBase {
           this.pgLookupRepo.getShipmentDriverPFReport(req.dfa),
           this.pgLookupRepo.getRoll3DriverWithBEReport(req.dfa)
         ]);
+        break;
+
+      case 'valid-slpf-driver':
+        excelSheetname = ['SLPF Validation'];
+        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Sales Value', 'Product Value',	'SCMS Value',	'Business Entity Value', 'Internal BE Value'];
+        excelProperties = ['measure.name', 'sm.name', 'input_sales_value', 'input_product_value', 'input_scms_value', 'input_entity_value', 'input_internal_be_value'];
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.pgLookupRepo.getSLPFDriverReport(body.fiscalMonth, body.submeasureKeys)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            return results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
+          });
         break;
 
       case 'submeasure':
