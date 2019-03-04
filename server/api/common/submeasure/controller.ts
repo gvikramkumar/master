@@ -192,10 +192,22 @@ export default class SubmeasureController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'submeasure', 'submeasure', omitProperties);
   }
 
+  isPassThrough(sm) {
+    return sm.indicators.passThrough === 'Y';
+  }
+
+  isUnallocatedGroup(sm) {
+    return sm.indicators.groupFlag === 'Y' && sm.indicators.allocationRequired === 'N';
+  }
+
+  isPassThroughOrUnallocatedGroup(sm) {
+    return this.isPassThrough(sm) || this.isUnallocatedGroup(sm);
+  }
+
   preApproveStep(sm, req) {
     const promises = [];
     // remove product class uploads for this submeasure and add new ones
-    if (sm.categoryType === 'Manual Mix') {
+    if (sm.categoryType === 'Manual Mix' && !this.isPassThroughOrUnallocatedGroup(sm)) {
       promises.push(this.productClassUploadRepo.removeMany({submeasureName: sm.name})
         .then(() => {
           return this.productClassUploadRepo.addManyTransaction([
@@ -208,7 +220,7 @@ export default class SubmeasureController extends ApprovalController {
             });
         }));
     }
-    if (shUtil.isDeptUpload(sm) && sm.indicators.deptAcct === 'A') {
+    if (shUtil.isDeptUpload(sm) && sm.indicators.deptAcct === 'A' && !this.isPassThroughOrUnallocatedGroup(sm)) {
       // find temp=Y records, if found, delete for sm.name && temp = N, then change these to temp Y >> N
       promises.push(
         this.deptUploadRepo.getMany({submeasureName: sm.name, temp: 'Y'})

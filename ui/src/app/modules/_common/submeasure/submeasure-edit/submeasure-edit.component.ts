@@ -14,7 +14,10 @@ import {SourceService} from '../../services/source.service';
 import {Source} from '../../../../../../../shared/models/source';
 import {DialogInputType, DialogSize, DialogType} from '../../../../core/models/ui-enums';
 import {NgForm} from '@angular/forms';
-import {Submeasure} from '../../../../../../../shared/models/submeasure';
+import {
+  Submeasure, SubmeasureIndicators,
+  SubmeasureInputFilterLevel
+} from '../../../../../../../shared/models/submeasure';
 import {shUtil} from '../../../../../../../shared/shared-util';
 import {PgLookupService} from '../../services/pg-lookup.service';
 import {ProductClassUploadService} from '../../../prof/services/product-class.service';
@@ -32,6 +35,8 @@ import {BusinessUploadService} from '../../services/business-upload.service';
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
   deptUploadFilename: string;
   deptUploadTemplate: FsFile;
+  manualMixHwDb: number;
+  manualMixSwDb: number;
   manualMixHw: number;
   manualMixSw: number;
   startFiscalMonth: string;
@@ -278,8 +283,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           }
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
         }
-        this.orgSubmeasure = _.cloneDeep(this.sm);
-        this.init();
       })
       .then(() => {
         const promises2: Promise<any>[] = [
@@ -294,21 +297,15 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           .then(results => {
             this.flashCategories = results[0];
             this.adjustmentTypes = results[1];
-            if (!this.addMode) {
-              // if !addMode and draft or pending, then use value from sm, else get value from database (if it exists)
-              if (_.includes(['D', 'P'], this.sm.status) && this.sm.manualMixHw && this.sm.manualMixSw) {
-                this.manualMixHw = this.sm.manualMixHw;
-                this.manualMixSw = this.sm.manualMixSw;
-              } else {
-                this.manualMixHw = results[2][0];
-                this.manualMixSw = results[2][1];
-              }
-            }
+            this.manualMixHwDb = results[2][0];
+            this.manualMixSwDb = results[2][1];
+            this.orgSubmeasure = _.cloneDeep(this.sm);
+            this.init();
           });
       });
   }
 
-  init() {
+  init(skipMeasureChange?) {
     /*
     why arrRules and not just use sm.rules in ngFor and everywhere else instead?
     There's a couple bugs when we do this.
@@ -322,7 +319,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     this.syncFilerLevelSwitches();
     this.syncManualMapSwitches();
-    this.measureChange(true);
+    if (!skipMeasureChange) {
+      this.measureChange(true);
+    }
     if (this.hasFlashCategory()) {
       this.flashCategory = this.sm.sourceSystemAdjTypeId;
     } else
@@ -334,6 +333,18 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
+
+    if (!this.addMode) {
+      // if !addMode and draft or pending, then use value from sm, else get value from database (if it exists)
+      if (_.includes(['D', 'P'], this.sm.status) && this.sm.manualMixHw && this.sm.manualMixSw) {
+        this.manualMixHw = this.sm.manualMixHw;
+        this.manualMixSw = this.sm.manualMixSw;
+      } else {
+        this.manualMixHw = this.manualMixHwDb;
+        this.manualMixSw = this.manualMixSwDb;
+      }
+    }
+
   }
 
   hasFlashCategory() {
@@ -668,7 +679,44 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
+  clearPropertiesForUnallocatedGroupOrPassThrough(mode: 'group'|'passThrough') {
+    const group = mode === 'group';
+    const passThrough = mode === 'passThrough';
+
+    if (group) {
+      delete this.sm.sourceId;
+      delete this.sm.categoryType;
+    }
+    this.sm.inputFilterLevel = new SubmeasureInputFilterLevel();
+    this.sm.manualMapping = new SubmeasureInputFilterLevel();
+    this.sm.indicators = new SubmeasureIndicators();
+    this.sm.indicators.corpRevenue = 'N';
+    this.sm.indicators.groupFlag = group ? 'Y' : 'N';
+    this.sm.indicators.passThrough = passThrough ? 'Y' : 'N';
+    this.sm.rules = []
+    delete this.sm.startFiscalMonth;
+    delete this.sm.endFiscalMonth;
+    delete this.sm.processingTime;
+    delete this.sm.pnlnodeGrouping;
+    this.sm.reportingLevels = [undefined, undefined, undefined];
+    delete this.sm.groupingSubmeasureId;
+    delete this.sm.sourceSystemAdjTypeId;
+    this.manualMixHw = undefined;
+    this.manualMixSw = undefined;
+    delete this.sm.inputProductFamily;
+    delete this.sm.allocProductFamily;
+    this.init(true); // we're just clearing stuff off here, measure change will add stuff back
+  }
+
   cleanUp() {
+    this.clearAllocationRequired();
+    if (this.isUnallocatedGroup()) {
+      this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+    }
+    if (this.isPassThrough()) {
+      this.clearPropertiesForUnallocatedGroupOrPassThrough('passThrough');
+    }
+
     this.cleanIflSwitchChoices();
     this.cleanMMSwitchChoices();
     this.cleanupRules();
@@ -681,12 +729,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.sourceSystemAdjTypeId = undefined;
     }
 
-    if (this.isManualMix()) {
+    if (this.isManualMix() && !this.isPassThroughOrUnallocatedGroup()) {
       this.sm.manualMixHw = this.manualMixHw;
       this.sm.manualMixSw = this.manualMixSw;
     }
-
-    this.clearAllocationRequired();
 
     if (this.isDeptUpload() && this.sm.indicators.deptAcct === 'N') {
         this.sm.indicators.deptAcct = 'Y';
@@ -757,6 +803,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               this.copyMode = false;
               this.editMode = true;
               this.sm = sm;
+              this.orgSubmeasure = _.cloneDeep(sm);
               this.uiUtil.toast('Submeasure saved to draft.');
             });
         }
@@ -963,18 +1010,37 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return `${environment.apiUrl}/api/file/${this.deptUploadTemplate.id}`;
   }
 
-  verifyNoRulesPassThrough() {
-    this.cleanupRules();
-    if (this.sm.rules.length) {
-      setTimeout(() => this.sm.indicators.passThrough = 'N');
-      this.uiUtil.genericDialog('Not allowed to have rules for pass through Sub-Measure.');
-    }
-  }
-
   clearAllocationRequired() {
     if (this.sm.indicators.groupFlag === 'N') {
       this.sm.indicators.allocationRequired = 'N';
     }
+  }
+
+  handleGroupingChange() {
+    this.verifyNoRulesGrouping()
+      .then(() => {
+        if (this.isUnallocatedGroup()) {
+          this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+        }
+      });
+  }
+
+  handleAllocationRequiredChange() {
+    this.verifyNoRulesGroupingAllocationRequired()
+      .then (() => {
+        if (this.isUnallocatedGroup()) {
+          this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+        }
+      });
+  }
+
+  handlePassThroughChange() {
+    this.verifyNoRulesPassThrough()
+      .then(() => {
+        if (this.isPassThrough()) {
+          this.clearPropertiesForUnallocatedGroupOrPassThrough('passThrough');
+        }
+      });
   }
 
   verifyNoRulesGrouping() {
@@ -984,9 +1050,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         this.sm.indicators.groupFlag = 'N';
         this.sm.indicators.allocationRequired = 'N';
       });
-      this.uiUtil.genericDialog('Not allowed to have rules for grouping Sub-Measure without allocation required.');
+      return this.uiUtil.genericDialog('Not allowed to have rules for grouping Sub-Measure without allocation required.').toPromise();
     } else {
       this.clearAllocationRequired();
+      return Promise.resolve();
     }
   }
 
@@ -994,7 +1061,19 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.cleanupRules();
     if (this.isUnallocatedGroup() && this.sm.rules.length) {
       setTimeout(() => this.sm.indicators.allocationRequired = 'Y');
-      this.uiUtil.genericDialog('Not allowed to have rules for grouping Sub-Measure without allocation required.');
+      return this.uiUtil.genericDialog('Not allowed to have rules for grouping Sub-Measure without allocation required.').toPromise();
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  verifyNoRulesPassThrough() {
+    this.cleanupRules();
+    if (this.sm.rules.length) {
+      setTimeout(() => this.sm.indicators.passThrough = 'N');
+      return this.uiUtil.genericDialog('Not allowed to have rules for pass through Sub-Measure.').toPromise();
+    } else {
+      return Promise.resolve();
     }
   }
 

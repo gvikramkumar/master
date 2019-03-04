@@ -1,5 +1,5 @@
 
-class InputFilterLevel {
+export class SubmeasureInputFilterLevel {
   productLevel: string;
   salesLevel: string;
   scmsLevel: string;
@@ -8,7 +8,7 @@ class InputFilterLevel {
   glSegLevel: string[];
 }
 
-class Indicators {
+export class SubmeasureIndicators {
   dollarUploadFlag = 'N';
   manualMapping = 'N';
   groupFlag = 'N';
@@ -37,10 +37,10 @@ export class Submeasure {
   processingTime: string;
   pnlnodeGrouping: string;
   categoryType: string;
-  inputFilterLevel = new InputFilterLevel();
-  manualMapping = new InputFilterLevel();
+  inputFilterLevel = new SubmeasureInputFilterLevel();
+  manualMapping = new SubmeasureInputFilterLevel();
   reportingLevels: string[] = [undefined, undefined, undefined];
-  indicators = new Indicators();
+  indicators = new SubmeasureIndicators();
   rules: string[] = [];
   groupingSubmeasureId: number;
   sourceSystemAdjTypeId: number;

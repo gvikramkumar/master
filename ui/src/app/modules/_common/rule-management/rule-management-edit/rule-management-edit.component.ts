@@ -280,6 +280,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.copyMode = false;
           this.editMode = true;
           this.rule = rule;
+          this.orgRule = _.cloneDeep(rule);
           this.uiUtil.toast('Rule saved to draft.');
         });
     }
