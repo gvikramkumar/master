@@ -15,7 +15,7 @@
         <label for="questionLabel">{{question.egineAttribue}}</label>
       </div>
 <!-- Multiselect-->
-      <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
+      <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
           <label for="questionLabel">{{question.egineAttribue}}</label>
           <p-multiSelect [id]="question.egineAttribue" [formControlName]="question.egineAttribue" [options]="question.listMutiSelect" optionLabel="name"></p-multiSelect>
       </div>
