@@ -92,6 +92,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   itemsList;
   copyAttributeResults;
   setTitle;
+  setSearchItem;
   multiSelectItems:string[]= ['Route-to-Market',
     'Price List Availability',
     'GPL Publication',
@@ -162,7 +163,9 @@ export class OfferconstructCanvasComponent implements OnInit {
       }
       this.cd.detectChanges();
   });
-    this.cd.detectChanges();
+  this.setSearchItem.node.data.searchItemRef = this.itemsList;
+  this.offerConstructItems = [...this.offerConstructItems];
+  this.cd.detectChanges();
   }
 
   //search copy attributes
@@ -1001,8 +1004,6 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   onHide() {
-    this.itemsList = null;
-    this.copyAttributeResults = null;
     this.offerConstructService.changeForm('reset');
     this.displayAddDetails = false;
     this.questions = [];
@@ -1011,24 +1012,23 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   addItemDetails() {
-    this.itemsList = null;
-    this.copyAttributeResults = null;
-    this.cd.detectChanges();
+    this.setSearchItem.node.data.searchItemRef = this.itemsList;
     this.showMandatoryDetails = false;
     this.payLoad = JSON.stringify(this.questionForm.value);
     this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
     this.closeDailog();
   }
 
-  addAllItemDetails(details) {
-    this.showMandatoryDetails = false;
-    this.payLoad = JSON.stringify(this.multipleForms.value);
-    this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
-    this.closeDailog();
-  }
-
   showAddDetailsDailog(currentNode) {
     // const productName = product;
+    this.setSearchItem = currentNode;
+    this.currentRowClicked = currentNode;
+    this.cd.detectChanges();
+    if(currentNode.node.data.searchItemRef){
+      this.itemsList = currentNode.node.data.searchItemRef;
+    } else {
+      this.itemsList = null;
+    }
     this.currentRowClicked = currentNode;
     this.lineItemName = currentNode.node.data.productName;
     this.popHeadName = currentNode.node.data.title;
