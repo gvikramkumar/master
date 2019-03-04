@@ -92,6 +92,10 @@ export class OfferconstructCanvasComponent implements OnInit {
   itemsList;
   copyAttributeResults;
   setTitle;
+  multiSelectItems:string[]= ['Route-to-Market',
+    'Price List Availability',
+    'GPL Publication',
+    'BILLING MODEL'];
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
@@ -678,9 +682,25 @@ export class OfferconstructCanvasComponent implements OnInit {
   convertItemDetail(itemDetails): Object {
     const obj = Object.create(null);
     itemDetails.forEach(element => {
-      obj[element.attributeName] = element.attributeValue;
+      // If attribute is of multiselect , then convert list of array values to
+      // array of objects which prime ng p-multiSelect  can understand.
+      if (this.multiSelectItems.includes(element.attributeName)){
+        obj[element.attributeName] = this.convertToArrayOfObjects(element.attributeValue);
+      } else {
+        obj[element.attributeName] = element.attributeValue[0];
+      }
     });
     return obj;
+  }
+
+  convertToArrayOfObjects(attribValue): any[] {
+    const tempArrayObj : any [] = [];
+    attribValue.forEach(element => {
+      const obj = Object.create(null);
+      obj['name'] = element;
+      tempArrayObj.push(obj);
+    });
+    return tempArrayObj;
   }
 
   /**
@@ -1093,8 +1113,9 @@ export class OfferconstructCanvasComponent implements OnInit {
           for (const key in node.data.itemDetails) {
             id = new ItemDetail();
             id.attributeName = key;
-            id.attributeValue = node.data.itemDetails[key];
+            id.attributeValue = this.convertToArray(node.data.itemDetails[key]);
             id.eGenieFlag = cd.eGenieFlag;
+            id.eGenieExistingPid = cd.eGenieFlag;
             cd.itemDetails.push(id);
           }
         }
@@ -1122,8 +1143,9 @@ export class OfferconstructCanvasComponent implements OnInit {
               for (const key in child.data.itemDetails) {
                 id = new ItemDetail();
                 id.attributeName = key;
-                id.attributeValue = child.data.itemDetails[key];
+                id.attributeValue = this.convertToArray(child.data.itemDetails[key]);
                 id.eGenieFlag = cd.eGenieFlag;
+                id.eGenieExistingPid = cd.eGenieFlag;
                 cd.itemDetails.push(id);
               }
             }
@@ -1160,8 +1182,9 @@ export class OfferconstructCanvasComponent implements OnInit {
                   for (const key in gchild.data.itemDetails) {
                     id = new ItemDetail();
                     id.attributeName = key;
-                    id.attributeValue = gchild.data.itemDetails[key];
+                    id.attributeValue = this.convertToArray(gchild.data.itemDetails[key]);
                     id.eGenieFlag = cd.eGenieFlag;
+                    id.eGenieExistingPid = cd.eGenieFlag;
                     cd.itemDetails.push(id);
                   }
                 }
@@ -1180,6 +1203,24 @@ export class OfferconstructCanvasComponent implements OnInit {
       (error) => {
         console.log(error);
       });
+  }
+
+  /**
+   * Convert user entered values to an array of values to save in DB.
+   */
+  convertToArray(selectedItems): string[] {
+    let tempArrayOfValues: string[] = [];
+    // First check if the values is of array type
+    // Meaning this values are from multiselect
+    // If not array just copy values in to a temp array and return
+    if (Array.isArray(selectedItems)) {
+      selectedItems.forEach((selectedValues) => {
+        tempArrayOfValues.push(selectedValues.name);
+      })
+    } else {
+      tempArrayOfValues.push(selectedItems);
+    }
+    return tempArrayOfValues;
   }
 
   /**
