@@ -88,6 +88,24 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
+  getSLPFDriverReport(fiscalMonth, submeasureKeys) {
+    const sql = `
+        select 
+        sub_measure_key,
+        input_sales_value,
+        input_product_value,
+        input_scms_value,
+        input_entity_value,
+        input_internal_be_value
+        from fpadfa.dfa_prof_input_amnt_upld
+        where fiscal_month_id = ${fiscalMonth} and sub_measure_key in ( ${submeasureKeys} )
+        group by 1,2,3,4,5,6
+        order by 1,2,3,4,5,6
+    `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+
   getMappingUploadReport(fiscalMonth, submeasureKeys) {
     const sql = `
       SELECT fiscal_month_id, measure_id, sub_measure_key, input_internal_be_hier_level_id, input_internal_be_hier_level_name, input_internal_be_value, input_end_cust_hier_level_id,
