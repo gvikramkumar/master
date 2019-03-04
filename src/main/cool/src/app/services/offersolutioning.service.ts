@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from '../../environments/environment.service';
 
 @Injectable()
 export class OffersolutioningService {
-  solutionData:Object = {};
+  solutionData: Object = {};
 
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
-  postForOfferSolutioning(data){
+  postForOfferSolutioning(data) {
     const url = this.environmentService.REST_API_OFFER_SOLUTIONING_POST_URL;
     return this.httpClient.post(url, data);
   }
 
-  saveSolutionData(offerId:string, data:Object) {
+  saveSolutionData(offerId: string, data: Object) {
     this.solutionData[offerId] = data;
     return null;
   }
 
-  getSolutionData(offerId:string) {
+  getSolutionData(offerId: string) {
     if (this.solutionData[offerId] != null) {
       return this.solutionData[offerId];
     } else {
@@ -27,21 +27,38 @@ export class OffersolutioningService {
     }
   }
   notificationPost(data) {
-    const url =this.environmentService.REST_API_NOTIFICATION_PRIMARYPOC_POST_URL;
-    return this.httpClient.post(url,data);
+    const url = this.environmentService.REST_API_NOTIFICATION_PRIMARYPOC_POST_URL;
+    return this.httpClient.post(url, data);
   }
   actionPost(data) {
-    const url =this.environmentService.REST_API_ACTION_PRIMARYPOC_POST_URL;
-    return this.httpClient.post(url,data);
+    const url = this.environmentService.REST_API_ACTION_PRIMARYPOC_POST_URL;
+    return this.httpClient.post(url, data);
   }
 
-  getSolutioningPayload(offerId){
+  getSolutioningPayload(offerId) {
     let url = this.environmentService.REST_API_GET_RULE_RESULT_URL;
     url += offerId;
-    return  this.httpClient.get(url);
+    return this.httpClient.get(url);
   }
-  updateOfferDetails(data){
+
+  updateOfferDetails(data) {
     let url = this.environmentService.REST_API_UPDATE_OFFER;
     return this.httpClient.post(url, data);
   }
+
+  saveOfferSolutionAnswers(offerId: string, offerSolutioningAnswers) {
+    const url = this.environmentService.REST_API_SAVE_OFFER_SOLUTIONING_ANSWERS + offerId;
+    return this.httpClient.post(url, offerSolutioningAnswers);
+  }
+
+  retrieveOfferSolutionQuestions(offerId: string) {
+    const url = this.environmentService.REST_API_RETRIEVE_OFFER_SOLUTIONING_QUESTIONS + offerId;
+    return this.httpClient.get(url);
+  }
+
+  retrieveOfferSolutionAnswers(offerId: string){
+    const url = this.environmentService.REST_API_RETRIEVE_OFFER_SOLUTIONING_ANSWERS + offerId;
+    return this.httpClient.get(url);
+  }
+
 }
