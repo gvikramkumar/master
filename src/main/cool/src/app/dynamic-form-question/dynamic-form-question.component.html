@@ -14,8 +14,13 @@
         </select>
         <label for="questionLabel">{{question.egineAttribue}}</label>
       </div>
+<!-- Multiselect-->
+      <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
+          <label for="questionLabel">{{question.egineAttribue}}</label>
+          <p-multiSelect [id]="question.egineAttribue" [formControlName]="question.egineAttribue" [options]="question.listMutiSelect" optionLabel="name"></p-multiSelect>
+      </div>
 <!-- Radio Button -->
-      <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'" >
+      <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'">
         <label class="radio half-margin-bottom" for="questionLabel">{{question.egineAttribue}}</label>
           <div>
             <label class="radio" *ngFor="let rad of question.values">
