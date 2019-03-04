@@ -179,45 +179,47 @@ export class OfferSolutioningComponent implements OnInit {
       // Get Unique Questions
       questionsAndAnswers = _.uniqBy(questionsAndAnswers, 'question');
 
-      // 
-      this.offersolutioningService.retrieveOfferSolutionAnswers(this.currentOfferId).subscribe(data => {
 
-        const answerListObject = data as Array<any>;
+      this.offersolutioningService.retrieveOfferSolutionAnswers(this.currentOfferId).subscribe(offerSolutioningAnswers => {
+
+        const answerListObject = offerSolutioningAnswers as Array<any>;
 
         for (let i = 0; i < questionsAndAnswers.length; i++) {
           for (let j = 0; j < answerListObject['questionAnswer'].length; j++) {
             if (questionsAndAnswers[i]['questionNo'] === answerListObject['questionAnswer'][j].questionNo) {
-              // const index = questionsAndAnswers.findIndex(qna => qna.questionNo === answerListObject['questionAnswer'][j].questionNo);
               questionsAndAnswers[i]['answerToQuestion'] = answerListObject['questionAnswer'][j].answer;
             }
           }
         }
 
-        const groupByOSGroup = _.chain(questionsAndAnswers)
-          .groupBy('oSgroup')
-          .mapValues(osGroupValues => _.chain(osGroupValues)
-            .groupBy('group')
-            .mapValues(groupValue => _.chain(groupValue)
-              .groupBy('subGroup')
-              .mapValues((value, key) => {
-                const returnObj = {
-                  questions: value,
-                  subGroupChoicesGiven: value[0].attribute,
-                  subGroupChoicesSelected: value[0].selectedAttributes
-                };
-                return returnObj;
-              }).value())
-            .value())
-          .value();
+        this.groupQuestionAndAnsers(questionsAndAnswers);
 
-        this.offerSolutionGroups = groupByOSGroup;
-
-
+      }, (err) => {
+        if (err && err.status === 404) {
+          this.groupQuestionAndAnsers(questionsAndAnswers);
+        }
       });
-
-
     });
+  }
 
+  private groupQuestionAndAnsers(questionsAndAnswers: any) {
+    const groupByOSGroup = _.chain(questionsAndAnswers)
+      .groupBy('oSgroup')
+      .mapValues(osGroupValues => _.chain(osGroupValues)
+        .groupBy('group')
+        .mapValues(groupValue => _.chain(groupValue)
+          .groupBy('subGroup')
+          .mapValues((value, key) => {
+            const returnObj = {
+              questions: value,
+              subGroupChoicesGiven: value[0].attribute,
+              subGroupChoicesSelected: value[0].selectedAttributes
+            };
+            return returnObj;
+          }).value())
+        .value())
+      .value();
+    this.offerSolutionGroups = groupByOSGroup;
   }
 
   createActionAndNotification() {
