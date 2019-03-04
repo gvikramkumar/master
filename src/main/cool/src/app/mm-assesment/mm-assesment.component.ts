@@ -672,6 +672,7 @@ export class MmAssesmentComponent implements OnInit {
       });
     });
   }
+
   private formatManuallyAddedUserAsStakeholder(resUserInfo: any): any {
     return {
       userName: resUserInfo.name,
@@ -687,6 +688,7 @@ export class MmAssesmentComponent implements OnInit {
       stakeholderDefaults: false
     };
   }
+
   private formatDefaultUserAsStakeholder(resUserInfo: any): any {
     return {
       userName: resUserInfo.userName,
@@ -738,6 +740,7 @@ export class MmAssesmentComponent implements OnInit {
       return [];
     }
   }
+
   changeTab(index) {
     if (this.canClickNextStep === true) {
       this.activeTabIndex = index;
@@ -1041,4 +1044,5 @@ export class MmAssesmentComponent implements OnInit {
   gotoOfferviewDetails() {
     this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
   }
+
 }

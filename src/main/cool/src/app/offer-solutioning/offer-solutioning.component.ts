@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { OfferBasicInfoComponent } from '../offer-basic-info/offer-basic-info.component';
-import { MmInfoBarComponent } from '../mm-info-bar/mm-info-bar.component';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { OffersolutioningService } from '../services/offersolutioning.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
-
-import { LeadTime } from '../right-panel/lead-time';
 import { RightPanelService } from '../services/right-panel.service';
 import * as _ from 'lodash';
+import { concat, filter } from 'rxjs/operators';
+
 @Component({
   selector: 'app-offer-solutioning',
   templateUrl: './offer-solutioning.component.html',
@@ -75,7 +73,7 @@ export class OfferSolutioningComponent implements OnInit {
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
-      this.populateInitialQuestion(Object.assign({}, this.firstData['solutioningDetails']));
+      // this.populateInitialQuestion(Object.assign({}, this.firstData['solutioningDetails']));
       if (Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
         this.primaryBE = this.firstData['primaryBEList'][0];
       }
@@ -126,99 +124,107 @@ export class OfferSolutioningComponent implements OnInit {
       this.stakeData = this.stakeHolderInfo;
       this.stake = this.stakeFunctionInfo;
 
+      // Call /offerDimensions API To Retrieve Offer Solutioning Details
       this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
         this.offerSolutionData = data;
         if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-          this.populateRuleBasedSolutionGroups();
+          // this.populateRuleBasedSolutionGroups();
+          this.offerSolutionQuestionAndAnswer();
           this.createActionAndNotification();
         }
       });
     });
-  }
-
-  populateInitialQuestion(initialOfferSolutioning: Array<any>) {
-
-    this.initialSolutioningGroups = _.chain(initialOfferSolutioning)
-      .groupBy('dimensionGroup')
-      .mapValues(groupValue => _.chain(groupValue)
-        .groupBy('dimensionSubgroup')
-        .mapValues((value, key) => {
-          const returnObj = {
-            questions: value.reduce((acc, val) => {
-              acc = acc.concat(val.Details);
-              return acc;
-            }, [])
-          };
-          return returnObj;
-        })
-        .value()
-      )
-      .value();
-
 
   }
 
-  populateRuleBasedSolutionGroups() {
+  offerSolutionQuestionAndAnswer() {
 
-    const arrOfferSolution = this.offerSolutionData['groups'] as Array<any>;
+    const functionalRole = 'BUPM';
 
-    const questionsAndAnswers = arrOfferSolution.reduce((groupAccumulator, group) => {
+    this.offersolutioningService.retrieveOfferSolutionQuestions(this.currentOfferId).subscribe(data => {
 
-      const groupName = group.groupName;
-      const subgroups = group.subGroup;
+      const questionsAndAnswersObj = data as Array<any>;
 
-      const subgroupQuestions = subgroups.reduce((subgroupAccumulator, subgroup) => {
+      let questionsAndAnswers = questionsAndAnswersObj.reduce((groupQuestionAccumulator, group) => {
 
-        const subgroupName = subgroup.subGroupName;
-        const questions = subgroup.listGrpQuestions;
-        const subGroupQuestions = _.uniqBy(questions.map(question => {
+        let osGroupName;
+        let selectedAttributes;
+        const subgroups = group.subGroup;
 
-          question.groupName = groupName;
-          question.subGroupName = subgroupName;
-          question.subGroupChoicesGiven = subgroup.choices;
-          question.subGroupChoicesSelected = subgroup.selected;
+        const subgroupQuestions = subgroups.reduce((subGroupQuestionAccumulator, subGroup) => {
 
-          const offerQuestions = this.initialSolutioningGroups[groupName][subgroupName].questions;
-          const offerQuestion = _.filter(offerQuestions, q => q.solutioninQuestion === question.question);
-          question.answer = offerQuestion && offerQuestion.length > 0 ? offerQuestion[0].solutioningAnswer : '';
-          return question;
+          selectedAttributes = subGroup.selected;
+          const subGroupQuestions = subGroup.listofQuestions;
 
-        }), (q) => q.question);
+          const subGroupOptionalQuestionsist = subGroupQuestions.map((question) => {
+            osGroupName = question.oSgroup;
+            return formatSolutioningQuestionAndAnswers(question, functionalRole, selectedAttributes);
+          });
 
-        subgroupAccumulator = subgroupAccumulator.concat(subGroupQuestions);
-        return subgroupAccumulator;
+          subGroupQuestionAccumulator = subGroupQuestionAccumulator.concat(subGroupOptionalQuestionsist);
+          return subGroupQuestionAccumulator;
+
+        }, []);
+
+        const subGroupAlwaysAskQuestionList = group.listofAlwaysAsk
+          .map((question) => {
+            return formatSolutioningQuestionAndAnswers(question, functionalRole, selectedAttributes);
+          });
+
+        groupQuestionAccumulator = groupQuestionAccumulator.concat(subgroupQuestions).concat(subGroupAlwaysAskQuestionList);
+        return groupQuestionAccumulator;
 
       }, []);
 
-      groupAccumulator = groupAccumulator.concat(subgroupQuestions);
-      return groupAccumulator;
-    }, []);
+      // Get Unique Questions
+      questionsAndAnswers = _.uniqBy(questionsAndAnswers, 'question');
 
-    const groupByOSGroup = _.chain(questionsAndAnswers)
-      .groupBy('osGroup')
-      .mapValues(osGroupValues => _.chain(osGroupValues)
-        .groupBy('groupName')
-        .mapValues(groupValue => _.chain(groupValue)
-          .groupBy('subGroupName')
-          .mapValues((value, key) => {
-            const returnObj = {
-              questions: value,
-              subGroupChoicesGiven: value[0].subGroupChoicesGiven,
-              subGroupChoicesSelected: value[0].subGroupChoicesSelected
-            };
-            return returnObj;
-          }).value())
-        .value())
-      .value();
+      // 
+      this.offersolutioningService.retrieveOfferSolutionAnswers(this.currentOfferId).subscribe(data => {
 
-    this.offerSolutionGroups = groupByOSGroup;
+        const answerListObject = data as Array<any>;
+
+        for (let i = 0; i < questionsAndAnswers.length; i++) {
+          for (let j = 0; j < answerListObject['questionAnswer'].length; j++) {
+            if (questionsAndAnswers[i]['questionNo'] === answerListObject['questionAnswer'][j].questionNo) {
+              // const index = questionsAndAnswers.findIndex(qna => qna.questionNo === answerListObject['questionAnswer'][j].questionNo);
+              questionsAndAnswers[i]['answerToQuestion'] = answerListObject['questionAnswer'][j].answer;
+            }
+          }
+        }
+
+        const groupByOSGroup = _.chain(questionsAndAnswers)
+          .groupBy('oSgroup')
+          .mapValues(osGroupValues => _.chain(osGroupValues)
+            .groupBy('group')
+            .mapValues(groupValue => _.chain(groupValue)
+              .groupBy('subGroup')
+              .mapValues((value, key) => {
+                const returnObj = {
+                  questions: value,
+                  subGroupChoicesGiven: value[0].attribute,
+                  subGroupChoicesSelected: value[0].selectedAttributes
+                };
+                return returnObj;
+              }).value())
+            .value())
+          .value();
+
+        this.offerSolutionGroups = groupByOSGroup;
+
+
+      });
+
+
+    });
 
   }
 
-
   createActionAndNotification() {
+
     let primaryPOC = [];
     let secondaryPOC = [];
+
     for (let group of this.offerSolutionGroups) {
       if (group['listGrpQuestions'] != null && group['listGrpQuestions'].length > 0) {
         primaryPOC = group['listGrpQuestions'][0]['primaryPOC'];
@@ -226,6 +232,7 @@ export class OfferSolutioningComponent implements OnInit {
         break;
       }
     }
+
     if (primaryPOC.length > 0) {
       const assignees = [];
       if (primaryPOC != null && primaryPOC.length > 0) {
@@ -237,6 +244,7 @@ export class OfferSolutioningComponent implements OnInit {
           }
         });
       }
+
       const secondassignees = [];
       if (secondaryPOC != null && secondaryPOC.length > 0) {
         secondaryPOC.forEach(element => {
@@ -247,10 +255,12 @@ export class OfferSolutioningComponent implements OnInit {
           }
         });
       }
+
       let owner = '';
       if (this.stakeData != null && this.stakeData['Owner'] != null && this.stakeData['Owner'].length > 0) {
         owner = this.stakeData['Owner'][0]['_id'];
       }
+
       let notificationassignees = assignees.concat(secondassignees);
 
 
@@ -327,13 +337,51 @@ export class OfferSolutioningComponent implements OnInit {
 
   proceedToNextStep(msg) {
 
-    debugger;
+    // Iterate - Function Names
+    let questionAnswer = [];
+    Object.entries(this.offerSolutionGroups)
+      .forEach(([osGroupKey, osGroupValue]) => {
+
+        Object.entries(this.offerSolutionGroups[osGroupKey])
+          .forEach(([groupKey, groupValue]) => {
+
+            Object.entries(this.offerSolutionGroups[osGroupKey][groupKey])
+              .forEach(([subGroupKey, subGroupValue]) => {
+
+                const answerList = subGroupValue['questions'].map(questions => {
+                  return {
+                    'questionNo': questions.questionNo,
+                    'answer': questions.answerToQuestion
+                  };
+                });
+
+                questionAnswer = questionAnswer.concat(answerList);
+
+              });
+          });
+
+      });
+
+
+    // Save Offer Solutioning Answers
+    const offerSolutioningAnswers = {};
+    offerSolutioningAnswers['offerId'] = this.offerId;
+
+    // Filter Values That Have No Data
+    questionAnswer.filter(nonEmptyAnswer => nonEmptyAnswer.answer);
+    offerSolutioningAnswers['questionAnswer'] = questionAnswer;
+
+    this.offersolutioningService.saveOfferSolutionAnswers(this.currentOfferId, offerSolutioningAnswers).subscribe();
+
     const nextStepPostData = {};
     nextStepPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
     nextStepPostData['solutioningDetails'] = [];
+
     this.offerSolutionData['groups'].forEach(group => {
+
       group['subGroup'].forEach(subGroup => {
+
         const solutioningDetail = {
           'dimensionGroup': group['groupName'],
           'dimensionSubgroup': subGroup['subGroupName'],
@@ -342,6 +390,7 @@ export class OfferSolutioningComponent implements OnInit {
           'secondaryFunctions': [],
           'Details': []
         };
+
         if (subGroup['listGrpQuestions'] != null && subGroup['listGrpQuestions'].length > 0) {
           solutioningDetail['primaryFunctions'] = subGroup['listGrpQuestions'][0]['primaryPOC'];
           solutioningDetail['secondaryFunctions'] = subGroup['listGrpQuestions'][0]['secondaryPOC'];
@@ -355,7 +404,9 @@ export class OfferSolutioningComponent implements OnInit {
             solutioningDetail['Details'].push(detail);
           });
         }
+
         nextStepPostData['solutioningDetails'].push(solutioningDetail);
+
       });
     });
 
@@ -371,7 +422,6 @@ export class OfferSolutioningComponent implements OnInit {
       };
       this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
         if (msg !== 'stay_on_this_page') {
-
           this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
         }
       });
@@ -379,4 +429,33 @@ export class OfferSolutioningComponent implements OnInit {
     });
 
   }
+}
+
+function formatSolutioningQuestionAndAnswers(question: any, functionalRole: string, selectedAttributes: Array<String>) {
+
+  // Initialize Variables
+  let validUser = false;
+
+  // Validate Type Of Question Being Asked
+  if (!question.questionType) {
+    question.questionType = 'Free Text';
+  }
+
+  // Validate If User Can Edit Questions Based On His Functional Role
+  if (question.primaryPOC || question.secondaryPOC) {
+    if (question.primaryPOC.includes(functionalRole) || (question.secondaryPOC.includes(functionalRole))) {
+      validUser = true;
+    }
+  }
+
+  // Map Values Into New Format
+  const newQuestionFormat = {
+    ...question,
+    validUser: validUser,
+    selectedAttributes: selectedAttributes
+  };
+
+  // Return New Question Format
+  return newQuestionFormat;
+
 }
