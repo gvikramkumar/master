@@ -35,8 +35,8 @@
       </div>
 
       <div class="col-lg-6">
-        <div [class.disabled]="isPassThroughOrUnallocatedGroup()">
-          <cui-select name="category" [(ngModel)]="sm.categoryType" [disabled]="disableCategories"
+        <div [class.disabled]="disableCategories || isUnallocatedGroup()">
+          <cui-select name="category" [(ngModel)]="sm.categoryType"
                       [items]="categoryTypes"
                       [required]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()"
                       [label]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'"
@@ -51,7 +51,9 @@
                        [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true"
                        class="hwsw-inputs"></fin-input>
           </div>
+        </div>
 
+        <div [class.disabled]="isPassThroughOrUnallocatedGroup()">
           <cui-select *ngIf="sm.measureId === 3" [disabled]="sm.sourceId !== 2" name="flashCategory"
                       [(ngModel)]="flashCategory" [items]="flashCategories"
                       [label]="!isUnallocatedGroup() && !isPassThrough()?'MRAP - Flash Category Id*':'MRAP - Flash Category Id'"
@@ -72,11 +74,13 @@
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
                 <fin-checkbox label="Is Grouping Sub-Measure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N"
-                              [disabled]="!!sm.groupingSubmeasureId" (modelChange)="verifyNoRulesGrouping()"></fin-checkbox>
+                              [disabled]="!!sm.groupingSubmeasureId" (modelChange)="handleGroupingChange()"></fin-checkbox>
               </div>
               <div class="col-6">
-                <fin-checkbox *ngIf="isGroupingParent()" label="Allocation Required" [(model)]="sm.indicators.allocationRequired"
-                              trueVal="Y" falseVal="N" (modelChange)="verifyNoRulesGroupingAllocationRequired()"></fin-checkbox>
+                <!-- this used to be ngIf groupFlag, but groupflag clears off properties now, so we need to allow them
+                      to select this "before" selecting groupFlag to keep them from clearing off properties if they want an allocated group -->
+                <fin-checkbox label="Allocation Required" [(model)]="sm.indicators.allocationRequired"
+                              trueVal="Y" falseVal="N" (modelChange)="handleAllocationRequiredChange()"></fin-checkbox>
               </div>
             </div>
             <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
@@ -323,7 +327,7 @@
             </div>
             <div class="form-group-check form-group-inline-20" [class.disabled]="isUnallocatedGroup() || isAllocatedGroup()">
               <fin-checkbox label="Pass Through" [(model)]="sm.indicators.passThrough" trueVal="Y" falseVal="N"
-                            [inline]="true" (modelChange)="verifyNoRulesPassThrough()"></fin-checkbox>
+                            [inline]="true" (modelChange)="handlePassThroughChange()"></fin-checkbox>
             </div>
           </div>
         </div>
