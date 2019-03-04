@@ -82,6 +82,11 @@ export class EnvironmentService {
     REST_API_LEAD_TIME_LAUNCH_DATE;
     REST_API_LEAD_TIME_AVERAGE_WEEKS;
 
+    REST_API_SAVE_OFFER_SOLUTIONING_ANSWERS;
+    REST_API_RETRIEVE_OFFER_SOLUTIONING_ANSWERS;
+    REST_API_RETRIEVE_OFFER_SOLUTIONING_QUESTIONS;
+
+
     authtokenbaseapi = '';
     client_id;
     redirect_url;
@@ -240,5 +245,9 @@ export class EnvironmentService {
         this.REST_API_GET_OFFER_DATES = this.baseapi + '/offer/getDates/';
         this.GET_PID_DETAILS = this.baseapi + '/eGenie/getAttribute/';
         this.REST_API_GET_ICC_DETAILS_URL = this.baseapi + '/ICC/getICC';
+        this.REST_API_SAVE_OFFER_SOLUTIONING_ANSWERS = this.baseapi + '/solutioning/';
+        this.REST_API_RETRIEVE_OFFER_SOLUTIONING_ANSWERS = this.baseapi + '/solutioning/';
+        this.REST_API_RETRIEVE_OFFER_SOLUTIONING_QUESTIONS = this.baseapi + '/getOfferSolutioningQuestions?offerID=';
+
     }
 }
