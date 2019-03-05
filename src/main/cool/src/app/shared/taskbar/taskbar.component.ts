@@ -12,9 +12,10 @@ export class TaskbarComponent implements OnInit {
 
   @Input() isDashboard: boolean = false;
   @Input() actionCount: { pendingActionCount: number, needImmediateActionCount: number };
-  @Input() isValidToProceed: boolean = true;
+  @Input() isValidToProceed: boolean = false;
   @Input() showSave: boolean = false;
   @Input() showOfferDtlsBtn: boolean = true;
+
   @Output() onProceedToNext = new EventEmitter();
 
   taskBarNavSteps = taskBarNavConstant;
