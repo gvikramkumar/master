@@ -286,7 +286,7 @@ export default class RepoBase {
       });
   }
 
-  removeMany(filter) {
+  removeMany(filter): Promise<any> {
     if (!filter) {
       throw new ApiError('No filter for removeMany');
     }
