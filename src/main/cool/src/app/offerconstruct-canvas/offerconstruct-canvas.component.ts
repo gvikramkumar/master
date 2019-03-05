@@ -332,10 +332,14 @@ export class OfferconstructCanvasComponent implements OnInit {
       rowNode.node.data.catergoryName = rowNode.node.data.name;
       rowNode.node.data.label = rowNode.node.data.name;
       rowNode.node.data.title = rowNode.node.data.name;
-      //rowNode.node.data.productName = rowNode.node.data.name;
+      // rowNode.node.data.productName = rowNode.node.data.name;
       // this.offerConstructItems.push(this.itemToTreeNode(rowNode));
       this.offerConstructItems = [...this.offerConstructItems];
       this.cd.detectChanges();
+    }
+
+    if(rowNode.node.data['itemDetails']) {
+      rowNode.node.data['itemDetails']['Item Name (PID)'] = rowNode.node.data.title;
     }
 
     this.showButtons = false;
