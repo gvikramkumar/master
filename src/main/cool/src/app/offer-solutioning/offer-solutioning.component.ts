@@ -323,6 +323,17 @@ export class OfferSolutioningComponent implements OnInit {
 
   proceedToNextStep(msg) {
 
+
+    // --------------------
+
+    const nextStepPostData = {};
+    nextStepPostData['solutioningDetails'] = [];
+    nextStepPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
+
+
+
+    // ----------------------
+
     // Iterate - Function Names
     let questionAnswer = [];
     Object.entries(this.offerSolutionGroups)
@@ -334,7 +345,28 @@ export class OfferSolutioningComponent implements OnInit {
             Object.entries(this.offerSolutionGroups[osGroupKey][groupKey])
               .forEach(([subGroupKey, subGroupValue]) => {
 
+
+                const solutioningDetail = {
+                  'dimensionGroup': groupKey,
+                  'dimensionSubgroup': subGroupKey,
+                  'dimensionAttribute': subGroupValue['subGroupChoicesSelected'],
+                  'primaryFunctions': [],
+                  'secondaryFunctions': [],
+                  'Details': []
+                };
+
                 const answerList = subGroupValue['questions'].map(questions => {
+
+                  const [questionSource, attributeName] = questions['source'] ? questions['source'].split('~~') : ['', ''];
+
+                  const offerQuestion = {
+                    'solutioninQuestion': questions['question'],
+                    'egenieAttributeName': attributeName ? attributeName : '',
+                    'oSGroup': questions['oSgroup'],
+                    'solutioningAnswer': questions['answerToQuestion']
+                  };
+                  solutioningDetail['Details'].push(offerQuestion);
+
                   return {
                     'questionNo': questions.questionNo,
                     'answer': questions.answerToQuestion
@@ -342,6 +374,7 @@ export class OfferSolutioningComponent implements OnInit {
                 });
 
                 questionAnswer = questionAnswer.concat(answerList);
+                nextStepPostData['solutioningDetails'].push(solutioningDetail);
 
               });
           });
@@ -359,42 +392,10 @@ export class OfferSolutioningComponent implements OnInit {
 
     this.offersolutioningService.saveOfferSolutionAnswers(this.currentOfferId, offerSolutioningAnswers).subscribe();
 
-    const nextStepPostData = {};
-    nextStepPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
-    nextStepPostData['solutioningDetails'] = [];
+    // ---------------------
 
-    this.offerSolutionData['groups'].forEach(group => {
-
-      group['subGroup'].forEach(subGroup => {
-
-        const solutioningDetail = {
-          'dimensionGroup': group['groupName'],
-          'dimensionSubgroup': subGroup['subGroupName'],
-          'dimensionAttribute': subGroup['selected'],
-          'primaryFunctions': [],
-          'secondaryFunctions': [],
-          'Details': []
-        };
-
-        if (subGroup['listGrpQuestions'] != null && subGroup['listGrpQuestions'].length > 0) {
-          solutioningDetail['primaryFunctions'] = subGroup['listGrpQuestions'][0]['primaryPOC'];
-          solutioningDetail['secondaryFunctions'] = subGroup['listGrpQuestions'][0]['secondaryPOC'];
-          subGroup['listGrpQuestions'].forEach(question => {
-            const detail = {
-              'solutioninQuestion': question['question'],
-              'egenieAttributeName': question['egineAttribue'],
-              'oSGroup': question['osGroup'],
-              'solutioningAnswer': question['answer']
-            };
-            solutioningDetail['Details'].push(detail);
-          });
-        }
-
-        nextStepPostData['solutioningDetails'].push(solutioningDetail);
-
-      });
-    });
+    // Update Offer Details
 
     this.offersolutioningService.updateOfferDetails(nextStepPostData).subscribe(res => {
       const solutioningProceedPayload = {
@@ -413,6 +414,8 @@ export class OfferSolutioningComponent implements OnInit {
       });
 
     });
+
+
 
   }
   formatSolutioningQuestionAndAnswers(question: any, functionalRole: string, selectedAttributes: Array<String>) {
