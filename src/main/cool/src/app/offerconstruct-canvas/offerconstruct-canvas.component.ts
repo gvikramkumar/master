@@ -338,7 +338,7 @@ export class OfferconstructCanvasComponent implements OnInit {
       this.cd.detectChanges();
     }
 
-    if(rowNode.node.data['itemDetails']) {
+    if (rowNode.node.data['itemDetails']) {
       rowNode.node.data['itemDetails']['Item Name (PID)'] = rowNode.node.data.title;
     }
 
@@ -1097,9 +1097,12 @@ export class OfferconstructCanvasComponent implements OnInit {
 
     // Construct all group Nodes.
     this.offerConstructItems.forEach((node) => {
+
       let cd: ConstructDetail;
+
       // check if this item is major item
       if (node.parent === null) {
+
         cd = new ConstructDetail();
         cd.constructItem = 'Major';
         cd.constructItemName = node.data.title;
@@ -1108,11 +1111,22 @@ export class OfferconstructCanvasComponent implements OnInit {
         cd.constructNodeId = node.data.uniqueKey.toString();
         cd.constructParentId = '0';
         cd.groupNode = false;
+
         // Checking if item is e-genie item.
         if (node.data['eginieItem']) {
           cd.eGenieFlag = true;
         }
-        if (node.data.itemDetails !== undefined) {
+
+        if (!node.data.itemDetails) {
+
+          const id = new ItemDetail();
+          id.attributeName = 'Item Name (PID)';
+          id.attributeValue = this.convertToArray(node.data.title);
+          id.eGenieFlag = cd.eGenieFlag;
+          id.eGenieExistingPid = cd.eGenieFlag;
+          cd.itemDetails.push(id);
+
+        } else {
           let id: ItemDetail;
           for (const key in node.data.itemDetails) {
             id = new ItemDetail();
