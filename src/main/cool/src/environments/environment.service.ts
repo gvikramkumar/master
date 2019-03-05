@@ -8,6 +8,7 @@ export class EnvironmentService {
     REST_API_MYACTIONS_URL;
     REST_API_PRIMARY_URL;
     REST_API_OFFER_CREATE_URL;
+    REST_API_OFFER_STATUS;
     REST_API_MMEDIT_SEARCH_URL;
     REST_API_MYOFFERS_URL;
     REST_API_MMOFFER_ATTRIBUTES_URL;
@@ -189,6 +190,7 @@ export class EnvironmentService {
         this.REST_API_MYACTIONS_URL = this.baseapi + '/action/getMyAction/';
         this.REST_API_PRIMARY_URL = this.baseapi + '/primaryBusiness/';
         this.REST_API_OFFER_CREATE_URL = this.baseapi + '/offer/create/';
+        this.REST_API_OFFER_STATUS = this.baseapi + '/offer/flags/';
         this.REST_API_MMEDIT_SEARCH_URL = this.baseapi + '/collabrators/searchCollabrators';
         this.REST_API_MYOFFERS_URL = this.baseapi + '/offer/getMyOffers/';
         this.REST_API_MMOFFER_ATTRIBUTES_URL = this.baseapi + '/getOfferDefaults?type=offerdimensions';
