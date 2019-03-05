@@ -104,6 +104,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { IdpidValidatorDirective } from './create-offer-cool/idpid-validator.directive';
 import { DynamicFormMultipleComponent } from './offerconstruct-canvas/dynamic-form-multiple';
 import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
+import { DesignreviewComponent } from './designreview/designreview.component';
+import SharedModule from '@shared/shared.module';
 
 export function app_init(configService: ConfigurationService, userService: UserService, envService: EnvironmentService) {
   return () => { return configService.init(); };
@@ -156,7 +158,8 @@ export function app_init(configService: ConfigurationService, userService: UserS
     ViewstrategyComponent,
     OasComponent,
     IdpidValidatorDirective,
-    NotificationOfferDetailPopupComponent
+    NotificationOfferDetailPopupComponent,
+    DesignreviewComponent
   ],
   imports: [
     NgbModule,
@@ -198,7 +201,8 @@ export function app_init(configService: ConfigurationService, userService: UserS
     NgCircleProgressModule.forRoot(),
     FlexLayoutModule,
     NgxWebstorageModule.forRoot(),
-    UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 })
+    UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 }),
+    SharedModule
   ],
   providers:
     [

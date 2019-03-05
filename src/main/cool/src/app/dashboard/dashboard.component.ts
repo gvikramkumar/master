@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { Router } from '@angular/router';
-import { CreateOfferService } from '../services/create-offer.service';
 import { UserService } from '../services/user.service';
 import { NgForm } from '@angular/forms';
 import { ActionsService } from '../services/actions.service';
@@ -13,7 +12,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
-import {lifeCycleStatusEnum} from '../enums/lifeCycleStatus.enums';
+import { lifeCycleStatusEnum } from '@shared/enums';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,8 +27,11 @@ export class DashboardComponent implements OnInit {
 
   myActionsAndNotifications = [];
   myOffers;
-  pendingActionCount = 0;
-  needImmediateActionCount = 0;
+  actionCount = {
+    pendingActionCount: 0,
+    needImmediateActionCount: 0
+  }
+
   showDoNotApproveSection = false;
   showConditionalApprovalSection = false;
   showApproveSection = false;
@@ -71,7 +73,6 @@ export class DashboardComponent implements OnInit {
 
   constructor(private dashboardService: DashboardService,
     private router: Router,
-    private createOfferService: CreateOfferService,
     private userService: UserService,
     private actionsService: ActionsService,
     private messageService: MessageService,
@@ -87,7 +88,7 @@ export class DashboardComponent implements OnInit {
       { field: 'offerName', header: 'OFFER NAME' },
       { field: 'ownerName', header: 'OFFER OWNER' },
       { field: 'expectedLaunchDate', header: 'LAUNCH DATE' },
-      { field: 'lifeCyclePriority', header:'LIFE CYCLE STATUS'}
+      { field: 'lifeCyclePriority', header: 'LIFE CYCLE STATUS' }
     ];
 
 
@@ -128,8 +129,8 @@ export class DashboardComponent implements OnInit {
   }
 
   private processActions(actions: any) {
-    this.needImmediateActionCount = 0;
-    this.pendingActionCount = 0;
+    this.actionCount.needImmediateActionCount = 0;
+    this.actionCount.pendingActionCount = 0;
     return actions.map(action => {
       this.processActionCount(action);
       action.alertType = 'action';
@@ -143,27 +144,27 @@ export class DashboardComponent implements OnInit {
 
   private processActionCount(action: any) {
     if (action.status && action.status.toLowerCase() === 'red') {
-      ++this.needImmediateActionCount;
+      ++this.actionCount.needImmediateActionCount;
     } else {
-      ++this.pendingActionCount;
+      ++this.actionCount.pendingActionCount;
     }
 
   }
-  private addLifeCycleSortingColumn(resOffers){
+  private addLifeCycleSortingColumn(resOffers) {
     this.myOffers = resOffers.map((data) => {
       let priority = 0;
-      switch(data.status.offerMilestone){
-        case lifeCycleStatusEnum.INLAUNCH.value: 
+      switch (data.status.offerMilestone) {
+        case lifeCycleStatusEnum.INLAUNCH.value:
           priority = lifeCycleStatusEnum.INLAUNCH.priority;
           break;
-        case lifeCycleStatusEnum.CANCEL.value: 
+        case lifeCycleStatusEnum.CANCEL.value:
           priority = lifeCycleStatusEnum.CANCEL.priority;
-          break; 
-        case lifeCycleStatusEnum.ONHOLD.value: 
+          break;
+        case lifeCycleStatusEnum.ONHOLD.value:
           priority = lifeCycleStatusEnum.ONHOLD.priority;
           break;
       }
-     return {...data, "lifeCyclePriority": priority};
+      return { ...data, "lifeCyclePriority": priority };
     });
   }
   private getMyOffers() {
@@ -225,7 +226,7 @@ export class DashboardComponent implements OnInit {
   getSelectFunctionRole(functionRole) {
     // Reset AssignList and AsigneeValue before service call
     this.assigneeValue = [];
-    this.assigneeList = [];    
+    this.assigneeList = [];
     this.selectedfunctionRole = functionRole;
     if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
@@ -341,7 +342,7 @@ export class DashboardComponent implements OnInit {
   }
 
   createApproveActionWithDetails(overlaypanel: OverlayPanel) {
-    if(this.selectedFile){
+    if (this.selectedFile) {
       const fd = new FormData();
       fd.append('file', this.selectedFile, this.selectedFile.name);
       this.dashboardService.postFileUploadForAction(this.selectedCaseId, fd).subscribe(data => {
@@ -365,7 +366,7 @@ export class DashboardComponent implements OnInit {
       overlaypanel.hide();
       this.getMyActionsAndNotifications();
     });
-    if(this.createActionForm){
+    if (this.createActionForm) {
       this.createActionForm.reset();
     }
   }
@@ -403,12 +404,7 @@ export class DashboardComponent implements OnInit {
     overlaypanel.toggle(event);
   }
 
-  createNewOffer() {
-    this.createOfferService.disablePrBEList = false;
-    this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
-    this.createOfferService.currenTOffer.next('');
-    this.router.navigate(['/coolOffer']);
-  }
+
   goToofferSolutioning(offerId, caseId, actiontTitle) {
     if (actiontTitle.toLowerCase() === 'provide details') {
       this.router.navigate(['/offerSolutioning', offerId, caseId]);

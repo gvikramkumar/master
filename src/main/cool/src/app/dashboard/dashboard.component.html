@@ -1,27 +1,6 @@
 <div class="content">
   <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
-          <div class="header-bar__main col-md-6">
-            <div class="header-heading">
-              <h1 class="page-title"><span class="action--value">{{pendingActionCount}}</span> <span
-                  class="action--value-label">Pending
-                  Actions</span></h1>
-              <span class="vertical-divider"></span>
-              <h1 class="page-title"><span class="action--value">{{needImmediateActionCount}}</span> <span
-                  class="action--value-label">Need
-                  Immediate Action</span></h1>
-            </div>
-          </div>
-          <div class="header-toolbar col-md-6">
-            <button (click)="createNewOffer()" class="btn btn--white cta--action"><span
-                class="icon-add icon-small"></span>
-              <span class="button--label">New Offer</span></button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <app-taskbar [actionCount]='actionCount' [isDashboard]='true'></app-taskbar>
     <!-- My Actions & Notifications Section -->
     <div class="row">
       <div class="col-md-12">
@@ -182,7 +161,7 @@
                 <ng-template pTemplate="header" let-columns>
                   <tr>
                     <ng-container *ngFor="let col of columns">
-                        <th  [pSortableColumn]="col.field" [attr.rowspan]="col.field!='lifeCyclePriority'?2:null"
+                      <th [pSortableColumn]="col.field" [attr.rowspan]="col.field!='lifeCyclePriority'?2:null"
                         [attr.colspan]="col.field=='lifeCyclePriority'?1:null"
                         [ngClass]="{'regColumn':col.field!='lifeCyclePriority', 'lastColumn':col.field=='lifeCyclePriority'}">
                         {{col.header}}
@@ -191,7 +170,7 @@
                     </ng-container>
                   </tr>
                   <tr class="tr--th-small">
-                    <th colspan="1"  >
+                    <th colspan="1">
                       <div class="row">
                         <div class="col">
                           PRE-LAUNCH
@@ -209,27 +188,27 @@
                 <ng-template pTemplate="body" let-offerData let-columns="columns">
                   <tr>
                     <ng-container *ngFor="let col of columns">
-                        <td style="width:10%" *ngIf="col.field!='lifeCyclePriority'">
-                          <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
-                            <div
-                              *ngIf="offerData.status !== null && (offerData.status['offerMilestone'] === 'cancel' || offerData.status['offerMilestone'] === 'hold' )">
+                      <td style="width:10%" *ngIf="col.field!='lifeCyclePriority'">
+                        <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
+                          <div
+                            *ngIf="offerData.status !== null && (offerData.status['offerMilestone'] === 'cancel' || offerData.status['offerMilestone'] === 'hold' )">
+                            {{offerData[col.field]}}
+                          </div>
+                          <div
+                            *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'  && offerData.status['offerMilestone'] !== 'hold'">
+                            <a (click)="showOfferPopUp($event,offerData,popturboContent)">
                               {{offerData[col.field]}}
-                            </div>
-                            <div
-                              *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'  && offerData.status['offerMilestone'] !== 'hold'">
-                              <a (click)="showOfferPopUp($event,offerData,popturboContent)">
-                                {{offerData[col.field]}}
-                              </a>
-                            </div>
-                          </span>
-                          <span *ngIf="col.field == 'expectedLaunchDate'">
-                            {{offerData[col.field] | date:'dd-MMM-yyyy'}}
-                          </span>
-                          <span *ngIf="col.field == 'ownerName' && offerData[col.field]">
-                            {{offerData[col.field]}}<br/>
-                            ({{offerData['offerOwner']}})
-                          </span>
-                        </td>
+                            </a>
+                          </div>
+                        </span>
+                        <span *ngIf="col.field == 'expectedLaunchDate'">
+                          {{offerData[col.field] | date:'dd-MMM-yyyy'}}
+                        </span>
+                        <span *ngIf="col.field == 'ownerName' && offerData[col.field]">
+                          {{offerData[col.field]}}<br />
+                          ({{offerData['offerOwner']}})
+                        </span>
+                      </td>
                     </ng-container>
                     <td style="width:20%" class="td--progress-fitted">
                       <div
