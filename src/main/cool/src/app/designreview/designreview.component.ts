@@ -58,6 +58,7 @@ export class DesignreviewComponent implements OnInit {
   milestoneList;
   designReviewList;
   milestoneValue: string;
+  proceedToOfferSetup: Boolean = true;
 
   loadExitCriteria = false;
 
