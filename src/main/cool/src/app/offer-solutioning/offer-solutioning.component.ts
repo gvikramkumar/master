@@ -270,7 +270,7 @@ export class OfferSolutioningComponent implements OnInit {
     };
 
     const actionPayload = {
-      '  offerId': this.currentOfferId,
+      'offerId': this.currentOfferId,
       'caseId': this.caseId,
       'actionTitle': 'Provide Details',
       'description': 'This offer need more information',
