@@ -1,0 +1,85 @@
+<div class="content">
+    <div class="container">
+      <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
+        [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
+      </app-menu-bar>
+      <div class="panel-wrapper mt-15">
+          <!-- <app-taskbar [isValidToProceed]="!proceedButtonStatusValid" (onProceedToNext)="offerDetailOverView($event)">
+          </app-taskbar> -->
+          <div class="panel panel--indigo panel--compressed task--bar">
+              <div class="row">
+                <div class="col-md-4">
+                  <h4><button class="btn--back btn btn--icon btn--white" [disabled]="!backbuttonStatusValid"
+                      (click)="goBack()"><span class="icon-back"></span></button>
+                    Design Review</h4>
+                </div>
+              <div class="col-md-8 text-right">
+                <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
+                <button class="btn btn--white" [disabled]="proceedToOfferSetup">Proceed to Offer Setup&nbsp;<span class="icon-chevron-right"></span></button>
+              </div>
+            </div>
+          </div>
+        <div class="contentBox mt-10">
+          <div class="leftContent">
+            <app-offer-create-detail></app-offer-create-detail>
+            <ul class="list list--highlight base-margin-top">
+              <li>
+                <div class="panel panel--bordered"><span class="text-success"><span
+                      class="icon-check-outline icon-medium"></span>
+                    {{derivedMM}} Aligned</span></div>
+              </li>
+            </ul>
+            <div class="alert base-margin-top half-margin-bottom"
+              [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
+              <div class="alert__icon mm-alert-icon"
+                [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}">
+              </div>
+              <div class="alert__message" [ngStyle]="{'color': message['color']}">
+                <b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
+            </div>
+            <!-- <Exit Criteria Validation> -->
+            <app-design-review-exit-criteria *ngIf="loadExitCriteria" [stakeData]="stakeData"
+              [offerBuilderdata]='offerBuilderdata'>
+            </app-design-review-exit-criteria>
+            <div class="accordion base-margin-top" id="accordion">
+  
+              <div class="panel panel--ltgray">
+                <div class="row">
+                  <div class="col-md-2">
+                    <h6 class="flex-center-vertical borderless"><span class="display-4">{{totalApprovalsCount}}</span>
+                      <span> Total Approvals</span></h6>
+                  </div>
+  
+                  <div class="col-md-2">
+                    <h6 class="flex-center-vertical"><span class="display-4">{{approvedCount}}</span><span>
+                        Approved</span></h6>
+                  </div>
+  
+                  <div class="col-md-3">
+                    <h6 class="flex-center-vertical"><span class="display-4">{{conditionallyApprovedCount}}</span><span>
+                        Conditionally Approved</span></h6>
+                  </div>
+  
+                  <div class="col-md-2">
+                    <h6 class="flex-center-vertical"><span class="display-4">{{notApprovedCount}}</span><span> Not
+                        Approved</span></h6>
+                  </div>
+  
+                  <div class="col-md-2">
+                    <h6 class="flex-center-vertical"><span class="display-4">{{notReviewedCount}}</span><span> Not
+                        Reviewed</span></h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rightContent">
+            <app-right-panel [offerId]="offerId" [stakeData]="stakeData" [primaryBE]="primaryBE" [portfolioFlag]="setFlag"
+              [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference"
+              (updateStakeData)="updateStakeData($event)">
+            </app-right-panel>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
