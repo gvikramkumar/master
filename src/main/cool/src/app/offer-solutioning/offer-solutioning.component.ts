@@ -428,6 +428,16 @@ export class OfferSolutioningComponent implements OnInit {
       question.questionType = 'Free Text';
     }
 
+    if (question.questionType === 'dropdown') {
+      question.values = question.values.map(drpValue => {
+        const [value, display] = drpValue.split('~~');
+        return {
+          value: value,
+          display: display ? display : value
+        };
+      });
+    }
+
     // Validate If User Can Edit Questions Based On His Functional Role
     if (question.primaryPOC || question.secondaryPOC) {
       if (question.primaryPOC.includes(functionalRole) || (question.secondaryPOC.includes(functionalRole))) {

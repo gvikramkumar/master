@@ -24,8 +24,8 @@
         <div class="form-group__text select">
           <select class="offer-solution-quesiton-select" [(ngModel)]="questionData['answerToQuestion']"
             [value]="questionData['answer']" [disabled]="!questionData['validUser']">
-            <option *ngFor="let option of questionData['values']" [value]="option">
-              {{option}}</option>
+            <option *ngFor="let option of questionData['values']" [value]="option.value">
+              {{option.display}}</option>
           </select>
         </div>
       </div>
