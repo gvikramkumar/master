@@ -106,6 +106,7 @@ import { DynamicFormMultipleComponent } from './offerconstruct-canvas/dynamic-fo
 import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
 import { DesignreviewComponent } from './designreview/designreview.component';
 import SharedModule from '@shared/shared.module';
+import { DesignReviewExitCriteriaComponent } from './directives/design-review-exit-criteria/design-review-exit-criteria.component';
 
 export function app_init(configService: ConfigurationService, userService: UserService, envService: EnvironmentService) {
   return () => { return configService.init(); };
@@ -159,7 +160,8 @@ export function app_init(configService: ConfigurationService, userService: UserS
     OasComponent,
     IdpidValidatorDirective,
     NotificationOfferDetailPopupComponent,
-    DesignreviewComponent
+    DesignreviewComponent,
+    DesignReviewExitCriteriaComponent
   ],
   imports: [
     NgbModule,
