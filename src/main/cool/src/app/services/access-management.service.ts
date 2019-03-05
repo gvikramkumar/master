@@ -197,11 +197,6 @@ export class AccessManagementService {
             { withCredentials: true });
     }
 
-    // change on GET PRIMARY BU BASED ON BE
-    // getPrimaryBuBasedOnBe(data) {
-    //     let url = this.getPrimaryBUBasedOnBE + data;
-    //     return this.httpClient.get(url, { withCredentials: true });
-
     private getUniqueDropdownValues(): (value: { label: any; value: any; }[], index: number) => any {
         return resBusinessUnit => _.uniqBy(resBusinessUnit, function (e) {
             return e.label;
