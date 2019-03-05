@@ -1,49 +1,54 @@
 <div class="dimensions-questions">
 
   <div class="subheader margin-5-0">{{ questionData["question"] }}</div>
-
-  <!-- Free Text -->
-  <div *ngIf="questionData['questionType']==='Free Text'">
-    <textarea class="textarea" [value]="questionData['answer']" [(ngModel)]="questionData['answerToQuestion']"
-      [disabled]="!questionData['validUser']" rows="3"></textarea>
-  </div>
-
-  <!-- Radio Button -->
-  <div *ngIf="questionData['questionType']==='Radio Button'">
-    <div class="form-group form-group--inline" *ngFor="let radio of questionData['values']">
-      <label class="radio">
-        <input type="radio" [value]="radio" [(ngModel)]="questionData['answerToQuestion']"
-          name="G{{groupIndex}}_I{{questionIndex}}" [disabled]="!questionData['validUser']" /> <span
-          class="radio__input"></span>
-        <span class="radio__label hidden-xs">{{radio}}</span>
-      </label>
+  <div *ngIf="questionData['validUser']">
+    <!-- Free Text -->
+    <div *ngIf="questionData['questionType']==='Free Text'">
+      <textarea class="textarea" [value]="questionData['answer']" [(ngModel)]="questionData['answerToQuestion']"
+        [disabled]="!questionData['validUser']" rows="3"></textarea>
     </div>
-  </div>
-
-  <!-- Dropdown -->
-  <div *ngIf="questionData['questionType']==='dropdown'">
-    <div class="form-group dropdown">
-      <div class="form-group__text select">
-        <select class="offer-solution-quesiton-select" [(ngModel)]="questionData['answerToQuestion']"
-          [value]="questionData['answer']" [disabled]="!questionData['validUser']">
-          <option *ngFor="let option of questionData['values']" [value]="option">
-            {{option}}</option>
-        </select>
+    <!-- Radio Button -->
+    <div *ngIf="questionData['questionType']==='Radio Button'">
+      <div class="form-group form-group--inline" *ngFor="let radio of questionData['values']">
+        <label class="radio">
+          <input type="radio" [value]="radio" [(ngModel)]="questionData['answerToQuestion']"
+            name="G{{groupIndex}}_I{{questionIndex}}" [disabled]="!questionData['validUser']" /> <span
+            class="radio__input"></span>
+          <span class="radio__label hidden-xs">{{radio}}</span>
+        </label>
+      </div>
+    </div>
+    <!-- Dropdown -->
+    <div *ngIf="questionData['questionType']==='dropdown'">
+      <div class="form-group dropdown">
+        <div class="form-group__text select">
+          <select class="offer-solution-quesiton-select" [(ngModel)]="questionData['answerToQuestion']"
+            [value]="questionData['answer']" [disabled]="!questionData['validUser']">
+            <option *ngFor="let option of questionData['values']" [value]="option.value">
+              {{option.display}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <!-- Data Picker -->
+    <div class="form-group label--floated input--icon half-margin-bottom col-md-6">
+      <div *ngIf="questionData['questionType']==='Date'">
+        <div class="form-group__text">
+          <input name="dueDateName" [(ngModel)]="questionData['answerToQuestion']" class="form-control"
+            #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
+            [bsConfig]="dpConfig" [(ngModel)]="dueDateValue" required ngModel #dueDateName="ngModel"
+            [disabled]="!questionData['validUser']">
+          <button type="button" class="link" tabindex="-1">
+            <span class="icon-month"></span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- Data Picker -->
-  <div class="form-group label--floated input--icon half-margin-bottom col-md-6">
-    <div *ngIf="questionData['questionType']==='Date'">
+  <div *ngIf="!questionData['validUser']">
+    <div class="form-group">
       <div class="form-group__text">
-        <input name="dueDateName" [(ngModel)]="questionData['answerToQuestion']" class="form-control"
-          #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
-          [bsConfig]="dpConfig" [(ngModel)]="dueDateValue" required ngModel #dueDateName="ngModel"
-          [disabled]="!questionData['validUser']">
-        <button type="button" class="link" tabindex="-1">
-          <span class="icon-month"></span>
-        </button>
+        <label>{{questionData['answerToQuestion']}}</label>
       </div>
     </div>
   </div>
