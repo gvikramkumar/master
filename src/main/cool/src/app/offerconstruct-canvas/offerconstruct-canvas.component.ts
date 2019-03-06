@@ -24,7 +24,7 @@ import { async } from '@angular/core/testing';
 import { StakeHolder } from '../models/stakeholder';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { filter } from 'rxjs/operators';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offerconstruct-canvas.component.html',
@@ -93,7 +93,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   copyAttributeResults;
   setTitle;
   setSearchItem;
-  multiSelectItems:string[]= ['Route-to-Market',
+  multiSelectItems: string[] = ['Route-to-Market',
     'Price List Availability',
     'GPL Publication',
     'BILLING MODEL'];
@@ -143,7 +143,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     }
   }
 
-  submitClickEvent(){
+  submitClickEvent() {
     this.offerConstructService.submitClickEvent.emit();
   }
 
@@ -159,13 +159,13 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(items => {
       let itemsData = items.body;
       if (this.lineItemName === itemsData['Item Category']) {
-          this.questionForm.patchValue(itemsData);
+        this.questionForm.patchValue(itemsData);
       }
       this.cd.detectChanges();
-  });
-  this.setSearchItem.node.data.searchItemRef = this.itemsList;
-  this.offerConstructItems = [...this.offerConstructItems];
-  this.cd.detectChanges();
+    });
+    this.setSearchItem.node.data.searchItemRef = this.itemsList;
+    this.offerConstructItems = [...this.offerConstructItems];
+    this.cd.detectChanges();
   }
 
   //search copy attributes
@@ -332,10 +332,14 @@ export class OfferconstructCanvasComponent implements OnInit {
       rowNode.node.data.catergoryName = rowNode.node.data.name;
       rowNode.node.data.label = rowNode.node.data.name;
       rowNode.node.data.title = rowNode.node.data.name;
-      //rowNode.node.data.productName = rowNode.node.data.name;
+      // rowNode.node.data.productName = rowNode.node.data.name;
       // this.offerConstructItems.push(this.itemToTreeNode(rowNode));
       this.offerConstructItems = [...this.offerConstructItems];
       this.cd.detectChanges();
+    }
+
+    if (rowNode.node.data['itemDetails']) {
+      rowNode.node.data['itemDetails']['Item Name (PID)'] = rowNode.node.data.title;
     }
 
     this.showButtons = false;
@@ -621,9 +625,9 @@ export class OfferconstructCanvasComponent implements OnInit {
       const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
 
       // Initialize Components
-      const offerTypeObj = offerDetails['solutioningDetails'] == null ? null :
+      const offerTypeObj = !offerDetails['solutioningDetails'] ? [] :
         offerDetails['solutioningDetails'].filter(sol => sol.dimensionSubgroup === 'Offer Type');
-      const offerType = offerTypeObj == null ? null : offerTypeObj[0]['dimensionAttribute'];
+      const offerType = offerTypeObj && offerTypeObj.length > 0 ? offerTypeObj[0]['dimensionAttribute'] : [];
 
       // Form ICC Request
       const iccRequest = {
@@ -687,7 +691,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     itemDetails.forEach(element => {
       // If attribute is of multiselect , then convert list of array values to
       // array of objects which prime ng p-multiSelect  can understand.
-      if (this.multiSelectItems.includes(element.attributeName)){
+      if (this.multiSelectItems.includes(element.attributeName)) {
         obj[element.attributeName] = this.convertToArrayOfObjects(element.attributeValue);
       } else {
         obj[element.attributeName] = element.attributeValue[0];
@@ -697,7 +701,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   convertToArrayOfObjects(attribValue): any[] {
-    const tempArrayObj : any [] = [];
+    const tempArrayObj: any[] = [];
     attribValue.forEach(element => {
       const obj = Object.create(null);
       obj['name'] = element;
@@ -1024,7 +1028,7 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.setSearchItem = currentNode;
     this.currentRowClicked = currentNode;
     this.cd.detectChanges();
-    if(currentNode.node.data.searchItemRef){
+    if (currentNode.node.data.searchItemRef) {
       this.itemsList = currentNode.node.data.searchItemRef;
     } else {
       this.itemsList = null;
@@ -1034,13 +1038,13 @@ export class OfferconstructCanvasComponent implements OnInit {
     this.popHeadName = currentNode.node.data.title;
     let itemDetails = currentNode.node.data['itemDetails'];
     this.displayAddDetails = true;
-    if(itemDetails && !itemDetails["Item Name (PID)"]){
+    if (itemDetails && !itemDetails["Item Name (PID)"]) {
       itemDetails["Item Name (PID)"] = currentNode.node.data.title;
       this.cd.detectChanges();
-    }else if(itemDetails === undefined){
-      itemDetails = {"Item Name (PID)": currentNode.node.data.title};
+    } else if (itemDetails === undefined) {
+      itemDetails = { "Item Name (PID)": currentNode.node.data.title };
       this.cd.detectChanges();
-    } else if(this.setTitle && this.setTitle !== currentNode.node.data.title) {
+    } else if (this.setTitle && this.setTitle !== currentNode.node.data.title) {
       itemDetails["Item Name (PID)"] = currentNode.node.data.title;
     }
     this.setTitle = null;
@@ -1108,7 +1112,15 @@ export class OfferconstructCanvasComponent implements OnInit {
         if (node.data['eginieItem']) {
           cd.eGenieFlag = true;
         }
-        if (node.data.itemDetails !== undefined) {
+        if (_.isEmpty(node.data.itemDetails)) {
+          const id = new ItemDetail();
+          id.attributeName = 'Item Name (PID)';
+          id.attributeValue = this.convertToArray(node.data.title);
+          id.eGenieFlag = cd.eGenieFlag;
+          id.eGenieExistingPid = cd.eGenieFlag;
+          cd.itemDetails.push(id);
+
+        } else {
           let id: ItemDetail;
           for (const key in node.data.itemDetails) {
             id = new ItemDetail();
@@ -1138,7 +1150,17 @@ export class OfferconstructCanvasComponent implements OnInit {
             if (child.data['eginieItem']) {
               cd.eGenieFlag = true;
             }
-            if (child.data.itemDetails !== undefined) {
+            if (_.isEmpty(child.data.itemDetails)) {
+
+              const id = new ItemDetail();
+              id.attributeName = 'Item Name (PID)';
+              id.attributeValue = this.convertToArray(child.data.title);
+              id.eGenieFlag = cd.eGenieFlag;
+              id.eGenieExistingPid = cd.eGenieFlag;
+              cd.itemDetails.push(id);
+
+            } else {
+
               let id: ItemDetail;
               for (const key in child.data.itemDetails) {
                 id = new ItemDetail();
