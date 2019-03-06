@@ -287,7 +287,7 @@
                                             </td>
 
                                             <td
-                                                [ngClass]="(planData.status == 'Completed')?'text-success':'text-warning'">
+                                                [ngClass]="(planData.status == 'Completed' || planData.status == 'Not Applicable')?'text-success':'text-warning'">
                                                 {{planData.status}}</td>
                                             <td>
                                                 <span *ngIf="!editPlanTargetDate">
