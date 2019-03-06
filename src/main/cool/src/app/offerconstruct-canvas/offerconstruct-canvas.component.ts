@@ -1116,13 +1116,9 @@ export class OfferconstructCanvasComponent implements OnInit {
         if (node.data['eginieItem']) {
           cd.eGenieFlag = true;
         }
-<<<<<<< HEAD
 
-        if (!node.data.itemDetails) {
-
-=======
         if (_.isEmpty(node.data.itemDetails)) {
->>>>>>> origin/develop
+
           const id = new ItemDetail();
           id.attributeName = 'Item Name (PID)';
           id.attributeValue = this.convertToArray(node.data.title);
