@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { Router } from '@angular/router';
+import { CreateOfferService } from '../services/create-offer.service';
 import { UserService } from '../services/user.service';
 import { NgForm } from '@angular/forms';
 import { ActionsService } from '../services/actions.service';
@@ -12,7 +13,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
-import { lifeCycleStatusEnum } from '@shared/enums';
+import { lifeCycleStatusEnum } from '../enums/lifeCycleStatus.enums';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,11 +28,8 @@ export class DashboardComponent implements OnInit {
 
   myActionsAndNotifications = [];
   myOffers;
-  actionCount = {
-    pendingActionCount: 0,
-    needImmediateActionCount: 0
-  }
-
+  pendingActionCount = 0;
+  needImmediateActionCount = 0;
   showDoNotApproveSection = false;
   showConditionalApprovalSection = false;
   showApproveSection = false;
@@ -73,6 +71,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private dashboardService: DashboardService,
     private router: Router,
+    private createOfferService: CreateOfferService,
     private userService: UserService,
     private actionsService: ActionsService,
     private messageService: MessageService,
@@ -129,8 +128,8 @@ export class DashboardComponent implements OnInit {
   }
 
   private processActions(actions: any) {
-    this.actionCount.needImmediateActionCount = 0;
-    this.actionCount.pendingActionCount = 0;
+    this.needImmediateActionCount = 0;
+    this.pendingActionCount = 0;
     return actions.map(action => {
       this.processActionCount(action);
       action.alertType = 'action';
@@ -144,9 +143,9 @@ export class DashboardComponent implements OnInit {
 
   private processActionCount(action: any) {
     if (action.status && action.status.toLowerCase() === 'red') {
-      ++this.actionCount.needImmediateActionCount;
+      ++this.needImmediateActionCount;
     } else {
-      ++this.actionCount.pendingActionCount;
+      ++this.pendingActionCount;
     }
 
   }
@@ -404,7 +403,12 @@ export class DashboardComponent implements OnInit {
     overlaypanel.toggle(event);
   }
 
-
+  createNewOffer() {
+    this.createOfferService.disablePrBEList = false;
+    this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
+    this.createOfferService.currenTOffer.next('');
+    this.router.navigate(['/coolOffer']);
+  }
   goToofferSolutioning(offerId, caseId, actiontTitle) {
     if (actiontTitle.toLowerCase() === 'provide details') {
       this.router.navigate(['/offerSolutioning', offerId, caseId]);
