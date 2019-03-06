@@ -29,6 +29,9 @@ export class OfferSolutionQuestionComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.questionData['questionType'] === 'Date') {
+      this.questionData['answerToQuestion'] = this.questionData['answerToQuestion'] ? new Date(this.questionData['answerToQuestion']) : '';
+    }
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
   }
 }

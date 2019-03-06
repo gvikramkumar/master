@@ -168,6 +168,15 @@ export class OfferConstructComponent implements OnInit {
   }
 
   onProceedToNext(msg) {
+    const operationalAssesmentProceedPayload = {
+      'taskId': '',
+      'userId': this.offerOwner,
+      'caseId': this.caseId,
+      'offerId': this.currentOfferId,
+      'taskName': 'Operational Assessment',
+      'action': '',
+      'comment': ''
+    };
     const designReviewProceedPayload = {
       'taskId': '',
       'userId': this.offerOwner,
@@ -177,10 +186,12 @@ export class OfferConstructComponent implements OnInit {
       'action': '',
       'comment': ''
     };
-    this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload).subscribe(result => {
-      if (msg !== 'stay_on_this_page') {
-        this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
-      }
+    this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload).subscribe(result => {
+      this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload).subscribe(result => {
+        if (msg !== 'stay_on_this_page') {
+          this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
+        }
+      });
     });
   }
 }

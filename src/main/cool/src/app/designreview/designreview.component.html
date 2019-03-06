@@ -4,21 +4,8 @@
         [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
       </app-menu-bar>
       <div class="panel-wrapper mt-15">
-          <!-- <app-taskbar [isValidToProceed]="!proceedButtonStatusValid" (onProceedToNext)="offerDetailOverView($event)">
-          </app-taskbar> -->
-          <div class="panel panel--indigo panel--compressed task--bar">
-              <div class="row">
-                <div class="col-md-4">
-                  <h4><button class="btn--back btn btn--icon btn--white" [disabled]="!backbuttonStatusValid"
-                      (click)="goBack()"><span class="icon-back"></span></button>
-                    Design Review</h4>
-                </div>
-              <div class="col-md-8 text-right">
-                <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
-                <button class="btn btn--white" [disabled]="proceedToOfferSetup">Proceed to Offer Setup&nbsp;<span class="icon-chevron-right"></span></button>
-              </div>
-            </div>
-          </div>
+          <app-taskbar [isValidToProceed]="proceedToOfferSetup" (onProceedToNext)="offerDetailOverView($event)">
+          </app-taskbar>
         <div class="contentBox mt-10">
           <div class="leftContent">
             <app-offer-create-detail></app-offer-create-detail>

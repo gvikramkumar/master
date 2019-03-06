@@ -24,7 +24,7 @@ import { async } from '@angular/core/testing';
 import { StakeHolder } from '../models/stakeholder';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { filter } from 'rxjs/operators';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offerconstruct-canvas.component.html',
@@ -1116,9 +1116,13 @@ export class OfferconstructCanvasComponent implements OnInit {
         if (node.data['eginieItem']) {
           cd.eGenieFlag = true;
         }
+<<<<<<< HEAD
 
         if (!node.data.itemDetails) {
 
+=======
+        if (_.isEmpty(node.data.itemDetails)) {
+>>>>>>> origin/develop
           const id = new ItemDetail();
           id.attributeName = 'Item Name (PID)';
           id.attributeValue = this.convertToArray(node.data.title);
@@ -1156,7 +1160,17 @@ export class OfferconstructCanvasComponent implements OnInit {
             if (child.data['eginieItem']) {
               cd.eGenieFlag = true;
             }
-            if (child.data.itemDetails !== undefined) {
+            if (_.isEmpty(child.data.itemDetails)) {
+
+              const id = new ItemDetail();
+              id.attributeName = 'Item Name (PID)';
+              id.attributeValue = this.convertToArray(child.data.title);
+              id.eGenieFlag = cd.eGenieFlag;
+              id.eGenieExistingPid = cd.eGenieFlag;
+              cd.itemDetails.push(id);
+
+            } else {
+
               let id: ItemDetail;
               for (const key in child.data.itemDetails) {
                 id = new ItemDetail();
