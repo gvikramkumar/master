@@ -75,7 +75,7 @@ export class DesignreviewComponent implements OnInit {
       this.caseId = params['id2'];
     });
   }
-
+  offerDetailOverView(){}
   ngOnInit() {
     forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;

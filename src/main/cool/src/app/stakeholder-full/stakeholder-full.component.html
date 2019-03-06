@@ -4,7 +4,7 @@
             (updateMessage)="updateMessage($event)">
         </app-menu-bar>
         <div class="panel-wrapper mt-15">
-            <app-taskbar [isValidToProceed]="!proceedButtonStatusValid" (onProceedToNext)="addCollaborator($event)">
+            <app-taskbar [isValidToProceed]="!proceedButtonStatusValid" (onProceedToNext)="addCollaborator()">
             </app-taskbar>
 
             <div class="contentBox mt-10">

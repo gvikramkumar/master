@@ -11,4 +11,4 @@ import { TaskbarComponent } from './taskbar/taskbar.component';
     TaskbarComponent
   ]
 })
-export default class SharedModule { }
+export class SharedModule { }

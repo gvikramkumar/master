@@ -3,7 +3,7 @@
     <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
       [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
     </app-menu-bar>
-    <app-taskbar [isValidToProceed]="enableOfferbuild" (onProceedToNext)="proceedToOfferBuilder($event)"
+    <app-taskbar [isValidToProceed]="enableOfferbuild" (onProceedToNext)="proceedToOfferBuilder()"
       [showOfferDtlsBtn]="false"></app-taskbar>
     <div class="card card--raised base-margin-top">
       <div class="panel">
