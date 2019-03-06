@@ -47,6 +47,7 @@ export class TurbotaxviewComponent implements OnChanges {
         this.navigateHash['Offer Dimension'] = ['/offerDimension', offerId, caseId];
         this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', offerId, caseId];
         this.navigateHash['Offer Components'] = ['/offerConstruct', offerId, caseId];
+        this.navigateHash['Design Review'] = ['/designReview', offerId, caseId];
 
         this.turbotax.getRubboTaxMenu(caseId).subscribe(resOfferPhases => {
             if (resOfferPhases) {

@@ -26,7 +26,7 @@ export class MmAssesmentComponent implements OnInit {
 
 
   public model: any;
-  public firstData: any;
+  public firstData: any = new Array();
   public data: any[];
   aligned: boolean;
   proceedFlag = false;
@@ -42,7 +42,6 @@ export class MmAssesmentComponent implements OnInit {
   groupNames = [];
   activeTabIndex = 0;
   message = {};
-  withRouter = true;
 
   offerId: string;
   offerName: string;
@@ -601,7 +600,7 @@ export class MmAssesmentComponent implements OnInit {
             this.getGroupData(group, {}, true);
           });
         }
-        this.proceedToStakeholder(false);
+        this.proceedToStakeholder('false');
       });
     } else {
       if (this.activeTabIndex < this.groupNames.length - 1) {
@@ -610,7 +609,7 @@ export class MmAssesmentComponent implements OnInit {
     }
 
     this.emitEventToChild();
-    this.proceedToStakeholder(false);
+    this.proceedToStakeholder('false');
   }
 
   getStakeData(mmModel) {
@@ -750,7 +749,7 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
 
-  proceedToStakeholder(withRouter = true) {
+  proceedToStakeholder(withRouter: string = 'true') {
 
     let proceedToStakeholderPostData = {};
     proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
@@ -848,7 +847,7 @@ export class MmAssesmentComponent implements OnInit {
         'comment': ''
       };
       that.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(() => {
-        if (withRouter === true) {
+        if (JSON.parse(withRouter) === true) {
           that.router.navigate(['/stakeholderFull', that.currentOfferId, that.caseId]);
         }
       });
@@ -856,7 +855,7 @@ export class MmAssesmentComponent implements OnInit {
 
   }
 
-  proceedToOfferSolution(withRouter = true) {
+  proceedToOfferSolution(withRouter: string = 'true') {
 
 
     let groups = [];
@@ -1026,7 +1025,7 @@ export class MmAssesmentComponent implements OnInit {
         };
         this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
           this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
-          if (withRouter === true) {
+          if (JSON.parse(withRouter) === true) {
             this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
           }
         })

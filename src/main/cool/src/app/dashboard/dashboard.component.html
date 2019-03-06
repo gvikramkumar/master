@@ -1,27 +1,6 @@
 <div class="content">
   <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
-          <div class="header-bar__main col-md-6">
-            <div class="header-heading">
-              <h1 class="page-title"><span class="action--value">{{pendingActionCount}}</span> <span
-                  class="action--value-label">Pending
-                  Actions</span></h1>
-              <span class="vertical-divider"></span>
-              <h1 class="page-title"><span class="action--value">{{needImmediateActionCount}}</span> <span
-                  class="action--value-label">Need
-                  Immediate Action</span></h1>
-            </div>
-          </div>
-          <div class="header-toolbar col-md-6">
-            <button (click)="createNewOffer()" class="btn btn--white cta--action"><span
-                class="icon-add icon-small"></span>
-              <span class="button--label">New Offer</span></button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <app-taskbar [actionCount]='actionCount' [isDashboard]='true'></app-taskbar>
     <!-- My Actions & Notifications Section -->
     <div class="row">
       <div class="col-md-12">
