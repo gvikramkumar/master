@@ -187,7 +187,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     this.navigateHash['Offer Dimension'] = ['/offerDimension', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
-    this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
 
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;

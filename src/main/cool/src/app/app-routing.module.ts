@@ -25,7 +25,6 @@ import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { OasComponent } from './oas/oas.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
-import { DesignreviewComponent } from './designreview/designreview.component';
 
 
 const routes: Routes = [
@@ -141,11 +140,6 @@ const routes: Routes = [
   }, {
     path: 'offerConstruct/:id/:id2',
     component: OfferConstructComponent
-  },
-  {
-    path: 'designReview/:id/:id2',
-    component: DesignreviewComponent,
-    resolve: { offerData: OfferOverViewResolver }
   }
 
 ];

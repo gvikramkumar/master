@@ -4,7 +4,18 @@
       [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
     </app-menu-bar>
     <div class="panel-wrapper mt-15">
-      <app-taskbar (onProceedToNext)="onProceedToNext($event)"></app-taskbar>
+      <div class="panel panel--indigo panel--compressed task--bar">
+        <div class="row">
+          <div class="col-md-8">
+            <h4><button class="btn--back btn btn--icon btn--white" [disabled]="!backbuttonStatusValid"
+                (click)="goBack()"><span class="icon-back"></span></button>
+              Offer Components</h4>
+          </div>
+          <div class="col-md-4 text-right">
+            <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
+          </div>
+        </div>
+      </div>
       <div class="contentBox mt-10">
         <div class="leftContent">
           <app-offer-create-detail></app-offer-create-detail>
