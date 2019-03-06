@@ -54,16 +54,28 @@
                 <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
-                      <div *ngIf="actionData.alertType == 'action'">
-                        <a (click)="showActionPopUp($event,actionData,popActionContent)">
-                          <span class="text-indigo"
-                            (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
-                            &nbsp;&nbsp;</span>
-                        </a>
+                      <span *ngIf="actionData.alertType == 'action'">
+                        <span [ngSwitch]="actionData.type">
+                          <!-- view for solutioning action -->
+                          <span *ngSwitchCase="'Solutioning Action'">
+                            <a
+                              (click)="goToofferSolutioning(actionData.offerId,actionData.caseId,actionData.actiontTitle)">
+                              <span class="text-indigo">{{actionData.title}}&nbsp;
+                                &nbsp;&nbsp;</span>
+                            </a>
+                          </span>
+                          <!-- view for other actions -->
+                          <span *ngSwitchDefault>
+                            <a (click)="showActionPopUp($event,actionData,popActionContent)">
+                              <span class="text-indigo">{{actionData.title}}&nbsp;
+                                &nbsp;&nbsp;</span>
+                            </a>
+                          </span>
+                        </span>
+
                         <span (click)="showActionPopUp($event,actionData,popCommentContent)"
                           class="icon-comment pull-right"></span>
-                      </div>
-
+                      </span>
                       <a *ngIf="actionData.alertType == 'notification'"
                         (click)="showActionPopUp($event,actionData,popNotificationContent)">
                         <span>{{actionData.title}}&nbsp;

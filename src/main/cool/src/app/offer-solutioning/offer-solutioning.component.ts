@@ -252,39 +252,49 @@ export class OfferSolutioningComponent implements OnInit {
     if (this.stakeData != null && this.stakeData['Owner'] != null && this.stakeData['Owner'].length > 0) {
       owner = this.stakeData['Owner'][0]['_id'];
     }
+    this.offersolutioningService.retrieveOfferFlags(this.currentOfferId).subscribe(resOfferStatus => {
+      const isSolutioningActionNotificationSent = resOfferStatus && resOfferStatus['solutioningActionNotification'];
 
-    const dueDate = new Date();
-    dueDate.setDate(dueDate.getDate() + 5);
-    const notificationPayload = {
-      'offerId': this.currentOfferId,
-      'caseId': this.caseId,
-      'actionTitle': 'Provide Details',
-      'description': 'This offer need more information',
-      'mileStone': 'Offer Solutioning',
-      'selectedFunction': primaryPOC != null ? primaryPOC.join(',') : '',
-      'assignee': notificationAssignees,
-      'dueDate': dueDate.toISOString(),
-      'offerName': this.offerName,
-      'owner': owner,
-      'type': 'Solutioning Notification',
-    };
+      if (!isSolutioningActionNotificationSent) {
 
-    const actionPayload = {
-      '  offerId': this.currentOfferId,
-      'caseId': this.caseId,
-      'actionTitle': 'Provide Details',
-      'description': 'This offer need more information',
-      'mileStone': 'Offer Solutioning',
-      'selectedFunction': primaryPOC != null ? primaryPOC.join(',') : '',
-      'assignee': actionAssignees,
-      'dueDate': dueDate.toISOString(),
-      'offerName': this.offerName,
-      'owner': owner,
-      'type': 'Solutioning Action',
-    };
-    this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
-      this.offersolutioningService.actionPost(actionPayload).subscribe(res => {
-      });
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 5);
+        const notificationPayload = {
+          'offerId': this.currentOfferId,
+          'caseId': this.caseId,
+          'actionTitle': 'Provide Details',
+          'description': 'This offer need more information',
+          'mileStone': 'Offer Solutioning',
+          'selectedFunction': primaryPOC != null ? primaryPOC.join(',') : '',
+          'assignee': notificationAssignees,
+          'dueDate': dueDate.toISOString(),
+          'offerName': this.offerName,
+          'owner': owner,
+          'type': 'Solutioning Notification',
+        };
+
+        const actionPayload = {
+          'offerId': this.currentOfferId,
+          'caseId': this.caseId,
+          'actionTitle': 'Provide Details',
+          'description': 'This offer need more information',
+          'mileStone': 'Offer Solutioning',
+          'selectedFunction': primaryPOC != null ? primaryPOC.join(',') : '',
+          'assignee': actionAssignees,
+          'dueDate': dueDate.toISOString(),
+          'offerName': this.offerName,
+          'owner': owner,
+          'type': 'Solutioning Action',
+        };
+
+        this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
+          this.offersolutioningService.actionPost(actionPayload).subscribe(res => {
+            this.offersolutioningService.updateOfferFlag(this.currentOfferId, 'solutioningActionNotification', true).subscribe()
+          });
+        });
+
+      }
+
     });
   }
 
