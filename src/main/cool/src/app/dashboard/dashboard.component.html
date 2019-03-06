@@ -75,16 +75,28 @@
                 <p-column field="title" sortable="true" header="ACTIONS AND NOTIFICATIONS">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>
-                      <div *ngIf="actionData.alertType == 'action'">
-                        <a (click)="showActionPopUp($event,actionData,popActionContent)">
-                          <span class="text-indigo"
-                            (click)="goToofferSolutioning(actionData.offerId, actionData.caseId,actionData.actiontTitle)">{{actionData.title}}&nbsp;
-                            &nbsp;&nbsp;</span>
-                        </a>
+                      <span *ngIf="actionData.alertType == 'action'">
+                        <span [ngSwitch]="actionData.type">
+                          <!-- view for solutioning action -->
+                          <span *ngSwitchCase="'Solutioning Action'">
+                            <a
+                              (click)="goToofferSolutioning(actionData.offerId,actionData.caseId,actionData.actiontTitle)">
+                              <span class="text-indigo">{{actionData.title}}&nbsp;
+                                &nbsp;&nbsp;</span>
+                            </a>
+                          </span>
+                          <!-- view for other actions -->
+                          <span *ngSwitchDefault>
+                            <a (click)="showActionPopUp($event,actionData,popActionContent)">
+                              <span class="text-indigo">{{actionData.title}}&nbsp;
+                                &nbsp;&nbsp;</span>
+                            </a>
+                          </span>
+                        </span>
+
                         <span (click)="showActionPopUp($event,actionData,popCommentContent)"
                           class="icon-comment pull-right"></span>
-                      </div>
-
+                      </span>
                       <a *ngIf="actionData.alertType == 'notification'"
                         (click)="showActionPopUp($event,actionData,popNotificationContent)">
                         <span>{{actionData.title}}&nbsp;
@@ -182,7 +194,7 @@
                 <ng-template pTemplate="header" let-columns>
                   <tr>
                     <ng-container *ngFor="let col of columns">
-                        <th  [pSortableColumn]="col.field" [attr.rowspan]="col.field!='lifeCyclePriority'?2:null"
+                      <th [pSortableColumn]="col.field" [attr.rowspan]="col.field!='lifeCyclePriority'?2:null"
                         [attr.colspan]="col.field=='lifeCyclePriority'?1:null"
                         [ngClass]="{'regColumn':col.field!='lifeCyclePriority', 'lastColumn':col.field=='lifeCyclePriority'}">
                         {{col.header}}
@@ -191,7 +203,7 @@
                     </ng-container>
                   </tr>
                   <tr class="tr--th-small">
-                    <th colspan="1"  >
+                    <th colspan="1">
                       <div class="row">
                         <div class="col">
                           PRE-LAUNCH
@@ -209,27 +221,27 @@
                 <ng-template pTemplate="body" let-offerData let-columns="columns">
                   <tr>
                     <ng-container *ngFor="let col of columns">
-                        <td style="width:10%" *ngIf="col.field!='lifeCyclePriority'">
-                          <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
-                            <div
-                              *ngIf="offerData.status !== null && (offerData.status['offerMilestone'] === 'cancel' || offerData.status['offerMilestone'] === 'hold' )">
+                      <td style="width:10%" *ngIf="col.field!='lifeCyclePriority'">
+                        <span *ngIf="col.field == 'offerId'||col.field=='offerName'">
+                          <div
+                            *ngIf="offerData.status !== null && (offerData.status['offerMilestone'] === 'cancel' || offerData.status['offerMilestone'] === 'hold' )">
+                            {{offerData[col.field]}}
+                          </div>
+                          <div
+                            *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'  && offerData.status['offerMilestone'] !== 'hold'">
+                            <a (click)="showOfferPopUp($event,offerData,popturboContent)">
                               {{offerData[col.field]}}
-                            </div>
-                            <div
-                              *ngIf="offerData.status !== null && offerData.status['offerMilestone'] !== 'cancel'  && offerData.status['offerMilestone'] !== 'hold'">
-                              <a (click)="showOfferPopUp($event,offerData,popturboContent)">
-                                {{offerData[col.field]}}
-                              </a>
-                            </div>
-                          </span>
-                          <span *ngIf="col.field == 'expectedLaunchDate'">
-                            {{offerData[col.field] | date:'dd-MMM-yyyy'}}
-                          </span>
-                          <span *ngIf="col.field == 'ownerName' && offerData[col.field]">
-                            {{offerData[col.field]}}<br/>
-                            ({{offerData['offerOwner']}})
-                          </span>
-                        </td>
+                            </a>
+                          </div>
+                        </span>
+                        <span *ngIf="col.field == 'expectedLaunchDate'">
+                          {{offerData[col.field] | date:'dd-MMM-yyyy'}}
+                        </span>
+                        <span *ngIf="col.field == 'ownerName' && offerData[col.field]">
+                          {{offerData[col.field]}}<br />
+                          ({{offerData['offerOwner']}})
+                        </span>
+                      </td>
                     </ng-container>
                     <td style="width:20%" class="td--progress-fitted">
                       <div

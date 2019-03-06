@@ -13,7 +13,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
-import {lifeCycleStatusEnum} from '../enums/lifeCycleStatus.enums';
+import { lifeCycleStatusEnum } from '../enums/lifeCycleStatus.enums';
 
 @Component({
   selector: 'app-dashboard',
@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit {
       { field: 'offerName', header: 'OFFER NAME' },
       { field: 'ownerName', header: 'OFFER OWNER' },
       { field: 'expectedLaunchDate', header: 'LAUNCH DATE' },
-      { field: 'lifeCyclePriority', header:'LIFE CYCLE STATUS'}
+      { field: 'lifeCyclePriority', header: 'LIFE CYCLE STATUS' }
     ];
 
 
@@ -149,21 +149,21 @@ export class DashboardComponent implements OnInit {
     }
 
   }
-  private addLifeCycleSortingColumn(resOffers){
+  private addLifeCycleSortingColumn(resOffers) {
     this.myOffers = resOffers.map((data) => {
       let priority = 0;
-      switch(data.status.offerMilestone){
-        case lifeCycleStatusEnum.INLAUNCH.value: 
+      switch (data.status.offerMilestone) {
+        case lifeCycleStatusEnum.INLAUNCH.value:
           priority = lifeCycleStatusEnum.INLAUNCH.priority;
           break;
-        case lifeCycleStatusEnum.CANCEL.value: 
+        case lifeCycleStatusEnum.CANCEL.value:
           priority = lifeCycleStatusEnum.CANCEL.priority;
-          break; 
-        case lifeCycleStatusEnum.ONHOLD.value: 
+          break;
+        case lifeCycleStatusEnum.ONHOLD.value:
           priority = lifeCycleStatusEnum.ONHOLD.priority;
           break;
       }
-     return {...data, "lifeCyclePriority": priority};
+      return { ...data, "lifeCyclePriority": priority };
     });
   }
   private getMyOffers() {
@@ -225,7 +225,7 @@ export class DashboardComponent implements OnInit {
   getSelectFunctionRole(functionRole) {
     // Reset AssignList and AsigneeValue before service call
     this.assigneeValue = [];
-    this.assigneeList = [];    
+    this.assigneeList = [];
     this.selectedfunctionRole = functionRole;
     if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
@@ -341,7 +341,7 @@ export class DashboardComponent implements OnInit {
   }
 
   createApproveActionWithDetails(overlaypanel: OverlayPanel) {
-    if(this.selectedFile){
+    if (this.selectedFile) {
       const fd = new FormData();
       fd.append('file', this.selectedFile, this.selectedFile.name);
       this.dashboardService.postFileUploadForAction(this.selectedCaseId, fd).subscribe(data => {
@@ -365,7 +365,7 @@ export class DashboardComponent implements OnInit {
       overlaypanel.hide();
       this.getMyActionsAndNotifications();
     });
-    if(this.createActionForm){
+    if (this.createActionForm) {
       this.createActionForm.reset();
     }
   }
@@ -434,6 +434,9 @@ export class DashboardComponent implements OnInit {
     switch (actionType) {
       case 'Strategy Review':
         page = 'strategyReview';
+        break;
+      case 'Solutioning Action':
+        page = 'offerSolutioning';
         break;
       default:
         page = 'offerDetailView';
