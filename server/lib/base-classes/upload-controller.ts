@@ -397,6 +397,15 @@ export default class UploadController {
     return Promise.resolve();
   }
 
+  validateProperty(temp, prop, values, required?) {
+    if (required && !this.temp[prop]) {
+      this.addErrorRequired(this.PropNames[prop]);
+    } else if (this.notExists(values, this.temp[prop])) {
+      this.addErrorInvalid(this.PropNames[prop], this.temp[prop]);
+    }
+    return Promise.resolve();
+  }
+
   validate(): Promise<any> {
     return Promise.resolve();
   }

@@ -22,6 +22,8 @@ const collationCollections = [
   'dfa_prof_swalloc_manualmix_upld',
   'dfa_prof_scms_triang_altsl2_map_upld',
   'dfa_prof_scms_triang_corpadj_map_upld',
+  'dfa_prof_service_map_upld',
+  'dfa_prof_service_trngsplit_pctmap_upld',
   'dfa_submeasure',
   'dfa_user'
 ];

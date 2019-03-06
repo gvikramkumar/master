@@ -8,6 +8,8 @@ DROP TABLE fpadfa.dfa_prof_dept_acct_map_upld;
 DROP TABLE fpadfa.dfa_prof_input_amnt_upld;
 DROP TABLE fpadfa.dfa_prof_manual_map_upld;
 DROP TABLE fpadfa.dfa_prof_sales_split_pctmap_upld;
+DROP TABLE fpadfa.dfa_prof_service_map_upld;
+DROP TABLE fpadfa.dfa_prof_service_trngsplit_pctmap_upld
 DROP TABLE fpadfa.dfa_prof_swalloc_manualmix_upld;
 DROP TABLE fpadfa.dfa_sub_measure;
 DROP TABLE fpadfa.dfa_submeasure_input_lvl;
@@ -15,6 +17,52 @@ DROP TABLE fpadfa.dfa_prof_scms_triang_altsl2_map_upld;
 DROP TABLE fpadfa.dfa_prof_scms_triang_corpadj_map_upld;
 DROP TABLE fpadfa.dfa_prof_disti_to_direct_map_upld;
 */
+
+CREATE TABLE fpadfa.dfa_prof_service_trngsplit_pctmap_upld (
+	fiscal_year numeric(22) NOT NULL,
+	sales_territory_code varchar(50) NOT NULL,
+	sales_node_level_3_code varchar(32) NULL,
+	ext_theater_name varchar(50) NULL,
+	sales_country_name varchar(255) NULL,
+	product_family varchar(40) NULL,
+	split_percentage float8 NULL,
+	create_owner varchar(30) NULL,
+	create_datetimestamp timestamp NULL,
+	update_owner varchar(30) NULL,
+	update_datetimestamp timestamp NULL
+)
+WITH (
+	OIDS=FALSE
+) ;
+CREATE INDEX ndx_svtrn_fisc_yr ON fpadfa.dfa_prof_service_trngsplit_pctmap_upld USING btree (fiscal_year) ;
+CREATE INDEX ndx_svtrn_sales_terr_code ON fpadfa.dfa_prof_service_trngsplit_pctmap_upld USING btree (sales_territory_code) ;
+CREATE INDEX ndx_svtrn_sl3_code ON fpadfa.dfa_prof_service_trngsplit_pctmap_upld USING btree (sales_node_level_3_code) ;
+
+CREATE TABLE fpadfa.dfa_prof_service_map_upld (
+	fiscal_month_id numeric(22) NOT NULL,
+	sales_territory_code varchar(50) NOT NULL,
+	sales_node_level_1_code varchar(32) NULL,
+	sales_node_level_2_code varchar(32) NULL,
+	sales_node_level_3_code varchar(32) NULL,
+	sales_node_level_4_code varchar(32) NULL,
+	sales_node_level_5_code varchar(32) NULL,
+	sales_node_level_6_code varchar(32) NULL,
+	business_entity varchar(100) NULL,
+	technology_group varchar(20) NULL,
+	business_unit varchar(40) NULL,
+	product_family varchar(40) NULL,
+	split_percentage float8 NULL,
+	create_owner varchar(30) NULL,
+	create_datetimestamp timestamp NULL,
+	update_owner varchar(30) NULL,
+	update_datetimestamp timestamp NULL
+)
+WITH (
+	OIDS=FALSE
+) ;
+CREATE INDEX ndx_svmap_biz_entity ON fpadfa.dfa_prof_service_map_upld USING btree (business_entity) ;
+CREATE INDEX ndx_svmap_fiscal_mthid ON fpadfa.dfa_prof_service_map_upld USING btree (fiscal_month_id) ;
+CREATE INDEX ndx_svmap_sales_terr_code ON fpadfa.dfa_prof_service_map_upld USING btree (sales_territory_code) ;
 
 
 CREATE TABLE fpadfa.dfa_prof_disti_to_direct_map_upld (

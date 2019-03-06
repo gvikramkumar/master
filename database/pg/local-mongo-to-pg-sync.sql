@@ -24,6 +24,8 @@ select * from fpadfa.dfa_prof_manual_map_upld;
 select * from fpadfa.dfa_prof_sales_split_pctmap_upld;
 select * from fpadfa.dfa_prof_scms_triang_altsl2_map_upld;
 select * from fpadfa.dfa_prof_scms_triang_corpadj_map_upld;
+select * from fpadfa.dfa_prof_service_map_upld;
+select * from fpadfa.dfa_prof_service_trngsplit_pctmap_upld
 select * from fpadfa.dfa_prof_swalloc_manualmix_upld;
 select * from fpadfa.dfa_sub_measure;
 select * from fpadfa.dfa_submeasure_input_lvl;
@@ -44,4 +46,4 @@ where sub_measure_key = 1055647;
 delete from fpadfa.dfa_sub_measure;
 
 
-
+select upper(1); 
