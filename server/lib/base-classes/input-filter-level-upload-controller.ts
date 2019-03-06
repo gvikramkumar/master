@@ -32,6 +32,7 @@ data;
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'product_family_id'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'business_unit_id'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'technology_group_id'),
+      pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'product_id'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l1_sales_territory_name_code'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code'),
       pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l3_sales_territory_name_code'),
@@ -48,23 +49,24 @@ data;
         this.data.product = {
           productFamilies: results[0],
           businessUnits: results[1],
-          techGroups: results[2]
+          techGroups: results[2],
+          productIds: results[3]
         };
         this.data.sales = {
-          level1s: results[3],
-          level2s: results[4],
-          level3s: results[5],
-          level4s: results[6],
-          level5s: results[7],
-          level6s: results[8]
+          level1s: results[4],
+          level2s: results[5],
+          level3s: results[6],
+          level4s: results[7],
+          level5s: results[8],
+          level6s: results[9]
         };
-        this.data.legalEntities = results[9];
+        this.data.legalEntities = results[10];
         this.data.businessEntity = {
-          internalBe: results[10],
-          internalSubBe: results[11]
+          internalBe: results[11],
+          internalSubBe: results[12]
         };
-        this.data.revClassifications = results[12];
-        this.data.scms = results[13];
+        this.data.revClassifications = results[13];
+        this.data.scms = results[14];
       });
   }
 
@@ -86,6 +88,10 @@ data;
         }
       } else if (productLevel === 'TG') {
         if (this.notExists(this.data.product.techGroups, this.temp.inputProductValue)) {
+          this.addErrorInvalid(this.PropNames.inputProductValue, this.temp.inputProductValue);
+        }
+      } else if (productLevel === 'PID') {
+        if (this.notExists(this.data.product.productIds, this.temp.inputProductValue)) {
           this.addErrorInvalid(this.PropNames.inputProductValue, this.temp.inputProductValue);
         }
       }
