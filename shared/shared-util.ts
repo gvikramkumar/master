@@ -13,13 +13,18 @@ export const shUtil = {
   getCutoffDateStrFromFiscalMonth,
   getHtmlForLargeSingleMessage,
   isDeptUpload,
-  isDeptUploadMeasure
+  isDeptUploadMeasure,
+  fiscalYearFromFiscalMonth
 };
 
 export interface ObjectDiffVal {
   path: string;
   oldVal: any;
   newVal: any;
+}
+
+function fiscalYearFromFiscalMonth(fimo) {
+  return Number(fimo.toString().substr(0, 4));
 }
 
 function isDeptUpload(submeasure) {
