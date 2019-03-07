@@ -3,26 +3,8 @@
     <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
       [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
     </app-menu-bar>
-    <div class="panel panel--indigo panel--compressed task--bar panel-wrapper mt-15">
-      <div class="row">
-        <div class="col-sm-4">
-          <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span
-                class="icon-back"></span></button>
-            Offer Info</h2>
-        </div>
-        <div class="col-sm-8 text-right">
-          <!-- <span *ngIf = "showEditbutton">
-              <app-editfields (onEdit)="editOffer()" (onSave)="finalChanges()"  (onDiscard)="PreviousValues()"  ></app-editfields>
-            </span>  -->
-
-          <!-- <button class="btn btn--white" [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to Offer Builder <span class="icon-chevron-right"></span></button> -->
-          <span>
-            <button class="btn btn--white" [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to
-              Offer Builder <span class="icon-chevron-right"></span></button>
-          </span>
-        </div>
-      </div>
-    </div>
+    <app-taskbar [isValidToProceed]="enableOfferbuild" (onProceedToNext)="proceedToOfferBuilder()"
+      [showOfferDtlsBtn]="false"></app-taskbar>
     <div class="card card--raised base-margin-top">
       <div class="panel">
         <div class="row">
@@ -56,8 +38,7 @@
                     <div class="form-group half-margin-bottom">
                       <label for="selectedBeValue">Primary Business Entity</label>
                       <p-dropdown id="selectedBeValue" class="form-control" name="primaryBEList"
-                        [options]="primaryBusinessEntities"
-                        [disabled]="disablePrimaryBEList"
+                        [options]="primaryBusinessEntities" [disabled]="disablePrimaryBEList"
                         (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBE($event.value)"
                         [(ngModel)]="primaryBusinessEntitiesValue" [style]="{'width':'100%'}" filter="true" required>
                       </p-dropdown>
