@@ -23,6 +23,7 @@ export class TaskbarComponent implements OnInit {
   currentOfferId: string;
   caseId: string;
   currentStepIndex: number = 0;
+  disableBackBtn: boolean = false;
   isLastStep: boolean;
   currentPage: string;
 
@@ -34,14 +35,14 @@ export class TaskbarComponent implements OnInit {
 
 
   ngOnInit() {
-    this.setTaskBar(this.router.url.split('/')[1]);
     this.currentOfferId = this.activatedRoute.snapshot.params["id"];
     this.caseId = this.activatedRoute.snapshot.params['id2'];
+    this.setTaskBar(this.router.url.split('/')[1]);
   }
 
   setTaskBar(currentPage: string) {
     this.currentStepIndex = offerBuilderStepsEnum[currentPage];
-    console.log(offerBuilderStepsEnum[this.currentStepIndex]);
+    this.disableBackBtn = this.currentStepIndex == 0 && this.currentOfferId ? true : false;
     this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
   }
   saveCurrentState() {
@@ -51,9 +52,11 @@ export class TaskbarComponent implements OnInit {
     this.onProceedToNext.emit('true');
   }
   goBack() {
-    if (this.currentStepIndex >= 0 && this.currentOfferId) {
+    if (this.currentStepIndex > 0 && this.currentOfferId) {
       const prevPage = offerBuilderStepsEnum[this.currentStepIndex - 1];
       this.router.navigate(['/' + prevPage, this.currentOfferId, this.caseId]);
+    } else if (!this.currentOfferId) {
+      this.router.navigate(['/dashboard']);
     }
   }
 

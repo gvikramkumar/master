@@ -79,6 +79,8 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
   actionStatusColor(status) {
     if (status === 'Completed') {
       return 'GREEN';
+    } else if (status === 'Not Applicable') {
+      return 'GREEN';
     } else if (status === 'pending') {
       return 'RED';
     } else {

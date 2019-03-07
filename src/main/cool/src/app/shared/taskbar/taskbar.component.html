@@ -20,8 +20,7 @@
     <div *ngIf="!isDashboard" class="panel panel--indigo panel--compressed task--bar">
       <div class="row">
         <div class="col-md-4">
-          <h4><button *ngIf="currentStepIndex" (click)='goBack()' [disabled]=""
-              class="btn--back btn btn--icon btn--white"><span
+          <h4><button (click)='goBack()' [disabled]="disableBackBtn" class="btn--back btn btn--icon btn--white"><span
                 class="icon-back"></span></button>{{taskBarNavSteps[currentStepIndex].title}}</h4>
         </div>
         <div class="col-md-8 text-right">
