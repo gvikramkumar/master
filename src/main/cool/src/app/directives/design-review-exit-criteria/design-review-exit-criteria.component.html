@@ -28,12 +28,15 @@
                     <td class="status" [ngStyle]="{'color': actionStatusColor(ideate['status'])}">
                       {{ideate['status']}}</td>
                   </tr>
-                  <tr *ngFor="let action of plan">
-                    <td><span class="icon-view-feed-single icon-medium dependancy"></span>
-                      {{action['subMilestone']}}</td>
-                    <td class="status" [ngStyle]="{'color': actionStatusColor(action['status'])}">
-                      {{action['status']}}</td>
-                  </tr>
+                  <ng-container *ngFor="let action of plan">
+                    <tr *ngIf="action['subMilestone'].trim() != 'Design Review'">
+                      <td><span class="icon-view-feed-single icon-medium dependancy"></span>
+                        {{action['subMilestone']}}</td>
+                      <td class="status" [ngStyle]="{'color': actionStatusColor(action['status'])}">
+                        {{action['status']}}</td>
+                    </tr>
+                  </ng-container>
+                  
                 </tbody>
               </table>
             </div>
