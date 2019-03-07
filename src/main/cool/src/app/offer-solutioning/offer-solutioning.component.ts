@@ -473,4 +473,3 @@ export class OfferSolutioningComponent implements OnInit {
 }
 
 
-
