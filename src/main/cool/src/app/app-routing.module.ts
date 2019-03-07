@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CreateOfferCoolComponent } from './create-offer-cool/create-offer-cool.component';
@@ -10,13 +9,9 @@ import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
-import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
-import { ActionsComponent } from './actions/actions.component';
 import { AccessManagementComponent } from './access-management/access-management.component';
-import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
-import { AuthGuard } from './auth/gaurds/auth-guard';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
 //Temperoary
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
@@ -25,6 +20,8 @@ import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { OasComponent } from './oas/oas.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
+import { DesignreviewComponent } from './designreview/designreview.component';
+import { BupmGuard, AuthGuard } from '@shared/guards';
 
 
 const routes: Routes = [
@@ -57,12 +54,8 @@ const routes: Routes = [
     component: CreateNewOfferComponent
   },
   {
-    path: 'createNewAction',
-    component: CreateNewActionComponent
-  },
-  {
     path: 'action',
-    component: ActionsComponent
+    loadChildren: './actions/actions.module#ActionsModule'
   },
   {
     path: 'offerDetailView/:id/:id2',
@@ -140,6 +133,11 @@ const routes: Routes = [
   }, {
     path: 'offerConstruct/:id/:id2',
     component: OfferConstructComponent
+  },
+  {
+    path: 'designReview/:id/:id2',
+    component: DesignreviewComponent,
+    resolve: { offerData: OfferOverViewResolver }
   }
 
 ];

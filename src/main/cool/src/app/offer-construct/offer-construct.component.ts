@@ -5,6 +5,7 @@ import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferConstructService } from '../services/offer-construct.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { LeadTime } from '../right-panel/lead-time';
+import { OfferPhaseService } from '../services/offer-phase.service';
 
 @Component({
   selector: 'app-offer-construct',
@@ -27,6 +28,7 @@ export class OfferConstructComponent implements OnInit {
   setFlag;
   derivedMM;
   offerName;
+  offerOwner: string;
   offerId: string;
   primaryBE: string;
   displayLeadTime = false;
@@ -42,6 +44,8 @@ export class OfferConstructComponent implements OnInit {
     private stakeholderfullService: StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute,
+    private offerPhaseService: OfferPhaseService,
+    private offerConstructService: OfferConstructService,
     private rightPanelService: RightPanelService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -63,6 +67,7 @@ export class OfferConstructComponent implements OnInit {
       this.derivedMM = this.firstData['derivedMM'];
       this.data = this.firstData['stakeholders'];
       this.offerName = this.firstData['offerName'];
+      this.offerOwner = data['offerOwner'];
       if(Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length){
        this.primaryBE = this.firstData['primaryBEList'][0];
       }
@@ -162,4 +167,31 @@ export class OfferConstructComponent implements OnInit {
     this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
   }
 
+  onProceedToNext(msg) {
+    const operationalAssesmentProceedPayload = {
+      'taskId': '',
+      'userId': this.offerOwner,
+      'caseId': this.caseId,
+      'offerId': this.currentOfferId,
+      'taskName': 'Operational Assessment',
+      'action': '',
+      'comment': ''
+    };
+    const designReviewProceedPayload = {
+      'taskId': '',
+      'userId': this.offerOwner,
+      'caseId': this.caseId,
+      'offerId': this.currentOfferId,
+      'taskName': 'Offer Components',
+      'action': '',
+      'comment': ''
+    };
+    this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload).subscribe(result => {
+      this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload).subscribe(result => {
+        if (msg !== 'stay_on_this_page') {
+          this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
+        }
+      });
+    });
+  }
 }

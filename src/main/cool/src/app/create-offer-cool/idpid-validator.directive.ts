@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, Validator, ValidationErrors } from '@angular/forms';
-import { CreateOfferService } from '../services/create-offer.service';
+import { CreateOfferService } from '@shared/services';
 
 @Directive({
   selector: '[appIdpidValidator]',

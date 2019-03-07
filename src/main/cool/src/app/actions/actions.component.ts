@@ -1,21 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActionsAndNotifcations } from '../dashboard/action';
 import * as moment from 'moment';
 import { ActionsService } from '../services/actions.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { CreateOfferService } from '../services/create-offer.service';
-import { DashboardService } from '../services/dashboard.service';
 import { NgForm } from '@angular/forms';
 import { CreateAction } from '../models/create-action';
 import { CreateActionService } from '../services/create-action.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { EnvironmentService } from '../../environments/environment.service';
-
-
-
+import { UserService, DashboardService } from '@shared/services';
 
 @Component({
   selector: 'app-actions',
@@ -26,8 +21,10 @@ export class ActionsComponent implements OnInit {
   @ViewChild('createActionForm') createActionForm: NgForm;
   myActionsList;
   myActions;
-  pendingActnCount = 0;
-  needImmActnCount = 0;
+  actionCount = {
+    pendingActionCount: 0,
+    needImmediateActionCount: 0
+  }
   myOfferArray: ActionsAndNotifcations[] = [];
   displayActionPhase: Boolean = false;
   minDate: Date;
@@ -63,9 +60,7 @@ export class ActionsComponent implements OnInit {
 
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
-    private createOfferService: CreateOfferService,
     private dashboardService: DashboardService,
-    private createActionService: CreateActionService,
     private environmentService: EnvironmentService,
   ) { }
 
@@ -135,7 +130,7 @@ export class ActionsComponent implements OnInit {
   getSelectFunctionRole(functionRole) {
     // Reset AssignList and AsigneeValue before service call
     this.assigneeValue = [];
-    this.assigneeList = [];    
+    this.assigneeList = [];
     this.selectedfunctionRole = functionRole;
     if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
@@ -168,9 +163,9 @@ export class ActionsComponent implements OnInit {
         obj.setActionTitle(element.actiontTitle);
         // Set the status color
         if (element.status && element.status.toLowerCase() === 'red') {
-          this.needImmActnCount = this.needImmActnCount + 1;
+          this.actionCount.needImmediateActionCount = this.actionCount.needImmediateActionCount + 1;
         } else {
-          this.pendingActnCount = this.pendingActnCount + 1;
+          this.actionCount.pendingActionCount = this.actionCount.pendingActionCount + 1;
         }
         this.myOfferArray.push(obj);
       });

@@ -1,18 +1,16 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { CreateOfferService } from '../services/create-offer.service';
 import { NgForm } from '@angular/forms';
 import { CreateOffer } from './create-offer';
 import { SelectItem } from 'primeng/api';
-import { UserService } from '../services/user.service';
 import { Location } from '@angular/common';
 import { Status } from './status';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
-import { HeaderService } from '../header/header.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
+import { HeaderService, UserService, CreateOfferService } from '@shared/services';
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -139,7 +137,7 @@ export class CreateOfferCoolComponent implements OnInit {
         this.primaryBusinessEntitiesValue = this.offerDetailRes.primaryBEList[0];
         this.getPrimaryBusinessUnitPromise(this.offerDetailRes.primaryBEList[0]);
         this.getSecondaryBusinessUnitsBasedOnSencondaryBE();
-        this.secondaryBusinessUnitsValue = this.offerDetailRes.secondaryBUList.slice();
+        this.secondaryBusinessUnitsValue = this.offerDetailRes.secondaryBUList ? this.offerDetailRes.secondaryBUList.slice() : null;
       }
     });
   }
@@ -513,7 +511,7 @@ export class CreateOfferCoolComponent implements OnInit {
       offerCreationDate,
       status,
       constructDetails
-      );
+    );
     if (!this.offerId) {
       this.createOffer(createoffer);
     } else {

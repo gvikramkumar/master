@@ -9,18 +9,13 @@ import { NgForm } from '@angular/forms';
 import { ActionsService } from '../services/actions.service';
 import { CreateActionComment } from '../models/create-action-comment';
 import { CreateActionApprove } from '../models/create-action-approve';
-import { UserService } from '../services/user.service';
 import { SharedService } from '../shared-service.service';
 import { MessageService } from '../services/message.service';
 import { Subscription, forkJoin } from 'rxjs';
-import { HeaderService } from '../header/header.service';
-import { LeadTime } from '../right-panel/lead-time';
 import { RightPanelService } from '../services/right-panel.service';
 import { User } from '../access-management/user';
 import { AccessManagementService } from '../services/access-management.service';
-import { DashboardService } from '../services/dashboard.service';
-import { CreateOfferService } from '../services/create-offer.service';
-import { element } from '@angular/core/src/render3';
+import { UserService, HeaderService, DashboardService, CreateOfferService } from '@shared/services';
 
 
 @Component({
@@ -170,8 +165,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
       this.offerName = this.firstData['offerName'];
-      if(Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length){
-       this.primaryBE = this.firstData['primaryBEList'][0];
+      if (Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
+        this.primaryBE = this.firstData['primaryBEList'][0];
       }
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {

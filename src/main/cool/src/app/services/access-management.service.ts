@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable, of, from } from 'rxjs';
-import { EnvironmentService } from '../../environments/environment.service';
 import { NewUser } from '../models/newuser';
-import { UserService } from './user.service';
 import { User } from '../access-management/user';
 import { map, filter, mergeMap, merge, mergeAll, concat, concatAll } from 'rxjs/operators';
 import * as _ from 'lodash';
+import { EnvironmentService } from '@env/environment.service';
+import { UserService } from '@shared/services/user.service';
+
 @Injectable()
 export class AccessManagementService {
 

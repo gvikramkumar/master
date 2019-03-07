@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MenuBarService } from '../services/menu-bar.service';
-import { UserService } from '../services/user.service';
+import { UserService } from '@shared/services';
 
 
 
@@ -18,14 +18,14 @@ export class MenuBarPopupComponent implements OnInit {
   caseId: String;
   reason: String = '';
   allowSubmit: boolean = false;
-  passedString : String = '';
+  passedString: String = '';
   buttonIsDisabled: boolean = false;
 
 
   constructor(private activatedRoute: ActivatedRoute,
     private menuBarService: MenuBarService,
     private userService: UserService,
-    ) {
+  ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -37,14 +37,14 @@ export class MenuBarPopupComponent implements OnInit {
   }
 
   enableSubmit(event): void {
-   let passedString = event.target.value;
-   let inputValue = passedString.trim();
-   if(inputValue === "" || inputValue === null) {
-    this.buttonIsDisabled=false;
-   } else {
-    this.buttonIsDisabled=true;
-   }
-}
+    let passedString = event.target.value;
+    let inputValue = passedString.trim();
+    if (inputValue === "" || inputValue === null) {
+      this.buttonIsDisabled = false;
+    } else {
+      this.buttonIsDisabled = true;
+    }
+  }
 
   getPopupTitle() {
     if (this.popupType === 'hold') {
@@ -62,7 +62,7 @@ export class MenuBarPopupComponent implements OnInit {
   }
 
   submit() {
-    let holdData= {};
+    let holdData = {};
     holdData['taskId'] = '';
     holdData['userId'] = this.userService.getUserId();
     holdData['caseId'] = this.caseId;
@@ -71,7 +71,7 @@ export class MenuBarPopupComponent implements OnInit {
     holdData['action'] = 'hold';
     holdData['comment'] = this.reason;
 
-    let cancelData={};
+    let cancelData = {};
     cancelData['taskId'] = '';
     cancelData['userId'] = this.userService.getUserId();
     cancelData['caseId'] = this.caseId;
@@ -89,7 +89,7 @@ export class MenuBarPopupComponent implements OnInit {
         this.closePopup.next('cancel');
       });
     }
-    
+
   }
 
 }

@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AccessManagementService } from '../services/access-management.service';
-import { ConfigurationService } from '../services/configuration.service';
 import { NgForm } from '@angular/forms';
 import { NewUser } from '../models/newuser';
 import { UserMapping } from '../models/usermapping';
 import { User } from './user';
 import { forkJoin, Observable, of, from } from 'rxjs';
+import { ConfigurationService } from '@shared/services';
 @Component({
   selector: 'app-access-management',
   templateUrl: './access-management.component.html',
