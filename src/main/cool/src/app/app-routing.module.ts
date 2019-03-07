@@ -9,7 +9,6 @@ import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
-import { AccessManagementComponent } from './access-management/access-management.component';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
@@ -21,7 +20,7 @@ import { OfferConstructComponent } from './offer-construct/offer-construct.compo
 import { OasComponent } from './oas/oas.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { DesignreviewComponent } from './designreview/designreview.component';
-import { BupmGuard, AuthGuard } from '@shared/guards';
+import { BupmGuard } from '@shared/guards';
 
 
 const routes: Routes = [
@@ -81,8 +80,7 @@ const routes: Routes = [
   },
   {
     path: 'accessManagement',
-    component: AccessManagementComponent,
-    canActivate: [AuthGuard]
+    loadChildren: './access-management/access-management.module#AccessManagementModule'
   },
   {
     path: 'auth-error',
@@ -151,13 +149,3 @@ const routes: Routes = [
   declarations: []
 })
 export class AppRoutingModule { }
-
-// @NgModule({
-//   exports: [RouterModule],
-//   imports: [
-//     CommonModule,
-//     [RouterModule.forRoot(routes,{ preloadingStrategy: PreloadAllModules })]
-//   ],
-//   declarations: []
-// })
-// export class AppRoutingModule { }

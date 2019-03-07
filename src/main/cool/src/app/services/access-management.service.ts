@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable, of, from } from 'rxjs';
 import { NewUser } from '../models/newuser';
-import { User } from '../access-management/user';
 import { map, filter, mergeMap, merge, mergeAll, concat, concatAll } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { EnvironmentService } from '@env/environment.service';
@@ -74,8 +73,8 @@ export class AccessManagementService {
         return currentUserData.isSuperAdmin ||
             (currentUserData.isFunctionalAdmin && currentUserData.functionsUserCanAddTo.includes(userData['functionalRole']));
     }
-    getUserDetails(user: User) {
-        return this.httpClient.post<[]>(this.environmentService.REST_API_USER_DETAILS, user, { withCredentials: true });
+    getUserDetails(user: string) {
+        return this.httpClient.post<[]>(this.environmentService.REST_API_USER_DETAILS, {userId: user}, { withCredentials: true });
     }
 
     registerUser(newUser: NewUser[]): Observable<any> {

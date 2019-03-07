@@ -13,7 +13,9 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { HeaderService, DashboardService, CreateOfferService, ViewcommentService, TurbotaxService } from './services';
 import { RouterModule } from '@angular/router';
 import { BupmGuard, AuthGuard } from './guards';
-import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule, FileUploadModule, DialogModule } from 'primeng/primeng';
+import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule, FileUploadModule, DialogModule, MenuModule, CalendarModule, AutoCompleteModule, DragDropModule, TreeTableModule, CardModule, PanelModule, TabMenuModule, TieredMenuModule, ConfirmDialogModule, ButtonModule, CheckboxModule, ProgressSpinnerModule } from 'primeng/primeng';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,22 @@ import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, To
   imports: [
     CommonModule,
     DataTableModule, DropdownModule, MultiSelectModule, FileUploadModule, TooltipModule, AccordionModule,
-    OverlayPanelModule,
+    OverlayPanelModule, 
+    MenuModule,
+    TableModule,
+    CalendarModule,
+    AutoCompleteModule,
+    DragDropModule,
+    TreeTableModule,
+    CardModule,
+    PanelModule,
+    TabMenuModule,
+    TieredMenuModule,
+    ConfirmDialogModule,
+    ButtonModule,
+    CheckboxModule,
+    ToastModule,
+    ProgressSpinnerModule,
     DialogModule,
     RouterModule,BsDatepickerModule.forRoot(),
     FormsModule, ReactiveFormsModule 
@@ -52,6 +69,21 @@ import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, To
     TurbotaxviewComponent,
     DataTableModule, DropdownModule, MultiSelectModule, FileUploadModule, TooltipModule, AccordionModule,
     OverlayPanelModule, BsDatepickerModule,
+    MenuModule,
+    TableModule,
+    CalendarModule,
+    AutoCompleteModule,
+    DragDropModule,
+    TreeTableModule,
+    CardModule,
+    PanelModule,
+    TabMenuModule,
+    TieredMenuModule,
+    ConfirmDialogModule,
+    ButtonModule,
+    CheckboxModule,
+    ToastModule,
+    ProgressSpinnerModule,
     DialogModule, FormsModule, ReactiveFormsModule,
   ]
 })

@@ -3,7 +3,6 @@ import { AccessManagementService } from '../services/access-management.service';
 import { NgForm } from '@angular/forms';
 import { NewUser } from '../models/newuser';
 import { UserMapping } from '../models/usermapping';
-import { User } from './user';
 import { forkJoin, Observable, of, from } from 'rxjs';
 import { ConfigurationService } from '@shared/services';
 @Component({
@@ -186,11 +185,8 @@ export class AccessManagementComponent implements OnInit {
   async checkUserIdAvailability(userId) {
 
     if (userId) {
-      // Initiailize User
-      const user = new User(userId.toString());
-
       // Retireve User Details
-      this.accessManagementService.getUserDetails(user).subscribe(
+      this.accessManagementService.getUserDetails(userId.toString()).subscribe(
         data => {
           this.userIdAvailable = data && data.length > 0 && !data['errorMsg'];
         }, () => {

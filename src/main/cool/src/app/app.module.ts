@@ -18,8 +18,6 @@ import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.com
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchCollaboratorService } from './services/search-collaborator.service';
-import { TableModule } from 'primeng/table';
-import { CalendarModule } from 'primeng/calendar';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { OfferDetailViewService } from './services/offer-detail-view.service';
 import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
@@ -27,13 +25,7 @@ import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit
 import { ExitCriteriaValidationService } from './services/exit-criteria-validation.service';
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
-import { TieredMenuModule } from 'primeng/tieredmenu';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { CardModule } from 'primeng/card';
-import { PanelModule } from 'primeng/panel';
 import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
-import { MenuModule } from 'primeng/menu';
-import { AccessManagementComponent } from './access-management/access-management.component';
 import { AccessManagementService } from './services/access-management.service';
 import { MenuBarPopupComponent } from './menu-bar-popup/menu-bar-popup.component';
 import { MenuBarService } from './services/menu-bar.service';
@@ -42,7 +34,6 @@ import { CreateActionService } from './services/create-action.service';
 import { StakeholderfullService } from './services/stakeholderfull.service';
 import { OfferPhaseService } from './services/offer-phase.service';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
-import { AutoCompleteModule } from 'primeng/autocomplete';
 import { StrategyReviewService } from './services/strategy-review.service';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
 import { PackingComponent } from './offer-dimension-groups/packing/packing.component';
@@ -61,8 +52,6 @@ import { UserIdleModule } from 'angular-user-idle';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
 import { OfferconstructCanvasComponent } from './offer-construct-canvas/offerconstruct-canvas.component';
-import { DragDropModule } from 'primeng/dragdrop';
-import { TreeTableModule } from 'primeng/treetable';
 import { BlueComponent } from './blue/blue.component';
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
@@ -70,11 +59,6 @@ import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-
 import { EditfieldsComponent } from './editfields/editfields.component';
 import { ViewstrategyComponent } from './viewstrategy/viewstrategy.component';
 import { OasComponent } from './oas/oas.component';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { IdpidValidatorDirective } from './create-offer-cool/idpid-validator.directive';
@@ -107,7 +91,6 @@ export function app_init(configService: ConfigurationService) {
     MenuBarComponent,
     StrategyReviewComponent,
     OfferCreateDetailComponent,
-    AccessManagementComponent,
     MenuBarPopupComponent,
     AuthErrorComponent,
     OfferSolutioningComponent,
@@ -139,27 +122,12 @@ export function app_init(configService: ConfigurationService) {
     BrowserModule,
     HttpClientModule,
     RouterModule,
-    MenuModule,
     AppRoutingModule,
     ClickOutsideModule,
     PerfectScrollbarModule,
     ModalModule.forRoot(),
     NgbModule.forRoot(),
     BrowserAnimationsModule,
-    TableModule,
-    CalendarModule,
-    AutoCompleteModule,
-    DragDropModule,
-    TreeTableModule,
-    CardModule,
-    PanelModule,
-    TabMenuModule,
-    TieredMenuModule,
-    ConfirmDialogModule,
-    ButtonModule,
-    CheckboxModule,
-    ToastModule,
-    ProgressSpinnerModule,
     NgCircleProgressModule.forRoot(),
     FlexLayoutModule,
     NgxWebstorageModule.forRoot(),

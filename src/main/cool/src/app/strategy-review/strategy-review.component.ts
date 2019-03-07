@@ -13,7 +13,6 @@ import { SharedService } from '../shared-service.service';
 import { MessageService } from '../services/message.service';
 import { Subscription, forkJoin } from 'rxjs';
 import { RightPanelService } from '../services/right-panel.service';
-import { User } from '../access-management/user';
 import { AccessManagementService } from '../services/access-management.service';
 import { UserService, HeaderService, DashboardService, CreateOfferService } from '@shared/services';
 
@@ -496,7 +495,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
 
       // Compute Manager List
       const userId = employee['_id'];
-      const managerDetailsList = await this.accessManagementService.getUserDetails(new User(userId)).toPromise();
+      const managerDetailsList = await this.accessManagementService.getUserDetails(userId.toString()).toPromise();
 
       // Iterate - Manager Names
       for (const manager of Array.from(managerDetailsList.values())) {
