@@ -84,6 +84,7 @@ import { DesignreviewComponent } from './designreview/designreview.component';
 import SharedModule from '@shared/shared.module';
 import { EnvironmentService } from 'src/environments/environment.service';
 import { ConfigurationService, HttpInterceptorService, UserService } from '@shared/services';
+import { DesignReviewExitCriteriaComponent } from '@shared/components';
 
 
 export function app_init(configService: ConfigurationService) {
@@ -131,6 +132,7 @@ export function app_init(configService: ConfigurationService) {
     IdpidValidatorDirective,
     NotificationOfferDetailPopupComponent,
     DesignreviewComponent,
+    DesignReviewExitCriteriaComponent
   ],
   imports: [
     NgbModule,

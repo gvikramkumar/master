@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angu
 import { Router, ActivatedRoute, ResolveEnd } from '@angular/router';
 import { offerBuilderStepsEnum } from '@shared/enums';
 import { taskBarNavConstant } from '@shared/constants/taskBarNav.constants';
-import { CreateOfferService } from '@shared/services';
+
 @Component({
   selector: 'app-taskbar',
   templateUrl: './taskbar.component.html',
@@ -44,7 +44,7 @@ export class TaskbarComponent implements OnInit {
   setTaskBar() {
     if(this.currentPage != 'dashboard' && this.currentPage != "action"){
       this.currentStepIndex = offerBuilderStepsEnum[this.currentPage];
-      this.disableBackBtn = this.currentStepIndex == 0 && !this.currentOfferId ? false : true;
+      this.disableBackBtn = this.currentStepIndex > 0 && this.currentOfferId ? false : true;
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
     }
   }

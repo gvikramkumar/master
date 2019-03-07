@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
-  TaskbarComponent, AvatarComponent, DesignReviewExitCriteriaComponent,
+  TaskbarComponent, AvatarComponent,
   StakeholderIdentificationComponent,
   FooterComponent,
   HeaderComponent,
@@ -18,7 +18,6 @@ import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, To
 @NgModule({
   declarations: [
     AvatarComponent,
-    DesignReviewExitCriteriaComponent,
     StakeholderIdentificationComponent,
     TaskbarComponent,
     FooterComponent,
@@ -45,7 +44,6 @@ import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, To
   ],
   exports: [
     AvatarComponent,
-    DesignReviewExitCriteriaComponent,
     StakeholderIdentificationComponent,
     TaskbarComponent,
     FooterComponent,

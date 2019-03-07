@@ -46,14 +46,14 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
       this.ideate = data['ideate'][3];
       this.plan = data['plan'];
 
-      for (let i = 0; i < this.ideate.length - 1; i++) {
+      for (let i = 0; i < this.ideate.length-1; i++) {
         if (this.ideate[i]['status'] !== 'Completed') {
           this.requestApprovalAvailable = false;
           break;
         }
       }
 
-      for (let i = 0; i < this.plan.length - 1; i++) {
+      for (let i = 0; i < this.plan.length-1; i++) {
         if (this.plan[i]['status'] !== 'Completed') {
           this.requestApprovalAvailable = false;
           break;
@@ -77,6 +77,8 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
 
   actionStatusColor(status) {
     if (status === 'Completed') {
+      return 'GREEN';
+    } else if (status === 'Not Applicable') {
       return 'GREEN';
     } else if (status === 'pending') {
       return 'RED';

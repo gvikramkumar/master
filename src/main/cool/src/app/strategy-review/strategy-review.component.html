@@ -4,7 +4,7 @@
       [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
     </app-menu-bar>
     <div class="panel-wrapper mt-15">
-      <app-taskbar [isValidToProceed]="!proceedButtonStatusValid" (onProceedToNext)="offerDetailOverView($event)">
+      <app-taskbar [isValidToProceed]="!proceedButtonStatusValid" (onProceedToNext)="offerDetailOverView()">
       </app-taskbar>
 
       <div class="contentBox mt-10">
