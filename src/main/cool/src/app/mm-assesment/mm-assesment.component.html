@@ -4,30 +4,12 @@
     <app-menu-bar [caseId]="caseId" [currentMMModel]="currentMMModel" [offerId]="currentOfferId"
       [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)">
     </app-menu-bar>
-    
-    <div class="panel-wrapper mt-15">
 
-      <!-- Blue bar -->
-      <div class="panel panel--indigo panel--compressed task--bar">
-        <div class="row">
-          <div class="col-md-4">
-            <h4 *ngIf="!dimensionMode"><button [disabled]="!backbuttonStatusValid" (click)='goBackToOffercreation()'
-                class="btn--back btn btn--icon btn--white"><span class="icon-back"></span></button> Offer Builder</h4>
-            <h4 *ngIf="dimensionMode"><button [disabled]="!backbuttonStatusValid" (click)='goBackToStrategyReview()'
-                class="btn--back btn btn--icon btn--white"><span class="icon-back"></span></button> Offer Builder</h4>
-          </div>
-          <div class="col-md-8 text-right">
-              <button *ngIf="dimensionMode" class="btn btn--white" (click)='proceedToOfferSolution(false)'> Save </button>
-            <button class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View </button>
-            <button *ngIf="!dimensionMode" class="btn btn--white" [disabled]="!proceedButtonStatusValid"
-              (click)='proceedToStakeholder()'>Proceed to Stakeholder Identification <span
-                class="icon-chevron-right"></span></button>
-            <button *ngIf="dimensionMode" class="btn btn--white" [disabled]="!proceedButtonStatusValid"
-              (click)='proceedToOfferSolution()'>Proceed to Offer Solutioning <span
-                class="icon-chevron-right"></span></button>
-          </div>
-        </div>
-      </div>
+    <div class="panel-wrapper mt-15">
+      <app-taskbar *ngIf="!dimensionMode" [isValidToProceed]="!proceedButtonStatusValid"
+        (onProceedToNext)="proceedToStakeholder($event)" [showSave]="false"></app-taskbar>
+      <app-taskbar *ngIf="dimensionMode" [isValidToProceed]="!proceedButtonStatusValid"
+        (onProceedToNext)="proceedToOfferSolution($event)" [showSave]="false"></app-taskbar>
 
       <div class="contentBox mt-10">
         <div class="row">

@@ -23,7 +23,6 @@
               </button>
             </div>
           </div>
-
           <div *ngFor="let question of groupData[group][subgroup].questions, index as i">
             <app-offer-solution-question [questionData]="question" [questionIndex]="i"
               [groupIndex]="question.questionNo" [stakeData]="stakeData" [offerData]="offerData">

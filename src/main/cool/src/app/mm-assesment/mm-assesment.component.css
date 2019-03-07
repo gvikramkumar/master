@@ -246,9 +246,6 @@ span.avatar-ico {
 .cui .task--bar .btn {
   border-radius: 6px !important;
 }
-.btn span.icon-chevron-right {
-  margin-left: 15px;
-}
 .offerID {
   text-transform: uppercase;
   color:#666666;
