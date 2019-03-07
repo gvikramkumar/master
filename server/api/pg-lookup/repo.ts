@@ -191,11 +191,12 @@ export default class PgLookupRepo {
             l4_sales_territory_name_code,
             l5_sales_territory_name_code,
             l6_sales_territory_name_code,
-            sales_territory_name
+            sales_territory_name,
+            sales_territory_name_code
             from fpacon.vw_fpa_sales_hierarchy
             where sales_territory_type_code in ('CORP. REVENUE')
-			group by 1,2,3,4,5,6,7,8,9,10,11,12,13            
-			order by 1,2,3,4,5,6,7,8,9,10,11,12,13;            
+			group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14            
+			order by 1,2,3,4,5,6,7,8,9,10,11,12,13,14;            
           `)
       .then(results => results.rows);
   }

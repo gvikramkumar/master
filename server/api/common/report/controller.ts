@@ -129,10 +129,10 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['Sales Hierarchy'];
         excelHeaders = ['Sales Level 1', 'Sales Level 2', 'Sales Level 3', 'Sales Level 4', 'Sales Level 5', 'Sales Level 6',
           'L1 Sales Territory Name Code', 'L2 Sales Territory Name Code', 'L3 Sales Territory Name Code', 'L4 Sales Territory Name Code', 'L5 Sales Territory Name Code', 'L6 Sales Territory Name Code',
-        'Sales Territory Name'];
+        'Sales Territory Name', 'Sales Territory Name Code'];
         excelProperties = ['l1_sales_territory_descr', 'l2_sales_territory_descr', 'l3_sales_territory_descr', 'l4_sales_territory_descr', 'l5_sales_territory_descr', 'l6_sales_territory_descr',
           'l1_sales_territory_name_code', 'l2_sales_territory_name_code', 'l3_sales_territory_name_code', 'l4_sales_territory_name_code', 'l5_sales_territory_name_code', 'l6_sales_territory_name_code',
-        'sales_territory_name'];
+        'sales_territory_name', 'sales_territory_name_code'];
         promise = this.pgLookupRepo.getSalesHierarchyReport();
         break;
 
