@@ -222,8 +222,8 @@ export class OfferSolutioningComponent implements OnInit {
           .mapValues((value, key) => {
             const returnObj = {
               questions: value,
-              subGroupChoicesGiven: value[0].attribute,
-              subGroupChoicesSelected: value[0].selectedAttributes
+              subGroupChoicesGiven: _.uniq(value.reduce((acc, val) => { acc = acc.concat(val.attribute); return acc; }, [])),
+              subGroupChoicesSelected: _.uniq(value.reduce((acc, val) => { acc = acc.concat(val.selectedAttributes); return acc; }, []))
             };
             return returnObj;
           }).value())
