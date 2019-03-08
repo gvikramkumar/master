@@ -2,7 +2,12 @@ const fs = require('fs'),
   mg = require('mongoose');
 
 const args = process.argv;
-const uri = `mongodb://${args[2]}:${args[3]}/${args[4]}`;
+let uri;
+if (args[5] && args[6]) { // user/pass
+  uri = `mongodb://${args[5]}:${args[6]}@${args[2]}:${args[3]}/${args[4]}`;
+} else {
+  uri = `mongodb://${args[2]}:${args[3]}/${args[4]}`;
+}
 
 mg.connect(uri, {useNewUrlParser: true})
   .then(() => {
