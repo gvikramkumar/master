@@ -312,7 +312,49 @@ export default class PgLookupRepo {
             from fpadfa.dfa_prof_sales_split_pctmap_upld
             where fiscal_month_id = ${fiscalMonth}
           `)
-          .then(results => results.rows);
+      .then(results => results.rows);
+  }
+
+  getServiceMapReport(fiscalMonth) {
+    return pgc.pgdb.query(`
+        select  
+        sales_territory_code,
+        sales_node_level_1_code,
+        sales_node_level_2_code,
+        sales_node_level_3_code,
+        sales_node_level_4_code,
+        sales_node_level_5_code,
+        sales_node_level_6_code,
+        business_entity,
+        technology_group,
+        business_unit,
+        product_family,
+        split_percentage,
+        fiscal_month_id,
+        update_owner,
+        update_datetimestamp
+        from fpadfa.dfa_prof_service_map_upld
+        where fiscal_month_id = ${fiscalMonth}
+          `)
+      .then(results => results.rows);
+  }
+
+  getServiceTrainingReport(fiscalYear) {
+    return pgc.pgdb.query(`
+        select  
+        sales_territory_code,
+        sales_node_level_3_code,
+        ext_theater_name,
+        sales_country_name,
+        product_family,
+        split_percentage,
+        fiscal_year,
+        update_owner,
+        update_datetimestamp
+        from fpadfa.dfa_prof_service_trngsplit_pctmap_upld
+        where fiscal_year = ${fiscalYear}
+          `)
+      .then(results => results.rows);
   }
 
   getAdjustmentPFReport() {
