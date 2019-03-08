@@ -24,6 +24,8 @@ mg.connect(uri, {useNewUrlParser: true})
       {fileName: 'alternate_sl2_upload_template.xlsx', buUploadType: 'alternate-sl2-upload'},
       {fileName: 'corp_adjustments_upload_template.xlsx', buUploadType: 'corp-adjustments-upload'},
       {fileName: 'disty_to_direct_upload_template.xlsx', buUploadType: 'disti-direct-upload'},
+      {fileName: 'service_map_upload_template.xlsx', buUploadType: 'service-map-upload'},
+      {fileName: 'service_training_split_upload_template.xlsx', buUploadType: 'service-training-upload'},
     ]
 
     buTemplates.forEach(template => {

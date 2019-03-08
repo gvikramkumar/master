@@ -15,6 +15,7 @@ import {SyncMap} from '../../../shared/models/sync-map';
 import DatabaseController from '../../api/database/controller';
 import config from '../../config/get-config';
 import {injector} from '../common/inversify.config';
+import {shUtil} from '../../../shared/shared-util';
 
 
 export default class UploadController {
@@ -133,6 +134,8 @@ export default class UploadController {
   removeOtherFiscalMonthUploads() {
     if (this.repo.hasFiscalMonth()) {
       return this.repo.removeMany({fiscalMonth: {$ne: this.fiscalMonth}});
+    } else if (this.repo.hasFiscalYear()) {
+      return this.repo.removeMany({fiscalYear: {$ne: shUtil.fiscalYearFromFiscalMonth(this.fiscalMonth)}});
     } else {
       return Promise.resolve();
     }
@@ -393,6 +396,15 @@ export default class UploadController {
     // todo: need a measureId to measureRole map (from ART data) to determine measure role here
     if (!this.user.isAuthorized('super-user')) {
       this.addError('', `Not authorized for this measure: ${this.submeasure.measureId}.`);
+    }
+    return Promise.resolve();
+  }
+
+  validateProperty(temp, prop, values, required?) {
+    if (required && !this.temp[prop]) {
+      this.addErrorRequired(this.PropNames[prop]);
+    } else if (this.temp[prop] !== undefined && this.notExists(values, this.temp[prop])) {
+      this.addErrorInvalid(this.PropNames[prop], this.temp[prop]);
     }
     return Promise.resolve();
   }

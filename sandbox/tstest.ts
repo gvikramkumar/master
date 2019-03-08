@@ -6,6 +6,17 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {take, first} from 'rxjs/operators';
 
 
+
+
+/*
+function fiscalYearFromFiscalMonth(fimo) {
+  return Number(fimo.toString().substr(0, 4));
+}
+
+console.log(fiscalYearFromFiscalMonth(201905));
+*/
+
+/*
 const users = [
   {name: 'dank', age: 50},
   {name: 'dank', age: 45},
@@ -13,6 +24,7 @@ const users = [
 ]
 console.log(users);
 console.log(_.orderBy(users, ['name']));
+*/
 
 /*
 const arr = [{}, {}]

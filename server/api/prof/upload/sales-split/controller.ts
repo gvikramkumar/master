@@ -9,9 +9,11 @@ import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import DollarUploadImport from '../dollar/import';
 import DeptUploadImport from '../dept/import';
+import AnyObj from '../../../../../shared/models/any-obj';
 
 @injectable()
 export default class SalesSplitUploadUploadController extends UploadController {
+  imports: AnyObj[];
 
   constructor(
     repo: SalesSplitUploadRepo,

@@ -19,6 +19,8 @@ export class ProgressComponent {
         this.timer = setInterval(() => {
           if (this.value < 101) {
             this.value += 1;
+          } else {
+            this.value = 0;
           }
         }, 300);
       } else {

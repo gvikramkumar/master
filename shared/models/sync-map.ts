@@ -17,6 +17,8 @@ export class SyncMap {
   dfa_prof_scms_triang_corpadj_map_upld = false;
   dfa_prof_swalloc_manualmix_upld = false;
   dfa_prof_disti_to_direct_map_upld = false;
+  dfa_prof_service_map_upld = false;
+  dfa_prof_service_trngsplit_pctmap_upld = false;
 
   constructor(data?: AnyObj) {
     if (data) {

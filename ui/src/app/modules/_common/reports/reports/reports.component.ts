@@ -19,6 +19,7 @@ interface ReportSettings {
   submeasureKey?: number;
   submeasureKeys?: number[];
   fiscalMonth?: number;
+  fiscalYear?: number;
   fiscalMonthMultiSels?: number[];
   excelFilename: string;
   moduleId: number;
@@ -33,6 +34,7 @@ interface Report {
   hasSubmeasureOnly: boolean;
   hasMultiSubmeasureOnly: boolean;
   hasFiscalMonthOnly: boolean;
+  hasFiscalYearOnly: boolean;
   hasMultiFiscalMonthOnly: boolean;
   hasSmAndFiscalMonth: boolean;
   hasMultiSmAndFiscalMonth: boolean;
@@ -51,6 +53,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   fiscalMonths: {fiscalMonth: number}[] = [];
   fiscalMonthMultiSels: number[];
   fiscalMonthMultis = shUtil.getFiscalMonthListFromDate(new Date(), 15);
+  fiscalYear: number;
+  fiscalYears: {name: string, value: number}[];
   measures: Measure[] = [];
   measuresAll: Measure[] = [];
   submeasuresAll: Submeasure[] = [];
@@ -123,8 +127,16 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     {
       type: 'disti-direct', hasFiscalMonthOnly: true, text: 'Disty to Direct Mapping', disabled: false,
       filename: 'Disty_to_Direct_Mapping_Report'
-    }
-  ];
+    },
+    {
+      type: 'service-map', hasFiscalMonthOnly: true, text: 'Service Mapping Split Percentage', disabled: false,
+      filename: 'Service_Mapping_Report'
+    },
+    {
+      type: 'service-training', hasFiscalYearOnly: true, text: 'Service Training Split Percentage', disabled: false,
+      filename: 'Service_Training_Report'
+    },
+];
   report: Report;
 
   constructor(
@@ -159,6 +171,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.fiscalMonthMultiSels = [this.fiscalMonthMultis[0].fiscalMonth];
     this.submeasures = [];
     this.fiscalMonths = [];
+    this.fiscalYears = [];
     if (this.report && (this.report.hasNoChoices || this.report.type === 'rule-submeasure')) {
       this.disableDownload = false;
     } else {
@@ -171,6 +184,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   getInitialData() {
     let obsFiscalMonth;
+    let obsFiscalYear;
     let obsMeasure;
     switch (this.report.type) {
       case 'sales-split-percentage':
@@ -187,6 +201,12 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'disti-direct':
         obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_disti_to_direct_map_upld', 'fiscal_month_id');
+        break;
+      case 'service-map':
+        obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_map_upld', 'fiscal_month_id');
+        break;
+      case 'service-training':
+        obsFiscalYear = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_trngsplit_pctmap_upld', 'fiscal_year');
         break;
       case 'valid-slpf-driver':
       case 'dollar-upload':
@@ -205,6 +225,16 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
         if (this.fiscalMonths.length) {
           this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
+          this.disableDownload = false;
+        }
+      });
+    }
+    if (obsFiscalYear) {
+      obsFiscalYear.subscribe(fiscalYears => {
+        this.fiscalYears = fiscalYears.map(fy => ({name: `FY${fy}`, value: fy}));
+        this.fiscalYears = _.orderBy(this.fiscalYears, ['value'], ['desc']);
+        if (this.fiscalYears.length) {
+          this.fiscalYear = this.fiscalYears[0].value;
           this.disableDownload = false;
         }
       });
@@ -314,6 +344,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       return this.report.filename + `_${_.snakeCase(sm.name)}_${dateStr}.xlsx`;
     } else if (this.report.hasFiscalMonthOnly || this.report.hasMultiSmAndFiscalMonth) {
       return this.report.filename + `_${this.fiscalMonth}.xlsx`;
+    } else if (this.report.hasFiscalYearOnly) {
+      return this.report.filename + `_${this.fiscalYear}.xlsx`;
     } else {
       return this.report.filename + `_${dateStr}.xlsx`;
     }
@@ -323,20 +355,20 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     const params = <ReportSettings>{
       excelFilename: this.getFilename()
     };
-
     if (this.report.hasSubmeasureOnly || this.report.hasSmAndFiscalMonth) {
       params.submeasureKey = this.submeasureKey;
     }
-
     if (this.report.hasMultiSubmeasureOnly || this.report.hasMultiSmAndFiscalMonth) {
       params.submeasureKeys = this.submeasureKeys;
     }
-
     if (this.report.hasSmAndFiscalMonth || this.report.hasMultiSmAndFiscalMonth || this.report.hasFiscalMonthOnly) {
       params.fiscalMonth = this.fiscalMonth;
     }
     if (this.report.hasMultiFiscalMonthOnly) {
       params.fiscalMonthMultiSels = this.fiscalMonthMultiSels;
+    }
+    if (this.report.hasFiscalYearOnly) {
+      params.fiscalYear = this.fiscalYear;
     }
     params.moduleId = this.store.module.moduleId;
     const url = `${environment.apiUrl}/api/report/${this.report.type}`;

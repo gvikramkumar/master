@@ -33,6 +33,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   selectedFileName = '';
   templates: FsFile[];
   openPeriod: OpenPeriod;
+
   uploadTypes = [
     {type: 'dollar-upload', text: 'Input Dollar Adjustments', disabled: false},
     {type: 'mapping-upload', text: 'Manual Mapping Split Percentage', disabled: false},
@@ -42,6 +43,8 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     {type: 'alternate-sl2-upload', text: 'Alternate SL2 Mapping', disabled: false},
     {type: 'corp-adjustments-upload', text: 'Corp Adjustments Mapping', disabled: false},
     {type: 'disti-direct-upload', text: 'Disty to Direct Mapping', disabled: false},
+    {type: 'service-map-upload', text: 'Service Mapping Split Percentage', disabled: false},
+    {type: 'service-training-upload', text: 'Service Training Mapping Split Percentage', disabled: false},
   ];
   uploadType: UploadType;
 

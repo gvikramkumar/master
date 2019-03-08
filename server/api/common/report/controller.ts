@@ -23,6 +23,7 @@ import {MappingUploadPgRepo} from '../../prof/mapping-upload/pgrepo';
 import {DeptUploadPgRepo} from '../../prof/dept-upload/pgrepo';
 import {Submeasure} from '../../../../shared/models/submeasure';
 import {ProductClassUploadPgRepo} from '../../prof/product-class-upload/pgrepo';
+import {OrmTypes} from '../../../lib/base-classes/Orm';
 
 @injectable()
 export default class ReportController extends ControllerBase {
@@ -129,10 +130,10 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['Sales Hierarchy'];
         excelHeaders = ['Sales Level 1', 'Sales Level 2', 'Sales Level 3', 'Sales Level 4', 'Sales Level 5', 'Sales Level 6',
           'L1 Sales Territory Name Code', 'L2 Sales Territory Name Code', 'L3 Sales Territory Name Code', 'L4 Sales Territory Name Code', 'L5 Sales Territory Name Code', 'L6 Sales Territory Name Code',
-        'Sales Territory Name'];
+        'Sales Territory Name', 'Sales Territory Name Code'];
         excelProperties = ['l1_sales_territory_descr', 'l2_sales_territory_descr', 'l3_sales_territory_descr', 'l4_sales_territory_descr', 'l5_sales_territory_descr', 'l6_sales_territory_descr',
           'l1_sales_territory_name_code', 'l2_sales_territory_name_code', 'l3_sales_territory_name_code', 'l4_sales_territory_name_code', 'l5_sales_territory_name_code', 'l6_sales_territory_name_code',
-        'sales_territory_name'];
+        'sales_territory_name', 'sales_territory_name_code'];
         promise = this.pgLookupRepo.getSalesHierarchyReport();
         break;
 
@@ -221,6 +222,23 @@ export default class ReportController extends ControllerBase {
         excelHeaders = ['Account Id', 'Company Code', 'Sub Account Code', 'Sales Territory Code', 'Percentage Value', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
         excelProperties = ['account_code', 'company_code', 'sub_account_code', 'sales_territory_code', 'split_percentage', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = this.pgLookupRepo.getSalesSplitPercentageReport(body.fiscalMonth);
+        break;
+
+      case 'service-map':
+        excelSheetname = ['Service Mapping Upload'];
+        excelHeaders = ['Sales Territory Code', 'Sales Level 1 Code', 'Sales Level 2 Code', 'Sales Level 3 Code', 'Sales Level 4 Code', 'Sales Level 5 Code', 'Sales Level 6 Code',
+          'Legal Entity', 'Technology Group', 'Business Unit', 'Product Family', 'Split Percentage', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['sales_territory_code', 'sales_node_level_1_code', 'sales_node_level_2_code', 'sales_node_level_3_code', 'sales_node_level_4_code', 'sales_node_level_5_code',
+          'sales_node_level_6_code', 'business_entity', 'technology_group', 'business_unit', 'product_family', 'split_percentage', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
+        promise = this.pgLookupRepo.getServiceMapReport(body.fiscalMonth);
+        break;
+
+      case 'service-training':
+        excelSheetname = ['Service Training Upload'];
+        excelHeaders = ['Sales Territory Code', 'Sales Level 3 Code', 'External Theater', 'Sales Country', 'Product Family', 'Split Percentage', 'Fiscal Year', 'Uploaded By', 'Uploaded Date'];
+        excelProperties = ['sales_territory_code', 'sales_node_level_3_code', 'ext_theater_name', 'sales_country_name', 'product_family', 'split_percentage',
+          'fiscal_year', 'update_owner', 'update_datetimestamp'];
+        promise = this.pgLookupRepo.getServiceTrainingReport(body.fiscalYear);
         break;
 
       case 'valid-driver':

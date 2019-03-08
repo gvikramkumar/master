@@ -48,6 +48,7 @@
                       [disabled]="(report?.hasSmAndFiscalMonth && !this.submeasureKey) || (report?.hasMultiSmAndFiscalMonth && !this.submeasureKeys.length)"></cui-select>
           <cui-multiselect *ngIf="report?.hasMultiFiscalMonthOnly" label="Fiscal Month" [items]="fiscalMonthMultis" [(ngModel)]="fiscalMonthMultiSels"
                       (ngModelChange)="fiscalMonthMultiChange()"  optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-multiselect>
+          <cui-select *ngIf="report?.hasFiscalYearOnly" label="Fiscal Year" [items]="fiscalYears" [(ngModel)]="fiscalYear" optionsKey="name" optionsValue="value"></cui-select>
 
           <div class="fin-footer-buttons">
             <button (click)="downloadReport()" [disabled]="disableDownload"
