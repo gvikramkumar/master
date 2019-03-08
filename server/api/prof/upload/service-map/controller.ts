@@ -1,16 +1,13 @@
 import {injectable} from 'inversify';
 import UploadController from '../../../../lib/base-classes/upload-controller';
-import ServiceMapUploadRepo from '../../sales-split-upload/repo';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import ServiceMapUploadTemplate from './template';
 import * as _ from 'lodash';
 import ServiceMapUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
-import DollarUploadImport from '../dollar/import';
-import DeptUploadImport from '../dept/import';
-import MappingUploadImport from '../mapping/import';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
+import ServiceMapUploadRepo from '../../service-map-upload/repo';
 
 @injectable()
 export default class ServiceMapUploadUploadController extends UploadController {
@@ -27,7 +24,7 @@ imports: ServiceMapUploadImport[];
       openPeriodRepo,
       submeasureRepo
     );
-    this.uploadName = 'Service Map Upload';
+    this.uploadName = 'Service Mapping Upload';
 
     this.PropNames = {
       salesTerritoryCode: 'Sales Territory Code',
@@ -54,10 +51,10 @@ imports: ServiceMapUploadImport[];
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l4_sales_territory_name_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l5_sales_territory_name_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l6_sales_territory_name_code'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.fpadfa.dfa_business_entity', 'business_entity_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.fpacon.vw_fpa_products', 'technology_group_id'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.fpacon.vw_fpa_products', 'business_unit_id'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.fpacon.vw_fpa_products', 'product_family_id'),
+      this.pgRepo.getSortedUpperListFromColumn('fpadfa.dfa_business_entity', 'business_entity_name'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'technology_group_id'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'business_unit_id'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'product_family_id'),
     ])
       .then(results => {
         this.data.salesTerritoryNames = results[0];
@@ -100,10 +97,10 @@ imports: ServiceMapUploadImport[];
     this.imports.forEach(val => {
       const salesTerritoryCode = val.salesTerritoryCode.toUpperCase();
       const businessEntity = val.businessEntity.toUpperCase();
-      if (obj[salesTerritoryCode][businessEntity] !== undefined) {
+      if (obj[salesTerritoryCode] && obj[salesTerritoryCode][businessEntity] !== undefined) {
         obj[salesTerritoryCode][businessEntity] += val.splitPercentage;
       } else {
-        obj[salesTerritoryCode][businessEntity] = val.splitPercentage;
+        obj[salesTerritoryCode] = {[businessEntity]: val.splitPercentage};
       }
     });
     _.forEach(obj, (obj1, salesTerr) => {
@@ -115,7 +112,7 @@ imports: ServiceMapUploadImport[];
     });
 
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Sales Territory Code / Legal Entity percentage values not 100%', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Sales Territory Code / Legal Entity  percentage values not 100%', this.errors));
     }
     return Promise.resolve();
   }

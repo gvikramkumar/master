@@ -585,6 +585,10 @@ export default class RepoBase {
     return !!this.schema.path('fiscalMonth');
   }
 
+  hasFiscalYear() {
+    return !!this.schema.path('fiscalYear');
+  }
+
   createPredicateFromProperties(props) {
     return function (a, b) {
       if (!props.length) {

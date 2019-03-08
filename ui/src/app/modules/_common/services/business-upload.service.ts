@@ -35,6 +35,7 @@ export class BusinessUploadService {
     }
     const options = {headers: {Accept: 'application/json'}, params};
     const url = `${apiUrl}/api/prof/upload/${uploadType}`;
+    this.uiUtil.toastHide();
     return this.httpClient.post<{ status: string, numRows?: number }>(url, formData, options).toPromise()
       .then((result: UploadResults) => {
         fileInput.value = '';
@@ -49,7 +50,7 @@ export class BusinessUploadService {
           title = 'Failure';
           message = 'Errors have been emailed to your email account.';
         }
-        this.uiUtil.toast(message, title);
+        this.uiUtil.toastPerm(message, title);
         return result;
       });
   }

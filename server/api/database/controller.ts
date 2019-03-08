@@ -21,6 +21,8 @@ import * as _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
 import DistiDirectUploadController from '../prof/disti-direct-upload/controller';
 import config from '../../config/get-config';
+import ServiceMapUploadController from '../prof/service-map-upload/controller';
+import ServiceTrainingUploadController from '../prof/service-training-upload/controller';
 
 @injectable()
 export default class DatabaseController {
@@ -45,7 +47,9 @@ export default class DatabaseController {
     private salesSplitUploadCtrl: SalesSplitUploadController,
     private alternateSl2UploadCtrl: AlternateSl2UploadController,
     private corpAdjustmentsUploadCtrl: CorpAdjustmentsUploadController,
-    private distiDirectUploadController: DistiDirectUploadController
+    private distiDirectUploadController: DistiDirectUploadController,
+    private serviceMapUploadController: ServiceMapUploadController,
+    private serviceTrainingUploadController: ServiceTrainingUploadController
     ) {
   }
 
@@ -117,6 +121,15 @@ export default class DatabaseController {
         if (syncMap.dfa_prof_disti_to_direct_map_upld) {
           promises.push(this.distiDirectUploadController.mongoToPgSync('dfa_prof_disti_to_direct_map_upld', userId, log, elog,
             {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}, dfa));
+        }
+        if (syncMap.dfa_prof_service_map_upld) {
+          promises.push(this.serviceMapUploadController.mongoToPgSync('dfa_prof_service_map_upld', userId, log, elog,
+            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}, dfa));
+        }
+        if (syncMap.dfa_prof_service_trngsplit_pctmap_upld) {
+          const fiscalYear = shUtil.fiscalYearFromFiscalMonth( dfa.fiscalMonths.prof);
+          promises.push(this.serviceTrainingUploadController.mongoToPgSync('dfa_prof_service_trngsplit_pctmap_upld', userId, log, elog,
+            {fiscalYear}, {fiscalYear}, dfa));
         }
       })
       .then(() => {
@@ -198,6 +211,8 @@ export default class DatabaseController {
         {type: 'alternate-sl2-upload', syncMapProp: 'dfa_prof_scms_triang_altsl2_map_upld'},
         {type: 'corp-adjustments-upload', syncMapProp: 'dfa_prof_scms_triang_corpadj_map_upld'},
         {type: 'disti-direct-upload', syncMapProp: 'dfa_prof_disti_to_direct_map_upld'},
+        {type: 'service-map-upload', syncMapProp: 'dfa_prof_service_map_upld'},
+        {type: 'service-training-upload', syncMapProp: 'dfa_prof_service_trngsplit_pctmap_upld'},
       ]
     };
     const syncMap = new SyncMap();

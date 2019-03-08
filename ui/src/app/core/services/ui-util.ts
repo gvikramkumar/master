@@ -13,23 +13,22 @@ import {
   MatDialogConfig,
   MatSnackBar,
   MatSnackBarConfig,
-  MatSnackBarHorizontalPosition
+  MatSnackBarHorizontalPosition, MatSnackBarRef
 } from '@angular/material';
-import {ToastSeverity} from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UiUtil {
+  static alphanumRegex = `[A-Z0-9_\\- ]*`;
+  static alphanumMessage = 'Only capital alphanumeric/underscore/dash/space allowed';
+  toastRef: MatSnackBarRef<any>;
 
   constructor(
     private store: AppStore,
     public dialog: MatDialog,
     private matToast: MatSnackBar) {
   }
-
-  static alphanumRegex = `[A-Z0-9_\\- ]*`;
-  static alphanumMessage = 'Only capital alphanumeric/underscore/dash/space allowed';
 
 // clear the object's property if not in list. Uses lodash path for obj and list
   static clearPropertyIfNotInList(obj, prop, list, listProp?) {
@@ -160,26 +159,37 @@ export class UiUtil {
 
   // instance methods (must be after static methods)
 
-  toast(message, action = '') {
+  toast(message, action = '', duration?) {
 
     const options: MatSnackBarConfig = {
       horizontalPosition: 'center',
       verticalPosition: 'top',
-      duration: 5000,
+      duration: duration ? duration : 5000,
       panelClass: 'mat-snack-bar-override'
     };
-    this.matToast.open(message, action, options);
+    this.toastRef = this.matToast.open(message, action, options);
   }
 
-/*
-  showPermToast(title, message, severity = ToastSeverity.info) {
-    // this.permToast.addToast(severity, title, message);
+  toastHide() {
+    if (this.toastRef) {
+      this.toastRef.dismiss();
+    }
   }
 
-  showAutoHideToast(message, severity = ToastSeverity.info) {
-    // this.autoHideToast.addToast(severity, title, message);
+  toastPerm(message, action = '') {
+    const year = 365 * 24 * 60 * 60 * 1000;
+    this.toast(message, action, year); //
   }
-*/
+
+  /*
+      showPermToast(title, message, severity = ToastSeverity.info) {
+        // this.permToast.addToast(severity, title, message);
+      }
+
+      showAutoHideToast(message, severity = ToastSeverity.info) {
+        // this.autoHideToast.addToast(severity, title, message);
+      }
+    */
 
   genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
     if (this.dialog.openDialogs.length) {

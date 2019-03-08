@@ -1,16 +1,13 @@
 import {injectable} from 'inversify';
 import UploadController from '../../../../lib/base-classes/upload-controller';
-import ServiceTrainingUploadRepo from '../../sales-split-upload/repo';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import ServiceTrainingUploadTemplate from './template';
 import * as _ from 'lodash';
 import ServiceTrainingUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
-import DollarUploadImport from '../dollar/import';
-import DeptUploadImport from '../dept/import';
-import MappingUploadImport from '../mapping/import';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
+import ServiceTrainingUploadRepo from '../../service-training-upload/repo';
 
 @injectable()
 export default class ServiceTrainingUploadUploadController extends UploadController {
@@ -27,7 +24,7 @@ imports: ServiceTrainingUploadImport[];
       openPeriodRepo,
       submeasureRepo
     );
-    this.uploadName = 'Service Map Upload';
+    this.uploadName = 'Service Training Upload';
 
     this.PropNames = {
       salesTerritoryCode: 'Sales Territory Code',
@@ -43,9 +40,9 @@ imports: ServiceTrainingUploadImport[];
     return Promise.all([
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l3_sales_territory_name_code'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'dd_external_theater_name'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'external_theater_name'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_iso_country', 'iso_country_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.fpacon.vw_fpa_products', 'product_family_id'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'product_family_id'),
     ])
       .then(results => {
         this.data.salesTerritoryNames = results[0];
@@ -76,10 +73,10 @@ imports: ServiceTrainingUploadImport[];
     this.imports.forEach(val => {
       const salesTerritoryCode = val.salesTerritoryCode.toUpperCase();
       const salesNodeLevel3Code = val.salesNodeLevel3Code.toUpperCase();
-      if (obj[salesTerritoryCode][salesNodeLevel3Code] !== undefined) {
+      if (obj[salesTerritoryCode] && obj[salesTerritoryCode][salesNodeLevel3Code] !== undefined) {
         obj[salesTerritoryCode][salesNodeLevel3Code] += val.splitPercentage;
       } else {
-        obj[salesTerritoryCode][salesNodeLevel3Code] = val.splitPercentage;
+        obj[salesTerritoryCode] = {[salesNodeLevel3Code]: val.splitPercentage};
       }
     });
     _.forEach(obj, (obj1, salesTerr) => {
@@ -91,7 +88,7 @@ imports: ServiceTrainingUploadImport[];
     });
 
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Sales Territory Code / Sales Level 3 Code percentage values not 100%', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Sales Territory Code / Sales Level 3 Code  percentage values not 100%', this.errors));
     }
     return Promise.resolve();
   }
