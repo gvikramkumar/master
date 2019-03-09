@@ -6,6 +6,7 @@ import { OfferConstructService } from '../services/offer-construct.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { LeadTime } from '../right-panel/lead-time';
 import { OfferPhaseService } from '../services/offer-phase.service';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-offer-construct',
@@ -45,6 +46,7 @@ export class OfferConstructComponent implements OnInit {
     private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute,
     private offerPhaseService: OfferPhaseService,
+    private messageService: MessageService,
     private offerConstructService: OfferConstructService,
     private rightPanelService: RightPanelService) {
     this.activatedRoute.params.subscribe(params => {
@@ -189,6 +191,7 @@ export class OfferConstructComponent implements OnInit {
     this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload).subscribe(result => {
       this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload).subscribe(result => {
         if (msg !== 'stay_on_this_page') {
+          this.messageService.sendMessage('Save Offer Construct Details');
           this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
         }
       });

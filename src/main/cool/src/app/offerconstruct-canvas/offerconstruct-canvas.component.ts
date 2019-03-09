@@ -6,7 +6,7 @@ import {
   Input,
   OnChanges
 } from '@angular/core';
-import { TreeNode, MessageService } from 'primeng/api';
+import { TreeNode } from 'primeng/api';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
 import { MMItems } from './model/MMItems';
 import { ActivatedRoute } from '@angular/router';
@@ -25,11 +25,12 @@ import { StakeHolder } from '../models/stakeholder';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { filter } from 'rxjs/operators';
 import * as _ from 'lodash';
+import { MessageService } from '../services/message.service';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offerconstruct-canvas.component.html',
   styleUrls: ['./offerconstruct-canvas.component.css'],
-  providers: [MessageService, OfferConstructService]
+  providers: [OfferConstructService]
 })
 export class OfferconstructCanvasComponent implements OnInit {
   questionForm: FormGroup;
@@ -93,6 +94,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   copyAttributeResults;
   setTitle;
   setSearchItem;
+  subscription: Subscription;
   multiSelectItems: string[] = ['Route-to-Market',
     'Price List Availability',
     'GPL Publication',
@@ -571,6 +573,11 @@ export class OfferconstructCanvasComponent implements OnInit {
 
 
   ngOnInit() {
+
+    this.subscription = this.messageService.getMessage()
+      .subscribe(message => {
+        this.saveOfferConstructChanges();
+      });
 
     this.eGinieSearchForm = new FormGroup({
       searchPID: new FormControl(null, Validators.required)
