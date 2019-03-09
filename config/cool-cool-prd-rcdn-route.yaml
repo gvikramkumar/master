@@ -6,7 +6,7 @@ metadata:
   labels:
      component: "cool"
 spec:
-   host: "cool.cisco.com"
+   host: "cool-prd.cisco.com"
    to:
      kind: "Service"
      name: "cool"
