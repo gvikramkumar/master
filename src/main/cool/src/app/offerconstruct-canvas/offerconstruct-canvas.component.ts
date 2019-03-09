@@ -1091,7 +1091,15 @@ export class OfferconstructCanvasComponent implements OnInit {
   }
 
   discardChanges() {
-    this.offerConstructItems = [];
+    // Check if construct details are availbale in the database for the current offer.
+    this.offerDetailViewService.offerDetailView(this.currentOfferId).subscribe(offerDetailRes => {
+      if (offerDetailRes.constructDetails.length > 0) {
+        this.transformDataToTreeNode(offerDetailRes);
+      }
+    }, (err) => {
+      console.log(err);
+    });
+    this.offerConstructItems = [...this.offerConstructItems];
     this.countableItems = [];
     this.addedEgineMajorItemsInTree = [];
   }
