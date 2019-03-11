@@ -1093,7 +1093,7 @@ export class OfferconstructCanvasComponent implements OnInit {
   discardChanges() {
     // Check if construct details are availbale in the database for the current offer.
     this.offerDetailViewService.offerDetailView(this.currentOfferId).subscribe(offerDetailRes => {
-      if (offerDetailRes.constructDetails.length > 0) {
+      if (offerDetailRes.constructDetails) {
         this.transformDataToTreeNode(offerDetailRes);
       }
     }, (err) => {

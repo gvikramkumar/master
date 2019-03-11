@@ -191,10 +191,10 @@ export class OfferConstructComponent implements OnInit {
     this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload).subscribe(result => {
       this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload).subscribe(result => {
         if (msg !== 'stay_on_this_page') {
-          this.messageService.sendMessage('Save Offer Construct Details');
           this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
         }
       });
-    });
+    },(err) => console.log('error', err),
+    () => this.messageService.sendMessage('Save Offer Construct Details'));
   }
 }
