@@ -7,6 +7,32 @@ import {svrUtil} from '../server/lib/common/svr-util';
 
 
 
+/* 1 */
+const arr = [
+  {
+    "period" : "MTD"
+  },
+  {
+    "period" : "QTD"
+  },
+  {
+    "period" : "ROLL3"
+  },
+  {
+    "period" : "ROLL6"
+  },
+  {
+    "period" : "PRIOR ROLL3"
+  },
+  {
+    "period" : "PRIOR ROLL6"
+  },
+  {
+    "period" : "PERCENT"
+  };
+
+console.log(arr.map(v => v.period).sort());
+
 
 /*
 function fiscalYearFromFiscalMonth(fimo) {
