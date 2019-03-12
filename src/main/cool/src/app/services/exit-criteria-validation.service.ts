@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
 import { EnvironmentService } from '../../environments/environment.service';
-import { OfferDimensionComponent } from '../offer-dimension/offer-dimension.component';
 
 @Injectable()
 export class ExitCriteriaValidationService {

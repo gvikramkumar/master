@@ -9,7 +9,7 @@
       <app-taskbar *ngIf="!dimensionMode" [isValidToProceed]="!proceedButtonStatusValid"
         (onProceedToNext)="proceedToStakeholder($event)" [showSave]="false"></app-taskbar>
       <app-taskbar *ngIf="dimensionMode" [isValidToProceed]="!proceedButtonStatusValid"
-        (onProceedToNext)="proceedToOfferSolution($event)" [showSave]="false"></app-taskbar>
+        (onProceedToNext)="proceedToOfferSolution($event)" [showSave]="true"></app-taskbar>
 
       <div class="contentBox mt-10">
         <div class="row">
