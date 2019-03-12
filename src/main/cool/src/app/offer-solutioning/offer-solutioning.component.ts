@@ -331,7 +331,7 @@ export class OfferSolutioningComponent implements OnInit {
     });
   }
 
-  proceedToNextStep(msg) {
+  proceedToNextStep(routeTo) {
 
 
     // --------------------
@@ -418,7 +418,7 @@ export class OfferSolutioningComponent implements OnInit {
         'comment': ''
       };
       this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
-        if (msg !== 'stay_on_this_page') {
+        if (JSON.parse(routeTo) === true) {
           this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
         }
       });
