@@ -1,0 +1,90 @@
+kind: "Service"
+apiVersion: "v1"
+metadata:
+  name: "cool"
+spec:
+  ports:
+    -
+      name: "web"
+      protocol: "TCP"
+      port: 8080
+  selector:
+    name: "cool"
+  type: "ClusterIP"
+  sessionAffinity: "None"
+---
+kind: "DeploymentConfig"
+apiVersion: "v1"
+metadata:
+  name: "cool"
+spec:
+  template:
+    metadata:
+      labels:
+        name: "cool"
+      annotations:
+        app_version: 'latest'
+    spec:
+      containers:
+        -
+          name: "cool"
+          image: "containers.cisco.com/it_cvc_supply_chain/cooldev-sdaas_cool:__IMAGETAG__"
+          ports:
+            -
+              containerPort: 8080
+              protocol: "TCP"
+          env:
+            -
+              name: "APP_NAME"
+              value: "cool"
+            -
+              name: "CISCO_LC"
+              value: "dev"
+          volumeMounts:
+            -
+              name: podinfo
+              mountPath: /etc/metadata
+              readOnly: false
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            capabilities: {}
+            privileged: false
+          #readinessProbe:
+          #  httpGet:
+          #    path: "/"
+          #    port: 8080
+          #  initialDelaySeconds: 15
+          #  timeoutSeconds: 1
+          #livenessProbe:
+          #  exec:
+          #    command:
+          #      - "/bin/true"
+          #  initialDelaySeconds: 15
+          #  timeoutSeconds: 1
+      volumes:
+        -
+          name: podinfo
+          downwardAPI:
+            items:
+              -
+                path: "labels"
+                fieldRef:
+                  fieldPath: metadata.labels
+              -
+                path: "annotations"
+                fieldRef:
+                  fieldPath: metadata.annotations
+      restartPolicy: "Always"
+      dnsPolicy: "ClusterFirst"
+  replicas: 2
+  selector:
+    name: "cool"
+  triggers:
+    -
+      type: "ConfigChange"
+  strategy:
+    type: "Rolling"
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 120

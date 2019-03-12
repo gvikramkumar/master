@@ -233,11 +233,11 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   createActionAndNotification() {
+
     const primaryPOC = _.uniq(this.primaryPOC);
     const secondaryPOC = _.uniq(this.secondaryPOC);
-    const poc = _.uniq([...primaryPOC, ...secondaryPOC]);
 
-    const notificationAssignees = poc.reduce((accumulator, functionalRole) => {
+    const notificationAssignees = secondaryPOC.reduce((accumulator, functionalRole) => {
       const stakeholderBelongingToTheFunctionalRole = this.stake[functionalRole] ? this.stake[functionalRole].map(stakeholder => stakeholder['_id']) : [];
       accumulator = accumulator.concat(stakeholderBelongingToTheFunctionalRole);
       return accumulator;
