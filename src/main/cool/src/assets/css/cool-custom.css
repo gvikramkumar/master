@@ -889,6 +889,12 @@ span[class*="display-"] {
   right: 12px;
   left: initial;
 }
+.cool.cui .one-third-width {
+  width: 33%;
+}
+.cool.cui .one-qtr-width {
+  width: 25%;
+}
 /* Offer Solutioning */
 .cool.cui .solutioning .card .card__header {
   margin: -10px;
