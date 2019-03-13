@@ -4,7 +4,8 @@ import {
   ChangeDetectorRef,
   ElementRef,
   Input,
-  OnChanges
+  OnChanges,
+  OnDestroy
 } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
@@ -32,7 +33,7 @@ import { MessageService } from '../services/message.service';
   styleUrls: ['./offerconstruct-canvas.component.css'],
   providers: [OfferConstructService]
 })
-export class OfferconstructCanvasComponent implements OnInit {
+export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   questionForm: FormGroup;
   currentOfferId;
   caseId;
@@ -1300,5 +1301,10 @@ export class OfferconstructCanvasComponent implements OnInit {
       });
     });
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 }
 
