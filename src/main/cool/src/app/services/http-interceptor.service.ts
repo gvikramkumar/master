@@ -15,7 +15,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   constructor(private environmentService: EnvironmentService, private configurationService: ConfigurationService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.startsWith(this.environmentService.basepdafapi) && this.configurationService.startupData.token) {
+    if ((req.url.startsWith(this.environmentService.basepdafapi) || req.url.startsWith(this.environmentService.baseldapapi)) && this.configurationService.startupData.token) {
       const authReq = req.clone({ headers: req.headers.set('Authorization', `Bearer ${this.configurationService.startupData.token}`) });
       return next.handle(authReq)
     }
