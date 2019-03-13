@@ -68,10 +68,10 @@
             <table class="table table--compressed table--nostripes phase-popover half-margin-top">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>MILESTONE</th>
-                        <th>STATUS</th>
-                        <th>COMPLETION DATE</th>
+                        <th class="one-qtr-width"></th>
+                        <th class="one-qtr-width">MILESTONE</th>
+                        <th class="one-qtr-width">STATUS</th>
+                        <th class="one-qtr-width">COMPLETION DATE</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="offerPhaseDetailsList">
@@ -92,7 +92,7 @@
                                         <tr [class.innerrow]="ideateCount -1  > i  "
                                             *ngFor="let ideateData of offerPhaseDetailsList.ideate; let i = index">
 
-                                            <td>
+                                            <td class="one-third-width">
                                                 <div *ngIf="!ideateData.enable; else enableOfferPhase">
                                                     <span class="text-muted"
                                                         pTooltip="Dependent activities are not yet satisfied"
@@ -104,10 +104,10 @@
                                                 </ng-template>
                                             </td>
 
-                                            <td
+                                            <td class="one-third-width"
                                                 [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">
                                                 {{ideateData.status}}</td>
-                                            <td>{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
+                                            <td class="one-third-width">{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -128,7 +128,7 @@
                                     <tbody>
                                         <tr [class.innerrow]="planCount -1  > i  " class="innerrow"
                                             *ngFor="let ideateData of offerPhaseDetailsList.plan; let i = index">
-                                            <td>
+                                            <td class="one-third-width">
                                                 <div *ngIf="!ideateData.enable; else enableOfferPhase">
                                                     <span class="text-muted"
                                                         pTooltip="Dependent activities are not yet satisfied"
@@ -139,10 +139,10 @@
                                                             (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
-                                            <td
+                                            <td class="one-third-width"
                                                 [ngClass]="(ideateData.status == 'Completed' || ideateData.status == 'Not Applicable')?'text-success':'text-warning'">
                                                 {{ideateData.status}}</td>
-                                            <td>{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
+                                            <td class="one-third-width">{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

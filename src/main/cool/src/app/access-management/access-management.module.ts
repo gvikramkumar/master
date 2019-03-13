@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { AccessManagementComponent } from './access-management.component';
 import { AuthGuard } from '@shared/guards';
-import SharedModule from '@shared/shared.module';
+import {SharedModule} from '@shared/shared.module';
 
 const routes: Routes = [
   { path: '', component: AccessManagementComponent,

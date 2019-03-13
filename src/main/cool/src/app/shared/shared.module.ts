@@ -87,4 +87,4 @@ import { ToastModule } from 'primeng/toast';
     DialogModule, FormsModule, ReactiveFormsModule,
   ]
 })
-export default class SharedModule { }
+export class SharedModule { }

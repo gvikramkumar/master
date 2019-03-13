@@ -52,7 +52,6 @@ import { UserIdleModule } from 'angular-user-idle';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
 import { OfferconstructCanvasComponent } from './offer-construct-canvas/offerconstruct-canvas.component';
-import { BlueComponent } from './blue/blue.component';
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
@@ -65,7 +64,7 @@ import { IdpidValidatorDirective } from './create-offer-cool/idpid-validator.dir
 import { DynamicFormMultipleComponent } from './offer-construct-canvas/dynamic-form-multiple';
 import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
 import { DesignreviewComponent } from './designreview/designreview.component';
-import SharedModule from '@shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { EnvironmentService } from 'src/environments/environment.service';
 import { ConfigurationService, HttpInterceptorService, UserService } from '@shared/services';
 import { DesignReviewExitCriteriaComponent } from '@shared/components';
@@ -107,7 +106,6 @@ export function app_init(configService: ConfigurationService) {
     OfferConstructComponent,
     DynamicFormQuestionComponent,
     OfferconstructCanvasComponent,
-    BlueComponent,
     OfferSolutionQuestionComponent,
     EditfieldsComponent,
     ViewstrategyComponent,
