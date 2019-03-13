@@ -57,6 +57,7 @@ export class EnvironmentService {
     REST_API_GET_ICC_DETAILS_URL;
 
     basepdafapi = '';
+    baseldapapi = '';
 
     REST_API_URL_GET_CURRENT_USER;
     REST_API_URL_GET_LDAP_INFO;
@@ -118,6 +119,7 @@ export class EnvironmentService {
             case 'production':
                 this.baseapi = 'https://cool-srv.cisco.com/coolsrv';
                 this.basepdafapi = 'https://api-supplychain.cisco.com/pdafapp';
+                this.baseldapapi = 'https://pcam.cisco.com'
                 this.authtokenbaseapi = 'https://cloudsso.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-prd.cisco.com/cool';
@@ -127,7 +129,8 @@ export class EnvironmentService {
                 break;
             case 'stage':
                 this.baseapi = 'https://cool-srv-stg.cisco.com/coolsrv';
-                this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
+                this.basepdafapi = 'https://api-supplychain.cisco.com/pdafapp';
+                this.baseldapapi = 'https://pcam.cisco.com'
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-stg.cisco.com/cool';
@@ -137,7 +140,8 @@ export class EnvironmentService {
                 break;
             case 'qualityassurance':
                 this.baseapi = 'https://cool-srv-qa.cisco.com/coolsrv';
-                this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
+                this.basepdafapi = 'https://api-supplychain.cisco.com/pdafapp';
+                this.baseldapapi = 'https://pcam.cisco.com'
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-qa.cisco.com/cool';
@@ -147,7 +151,8 @@ export class EnvironmentService {
                 break;
             case 'development':
                 this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
-                this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
+                this.basepdafapi = 'https://api-supplychain.cisco.com/pdafapp';
+                this.baseldapapi = 'https://pcam.cisco.com'
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-dev.cisco.com/cool';
@@ -158,6 +163,7 @@ export class EnvironmentService {
             default:
                 this.baseapi = '/api';
                 this.basepdafapi = '/pdafapp';
+                this.baseldapapi = '/ldapapp';
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'http://localhost.cisco.com:4200';
@@ -172,7 +178,7 @@ export class EnvironmentService {
         /** PDAF API's */
 
         this.REST_API_URL_GET_CURRENT_USER = this.basepdafapi + '/system/1.1/get/currentUser';
-        this.REST_API_URL_GET_LDAP_INFO = this.basepdafapi + '/user/1.0/getLdapUserInfo';
+        this.REST_API_URL_GET_LDAP_INFO = this.baseldapapi + '/api/getLdapUserInfo';
         this.REST_API_PRIMARY_BUSINESS_ENTITY_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
         this.REST_API_PRIMARY_BUSINESS_ENTITY_LULU_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?columns=BE&distinct=true';
         this.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL = this.basepdafapi + '/mdm/1.0/hierarchy/getBUhierarchy?be=';
@@ -241,7 +247,7 @@ export class EnvironmentService {
         this.REST_API_POST_RULE_RESULT_URL = this.baseapi + '/offer/offerDimensions';
         this.REST_API_GET_RULE_RESULT_URL = this.baseapi + '/offer/offerDimensions/';
         this.REST_API_OWB_CONTROLLER = this.baseapi + '/owb/create';
-        this.REST_API_USER_DETAILS = this.basepdafapi + '/user/1.0/getLdapUserInfo';
+        this.REST_API_USER_DETAILS = this.basepdafapi + '/api/getLdapUserInfo';
         this.REST_API_UPDATE_OFFER_TARGET_DATE = this.baseapi + '/offer/updateDates';
         this.REST_API_GET_OFFER_DATES = this.baseapi + '/offer/getDates/';
         this.GET_PID_DETAILS = this.baseapi + '/eGenie/getAttribute/';
