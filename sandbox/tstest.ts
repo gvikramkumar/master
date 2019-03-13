@@ -7,7 +7,7 @@ import {svrUtil} from '../server/lib/common/svr-util';
 
 
 
-/* 1 */
+/*
 const arr = [
   {
     "period" : "MTD"
@@ -29,9 +29,10 @@ const arr = [
   },
   {
     "period" : "PERCENT"
-  };
-
+  }
+];
 console.log(arr.map(v => v.period).sort());
+*/
 
 
 /*
