@@ -1,104 +1,6 @@
 const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
-db.dfa_measure.insertMany([
-  {
-    measureId: NumberInt(1),
-    moduleId: NumberInt(1),
-    name: "Indirect Revenue Adjustments",
-    typeCode: "REVADJ",
-    sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
-    hierarchies: ['PRODUCT', 'SALES'],
-    status: "A",
-    reportingLevel1: 'indirect1',
-    reportingLevel2: 'indirect2',
-    reportingLevel3: null,
-    reportingLevel1Enabled: false,
-    reportingLevel2Enabled: false,
-    reportingLevel3Enabled: false,
-    reportingLevel3SetToSubmeasureName: true
-  },
-  {
-    measureId: NumberInt(2),
-    moduleId: NumberInt(1),
-    name: "Standard COGS Adjustments",
-    typeCode: "STDCOGSADJ",
-    sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
-    hierarchies: ['PRODUCT', 'SALES'],
-    status: "A",
-    reportingLevel1: null,
-    reportingLevel2: null,
-    reportingLevel3: null,
-    reportingLevel1Enabled: true,
-    reportingLevel2Enabled: true,
-    reportingLevel3Enabled: true,
-
-  },
-  {
-    measureId: NumberInt(3),
-    moduleId: NumberInt(1),
-    name: "Manufacturing V&O",
-    typeCode: "MOCOGS",
-    sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
-    hierarchies: ['PRODUCT', 'SALES'],
-    status: "A",
-    reportingLevel1: null,
-    reportingLevel2: null,
-    reportingLevel3: null,
-    reportingLevel1Enabled: true,
-    reportingLevel2Enabled: true,
-    reportingLevel3Enabled: true,
-
-  },
-  {
-    measureId: NumberInt(4),
-    moduleId: NumberInt(1),
-    name: "Manufacturing Overhead",
-    typeCode: "MOVHD",
-    sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
-    hierarchies: ['PRODUCT', 'SALES'],
-    status: "A",
-    reportingLevel1: null,
-    reportingLevel2: null,
-    reportingLevel3: null,
-    reportingLevel1Enabled: true,
-    reportingLevel2Enabled: true,
-    reportingLevel3Enabled: true,
-
-  },
-  {
-    measureId: NumberInt(5),
-    moduleId: NumberInt(1),
-    name: "Manufacturing Supply Chain Expenses",
-    typeCode: "INVEX",
-    sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
-    hierarchies: ['PRODUCT', 'SALES'],
-    status: "A",
-    reportingLevel1: null,
-    reportingLevel2: null,
-    reportingLevel3: null,
-    reportingLevel1Enabled: true,
-    reportingLevel2Enabled: true,
-    reportingLevel3Enabled: true,
-
-  },
-  {
-    measureId: NumberInt(6),
-    moduleId: NumberInt(1),
-    name: "Warranty",
-    typeCode: "WAREX",
-    sources: [NumberInt(1), NumberInt(2),NumberInt(3), NumberInt(4)],
-    hierarchies: ['PRODUCT', 'SALES'],
-    status: "A",
-    reportingLevel1: null,
-    reportingLevel2: null,
-    reportingLevel3: null,
-    reportingLevel1Enabled: true,
-    reportingLevel2Enabled: true,
-    reportingLevel3Enabled: true,
-
-  },
-])
 
 db.dfa_open_period.insertMany([
   {moduleId: NumberInt(1), fiscalMonth: NumberInt(201904), openFlag: "Y"},
@@ -116,6 +18,10 @@ db.dfa_open_period.insertMany([
 
 db.dfa_lookup.insertMany([
   {
+    key: 'database-version',
+    value: 17
+  },
+  {
     key: 'build-number',
     value: "0"
   },
@@ -123,10 +29,8 @@ db.dfa_lookup.insertMany([
     key: 'itadmin-email',
     value: 'dfa-admin@cisco.com'
   },
-  {
-    key: 'database-version',
-    value: 0
-  },
+  {key: 'generic-users', value: ['dfaadmin.gen', 'dakahle', 'rsamband', 'amalakar']},
+  {key: 'ppmt-email', value: 'dfa-ppmt@cisco.com'},
   {
     key: 'revenue_classification',
     value: ["Recurring Deferred", "Recurring Non Deferred", "Recurring Other", "Non Recurring"]
@@ -141,74 +45,137 @@ db.dfa_lookup.insertMany([
       'akmehrot', 'kalaissu', 'heyeung', 'myjagade', // bizadmin only
     ]
   },
+  {
+    key: 'drivers',
+    value: [
+        {
+          "name" : "Software POS Revenue",
+          "value" : "POSREVSW"
+        },
+        {
+          "name" : "Svc Channel Revenue",
+          "value" : "MSCP"
+        },
+        {
+          "name" : "Shipped Revenue",
+          "value" : "SHIPREV"
+        },
+        {
+          "name" : "POS Revenue",
+          "value" : "REVPOS"
+        },
+        {
+          "name" : "Partner Dev Fund",
+          "value" : "PDF"
+        },
+        {
+          "name" : "Gross Revenue CMDM",
+          "value" : "GLREV"
+        },
+        {
+          "name" : "Legacy Driver",
+          "value" : "LEGACYDRVR"
+        },
+        {
+          "name" : "2T Subscription Revenue",
+          "value" : "2TSUBDIR"
+        },
+        {
+          "name" : "Net Revenue",
+          "value" : "GLREVMIX"
+        },
+        {
+          "name" : "Shipment",
+          "value" : "SHIPMENT"
+        },
+        {
+          "name" : "Remarketing Revenue",
+          "value" : "REMKTREV"
+        },
+        {
+          "name" : "VIP Rebate",
+          "value" : "VIP"
+        },
+        {
+          "name" : "POS Revenue Disty",
+          "value" : "REVPOSDIS"
+        },
+        {
+          "name" : "Svc Map",
+          "value" : "SERVMAP"
+        },
+        {
+          "name" : "Svc Sales Split PCT Map",
+          "value" : "SERVSLSMAP"
+        },
+        {
+          "name" : "Svc Training Split PCT Map",
+          "value" : "SERVTRNMAP"
+        },
+        {
+          "name" : "Svc Revenue",
+          "value" : "SVCREVT3"
+        },
+        {
+          "name" : "Def POS Revenue SW",
+          "value" : "DRPOSREVSW"
+        },
+        {
+          "name" : "Def Shipment",
+          "value" : "DRSHIPMENT"
+        },
+        {
+          "name" : "Def Ship Revenue SW",
+          "value" : "DRSHPREVSW"
+        },
+        {
+          "name" : "Default Driver DO NOT USE",
+          "value" : "DEFAULT"
+        },
+        {
+          "name" : "Shipped Revenue with POS Adj",
+          "value" : "SHREVPOS"
+        }
+      ]
+  },
+  {
+    "key" : "periods",
+    "value" : [
+      {
+        "period" : "MTD"
+      },
+      {
+        "period" : "QTD"
+      },
+      {
+        "period" : "ROLL3"
+      },
+      {
+        "period" : "ROLL6"
+      },
+      {
+        "period" : "PRIOR ROLL3"
+      },
+      {
+        "period" : "PRIOR ROLL6"
+      },
+      {
+        "period" : "PERCENT"
+      }
+    ]
+  }
 ]);
 
 db.dfa_module_data_source.insertMany([
   {moduleId: NumberInt(1), sources: [NumberInt(1),NumberInt(2), NumberInt(3),NumberInt(4)]}
 ])
 
-db.dfa_data_source.insertMany([
-  {
-    sourceId: NumberInt(1),
-    name: 'Rapid Revenue',
-    desc: 'Rapid Revenue source',
-    typeCode: 'RRR',
-    status: 'A'
-  },
-  {
-    sourceId: NumberInt(2),
-    name: 'MRAP',
-    desc: 'MRAP source',
-    typeCode: 'MRAP',
-    status: 'A'
-  },
-  {
-    sourceId: NumberInt(3),
-    name: 'Expense SSOT',
-    desc: 'Expense SSOT source',
-    typeCode: 'EXPMFGO',
-    status: 'A'
-  },
-  {
-    sourceId: NumberInt(4),
-    name: 'Manual Upload',
-    desc: 'Manual Upload source',
-    typeCode: 'EXCEL',
-    status: 'A'
-  },
-])
-
-const collectionsWithStatus = [
-  'dfa_allocation_rule',
-  'dfa_measure',
-  'dfa_module'
-];
-
-collectionsWithStatus.forEach(coll => {
-  db.getCollection(coll).updateMany({}, {
-    $set: {
-      status: 'A'
-    }
-  });
-});
-
-db.dfa_allocation_rule.updateMany({}, {$set: {approvedOnce: 'Y', activeStatus: 'A'}});
-
-db.dfa_allocation_rule.updateMany({salesMatch: ''}, {$unset: {salesMatch: ''}});
-db.dfa_allocation_rule.updateMany({productMatch: ''}, {$unset: {productMatch: ''}});
-db.dfa_allocation_rule.updateMany({scmsMatch: ''}, {$unset: {scmsMatch: ''}});
-db.dfa_allocation_rule.updateMany({legalEntityMatch: ''}, {$unset: {legalEntityMatch: ''}});
-db.dfa_allocation_rule.updateMany({beMatch: ''}, {$unset: {beMatch: ''}});
-db.dfa_allocation_rule.updateMany({sl1Select: ''}, {$unset: {sl1Select: ''}});
-db.dfa_allocation_rule.updateMany({scmsSelect: ''}, {$unset: {scmsSelect: ''}});
-db.dfa_allocation_rule.updateMany({beSelect: ''}, {$unset: {beSelect: ''}});
-
-
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   'dfa_allocation_rule',
   'dfa_data_source',
   'dfa_measure',
+  'dfa_submeasure',
   'dfa_module',
   'dfa_module_data_source',
   'dfa_open_period',
