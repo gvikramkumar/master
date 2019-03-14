@@ -17,15 +17,6 @@
             "^/pdafapp": ""
         }
     },
-    "/ldapapp": {
-        "target": "https://pcam.cisco.com",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {
-            "^/ldapapp": ""
-        }
-    },
     "/sso": {
         "target": "https://cloudsso-test.cisco.com",
         "secure": false,
