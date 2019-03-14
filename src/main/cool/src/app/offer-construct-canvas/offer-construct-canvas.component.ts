@@ -29,8 +29,8 @@ import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
 @Component({
   selector: 'app-offerconstruct-canvas',
-  templateUrl: './offerconstruct-canvas.component.html',
-  styleUrls: ['./offerconstruct-canvas.component.css'],
+  templateUrl: './offer-construct-canvas.component.html',
+  styleUrls: ['./offer-construct-canvas.component.css'],
   providers: [OfferConstructService]
 })
 export class OfferconstructCanvasComponent implements OnInit, OnDestroy {

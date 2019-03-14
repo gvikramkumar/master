@@ -10,8 +10,8 @@ import { RightPanelService } from '@app/services/right-panel.service';
 
 @Component({
   selector: 'app-designreview',
-  templateUrl: './designreview.component.html',
-  styleUrls: ['./designreview.component.css']
+  templateUrl: './design-review.component.html',
+  styleUrls: ['./design-review.component.css']
 })
 export class DesignReviewComponent implements OnInit {
   offerData: any;
