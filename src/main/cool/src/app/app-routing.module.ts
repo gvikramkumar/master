@@ -18,14 +18,15 @@ import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { AuthGuard } from './auth/gaurds/auth-guard';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
-//Temperoary
+
+// Temporoary
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { OasComponent } from './oas/oas.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
-import { DesignreviewComponent } from './designreview/designreview.component';
+import { DesignReviewComponent } from '@app/design-review/design-review.component';
 
 
 const routes: Routes = [
@@ -144,7 +145,7 @@ const routes: Routes = [
   },
   {
     path: 'designReview/:id/:id2',
-    component: DesignreviewComponent,
+    component: DesignReviewComponent,
     resolve: { offerData: OfferOverViewResolver }
   }
 
@@ -158,14 +159,5 @@ const routes: Routes = [
   providers: [],
   declarations: []
 })
-export class AppRoutingModule { }
 
-// @NgModule({
-//   exports: [RouterModule],
-//   imports: [
-//     CommonModule,
-//     [RouterModule.forRoot(routes,{ preloadingStrategy: PreloadAllModules })]
-//   ],
-//   declarations: []
-// })
-// export class AppRoutingModule { }
+export class AppRoutingModule { }

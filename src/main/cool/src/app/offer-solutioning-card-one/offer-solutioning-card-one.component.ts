@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-offersolutioning-card-one',
-  templateUrl: './offersolutioning-card-one.component.html',
-  styleUrls: ['./offersolutioning-card-one.component.css']
+  templateUrl: './offer-solutioning-card-one.component.html',
+  styleUrls: ['./offer-solutioning-card-one.component.css']
 })
 export class OffersolutioningCardOneComponent implements OnInit {
   @Input() groupData: Object;

@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MonetizationModelService } from '../services/monetization-model.service';
-import { StakeholderfullService } from '../services/stakeholderfull.service';
-import { StrategyReviewService } from '../services/strategy-review.service';
-import { ActionsService } from '../services/actions.service';
-import { SharedService } from '../shared-service.service';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { StrategyReviewService } from '@app/services/strategy-review.service';
+import { ActionsService } from '@app/services/actions.service';
+import { SharedService } from '@app/shared-service.service';
 import { Subscription, forkJoin } from 'rxjs';
-import { RightPanelService } from '../services/right-panel.service';
+import { RightPanelService } from '@app/services/right-panel.service';
 
 @Component({
   selector: 'app-designreview',
-  templateUrl: './designreview.component.html',
-  styleUrls: ['./designreview.component.css']
+  templateUrl: './design-review.component.html',
+  styleUrls: ['./design-review.component.css']
 })
-export class DesignreviewComponent implements OnInit {
+export class DesignReviewComponent implements OnInit {
   offerData: any;
   currentOfferId;
   caseId;
@@ -75,7 +75,7 @@ export class DesignreviewComponent implements OnInit {
       this.caseId = params['id2'];
     });
   }
-  offerDetailOverView(){}
+  offerDetailOverView() {}
   ngOnInit() {
     forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;

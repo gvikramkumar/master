@@ -51,7 +51,7 @@ import { AvatarComponent } from './directives/avatar/avatar.component';
 import { AccessManagementService } from './services/access-management.service';
 import { EnvironmentService } from '../environments/environment.service';
 import { MenuBarPopupComponent } from './menu-bar-popup/menu-bar-popup.component';
-import { MenuBarService } from './services/menu-bar.service'
+import { MenuBarService } from './services/menu-bar.service';
 import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { CreateActionService } from './services/create-action.service';
@@ -77,17 +77,16 @@ import { TurbotaxService } from './services/turbotax.service';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
-import { OffersolutioningCardOneComponent } from './offersolutioning-card-one/offersolutioning-card-one.component';
+import { OffersolutioningCardOneComponent } from '@app/offer-solutioning-card-one/offer-solutioning-card-one.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
-import { OfferconstructCanvasComponent } from './offerconstruct-canvas/offerconstruct-canvas.component';
+import { OfferconstructCanvasComponent } from '@app/offer-construct-canvas/offer-construct-canvas.component';
 import { DragDropModule } from 'primeng/dragdrop';
 import { TreeTableModule } from 'primeng/treetable';
-import { BlueComponent } from './blue/blue.component';
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
@@ -102,14 +101,14 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { IdpidValidatorDirective } from './create-offer-cool/idpid-validator.directive';
-import { DynamicFormMultipleComponent } from './offerconstruct-canvas/dynamic-form-multiple';
+import { DynamicFormMultipleComponent } from '@app/offer-construct-canvas/dynamic-form-multiple';
 import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
-import { DesignreviewComponent } from './designreview/designreview.component';
+import { DesignReviewComponent } from '@app/design-review/design-review.component';
 import {SharedModule} from '@shared/shared.module';
 import { DesignReviewExitCriteriaComponent } from './directives/design-review-exit-criteria/design-review-exit-criteria.component';
 
 export function app_init(configService: ConfigurationService, userService: UserService, envService: EnvironmentService) {
-  return () => { return configService.init(); };
+  return () => configService.init();
 }
 
 @NgModule({
@@ -153,14 +152,13 @@ export function app_init(configService: ConfigurationService, userService: UserS
     OfferConstructComponent,
     DynamicFormQuestionComponent,
     OfferconstructCanvasComponent,
-    BlueComponent,
     OfferSolutionQuestionComponent,
     EditfieldsComponent,
     ViewstrategyComponent,
     OasComponent,
     IdpidValidatorDirective,
     NotificationOfferDetailPopupComponent,
-    DesignreviewComponent,
+    DesignReviewComponent,
     DesignReviewExitCriteriaComponent
   ],
   imports: [
