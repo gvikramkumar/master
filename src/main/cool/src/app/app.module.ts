@@ -87,7 +87,6 @@ import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-fo
 import { OfferconstructCanvasComponent } from '@app/offer-construct-canvas/offer-construct-canvas.component';
 import { DragDropModule } from 'primeng/dragdrop';
 import { TreeTableModule } from 'primeng/treetable';
-import { BlueComponent } from './blue/blue.component';
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
@@ -104,7 +103,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { IdpidValidatorDirective } from './create-offer-cool/idpid-validator.directive';
 import { DynamicFormMultipleComponent } from '@app/offer-construct-canvas/dynamic-form-multiple';
 import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
-import { DesignreviewComponent } from '@app/design-review/design-review.component';
+import { DesignReviewComponent } from '@app/design-review/design-review.component';
 import {SharedModule} from '@shared/shared.module';
 import { DesignReviewExitCriteriaComponent } from './directives/design-review-exit-criteria/design-review-exit-criteria.component';
 
@@ -153,14 +152,13 @@ export function app_init(configService: ConfigurationService, userService: UserS
     OfferConstructComponent,
     DynamicFormQuestionComponent,
     OfferconstructCanvasComponent,
-    BlueComponent,
     OfferSolutionQuestionComponent,
     EditfieldsComponent,
     ViewstrategyComponent,
     OasComponent,
     IdpidValidatorDirective,
     NotificationOfferDetailPopupComponent,
-    DesignreviewComponent,
+    DesignReviewComponent,
     DesignReviewExitCriteriaComponent
   ],
   imports: [

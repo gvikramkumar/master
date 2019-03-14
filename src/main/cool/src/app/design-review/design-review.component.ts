@@ -13,7 +13,7 @@ import { RightPanelService } from '@app/services/right-panel.service';
   templateUrl: './designreview.component.html',
   styleUrls: ['./designreview.component.css']
 })
-export class DesignreviewComponent implements OnInit {
+export class DesignReviewComponent implements OnInit {
   offerData: any;
   currentOfferId;
   caseId;
