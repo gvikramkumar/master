@@ -51,7 +51,7 @@ import { AvatarComponent } from './directives/avatar/avatar.component';
 import { AccessManagementService } from './services/access-management.service';
 import { EnvironmentService } from '../environments/environment.service';
 import { MenuBarPopupComponent } from './menu-bar-popup/menu-bar-popup.component';
-import { MenuBarService } from './services/menu-bar.service'
+import { MenuBarService } from './services/menu-bar.service';
 import { BupmGuard } from './auth/gaurds/bupm-guard';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { CreateActionService } from './services/create-action.service';
@@ -108,7 +108,7 @@ import {SharedModule} from '@shared/shared.module';
 import { DesignReviewExitCriteriaComponent } from './directives/design-review-exit-criteria/design-review-exit-criteria.component';
 
 export function app_init(configService: ConfigurationService, userService: UserService, envService: EnvironmentService) {
-  return () => { return configService.init(); };
+  return () => configService.init();
 }
 
 @NgModule({
