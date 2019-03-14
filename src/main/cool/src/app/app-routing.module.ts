@@ -159,14 +159,5 @@ const routes: Routes = [
   providers: [],
   declarations: []
 })
-export class AppRoutingModule { }
 
-// @NgModule({
-//   exports: [RouterModule],
-//   imports: [
-//     CommonModule,
-//     [RouterModule.forRoot(routes,{ preloadingStrategy: PreloadAllModules })]
-//   ],
-//   declarations: []
-// })
-// export class AppRoutingModule { }
+export class AppRoutingModule { }
