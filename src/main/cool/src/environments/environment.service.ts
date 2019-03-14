@@ -129,8 +129,8 @@ export class EnvironmentService {
                 break;
             case 'stage':
                 this.baseapi = 'https://cool-srv-stg.cisco.com/coolsrv';
-                this.basepdafapi = 'https://api-supplychain.cisco.com/pdafapp';
-                this.baseldapapi = 'https://pcam.cisco.com'
+                this.basepdafapi = 'https://api-supplychain-stage.cisco.com/pdafapp';
+                this.baseldapapi = 'https://pcam-stage.cisco.com'
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-stg.cisco.com/cool';
@@ -140,8 +140,8 @@ export class EnvironmentService {
                 break;
             case 'qualityassurance':
                 this.baseapi = 'https://cool-srv-qa.cisco.com/coolsrv';
-                this.basepdafapi = 'https://api-supplychain.cisco.com/pdafapp';
-                this.baseldapapi = 'https://pcam.cisco.com'
+                this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
+                this.baseldapapi = 'https://pcam-dev.cisco.com'
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-qa.cisco.com/cool';
@@ -151,8 +151,8 @@ export class EnvironmentService {
                 break;
             case 'development':
                 this.baseapi = 'https://cool-srv-dev.cisco.com/coolsrv';
-                this.basepdafapi = 'https://api-supplychain.cisco.com/pdafapp';
-                this.baseldapapi = 'https://pcam.cisco.com'
+                this.basepdafapi = 'https://api-supplychain-dev.cisco.com/pdafapp';
+                this.baseldapapi = 'https://pcam-dev.cisco.com'
                 this.authtokenbaseapi = 'https://cloudsso-test.cisco.com';
                 this.client_id = 'cool_pdaf_client';
                 this.redirect_url = 'https://cool-dev.cisco.com/cool';
