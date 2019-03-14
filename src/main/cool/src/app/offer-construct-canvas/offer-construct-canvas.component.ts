@@ -8,25 +8,25 @@ import {
   OnDestroy
 } from '@angular/core';
 import { TreeNode } from 'primeng/api';
-import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
-import { MMItems } from './model/MMItems';
+import { OfferconstructCanvasService } from '@app/offer-construct-canvas/service/offerconstruct-canvas.service';
+import { MMItems } from '@app/offer-construct-canvas/model/MMItems';
 import { ActivatedRoute } from '@angular/router';
-import { SubGroup } from './model/SubGroup';
-import { Group } from './model/Group';
-import { Groups } from '../models/groups';
+import { SubGroup } from '@app/offer-construct-canvas/model/SubGroup';
+import { Group } from '@app/offer-construct-canvas/model/Group';
+import { Groups } from '@app/models/groups';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
-import { OfferConstructService } from '../services/offer-construct.service';
-import { ConstructDetails } from './model/ConstructDetails';
-import { ConstructDetail } from './model/ConstructDetail';
-import { ItemDetail } from './model/ItemDetail';
+import { OfferConstructService } from '@app/services/offer-construct.service';
+import { ConstructDetails } from '@app/offer-construct-canvas/model/ConstructDetails';
+import { ConstructDetail } from '@app/offer-construct-canvas/model/ConstructDetail';
+import { ItemDetail } from '@app/offer-construct-canvas/model/ItemDetail';
 import { group } from '@angular/animations';
 import { Observable, Subscription } from 'rxjs';
 import { async } from '@angular/core/testing';
-import { StakeHolder } from '../models/stakeholder';
-import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import { StakeHolder } from '@app/models/stakeholder';
+import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
 import { filter } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { MessageService } from '../services/message.service';
+import { MessageService } from '@app/services/message.service';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offerconstruct-canvas.component.html',

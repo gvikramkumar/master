@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, Renderer } from '@angu
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
-import { OfferConstructService } from '../services/offer-construct.service';
+import { OfferConstructService } from '@app/services/offer-construct.service';
 
 @Component({
     selector: 'dynamic-form-multiple',

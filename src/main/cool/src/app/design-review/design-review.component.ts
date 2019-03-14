@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MonetizationModelService } from '../services/monetization-model.service';
-import { StakeholderfullService } from '../services/stakeholderfull.service';
-import { StrategyReviewService } from '../services/strategy-review.service';
-import { ActionsService } from '../services/actions.service';
-import { SharedService } from '../shared-service.service';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { StrategyReviewService } from '@app/services/strategy-review.service';
+import { ActionsService } from '@app/services/actions.service';
+import { SharedService } from '@app/shared-service.service';
 import { Subscription, forkJoin } from 'rxjs';
-import { RightPanelService } from '../services/right-panel.service';
+import { RightPanelService } from '@app/services/right-panel.service';
 
 @Component({
   selector: 'app-designreview',
