@@ -76,19 +76,23 @@ export class DesignReviewComponent implements OnInit {
     });
   }
   offerDetailOverView() {}
+
   ngOnInit() {
+
     forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;
       this.getDesignReview(designReviewData);
       this.getMilestones(milstones);
       this.completeDesignReview();
     });
+
     this.data = [];
     this.message = {
       contentHead: 'Great Work!',
       content: 'Design Review Message.',
       color: 'black'
     };
+
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
       this.offerId = this.currentOfferId;
@@ -125,21 +129,9 @@ export class DesignReviewComponent implements OnInit {
       }
       this.stakeData = this.stakeHolderInfo;
     });
-    this.monetizationModelService.getAttributes().subscribe(data => {
-      this.offerData = data;
-      this.offerData['groups'].forEach(group => {
-        this.groupNames.push(group['groupName']);
-        const curGroup = {};
-        group['subGroup'].forEach(g => {
-          curGroup[g['subGroupName']] = [];
-          g.choices.forEach((c) => {
-            curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
-          });
-        });
-        this.groupData.push(curGroup);
-      });
-    });
+
     this.getOfferDetails();
+
   }
 
   private getMilestones(milestones) {
@@ -181,6 +173,7 @@ export class DesignReviewComponent implements OnInit {
   }
 
   completeDesignReview() {
+
     if (this.lastValueInMilestone['status'].toUpperCase() === 'AVAILABLE' &&
       this.totalApprovalsCount > 0 &&
       this.notReviewedCount === 0

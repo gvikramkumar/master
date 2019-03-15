@@ -18,7 +18,7 @@ export class DashboardService {
   }
 
   getMyOffersList(): Observable<any> {
-    let url = this.environmentService.REST_API_MYOFFERS_URL + this.userService.getUserId();
+    let url = this.environmentService.REST_API_MY_OFFERS_URL + this.userService.getUserId();
     return this.http.get(url, { withCredentials: true });
   }
 

@@ -41,18 +41,18 @@ export class ActionsService {
     return this._http.get(url, { withCredentials: true });
   }
 
+  createConditionalApprovalAction(createActionPayload) {
+    const url = this.environmentService.REST_API_CREATE_MANUAL_ACTION_POST_URL;
+    return this._http.post(url, createActionPayload);
+  }
+
   createNewAction(newActionData: CreateAction): Observable<any> {
-    const url = this.environmentService.REST_API_CREATE_NEW_ACTION_POST_URL;
+    const url = this.environmentService.REST_API_CREATE_MANUAL_ACTION_POST_URL;
     return this._http.post(url, newActionData).pipe(
       flatMap(res => {
         return this.sendNotification(newActionData.assignee, newActionData.offerId, newActionData.actionTitle, newActionData.description);
       })
     );
-  }
-
-  createConditionalApprovalAction(createActionPayload) {
-    const url = this.environmentService.REST_API_CREATE_NEW_ACTION_POST_URL;
-    return this._http.post(url, createActionPayload);
   }
 
   createNotAndConditional(createActionComment: CreateActionComment): Observable<any> {
