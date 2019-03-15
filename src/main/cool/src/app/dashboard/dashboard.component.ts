@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DashboardService } from '../services/dashboard.service';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
 import { NgForm } from '@angular/forms';
 import { ActionsService } from '../services/actions.service';
 import { CreateActionApprove } from '../models/create-action-approve';
@@ -13,6 +11,7 @@ import { TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { lifeCycleStatusEnum } from '@shared/enums';
+import { UserService, DashboardService, CreateOfferService } from '@shared/services';
 
 @Component({
   selector: 'app-dashboard',
@@ -76,7 +75,8 @@ export class DashboardComponent implements OnInit {
     private userService: UserService,
     private actionsService: ActionsService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private createOfferService: CreateOfferService,
   ) {
   }
 
@@ -414,7 +414,13 @@ export class DashboardComponent implements OnInit {
   onBasicUpload(event) {
     console.log("milsss");
   }
-
+  
+  createNewOffer() {
+    this.createOfferService.disablePrBEList = false;
+    this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
+    this.createOfferService.currenTOffer.next('');
+    this.router.navigate(['/coolOffer']);
+  }
   enableSubmit(event): void {
     let passedString = event.target.value;
     let inputValue = passedString.trim();

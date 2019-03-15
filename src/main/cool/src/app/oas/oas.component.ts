@@ -5,7 +5,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { Message } from 'primeng/components/common/api';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup } from '@angular/forms';
 import { Location } from '@angular/common';
 
 
@@ -65,6 +65,7 @@ export class OasComponent implements OnInit {
 
   selectedPrimaryOffer = this.offerFactors[3];
   selectedSecondaryOffer = this.secondaryOfferFactors[0];
+  oasFormGroupArray: Array<FormGroup> = new Array();
 
   constructor(
     private router: Router,
@@ -76,7 +77,14 @@ export class OasComponent implements OnInit {
     this.showChallenges = false;
 
   }
+/*
+[
+  {
+    factorName: 'Offer Construct',
 
+  }
+]
+*/
   ngOnInit() {
 
 
@@ -110,6 +118,9 @@ export class OasComponent implements OnInit {
 
     this.oasPrimaryFactorsList.push(oasFactor1, oasFactor2, oasFactor3, oasFactor4);
 
+    console.log(this.oasPrimaryFactorsList);
+
+
     this.items = [
       { label: 'UnSupported Offer Factors', icon: 'fa fa-fw fa-bar-chart' },
       { label: 'Supported Offer Factors', icon: 'fa fa-fw fa-calendar' },
@@ -126,6 +137,9 @@ export class OasComponent implements OnInit {
       { field: 'color', header: 'Color' }
     ];
 
+
+  }
+  initFormGroup(){
 
   }
 

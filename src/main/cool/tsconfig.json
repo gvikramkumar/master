@@ -19,8 +19,18 @@
       "dom"
     ],
     "paths": {
-      "@shared/*":["src/app/shared/*"],
-      "@app/*": ["src/app/*"]
+      "@shared/*": [
+        "src/app/shared/*"
+      ],
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@env/*": [
+        "src/environments/*"
+      ],
+      "@actions/*": [
+        "src/app/actions/*"
+      ],
     }
   }
 }

@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
-import { UserService } from './user.service';
 import { EnvironmentService } from '../../environments/environment.service';
 import { CreateAction } from '../models/create-action';
 import { CreateActionComment } from '../models/create-action-comment';
 import { CreateActionApprove } from '../models/create-action-approve';
+import { UserService } from '@shared/services';
 
 @Injectable()
 export class ActionsService {

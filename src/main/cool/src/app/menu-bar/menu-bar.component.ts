@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MenuBarService } from '../services/menu-bar.service';
-import { UserService } from '../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '../../environments/environment.service';
+import { UserService } from '@shared/services';
 
 @Component({
     selector: 'app-menu-bar',
@@ -194,7 +194,7 @@ export class MenuBarComponent implements OnInit {
                 this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
                     this.router.navigate(['/dashboard']);
 
-      
+
                 });
             }
             this.updateMessage.next(message);

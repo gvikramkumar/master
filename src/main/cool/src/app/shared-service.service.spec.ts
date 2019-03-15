@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { SharedServiceService } from './shared-service.service';
+import { SharedService } from './shared-service.service';
 
 describe('SharedServiceService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SharedServiceService]
+      providers: [SharedService]
     });
   });
 
-  it('should be created', inject([SharedServiceService], (service: SharedServiceService) => {
+  it('should be created', inject([SharedService], (service: SharedService) => {
     expect(service).toBeTruthy();
   }));
 });

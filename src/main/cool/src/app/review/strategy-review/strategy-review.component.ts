@@ -6,21 +6,15 @@ import { Location } from '@angular/common';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { StrategyReviewService } from '@app/services/strategy-review.service';
 import { NgForm } from '@angular/forms';
+import { UserService, HeaderService, DashboardService, CreateOfferService } from '@shared/services';
+import { Subscription, forkJoin } from 'rxjs';
 import { ActionsService } from '@app/services/actions.service';
-import { CreateActionComment } from '@app/models/create-action-comment';
-import { CreateActionApprove } from '@app/models/create-action-approve';
-import { UserService } from '@app/services/user.service';
 import { SharedService } from '@app/shared-service.service';
 import { MessageService } from '@app/services/message.service';
-import { Subscription, forkJoin } from 'rxjs';
-import { HeaderService } from '@app/header/header.service';
-import { LeadTime } from '@app/right-panel/lead-time';
 import { RightPanelService } from '@app/services/right-panel.service';
-import { User } from '@app/access-management/user';
 import { AccessManagementService } from '@app/services/access-management.service';
-import { DashboardService } from '@app/services/dashboard.service';
-import { CreateOfferService } from '@app/services/create-offer.service';
-import { element } from '@angular/core/src/render3';
+import { CreateActionComment } from '../../models/create-action-comment';
+import { CreateActionApprove } from '../../models/create-action-approve';
 
 
 @Component({
@@ -140,7 +134,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
         });
       });
 
-    forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
+    forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)])
+    .subscribe(data => {
       const [strategyReviewData, milstones] = data;
       this.getStrategyReview(strategyReviewData);
       this.getMilestones(milstones);
@@ -499,7 +494,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
 
       // Compute Manager List
       const userId = employee['_id'];
-      const managerDetailsList = await this.accessManagementService.getUserDetails(new User(userId)).toPromise();
+      const managerDetailsList = await this.accessManagementService.getUserDetails(userId.toString()).toPromise();
 
       // Iterate - Manager Names
       for (const manager of Array.from(managerDetailsList.values())) {

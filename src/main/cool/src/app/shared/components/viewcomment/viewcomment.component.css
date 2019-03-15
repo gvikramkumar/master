@@ -1,0 +1,41 @@
+
+.addcomment span{
+  color: #007493;
+  font-size: 1em;
+  margin-right: 5px;
+  cursor: pointer;
+  line-height: 1em;
+}
+
+.addcomment{
+  color: #007493;
+  font-size: 1.8rem;
+}
+
+
+
+.viewcomment{
+  width:100%;
+  word-wrap: break-word;
+  font-size: 15px;
+  color: #666;
+}
+
+.comments{
+  max-height: 350px;
+  overflow-y: scroll;
+  padding: 0 20px 0 0;
+}
+.datestamp {
+  font-size: 11px;
+  line-height: 1;
+  margin: -5px auto 1.5em;
+}
+
+label.subheader {
+  color: #9e9ea2;
+  text-transform: uppercase;
+}
+.text-danger.text-right {
+  font-size: 12px;
+}

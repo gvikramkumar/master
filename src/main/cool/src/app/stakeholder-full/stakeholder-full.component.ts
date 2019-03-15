@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { CreateOfferService } from '../services/create-offer.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { StakeHolder } from '../models/stakeholder';
@@ -8,8 +7,7 @@ import { Collaborators } from '../models/collaborator';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { SharedService } from '../shared-service.service';
-import { ConfigurationService } from '../services/configuration.service';
-import { UserService } from '../services/user.service';
+import { ConfigurationService, UserService, CreateOfferService } from '@shared/services';
 @Component({
   selector: 'app-stakeholder-full',
   templateUrl: './stakeholder-full.component.html',

@@ -1,6 +1,6 @@
 <div class="content">
   <div class="container">
-    <app-taskbar [actionCount]='actionCount' [isDashboard]='true'></app-taskbar>
+    <app-taskbar [actionCount]='actionCount' (newBtnClick)="createNewOffer()"></app-taskbar>
     <!-- My Actions & Notifications Section -->
     <div class="row">
       <div class="col-md-12">

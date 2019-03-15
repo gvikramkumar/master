@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-
-import { CreateOfferService } from '../services/create-offer.service';
+import { CreateOfferService } from '@shared/services';
+import { panelsConstants, userPanelsConstants, dotBoxConstants, resultTableConstants } from '@shared/constants';
 
 const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
 @Component({
@@ -11,7 +11,10 @@ const searchOptions = ['Option1', 'Option2', 'Option3', 'Option4'];
   styleUrls: ['./create-new-offer.component.css']
 })
 export class CreateNewOfferComponent implements OnInit {
-
+  panels = panelsConstants;
+  userPanels = userPanelsConstants;
+  dotBox = dotBoxConstants;
+  resultTable = resultTableConstants;
   search = (text$: Observable<string>) =>
     text$
       .pipe(
@@ -34,62 +37,6 @@ export class CreateNewOfferComponent implements OnInit {
   }
   tabindex = 0;
   tabView = false;
-
-  panels = {
-    "panel1": true,
-    "panel2": true
-  }
-
-  userPanels = {
-    "panel1": false,
-    "panel2": true
-  }
-
-  dotBox = [
-    {
-      status: "Completed",
-      statuscontent: "Initial MM Assesment"
-    },
-    {
-      status: "Completed",
-      statuscontent: "Initial offer Dimension"
-    }
-    ,
-    {
-      status: "In Progress",
-      statuscontent: "Stakeholders Identified"
-    },
-    {
-      status: "Completed",
-      statuscontent: "Offer Portfolio"
-    },
-    {
-      status: "In Progress",
-      statuscontent: "Strategy Review Completion"
-    },
-    {
-      status: "Pending",
-      statuscontent: "Offer Construct Details"
-    }
-  ]
-
-  resultTable = [
-    {
-      name: 'Mary Adams',
-      id: 'madams@altus.com',
-      function: 'Pricing'
-    },
-    {
-      name: 'Gina Silva',
-      id: 'gsilva@altus.com',
-      function: 'Finance'
-    },
-    {
-      name: 'Derek Brian',
-      id: 'dbrian@altus.com',
-      function: 'Pricing'
-    },
-  ]
 
   setFlag: boolean;
 
