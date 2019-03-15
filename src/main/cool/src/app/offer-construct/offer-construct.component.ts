@@ -7,6 +7,7 @@ import { RightPanelService } from '../services/right-panel.service';
 import { LeadTime } from '../right-panel/lead-time';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { MessageService } from '../services/message.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-offer-construct',
@@ -188,13 +189,19 @@ export class OfferConstructComponent implements OnInit {
       'action': '',
       'comment': ''
     };
-    this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload).subscribe(result => {
-      this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload).subscribe(result => {
-        if (msg !== 'stay_on_this_page') {
-          this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
-        }
-      });
-    },(err) => console.log('error', err),
-    () => this.messageService.sendMessage('Save Offer Construct Details'));
+    // this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload).subscribe(result => {
+    //   this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload).subscribe(result => {
+    //     if (msg !== 'stay_on_this_page') {
+    //       this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
+    //     }
+    //   });
+    // },(err) => console.log('error', err),
+    // () => this.messageService.sendMessage('Save Offer Construct Details'));
+    forkJoin([this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload), this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload)]).subscribe(result => {
+      this.messageService.sendMessage('Save Offer Construct Details');
+      if (msg !== 'stay_on_this_page') {
+        this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
+      }
+    });
   }
 }

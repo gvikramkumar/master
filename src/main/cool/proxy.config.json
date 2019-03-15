@@ -1,6 +1,6 @@
 {
     "/api": {
-        "target": "https://cool-srv-dev.cisco.com/coolsrv",
+        "target": "https://cool-srv-qa.cisco.com/coolsrv",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug",
@@ -15,15 +15,6 @@
         "logLevel": "debug",
         "pathRewrite": {
             "^/pdafapp": ""
-        }
-    },
-    "/ldapapp": {
-        "target": "https://pcam.cisco.com",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {
-            "^/ldapapp": ""
         }
     },
     "/sso": {

@@ -20,8 +20,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchCollaboratorService } from './services/search-collaborator.service';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { OfferDetailViewService } from './services/offer-detail-view.service';
-import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
-import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
+import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
+import { ExitCriteriaValidationComponent } from '@app/review/exit-criteria-validation/exit-criteria-validation.component';
 import { ExitCriteriaValidationService } from './services/exit-criteria-validation.service';
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
@@ -44,26 +44,25 @@ import { ProgramComponent } from './offer-dimension-groups/program/program.compo
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
-import { OffersolutioningCardOneComponent } from './offer-solutioning-card-one/offersolutioning-card-one.component';
+import { OffersolutioningCardOneComponent } from '@app/offer-solutioning-card-one/offer-solutioning-card-one.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
-import { OfferconstructCanvasComponent } from './offer-construct-canvas/offerconstruct-canvas.component';
+import { OfferconstructCanvasComponent } from '@app/offer-construct-canvas/offer-construct-canvas.component';
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
 import { EditfieldsComponent } from './editfields/editfields.component';
-import { ViewstrategyComponent } from './viewstrategy/viewstrategy.component';
+import { ViewStrategyComponent as ViewStrategyComponent } from '@app/review/view-strategy/view-strategy.component';
 import { OasComponent } from './oas/oas.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { IdpidValidatorDirective } from './create-offer-cool/idpid-validator.directive';
 import { DynamicFormMultipleComponent } from './offer-construct-canvas/dynamic-form-multiple';
 import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
-import { DesignreviewComponent } from './designreview/designreview.component';
+import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import { SharedModule } from '@shared/shared.module';
 import { EnvironmentService } from 'src/environments/environment.service';
 import { ConfigurationService, HttpInterceptorService, UserService } from '@shared/services';
@@ -71,7 +70,7 @@ import { DesignReviewExitCriteriaComponent } from '@shared/components';
 
 
 export function app_init(configService: ConfigurationService) {
-  return () => { return configService.init(); };
+  return () => configService.init();
 }
 
 @NgModule({
@@ -108,11 +107,10 @@ export function app_init(configService: ConfigurationService) {
     OfferconstructCanvasComponent,
     OfferSolutionQuestionComponent,
     EditfieldsComponent,
-    ViewstrategyComponent,
+    ViewStrategyComponent,
     OasComponent,
-    IdpidValidatorDirective,
     NotificationOfferDetailPopupComponent,
-    DesignreviewComponent,
+    DesignReviewComponent,
     DesignReviewExitCriteriaComponent
   ],
   imports: [

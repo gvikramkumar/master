@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MonetizationModelService } from '../services/monetization-model.service';
-import { StakeholderfullService } from '../services/stakeholderfull.service';
-import { StrategyReviewService } from '../services/strategy-review.service';
-import { ActionsService } from '../services/actions.service';
-import { SharedService } from '../shared-service.service';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { StrategyReviewService } from '@app/services/strategy-review.service';
+import { ActionsService } from '@app/services/actions.service';
+import { SharedService } from '@app/shared-service.service';
 import { Subscription, forkJoin } from 'rxjs';
-import { RightPanelService } from '../services/right-panel.service';
+import { RightPanelService } from '@app/services/right-panel.service';
 
 @Component({
   selector: 'app-designreview',
-  templateUrl: './designreview.component.html',
-  styleUrls: ['./designreview.component.css']
+  templateUrl: './design-review.component.html',
+  styleUrls: ['./design-review.component.css']
 })
-export class DesignreviewComponent implements OnInit {
+export class DesignReviewComponent implements OnInit {
   offerData: any;
   currentOfferId;
   caseId;
@@ -75,20 +75,24 @@ export class DesignreviewComponent implements OnInit {
       this.caseId = params['id2'];
     });
   }
-  offerDetailOverView(){}
+  offerDetailOverView() {}
+
   ngOnInit() {
+
     forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;
       this.getDesignReview(designReviewData);
       this.getMilestones(milstones);
       this.completeDesignReview();
     });
+
     this.data = [];
     this.message = {
       contentHead: 'Great Work!',
       content: 'Design Review Message.',
       color: 'black'
     };
+
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
       this.offerId = this.currentOfferId;
@@ -125,21 +129,9 @@ export class DesignreviewComponent implements OnInit {
       }
       this.stakeData = this.stakeHolderInfo;
     });
-    this.monetizationModelService.getAttributes().subscribe(data => {
-      this.offerData = data;
-      this.offerData['groups'].forEach(group => {
-        this.groupNames.push(group['groupName']);
-        const curGroup = {};
-        group['subGroup'].forEach(g => {
-          curGroup[g['subGroupName']] = [];
-          g.choices.forEach((c) => {
-            curGroup[g['subGroupName']].push({ name: c, type: 0, status: -1 });
-          });
-        });
-        this.groupData.push(curGroup);
-      });
-    });
+
     this.getOfferDetails();
+
   }
 
   private getMilestones(milestones) {
@@ -181,6 +173,7 @@ export class DesignreviewComponent implements OnInit {
   }
 
   completeDesignReview() {
+
     if (this.lastValueInMilestone['status'].toUpperCase() === 'AVAILABLE' &&
       this.totalApprovalsCount > 0 &&
       this.notReviewedCount === 0

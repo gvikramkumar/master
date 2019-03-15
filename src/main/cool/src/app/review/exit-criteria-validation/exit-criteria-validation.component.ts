@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ExitCriteriaValidationService } from '../services/exit-criteria-validation.service';
+import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
 import { ActivatedRoute } from '@angular/router';
-import { MessageService } from '../services/message.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { HeaderService, UserService } from '@shared/services';
+import { MessageService } from '@app/services/message.service';
 
 @Component({
   selector: 'app-exit-criteria-validation',
