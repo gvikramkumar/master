@@ -17,6 +17,7 @@ export class DesignReviewComponent implements OnInit {
   offerData: any;
   currentOfferId;
   caseId;
+  strategyReviewList:any;
   bviewDeckData: any[];
   choiceSelected;
   groups = {};
