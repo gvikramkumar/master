@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ExitCriteriaValidationService } from '../services/exit-criteria-validation.service';
+import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
 import { ActivatedRoute } from '@angular/router';
-import { HeaderService } from '../header/header.service';
-import { MessageService } from '../services/message.service';
+import { HeaderService } from '@app/header/header.service';
+import { MessageService } from '@app/services/message.service';
 import { LocalStorageService } from 'ngx-webstorage';
-import { UserService } from '../services/user.service';
-import { OfferService } from '../services/offer.service';
+import { UserService } from '@app/services/user.service';
+import { OfferService } from '@app/services/offer.service';
 import { forkJoin } from 'rxjs';
 
 const STRATEGY_REVIEW_APPROVAL_SENT_FLAG = 'strategyReviewRequestApproval';

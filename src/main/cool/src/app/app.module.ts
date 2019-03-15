@@ -33,13 +33,12 @@ import { CalendarModule } from 'primeng/calendar';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { OfferDetailViewService } from './services/offer-detail-view.service';
 import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
-import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
+import { ExitCriteriaValidationComponent } from '@app/review/exit-criteria-validation/exit-criteria-validation.component';
 import { ExitCriteriaValidationService } from './services/exit-criteria-validation.service';
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { MenuItem } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { PanelModule } from 'primeng/panel';
 import { CreateNewActionComponent } from './create-new-action/create-new-action.component';
@@ -91,7 +90,7 @@ import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
 import { EditfieldsComponent } from './editfields/editfields.component';
-import { ViewstrategyComponent } from './viewstrategy/viewstrategy.component';
+import { ViewStrategyComponent as ViewStrategyComponent } from '@app/review/view-strategy/view-strategy.component';
 import { OasComponent } from './oas/oas.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
@@ -153,7 +152,7 @@ export function app_init(configService: ConfigurationService, userService: UserS
     OfferconstructCanvasComponent,
     OfferSolutionQuestionComponent,
     EditfieldsComponent,
-    ViewstrategyComponent,
+    ViewStrategyComponent,
     OasComponent,
     NotificationOfferDetailPopupComponent,
     DesignReviewComponent,
