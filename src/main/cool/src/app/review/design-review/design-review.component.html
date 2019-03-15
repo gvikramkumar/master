@@ -24,10 +24,12 @@
               <div class="alert__message" [ngStyle]="{'color': message['color']}">
                 <b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
             </div>
+            
             <!-- <Exit Criteria Validation> -->
             <app-design-review-exit-criteria *ngIf="loadExitCriteria" [stakeData]="stakeData"
               [offerBuilderdata]='offerBuilderdata'>
             </app-design-review-exit-criteria>
+
             <!--<div class="accordion base-margin-top" id="accordion">
   
               <div class="panel panel--ltgray">

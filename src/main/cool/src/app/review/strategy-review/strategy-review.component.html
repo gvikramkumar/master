@@ -12,22 +12,19 @@
           <app-offer-create-detail></app-offer-create-detail>
           <ul class="list list--highlight base-margin-top">
             <li>
-              <div class="panel panel--bordered"><span class="text-success"><span
-                    class="icon-check-outline icon-medium"></span>
+              <div class="panel panel--bordered"><span class="text-success"><span class="icon-check-outline icon-medium"></span>
                   {{derivedMM}} Aligned</span></div>
             </li>
           </ul>
-          <div class="alert base-margin-top half-margin-bottom"
-            [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
-            <div class="alert__icon mm-alert-icon"
-              [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}">
+          <div class="alert base-margin-top half-margin-bottom" [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
+            <div class="alert__icon mm-alert-icon" [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}">
             </div>
             <div class="alert__message" [ngStyle]="{'color': message['color']}">
               <b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
           </div>
+          
           <!-- <Exit Criteria Validation> -->
-          <app-exit-criteria-validation *ngIf="loadExitCriteria" [stakeData]="stakeData"
-            [offerBuilderdata]='offerBuilderdata'>
+          <app-exit-criteria-validation *ngIf="loadExitCriteria" [stakeData]="stakeData" [offerBuilderdata]='offerBuilderdata'>
           </app-exit-criteria-validation>
           <div class="accordion base-margin-top" id="accordion">
 
@@ -73,44 +70,41 @@
                     <div class="col" style="max-width: 190px;"></div>
                   </div>
                   <p-accordion>
-                    <p-accordionTab *ngFor="let strategyReviewData of strategyReviewList"
-                      (click)="onTabOpen(strategyReviewData.taskId)">
+
+                    <p-accordionTab *ngFor="let strategyReviewData of strategyReviewList" (click)="onTabOpen(strategyReviewData.taskId)">
+
                       <p-header>
                         <div class="row" style="vertical-align: middle;margin-left: 20px">
                           <div class="col">
-                            <span class="icon-check-outline icon-eye-closed text-darkgray"
-                              *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'not reviewed'"></span>
-                            <span class="icon-warning-outline text-warning"
-                              *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'conditionally approved'"></span>
-                            <span class="icon-error-outline text-danger"
-                              *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'not approved'"></span>
-                            <span class="icon-check-outline text-success"
-                              *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'approved'"></span>
+                            <span class="icon-check-outline icon-eye-closed text-darkgray" *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'not reviewed'"></span>
+                            <span class="icon-warning-outline text-warning" *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'conditionally approved'"></span>
+                            <span class="icon-error-outline text-danger" *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'not approved'"></span>
+                            <span class="icon-check-outline text-success" *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'approved'"></span>
                             {{strategyReviewData.function}}</div>
                           <div class="col" *ngIf="strategyReviewData.status">{{strategyReviewData.status | titlecase}}
                           </div>
                           <div class="col">{{strategyReviewData.reviewedOn | date:'dd-MMM-yyyy'}}</div>
                           <div class="col">{{strategyReviewData.reviewedBy}}</div>
-                          <div class="reviewed-comments"><span class="icon-message"><span
-                                class="total">{{strategyReviewData.comments.length}}</span></span>
+                          <div class="reviewed-comments"><span class="icon-message"><span class="total">{{strategyReviewData.comments.length}}</span></span>
                             Comment</div>
                         </div>
                       </p-header>
-                      <!--
-  If the action is still in 'Not Reviewed' status then 
-  users who belong to the escalate users group will see the escalate section
-  users who the task is assigned to will see the approval section
 
-  everyone will see the comments irrespective of the status of the action
--->
+                      <!-- 
+                        If the action is still in 'Not Reviewed' status 
+                        then  users who belong to the escalate users group will see the escalate section
+                        and, users who the task is assigned to will see the approval section
+                        everyone will see the comments irrespective of the status of the action
+                      -->
+
                       <div class="panel panel--bordered">
                         <app-viewstrategy [caseId]="caseId" [comments]="strategyReviewData.comments">
                         </app-viewstrategy>
                       </div>
 
-                      <div
-                        *ngIf="strategyReviewData.status=='Not Reviewed' && escalateVisibleAvailable; then visibleEscalateTemplate">
+                      <div *ngIf="strategyReviewData.status=='Not Reviewed' && escalateVisibleAvailable; then visibleEscalateTemplate">
                       </div>
+
                       <ng-template #visibleEscalateTemplate>
                         <div class="panel panel--bordered not-reviewed">
                           <p>This is the strategy review milestone and the content is a placeholder for
@@ -120,12 +114,15 @@
                             (click)="onEscalate(strategyReviewData.function)">Escalate</button>
                         </div>
                       </ng-template>
+
                       <div *ngIf="getshowApprovalDecisionAction(strategyReviewData)">
+
                         <div class="panel panel--bordered not-reviewed" *ngIf="showButtonSection">
 
                           <div class="panel--header">
                             <h5>Approval Decision</h5>
                           </div>
+
                           <div class="panel--footer">
                             <button class="btn btn--secondary" (click)="doNotApprove()">Do Not
                               Approve</button>
@@ -133,7 +130,9 @@
                               Approval</button>
                             <button class="btn btn--secondary" (click)="approve()">Approve</button>
                           </div>
+
                         </div>
+
                         <section *ngIf="doNotApproveSection">
                           <div class="panel panel--bordered">
                             <div class="row">
@@ -176,9 +175,8 @@
                                       <div class="form-group half-margin-bottom">
                                         <div class="form-group__text">
                                           <label for="action">ACTION DESCRIPTION</label>
-                                          <input id="descriptionName" type="text" class="form-control"
-                                            name="descriptionName" [(ngModel)]="descriptionValue" required ngModel
-                                            #descriptionName="ngModel">
+                                          <input id="descriptionName" type="text" class="form-control" name="descriptionName"
+                                            [(ngModel)]="descriptionValue" required ngModel #descriptionName="ngModel">
                                         </div>
                                       </div>
                                     </div>
@@ -193,9 +191,8 @@
                                             <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
                                               {{milestone.subMilestone}}</option>
                                           </select> -->
-                                          <input type="text" id="select-state-disabled" class="form-control"
-                                            name="milestoneName" value={{milestoneValue}} readonly
-                                            [(ngModel)]="milestoneValue">
+                                          <input type="text" id="select-state-disabled" class="form-control" name="milestoneName"
+                                            value={{milestoneValue}} readonly [(ngModel)]="milestoneValue">
                                         </div>
                                       </div>
                                     </div>
@@ -209,8 +206,7 @@
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>
                                             </select> -->
-                                            <select id="functionName" class="form-control" name="functionName"
-                                              (change)="getSelectFunctionRole($event.target.value)"
+                                            <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
                                               [(ngModel)]="functionNameValue" ngModel required>
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>
@@ -240,9 +236,9 @@
                                         <label for="dueDate">DUE DATE</label>
                                         <div class="form-group__text">
                                           <input name="dueDateName" class="form-control" #dp4="bsDatepicker"
-                                            bsDatepicker placement="top" [minDate]="minDate"
-                                            containerClass="custome-date" [bsConfig]="dpConfig"
-                                            [(ngModel)]="dueDateValue" required ngModel #dueDateName="ngModel">
+                                            bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
+                                            [bsConfig]="dpConfig" [(ngModel)]="dueDateValue" required ngModel
+                                            #dueDateName="ngModel">
                                           <button type="button" class="link" tabindex="-1">
                                             <span class="icon-month"></span>
                                           </button>
@@ -254,8 +250,7 @@
                                   <div class="row">
                                     <div class="col-md-12 text-right">
                                       <button class="btn btn--secondary" (click)="closeForm()">Cancel</button>
-                                      <button class="btn btn--primary" [disabled]="!createActionForm.valid"
-                                        (click)="createAction()">Create
+                                      <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction()">Create
                                         an Action</button>
                                     </div>
                                   </div>
@@ -264,6 +259,7 @@
                             </div>
                           </div>
                         </section>
+
                         <section *ngIf="showConditionalApprovalSection">
                           <div class="panel panel--bordered">
                             <div class="row">
@@ -306,9 +302,8 @@
                                       <div class="form-group half-margin-bottom">
                                         <div class="form-group__text">
                                           <label for="action">ACTION DESCRIPTION</label>
-                                          <input id="descriptionName" type="text" class="form-control"
-                                            name="descriptionName" [(ngModel)]="descriptionValue" required ngModel
-                                            #descriptionName="ngModel">
+                                          <input id="descriptionName" type="text" class="form-control" name="descriptionName"
+                                            [(ngModel)]="descriptionValue" required ngModel #descriptionName="ngModel">
                                         </div>
                                       </div>
                                     </div>
@@ -318,9 +313,8 @@
                                       <div class="form-group half-margin-bottom">
                                         <div class="form-group__text select">
                                           <label for="functionName">MILESTONE</label>
-                                          <input type="text" id="select-state-disabled" class="form-control"
-                                            name="milestoneName" value={{milestoneValue}} readonly
-                                            [(ngModel)]="milestoneValue">
+                                          <input type="text" id="select-state-disabled" class="form-control" name="milestoneName"
+                                            value={{milestoneValue}} readonly [(ngModel)]="milestoneValue">
                                           <!-- <select id="milestoneName" type="text" class="form-control" name="milestoneName"
                                             [(ngModel)]="milestoneValue" required ngModel #milestoneName="ngModel">
                                             <option *ngFor="let milestone of milestoneList" [value]="milestone.subMilestone">
@@ -340,8 +334,7 @@
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>
                                             </select> -->
-                                            <select id="functionName" class="form-control" name="functionName"
-                                              (change)="getSelectFunctionRole($event.target.value)"
+                                            <select id="functionName" class="form-control" name="functionName" (change)="getSelectFunctionRole($event.target.value)"
                                               [(ngModel)]="functionNameValue" ngModel required>
                                               <option *ngFor="let function of functionList" [value]="function">
                                                 {{function}}</option>
@@ -371,9 +364,9 @@
                                         <label for="dueDate">DUE DATE</label>
                                         <div class="form-group__text">
                                           <input name="dueDateName" class="form-control" #dp4="bsDatepicker"
-                                            bsDatepicker placement="top" [minDate]="minDate"
-                                            containerClass="custome-date" [bsConfig]="dpConfig"
-                                            [(ngModel)]="dueDateValue" required ngModel #dueDateName="ngModel">
+                                            bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
+                                            [bsConfig]="dpConfig" [(ngModel)]="dueDateValue" required ngModel
+                                            #dueDateName="ngModel">
                                           <button type="button" class="link" tabindex="-1">
                                             <span class="icon-month"></span>
                                           </button>
@@ -385,8 +378,7 @@
                                   <div class="row">
                                     <div class="col-md-12 text-right">
                                       <button class="btn btn--secondary" (click)="closeForm()">Cancel</button>
-                                      <button class="btn btn--primary" [disabled]="!createActionForm.valid"
-                                        (click)="createAction()">Create
+                                      <button class="btn btn--primary" [disabled]="!createActionForm.valid" (click)="createAction()">Create
                                         an Action</button>
                                     </div>
                                   </div>
@@ -395,6 +387,7 @@
                             </div>
                           </div>
                         </section>
+
                         <section *ngIf="showApproveSection">
                           <div class="panel panel--bordered">
                             <div class="row">
@@ -435,7 +428,9 @@
                             </div>
                           </div>
                         </section>
+
                       </div>
+
                     </p-accordionTab>
                   </p-accordion>
                 </div>
@@ -443,12 +438,13 @@
             </div>
           </div>
         </div>
+
         <div class="rightContent">
           <app-right-panel [offerId]="offerId" [stakeData]="stakeData" [primaryBE]="primaryBE" [portfolioFlag]="setFlag"
-            [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference"
-            (updateStakeData)="updateStakeData($event)">
+            [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
           </app-right-panel>
         </div>
+
       </div>
     </div>
   </div>

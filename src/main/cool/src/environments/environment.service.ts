@@ -10,7 +10,7 @@ export class EnvironmentService {
     REST_API_OFFER_CREATE_URL;
     REST_API_OFFER_STATUS;
     REST_API_MMEDIT_SEARCH_URL;
-    REST_API_MYOFFERS_URL;
+    REST_API_MY_OFFERS_URL;
     REST_API_MMOFFER_ATTRIBUTES_URL;
     REST_API_MMATTRIBUTES_POST_URL;
     REST_API_MM_STAKEHOLDERS_GET_URL;
@@ -34,7 +34,7 @@ export class EnvironmentService {
     REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
     REST_API_RIGISTERNEWUSER_GET_URL;
     REST_API_GETFUNCTIONAL_ROLE_URL;
-    REST_API_CREATE_NEW_ACTION_POST_URL;
+    REST_API_CREATE_MANUAL_ACTION_POST_URL;
     REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL;
     REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL;
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL;
@@ -192,7 +192,7 @@ export class EnvironmentService {
         this.REST_API_OFFER_CREATE_URL = this.baseapi + '/offer/create/';
         this.REST_API_OFFER_STATUS = this.baseapi + '/offer/flags/';
         this.REST_API_MMEDIT_SEARCH_URL = this.baseapi + '/collabrators/searchCollabrators';
-        this.REST_API_MYOFFERS_URL = this.baseapi + '/offer/getMyOffers/';
+        this.REST_API_MY_OFFERS_URL = this.baseapi + '/offer/getMyOffers/';
         this.REST_API_MMOFFER_ATTRIBUTES_URL = this.baseapi + '/getOfferDefaults?type=offerdimensions';
         this.REST_API_MMATTRIBUTES_POST_URL = this.baseapi + '/validateOfferDim';
         this.REST_API_MM_STAKEHOLDERS_GET_URL = this.baseapi + '/stakeholder/getStakeHolderMgnt/';
@@ -213,7 +213,7 @@ export class EnvironmentService {
         this.REST_API_EXITCRITERIA_REQUEST_APPROVAL_POST_URL = this.baseapi + '/emailNotification/sendEmailNotification/';
         this.REST_API_EXITCRITERIA_REQUEST_ACTION_AUTO_CREATION_URL = this.baseapi + '/action/create/task/';
         this.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL = this.baseapi + '/access/getuser';
-        this.REST_API_CREATE_NEW_ACTION_POST_URL = this.baseapi + '/action/create/manualAction';
+        this.REST_API_CREATE_MANUAL_ACTION_POST_URL = this.baseapi + '/action/create/manualAction';
         this.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL = this.baseapi + '/bpmApi/getMilestones';
         this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseapi + '/LOV/getFunctionalRoles';
         this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseapi + '/LOV/getAssignee/';

@@ -32,7 +32,7 @@ import { ConfigurationService } from './services/configuration.service';
 import { CalendarModule } from 'primeng/calendar';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { OfferDetailViewService } from './services/offer-detail-view.service';
-import { StrategyReviewComponent } from './strategy-review/strategy-review.component';
+import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
 import { ExitCriteriaValidationComponent } from './exit-criteria-validation/exit-criteria-validation.component';
 import { ExitCriteriaValidationService } from './services/exit-criteria-validation.service';
 import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
@@ -100,10 +100,9 @@ import {ToastModule} from 'primeng/toast';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { IdpidValidatorDirective } from './create-offer-cool/idpid-validator.directive';
 import { DynamicFormMultipleComponent } from '@app/offer-construct-canvas/dynamic-form-multiple';
 import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
-import { DesignReviewComponent } from '@app/design-review/design-review.component';
+import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import {SharedModule} from '@shared/shared.module';
 import { DesignReviewExitCriteriaComponent } from './directives/design-review-exit-criteria/design-review-exit-criteria.component';
 
@@ -156,7 +155,6 @@ export function app_init(configService: ConfigurationService, userService: UserS
     EditfieldsComponent,
     ViewstrategyComponent,
     OasComponent,
-    IdpidValidatorDirective,
     NotificationOfferDetailPopupComponent,
     DesignReviewComponent,
     DesignReviewExitCriteriaComponent
