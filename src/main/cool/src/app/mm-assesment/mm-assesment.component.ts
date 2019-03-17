@@ -471,6 +471,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
+
     this.isChangedAttribute = true;
     if (attribute.type === 2 && attribute.status === -1) {
       attribute.type = 0;
@@ -498,6 +499,7 @@ export class MmAssesmentComponent implements OnInit {
         this.canClickNextStep = true;
       } else {
         this.canClickNextStep = false;
+        this.proceedButtonStatusValid = false;
       }
     }
 

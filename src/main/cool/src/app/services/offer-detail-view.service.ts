@@ -8,11 +8,6 @@ export class OfferDetailViewService {
 
     constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) {}
 
-    export() {
-        // return this.httpClient.get(this.download_endpoint, 
-            // {responseType: 'blob'});
-    }
-
     offerDetailView(offerId):any {
         return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_OFFER_DETAILS_URL + offerId);
       }
