@@ -76,47 +76,20 @@ export class OfferDetailViewComponent implements OnInit {
     });
   }
 
-  // Creating Data for Offer Solutioning Details
-  // Commented as not wanted to point to new service 
-  // Making seperate service call for getting offer dimensions as mentioned
-  // getofferDimensions(){
-  //   this.offerDetailViewService.offerDimensions(this.currentOfferId)
-  //     .subscribe(data => {
-  //       if(Array.isArray(data.groups) && data.groups.length){
-  //         data.groups.forEach(element => {
-  //           if (!(element.dimensionGroup in this.offerDimensionsCharacteristics) && element.groupName != 'Offer Characteristics' && element.groupName != 'Always Ask'){
-  //             this.offerDimensionsCharacteristics[element.groupName] = {};
-  //             this.offerDimensionsCharacteristics[element.groupName]['subGroup'] = [];
-  //             this.offerDimensionsCharacteristics[element.groupName]['selected'] = [];
-  //             this.offerDimensionsCharacteristics[element.groupName]['chocies'] = [];
-  //             this.offerDimensionsCharacteristics[element.groupName]['listGrpQuestions'] = [];
-  //             this.offerDimensionsCharacteristics[element.groupName]['subGroup'].push(element.subGroup);
-  //             this.offerDimensionsCharacteristics[element.groupName]['selected'].push(element.selected);
-  //             this.offerDimensionsCharacteristics[element.groupName]['chocies'].push(element.chocies);
-  //             this.offerDimensionsCharacteristics[element.groupName]['listGrpQuestions'].push(element.listGrpQuestions);
-  //           }
-  //           else if ((element.dimensionGroup in this.offerDimensionsCharacteristics) && element.groupName != 'Offer Characteristics' && element.groupName != 'Always Ask'){
-  //             this.offerDimensionsCharacteristics[element.groupName]['subGroup'].push(element.subGroup);
-  //             this.offerDimensionsCharacteristics[element.groupName]['selected'].push(element.selected);
-  //             this.offerDimensionsCharacteristics[element.groupName]['chocies'].push(element.chocies);
-  //             this.offerDimensionsCharacteristics[element.groupName]['listGrpQuestions'].push(element.listGrpQuestions);
-  //           }
-  //         });
-  //       }
-  //     });
-  // }
-
   getOfferOverviewDetails() {
 
     this.offerDetailViewService.offerDetailView(this.currentOfferId)
       .subscribe(data => {
+
         this.offerViewData = data;
         let stakeholdersInfo = null;
         this.offerName = data.offerName;
         this.derivedMM = data.derivedMM;
         this.offerOwnerId = data.offerOwner;
         this.allignedStatus = data.overallStatus;
+
         if (Array.isArray(this.offerViewData.stakeholders) && this.offerViewData.stakeholders.length) {
+
           this.offerViewData.stakeholders.forEach(element => {
 
             stakeholdersInfo = new StakeHolder();
@@ -137,11 +110,9 @@ export class OfferDetailViewComponent implements OnInit {
               this.offerStakeHolderList.push(stakeholdersInfo);
               this.stakeHolderTotalCount = this.offerStakeHolderList.length;
             }
+
           });
         }
-
-        // this.offerOwner = 
-        // this.offerCoOwnerList = this.offerCoOwnerList.reduce(a => a['userName'] !== this.offerOwner);
 
         let offerCharacteristics = null;
         let packaging = null;
@@ -170,7 +141,8 @@ export class OfferDetailViewComponent implements OnInit {
               this.solutioningDetailsCharacteristics[element.dimensionGroup]['details'] = [];
               this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionSubgroup'].push(element.dimensionSubgroup);
               this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'].push(element.dimensionAttribute);
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'] = Array.from(new Set([].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'])));
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'] = Array.from(new Set([].concat
+                .apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'])));
               let temp = this.solutioningDetailsCharacteristics;
               if (element.Details.length) {
                 element.Details.forEach(subelement => {
@@ -185,15 +157,16 @@ export class OfferDetailViewComponent implements OnInit {
                 this.solutioningDetailsCharacteristics = temp;
               }
 
-            }
-            else if ((element.dimensionGroup in this.solutioningDetailsCharacteristics) && element.dimensionGroup != 'Offer Characteristics') {
+            } else if ((element.dimensionGroup in this.solutioningDetailsCharacteristics)
+              && element.dimensionGroup != 'Offer Characteristics') {
               this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionSubgroup'].push(element.dimensionSubgroup);
               this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'].push(element.dimensionAttribute);
-              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'] = Array.from(new Set([].concat.apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'])));
+              this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'] = Array.from(new Set([].concat
+                .apply([], this.solutioningDetailsCharacteristics[element.dimensionGroup]['dimensionAttribute'])));
               let temp = this.solutioningDetailsCharacteristics;
               if (element.Details.length) {
                 element.Details.forEach(subelement => {
-                  let temp_dict = {};
+                  const temp_dict = {};
                   Object.keys(subelement).forEach(function (key) {
                     if (key == 'solutioninQuestion' && subelement['solutioningAnswer']) {
                       temp_dict[subelement[key]] = subelement['solutioningAnswer'];
@@ -211,17 +184,6 @@ export class OfferDetailViewComponent implements OnInit {
 
         if (Array.isArray(this.offerViewData.constructDetails) && this.offerViewData.constructDetails.length) {
           this.offerComponentCharacterestics = this.offerViewData.constructDetails;
-          // this.offerViewData.constructDetails.forEach(element => {
-          //   if (!(element.constructItemName in this.offerComponentCharacterestics) || (element.constructItem == 'Minor')){
-          //     this.offerComponentCharacterestics[element.constructItemName] = {};
-          //     this.offerComponentCharacterestics[element.constructItemName]['_id'] = this.offerViewData.constructDetails.indexOf(element);
-          //     this.offerComponentCharacterestics[element.constructItemName]['parent'] = element.constructParentId;
-          //     this.offerComponentCharacterestics[element.constructItemName]['expanded'] = true;
-          //     this.offerComponentCharacterestics[element.constructItemName]['editable'] = false;
-          //     this.offerComponentCharacterestics[element.constructItemName]['constructItem'] = element.constructItem;
-          //     this.offerComponentCharacterestics[element.constructItemName]['itemDetails'] = element.itemDetails;
-          //   }
-          // });
         }
 
         if (Array.isArray(this.offerViewData.additionalCharacteristics) && this.offerViewData.additionalCharacteristics.length) {
@@ -257,7 +219,8 @@ export class OfferDetailViewComponent implements OnInit {
               this.programList.push(program);
             }
 
-            if (!(element.group in this.offerDimensionsCharacteristics) && element.group != 'Offer Characteristics' && element.group != 'Always Ask') {
+            if (!(element.group in this.offerDimensionsCharacteristics) && element.group != 'Offer Characteristics'
+              && element.group !== 'Always Ask') {
               this.offerDimensionsCharacteristics[element.group] = {};
               this.offerDimensionsCharacteristics[element.group]['subGroup'] = [];
               this.offerDimensionsCharacteristics[element.group]['selected'] = [];
@@ -266,7 +229,8 @@ export class OfferDetailViewComponent implements OnInit {
               this.offerDimensionsCharacteristics[element.group]['subGroup'].push(element.subgroup);
               this.offerDimensionsCharacteristics[element.group]['selected'].push(element.characteristics);
             }
-            else if ((element.group in this.offerDimensionsCharacteristics) && element.group != 'Offer Characteristics' && element.group != 'Always Ask') {
+            else if ((element.group in this.offerDimensionsCharacteristics) && element.group !== 'Offer Characteristics'
+              && element.group !== 'Always Ask') {
               this.offerDimensionsCharacteristics[element.group]['subGroup'].push(element.subgroup);
               this.offerDimensionsCharacteristics[element.group]['selected'].push(element.characteristics);
             }

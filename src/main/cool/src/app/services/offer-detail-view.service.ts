@@ -6,17 +6,7 @@ import { EnvironmentService } from '../../environments/environment.service';
 @Injectable()
 export class OfferDetailViewService {
 
-    // download_endpoint = 'http://localhost:8080/api/files';
-
     constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) {}
-
-    // npm install file-saver --save
-
-    // npm install @types/file-saver --save
-
-    // "@types/filesaver": "0.0.30",
-
-    // "file-saver": "^1.3.2"
 
     export() {
         // return this.httpClient.get(this.download_endpoint, 
@@ -24,15 +14,15 @@ export class OfferDetailViewService {
     }
 
     offerDetailView(offerId):any {
-        return this.httpClient.get(this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId);
+        return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_OFFER_DETAILS_URL + offerId);
       }
 
     // Service call for Offer Dimensions
     offerDimensions(offerId):any {
-        return this.httpClient.get(this.environmentService.REST_API_GET_RULE_RESULT_URL + offerId);
+        return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_OFFER_DIMENSIONS_INFO_URL + offerId);
     }
 
     mmDataRetrive(offerId):any {
-        return this.httpClient.get(this.environmentService.REST_APT_MMPAGE_RETRIVE_DATA_GET_URL + offerId);
+        return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_OFFER_DETAILS_URL + offerId);
       }
 }

@@ -8,7 +8,7 @@ import { EnvironmentService } from '../../environments/environment.service';
 
 @Injectable()
 export class SearchCollaboratorService {
-  baseUrl: string = this.environmentService.REST_API_URL_GET_LDAP_INFO;
+  baseUrl: string = this.environmentService.REST_API_LDAP_USER_DETAILS_URL;
   addEditCollaborator;
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) {
     this.addEditCollaborator = {
@@ -18,7 +18,7 @@ export class SearchCollaboratorService {
     };
   }
   searchCollaborator(payLoad: any): Observable<any> {
-    return this.httpClient.post(this.environmentService.REST_API_MM_STAKEHOLDERS_SEARCH_URL,payLoad);
+    return this.httpClient.post(this.environmentService.REST_API_SEARCH_STAKEHOLDERS_URL,payLoad);
   }
 
   addCollaborators(saveCollaborator: any): Observable<any> {

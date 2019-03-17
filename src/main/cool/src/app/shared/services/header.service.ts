@@ -8,12 +8,13 @@ export class HeaderService {
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
   public getUserInfo(user: String) {
-    var url = this.environmentService.REST_API_URL_GET_LDAP_INFO;
+    const url = this.environmentService.REST_API_LDAP_USER_DETAILS_URL;
     return this.httpClient.post(url, { userId: user }, { withCredentials: true });
   }
 
   public getCurrentUser() {
-    var url = this.environmentService.REST_API_URL_GET_CURRENT_USER;
+    const url = this.environmentService.REST_API_URL_GET_CURRENT_USER_URL;
     return this.httpClient.get(url, { withCredentials: true });
   }
+
 }

@@ -131,7 +131,7 @@ export class MenuBarComponent implements OnInit {
 
                 let textValue = document.createElement('a');
                 textValue.innerText = 'here';
-                textValue.href = this.environmentService.redirect_url;
+                textValue.href = this.environmentService.redirectUrl;
 
 
                 let emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
@@ -168,7 +168,7 @@ export class MenuBarComponent implements OnInit {
 
                 let textValue = document.createElement('a');
                 textValue.innerText = 'here';
-                textValue.href = this.environmentService.redirect_url;
+                textValue.href = this.environmentService.redirectUrl;
 
                 let emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
                 let emailBody = `Hello All,

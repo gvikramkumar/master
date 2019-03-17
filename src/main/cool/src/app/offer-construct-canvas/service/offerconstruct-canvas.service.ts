@@ -11,11 +11,11 @@ export class OfferconstructCanvasService {
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
   getMMInfo(offerId: string): Observable<any> {
-    return this.httpClient.get(this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId);
+    return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_OFFER_DETAILS_URL + offerId);
   }
 
   getOfferConstructItems(mmInfo: any): Observable<any> {
-    return this.httpClient.post(this.environmentService.REST_API_SET_OFFERCONSTRUCT_POST_URL, mmInfo, { withCredentials: true });
+    return this.httpClient.post(this.environmentService.REST_API_POST_OFFER_CONSTRUCT_URL, mmInfo, { withCredentials: true });
   }
 
   searchEgenie(keyword: String): Observable<any> {
@@ -23,7 +23,7 @@ export class OfferconstructCanvasService {
   }
 
   getPidDetails(keyword: String): Observable<any> {
-    return this.httpClient.get(this.environmentService.GET_PID_DETAILS + keyword);
+    return this.httpClient.get(this.environmentService.REST_API_GET_PID_DETAILS_URL + keyword);
   }
 
   saveOfferConstructChanges(offerConstructChnages: any): Observable<any> {

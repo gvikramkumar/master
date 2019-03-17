@@ -14,7 +14,7 @@ export class SharedService {
      * Get Functional Roles
      */
     getFunctionalRoles(): Observable<any> {
-        let url = this.environmentService.REST_API_RIGISTERNEWUSER_GET_URL;
+        let url = this.environmentService.REST_API_REGISTER_NEW_USER_GET_URL;
         return this._http.get(url, { withCredentials: true });
     }
 
@@ -29,7 +29,7 @@ export class SharedService {
     }
 
     proceedToNextPhase(data) {
-        const url = this.environmentService.REST_API_HOLD_OFFER;
+        const url = this.environmentService.REST_API_POST_ACTION_URL;
         return this._http.post(url, data);
     }
 
