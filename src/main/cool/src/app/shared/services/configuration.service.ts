@@ -7,9 +7,9 @@ import { UserService } from './user.service';
 @Injectable()
 export class ConfigurationService {
 
-    urlGetUserInfo = this.environmentService.REST_API_URL_GET_LDAP_INFO;
-    urlGetCurrentUser = this.environmentService.REST_API_URL_GET_CURRENT_USER;
-    urlCheckAdminAccess = this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL;
+    urlGetUserInfo = this.environmentService.REST_API_LDAP_USER_DETAILS_URL;
+    urlGetCurrentUser = this.environmentService.REST_API_URL_GET_CURRENT_USER_URL;
+    urlCheckAdminAccess = this.environmentService.REST_API_RETRIEVE_USER_INFO_URL;
 
     private _startupData: any = {};
 
@@ -33,7 +33,8 @@ export class ConfigurationService {
                             this._startupData.userId = resUserInfo.userId;
                             this._startupData.userName = resUserInfo.userName;
                             this._startupData.isSuperAdmin = resUserInfo.superAdmin;
-                            this._startupData.isFunctionalAdmin = (resUserInfo.userMapping && resUserInfo.userMapping.some(mapping => mapping.functionalAdmin));
+                            this._startupData.isFunctionalAdmin = (resUserInfo.userMapping && resUserInfo.userMapping
+                                .some(mapping => mapping.functionalAdmin));
                             this._startupData.functionsUserCanAddTo = resUserInfo.userMapping.reduce((accumulator, mapping) => {
                                 accumulator = [...accumulator, mapping.functionalRole];
                                 return accumulator;
@@ -54,7 +55,7 @@ export class ConfigurationService {
                     .then((response) => resolve(true))
                     .catch(this.handleError());
             } else {
-                const url = this.environmentService.GENERATE_AUTH_TOKEN_URL;
+                const url = this.environmentService.REST_API_GENERATE_AUTH_TOKEN_URL;
                 window.location.replace(url);
             }
         });

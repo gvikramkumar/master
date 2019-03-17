@@ -15,12 +15,12 @@ export class MonetizationModelService {
 
 
   getAttributes() {
-    let url = this.environmentService.REST_API_MMOFFER_ATTRIBUTES_URL;
+    let url = this.environmentService.REST_API_RETRIEVE_MM_OFFER_DIMENSIONS_ATTRIBUTES_URL;
     return this.http.get(url, { withCredentials: true });
   }
 
   getOfferBuilderData(offerId) {
-    let url = this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
+    let url = this.environmentService.REST_API_RETRIEVE_OFFER_DETAILS_URL + offerId;
     return this.http.get(url, { withCredentials: true });
   }
 
@@ -34,16 +34,16 @@ export class MonetizationModelService {
       withCredentials: true,
     };
 
-    let url = this.environmentService.REST_API_MMATTRIBUTES_POST_URL;
+    let url = this.environmentService.REST_API_VALIDATE_OFFER_DIMENSIONS_INFO_URL;
     return this.http.post(url, data, httpOptions);
   };
 
   showDefaultStakeHolders(model, be) {
-    let url = this.environmentService.REST_API_MM_STAKEHOLDERS_GET_URL;
+    let url = this.environmentService.REST_API_RETRIEVE_DEFAULT_STAKEHOLDERS_URL;
     url += model;
     url += "/" + be;
     return this.http.get(url);
-  };
+  }
 
   getPDF(offerId) {
     let url = this.environmentService.REST_API_DOWNLOAD_PDF_GET_URL + '/' + offerId;
@@ -68,8 +68,8 @@ export class MonetizationModelService {
 
 
   postRuleResult(data) {
-    let url = this.environmentService. REST_API_POST_RULE_RESULT_URL;
-
+    let url = this.environmentService.REST_API_RETRIEVE_OFFER_DIMENSIONS_INFO_URL + '/';
     return this.http.post(url, data);
   }
+  
 }

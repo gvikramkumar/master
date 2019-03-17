@@ -10,10 +10,7 @@ export class StakeholderfullService {
   }
 
   getdata(offerId) {
-    //let url="http://10.24.122.136:8080/coolsrv/stakeholder/getStakeHolderMgnt/MM1/All"
-
-    return this._http.get(this.environmentService.REST_API_STAKEHOLDERLIST_GET_URL + '/' + offerId, { withCredentials: true });
-    // return this._http.get(url);
+    return this._http.get(this.environmentService.REST_API_RETRIEVE_OFFER_DETAILS_URL + offerId, { withCredentials: true });
   }
 
 
@@ -32,7 +29,7 @@ export class StakeholderfullService {
   }
 
   getOfferBuilderData(offerId) {
-    let url = this.environmentService.REST_API_MM_OFFER_BUILDER_GET_URL + offerId;
+    let url = this.environmentService.REST_API_RETRIEVE_OFFER_DETAILS_URL + offerId;
     return this._http.get(url, { withCredentials: true });
   }
 

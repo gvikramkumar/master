@@ -10,24 +10,21 @@ import { UserService } from '@shared/services';
 
 @Injectable()
 export class ActionsService {
-  // baseMyActionsUrl: string = environment.REST_API_MYACTIONS_URL;
-  // baseMyOfferssUrl: string = environment.REST_API_MYOFFERS_URL;
-  // baseDismissNotificationUrl: string = environment.REST_API_DISMISS_NOTIFICATION;
 
   constructor(private _http: HttpClient, private userService: UserService, private environmentService: EnvironmentService) { }
 
   getActionsTracker(): Observable<any> {
-    const url = this.environmentService.REST_API_ACTIONSTRACKER_URL + this.userService.getUserId() + '/true';
+    const url = this.environmentService.REST_API_ACTIONS_TRACKER_URL + this.userService.getUserId() + '/true';
     return this._http.get(url, { withCredentials: true });
   }
 
   getMilestones(caseId): Observable<any> {
-    const url = `${this.environmentService.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL}/${caseId}/false`;
-
+    const url = `${this.environmentService.REST_API_RETRIEVE_MILESTONES_URL}/${caseId}/false`;
     return this._http.get(url, { withCredentials: true });
   }
+
   getAchievedMilestones(caseId): Observable<any> {
-    const url = `${this.environmentService.REST_API_CREATE_NEW_ACTION_GETMILESTONE_URL}/${caseId}/true`;
+    const url = `${this.environmentService.REST_API_RETRIEVE_MILESTONES_URL}/${caseId}/true`;
     return this._http.get(url);
   }
 
@@ -56,12 +53,12 @@ export class ActionsService {
   }
 
   createNotAndConditional(createActionComment: CreateActionComment): Observable<any> {
-    const url = this.environmentService.REST_API_CREATE_BPM_APPROVAL_URL;
+    const url = this.environmentService.REST_API_POST_ACTION_URL;
     return this._http.post(url, createActionComment);
   }
 
   createActionApprove(createActionApprove: CreateActionApprove): Observable<any> {
-    const url = this.environmentService.REST_API_CREATE_BPM_APPROVAL_URL;
+    const url = this.environmentService.REST_API_POST_ACTION_URL;
     return this._http.post(url, createActionApprove);
   }
 
@@ -74,17 +71,17 @@ export class ActionsService {
     Description: ${actionDescription}
     `;
     emailPayload['toMailLists'] = userId;
-    const url = this.environmentService.REST_API_ESCALATE_NOTIFICATION_URL;
+    const url = this.environmentService.REST_API_EMAIL_NOTIFICATION;
     return this._http.post(url, emailPayload);
   }
 
   postForNewAction(offerId, caseId, createActionPayload) {
-    const url = `${this.environmentService.REST_API_EXITCRITERIA_REQUEST_ACTION_AUTO_CREATION_URL}${offerId}/${caseId}`;
+    const url = `${this.environmentService.REST_API_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL}${offerId}/${caseId}`;
     return this._http.post(url, createActionPayload);
   }
 
   escalateNotification(emailPayload) {
-    const url = this.environmentService.REST_API_ESCALATE_NOTIFICATION_URL;
+    const url = this.environmentService.REST_API_EMAIL_NOTIFICATION;
     return this._http.post(url, emailPayload);
   }
 
@@ -94,4 +91,5 @@ export class ActionsService {
     headers = headers.set('Accept', 'application/octet-stream');
     return this._http.get(url, { headers: headers, responseType: 'blob' });
   }
+
 }

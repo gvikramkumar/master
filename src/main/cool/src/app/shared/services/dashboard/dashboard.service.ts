@@ -12,7 +12,7 @@ export class DashboardService {
   constructor(private http: HttpClient, private userService: UserService, private environmentService: EnvironmentService) { }
 
   getMyActionsList(): Observable<any> {
-    let url = this.environmentService.REST_API_ACTIONSTRACKER_URL + this.userService.getUserId() + '/false';
+    let url = this.environmentService.REST_API_ACTIONS_TRACKER_URL + this.userService.getUserId() + '/false';
     return this.http.get(url, { withCredentials: true });
   }
 
@@ -22,7 +22,7 @@ export class DashboardService {
   }
 
   postDismissNotification(data) {
-    return this.http.post(this.environmentService.REST_API_DISMISS_NOTIFICATION, data);
+    return this.http.post(this.environmentService.REST_API_POST_ACTION_URL, data);
   }
 
   postFileUploadForAction(caseid, data) {
@@ -37,10 +37,10 @@ export class DashboardService {
   }
 
   postComments(data) {
-    return this.http.post(this.environmentService.REST_API_DASH_DIFF_APPROVE_COMMENT_URL, data);
+    return this.http.post(this.environmentService.REST_API_POST_ACTION_URL, data);
   }
 
   postActionForNapprove(data) {
-    return this.http.post(this.environmentService.REST_API_DASH_DIFF_APPROVE_URL, data);
+    return this.http.post(this.environmentService.REST_API_CREATE_MANUAL_ACTION_POST_URL, data);
   }
 }

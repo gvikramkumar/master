@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SharedService } from '../shared-service.service';
 import { Subscription, Subject } from 'rxjs';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
@@ -8,13 +7,12 @@ import { ConfigurationService } from '@shared/services';
 import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import { OffersolutioningService } from '../services/offersolutioning.service';
 import { RightPanelService } from '../services/right-panel.service';
-import { LeadTime } from '../right-panel/lead-time';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { AccessManagementService } from '../services/access-management.service';
 import { StrategyReviewService } from '../services/strategy-review.service';
+
 @Component({
   selector: 'app-mm-assesment',
   templateUrl: './mm-assesment.component.html',
@@ -22,7 +20,6 @@ import { StrategyReviewService } from '../services/strategy-review.service';
   providers: [MessageService, ConfirmationService]
 })
 export class MmAssesmentComponent implements OnInit {
-
 
   public model: any;
   public firstData: any = new Array();
@@ -62,12 +59,11 @@ export class MmAssesmentComponent implements OnInit {
   currentPrimaryBE: any;
   userName;
   eventsSubject: Subject<string> = new Subject<string>();
-  ownerName;
+ 
   setFlag;
   backdropCustom;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
-  offerArray: any[] = [];
   match = false;
   dimensionMode: Boolean = false;
   dimensionFirstGroupData: Object;
@@ -84,6 +80,9 @@ export class MmAssesmentComponent implements OnInit {
   totalApprovalsCount: Number = 0;
   manuallyAddedStakeholders: Array<any> = [];
 
+  // --------------------------------------------------------------------------------------------
+
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private monetizationModelService: MonetizationModelService,
@@ -93,7 +92,6 @@ export class MmAssesmentComponent implements OnInit {
     private offersolutioningService: OffersolutioningService,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService,
-    private confirmationService: ConfirmationService,
     private accessMgmtService: AccessManagementService,
     private strategyReviewService: StrategyReviewService
   ) {
@@ -109,9 +107,7 @@ export class MmAssesmentComponent implements OnInit {
 
   }
 
-  onStrategyReview() {
-    this.router.navigate(['/strategyReview', this.currentOfferId]);
-  }
+  // --------------------------------------------------------------------------------------------
 
   ngOnInit() {
 
@@ -122,11 +118,7 @@ export class MmAssesmentComponent implements OnInit {
     if (this.dimensionMode) {
       this.canClickTab = true;
     }
-    this.offerArray = [];
-    // Fetch logged in owner name from configurationservice.
-    this.ownerName = this.configService.startupData['userName'];
-
-
+        
     // Get Attributes for each group
     this.offerDetailViewService.mmDataRetrive(this.currentOfferId).subscribe(offerDetailRes => {
       let selectedCharacteristics = {};
@@ -288,6 +280,7 @@ export class MmAssesmentComponent implements OnInit {
       this.manuallyAddedStakeholders = this.manuallyAddedStakeholders.map(stakeholder => this.formatManuallyAddedUserAsStakeholder(stakeholder));
 
     });
+
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
       this.totalApprovalsCount = resStrategyReview.length;
     });
@@ -304,11 +297,12 @@ export class MmAssesmentComponent implements OnInit {
     this.groupNames.push(group['groupName']);
 
     group['subGroup'].forEach(g => {
+      
       if (Object.keys(selectedCharacteristics).length !== 0) {
         this.showEditbutton = true;
         this.disablefields = true;
-        this.offerArray = selectedCharacteristics['Offer Characteristics'][g['subGroupName']];
       }
+
       curGroup[g['subGroupName']] = [];
       g.choices.forEach((c) => {
         this.match = false;
@@ -331,6 +325,8 @@ export class MmAssesmentComponent implements OnInit {
     });
     this.groupData.push(curGroup);
   }
+
+  // --------------------------------------------------------------------------------------------
 
   // Attributes Selection Rules
 
@@ -508,6 +504,19 @@ export class MmAssesmentComponent implements OnInit {
     this.selectedGroupData = this.groupData;
   }
 
+  // --------------------------------------------------------------------------------------------
+
+  showDialogBox() {
+    if (this.totalApprovalsCount > 0 && this.isChangedAttribute) {
+      this.showDialog = true;
+    } else {
+      this.toNextStep();
+    }
+
+  }
+
+  // --------------------------------------------------------------------------------------------
+
   toPrevStep() {
     if (this.activeTabIndex > 0) {
       this.activeTabIndex -= 1;
@@ -517,21 +526,7 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
 
-  showDialogBox() {
-    // let isCompleted = false;
-    // this.currentOfferResult.ideate.forEach(item => {
-    //   if (item.subMilestone == "Strategy Review" && item.status == "Completed") {
-    //     isCompleted = true;
-    //   }
-    // });
-
-    if (this.totalApprovalsCount > 0 && this.isChangedAttribute) {
-      this.showDialog = true;
-    }
-    else
-      this.toNextStep();
-  }
-
+  // --------------------------------------------------------------------------------------------
 
   toNextStep() {
 
@@ -611,6 +606,8 @@ export class MmAssesmentComponent implements OnInit {
     this.emitEventToChild();
     this.proceedToStakeholder('false');
   }
+
+  // --------------------------------------------------------------------------------------------
 
   getStakeData(mmModel) {
 
@@ -713,6 +710,8 @@ export class MmAssesmentComponent implements OnInit {
     });
   }
 
+  // --------------------------------------------------------------------------------------------
+
   emitEventToChild() {
     this.eventsSubject.next(this.offerBuilderdata['offerOwner']);
   }
@@ -748,6 +747,8 @@ export class MmAssesmentComponent implements OnInit {
       }
     }
   }
+
+  // --------------------------------------------------------------------------------------------
 
   proceedToStakeholder(withRouter: string = 'true') {
 
@@ -1034,6 +1035,12 @@ export class MmAssesmentComponent implements OnInit {
     })
   }
 
+  // --------------------------------------------------------------------------------------------
+
+  onStrategyReview() {
+    this.router.navigate(['/strategyReview', this.currentOfferId]);
+  }
+
   goBackToOffercreation() {
     this.router.navigate(['/coolOffer', this.currentOfferId, this.caseId]);
   }
@@ -1043,5 +1050,7 @@ export class MmAssesmentComponent implements OnInit {
   gotoOfferviewDetails() {
     this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
   }
+
+  // --------------------------------------------------------------------------------------------
 
 }

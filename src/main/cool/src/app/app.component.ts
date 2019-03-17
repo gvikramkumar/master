@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
 
     // Start watch when time is up.
     this.userIdle.onTimeout().subscribe(() =>
-      window.location.href = this.environmentService.GENERATE_AUTH_TOKEN_URL
+      window.location.href = this.environmentService.REST_API_GENERATE_AUTH_TOKEN_URL
     );
   }
 

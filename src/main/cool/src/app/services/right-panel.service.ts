@@ -22,7 +22,7 @@ export class RightPanelService {
     private httpClient: HttpClient,
     private environmentService: EnvironmentService) {
 
-    this.getOfferDatesUrl = this.environmentService.REST_API_GET_OFFER_DATES;
+    this.getOfferDatesUrl = this.environmentService.REST_API_RETRIEVE_OFFER_DATES;
     this.launchDateUrl = this.environmentService.REST_API_LEAD_TIME_LAUNCH_DATE;
     this.averageWeekUrl = this.environmentService.REST_API_LEAD_TIME_AVERAGE_WEEKS;
     this.updateOfferPhaseUrl = this.environmentService.REST_API_UPDATE_OFFER_TARGET_DATE;

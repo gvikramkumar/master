@@ -8,7 +8,7 @@ import { UserService } from '../user.service';
 @Injectable()
 export class CreateOfferService {
 
-  baseUrl: string = this.environmentService.REST_API_URL_GET_LDAP_INFO;
+  baseUrl: string = this.environmentService.REST_API_LDAP_USER_DETAILS_URL;
   offerCreateUrl: string = this.environmentService.REST_API_OFFER_CREATE_URL;
   offerUpdateUrl: string = this.environmentService.REST_API_UPDATE_OFFER;
   basePrimaryUrl: string = this.environmentService.REST_API_PRIMARY_URL;
@@ -156,7 +156,7 @@ export class CreateOfferService {
   }
 
   getIdpid() {
-    let url = this.environmentService.GENERATE_AUTH_IDP_TOKEN_URL;
+    let url = this.environmentService.REST_API_AUTH_IDP_TOKEN_URL;
     return this.httpClient.get(url);
   }
 

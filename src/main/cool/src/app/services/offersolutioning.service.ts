@@ -27,16 +27,16 @@ export class OffersolutioningService {
     }
   }
   notificationPost(data) {
-    const url = this.environmentService.REST_API_NOTIFICATION_PRIMARYPOC_POST_URL;
+    const url = this.environmentService.REST_API_NOTIFICATION_PRIMARY_POC_POST_URL;
     return this.httpClient.post(url, data);
   }
   actionPost(data) {
-    const url = this.environmentService.REST_API_ACTION_PRIMARYPOC_POST_URL;
+    const url = this.environmentService.REST_API_ACTION_PRIMARY_POC_POST_URL;
     return this.httpClient.post(url, data);
   }
 
   getSolutioningPayload(offerId) {
-    let url = this.environmentService.REST_API_GET_RULE_RESULT_URL;
+    let url = this.environmentService.REST_API_RETRIEVE_OFFER_DIMENSIONS_INFO_URL;
     url += offerId;
     return this.httpClient.get(url);
   }
@@ -47,7 +47,7 @@ export class OffersolutioningService {
   }
 
   saveOfferSolutionAnswers(offerId: string, offerSolutioningAnswers) {
-    const url = this.environmentService.REST_API_SAVE_OFFER_SOLUTIONING_ANSWERS + offerId;
+    const url = this.environmentService.REST_API_SAVE_OR_RETRIEVE_OFFER_SOLUTIONING_ANSWERS + offerId;
     return this.httpClient.post(url, offerSolutioningAnswers);
   }
 
@@ -57,7 +57,7 @@ export class OffersolutioningService {
   }
 
   retrieveOfferSolutionAnswers(offerId: string) {
-    const url = this.environmentService.REST_API_RETRIEVE_OFFER_SOLUTIONING_ANSWERS + offerId;
+    const url = this.environmentService.REST_API_SAVE_OR_RETRIEVE_OFFER_SOLUTIONING_ANSWERS + offerId;
     return this.httpClient.get(url);
   }
 

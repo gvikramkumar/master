@@ -7,7 +7,7 @@ import { EnvironmentService } from '../../environments/environment.service';
 @Injectable()
 export class OfferPhaseService {
 
-    offerPhaseDetailsUrl: string = this.environmentService.REST_API_OFFERPHASE_DETAILS_URL;
+    offerPhaseDetailsUrl: string = this.environmentService.REST_API_RETRIEVE_MILESTONES_URL;
 
     constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) {
     }
@@ -23,7 +23,7 @@ export class OfferPhaseService {
     }
 
     proceedToStakeHolders(data){
-        let url = this.environmentService.REST_API_HOLD_OFFER;
+        let url = this.environmentService.REST_API_POST_ACTION_URL;
         const httpOptions = {
             headers: new HttpHeaders({
               'Content-Type': 'application/json',

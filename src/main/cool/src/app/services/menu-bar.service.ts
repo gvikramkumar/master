@@ -11,7 +11,7 @@ export class MenuBarService {
     ) { }
 
     getRubboTaxMenu(caseId):any {
-      return this.httpClient.get(this.environmentService.REST_API_TURBO_TAX_MENU + caseId + '/false');
+      return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + caseId + '/false');
     }
 
     holdOffer(data):any {
@@ -24,7 +24,7 @@ export class MenuBarService {
         withCredentials: true,
       };
 
-      return this.httpClient.post(this.environmentService.REST_API_HOLD_OFFER, data, httpOptions);
+      return this.httpClient.post(this.environmentService.REST_API_POST_ACTION_URL, data, httpOptions);
     }
 
     cancelOffer(data):any {
@@ -36,7 +36,7 @@ export class MenuBarService {
         withCredentials: true,
       };
 
-      return this.httpClient.post(this.environmentService.REST_API_CANCEL_OFFER, data, httpOptions );
+      return this.httpClient.post(this.environmentService.REST_API_POST_ACTION_URL, data, httpOptions );
     }
 
     sendNotification(data:object) {
@@ -48,7 +48,7 @@ export class MenuBarService {
         withCredentials: true,
       };
 
-      return this.httpClient.post(this.environmentService.REST_API_EMAIL_NORIFICATION, data, httpOptions );
+      return this.httpClient.post(this.environmentService.REST_API_EMAIL_NOTIFICATION, data, httpOptions );
     }
 
 }

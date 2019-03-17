@@ -18,14 +18,14 @@ export class AccessManagementService {
         private httpClient: HttpClient, private environmentService: EnvironmentService, private userService: UserService) { }
 
     accessManagementAll(): any {
-        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_GETALL_URL);
+        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_GET_ALL_URL);
     }
     /**
      * Gets user access data
      * Filters user access data based on current user permission
      */
     getFomattedUserAccessData(currentUserData): any {
-        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_GETALL_URL)
+        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_GET_ALL_URL)
             .pipe(
                 map(userData => this.formatAndFilterUserAccessData(currentUserData, userData))
             );
@@ -74,38 +74,39 @@ export class AccessManagementService {
             (currentUserData.isFunctionalAdmin && currentUserData.functionsUserCanAddTo.includes(userData['functionalRole']));
     }
     getUserDetails(user: string) {
-        return this.httpClient.post<[]>(this.environmentService.REST_API_USER_DETAILS, {userId: user}, { withCredentials: true });
+        return this.httpClient.post<[]>(this.environmentService.REST_API_LDAP_USER_DETAILS_URL, {userId: user}, { withCredentials: true });
     }
 
     registerUser(newUser: NewUser[]): Observable<any> {
-        return this.httpClient.post(this.environmentService.REST_API_ACCESS_MANAGEMENT_CREATEUSER_URL,
+        return this.httpClient.post(this.environmentService.REST_API_CREATE_NEW_USER_URL,
             newUser, { withCredentials: true });
     }
 
     updateAccessManagement(accessManagement: any) {
-        return this.httpClient.post(this.environmentService.REST_API_ACCESS_MANAGEMENT_UPDATEUSER_URL,
+        return this.httpClient.post(this.environmentService.REST_API_UPDATE_USER_INFO_URL,
             accessManagement, { withCredentials: true });
     }
 
     getregisterUserFunction() {
-        const url = this.environmentService.REST_API_RIGISTERNEWUSER_GET_URL;
+        const url = this.environmentService.REST_API_REGISTER_NEW_USER_GET_URL;
         return this.httpClient.get(url);
     }
 
     checkAdminAccess(): Observable<any> {
-        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL + '/' + this.userService.getUserId(),
+        return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_USER_INFO_URL + '/' + this.userService.getUserId(),
             { withCredentials: true });
     }
 
     getCurrentUserInfo(userId: String): Observable<any> {
-        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL + '/' + userId,
+        return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_USER_INFO_URL + '/' + userId,
             { withCredentials: true });
     }
+
     // If super admin then all the function values should show up
     // Else if the user if functional Admin dropdown should show values the user is funcional admin for
     // other wise don't show up any values
     getFunction(currentUserData) {
-        const url = this.environmentService.REST_API_RIGISTERNEWUSER_GET_URL;
+        const url = this.environmentService.REST_API_REGISTER_NEW_USER_GET_URL;
         return this.httpClient.get(url).pipe(
             map(resFunctions => {
                 if (currentUserData.isSuperAdmin) {
@@ -193,7 +194,7 @@ export class AccessManagementService {
     }
 
     retrieveUserInfo(userId: String): Observable<any> {
-        return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_ACCESS_CHECK_URL + '/' + userId,
+        return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_USER_INFO_URL + '/' + userId,
             { withCredentials: true });
     }
 
