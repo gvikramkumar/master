@@ -1,5 +1,6 @@
 <div class="row">
   <div class="col-md-12" [ngSwitch]="currentPage">
+
     <div *ngSwitchCase="'dashboard'" class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
       <div class="header-bar__main col-md-6">
         <div class="header-heading">
@@ -17,6 +18,7 @@
           <span class="button--label">New Offer</span></button>
       </div>
     </div>
+
     <div *ngSwitchCase="'action'" class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
       <div class="header-bar__main col-md-6">
         <div class="header-heading">
@@ -34,6 +36,7 @@
           <span class="button--label">New Action</span></button>
       </div>
     </div>
+    
     <div *ngSwitchDefault class="panel panel--indigo panel--compressed task--bar">
       <div class="row">
         <div class="col-md-4">
