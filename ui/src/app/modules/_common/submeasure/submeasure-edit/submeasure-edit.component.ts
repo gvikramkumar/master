@@ -289,7 +289,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.pgLookupService.getSubmeasureFlashCategories(this.sm.submeasureKey || 0).toPromise(),
           this.pgLookupService.getSubmeasureAdjustmentTypes(this.sm.submeasureKey || 0).toPromise(),
         ]
-        if (!this.addMode) {
+        if ((this.viewMode || this.editMode) && this.isManualMix()) { // needs submeasureKey for this call
           promises2.push(this.pgLookupService.callRepoMethod('getManualMixHwSwBySubmeasureKey',
             {submeasureKey: this.sm.submeasureKey, moduleId: this.store.module.moduleId}).toPromise());
         }
@@ -297,8 +297,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           .then(results => {
             this.flashCategories = results[0];
             this.adjustmentTypes = results[1];
-            this.manualMixHwDb = results[2][0];
-            this.manualMixSwDb = results[2][1];
+            if ((this.viewMode || this.editMode) && this.isManualMix()) {
+              this.manualMixHwDb = results[2][0];
+              this.manualMixSwDb = results[2][1];
+            }
             this.orgSubmeasure = _.cloneDeep(this.sm);
             this.init();
           });
@@ -905,8 +907,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       if (isNaN(sw)) {
         this.errs.push(`Manual Mix SW value, not a number: ${this.sm.manualMixSw}`);
       }
-      if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
-        this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
+      if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 1.0) {
+        this.errs.push(`Manual Mix HW/SW values do not add up to 1`);
       }
     }
 
