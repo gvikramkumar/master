@@ -79,9 +79,6 @@ export class SourceMappingComponent extends RoutingComponentBase implements OnIn
         .then(() => {
           this.refresh();
           this.uiUtil.toast('Module-to-source mapping saved.');
-        })
-        .catch(err => {
-          const i = 5;
         });
     }
   }
