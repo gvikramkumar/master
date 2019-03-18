@@ -166,18 +166,14 @@ db.dfa_lookup.insertMany([
   }
 ]);
 
-db.dfa_module_data_source.insertMany([
-  {moduleId: NumberInt(1), sources: [NumberInt(1),NumberInt(2), NumberInt(3),NumberInt(4)]}
-])
-
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
-  'dfa_allocation_rule',
-  'dfa_data_source',
-  'dfa_measure',
-  'dfa_submeasure',
-  'dfa_module',
-  'dfa_module_data_source',
+  // 'dfa_allocation_rule',
+  // 'dfa_data_source',
+  // 'dfa_measure',
+  // 'dfa_submeasure',
+  // 'dfa_module',
+  // 'dfa_module_data_source',
   'dfa_open_period',
 ];
 

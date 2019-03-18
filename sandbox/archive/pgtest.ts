@@ -13,9 +13,9 @@ pgc.promise.then(db => {
   });
 */
 
-import AnyObj from '../shared/models/any-obj';
+import AnyObj from '../../shared/models/any-obj';
 import * as _ from 'lodash';
-import {pgc} from '../server/lib/database/postgres-conn';
+import {pgc} from '../../server/lib/database/postgres-conn';
 import {PgRepo} from './pgrepo';
 
 const repo = new PgRepo();

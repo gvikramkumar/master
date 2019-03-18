@@ -5,6 +5,17 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+const periodMap = {
+  MTD: 'MTD',
+  PERCENT: 'PCT',
+  ['PRIOR ROLL3']: 'ROLL3',
+  ['PRIOR ROLL6']: 'PROLL6',
+  QTD: 'QTD',
+  ROLL3: 'ROLL3',
+  ROLL6: 'ROLL6'
+};
+
+
 
 
 /*

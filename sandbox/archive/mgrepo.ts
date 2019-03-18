@@ -1,5 +1,5 @@
 import {Schema} from 'mongoose';
-import RepoBase from '../server/lib/base-classes/repo-base';
+import RepoBase from '../../server/lib/base-classes/repo-base';
 
 
 const schema = new Schema(

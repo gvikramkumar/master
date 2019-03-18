@@ -4,6 +4,16 @@ print('host: ' + host + ', port: ' + port + ', db: ' + _db);
 const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 
+/*
+rollover tables
+•	fpadfa.dfa_prof_disti_to_direct_map_upld
+•	fpadfa.dfa_prof_manual_map_upld
+•	fpadfa.dfa_prof_sales_split_pctmap_upld
+•	fpadfa.dfa_prof_scms_triang_altsl2_map_upld
+•	fpadfa.dfa_prof_scms_triang_corpadj_map_upld
+•	fpadfa.dfa_prof_swalloc_manualmix_upld
+ */
+
 // this is a case INsensitive database because of this collation setting we do. All collections
 // have to be added to this and go through this collation setting, either here or in an update.
 const collationCollections = [

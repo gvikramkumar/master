@@ -1,6 +1,6 @@
-import {mgc} from '../server/lib/database/mongoose-conn';
+import {mgc} from '../../server/lib/database/mongoose-conn';
 import MgRepo from './mgrepo';
-import AnyObj from '../shared/models/any-obj';
+import AnyObj from '../../shared/models/any-obj';
 import * as _ from 'lodash';
 
 const repo = new MgRepo();
