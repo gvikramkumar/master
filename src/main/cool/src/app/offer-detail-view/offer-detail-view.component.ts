@@ -258,7 +258,7 @@ export class OfferDetailViewComponent implements OnInit {
   }
 
   onExportPdf() {
-    this.monetizationModelService.getPDF(this.currentOfferId).subscribe(data => {
+    this.monetizationModelService.downloadOfferDetailsPdf(this.currentOfferId).subscribe(data => {
       const nameOfFileToDownload = 'offer-details';
       const blob = new Blob([data], { type: 'application/pdf' });
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {

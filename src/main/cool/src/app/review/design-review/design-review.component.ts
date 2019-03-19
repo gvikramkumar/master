@@ -238,7 +238,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
 
   getOfferDetails() {
     this.offerBuilderdata = {};
-    this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
+    this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.offerBuilderdata = data;
       this.offerBuilderdata['BEList'] = [];
       this.offerBuilderdata['BUList'] = [];

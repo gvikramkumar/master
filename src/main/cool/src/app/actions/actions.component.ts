@@ -249,7 +249,7 @@ export class ActionsComponent implements OnInit {
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
       } else {
-        const url = `${this.environmentService.REST_API_FILE_DOWNLOAD_FOR_ACTION}/${caseid}`;
+        const url = `${this.environmentService.REST_API_DOWNLOAD_FILE_FOR_ACTION}/${caseid}`;
         var a = document.createElement('a');
         a.href = url;
         a.download = nameOfFileToDownload;

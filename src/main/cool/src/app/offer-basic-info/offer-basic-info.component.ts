@@ -24,7 +24,7 @@ export class OfferBasicInfoComponent implements OnInit {
   
   ngOnInit() {
     let that = this;
-    this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
+    this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       that.offerBuilderdata = data;
       that.offerBuilderdata['BEList'] = [];
       that.offerBuilderdata['BUList'] = [];
