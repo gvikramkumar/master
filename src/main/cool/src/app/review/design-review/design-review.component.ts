@@ -228,6 +228,8 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
 
  // --------------------------------------------------------------------------------------------------------------------------------
 
+ offerDetailOverView() {}
+
   private getMilestones(milestones) {
     const result = milestones.ideate;
     this.milestoneList = [];
