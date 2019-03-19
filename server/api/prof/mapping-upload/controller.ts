@@ -15,9 +15,9 @@ export default class MappingUploadController extends ControllerBase {
   }
 
   mongoToPgSyncTransform(mums, userId, log, elog) {
-    const tableName = 'dfa_prof_dept_acct_map_upld';
+    const tableName = 'dfa_prof_manual_map_upld';
     const mups = [];
-    return this.submeasureRepo.getManyActive({moduleId: DfaModuleIds.prof})
+    return this.submeasureRepo.getManyLatestGroupByNameActive({moduleId: DfaModuleIds.prof})
       .then(subs => {
         mums.forEach(mum => {
           const sub = _.find(subs, {name: mum.submeasureName});

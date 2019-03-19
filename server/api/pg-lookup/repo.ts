@@ -612,7 +612,7 @@ export default class PgLookupRepo {
         update  fpadfa.dfa_prof_disti_to_direct_map_upld
         set ext_theater_name = distimap.external_theater
         from (select D2D.node_code as distinode
-        ,case dsh.external_theater_name
+        ,case dsh.dd_external_theater_name
         when 'APJC' then 'APJC'
         when 'Americas' then 'Americas'
         when 'EMEA' then 'EMEA' end as external_theater
