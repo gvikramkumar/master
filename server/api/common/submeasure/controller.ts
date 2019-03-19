@@ -211,8 +211,8 @@ export default class SubmeasureController extends ApprovalController {
       promises.push(this.productClassUploadRepo.removeMany({submeasureName: sm.name})
         .then(() => {
           return this.productClassUploadRepo.addManyTransaction([
-            {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'HARDWARE', splitPercentage: sm.manualMixHw},
-            {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'SOFTWARE', splitPercentage: sm.manualMixSw}
+            {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'HARDWARE', splitPercentage: sm.manualMixHw ? sm.manualMixHw / 100 : undefined},
+            {fiscalMonth: req.dfa.module.fiscalMonth, submeasureName: sm.name, splitCategory: 'SOFTWARE', splitPercentage: sm.manualMixSw ? sm.manualMixSw / 100 : undefined}
           ], sm.updatedBy)
             .then(() => {
               delete sm.manualMixHw;

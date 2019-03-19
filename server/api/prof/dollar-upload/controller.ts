@@ -17,7 +17,7 @@ export default class DollarUploadController extends ControllerBase {
   mongoToPgSyncTransform(dums, userId, log, elog) {
     const tableName = 'dfa_prof_input_amnt_upld';
     const dups = [];
-    return this.submeasureRepo.getManyLatestGroupByNameActive({moduleId: DfaModuleIds.prof})
+    return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.prof)
       .then(subs => {
         dums.forEach(dum => {
           const sub = _.find(subs, {name: dum.submeasureName});
