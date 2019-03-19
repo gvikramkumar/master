@@ -4,8 +4,7 @@
     <div *ngSwitchCase="'dashboard'" class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
       <div class="header-bar__main col-md-6">
         <div class="header-heading">
-          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
-              class="action--value-label">Pending
+          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span class="action--value-label">Pending
               Actions</span></h1>
           <span class="vertical-divider"></span>
           <h1 class="page-title"><span class="action--value">{{actionCount.needImmediateActionCount}}</span> <span
@@ -22,8 +21,7 @@
     <div *ngSwitchCase="'action'" class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
       <div class="header-bar__main col-md-6">
         <div class="header-heading">
-          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
-              class="action--value-label">Pending
+          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span class="action--value-label">Pending
               Actions</span></h1>
           <span class="vertical-divider"></span>
           <h1 class="page-title"><span class="action--value">{{actionCount.needImmediateActionCount}}</span> <span
@@ -36,7 +34,7 @@
           <span class="button--label">New Action</span></button>
       </div>
     </div>
-    
+
     <div *ngSwitchDefault class="panel panel--indigo panel--compressed task--bar">
       <div class="row">
         <div class="col-md-4">
@@ -47,8 +45,7 @@
           <button *ngIf="showSave" class="btn btn--white" (click)='saveCurrentState()'> Save </button>
           <button *ngIf="showOfferDtlsBtn" class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View
           </button>
-          <button *ngIf="!isLastStep" class="btn btn--white" (click)='proceedToNextStep()'
-            [disabled]="isValidToProceed">Proceed to
+          <button *ngIf="!isLastStep" class="btn btn--white" (click)='proceedToNextStep()'>Proceed to
             {{taskBarNavSteps[currentStepIndex].nxtBtnTitle}}&nbsp;<span class="icon-chevron-right"></span></button>
         </div>
       </div>

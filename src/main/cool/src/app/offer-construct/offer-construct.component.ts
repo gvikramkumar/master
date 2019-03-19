@@ -104,7 +104,7 @@ export class OfferConstructComponent implements OnInit {
 
     });
 
-    this.monetizationModelService.getAttributes().subscribe(data => {
+    this.monetizationModelService.retrieveOfferDimensionAttributes().subscribe(data => {
       this.offerData = data;
       this.offerData['groups'].forEach(group => {
         this.groupNames.push(group['groupName']);

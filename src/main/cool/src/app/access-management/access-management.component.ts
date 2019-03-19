@@ -114,7 +114,8 @@ export class AccessManagementComponent implements OnInit {
           businessEntity,
           this.functionNameValue,
           this.adminValue,
-          this.keyPocValue
+          this.keyPocValue,
+          null
         );
         accumulator.push(userMapping);
         return accumulator;
@@ -153,7 +154,8 @@ export class AccessManagementComponent implements OnInit {
           element,
           updatedUserBusinessEntity.functionalRole,
           isAdmin,
-          isKeyPoC
+          isKeyPoC,
+          null
         );
         userMappings.push(userMapping);
       });

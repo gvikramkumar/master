@@ -12,7 +12,6 @@ export class TaskbarComponent implements OnInit {
 
   @Input() isDashboard: boolean = false;
   @Input() actionCount: { pendingActionCount: number, needImmediateActionCount: number };
-  @Input() isValidToProceed: boolean = false;
   @Input() showSave: boolean = false;
   @Input() showOfferDtlsBtn: boolean = true;
 
