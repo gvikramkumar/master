@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ExitCriteriaValidationService } from 'src/app/services/exit-criteria-validation.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { HeaderService, UserService } from '@shared/services';
+import { MessageService } from '@app/services/message.service';
 
 @Component({
   selector: 'app-design-review-exit-criteria',
@@ -20,12 +21,13 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
   plan = [];
   offerOwner: String = '';
   requestApprovalAvailable: Boolean = true;
-  approvedOfferId;
+  designApprovedOfferId;
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private headerService: HeaderService,
     private localStorage: LocalStorageService,
+    private messageService: MessageService,
     private userService: UserService
   ) {
     this.activatedRoute.params.subscribe(params => {
@@ -35,8 +37,8 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.approvedOfferId = this.localStorage.retrieve('approvedOfferId');
-    if (this.approvedOfferId === this.currentOfferId) {
+    this.designApprovedOfferId = this.localStorage.retrieve('designApprovedOfferId');
+    if (this.designApprovedOfferId === this.currentOfferId) {
       this.requestApprovalAvailable = false;
     }
 
@@ -54,7 +56,7 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
       }
 
       for (let i = 0; i < this.plan.length-1; i++) {
-        if (this.plan[i]['status'] !== 'Completed') {
+        if (this.plan[i]['status'] !== 'Completed' && this.plan[i]['status'] !== 'Not Applicable') {
           this.requestApprovalAvailable = false;
           break;
         }
@@ -100,8 +102,8 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
       });
     this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
       this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
-        // this.messageService.sendMessage('Strategy Review');
-        this.localStorage.store('approvedOfferId', this.currentOfferId);
+        this.messageService.sendMessage('Design Review');
+        this.localStorage.store('designApprovedOfferId', this.currentOfferId);
         this.requestApprovalAvailable = false;
       });
     });

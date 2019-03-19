@@ -76,7 +76,7 @@
                 <div class="card">
 
                   <div class="panel panel--ltgray">
-                    <h5>Strategy Review Status</h5>
+                    <h5>Design Review Status</h5>
                   </div>
 
                   <div class="row accordion-col-heading">
@@ -89,7 +89,7 @@
 
                   <p-accordion>
 
-                    <p-accordionTab *ngFor="let strategyReviewData of strategyReviewList" (click)="onTabOpen(strategyReviewData.taskId)">
+                    <p-accordionTab *ngFor="let strategyReviewData of designReviewList" (click)="onTabOpen(strategyReviewData.taskId)">
 
                       <p-header>
                         <div class="row" style="vertical-align: middle;margin-left: 20px">
@@ -125,9 +125,9 @@
 
                       <ng-template #visibleEscalateTemplate>
                         <div class="panel panel--bordered not-reviewed">
-                          <p>This is the strategy review milestone and the content is a placeholder for
+                          <p>This is the design review milestone and the content is a placeholder for
                             milestone summary.
-                            This is the strategy review milestone and the content is ... </p>
+                            This is the design review milestone and the content is ... </p>
                           <button class="btn btn--secondary" [disabled]="strategyReviewData.flag=='Not Escalate'"
                             (click)="onEscalate(strategyReviewData.function)">Escalate</button>
                         </div>

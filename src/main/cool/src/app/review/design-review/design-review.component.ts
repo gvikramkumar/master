@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
@@ -7,27 +7,38 @@ import { ActionsService } from '@app/services/actions.service';
 import { SharedService } from '@app/shared-service.service';
 import { Subscription, forkJoin } from 'rxjs';
 import { RightPanelService } from '@app/services/right-panel.service';
+import { MessageService } from '@app/services/message.service';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { NgForm } from '@angular/forms';
+import { UserService, CreateOfferService, DashboardService, HeaderService } from '@shared/services';
+import { CreateActionComment } from '@app/models/create-action-comment';
+import { CreateActionApprove } from '@app/models/create-action-approve';
+import { AccessManagementService } from '@app/services/access-management.service';
 
 @Component({
   selector: 'app-designreview',
   templateUrl: './design-review.component.html',
   styleUrls: ['./design-review.component.css']
 })
-export class DesignReviewComponent implements OnInit {
+export class DesignReviewComponent implements OnInit, OnDestroy {
+
+  @ViewChild('createActionForm') createActionForm: NgForm;
+  @ViewChild('createActionApproveForm') createActionApproveForm: NgForm;
+
   offerData: any;
   currentOfferId;
   caseId;
-  strategyReviewList:any;
   bviewDeckData: any[];
   choiceSelected;
   groups = {};
   groupKeys = [];
   groupNames = [];
-  groupData = [];
+
   message = {};
   stakeData = {};
   newDataArray = [];
   offerBuilderdata = {};
+  minDate: Date;
   updateStakeData;
   setFlag;
   currentUser;
@@ -45,6 +56,8 @@ export class DesignReviewComponent implements OnInit {
   stakeHolders = {};
 
   public data = [];
+  public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+
   totalApprovalsCount: any = 0;
   approvedCount: any = 0;
   conditionallyApprovedCount: any = 0;
@@ -60,7 +73,23 @@ export class DesignReviewComponent implements OnInit {
   designReviewList;
   milestoneValue: string;
   proceedToOfferSetup: Boolean = true;
-
+  showButtonSection = false;
+  doNotApproveSection = false;
+  showConditionalApprovalSection = false;
+  escalateVisibleAvailable: Boolean = false;
+  showApproveSection = false;
+  action: any;
+  currentTaskId: any;
+  commentValue: string;
+  titleValue: string;
+  descriptionValue: string;
+  functionNameValue: string;
+  assigneeValue: Array<any>;
+  dueDateValue: any;
+  functionList;
+  assigneeList;
+  strategyReviewList;
+  currentFunctionalRole;
   loadExitCriteria = false;
 
   constructor(private router: Router,
@@ -70,22 +99,55 @@ export class DesignReviewComponent implements OnInit {
     private strategyReviewService: StrategyReviewService,
     private actionsService: ActionsService,
     private sharedService: SharedService,
-    private rightPanelService: RightPanelService) {
+    private messageService: MessageService,
+    private headerService: HeaderService,
+    private userService: UserService,
+    private accessManagementService: AccessManagementService,
+    private rightPanelService: RightPanelService,
+    private dashboardService: DashboardService,
+    private createOfferService: CreateOfferService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
     });
   }
-  offerDetailOverView() {}
 
   ngOnInit() {
 
-    forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
+    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+      this.currentFunctionalRole = data.userMappings[0].functionalRole;
+    });
+
+    this.dashboardService.getMyOffersList()
+      .subscribe(resOffers => {
+        resOffers.forEach(ele => {
+          this.stakeHolders[ele.offerId] = {};
+          if (ele.stakeholders != null) {
+            ele.stakeholders.forEach(holder => {
+              if (this.stakeHolders[ele.offerId][holder.functionalRole] == null) {
+                this.stakeHolders[ele.offerId][holder.functionalRole] = [];
+              }
+              this.stakeHolders[ele.offerId][holder.functionalRole].push(holder['_id']);
+            });
+          }
+        });
+      });
+
+    forkJoin([this.strategyReviewService.getStrategyReview(this.caseId),
+        this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;
       this.getDesignReview(designReviewData);
       this.getMilestones(milstones);
       this.completeDesignReview();
     });
+
+    const canApproveUsers = [];
+    const canEscalateUsers = [];
+
+    this.subscription = this.messageService.getMessage()
+      .subscribe(message => {
+        this.getDesignReviewInfo();
+      });
 
     this.data = [];
     this.message = {
@@ -93,6 +155,15 @@ export class DesignReviewComponent implements OnInit {
       content: 'Design Review Message.',
       color: 'black'
     };
+
+    this.showButtonSection = true;
+    this.actionsService.getFunction().subscribe(data => {
+      this.functionList = data;
+    });
+
+    this.actionsService.getAssignee(this.currentOfferId).subscribe(data => {
+      this.assigneeList = data;
+    });
 
     this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
       this.firstData = data;
@@ -129,11 +200,33 @@ export class DesignReviewComponent implements OnInit {
           });
       }
       this.stakeData = this.stakeHolderInfo;
+
+      for (const auth in this.stakeData) {
+        if (auth === 'Co-Owner' || auth === 'Owner') {
+          this.stakeData[auth].forEach(owners => {
+            canEscalateUsers.push(owners['_id']);
+            canApproveUsers.push(owners['_id']);
+          });
+        }
+      }
+
+      this.headerService.getCurrentUser().subscribe(user => {
+        this.currentUser = user;
+        if (canEscalateUsers.includes(user)) {
+          this.escalateVisibleAvailable = true;
+          this.completeStrategyReviewAvailable = true;
+        }
+        this.headerService.getUserInfo(this.currentUser).subscribe(userData => {
+          this.managerName = userData[0].manager;
+        });
+      });
     });
-
+    this.minDate = new Date();
+    this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
     this.getOfferDetails();
-
   }
+
+ // --------------------------------------------------------------------------------------------------------------------------------
 
   private getMilestones(milestones) {
     const result = milestones.ideate;
@@ -164,17 +257,37 @@ export class DesignReviewComponent implements OnInit {
     });
   }
 
+  // --------------------------------------------------------------------------------------------------------------------------------
+  // Retrieve Design Review Info
+  getDesignReviewInfo() {
+    this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
+      this.getDesignReview(resStrategyReview);
+    });
+  }
+
   getDesignReview(resDesignReview) {
     this.designReviewList = resDesignReview;
     this.totalApprovalsCount = resDesignReview.length;
     this.approvedCount = resDesignReview.filter(task => task.status && task.status.toUpperCase() === 'APPROVED').length;
     this.notApprovedCount = resDesignReview.filter(task => task.status && task.status.toUpperCase() === 'NOT APPROVED').length;
-    this.conditionallyApprovedCount = resDesignReview.filter(task => task.status && task.status.toUpperCase() === 'CONDITIONALLY APPROVED').length;
+    this.conditionallyApprovedCount = resDesignReview.filter(task => task.status &&
+      task.status.toUpperCase() === 'CONDITIONALLY APPROVED').length;
     this.notReviewedCount = resDesignReview.filter(task => task.status && task.status.toUpperCase() === 'NOT REVIEWED').length;
   }
 
-  completeDesignReview() {
+  // --------------------------------------------------------------------------------------------------------------------------------
 
+  goBack() {
+    this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+  }
+
+  gotoOfferviewDetails() {
+    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  completeDesignReview() {
     if (this.lastValueInMilestone['status'].toUpperCase() === 'AVAILABLE' &&
       this.totalApprovalsCount > 0 &&
       this.notReviewedCount === 0
@@ -196,6 +309,176 @@ export class DesignReviewComponent implements OnInit {
       this.loadExitCriteria = true;
     }
   }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  onTabOpen(taskId) {
+    this.currentTaskId = taskId;
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  //  function returns flag to display Approval Action section
+
+  getshowApprovalDecisionAction(strategyReviewData) {
+    return strategyReviewData.status &&
+      strategyReviewData.status.toUpperCase() === 'NOT REVIEWED' &&
+      strategyReviewData.assignees.includes(this.userService.getUserId()) &&
+      strategyReviewData.function === this.currentFunctionalRole;
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  doNotApprove() {
+    this.action = 'Not Approved';
+    this.showButtonSection = false;
+    this.doNotApproveSection = true;
+  }
+
+  conditionalApprove() {
+    this.showButtonSection = false;
+    this.action = 'Conditionally Approved';
+    this.showConditionalApprovalSection = true;
+
+  }
+
+  approve() {
+    this.action = 'Approved';
+    this.showButtonSection = false;
+    this.showApproveSection = true;
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  getSelectFunctionRole(functionRole) {
+    // Reset AssignList and AsigneeValue before service call
+    this.assigneeList = [];
+    this.assigneeValue = [];
+    this.selectedfunctionRole = functionRole;
+    if (this.currentOfferId != null && this.selectedfunctionRole != null
+      && this.stakeHolders[this.currentOfferId] != null && this.stakeHolders[this.currentOfferId][this.selectedfunctionRole] != null) {
+      this.assigneeList = this.stakeHolders[this.currentOfferId][this.selectedfunctionRole];
+    }
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  closeForm() {
+    this.doNotApproveSection = false;
+    this.showConditionalApprovalSection = false;
+    this.showApproveSection = false;
+    this.showButtonSection = true;
+    this.commentValue = '';
+    this.titleValue = '';
+    this.descriptionValue = '';
+    this.functionNameValue = '';
+    this.assigneeValue = [];
+    this.dueDateValue = '';
+  }
+
+  createAction() {
+
+    const taskName = 'Action';
+    const taskId = this.currentTaskId;
+    const userId = this.userService.getUserId();
+
+    const createActionPayload = {};
+    createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
+    createActionPayload['owner'] = this.offerBuilderdata['offerOwner'];
+    createActionPayload['assignee'] = [this.assigneeValue];
+    createActionPayload['offerId'] = this.offerId;
+    createActionPayload['caseId'] = this.caseId;
+    createActionPayload['description'] = this.descriptionValue;
+    createActionPayload['actionTitle'] = this.titleValue;
+    createActionPayload['dueDate'] = this.dueDateValue.toISOString();
+    createActionPayload['mileStone'] = this.milestoneValue;
+    createActionPayload['selectedFunction'] = this.functionNameValue;
+    createActionPayload['actionCreator'] = userId;
+    createActionPayload['type'] = 'Manual Action';
+
+    const createActionComment: CreateActionComment = new CreateActionComment(
+      taskId,
+      userId,
+      taskName,
+      this.action,
+      this.commentValue,
+      this.titleValue,
+      this.descriptionValue,
+      this.milestoneValue,
+      this.functionNameValue,
+      this.assigneeValue,
+      this.dueDateValue.toISOString(),
+    );
+
+    const offerId = this.offerId;
+    const actionTitle = this.titleValue;
+    const assignee = [this.assigneeValue];
+    const actionDescription = this.descriptionValue;
+
+    this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
+      this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
+        this.closeForm();
+        this.getDesignReviewInfo();
+        this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
+      });
+    });
+
+    this.createActionForm.reset();
+
+  }
+
+  createActionApprove() {
+
+    const taskName = 'Action';
+    const taskId = this.currentTaskId;
+    const userId = this.userService.getUserId();
+
+    const createActionApprove: CreateActionApprove = new CreateActionApprove(
+      taskId,
+      userId,
+      taskName,
+      this.action,
+      this.commentValue,
+      false
+    );
+    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+      this.closeForm();
+      this.getDesignReviewInfo();
+    });
+    this.createActionApproveForm.reset();
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  async onEscalate(functionName: string) {
+    // Initialize Variables
+    const mailList = [];
+    const functionNameMap = this.stakeData[functionName];
+    // Iterate - Function Names
+    for (const employee of Array.from(functionNameMap.values())) {
+      // Compute Manager List
+      const userId = employee['_id'];
+      const managerDetailsList = await this.accessManagementService.getUserDetails(userId.toString()).toPromise();
+      // Iterate - Manager Names
+      for (const manager of Array.from(managerDetailsList.values())) {
+        mailList.push(manager['manager']);
+      }
+    }
+
+    // Initialize Email Variables
+    const emailPayload = {};
+    emailPayload['toMailLists'] = mailList;
+    emailPayload['subject'] = 'Immediate Attention needed! ' + this.currentOfferId + ' + ' + this.offerName + ' Approval pending';
+    emailPayload['emailBody'] = 'Hello You are receiving this message because the below offer has a pending approval that requires review from a member of your team. Offer ID: ' + this.currentOfferId + ' Offer Name: ' + this.offerName + ' Your immediate attention is highly appreciated. Thanks';
+
+    // Send EMail
+    this.actionsService.escalateNotification(emailPayload).subscribe(data => {
+      this.getDesignReviewInfo();
+    });
+
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
 
   updateMessage(message) {
     if (message != null && message !== '') {
@@ -219,11 +502,12 @@ export class DesignReviewComponent implements OnInit {
     }
   }
 
-  goBack() {
-    this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
-  gotoOfferviewDetails() {
-    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
-  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
 
 }
