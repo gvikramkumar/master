@@ -298,8 +298,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
             this.flashCategories = results[0];
             this.adjustmentTypes = results[1];
             if ((this.viewMode || this.editMode) && this.isManualMix()) {
-              this.manualMixHwDb = results[2][0];
-              this.manualMixSwDb = results[2][1];
+              this.manualMixHwDb = results[2][0] ? results[2][0] * 100 : undefined;
+              this.manualMixSwDb = results[2][1] ? results[2][1] * 100 : undefined;
             }
             this.orgSubmeasure = _.cloneDeep(this.sm);
             this.init();
@@ -393,10 +393,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     if (!this.hasAdjustmentType()) {
       this.adjustmentType = undefined;
-    }
-    if (!this.hasSourceRapidRevenue()) {
-      this.ifl_switch_glseg = false;
-      this.iflChange('glseg');
     }
   }
 
@@ -907,8 +903,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       if (isNaN(sw)) {
         this.errs.push(`Manual Mix SW value, not a number: ${this.sm.manualMixSw}`);
       }
-      if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 1.0) {
-        this.errs.push(`Manual Mix HW/SW values do not add up to 1`);
+      if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
+        this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
       }
     }
 
@@ -1023,6 +1019,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then(() => {
         if (this.isUnallocatedGroup()) {
           this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+        } else {
+          this.init();
         }
       });
   }
@@ -1032,6 +1030,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then (() => {
         if (this.isUnallocatedGroup()) {
           this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+        } else {
+          this.init();
         }
       });
   }
@@ -1041,6 +1041,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then(() => {
         if (this.isPassThrough()) {
           this.clearPropertiesForUnallocatedGroupOrPassThrough('passThrough');
+        } else {
+          this.init();
         }
       });
   }

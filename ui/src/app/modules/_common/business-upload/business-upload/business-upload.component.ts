@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
@@ -33,6 +33,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   selectedFileName = '';
   templates: FsFile[];
   openPeriod: OpenPeriod;
+  @ViewChild('fileInput') fileInput;
 
   uploadTypes = [
     {type: 'dollar-upload', text: 'Input Dollar Adjustments', disabled: false},
@@ -93,5 +94,6 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
 
   changeUploadType() {
     this.selectedFileName = '';
+    this.fileInput.nativeElement.value = null;
   }
 }

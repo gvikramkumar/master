@@ -9,6 +9,7 @@ import {AppStore} from '../../../../app/app-store';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import * as _ from 'lodash';
 import {shUtil} from '../../../../../../../shared/shared-util';
+import {UiUtil} from '../../../../core/services/ui-util';
 
 @Component({
   selector: 'fin-submeasure-detail-dialog',
@@ -39,7 +40,7 @@ export class SubmeasureDetailDialogComponent {
   ngOnInit() {
     const promises: Promise<any>[] = [
       this.measureService.getQueryOne({measureId: this.sm.measureId}).toPromise(),
-      this.sourceService.getQueryOne({sourceId: this.sm.sourceId}).toPromise(),
+      this.sm.sourceId ? this.sourceService.getQueryOne({sourceId: this.sm.sourceId}).toPromise() : Promise.resolve(undefined),
       this.ruleService.getManyLatestGroupByNameActive(this.store.module.moduleId).toPromise()
     ];
     if (this.sm.groupingSubmeasureId) {
@@ -48,7 +49,7 @@ export class SubmeasureDetailDialogComponent {
     Promise.all(promises)
       .then(results => {
         this.measureName = results[0].name;
-        this.sourceName = results[1].name;
+        this.sourceName = results[1] && results[1].name;
         this.rulesAll = results[2];
         this.sm.rules.forEach(name => this.rules.push(_.find(this.rulesAll, {name})));
         if (this.sm.groupingSubmeasureId) {
@@ -69,6 +70,11 @@ export class SubmeasureDetailDialogComponent {
 
   isDeptUpload() {
     return shUtil.isDeptUpload(this.sm);
+  }
+
+  getStatus() {
+    const status = this.sm.approvedOnce === 'Y' ? this.sm.activeStatus : this.sm.status;
+    return UiUtil.getStatusText(status);
   }
 
 }

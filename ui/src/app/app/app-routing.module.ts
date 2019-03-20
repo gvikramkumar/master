@@ -8,6 +8,7 @@ import {AppStore} from './app-store';
 import {PageNotFoundComponent} from '../shared/components/page-not-found/page-not-found.component';
 import {AuthorizationGuard} from '../core/guards/authorization.guard';
 import {filter} from 'rxjs/operators';
+import {UiUtil} from '../core/services/ui-util';
 
 const routes: Routes = [
   {
@@ -53,7 +54,7 @@ const routes: Routes = [
 })
 export class AppRoutingModule {
 
-  constructor(private store: AppStore, private router: Router, private appRef: ApplicationRef) {
+  constructor(private store: AppStore, private router: Router, private appRef: ApplicationRef, private uiUtil: UiUtil) {
     this.init();
   }
 
@@ -61,6 +62,7 @@ export class AppRoutingModule {
     this.router.events.pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.store.currentUrlPub(event.url);
+        this.uiUtil.toastHide(); // toastPerm() will stay up on page changes, we'll pull it down then
         // console.log(event.url);
       });
 
