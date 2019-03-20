@@ -61,7 +61,6 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   submeasuresInData: Submeasure[] = [];
   submeasures: Submeasure[] = [];
   disableDownload = true;
-  handleHasMultiSmAndFiscalMonth;
 
   reports: any[] = [
     {
@@ -151,7 +150,6 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   ngOnInit() {
-    this.handleHasMultiSmAndFiscalMonth = _.debounce(this._handleHasMultiSmAndFiscalMonth, 1000);
     Promise.all([
       this.measureService.getManyActive().toPromise(),
       this.submeasureService.getManyLatestGroupByNameActive().toPromise()
@@ -291,7 +289,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     }
   }
 
-  _handleHasMultiSmAndFiscalMonth() {
+  handleHasMultiSmAndFiscalMonth() {
     let obs;
     switch (this.report.type) {
       case 'dollar-upload':
@@ -315,10 +313,14 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   submeasureMultiChange() {
-    if (!this.submeasureKeys.length) { // if they clear the values, disable the
+    if (this.report.hasMultiSubmeasureOnly && !this.submeasureKeys.length) { // if they clear the values, disable the
       this.disableDownload = true;
     } else if (this.report.hasMultiSubmeasureOnly && this.submeasureKeys.length) {
       this.disableDownload = false;
+    } else if (this.report.hasMultiSmAndFiscalMonth && !this.submeasureKeys.length) {
+      this.disableDownload = true;
+      this.fiscalMonth = undefined;
+      this.fiscalMonths = [];
     } else if (this.report.hasMultiSmAndFiscalMonth && this.submeasureKeys.length) {
       this.disableDownload = true;
       this.fiscalMonth = undefined;
