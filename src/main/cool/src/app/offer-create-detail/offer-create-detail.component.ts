@@ -26,7 +26,7 @@ export class OfferCreateDetailComponent implements OnInit {
      }
 
   ngOnInit() {
-    this.monetizationModelService.getAttributes().subscribe(data => {
+    this.monetizationModelService.retrieveOfferDimensionAttributes().subscribe(data => {
       this.offerData = data;
       const defaultOfferDataGroups = this.offerData['groups'][0];
       defaultOfferDataGroups['subGroup'].forEach((g) => {
@@ -38,7 +38,7 @@ export class OfferCreateDetailComponent implements OnInit {
       this.groupKeys = Object.keys(this.groups);
     });
 
-    this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
+    this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.offerBuilderdata = data;
       this.offerBuilderdata['BEList'] = [];
       this.offerBuilderdata['BUList'] = [];

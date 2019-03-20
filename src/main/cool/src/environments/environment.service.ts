@@ -85,6 +85,7 @@ export class EnvironmentService {
     //  STAKEHOLDER URLs
     REST_API_SEARCH_STAKEHOLDERS_URL: string;
     REST_API_RETRIEVE_DEFAULT_STAKEHOLDERS_URL: string;
+    REST_API_RETRIEVE_STAKEHOLDERS_REALTED_TO_SELECTED_ATTRIBUTES_URL: string;
 
     //  EMAIL URLs
     REST_API_EMAIL_NOTIFICATION: string;
@@ -107,9 +108,9 @@ export class EnvironmentService {
     REST_API_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL: string;
 
     // DOWNLOAD N UPLOAD URLs
-    REST_API_DOWNLOAD_PDF_GET_URL: string;
+    REST_API_DOWNLOAD_OFFER_DETAILS_PDF_URL: string;
     REST_API_FILE_UPLOAD_FOR_ACTION: string;
-    REST_API_FILE_DOWNLOAD_FOR_ACTION: string;
+    REST_API_DOWNLOAD_FILE_FOR_ACTION: string;
 
     // TTM URLs
     REST_API_GET_ICC_DETAILS_URL: string;
@@ -211,8 +212,8 @@ export class EnvironmentService {
         // ------------------------ eGenie URLs ------------------------------------------------------
 
         this.REST_API_OWB_CONTROLLER_URL = this.baseApiUrl + '/owb/create';
-        this.REST_API_GET_PID_DETAILS_URL = this.baseApiUrl + '/eGenie/getAttribute/';
         this.REST_API_DOWNLOAD_ZIP_GET_URL = this.baseApiUrl + '/eGenie/zip/';
+        this.REST_API_GET_PID_DETAILS_URL = this.baseApiUrl + '/eGenie/getAttribute/';
 
         // ------------------------------- BPM URLs ---------------------------------------------------
 
@@ -264,7 +265,7 @@ export class EnvironmentService {
         this.REST_API_SAVE_OR_RETRIEVE_OFFER_SOLUTIONING_ANSWERS = this.baseApiUrl + '/solutioning/';
         this.REST_API_RETRIEVE_OFFER_SOLUTIONING_QUESTIONS = this.baseApiUrl + '/getOfferSolutioningQuestions?offerID=';
 
-        // -------------------------- OFFER CONSTRUCT URLs -----------------------------------------------
+        // -------------------------- OFFER CONSTRUCT URLs ------------------------------------------------------
 
         this.REST_API_POST_OFFER_CONSTRUCT_URL = this.baseApiUrl + '/setOfferConstruct';
         this.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL = this.baseApiUrl + '/setOfferConstructAttribute';
@@ -273,6 +274,7 @@ export class EnvironmentService {
 
         this.REST_API_SEARCH_STAKEHOLDERS_URL = this.baseApiUrl + '/collabrators/searchCollabrators';
         this.REST_API_RETRIEVE_DEFAULT_STAKEHOLDERS_URL = this.baseApiUrl + '/stakeholder/getStakeHolderMgnt/';
+        this.REST_API_RETRIEVE_STAKEHOLDERS_REALTED_TO_SELECTED_ATTRIBUTES_URL = this.baseApiUrl + '/getStakeHolders/';
 
         // ------------------------------- EMAIL URLs --------------------------------------------------------------
 
@@ -300,8 +302,8 @@ export class EnvironmentService {
         // ------------------------- DOWNLOAD N UPLOAD URLs ----------------------------------------------
 
         this.REST_API_FILE_UPLOAD_FOR_ACTION = this.baseApiUrl + '/upload/file';
-        this.REST_API_DOWNLOAD_PDF_GET_URL = this.baseApiUrl + '/pdf/offerDetailsPDF';
-        this.REST_API_FILE_DOWNLOAD_FOR_ACTION = this.baseApiUrl + '/download/provideDetails';
+        this.REST_API_DOWNLOAD_FILE_FOR_ACTION = this.baseApiUrl + '/download/provideDetails';
+        this.REST_API_DOWNLOAD_OFFER_DETAILS_PDF_URL = this.baseApiUrl + '/pdf/offerDetailsPDF';
 
         // ------------------------------- TTM URLs -------------------------------------------------------
 

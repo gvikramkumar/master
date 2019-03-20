@@ -203,7 +203,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.monetizationModelService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
+    this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.offerName = data['offerName'];
     });
 

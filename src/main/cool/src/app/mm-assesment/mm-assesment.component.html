@@ -7,10 +7,8 @@
 
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar *ngIf="!dimensionMode" [isValidToProceed]="!proceedButtonStatusValid" (onProceedToNext)="proceedToStakeholder($event)"
-        [showSave]="false"></app-taskbar>
-      <app-taskbar *ngIf="dimensionMode" [isValidToProceed]="!proceedButtonStatusValid" (onProceedToNext)="proceedToOfferSolution($event)"
-        [showSave]="true"></app-taskbar>
+      <app-taskbar *ngIf="!dimensionMode" (onProceedToNext)="proceedToStakeholder($event)" [showSave]="false"></app-taskbar>
+      <app-taskbar *ngIf="dimensionMode" (onProceedToNext)="proceedToOfferSolution($event)" [showSave]="true"></app-taskbar>
 
       <div class="contentBox mt-10">
         <div class="row">
@@ -43,7 +41,7 @@
               <div class="card card--raised">
                 <h4>{{ groupNames[activeTabIndex] }}</h4>
                 <div class="panel">
-                  
+
                   <div id="tabsv6-content" class="tab-content">
                     <div id="tabsv6-1-content" class="tab-pane active">
 
