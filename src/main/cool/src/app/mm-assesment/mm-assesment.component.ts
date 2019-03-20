@@ -702,25 +702,15 @@ export class MmAssesmentComponent implements OnInit {
 
   private formatStakeHolderPojoToUpdateOffer_1() {
 
-    let stakeHolderInUpdateOfferFormat = [];
+    const stakeHolderUpdateOfferFormat = [];
 
     for (const functionalRole of Object.keys(this.stakeholders)) {
-
       this.stakeholders[functionalRole]
         .map((currentStakeHolder: User) => {
-          stakeHolderInUpdateOfferFormat.push(this.formatStakeHolderPojoToUpdateOffer_2(currentStakeHolder));
+          stakeHolderUpdateOfferFormat.push(this.formatStakeHolderPojoToUpdateOffer_2(currentStakeHolder));
         });
-
-      // const stakeHolderFunctionLevel = this.stakeholders[functionalRole]
-      //   .reduce((stakeHolderAccumulator, currentStakeHolder: User) => {
-      //     stakeHolderAccumulator = stakeHolderAccumulator
-      //       .concat(this.formatStakeHolderPojoToUpdateOffer_2(currentStakeHolder));
-      //     return stakeHolderAccumulator;
-      //   }, []);
-
-      //   stakeHolderInUpdateOfferFormat  = stakeHolderInUpdateOfferFormat.concat(stakeHolderFunctionLevel);
     }
-    return stakeHolderInUpdateOfferFormat;
+    return stakeHolderUpdateOfferFormat;
   }
 
   private formatStakeHolderPojoToUpdateOffer_2(user: User): any {
@@ -734,6 +724,8 @@ export class MmAssesmentComponent implements OnInit {
       'name': user['userName']
     };
   }
+
+  // --------------------------------------------------------------------------------------------
 
   private formatDefaultUserAsStakeholder(resUserInfo: any): any {
     return {
