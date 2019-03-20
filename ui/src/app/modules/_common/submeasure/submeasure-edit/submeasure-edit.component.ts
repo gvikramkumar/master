@@ -394,10 +394,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.hasAdjustmentType()) {
       this.adjustmentType = undefined;
     }
-    if (!this.hasSourceRapidRevenue()) {
-      this.ifl_switch_glseg = false;
-      this.iflChange('glseg');
-    }
   }
 
   isCogsMeasure() {
