@@ -45,7 +45,7 @@
           <button *ngIf="showSave" class="btn btn--white" (click)='saveCurrentState()'> Save </button>
           <button *ngIf="showOfferDtlsBtn" class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View
           </button>
-          <button *ngIf="!isLastStep" class="btn btn--white" (click)='proceedToNextStep()'>Proceed to
+          <button *ngIf="!isLastStep" class="btn btn--white" [disabled]="proceedToOfferSetup" (click)='proceedToNextStep()'>Proceed to
             {{taskBarNavSteps[currentStepIndex].nxtBtnTitle}}&nbsp;<span class="icon-chevron-right"></span></button>
         </div>
       </div>
