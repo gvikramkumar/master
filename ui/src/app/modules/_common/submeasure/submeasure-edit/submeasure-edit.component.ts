@@ -1019,6 +1019,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then(() => {
         if (this.isUnallocatedGroup()) {
           this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+        } else {
+          this.init();
         }
       });
   }
@@ -1028,6 +1030,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then (() => {
         if (this.isUnallocatedGroup()) {
           this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+        } else {
+          this.init();
         }
       });
   }
@@ -1037,6 +1041,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then(() => {
         if (this.isPassThrough()) {
           this.clearPropertiesForUnallocatedGroupOrPassThrough('passThrough');
+        } else {
+          this.init();
         }
       });
   }
