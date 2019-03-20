@@ -139,6 +139,7 @@
             </p-accordionTab>
         </p-accordion>
     </div>
+
     <!-- Dialog - Phase Process  -->
     <p-dialog [showHeader]="false" [responsive]="true" [minY]="70" [(visible)]="displayOfferPhase" [closable]="true">
         <div class="overlay-phases">
@@ -330,9 +331,11 @@
             </div>
         </div>
     </p-dialog>
+
     <!-- Dialog - Add / Edit Collaborators  -->
     <p-dialog header="Add or Edit Collaborators" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
         [responsive]="true" [width]="900" [minWidth]="200" [minY]="70" [(visible)]="display">
+        
         <form [formGroup]="addEditCollaboratorsForm" (ngSubmit)="onSearch()">
             <div class="row">
                 <div class="col-md-3">
@@ -368,6 +371,7 @@
                 <button class="btn btn&#45;&#45;secondary" type="submit">Search</button>
             </div>
         </form>
+
         <p-dataTable [value]="collaboratorsList" [(selection)]="selectedCollabs" dataKey="email" #dt>
             <p-column [style]="{'width': '50px'}" selectionMode="multiple"></p-column>
             <p-column field="functionalRole" header="Function"></p-column>
@@ -382,13 +386,16 @@
             <p-column field="email" header="Email"></p-column>
             <p-column field="businessEntity" header="BusinessEntity"></p-column>
         </p-dataTable>
+
         <div class="modal__footer">
             <div class="card__footer form-actions">
                 <button class="btn base-margin-top" (click)="closeDailog()">Cancel</button>
                 <button class="btn btn&#45;&#45;primary base-margin-top" (click)="addCollaborator()">Add</button>
             </div>
         </div>
+        
     </p-dialog>
+
     <!-- Dialog - Lead Time Calculation  -->
     <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
         [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">

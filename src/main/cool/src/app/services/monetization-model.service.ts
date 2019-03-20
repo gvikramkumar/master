@@ -74,8 +74,7 @@ export class MonetizationModelService {
   retrieveStakeHoldersRelatedToSelectedAttributes
     (businessEntity: string, mmAttributeList: MMAttributes[]) {
     let url = this.environmentService.REST_API_RETRIEVE_STAKEHOLDERS_REALTED_TO_SELECTED_ATTRIBUTES_URL + businessEntity;
-    url = 'http://10.155.73.173:8080/coolsrv/stakeholder/getStakeHolders/' + businessEntity;
-    return this.httpClient.post(url, mmAttributeList);
+    return this.httpClient.post<User[]>(url, mmAttributeList);
   }
 
   // ---------------------------------------------------------------------------------------------------------------
