@@ -11,14 +11,16 @@ import { UserService } from '@shared/services';
   styleUrls: ['./menu-bar-popup.component.css']
 })
 export class MenuBarPopupComponent implements OnInit {
+  
   @Input() show = false;
   @Input() popupType: String = '';
   @Output() closePopup = new EventEmitter<string>();
-  currentOfferId: String;
+  
   caseId: String;
   reason: String = '';
-  allowSubmit: boolean = false;
+  currentOfferId: String;
   passedString: String = '';
+  allowSubmit: boolean = false;
   buttonIsDisabled: boolean = false;
 
 

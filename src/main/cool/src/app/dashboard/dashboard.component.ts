@@ -151,7 +151,9 @@ export class DashboardComponent implements OnInit {
 
   }
   private addLifeCycleSortingColumn(resOffers) {
+
     this.myOffers = resOffers.map((data) => {
+
       let priority = 0;
       switch (data.status.offerMilestone) {
         case lifeCycleStatusEnum.INLAUNCH.value:
@@ -164,7 +166,7 @@ export class DashboardComponent implements OnInit {
           priority = lifeCycleStatusEnum.ONHOLD.priority;
           break;
       }
-      return { ...data, "lifeCyclePriority": priority };
+      return { ...data, 'lifeCyclePriority': priority };
     });
   }
   private getMyOffers() {
@@ -412,7 +414,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onBasicUpload(event) {
-    console.log("milsss");
+    console.log('milsss');
   }
   
   createNewOffer() {
@@ -424,7 +426,7 @@ export class DashboardComponent implements OnInit {
   enableSubmit(event): void {
     let passedString = event.target.value;
     let inputValue = passedString.trim();
-    if (inputValue === "" || inputValue === null) {
+    if (inputValue === '' || inputValue === null) {
       this.buttonIsDisabled = false;
     } else {
       this.buttonIsDisabled = true;

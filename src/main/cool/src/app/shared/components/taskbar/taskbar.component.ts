@@ -16,7 +16,6 @@ export class TaskbarComponent implements OnInit {
   @Input() showOfferDtlsBtn: boolean = true;
 
   @Output() onProceedToNext = new EventEmitter();
-  @Output() newBtnClick = new EventEmitter();
 
   taskBarNavSteps = taskBarNavConstant;
   subscribedEvents = new Array();

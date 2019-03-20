@@ -275,7 +275,7 @@ export class MmAssesmentComponent implements OnInit {
       });
     });
 
-    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
 
       this.firstData = data;
       this.currentOfferStakeholders = {};
@@ -896,6 +896,7 @@ export class MmAssesmentComponent implements OnInit {
 
         // Update Offer Details
         this.monetizationModelService.updateOfferDetails(proceedToStakeholderPostData).subscribe(() => {
+
           const proceedPayload = {
             'taskId': '',
             'userId': this.offerBuilderdata['offerOwner'],

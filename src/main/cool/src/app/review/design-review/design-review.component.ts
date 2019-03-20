@@ -165,7 +165,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
       this.assigneeList = data;
     });
 
-    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.firstData = data;
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];

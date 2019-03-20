@@ -67,7 +67,7 @@ export class OfferSolutioningComponent implements OnInit {
 
   ngOnInit() {
 
-    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
 
       this.firstData = data;
       this.offerName = data['offerName'];
