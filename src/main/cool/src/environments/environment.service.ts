@@ -274,7 +274,7 @@ export class EnvironmentService {
 
         this.REST_API_SEARCH_STAKEHOLDERS_URL = this.baseApiUrl + '/collabrators/searchCollabrators';
         this.REST_API_RETRIEVE_DEFAULT_STAKEHOLDERS_URL = this.baseApiUrl + '/stakeholder/getStakeHolderMgnt/';
-        this.REST_API_RETRIEVE_STAKEHOLDERS_REALTED_TO_SELECTED_ATTRIBUTES_URL = this.baseApiUrl + '/getStakeHolders/';
+        this.REST_API_RETRIEVE_STAKEHOLDERS_REALTED_TO_SELECTED_ATTRIBUTES_URL = this.baseApiUrl + '/stakeholder/getStakeHolders/';
 
         // ------------------------------- EMAIL URLs --------------------------------------------------------------
 

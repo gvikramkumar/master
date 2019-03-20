@@ -598,8 +598,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   onSearch() {
-    const tempCollaboratorList: Collaborators[] = [];
 
+    const tempCollaboratorList: Collaborators[] = [];
     const tempVar = this.addEditCollaboratorsForm.controls['name'].value;
     const userName = this.addEditCollaboratorsForm.controls['name'].value;
     const businessEntity = this.addEditCollaboratorsForm.controls['businessEntity'].value;
@@ -639,6 +639,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       .subscribe(data => {
         this.selectedCollabs = [];
         data.forEach(element => {
+
           const collaborator = new Collaborators();
           collaborator.email = element.emailId;
           collaborator.name = element.userName;
@@ -702,9 +703,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   }
 
   addCollaborator() {
-    console.log(this.selectedCollabs);
+
     const listOfStakeHolders: StakeHolder[] = [];
     const stakeHolderDto = new StakeHolderDTO();
+
     this.selectedCollabs.forEach(element => {
       const stakeHolder = new StakeHolder();
       stakeHolder.businessEntity = element.businessEntity;
@@ -715,18 +717,16 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       stakeHolder.userName = element.name;
       listOfStakeHolders.push(stakeHolder);
     });
+
+
     this.selectedCollabs = [];
     stakeHolderDto.offerId = this.currentOfferId;
     stakeHolderDto.stakeholders = listOfStakeHolders;
 
-    let that = this;
-    // this.searchCollaboratorService.addCollaborators(stakeHolderDto).subscribe(data => {
-    // update stakeData from data posted response
-    that.addToStakeData(stakeHolderDto);
-    // });
+    this.addToStakeData(stakeHolderDto);
     this.updateStakeData.next('');
     this.display = false;
-    console.log(stakeHolderDto);
+
   }
 
   show_deliveryDesc() {
@@ -797,5 +797,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   goScalabilityIndex() {
     this.router.navigate(['/oas']);
   }
+
 }
 

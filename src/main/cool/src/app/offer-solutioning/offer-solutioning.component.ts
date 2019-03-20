@@ -188,7 +188,7 @@ export class OfferSolutioningComponent implements OnInit {
       this.offersolutioningService.retrieveOfferSolutionAnswers(this.currentOfferId).subscribe(resOfferSolutioningAnswers => {
 
         const offerSolutioningAnswers = resOfferSolutioningAnswers as Array<any>;
-        
+
         // Initialize QnA Map
         const questionAnswerMap: Map<string, string> = new Map<string, string>();
         for (const qna of offerSolutioningAnswers['questionAnswer']) {
