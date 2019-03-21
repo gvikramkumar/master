@@ -27,6 +27,7 @@ export class TaskbarComponent implements OnInit {
   disableBackBtn: boolean = false;
   isLastStep: boolean;
   currentPage: string = 'dashboard';
+  proceedToOfferSetup: Boolean = false;
 
   constructor(
     private router: Router,
@@ -46,6 +47,9 @@ export class TaskbarComponent implements OnInit {
       this.currentStepIndex = offerBuilderStepsEnum[this.currentPage];
       this.disableBackBtn = this.currentStepIndex > 0 ? false : this.currentOfferId ? true : false;
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
+    }
+    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Offer Setup') {
+      this.proceedToOfferSetup = true;
     }
   }
   saveCurrentState() {
