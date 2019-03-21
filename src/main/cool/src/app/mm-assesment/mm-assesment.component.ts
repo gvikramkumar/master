@@ -854,7 +854,7 @@ export class MmAssesmentComponent implements OnInit {
     let additionalCharacteristics = [];
 
     // Find Additional & Selected Characterstics Related To Given Offer
-    [selectedCharacteristics, additionalCharacteristics] = this.findAdditionalAndSelectedCharacterstics(this.groupData);
+    [selectedCharacteristics, additionalCharacteristics] = this.findAdditionalAndSelectedCharacterstics(this.groupNames, this.groupData);
 
     // Find Monetization Attributes Selected By Offer Owner / Co-Owner
     const selectedMonetizationAttributes: MMAttributes[] = additionalCharacteristics
@@ -927,7 +927,7 @@ export class MmAssesmentComponent implements OnInit {
 
   // --------------------------------------------------------------------------------------------
 
-  private findAdditionalAndSelectedCharacterstics(groupData: any): any {
+  private findAdditionalAndSelectedCharacterstics(groupNames: any, groupData: any): any {
 
     const selectedCharacteristics: any[] = [];
     const additionalCharacteristics: any[] = [];
@@ -941,8 +941,8 @@ export class MmAssesmentComponent implements OnInit {
         notSubselectedCharacteristics['subgroup'] = subGroup;
         subselectedCharacteristics['characteristics'] = [];
         notSubselectedCharacteristics['characteristics'] = [];
-        subselectedCharacteristics['group'] = this.groupNames[index];
-        notSubselectedCharacteristics['group'] = this.groupNames[index];
+        subselectedCharacteristics['group'] = groupNames[index];
+        notSubselectedCharacteristics['group'] = groupNames[index];
         subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
         notSubselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
 
@@ -1024,7 +1024,7 @@ export class MmAssesmentComponent implements OnInit {
       let additionalCharacteristics = [];
 
       // Find Additional & Selected Characterstics Related To Given Offer
-      [selectedCharacteristics, additionalCharacteristics] = this.findAdditionalAndSelectedCharacterstics(groupDataWithFirst);
+      [selectedCharacteristics, additionalCharacteristics] = this.findAdditionalAndSelectedCharacterstics(groupNamesWithFirst, groupDataWithFirst);
 
       // Find Monetization Attributes Selected By Offer Owner / Co-Owner
       const selectedMonetizationAttributes: MMAttributes[] = additionalCharacteristics
