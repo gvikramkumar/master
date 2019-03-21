@@ -13,10 +13,6 @@ import { ConfigurationService, UserService } from '@shared/services';
 })
 export class StakeholderFullComponent implements OnInit {
 
-  @Input() stakeData: Object;
-  @Input() offerOwner: String;
-  @Input() portfolioFlag: Boolean = false;
-
   message = {};
   stakeholderForm: FormGroup;
 
@@ -40,6 +36,8 @@ export class StakeholderFullComponent implements OnInit {
     { field: 'email', header: 'EMAIL' },
     { field: 'functionalRole', header: 'FUNCTION' }
   ];
+
+   // ---------------------------------------------------------------------------------------------
 
   constructor(private stakeholderfullService: StakeholderfullService,
     private searchCollaboratorService: SearchCollaboratorService,
@@ -124,11 +122,11 @@ export class StakeholderFullComponent implements OnInit {
         const currentUserRole = this.configurationService.startupData.appRoleList;
         const currentUserFunctionalRole = this.configurationService.startupData.functionalRole[0];
 
-        if (adminRole.includes(currentUserRole)) {
+        if (adminRole.some(p => currentUserRole.includes(p))) {
           this.searchStakeHolderResults = collaboratorsResponseList;
         } else {
           this.searchStakeHolderResults = collaboratorsResponseList
-            .filter(collaborator => collaborator.functionalRole === currentUserFunctionalRole);
+            .filter(collaborator => collaborator.userMappings[0]['functionalRole'] === currentUserFunctionalRole);
         }
 
       });
@@ -216,7 +214,6 @@ export class StakeholderFullComponent implements OnInit {
     this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe(data => {
       const proceedPayload = {
         'taskId': '',
-        'userId': this.offerOwner,
         'caseId': this.caseId,
         'offerId': this.currentOfferId,
         'taskName': 'Stake Holders',
