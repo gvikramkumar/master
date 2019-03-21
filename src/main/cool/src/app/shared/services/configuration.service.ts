@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AccessManagementService } from '@app/services/access-management.service';
 import { EnvironmentService } from '@env/environment.service';
 import { UserService } from './user.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class ConfigurationService {
@@ -30,16 +31,25 @@ export class ConfigurationService {
 
                         // check for admin access
                         this.accessMgmtService.checkAdminAccess().toPromise().then((resUserInfo) => {
+
                             this._startupData.userId = resUserInfo.userId;
                             this._startupData.userName = resUserInfo.userName;
                             this._startupData.isSuperAdmin = resUserInfo.superAdmin;
                             this._startupData.isFunctionalAdmin = (resUserInfo.userMapping && resUserInfo.userMapping
                                 .some(mapping => mapping.functionalAdmin));
-                            this._startupData.functionsUserCanAddTo = resUserInfo.userMapping.reduce((accumulator, mapping) => {
-                                accumulator = [...accumulator, mapping.functionalRole];
-                                return accumulator;
-                            }, []);
-                            this._startupData.functionalRole = this._startupData.functionsUserCanAddTo[0];
+
+                            this._startupData.functionalRole = _.uniqBy(resUserInfo.userMapping
+                                .reduce((accumulator, mapping) => {
+                                    accumulator = [...accumulator, mapping.functionalRole];
+                                    return accumulator;
+                                }, []));
+
+                            this._startupData.appRoleList = _.uniqBy(resUserInfo.userMapping
+                                .reduce((accumulator, mapping) => {
+                                    accumulator = [...accumulator, ...mapping.appRoleList];
+                                    return accumulator;
+                                }, []));
+
                             this._startupData.businessEntity = resUserInfo.userMapping[0]['businessEntity'];
                             if (this._startupData.isSuperAdmin || this._startupData.isFunctionalAdmin) {
                                 this._startupData.hasAdminAccess = true;

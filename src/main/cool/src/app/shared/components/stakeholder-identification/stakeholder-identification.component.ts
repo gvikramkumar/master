@@ -6,6 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./stakeholder-identification.component.css']
 })
 export class StakeholderIdentificationComponent implements OnInit {
+
   @Input() subgroupName: string;
   @Input() characteristics: string;
 

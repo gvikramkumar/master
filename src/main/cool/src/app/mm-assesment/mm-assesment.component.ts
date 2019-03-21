@@ -123,7 +123,9 @@ export class MmAssesmentComponent implements OnInit {
 
     // Get Attributes for each group
     this.offerDetailViewService.mmDataRetrive(this.currentOfferId).subscribe(offerDetailRes => {
+
       const selectedCharacteristics = {};
+
       if (offerDetailRes['selectedCharacteristics'] != null) {
         offerDetailRes['selectedCharacteristics'].forEach(selected => {
           if (selectedCharacteristics[selected['group']] == null) {
@@ -275,7 +277,7 @@ export class MmAssesmentComponent implements OnInit {
       });
     });
 
-    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
 
       this.firstData = data;
       this.currentOfferStakeholders = {};
@@ -524,6 +526,52 @@ export class MmAssesmentComponent implements OnInit {
 
     this.selectedGroupData = this.groupData;
   }
+
+
+  // --------------------------------------------------------------------------------------------
+
+  emitEventToChild() {
+    this.eventsSubject.next(this.offerBuilderdata['offerOwner']);
+  }
+
+  updateMessage(message) {
+
+    if (message != null && message !== '') {
+      if (message === 'hold') {
+        this.backbuttonStatusValid = false;
+        this.message = {
+          contentHead: '',
+          content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black'
+        };
+      } else if (message === 'cancel') {
+        this.backbuttonStatusValid = false;
+        this.message = {
+          contentHead: '',
+          content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black'
+        };
+      }
+    }
+  }
+
+  getGroupKeys(obj) {
+    if (typeof obj === 'object') {
+      return Object.keys(obj);
+    } else {
+      return [];
+    }
+  }
+
+  changeTab(index) {
+    if (this.canClickNextStep === true) {
+      this.activeTabIndex = index;
+      if (index === 0 && !this.dimensionMode) {
+        this.canClickTab = false;
+      }
+    }
+  }
+
 
   // --------------------------------------------------------------------------------------------
 
@@ -800,58 +848,13 @@ export class MmAssesmentComponent implements OnInit {
 
   // --------------------------------------------------------------------------------------------
 
-  emitEventToChild() {
-    this.eventsSubject.next(this.offerBuilderdata['offerOwner']);
-  }
-
-  updateMessage(message) {
-
-    if (message != null && message !== '') {
-      if (message === 'hold') {
-        this.backbuttonStatusValid = false;
-        this.message = {
-          contentHead: '',
-          content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.',
-          color: 'black'
-        };
-      } else if (message === 'cancel') {
-        this.backbuttonStatusValid = false;
-        this.message = {
-          contentHead: '',
-          content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
-          color: 'black'
-        };
-      }
-    }
-  }
-
-  getGroupKeys(obj) {
-    if (typeof obj === 'object') {
-      return Object.keys(obj);
-    } else {
-      return [];
-    }
-  }
-
-  changeTab(index) {
-    if (this.canClickNextStep === true) {
-      this.activeTabIndex = index;
-      if (index === 0 && !this.dimensionMode) {
-        this.canClickTab = false;
-      }
-    }
-  }
-
-  // --------------------------------------------------------------------------------------------
-
   proceedToStakeholder(withRouter: string = 'true') {
 
     let selectedCharacteristics = [];
     let additionalCharacteristics = [];
 
     // Find Additional & Selected Characterstics Related To Given Offer
-    [selectedCharacteristics, additionalCharacteristics] = this.
-      findAdditionalAndSelectedCharacterstics(selectedCharacteristics, additionalCharacteristics);
+    [selectedCharacteristics, additionalCharacteristics] = this.findAdditionalAndSelectedCharacterstics(this.groupNames, this.groupData);
 
     // Find Monetization Attributes Selected By Offer Owner / Co-Owner
     const selectedMonetizationAttributes: MMAttributes[] = additionalCharacteristics
@@ -896,6 +899,7 @@ export class MmAssesmentComponent implements OnInit {
 
         // Update Offer Details
         this.monetizationModelService.updateOfferDetails(proceedToStakeholderPostData).subscribe(() => {
+
           const proceedPayload = {
             'taskId': '',
             'userId': this.offerBuilderdata['offerOwner'],
@@ -923,9 +927,12 @@ export class MmAssesmentComponent implements OnInit {
 
   // --------------------------------------------------------------------------------------------
 
-  private findAdditionalAndSelectedCharacterstics(selectedCharacteristics: any[], additionalCharacteristics: any[]): any {
+  private findAdditionalAndSelectedCharacterstics(groupNames: any, groupData: any): any {
 
-    this.groupData.forEach((group, index) => {
+    const selectedCharacteristics: any[] = [];
+    const additionalCharacteristics: any[] = [];
+
+    groupData.forEach((group, index) => {
       for (const subGroup of Object.keys(group)) {
 
         const subselectedCharacteristics = {};
@@ -934,8 +941,8 @@ export class MmAssesmentComponent implements OnInit {
         notSubselectedCharacteristics['subgroup'] = subGroup;
         subselectedCharacteristics['characteristics'] = [];
         notSubselectedCharacteristics['characteristics'] = [];
-        subselectedCharacteristics['group'] = this.groupNames[index];
-        notSubselectedCharacteristics['group'] = this.groupNames[index];
+        subselectedCharacteristics['group'] = groupNames[index];
+        notSubselectedCharacteristics['group'] = groupNames[index];
         subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
         notSubselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
 
@@ -1000,11 +1007,9 @@ export class MmAssesmentComponent implements OnInit {
     const postOfferSolutioningData = {};
     postOfferSolutioningData['groups'] = groups;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
-    postOfferSolutioningData['functionalRole'] = this.configService.startupData.functionalRole;
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-
-    console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
+    postOfferSolutioningData['functionalRole'] = this.configService.startupData.functionalRole[0];
 
     // REST API - /setOfferSolutioning
     this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
@@ -1019,8 +1024,7 @@ export class MmAssesmentComponent implements OnInit {
       let additionalCharacteristics = [];
 
       // Find Additional & Selected Characterstics Related To Given Offer
-      [selectedCharacteristics, additionalCharacteristics] = this.
-        findAdditionalAndSelectedCharacterstics(selectedCharacteristics, additionalCharacteristics);
+      [selectedCharacteristics, additionalCharacteristics] = this.findAdditionalAndSelectedCharacterstics(groupNamesWithFirst, groupDataWithFirst);
 
       // Find Monetization Attributes Selected By Offer Owner / Co-Owner
       const selectedMonetizationAttributes: MMAttributes[] = additionalCharacteristics
@@ -1080,6 +1084,7 @@ export class MmAssesmentComponent implements OnInit {
             });
           });
 
+
           // Update Offer details
           this.monetizationModelService.updateOfferDetails(proceedToStakeholderPostData).subscribe(() => {
 
@@ -1101,6 +1106,10 @@ export class MmAssesmentComponent implements OnInit {
             });
 
           });
+
+        }, (err) => {
+
+          console.log(err);
 
         });
     });
