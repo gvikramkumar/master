@@ -23,7 +23,7 @@ export class EnvironmentService {
     REST_API_URL_GET_CURRENT_USER_URL: string;
 
     // LOV URLs
-    REST_API_GETFUNCTIONAL_ROLE_URL: string;
+    REST_API_GET_FUNCTIONAL_ROLE_URL: string;
     REST_API_REGISTER_NEW_USER_GET_URL: string;
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL: string;
     REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL: string;
@@ -204,7 +204,7 @@ export class EnvironmentService {
 
         // ------------------------- LOV URLs---------------------------------------------------------
 
-        this.REST_API_GETFUNCTIONAL_ROLE_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
+        this.REST_API_GET_FUNCTIONAL_ROLE_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
         this.REST_API_REGISTER_NEW_USER_GET_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
         this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseApiUrl + '/LOV/getAssignee/';
         this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';

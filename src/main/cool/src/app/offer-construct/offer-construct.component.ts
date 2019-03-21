@@ -64,7 +64,7 @@ export class OfferConstructComponent implements OnInit {
       color: 'black'
     };
 
-    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
+    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.firstData = data;
       this.offerId = this.currentOfferId;
       this.derivedMM = this.firstData['derivedMM'];

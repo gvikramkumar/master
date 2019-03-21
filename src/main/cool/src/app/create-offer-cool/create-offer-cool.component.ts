@@ -367,7 +367,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.autoSelectBE();
     }
 
-    this.stakeholderfullService.getdata(this.offerId).subscribe(data => {
+    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(data => {
       this.firstData = data;
       this.derivedMM = this.firstData['derivedMM'];
       this.data = this.firstData['stakeholders'];

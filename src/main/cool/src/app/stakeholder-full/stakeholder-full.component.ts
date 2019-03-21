@@ -1,65 +1,56 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
-import { StakeHolder } from '../models/stakeholder';
-import { Collaborators } from '../models/collaborator';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
-import { SharedService } from '../shared-service.service';
 import { ConfigurationService, UserService, CreateOfferService } from '@shared/services';
+
 @Component({
   selector: 'app-stakeholder-full',
   templateUrl: './stakeholder-full.component.html',
   styleUrls: ['./stakeholder-full.component.css']
 })
 export class StakeholderFullComponent implements OnInit {
-  entityList;
-  notiFication: Boolean = false;
-  @Input() portfolioFlag: Boolean = false;
+
   @Input() stakeData: Object;
   @Input() offerOwner: String;
+  @Input() portfolioFlag: Boolean = false;
   @Output() updateStakeData = new EventEmitter<String>();
+
+
+
   stakeholderForm: FormGroup;
-  collaboratorsList;
-  selectedCollabs;
-  currentOfferId;
+
   offerName;
-  temporaryList;
-  lists;
   message = {};
-  proceedButtonStatusValid = true;
-  backbuttonStatusValid = true;
-  public offerBuilderdata;
-  public newData: any[];
-  public showDelete = false;
-  public tempcoll: any[];
-  public lstcoll: any[];
-  public showtemp: Boolean;
-  public showdel: Boolean;
-  public tempvalue: Boolean;
-  public lastvalue: Boolean;
-  public coll: any[];
-  public selectedColl: any[];
-  public firstData: any;
-  public data: any[];
-  test: any;
-  duplicateList: any;
-  displayData: any;
-  funcionalRoleList: String[];
-  temporaryselectedCollabs: any[];
-  finalCollabs: any[];
-  newDatastring: String;
+  currentOfferId;
+
+
+  selectedCollabs;
   deleteCollabs: any[];
+  newDatastring: String;
+
+
+  showDelete = false;
+  backbuttonStatusValid = true;
+  proceedButtonStatusValid = true;
+
+
+  finalCollabs: any[];
+  temporaryselectedCollabs: any[];
+
   caseId: any;
-  getRole: any;
-  stakeHolderInfo = {};
-  Stakeholders: any[] = [];
-  val;
-  selectedSh;
+
+  stakeHolderData: any[];
+  stakeHolderMapInfo = {};
+  stakeHolderListInfo: any[] = [];
+
+  selectedStakeHolders;
+  searchStakeHolderInput;
+  searchStakeHolderResults: String[];
+
   text: String;
-  results: String[];
-  selectedUser;
 
   cols = [
     { field: 'name', header: 'NAME' },
@@ -72,99 +63,127 @@ export class StakeholderFullComponent implements OnInit {
     private searchCollaboratorService: SearchCollaboratorService,
     private activatedRoute: ActivatedRoute,
     private router: Router, private offerPhaseService: OfferPhaseService,
-    private sharedService: SharedService,
     private configurationService: ConfigurationService,
     private userService: UserService) {
+
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
     });
+
     if (!this.currentOfferId) {
       this.currentOfferId = this.createOfferService.coolOffer.offerId;
     }
+
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
     });
+
   }
 
+  // ---------------------------------------------------------------------------------------------
+
   ngOnInit() {
+
     this.message = {
+      color: 'black',
       contentHead: '',
-      content: 'Stakeholders message.',
-      color: 'black'
+      content: 'Stakeholders message.'
     };
-    this.newData = [];
-    this.temporaryselectedCollabs = [];
+
     this.deleteCollabs = [];
-
-
-    this.sharedService.getFunctionalRoles().subscribe(data => {
-      this.funcionalRoleList = data;
-    });
-
-    this.stakeholderfullService.getdata(this.currentOfferId).subscribe(data => {
-
-      this.firstData = data;
-      this.data = this.firstData.stakeholders;
-      this.offerName = this.firstData['offerName'];
-      this.processStakeHolderData(this.data);
-    });
-
-    this.createOfferService.getPrimaryBusinessUnits()
-      .subscribe(data => {
-        this.entityList = ['Security', 'IOT', 'Data Center', 'Enterprise'];
-      });
-
-    this.stakeholderfullService.getOfferrole().subscribe(data => {
-      this.getRole = data;
-    })
+    this.temporaryselectedCollabs = [];
 
     this.stakeholderForm = new FormGroup({
       userName: new FormControl(null, Validators.required)
     });
 
-    this.stakeholderfullService.getOfferBuilderData(this.currentOfferId).subscribe(data => {
-      this.offerBuilderdata = data;
+    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
+      this.offerName = data['offerName'];
+      this.stakeHolderData = data['stakeholders'];
+      this.processStakeHolderData(data['stakeholders']);
     });
 
 
-    this.showtemp = false;
-    this.tempcoll = [];
-    this.lstcoll = [];
-    this.lastvalue = false;
-    this.tempvalue = true;
+
   }
 
+  // ---------------------------------------------------------------------------------------------
 
-  search(event) {
+  processStakeHolderData(stakeHolderData) {
+
+    stakeHolderData.forEach(stakeHolder => {
+
+      if (this.stakeHolderMapInfo[stakeHolder['offerRole']] == null) {
+        this.stakeHolderMapInfo[stakeHolder['offerRole']] = [];
+      }
+
+      // Stake Holder Info To Display Acc 2 Functional Role On UI
+      this.stakeHolderMapInfo[stakeHolder['offerRole']].push(
+        {
+          name: stakeHolder['name'],
+          email: stakeHolder['_id'] + '@cisco.com',
+          _id: stakeHolder['_id'],
+          businessEntity: stakeHolder['businessEntity'],
+          functionalRole: stakeHolder['functionalRole'],
+          offerRole: stakeHolder['offerRole'],
+          stakeholderDefaults: stakeHolder['stakeholderDefaults']
+        });
+
+      // Stake Holder Info To Update Offer Details
+      this.stakeHolderListInfo.push(
+        {
+          name: stakeHolder['name'],
+          email: stakeHolder['_id'] + '@cisco.com',
+          _id: stakeHolder['_id'],
+          businessEntity: stakeHolder['businessEntity'],
+          functionalRole: stakeHolder['functionalRole'],
+          offerRole: stakeHolder['offerRole'],
+          stakeholderDefaults: stakeHolder['stakeholderDefaults']
+        });
+    });
+  }
+
+  // ---------------------------------------------------------------------------------------------
+
+  search(event: any) {
+
     this.searchCollaboratorService.searchCollaborator({ 'userName': event.query })
-      .subscribe(resCollaborators => {
-        const userFunctions = this.configurationService.startupData.functionsUserCanAddTo;
-        if (userFunctions.includes('BUPM')) {
-          this.results = resCollaborators;
+      .subscribe(collaboratorsResponseList => {
+
+        const adminRole = ['Owner', 'Co-Owner'];
+        const currentUserRole = this.configurationService.startupData.appRoleList;
+        const currentUserFunctionalRole = this.configurationService.startupData.functionalRole[0];
+
+        if (adminRole.includes(currentUserRole)) {
+          this.searchStakeHolderResults = collaboratorsResponseList;
         } else {
-          this.results = resCollaborators.filter(collaborator => {
-            let isCollaboratorInUserFunction = false;
-            for (const userFunction of userFunctions) {
-              if (collaborator.userMappings.some(userMapping => userMapping.functionalRole === userFunction)) {
-                isCollaboratorInUserFunction = true;
-                break;
-              }
-            }
-            return isCollaboratorInUserFunction;
-          });
+          this.searchStakeHolderResults = collaboratorsResponseList
+            .filter(collaborator => collaborator.functionalRole === currentUserFunctionalRole);
         }
 
       });
   }
-  canUserDeleteStakeHolder(stakeholder) {
-    const currentUserId = this.userService.getUserId();
-    const userFunctions = this.configurationService.startupData.functionsUserCanAddTo;
-    return !stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId && (userFunctions.includes('BUPM') || userFunctions.includes(stakeholder.functionalRole));
+
+  // ---------------------------------------------------------------------------------------------
+
+  getInitialChar(name) {
+    if (name == null) { return '' }
+    const names = name.split(' ');
+    let initials = '';
+    initials += names[0].charAt(0).toUpperCase();
+    if (names.length > 1) {
+      initials += names[1].charAt(0).toUpperCase();
+    }
+    return initials;
   }
-  selectUser(stakes: any) {
-    this.selectUser = stakes;
+
+  getUserIdFromEmail(email): any {
+    const arrayOfStrings = email.split('@');
+    return arrayOfStrings[0];
   }
+
+  // ---------------------------------------------------------------------------------------------
 
   getKeys(obj) {
     if (typeof obj === 'object') {
@@ -174,46 +193,8 @@ export class StakeholderFullComponent implements OnInit {
     }
   }
 
-
-  processStakeHolderData(stakeHolderData) {
-
-    stakeHolderData.forEach(stakeHolder => {
-
-      if (this.stakeHolderInfo[stakeHolder['offerRole']] == null) {
-        this.stakeHolderInfo[stakeHolder['offerRole']] = [];
-      }
-
-      this.stakeHolderInfo[stakeHolder['offerRole']].push(
-        {
-          name: stakeHolder['name'],
-          email: stakeHolder['_id'] + '@cisco.com',
-          _id: stakeHolder['_id'],
-          businessEntity: stakeHolder['businessEntity'],
-          functionalRole: stakeHolder['functionalRole'],
-          offerRole: stakeHolder['offerRole'],
-          stakeholderDefaults: stakeHolder['stakeholderDefaults']
-        });
-
-      this.Stakeholders.push(
-        {
-          name: stakeHolder['name'],
-          email: stakeHolder['_id'] + '@cisco.com',
-          _id: stakeHolder['_id'],
-          businessEntity: stakeHolder['businessEntity'],
-          functionalRole: stakeHolder['functionalRole'],
-          offerRole: stakeHolder['offerRole'],
-          stakeholderDefaults: stakeHolder['stakeholderDefaults']
-        });
-    });
-  }
-
-  getUserIdFromEmail(email): any {
-    const arrayOfStrings = email.split('@');
-    return arrayOfStrings[0];
-  }
-
-  gotoOfferviewDetails() {
-    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+  selectUser(stakes: any) {
+    this.selectUser = stakes;
   }
 
   updateMessage(message) {
@@ -221,72 +202,74 @@ export class StakeholderFullComponent implements OnInit {
       if (message === 'hold') {
         this.proceedButtonStatusValid = false;
         this.backbuttonStatusValid = false;
-        this.message = { contentHead: '', content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
+        this.message = {
+          contentHead: '',
+          content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black'
+        };
       } else if (message === 'cancel') {
         this.proceedButtonStatusValid = false;
         this.backbuttonStatusValid = false;
-        this.message = { contentHead: '', content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.', color: 'black' };
+        this.message = {
+          contentHead: '',
+          content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black'
+        };
       }
     }
   }
 
+  // ---------------------------------------------------------------------------------------------
+
   onAdd() {
-    const tempCollaboratorList: Collaborators[] = [];
 
     const obj = {
-      name: this.val['userName'],
-      email: this.val['_id'] + '@cisco.com',
-      _id: this.val['_id'],
-      businessEntity: this.val['userMappings'][0]['businessEntity'],
-      functionalRole: this.val['userMappings'][0]['functionalRole'],
-      offerRole: this.val['userMappings'][0]['functionalRole'],
+      name: this.searchStakeHolderInput['userName'],
+      email: this.searchStakeHolderInput['_id'] + '@cisco.com',
+      _id: this.searchStakeHolderInput['_id'],
+      businessEntity: this.searchStakeHolderInput['userMappings'][0]['businessEntity'],
+      functionalRole: this.searchStakeHolderInput['userMappings'][0]['functionalRole'],
+      offerRole: this.searchStakeHolderInput['userMappings'][0]['functionalRole'],
       stakeholderDefaults: false
     };
 
-    if (this.Stakeholders.findIndex(k => k._id === this.val['_id']) === -1) {
-      this.Stakeholders.push(obj);
-      if (this.stakeHolderInfo[obj['offerRole']] == null) {
-        this.stakeHolderInfo[obj['offerRole']] = [];
+    if (this.stakeHolderListInfo.findIndex(k => k._id === this.searchStakeHolderInput['_id']) === -1) {
+      this.stakeHolderListInfo.push(obj);
+      if (this.stakeHolderMapInfo[obj['offerRole']] == null) {
+        this.stakeHolderMapInfo[obj['offerRole']] = [];
 
       }
 
-      this.stakeHolderInfo[obj['offerRole']].push(obj);
+      this.stakeHolderMapInfo[obj['offerRole']].push(obj);
     }
 
     const stakeholdersPayLoad = {
       offerId: this.currentOfferId,
       caseId: this.caseId,
       stakeholders: []
-    }
+    };
 
 
-    const keys: any[] = Object.keys(this.stakeHolderInfo);
+    const keys: any[] = Object.keys(this.stakeHolderMapInfo);
 
     keys.forEach(key => {
-      this.stakeHolderInfo[key].forEach(element => {
-        let obj = {
-          '_id': element._id,
-          'businessEntity': element.businessEntity,
-          'functionalRole': element.functionalRole,
-          'stakeholderDefaults': element.stakeholderDefaults === true ? true : false,
-          'offerRole': element.offerRole,
-          'name': element.name
-        };
-        stakeholdersPayLoad['stakeholders'].push(obj);
+
+      this.stakeHolderMapInfo[key].forEach(element => {
+
+        stakeholdersPayLoad['stakeholders']
+          .push({
+            '_id': element._id,
+            'businessEntity': element.businessEntity,
+            'functionalRole': element.functionalRole,
+            'stakeholderDefaults': element.stakeholderDefaults === true ? true : false,
+            'offerRole': element.offerRole,
+            'name': element.name
+          });
       });
+
     });
 
-    this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe(data => {
-      const proceedPayload = {
-        'taskId': '',
-        'userId': this.offerBuilderdata['offerOwner'],
-        'caseId': this.caseId,
-        'offerId': this.currentOfferId,
-        'taskName': 'Stake Holders',
-        'action': '',
-        'comment': ''
-      }
-    });
+    this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe();
 
     this.stakeholderForm.reset();
 
@@ -304,17 +287,17 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   addCollaborator() {
-    const listOfStakeHolders: StakeHolder[] = [];
+
     const stakeholdersPayLoad = {
       offerId: this.currentOfferId,
       caseId: this.caseId,
       stakeholders: []
-    }
+    };
 
-    const keys: any[] = Object.keys(this.stakeHolderInfo);
+    const keys: any[] = Object.keys(this.stakeHolderMapInfo);
 
     keys.forEach(key => {
-      this.stakeHolderInfo[key].forEach(element => {
+      this.stakeHolderMapInfo[key].forEach(element => {
         const obj = {
           '_id': element._id,
           'businessEntity': element.businessEntity,
@@ -330,7 +313,7 @@ export class StakeholderFullComponent implements OnInit {
     this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe(data => {
       const proceedPayload = {
         'taskId': '',
-        'userId': this.offerBuilderdata['offerOwner'],
+        'userId': this.offerOwner,
         'caseId': this.caseId,
         'offerId': this.currentOfferId,
         'taskName': 'Stake Holders',
@@ -348,40 +331,16 @@ export class StakeholderFullComponent implements OnInit {
       })
   }
 
-  goBack() {
-    this.router.navigate(['/mmassesment', this.currentOfferId, this.caseId]);
-  }
-
-  onDelete(user) {
-
-    if (this.data.length === 1) {
-      this.data.splice(0, 1);
-    }
-    for (let i = 0; i <= this.data.length - 1; i++) {
-      if (this.data[i]._id === user._id) {
-        this.data.splice(i, 1);
-      }
-    }
-    this.finalCollabs = this.data;
-  }
-
-  onEvent(event, value) {
-    this.showDelete = true;
-
-  }
-
-  onOut(event, value) {
-    this.showDelete = false;
-  }
+  // ---------------------------------------------------------------------------------------------
 
   selectlist(event) {
     if (this.selectedCollabs.length < 1) {
       this.temporaryselectedCollabs.push(this.selectedCollabs);
     }
 
-    if (this.selectedCollabs.length > 0 && this.data.length > 0) {
+    if (this.selectedCollabs.length > 0 && this.stakeHolderData.length > 0) {
       this.selectedCollabs.forEach(element => {
-        if (this.data.includes(element)) {
+        if (this.stakeHolderData.includes(element)) {
           alert('User already selected -- select ok to delete the user');
           this.selectedCollabs.pop();
           this.deleteCollabs.push(element);
@@ -393,24 +352,39 @@ export class StakeholderFullComponent implements OnInit {
     }
   }
 
-  addselectedCollabs() {
-    if (this.temporaryselectedCollabs.length > 0 && this.newData.length > 0) {
-      this.data = this.data.concat(this.temporaryselectedCollabs);
-      this.finalCollabs = this.newData;
-    }
-    if (this.temporaryselectedCollabs.length > 0 && this.newData.length < 1) {
-      this.newData = this.temporaryselectedCollabs;
-      this.finalCollabs = this.newData;
-      this.data = this.data.concat(this.newData);
-      this.newDatastring = JSON.stringify(this.newData);
-    }
-    if (this.temporaryselectedCollabs.length < 1) {
-      alert('select atleast one');
-    }
+  // addselectedCollabs() {
+  //   if (this.temporaryselectedCollabs.length > 0 && this.newData.length > 0) {
+  //     this.data = this.data.concat(this.temporaryselectedCollabs);
+  //     this.finalCollabs = this.newData;
+  //   }
+  //   if (this.temporaryselectedCollabs.length > 0 && this.newData.length < 1) {
+  //     this.newData = this.temporaryselectedCollabs;
+  //     this.finalCollabs = this.newData;
+  //     this.data = this.data.concat(this.newData);
+  //     this.newDatastring = JSON.stringify(this.newData);
+  //   }
+  //   if (this.temporaryselectedCollabs.length < 1) {
+  //     alert('select atleast one');
+  //   }
 
-    this.temporaryselectedCollabs = [];
-    this.selectedCollabs = [];
+  //   this.temporaryselectedCollabs = [];
+  //   this.selectedCollabs = [];
 
+  // }
+
+  // ---------------------------------------------------------------------------------------------
+
+  onDelete(user) {
+
+    if (this.stakeHolderData.length === 1) {
+      this.stakeHolderData.splice(0, 1);
+    }
+    for (let i = 0; i <= this.stakeHolderData.length - 1; i++) {
+      if (this.stakeHolderData[i]._id === user._id) {
+        this.stakeHolderData.splice(i, 1);
+      }
+    }
+    this.finalCollabs = this.stakeHolderData;
   }
 
   multideleteCollaborator() {
@@ -419,30 +393,16 @@ export class StakeholderFullComponent implements OnInit {
     }
 
     if (this.deleteCollabs.length > 0) {
-      this.data = this.data.filter(val => !this.deleteCollabs.includes(val));
+      this.stakeHolderData = this.stakeHolderData.filter(val => !this.deleteCollabs.includes(val));
     }
 
-    this.finalCollabs = this.data;
+    this.finalCollabs = this.stakeHolderData;
     this.deleteCollabs = [];
     this.selectedCollabs = [];
   }
 
-  getInitialChar(name) {
-    if (name == null) { return '' }
-    const names = name.split(' ');
-    let initials = '';
-    initials += names[0].charAt(0).toUpperCase();
-    if (names.length > 1) {
-      initials += names[1].charAt(0).toUpperCase();
-    }
-    return initials;
-  }
-
-  /**
-   * Delete Stake Holders when user selected check boxes
-   */
   delteSelectedStakeHolders() {
-    this.selectedSh.forEach(shs => {
+    this.selectedStakeHolders.forEach(shs => {
       if (this.canUserDeleteStakeHolder(shs)) {
         this.deleteStakeHolder(shs._id);
       }
@@ -450,15 +410,15 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   deleteStakeHolder(stakeHolderId) {
-    this.Stakeholders.splice(this.Stakeholders.findIndex(matchesEl), 1);
+    this.stakeHolderListInfo.splice(this.stakeHolderListInfo.findIndex(matchesEl), 1);
     function matchesEl(el) {
       return el._id === stakeHolderId;
     }
 
-    const keys: any[] = Object.keys(this.stakeHolderInfo);
+    const keys: any[] = Object.keys(this.stakeHolderMapInfo);
 
     keys.forEach(key => {
-      let tmp = this.stakeHolderInfo[key];
+      const tmp = this.stakeHolderMapInfo[key];
 
       if (tmp.length > 0) {
         for (let i = 0; i < tmp.length; i++) {
@@ -468,10 +428,45 @@ export class StakeholderFullComponent implements OnInit {
         }
       }
 
-      this.stakeHolderInfo[key] = tmp;
+      this.stakeHolderMapInfo[key] = tmp;
       if (tmp.length === 0) {
-        delete this.stakeHolderInfo[key];
+        delete this.stakeHolderMapInfo[key];
       }
     });
   }
+
+  canUserDeleteStakeHolder(stakeholder) {
+
+    const adminRole = ['Owner', 'Co-Owner'];
+    const currentUserId = this.userService.getUserId();
+    const currentUserRole = this.configurationService.startupData.appRoleList;
+    const currentUserFunctions = this.configurationService.startupData.functionalRole;
+
+    return !stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId
+      && (adminRole.includes(currentUserRole) || currentUserFunctions.includes(stakeholder.functionalRole));
+
+  }
+
+  // ---------------------------------------------------------------------------------------------
+
+  onEvent(event, value) {
+    this.showDelete = true;
+  }
+
+  onOut(event, value) {
+    this.showDelete = false;
+  }
+
+  // ------------------------------------------------------------------------------------------------
+
+  goBack() {
+    this.router.navigate(['/mmassesment', this.currentOfferId, this.caseId]);
+  }
+
+  gotoOfferviewDetails() {
+    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+  }
+
+  // ---------------------------------------------------------------------------------------------
+
 }
