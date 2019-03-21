@@ -1,6 +1,7 @@
 import AnyObj from '../../../shared/models/any-obj';
 import * as _ from 'lodash';
 import {ApiError} from '../common/api-error';
+import {svrUtil} from '../common/svr-util';
 
 export enum OrmTypes {
   string = 1,
@@ -87,7 +88,7 @@ export class Orm {
       } else {
         let val = _.get(obj, map.prop);
         if (val && typeof val === 'string') {
-          val = val.replace(/'/g, '\'\''); // postgres has strings wrapped in single quotes, so we have to replace single quotes with double single quotes
+          val = svrUtil.postgresReplaceQuotes(val);
         }
         record[map.field] = val;
       }
