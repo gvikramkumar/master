@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
-import { ConfigurationService, UserService, CreateOfferService } from '@shared/services';
+import { ConfigurationService, UserService } from '@shared/services';
 
 @Component({
   selector: 'app-stakeholder-full',
