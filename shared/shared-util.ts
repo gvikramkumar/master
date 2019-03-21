@@ -27,10 +27,12 @@ function fiscalYearFromFiscalMonth(fimo) {
   return Number(fimo.toString().substr(0, 4));
 }
 
+// std cogs adj and mfg overhead measures (2 & 4) AND sm has EXPSSOT MFGO source (#3)
 function isDeptUpload(submeasure) {
-  return (submeasure.measureId === 2 || submeasure.measureId === 4) && submeasure.sourceId === 3;
+  return isDeptUploadMeasure(submeasure) && submeasure.sourceId === 3;
 }
 
+// std cogs adj and mfg overhead measures (2 & 4)
 function isDeptUploadMeasure(submeasure) {
   return (submeasure.measureId === 2 || submeasure.measureId === 4);
 }
