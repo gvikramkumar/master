@@ -141,7 +141,7 @@ export class OfferSolutioningComponent implements OnInit {
 
   offerSolutionQuestionAndAnswer() {
 
-    const functionalRole = this.configurationService.startupData.functionalRole;
+    const functionalRole = this.configurationService.startupData.functionalRole[0];
 
     this.offersolutioningService.retrieveOfferSolutionQuestions(this.currentOfferId).subscribe(resQuestionsAndAnswers => {
 
@@ -221,9 +221,10 @@ export class OfferSolutioningComponent implements OnInit {
           .groupBy('subGroup')
           .mapValues((value, key) => {
             const returnObj = {
-              questions: value,
-              subGroupChoicesGiven: value[0].attribute,
-              subGroupChoicesSelected: value[0].selectedAttributes
+              questions: value, subGroupChoicesGiven:
+                _.uniq(value.reduce((acc, val) => { acc = acc.concat(val.attribute); return acc; }, [])),
+              subGroupChoicesSelected: _.uniq(value
+                .reduce((acc, val) => { acc = acc.concat(val.selectedAttributes); return acc; }, []))
             };
             return returnObj;
           }).value())
@@ -238,12 +239,14 @@ export class OfferSolutioningComponent implements OnInit {
     const secondaryPOC = _.uniq(this.secondaryPOC);
 
     const notificationAssignees = secondaryPOC.reduce((accumulator, functionalRole) => {
-      const stakeholderBelongingToTheFunctionalRole = this.stake[functionalRole] ? this.stake[functionalRole].map(stakeholder => stakeholder['_id']) : [];
+      const stakeholderBelongingToTheFunctionalRole = this.stake[functionalRole]
+        ? this.stake[functionalRole].map(stakeholder => stakeholder['_id']) : [];
       accumulator = accumulator.concat(stakeholderBelongingToTheFunctionalRole);
       return accumulator;
     }, []);
     const actionAssignees = primaryPOC.reduce((accumulator, functionalRole) => {
-      const stakeholderBelongingToTheFunctionalRole = this.stake[functionalRole] ? this.stake[functionalRole].map(stakeholder => stakeholder['_id']) : [];
+      const stakeholderBelongingToTheFunctionalRole = this.stake[functionalRole]
+        ? this.stake[functionalRole].map(stakeholder => stakeholder['_id']) : [];
       accumulator = accumulator.concat(stakeholderBelongingToTheFunctionalRole);
       return accumulator;
     }, []);
@@ -253,38 +256,48 @@ export class OfferSolutioningComponent implements OnInit {
       owner = this.stakeData['Owner'][0]['_id'];
     }
 
-    const dueDate = new Date();
-    dueDate.setDate(dueDate.getDate() + 5);
-    const notificationPayload = {
-      'offerId': this.currentOfferId,
-      'caseId': this.caseId,
-      'actionTitle': 'Provide Details',
-      'description': 'This offer need more information',
-      'mileStone': 'Offer Solutioning',
-      'selectedFunction': primaryPOC != null ? primaryPOC.join(',') : '',
-      'assignee': notificationAssignees,
-      'dueDate': dueDate.toISOString(),
-      'offerName': this.offerName,
-      'owner': owner,
-      'type': 'Solutioning Notification',
-    };
+    this.offersolutioningService.retrieveOfferFlags(this.currentOfferId).subscribe(resOfferStatus => {
 
-    const actionPayload = {
-      '  offerId': this.currentOfferId,
-      'caseId': this.caseId,
-      'actionTitle': 'Provide Details',
-      'description': 'This offer need more information',
-      'mileStone': 'Offer Solutioning',
-      'selectedFunction': primaryPOC != null ? primaryPOC.join(',') : '',
-      'assignee': actionAssignees,
-      'dueDate': dueDate.toISOString(),
-      'offerName': this.offerName,
-      'owner': owner,
-      'type': 'Solutioning Action',
-    };
-    this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
-      this.offersolutioningService.actionPost(actionPayload).subscribe(res => {
-      });
+      const isSolutioningActionNotificationSent = resOfferStatus && resOfferStatus['solutioningActionNotification'];
+
+      if (!isSolutioningActionNotificationSent) {
+
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 5);
+        const notificationPayload = {
+          'offerId': this.currentOfferId,
+          'caseId': this.caseId,
+          'actionTitle': 'Provide Details',
+          'description': 'This offer need more information',
+          'mileStone': 'Offer Solutioning',
+          'selectedFunction': primaryPOC != null ? primaryPOC.join(',') : '',
+          'assignee': notificationAssignees,
+          'dueDate': dueDate.toISOString(),
+          'offerName': this.offerName,
+          'owner': owner,
+          'type': 'Solutioning Notification',
+        };
+
+        const actionPayload = {
+          'offerId': this.currentOfferId,
+          'caseId': this.caseId,
+          'actionTitle': 'Provide Details',
+          'description': 'This offer need more information',
+          'mileStone': 'Offer Solutioning',
+          'selectedFunction': primaryPOC != null ? primaryPOC.join(',') : '',
+          'assignee': actionAssignees,
+          'dueDate': dueDate.toISOString(),
+          'offerName': this.offerName,
+          'owner': owner,
+          'type': 'Solutioning Action',
+        };
+
+        this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
+          this.offersolutioningService.actionPost(actionPayload).subscribe(res => {
+            this.offersolutioningService.updateOfferFlag(this.currentOfferId, 'solutioningActionNotification', true).subscribe()
+          });
+        });
+      }
     });
   }
 

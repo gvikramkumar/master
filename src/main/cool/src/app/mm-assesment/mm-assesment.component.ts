@@ -1001,11 +1001,9 @@ export class MmAssesmentComponent implements OnInit {
     const postOfferSolutioningData = {};
     postOfferSolutioningData['groups'] = groups;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
-    postOfferSolutioningData['functionalRole'] = this.configService.startupData.functionalRole;
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-
-    console.log('postForOfferSolutioning Data:', postOfferSolutioningData);
+    postOfferSolutioningData['functionalRole'] = this.configService.startupData.functionalRole[0];
 
     // REST API - /setOfferSolutioning
     this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
