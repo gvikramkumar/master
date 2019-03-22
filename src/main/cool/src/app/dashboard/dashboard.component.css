@@ -311,15 +311,28 @@ th.ui-state-default.ui-unselectable-text.ui-sortable-column {
 }
 
 .GREEN {
-  color: #6EBE4A;
+  background-color: #6EBE4A;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  border-radius: 15px;
  }
 
+
 .YELLOW {
-  color: #FBAB18;
+  background-color: #FBAB18;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  border-radius: 15px;
 }
 
 .RED {
-  color: #E2231A;
+  background-color: #E2231A;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  border-radius: 15px;
 }
 
 /*ToolTip CSS*/

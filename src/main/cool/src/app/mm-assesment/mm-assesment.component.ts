@@ -597,103 +597,6 @@ export class MmAssesmentComponent implements OnInit {
 
   // --------------------------------------------------------------------------------------------
 
-  toNextStep() {
-
-    if (this.activeTabIndex === 0 && !this.dimensionMode) {
-      this.canClickTab = true;
-      let index = 0;
-      const groupKeys = this.getGroupKeys(this.groupData[0]);
-      groupKeys.forEach((key) => {
-        this.offerData['groups'][0]['subGroup'][index]['selected'] = [];
-        this.groupData[0][key].forEach((attr) => {
-          if (attr.status === 1 || attr.type === 2) {
-            this.offerData['groups'][0]['subGroup'][index]['selected'].push(attr.name);
-          }
-        });
-        index += 1;
-      });
-      this.offerData['offerId'] = this.currentOfferId;
-      this.offerData['mmChoice'] = 'REVALIDATE';
-      this.offerData['mmId'] = null;
-      const postData = this.offerData;
-      postData['groups'] = this.offerData['groups'];
-
-
-      this.monetizationModelService.validateOfferDimension(postData).subscribe(data => {
-
-        let tempMessage: any = {};
-        if (data['mmMapperStatus'] === 'Aligned') {
-          tempMessage = {
-            contentHead: data['mmMapperStatus'],
-            content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`,
-            mmModel: data['mmModel']
-          };
-        } else if (data['mmMapperStatus'] === 'Partially Aligned') {
-          tempMessage = {
-            contentHead: data['mmMapperStatus'],
-            content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${data['mmModel']}.`,
-            mmModel: data['mmModel']
-          };
-        } else {
-          tempMessage = {
-            contentHead: data['mmMapperStatus'],
-            content: ' Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'
-          };
-        }
-
-        if (this.totalApprovalsCount > 0 && this.isChangedAttribute && (tempMessage['contentHead'] != this.message['contentHead']
-          || tempMessage['content'] != this.message['content'])) {
-          this.showDialog = true;
-          return;
-        }
-
-        if (data['mmMapperStatus'] === 'Aligned') {
-          this.message = {
-            contentHead: data['mmMapperStatus'],
-            content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`,
-            mmModel: data['mmModel']
-          };
-        } else if (data['mmMapperStatus'] === 'Partially Aligned') {
-          this.message = {
-            contentHead: data['mmMapperStatus'],
-            content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${data['mmModel']}.`,
-            mmModel: data['mmModel']
-          };
-        } else {
-          this.message = {
-            contentHead: data['mmMapperStatus'],
-            content: ' Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'
-          };
-        }
-
-        if (this.activeTabIndex < this.groupNames.length - 1) {
-          this.activeTabIndex += 1;
-        }
-        this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
-        this.getStakeData(data['mmModel']);
-
-        if (this.currentMMModel !== data['mmModel']) {
-          this.currentMMModel = data['mmModel'];
-          this.groupData.splice(1);
-          this.groupNames.splice(1);
-          data['dimgroups'].forEach(group => {
-            this.getGroupData(group, {}, true);
-          });
-        }
-        this.proceedToStakeholder('false');
-      });
-    } else {
-      if (this.activeTabIndex < this.groupNames.length - 1) {
-        this.activeTabIndex += 1;
-      }
-    }
-
-    this.emitEventToChild();
-    this.proceedToStakeholder('false');
-  }
-
-  // --------------------------------------------------------------------------------------------
-
   getStakeData(mmModel) {
 
     // Initialize Right Panel Component Data
@@ -848,6 +751,103 @@ export class MmAssesmentComponent implements OnInit {
 
   // --------------------------------------------------------------------------------------------
 
+  toNextStep() {
+
+    if (this.activeTabIndex === 0 && !this.dimensionMode) {
+      this.canClickTab = true;
+      let index = 0;
+      const groupKeys = this.getGroupKeys(this.groupData[0]);
+      groupKeys.forEach((key) => {
+        this.offerData['groups'][0]['subGroup'][index]['selected'] = [];
+        this.groupData[0][key].forEach((attr) => {
+          if (attr.status === 1 || attr.type === 2) {
+            this.offerData['groups'][0]['subGroup'][index]['selected'].push(attr.name);
+          }
+        });
+        index += 1;
+      });
+      this.offerData['offerId'] = this.currentOfferId;
+      this.offerData['mmChoice'] = 'REVALIDATE';
+      this.offerData['mmId'] = null;
+      const postData = this.offerData;
+      postData['groups'] = this.offerData['groups'];
+
+
+      this.monetizationModelService.validateOfferDimension(postData).subscribe(data => {
+
+        let tempMessage: any = {};
+        if (data['mmMapperStatus'] === 'Aligned') {
+          tempMessage = {
+            contentHead: data['mmMapperStatus'],
+            content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`,
+            mmModel: data['mmModel']
+          };
+        } else if (data['mmMapperStatus'] === 'Partially Aligned') {
+          tempMessage = {
+            contentHead: data['mmMapperStatus'],
+            content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${data['mmModel']}.`,
+            mmModel: data['mmModel']
+          };
+        } else {
+          tempMessage = {
+            contentHead: data['mmMapperStatus'],
+            content: ' Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'
+          };
+        }
+
+        if (this.totalApprovalsCount > 0 && this.isChangedAttribute && (tempMessage['contentHead'] != this.message['contentHead']
+          || tempMessage['content'] != this.message['content'])) {
+          this.showDialog = true;
+          return;
+        }
+
+        if (data['mmMapperStatus'] === 'Aligned') {
+          this.message = {
+            contentHead: data['mmMapperStatus'],
+            content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`,
+            mmModel: data['mmModel']
+          };
+        } else if (data['mmMapperStatus'] === 'Partially Aligned') {
+          this.message = {
+            contentHead: data['mmMapperStatus'],
+            content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${data['mmModel']}.`,
+            mmModel: data['mmModel']
+          };
+        } else {
+          this.message = {
+            contentHead: data['mmMapperStatus'],
+            content: ' Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'
+          };
+        }
+
+        if (this.activeTabIndex < this.groupNames.length - 1) {
+          this.activeTabIndex += 1;
+        }
+        this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
+        this.getStakeData(data['mmModel']);
+
+        if (this.currentMMModel !== data['mmModel']) {
+          this.currentMMModel = data['mmModel'];
+          this.groupData.splice(1);
+          this.groupNames.splice(1);
+          data['dimgroups'].forEach(group => {
+            this.getGroupData(group, {}, true);
+          });
+        }
+        this.proceedToStakeholder('false');
+      });
+    } else {
+      if (this.activeTabIndex < this.groupNames.length - 1) {
+        this.activeTabIndex += 1;
+      }
+    }
+
+    this.emitEventToChild();
+    this.proceedToStakeholder('false');
+  }
+
+  // --------------------------------------------------------------------------------------------
+
   proceedToStakeholder(withRouter: string = 'true') {
 
     let selectedCharacteristics = [];
@@ -922,47 +922,6 @@ export class MmAssesmentComponent implements OnInit {
       }, err => {
         console.log('Error Retriving New Stake Holder Related To Selected Attributes');
       });
-
-  }
-
-  // --------------------------------------------------------------------------------------------
-
-  private findAdditionalAndSelectedCharacterstics(groupNames: any, groupData: any): any {
-
-    const selectedCharacteristics: any[] = [];
-    const additionalCharacteristics: any[] = [];
-
-    groupData.forEach((group, index) => {
-      for (const subGroup of Object.keys(group)) {
-
-        const subselectedCharacteristics = {};
-        const notSubselectedCharacteristics = {};
-        subselectedCharacteristics['subgroup'] = subGroup;
-        notSubselectedCharacteristics['subgroup'] = subGroup;
-        subselectedCharacteristics['characteristics'] = [];
-        notSubselectedCharacteristics['characteristics'] = [];
-        subselectedCharacteristics['group'] = groupNames[index];
-        notSubselectedCharacteristics['group'] = groupNames[index];
-        subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
-        notSubselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
-
-        group[subGroup].forEach((characters) => {
-          if (characters['status'] === 1 || characters['type'] === 2) {
-            subselectedCharacteristics['characteristics'].push(characters['name']);
-          } else {
-            notSubselectedCharacteristics['characteristics'].push(characters['name']);
-          }
-        });
-
-        if (index === 0) {
-          selectedCharacteristics.push(subselectedCharacteristics);
-        } else {
-          additionalCharacteristics.push(subselectedCharacteristics);
-        }
-      }
-    });
-
-    return [selectedCharacteristics, additionalCharacteristics];
 
   }
 
@@ -1116,6 +1075,47 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   // --------------------------------------------------------------------------------------------
+
+  private findAdditionalAndSelectedCharacterstics(groupNames: any, groupData: any): any {
+
+    const selectedCharacteristics: any[] = [];
+    const additionalCharacteristics: any[] = [];
+
+    groupData.forEach((group, index) => {
+      for (const subGroup of Object.keys(group)) {
+
+        const subselectedCharacteristics = {};
+        const notSubselectedCharacteristics = {};
+        subselectedCharacteristics['subgroup'] = subGroup;
+        notSubselectedCharacteristics['subgroup'] = subGroup;
+        subselectedCharacteristics['characteristics'] = [];
+        notSubselectedCharacteristics['characteristics'] = [];
+        subselectedCharacteristics['group'] = groupNames[index];
+        notSubselectedCharacteristics['group'] = groupNames[index];
+        subselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
+        notSubselectedCharacteristics['alignmentStatus'] = this.message['contentHead'];
+
+        group[subGroup].forEach((characters) => {
+          if (characters['status'] === 1 || characters['type'] === 2) {
+            subselectedCharacteristics['characteristics'].push(characters['name']);
+          } else {
+            notSubselectedCharacteristics['characteristics'].push(characters['name']);
+          }
+        });
+
+        if (index === 0) {
+          selectedCharacteristics.push(subselectedCharacteristics);
+        } else {
+          additionalCharacteristics.push(subselectedCharacteristics);
+        }
+      }
+    });
+
+    return [selectedCharacteristics, additionalCharacteristics];
+
+  }
+
+ // --------------------------------------------------------------------------------------------
 
   onStrategyReview() {
     this.router.navigate(['/strategyReview', this.currentOfferId]);

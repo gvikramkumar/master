@@ -2,6 +2,7 @@
 @import 'assets/css/cui-standard.min.css';
 @import '~perfect-scrollbar/css/perfect-scrollbar.css';
 @import 'assets/css/cool-custom.css';
+
 html {
   height: 100%;
   font-size: 62.5%;
@@ -377,7 +378,7 @@ ul li {
 }
 
 .mr-40 {
-  margin-right:40px !important;
+  margin-right: 40px !important;
 }
 
 .mt--10 {
@@ -409,7 +410,7 @@ ul li {
 }
 
 .pl-0 {
-  padding-left:0 !important;
+  padding-left: 0 !important;
 }
 
 .pl-10 {
@@ -445,22 +446,22 @@ ul li {
 }
 
 .noBorder {
-  border:none !important;
+  border: none !important;
 }
 
 .noBorderBottom {
-  border-bottom:none !important;
+  border-bottom: none !important;
 }
 
 .noBorderTop {
-  border-top:none !important;
+  border-top: none !important;
 }
 
-.width100{
+.width100 {
   width: 100%;
 }
 
-.visible-tooltip  {
+.visible-tooltip {
   overflow: visible !important;
 }
 
@@ -749,7 +750,7 @@ h6 .acc-title {
   color: #049fd9 !important;
 }
 
-.labelBlue label{
+.labelBlue label {
   font-size: 1.2rem;
 }
 
@@ -788,7 +789,7 @@ h6 .acc-title {
 
 /** Modal CSS Start Here **/
 
-.custom-modal{
+.custom-modal {
   position: fixed;
   background: #fff;
   border: 1px solid #ddd;
@@ -796,19 +797,19 @@ h6 .acc-title {
   /* height: calc(100vh - 110px); */
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
-  box-shadow:1px 1px 1px 1px #ccc;
+  transform: translate(-50%, -50%);
+  box-shadow: 1px 1px 1px 1px #ccc;
   z-index: 1001;
   border-radius: 4px;
 }
 
-.custom-modal .custom-modal-body > div.txtDesc {
+.custom-modal .custom-modal-body>div.txtDesc {
   min-height: calc(100% - 50px);
   max-height: calc(100% - 50px);
   overflow: auto;
 }
 
-.headerTittle{
+.headerTittle {
   padding-left: 15px;
   margin: 12px 0 !important;
   font-size: 1.6rem !important;
@@ -817,18 +818,18 @@ h6 .acc-title {
   padding-bottom: 7px;
 }
 
-.innerTittle{
+.innerTittle {
   font-size: 1.4rem !important;
   font-weight: 400 !important;
 }
 
-.custom-modal-body{
-  max-height: calc(100%  - 40px);
+.custom-modal-body {
+  max-height: calc(100% - 40px);
   overflow: auto;
   padding: 5px 15px 15px 15px
 }
 
-.custom-modal .modal-title{
+.custom-modal .modal-title {
   color: #049fd9;
   font-size: 16px;
   margin: 0;
@@ -836,10 +837,11 @@ h6 .acc-title {
   padding-left: 15px;
   text-align: left;
 }
-.custom-modal .modal-title .edit-icon{
+
+.custom-modal .modal-title .edit-icon {
   position: relative;
-  top:-4px;
-  left:5px;
+  top: -4px;
+  left: 5px;
 }
 
 .backdrop-custom {
@@ -849,7 +851,7 @@ h6 .acc-title {
   top: 0;
   left: 0;
   opacity: 0.5;
-  background: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.5);
   z-index: 1000;
 }
 
@@ -869,12 +871,16 @@ h6 .acc-title {
   background: none;
   border: 0;
 }
+
 .searchSec .dropdown-item {
   padding: 3px 10px;
 }
-.searchSec button, .searchSecinput {
+
+.searchSec button,
+.searchSecinput {
   overflow: visible;
 }
+
 .searchSec .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -895,13 +901,14 @@ h6 .acc-title {
   border-radius: 0;
   margin-top: -1px;
 }
+
 .searchSec .dropdown-menu {
   width: 100%;
   overflow: hidden;
   padding: 0;
 }
 
-.searchSec .dropdown-item:hover{
+.searchSec .dropdown-item:hover {
   color: #fff;
   background: #049fd9;
 }
@@ -909,7 +916,7 @@ h6 .acc-title {
 
 /**Autocomplete CSS Start**/
 
-.searchBox{
+.searchBox {
   background: #f2f2f2;
   padding: 9px;
 }
@@ -921,14 +928,14 @@ h6 .acc-title {
   font-size: 24px;
 }
 
-.icons{
+.icons {
   float: left;
   margin: 0 9px 0 0;
-  width:22px;
+  width: 22px;
   height: 22px;
 }
 
-.iconError{
+.iconError {
   background: url(assets/images/icon-error1.png);
   height: 19px;
 }
@@ -944,7 +951,7 @@ h6 .acc-title {
 }
 
 
-.cui ul.tabs>li > a {
+.cui ul.tabs>li>a {
   margin-top: 10px;
   padding: 0px 10px;
   border: 1px solid rgb(233, 233, 233);
@@ -952,6 +959,7 @@ h6 .acc-title {
   background-color: rgb(233, 233, 233);
   box-shadow: none;
 }
+
 .cui ul.tabs>li.active>a {
   margin-top: 10px;
   padding: 0px 10px;
@@ -973,17 +981,17 @@ h6 .acc-title {
   padding: 0 20px
 }
 
-.responsive-table.cool .fixed-table{
+.responsive-table.cool .fixed-table {
   table-layout: fixed;
 }
 
-.responsive-table.cool .fixed-table td{
+.responsive-table.cool .fixed-table td {
   text-overflow: initial;
   white-space: normal;
 }
 
 
-.tab .tabs{
+.tab .tabs {
   box-shadow: inherit !important;
 }
 
@@ -1016,7 +1024,7 @@ h6 .acc-title {
 }
 
 
-.iconWarning{
+.iconWarning {
   background: url(assets/images/icon-warning.png);
   height: 16px;
   width: 18px;
@@ -1028,7 +1036,8 @@ h6 .acc-title {
 
 /**CUI Icon Css Start**/
 
-.cui .table tr td:first-child, .cui .table tr th:first-child {
+.cui .table tr td:first-child,
+.cui .table tr th:first-child {
   border-left: inherit;
 }
 
@@ -1036,13 +1045,13 @@ h6 .acc-title {
   font-size: 20px;
 }
 
-.icon-close{
+.icon-close {
   position: relative;
   right: 8px;
   top: -5px;
 }
 
-.cui .icon-close:before{
+.cui .icon-close:before {
   font-size: 18px;
 }
 
@@ -1066,26 +1075,26 @@ h6 .acc-title {
   position: relative;
 }
 
-.iconCompleted:after{
+.iconCompleted:after {
   border-bottom: 1px solid #889B28;
   border-right: 1px solid #889B28;
   content: "";
   display: inline-block;
-  width:5px;
+  width: 5px;
   height: 10px;
   left: 6px;
   margin: 1px;
   position: absolute;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-  top:2px;
+  top: 2px;
 }
 
 /**CUI Icon Css End**/
 
 /**Modal & Table CSS Start**/
 
-.table-modal{
+.table-modal {
   border: #dfdfdf 1px solid;
   table-layout: fixed;
   border-collapse: collapse !important;
@@ -1095,7 +1104,7 @@ h6 .acc-title {
   background: none;
 }
 
-.table-modal th{
+.table-modal th {
   padding: 0 9px !important;
   background: #f2f2f2;
 }
@@ -1106,6 +1115,7 @@ h6 .acc-title {
 .cui .cus_dropdown {
   position: relative;
 }
+
 .cus_dropdown {
   position: relative;
   padding: 0 0 2px 0;
@@ -1115,6 +1125,7 @@ h6 .acc-title {
   opacity: 1;
   border-bottom: 0 !important;
 }
+
 .cui .cus_dropdown span.icon-chevron-down {
   position: absolute;
   right: 5px;
@@ -1122,9 +1133,11 @@ h6 .acc-title {
   top: 6px;
   cursor: pointer;
 }
+
 .cui .cus_dropdown.open .cus_dropdown_menu {
   top: calc(100% - 2px);
 }
+
 .cui .cus_dropdown.open .cus_dropdown_menu {
   display: block;
 }
@@ -1138,6 +1151,7 @@ h6 .acc-title {
   left: 0px;
   display: none;
 }
+
 .cui .cus_dropdown_menu a {
   line-height: 2.4;
   display: block;
@@ -1146,7 +1160,8 @@ h6 .acc-title {
   font-size: 1.3rem;
 }
 
-.cui .cus_dropdown_menu a:hover, .cui .cus_dropdown_menu a.selected {
+.cui .cus_dropdown_menu a:hover,
+.cui .cus_dropdown_menu a.selected {
   background: #f1f1f1;
 }
 
@@ -1154,7 +1169,7 @@ h6 .acc-title {
 
 /**Font CSS**/
 
-.fontSmall{
+.fontSmall {
   font-size: 1.4rem;
 }
 
@@ -1203,12 +1218,12 @@ h6 .acc-title {
 
 }
 
-.offerData p{
+.offerData p {
   margin: 5px 0;
 }
 
-.ui-multiselect .ui-multiselect-label{
-  min-width:350px !important;
+.ui-multiselect .ui-multiselect-label {
+  min-width: 350px !important;
 }
 
 .cui .timeline:after {
@@ -1222,6 +1237,7 @@ h6 .acc-title {
   bottom: 0;
   z-index: 1;
 }
+
 /* .cui .timeline__icon {
   border-radius: 50%;
   width: 24px;
@@ -1245,16 +1261,18 @@ h6 .acc-title {
   outline: none;
   border: none;
 }
+
 .cui .timeline__content {
   margin-left: 50px;
   width: 100%;
 }
+
 span.icon-check-outline.icon-medium {
   color: #6ebe4a;
 }
 
 .offerID {
   text-transform: uppercase;
-  color:#666666;
+  color: #666666;
   font-size: 18px;
 }
