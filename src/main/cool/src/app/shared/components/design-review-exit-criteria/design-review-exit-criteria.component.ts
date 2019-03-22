@@ -77,10 +77,11 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
         this.requestApprovalAvailable = false;
       }
     });
-    this.designApprovedOfferId = this.localStorage.retrieve('designApprovedOfferId');
-    if (this.designApprovedOfferId === this.currentOfferId) {
-      this.requestApprovalAvailable = false;
-    }
+    this.exitCriteriaValidationService.requestApprovalButtonEnable(this.currentOfferId).subscribe(data => {
+      if (data['designReviewRequestApproval']) {
+        this.requestApprovalAvailable = false;
+      }
+    });
 
     this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
       const canRequestUsers = [];
@@ -143,8 +144,9 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
     this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
       this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
         this.messageService.sendMessage('Design Review');
-        this.localStorage.store('designApprovedOfferId', this.currentOfferId);
-        this.requestApprovalAvailable = false;
+        this.exitCriteriaValidationService.requestApprovalButtonDisable(this.currentOfferId).subscribe(resData => {
+          this.requestApprovalAvailable = false;
+        });
       });
     });
   }

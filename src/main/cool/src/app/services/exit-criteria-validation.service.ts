@@ -31,4 +31,15 @@ export class ExitCriteriaValidationService {
     const url = `${this.environmentService.REST_API_OWB_CONTROLLER_URL}/${offerid}/${userid}`;
     return this.http.get(url, { withCredentials: true });
   }
+
+  requestApprovalButtonEnable(offerId) {
+    const url = `${this.environmentService.REST_API_REQUEST_APPROVAL_ENABLE_URL}/${offerId}`;
+    return this.http.get(url, { withCredentials: true });
+  }
+
+  requestApprovalButtonDisable(offerId) {
+    let url = `${this.environmentService.REST_API_REQUEST_APPROVAL_ENABLE_URL}/${offerId}`;
+    url += '?flag=designReviewRequestApproval&val=true';
+    return this.http.post(url, { withCredentials: true });
+  }
 }
