@@ -6,7 +6,7 @@ import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
 import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.component';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { ExitCriteriaValidationComponent } from '@app/review/exit-criteria-validation/exit-criteria-validation.component';
-import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
+import { StakeholderFullComponent } from '@app/stakeholder/stakeholder-full/stakeholder-full.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
@@ -22,6 +22,7 @@ import { OasComponent } from './oas/oas.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { BupmGuard } from '@shared/guards';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
+import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeholder-add.component';
 
 
 const routes: Routes = [
@@ -137,6 +138,10 @@ const routes: Routes = [
     path: 'designReview/:id/:id2',
     component: DesignReviewComponent,
     resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'stakeholder-add',
+    component: StakeholderAddComponent
   }
 
 ];

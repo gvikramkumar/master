@@ -96,6 +96,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   @Input() noOfWeeksDifference: string;
   @Input() displayLeadTime: Boolean = false;
 
+  addStakeHolder: Boolean = false;
+
   offerData;
   dotBox = [
     {
@@ -796,6 +798,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   goScalabilityIndex() {
     this.router.navigate(['/oas']);
+  }
+
+  showStakeHolderInfo() {
+    this.addStakeHolder = true;
   }
 
 }

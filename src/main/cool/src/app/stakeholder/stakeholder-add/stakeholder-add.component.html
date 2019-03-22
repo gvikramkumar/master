@@ -1,0 +1,26 @@
+<div class="card card--raised base-margin-top">
+
+  <ul class="list">
+    <!-- <div class="ui-accordion-content"> -->
+
+      <div class="panel panel--compressed panel--ltgray panel--loose">
+        <div class="container base-margin-top">
+          <cui-search placeholder="Search by Name, Cec ID or Function" [debounce]="300" [compressed]="false" (onUpdate)="search($event)"></cui-search>
+        </div>
+      </div>
+
+      <p-dataTable [value]="searchStakeHolderResultList" [(selection)]="selectedStakeHolders" [paginator]="true" [rows]="5">
+        <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+        <p-column field="name" header="Name" [sortable]="true"></p-column>
+        <p-column field="emailId" header="Email" [sortable]="true"></p-column>
+        <p-column field="functionalRole" header="Function" [sortable]="true"></p-column>
+      </p-dataTable>
+
+    <!-- </div> -->
+  </ul>
+
+  <div class="col-md-12 base-margin-top">
+    <button class="btn btn--primary" (click)="addSelectedStakeHolders()">ADD</button>
+  </div>
+
+</div>

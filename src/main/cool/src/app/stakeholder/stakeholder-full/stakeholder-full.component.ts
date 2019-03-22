@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { SearchCollaboratorService } from '../services/search-collaborator.service';
-import { StakeholderfullService } from '../services/stakeholderfull.service';
-import { OfferPhaseService } from '../services/offer-phase.service';
+import { SearchCollaboratorService } from '@app/services/search-collaborator.service';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { OfferPhaseService } from '@app/services/offer-phase.service';
 import { ConfigurationService, UserService } from '@shared/services';
 
 @Component({
@@ -122,7 +122,7 @@ export class StakeholderFullComponent implements OnInit {
         const currentUserRole = this.configurationService.startupData.appRoleList;
         const currentUserFunctionalRole = this.configurationService.startupData.functionalRole[0];
 
-        if (adminRole.some(p => currentUserRole.includes(p))) {
+        if (adminRole.some(user => currentUserRole.includes(user))) {
           this.searchStakeHolderResults = collaboratorsResponseList;
         } else {
           this.searchStakeHolderResults = collaboratorsResponseList
