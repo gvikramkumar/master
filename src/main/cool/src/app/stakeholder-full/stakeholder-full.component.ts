@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
-import { ConfigurationService, UserService, CreateOfferService } from '@shared/services';
+import { ConfigurationService, UserService } from '@shared/services';
 
 @Component({
   selector: 'app-stakeholder-full',
@@ -13,34 +13,15 @@ import { ConfigurationService, UserService, CreateOfferService } from '@shared/s
 })
 export class StakeholderFullComponent implements OnInit {
 
-  @Input() stakeData: Object;
-  @Input() offerOwner: String;
-  @Input() portfolioFlag: Boolean = false;
-  @Output() updateStakeData = new EventEmitter<String>();
-
-
-
+  message = {};
   stakeholderForm: FormGroup;
 
-  offerName;
-  message = {};
-  currentOfferId;
+  caseId: string;
+  offerName: string;
+  currentOfferId: string;
 
-
-  selectedCollabs;
-  deleteCollabs: any[];
-  newDatastring: String;
-
-
-  showDelete = false;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
-
-
-  finalCollabs: any[];
-  temporaryselectedCollabs: any[];
-
-  caseId: any;
 
   stakeHolderData: any[];
   stakeHolderMapInfo = {};
@@ -50,29 +31,20 @@ export class StakeholderFullComponent implements OnInit {
   searchStakeHolderInput;
   searchStakeHolderResults: String[];
 
-  text: String;
-
   cols = [
     { field: 'name', header: 'NAME' },
     { field: 'email', header: 'EMAIL' },
     { field: 'functionalRole', header: 'FUNCTION' }
   ];
 
+   // ---------------------------------------------------------------------------------------------
+
   constructor(private stakeholderfullService: StakeholderfullService,
-    private createOfferService: CreateOfferService,
     private searchCollaboratorService: SearchCollaboratorService,
     private activatedRoute: ActivatedRoute,
     private router: Router, private offerPhaseService: OfferPhaseService,
     private configurationService: ConfigurationService,
     private userService: UserService) {
-
-    this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-    });
-
-    if (!this.currentOfferId) {
-      this.currentOfferId = this.createOfferService.coolOffer.offerId;
-    }
 
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -91,9 +63,6 @@ export class StakeholderFullComponent implements OnInit {
       content: 'Stakeholders message.'
     };
 
-    this.deleteCollabs = [];
-    this.temporaryselectedCollabs = [];
-
     this.stakeholderForm = new FormGroup({
       userName: new FormControl(null, Validators.required)
     });
@@ -104,13 +73,11 @@ export class StakeholderFullComponent implements OnInit {
       this.processStakeHolderData(data['stakeholders']);
     });
 
-
-
   }
 
   // ---------------------------------------------------------------------------------------------
 
-  processStakeHolderData(stakeHolderData) {
+  processStakeHolderData(stakeHolderData: any) {
 
     stakeHolderData.forEach(stakeHolder => {
 
@@ -155,68 +122,14 @@ export class StakeholderFullComponent implements OnInit {
         const currentUserRole = this.configurationService.startupData.appRoleList;
         const currentUserFunctionalRole = this.configurationService.startupData.functionalRole[0];
 
-        if (adminRole.includes(currentUserRole)) {
+        if (adminRole.some(p => currentUserRole.includes(p))) {
           this.searchStakeHolderResults = collaboratorsResponseList;
         } else {
           this.searchStakeHolderResults = collaboratorsResponseList
-            .filter(collaborator => collaborator.functionalRole === currentUserFunctionalRole);
+            .filter(collaborator => collaborator.userMappings[0]['functionalRole'] === currentUserFunctionalRole);
         }
 
       });
-  }
-
-  // ---------------------------------------------------------------------------------------------
-
-  getInitialChar(name) {
-    if (name == null) { return '' }
-    const names = name.split(' ');
-    let initials = '';
-    initials += names[0].charAt(0).toUpperCase();
-    if (names.length > 1) {
-      initials += names[1].charAt(0).toUpperCase();
-    }
-    return initials;
-  }
-
-  getUserIdFromEmail(email): any {
-    const arrayOfStrings = email.split('@');
-    return arrayOfStrings[0];
-  }
-
-  // ---------------------------------------------------------------------------------------------
-
-  getKeys(obj) {
-    if (typeof obj === 'object') {
-      return Object.keys(obj);
-    } else {
-      return [];
-    }
-  }
-
-  selectUser(stakes: any) {
-    this.selectUser = stakes;
-  }
-
-  updateMessage(message) {
-    if (message != null && message !== '') {
-      if (message === 'hold') {
-        this.proceedButtonStatusValid = false;
-        this.backbuttonStatusValid = false;
-        this.message = {
-          contentHead: '',
-          content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.',
-          color: 'black'
-        };
-      } else if (message === 'cancel') {
-        this.proceedButtonStatusValid = false;
-        this.backbuttonStatusValid = false;
-        this.message = {
-          contentHead: '',
-          content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
-          color: 'black'
-        };
-      }
-    }
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -237,7 +150,6 @@ export class StakeholderFullComponent implements OnInit {
       this.stakeHolderListInfo.push(obj);
       if (this.stakeHolderMapInfo[obj['offerRole']] == null) {
         this.stakeHolderMapInfo[obj['offerRole']] = [];
-
       }
 
       this.stakeHolderMapInfo[obj['offerRole']].push(obj);
@@ -275,17 +187,6 @@ export class StakeholderFullComponent implements OnInit {
 
   }
 
-  addToStakeData(res) {
-
-    const keyUsers = res['stakeholders'];
-    keyUsers.forEach(user => {
-      if (this.stakeData[user['offerRole']] == null) {
-        this.stakeData[user['offerRole']] = [];
-      }
-      this.stakeData[user['offerRole']].push({ name: user['_id'], email: 'sample@sample.com' });
-    });
-  }
-
   addCollaborator() {
 
     const stakeholdersPayLoad = {
@@ -313,7 +214,6 @@ export class StakeholderFullComponent implements OnInit {
     this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe(data => {
       const proceedPayload = {
         'taskId': '',
-        'userId': this.offerOwner,
         'caseId': this.caseId,
         'offerId': this.currentOfferId,
         'taskName': 'Stake Holders',
@@ -328,78 +228,10 @@ export class StakeholderFullComponent implements OnInit {
       });
     },
       (error) => {
-      })
-  }
-
-  // ---------------------------------------------------------------------------------------------
-
-  selectlist(event) {
-    if (this.selectedCollabs.length < 1) {
-      this.temporaryselectedCollabs.push(this.selectedCollabs);
-    }
-
-    if (this.selectedCollabs.length > 0 && this.stakeHolderData.length > 0) {
-      this.selectedCollabs.forEach(element => {
-        if (this.stakeHolderData.includes(element)) {
-          alert('User already selected -- select ok to delete the user');
-          this.selectedCollabs.pop();
-          this.deleteCollabs.push(element);
-        } else {
-
-          this.temporaryselectedCollabs.push(element);
-        }
       });
-    }
   }
-
-  // addselectedCollabs() {
-  //   if (this.temporaryselectedCollabs.length > 0 && this.newData.length > 0) {
-  //     this.data = this.data.concat(this.temporaryselectedCollabs);
-  //     this.finalCollabs = this.newData;
-  //   }
-  //   if (this.temporaryselectedCollabs.length > 0 && this.newData.length < 1) {
-  //     this.newData = this.temporaryselectedCollabs;
-  //     this.finalCollabs = this.newData;
-  //     this.data = this.data.concat(this.newData);
-  //     this.newDatastring = JSON.stringify(this.newData);
-  //   }
-  //   if (this.temporaryselectedCollabs.length < 1) {
-  //     alert('select atleast one');
-  //   }
-
-  //   this.temporaryselectedCollabs = [];
-  //   this.selectedCollabs = [];
-
-  // }
 
   // ---------------------------------------------------------------------------------------------
-
-  onDelete(user) {
-
-    if (this.stakeHolderData.length === 1) {
-      this.stakeHolderData.splice(0, 1);
-    }
-    for (let i = 0; i <= this.stakeHolderData.length - 1; i++) {
-      if (this.stakeHolderData[i]._id === user._id) {
-        this.stakeHolderData.splice(i, 1);
-      }
-    }
-    this.finalCollabs = this.stakeHolderData;
-  }
-
-  multideleteCollaborator() {
-    if (this.deleteCollabs.length < 1) {
-      alert('select atleast one');
-    }
-
-    if (this.deleteCollabs.length > 0) {
-      this.stakeHolderData = this.stakeHolderData.filter(val => !this.deleteCollabs.includes(val));
-    }
-
-    this.finalCollabs = this.stakeHolderData;
-    this.deleteCollabs = [];
-    this.selectedCollabs = [];
-  }
 
   delteSelectedStakeHolders() {
     this.selectedStakeHolders.forEach(shs => {
@@ -449,12 +281,52 @@ export class StakeholderFullComponent implements OnInit {
 
   // ---------------------------------------------------------------------------------------------
 
-  onEvent(event, value) {
-    this.showDelete = true;
+  getKeys(obj) {
+    if (typeof obj === 'object') {
+      return Object.keys(obj);
+    } else {
+      return [];
+    }
   }
 
-  onOut(event, value) {
-    this.showDelete = false;
+  updateMessage(message) {
+    if (message != null && message !== '') {
+      if (message === 'hold') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
+        this.message = {
+          contentHead: '',
+          content: 'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black'
+        };
+      } else if (message === 'cancel') {
+        this.proceedButtonStatusValid = false;
+        this.backbuttonStatusValid = false;
+        this.message = {
+          contentHead: '',
+          content: 'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black'
+        };
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+
+  getInitialChar(name: string) {
+    if (name == null) { return '' }
+    const names = name.split(' ');
+    let initials = '';
+    initials += names[0].charAt(0).toUpperCase();
+    if (names.length > 1) {
+      initials += names[1].charAt(0).toUpperCase();
+    }
+    return initials;
+  }
+
+  getUserIdFromEmail(email: string): any {
+    const arrayOfStrings = email.split('@');
+    return arrayOfStrings[0];
   }
 
   // ------------------------------------------------------------------------------------------------

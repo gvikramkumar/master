@@ -7,10 +7,12 @@ import { StakeholderfullService } from '../services/stakeholderfull.service';
   styleUrls: ['./mm-info-bar.component.css']
 })
 export class MmInfoBarComponent implements OnInit {
+
+  offerData;
   @Input() derivedMM: any;
   @Input() currentOfferId;
-  offerData;
-  
+
+
 
   constructor(private stakeholderfullService: StakeholderfullService) { }
 
@@ -18,8 +20,8 @@ export class MmInfoBarComponent implements OnInit {
     this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.offerData = data;
       this.derivedMM = this.offerData['derivedMM'];
-    })
+    });
 
-}
+  }
 
 }
