@@ -121,10 +121,9 @@ export default class SalesSplitUploadUploadController extends UploadController {
     const duplicates = _.uniqWith(imports, (a, b) => {
       return a.accountId === b.accountId &&
         a.companyCode === b.companyCode &&
-        a.subaccountCode === b.subaccountCode &&
-        a.salesTerritoryCode === b.salesTerritoryCode;
+        a.subaccountCode === b.subaccountCode;
     })
-      .map(x => _.pick(x, ['accountId', 'companyCode', 'subaccountCode', 'salesTerritoryCode']))
+      .map(x => _.pick(x, ['accountId', 'companyCode', 'subaccountCode']))
     return this.repo.bulkRemove(duplicates);
   }
 

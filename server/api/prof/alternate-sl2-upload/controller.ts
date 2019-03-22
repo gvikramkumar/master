@@ -18,8 +18,8 @@ export default class AlternateSl2UploadController extends ControllerBase {
   }
 
   mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa) {
-    return this.pgRepo.syncRecordsQueryOneDeleteInsertNoChecks(pgRemoveFilter, ['actualSl2Code', 'alternateSl2Code'],
-      objs, userId, true, false)
+    return this.pgRepo.syncRecordsReplaceAllWhereProps(pgRemoveFilter, ['actualSl2Code', 'alternateSl2Code'],
+      objs, userId, true)
       .then(results => results.recordCount);
   }
 

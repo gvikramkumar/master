@@ -32,7 +32,7 @@ select * from fpadfa.dfa_submeasure_input_lvl;
 
 
 select * from fpadfa.dfa_sub_measure where sub_measure_name = 'dank4sm';
-select * from fpadfa.dfa_sub_measure where sub_measure_key = 1006132;
+select * from fpadfa.dfa_sub_measure where sub_measure_key = 1134884;
 select * from fpadfa.dfa_submeasure_input_lvl where sub_measure_key = 1006132;
 select * from fpadfa.dfa_submeasure_input_lvl where input_level_flag = 'M';
 

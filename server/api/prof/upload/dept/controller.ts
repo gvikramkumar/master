@@ -88,7 +88,9 @@ export default class DeptUploadUploadController extends UploadController {
 
   validateRow1(row) {
     this.temp = new DeptUploadDeptTemplate(row);
-    this.sheet1SubmeasureNames.push(this.temp.submeasureName.toUpperCase());
+    if (this.temp.submeasureName) {
+      this.sheet1SubmeasureNames.push(this.temp.submeasureName.toUpperCase());
+    }
     return this.getSubmeasure()
       .then(() => this.validateSubmeasure())
       .then(() => this.lookForErrors())

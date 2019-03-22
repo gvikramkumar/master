@@ -6,7 +6,13 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {take, first} from 'rxjs/operators';
 
 
-console.log(.25)
+const arr = [
+  {name: 'dank', prop: 'm', age: 15},
+  {name: 'dank', prop: 'm', age: 16},
+  {name: 'dank', prop: 'f', age: 17},
+];
+
+console.log(_.uniqWith(arr, (a, b) => a.name === b.name && a.prop === b.prop).map(x => _.pick(x, ['name', 'prop'])));
 
 
 /*
