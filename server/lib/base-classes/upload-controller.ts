@@ -113,7 +113,7 @@ export default class UploadController {
           if (err.stack) {
             data.stack = err.stack;
           }
-          const _err = new ApiError(`Unexpected ${this.uploadName} error`, data);
+          const _err = new ApiError(`Unexpected ${this.uploadName} Error`, data);
           this.sendErrorEmail(_err);
           next(_err);
         }
@@ -377,7 +377,7 @@ export default class UploadController {
   }
 
   getSubmeasure() {
-    this.submeasure = _.find(this.data.submeasures, {name: this.temp.submeasureName});
+    this.submeasure = _.find(this.data.submeasures, sm => sm.name.toUpperCase() === this.temp.submeasureName.toUpperCase());
     return Promise.resolve();
   }
 

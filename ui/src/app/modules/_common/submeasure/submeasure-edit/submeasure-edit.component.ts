@@ -819,7 +819,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                 this.cleanUp();
                 this.submeasureService.reject(this.sm)
                   .subscribe(sm => {
-                    this.uiUtil.toast('Submeasure has been rejected, user notified.');
                     history.go(-1);
                   });
               }
@@ -839,7 +838,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                 this.cleanUp();
                 this.submeasureService.approve(this.sm)
                   .subscribe(() => {
-                    this.uiUtil.toast('Submeasure approved, user notified.');
                     history.go(-1);
                   });
               }
@@ -865,7 +863,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                 const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
                 this.submeasureService.submitForApproval(this.sm, {saveMode})
                   .subscribe(() => {
-                    this.uiUtil.toast('Submeasure submitted for approval.');
                     history.go(-1);
                   });
               }
@@ -906,6 +903,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
         this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
       }
+    }
+
+    if (this.isDeptUpload() && this.sm.indicators.deptAcct !== 'A') {
+      this.errs.push('Must upload Dept/Acct data');
     }
 
     if (!this.validateManualMapping()) {

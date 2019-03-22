@@ -24,6 +24,7 @@ export class BusinessUploadService {
       return;
     }
     const file = fileInput.files[0];
+    fileInput.value = null;
     const formData: FormData = new FormData();
     formData.append('fileUploadField', file, file.name);
     const params: AnyObj = {
@@ -38,7 +39,6 @@ export class BusinessUploadService {
     this.uiUtil.toastHide();
     return this.httpClient.post<{ status: string, numRows?: number }>(url, formData, options).toPromise()
       .then((result: UploadResults) => {
-        fileInput.value = '';
         let title;
         let message;
         if (result.status === 'success') {

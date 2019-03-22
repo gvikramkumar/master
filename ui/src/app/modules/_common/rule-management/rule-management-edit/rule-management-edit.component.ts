@@ -297,7 +297,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 this.cleanUp();
                 this.ruleService.reject(this.rule)
                   .subscribe(rule => {
-                    this.uiUtil.toast('Rule has been rejected, user notified.');
                     history.go(-1);
                   });
               }
@@ -317,7 +316,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 this.cleanUp();
                 this.ruleService.approve(this.rule)
                   .subscribe(() => {
-                    this.uiUtil.toast('Rule approved, user notified.');
                     history.go(-1);
                   });
               }
@@ -338,7 +336,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
                 this.ruleService.submitForApproval(this.rule, {saveMode})
                   .subscribe(() => {
-                    this.uiUtil.toast('Rule submitted for approval.');
                     history.go(-1);
                   });
               }

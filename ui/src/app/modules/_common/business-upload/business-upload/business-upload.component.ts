@@ -75,9 +75,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   }
 
   uploadFile(fileInput) {
-    this.businessUploadService.uploadFile(fileInput, this.uploadType.type)
-      .then(result => {
-      });
+    this.businessUploadService.uploadFile(fileInput, this.uploadType.type);
   }
 
   getDownloadUri() {
