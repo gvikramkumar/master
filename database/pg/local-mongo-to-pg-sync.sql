@@ -45,5 +45,6 @@ where sub_measure_key = 1055647;
 
 delete from fpadfa.dfa_sub_measure;
 
+select * from fpadfa.dfa_prof_input_amnt_upld;
 
-select upper(1); 
+
