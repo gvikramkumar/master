@@ -70,7 +70,6 @@ import { DesignReviewExitCriteriaComponent } from '@shared/components';
 import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeholder-add.component';
 
 import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
-import { CuiAlertComponent } from '@cisco-ngx/cui-components';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -79,7 +78,6 @@ export function app_init(configService: ConfigurationService) {
 @NgModule({
   declarations: [
     AppComponent,
-    CuiAlertComponent,
     DynamicFormMultipleComponent,
     DashboardComponent,
     CreateOfferCoolComponent,
