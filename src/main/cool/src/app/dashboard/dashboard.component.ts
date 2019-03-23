@@ -204,21 +204,13 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  // getActionFormValues() {
-  //   if (this.selectedAction.offerId && this.selectedAction.caseId) {
-  //     this.actionsService.getAssignee(this.selectedAction.offerId).subscribe(resAssignee => {
-  //       this.assigneeList = resAssignee;
-  //     });
-  //     this.actionsService.getMilestones(this.selectedAction.caseId).subscribe(resMilestones => {
-  //       this.milestoneList = Object.keys(resMilestones).reduce((accumulator, current) => accumulator.concat(resMilestones[current]), []);
-  //     });
-  //   }
-  // }
   getActionFormValues() {
     this.selectedofferId = this.selectedAction.offerId;
     this.selectedCaseId = this.selectedAction.caseId;
     this.milestoneValue = this.selectedAction.milestone;
-    if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
+    if (this.selectedofferId != null && this.selectedfunctionRole != null
+      && this.stakeHolders[this.selectedofferId] != null
+      && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
     } else {
       this.assigneeList = [];
@@ -230,7 +222,9 @@ export class DashboardComponent implements OnInit {
     this.assigneeValue = [];
     this.assigneeList = [];
     this.selectedfunctionRole = functionRole;
-    if (this.selectedofferId != null && this.selectedfunctionRole != null && this.stakeHolders[this.selectedofferId] != null && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
+    if (this.selectedofferId != null && this.selectedfunctionRole != null
+      && this.stakeHolders[this.selectedofferId] != null
+      && this.stakeHolders[this.selectedofferId][this.selectedfunctionRole] != null) {
       this.assigneeList = this.stakeHolders[this.selectedofferId][this.selectedfunctionRole];
     } else {
       this.assigneeList = [];
@@ -242,21 +236,25 @@ export class DashboardComponent implements OnInit {
   }
 
   doNotApprove() {
-    this.showActionSection = false;
+    // this.showActionSection = false;
     this.showDoNotApproveSection = true;
     this.action = 'not approved';
+    this.showActionSection = false;
+    
   }
 
   conditionalApprove() {
-    this.showActionSection = false;
+    // this.showActionSection = false;
     this.showConditionalApprovalSection = true;
     this.action = 'conditionally Approved';
+    this.showActionSection = false;
   }
 
   approve() {
-    this.showActionSection = false;
+    // this.showActionSection = false;
     this.showApproveSection = true;
     this.action = 'approved';
+    this.showActionSection = false;
   }
 
   createNotAndConditionalAction(overlaypanel: OverlayPanel) {
@@ -416,7 +414,7 @@ export class DashboardComponent implements OnInit {
   onBasicUpload(event) {
     console.log('milsss');
   }
-  
+
   createNewOffer() {
     this.createOfferService.disablePrBEList = false;
     this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
