@@ -52,6 +52,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   addMode = false;
   viewMode = false;
   editMode = false;
+  editModeAI = false;
   copyMode = false;
   submeasureNames: string[] = [];
   sm = new Submeasure();
@@ -245,18 +246,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
         if (this.viewMode || this.editMode || this.copyMode) {
           this.sm = results[6];
+          this.editModeAI = this.editMode && _.includes(['A', 'I'], this.sm.status);
         }
         if (this.addMode) {
           if (this.route.snapshot.params.measureId) {
             this.sm.measureId = Number(this.route.snapshot.params.measureId);
           }
-
-        }
-        if (this.viewMode) {
-          this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
-        } else {
-          // they need to pick a new effective month is it's not in the last 6 months.
-          UiUtil.clearPropertyIfNotInList(this.sm, 'startFiscalMonth', this.yearmos, 'fiscalMonth');
         }
         if (this.copyMode) {
           this.sm.approvedOnce = 'N';
@@ -274,7 +269,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           delete this.sm.allocProductFamily;
         }
         if (this.editMode) {
-          if (_.includes(['A', 'I'], this.sm.status)) {
+          if (this.editModeAI) {
             delete this.sm.createdBy;
             delete this.sm.createdDate;
             if (this.isDeptUpload()) {
@@ -282,6 +277,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
             }
           }
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
+        }
+        if (this.viewMode || this.sm.approvedOnce === 'Y') {
+          this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
+        } else {
+          // they need to pick a new effective month is it's not in the last 6 months.
+          UiUtil.clearPropertyIfNotInList(this.sm, 'startFiscalMonth', this.yearmos, 'fiscalMonth');
         }
       })
       .then(() => {
@@ -691,9 +692,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.sm.indicators.corpRevenue = 'N';
     this.sm.indicators.groupFlag = group ? 'Y' : 'N';
     this.sm.indicators.passThrough = passThrough ? 'Y' : 'N';
-    this.sm.rules = []
-    delete this.sm.startFiscalMonth;
-    delete this.sm.endFiscalMonth;
+    this.sm.rules = [];
+    if (this.sm.approvedOnce === 'N') {
+      delete this.sm.startFiscalMonth;
+      delete this.sm.endFiscalMonth;
+    }
     delete this.sm.processingTime;
     delete this.sm.pnlnodeGrouping;
     this.sm.reportingLevels = [undefined, undefined, undefined];

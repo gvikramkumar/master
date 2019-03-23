@@ -258,8 +258,8 @@
 
       <div class="row" style="margin-top:30px;" [class.disabled]="isPassThroughOrUnallocatedGroup()">
         <div class="col-lg-6">
-          <fin-input name="startMonth" *ngIf="viewMode" [(ngModel)]="startFiscalMonth" label="Effective Month*"></fin-input>
-          <cui-select *ngIf="!viewMode" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos"
+          <fin-input name="startMonth" *ngIf="viewMode || sm.approvedOnce === 'Y'" [(ngModel)]="startFiscalMonth" label="Effective Month" [disabled]="true"></fin-input>
+          <cui-select *ngIf="!(viewMode || sm.approvedOnce === 'Y')" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos"
                       [label]="!isUnallocatedGroup() && !isPassThrough()?'Effective Month*':'Effective Month'" empty="true"
                       [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
 
