@@ -1,6 +1,8 @@
 <span class="pull-right panel-right" *ngIf="!portfolioFlag">
 </span>
+
 <div>
+
   <!-- Offer Phase Steps -->
   <div class="card card--raised base-margin-top" (click)="showOfferPhaseDailog()">
     <h5 class="half-margin-bottom">Offer Phase
@@ -39,7 +41,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- Estimated Lead Time -->
   <div class="card card--raised base-margin-top">
@@ -141,7 +142,6 @@
 
       </li>
     </ul>
-
 
   </div>
 
@@ -324,7 +324,7 @@
   <!-- Dialog - Add Stakeholders  -->
   <p-dialog header="Add Stakeholders" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
     [responsive]="true" [(visible)]="addStakeHolder">
-    <app-stakeholder-add></app-stakeholder-add>
+    <app-stakeholder-add [offerId] = "currentOfferId" [stakeHolderMapInfo] ="stakeData"></app-stakeholder-add>
   </p-dialog>
 
   <!-- Dialog - Lead Time Calculation  -->
@@ -473,3 +473,6 @@
   </p-dialog>
 
 </div>
+
+
+
