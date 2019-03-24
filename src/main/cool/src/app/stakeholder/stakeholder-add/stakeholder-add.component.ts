@@ -10,6 +10,7 @@ import { CuiTableOptions } from '@cisco-ngx/cui-components';
 import { HttpClient } from '@angular/common/http';
 
 import * as _ from 'lodash';
+import { User } from '@app/models/user';
 
 @Component({
   selector: 'app-stakeholder-add',
@@ -21,6 +22,7 @@ export class StakeholderAddComponent implements OnInit {
 
   caseId: string;
   offerName: string;
+  offerOwner: string;
   currentOfferId: string;
 
   stakeHolderData: any[];
@@ -61,7 +63,8 @@ export class StakeholderAddComponent implements OnInit {
 
     this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.offerName = data['offerName'];
-      this.stakeHolderData = data['stakeholders'];
+      this.offerOwner = data['offerOwner'],
+        this.stakeHolderData = data['stakeholders'];
       this.processStakeHolderData(data['stakeholders']);
     });
 
@@ -80,12 +83,16 @@ export class StakeholderAddComponent implements OnInit {
       // Stake Holder Info To Display Acc 2 Functional Role On UI
       this.stakeHolderMapInfo[stakeHolder['offerRole']].push(
         {
-          name: stakeHolder['name'],
-          email: stakeHolder['_id'] + '@cisco.com',
+          userName: stakeHolder['name'],
+          emailId: stakeHolder['_id'] + '@cisco.com',
           _id: stakeHolder['_id'],
-          businessEntity: stakeHolder['businessEntity'],
-          functionalRole: stakeHolder['functionalRole'],
-          offerRole: stakeHolder['offerRole'],
+          userMappings: [{
+            appRoleList: stakeHolder['appRoleList'],
+            businessEntity: stakeHolder['businessEntity'],
+            functionalRole: stakeHolder['functionalRole'],
+            offerRole: stakeHolder['offerRole'],
+          }
+          ],
           stakeholderDefaults: stakeHolder['stakeholderDefaults']
         });
 
@@ -93,11 +100,12 @@ export class StakeholderAddComponent implements OnInit {
       this.stakeHolderListInfo.push(
         {
           name: stakeHolder['name'],
-          email: stakeHolder['_id'] + '@cisco.com',
+          emailId: stakeHolder['_id'] + '@cisco.com',
           _id: stakeHolder['_id'],
           businessEntity: stakeHolder['businessEntity'],
           functionalRole: stakeHolder['functionalRole'],
           offerRole: stakeHolder['offerRole'],
+          appRoleList: stakeHolder['appRoleList'],
           stakeholderDefaults: stakeHolder['stakeholderDefaults']
         });
     });
@@ -129,8 +137,10 @@ export class StakeholderAddComponent implements OnInit {
             'stakeholderDefaults': false,
             'businessEntity': user['userMappings'][0]['businessEntity'],
             'functionalRole': user['userMappings'][0]['functionalRole'],
-            'offerRole': _.isEmpty(user['userMappings'][0]['appRoleList']) ? user['userMappings'][0]['functionalRole']
-              : user['userMappings'][0]['appRoleList'][0],
+            'offerRole': user['userMappings'][0]['functionalRole'] === 'BUPM' && user['_id'] === this.offerOwner
+              ? 'Owner' : user['userMappings'][0]['functionalRole'],
+            appRoleList: user['userMappings'][0]['appRoleList'] == null ?
+              [] : user['userMappings'][0]['appRoleList'],
           };
         });
 
@@ -141,24 +151,89 @@ export class StakeholderAddComponent implements OnInit {
 
   // ---------------------------------------------------------------------------------------------
 
-  // onAdd() {
+  onAdd() {
 
-  //   this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe();
+    this.stakeHolderListInfo = _.uniqBy(this.stakeHolderListInfo.concat(this.newlyAddedStakeHolderList));
 
-  //   this.stakeholderForm.reset();
+    const stakeholdersPayLoad = {
+      offerId: this.currentOfferId,
+      stakeholders: this.stakeHolderListInfo
+    };
 
-  // }
+    this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe();
+    this.stakeholderForm.reset();
 
+  }
+
+  private formatUserAsStakeholder(userInfo: any, defaultStakeHolderExists: boolean): any {
+    return {
+      userName: userInfo.name,
+      emailId: userInfo._id + '@cisco.com',
+      _id: userInfo._id,
+      userMappings: [{
+        appRoleList: userInfo.appRoleList,
+        businessEntity: userInfo.businessEntity,
+        functionalRole: userInfo.functionalRole,
+        offerRole: userInfo.offerRole,
+      }
+      ],
+      stakeholderDefaults: defaultStakeHolderExists
+    };
+  }
+
+  private compareAndAddNewStakeHolders(newStakeHolderList: User[], existingStakeHolderList: {}): {} {
+
+    newStakeHolderList.reduce((stakeHolderAccumulator, currentStakeholder) => {
+
+      const stakeholder = {
+        ...currentStakeholder,
+        stakeholderDefaults: false
+      };
+      const stakeholderFunctionRole = currentStakeholder['userMappings'][0]['functionalRole'];
+
+      // Check If Stakeholder Is Already Present In Existing Stakeholder list
+      const isCurrentUserInStakeholders = existingStakeHolderList[stakeholderFunctionRole]
+        && existingStakeHolderList[stakeholderFunctionRole].some(stk => stk._id === currentStakeholder._id);
+
+      // Add Stakeholder, If Not Present In Existing Stakholder List
+      if (!isCurrentUserInStakeholders) {
+        stakeHolderAccumulator[stakeholderFunctionRole] = stakeHolderAccumulator[stakeholderFunctionRole]
+          && stakeHolderAccumulator[stakeholderFunctionRole].length > 0 ?
+          stakeHolderAccumulator[stakeholderFunctionRole].concat(stakeholder) : [stakeholder];
+      }
+
+      return stakeHolderAccumulator;
+    }, existingStakeHolderList);
+
+    return existingStakeHolderList;
+
+  }
 
   // ---------------------------------------------------------------------------------------------
 
 
   addSelectedStakeHolders() {
-    console.log(this.selectedStakeHolders);
-    this.newlyAddedStakeHolderList = this.newlyAddedStakeHolderList.concat(this.selectedStakeHolders);
-    this.newlyAddedStakeHolderList = _.uniqBy(this.newlyAddedStakeHolderList);
+
+    const newlyAddedStakeHolderMap = this.selectedStakeHolders.map(user =>
+      this.formatUserAsStakeholder(user, false));
+
+    this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(newlyAddedStakeHolderMap, this.stakeHolderMapInfo);
+
+    this.stakeHolderListInfo = _.uniqBy(this.stakeHolderListInfo.concat(this.selectedStakeHolders));
+
+    const stakeholdersPayLoad = {
+      offerId: this.currentOfferId,
+      stakeholders: this.stakeHolderListInfo
+    };
+
+    this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe();
+
     this.selectedStakeHolders = null;
+    this.stakeholderForm.reset();
   }
 
-}
+  // ---------------------------------------------------------------------------------------------
 
+
+
+}

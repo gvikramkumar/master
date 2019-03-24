@@ -383,6 +383,7 @@ export class DashboardComponent implements OnInit {
     overlaypanel1.hide();
     overlaypanel2.show(event);
   }
+
   dismissNotification(overlaypanel: OverlayPanel) {
     const postData = {
       'taskId': this.selectedAction.taskId,

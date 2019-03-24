@@ -585,7 +585,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     });
 
     // Check if construct details are availbale in the database for the current offer.
-    this.offerDetailViewService.offerDetailView(this.currentOfferId).subscribe(offerDetailRes => {
+    this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
       if (offerDetailRes.constructDetails.length > 0) {
         this.transformDataToTreeNode(offerDetailRes);
       }
@@ -1093,7 +1093,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   discardChanges() {
     // Check if construct details are availbale in the database for the current offer.
-    this.offerDetailViewService.offerDetailView(this.currentOfferId).subscribe(offerDetailRes => {
+    this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
       if (offerDetailRes.constructDetails) {
         this.transformDataToTreeNode(offerDetailRes);
       }
