@@ -8,6 +8,10 @@ const pool = new Pool({
   database: config.database,
   port: config.port,
   keepAlive: true,
+  max: 50, // set pool max size to 50
+  min: 10, // set min pool size to 10
+  idleTimeoutMillis: 1000, // close idle clients after 1 second
+  connectionTimeoutMillis: 10000, // return an error after 10 seconds if connection could not be established
   user: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD
 })
