@@ -792,7 +792,6 @@ export class MmAssesmentComponent implements OnInit {
 
         let tempMessage: any = {};
         this.derivedMM = data['mmModel'];
-        // this.getStakeHolderList();
 
         if (data['mmMapperStatus'] === 'Aligned') {
           tempMessage = {
