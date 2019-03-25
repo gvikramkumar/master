@@ -481,17 +481,17 @@ export class RightPanelComponent implements OnInit {
   }
 
   showStakeHolderDialog() {
-    if (!_.isEmpty(this.stakeData)) {
+    // if (!_.isEmpty(this.stakeData)) {
       this.addStakeHolder = true;
-    }
+    // }
   }
 
   closeStakeHolderDialog() {
 
     this.addStakeHolder = false;
-    this.stakeHolderService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetails => {
+    const stakeHolderMapInfo = [];
 
-      const stakeHolderMapInfo = [];
+    this.stakeHolderService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetails => {
 
       offerDetails['stakeholders'].forEach(stakeHolder => {
 
@@ -506,11 +506,13 @@ export class RightPanelComponent implements OnInit {
             emailId: stakeHolder['_id'] + '@cisco.com',
           });
 
-        // Update Stake Holder Info
-        this.stakeData = stakeHolderMapInfo;
-
       });
+
     });
+
+    // Update Stake Holder Info
+    this.stakeData = stakeHolderMapInfo;
+
 
   }
 

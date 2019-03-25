@@ -324,9 +324,9 @@
   </p-dialog>
 
   <!-- Dialog - Add Stakeholders  -->
-  <p-dialog header="Add Stakeholders" closable="true" modal="true" (onHide)="closeStakeHolderDialog()" showHeader="false"
-    [responsive]="true" [(visible)]="addStakeHolder">
-    <app-stakeholder-add (addSelectedStakeHolders) = updateStakeHodlerInfo($event) ></app-stakeholder-add>
+  <p-dialog header="Add Stakeholders" closable="true" (onHide)="closeStakeHolderDialog()"
+    showHeader="false" [responsive]="true" [(visible)]="addStakeHolder">
+    <app-stakeholder-add (addSelectedStakeHolders)="updateStakeHodlerInfo($event)"></app-stakeholder-add>
   </p-dialog>
 
   <!-- Dialog - Lead Time Calculation  -->
