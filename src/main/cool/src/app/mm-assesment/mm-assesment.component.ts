@@ -862,9 +862,9 @@ export class MmAssesmentComponent implements OnInit {
     // Retrieve Existing Stake Holders Details From Current Offer 
     this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
 
-      const newlyAddedStakeHolders = offerDetailsData['stakeholders'];
+      const updatedStakeHolders = offerDetailsData['stakeholders'];
       const existingStakeHolders = this.formatStakeHolderPojoToUpdateOffer_1(this.stakeholders);
-      const totalCombinedStakeHolders = _.uniqBy(existingStakeHolders.concat(newlyAddedStakeHolders), '_id');
+      const totalCombinedStakeHolders = _.uniqBy(existingStakeHolders.concat(updatedStakeHolders), '_id');
 
       proceedToStakeholderPostData['stakeholders'] = totalCombinedStakeHolders;
       proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
