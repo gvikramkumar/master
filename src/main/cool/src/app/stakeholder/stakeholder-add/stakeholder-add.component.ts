@@ -1,13 +1,10 @@
-import { Component, ViewChild, OnInit, TemplateRef } from '@angular/core';
+import { Component, ViewChild, OnInit, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { SearchCollaboratorService } from '@app/services/search-collaborator.service';
 import { ConfigurationService } from '@shared/services';
-
-import { CuiTableOptions } from '@cisco-ngx/cui-components';
-import { HttpClient } from '@angular/common/http';
 
 import * as _ from 'lodash';
 import { User } from '@app/models/user';
@@ -37,10 +34,11 @@ export class StakeholderAddComponent implements OnInit {
   searchStakeHolderResults: String[];
 
   stakeholderForm: FormGroup;
+  @Output() updatedStakeHolderMapInfo = new EventEmitter<any>();
 
   // ---------------------------------------------------------------------------------------------
 
-  constructor(private http: HttpClient,
+  constructor(
     private activatedRoute: ActivatedRoute,
     private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
@@ -63,8 +61,8 @@ export class StakeholderAddComponent implements OnInit {
 
     this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.offerName = data['offerName'];
-      this.offerOwner = data['offerOwner'],
-        this.stakeHolderData = data['stakeholders'];
+      this.offerOwner = data['offerOwner'];
+      this.stakeHolderData = data['stakeholders'] ? data['stakeholders'] : [];
       this.processStakeHolderData(data['stakeholders']);
     });
 
@@ -218,6 +216,7 @@ export class StakeholderAddComponent implements OnInit {
       this.formatUserAsStakeholder(user, false));
 
     this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(newlyAddedStakeHolderMap, this.stakeHolderMapInfo);
+    this.updatedStakeHolderMapInfo.emit(this.stakeHolderMapInfo);
 
     this.stakeHolderListInfo = _.uniqBy(this.stakeHolderListInfo.concat(this.selectedStakeHolders));
 
