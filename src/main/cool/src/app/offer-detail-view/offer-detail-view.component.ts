@@ -78,7 +78,7 @@ export class OfferDetailViewComponent implements OnInit {
 
   getOfferOverviewDetails() {
 
-    this.offerDetailViewService.offerDetailView(this.currentOfferId)
+    this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId)
       .subscribe(data => {
 
         this.offerViewData = data;

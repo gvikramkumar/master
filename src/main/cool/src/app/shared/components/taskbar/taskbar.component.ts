@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angu
 import { Router, ActivatedRoute, ResolveEnd } from '@angular/router';
 import { offerBuilderStepsEnum } from '@shared/enums';
 import { taskBarNavConstant } from '@shared/constants/taskBarNav.constants';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-taskbar',
@@ -14,8 +15,9 @@ export class TaskbarComponent implements OnInit {
   @Input() actionCount: { pendingActionCount: number, needImmediateActionCount: number };
   @Input() showSave: boolean = false;
   @Input() showOfferDtlsBtn: boolean = true;
+  @Input() isValidToProceed: boolean;
 
-  
+
   @Output() newBtnClick = new EventEmitter();
   @Output() onProceedToNext = new EventEmitter();
 
@@ -43,10 +45,11 @@ export class TaskbarComponent implements OnInit {
   }
 
   setTaskBar() {
-    if(this.currentPage != 'dashboard' && this.currentPage != "action"){
+    if (this.currentPage != 'dashboard' && this.currentPage != "action") {
       this.currentStepIndex = offerBuilderStepsEnum[this.currentPage];
       this.disableBackBtn = this.currentStepIndex > 0 ? false : this.currentOfferId ? true : false;
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
+      this.proceedToOfferSetup = this.isValidToProceed;
     }
     if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Offer Setup') {
       this.proceedToOfferSetup = true;

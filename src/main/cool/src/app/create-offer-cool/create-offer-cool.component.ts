@@ -93,7 +93,7 @@ export class CreateOfferCoolComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       if (this.offerId) {
-        this.offerDetailViewService.offerDetailView(this.offerId).subscribe(offerDetailRes => {
+        this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerDetailRes => {
           this.offerDetailRes = offerDetailRes;
           this.caseId = offerDetailRes.caseId;
           this.offerNameValue = offerDetailRes.offerName;

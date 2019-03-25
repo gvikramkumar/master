@@ -23,7 +23,7 @@ import { OfferDetailViewService } from './services/offer-detail-view.service';
 import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
 import { ExitCriteriaValidationComponent } from '@app/review/exit-criteria-validation/exit-criteria-validation.component';
 import { ExitCriteriaValidationService } from './services/exit-criteria-validation.service';
-import { StakeholderFullComponent } from './stakeholder-full/stakeholder-full.component';
+import { StakeholderFullComponent } from '@app/stakeholder/stakeholder-full/stakeholder-full.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
 import { AccessManagementService } from './services/access-management.service';
@@ -67,7 +67,9 @@ import { SharedModule } from '@shared/shared.module';
 import { EnvironmentService } from 'src/environments/environment.service';
 import { ConfigurationService, HttpInterceptorService, UserService } from '@shared/services';
 import { DesignReviewExitCriteriaComponent } from '@shared/components';
+import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeholder-add.component';
 
+import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -111,11 +113,15 @@ export function app_init(configService: ConfigurationService) {
     OasComponent,
     NotificationOfferDetailPopupComponent,
     DesignReviewComponent,
-    DesignReviewExitCriteriaComponent
+    DesignReviewExitCriteriaComponent,
+    StakeholderAddComponent
   ],
   imports: [
     NgbModule,
     BrowserModule,
+    CuiSearchModule,
+    CuiTableModule,
+    CuiPagerModule,
     HttpClientModule,
     RouterModule,
     AppRoutingModule,

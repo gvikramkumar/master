@@ -115,6 +115,7 @@
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span *ngIf="actionData.alertType == 'action'">
                       <div class="text-center">
+                        <!-- {{actionData.status|json}} -->
                         <span class="{{actionData.status}}">
                           <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
                         </span>
@@ -344,6 +345,7 @@
       </div>
 
     </div>
+
   </div>
 </div>
 
@@ -385,7 +387,8 @@
 <p-overlayPanel #popActionContent [showCloseIcon]="true" (onShow)="getActionFormValues()">
   <div *ngIf="selectedAction" style="min-width:700px">
 
-    <div *ngIf="showActionSection">
+    <!-- *ngIf="showActionSection" -->
+    <div [hidden]="!showActionSection">
       <h4 class="popover__title">Offer ID <span> {{selectedAction.offerId}}</span> </h4>
       <div class="popover__body">
         <div class="responsive-table half-margin-bottom">
@@ -410,24 +413,30 @@
             </tbody>
           </table>
         </div>
+
         <h5>Action Description</h5>
         <p>{{selectedAction.actionDesc}}</p>
+
         <button class="btn btn--secondary " (click)="getOfferViewLink()">
           View Offer
         </button>
+
         <button class="btn btn--secondary" *ngIf="selectedAction.type == 'Solutioning Action'" [routerLink]="['/offerSolutioning', selectedAction.offerId, selectedAction.caseId]">
           Provide Details
         </button>
+
       </div>
+
       <div class="popover__footer">
+
         <div *ngIf="selectedAction.type == 'Manual Action'">
           <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="createApproveAction($event, popActionContent, popCompleteContent)">Complete</button>
           <!-- <button class="btn btn--primary base-margin-top" id="popover_close_btn"
               (click)="showprovideDetails($event, popActionContent, popProvideFeedbackContent)">Provide Feedback</button> -->
           <button class="btn btn--primary base-margin-top" id="popover_close_btn" (click)="showprovideDetails($event, popActionContent, popProvideDetailsContent)">Provide
             Details</button>
-
         </div>
+
         <div *ngIf="selectedAction.type == 'Strategy Review'">
           <button class="btn btn--primary base-margin-top" (click)="doNotApprove()">
             Do Not Approve
@@ -439,9 +448,13 @@
             Approve
           </button>
         </div>
+
       </div>
+
     </div>
-    <section *ngIf="showDoNotApproveSection">
+
+    <!-- *ngIf="showDoNotApproveSection" -->
+    <div [hidden]="!showDoNotApproveSection">
       <div class="row">
         <div class="col-md-12">
           <div class="card__header">
@@ -551,18 +564,9 @@
           </form>
         </div>
       </div>
-    </section>
-    <section *ngIf="showConditionalApprovalSection">
-      <!-- <div class="row">
-          <div class="col-md-12">
-            <div class="pull-right">
-              <span class="icon-close" (click)="popActionContent.hide($event)"></span>
-            </div>
-            <div class="card__header">
-              <h5 class="card__title">Conditional Approval</h5>
-            </div>
-          </div>
-        </div> -->
+    </div>
+
+    <div [hidden]="!showConditionalApprovalSection">
       <div class="row">
         <div class="col-md-12">
           <div class="card__header">
@@ -670,8 +674,10 @@
           </form>
         </div>
       </div>
-    </section>
-    <section *ngIf="showApproveSection">
+    </div>
+
+    <!-- *ngIf="showApproveSection" -->
+    <div [hidden]="!showApproveSection">
       <div class="row">
         <div class="col-md-12">
           <div class="pull-right">
@@ -707,7 +713,8 @@
           </form>
         </div>
       </div>
-    </section>
+    </div>
+
   </div>
 </p-overlayPanel>
 
