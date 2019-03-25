@@ -412,8 +412,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
 
     if (!init) {
-      // we clear a lot off on unallocated group, gets confusing then they change measures like that, so clear off group then, not on init though
+      // group and passthrough changes can conflict with measure change changes, so clear off first
       this.sm.indicators.groupFlag = 'N';
+      this.sm.indicators.passThrough = 'N';
     }
 
     if (this.isCogsMeasure()) {
