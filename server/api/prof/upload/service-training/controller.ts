@@ -8,6 +8,7 @@ import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
 import ServiceTrainingUploadRepo from '../../service-training-upload/repo';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 @injectable()
 export default class ServiceTrainingUploadUploadController extends UploadController {
@@ -81,7 +82,7 @@ imports: ServiceTrainingUploadImport[];
     });
     _.forEach(obj, (obj1, salesTerr) => {
       _.forEach(obj1, (val, busEntity) => {
-        if (Number(val.toPrecision(12)) !== 1.0) {
+        if (svrUtil.setPrecision5(val) !== 1.0) {
           this.addError(`${salesTerr} / ${busEntity}`, val);
         }
       });

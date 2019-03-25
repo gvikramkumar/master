@@ -8,6 +8,7 @@ import OpenPeriodRepo from '../../../common/open-period/repo';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
 import * as _ from 'lodash';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 @injectable()
 export default class MappingUploadUploadController extends InputFilterLevelUploadController {
@@ -76,7 +77,7 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
       }
     });
     _.forEach(obj, (val, key) => {
-      if (Number(val.toPrecision(12)) !== 1.0) {
+      if (svrUtil.setPrecision5(val) !== 1.0) {
         this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
       }
     });
