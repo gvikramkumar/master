@@ -13,6 +13,6 @@ export class OfferOverViewResolver implements Resolve<any> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         this.caseId = route.paramMap.get('id2');
-        return this.offerPhaseService.getOfferPhaseDetails(this.caseId);
+        return this.offerPhaseService.getOfferPhaseDetails(this.caseId, false);
     }
 }

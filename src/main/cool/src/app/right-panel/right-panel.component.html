@@ -101,7 +101,7 @@
   <!-- People Involved -->
   <div class="card card--raised base-margin-top stakeholders">
 
-    <h5>People Involved<a href="javascript:;" class="pull-right" (click)="showStakeHolderInfo()">
+    <h5>People Involved<a href="javascript:;" class="pull-right" (click)="showStakeHolderDialog()">
         <i class="pi pi-plus"></i> Add</a>
     </h5>
 
@@ -116,14 +116,16 @@
 
                 <!-- Team Member Avatar -->
                 <span class="avatar-ico">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" id="fwt-profile-button-loggedin"
-                    role="img">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"
+                    id="fwt-profile-button-loggedin" role="img">
                     <title id="fwt-profile-button-loggedin-title"></title>
                     <g fill="none" fill-rule="evenodd">
-                      <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
+                      <path stroke="#4d4c4c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M22.857 31.36c-1.616.614-3.37.95-5.202.95C9.56 32.31 3 25.749 3 17.655S9.561 3 17.655 3 32.31 9.561 32.31 17.655c0 3.988-1.727 7.703-4.31 10.344"
                         x="0" y="0"></path>
                       <text fill="#007493" font-family="CiscoSans, Arial, sans-serif" font-weight="300" font-size="16"
-                        x="50%" y="50%" dy=".35em" text-anchor="middle" id="fwt-initials">{{getInitialChar(coOwners['userName'])}}</text>
+                        x="50%" y="50%" dy=".35em" text-anchor="middle"
+                        id="fwt-initials">{{getInitialChar(coOwners['userName'])}}</text>
                     </g>
                   </svg>
                 </span>
@@ -215,8 +217,10 @@
                 <table class="table table--hover table--compressed table--nostripes">
                   <thead>
                     <tr>
-                      <th>Ideate - <span [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'">
-                          {{ideateCompletedCount}} of {{ideateCount}} <span class="icon-check-outline icon-medium"></span></span></th>
+                      <th>Ideate - <span
+                          [ngClass]="(ideateCompletedCount == ideateCount)?'text-success':'text-warning'">
+                          {{ideateCompletedCount}} of {{ideateCount}} <span
+                            class="icon-check-outline icon-medium"></span></span></th>
                       <th>STATUS</th>
                       <th>TARGET DATE</th>
                       <th>COMPLETION DATE</th>
@@ -242,9 +246,9 @@
                           {{ideateData.targetDate | date: "dd-MMM-y"}}
                         </span>
                         <span *ngIf="editIdeateTargetDate && ideateData.subMilestone === 'Strategy Review'">
-                          <input type="text" class="form-control" #dp="bsDatepicker" autofocus bsDatepicker [minDate]="minDate"
-                            [bsConfig]="dpConfig" (bsValueChange)="onValueChange('ideate',$event)" [value]='ideateData.targetDate | date: "dd-MMM-y"'
-                            placement="top">
+                          <input type="text" class="form-control" #dp="bsDatepicker" autofocus bsDatepicker
+                            [minDate]="minDate" [bsConfig]="dpConfig" (bsValueChange)="onValueChange('ideate',$event)"
+                            [value]='ideateData.targetDate | date: "dd-MMM-y"' placement="top">
                         </span>
                         <span *ngIf="ideateData.subMilestone === 'Strategy Review'">
                           <a (click)="editDate('ideate')"><span class="icon-pencil"></span>Edit</a>
@@ -281,7 +285,8 @@
                         </ng-template>
                       </td>
 
-                      <td [ngClass]="(planData.status == 'Completed' || planData.status == 'Not Applicable')?'text-success':'text-warning'">
+                      <td
+                        [ngClass]="(planData.status == 'Completed' || planData.status == 'Not Applicable')?'text-success':'text-warning'">
                         {{planData.status}}</td>
                       <td>
                         <span *ngIf="!editPlanTargetDate">
@@ -289,8 +294,8 @@
                         </span>
                         <span *ngIf="editPlanTargetDate && planData.subMilestone === 'Design Review'">
                           <input type="text" class="form-control" #dp="bsDatepicker" bsDatepicker [minDate]="minDate"
-                            [bsConfig]="dpConfig" (bsValueChange)="onValueChange('plan',$event)" [value]='planData.targetDate | date: "dd-MMM-y"'
-                            placement="top">
+                            [bsConfig]="dpConfig" (bsValueChange)="onValueChange('plan',$event)"
+                            [value]='planData.targetDate | date: "dd-MMM-y"' placement="top">
                         </span>
                         <span *ngIf="planData.subMilestone === 'Design Review'">
                           <a (click)="editDate('plan')"><span class="icon-pencil"></span>Edit</a>
@@ -322,14 +327,14 @@
   </p-dialog>
 
   <!-- Dialog - Add Stakeholders  -->
-  <p-dialog header="Add Stakeholders" closable="true" modal="true" (onHide)="onHide()" showHeader="false"
+  <p-dialog header="Add Stakeholders" closable="true" modal="true" (onHide)="closeStakeHolderDialog()" showHeader="false"
     [responsive]="true" [(visible)]="addStakeHolder">
-    <app-stakeholder-add [offerId] = "currentOfferId" [stakeHolderMapInfo] ="stakeData"></app-stakeholder-add>
+    <app-stakeholder-add (addSelectedStakeHolders) = updateStakeHodlerInfo($event) ></app-stakeholder-add>
   </p-dialog>
 
   <!-- Dialog - Lead Time Calculation  -->
-  <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" 
-  [width]="1400" [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
+  <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
+    [minWidth]="500" [minY]="70" [(visible)]="displayLeadTimeButton">
     <div *ngIf="loadingLeadTime">
       <div class="loader">
         <div class="loading-dots loading-dots--info" aria-label="Loading, please wait...">
@@ -422,7 +427,8 @@
                   </td>
                   <td width="25%">
                     <h6>{{averageOfTopTenPercentileWeeks}} WEEKS
-                      <span class="pull-right" *ngIf="!isNaN(topTenPercentileWeeksCompare)" [className]="topTenPercentileWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(topTenPercentileWeeksCompare)}}</span>
+                      <span class="pull-right" *ngIf="!isNaN(topTenPercentileWeeksCompare)"
+                        [className]="topTenPercentileWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(topTenPercentileWeeksCompare)}}</span>
                     </h6>
                   </td>
                 </tr>
@@ -436,20 +442,23 @@
                   </td>
                   <td width="25%">
                     <h6>{{averageOverallWeeks}} WEEKS
-                      <span class="pull-right" *ngIf="!isNaN(overallWeeksCompare)" [className]="overallWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(overallWeeksCompare)}}</span>
+                      <span class="pull-right" *ngIf="!isNaN(overallWeeksCompare)"
+                        [className]="overallWeeksCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(overallWeeksCompare)}}</span>
                     </h6>
                   </td>
                 </tr>
                 <tr>
                   <td width="75%" style="border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3">
                     <label>90th Percentile</label>
-                    <div class="progressbar progressbar--success" [attr.data-percentage]="averageOfRemainingNinetyPercentile">
+                    <div class="progressbar progressbar--success"
+                      [attr.data-percentage]="averageOfRemainingNinetyPercentile">
                       <div class="progressbar__fill"></div>
                     </div>
                   </td>
                   <td width="25%">
                     <h6>{{averageOfRemainingNinetyPercentileWeeks}} WEEKS
-                      <span class="pull-right" *ngIf="!isNaN(remainingNinetyPercentileCompare)" [className]="remainingNinetyPercentileCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(remainingNinetyPercentileCompare)}}</span>
+                      <span class="pull-right" *ngIf="!isNaN(remainingNinetyPercentileCompare)"
+                        [className]="remainingNinetyPercentileCompare > 0 ? 'pull-right text-success': 'pull-right text-danger'">{{Math.abs(remainingNinetyPercentileCompare)}}</span>
                     </h6>
                   </td>
                 </tr>
@@ -473,6 +482,3 @@
   </p-dialog>
 
 </div>
-
-
-

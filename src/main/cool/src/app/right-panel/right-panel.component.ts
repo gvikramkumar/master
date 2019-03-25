@@ -1,58 +1,37 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { SearchCollaboratorService } from '../services/search-collaborator.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
-import { MonetizationModelService } from '../services/monetization-model.service';
-import { SharedService } from '../shared-service.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { LeadTime } from './lead-time';
 import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { CreateOfferService } from '@shared/services';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-right-panel',
   templateUrl: './right-panel.component.html',
   styleUrls: ['./right-panel.component.css']
 })
-export class RightPanelComponent implements OnInit, OnDestroy {
+export class RightPanelComponent implements OnInit {
 
+  caseId;
+  entityList;
+  currentOfferId;
+  funcionalRoleList;
+  offerPhaseDetailsList;
 
-  @Input() portfolioFlag: Boolean = false;
-  @Output() updateStakeData = new EventEmitter<string>();
+  planCount = 0;
+  ideateCount: any = 0;
+  planCompletedCount = 0;
+  ideateCompletedCount = 0;
 
   navigateHash: Object = {};
-  backdropCustom: Boolean = false;
-  proceedFlag: boolean;
-  subscription: Subscription;
-  aligned: boolean;
-  currentOfferId;
-  phaseTaskMap: object;
-  phaseList: string[];
-  display: Boolean = false;
-  displayOfferPhase: Boolean = false;
-  collaboratorsList;
-  addEditCollaboratorsForm: FormGroup;
-  selectedCollabs;
-  entityList;
-  funcionalRoleList;
-  caseId;
-  offerPhaseDetailsList;
-  ideateCount: any = 0;
-  ideateCompletedCount = 0;
-  planCount = 0;
-  planCompletedCount = 0;
-  mStoneCntInAllPhases: any[] = ['ideate', 'plan', 'execute', 'launch'];
-  mileStoneStatus: any[] = [];
   phaseProcessingCompleted = false;
-  offerName;
-  alreayAddedStakeHolders: any[] = [];
-  ddFunction = 'Select Function';
-  flagFunction = false;
-  private eventsSubscription: any;
-  @Input() events: Observable<string>;
+
+  mileStoneStatus: any[] = [];
+  mStoneCntInAllPhases: any[] = ['ideate', 'plan', 'execute', 'launch'];
 
   ddOwner1 = 'Select Owner';
   flagOwner1 = false;
@@ -92,83 +71,54 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   @Input() noOfWeeksDifference: string;
   @Input() displayLeadTime: Boolean = false;
 
-  addStakeHolder: Boolean = false;
-
-  offerData;
-  dotBox = [
-    {
-      status: 'Completed',
-      statuscontent: 'Initial MM Assesment'
-    },
-    {
-      status: 'Completed',
-      statuscontent: 'Initial offer Dimension'
-    }
-    ,
-    {
-      status: 'In Progress',
-      statuscontent: 'Stakeholders Identified'
-    },
-    {
-      status: 'Completed',
-      statuscontent: 'Offer Portfolio'
-    },
-    {
-      status: 'In Progress',
-      statuscontent: 'Strategy Review Completion'
-    },
-    {
-      status: 'Pending',
-      statuscontent: 'Offer Construct Details'
-    }
-  ];
-
-  OfferOwners;
-  approvars;
-
-
-  userPanels = {
-    'panel1': false,
-    'panel2': true
-  };
+  @Input() events: Observable<string>;
+  @Input() portfolioFlag: Boolean = false;
+  @Output() updateStakeData = new EventEmitter<string>();
 
   editIdeateTargetDate: Boolean = false;
   editPlanTargetDate: Boolean = false;
   editExecuteTargetDate: Boolean = false;
   editLanchTargetDate: Boolean = false;
-  public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+
   minDate: Date;
   showAlert: Boolean = false;
+  public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
 
-  averageOfRemainingNinetyPercentileWeeks;
-  averageOfTopTenPercentileWeeks;
-  averageOverallWeeks;
-  averageOfRemainingNinetyPercentile = 0;
-  averageOfTopTenPercentile = 0;
+
   averageOverall = 0;
-  countOfHundredPercentile;
-  remainingNinetyPercentileCompare;
-  topTenPercentileWeeksCompare;
+  averageOfTopTenPercentile = 0;
+  averageOfRemainingNinetyPercentile = 0;
+
   overallWeeksCompare;
+  averageOverallWeeks;
+  averageOfTopTenPercentileWeeks;
+  averageOfRemainingNinetyPercentileWeeks;
+
+  countOfHundredPercentile;
+  topTenPercentileWeeksCompare;
+  remainingNinetyPercentileCompare;
 
   loadingLeadTime = true;
+  addStakeHolder: Boolean = false;
+  displayOfferPhase: Boolean = false;
+
+
 
   // ----------------------------------------------------------------------------------------
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(
     private router: Router,
-    private createOfferService: CreateOfferService,
+    private activatedRoute: ActivatedRoute,
     private offerPhaseService: OfferPhaseService,
-    private monetizationModelService: MonetizationModelService,
-    private sharedService: SharedService,
-    private rightPanelService: RightPanelService) {
+    private rightPanelService: RightPanelService,
+    private stakeHolderService: StakeholderfullService) {
+
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
     });
-    if (!this.currentOfferId) {
-      this.currentOfferId = this.createOfferService.coolOffer.offerId;
-    }
+
+
     this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
 
   }
@@ -205,78 +155,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
-      this.offerName = data['offerName'];
-    });
-
-    this.offerPhaseService.getCurrentOfferPhaseInfo(this.caseId).subscribe(data => {
+    this.offerPhaseService.getOfferPhaseDetails(this.caseId, true).subscribe(data => {
       this.processCurrentPhaseInfo(data);
     });
 
-    // Get Functional Roles
-    this.sharedService.getFunctionalRoles().subscribe(data => {
-      this.funcionalRoleList = data;
-    });
-
-    // Get Business Entities
-    this.sharedService.getBusinessEntity().subscribe(data => {
-      const businessEntities = <any>data;
-      const beArry = [];
-      businessEntities.forEach(element => {
-        if (element.BE !== null) {
-          beArry.push(element.BE);
-        }
-      });
-      this.entityList = beArry;
-    });
-
-    this.addEditCollaboratorsForm = new FormGroup({
-      name: new FormControl(null, Validators.required),
-      businessEntity: new FormControl(null, Validators.required),
-      functionName: new FormControl(null, Validators.required)
-    });
-
-    if (this.currentOfferId) {
-
-      this.createOfferService.getMMMapperById(this.currentOfferId).subscribe(data => {
-
-        this.offerData = data;
-        this.createOfferService.subscribeMMAssessment(data);
-
-        if (this.offerData.offerObj) {
-          this.OfferOwners = this.offerData.offerObj.owners;
-          this.approvars = this.offerData.offerObj.approvars;
-
-          if (this.OfferOwners) {
-            this.OfferOwners.forEach(item => {
-              item.caption = '';
-              item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
-            });
-          }
-          if (this.approvars) {
-            this.approvars.forEach(item => {
-              item.caption = '';
-              item.caption = item.firstName.charAt(0) + '' + item.lastName.charAt(0);
-            });
-          }
-
-        }
-        if (this.offerData.phaseTaskList) {
-          this.phaseTaskMap = this.offerData.phaseTaskList;
-
-          this.phaseList = Object.keys(this.phaseTaskMap);
-
-        }
-      });
-    }
-
-
-  }
-
-  ngOnDestroy() {
-    if (this.eventsSubscription) {
-      this.eventsSubscription.unsubscribe();
-    }
   }
 
   // ----------------------------------------------------------------------------------------
@@ -291,18 +173,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   closeOfferPhaseDailog() {
     this.displayOfferPhase = false;
-  }
-
-  // ----------------------------------------------------------------------------------------
-
-  showDialog() {
-    this.display = true;
-  }
-
-  closeDailog() {
-    this.display = false;
-    // this.collaboratorsList = [];
-    this.addEditCollaboratorsForm.reset();
   }
 
   // ----------------------------------------------------------------------------------------
@@ -608,8 +478,42 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
   // ----------------------------------------------------------------------------------------
 
-  showStakeHolderInfo() {
-    this.addStakeHolder = true;
+  updateStakeHodlerInfo(updatedStakeHolderInfo: any) {
+    this.stakeData = updatedStakeHolderInfo;
+  }
+
+  showStakeHolderDialog() {
+    if (!_.isEmpty(this.stakeData)) {
+      this.addStakeHolder = true;
+    }
+  }
+
+  closeStakeHolderDialog() {
+
+    this.addStakeHolder = false;
+    this.stakeHolderService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetails => {
+
+      const stakeHolderMapInfo = [];
+
+      offerDetails['stakeholders'].forEach(stakeHolder => {
+
+        if (stakeHolderMapInfo[stakeHolder['offerRole']] == null) {
+          stakeHolderMapInfo[stakeHolder['offerRole']] = [];
+        }
+
+        // Stake Holder Info To Display Acc 2 Functional Role On UI
+        stakeHolderMapInfo[stakeHolder['offerRole']].push(
+          {
+            userName: stakeHolder['name'],
+            emailId: stakeHolder['_id'] + '@cisco.com',
+          });
+
+        // Update Stake Holder Info
+        this.stakeData = stakeHolderMapInfo;
+
+      });
+    });
+
   }
 
   // ----------------------------------------------------------------------------------------

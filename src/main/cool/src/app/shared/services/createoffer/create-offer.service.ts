@@ -20,8 +20,6 @@ export class CreateOfferService {
   getDinstinctBUUrl: string = this.environmentService.REST_API_SECONDARY_BUSINESS_UNIT_LULU_URL;
 
 
-
-
   coolOffer;
   coolOfferCopy;
   currenTOffer = new BehaviorSubject<any>('');

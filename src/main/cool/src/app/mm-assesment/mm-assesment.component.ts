@@ -24,62 +24,41 @@ import { User } from '@app/models/user';
 })
 export class MmAssesmentComponent implements OnInit {
 
-  public model: any;
-  public firstData: any = new Array();
-  public data: any[];
-  aligned: boolean;
-  proceedFlag = false;
-  alignedFlag = false;
-  subscription: Subscription;
   offerData: any;
-  currentOfferId;
-  caseId;
-  bviewDeckData: any[];
-  choiceSelected;
-  groupData = [];
-  selectedGroupData = [];
-  groupNames = [];
-  activeTabIndex = 0;
-  message = {};
+  offerBuilderdata = {};
 
+  caseId: string;
   offerId: string;
   offerName: string;
   offerOwner: string;
+  currentOfferId: string;
+  currentMMModel: string = null;
 
   primaryBE: string;
   derivedMM: string;
-  offerBuilderdata = {};
   displayLeadTime = false;
   noOfWeeksDifference: string;
 
+  message = {};
   stakeholders = {};
-  Stakeholders: any[] = [];
+  manuallyAddedStakeholders: Array<any> = [];
 
-  canClickNextStep = false;
+  groupData = [];
+  groupNames = [];
+  activeTabIndex = 0;
+  selectedGroupData = [];
+
   canClickTab = false;
-  currentMMModel: string = null;
-  currentPrimaryBE: any;
-  userName;
-  eventsSubject: Subject<string> = new Subject<string>();
-
-  setFlag;
-  backdropCustom;
+  canClickNextStep = false;
   backbuttonStatusValid = true;
-  match = false;
   dimensionMode: Boolean = false;
   dimensionFirstGroupData: Object;
   dimensionFirstGroupName: string;
-  oldselectedCharacteristics = {};
-  disablefields: boolean;
-  display: boolean;
-  showEditbutton: boolean;
-  showWarningSave: boolean;
+
   showDialog: boolean;
-  currentOfferResult: any;
-  isChangedAttribute: boolean;
   showErrorDialog: boolean;
+  isChangedAttribute: boolean;
   totalApprovalsCount: Number = 0;
-  manuallyAddedStakeholders: Array<any> = [];
 
   // --------------------------------------------------------------------------------------------
 
@@ -97,11 +76,7 @@ export class MmAssesmentComponent implements OnInit {
     private strategyReviewService: StrategyReviewService
   ) {
 
-    this.display = false;
-    this.showEditbutton = false;
-    this.showWarningSave = false;
     this.activatedRoute.params.subscribe(params => {
-
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
     });
@@ -314,18 +289,12 @@ export class MmAssesmentComponent implements OnInit {
 
     group['subGroup'].forEach(g => {
 
-      if (Object.keys(selectedCharacteristics).length !== 0) {
-        this.showEditbutton = true;
-        this.disablefields = true;
-      }
-
       curGroup[g['subGroupName']] = [];
       g.choices.forEach((c) => {
-        this.match = false;
         const splitArr = c.split('#');
         const attrName = splitArr[0];
         let description = splitArr[1];
-        if (description == null || description == '') {
+        if (description == null || description === '') {
           description = attrName;
         }
 
@@ -527,10 +496,6 @@ export class MmAssesmentComponent implements OnInit {
 
   // --------------------------------------------------------------------------------------------
 
-  emitEventToChild() {
-    this.eventsSubject.next(this.offerBuilderdata['offerOwner']);
-  }
-
   updateMessage(message) {
 
     if (message != null && message !== '') {
@@ -631,40 +596,20 @@ export class MmAssesmentComponent implements OnInit {
 
   // --------------------------------------------------------------------------------------------
 
-  private findManuallyAddedStakeHolders(finalStakeHoldersList: {}): any {
-
-    finalStakeHoldersList = this.manuallyAddedStakeholders.reduce((manualStakeHolderAccumulator, currentStakeholder) => {
-      const stakeholder = {
-        ...currentStakeholder,
-        stakeholderDefaults: false
-      };
-      const stakeholderFunctionRole = currentStakeholder['userMappings'][0]['functionalRole'];
-      manualStakeHolderAccumulator[stakeholderFunctionRole] = manualStakeHolderAccumulator[stakeholderFunctionRole]
-        && manualStakeHolderAccumulator[stakeholderFunctionRole].length
-        > 0 ? manualStakeHolderAccumulator[stakeholderFunctionRole].concat(stakeholder) : [stakeholder];
-      return manualStakeHolderAccumulator;
-    }, finalStakeHoldersList);
-
-    return finalStakeHoldersList;
-
-  }
-
-  // --------------------------------------------------------------------------------------------
-
-  private formatStakeHolderPojoToUpdateOffer_1() {
+  private formatStakeHolderPojoToUpdateOffer_1(user: any) {
 
     const stakeHolderUpdateOfferFormat = [];
 
     for (const functionalRole of Object.keys(this.stakeholders)) {
       this.stakeholders[functionalRole]
         .map((currentStakeHolder: User) => {
-          stakeHolderUpdateOfferFormat.push(this.formatStakeHolderPojoToUpdateOffer_2(currentStakeHolder));
+          stakeHolderUpdateOfferFormat.push(this.formatStakeHolderPojoToUpdateOffer(currentStakeHolder));
         });
     }
     return stakeHolderUpdateOfferFormat;
   }
 
-  private formatStakeHolderPojoToUpdateOffer_2(user: User): any {
+  private formatStakeHolderPojoToUpdateOffer(user: User): any {
     return {
       '_id': user['_id'],
       'businessEntity': user['userMappings'][0]['businessEntity'],
@@ -686,6 +631,26 @@ export class MmAssesmentComponent implements OnInit {
       'stakeholderDefaults': true,
       'name': user['userName']
     };
+  }
+
+  // --------------------------------------------------------------------------------------------
+
+  private findManuallyAddedStakeHolders(finalStakeHoldersList: {}): any {
+
+    finalStakeHoldersList = this.manuallyAddedStakeholders.reduce((manualStakeHolderAccumulator, currentStakeholder) => {
+      const stakeholder = {
+        ...currentStakeholder,
+        stakeholderDefaults: false
+      };
+      const stakeholderFunctionRole = currentStakeholder['userMappings'][0]['functionalRole'];
+      manualStakeHolderAccumulator[stakeholderFunctionRole] = manualStakeHolderAccumulator[stakeholderFunctionRole]
+        && manualStakeHolderAccumulator[stakeholderFunctionRole].length
+        > 0 ? manualStakeHolderAccumulator[stakeholderFunctionRole].concat(stakeholder) : [stakeholder];
+      return manualStakeHolderAccumulator;
+    }, finalStakeHoldersList);
+
+    return finalStakeHoldersList;
+
   }
 
   // --------------------------------------------------------------------------------------------
@@ -790,6 +755,8 @@ export class MmAssesmentComponent implements OnInit {
       this.monetizationModelService.validateOfferDimension(postData).subscribe(data => {
 
         let tempMessage: any = {};
+        this.derivedMM = data['mmModel'];
+        this.getStakeHolderList();
 
         if (data['mmMapperStatus'] === 'Aligned') {
           tempMessage = {
@@ -839,8 +806,6 @@ export class MmAssesmentComponent implements OnInit {
           this.activeTabIndex += 1;
         }
 
-        this.currentPrimaryBE = this.offerBuilderdata['primaryBEList'][0];
-
         if (this.currentMMModel !== data['mmModel']) {
           this.currentMMModel = data['mmModel'];
           this.groupData.splice(1);
@@ -862,7 +827,6 @@ export class MmAssesmentComponent implements OnInit {
       }
     }
 
-    this.emitEventToChild();
     this.proceedToStakeholder('false');
 
   }
@@ -895,32 +859,44 @@ export class MmAssesmentComponent implements OnInit {
     }];
 
 
-    proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
-    proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
-    proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
-    proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-    proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
+    // Retrieve Existing Stake Holders Details From Current Offer 
+    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
 
-    // Update Offer Details
-    this.monetizationModelService.updateOfferDetails(proceedToStakeholderPostData).subscribe(() => {
+      const newlyAddedStakeHolders = offerDetailsData['stakeholders'];
+      const existingStakeHolders = this.formatStakeHolderPojoToUpdateOffer_1(this.stakeholders);
+      const totalCombinedStakeHolders = _.uniqBy(existingStakeHolders.concat(newlyAddedStakeHolders), '_id');
 
-      const proceedPayload = {
-        'taskId': '',
-        'userId': this.offerBuilderdata['offerOwner'],
-        'caseId': this.caseId,
-        'offerId': this.currentOfferId,
-        'taskName': 'Offer MM',
-        'action': '',
-        'comment': ''
-      };
+      proceedToStakeholderPostData['stakeholders'] = totalCombinedStakeHolders;
+      proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
+      proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
+      proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
+      proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
+      proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
 
-      this.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(() => {
-        if (JSON.parse(withRouter) === true) {
-          this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
-        }
+      // Update Offer Details
+      this.monetizationModelService.updateOfferDetails(proceedToStakeholderPostData).subscribe(() => {
+
+        const proceedPayload = {
+          'taskId': '',
+          'userId': this.offerBuilderdata['offerOwner'],
+          'caseId': this.caseId,
+          'offerId': this.currentOfferId,
+          'taskName': 'Offer MM',
+          'action': '',
+          'comment': ''
+        };
+
+        this.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(() => {
+          if (JSON.parse(withRouter) === true) {
+            this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
+          }
+        });
+
       });
 
+
     });
+
 
   }
 
@@ -1022,7 +998,7 @@ export class MmAssesmentComponent implements OnInit {
             .subscribe(stakeHolderRelatedToSelectedAttributesList => {
 
               const stakeHolderRelatedToSelectedAttributes = stakeHolderRelatedToSelectedAttributesList
-                .map(user => this.formatStakeHolderPojoToUpdateOffer_2(user));
+                .map(user => this.formatStakeHolderPojoToUpdateOffer(user));
 
               existingStakeHolders = existingStakeHolders.concat(stakeHolderRelatedToSelectedAttributes);
 
@@ -1154,9 +1130,11 @@ export class MmAssesmentComponent implements OnInit {
   goBackToOffercreation() {
     this.router.navigate(['/coolOffer', this.currentOfferId, this.caseId]);
   }
+
   goBackToStrategyReview() {
     this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
   }
+
   gotoOfferviewDetails() {
     this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
   }
