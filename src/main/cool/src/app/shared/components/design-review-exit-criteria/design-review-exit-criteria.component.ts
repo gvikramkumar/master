@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ExitCriteriaValidationService } from 'src/app/services/exit-criteria-validation.service';
-import { LocalStorageService } from 'ngx-webstorage';
 import { HeaderService, UserService } from '@shared/services';
 import { MessageService } from '@app/services/message.service';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
@@ -29,7 +28,6 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private headerService: HeaderService,
-    private localStorage: LocalStorageService,
     private messageService: MessageService,
     private monetizationModelService: MonetizationModelService,
     private userService: UserService
@@ -77,10 +75,11 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
         this.requestApprovalAvailable = false;
       }
     });
-    this.designApprovedOfferId = this.localStorage.retrieve('designApprovedOfferId');
-    if (this.designApprovedOfferId === this.currentOfferId) {
-      this.requestApprovalAvailable = false;
-    }
+    this.exitCriteriaValidationService.requestApprovalButtonEnable(this.currentOfferId).subscribe(data => {
+      if (data['designReviewRequestApproval']) {
+        this.requestApprovalAvailable = false;
+      }
+    });
 
     this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
       const canRequestUsers = [];
@@ -141,10 +140,12 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
         console.log('error occured');
       });
     this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
-      this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
+      this.exitCriteriaValidationService.postForDesingReviewNewAction(this.currentOfferId, this.currentCaseId, payload)
+      .subscribe(response => {
         this.messageService.sendMessage('Design Review');
-        this.localStorage.store('designApprovedOfferId', this.currentOfferId);
-        this.requestApprovalAvailable = false;
+        this.exitCriteriaValidationService.requestApprovalButtonDisable(this.currentOfferId).subscribe(resData => {
+          this.requestApprovalAvailable = false;
+        });
       });
     });
   }
