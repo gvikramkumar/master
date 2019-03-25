@@ -69,7 +69,7 @@
         </div>
 
         <!--<div class="margin-top:10px; height: 0px;">&nbsp;</div>-->
-        <div class="border-and-padding form-group-max-width">
+        <div class="border-and-padding form-group-max-width" [class.disabled]="isPassThrough()">
           <div style="margin-bottom:-10px;">
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
@@ -79,7 +79,7 @@
               <div class="col-6">
                 <!-- this used to be ngIf groupFlag, but groupflag clears off properties now, so we need to allow them
                       to select this "before" selecting groupFlag to keep them from clearing off properties if they want an allocated group -->
-                <fin-checkbox label="Allocation Required" [(model)]="sm.indicators.allocationRequired"
+                <fin-checkbox *ngIf="isGroup()" label="Allocation Required" [(model)]="sm.indicators.allocationRequired"
                               trueVal="Y" falseVal="N" (modelChange)="handleAllocationRequiredChange()"></fin-checkbox>
               </div>
             </div>
@@ -326,7 +326,7 @@
                               (change)="filterGroupingSubmeasuresIfService()" [inline]="true"></fin-checkbox>
               </div>
             </div>
-            <div class="form-group-check form-group-inline-20" [class.disabled]="isUnallocatedGroup()">
+            <div class="form-group-check form-group-inline-20" [class.disabled]="isGroup()">
               <fin-checkbox label="Pass Through" [(model)]="sm.indicators.passThrough" trueVal="Y" falseVal="N"
                             [inline]="true" (modelChange)="handlePassThroughChange()"></fin-checkbox>
             </div>

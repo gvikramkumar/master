@@ -730,7 +730,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.sm.indicators = new SubmeasureIndicators();
     this.sm.indicators.corpRevenue = corpRev;
     this.sm.indicators.groupFlag = 'Y';
-    this.sm.indicators.passThrough = 'N'; // can't have passthough and unallocated group at same time
     this.sm.sourceId = -777; // Default Source
     delete this.sm.categoryType;
     this.sm.rules = [];
@@ -754,10 +753,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.clearInputFilterLevelsPassThrough();
     this.sm.indicators.manualMapping = 'N';
     this.clearManualMappingLevels();
-    if (this.isUnallocatedGroup() || this.isAllocatedGroup()) {
-      this.sm.indicators.groupFlag = 'N';
-      this.sm.indicators.allocationRequired = 'N';
-    }
     this.sm.rules = [];
     this.init();
   }
@@ -1016,6 +1011,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return this.sm.indicators.groupFlag === 'Y' && this.sm.indicators.allocationRequired === 'Y';
   }
 
+  isGroup() {
+    return this.sm.indicators.groupFlag === 'Y';
+  }
+
   changeFile(fileInput) {
     this.deptUploadFilename = fileInput.files[0] && fileInput.files[0].name;
   }
@@ -1076,8 +1075,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then(() => {
         if (this.isUnallocatedGroup()) {
           this.clearPropertiesForUnallocatedGroup();
-        } else if (this.isAllocatedGroup()) {
-          this.sm.indicators.passThrough = 'N';
         } else {
           delete this.sm.sourceId; // we set this to Default Source in clear properties
           this.init();
@@ -1090,8 +1087,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then (() => {
         if (this.isUnallocatedGroup()) {
           this.clearPropertiesForUnallocatedGroup();
-        } else if (this.sm.indicators.allocationRequired) {
-          this.sm.indicators.passThrough = 'N';
         } else {
           delete this.sm.sourceId;
           this.init();
