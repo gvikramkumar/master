@@ -754,8 +754,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.clearInputFilterLevelsPassThrough();
     this.sm.indicators.manualMapping = 'N';
     this.clearManualMappingLevels();
-    if (this.isUnallocatedGroup()) {
-      this.sm.indicators.groupFlag = 'N'; // can't have passthough and unallocated group at same time
+    if (this.isUnallocatedGroup() || this.isAllocatedGroup()) {
+      this.sm.indicators.groupFlag = 'N';
+      this.sm.indicators.allocationRequired = 'N';
     }
     this.sm.rules = [];
     this.init();
@@ -1075,6 +1076,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then(() => {
         if (this.isUnallocatedGroup()) {
           this.clearPropertiesForUnallocatedGroup();
+        } else if (this.isAllocatedGroup()) {
+          this.sm.indicators.passThrough = 'N';
         } else {
           delete this.sm.sourceId; // we set this to Default Source in clear properties
           this.init();
@@ -1087,6 +1090,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .then (() => {
         if (this.isUnallocatedGroup()) {
           this.clearPropertiesForUnallocatedGroup();
+        } else if (this.sm.indicators.allocationRequired) {
+          this.sm.indicators.passThrough = 'N';
         } else {
           delete this.sm.sourceId;
           this.init();
