@@ -153,7 +153,8 @@
                       <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')" [disabled]="ScmsIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
                     <div class="check-wrap">
-                      <fin-checkbox [(model)]="ifl_switch_glseg" label="GL Segments" (modelChange)="iflChange('glseg')" [disabled]="isPassThrough()"></fin-checkbox>
+                      <fin-checkbox [(model)]="ifl_switch_glseg" label="GL Segments" (modelChange)="iflChange('glseg')" [disabled]="!hasSourceRapidRevenue() || isPassThrough()"
+                      matTooltip="Gl Segments only available for source Rapid Revenue" [matTooltipDisabled]="hasSourceRapidRevenue()" matTooltipShowDelay="1000"></fin-checkbox>
                     </div>
                   </div>
                   <div class="col-6">
