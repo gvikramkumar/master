@@ -48,7 +48,6 @@ export class OfferConstructComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private offerPhaseService: OfferPhaseService,
     private messageService: MessageService,
-    private offerConstructService: OfferConstructService,
     private rightPanelService: RightPanelService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];

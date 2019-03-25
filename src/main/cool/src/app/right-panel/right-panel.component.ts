@@ -63,16 +63,14 @@ export class RightPanelComponent implements OnInit {
   tenthPercentile = '10th Percentile';
   nintyPercentile = '90th Percentile';
 
-  @Input() offerId: string;
+  @Input() offerName: string;
   @Input() stakeData: Object;
   @Input() derivedMM: string;
   @Input() primaryBE: string;
-  @Input() offerBuilderdata: Object;
   @Input() noOfWeeksDifference: string;
   @Input() displayLeadTime: Boolean = false;
 
   @Input() events: Observable<string>;
-  @Input() portfolioFlag: Boolean = false;
   @Output() updateStakeData = new EventEmitter<string>();
 
   editIdeateTargetDate: Boolean = false;
@@ -390,7 +388,7 @@ export class RightPanelComponent implements OnInit {
 
         // Compute Expected Launch Date
         this.displayLeadTimeButton = true;
-        const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.offerId).toPromise();
+        const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.currentOfferId).toPromise();
         this.expectedLaunchDate = moment(expectedLaunchDateObject['expectedLaunchDate']).format('DD-MMM-YYYY');
         const noOfWeeksDifference = expectedLaunchDateObject['noOfWeeksDifference'];
 
