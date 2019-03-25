@@ -1148,7 +1148,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.closeDailog();
   }
 
-  addItemDetails() {
+  addItemDetails(popHeadName) {
     this.setSearchItem.node.data.searchItemRef = this.itemsList;
     this.showMandatoryDetails = false;
     this.replaceSingleFormQuestionWith(this.uniqueNodeId)
