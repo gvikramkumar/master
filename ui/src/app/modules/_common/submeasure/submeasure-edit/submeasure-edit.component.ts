@@ -407,6 +407,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       return;
     }
 
+    if (!init) {
+      // we clear a lot off on unallocated group, gets confusing then they change measures like that, so clear off group then, not on init though
+      this.sm.indicators.groupFlag = 'N';
+    }
+
     if (this.isCogsMeasure()) {
       this.disableCategories = false;
     } else {
@@ -618,7 +623,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.ifl_switch_le = !!this.sm.inputFilterLevel.entityLevel;
     this.ifl_switch_s = !!this.sm.inputFilterLevel.salesLevel;
     this.ifl_switch_scms = !!this.sm.inputFilterLevel.scmsLevel;
-    this.ifl_switch_glseg = !!(this.sm.inputFilterLevel.glSegLevel && this.sm.inputFilterLevel.glSegLevel.length);
+    this.ifl_switch_glseg = !!this.sm.inputFilterLevel.glSegLevel.length;
   }
 
   syncManualMapSwitches() {
@@ -646,7 +651,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       delete this.sm.inputFilterLevel.scmsLevel;
     }
     if (!this.ifl_switch_glseg) {
-      delete this.sm.inputFilterLevel.glSegLevel;
+      this.sm.inputFilterLevel.glSegLevel = [];
     }
   }
 
@@ -678,20 +683,52 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
-  clearPropertiesForUnallocatedGroupOrPassThrough(mode: 'group'|'passThrough') {
-    const group = mode === 'group';
-    const passThrough = mode === 'passThrough';
-
-    if (group) {
-      delete this.sm.sourceId;
-      delete this.sm.categoryType;
-    }
+  clearInputFilterLevels() {
     this.sm.inputFilterLevel = new SubmeasureInputFilterLevel();
+    this.ifl_switch_ibe = false;
+    this.ifl_switch_p = false;
+    this.ifl_switch_le = false;
+    this.ifl_switch_s = false;
+    this.ifl_switch_scms = false;
+    this.ifl_switch_glseg = false;
+    ['ibe', 'p', 'le', 's', 'scms', 'glseg'].forEach(val => this.iflChange(val));
+    ['ibe', 'p', 'le', 's', 'scms'].forEach(val => this.mmChange(val));
+  }
+
+  clearInputFilterLevelsPassThrough() {
+    delete this.sm.inputFilterLevel.internalBELevel;
+    delete this.sm.inputFilterLevel.entityLevel;
+    delete this.sm.inputFilterLevel.scmsLevel;
+    this.sm.inputFilterLevel.glSegLevel = [];
+    this.ifl_switch_ibe = false;
+    this.ifl_switch_le = false;
+    this.ifl_switch_scms = false;
+    this.ifl_switch_glseg = false;
+    ['ibe', 'p', 'le', 's', 'scms', 'glseg'].forEach(val => this.iflChange(val));
+    ['ibe', 'p', 'le', 's', 'scms'].forEach(val => this.mmChange(val));
+  }
+
+  clearManualMappingLevels() {
     this.sm.manualMapping = new SubmeasureInputFilterLevel();
+    this.mm_switch_ibe = false;
+    this.mm_switch_p = false;
+    this.mm_switch_le = false;
+    this.mm_switch_s = false;
+    this.mm_switch_scms = false;
+    ['ibe', 'p', 'le', 's', 'scms', 'glseg'].forEach(val => this.iflChange(val));
+    ['ibe', 'p', 'le', 's', 'scms'].forEach(val => this.mmChange(val));
+  }
+
+  clearPropertiesForUnallocatedGroup() {
+    this.clearInputFilterLevels();
+    this.clearManualMappingLevels();
+    const corpRev = this.sm.indicators.corpRevenue;
     this.sm.indicators = new SubmeasureIndicators();
-    this.sm.indicators.corpRevenue = 'N';
-    this.sm.indicators.groupFlag = group ? 'Y' : 'N';
-    this.sm.indicators.passThrough = passThrough ? 'Y' : 'N';
+    this.sm.indicators.corpRevenue = corpRev;
+    this.sm.indicators.groupFlag = 'Y';
+    this.sm.indicators.passThrough = 'N'; // can't have passthough and unallocated group at same time
+    this.sm.sourceId = -777; // Default Source
+    delete this.sm.categoryType;
     this.sm.rules = [];
     if (this.sm.approvedOnce === 'N') {
       delete this.sm.startFiscalMonth;
@@ -709,13 +746,24 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.init(true); // we're just clearing stuff off here, measure change will add stuff back
   }
 
+  clearPropertiesForPassThrough() {
+    this.clearInputFilterLevelsPassThrough();
+    this.sm.indicators.manualMapping = 'N';
+    this.clearManualMappingLevels();
+    if (this.isUnallocatedGroup()) {
+      this.sm.indicators.groupFlag = 'N'; // can't have passthough and unallocated group at same time
+    }
+    this.sm.rules = [];
+    this.init();
+  }
+
   cleanUp() {
     this.clearAllocationRequired();
     if (this.isUnallocatedGroup()) {
-      this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+      this.clearPropertiesForUnallocatedGroup();
     }
     if (this.isPassThrough()) {
-      this.clearPropertiesForUnallocatedGroupOrPassThrough('passThrough');
+      this.clearPropertiesForPassThrough();
     }
 
     this.cleanIflSwitchChoices();
@@ -730,7 +778,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.sourceSystemAdjTypeId = undefined;
     }
 
-    if (this.isManualMix() && !this.isPassThroughOrUnallocatedGroup()) {
+    if (this.isManualMix() && !this.isAllocatedGroup()) {
       this.sm.manualMixHw = this.manualMixHw;
       this.sm.manualMixSw = this.manualMixSw;
     }
@@ -877,11 +925,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   validate() {
     this.errs = [];
 
-    if (this.isUnallocatedGroup() || this.isPassThrough()) {
+    if (this.isUnallocatedGroup()) {
       return null;
     }
 
-    if (!this.sm.rules.length) {
+    if (!this.sm.rules.length && !(this.isUnallocatedGroup() || this.isPassThrough())) {
       this.errs.push('No rules specified');
     }
 
@@ -914,6 +962,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
     if (!this.validateManualMapping()) {
       this.errs.push('Manual Mapping selected, but no value entered');
+    }
+
+    if (this.isPassThrough() && !this.verifyOnlyPfOrPidAndSl6()) {
+      this.errs.push('Must choose Product: Product Family or Product ID and Sales: Level 6 only');
     }
 
     this.errs = this.errs.map(err => `* ${err}`)
@@ -957,10 +1009,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   isAllocatedGroup() {
     return this.sm.indicators.groupFlag === 'Y' && this.sm.indicators.allocationRequired === 'Y';
-  }
-
-  isPassThroughOrUnallocatedGroup() {
-    return this.isPassThrough() || this.isUnallocatedGroup();
   }
 
   changeFile(fileInput) {
@@ -1022,8 +1070,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.verifyNoRulesGrouping()
       .then(() => {
         if (this.isUnallocatedGroup()) {
-          this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+          this.clearPropertiesForUnallocatedGroup();
         } else {
+          delete this.sm.sourceId; // we set this to Default Source in clear properties
           this.init();
         }
       });
@@ -1033,8 +1082,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.verifyNoRulesGroupingAllocationRequired()
       .then (() => {
         if (this.isUnallocatedGroup()) {
-          this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+          this.clearPropertiesForUnallocatedGroup();
         } else {
+          delete this.sm.sourceId;
           this.init();
         }
       });
@@ -1044,7 +1094,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.verifyNoRulesPassThrough()
       .then(() => {
         if (this.isPassThrough()) {
-          this.clearPropertiesForUnallocatedGroupOrPassThrough('passThrough');
+          this.clearPropertiesForPassThrough();
         } else {
           this.init();
         }
@@ -1083,6 +1133,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     } else {
       return Promise.resolve();
     }
+  }
+
+  verifyOnlyPfOrPidAndSl6() {
+    return _.includes(['PF', 'PID'], this.sm.inputFilterLevel.productLevel) && this.sm.inputFilterLevel.salesLevel === 'LEVEL6' &&
+    !this.sm.inputFilterLevel.scmsLevel && !this.sm.inputFilterLevel.internalBELevel && !this.sm.inputFilterLevel.entityLevel &&
+    !this.sm.inputFilterLevel.glSegLevel.length;
   }
 
 }
