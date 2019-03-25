@@ -69,7 +69,7 @@ export default class AllocationRuleController extends ApprovalController {
       return Promise.resolve({values: [], exist: true});
     }
     return this.pgLookupRepo.checkForExistenceArray('fpacon.vw_fpa_sales_hierarchy',
-      'l2_sales_territory_descr', choices, true);
+      'l2_sales_territory_name_code', choices, true);
   }
 
   validateSalesSL2CritChoices(req, res, next) {
@@ -83,7 +83,7 @@ export default class AllocationRuleController extends ApprovalController {
       return Promise.resolve({values: [], exist: true});
     }
     return this.pgLookupRepo.checkForExistenceArray('fpacon.vw_fpa_sales_hierarchy',
-      'l3_sales_territory_descr', choices, true);
+      'l3_sales_territory_name_code', choices, true);
   }
 
   validateSalesSL3CritChoices(req, res, next) {
