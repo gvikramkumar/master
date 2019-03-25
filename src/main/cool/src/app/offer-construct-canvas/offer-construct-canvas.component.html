@@ -3,7 +3,8 @@
     <div class="col">
       <div class="panel panel--ltgray">
         <span class="mt-5">Offer Components</span>
-        <button class="pull-right borderless" [disabled]="!downloadEnable" title="Download" (click)='downloadZip(currentOfferId)'><span class="icon-download"></span></button>
+        <button class="pull-right borderless" [disabled]="!downloadEnable" title="Download"
+          (click)='downloadZip(currentOfferId)'><span class="icon-download"></span></button>
       </div>
     </div>
   </div>
@@ -42,38 +43,38 @@
             <div class="row" *ngIf="expandView">
               <div class="col">
                 <div class="panel panel--ltgray panel--compressed">
-                    <form [formGroup]="eGinieSearchForm" (ngSubmit)="addSearchedItemToOfferConfig()">
-                  <div class="row">
-                    <div class="col-md-10">
+                  <form [formGroup]="eGinieSearchForm" (ngSubmit)="addSearchedItemToOfferConfig()">
+                    <div class="row">
+                      <div class="col-md-10">
 
-                      <span class="ui-fluid">
-                        <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results"
-                          (completeMethod)="searchForItemFromPdaf($event)" field="PID"
-                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9" formControlName="searchPID">
-                          <ng-template pTemplate="body" let-item>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  {{item.PID}}
-                                </td>
-                                <!-- <td>
+                        <span class="ui-fluid">
+                          <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results"
+                            (completeMethod)="searchForItemFromPdaf($event)" field="PID"
+                            placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9"
+                            formControlName="searchPID">
+                            <ng-template pTemplate="body" let-item>
+                              <tbody>
+                                <tr>
+                                  <td>
+                                    {{item.PID}}
+                                  </td>
+                                  <!-- <td>
                                   {{item.PRODUCT_FAMILY}}
                                 </td>
                                 <td>
                                   {{item.TECHNOLOGY_GROUP}}
                                 </td> -->
-                              </tr>
-                            </tbody>
-                          </ng-template>
-                        </p-autoComplete>
-                      </span>
+                                </tr>
+                              </tbody>
+                            </ng-template>
+                          </p-autoComplete>
+                        </span>
+                      </div>
+                      <div class="col-md-2">
+                        <button class="btn btn--small" type="submit" [disabled]="!eGinieSearchForm.valid">Add</button>
+                      </div>
                     </div>
-                    <div class="col-md-2">
-                      <button class="btn btn--small" type="submit"
-                      [disabled]="!eGinieSearchForm.valid">Add</button>
-                    </div>
-                  </div>
-                </form>
+                  </form>
                 </div>
               </div>
             </div>
@@ -135,7 +136,7 @@
                                     (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
                                     [disabled]="editData ? true : null" value="{{rowData['title']}}"
                                     [autofocus]='autoFocus' *ngIf="!rowData['eginieItem']">
-                                    <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
+                                  <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
@@ -146,11 +147,11 @@
                                     *ngIf='buttonId == rowData["uniqueKey"] && showButtons'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
                                 </span>
                                 <a *ngIf="!rowData['isGroupNode'] && !rowData['eginieItem']" class="pull-right"
-                                    (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
-                                    Details</a>
-                                    <a *ngIf="rowData['eginieItem']" class="pull-right"
-                                    (click)="showViewDetailsDailog(rowNode)"><span class="icon-add-contain"></span> View
-                                    Details</a>
+                                  (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
+                                  Details</a>
+                                <a *ngIf="rowData['eginieItem']" class="pull-right"
+                                  (click)="showViewDetailsDailog(rowNode)"><span class="icon-add-contain"></span> View
+                                  Details</a>
                               </div>
                             </td>
                             <!-- to copy -->
@@ -242,16 +243,17 @@
       <button class="btn btn--primary" (click)="discardChanges()">Discard Changes</button>
       <button class="btn btn--primary" (click)="saveOfferConstructChanges()">Save Changes</button>
     </div>
-
   </div>
   <p-dialog header="Add Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
     (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
-    [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}" positionTop='150'>
+    [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}"
+    positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
-    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()" (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
+    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
+      (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
-        <div class="col-md-6" *ngFor="let question of questions">
+        <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
           <div [ngSwitch]="question.itemType">
             <div *ngSwitchCase="'Unique Item'">
               <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
@@ -268,15 +270,15 @@
         </div>
         <div class="col-md-6 search-buffer">
           <div class="form-group input--icon half-margin-bottom">
-              <div class="form-group__text search-icon">
-                  <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}" [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
-                              (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
-                              placeholder="Copy Attributes" [size]="100" [minLength]="9">
-                    </p-autoComplete>
-                  <button type="button" class="link">
-                    <span class="icon-search"></span>
-                  </button>
-                </div>
+            <div class="form-group__text search-icon">
+              <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}" [(ngModel)]="itemsList"
+                [suggestions]="copyAttributeResults" (completeMethod)="searchCopyAttributes($event)" field="PID"
+                class="auto-complete-attribute" placeholder="Copy Attributes" [size]="100" [minLength]="9">
+              </p-autoComplete>
+              <button type="button" class="link">
+                <span class="icon-search"></span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -284,7 +286,7 @@
       <div *ngIf="showMandatoryDetails">
         <!-- starts Mandatory Items -->
         <div class="row half-margin-bottom">
-          <div class="col-md-6" *ngFor="let question of questions">
+          <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
             <div [ngSwitch]="question.itemType">
               <div *ngSwitchCase="'Item'">
                 <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
@@ -304,71 +306,24 @@
       </div>
     </form>
   </p-dialog>
-  <p-dialog header="Add All Offer Details" closable="true" modal="true" showHeader="false" (onHide)="onHide()"
-    [responsive]="false" [(visible)]="display"
-    [contentStyle]="{'height': '450px', 'max-height':'450px', 'width':'100% !important'}" positionTop='150'
-    positionRight='0' positionLeft='0'>
-    <div class="divider" style="margin-top: -1.5%"></div>
-    <div class="line-items-nav">
-      <ul id="tabsv4" class="tabs tabs--tall">
-        <li id="tabsv4-1" class="tab">
-            <a (click)='majorLine()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true}">Add Major Line
-              Details</a>
-        </li>
-        <li id="tabsv4-2" class="tab">
-            <a (click)='minorLine()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
-              Details</a>
-        </li>
-      </ul>
-    </div>
-    <div *ngIf='minorLineItemsActive'>
-      <div *ngFor='let formGroupDataMinorItems of formGroupDataMinorItems'>
-        <div *ngFor='let groupsMinor of formGroupDataMinorItems.groups'>
-          <div class="row half-margin-bottom">
-            <div class="col-md-12">
-              <dynamic-form-multiple [group]='groupsMinor' [groupName]='groupsMinor.groupName'
-                [dataObject]="groupsMinor.listOfferQuestions"></dynamic-form-multiple>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-          <div class="col-md-12 text-right">
-              <button class="display-none"></button>
-              <button class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
-              <button class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
-          </div>
-      </div>
-    </div>
-    <div *ngIf='majorLineItemsActive'>
-      <div *ngFor='let formGroupData of formGroupData'>
-        <div *ngFor='let groups of formGroupData.groups'>
-          <div class="row half-margin-bottom">
-            <div class="col-md-12">
-              <dynamic-form-multiple [group]='groups' [dataObject]="groups.listOfferQuestions"></dynamic-form-multiple>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-          <div class="col-md-12 text-right">
-              <button class="display-none"></button>
-              <button class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
-              <button class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
-          </div>
-      </div>
-    </div>
-  </p-dialog>
+
+  <!-- view add details -->
+  <div *ngIf='display'>
+    <dynamic-form-multiple></dynamic-form-multiple>
+    <!-- <app-dynamic-form-template [dataObject]='formGroupData.groups' (valueChange)='displayCounter($event)'></app-dynamic-form-template> -->
+  </div>
+
+  <!-- end of view add details -->
 
   <!-- Dialog for view details-->
   <p-dialog header="View Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
-  (onHide)="onHide()" [responsive]="true" [(visible)]="displayViewDetails"
-  [contentStyle]="{'height': '450px', 'min-width':'700px'}">
-  <div class="divider"></div>
-  <table class="table">
-        <tr *ngFor="let item of viewDetails | keyvalue">
-          <td>{{item.key}}</td>
-          <td>{{item.value}}</td>
-        </tr>
-  </table>
+    (onHide)="onHide()" [responsive]="true" [(visible)]="displayViewDetails"
+    [contentStyle]="{'height': '450px', 'min-width':'700px'}">
+    <div class="divider"></div>
+    <table class="table">
+      <tr *ngFor="let item of viewDetails | keyvalue">
+        <td>{{item.key}}</td>
+        <td>{{item.value}}</td>
+      </tr>
+    </table>
   </p-dialog>

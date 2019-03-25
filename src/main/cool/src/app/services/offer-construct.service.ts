@@ -9,6 +9,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class OfferConstructService {
 
+
+
+    public singleMultipleFormInfo: any = {};  // for add details single form and multiple form
+    public closeAddDetails: boolean;
     constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
     public space: Subject<string> = new BehaviorSubject<string>(null);
