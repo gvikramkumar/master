@@ -38,38 +38,38 @@
         <div [class.disabled]="disableCategories || isUnallocatedGroup()">
           <cui-select name="category" [(ngModel)]="sm.categoryType"
                       [items]="categoryTypes"
-                      [required]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()"
-                      [label]="(isCogsMeasure() || isPassThrough()) && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'"
+                      [required]="isCogsMeasure() && !isUnallocatedGroup()"
+                      [label]="isCogsMeasure() && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'"
                       empty="true" optionsKey="name" optionsValue="value" [class.cat-type]="isManualMix()"></cui-select>
           <div class="manual-mix" *ngIf="isManualMix()">
-            <fin-input name="manualMixHw" [label]="!isUnallocatedGroup() && !isPassThrough()?'HW*':'HW'"
+            <fin-input name="manualMixHw" [label]="!isUnallocatedGroup()?'HW*':'HW'"
                        [(ngModel)]="manualMixHw"
-                       [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true"
+                       [required]="!isUnallocatedGroup()" [inline]="true"
                        class="hwsw-inputs"></fin-input>
-            <fin-input name="manualMixSw" [label]="!isUnallocatedGroup() && !isPassThrough()?'SW*':'SW'"
+            <fin-input name="manualMixSw" [label]="!isUnallocatedGroup()?'SW*':'SW'"
                        [(ngModel)]="manualMixSw"
-                       [required]="!isUnallocatedGroup() && !isPassThrough()" [inline]="true"
+                       [required]="!isUnallocatedGroup()" [inline]="true"
                        class="hwsw-inputs"></fin-input>
           </div>
         </div>
 
-        <div [class.disabled]="isPassThroughOrUnallocatedGroup()">
+        <div [class.disabled]="isUnallocatedGroup()">
           <cui-select *ngIf="sm.measureId === 3" [disabled]="sm.sourceId !== 2" name="flashCategory"
                       [(ngModel)]="flashCategory" [items]="flashCategories"
-                      [label]="!isUnallocatedGroup() && !isPassThrough()?'MRAP - Flash Category Id*':'MRAP - Flash Category Id'"
+                      [label]="!isUnallocatedGroup()?'MRAP - Flash Category Id*':'MRAP - Flash Category Id'"
                       empty="true"
-                      [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="mrap_category_id"
+                      [required]="!isUnallocatedGroup()" optionsKey="mrap_category_id"
                       optionsValue="adj_type_id"></cui-select>
           <cui-select *ngIf="sm.measureId === 1" [disabled]="sm.sourceId !== 1" name="adjustmentType"
                       [(ngModel)]="adjustmentType" [items]="adjustmentTypes"
-                      [label]="!isUnallocatedGroup() && !isPassThrough()?'Adjustment Type*':'Adjustment Type'"
+                      [label]="!isUnallocatedGroup()?'Adjustment Type*':'Adjustment Type'"
                       empty="true"
-                      [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="rrr_category_id"
+                      [required]="!isUnallocatedGroup()" optionsKey="rrr_category_id"
                       optionsValue="adj_type_id"></cui-select>
         </div>
 
         <!--<div class="margin-top:10px; height: 0px;">&nbsp;</div>-->
-        <div class="border-and-padding form-group-max-width" [class.disabled]="isPassThrough()">
+        <div class="border-and-padding form-group-max-width">
           <div style="margin-bottom:-10px;">
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
@@ -89,7 +89,7 @@
           </div>
         </div>
 
-        <div *ngIf="isDeptUploadMeasure()" class="border-and-padding half-margin-top form-group-max-width" [class.disabled]="isPassThroughOrUnallocatedGroup()">
+        <div *ngIf="isDeptUploadMeasure()" class="border-and-padding half-margin-top form-group-max-width" [class.disabled]="isUnallocatedGroup()">
           <!--we want to position this button relative to fieldset, but fails on firefox, so we'll add this for a relative position-->
           <div style="position:relative">
             <fieldset style="margin-bottom:0;" [class.disabled]="!isDeptUpload()">
@@ -121,9 +121,9 @@
 
       <div class="row">
 
-        <div class="col-lg-6  ifl-left-side" [class.disabled]="isPassThroughOrUnallocatedGroup()">
+        <div class="col-lg-6  ifl-left-side" [class.disabled]="isUnallocatedGroup()">
           <div class="form-group-max-width">
-            <div class="border-and-padding">
+            <div class="border-and-padding" style="padding-bottom:14px;">
               <fieldset class="input-filter-level">
                 <legend>Business Input Level</legend>
                 <div class="row half-padding">
@@ -138,22 +138,22 @@
                   <div class="col-6">
                     <div class="check-wrap">
                       <fin-checkbox [(model)]="ifl_switch_ibe" label="Internal Business Entity"
-                                    (modelChange)="iflChange('ibe')" [disabled]="BeIflDisabled"></fin-checkbox>
+                                    (modelChange)="iflChange('ibe')" [disabled]="BeIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
                     <div class="check-wrap">
                       <fin-checkbox [(model)]="ifl_switch_p" label="Product" (modelChange)="iflChange('p')" [disabled]="ProductIflDisabled"></fin-checkbox>
                     </div>
                     <div class="check-wrap">
-                      <fin-checkbox [(model)]="ifl_switch_le" label="Legal Entity" (modelChange)="iflChange('le')" [disabled]="LegalIflDisabled"></fin-checkbox>
+                      <fin-checkbox [(model)]="ifl_switch_le" label="Legal Entity" (modelChange)="iflChange('le')" [disabled]="LegalIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
                     <div class="check-wrap">
                       <fin-checkbox [(model)]="ifl_switch_s" label="Sales" (modelChange)="iflChange('s')" [disabled]="SalesIflDisabled"></fin-checkbox>
                     </div>
                     <div class="check-wrap">
-                      <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')" [disabled]="ScmsIflDisabled"></fin-checkbox>
+                      <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')" [disabled]="ScmsIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
                     <div class="check-wrap">
-                      <fin-checkbox [(model)]="ifl_switch_glseg" label="GL Segments" (modelChange)="iflChange('glseg')"></fin-checkbox>
+                      <fin-checkbox [(model)]="ifl_switch_glseg" label="GL Segments" (modelChange)="iflChange('glseg')" [disabled]="isPassThrough()"></fin-checkbox>
                     </div>
                   </div>
                   <div class="col-6">
@@ -188,9 +188,9 @@
           </div>
         </div>
 
-        <div class="col-lg-6 mm-right-side" [class.disabled]="isPassThroughOrUnallocatedGroup()">
+        <div class="col-lg-6 mm-right-side" [class.disabled]="isUnallocatedGroup() || isPassThrough()">
           <div class="form-group-max-width">
-            <div class="border-and-padding">
+            <div class="border-and-padding" style="padding-bottom:58px;">
               <fieldset class="input-filter-level mm-fieldset">
                 <legend>
                   <fin-checkbox class="legend-checkbox" [(model)]="sm.indicators.manualMapping" label="Manual Mapping"
@@ -256,12 +256,12 @@
 
       </div>
 
-      <div class="row" style="margin-top:30px;" [class.disabled]="isPassThroughOrUnallocatedGroup()">
+      <div class="row" style="margin-top:30px;" [class.disabled]="isUnallocatedGroup()">
         <div class="col-lg-6">
-          <fin-input name="startMonth" *ngIf="viewMode" [(ngModel)]="startFiscalMonth" label="Effective Month*"></fin-input>
-          <cui-select *ngIf="!viewMode" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos"
-                      [label]="!isUnallocatedGroup() && !isPassThrough()?'Effective Month*':'Effective Month'" empty="true"
-                      [required]="!isUnallocatedGroup() && !isPassThrough()" optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
+          <fin-input name="startMonth" *ngIf="viewMode || sm.approvedOnce === 'Y'" [(ngModel)]="startFiscalMonth" label="Effective Month" [disabled]="true"></fin-input>
+          <cui-select *ngIf="!(viewMode || sm.approvedOnce === 'Y')" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos"
+                      [label]="!isUnallocatedGroup()?'Effective Month*':'Effective Month'" empty="true"
+                      [required]="!isUnallocatedGroup()" optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
 
           <cui-select name="processingTime" [(ngModel)]="sm.processingTime" [items]="timings" label="Processing Timing" empty="true"
                       optionsKey="name" optionsValue="name"></cui-select>
@@ -276,7 +276,7 @@
         </div>
       </div>
 
-      <div class="row base-padding-top" [class.disabled]="isPassThroughOrUnallocatedGroup()">
+      <div class="row base-padding-top" [class.disabled]="isUnallocatedGroup()">
         <div class="col-lg-6">
           <fieldset class="rule-assoc">
             <legend>
@@ -300,7 +300,7 @@
       <div class="row">
         <div class="col-12">
           <div class="inline-check-row">
-            <div [class.disabled]="isPassThroughOrUnallocatedGroup()">
+            <div [class.disabled]="isUnallocatedGroup()">
               <div class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Retained Earnings" [(model)]="sm.indicators.retainedEarnings" trueVal="Y"
                               falseVal="N"></fin-checkbox>
@@ -325,7 +325,7 @@
                               (change)="filterGroupingSubmeasuresIfService()" [inline]="true"></fin-checkbox>
               </div>
             </div>
-            <div class="form-group-check form-group-inline-20" [class.disabled]="isUnallocatedGroup() || isAllocatedGroup()">
+            <div class="form-group-check form-group-inline-20" [class.disabled]="isUnallocatedGroup()">
               <fin-checkbox label="Pass Through" [(model)]="sm.indicators.passThrough" trueVal="Y" falseVal="N"
                             [inline]="true" (modelChange)="handlePassThroughChange()"></fin-checkbox>
             </div>

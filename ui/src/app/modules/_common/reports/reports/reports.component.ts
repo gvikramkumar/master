@@ -240,7 +240,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     if (obsMeasure) {
       obsMeasure.subscribe(smKeys => {
         this.submeasuresInData = this.submeasuresAll.filter(sm => _.includes(smKeys, sm.submeasureKey));
-        this.measures = this.measuresAll.filter(m => _.includes(this.submeasuresInData.map(sm => sm.measureId), m.measureId));
+        this.measures = this.measuresAll.filter(m => _.includes(_.uniq(this.submeasuresInData.map(sm => sm.measureId)), m.measureId));
       });
     }
   }

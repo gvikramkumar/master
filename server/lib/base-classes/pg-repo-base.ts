@@ -310,9 +310,8 @@ export class PgRepoBase {
       });
   }
 
-  // sync using filter to section off (fiscalMonth) and uniqueFilterProps to identify records in that section (instead of id)
-  // syncRecordsQueryOne calls regular queryone methods which get, then verify only one returned, then update/delete. We need a faster
-  // version for update table syncs, these just do the update/delete with no checks. removeMany removes one, no check for duplicates
+  // NOT USED CURRENTLY, BUT KEEP AROUND.
+  // The sync delete properties for rollover tables ended up NOT being unique records, getSyncArrays expects, that so went another route
   syncRecordsQueryOneDeleteInsertNoChecks(filter, uniqueFilterProps, records, userId, bypassCreatedUpdated = false, remove = true) {
     return this.getSyncArrays(filter, uniqueFilterProps, records, userId)
       .then(({updates, adds, deletes}) => {
@@ -353,6 +352,19 @@ export class PgRepoBase {
   syncRecordsReplaceAllWhere(removeWhere, records, userId, bypassCreatedUpdated?) {
     const sql = `delete from ${this.table} where ${removeWhere}`;
     return pgc.pgdb.query(sql)
+      .then(() => this.addMany(records, userId, bypassCreatedUpdated))
+      .then(() => ({recordCount: records.length}));
+  }
+
+
+
+  syncRecordsReplaceAllWhereProps(filter, props, records, userId, bypassCreatedUpdated?) {
+    const deletes = [];
+    const duplicates = _.uniqWith(records, this.createPredicateFromProperties(props))
+      .map(x => Object.assign({}, filter, _.pick(x, props)))
+      .forEach(x => deletes.push(this.removeMany(x)));
+
+    return Promise.all(deletes)
       .then(() => this.addMany(records, userId, bypassCreatedUpdated))
       .then(() => ({recordCount: records.length}));
   }

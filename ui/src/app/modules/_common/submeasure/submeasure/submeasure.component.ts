@@ -70,7 +70,13 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
         this.measures = _.sortBy(results[0], 'name');
         this.submeasures = results[1];
         this.sources = results[2];
-        this.measureId = (this.route.snapshot.queryParams.measureId && Number(this.route.snapshot.queryParams.measureId)) || this.measures[0].measureId;
+        const routeMeasure = this.route.snapshot.queryParams.measureId && Number(this.route.snapshot.queryParams.measureId);
+        if (routeMeasure) {
+          this.measureId = routeMeasure;
+        } else {
+          this.measureId = this.measures[0].measureId;
+          UiUtil.updateUrl(this.router, this.route, {measureId: this.measureId});
+        }
         this.refresh();
       });
   }
