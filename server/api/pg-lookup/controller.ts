@@ -30,13 +30,29 @@ export class PgLookupController {
       .catch(next);
   }
 
+  getRecordset(req, res, next) {
+    this.verifyProperties(req.body, ['table', 'column']);
+    this.repo.getRecordset(req.body.table, req.body.column, req.body.where, req.body.isNumber, req.body.upper)
+      .then(list => res.json(list))
+      .catch(next);
+  }
+
+  getListFromColumn(req, res, next) {
+    this.verifyProperties(req.body, ['table', 'column']);
+    this.repo.getListFromColumn(req.body.table, req.body.column, req.body.where, req.body.isNumber, req.body.upper)
+      .then(list => res.json(list))
+      .catch(next);
+  }
+
   getSortedListFromColumn(req, res, next) {
+    this.verifyProperties(req.body, ['table', 'column']);
     this.repo.getSortedListFromColumn(req.body.table, req.body.column, req.body.where, req.body.isNumber)
       .then(list => res.json(list))
       .catch(next);
   }
 
   getSortedUpperListFromColumn(req, res, next) {
+    this.verifyProperties(req.body, ['table', 'column']);
     this.repo.getSortedUpperListFromColumn(req.body.table, req.body.column, req.body.where)
       .then(list => res.json(list))
       .catch(next);
@@ -62,11 +78,15 @@ internal be be/sub be (not sure page will work well with 100 choices in dropdown
    */
 
   verifyProperties(data, arr) {
+    const missingProps = [];
     arr.forEach(prop => {
       if (!data[prop]) {
-        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+        missingProps.push(prop);
       }
     });
+    if (missingProps.length) {
+      throw new ApiError(`Properties missing: ${missingProps.join(', ')}.`, data, 400);
+    }
   }
 
 }
