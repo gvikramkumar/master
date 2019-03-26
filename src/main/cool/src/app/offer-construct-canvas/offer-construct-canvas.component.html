@@ -3,10 +3,13 @@
     <div class="col">
       <div class="panel panel--ltgray">
         <span class="mt-5">Offer Components</span>
-        <button class="pull-right borderless" [disabled]="!downloadEnable" title="Download" (click)='downloadZip(currentOfferId)'><span class="icon-download"></span></button>
+        <button class="pull-right borderless" [disabled]="!downloadEnable" title="Download"
+          (click)='downloadZip(currentOfferId)'><span class="icon-download"></span></button>
       </div>
     </div>
   </div>
+
+
   <div class="row base-top-margin">
     <div class="col">
       <div class="card card--raised">
@@ -20,11 +23,17 @@
                 </div>
               </div>
             </div>
+
+            
+            {{readOnly}} lulu {{editData}}
+
             <div class="row">
               <div class="col-sm-12">
                 <ul class="list list--highlight">
-                  <li *ngFor="let item of itemCategories" class="ui-helper-clearfix list-item" pDraggable="dragItem"
-                    dragEffect="copyMove" (onDragStart)="dragStart($event,item)" (onDragEnd)="dragEnd($event)">
+
+                  <li *ngFor="let item of itemCategories" class="ui-helper-clearfix list-item"
+                    pDraggable="dragItem" pDroppableDisabled= "!readOnly" dragEffect="copyMove"
+                    (onDragStart)="dragStart($event,item)" (onDragEnd)="dragEnd($event)">
                     <div class="panel panel--bordered">
                       <div *ngIf="item.isMajorLineItem; else nonMajorLineItem">
                         <span class="icon-dial icon-small"></span>{{item.categoryName}} (Major)
@@ -37,43 +46,44 @@
                 </ul>
               </div>
             </div>
+
           </div>
           <div class="col">
             <div class="row" *ngIf="expandView">
               <div class="col">
                 <div class="panel panel--ltgray panel--compressed">
-                    <form [formGroup]="eGinieSearchForm" (ngSubmit)="addSearchedItemToOfferConfig()">
-                  <div class="row">
-                    <div class="col-md-10">
+                  <form [formGroup]="eGinieSearchForm" (ngSubmit)="addSearchedItemToOfferConfig()">
+                    <div class="row">
+                      <div class="col-md-10">
 
-                      <span class="ui-fluid">
-                        <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results"
-                          (completeMethod)="searchForItemFromPdaf($event)" field="PID"
-                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9" formControlName="searchPID">
-                          <ng-template pTemplate="body" let-item>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  {{item.PID}}
-                                </td>
-                                <!-- <td>
+                        <span class="ui-fluid">
+                          <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results"
+                            (completeMethod)="searchForItemFromPdaf($event)" field="PID"
+                            placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9"
+                            formControlName="searchPID">
+                            <ng-template pTemplate="body" let-item>
+                              <tbody>
+                                <tr>
+                                  <td>
+                                    {{item.PID}}
+                                  </td>
+                                  <!-- <td>
                                   {{item.PRODUCT_FAMILY}}
                                 </td>
                                 <td>
                                   {{item.TECHNOLOGY_GROUP}}
                                 </td> -->
-                              </tr>
-                            </tbody>
-                          </ng-template>
-                        </p-autoComplete>
-                      </span>
+                                </tr>
+                              </tbody>
+                            </ng-template>
+                          </p-autoComplete>
+                        </span>
+                      </div>
+                      <div class="col-md-2">
+                        <button class="btn btn--small" type="submit" [disabled]="!eGinieSearchForm.valid">Add</button>
+                      </div>
                     </div>
-                    <div class="col-md-2">
-                      <button class="btn btn--small" type="submit"
-                      [disabled]="!eGinieSearchForm.valid">Add</button>
-                    </div>
-                  </div>
-                </form>
+                  </form>
                 </div>
               </div>
             </div>
@@ -135,22 +145,22 @@
                                     (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
                                     [disabled]="editData ? true : null" value="{{rowData['title']}}"
                                     [autofocus]='autoFocus' *ngIf="!rowData['eginieItem']">
-                                    <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
+                                  <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
-                                    class="icon-edit" *ngIf="!rowData['eginieItem']"></span>
-                                  <a [id]='rowData["uniqueKey"]' *ngIf='buttonId == rowData["uniqueKey"] && showButtons'
-                                    (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
+                                    class="icon-edit" *ngIf="!rowData['eginieItem && !readOnly']"></span>
+                                  <a [id]='rowData["uniqueKey"]' *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'
+                                   (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
                                   <a [id]='rowData["uniqueKey"]' (click)='disableButtons()'
-                                    *ngIf='buttonId == rowData["uniqueKey"] && showButtons'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
+                                    *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
                                 </span>
                                 <a *ngIf="!rowData['isGroupNode'] && !rowData['eginieItem']" class="pull-right"
-                                    (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
-                                    Details</a>
-                                    <a *ngIf="rowData['eginieItem']" class="pull-right"
-                                    (click)="showViewDetailsDailog(rowNode)"><span class="icon-add-contain"></span> View
-                                    Details</a>
+                                  (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
+                                  Details</a>
+                                <a *ngIf="rowData['eginieItem']" class="pull-right"
+                                  (click)="showViewDetailsDailog(rowNode)"><span class="icon-add-contain"></span> View
+                                  Details</a>
                               </div>
                             </td>
                             <!-- to copy -->
@@ -164,12 +174,12 @@
                             <td *ngIf="rowData['productName']">
                               <span class="list-price">{{rowData['listPrice']}}</span>
                               <div *ngIf="rowData['isMajorLineItem']">
-                                <a (click)="createGroup(rowNode)"><span class="icon-folder icon-small"></span> Create a
+                                <a *ngIf="!readOnly" (click)="createGroup(rowNode)"><span class="icon-folder icon-small"></span> Create a
                                   Group</a>
                               </div>
 
                               <!-- added to copy delete node -->
-                              <a (click)='deleteNode(rowNode)' class="remove"><span
+                              <a *ngIf="!readOnly" (click)='deleteNode(rowNode)' class="remove"><span
                                   class="icon-trash icon-small"></span>
                                 <small>Remove Item</small></a>
                             </td>
@@ -226,7 +236,7 @@
                         </div>
                       </div>
                     </div>
-                    <button [disabled]="selected ? null : true" (click)='removeSelected()'
+                    <button [disabled]="readOnly" [disabled]="selected ? null : true" (click)='removeSelected()'
                       class="btn btn--primary">Remove</button>
                   </div>
                 </div>
@@ -239,16 +249,20 @@
   </div>
   <div class="row base-margin-top">
     <div class="col-md-12 task--bar">
-      <button class="btn btn--primary" (click)="discardChanges()">Discard Changes</button>
-      <button class="btn btn--primary" (click)="saveOfferConstructChanges()">Save Changes</button>
+      <button [disabled]="readOnly" class="btn btn--primary" (click)="discardChanges()">Discard
+        Changes</button>
+      <button [disabled]="readOnly" class="btn btn--primary" (click)="!readOnly && saveOfferConstructChanges()">Save
+        Changes</button>
     </div>
 
   </div>
   <p-dialog header="Add Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
     (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
-    [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}" positionTop='150'>
+    [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}"
+    positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
-    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()" (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
+    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
+      (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
         <div class="col-md-6" *ngFor="let question of questions">
@@ -268,15 +282,15 @@
         </div>
         <div class="col-md-6 search-buffer">
           <div class="form-group input--icon half-margin-bottom">
-              <div class="form-group__text search-icon">
-                  <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}" [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
-                              (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
-                              placeholder="Copy Attributes" [size]="100" [minLength]="9">
-                    </p-autoComplete>
-                  <button type="button" class="link">
-                    <span class="icon-search"></span>
-                  </button>
-                </div>
+            <div class="form-group__text search-icon">
+              <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}" [(ngModel)]="itemsList"
+                [suggestions]="copyAttributeResults" (completeMethod)="searchCopyAttributes($event)" field="PID"
+                class="auto-complete-attribute" placeholder="Copy Attributes" [size]="100" [minLength]="9">
+              </p-autoComplete>
+              <button [disabled]="readOnly"type="button" class="link">
+                <span class="icon-search"></span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -298,8 +312,8 @@
       <div class="divider" style="margin-top: 1%"></div>
       <div class="row">
         <div class="col-md-12 text-right">
-          <button class="btn btn--secondary" type="button" (click)="closeDailog()">Cancel</button>
-          <button class="btn btn--primary" type="submit">Add Details</button>
+          <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
+          <button class="btn btn--primary" type="submit" [disabled]="readOnly">Add Details</button>
         </div>
       </div>
     </form>
@@ -312,12 +326,12 @@
     <div class="line-items-nav">
       <ul id="tabsv4" class="tabs tabs--tall">
         <li id="tabsv4-1" class="tab">
-            <a (click)='majorLine()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true}">Add Major Line
-              Details</a>
+          <a (click)='majorLine()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true}">Add Major Line
+            Details</a>
         </li>
         <li id="tabsv4-2" class="tab">
-            <a (click)='minorLine()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
-              Details</a>
+          <a (click)='minorLine()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
+            Details</a>
         </li>
       </ul>
     </div>
@@ -333,11 +347,11 @@
         </div>
       </div>
       <div class="row">
-          <div class="col-md-12 text-right">
-              <button class="display-none"></button>
-              <button class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
-              <button class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
-          </div>
+        <div class="col-md-12 text-right">
+          <button class="display-none"></button>
+          <button [disabled]="readOnly" class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
+          <button [disabled]="readOnly" class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
+        </div>
       </div>
     </div>
     <div *ngIf='majorLineItemsActive'>
@@ -351,24 +365,24 @@
         </div>
       </div>
       <div class="row">
-          <div class="col-md-12 text-right">
-              <button class="display-none"></button>
-              <button class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
-              <button class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
-          </div>
+        <div class="col-md-12 text-right">
+          <button class="display-none"></button>
+          <button [disabled]="readOnly" class="btn btn--secondary" (click)="closeAddALLDialog()">Cancel</button>
+          <button [disabled]="readOnly" class="btn btn--primary" (click)='submitClickEvent()'>Add All Item Details</button>
+        </div>
       </div>
     </div>
   </p-dialog>
 
   <!-- Dialog for view details-->
   <p-dialog header="View Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
-  (onHide)="onHide()" [responsive]="true" [(visible)]="displayViewDetails"
-  [contentStyle]="{'height': '450px', 'min-width':'700px'}">
-  <div class="divider"></div>
-  <table class="table">
-        <tr *ngFor="let item of viewDetails | keyvalue">
-          <td>{{item.key}}</td>
-          <td>{{item.value}}</td>
-        </tr>
-  </table>
+    (onHide)="onHide()" [responsive]="true" [(visible)]="displayViewDetails"
+    [contentStyle]="{'height': '450px', 'min-width':'700px'}">
+    <div class="divider"></div>
+    <table class="table">
+      <tr *ngFor="let item of viewDetails | keyvalue">
+        <td>{{item.key}}</td>
+        <td>{{item.value}}</td>
+      </tr>
+    </table>
   </p-dialog>

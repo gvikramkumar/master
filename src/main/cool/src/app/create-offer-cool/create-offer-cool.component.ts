@@ -10,7 +10,8 @@ import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
-import { HeaderService, UserService, CreateOfferService } from '@shared/services';
+import { HeaderService, UserService, CreateOfferService, ConfigurationService } from '@shared/services';
+
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -62,6 +63,7 @@ export class CreateOfferCoolComponent implements OnInit {
   secondaryBUbackup: any;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
+  readOnly = false;
 
   derivedMM;
   firstData: Object;
@@ -82,6 +84,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
 
   constructor(private createOfferService: CreateOfferService,
+    private configurationService: ConfigurationService,
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -360,6 +363,8 @@ export class CreateOfferCoolComponent implements OnInit {
     const canApproveUsers = [];
     this.data = [];
     this.populateStakeHoldersData();
+
+    this.readOnly = this.configurationService.startupData.readOnly;
 
     if (this.offerId === undefined) {
       this.loadPrimaryBe();

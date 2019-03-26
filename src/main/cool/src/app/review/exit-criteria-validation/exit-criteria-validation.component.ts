@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
 import { ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
-import { HeaderService, UserService } from '@shared/services';
+import { HeaderService, UserService, ConfigurationService } from '@shared/services';
 import { MessageService } from '@app/services/message.service';
 
 @Component({
@@ -21,11 +21,14 @@ export class ExitCriteriaValidationComponent implements OnInit {
   ideate = [];
   offerOwner: String = '';
   requestApprovalAvailable: Boolean = true;
+  readOnly = false;
   approvedOfferId;
+
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private headerService: HeaderService,
+    private configurationService: ConfigurationService,
     private messageService: MessageService,
     private localStorage: LocalStorageService,
     private userService: UserService
@@ -39,6 +42,13 @@ export class ExitCriteriaValidationComponent implements OnInit {
   ngOnInit() {
     this.approvedOfferId = this.localStorage.retrieve('approvedOfferId');
     if (this.approvedOfferId === this.currentOfferId) {
+      this.requestApprovalAvailable = false;
+    }
+   
+    this.readOnly = this.configurationService.startupData.readOnly;
+    if (this.readOnly = false) {
+      this.requestApprovalAvailable = true;
+    } else {
       this.requestApprovalAvailable = false;
     }
 

@@ -27,6 +27,7 @@ import { OfferDetailViewService } from '@app/services/offer-detail-view.service'
 import { filter } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
+import { ConfigurationService } from '@shared/services';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offer-construct-canvas.component.html',
@@ -47,6 +48,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   searchInput: any;
   results;
   initalRowAdded: Boolean = true;
+  readOnly: Boolean = false;
   expandView = true;
   editData: any;
   showButtons: any = false;
@@ -101,9 +103,12 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     'GPL Publication',
     'BILLING MODEL'];
 
+
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
+    private configurationService: ConfigurationService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder, private offerDetailViewService: OfferDetailViewService) {
+
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -114,6 +119,127 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     })
 
   }
+  ngOnInit() {
+    this.readOnly = this.configurationService.startupData.readOnly;
+    console.log(this.readOnly);
+    this.subscription = this.messageService.getMessage()
+      .subscribe(message => {
+        this.saveOfferConstructChanges();
+      });
+
+    this.eGinieSearchForm = new FormGroup({
+      searchPID: new FormControl(null, Validators.required)
+    });
+
+    // Check if construct details are availbale in the database for the current offer.
+    this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
+      if (offerDetailRes.constructDetails.length > 0) {
+        this.transformDataToTreeNode(offerDetailRes);
+      }
+    }, (err) => {
+      console.log(err);
+    });
+
+    this.offerConstructService.space.subscribe((val) => {
+      this.offerConstructItems.forEach(item => {
+        if (item.data.productName == val[0]) {
+          item.data['itemDetails'] = val[1];
+        }
+      })
+      this.offerConstructItems.forEach(value => {
+        value.children.forEach(itm => {
+          if (itm.data.productName == val[0]) {
+            itm.data['itemDetails'] = val[1];
+          }
+        })
+      })
+
+      this.offerConstructService.closeDialog.subscribe((val) => {
+        if (val == 'close') {
+          this.display = false;
+        }
+      })
+
+      this.offerConstructItems = [...this.offerConstructItems];
+    });
+    this.questionForm = new FormGroup({
+    });
+
+    this.multipleForms = new FormGroup({
+    });
+
+    // Prepare payload to fetch item categories. Obtain MM information.
+    this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
+
+      // Initialize MM ModelICC Request Param Details
+      const mmModel = offerDetails.derivedMM;
+
+      // Initialize Offer Types
+      const componentsObj = offerDetails['selectedCharacteristics'] == null ? null : offerDetails['selectedCharacteristics'].
+        filter(char => char.subgroup === 'Offer Components');
+      const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
+
+      // Initialize Components
+      const offerTypeObj = !offerDetails['solutioningDetails'] ? [] :
+        offerDetails['solutioningDetails'].filter(sol => sol.dimensionSubgroup === 'Offer Type');
+      const offerType = offerTypeObj && offerTypeObj.length > 0 ? offerTypeObj[0]['dimensionAttribute'] : [];
+
+      // Form ICC Request
+      const iccRequest = {
+        'mmModel': mmModel,
+        'offerType': offerType,
+        'components': components
+      };
+
+      // Call offerconstruct request to get Major/Minor Line Items
+      this.offerConstructCanvasService.retrieveIccDetails(iccRequest).subscribe((iccResponse) => {
+
+        // Extract Major / Minor Category Details
+        const minorItems = iccResponse['minor'];
+        const majorItems = iccResponse['major'];
+
+        let majorItemsList = [];
+        let minorItemsList = [];
+
+        majorItemsList = majorItems.map(function (item) {
+          return {
+            productName: item,
+            categoryName: item,
+            isMajorLineItem: true,
+            listPrice: ''
+          };
+        });
+
+        minorItemsList = minorItems.map(function (item) {
+          return {
+            productName: item,
+            categoryName: item,
+            isMajorLineItem: false,
+            listPrice: ''
+          };
+        });
+
+        // Populate Item Categories List
+        this.itemCategories = majorItemsList.concat(minorItemsList);
+
+
+      });
+
+    });
+
+
+    this.itemCount = 0;
+
+    this.cols = [
+      { field: 'productName', header: 'PRODUCTS' },
+      { field: 'productFamily', header: 'PRODUCT FAMILY' },
+      { field: 'listPrice', header: 'LIST PRICE(USD)' }
+    ];
+
+
+
+  }
+
 
   /**
    * Called when Item is dragged into Offer Components Tree table
@@ -573,123 +699,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnInit() {
-
-    this.subscription = this.messageService.getMessage()
-      .subscribe(message => {
-        this.saveOfferConstructChanges();
-      });
-
-    this.eGinieSearchForm = new FormGroup({
-      searchPID: new FormControl(null, Validators.required)
-    });
-
-    // Check if construct details are availbale in the database for the current offer.
-    this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
-      if (offerDetailRes.constructDetails.length > 0) {
-        this.transformDataToTreeNode(offerDetailRes);
-      }
-    }, (err) => {
-      console.log(err);
-    });
-
-    this.offerConstructService.space.subscribe((val) => {
-      this.offerConstructItems.forEach(item => {
-        if (item.data.productName == val[0]) {
-          item.data['itemDetails'] = val[1];
-        }
-      })
-      this.offerConstructItems.forEach(value => {
-        value.children.forEach(itm => {
-          if (itm.data.productName == val[0]) {
-            itm.data['itemDetails'] = val[1];
-          }
-        })
-      })
-
-      this.offerConstructService.closeDialog.subscribe((val) => {
-        if (val == 'close') {
-          this.display = false;
-        }
-      })
-
-      this.offerConstructItems = [...this.offerConstructItems];
-    });
-    this.questionForm = new FormGroup({
-    });
-
-    this.multipleForms = new FormGroup({
-    });
-
-    // Prepare payload to fetch item categories. Obtain MM information.
-    this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
-
-      // Initialize MM ModelICC Request Param Details
-      const mmModel = offerDetails.derivedMM;
-
-      // Initialize Offer Types
-      const componentsObj = offerDetails['selectedCharacteristics'] == null ? null : offerDetails['selectedCharacteristics'].
-        filter(char => char.subgroup === 'Offer Components');
-      const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
-
-      // Initialize Components
-      const offerTypeObj = !offerDetails['solutioningDetails'] ? [] :
-        offerDetails['solutioningDetails'].filter(sol => sol.dimensionSubgroup === 'Offer Type');
-      const offerType = offerTypeObj && offerTypeObj.length > 0 ? offerTypeObj[0]['dimensionAttribute'] : [];
-
-      // Form ICC Request
-      const iccRequest = {
-        'mmModel': mmModel,
-        'offerType': offerType,
-        'components': components
-      };
-
-      // Call offerconstruct request to get Major/Minor Line Items
-      this.offerConstructCanvasService.retrieveIccDetails(iccRequest).subscribe((iccResponse) => {
-
-        // Extract Major / Minor Category Details
-        const minorItems = iccResponse['minor'];
-        const majorItems = iccResponse['major'];
-
-        let majorItemsList = [];
-        let minorItemsList = [];
-
-        majorItemsList = majorItems.map(function (item) {
-          return {
-            productName: item,
-            categoryName: item,
-            isMajorLineItem: true,
-            listPrice: ''
-          };
-        });
-
-        minorItemsList = minorItems.map(function (item) {
-          return {
-            productName: item,
-            categoryName: item,
-            isMajorLineItem: false,
-            listPrice: ''
-          };
-        });
-
-        // Populate Item Categories List
-        this.itemCategories = majorItemsList.concat(minorItemsList);
-
-
-      });
-
-    });
-
-
-    this.itemCount = 0;
-
-    this.cols = [
-      { field: 'productName', header: 'PRODUCTS' },
-      { field: 'productFamily', header: 'PRODUCT FAMILY' },
-      { field: 'listPrice', header: 'LIST PRICE(USD)' }
-    ];
-  }
-
   /**
    * Convert itemdetails array of objets into single object.
    * @param itemDetails
@@ -802,12 +811,17 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStartRow($event, item) {
+    if(this.readOnly === false) {
     this.draggedItem = item.node;
     // this.selected = [...this.selected];
   }
 
+  }
+
   dragStart(event, item: any) {
+    if(this.readOnly === false) {
     this.draggedItem = item;
+    }
   }
 
   // donwnload Zip file
@@ -1305,6 +1319,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
+
 
 }
 

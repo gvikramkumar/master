@@ -29,6 +29,7 @@
           <div class="col-md-8">
             <div class="card__body">
               <form autoComplete="off" #offerCreateForm="ngForm">
+                <fieldset [disabled]="readOnly">
                 <div class="row base-margin-top">
                   <div class="col-md-12">
                     <div class="form-group half-margin-bottom">
@@ -167,6 +168,8 @@
                     </div>
                   </div>
                 </div>
+             
+              </fieldset>
               </form>
             </div>
           </div>

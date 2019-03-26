@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ExitCriteriaValidationService } from 'src/app/services/exit-criteria-validation.service';
-import { HeaderService, UserService } from '@shared/services';
+import { HeaderService, UserService, ConfigurationService } from '@shared/services';
 import { MessageService } from '@app/services/message.service';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
 import * as _ from 'lodash';
@@ -24,9 +24,11 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
   requestApprovalAvailable: Boolean = true;
   designApprovedOfferId;
   offerData;
+  readOnly = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
+    private configurationService: ConfigurationService,
     private headerService: HeaderService,
     private messageService: MessageService,
     private monetizationModelService: MonetizationModelService,
@@ -39,6 +41,12 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.readOnly = this.configurationService.startupData.readOnly;
+    if (this.readOnly = false) {
+      this.requestApprovalAvailable = true;
+    } else {
+      this.requestApprovalAvailable = false;
+    }
     this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.offerData = data;
       let offerDimensionSelected = true;
@@ -149,5 +157,7 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
       });
     });
   }
+
+  
 
 }

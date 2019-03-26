@@ -52,6 +52,7 @@ export class MmAssesmentComponent implements OnInit {
   canClickNextStep = false;
   backbuttonStatusValid = true;
   dimensionMode: Boolean = false;
+  readOnly = false;
   dimensionFirstGroupData: Object;
   dimensionFirstGroupName: string;
 
@@ -68,7 +69,7 @@ export class MmAssesmentComponent implements OnInit {
     private monetizationModelService: MonetizationModelService,
     private offerPhaseService: OfferPhaseService,
     private offerDetailViewService: OfferDetailViewService,
-    private configService: ConfigurationService,
+    private configurationService: ConfigurationService,
     private offersolutioningService: OffersolutioningService,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService,
@@ -86,6 +87,7 @@ export class MmAssesmentComponent implements OnInit {
   // --------------------------------------------------------------------------------------------
 
   ngOnInit() {
+    this.readOnly = this.configurationService.startupData.readOnly;
 
     if (this.router.url.match(/offerDimension/) !== null) {
       this.dimensionMode = true;
@@ -94,6 +96,8 @@ export class MmAssesmentComponent implements OnInit {
     if (this.dimensionMode) {
       this.canClickTab = true;
     }
+
+    
 
     // Retrieve Offer Details
     // Get Attributes Of Each Group
@@ -273,6 +277,8 @@ export class MmAssesmentComponent implements OnInit {
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
       this.totalApprovalsCount = resStrategyReview.length;
     });
+
+   
 
   }
 
@@ -459,38 +465,40 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
+ if (this.readOnly === false) {
+  this.isChangedAttribute = true;
+  if (attribute.type === 2 && attribute.status === -1) {
+    attribute.type = 0;
+    this.canClickNextStep = false;
+    return;
+  }
+  attribute.status = -attribute.status;
 
-    this.isChangedAttribute = true;
-    if (attribute.type === 2 && attribute.status === -1) {
-      attribute.type = 0;
-      this.canClickNextStep = false;
-      return;
+  if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
+    if (this.groupData[0]['Offer Components'].includes(attribute)) {
+      this.changeSubGroupType(this.groupData[0]);
     }
-    attribute.status = -attribute.status;
 
-    if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
-      if (this.groupData[0]['Offer Components'].includes(attribute)) {
-        this.changeSubGroupType(this.groupData[0]);
-      }
-
-      let next = 0;
-      const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
-      groupKeys.forEach(key => {
-        for (const attr of this.groupData[0][key]) {
-          if (attr.status === 1 || attr.type === 2) {
-            next += 1;
-            break;
-          }
+    let next = 0;
+    const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
+    groupKeys.forEach(key => {
+      for (const attr of this.groupData[0][key]) {
+        if (attr.status === 1 || attr.type === 2) {
+          next += 1;
+          break;
         }
-      });
-      if (next === groupKeys.length) {
-        this.canClickNextStep = true;
-      } else {
-        this.canClickNextStep = false;
       }
+    });
+    if (next === groupKeys.length) {
+      this.canClickNextStep = true;
+    } else {
+      this.canClickNextStep = false;
     }
+  }
 
-    this.selectedGroupData = this.groupData;
+  this.selectedGroupData = this.groupData;
+ }
+    
   }
 
 
@@ -943,7 +951,7 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-    postOfferSolutioningData['functionalRole'] = this.configService.startupData.functionalRole[0];
+    postOfferSolutioningData['functionalRole'] = this.configurationService.startupData.functionalRole[0];
 
     // REST API - /setOfferSolutioning
     this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
