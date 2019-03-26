@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ExitCriteriaValidationService } from 'src/app/services/exit-criteria-validation.service';
 import { HeaderService, UserService, ConfigurationService } from '@shared/services';
 import { MessageService } from '@app/services/message.service';
-import { MonetizationModelService } from '@app/services/monetization-model.service';
 import * as _ from 'lodash';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
 
 @Component({
   selector: 'app-design-review-exit-criteria',
@@ -31,8 +31,8 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
     private configurationService: ConfigurationService,
     private headerService: HeaderService,
     private messageService: MessageService,
-    private monetizationModelService: MonetizationModelService,
-    private userService: UserService
+    private userService: UserService,
+    private monetizationModelService: MonetizationModelService
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];

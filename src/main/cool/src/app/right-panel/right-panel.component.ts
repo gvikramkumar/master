@@ -344,7 +344,7 @@ export class RightPanelComponent implements OnInit {
         }
         this.rightPanelService.updatePhaseTargetDateInDB(updateDBpayLoad).subscribe((data) => {
           console.log(updateDBpayLoad);
-        })
+        });
       },
         (error) => {
         });
@@ -450,7 +450,7 @@ export class RightPanelComponent implements OnInit {
     if (name == null) {
       return '';
     }
-    let names = name.split(' ');
+    const names = name.split(' ');
     let initials = '';
     initials += names[0].charAt(0).toUpperCase();
     if (names.length > 1) {
@@ -481,17 +481,15 @@ export class RightPanelComponent implements OnInit {
   }
 
   showStakeHolderDialog() {
-    if (!_.isEmpty(this.stakeData)) {
       this.addStakeHolder = true;
-    }
   }
 
   closeStakeHolderDialog() {
 
     this.addStakeHolder = false;
-    this.stakeHolderService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetails => {
+    const stakeHolderMapInfo = [];
 
-      const stakeHolderMapInfo = [];
+    this.stakeHolderService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetails => {
 
       offerDetails['stakeholders'].forEach(stakeHolder => {
 
@@ -506,11 +504,13 @@ export class RightPanelComponent implements OnInit {
             emailId: stakeHolder['_id'] + '@cisco.com',
           });
 
-        // Update Stake Holder Info
-        this.stakeData = stakeHolderMapInfo;
-
       });
+
     });
+
+    // Update Stake Holder Info
+    this.stakeData = stakeHolderMapInfo;
+
 
   }
 

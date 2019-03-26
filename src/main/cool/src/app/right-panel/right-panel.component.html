@@ -142,6 +142,7 @@
       </li>
     </ul>
 
+
   </div>
 
   <!-- Dialog - Phase Process  -->
@@ -324,10 +325,11 @@
   </p-dialog>
 
   <!-- Dialog - Add Stakeholders  -->
-  <p-dialog header="Add Stakeholders" closable="true" modal="true" (onHide)="closeStakeHolderDialog()" showHeader="false"
-    [responsive]="true" [(visible)]="addStakeHolder">
-    <app-stakeholder-add (addSelectedStakeHolders) = updateStakeHodlerInfo($event) ></app-stakeholder-add>
+  <p-dialog header="Add Stakeholders" closable="true" (onHide)="closeStakeHolderDialog()" [responsive]="true"
+    [(visible)]="addStakeHolder" [transitionOptions]="'2ms'">
+    <app-stakeholder-add (addSelectedStakeHolders)="updateStakeHodlerInfo($event)"></app-stakeholder-add>
   </p-dialog>
+
 
   <!-- Dialog - Lead Time Calculation  -->
   <p-dialog class="lead-time" header="Lead Time Calculation" closable="true" [responsive]="true" [width]="1400"
