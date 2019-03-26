@@ -420,11 +420,27 @@ export class OfferSolutioningComponent implements OnInit {
         'action': '',
         'comment': ''
       };
-      this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
+
+      // Need to give answer for every question from offer solutioning to enable request approval button.
+      let offerSolutioningSelected = true;
+      nextStepPostData['solutioningDetails'].forEach(element => {
+        element.Details.forEach(ele => {
+          if (_.isEmpty(ele.solutioningAnswer)) {
+            offerSolutioningSelected = false;
+          }
+        });
+      });
+      if (offerSolutioningSelected) {
+        this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
+          if (JSON.parse(routeTo) === true) {
+            this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+          }
+        });
+      } else {
         if (JSON.parse(routeTo) === true) {
           this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
         }
-      });
+      }
 
     });
 
