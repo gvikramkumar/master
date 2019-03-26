@@ -7,11 +7,7 @@ import { OfferConstructService } from '@app/services/offer-construct.service';
 @Component({
     selector: 'dynamic-form-multiple',
     templateUrl: './dynamic-form-multiple.html',
-    styles: [`
-    .error { color: red; }
-    .form-group-add-OfferConfiguration .row-button-add-details{display:none}
-    `
-    ]
+    styleUrls: ['./offer-construct-canvas.component.css'],
 })
 export class DynamicFormMultipleComponent implements OnInit {
     public offerInfo: any;
@@ -20,6 +16,10 @@ export class DynamicFormMultipleComponent implements OnInit {
     public headerArray: any;
     public tableShowCondition: boolean = false;
     public ismajorSection: boolean = true;
+
+    cities1: any;
+
+
     constructor(public offerConstructService: OfferConstructService) { }
 
     ngOnInit() {
@@ -31,6 +31,14 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.minorOfferInfo = this.offerInfo.minor;
 
         this.tableShowCondition = true;
+
+        this.cities1 = [
+            { label: 'New York', value: { id: 1, name: 'New York', code: 'NY' } },
+            { label: 'Rome', value: { id: 2, name: 'Rome', code: 'RM' } },
+            { label: 'London', value: { id: 3, name: 'London', code: 'LDN' } },
+            { label: 'Istanbul', value: { id: 4, name: 'Istanbul', code: 'IST' } },
+            { label: 'Paris', value: { id: 5, name: 'Paris', code: 'PRS' } }
+        ];
     }
 
     saveJson() {

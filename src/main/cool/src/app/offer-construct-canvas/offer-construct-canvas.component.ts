@@ -1011,6 +1011,21 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.updateChildCount();
   }
 
+  /**
+   * Convert searched e-gine PIDs to a format equal to other PID's
+   */
+  convertEgineDetails(searchResult): any {
+    let arrayOfEginieItems: any[] = [];
+    for (const key in searchResult) {
+      const obj = Object.create(null);
+      obj['egineAttribue'] = key;
+      obj['values'] = this.convertToArray(searchResult[key]);
+      obj['eGenieFlag'] = true;
+      obj['eGenieExistingPid'] = true;
+      arrayOfEginieItems.push(obj)
+    }
+    return arrayOfEginieItems;
+  }
 
   /**
    * Called when an Major Item is added in to Offer Components Tree table
@@ -1031,7 +1046,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       obj['isMajorLineItem'] = true; // Major/Minor
       obj['childCount'] = 0;
       obj['eginieItem'] = true;
-      obj['itemDetails'] = searchResult;
+      // obj['itemDetails'] = searchResult;
+      obj['itemDetails'] = this.convertEgineDetails(searchResult);
       this.offerConstructItems.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
       this.countableItems.push(this.uniqueId);
@@ -1060,7 +1076,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       obj['isMajorLineItem'] = false; // Major/Minor
       obj['childCount'] = 0;
       obj['eginieItem'] = true;
-      obj['itemDetails'] = searchResult;
+      // obj['itemDetails'] = searchResult;
+      obj['itemDetails'] = this.convertEgineDetails(searchResult);
       // A minor item cannot be added if altleast one major item doesn't exist
       const lastMajorItem = this.offerConstructItems[this.offerConstructItems.length - 1];
       lastMajorItem.children.push(this.itemToTreeNode(obj));
@@ -1140,6 +1157,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.displayAddDetails = false;
     this.questions = [];
     // this.questionForm.reset();
+
+    //reset the form with current value with previous value
+    this.resetFormValue(this.uniqueNodeId, false);
+
   }
 
   onHide() {
@@ -1573,6 +1594,23 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           });
         }
       });
+    }
+  }
+
+  resetFormValue(popHeadName, isUdate: boolean) {
+    let title = this.QuestionsNodeInfo[popHeadName].title;
+    if (this.QuestionsNodeInfo[popHeadName].isMajor) {     //for major group
+      //for major group
+      for (let x in this.offerConstructService.singleMultipleFormInfo['major']) {
+        if (x == this.QuestionsNodeInfo[popHeadName].groupName) {
+          this.offerConstructService.singleMultipleFormInfo.major[x]['productInfo'].forEach(element => {
+            console.log(element[title]);
+            if (element[title].uniqueKey == this.QuestionsNodeInfo[popHeadName].uniqueId) {
+              console.log(element[title].listOfferQuestions);
+            }
+          });
+        }
+      }
     }
   }
 
