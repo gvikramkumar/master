@@ -1121,13 +1121,26 @@ export class MmAssesmentComponent implements OnInit {
                   'comment': ''
                 };
 
-                this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
-                  this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
-                  if (JSON.parse(withRouter) === true) {
-                    this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+                // Need to select atleast one subgroup characteristic from offer dimension to enable request approval button.
+                let offerDimensionSelected = true;
+                proceedToStakeholderPostData['additionalCharacteristics'].forEach(element => {
+                  if (element.characteristics.length === 0) {
+                    offerDimensionSelected = false;
                   }
                 });
 
+                if (offerDimensionSelected) {
+                  this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
+                    this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
+                    if (JSON.parse(withRouter) === true) {
+                      this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+                    }
+                  });
+                } else {
+                  if (JSON.parse(withRouter) === true) {
+                    this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+                  }
+                }
               });
 
             }, (err) => {
