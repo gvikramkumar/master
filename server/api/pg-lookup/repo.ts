@@ -720,6 +720,7 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
+  // testing only, just to profile time to get query, as opposed to get it and sort it. Negligible sort time.
   getRecordset(table, column, whereClause?, isNumber?, upper?) {
     let query;
     if (upper) {
