@@ -36,13 +36,7 @@
                     <tbody class="offer-values">
                       <p>Unique Item</p>
                       <div *ngFor="let ques of item.value['questionset']">
-                        <tr *ngIf="ques.itemType == 'Unique Item'">
-                          <td>{{ques.egineAttribue}}</td>
-                        </tr>
-                      </div>
-                      <p>Additional Item</p>
-                      <div *ngFor="let ques of item.value['questionset']">
-                        <tr *ngIf="ques.itemType !== 'Unique Item'">
+                        <tr>
                           <td>{{ques.egineAttribue}}</td>
                         </tr>
                       </div>
@@ -73,39 +67,7 @@
                             <!-- unoque item -->
                             <P>Unique Item</P>
                             <div *ngFor="let pInfo of ques.value['listOfferQuestions']">
-                              <tr [ngSwitch]="pInfo.componentType" *ngIf="pInfo.itemType == 'Unique Item'">
-                                <td *ngSwitchCase="'Free Text'">
-                                  <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                    [(ngModel)]="pInfo.currentValue" class="form-control">
-                                </td>
-
-                                <td *ngSwitchCase="'Radio Button'">
-                                  <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
-                                    [(ngModel)]="pInfo.currentValue">
-                                    <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                  </select>
-                                </td>
-
-                                <td *ngSwitchCase="'Drop-down'">
-                                  <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
-                                    [(ngModel)]="pInfo.currentValue">
-                                    <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                  </select>
-                                </td>
-
-                                <td *ngSwitchCase="'Multiselect'">
-                                  <p-multiSelect [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                    [options]="pInfo.listMutiSelect" optionLabel="name"
-                                    [(ngModel)]="pInfo.currentValue">
-                                  </p-multiSelect>
-                                </td>
-                                <!-- </div> -->
-                              </tr>
-                            </div>
-                            <!-- Addition Item -->
-                            <P>Additional Item</P>
-                            <div *ngFor="let pInfo of ques.value['listOfferQuestions']">
-                              <tr [ngSwitch]="pInfo.componentType" *ngIf="pInfo.itemType !== 'Unique Item'">
+                              <tr [ngSwitch]="pInfo.componentType">
                                 <td *ngSwitchCase="'Free Text'">
                                   <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
                                     [(ngModel)]="pInfo.currentValue" class="form-control">

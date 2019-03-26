@@ -847,7 +847,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     obj['label'] = node.constructItemName;
     obj['title'] = node.constructItemName;
     obj['isMajorLineItem'] = true;
-    obj['itemDetails'] = this.convertItemDetail(node.itemDetails);
+    // obj['itemDetails'] = this.convertItemDetail(node.itemDetails);
+    obj['itemDetails'] = node.itemDetails;
     obj['childCount'] = 0;
     if (node['eGenieFlag']) {
       obj['eginieItem'] = node['eGenieFlag'];
@@ -878,7 +879,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     obj['label'] = childNode.constructItemName;
     obj['title'] = childNode.constructItemName;
     obj['isMajorLineItem'] = false;
-    obj['itemDetails'] = this.convertItemDetail(childNode.itemDetails);
+    // obj['itemDetails'] = this.convertItemDetail(childNode.itemDetails);
+    obj['itemDetails'] = childNode.itemDetails;
     obj['childCount'] = 0;
     if (childNode['eGenieFlag']) {
       obj['eginieItem'] = childNode['eGenieFlag'];
@@ -1284,23 +1286,25 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
         if (_.isEmpty(node.data.itemDetails)) {
 
-          const id = new ItemDetail();
-          id.attributeName = 'Item Name (PID)';
-          id.attributeValue = this.convertToArray(node.data.title);
-          id.eGenieFlag = cd.eGenieFlag;
-          id.eGenieExistingPid = cd.eGenieFlag;
-          cd.itemDetails.push(id);
+          // const id = new ItemDetail();
+          // id.attributeName = 'Item Name (PID)';
+          // id.attributeValue = this.convertToArray(node.data.title);
+          // id.eGenieFlag = cd.eGenieFlag;
+          // id.eGenieExistingPid = cd.eGenieFlag;
+          // cd.itemDetails.push(id);
+          cd.itemDetails = node.data.itemDetails;
 
         } else {
           let id: ItemDetail;
-          for (const key in node.data.itemDetails) {
-            id = new ItemDetail();
-            id.attributeName = key;
-            id.attributeValue = this.convertToArray(node.data.itemDetails[key]);
-            id.eGenieFlag = cd.eGenieFlag;
-            id.eGenieExistingPid = cd.eGenieFlag;
-            cd.itemDetails.push(id);
-          }
+          // for (const key in node.data.itemDetails) {
+          //   id = new ItemDetail();
+          //   id.attributeName = key;
+          //   id.attributeValue = this.convertToArray(node.data.itemDetails[key]);
+          //   id.eGenieFlag = cd.eGenieFlag;
+          //   id.eGenieExistingPid = cd.eGenieFlag;
+          //   cd.itemDetails.push(id);
+          // }
+          cd.itemDetails = node.data.itemDetails;
         }
         cds.constructDetails.push(cd);
       }
@@ -1323,24 +1327,26 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             }
             if (_.isEmpty(child.data.itemDetails)) {
 
-              const id = new ItemDetail();
-              id.attributeName = 'Item Name (PID)';
-              id.attributeValue = this.convertToArray(child.data.title);
-              id.eGenieFlag = cd.eGenieFlag;
-              id.eGenieExistingPid = cd.eGenieFlag;
-              cd.itemDetails.push(id);
+              // const id = new ItemDetail();
+              // id.attributeName = 'Item Name (PID)';
+              // id.attributeValue = this.convertToArray(child.data.title);
+              // id.eGenieFlag = cd.eGenieFlag;
+              // id.eGenieExistingPid = cd.eGenieFlag;
+              // cd.itemDetails.push(id);
+              cd.itemDetails = child.data.itemDetails;
 
             } else {
 
-              let id: ItemDetail;
-              for (const key in child.data.itemDetails) {
-                id = new ItemDetail();
-                id.attributeName = key;
-                id.attributeValue = this.convertToArray(child.data.itemDetails[key]);
-                id.eGenieFlag = cd.eGenieFlag;
-                id.eGenieExistingPid = cd.eGenieFlag;
-                cd.itemDetails.push(id);
-              }
+              // let id: ItemDetail;
+              // for (const key in child.data.itemDetails) {
+              //   id = new ItemDetail();
+              //   id.attributeName = key;
+              //   id.attributeValue = this.convertToArray(child.data.itemDetails[key]);
+              //   id.eGenieFlag = cd.eGenieFlag;
+              //   id.eGenieExistingPid = cd.eGenieFlag;
+              //   cd.itemDetails.push(id);
+              // }
+              cd.itemDetails = child.data.itemDetails;
             }
             cds.constructDetails.push(cd);
           } else {
@@ -1390,6 +1396,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
 
     });
+
+    console.log("cds", cds);
+
 
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
     },
