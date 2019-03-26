@@ -52,8 +52,4 @@ export class PgLookupService extends RestBase<any> {
     return this.callRepoMethod('getSubmeasureAdjustmentTypes', null, {submeasureKey});
   }
 
-  getCountryNamesFromSalesHierarchy() {
-    return this.callRepoMethod('getCountryNamesFromSalesHierarchy');
-  }
-
 }

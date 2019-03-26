@@ -21,11 +21,6 @@ export default {
     host: 'localhost',
     port: 27017,
     db: 'fin-dfa'
-  },
-  postgres: {
-    host: 'finpg-dev-01',
-    port: 5432,
-    database: 'fpadev',
   }
   /*
   ssl: {

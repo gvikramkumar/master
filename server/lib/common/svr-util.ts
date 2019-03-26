@@ -23,8 +23,13 @@ export const svrUtil = {
   asciiToBase64,
   base64ToAscii,
   docToObject,
-  postgresReplaceQuotes
+  postgresReplaceQuotes,
+  setPrecision5
 };
+
+function setPrecision5(val) {
+  return Number(val.toPrecision(5));
+}
 
 // strings are bracketed by single quotes, so we have to escape single quotes within the string
 function postgresReplaceQuotes(val) {

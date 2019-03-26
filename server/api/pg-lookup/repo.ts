@@ -163,19 +163,6 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
-  getCountryNamesFromSalesHierarchy() {
-    return pgc.pgdb.query(`
-            select cntry.iso_country_name
-            from fpacon.vw_fpa_iso_country cntry
-            ,fpacon.vw_fpa_sales_hierarchy dsh
-            where 1=1
-            and dsh.iso_country_code=cntry.bk_iso_country_code
-            group by 1;
-          `)
-      .then(resp => resp.rows.map(x => x.iso_country_name));
-  }
-
-
   getSalesHierarchyReport() {
     return pgc.pgdb.query(`
             select 
@@ -733,6 +720,29 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
+  // testing only, just to profile time to get query, as opposed to get it and sort it. Negligible sort time.
+  getRecordset(table, column, whereClause?, isNumber?, upper?) {
+    let query;
+    if (upper) {
+      query = `select distinct upper(${column}) as col from ${table}`;
+    } else {
+      query = `select distinct ${column} as col from ${table}`;
+    }
+    if (whereClause) {
+      query += ` where ${whereClause} and ${column} is not null `;
+    } else {
+      query += ` where ${column} is not null `;
+    }
+    if (upper) {
+      query += ` order by upper(${column})`;
+    } else {
+      query += ` order by ${column}`;
+    }
+
+    return pgc.pgdb.query(query)
+      .then(results => results.rows);
+  }
+
   getListFromColumn(table, column, whereClause?, isNumber?, upper?) {
     let query;
     if (upper) {
@@ -896,11 +906,15 @@ export default class PgLookupRepo {
   }
 
   verifyProperties(data, arr) {
+    const missingProps = [];
     arr.forEach(prop => {
       if (!data[prop]) {
-        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+        missingProps.push(prop);
       }
     });
+    if (missingProps.length) {
+      throw new ApiError(`Properties missing: ${missingProps.join(', ')}.`, data, 400);
+    }
   }
 
 }

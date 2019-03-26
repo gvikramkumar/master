@@ -395,6 +395,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.hasAdjustmentType()) {
       this.adjustmentType = undefined;
     }
+    if (!this.hasSourceRapidRevenue()) {
+      this.ifl_switch_glseg = false;
+      this.iflChange('glseg');
+    }
   }
 
   isCogsMeasure() {
@@ -408,8 +412,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
 
     if (!init) {
-      // we clear a lot off on unallocated group, gets confusing then they change measures like that, so clear off group then, not on init though
+      // group and passthrough changes can conflict with measure change changes, so clear off first
       this.sm.indicators.groupFlag = 'N';
+      this.sm.indicators.passThrough = 'N';
     }
 
     if (this.isCogsMeasure()) {
@@ -726,7 +731,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.sm.indicators = new SubmeasureIndicators();
     this.sm.indicators.corpRevenue = corpRev;
     this.sm.indicators.groupFlag = 'Y';
-    this.sm.indicators.passThrough = 'N'; // can't have passthough and unallocated group at same time
     this.sm.sourceId = -777; // Default Source
     delete this.sm.categoryType;
     this.sm.rules = [];
@@ -750,9 +754,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.clearInputFilterLevelsPassThrough();
     this.sm.indicators.manualMapping = 'N';
     this.clearManualMappingLevels();
-    if (this.isUnallocatedGroup()) {
-      this.sm.indicators.groupFlag = 'N'; // can't have passthough and unallocated group at same time
-    }
     this.sm.rules = [];
     this.init();
   }
@@ -1009,6 +1010,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   isAllocatedGroup() {
     return this.sm.indicators.groupFlag === 'Y' && this.sm.indicators.allocationRequired === 'Y';
+  }
+
+  isGroup() {
+    return this.sm.indicators.groupFlag === 'Y';
   }
 
   changeFile(fileInput) {
