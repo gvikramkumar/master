@@ -55,7 +55,7 @@
                   </tbody>
                 </table>
               </div>
-              <div class="col-sm-10">
+              <div class="col-sm-10" style="display:flex">
                 <div *ngFor="let queslist of item.value['productInfo']">
                   <div *ngFor="let ques of queslist|keyvalue">
                     <table class="pull-left text-left table table--compressed table--bordered table--selectable"
@@ -168,6 +168,8 @@
         </p-accordion>
       </div>
     </div>
+    <button (click)="closeDialog()">Cancel</button>
+    <button (click)="saveForm()">Save</button>
   </div>
   <!-- </div> -->
 </p-dialog>

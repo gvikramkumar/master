@@ -24,27 +24,14 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     ngOnInit() {
 
-        console.log("child component");
-
         this.offerInfo = this.offerConstructService.singleMultipleFormInfo;
         this.majorOfferInfo = this.offerInfo.major;
         this.minorOfferInfo = this.offerInfo.minor;
 
         this.tableShowCondition = true;
-
-        this.cities1 = [
-            { label: 'New York', value: { id: 1, name: 'New York', code: 'NY' } },
-            { label: 'Rome', value: { id: 2, name: 'Rome', code: 'RM' } },
-            { label: 'London', value: { id: 3, name: 'London', code: 'LDN' } },
-            { label: 'Istanbul', value: { id: 4, name: 'Istanbul', code: 'IST' } },
-            { label: 'Paris', value: { id: 5, name: 'Paris', code: 'PRS' } }
-        ];
     }
 
-    saveJson() {
-        console.log(this.offerInfo.hardware);
 
-    }
 
     majorSection() {
         this.ismajorSection = true;
@@ -58,10 +45,47 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.offerConstructService.closeAddDetails = false;
     }
 
+    saveForm() {
+        let isUdate: boolean = true;
+        this.majorOfferInfo.forEach((list, index) => {
+            let groupName: any = Object.keys(list);
+            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+                let title: any = Object.keys(element);
+                this.replaceOrUpdatevalue(element[title], isUdate)
+            });
+        });
+        this.offerConstructService.closeAddDetails = false;
+
+    }
 
     closeDialog() {
+        let isUdate: boolean = true;
+        this.majorOfferInfo.forEach((list, index) => {
+            let groupName: any = Object.keys(list);
+            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+                let title: any = Object.keys(element);
+                element[title].listOfferQuestions.forEach(minorProduct => {
+                    minorProduct.currentValue = minorProduct.previousValue;
+                });
+            });
+        });
         this.offerConstructService.closeAddDetails = false;
     }
+
+    replaceOrUpdatevalue(questions, isUdate) {
+
+        if (isUdate) {
+            questions.listOfferQuestions.forEach(list => {
+                list.previousValue = list.currentValue;
+            });
+        } else {
+            questions.listOfferQuestions.forEach(item => {
+                item.currentValue = item.previousValue;
+            });
+        }
+    }
+
+
 
 }
 

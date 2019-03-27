@@ -1153,18 +1153,24 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.expandView = !this.expandView;
   }
 
-  closeDailog() {
+  closeDailog(updateInfo?) {
     this.displayAddDetails = false;
     this.questions = [];
     // this.questionForm.reset();
 
     //reset the form with current value with previous value
-    this.resetFormValue(this.uniqueNodeId, false);
+    if (updateInfo) {
+      this.resetFormValue(this.uniqueNodeId, true);
+    } else {
+      this.resetFormValue(this.uniqueNodeId, false);
+    }
 
   }
 
   onHide() {
     this.offerConstructService.changeForm('reset');
+    console.log("onHide");
+
     this.displayAddDetails = false;
     this.questions = [];
     this.showMandatoryDetails = false;
@@ -1178,7 +1184,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.payLoad = JSON.stringify(this.questionForm.value);
     // this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
     this.currentRowClicked.node.data['itemDetails'] = this.questionsList[this.uniqueNodeId];
-    this.closeDailog();
+    this.closeDailog(true);
   }
 
   replaceSingleFormQuestionWith(popHeadName) {
@@ -1599,19 +1605,45 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   resetFormValue(popHeadName, isUdate: boolean) {
     let title = this.QuestionsNodeInfo[popHeadName].title;
+    let groupName = this.QuestionsNodeInfo[popHeadName].groupName;
+    let uniqueId = this.QuestionsNodeInfo[popHeadName].uniqueId;
     if (this.QuestionsNodeInfo[popHeadName].isMajor) {     //for major group
-      //for major group
-      for (let x in this.offerConstructService.singleMultipleFormInfo['major']) {
-        if (x == this.QuestionsNodeInfo[popHeadName].groupName) {
-          this.offerConstructService.singleMultipleFormInfo.major[x]['productInfo'].forEach(element => {
-            console.log(element[title]);
-            if (element[title].uniqueKey == this.QuestionsNodeInfo[popHeadName].uniqueId) {
-              console.log(element[title].listOfferQuestions);
+      this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
+        if (Object.keys(list) == this.QuestionsNodeInfo[popHeadName].groupName) {
+          this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+            if (Object.keys(element) == title) {
+              if (element[title].uniqueKey == uniqueId) {
+                this.replaceOrUpdatevalue(element[title].listOfferQuestions, isUdate)
+              }
             }
           });
         }
-      }
+      });
+    } else {
+      this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
+        if (Object.keys(list) == this.QuestionsNodeInfo[popHeadName].groupName) {
+          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
+            if (Object.keys(element) == title) {
+              if (element[title].uniqueKey == uniqueId) {
+                this.replaceOrUpdatevalue(element[title].listOfferQuestions, isUdate)
+              }
+            }
+          });
+        }
+      });
     }
+  }
+
+  replaceOrUpdatevalue(listOfferQuestions, isUdate) {
+    listOfferQuestions.forEach(element => {
+      debugger;
+      if (isUdate) {
+        element.previousValue = element.currentValue;
+      } else {
+        element.currentValue = element.previousValue;
+      }
+    });
+
   }
 
   ngOnDestroy() {
