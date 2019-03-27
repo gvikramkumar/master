@@ -70,6 +70,7 @@ import { DesignReviewExitCriteriaComponent } from '@shared/components';
 import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeholder-add.component';
 
 import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
+import { OfferconstructChildComponent } from './child_component/offerconstruct-child/offerconstruct-child.component';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -114,7 +115,8 @@ export function app_init(configService: ConfigurationService) {
     NotificationOfferDetailPopupComponent,
     DesignReviewComponent,
     DesignReviewExitCriteriaComponent,
-    StakeholderAddComponent
+    StakeholderAddComponent,
+    OfferconstructChildComponent
   ],
   imports: [
     NgbModule,

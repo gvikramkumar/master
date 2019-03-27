@@ -47,7 +47,8 @@ export class MmAssesmentComponent implements OnInit {
   groupNames = [];
   activeTabIndex = 0;
   selectedGroupData = [];
-
+ 
+  readOnly = false;
   canClickTab = false;
   canClickNextStep = false;
   backbuttonStatusValid = true;
@@ -68,7 +69,7 @@ export class MmAssesmentComponent implements OnInit {
     private monetizationModelService: MonetizationModelService,
     private offerPhaseService: OfferPhaseService,
     private offerDetailViewService: OfferDetailViewService,
-    private configService: ConfigurationService,
+    private configurationService: ConfigurationService,
     private offersolutioningService: OffersolutioningService,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService,
@@ -94,6 +95,8 @@ export class MmAssesmentComponent implements OnInit {
     if (this.dimensionMode) {
       this.canClickTab = true;
     }
+
+    this.readOnly = this.configurationService.startupData.readOnly;
 
     // Retrieve Offer Details
     // Get Attributes Of Each Group
@@ -273,6 +276,8 @@ export class MmAssesmentComponent implements OnInit {
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
       this.totalApprovalsCount = resStrategyReview.length;
     });
+
+   
 
   }
 
@@ -459,38 +464,40 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
+ if (this.readOnly === false) {
+  this.isChangedAttribute = true;
+  if (attribute.type === 2 && attribute.status === -1) {
+    attribute.type = 0;
+    this.canClickNextStep = false;
+    return;
+  }
+  attribute.status = -attribute.status;
 
-    this.isChangedAttribute = true;
-    if (attribute.type === 2 && attribute.status === -1) {
-      attribute.type = 0;
-      this.canClickNextStep = false;
-      return;
+  if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
+    if (this.groupData[0]['Offer Components'].includes(attribute)) {
+      this.changeSubGroupType(this.groupData[0]);
     }
-    attribute.status = -attribute.status;
 
-    if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
-      if (this.groupData[0]['Offer Components'].includes(attribute)) {
-        this.changeSubGroupType(this.groupData[0]);
-      }
-
-      let next = 0;
-      const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
-      groupKeys.forEach(key => {
-        for (const attr of this.groupData[0][key]) {
-          if (attr.status === 1 || attr.type === 2) {
-            next += 1;
-            break;
-          }
+    let next = 0;
+    const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
+    groupKeys.forEach(key => {
+      for (const attr of this.groupData[0][key]) {
+        if (attr.status === 1 || attr.type === 2) {
+          next += 1;
+          break;
         }
-      });
-      if (next === groupKeys.length) {
-        this.canClickNextStep = true;
-      } else {
-        this.canClickNextStep = false;
       }
+    });
+    if (next === groupKeys.length) {
+      this.canClickNextStep = true;
+    } else {
+      this.canClickNextStep = false;
     }
+  }
 
-    this.selectedGroupData = this.groupData;
+  this.selectedGroupData = this.groupData;
+ }
+    
   }
 
 
@@ -1005,7 +1012,7 @@ export class MmAssesmentComponent implements OnInit {
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
     postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-    postOfferSolutioningData['functionalRole'] = this.configService.startupData.functionalRole[0];
+    postOfferSolutioningData['functionalRole'] = this.configurationService.startupData.functionalRole[0];
 
     // REST API - /setOfferSolutioning
     this.offersolutioningService.postForOfferSolutioning(postOfferSolutioningData).subscribe(result => {
@@ -1029,6 +1036,17 @@ export class MmAssesmentComponent implements OnInit {
         .map(function (mmAttribute) {
           return new MMAttributes(mmAttribute.group, mmAttribute.subgroup, mmAttribute.characteristics);
         });
+
+      // Adding selected characteristics to get stake holders
+      const selectedChars: MMAttributes[] = selectedCharacteristics
+        .filter(mmAttribute => !_.isEmpty(mmAttribute.characteristics))
+        .map(function (mmAttribute) {
+          return new MMAttributes(mmAttribute.group, mmAttribute.subgroup, mmAttribute.characteristics);
+        });
+
+      selectedChars.forEach(offerChars => {
+        selectedMonetizationAttributes.push(offerChars);
+      });
 
       // Retrieve Existing Stake Holders Details From Current Offer 
       this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
@@ -1121,13 +1139,26 @@ export class MmAssesmentComponent implements OnInit {
                   'comment': ''
                 };
 
-                this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
-                  this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
-                  if (JSON.parse(withRouter) === true) {
-                    this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+                // Need to select atleast one subgroup characteristic from offer dimension to enable request approval button.
+                let offerDimensionSelected = true;
+                proceedToStakeholderPostData['additionalCharacteristics'].forEach(element => {
+                  if (element.characteristics.length === 0) {
+                    offerDimensionSelected = false;
                   }
                 });
 
+                if (offerDimensionSelected) {
+                  this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
+                    this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
+                    if (JSON.parse(withRouter) === true) {
+                      this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+                    }
+                  });
+                } else {
+                  if (JSON.parse(withRouter) === true) {
+                    this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+                  }
+                }
               });
 
             }, (err) => {

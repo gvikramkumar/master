@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvironmentService } from '../../../environments/environment.service';
 
@@ -8,7 +8,16 @@ import { EnvironmentService } from '../../../environments/environment.service';
 })
 export class OfferconstructCanvasService {
 
+  private subject = new Subject<any>();
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
+
+  sendMessage(message: any) {
+    this.subject.next({ message });
+  }
+
+  getMessage(): Observable<any> {
+  return this.subject.asObservable();
+  }
 
   getMMInfo(offerId: string): Observable<any> {
     return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_OFFER_DETAILS_URL + offerId);

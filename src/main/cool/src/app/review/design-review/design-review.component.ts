@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import { StrategyReviewService } from '@app/services/strategy-review.service';
 import { ActionsService } from '@app/services/actions.service';
 import { SharedService } from '@app/shared-service.service';
 import { Subscription, forkJoin } from 'rxjs';
@@ -14,6 +13,7 @@ import { UserService, CreateOfferService, DashboardService, HeaderService } from
 import { CreateActionComment } from '@app/models/create-action-comment';
 import { CreateActionApprove } from '@app/models/create-action-approve';
 import { AccessManagementService } from '@app/services/access-management.service';
+import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
 
 @Component({
   selector: 'app-designreview',
@@ -96,7 +96,6 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     private stakeholderfullService: StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute,
-    private strategyReviewService: StrategyReviewService,
     private actionsService: ActionsService,
     private sharedService: SharedService,
     private messageService: MessageService,
@@ -105,6 +104,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     private accessManagementService: AccessManagementService,
     private rightPanelService: RightPanelService,
     private dashboardService: DashboardService,
+    private exitCriteriaValidationService: ExitCriteriaValidationService,
     private createOfferService: CreateOfferService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -133,7 +133,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
         });
       });
 
-    forkJoin([this.strategyReviewService.getStrategyReview(this.caseId),
+    forkJoin([this.exitCriteriaValidationService.getDesignReview(this.caseId),
         this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;
       this.getDesignReview(designReviewData);
@@ -231,7 +231,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
  offerDetailOverView() {}
 
   private getMilestones(milestones) {
-    const result = milestones.ideate;
+    const result = milestones.plan;
     this.milestoneList = [];
     this.lastValueInMilestone = result.slice(-1)[0];
     const mile = this.lastValueInMilestone;
@@ -262,8 +262,8 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   // --------------------------------------------------------------------------------------------------------------------------------
   // Retrieve Design Review Info
   getDesignReviewInfo() {
-    this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
-      this.getDesignReview(resStrategyReview);
+    this.exitCriteriaValidationService.getDesignReview(this.caseId).subscribe((resDesignReview) => {
+      this.getDesignReview(resDesignReview);
     });
   }
 

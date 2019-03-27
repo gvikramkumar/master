@@ -1,11 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ExitCriteriaValidationService } from 'src/app/services/exit-criteria-validation.service';
-import { LocalStorageService } from 'ngx-webstorage';
-import { HeaderService, UserService } from '@shared/services';
+import { HeaderService, UserService, ConfigurationService } from '@shared/services';
 import { MessageService } from '@app/services/message.service';
-import { MonetizationModelService } from '@app/services/monetization-model.service';
 import * as _ from 'lodash';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
 
 @Component({
   selector: 'app-design-review-exit-criteria',
@@ -25,14 +24,15 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
   requestApprovalAvailable: Boolean = true;
   designApprovedOfferId;
   offerData;
+  readOnly = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
+    private configurationService: ConfigurationService,
     private headerService: HeaderService,
-    private localStorage: LocalStorageService,
     private messageService: MessageService,
-    private monetizationModelService: MonetizationModelService,
-    private userService: UserService
+    private userService: UserService,
+    private monetizationModelService: MonetizationModelService
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -41,6 +41,9 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.readOnly = this.configurationService.startupData.readOnly;
+    this.readOnlyMode();
+  
     this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.offerData = data;
       let offerDimensionSelected = true;
@@ -77,10 +80,11 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
         this.requestApprovalAvailable = false;
       }
     });
-    this.designApprovedOfferId = this.localStorage.retrieve('designApprovedOfferId');
-    if (this.designApprovedOfferId === this.currentOfferId) {
-      this.requestApprovalAvailable = false;
-    }
+    this.exitCriteriaValidationService.requestApprovalButtonEnable(this.currentOfferId).subscribe(data => {
+      if (data['designReviewRequestApproval']) {
+        this.requestApprovalAvailable = false;
+      }
+    });
 
     this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
       const canRequestUsers = [];
@@ -140,13 +144,23 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
       error => {
         console.log('error occured');
       });
-    this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
-      this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
+    this.exitCriteriaValidationService.designReviewRequestApproval(this.currentOfferId).subscribe(data => {
+      this.exitCriteriaValidationService.postForDesingReviewNewAction(this.currentOfferId, this.currentCaseId, payload)
+      .subscribe(response => {
         this.messageService.sendMessage('Design Review');
-        this.localStorage.store('designApprovedOfferId', this.currentOfferId);
-        this.requestApprovalAvailable = false;
+        this.exitCriteriaValidationService.requestApprovalButtonDisable(this.currentOfferId).subscribe(resData => {
+          this.requestApprovalAvailable = false;
+        });
       });
     });
+  }
+
+  readOnlyMode(){
+    if (this.readOnly = false) {
+      this.requestApprovalAvailable = true;
+    } else {
+      this.requestApprovalAvailable = false;
+    }
   }
 
 }

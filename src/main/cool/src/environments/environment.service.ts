@@ -117,6 +117,10 @@ export class EnvironmentService {
     REST_API_LEAD_TIME_LAUNCH_DATE: string;
     REST_API_LEAD_TIME_AVERAGE_WEEKS: string;
 
+    // DESIGN REVIEW URL's
+    REST_API_DESIGN_REVIEW_GET_URL: string;
+    REST_API_DESIGN_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL: string;
+
     // -------------------------------------------------------------------------------------------------
 
 
@@ -310,6 +314,11 @@ export class EnvironmentService {
         this.REST_API_GET_ICC_DETAILS_URL = this.baseApiUrl + '/ICC/getICC';
         this.REST_API_LEAD_TIME_LAUNCH_DATE = this.baseApiUrl + '/leadTimeCal/getLTC/';
         this.REST_API_LEAD_TIME_AVERAGE_WEEKS = this.baseApiUrl + '/leadTimeCal/ttm/getLTC/';
+
+        // --------------------------------- DESIGN REVIEW URLs ----------------------------------------------
+
+        this.REST_API_DESIGN_REVIEW_GET_URL = this.baseApiUrl + '/designReview/getInfo/';
+        this.REST_API_DESIGN_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL = this.baseApiUrl + '/action/create/user/designReviewTask/';
 
         // -------------------------------------------------------------------------------------------------
 
