@@ -106,10 +106,11 @@ export class ExitCriteriaValidationComponent implements OnInit {
     });
   }
 readOnlyMode(){
- if (this.readOnly = false) {
-      this.requestApprovalAvailable = true;
-    } else {
+ if (this.readOnly = true) {
       this.requestApprovalAvailable = false;
+    } else {
+      this.requestApprovalAvailable = true;
     }
   }
+
 }

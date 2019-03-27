@@ -258,8 +258,7 @@
     [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}"
     positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
-    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
-      (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
+    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()" (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
         <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
