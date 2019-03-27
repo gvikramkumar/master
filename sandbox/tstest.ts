@@ -5,7 +5,10 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-
+const a: any = new Date();
+const b: any = new Date();
+b.setMinutes(b.getMinutes() - 1);
+console.log((a - b));
 
 
 /*

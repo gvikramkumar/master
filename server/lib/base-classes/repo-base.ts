@@ -82,7 +82,11 @@ export default class RepoBase {
     ])
       .then(arr => {
         const ids = arr.map(obj => obj._id);
-        return this.Model.find({_id: {$in: ids}}).exec();
+        return mgc.db.collection(this.Model.collection.collectionName).find({_id: {$in: ids}}).toArray()
+          .then(vals => {
+            const find = new Date().getTime();
+            return vals;
+          });
       });
   }
 
@@ -97,7 +101,7 @@ export default class RepoBase {
   // get the latest version that's active or inactive, but only the actives from those
   getManyLatestGroupByNameActive(moduleId, filter = {}) {
     return this.getManyLatestGroupByNameActiveInactive(moduleId, filter)
-      .then(docs => docs.filter(doc => doc.status === 'A'));
+      .then((docs: any) => docs.filter(doc => doc.status === 'A'));
   }
 
   getManyLatestGroupByNameInactive(moduleId, _filter = {}) {
