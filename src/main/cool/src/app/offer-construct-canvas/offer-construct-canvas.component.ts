@@ -1574,32 +1574,45 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   deleteQuestionToNode(uniqueId, groupName, isMajor, title) {
+    console.log(this.offerConstructService.singleMultipleFormInfo);
+    let deletedJson: any;
+    let indexCount: number;
     if (isMajor) {     //for major group
       this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
         if (Object.keys(list) == groupName) {
-          this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
-            if (Object.keys(element) == title) {
-              if (element[title].uniqueKey == uniqueId) {
-                this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].splice(index, 1);
-                console.log(this.offerConstructService.singleMultipleFormInfo);
-              }
-            }
+          indexCount = index;
+          deletedJson = this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].filter((element, index) => {
+            return Object.keys(element) != title
           });
+          console.log(deletedJson);
         }
+
       });
+
+      this.offerConstructService.singleMultipleFormInfo.major[indexCount][groupName]['productInfo'] = deletedJson;
+
     } else {
       this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
         if (Object.keys(list) == groupName) {
           this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
-            if (Object.keys(element) == title) {
-              if (element[title].uniqueKey == uniqueId) {
-                this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].splice(index, 1);
-                console.log(this.offerConstructService.singleMultipleFormInfo);
-              }
-            }
+            // if (Object.keys(element) == title) {
+            //   if (element[title].uniqueKey == uniqueId) {
+            //     this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].splice(index, 1);
+            //     console.log(this.offerConstructService.singleMultipleFormInfo);
+            //   }
+            // }
+
+            indexCount = index;
+            deletedJson = this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].filter((element, index) => {
+              return Object.keys(element) != title
+            });
+
           });
         }
       });
+
+      this.offerConstructService.singleMultipleFormInfo.minor[indexCount][groupName]['productInfo'] = deletedJson;
+
     }
   }
 
@@ -1636,7 +1649,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   replaceOrUpdatevalue(listOfferQuestions, isUdate) {
     listOfferQuestions.forEach(element => {
-      debugger;
       if (isUdate) {
         element.previousValue = element.currentValue;
       } else {
