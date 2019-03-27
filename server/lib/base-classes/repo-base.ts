@@ -82,11 +82,9 @@ export default class RepoBase {
     ])
       .then(arr => {
         const ids = arr.map(obj => obj._id);
-        return mgc.db.collection(this.Model.collection.collectionName).find({_id: {$in: ids}}).toArray()
-          .then(vals => {
-            const find = new Date().getTime();
-            return vals;
-          });
+        // Model.find() vs native.find: 565ms vs 88ms, we have 1000 ids to get, so will defer to native in situations like that
+        // return this.Model.find({_id: {$in: ids}});
+        return mgc.db.collection(this.Model.collection.collectionName).find({_id: {$in: ids}}).toArray();
       });
   }
 
