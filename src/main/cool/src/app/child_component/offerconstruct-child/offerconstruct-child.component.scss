@@ -1,0 +1,25 @@
+table {
+  border-collapse: collapse;
+}
+
+.labels tr td {
+  background-color: #017cad;
+  font-weight: bold;
+  color: #fff;
+}
+
+.label tr td label {
+  display: block;
+}
+
+[data-toggle="toggle"] {
+  display: none;
+}
+
+/* separate */
+
+.offer-values {}
+
+.opacity-0 {
+  opacity: 0;
+}
