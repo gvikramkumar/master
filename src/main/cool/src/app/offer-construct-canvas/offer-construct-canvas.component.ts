@@ -120,7 +120,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // you can also set initial formgroup inside if you like
       companies: this._fb.array([])
     })
-
   }
 
 
@@ -1485,6 +1484,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         }
       });
     });
+    this.offerConstructCanvasService.sendMessage(this.offerConstructItems);
   }
 
 

@@ -563,34 +563,43 @@ export class MmAssesmentComponent implements OnInit {
 
 
     this.stakeholders = {};
-    let finalStakeHoldersList = {};
 
+    // Update StakeHolder Array
     this.monetizationModelService.retrieveDefaultStakeHolders(this.derivedMM, this.primaryBE).subscribe(defaultStakeholdersObj => {
 
+      // Retrieve Default Stake Holders Details Related To Current Offer
       const defaultStakeholders = defaultStakeholdersObj as Array<User>;
 
+      // Retrieve Owner Of Current Offer
       this.accessMgmtService.retrieveUserInfo(this.offerOwner).subscribe(ownerInfo => {
 
         // Map Owner To User Format
-        const owner = this.formatDefaultUserAsStakeholder(ownerInfo);
-
-        // Add Owner Details To Final Stakeholder List
-        finalStakeHoldersList['Owner'] = [owner];
-
-        // Add Manually Added Stakeholders To Final List
-        finalStakeHoldersList = this.findManuallyAddedStakeHolders(finalStakeHoldersList);
-
-
-        // Combine Default and Manually Added Stakeholder To Form Final List
-        finalStakeHoldersList = this.compareAndAddNewStakeHolders(defaultStakeholders, finalStakeHoldersList);
-
-        // Complete Final Stake Holder List
-        this.stakeholders = finalStakeHoldersList;
+        this.stakeholders = this.formFinalStakeHolderList(ownerInfo, defaultStakeholders);
 
       });
 
 
     });
+
+  }
+
+  private formFinalStakeHolderList(ownerInfo: any, defaultStakeholders: User[]) {
+
+
+    let finalStakeHoldersList = {};
+    const owner = this.formatDefaultUserAsStakeholder(ownerInfo);
+
+    // Add Owner Details To Final Stakeholder List
+    finalStakeHoldersList['Owner'] = [owner];
+
+    // Add Manually Added Stakeholders To Final List
+    finalStakeHoldersList = this.findManuallyAddedStakeHolders(finalStakeHoldersList);
+
+    // Combine Default and Manually Added Stakeholder To Form Final List
+    finalStakeHoldersList = this.compareAndAddNewStakeHolders(defaultStakeholders, finalStakeHoldersList);
+
+    // Return Final Stake Holder List
+    return finalStakeHoldersList;
 
   }
 
@@ -631,6 +640,33 @@ export class MmAssesmentComponent implements OnInit {
       'stakeholderDefaults': true,
       'name': user['userName']
     };
+  }
+
+  private transformStakeHolderInfo(totalCombinedStakeHolders: any) {
+
+    this.stakeholders = [];
+
+    totalCombinedStakeHolders.forEach(stakeHolder => {
+
+      if (this.stakeholders[stakeHolder['offerRole']] == null) {
+        this.stakeholders[stakeHolder['offerRole']] = [];
+      }
+
+      // Stake Holder Info To Display Acc 2 Functional Role On UI
+      this.stakeholders[stakeHolder['offerRole']].push({
+        userName: stakeHolder['name'],
+        emailId: stakeHolder['_id'] + '@cisco.com',
+        _id: stakeHolder['_id'],
+        userMappings: [{
+          appRoleList: stakeHolder['appRoleList'],
+          businessEntity: stakeHolder['businessEntity'],
+          functionalRole: stakeHolder['functionalRole'],
+          offerRole: stakeHolder['offerRole'],
+        }
+        ],
+        stakeholderDefaults: stakeHolder['stakeholderDefaults']
+      });
+    });
   }
 
   // --------------------------------------------------------------------------------------------
@@ -756,7 +792,6 @@ export class MmAssesmentComponent implements OnInit {
 
         let tempMessage: any = {};
         this.derivedMM = data['mmModel'];
-        this.getStakeHolderList();
 
         if (data['mmMapperStatus'] === 'Aligned') {
           tempMessage = {
@@ -835,6 +870,8 @@ export class MmAssesmentComponent implements OnInit {
 
   proceedToStakeholder(withRouter: string = 'true') {
 
+
+    this.stakeholders = {};
     let selectedCharacteristics = [];
     let additionalCharacteristics = [];
 
@@ -858,47 +895,72 @@ export class MmAssesmentComponent implements OnInit {
       'completionDate': new Date().toDateString(),
     }];
 
+    // Update StakeHolder Array
+    this.monetizationModelService.retrieveDefaultStakeHolders(this.derivedMM, this.primaryBE).subscribe(defaultStakeholdersObj => {
 
-    // Retrieve Existing Stake Holders Details From Current Offer 
-    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
+      // Retrieve Default Stake Holders Details Related To Current Offer
+      const defaultStakeholders = defaultStakeholdersObj as Array<User>;
 
-      const newlyAddedStakeHolders = offerDetailsData['stakeholders'];
-      const existingStakeHolders = this.formatStakeHolderPojoToUpdateOffer_1(this.stakeholders);
-      const totalCombinedStakeHolders = _.uniqBy(existingStakeHolders.concat(newlyAddedStakeHolders), '_id');
+      // Retrieve Owner Of Current Offer
+      this.accessMgmtService.retrieveUserInfo(this.offerOwner).subscribe(ownerInfo => {
 
-      proceedToStakeholderPostData['stakeholders'] = totalCombinedStakeHolders;
-      proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
-      proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
-      proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
-      proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-      proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
+        // Map Owner To User Format
+        this.stakeholders = this.formFinalStakeHolderList(ownerInfo, defaultStakeholders);
 
-      // Update Offer Details
-      this.monetizationModelService.updateOfferDetails(proceedToStakeholderPostData).subscribe(() => {
+        // Retrieve Existing Stake Holders Details From Current Offer 
+        this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
 
-        const proceedPayload = {
-          'taskId': '',
-          'userId': this.offerBuilderdata['offerOwner'],
-          'caseId': this.caseId,
-          'offerId': this.currentOfferId,
-          'taskName': 'Offer MM',
-          'action': '',
-          'comment': ''
-        };
+          const updatedStakeHolders = offerDetailsData['stakeholders'];
+          const existingStakeHolders = this.formatStakeHolderPojoToUpdateOffer_1(this.stakeholders);
+          const totalCombinedStakeHolders = _.compact(_.uniqBy(existingStakeHolders.concat(updatedStakeHolders), '_id'));
 
-        this.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(() => {
-          if (JSON.parse(withRouter) === true) {
-            this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
+          // Transform StakeHolder Info To Display On UI
+          if (!_.isEmpty(totalCombinedStakeHolders)) {
+            this.transformStakeHolderInfo(totalCombinedStakeHolders);
           }
+
+          // Populate Update Offer Details Request
+          proceedToStakeholderPostData['stakeholders'] = totalCombinedStakeHolders;
+          proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
+          proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
+          proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
+          proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
+          proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
+
+          // Update Offer Details
+          this.monetizationModelService.updateOfferDetails(proceedToStakeholderPostData).subscribe(() => {
+
+            const proceedPayload = {
+              'taskId': '',
+              'userId': this.offerBuilderdata['offerOwner'],
+              'caseId': this.caseId,
+              'offerId': this.currentOfferId,
+              'taskName': 'Offer MM',
+              'action': '',
+              'comment': ''
+            };
+
+            this.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(() => {
+              if (JSON.parse(withRouter) === true) {
+                this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
+              }
+            });
+
+          });
+
+
         });
 
       });
 
-
+    }, (err) => {
+      if (JSON.parse(withRouter) === true) {
+        this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
+      }
     });
 
-
   }
+
 
   // --------------------------------------------------------------------------------------------
 
@@ -968,6 +1030,17 @@ export class MmAssesmentComponent implements OnInit {
           return new MMAttributes(mmAttribute.group, mmAttribute.subgroup, mmAttribute.characteristics);
         });
 
+      // Adding selected characteristics to get stake holders
+      const selectedChars: MMAttributes[] = selectedCharacteristics
+        .filter(mmAttribute => !_.isEmpty(mmAttribute.characteristics))
+        .map(function (mmAttribute) {
+          return new MMAttributes(mmAttribute.group, mmAttribute.subgroup, mmAttribute.characteristics);
+        });
+
+      selectedChars.forEach(offerChars => {
+        selectedMonetizationAttributes.push(offerChars);
+      });
+
       // Retrieve Existing Stake Holders Details From Current Offer 
       this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
 
@@ -983,6 +1056,7 @@ export class MmAssesmentComponent implements OnInit {
             'name': user['name']
           };
         });
+
 
         // Retrieve Owner Details  Of From Current Offer 
         this.accessMgmtService.retrieveUserInfo(this.offerOwner).subscribe(ownerInfo => {
@@ -1058,13 +1132,26 @@ export class MmAssesmentComponent implements OnInit {
                   'comment': ''
                 };
 
-                this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
-                  this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
-                  if (JSON.parse(withRouter) === true) {
-                    this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+                // Need to select atleast one subgroup characteristic from offer dimension to enable request approval button.
+                let offerDimensionSelected = true;
+                proceedToStakeholderPostData['additionalCharacteristics'].forEach(element => {
+                  if (element.characteristics.length === 0) {
+                    offerDimensionSelected = false;
                   }
                 });
 
+                if (offerDimensionSelected) {
+                  this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
+                    this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
+                    if (JSON.parse(withRouter) === true) {
+                      this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+                    }
+                  });
+                } else {
+                  if (JSON.parse(withRouter) === true) {
+                    this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
+                  }
+                }
               });
 
             }, (err) => {

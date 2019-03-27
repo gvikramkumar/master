@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
@@ -7,14 +7,15 @@ import { RightPanelService } from '../services/right-panel.service';
 import { LeadTime } from '../right-panel/lead-time';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { MessageService } from '../services/message.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
+import { OfferconstructCanvasService } from '@app/offer-construct-canvas/service/offerconstruct-canvas.service';
 
 @Component({
   selector: 'app-offer-construct',
   templateUrl: './offer-construct.component.html',
   styleUrls: ['./offer-construct.component.css']
 })
-export class OfferConstructComponent implements OnInit {
+export class OfferConstructComponent implements OnInit, OnDestroy {
   offerData: any;
   currentOfferId;
   caseId;
@@ -25,6 +26,7 @@ export class OfferConstructComponent implements OnInit {
   groupNames = [];
   groupData = [];
   message = {};
+  constructDetails = [];
   stakeData = {};
   updateStakeData;
   setFlag;
@@ -35,12 +37,12 @@ export class OfferConstructComponent implements OnInit {
   primaryBE: string;
   displayLeadTime = false;
   noOfWeeksDifference: string;
-
   public data = [];
   firstData: Object;
   stakeHolderInfo: any;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
+  subscription: Subscription;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
@@ -48,11 +50,16 @@ export class OfferConstructComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private offerPhaseService: OfferPhaseService,
     private messageService: MessageService,
-    private offerConstructService: OfferConstructService,
-    private rightPanelService: RightPanelService) {
+    private rightPanelService: RightPanelService,
+    private offerConstructCanvasService: OfferconstructCanvasService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
+    });
+
+    this.subscription = this.offerConstructCanvasService.getMessage().subscribe(constructMessage => {
+       this.constructDetails = constructMessage;
+        console.log(this.constructDetails);
     });
   }
 
@@ -189,19 +196,54 @@ export class OfferConstructComponent implements OnInit {
       'action': '',
       'comment': ''
     };
-    // this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload).subscribe(result => {
-    //   this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload).subscribe(result => {
-    //     if (msg !== 'stay_on_this_page') {
-    //       this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
-    //     }
-    //   });
-    // },(err) => console.log('error', err),
-    // () => this.messageService.sendMessage('Save Offer Construct Details'));
-    forkJoin([this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload), this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload)]).subscribe(result => {
+
+    // Need to drag atlease one major and one minor items from offer component to enable request approval button.
+    const majorItemData = [];
+    const minorItemData = [];
+
+    this.constructDetails['message'].forEach(item => {
+      if (item.data.isMajorLineItem === true) {
+        majorItemData.push(item);
+      }
+    });
+
+    this.constructDetails['message'].forEach(minorItem => {
+      minorItem['children'].forEach(element => {
+        if (element.data.isMajorLineItem === false) {
+          minorItemData.push(element);
+        }
+      });
+    });
+
+    this.constructDetails['message'].forEach(majorItem => {
+      majorItem['children'].forEach(ele => {
+        if (ele.data.isGroupNode) {
+          if (ele.children.length > 0) {
+            ele.children.forEach(element => {
+              minorItemData.push(element);
+            });
+          }
+        }
+      });
+    });
+
+    if (majorItemData.length > 0 && minorItemData.length > 0) {
+      forkJoin([this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload),
+        this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload)]).subscribe(result => {
+        this.messageService.sendMessage('Save Offer Construct Details');
+        if (msg !== 'stay_on_this_page') {
+          this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
+        }
+      });
+    } else {
       this.messageService.sendMessage('Save Offer Construct Details');
       if (msg !== 'stay_on_this_page') {
         this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
       }
-    });
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

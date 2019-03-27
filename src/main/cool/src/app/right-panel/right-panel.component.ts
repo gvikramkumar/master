@@ -63,16 +63,14 @@ export class RightPanelComponent implements OnInit {
   tenthPercentile = '10th Percentile';
   nintyPercentile = '90th Percentile';
 
-  @Input() offerId: string;
+  @Input() offerName: string;
   @Input() stakeData: Object;
   @Input() derivedMM: string;
   @Input() primaryBE: string;
-  @Input() offerBuilderdata: Object;
   @Input() noOfWeeksDifference: string;
   @Input() displayLeadTime: Boolean = false;
 
   @Input() events: Observable<string>;
-  @Input() portfolioFlag: Boolean = false;
   @Output() updateStakeData = new EventEmitter<string>();
 
   editIdeateTargetDate: Boolean = false;
@@ -346,7 +344,7 @@ export class RightPanelComponent implements OnInit {
         }
         this.rightPanelService.updatePhaseTargetDateInDB(updateDBpayLoad).subscribe((data) => {
           console.log(updateDBpayLoad);
-        })
+        });
       },
         (error) => {
         });
@@ -390,7 +388,7 @@ export class RightPanelComponent implements OnInit {
 
         // Compute Expected Launch Date
         this.displayLeadTimeButton = true;
-        const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.offerId).toPromise();
+        const expectedLaunchDateObject = await this.rightPanelService.displayLaunchDate(this.currentOfferId).toPromise();
         this.expectedLaunchDate = moment(expectedLaunchDateObject['expectedLaunchDate']).format('DD-MMM-YYYY');
         const noOfWeeksDifference = expectedLaunchDateObject['noOfWeeksDifference'];
 
@@ -452,7 +450,7 @@ export class RightPanelComponent implements OnInit {
     if (name == null) {
       return '';
     }
-    let names = name.split(' ');
+    const names = name.split(' ');
     let initials = '';
     initials += names[0].charAt(0).toUpperCase();
     if (names.length > 1) {
@@ -483,17 +481,15 @@ export class RightPanelComponent implements OnInit {
   }
 
   showStakeHolderDialog() {
-    if (!_.isEmpty(this.stakeData)) {
       this.addStakeHolder = true;
-    }
   }
 
   closeStakeHolderDialog() {
 
     this.addStakeHolder = false;
-    this.stakeHolderService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetails => {
+    const stakeHolderMapInfo = [];
 
-      const stakeHolderMapInfo = [];
+    this.stakeHolderService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetails => {
 
       offerDetails['stakeholders'].forEach(stakeHolder => {
 
@@ -508,11 +504,13 @@ export class RightPanelComponent implements OnInit {
             emailId: stakeHolder['_id'] + '@cisco.com',
           });
 
-        // Update Stake Holder Info
-        this.stakeData = stakeHolderMapInfo;
-
       });
+
     });
+
+    // Update Stake Holder Info
+    this.stakeData = stakeHolderMapInfo;
+
 
   }
 
