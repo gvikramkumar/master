@@ -57,4 +57,12 @@ export class ExitCriteriaValidationService {
     url += '/' + caseId;
     return this.http.post(url, payload);
   }
+
+  designReviewRequestApproval(offerId) {
+    let url = this.environmentService.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL;
+    url += offerId;
+    url += '/' + 'designReview';
+    return this.http.post(url, null, { withCredentials: true });
+  }
+
 }
