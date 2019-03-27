@@ -344,7 +344,7 @@ export class RightPanelComponent implements OnInit {
         }
         this.rightPanelService.updatePhaseTargetDateInDB(updateDBpayLoad).subscribe((data) => {
           console.log(updateDBpayLoad);
-        })
+        });
       },
         (error) => {
         });
@@ -450,7 +450,7 @@ export class RightPanelComponent implements OnInit {
     if (name == null) {
       return '';
     }
-    let names = name.split(' ');
+    const names = name.split(' ');
     let initials = '';
     initials += names[0].charAt(0).toUpperCase();
     if (names.length > 1) {
@@ -481,9 +481,7 @@ export class RightPanelComponent implements OnInit {
   }
 
   showStakeHolderDialog() {
-    // if (!_.isEmpty(this.stakeData)) {
       this.addStakeHolder = true;
-    // }
   }
 
   closeStakeHolderDialog() {
