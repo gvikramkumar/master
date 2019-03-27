@@ -46,11 +46,8 @@ export class ExitCriteriaValidationComponent implements OnInit {
     }
    
     this.readOnly = this.configurationService.startupData.readOnly;
-    if (this.readOnly = false) {
-      this.requestApprovalAvailable = true;
-    } else {
-      this.requestApprovalAvailable = false;
-    }
+    this.readOnlyMode();
+   
 
     this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
       const canRequestUsers = [];
@@ -108,5 +105,11 @@ export class ExitCriteriaValidationComponent implements OnInit {
       });
     });
   }
-
+readOnlyMode(){
+ if (this.readOnly = false) {
+      this.requestApprovalAvailable = true;
+    } else {
+      this.requestApprovalAvailable = false;
+    }
+  }
 }

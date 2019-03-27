@@ -53,6 +53,7 @@ export class CreateOfferCoolComponent implements OnInit {
   caseId: string;
   idpid;
   iDPId: string;
+  readOnly = false;
   isIdpIdValid = false;
   enableOfferbuild = true;
   disablePrimaryBEList: boolean;
@@ -63,7 +64,7 @@ export class CreateOfferCoolComponent implements OnInit {
   secondaryBUbackup: any;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
-  readOnly = false;
+ 
 
   derivedMM;
   firstData: Object;
@@ -364,14 +365,12 @@ export class CreateOfferCoolComponent implements OnInit {
     this.data = [];
     this.populateStakeHoldersData();
 
-    this.readOnly = this.configurationService.startupData.readOnly;
-
     if (this.offerId === undefined) {
       this.loadPrimaryBe();
       this.loadSecondaryBu();
       this.autoSelectBE();
     }
-
+    this.readOnly = this.configurationService.startupData.readOnly;
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(data => {
       this.firstData = data;
       this.derivedMM = this.firstData['derivedMM'];

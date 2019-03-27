@@ -47,12 +47,12 @@ export class MmAssesmentComponent implements OnInit {
   groupNames = [];
   activeTabIndex = 0;
   selectedGroupData = [];
-
+ 
+  readOnly = false;
   canClickTab = false;
   canClickNextStep = false;
   backbuttonStatusValid = true;
   dimensionMode: Boolean = false;
-  readOnly = false;
   dimensionFirstGroupData: Object;
   dimensionFirstGroupName: string;
 
@@ -87,7 +87,6 @@ export class MmAssesmentComponent implements OnInit {
   // --------------------------------------------------------------------------------------------
 
   ngOnInit() {
-    this.readOnly = this.configurationService.startupData.readOnly;
 
     if (this.router.url.match(/offerDimension/) !== null) {
       this.dimensionMode = true;
@@ -97,7 +96,7 @@ export class MmAssesmentComponent implements OnInit {
       this.canClickTab = true;
     }
 
-    
+    this.readOnly = this.configurationService.startupData.readOnly;
 
     // Retrieve Offer Details
     // Get Attributes Of Each Group
