@@ -252,7 +252,6 @@
       <button [disabled]="readOnly" class="btn btn--primary" (click)="!readOnly && saveOfferConstructChanges()">Save
         Changes</button>
     </div>
-
   </div>
   <p-dialog header="Add Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
     (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
@@ -263,7 +262,7 @@
       (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
-        <div class="col-md-6" *ngFor="let question of questions">
+        <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
           <div [ngSwitch]="question.itemType">
             <div *ngSwitchCase="'Unique Item'">
               <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
@@ -296,7 +295,7 @@
       <div *ngIf="showMandatoryDetails">
         <!-- starts Mandatory Items -->
         <div class="row half-margin-bottom">
-          <div class="col-md-6" *ngFor="let question of questions">
+          <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
             <div [ngSwitch]="question.itemType">
               <div *ngSwitchCase="'Item'">
                 <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
@@ -372,15 +371,23 @@
     </div>
   </p-dialog>
 
+  <!-- view add details -->
+  <div *ngIf='display'>
+    <dynamic-form-multiple></dynamic-form-multiple>
+    <!-- <app-dynamic-form-template [dataObject]='formGroupData.groups' (valueChange)='displayCounter($event)'></app-dynamic-form-template> -->
+  </div>
+
+  <!-- end of view add details -->
+
   <!-- Dialog for view details-->
   <p-dialog header="View Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
     (onHide)="onHide()" [responsive]="true" [(visible)]="displayViewDetails"
     [contentStyle]="{'height': '450px', 'min-width':'700px'}">
     <div class="divider"></div>
     <table class="table">
-      <tr *ngFor="let item of viewDetails | keyvalue">
-        <td>{{item.key}}</td>
-        <td>{{item.value}}</td>
+      <tr *ngFor="let item of viewDetails">
+        <td>{{item.egineAttribue}}</td>
+        <td>{{item.values[0]}}</td>
       </tr>
     </table>
   </p-dialog>
