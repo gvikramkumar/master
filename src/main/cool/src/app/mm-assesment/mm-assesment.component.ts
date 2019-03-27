@@ -1030,6 +1030,17 @@ export class MmAssesmentComponent implements OnInit {
           return new MMAttributes(mmAttribute.group, mmAttribute.subgroup, mmAttribute.characteristics);
         });
 
+      // Adding selected characteristics to get stake holders
+      const selectedChars: MMAttributes[] = selectedCharacteristics
+        .filter(mmAttribute => !_.isEmpty(mmAttribute.characteristics))
+        .map(function (mmAttribute) {
+          return new MMAttributes(mmAttribute.group, mmAttribute.subgroup, mmAttribute.characteristics);
+        });
+
+      selectedChars.forEach(offerChars => {
+        selectedMonetizationAttributes.push(offerChars);
+      });
+
       // Retrieve Existing Stake Holders Details From Current Offer 
       this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
 

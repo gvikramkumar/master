@@ -101,7 +101,7 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
       error => {
         console.log('error occured');
       });
-    this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
+    this.exitCriteriaValidationService.designReviewRequestApproval(this.currentOfferId).subscribe(data => {
       this.exitCriteriaValidationService.postForDesingReviewNewAction(this.currentOfferId, this.currentCaseId, payload)
       .subscribe(response => {
         this.messageService.sendMessage('Design Review');
