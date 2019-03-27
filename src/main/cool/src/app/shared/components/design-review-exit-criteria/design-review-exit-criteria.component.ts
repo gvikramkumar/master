@@ -42,7 +42,6 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
 
   ngOnInit() {
     this.readOnly = this.configurationService.startupData.readOnly;
-    this.readOnlyMode();
   
     this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
       this.offerData = data;
@@ -155,12 +154,5 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
     });
   }
 
-  readOnlyMode(){
-    if (this.readOnly = false) {
-      this.requestApprovalAvailable = true;
-    } else {
-      this.requestApprovalAvailable = false;
-    }
-  }
 
 }

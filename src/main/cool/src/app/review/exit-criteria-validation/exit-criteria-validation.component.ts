@@ -44,11 +44,8 @@ export class ExitCriteriaValidationComponent implements OnInit {
     if (this.approvedOfferId === this.currentOfferId) {
       this.requestApprovalAvailable = false;
     }
-   
-    this.readOnly = this.configurationService.startupData.readOnly;
-    this.readOnlyMode();
-   
 
+    this.readOnly = this.configurationService.startupData.readOnly;
     this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
       const canRequestUsers = [];
       this.exitCriteriaData = data;
@@ -104,13 +101,6 @@ export class ExitCriteriaValidationComponent implements OnInit {
         this.requestApprovalAvailable = false;
       });
     });
-  }
-readOnlyMode(){
- if (this.readOnly = true) {
-      this.requestApprovalAvailable = false;
-    } else {
-      this.requestApprovalAvailable = true;
-    }
   }
 
 }

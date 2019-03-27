@@ -370,6 +370,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.loadSecondaryBu();
       this.autoSelectBE();
     }
+   
     this.readOnly = this.configurationService.startupData.readOnly;
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(data => {
       this.firstData = data;
