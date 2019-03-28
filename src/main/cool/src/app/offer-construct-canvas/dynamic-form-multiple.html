@@ -2,9 +2,18 @@
   class="add-details-dialog" [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
   [contentStyle]="{'min-height':'450px', 'width':'100% !important'}" positionTop='150' positionRight='0'
   positionLeft='0'>
-  <div>
-    <button (click)="majorSection()">Major section</button>
-    <button (click)="minorSection()">Minor section</button>
+  <div class="divider" style="margin-top: -1.5%"></div>
+  <div class="line-items-nav">
+    <ul id="tabsv4" class="tabs tabs--tall">
+      <li id="tabsv4-1" class="tab">
+        <a (click)='majorSection()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true}">Add Major Line
+          Details</a>
+      </li>
+      <li id="tabsv4-2" class="tab">
+        <a (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
+          Details</a>
+      </li>
+    </ul>
   </div>
   <!-- <div class="row"> -->
   <div class="container-fluid" class="view-item-details">
@@ -204,8 +213,13 @@
         </p-accordion>
       </div>
     </div>
-    <button (click)="closeDialog()">Cancel</button>
-    <button (click)="saveForm()">Save</button>
+    <div class="row">
+      <div class="col-md-12 text-right">
+        <button class="display-none"></button>
+        <button [disabled]="readOnly" class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
+        <button [disabled]="readOnly" class="btn btn--primary" (click)='saveForm()'>Save</button>
+      </div>
+    </div>
   </div>
   <!-- </div> -->
 </p-dialog>
