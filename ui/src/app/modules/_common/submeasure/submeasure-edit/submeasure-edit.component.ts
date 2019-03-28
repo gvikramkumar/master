@@ -955,7 +955,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       }
     }
 
-    if (this.isDeptUpload() && this.sm.indicators.deptAcct !== 'A') {
+    if (this.isDeptUpload() && !this.isApprovedOnce() && this.sm.indicators.deptAcct !== 'A') {
       this.errs.push('Must upload Dept/Acct data');
     }
 
