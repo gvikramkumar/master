@@ -10,7 +10,8 @@ import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
-import { HeaderService, UserService, CreateOfferService } from '@shared/services';
+import { HeaderService, UserService, CreateOfferService, ConfigurationService } from '@shared/services';
+
 
 @Component({
   selector: 'app-create-offer-cool',
@@ -52,6 +53,7 @@ export class CreateOfferCoolComponent implements OnInit {
   caseId: string;
   idpid;
   iDPId: string;
+  readOnly = false;
   isIdpIdValid = false;
   enableOfferbuild = true;
   disablePrimaryBEList: boolean;
@@ -62,6 +64,7 @@ export class CreateOfferCoolComponent implements OnInit {
   secondaryBUbackup: any;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
+ 
 
   derivedMM;
   firstData: Object;
@@ -82,6 +85,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
 
   constructor(private createOfferService: CreateOfferService,
+    private configurationService: ConfigurationService,
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -366,7 +370,8 @@ export class CreateOfferCoolComponent implements OnInit {
       this.loadSecondaryBu();
       this.autoSelectBE();
     }
-
+   
+    this.readOnly = this.configurationService.startupData.readOnly;
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(data => {
       this.firstData = data;
       this.derivedMM = this.firstData['derivedMM'];

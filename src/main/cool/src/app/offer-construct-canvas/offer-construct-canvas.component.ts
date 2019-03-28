@@ -27,6 +27,7 @@ import { OfferDetailViewService } from '@app/services/offer-detail-view.service'
 import { filter } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
+import { ConfigurationService } from '@shared/services';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offer-construct-canvas.component.html',
@@ -47,6 +48,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   searchInput: any;
   results;
   initalRowAdded: Boolean = true;
+  readOnly: Boolean = false;
   expandView = true;
   editData: any;
   showButtons: any = false;
@@ -101,9 +103,19 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     'GPL Publication',
     'BILLING MODEL'];
 
+  // changes for view add details
+  public questionList: any;
+  public questionsList: any = {};
+  public QuestionsNodeInfo: any = {};
+  public majorAndMinorInfo: any;
+  public uniqueNodeId: any;
+  public isMajorMinorGroupCreated: boolean = false;
+
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
+    private configurationService: ConfigurationService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder, private offerDetailViewService: OfferDetailViewService) {
+
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -112,6 +124,31 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // you can also set initial formgroup inside if you like
       companies: this._fb.array([])
     })
+  }
+
+
+  // create a json skelaton for major and minor group
+
+  createMajorMinorGroup() {
+
+    //major group
+    this.offerConstructService.singleMultipleFormInfo['major'] = [];
+    this.majorAndMinorInfo['major'].forEach(element => {
+      this.offerConstructService.singleMultipleFormInfo['major'].push({
+        [element]: { 'questionset': [], 'productInfo': [] }
+      });
+    });
+
+    //minor group
+    this.offerConstructService.singleMultipleFormInfo['minor'] = [];
+    this.majorAndMinorInfo['minor'].forEach(element => {
+      this.offerConstructService.singleMultipleFormInfo['minor'].push({
+        [element]: { 'questionset': [], 'productInfo': [] }
+      });
+
+      this.isMajorMinorGroupCreated = true;
+
+    });
   }
 
   /**
@@ -138,11 +175,80 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         this.map1.set(this.draggedItem.productName, this.map1.get(this.draggedItem.productName) + 1);
       }
       obj['title'] = this.draggedItem.productName + ' ' + this.map1.get(this.draggedItem.productName);
+
+      // call getQuestionList() for set question on drag and drop on product
+      obj['uniqueNodeId'] = this.draggedItem.productName + '_' + obj['uniqueKey'];
+      this.getQuestionList(obj);
+
       this.offerConstructItems.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
       this.countableItems.push(this.uniqueId);
       this.updateChildCount();
     }
+  }
+
+  getQuestionList(obj, isQuestionPresent?) {
+    console.log("isQuestionPresent", isQuestionPresent);
+
+    let group_name = obj.productName;
+    let groups = { group_name: group_name }
+    const majorItem = {
+      groupName: group_name
+    };
+    let test = [];
+    test.push(majorItem);
+    let groupsName = { groups: test };
+    this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+      let groupName = obj.uniqueNodeId;
+      let listOfferQuestions;
+      if (isQuestionPresent == undefined) {
+        console.log("isQuestionPresent if block", isQuestionPresent);
+        listOfferQuestions = data.groups[0].listOfferQuestions;
+      } else {
+        console.log("isQuestionPresent else block", isQuestionPresent);
+        listOfferQuestions = obj.itemDetails;
+      }
+      let groupinfo = {
+        uniqueKey: obj.uniqueKey,
+        title: obj.title,
+        uniqueNodeId: obj.uniqueNodeId,
+        childCount: obj.childCount,
+        isMajor: obj.isMajorLineItem,
+        isGroupNode: obj.isGroupNode,
+        groupName: obj.productName,
+        listOfferQuestions: listOfferQuestions
+      }
+
+      let setinfo = { [groupName]: groupinfo };
+
+      // this.offerConstructService.singleMultipleFormInfo['productInfo'].push({ [groupName]: groupinfo });
+
+      console.log(this.offerConstructService.singleMultipleFormInfo);
+
+      this.setProductInfo(obj.productName, obj.isMajorLineItem, setinfo, data.groups[0].listOfferQuestions);
+    });
+  }
+
+  setProductInfo(groupName, groupType, groupInfo, questionSet) {
+
+    if (groupType) {      //for major group
+      this.offerConstructService.singleMultipleFormInfo['major'].forEach((element, index) => {
+        if (Object.keys(element) == groupName) {
+          this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['questionset'] = [];
+          this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['questionset'] = questionSet;
+          this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].push(groupInfo);
+        }
+      });
+    } else {
+      this.offerConstructService.singleMultipleFormInfo['minor'].forEach((element, index) => {
+        if (Object.keys(element) == groupName) {
+          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['questionset'] = [];
+          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['questionset'] = questionSet;
+          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].push(groupInfo);
+        }
+      });
+    }
+    console.log(this.offerConstructService.singleMultipleFormInfo);
   }
 
   submitClickEvent() {
@@ -200,69 +306,70 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   showDialog() {
-    this.majorItemData = [];
-    this.minorItemData = [];
+    // this.majorItemData = [];
+    // this.minorItemData = [];
     this.display = true;
-    let tempObj = [];
-    this.offerConstructItems = [...this.offerConstructItems]
-    tempObj = null;
-    this.formGroupData = [];
-    this.formGroupDataMinorItems = [];
-    tempObj = this.offerConstructItems;
-    tempObj.forEach(item => {
-      if (item.parent == null) {
-        const majorItem = {
-          productName: item.data.productName
-        };
-        if (item.children.length) {
-          let tempChildObj = []
-          tempChildObj = item.children;
-          tempChildObj.forEach(item => {
-            if (!item.data.isGroupNode) {
-              const minorItem = {
-                productName: item.data.productName
-              }
-              this.minorItemData.push(minorItem);
-            }
-          })
-        }
-        this.majorItemData.push(majorItem);
-      }
-    })
-    this.displayAddDetails = true;
-    let groups = [];
-    for (let i = 0; i < this.majorItemData.length; i++) {
-      let groupName = { groupName: this.majorItemData[i].productName }
-      groups.push(groupName);
-    }
-    let minorGroups = []
-    for (let i = 0; i < this.minorItemData.length; i++) {
-      let minorGroupName = { groupName: this.minorItemData[i].productName }
-      minorGroups.push(minorGroupName);
-    }
-    let groupsPayload = groups;
-    let m = this;
-    for (let i = 0; i < minorGroups.length; i++) {
-      let payLoad = { groups: [minorGroups[i]] }
-      m.offerConstructService.addDetails(payLoad).subscribe(
-        (data) => {
-          this.formGroupDataMinorItems.push(data);
-          this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
-        }, err => console.log('error ' + err),
-        () => console.log('Ok ')
-      );
-    }
-    for (let i = 0; i < groups.length; i++) {
-      let payLoadMajor = { groups: [groups[i]] }
-      m.offerConstructService.addDetails(payLoadMajor).subscribe(
-        (data) => {
-          this.formGroupData.push(data);
-          this.mandatoryFields.push(data.groups[0]);
-          this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
-        }, err => console.log('error ' + err),
-        () => console.log('Ok ')
-      );
-    }
+    this.offerConstructService.closeAddDetails = true;
+    // let tempObj = [];
+    // this.offerConstructItems = [...this.offerConstructItems]
+    // tempObj = null;
+    // this.formGroupData = [];
+    // this.formGroupDataMinorItems = [];
+    // tempObj = this.offerConstructItems;
+    // tempObj.forEach(item => {
+    //   if (item.parent == null) {
+    //     const majorItem = {
+    //       productName: item.data.productName
+    //     };
+    //     if (item.children.length) {
+    //       let tempChildObj = []
+    //       tempChildObj = item.children;
+    //       tempChildObj.forEach(item => {
+    //         if (!item.data.isGroupNode) {
+    //           const minorItem = {
+    //             productName: item.data.productName
+    //           }
+    //           this.minorItemData.push(minorItem);
+    //         }
+    //       })
+    //     }
+    //     this.majorItemData.push(majorItem);
+    //   }
+    // })
+    // this.displayAddDetails = true;
+    // let groups = [];
+    // for (let i = 0; i < this.majorItemData.length; i++) {
+    //   let groupName = { groupName: this.majorItemData[i].productName }
+    //   groups.push(groupName);
+    // }
+    // let minorGroups = []
+    // for (let i = 0; i < this.minorItemData.length; i++) {
+    //   let minorGroupName = { groupName: this.minorItemData[i].productName }
+    //   minorGroups.push(minorGroupName);
+    // }
+    // let groupsPayload = groups;
+    // let m = this;
+    // for (let i = 0; i < minorGroups.length; i++) {
+    //   let payLoad = { groups: [minorGroups[i]] }
+    //   m.offerConstructService.addDetails(payLoad).subscribe(
+    //     (data) => {
+    //       this.formGroupDataMinorItems.push(data);
+    //       this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
+    //     }, err => console.log('error ' + err),
+    //     () => console.log('Ok ')
+    //   );
+    // }
+    // for (let i = 0; i < groups.length; i++) {
+    //   let payLoadMajor = { groups: [groups[i]] }
+    //   m.offerConstructService.addDetails(payLoadMajor).subscribe(
+    //     (data) => {
+    //       this.formGroupData.push(data);
+    //       this.mandatoryFields.push(data.groups[0]);
+    //       this.multipleForms = this.offerConstructService.toFormGroup(this.questions);
+    //     }, err => console.log('error ' + err),
+    //     () => console.log('Ok ')
+    //   );
+    // }
   }
 
   /* METHOD: deleteNode
@@ -276,6 +383,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       //Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
       this.offerConstructItems.forEach((element, index) => {
         if (element.data.uniqueKey == rowNode.node.data.uniqueKey) {
+          this.checkNodeUniqueKeyAndPatchQuestion(rowNode, false);
           this.offerConstructItems.splice(index, 1);
         }
       });
@@ -289,6 +397,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           // Loop through of all childrens of matched Parent data from Offer array
           element.children.forEach((childElement, childIndex) => {
             if (childElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+              this.checkNodeUniqueKeyAndPatchQuestion(rowNode, false);
               element.children.splice(childIndex, 1);
               // Removed the child element from Parent Array of Offer construct Array
             }
@@ -303,6 +412,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               // Removed the child element from Parent Array of Offer construct Array
               childElement.children.forEach((innerChildElement, innerChildIndex) => {
                 if (innerChildElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+                  this.checkNodeUniqueKeyAndPatchQuestion(rowNode, false);
                   childElement.children.splice(innerChildIndex, 1);
                   // Removed the child element from Parent Array of Offer construct Array
                 }
@@ -474,6 +584,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           }
           obj['title'] = this.draggedItem.productName + ' ' + this.map1.get(this.draggedItem.productName);
 
+          obj['uniqueNodeId'] = this.draggedItem.productName + '_' + obj['uniqueKey'];
+          this.getQuestionList(obj);
+
           rowNode.node.children.push(this.itemToTreeNode(obj));
         }
       }
@@ -584,14 +697,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     });
 
     // Check if construct details are availbale in the database for the current offer.
-    this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
-      if (offerDetailRes.constructDetails.length > 0) {
-        this.transformDataToTreeNode(offerDetailRes);
-      }
-    }, (err) => {
-      console.log(err);
-    });
-
     this.offerConstructService.space.subscribe((val) => {
       this.offerConstructItems.forEach(item => {
         if (item.data.productName == val[0]) {
@@ -646,6 +751,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // Call offerconstruct request to get Major/Minor Line Items
       this.offerConstructCanvasService.retrieveIccDetails(iccRequest).subscribe((iccResponse) => {
 
+        this.majorAndMinorInfo = iccResponse;
+
         // Extract Major / Minor Category Details
         const minorItems = iccResponse['minor'];
         const majorItems = iccResponse['major'];
@@ -675,7 +782,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         this.itemCategories = majorItemsList.concat(minorItemsList);
 
 
-      });
+      }, (err) => { console.log(err) },
+        () => (this.createMajorMinorGroup(), this.offerDetailView()));
+
     });
 
 
@@ -686,6 +795,22 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       { field: 'productFamily', header: 'PRODUCT FAMILY' },
       { field: 'listPrice', header: 'LIST PRICE(USD)' }
     ];
+
+
+    this.readOnly = this.configurationService.startupData.readOnly;
+
+  }
+
+
+  offerDetailView() {
+    // Check if construct details are availbale in the database for the current offer.
+    this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
+      if (offerDetailRes.constructDetails.length > 0) {
+        this.transformDataToTreeNode(offerDetailRes);
+      }
+    }, (err) => {
+      console.log(err);
+    });
   }
 
   /**
@@ -729,7 +854,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     obj['label'] = node.constructItemName;
     obj['title'] = node.constructItemName;
     obj['isMajorLineItem'] = true;
-    obj['itemDetails'] = this.convertItemDetail(node.itemDetails);
+    // obj['itemDetails'] = this.convertItemDetail(node.itemDetails);
+    obj['itemDetails'] = node.itemDetails;
     obj['childCount'] = 0;
     if (node['eGenieFlag']) {
       obj['eginieItem'] = node['eGenieFlag'];
@@ -739,6 +865,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructItems.push(tempNode);
     this.offerConstructItems = [...this.offerConstructItems];
     this.countableItems.push(node.constructNodeId);
+
+    obj['uniqueNodeId'] = node.constructType + '_' + obj['uniqueKey'];
+    this.getQuestionList(obj, true);
+
     return tempNode;
   }
 
@@ -756,7 +886,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     obj['label'] = childNode.constructItemName;
     obj['title'] = childNode.constructItemName;
     obj['isMajorLineItem'] = false;
-    obj['itemDetails'] = this.convertItemDetail(childNode.itemDetails);
+    // obj['itemDetails'] = this.convertItemDetail(childNode.itemDetails);
+    obj['itemDetails'] = childNode.itemDetails;
     obj['childCount'] = 0;
     if (childNode['eGenieFlag']) {
       obj['eginieItem'] = childNode['eGenieFlag'];
@@ -766,6 +897,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     parentNode.children.push(tempNode);
     this.offerConstructItems = [...this.offerConstructItems];
     this.updateChildCount();
+
+    //set question for respective major or minor section
+    obj['uniqueNodeId'] = childNode.constructType + '_' + obj['uniqueKey'];
+    this.getQuestionList(obj, true);
+
     return tempNode;
   }
 
@@ -800,12 +936,17 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStartRow($event, item) {
-    this.draggedItem = item.node;
-    // this.selected = [...this.selected];
+    if (this.readOnly === false) {
+      this.draggedItem = item.node;
+      // this.selected = [...this.selected];
+    }
+
   }
 
   dragStart(event, item: any) {
-    this.draggedItem = item;
+    if (this.readOnly === false) {
+      this.draggedItem = item;
+    }
   }
 
   // donwnload Zip file
@@ -882,6 +1023,21 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.updateChildCount();
   }
 
+  /**
+   * Convert searched e-gine PIDs to a format equal to other PID's
+   */
+  convertEgineDetails(searchResult): any {
+    let arrayOfEginieItems: any[] = [];
+    for (const key in searchResult) {
+      const obj = Object.create(null);
+      obj['egineAttribue'] = key;
+      obj['values'] = this.convertToArray(searchResult[key]);
+      obj['eGenieFlag'] = true;
+      obj['eGenieExistingPid'] = true;
+      arrayOfEginieItems.push(obj)
+    }
+    return arrayOfEginieItems;
+  }
 
   /**
    * Called when an Major Item is added in to Offer Components Tree table
@@ -902,7 +1058,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       obj['isMajorLineItem'] = true; // Major/Minor
       obj['childCount'] = 0;
       obj['eginieItem'] = true;
-      obj['itemDetails'] = searchResult;
+      // obj['itemDetails'] = searchResult;
+      obj['itemDetails'] = this.convertEgineDetails(searchResult);
       this.offerConstructItems.push(this.itemToTreeNode(obj));
       this.offerConstructItems = [...this.offerConstructItems];
       this.countableItems.push(this.uniqueId);
@@ -931,7 +1088,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       obj['isMajorLineItem'] = false; // Major/Minor
       obj['childCount'] = 0;
       obj['eginieItem'] = true;
-      obj['itemDetails'] = searchResult;
+      // obj['itemDetails'] = searchResult;
+      obj['itemDetails'] = this.convertEgineDetails(searchResult);
       // A minor item cannot be added if altleast one major item doesn't exist
       const lastMajorItem = this.offerConstructItems[this.offerConstructItems.length - 1];
       lastMajorItem.children.push(this.itemToTreeNode(obj));
@@ -1007,26 +1165,56 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.expandView = !this.expandView;
   }
 
-  closeDailog() {
+  closeDailog(updateInfo?) {
     this.displayAddDetails = false;
     this.questions = [];
     // this.questionForm.reset();
+
+    //reset the form with current value with previous value
+    if (updateInfo) {
+      this.resetFormValue(this.uniqueNodeId, true);
+    } else {
+      this.resetFormValue(this.uniqueNodeId, false);
+    }
+
   }
 
   onHide() {
     this.offerConstructService.changeForm('reset');
+    console.log("onHide");
+
     this.displayAddDetails = false;
     this.questions = [];
     this.showMandatoryDetails = false;
     this.closeDailog();
   }
 
-  addItemDetails() {
+  addItemDetails(popHeadName) {
     this.setSearchItem.node.data.searchItemRef = this.itemsList;
     this.showMandatoryDetails = false;
+    this.replaceSingleFormQuestionWith(this.uniqueNodeId)
     this.payLoad = JSON.stringify(this.questionForm.value);
-    this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
-    this.closeDailog();
+    // this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
+    this.currentRowClicked.node.data['itemDetails'] = this.questionsList[this.uniqueNodeId];
+    this.closeDailog(true);
+  }
+
+  replaceSingleFormQuestionWith(popHeadName) {
+    let title = this.QuestionsNodeInfo[popHeadName].title;
+    if (this.QuestionsNodeInfo[popHeadName].isMajor) {     //for major group
+      //for major group
+      for (let x in this.offerConstructService.singleMultipleFormInfo['major']) {
+        if (x == this.QuestionsNodeInfo[popHeadName].groupName) {
+          this.offerConstructService.singleMultipleFormInfo.major[x]['productInfo'].forEach(element => {
+            console.log(element[title]);
+            if (element[title].uniqueKey == this.QuestionsNodeInfo[popHeadName].uniqueId) {
+              this.questionList[this.uniqueNodeId] = element[title].listOfferQuestions;
+            }
+          });
+        }
+      }
+    }
+    console.log(JSON.stringify(this.offerConstructService.singleMultipleFormInfo));
   }
 
   showAddDetailsDailog(currentNode) {
@@ -1055,26 +1243,30 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     }
     this.setTitle = null;
     this.setTitle = currentNode.node.data.title;
+    this.uniqueNodeId = currentNode.node.data.uniqueNodeId;
     const groups: Groups[] = [];
     const group = new Groups(
       this.lineItemName
     );
     groups.push(group);
     const groupsPayload = { groups };
-    this.offerConstructService.addDetails(groupsPayload).subscribe((data) => {
-      this.addDetails = data;
-      this.addDetails.groups[0].listOfferQuestions.forEach(element => {
-        const quesion = element;
-        this.questions.push(quesion);
-      });
-      this.questionForm = this.offerConstructService.toFormGroup(this.questions);
-      if (itemDetails !== undefined) {
-        this.questionForm.patchValue(itemDetails);
-      }
-    },
-      (err) => {
-        console.log(err);
-      });
+    // this.offerConstructService.addDetails(groupsPayload).subscribe((data) => {
+    //   this.addDetails = data;
+    //   this.addDetails.groups[0].listOfferQuestions.forEach(element => {
+    //     const quesion = element;
+    //     this.questions.push(quesion);
+    //   });
+    //   this.questionForm = this.offerConstructService.toFormGroup(this.questions);
+    //   if (itemDetails !== undefined) {
+    //     this.questionForm.patchValue(itemDetails);
+    //   }
+    // },
+    //   (err) => {
+    //     console.log(err);
+    //   });
+
+    this.checkNodeUniqueKeyAndPatchQuestion(currentNode, true);
+
   }
 
   showViewDetailsDailog(currentNode) {
@@ -1133,23 +1325,25 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
         if (_.isEmpty(node.data.itemDetails)) {
 
-          const id = new ItemDetail();
-          id.attributeName = 'Item Name (PID)';
-          id.attributeValue = this.convertToArray(node.data.title);
-          id.eGenieFlag = cd.eGenieFlag;
-          id.eGenieExistingPid = cd.eGenieFlag;
-          cd.itemDetails.push(id);
+          // const id = new ItemDetail();
+          // id.attributeName = 'Item Name (PID)';
+          // id.attributeValue = this.convertToArray(node.data.title);
+          // id.eGenieFlag = cd.eGenieFlag;
+          // id.eGenieExistingPid = cd.eGenieFlag;
+          // cd.itemDetails.push(id);
+          cd.itemDetails = node.data.itemDetails;
 
         } else {
           let id: ItemDetail;
-          for (const key in node.data.itemDetails) {
-            id = new ItemDetail();
-            id.attributeName = key;
-            id.attributeValue = this.convertToArray(node.data.itemDetails[key]);
-            id.eGenieFlag = cd.eGenieFlag;
-            id.eGenieExistingPid = cd.eGenieFlag;
-            cd.itemDetails.push(id);
-          }
+          // for (const key in node.data.itemDetails) {
+          //   id = new ItemDetail();
+          //   id.attributeName = key;
+          //   id.attributeValue = this.convertToArray(node.data.itemDetails[key]);
+          //   id.eGenieFlag = cd.eGenieFlag;
+          //   id.eGenieExistingPid = cd.eGenieFlag;
+          //   cd.itemDetails.push(id);
+          // }
+          cd.itemDetails = node.data.itemDetails;
         }
         cds.constructDetails.push(cd);
       }
@@ -1172,24 +1366,26 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             }
             if (_.isEmpty(child.data.itemDetails)) {
 
-              const id = new ItemDetail();
-              id.attributeName = 'Item Name (PID)';
-              id.attributeValue = this.convertToArray(child.data.title);
-              id.eGenieFlag = cd.eGenieFlag;
-              id.eGenieExistingPid = cd.eGenieFlag;
-              cd.itemDetails.push(id);
+              // const id = new ItemDetail();
+              // id.attributeName = 'Item Name (PID)';
+              // id.attributeValue = this.convertToArray(child.data.title);
+              // id.eGenieFlag = cd.eGenieFlag;
+              // id.eGenieExistingPid = cd.eGenieFlag;
+              // cd.itemDetails.push(id);
+              cd.itemDetails = child.data.itemDetails;
 
             } else {
 
-              let id: ItemDetail;
-              for (const key in child.data.itemDetails) {
-                id = new ItemDetail();
-                id.attributeName = key;
-                id.attributeValue = this.convertToArray(child.data.itemDetails[key]);
-                id.eGenieFlag = cd.eGenieFlag;
-                id.eGenieExistingPid = cd.eGenieFlag;
-                cd.itemDetails.push(id);
-              }
+              // let id: ItemDetail;
+              // for (const key in child.data.itemDetails) {
+              //   id = new ItemDetail();
+              //   id.attributeName = key;
+              //   id.attributeValue = this.convertToArray(child.data.itemDetails[key]);
+              //   id.eGenieFlag = cd.eGenieFlag;
+              //   id.eGenieExistingPid = cd.eGenieFlag;
+              //   cd.itemDetails.push(id);
+              // }
+              cd.itemDetails = child.data.itemDetails;
             }
             cds.constructDetails.push(cd);
           } else {
@@ -1239,6 +1435,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
 
     });
+
+    console.log("cds", cds);
+
 
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
     },
@@ -1301,9 +1500,182 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructCanvasService.sendMessage(this.offerConstructItems);
   }
 
+
+  checkNodeUniqueKeyAndPatchQuestion(rowNode, patchQuestion: boolean) {
+    console.log(rowNode);
+
+    if (rowNode.parent == null) {
+      // If parent not present which means its a Major Item and may contains children.
+      //Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
+      this.offerConstructItems.forEach((element, index) => {
+        if (element.data.uniqueKey == rowNode.node.data.uniqueKey) {
+          // this.offerConstructItems.splice(index, 1);
+          if (patchQuestion) {
+            this.patchQuestionToNode(rowNode.node.data.uniqueKey, rowNode.node.data.productName, rowNode.node.data.isMajorLineItem, rowNode.node.data.uniqueNodeId);
+          } else {
+            this.deleteQuestionToNode(rowNode.node.data.uniqueKey, rowNode.node.data.productName, rowNode.node.data.isMajorLineItem, rowNode.node.data.uniqueNodeId);
+          }
+        }
+      });
+    } else {
+      this.offerConstructItems.forEach((element, index) => {
+        if (element.data.uniqueKey == rowNode.parent.data.uniqueKey) {
+          // Loop through of all childrens of matched Parent data from Offer array
+          element.children.forEach((childElement, childIndex) => {
+            if (childElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+              if (patchQuestion) {
+                this.patchQuestionToNode(rowNode.node.data.uniqueKey, rowNode.node.data.productName, rowNode.node.data.isMajorLineItem, rowNode.node.data.uniqueNodeId);
+              } else {
+                this.deleteQuestionToNode(rowNode.node.data.uniqueKey, rowNode.node.data.productName, rowNode.node.data.isMajorLineItem, rowNode.node.data.uniqueNodeId);
+              }
+            }
+          });
+        }
+      });
+      // Check if parent is a group Node.
+      if (rowNode.parent.data.isGroupNode) {
+        this.offerConstructItems.forEach((element, index) => {
+          element.children.forEach((childElement, childIndex) => {
+            if (childElement.data.uniqueKey == rowNode.parent.data.uniqueKey) {
+              // Removed the child element from Parent Array of Offer construct Array
+              childElement.children.forEach((innerChildElement, innerChildIndex) => {
+                if (innerChildElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+                  if (patchQuestion) {
+                    this.patchQuestionToNode(rowNode.node.data.uniqueKey, rowNode.node.data.productName, rowNode.node.data.isMajorLineItem, rowNode.node.data.uniqueNodeId);
+                  } else {
+                    this.deleteQuestionToNode(rowNode.node.data.uniqueKey, rowNode.node.data.productName, rowNode.node.data.isMajorLineItem, rowNode.node.data.uniqueNodeId);
+                  }
+                }
+              });
+            }
+          });
+        });
+      }
+    }
+  }
+
+  patchQuestionToNode(uniqueId, groupName, isMajor, title) {
+    console.log(this.offerConstructService.singleMultipleFormInfo);
+
+    if (isMajor) {     //for major group
+      this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
+        if (Object.keys(list) == groupName) {
+          this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach(element => {
+            if (Object.keys(element) == title) {
+              if (element[title].uniqueKey == uniqueId) {
+                this.questionsList[this.uniqueNodeId] = element[title].listOfferQuestions;
+                this.QuestionsNodeInfo[this.uniqueNodeId] = { 'uniqueId': uniqueId, 'groupName': groupName, 'isMajor': isMajor, 'title': title, 'uniqueNodeId': this.uniqueNodeId };
+              }
+            }
+          });
+        }
+      });
+    } else {
+      this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
+        if (Object.keys(list) == groupName) {
+          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach(element => {
+            if (Object.keys(element) == title) {
+              if (element[title].uniqueKey == uniqueId) {
+                this.questionsList[this.uniqueNodeId] = element[title].listOfferQuestions;
+                this.QuestionsNodeInfo[this.uniqueNodeId] = { 'uniqueId': uniqueId, 'groupName': groupName, 'isMajor': isMajor, 'title': title, 'uniqueNodeId': this.uniqueNodeId };
+              }
+            }
+          });
+        }
+      });
+    }
+  }
+
+  deleteQuestionToNode(uniqueId, groupName, isMajor, title) {
+    console.log(this.offerConstructService.singleMultipleFormInfo);
+    let deletedJson: any;
+    let indexCount: number;
+    if (isMajor) {     //for major group
+      this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
+        if (Object.keys(list) == groupName) {
+          indexCount = index;
+          deletedJson = this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].filter((element, index) => {
+            return Object.keys(element) != title
+          });
+          console.log(deletedJson);
+        }
+
+      });
+
+      this.offerConstructService.singleMultipleFormInfo.major[indexCount][groupName]['productInfo'] = deletedJson;
+
+    } else {
+      this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
+        if (Object.keys(list) == groupName) {
+          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
+            // if (Object.keys(element) == title) {
+            //   if (element[title].uniqueKey == uniqueId) {
+            //     this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].splice(index, 1);
+            //     console.log(this.offerConstructService.singleMultipleFormInfo);
+            //   }
+            // }
+
+            indexCount = index;
+            deletedJson = this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].filter((element, index) => {
+              return Object.keys(element) != title
+            });
+
+          });
+        }
+      });
+
+      this.offerConstructService.singleMultipleFormInfo.minor[indexCount][groupName]['productInfo'] = deletedJson;
+
+    }
+  }
+
+  resetFormValue(popHeadName, isUdate: boolean) {
+    let title = this.QuestionsNodeInfo[popHeadName].title;
+    let groupName = this.QuestionsNodeInfo[popHeadName].groupName;
+    let uniqueId = this.QuestionsNodeInfo[popHeadName].uniqueId;
+    if (this.QuestionsNodeInfo[popHeadName].isMajor) {     //for major group
+      this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
+        if (Object.keys(list) == this.QuestionsNodeInfo[popHeadName].groupName) {
+          this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+            if (Object.keys(element) == title) {
+              if (element[title].uniqueKey == uniqueId) {
+                this.replaceOrUpdatevalue(element[title].listOfferQuestions, isUdate)
+              }
+            }
+          });
+        }
+      });
+    } else {
+      this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
+        if (Object.keys(list) == this.QuestionsNodeInfo[popHeadName].groupName) {
+          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
+            if (Object.keys(element) == title) {
+              if (element[title].uniqueKey == uniqueId) {
+                this.replaceOrUpdatevalue(element[title].listOfferQuestions, isUdate)
+              }
+            }
+          });
+        }
+      });
+    }
+  }
+
+  replaceOrUpdatevalue(listOfferQuestions, isUdate) {
+    listOfferQuestions.forEach(element => {
+      if (isUdate) {
+        element.previousValue = element.currentValue;
+      } else {
+        element.currentValue = element.previousValue;
+      }
+    });
+
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
+
 
 }
 
