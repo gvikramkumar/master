@@ -1014,6 +1014,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return this.sm.indicators.groupFlag === 'Y';
   }
 
+  isApprovedOnce() {
+    return this.sm.approvedOnce === 'Y';
+  }
   changeFile(fileInput) {
     this.deptUploadFilename = fileInput.files[0] && fileInput.files[0].name;
   }
