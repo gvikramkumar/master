@@ -7,7 +7,7 @@ import { OfferConstructService } from '@app/services/offer-construct.service';
 @Component({
     selector: 'dynamic-form-multiple',
     templateUrl: './dynamic-form-multiple.html',
-    styleUrls: ['./offer-construct-canvas.component.css'],
+    styleUrls: ['./dynamic-form-multiple.css']
 })
 export class DynamicFormMultipleComponent implements OnInit {
     public offerInfo: any;
@@ -16,6 +16,8 @@ export class DynamicFormMultipleComponent implements OnInit {
     public headerArray: any;
     public tableShowCondition: boolean = false;
     public ismajorSection: boolean = true;
+    public minorLineItemsActive: Boolean = false;
+    public majorLineItemsActive: Boolean = false;
 
     cities1: any;
 
@@ -35,10 +37,14 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     majorSection() {
         this.ismajorSection = true;
+        this.minorLineItemsActive = false;
+        this.majorLineItemsActive = true;
     }
 
     minorSection() {
         this.ismajorSection = false;
+        this.majorLineItemsActive = false;
+        this.minorLineItemsActive = true;
     }
 
     onHide() {
