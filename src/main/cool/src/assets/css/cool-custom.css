@@ -640,7 +640,7 @@ th.ui-sortable-column.ng-star-inserted {
   border-right: none;
 }
 .cool.cui .view-item-details .detail-labels tbody {
-  max-width: 280px;
+  max-width: 100%;
   display: block;
 }
 .cool.cui .view-item-details tbody tr {
@@ -651,7 +651,9 @@ th.ui-sortable-column.ng-star-inserted {
   width: 100%;
   display: block;
   overflow: visible;
-  padding: 0;
+}
+.cool.cui .view-item-details .section-label th.section-label {
+  width: 100%!important;
 }
 
 .cool.cui .view-item-details .form-group .form-group__text input,
