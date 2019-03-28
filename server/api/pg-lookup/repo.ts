@@ -41,6 +41,16 @@ export default class PgLookupRepo {
   }
 */
 
+  getDollarUploadFiscalMonthsFromSubmeasureKeys(req) {
+    return this.getListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
+      `sub_measure_key in ( ${req.body.submeasureKeys} )`);
+  }
+
+  getMappingUploadFiscalMonthsFromSubmeasureKeys(req) {
+    return this.getListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
+      `sub_measure_key in ( ${req.body.submeasureKeys} )`);
+  }
+
   getManualMixHwSwBySubmeasureKey(req) {
     if (!req.dfa.module) {
       throw new ApiError('getManualMixHwSwBySubmeasureKey: No module');
@@ -522,7 +532,7 @@ export default class PgLookupRepo {
                    and ds.module_id=1
                    and sm.measure_id=3                                   
                     and sm.source_system_id <> 4                                         
-                    and sm.sub_measure_key = ${Number(req.query.submeasureKey)}
+                    and sm.sub_measure_key = ${Number(req.body.submeasureKey)}
 --                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
 --                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
             ) a
@@ -583,7 +593,7 @@ export default class PgLookupRepo {
                     and sm.source_system_adj_type_id=adj.adj_type_id                                         
                     and sm.measure_id=1                                    
                     and sm.source_system_id <> 4                                         
-                            and sm.sub_measure_key = ${Number(req.query.submeasureKey)}
+                            and sm.sub_measure_key = ${Number(req.body.submeasureKey)}
         --                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
         --                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
             ) a
