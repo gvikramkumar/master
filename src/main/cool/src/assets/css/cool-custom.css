@@ -596,6 +596,28 @@ th.ui-sortable-column.ng-star-inserted {
   color: white
 }
 
+/* PrimeNG customized Multi Select Form Elements */
+.cool.cui .ui-multiselect {
+  display: block;
+}
+.cool.cui .ui-multiselect-filter-container .ui-inputtext {
+  padding: .75em 1.25em;
+}
+.cool.cui .ui-inputtext {
+  padding: .75em;
+}
+.cool.cui .ui-multiselect .ui-multiselect-label {
+  padding: .75em;
+}
+.cool.cui .ui-multiselect:not(.ui-state-disabled):hover, .cool.cui .ui-dropdown:not(.ui-state-disabled):hover {
+  border-color: #00bceb;
+  background-color: #eeeeee;
+  color: #212121;
+}
+.cool.cui .ui-multiselect-header .ui-multiselect-filter-container .ui-multiselect-filter-icon {
+  top: .85em;
+}
+
 /* Estimated Lead Time Ribbon */
 .cool.cui .ribbon:hover button {
   color: #000;
