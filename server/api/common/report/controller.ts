@@ -71,7 +71,7 @@ export default class ReportController extends ControllerBase {
   getExcelReport(req, res, next) {
     this.verifyProperties(req.body, ['excelFilename']);
     const moduleId = req.body.moduleId;
-    let excelFilename = req.body.excelFilename;
+    const excelFilename = req.body.excelFilename;
     const body = _.omit(req.body, ['moduleId', 'excelFilename']);
     let excelSheetname;
     let excelHeaders;

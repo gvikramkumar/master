@@ -32,7 +32,7 @@ export class PgLookupController {
 
   getRecordset(req, res, next) {
     this.verifyProperties(req.body, ['table', 'column']);
-    this.verifyNoProperties(req.body, ['where']); // this is a security risk, have to send in null or undefined for this
+    // this.verifyNoProperties(req.body, ['where']); // this is a security risk, have to send in null or undefined for this
     this.repo.getRecordset(req.body.table, req.body.column, req.body.where, req.body.isNumber, req.body.upper)
       .then(list => res.json(list))
       .catch(next);
@@ -40,7 +40,7 @@ export class PgLookupController {
 
   getListFromColumn(req, res, next) {
     this.verifyProperties(req.body, ['table', 'column']);
-    this.verifyNoProperties(req.body, ['where']); // this is a security risk, have to send in null or undefined for this
+    // this.verifyNoProperties(req.body, ['where']); // this is a security risk, have to send in null or undefined for this
     this.repo.getListFromColumn(req.body.table, req.body.column, req.body.where, req.body.isNumber, req.body.upper)
       .then(list => res.json(list))
       .catch(next);
@@ -48,7 +48,7 @@ export class PgLookupController {
 
   getSortedListFromColumn(req, res, next) {
     this.verifyProperties(req.body, ['table', 'column']);
-    this.verifyNoProperties(req.body, ['where']); // this is a security risk, have to send in null or undefined for this
+    // this.verifyNoProperties(req.body, ['where']); // this is a security risk, have to send in null or undefined for this
     this.repo.getSortedListFromColumn(req.body.table, req.body.column, req.body.where, req.body.isNumber)
       .then(list => res.json(list))
       .catch(next);
@@ -56,7 +56,7 @@ export class PgLookupController {
 
   getSortedUpperListFromColumn(req, res, next) {
     this.verifyProperties(req.body, ['table', 'column']);
-    this.verifyNoProperties(req.body, ['where']); // this is a security risk, have to send in null or undefined for this
+    // this.verifyNoProperties(req.body, ['where']); // this is a security risk, have to send in null or undefined for this
     this.repo.getSortedUpperListFromColumn(req.body.table, req.body.column, req.body.where)
       .then(list => res.json(list))
       .catch(next);
