@@ -625,6 +625,10 @@ th.ui-sortable-column.ng-star-inserted {
 }
 
 /* Add All Offer Details CUstom Data Table  */
+.cool.cui .section-label {
+  color:white;
+  background:#017CAD;
+}
 .cool.cui .view-item-details .form-group.input--compressed .form-group__text.select:after {
   top: initial;
 }
@@ -632,7 +636,10 @@ th.ui-sortable-column.ng-star-inserted {
   width: 100%;
   display: block;
 }
-.cool.cui .view-item-details .detail-lables tbody {
+.cool.cui .view-item-details .detail-labels {
+  border-right: none;
+}
+.cool.cui .view-item-details .detail-labels tbody {
   max-width: 280px;
   display: block;
 }
