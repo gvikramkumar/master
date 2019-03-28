@@ -108,6 +108,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public majorAndMinorInfo: any;
   public uniqueNodeId: any;
   public isMajorMinorGroupCreated: boolean = false;
+  public isDisabledView: boolean = true;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
@@ -244,6 +245,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         }
       });
     }
+    this.isDisabledView = false;
     console.log(this.offerConstructService.singleMultipleFormInfo);
   }
 
@@ -933,6 +935,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStart(event, item: any) {
+    this.isDisabledView = true;
     this.draggedItem = item;
   }
 
@@ -958,12 +961,17 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     if (this.selected.length) {
 
       this.selected.forEach((selectedItem) => {
+        debugger;
         if (selectedItem.parent == null) {
           // If parent not present which means its a Major Item and may contains children.
           // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
           this.offerConstructItems.forEach((element, index) => {
             this.removeEginieMajorItemFromListofAlreadyAddedItems(element.data.title);
             if (element.data.uniqueKey == selectedItem.data.uniqueKey) {
+
+              //remove list form global variable
+              this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.productName, selectedItem.data.isMajorLineItem, selectedItem.data.uniqueNodeId);
+
               this.offerConstructItems.splice(index, 1);
             }
           });
@@ -977,6 +985,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               // Loop through of all childrens of matched Parent data from Offer array
               element.children.forEach((childElement, childIndex) => {
                 if (childElement.data.uniqueKey == selectedItem.data.uniqueKey) {
+                  //remove list form global variable
+                  this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.productName, selectedItem.data.isMajorLineItem, selectedItem.data.uniqueNodeId);
                   element.children.splice(childIndex, 1);
                   // Removed the child element from Parent Array of Offer construct Array
                 }
@@ -991,6 +1001,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                     // Removed the child element from Parent Array of Offer construct Array
                     childElement.children.forEach((innerChildElement, innerChildIndex) => {
                       if (innerChildElement.data.uniqueKey == selectedItem.data.uniqueKey) {
+                        //remove list form global variable
+                        this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.productName, selectedItem.data.isMajorLineItem, selectedItem.data.uniqueNodeId);
                         childElement.children.splice(innerChildIndex, 1);
                         // Removed the child element from Parent Array of Offer construct Array
                       }
@@ -1595,13 +1607,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
         if (Object.keys(list) == groupName) {
           this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
-            // if (Object.keys(element) == title) {
-            //   if (element[title].uniqueKey == uniqueId) {
-            //     this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].splice(index, 1);
-            //     console.log(this.offerConstructService.singleMultipleFormInfo);
-            //   }
-            // }
-
             indexCount = index;
             deletedJson = this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].filter((element, index) => {
               return Object.keys(element) != title
