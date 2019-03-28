@@ -596,6 +596,104 @@ th.ui-sortable-column.ng-star-inserted {
   color: white
 }
 
+/* PrimeNG customized Multi Select Form Elements */
+.cool.cui .ui-multiselect {
+  display: block;
+}
+.cool.cui .ui-multiselect-filter-container .ui-inputtext {
+  padding: .75em 1.25em;
+}
+.cool.cui .ui-inputtext {
+  padding: .75em;
+}
+.cool.cui .ui-multiselect .ui-multiselect-label {
+  padding: .75em;
+}
+.cool.cui .ui-multiselect:not(.ui-state-disabled):hover, .cool.cui .ui-dropdown:not(.ui-state-disabled):hover {
+  border-color: #00bceb;
+  background-color: #eeeeee;
+  color: #212121;
+}
+.cool.cui .ui-multiselect-header .ui-multiselect-filter-container .ui-multiselect-filter-icon {
+  top: .85em;
+}
+.cool.cui  .ui-multiselect-trigger.ui-state-default.ui-corner-right {
+  border-left: none;
+}
+.cool.cui .overflow-visible {
+  overflow: visible;
+}
+
+/* Add All Offer Details CUstom Data Table  */
+.cool.cui .view-item-details .form-group.input--compressed .form-group__text.select:after {
+  top: initial;
+}
+.cool.cui .view-item-details tbody {
+  width: 100%;
+  display: block;
+}
+.cool.cui .view-item-details .detail-lables tbody {
+  max-width: 280px;
+  display: block;
+}
+.cool.cui .view-item-details tbody tr {
+  width: 100%;
+  display: block;
+}
+.cool.cui .view-item-details tbody td {
+  width: 100%;
+  display: block;
+  overflow: visible;
+  padding: 0;
+}
+
+.cool.cui .view-item-details .form-group .form-group__text input,
+.cool.cui .view-item-details .form-group .form-group__text select,
+.cool.cui .view-item-details .form-group .form-group__text textarea,
+.cool.cui .view-item-details .form-group .form-group__text.select input,
+.cool.cui .view-item-details .form-group .form-group__text.select select,
+.cool.cui .view-item-details .form-group .form-group__text.select textarea {
+    border: 1px solid transparent;
+    border-radius: 2px;
+    flex: 1;
+    flex-shrink: 0;
+    order: 3;
+    background: transparent;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.cool.cui .view-item-details .form-group .form-group__text input:hover,
+.cool.cui .view-item-details .form-group .form-group__text select:hover,
+.cool.cui .view-item-details .form-group .form-group__text textarea:hover,
+.cool.cui .view-item-details .form-group .form-group__text.select input:hover,
+.cool.cui .view-item-details .form-group .form-group__text.select select:hover,
+.cool.cui .view-item-details .form-group .form-group__text.select textarea:hover {
+    border: 1px solid #00bceb;
+    border-radius: 2px;
+    flex: 1;
+    flex-shrink: 0;
+    order: 3;
+    background: white;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.cool.cui .view-item-details p-multiselect .ui-state-default {
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: #555555;
+}
+.cool.cui .view-item-details p-multiselect .ui-state-default:hover {
+  border: 1px solid #d6d6d6;
+  background-color: #ffffff;
+  color: #555555;
+}
+
+.cool.cui .view-item-details .ui-multiselect .ui-multiselect-label {
+  padding: .5em;
+}
+
 /* Estimated Lead Time Ribbon */
 .cool.cui .ribbon:hover button {
   color: #000;
