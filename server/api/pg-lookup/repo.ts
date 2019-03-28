@@ -380,7 +380,7 @@ export default class PgLookupRepo {
                   WHERE fiscal_year_month_int = ${dfa.fiscalMonths.prof}
                   order by fiscal_year_month_int desc) as fm 
               limit 3)
-            and drv.sales_territory_code = sh.sales_territory_name
+            and drv.sales_territory_code = sh.sales_territory_name_code
             GROUP BY DRIVER_TYPE, sh.l1_sales_territory_name_code, sh.l1_sales_territory_descr,
             sh.l2_sales_territory_name_code, sh.l2_sales_territory_descr ,
             sh.l3_sales_territory_name_code, sh.l3_sales_territory_descr
