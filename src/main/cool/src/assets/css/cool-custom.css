@@ -617,6 +617,69 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .ui-multiselect-header .ui-multiselect-filter-container .ui-multiselect-filter-icon {
   top: .85em;
 }
+.cool.cui  .ui-multiselect-trigger.ui-state-default.ui-corner-right {
+  border-left: none;
+}
+.cool.cui .overflow-visible {
+  overflow: visible;
+}
+
+/* Add All Offer Details CUstom Data Table  */
+.cool.cui .view-item-details .form-group.input--compressed .form-group__text.select:after {
+  top: initial;
+}
+.cool.cui .view-item-details tbody {
+  width: 100%;
+  display: block;
+}
+.cool.cui .view-item-details .detail-lables tbody {
+  max-width: 280px;
+  display: block;
+}
+.cool.cui .view-item-details tbody tr {
+  width: 100%;
+  display: block;
+}
+.cool.cui .view-item-details tbody td {
+  width: 100%;
+  display: block;
+  overflow: visible;
+  padding: 0;
+}
+
+.cool.cui .view-item-details .form-group .form-group__text input,
+.cool.cui .view-item-details .form-group .form-group__text select,
+.cool.cui .view-item-details .form-group .form-group__text textarea,
+.cool.cui .view-item-details .form-group .form-group__text.select input,
+.cool.cui .view-item-details .form-group .form-group__text.select select,
+.cool.cui .view-item-details .form-group .form-group__text.select textarea {
+    border: 1px solid transparent;
+    border-radius: 2px;
+    flex: 1;
+    flex-shrink: 0;
+    order: 3;
+    background: transparent;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.cool.cui .view-item-details .form-group .form-group__text input:hover,
+.cool.cui .view-item-details .form-group .form-group__text select:hover,
+.cool.cui .view-item-details .form-group .form-group__text textarea:hover,
+.cool.cui .view-item-details .form-group .form-group__text.select input:hover,
+.cool.cui .view-item-details .form-group .form-group__text.select select:hover,
+.cool.cui .view-item-details .form-group .form-group__text.select textarea:hover {
+    border: 1px solid #00bceb;
+    border-radius: 2px;
+    flex: 1;
+    flex-shrink: 0;
+    order: 3;
+    background: white;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+
 
 /* Estimated Lead Time Ribbon */
 .cool.cui .ribbon:hover button {
