@@ -109,6 +109,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public uniqueNodeId: any;
   public isMajorMinorGroupCreated: boolean = false;
   public isDisabledView: boolean = true;
+  readOnly: boolean = false;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
@@ -947,8 +948,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStart(event, item: any) {
+    if (this.readOnly === false) {
+      this.draggedItem = item;
+    }
     this.isDisabledView = true;
-    this.draggedItem = item;
   }
 
   // donwnload Zip file
