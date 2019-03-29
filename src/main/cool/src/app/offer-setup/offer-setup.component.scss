@@ -8,6 +8,10 @@
   color: #fff;
   background-color: #fbab18;
 }
+.osw-module--btns button.btn.btn--small.btn--warning:hover {
+  color: #fff;
+  background-color: #ffcc00;
+}
 .osw-module--btns .btn.btn--small > span[class^="icon-"] {
   background: white;
   border-radius: 20px;
@@ -21,6 +25,9 @@
   color: #017CAD;
 }
 .osw-module--btns .btn.btn--small.btn--default > span[class^="icon-"] {
+  color: #58585b;
+}
+.osw-module--btns .btn.btn--small.btn--gray-ghost > span[class^="icon-"] {
   color: #58585b;
 }
 .osw-module--btns .btn.btn--small.btn--warning > span[class^="icon-"] {
@@ -42,7 +49,7 @@
   position: absolute;
   display: block;
   width: 50%;
-  height: 295px;
+  height: 280px;
   z-index: 0;
   left: 15%;
   top: 15%;
