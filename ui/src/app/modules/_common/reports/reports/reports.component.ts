@@ -61,7 +61,6 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   submeasuresInData: Submeasure[] = [];
   submeasures: Submeasure[] = [];
   disableDownload = true;
-  handleHasMultiSmAndFiscalMonth;
 
   reports: any[] = [
     {
@@ -151,7 +150,6 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   ngOnInit() {
-    this.handleHasMultiSmAndFiscalMonth = _.debounce(this._handleHasMultiSmAndFiscalMonth, 1000);
     Promise.all([
       this.measureService.getManyActive().toPromise(),
       this.submeasureService.getManyLatestGroupByNameActive().toPromise()
@@ -210,13 +208,13 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'valid-slpf-driver':
       case 'dollar-upload':
-        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', null, true);
+        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', true);
         break;
       case 'mapping-upload':
-        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', null, true);
+        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', true);
         break;
       case 'dept-upload':
-        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', null, true);
+        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true);
         break;
     }
     if (obsFiscalMonth) {
@@ -242,7 +240,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     if (obsMeasure) {
       obsMeasure.subscribe(smKeys => {
         this.submeasuresInData = this.submeasuresAll.filter(sm => _.includes(smKeys, sm.submeasureKey));
-        this.measures = this.measuresAll.filter(m => _.includes(this.submeasuresInData.map(sm => sm.measureId), m.measureId));
+        this.measures = this.measuresAll.filter(m => _.includes(_.uniq(this.submeasuresInData.map(sm => sm.measureId)), m.measureId));
       });
     }
   }
@@ -291,17 +289,15 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     }
   }
 
-  _handleHasMultiSmAndFiscalMonth() {
+  handleHasMultiSmAndFiscalMonth() {
     let obs;
     switch (this.report.type) {
       case 'dollar-upload':
       case 'valid-slpf-driver':
-        obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
-          `sub_measure_key in ( ${this.submeasureKeys} )`);
+        obs = this.pgLookupService.callRepoMethod('getDollarUploadFiscalMonthsFromSubmeasureKeys', {submeasureKeys: this.submeasureKeys});
         break;
       case 'mapping-upload':
-        obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
-          `sub_measure_key in ( ${this.submeasureKeys} )`);
+        obs = this.pgLookupService.callRepoMethod('getMappingUploadFiscalMonthsFromSubmeasureKeys', {submeasureKeys: this.submeasureKeys});
         break;
     }
     obs.subscribe(fiscalMonths => {
@@ -315,10 +311,14 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   submeasureMultiChange() {
-    if (!this.submeasureKeys.length) { // if they clear the values, disable the
+    if (this.report.hasMultiSubmeasureOnly && !this.submeasureKeys.length) { // if they clear the values, disable the
       this.disableDownload = true;
     } else if (this.report.hasMultiSubmeasureOnly && this.submeasureKeys.length) {
       this.disableDownload = false;
+    } else if (this.report.hasMultiSmAndFiscalMonth && !this.submeasureKeys.length) {
+      this.disableDownload = true;
+      this.fiscalMonth = undefined;
+      this.fiscalMonths = [];
     } else if (this.report.hasMultiSmAndFiscalMonth && this.submeasureKeys.length) {
       this.disableDownload = true;
       this.fiscalMonth = undefined;

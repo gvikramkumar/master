@@ -10,7 +10,7 @@ db.dfa_submeasure.insertMany([
     desc: "2 Tier Adjustment",
     sourceId: NumberInt(4),
     measureId: NumberInt(1), // for manual upload
-    startFiscalMonth: NumberInt(201810),
+    startFiscalMonth: NumberInt(201905),
     endFiscalMonth: NumberInt(204012),
     processingTime: "Monthly",
     pnlnodeGrouping: "Indirect Adjustments",
@@ -56,7 +56,7 @@ db.dfa_submeasure.insertMany([
     desc: "2 Tier Adjustment2",
     sourceId: NumberInt(4),
     measureId: NumberInt(2), // for manual upload
-    startFiscalMonth: NumberInt(201810),
+    startFiscalMonth: NumberInt(201905),
     endFiscalMonth: NumberInt(204012),
     processingTime: "Daily",
     pnlnodeGrouping: "Indirect Adjustments",

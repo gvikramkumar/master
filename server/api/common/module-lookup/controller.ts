@@ -21,7 +21,7 @@ export default class ModuleLookupController {
 
   // moduleId/keys >> {key, value} each key is a property in the object, no prop if no value (json.stringify)
   getManyValuesOneModule(req, res, next) {
-    this.repo.getManyValuesOneModule(req.query.moduleId, req.query.keys.split(','))
+    this.repo.getManyValuesOneModule(Number(req.query.moduleId), req.query.keys.split(','))
       .then(obj => res.json(obj))
       .catch(next);
   }
@@ -38,7 +38,7 @@ export default class ModuleLookupController {
       next(new ApiError('moduleId required', null, 400));
       return Promise.resolve();
     }
-    return this.repo.getOne(req.query.moduleId, req.params.key)
+    return this.repo.getOne(Number(req.query.moduleId), req.params.key)
       .then(item => {
         if (!item) {
           if (req.query.noerror) {
@@ -77,7 +77,7 @@ export default class ModuleLookupController {
     if (!req.query.moduleId) {
       next(new ApiError('moduleId required', null, 400));
     }
-    return this.repo.getOne(req.query.moduleId, req.params.key)
+    return this.repo.getOne(Number(req.query.moduleId), req.params.key)
       .then(item => {
         if (!item) {
           res.status(204).end();
@@ -89,12 +89,16 @@ export default class ModuleLookupController {
       .catch(next);
   }
 
-  verifyProperties(data, props) {
-    props.forEach(prop => {
+  verifyProperties(data, arr) {
+    const missingProps = [];
+    arr.forEach(prop => {
       if (!data[prop]) {
-        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+        missingProps.push(prop);
       }
     });
+    if (missingProps.length) {
+      throw new ApiError(`Properties missing: ${missingProps.join(', ')}.`, data, 400);
+    }
   }
 
 }

@@ -38,8 +38,8 @@ export default class DistiDirectUploadUploadController extends UploadController 
   getValidationAndImportData() {
     return Promise.all([
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_fin_sales_theater_hier', 'level03_theater_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l3_sales_territory_name_code', 'l1_sales_territory_descr = \'WW Distribution\''),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code', 'sales_territory_descr <> \'WW Distribution\''),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l3_sales_territory_name_code', 'l1_sales_territory_name_code = \'WW Distribution\''),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code', 'sales_territory_name_code <> \'WW Distribution\''),
     ])
       .then(results => {
         this.data.level03TheaterNames = results[0];

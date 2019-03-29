@@ -15,12 +15,12 @@ export default class MappingUploadController extends ControllerBase {
   }
 
   mongoToPgSyncTransform(mums, userId, log, elog) {
-    const tableName = 'dfa_prof_dept_acct_map_upld';
+    const tableName = 'dfa_prof_manual_map_upld';
     const mups = [];
-    return this.submeasureRepo.getManyActive({moduleId: DfaModuleIds.prof})
+    return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.prof)
       .then(subs => {
         mums.forEach(mum => {
-          const sub = _.find(subs, {name: mum.submeasureName});
+          const sub = _.find(subs, x => x.name.toLowerCase() === mum.submeasureName.toLowerCase());
           if (!sub) {
             throw new ApiError(`${tableName}: no submeasure for submeasureName: ${mum.submeasureName}`);
           }

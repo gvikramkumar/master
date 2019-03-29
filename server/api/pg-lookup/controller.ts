@@ -30,14 +30,34 @@ export class PgLookupController {
       .catch(next);
   }
 
+  getRecordset(req, res, next) {
+    this.verifyProperties(req.body, ['table', 'column']);
+    // shut down where for security risk
+    this.repo.getRecordset(req.body.table, req.body.column, null, req.body.isNumber, req.body.upper)
+      .then(list => res.json(list))
+      .catch(next);
+  }
+
+  getListFromColumn(req, res, next) {
+    this.verifyProperties(req.body, ['table', 'column']);
+    // shut down where for security risk
+    this.repo.getListFromColumn(req.body.table, req.body.column, null, req.body.isNumber, req.body.upper)
+      .then(list => res.json(list))
+      .catch(next);
+  }
+
   getSortedListFromColumn(req, res, next) {
-    this.repo.getSortedListFromColumn(req.body.table, req.body.column, req.body.where, req.body.isNumber)
+    this.verifyProperties(req.body, ['table', 'column']);
+    // shut down where for security risk
+    this.repo.getSortedListFromColumn(req.body.table, req.body.column, null, req.body.isNumber)
       .then(list => res.json(list))
       .catch(next);
   }
 
   getSortedUpperListFromColumn(req, res, next) {
-    this.repo.getSortedUpperListFromColumn(req.body.table, req.body.column, req.body.where)
+    this.verifyProperties(req.body, ['table', 'column']);
+    // shut down where for security risk
+    this.repo.getSortedUpperListFromColumn(req.body.table, req.body.column, null)
       .then(list => res.json(list))
       .catch(next);
   }
@@ -53,20 +73,16 @@ export class PgLookupController {
       .catch(next);
   }
 
-  /*
-  sales >> sl1 only
-product >> tg only
-legal entity??
-internal be be/sub be (not sure page will work well with 100 choices in dropdown)
-
-   */
-
   verifyProperties(data, arr) {
+    const missingProps = [];
     arr.forEach(prop => {
       if (!data[prop]) {
-        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+        missingProps.push(prop);
       }
     });
+    if (missingProps.length) {
+      throw new ApiError(`Properties missing: ${missingProps.join(', ')}.`, data, 400);
+    }
   }
 
 }

@@ -120,7 +120,7 @@ CREATE INDEX ndx_fisc_mthid_altsl2_map ON fpadfa.dfa_prof_scms_triang_altsl2_map
 
 CREATE TABLE fpadfa.dfa_data_sources (
 	source_system_id numeric(22) NULL,
-	source_system_name varchar(30) NOT NULL,
+	source_system_name varchar(80) NOT NULL,
 	source_system_type_code varchar(30) NOT NULL,
 	status_flag bpchar(1) NULL,
 	module_id numeric(4) NULL,
@@ -128,7 +128,10 @@ CREATE TABLE fpadfa.dfa_data_sources (
 	create_datetimestamp timestamp NULL,
 	update_owner varchar(30) NULL,
 	update_datetimestamp timestamp NULL
-);
+)
+WITH (
+	OIDS=FALSE
+) ;
 
 CREATE TABLE fpadfa.dfa_measure (
 	module_id numeric(10) NULL,

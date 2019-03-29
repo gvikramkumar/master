@@ -21,11 +21,9 @@ export class PgLookupService extends RestBase<any> {
     super('pg-lookup', httpClient, store);
   }
 
-  getSortedListFromColumn(table, column, whereClause?, isNumber?) {
+  getSortedListFromColumn(table, column, isNumber?) {
     const params: AnyObj = {table, column};
-    if (whereClause) {
-      params.where = whereClause;
-    }
+
     if (isNumber) {
       params.isNumber = true;
     }
@@ -42,18 +40,6 @@ export class PgLookupService extends RestBase<any> {
 
   getFiscalMonths() {
     return this.callMethod('getFiscalMonths');
-  }
-
-  getSubmeasureFlashCategories(submeasureKey: number) {
-    return this.callRepoMethod('getSubmeasureFlashCategories', null, {submeasureKey});
-  }
-
-  getSubmeasureAdjustmentTypes(submeasureKey: number) {
-    return this.callRepoMethod('getSubmeasureAdjustmentTypes', null, {submeasureKey});
-  }
-
-  getCountryNamesFromSalesHierarchy() {
-    return this.callRepoMethod('getCountryNamesFromSalesHierarchy');
   }
 
 }

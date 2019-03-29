@@ -38,7 +38,7 @@ export default class CorpAdjustmentsUploadUploadController extends UploadControl
   getValidationAndImportData() {
     return Promise.all([
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_iso_country', 'iso_country_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_descr'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code'),
     ])
       .then(results => {

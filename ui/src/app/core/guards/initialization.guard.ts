@@ -77,14 +77,16 @@ export class InitializationGuard implements CanActivate {
         console.log('app initialized');
 
         // temporary art check for staging issue
+/*
         if (this.store.isDevEnv() || this.store.isStageEnv()) {
           setInterval(() => {
             this.userService.getArtRoles()
               .subscribe(resp => {
-                // console.log(`getArtRoles: ${resp.userId}, ${resp.roles}`);
+                console.log(`getArtRoles: ${resp.userId}, ${resp.roles}`);
               });
           }, 5 * 60 * 1000);
         }
+*/
 
         return true;
       })

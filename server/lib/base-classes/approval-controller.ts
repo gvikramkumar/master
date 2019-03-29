@@ -111,7 +111,7 @@ export default class ApprovalController extends ControllerBase {
         moduleId: req.body.moduleId})
     ])
       .then(results => {
-        const ailist = results[0];
+        const ailist: any = results[0];
         const draftPending = results[1];
         res.json(ailist.concat(draftPending));
       })
@@ -126,7 +126,7 @@ export default class ApprovalController extends ControllerBase {
         moduleId: req.body.moduleId})
     ])
       .then(results => {
-        const ailist = results[0];
+        const ailist: any = results[0];
         const draftPending = results[1];
         res.json(ailist.concat(draftPending));
       })

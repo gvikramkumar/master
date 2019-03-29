@@ -89,7 +89,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   public ngOnInit(): void {
     const promises: Promise<any>[] = [
-      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l1_sales_territory_descr').toPromise(),
+      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l1_sales_territory_name_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
@@ -114,7 +114,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         if (this.viewMode || this.editMode || this.copyMode) {
           this.rule = results[6];
         }
-
+        this.rule.period = this.rule.period || this.periods[0].period;
         if (this.copyMode) {
           this.rule.approvedOnce = 'N';
           delete this.rule.createdBy;
@@ -297,7 +297,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 this.cleanUp();
                 this.ruleService.reject(this.rule)
                   .subscribe(rule => {
-                    this.uiUtil.toast('Rule has been rejected, user notified.');
                     history.go(-1);
                   });
               }
@@ -317,7 +316,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 this.cleanUp();
                 this.ruleService.approve(this.rule)
                   .subscribe(() => {
-                    this.uiUtil.toast('Rule approved, user notified.');
                     history.go(-1);
                   });
               }
@@ -338,7 +336,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
                 this.ruleService.submitForApproval(this.rule, {saveMode})
                   .subscribe(() => {
-                    this.uiUtil.toast('Rule submitted for approval.');
                     history.go(-1);
                   });
               }

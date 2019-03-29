@@ -33,6 +33,7 @@ import {BusinessUploadService} from '../../services/business-upload.service';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  effectiveMonthNotRequired = true;
   deptUploadFilename: string;
   deptUploadTemplate: FsFile;
   manualMixHwDb: number;
@@ -52,6 +53,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   addMode = false;
   viewMode = false;
   editMode = false;
+  editModeAI = false;
   copyMode = false;
   submeasureNames: string[] = [];
   sm = new Submeasure();
@@ -245,18 +247,14 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
         if (this.viewMode || this.editMode || this.copyMode) {
           this.sm = results[6];
+          this.editModeAI = this.editMode && _.includes(['A', 'I'], this.sm.status);
         }
+        // this is an edge case: create unallocated group >> approve >> now want to make it allocated
+        this.effectiveMonthNotRequired = this.viewMode || (this.editMode && this.sm.approvedOnce === 'Y' && !this.isUnallocatedGroup());
         if (this.addMode) {
           if (this.route.snapshot.params.measureId) {
             this.sm.measureId = Number(this.route.snapshot.params.measureId);
           }
-
-        }
-        if (this.viewMode) {
-          this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
-        } else {
-          // they need to pick a new effective month is it's not in the last 6 months.
-          UiUtil.clearPropertyIfNotInList(this.sm, 'startFiscalMonth', this.yearmos, 'fiscalMonth');
         }
         if (this.copyMode) {
           this.sm.approvedOnce = 'N';
@@ -274,7 +272,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           delete this.sm.allocProductFamily;
         }
         if (this.editMode) {
-          if (_.includes(['A', 'I'], this.sm.status)) {
+          if (this.editModeAI) {
             delete this.sm.createdBy;
             delete this.sm.createdDate;
             if (this.isDeptUpload()) {
@@ -283,13 +281,19 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           }
           this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
         }
+        if (this.viewMode || this.sm.approvedOnce === 'Y') {
+          this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
+        } else {
+          // they need to pick a new effective month is it's not in the last 6 months.
+          UiUtil.clearPropertyIfNotInList(this.sm, 'startFiscalMonth', this.yearmos, 'fiscalMonth');
+        }
       })
       .then(() => {
         const promises2: Promise<any>[] = [
-          this.pgLookupService.getSubmeasureFlashCategories(this.sm.submeasureKey || 0).toPromise(),
-          this.pgLookupService.getSubmeasureAdjustmentTypes(this.sm.submeasureKey || 0).toPromise(),
+          this.pgLookupService.callRepoMethod('getSubmeasureFlashCategories', {submeasureKey: this.sm.submeasureKey || 0}).toPromise(),
+          this.pgLookupService.callRepoMethod('getSubmeasureAdjustmentTypes', {submeasureKey: this.sm.submeasureKey || 0}).toPromise()
         ]
-        if (!this.addMode) {
+        if ((this.viewMode || this.editMode) && this.isManualMix()) { // needs submeasureKey for this call
           promises2.push(this.pgLookupService.callRepoMethod('getManualMixHwSwBySubmeasureKey',
             {submeasureKey: this.sm.submeasureKey, moduleId: this.store.module.moduleId}).toPromise());
         }
@@ -297,8 +301,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           .then(results => {
             this.flashCategories = results[0];
             this.adjustmentTypes = results[1];
-            this.manualMixHwDb = results[2][0];
-            this.manualMixSwDb = results[2][1];
+            if ((this.viewMode || this.editMode) && this.isManualMix()) {
+              this.manualMixHwDb = results[2][0] ? results[2][0] * 100 : undefined;
+              this.manualMixSwDb = results[2][1] ? results[2][1] * 100 : undefined;
+            }
             this.orgSubmeasure = _.cloneDeep(this.sm);
             this.init();
           });
@@ -406,6 +412,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   measureChange(init?) {
     if (!this.sm.measureId) { // no measure in "add" mode
       return;
+    }
+
+    if (!init) {
+      // group and passthrough changes can conflict with measure change changes, so clear off first
+      this.sm.indicators.groupFlag = 'N';
+      this.sm.indicators.passThrough = 'N';
     }
 
     if (this.isCogsMeasure()) {
@@ -619,7 +631,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.ifl_switch_le = !!this.sm.inputFilterLevel.entityLevel;
     this.ifl_switch_s = !!this.sm.inputFilterLevel.salesLevel;
     this.ifl_switch_scms = !!this.sm.inputFilterLevel.scmsLevel;
-    this.ifl_switch_glseg = !!(this.sm.inputFilterLevel.glSegLevel && this.sm.inputFilterLevel.glSegLevel.length);
+    this.ifl_switch_glseg = !!this.sm.inputFilterLevel.glSegLevel.length;
   }
 
   syncManualMapSwitches() {
@@ -647,7 +659,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       delete this.sm.inputFilterLevel.scmsLevel;
     }
     if (!this.ifl_switch_glseg) {
-      delete this.sm.inputFilterLevel.glSegLevel;
+      this.sm.inputFilterLevel.glSegLevel = [];
     }
   }
 
@@ -679,23 +691,56 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
   }
 
-  clearPropertiesForUnallocatedGroupOrPassThrough(mode: 'group'|'passThrough') {
-    const group = mode === 'group';
-    const passThrough = mode === 'passThrough';
-
-    if (group) {
-      delete this.sm.sourceId;
-      delete this.sm.categoryType;
-    }
+  clearInputFilterLevels() {
     this.sm.inputFilterLevel = new SubmeasureInputFilterLevel();
+    this.ifl_switch_ibe = false;
+    this.ifl_switch_p = false;
+    this.ifl_switch_le = false;
+    this.ifl_switch_s = false;
+    this.ifl_switch_scms = false;
+    this.ifl_switch_glseg = false;
+    ['ibe', 'p', 'le', 's', 'scms', 'glseg'].forEach(val => this.iflChange(val));
+    ['ibe', 'p', 'le', 's', 'scms'].forEach(val => this.mmChange(val));
+  }
+
+  clearInputFilterLevelsPassThrough() {
+    delete this.sm.inputFilterLevel.internalBELevel;
+    delete this.sm.inputFilterLevel.entityLevel;
+    delete this.sm.inputFilterLevel.scmsLevel;
+    this.sm.inputFilterLevel.glSegLevel = [];
+    this.ifl_switch_ibe = false;
+    this.ifl_switch_le = false;
+    this.ifl_switch_scms = false;
+    this.ifl_switch_glseg = false;
+    ['ibe', 'p', 'le', 's', 'scms', 'glseg'].forEach(val => this.iflChange(val));
+    ['ibe', 'p', 'le', 's', 'scms'].forEach(val => this.mmChange(val));
+  }
+
+  clearManualMappingLevels() {
     this.sm.manualMapping = new SubmeasureInputFilterLevel();
+    this.mm_switch_ibe = false;
+    this.mm_switch_p = false;
+    this.mm_switch_le = false;
+    this.mm_switch_s = false;
+    this.mm_switch_scms = false;
+    ['ibe', 'p', 'le', 's', 'scms', 'glseg'].forEach(val => this.iflChange(val));
+    ['ibe', 'p', 'le', 's', 'scms'].forEach(val => this.mmChange(val));
+  }
+
+  clearPropertiesForUnallocatedGroup() {
+    this.clearInputFilterLevels();
+    this.clearManualMappingLevels();
+    const corpRev = this.sm.indicators.corpRevenue;
     this.sm.indicators = new SubmeasureIndicators();
-    this.sm.indicators.corpRevenue = 'N';
-    this.sm.indicators.groupFlag = group ? 'Y' : 'N';
-    this.sm.indicators.passThrough = passThrough ? 'Y' : 'N';
-    this.sm.rules = []
-    delete this.sm.startFiscalMonth;
-    delete this.sm.endFiscalMonth;
+    this.sm.indicators.corpRevenue = corpRev;
+    this.sm.indicators.groupFlag = 'Y';
+    this.sm.sourceId = -777; // Default Source
+    delete this.sm.categoryType;
+    this.sm.rules = [];
+    if (this.sm.approvedOnce === 'N') {
+      delete this.sm.startFiscalMonth;
+      delete this.sm.endFiscalMonth;
+    }
     delete this.sm.processingTime;
     delete this.sm.pnlnodeGrouping;
     this.sm.reportingLevels = [undefined, undefined, undefined];
@@ -708,13 +753,21 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.init(true); // we're just clearing stuff off here, measure change will add stuff back
   }
 
+  clearPropertiesForPassThrough() {
+    this.clearInputFilterLevelsPassThrough();
+    this.sm.indicators.manualMapping = 'N';
+    this.clearManualMappingLevels();
+    this.sm.rules = [];
+    this.init();
+  }
+
   cleanUp() {
     this.clearAllocationRequired();
     if (this.isUnallocatedGroup()) {
-      this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+      this.clearPropertiesForUnallocatedGroup();
     }
     if (this.isPassThrough()) {
-      this.clearPropertiesForUnallocatedGroupOrPassThrough('passThrough');
+      this.clearPropertiesForPassThrough();
     }
 
     this.cleanIflSwitchChoices();
@@ -729,7 +782,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.sourceSystemAdjTypeId = undefined;
     }
 
-    if (this.isManualMix() && !this.isPassThroughOrUnallocatedGroup()) {
+    if (this.isManualMix() && !this.isAllocatedGroup()) {
       this.sm.manualMixHw = this.manualMixHw;
       this.sm.manualMixSw = this.manualMixSw;
     }
@@ -821,7 +874,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                 this.cleanUp();
                 this.submeasureService.reject(this.sm)
                   .subscribe(sm => {
-                    this.uiUtil.toast('Submeasure has been rejected, user notified.');
                     history.go(-1);
                   });
               }
@@ -841,7 +893,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                 this.cleanUp();
                 this.submeasureService.approve(this.sm)
                   .subscribe(() => {
-                    this.uiUtil.toast('Submeasure approved, user notified.');
                     history.go(-1);
                   });
               }
@@ -867,7 +918,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
                 const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
                 this.submeasureService.submitForApproval(this.sm, {saveMode})
                   .subscribe(() => {
-                    this.uiUtil.toast('Submeasure submitted for approval.');
                     history.go(-1);
                   });
               }
@@ -879,21 +929,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   validate() {
     this.errs = [];
 
-    if (this.isUnallocatedGroup() || this.isPassThrough()) {
+    if (this.isUnallocatedGroup()) {
       return null;
     }
 
-    if (!this.sm.rules.length) {
+    if (!this.sm.rules.length && !(this.isUnallocatedGroup() || this.isPassThrough())) {
       this.errs.push('No rules specified');
     }
 
     if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
       this.errs.push('Duplicate rules entered');
-    }
-    // this shouldn't have to be here, but currently we have a bug where form.valid === true even though this control
-    // is highlighted red with required: true error
-    if (!UiUtil.isValidFiscalMonth(this.sm.startFiscalMonth)) {
-      this.errs.push(`No "Effective Month" value`);
     }
 
     if (this.isManualMix()) {
@@ -910,8 +955,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       }
     }
 
+    if (this.isDeptUpload() && !this.isApprovedOnce() && this.sm.indicators.deptAcct !== 'A') {
+      this.errs.push('Must upload Dept/Acct data');
+    }
+
     if (!this.validateManualMapping()) {
       this.errs.push('Manual Mapping selected, but no value entered');
+    }
+
+    if (this.isPassThrough() && !this.verifyOnlyPfOrPidAndSl6()) {
+      this.errs.push('Must choose Product: Product Family or Product ID and Sales: Level 6 only');
     }
 
     this.errs = this.errs.map(err => `* ${err}`)
@@ -957,10 +1010,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return this.sm.indicators.groupFlag === 'Y' && this.sm.indicators.allocationRequired === 'Y';
   }
 
-  isPassThroughOrUnallocatedGroup() {
-    return this.isPassThrough() || this.isUnallocatedGroup();
+  isGroup() {
+    return this.sm.indicators.groupFlag === 'Y';
   }
 
+  isApprovedOnce() {
+    return this.sm.approvedOnce === 'Y';
+  }
   changeFile(fileInput) {
     this.deptUploadFilename = fileInput.files[0] && fileInput.files[0].name;
   }
@@ -1020,7 +1076,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.verifyNoRulesGrouping()
       .then(() => {
         if (this.isUnallocatedGroup()) {
-          this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+          this.clearPropertiesForUnallocatedGroup();
+        } else {
+          delete this.sm.sourceId; // we set this to Default Source in clear properties
+          this.init();
         }
       });
   }
@@ -1029,7 +1088,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.verifyNoRulesGroupingAllocationRequired()
       .then (() => {
         if (this.isUnallocatedGroup()) {
-          this.clearPropertiesForUnallocatedGroupOrPassThrough('group');
+          this.clearPropertiesForUnallocatedGroup();
+        } else {
+          delete this.sm.sourceId;
+          this.init();
         }
       });
   }
@@ -1038,7 +1100,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.verifyNoRulesPassThrough()
       .then(() => {
         if (this.isPassThrough()) {
-          this.clearPropertiesForUnallocatedGroupOrPassThrough('passThrough');
+          this.clearPropertiesForPassThrough();
+        } else {
+          this.init();
         }
       });
   }
@@ -1075,6 +1139,12 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     } else {
       return Promise.resolve();
     }
+  }
+
+  verifyOnlyPfOrPidAndSl6() {
+    return _.includes(['PF', 'PID'], this.sm.inputFilterLevel.productLevel) && this.sm.inputFilterLevel.salesLevel === 'LEVEL6' &&
+    !this.sm.inputFilterLevel.scmsLevel && !this.sm.inputFilterLevel.internalBELevel && !this.sm.inputFilterLevel.entityLevel &&
+    !this.sm.inputFilterLevel.glSegLevel.length;
   }
 
 }

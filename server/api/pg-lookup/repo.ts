@@ -41,6 +41,16 @@ export default class PgLookupRepo {
   }
 */
 
+  getDollarUploadFiscalMonthsFromSubmeasureKeys(req) {
+    return this.getListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
+      `sub_measure_key in ( ${req.body.submeasureKeys} )`);
+  }
+
+  getMappingUploadFiscalMonthsFromSubmeasureKeys(req) {
+    return this.getListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
+      `sub_measure_key in ( ${req.body.submeasureKeys} )`);
+  }
+
   getManualMixHwSwBySubmeasureKey(req) {
     if (!req.dfa.module) {
       throw new ApiError('getManualMixHwSwBySubmeasureKey: No module');
@@ -162,19 +172,6 @@ export default class PgLookupRepo {
           `)
       .then(results => results.rows);
   }
-
-  getCountryNamesFromSalesHierarchy() {
-    return pgc.pgdb.query(`
-            select cntry.iso_country_name
-            from fpacon.vw_fpa_iso_country cntry
-            ,fpacon.vw_fpa_sales_hierarchy dsh
-            where 1=1
-            and dsh.iso_country_code=cntry.bk_iso_country_code
-            group by 1;
-          `)
-      .then(resp => resp.rows.map(x => x.iso_country_name));
-  }
-
 
   getSalesHierarchyReport() {
     return pgc.pgdb.query(`
@@ -393,7 +390,7 @@ export default class PgLookupRepo {
                   WHERE fiscal_year_month_int = ${dfa.fiscalMonths.prof}
                   order by fiscal_year_month_int desc) as fm 
               limit 3)
-            and drv.sales_territory_code = sh.sales_territory_name
+            and drv.sales_territory_code = sh.sales_territory_name_code
             GROUP BY DRIVER_TYPE, sh.l1_sales_territory_name_code, sh.l1_sales_territory_descr,
             sh.l2_sales_territory_name_code, sh.l2_sales_territory_descr ,
             sh.l3_sales_territory_name_code, sh.l3_sales_territory_descr
@@ -535,7 +532,7 @@ export default class PgLookupRepo {
                    and ds.module_id=1
                    and sm.measure_id=3                                   
                     and sm.source_system_id <> 4                                         
-                    and sm.sub_measure_key = ${Number(req.query.submeasureKey)}
+                    and sm.sub_measure_key = ${Number(req.body.submeasureKey)}
 --                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
 --                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
             ) a
@@ -596,7 +593,7 @@ export default class PgLookupRepo {
                     and sm.source_system_adj_type_id=adj.adj_type_id                                         
                     and sm.measure_id=1                                    
                     and sm.source_system_id <> 4                                         
-                            and sm.sub_measure_key = ${Number(req.query.submeasureKey)}
+                            and sm.sub_measure_key = ${Number(req.body.submeasureKey)}
         --                 sm.sub_measure_key = 0 /* for any new sub-measure creation, pass 0 as a parameter */        
         --                 or sm.sub_measure_key = $$sub_measure_key /* for existing sub-measure update, pass sub-measure-key as a parameter */
             ) a
@@ -612,7 +609,7 @@ export default class PgLookupRepo {
         update  fpadfa.dfa_prof_disti_to_direct_map_upld
         set ext_theater_name = distimap.external_theater
         from (select D2D.node_code as distinode
-        ,case dsh.external_theater_name
+        ,case dsh.dd_external_theater_name
         when 'APJC' then 'APJC'
         when 'Americas' then 'Americas'
         when 'EMEA' then 'EMEA' end as external_theater
@@ -730,6 +727,29 @@ export default class PgLookupRepo {
     const vars = arr.map((x, idx) => `$${idx + 1}`).join(',');
     const sql = `select * from ${table} where upper(${column}) in ( ${vars} )`;
     return pgc.pgdb.query(sql, arr.map(x => x.toUpperCase()))
+      .then(results => results.rows);
+  }
+
+  // testing only, just to profile time to get query, as opposed to get it and sort it. Negligible sort time.
+  getRecordset(table, column, whereClause?, isNumber?, upper?) {
+    let query;
+    if (upper) {
+      query = `select distinct upper(${column}) as col from ${table}`;
+    } else {
+      query = `select distinct ${column} as col from ${table}`;
+    }
+    if (whereClause) {
+      query += ` where ${whereClause} and ${column} is not null `;
+    } else {
+      query += ` where ${column} is not null `;
+    }
+    if (upper) {
+      query += ` order by upper(${column})`;
+    } else {
+      query += ` order by ${column}`;
+    }
+
+    return pgc.pgdb.query(query)
       .then(results => results.rows);
   }
 
@@ -896,11 +916,15 @@ export default class PgLookupRepo {
   }
 
   verifyProperties(data, arr) {
+    const missingProps = [];
     arr.forEach(prop => {
       if (!data[prop]) {
-        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+        missingProps.push(prop);
       }
     });
+    if (missingProps.length) {
+      throw new ApiError(`Properties missing: ${missingProps.join(', ')}.`, data, 400);
+    }
   }
 
 }

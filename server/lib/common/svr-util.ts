@@ -22,8 +22,19 @@ export const svrUtil = {
   sortedListNotExists,
   asciiToBase64,
   base64ToAscii,
-  docToObject
+  docToObject,
+  postgresReplaceQuotes,
+  setPrecision5
 };
+
+function setPrecision5(val) {
+  return Number(val.toPrecision(5));
+}
+
+// strings are bracketed by single quotes, so we have to escape single quotes within the string
+function postgresReplaceQuotes(val) {
+  return val.replace(/'/g, '\'\'');
+}
 
 function docToObject(doc) {
   if (doc.toObject) {

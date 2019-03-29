@@ -5,7 +5,7 @@ export class SubmeasureInputFilterLevel {
   scmsLevel: string;
   internalBELevel: string;
   entityLevel: string;
-  glSegLevel: string[];
+  glSegLevel: string[] = [];
 }
 
 export class SubmeasureIndicators {

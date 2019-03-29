@@ -88,7 +88,9 @@ export default class DeptUploadUploadController extends UploadController {
 
   validateRow1(row) {
     this.temp = new DeptUploadDeptTemplate(row);
-    this.sheet1SubmeasureNames.push(this.temp.submeasureName);
+    if (this.temp.submeasureName) {
+      this.sheet1SubmeasureNames.push(this.temp.submeasureName.toUpperCase());
+    }
     return this.getSubmeasure()
       .then(() => this.validateSubmeasure())
       .then(() => this.lookForErrors())
@@ -188,7 +190,7 @@ export default class DeptUploadUploadController extends UploadController {
       if (!this.temp.submeasureName) {
         this.addErrorRequired(this.PropNames.submeasureName);
       }
-      if (this.temp.submeasureName !== this.submeasureName) {
+      if (this.temp.submeasureName.toUpperCase() !== this.submeasureName.toUpperCase()) {
         this.addError(this.PropNames.submeasureName, `Sub Measure name doesn't match current name`, this.temp.submeasureName);
       }
       return Promise.resolve();
@@ -220,7 +222,7 @@ export default class DeptUploadUploadController extends UploadController {
   }
 
   validateSubmeasureNameInSheet1() {
-    if (_.sortedIndexOf(this.sheet1SubmeasureNames, this.temp.submeasureName) === -1) {
+    if (_.sortedIndexOf(this.sheet1SubmeasureNames, this.temp.submeasureName.toUpperCase()) === -1) {
       this.addError(this.PropNames.submeasureName, 'No matching submeasure in sheet1', this.temp.submeasureName);
     }
     return Promise.resolve();

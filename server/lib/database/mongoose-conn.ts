@@ -7,7 +7,7 @@ const options = {
   autoIndex: false,
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 500,
-  poolSize: 10,
+  poolSize: 50,
   bufferMaxEntries: 0,
   useNewUrlParser: true,
   user: process.env.MONGODB_USER,

@@ -16,10 +16,10 @@ export default class DeptUploadController extends ControllerBase {
   mongoToPgSyncTransform(objs, userId, log, elog) {
     const tableName = 'dfa_prof_dept_acct_map_upld';
     const records = [];
-    return this.submeasureRepo.getManyActive({moduleId: DfaModuleIds.prof})
+    return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.prof)
       .then(subs => {
         objs.forEach(obj => {
-          const sub = _.find(subs, {name: obj.submeasureName});
+          const sub = _.find(subs, x => x.name.toLowerCase() === obj.submeasureName.toLowerCase());
           if (!sub) {
             throw new ApiError(`${tableName}: no submeasure for submeasureName: ${obj.submeasureName}`);
           }

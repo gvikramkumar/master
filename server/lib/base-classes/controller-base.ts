@@ -56,7 +56,7 @@ export default class ControllerBase {
   }
 
   getManyLatestGroupByNameActive(req, res, next) {
-    this.repo.getManyLatestGroupByNameActive(req.query.moduleId || req.body.moduleId)
+    this.repo.getManyLatestGroupByNameActive(Number(req.query.moduleId) || req.body.moduleId)
       .then(docs => res.send(docs))
       .catch(next);
   }
@@ -365,11 +365,15 @@ export default class ControllerBase {
   }
 
   verifyProperties(data, arr) {
+    const missingProps = [];
     arr.forEach(prop => {
       if (!data[prop]) {
-        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+        missingProps.push(prop);
       }
     });
+    if (missingProps.length) {
+      throw new ApiError(`Properties missing: ${missingProps.join(', ')}.`, data, 400);
+    }
   }
 
   // return false if name exists in list

@@ -113,7 +113,7 @@ export default class UploadController {
           if (err.stack) {
             data.stack = err.stack;
           }
-          const _err = new ApiError(`Unexpected ${this.uploadName} error`, data);
+          const _err = new ApiError(`Unexpected ${this.uploadName} Error`, data);
           this.sendErrorEmail(_err);
           next(_err);
         }
@@ -377,7 +377,7 @@ export default class UploadController {
   }
 
   getSubmeasure() {
-    this.submeasure = _.find(this.data.submeasures, {name: this.temp.submeasureName});
+    this.submeasure = _.find(this.data.submeasures, sm => sm.name.toUpperCase() === (this.temp.submeasureName && this.temp.submeasureName.toUpperCase()));
     return Promise.resolve();
   }
 
@@ -436,15 +436,44 @@ export default class UploadController {
 
   autoSync() {
     const databaseCtrl = injector.get(DatabaseController);
-    return databaseCtrl.autoSync(this.req);
+    return databaseCtrl.autoSync(this.getSyncMapFromUploadType(), this.req);
   }
 
+  getSyncMapFromUploadType() {
+    const uploadTypes = {
+      prof: [
+        {type: 'dollar-upload', syncMapProp: 'dfa_prof_input_amnt_upld'},
+        {type: 'mapping-upload', syncMapProp: 'dfa_prof_manual_map_upld'},
+        {type: 'dept-upload', syncMapProp: 'dfa_prof_dept_acct_map_upld'},
+        {type: 'sales-split-upload', syncMapProp: 'dfa_prof_sales_split_pctmap_upld'},
+        {type: 'product-class-upload', syncMapProp: 'dfa_prof_swalloc_manualmix_upld'},
+        {type: 'alternate-sl2-upload', syncMapProp: 'dfa_prof_scms_triang_altsl2_map_upld'},
+        {type: 'corp-adjustments-upload', syncMapProp: 'dfa_prof_scms_triang_corpadj_map_upld'},
+        {type: 'disti-direct-upload', syncMapProp: 'dfa_prof_disti_to_direct_map_upld'},
+        {type: 'service-map-upload', syncMapProp: 'dfa_prof_service_map_upld'},
+        {type: 'service-training-upload', syncMapProp: 'dfa_prof_service_trngsplit_pctmap_upld'},
+      ]
+    };
+    const syncMap = new SyncMap();
+    const syncProp = _.find(uploadTypes[this.req.dfa.module.abbrev], {type: this.req.query.uploadType}).syncMapProp;
+    if (!syncProp) {
+      throw new ApiError(`getSyncMapFromUploadType: no syncProp`);
+    }
+    syncMap[syncProp] = true;
+    return syncMap;
+  }
+
+
   verifyProperties(data, arr) {
+    const missingProps = [];
     arr.forEach(prop => {
       if (!data[prop]) {
-        throw new ApiError(`Property missing: ${prop}.`, data, 400);
+        missingProps.push(prop);
       }
     });
+    if (missingProps.length) {
+      throw new ApiError(`Properties missing: ${missingProps.join(', ')}.`, data, 400);
+    }
   }
 
 }

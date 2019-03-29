@@ -71,7 +71,7 @@ export default class ReportController extends ControllerBase {
   getExcelReport(req, res, next) {
     this.verifyProperties(req.body, ['excelFilename']);
     const moduleId = req.body.moduleId;
-    let excelFilename = req.body.excelFilename;
+    const excelFilename = req.body.excelFilename;
     const body = _.omit(req.body, ['moduleId', 'excelFilename']);
     let excelSheetname;
     let excelHeaders;
@@ -155,7 +155,7 @@ export default class ReportController extends ControllerBase {
               obj.endAccount = obj.gl_account ? '' : 69999;
               return this.transformAddMeasureAndSubmeasure(obj);
             });
-            return _.orderBy(rtn, ['sm.name', 'node_value'], ['asc', 'asc']);
+            return _.orderBy(rtn, ['sm.name', 'node_value']);
           });
         break;
 
@@ -171,8 +171,13 @@ export default class ReportController extends ControllerBase {
           .then(results => {
             this.measures = results[0];
             this.submeasures = results[1];
-            const rtn = results[2].map(doc => this.transformAddMeasureAndSubmeasure(doc));
-            return _.orderBy(rtn, ['measure.name', 'sm.name', 'splitCategory'], ['asc', 'asc', 'asc']);
+            const rtn = results[2]
+              .map(doc => this.transformAddMeasureAndSubmeasure(doc))
+              .map(doc => {
+                doc.splitPercentage = doc.splitPercentage ? doc.splitPercentage * 100 : doc.splitPercentage;
+                return doc;
+              })
+            return _.orderBy(rtn, ['measure.name', 'sm.name', 'splitCategory']);
           });
         break;
 
@@ -206,7 +211,7 @@ export default class ReportController extends ControllerBase {
         excelHeaders = ['Actual SL2', 'Alternate SL2', 'Alternate Country', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
         excelProperties = ['actual_sl2_code', 'alternate_sl2_code', 'alternate_country_name', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = this.pgLookupRepo.getAlternateSL2Report(body.fiscalMonth)
-          .then(rows => _.orderBy(rows, ['actual_sl2_code'], ['asc']));
+          .then(rows => _.orderBy(rows, ['actual_sl2_code']));
         break;
 
       case 'corp-adjustment':
@@ -214,7 +219,7 @@ export default class ReportController extends ControllerBase {
         excelHeaders = ['Country Name', 'Sales Territory Code', 'SCMS Value', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
         excelProperties = ['sales_country_name', 'sales_territory_code', 'scms_value', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = this.pgLookupRepo.getCorpAdjustmentReport(body.fiscalMonth)
-          .then(rows => _.orderBy(rows, ['sales_country_name', 'sales_territory_code', 'scms_value'], ['asc', 'asc', 'asc']));
+          .then(rows => _.orderBy(rows, ['sales_country_name', 'sales_territory_code', 'scms_value']));
         break;
 
       case 'sales-split-percentage':
@@ -335,13 +340,13 @@ export default class ReportController extends ControllerBase {
             return Promise.all([
               this.submeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
                 .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
-                .then(vals => _.orderBy(vals, ['measureName', 'name'], ['asc', 'asc'])),
+                .then(vals => _.orderBy(vals, ['measureName', 'name'])),
               this.submeasureRepo.getMany({setSort: 'name', moduleId})
                 .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
-                .then(vals => _.orderBy(vals, ['measureName', 'name'], ['asc', 'asc'])),
+                .then(vals => _.orderBy(vals, ['measureName', 'name'])),
               this.submeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
                 .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
-                .then(vals => _.orderBy(vals, ['measureName', 'name'], ['asc', 'asc']))
+                .then(vals => _.orderBy(vals, ['measureName', 'name']))
             ]);
 
           })
@@ -377,13 +382,13 @@ export default class ReportController extends ControllerBase {
         promise = Promise.all([
           this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
             .then(docs => docs.map(doc => this.transformRule(doc)))
-            .then(vals => _.orderBy(vals, ['name'], ['asc'])),
+            .then(vals => _.orderBy(vals, ['name'])),
           this.allocationRuleRepo.getMany({setSort: 'name', moduleId})
             .then(docs => docs.map(doc => this.transformRule(doc)))
-            .then(vals => _.orderBy(vals, ['name'], ['asc'])),
+            .then(vals => _.orderBy(vals, ['name'])),
           this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
             .then(docs => docs.map(doc => this.transformRule(doc)))
-            .then(vals => _.orderBy(vals, ['name'], ['asc']))
+            .then(vals => _.orderBy(vals, ['name']))
         ]);
         break;
 
@@ -430,7 +435,7 @@ export default class ReportController extends ControllerBase {
                 rows.push({fiscalMonth, sm});
               });
             });
-            return _.orderBy(rows, ['fiscalMonth', 'sm.measureName', 'sm.name'], ['asc', 'asc', 'asc']);
+            return _.orderBy(rows, ['fiscalMonth', 'sm.measureName', 'sm.name']);
           })
         break;
 

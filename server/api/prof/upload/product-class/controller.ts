@@ -8,6 +8,7 @@ import {NamedApiError} from '../../../../lib/common/named-api-error';
 import AnyObj from '../../../../../shared/models/any-obj';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
+import {svrUtil} from '../../../../lib/common/svr-util';
 
 @injectable()
 export default class ProductClassUploadUploadController extends UploadController {
@@ -84,7 +85,7 @@ export default class ProductClassUploadUploadController extends UploadController
       }
     });
     _.forEach(obj, (val, key) => {
-      if (val !== 1.0) {
+      if (svrUtil.setPrecision5(val) !== 1.0) {
         this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
       }
     });
