@@ -12,6 +12,14 @@
   color: #fff;
   background-color: #ffcc00;
 }
+.osw-module--btns button.btn.btn--small.btn--default {
+  color: #585858;
+  background-color: rgba(76, 76, 76, 0.1);
+}
+.osw-module--btns button.btn.btn--small.btn--default:hover {
+  color: #585858;
+  background-color: rgba(76, 76, 76, 0.25);
+}
 .osw-module--btns .btn.btn--small > span[class^="icon-"] {
   background: white;
   border-radius: 20px;
