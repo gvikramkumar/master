@@ -1,10 +1,19 @@
 <p-dialog header="Add All Offer Details" closable="true" modal="true" showHeader="false" [responsive]="false"
   class="add-details-dialog" [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
-  [contentStyle]="{'max-height':'450px', 'width':'100% !important'}" positionTop='150' positionRight='0'
+  [contentStyle]="{'min-height':'450px', 'width':'100% !important'}" positionTop='150' positionRight='0'
   positionLeft='0'>
-  <div>
-    <button (click)="majorSection()">Major section</button>
-    <button (click)="minorSection()">Minor section</button>
+  <div class="divider" style="margin-top: -1.5%"></div>
+  <div class="line-items-nav">
+    <ul id="tabsv4" class="tabs tabs--tall">
+      <li id="tabsv4-1" class="tab">
+        <a (click)='majorSection()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true}">Add Major Line
+          Details</a>
+      </li>
+      <li id="tabsv4-2" class="tab">
+        <a (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
+          Details</a>
+      </li>
+    </ul>
   </div>
   <!-- <div class="row"> -->
   <div class="container-fluid" class="view-item-details">
@@ -15,11 +24,11 @@
             <p-header>
               {{item.key}}
             </p-header>
-            <div class="row" style="overflow-y: auto;">
+            <div class="row">
               <!-- Accordian content starts-->
               <div class="col-sm-2">
                 <!-- Unique -->
-                <table class="text-left table table--compressed table--bordered table--selectable">
+                <table class="detail-labels text-left table table--compressed table--bordered">
                   <tbody>
                     <tr>
                       <th>
@@ -35,7 +44,7 @@
                     <!-- </tbody> -->
                     <!-- <tbody class="offer-values"> -->
                     <tr>
-                      <th>Unique Item</th>
+                      <th class="section-label">Unique Item</th>
                     </tr>
                     <!-- <div > -->
                     <div *ngFor="let ques of item.value['questionset']">
@@ -44,7 +53,7 @@
                       </tr>
                     </div>
                     <tr>
-                      <th>Additional Item</th>
+                      <th class="section-label">Additional Item</th>
                     </tr>
                     <div *ngFor="let ques of item.value['questionset']">
                       <tr *ngIf="ques.itemType !== 'Unique Item'">
@@ -55,10 +64,10 @@
                   </tbody>
                 </table>
               </div>
-              <div class="col-sm-10" style="display:flex">
+              <div class="col-sm-10" style="display:flex;overflow-x: scroll;">
                 <div *ngFor="let queslist of item.value['productInfo']">
                   <div *ngFor="let ques of queslist|keyvalue">
-                    <table class="pull-left text-left table table--compressed table--bordered table--selectable"
+                    <table class="pull-left text-left table table--compressed table--bordered"
                       style="max-width: 300px;">
                       <tbody>
                         <tr>
@@ -76,36 +85,54 @@
                           <th></th>
                         </tr>
                         <div *ngFor="let pInfo of ques.value['listOfferQuestions']">
-                          <tr [ngSwitch]="pInfo.componentType" *ngIf="pInfo.itemType == 'Unique Item'">
+                          <tr class="overflow-visible" [ngSwitch]="pInfo.componentType" *ngIf="pInfo.itemType == 'Unique Item'">
                             <td *ngSwitchCase="'Free Text'">
-                              <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                [(ngModel)]="pInfo.currentValue" class="form-control">
+                                <div class="form-group input--compressed">
+                                  <div class="form-group__text">
+                                    <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' [(ngModel)]="pInfo.currentValue">
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Q&A FreeText'">
-                              <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                [(ngModel)]="pInfo.currentValue" class="form-control">
+                                <div class="form-group input--compressed">
+                                  <div class="form-group__text">
+                                    <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' [(ngModel)]="pInfo.currentValue">
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Radio Button'">
-                              <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
-                                [(ngModel)]="pInfo.currentValue">
-                                <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                              </select>
+                                <div class="form-group dropdown input--compressed">
+                                  <div class="form-group__text select">
+                                    <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Q&A Radio Button'">
-                              <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
-                                [(ngModel)]="pInfo.currentValue">
-                                <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                              </select>
+                                <div class="form-group dropdown input--compressed">
+                                  <div class="form-group__text select">
+                                    <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Drop-down'">
-                              <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
-                                [(ngModel)]="pInfo.currentValue">
-                                <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                              </select>
+                                <div class="form-group dropdown input--compressed">
+                                  <div class="form-group__text select">
+                                    <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Multiselect'">
@@ -121,39 +148,58 @@
                         <div *ngFor="let pInfo of ques.value['listOfferQuestions']">
                           <tr [ngSwitch]="pInfo.componentType" *ngIf="pInfo.itemType !== 'Unique Item'">
                             <td *ngSwitchCase="'Free Text'">
-                              <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                [(ngModel)]="pInfo.currentValue" class="form-control">
+                                <div class="form-group input--compressed">
+                                  <div class="form-group__text">
+                                    <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' [(ngModel)]="pInfo.currentValue">
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Q&A FreeText'">
-                              <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                [(ngModel)]="pInfo.currentValue" class="form-control">
+                                <div class="form-group input--compressed">
+                                  <div class="form-group__text">
+                                    <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' [(ngModel)]="pInfo.currentValue" class="form-control">
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Radio Button'">
-                              <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
-                                [(ngModel)]="pInfo.currentValue">
-                                <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                              </select>
+                                <div class="form-group dropdown input--compressed">
+                                  <div class="form-group__text select">
+                                    <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Q&A Radio Button'">
-                              <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
-                                [(ngModel)]="pInfo.currentValue">
-                                <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                              </select>
+                                <div class="form-group dropdown input--compressed">
+                                  <div class="form-group__text select">
+                                    <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Drop-down'">
-                              <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
-                                [(ngModel)]="pInfo.currentValue">
-                                <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                              </select>
+                                <div class="form-group dropdown input--compressed">
+                                  <div class="form-group__text select">
+                                    <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
+                                  </div>
+                                </div>
                             </td>
 
                             <td *ngSwitchCase="'Multiselect'">
                               <p-multiSelect [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                [options]="pInfo.listMutiSelect" optionLabel="name" [(ngModel)]="pInfo.currentValue">
+                                [options]="pInfo.listMutiSelect" optionLabel="name"
+                                [(ngModel)]="pInfo.listCurrentValue">
                               </p-multiSelect>
                             </td>
                           </tr>
@@ -168,8 +214,13 @@
         </p-accordion>
       </div>
     </div>
-    <button (click)="closeDialog()">Cancel</button>
-    <button (click)="saveForm()">Save</button>
+    <div class="row">
+      <div class="col-md-12 text-right">
+        <button class="display-none"></button>
+        <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
+        <button class="btn btn--primary" (click)='saveForm()'>Save</button>
+      </div>
+    </div>
   </div>
   <!-- </div> -->
 </p-dialog>

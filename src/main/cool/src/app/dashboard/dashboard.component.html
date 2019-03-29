@@ -437,7 +437,7 @@
             Details</button>
         </div>
 
-        <div *ngIf="selectedAction.type == 'Strategy Review'">
+        <div *ngIf="selectedAction.type == 'Strategy Review' || selectedAction.type == 'Design Review'">
           <button class="btn btn--primary base-margin-top" (click)="doNotApprove()">
             Do Not Approve
           </button>

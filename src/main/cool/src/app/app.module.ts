@@ -71,6 +71,7 @@ import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeh
 
 import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
 import { OfferconstructChildComponent } from './child_component/offerconstruct-child/offerconstruct-child.component';
+import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -116,7 +117,8 @@ export function app_init(configService: ConfigurationService) {
     DesignReviewComponent,
     DesignReviewExitCriteriaComponent,
     StakeholderAddComponent,
-    OfferconstructChildComponent
+    OfferconstructChildComponent,
+    OfferSetupComponent
   ],
   imports: [
     NgbModule,
