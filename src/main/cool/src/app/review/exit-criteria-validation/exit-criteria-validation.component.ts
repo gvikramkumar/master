@@ -44,7 +44,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
     if (this.approvedOfferId === this.currentOfferId) {
       this.requestApprovalAvailable = false;
     }
-
+    debugger;
     this.readOnly = this.configurationService.startupData.readOnly;
     this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
       const canRequestUsers = [];
@@ -57,13 +57,13 @@ export class ExitCriteriaValidationComponent implements OnInit {
           break;
         }
       }
-      for (let prop in this.stakeData) {
-        if (prop === 'Co-Owner' || prop === 'Owner') {
-          this.stakeData[prop].forEach(holder => {
-            canRequestUsers.push(holder['_id']);
-          });
-        }
-      }
+        let prop = this.configurationService.startupData.appRoleList
+        if (prop.includes('Co-Owner') || prop.includes('Owner')) {
+          let validUser = this.configurationService.startupData.userId
+            canRequestUsers.push(validUser);
+          }
+        
+      
 
       this.headerService.getCurrentUser().subscribe(user => {
         if (!canRequestUsers.includes(user)) {
