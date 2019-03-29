@@ -12,8 +12,6 @@
       <div class="col-lg-6">
         <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [notInList]="ruleNames"
                    notInListMessage="Rule name already exists" [required]="true" [disabled]="editMode"></fin-input>
-        <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="drivers" label="Driver*"
-                    optionsKey="name" optionsValue="value" [required]="true"></cui-select>
       </div>
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center start" class="status-section">
@@ -22,18 +20,29 @@
           </div>
           <div class="form-group-text" style="margin-left:30px;">Status: {{UiUtil.getStatusText(rule.status)}}</div>
         </div>
-        <cui-select name="period" [(ngModel)]="rule.period" [items]="periods" label="Driver Period*" dropdownMaxHeight="220px"
-                    [required]="true" optionsKey="period" optionsValue="period"></cui-select>
       </div>
     </div>
-    <br>
 
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="form-group-max-width">
-          <div class="border-and-padding">
-            <div style="margin-bottom:-10px;">
-              <div class="left text-center half-margin-bottom form-group-max-width">Matching Criteria</div>
+    <div [class.disabled]="rule.approvedOnce">
+
+      <div class="row">
+        <div class="col-lg-6">
+          <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="drivers" label="Driver*"
+                      optionsKey="name" optionsValue="value" [required]="true"></cui-select>
+        </div>
+        <div class="col-lg-6">
+          <cui-select name="period" [(ngModel)]="rule.period" [items]="periods" label="Driver Period*" dropdownMaxHeight="220px"
+                      [required]="true" optionsKey="period" optionsValue="period"></cui-select>
+        </div>
+      </div>
+      <br>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group-max-width">
+            <div class="border-and-padding">
+              <div style="margin-bottom:-10px;">
+                <div class="left text-center half-margin-bottom form-group-max-width">Matching Criteria</div>
                 <cui-select name="salesMatch" [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
                             optionsKey="match" optionsValue="match"></cui-select>
                 <cui-select name="productMatch" [disabled]="!!rule.beMatch" [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product"
@@ -46,19 +55,19 @@
                             empty="true" optionsKey="match" optionsValue="match"></cui-select>
                 <cui-select name="cntyMatch" [(ngModel)]="rule.countryMatch" [items]="countryMatches" dropdownMaxHeight="300"
                             optionsKey="name" optionsValue="value" empty="true" label="Country"></cui-select>
-              <cui-select name="extTheaterMatch" [(ngModel)]="rule.extTheaterMatch" [items]="extTheaterMatches"
-                          optionsKey="name" optionsValue="value" empty="true" label="External Theater"></cui-select>
-              <cui-multiselect name="glSegmentsMatch" [(ngModel)]="rule.glSegmentsMatch" [items]="glSegmentMatches"
-                          optionsKey="name" optionsValue="value" empty="true" label="GL Segments"></cui-multiselect>
+                <cui-select name="extTheaterMatch" [(ngModel)]="rule.extTheaterMatch" [items]="extTheaterMatches"
+                            optionsKey="name" optionsValue="value" empty="true" label="External Theater"></cui-select>
+                <cui-multiselect name="glSegmentsMatch" [(ngModel)]="rule.glSegmentsMatch" [items]="glSegmentMatches"
+                                 optionsKey="name" optionsValue="value" empty="true" label="GL Segments"></cui-multiselect>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-lg-6 conditional-div">
-        <div class="form-group-max-width">
-          <div class="border-and-padding">
-            <div style="margin-bottom:-10px;">
+        <div class="col-lg-6 conditional-div">
+          <div class="form-group-max-width">
+            <div class="border-and-padding">
+              <div style="margin-bottom:-10px;">
                 <div class="right text-center half-margin-bottom form-group-max-width">Selection Criteria</div>
                 <div class="row">
                   <div class="col-1">
@@ -110,16 +119,18 @@
                     <cui-multiselect name="scmsChoice" [(ngModel)]="scmsCritChoices" [items]="scmsChoices" optionsKey="name"
                                      class="replace-label-space" optionsValue="name" empty="true"></cui-multiselect>
                     <cui-multiselect name="beChoice" [(ngModel)]="beCritChoices" [items]="internalBeChoices" optionsKey="name"
-                                 optionsValue="name" dropdownMaxHeight="300"
+                                     optionsValue="name" dropdownMaxHeight="300"
                                      class="replace-label-space" empty="true"></cui-multiselect>
                   </div>
                 </div>
+              </div>
             </div>
           </div>
         </div>
+
       </div>
 
-    </div>
+    </div> <!-- disable if approvedOnce -->
 
     <div *ngIf="!viewMode" finAuth="super-user" class="fin-footer-buttons">
       <button type="submit" finErrorFlash cuiButton color="primary" (click)="submitForApproval()">Submit</button>
@@ -130,11 +141,11 @@
 
     <div *ngIf="viewMode"><br><br></div>
 
-<!--
-    <div>form.valid: {{form.valid}}</div>
-    <div>form.invalid: {{form.invalid}}</div>
-    <div>form.pending: {{form.pending}}</div>
--->
+    <!--
+        <div>form.valid: {{form.valid}}</div>
+        <div>form.invalid: {{form.invalid}}</div>
+        <div>form.pending: {{form.pending}}</div>
+    -->
 
   </form>
 </div>

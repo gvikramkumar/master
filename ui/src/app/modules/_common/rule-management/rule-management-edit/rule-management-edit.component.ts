@@ -47,6 +47,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   addMode = false;
   viewMode = false;
   editMode = false;
+  editModeAI = false;
   copyMode = false;
   rule = new AllocationRule();
   orgRule: AllocationRule;
@@ -113,6 +114,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
         if (this.viewMode || this.editMode || this.copyMode) {
           this.rule = results[6];
+          this.editModeAI = this.editMode && _.includes(['A', 'I'], this.rule.status);
         }
         this.rule.period = this.rule.period || this.periods[0].period;
         if (this.copyMode) {
@@ -121,7 +123,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           delete this.rule.createdDate;
         }
         if (this.editMode) {
-          if (_.includes(['A', 'I'], this.rule.status)) {
+          if (this.editModeAI) {
             delete this.rule.createdBy;
             delete this.rule.createdDate;
           }
