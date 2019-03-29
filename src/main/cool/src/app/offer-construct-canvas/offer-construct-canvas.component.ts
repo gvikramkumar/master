@@ -1438,11 +1438,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     console.log("cds", cds);
 
 
-    this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
-    },
-      (error) => {
-        console.log(error);
-      });
+    // this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
+    // },
+    //   (error) => {
+    //     console.log(error);
+    //   });
   }
 
   /**
