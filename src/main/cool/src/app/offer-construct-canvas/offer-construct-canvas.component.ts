@@ -27,6 +27,7 @@ import { OfferDetailViewService } from '@app/services/offer-detail-view.service'
 import { filter } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
+import { ConfigurationService } from '@shared/services';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offer-construct-canvas.component.html',
@@ -47,6 +48,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   searchInput: any;
   results;
   initalRowAdded: Boolean = true;
+  readOnly: Boolean = false;
   expandView = true;
   editData: any;
   showButtons: any = false;
@@ -109,11 +111,12 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public uniqueNodeId: any;
   public isMajorMinorGroupCreated: boolean = false;
   public isDisabledView: boolean = true;
-  readOnly: boolean = false;
 
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
+    private configurationService: ConfigurationService,
     private activatedRoute: ActivatedRoute, private _fb: FormBuilder, private offerDetailViewService: OfferDetailViewService) {
+
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -806,6 +809,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       { field: 'productFamily', header: 'PRODUCT FAMILY' },
       { field: 'listPrice', header: 'LIST PRICE(USD)' }
     ];
+
+
+    this.readOnly = this.configurationService.startupData.readOnly;
+
   }
 
 
@@ -943,8 +950,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStartRow($event, item) {
-    this.draggedItem = item.node;
-    // this.selected = [...this.selected];
+    if (this.readOnly === false) {
+      this.draggedItem = item.node;
+      // this.selected = [...this.selected];
+    }
+
   }
 
   dragStart(event, item: any) {
@@ -1681,6 +1691,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
+
 
 }
 

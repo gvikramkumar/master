@@ -9,6 +9,7 @@ import { OfferPhaseService } from '../services/offer-phase.service';
 import { MessageService } from '../services/message.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { OfferconstructCanvasService } from '@app/offer-construct-canvas/service/offerconstruct-canvas.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-offer-construct',
@@ -200,7 +201,12 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
     // Need to drag atlease one major and one minor items from offer component to enable request approval button.
     const majorItemData = [];
     const minorItemData = [];
-
+    if (_.isEmpty(this.constructDetails['message'])) {
+      this.messageService.sendMessage('Save Offer Construct Details');
+      if (msg !== 'stay_on_this_page') {
+        this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
+      }
+    } else {
     this.constructDetails['message'].forEach(item => {
       if (item.data.isMajorLineItem === true) {
         majorItemData.push(item);
@@ -242,6 +248,7 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
       }
     }
   }
+}
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

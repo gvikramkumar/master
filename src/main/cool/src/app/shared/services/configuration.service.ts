@@ -50,6 +50,8 @@ export class ConfigurationService {
                                     return accumulator;
                                 }, []));
 
+                            this._startupData.readOnly = this.editAuthValidation(this._startupData.appRoleList);
+
                             this._startupData.businessEntity = resUserInfo.userMapping[0]['businessEntity'];
                             if (this._startupData.isSuperAdmin || this._startupData.isFunctionalAdmin) {
                                 this._startupData.hasAdminAccess = true;
@@ -79,5 +81,20 @@ export class ConfigurationService {
 
     get startupData(): any {
         return this._startupData;
+    }
+
+
+    //check if the login user is owner/co-owner to determine the edit auth
+    editAuthValidation(currentUserRole: any): boolean {
+
+        let readOnly: boolean = false;
+        const adminRole = ['Owner', 'Co-Owner'];
+        if (adminRole.some(user => currentUserRole.includes(user))) {
+            readOnly = false;
+        } else {
+            readOnly = true;
+        }
+
+        return readOnly;
     }
 }
