@@ -6,13 +6,8 @@
         <input [name]="question.egineAttribue" [id]="question.egineAttribue"
           *ngIf='question.egineAttribue === "Item Name (PID)"' [attr.disabled]='true' class="form-control">
         <input [name]="question.egineAttribue" [id]="question.egineAttribue"
-<<<<<<< HEAD
           *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue" maxlength="{{question.rules.maxCharacterLen}}">
         <label for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
-=======
-          *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
-        <label for="questionLabel">{{question.question}}</label>
->>>>>>> master
       </div>
       <!-- Select -->
       <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Drop-down'">
@@ -20,29 +15,17 @@
           [(ngModel)]="question.currentValue">
           <option *ngFor="let opt of question.values" [value]="opt">{{opt}}</option>
         </select>
-<<<<<<< HEAD
         <label for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
       </div>
       <!-- Multiselect-->
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
         <label for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
-=======
-        <label for="questionLabel">{{question.question}}</label>
-      </div>
-      <!-- Multiselect-->
-      <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
-        <label for="questionLabel">{{question.question}}</label>
->>>>>>> master
         <p-multiSelect [id]="question.egineAttribue" [name]="question.egineAttribue" [options]="question.listMutiSelect"
           optionLabel="name" [(ngModel)]="question.listCurrentValue"></p-multiSelect>
       </div>
       <!-- Radio Button -->
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'">
-<<<<<<< HEAD
         <label class="radio half-margin-bottom" for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
-=======
-        <label class="radio half-margin-bottom" for="questionLabel">{{question.question}}</label>
->>>>>>> master
         <div>
           <label class="radio" *ngFor="let rad of question.values">
             <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"
