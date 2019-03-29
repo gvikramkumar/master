@@ -153,7 +153,8 @@
 
                             <td *ngSwitchCase="'Multiselect'">
                               <p-multiSelect [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                [options]="pInfo.listMutiSelect" optionLabel="name" [(ngModel)]="pInfo.currentValue">
+                                [options]="pInfo.listMutiSelect" optionLabel="name"
+                                [(ngModel)]="pInfo.listCurrentValue">
                               </p-multiSelect>
                             </td>
                           </tr>

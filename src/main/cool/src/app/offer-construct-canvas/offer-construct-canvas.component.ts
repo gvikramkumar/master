@@ -262,17 +262,31 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   addItms() {
+    let itemsData: any;
     this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(items => {
-      let itemsData = items.body;
-      this.questionForm.patchValue(itemsData);
+      itemsData = items.body;
+      // this.questionForm.patchValue(itemsData);
       this.cd.detectChanges();
-    });
+    }, (err) => { },
+      () => { this.singleFormCopy(itemsData) });
     this.setSearchItem.node.data.searchItemRef = this.itemsList;
     this.offerConstructItems = [...this.offerConstructItems];
     this.cd.detectChanges();
   }
 
   //search copy attributes
+
+  singleFormCopy(itemsData) {
+    let groupName: any = Object.keys(this.questionsList);
+    for (let searchValue in itemsData) {
+      // itemsData.forEach(searchValue => {
+      this.questionsList[groupName].forEach(element => {
+        if (searchValue === element.question) {
+          element.currentValue = itemsData[searchValue];
+        }
+      });
+    }
+  }
 
   searchCopyAttributes(event) {
     const searchString = event.query.toUpperCase();
@@ -1436,11 +1450,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     console.log("cds", cds);
 
 
-    // this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
-    // },
-    //   (error) => {
-    //     console.log(error);
-    //   });
+    this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
+    },
+      (error) => {
+        console.log(error);
+      });
   }
 
   /**
