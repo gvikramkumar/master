@@ -229,7 +229,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.measureService.getManyActive().toPromise(),
       this.ruleService.getManyLatestGroupByNameActive().toPromise(),
       this.sourceService.getMany().toPromise(),
-      this.submeasureService.getDistinct('name', {moduleId: -1}).toPromise(),
+      this.submeasureService.getDistinct('name', {moduleId: this.store.module.moduleId}).toPromise(),
       this.pgLookupService.callRepoMethod('getSubmeasurePNLNodes', null, {moduleId: this.store.module.moduleId}).toPromise(),
       this.fsFileService.getInfoMany({directory: Directory.profBusinessUpload, buFileType: BusinessUploadFileType.template, buUploadType: 'dept-upload'}).toPromise()
     ];

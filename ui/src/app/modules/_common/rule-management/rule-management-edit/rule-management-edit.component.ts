@@ -93,7 +93,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
-      this.ruleService.getDistinct('name', {moduleId: -1}).toPromise(),
+      this.ruleService.getDistinct('name', {moduleId: this.store.module.moduleId}).toPromise(),
       this.lookupService.getValues(['drivers', 'periods']).toPromise()
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
