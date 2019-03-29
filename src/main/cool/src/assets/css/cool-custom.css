@@ -625,6 +625,10 @@ th.ui-sortable-column.ng-star-inserted {
 }
 
 /* Add All Offer Details CUstom Data Table  */
+.cool.cui .section-label {
+  color:white;
+  background:#017CAD;
+}
 .cool.cui .view-item-details .form-group.input--compressed .form-group__text.select:after {
   top: initial;
 }
@@ -632,8 +636,11 @@ th.ui-sortable-column.ng-star-inserted {
   width: 100%;
   display: block;
 }
-.cool.cui .view-item-details .detail-lables tbody {
-  max-width: 280px;
+.cool.cui .view-item-details .detail-labels {
+  border-right: none;
+}
+.cool.cui .view-item-details .detail-labels tbody {
+  max-width: 100%;
   display: block;
 }
 .cool.cui .view-item-details tbody tr {
@@ -644,7 +651,9 @@ th.ui-sortable-column.ng-star-inserted {
   width: 100%;
   display: block;
   overflow: visible;
-  padding: 0;
+}
+.cool.cui .view-item-details .section-label th.section-label {
+  width: 100%!important;
 }
 
 .cool.cui .view-item-details .form-group .form-group__text input,
