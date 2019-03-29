@@ -21,7 +21,7 @@
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
         <label for="questionLabel">{{question.question}}</label>
         <p-multiSelect [id]="question.egineAttribue" [name]="question.egineAttribue" [options]="question.listMutiSelect"
-          optionLabel="name" [(ngModel)]="question.currentValue"></p-multiSelect>
+          optionLabel="name" [(ngModel)]="question.listCurrentValue"></p-multiSelect>
       </div>
       <!-- Radio Button -->
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'">
