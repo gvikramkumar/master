@@ -531,6 +531,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     return rtn;
   }
 
-
+  isApprovedOnce() {
+    return this.rule.approvedOnce === 'Y';
+  }
 
 }
