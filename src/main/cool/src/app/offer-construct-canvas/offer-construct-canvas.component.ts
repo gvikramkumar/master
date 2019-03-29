@@ -264,9 +264,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   addItms() {
     this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(items => {
       let itemsData = items.body;
-      if (this.lineItemName === itemsData['Item Category']) {
-        this.questionForm.patchValue(itemsData);
-      }
+      this.questionForm.patchValue(itemsData);
       this.cd.detectChanges();
     });
     this.setSearchItem.node.data.searchItemRef = this.itemsList;
