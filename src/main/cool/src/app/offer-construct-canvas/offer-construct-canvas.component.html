@@ -91,7 +91,7 @@
                   <div class="col-md-3">
                     <h6>Offer Configuration </h6>
                   </div>
-                  <div class="col text-right">
+                  <div class="col text-right" [class.disabled]="isDisabledView">
                     <span (click)='showDialog(); displayAddDetails=false'><a href="javascript:;"><span
                           class="icon-add-contain"></span>
                         Add All Item Detail&nbsp;&nbsp;</a></span>
@@ -154,10 +154,12 @@
                                     *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
                                 </span>
                                 <a *ngIf="!rowData['isGroupNode'] && !rowData['eginieItem']" class="pull-right"
-                                  (click)="showAddDetailsDailog(rowNode)"><span class="icon-add-contain"></span> Add
+                                  (click)="showAddDetailsDailog(rowNode)" [class.disabled]="isDisabledView"><span
+                                    class="icon-add-contain"></span> Add
                                   Details</a>
                                 <a *ngIf="rowData['eginieItem']" class="pull-right"
-                                  (click)="showViewDetailsDailog(rowNode)"><span class="icon-add-contain"></span> View
+                                  (click)="showViewDetailsDailog(rowNode)" [class.disabled]="isDisabledView"><span
+                                    class="icon-add-contain"></span> View
                                   Details</a>
                               </div>
                             </td>
