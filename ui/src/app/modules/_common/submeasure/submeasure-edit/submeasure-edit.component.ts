@@ -33,6 +33,7 @@ import {BusinessUploadService} from '../../services/business-upload.service';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
+  effectiveMonthNotRequired = true;
   deptUploadFilename: string;
   deptUploadTemplate: FsFile;
   manualMixHwDb: number;
@@ -248,6 +249,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.sm = results[6];
           this.editModeAI = this.editMode && _.includes(['A', 'I'], this.sm.status);
         }
+        // this is an edge case: create unallocated group >> approve >> now want to make it allocated
+        this.effectiveMonthNotRequired = this.viewMode || (this.editMode && this.sm.approvedOnce === 'Y' && !this.isUnallocatedGroup());
         if (this.addMode) {
           if (this.route.snapshot.params.measureId) {
             this.sm.measureId = Number(this.route.snapshot.params.measureId);
@@ -287,8 +290,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       })
       .then(() => {
         const promises2: Promise<any>[] = [
-          this.pgLookupService.getSubmeasureFlashCategories(this.sm.submeasureKey || 0).toPromise(),
-          this.pgLookupService.getSubmeasureAdjustmentTypes(this.sm.submeasureKey || 0).toPromise(),
+          this.pgLookupService.callRepoMethod('getSubmeasureFlashCategories', {submeasureKey: this.sm.submeasureKey || 0}).toPromise(),
+          this.pgLookupService.callRepoMethod('getSubmeasureAdjustmentTypes', {submeasureKey: this.sm.submeasureKey || 0}).toPromise()
         ]
         if ((this.viewMode || this.editMode) && this.isManualMix()) { // needs submeasureKey for this call
           promises2.push(this.pgLookupService.callRepoMethod('getManualMixHwSwBySubmeasureKey',
@@ -937,11 +940,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (this.sm.rules.length > _.uniq(this.sm.rules).length) {
       this.errs.push('Duplicate rules entered');
     }
-    // this shouldn't have to be here, but currently we have a bug where form.valid === true even though this control
-    // is highlighted red with required: true error
-    if (!UiUtil.isValidFiscalMonth(this.sm.startFiscalMonth)) {
-      this.errs.push(`No "Effective Month" value`);
-    }
 
     if (this.isManualMix()) {
       const hw = Number(this.sm.manualMixHw);
@@ -957,7 +955,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       }
     }
 
-    if (this.isDeptUpload() && this.sm.indicators.deptAcct !== 'A') {
+    if (this.isDeptUpload() && !this.isApprovedOnce() && this.sm.indicators.deptAcct !== 'A') {
       this.errs.push('Must upload Dept/Acct data');
     }
 
@@ -1016,6 +1014,9 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     return this.sm.indicators.groupFlag === 'Y';
   }
 
+  isApprovedOnce() {
+    return this.sm.approvedOnce === 'Y';
+  }
   changeFile(fileInput) {
     this.deptUploadFilename = fileInput.files[0] && fileInput.files[0].name;
   }

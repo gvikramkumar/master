@@ -208,13 +208,13 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'valid-slpf-driver':
       case 'dollar-upload':
-        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', null, true);
+        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', true);
         break;
       case 'mapping-upload':
-        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', null, true);
+        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', true);
         break;
       case 'dept-upload':
-        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', null, true);
+        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true);
         break;
     }
     if (obsFiscalMonth) {
@@ -294,12 +294,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     switch (this.report.type) {
       case 'dollar-upload':
       case 'valid-slpf-driver':
-        obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
-          `sub_measure_key in ( ${this.submeasureKeys} )`);
+        obs = this.pgLookupService.callRepoMethod('getDollarUploadFiscalMonthsFromSubmeasureKeys', {submeasureKeys: this.submeasureKeys});
         break;
       case 'mapping-upload':
-        obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
-          `sub_measure_key in ( ${this.submeasureKeys} )`);
+        obs = this.pgLookupService.callRepoMethod('getMappingUploadFiscalMonthsFromSubmeasureKeys', {submeasureKeys: this.submeasureKeys});
         break;
     }
     obs.subscribe(fiscalMonths => {

@@ -188,9 +188,8 @@ export default class DatabaseController {
       });
   }
 
-  autoSync(req): Promise<any> {
+  autoSync(syncMap: SyncMap, req): Promise<any> {
     if (config.autoSyncOn) {
-      const syncMap = this.getSyncMapFromUploadType(req);
       return this.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id)
         .catch(err => {
           throw new ApiError('AutoSync error', Object.assign({message: err.message}, err));
@@ -199,31 +198,6 @@ export default class DatabaseController {
       return Promise.resolve();
     }
   }
-
-  getSyncMapFromUploadType(req) {
-    const uploadTypes = {
-      prof: [
-        {type: 'dollar-upload', syncMapProp: 'dfa_prof_input_amnt_upld'},
-        {type: 'mapping-upload', syncMapProp: 'dfa_prof_manual_map_upld'},
-        {type: 'dept-upload', syncMapProp: 'dfa_prof_dept_acct_map_upld'},
-        {type: 'sales-split-upload', syncMapProp: 'dfa_prof_sales_split_pctmap_upld'},
-        {type: 'product-class-upload', syncMapProp: 'dfa_prof_swalloc_manualmix_upld'},
-        {type: 'alternate-sl2-upload', syncMapProp: 'dfa_prof_scms_triang_altsl2_map_upld'},
-        {type: 'corp-adjustments-upload', syncMapProp: 'dfa_prof_scms_triang_corpadj_map_upld'},
-        {type: 'disti-direct-upload', syncMapProp: 'dfa_prof_disti_to_direct_map_upld'},
-        {type: 'service-map-upload', syncMapProp: 'dfa_prof_service_map_upld'},
-        {type: 'service-training-upload', syncMapProp: 'dfa_prof_service_trngsplit_pctmap_upld'},
-      ]
-    };
-    const syncMap = new SyncMap();
-    const syncProp = _.find(uploadTypes[req.dfa.module.abbrev], {type: req.query.uploadType}).syncMapProp;
-    if (!syncProp) {
-      throw new ApiError(`getSyncMapFromUploadType: no syncProp`);
-    }
-    syncMap[syncProp] = true;
-    return syncMap;
-  }
-
 
 }
 

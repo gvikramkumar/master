@@ -56,7 +56,7 @@ export default class ControllerBase {
   }
 
   getManyLatestGroupByNameActive(req, res, next) {
-    this.repo.getManyLatestGroupByNameActive(req.query.moduleId || req.body.moduleId)
+    this.repo.getManyLatestGroupByNameActive(Number(req.query.moduleId) || req.body.moduleId)
       .then(docs => res.send(docs))
       .catch(next);
   }

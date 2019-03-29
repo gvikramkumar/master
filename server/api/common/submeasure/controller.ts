@@ -19,6 +19,7 @@ import xlsx from 'xlsx';
 import AnyObj from '../../../../shared/models/any-obj';
 import {injector, lazyInject} from '../../../lib/common/inversify.config';
 import DatabaseController from '../../database/controller';
+import {SyncMap} from '../../../../shared/models/sync-map';
 
 
 interface FilterLevel {
@@ -192,22 +193,10 @@ export default class SubmeasureController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'submeasure', 'submeasure', omitProperties);
   }
 
-  isPassThrough(sm) {
-    return sm.indicators.passThrough === 'Y';
-  }
-
-  isUnallocatedGroup(sm) {
-    return sm.indicators.groupFlag === 'Y' && sm.indicators.allocationRequired === 'N';
-  }
-
-  isPassThroughOrUnallocatedGroup(sm) {
-    return this.isPassThrough(sm) || this.isUnallocatedGroup(sm);
-  }
-
   preApproveStep(sm, req) {
     const promises = [];
     // remove product class uploads for this submeasure and add new ones
-    if (sm.categoryType === 'Manual Mix' && !this.isPassThroughOrUnallocatedGroup(sm)) {
+    if (sm.categoryType === 'Manual Mix') {
       promises.push(this.productClassUploadRepo.removeMany({submeasureName: sm.name})
         .then(() => {
           return this.productClassUploadRepo.addManyTransaction([
@@ -220,7 +209,7 @@ export default class SubmeasureController extends ApprovalController {
             });
         }));
     }
-    if (shUtil.isDeptUpload(sm) && sm.indicators.deptAcct === 'A' && !this.isPassThroughOrUnallocatedGroup(sm)) {
+    if (shUtil.isDeptUpload(sm) && sm.indicators.deptAcct === 'A') {
       // find temp=Y records, if found, delete for sm.name && temp = N, then change these to temp Y >> N
       promises.push(
         this.deptUploadRepo.getMany({submeasureName: sm.name, temp: 'Y'})
@@ -239,12 +228,22 @@ export default class SubmeasureController extends ApprovalController {
       .then(() => sm);
   }
 
-  postApproveStep(data, req): Promise<any> {
+  postApproveStep(sm, req): Promise<any> {
     // we have to avoid circular reference between DatabaseController and SubmeasureController. This required changes in both places
     // to overcome. See DatabaseController constructor for more info
     const databaseCtrl = injector.get(DatabaseController);
-    req.query.uploadType = 'dept-upload';
-    return this.databaseController.autoSync(req);
+    const syncMap = new SyncMap();
+    if (sm.categoryType === 'Manual Mix') {
+      syncMap.dfa_prof_swalloc_manualmix_upld = true;
+    }
+    if (shUtil.isDeptUpload(sm)) {
+      syncMap.dfa_prof_dept_acct_map_upld = true;
+    }
+    if (syncMap.dfa_prof_swalloc_manualmix_upld || syncMap.dfa_prof_dept_acct_map_upld) {
+      return this.databaseController.autoSync(syncMap, req);
+    } else {
+      return Promise.resolve();
+    }
   }
 
   preRejectStep(sm, req) {

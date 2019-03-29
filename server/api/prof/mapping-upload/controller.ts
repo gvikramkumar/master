@@ -20,7 +20,7 @@ export default class MappingUploadController extends ControllerBase {
     return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.prof)
       .then(subs => {
         mums.forEach(mum => {
-          const sub = _.find(subs, {name: mum.submeasureName});
+          const sub = _.find(subs, x => x.name.toLowerCase() === mum.submeasureName.toLowerCase());
           if (!sub) {
             throw new ApiError(`${tableName}: no submeasure for submeasureName: ${mum.submeasureName}`);
           }

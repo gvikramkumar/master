@@ -32,28 +32,32 @@ export class PgLookupController {
 
   getRecordset(req, res, next) {
     this.verifyProperties(req.body, ['table', 'column']);
-    this.repo.getRecordset(req.body.table, req.body.column, req.body.where, req.body.isNumber, req.body.upper)
+    // shut down where for security risk
+    this.repo.getRecordset(req.body.table, req.body.column, null, req.body.isNumber, req.body.upper)
       .then(list => res.json(list))
       .catch(next);
   }
 
   getListFromColumn(req, res, next) {
     this.verifyProperties(req.body, ['table', 'column']);
-    this.repo.getListFromColumn(req.body.table, req.body.column, req.body.where, req.body.isNumber, req.body.upper)
+    // shut down where for security risk
+    this.repo.getListFromColumn(req.body.table, req.body.column, null, req.body.isNumber, req.body.upper)
       .then(list => res.json(list))
       .catch(next);
   }
 
   getSortedListFromColumn(req, res, next) {
     this.verifyProperties(req.body, ['table', 'column']);
-    this.repo.getSortedListFromColumn(req.body.table, req.body.column, req.body.where, req.body.isNumber)
+    // shut down where for security risk
+    this.repo.getSortedListFromColumn(req.body.table, req.body.column, null, req.body.isNumber)
       .then(list => res.json(list))
       .catch(next);
   }
 
   getSortedUpperListFromColumn(req, res, next) {
     this.verifyProperties(req.body, ['table', 'column']);
-    this.repo.getSortedUpperListFromColumn(req.body.table, req.body.column, req.body.where)
+    // shut down where for security risk
+    this.repo.getSortedUpperListFromColumn(req.body.table, req.body.column, null)
       .then(list => res.json(list))
       .catch(next);
   }
@@ -68,14 +72,6 @@ export class PgLookupController {
       .then(resp => res.json(resp.rows.map(record => orm.recordToObject(record))))
       .catch(next);
   }
-
-  /*
-  sales >> sl1 only
-product >> tg only
-legal entity??
-internal be be/sub be (not sure page will work well with 100 choices in dropdown)
-
-   */
 
   verifyProperties(data, arr) {
     const missingProps = [];

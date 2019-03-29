@@ -82,7 +82,15 @@ export default class RepoBase {
     ])
       .then(arr => {
         const ids = arr.map(obj => obj._id);
-        return this.Model.find({_id: {$in: ids}}).exec();
+        // Model.find() vs native.find: 565ms vs 88ms, we have 1000 ids to get, so will defer to native in situations like that
+        // return this.Model.find({_id: {$in: ids}});
+        return mgc.db.collection(this.Model.collection.collectionName).find({_id: {$in: ids}}).toArray()
+          .then(objs => {
+            return objs.map(x => {
+              x.id = x._id.toString();
+              return x;
+            });
+          });
       });
   }
 
@@ -97,7 +105,7 @@ export default class RepoBase {
   // get the latest version that's active or inactive, but only the actives from those
   getManyLatestGroupByNameActive(moduleId, filter = {}) {
     return this.getManyLatestGroupByNameActiveInactive(moduleId, filter)
-      .then(docs => docs.filter(doc => doc.status === 'A'));
+      .then((docs: any) => docs.filter(doc => doc.status === 'A'));
   }
 
   getManyLatestGroupByNameInactive(moduleId, _filter = {}) {
