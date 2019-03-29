@@ -19,7 +19,7 @@ export default class DeptUploadController extends ControllerBase {
     return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.prof)
       .then(subs => {
         objs.forEach(obj => {
-          const sub = _.find(subs, {name: obj.submeasureName});
+          const sub = _.find(subs, x => x.name.toLowerCase() === obj.submeasureName.toLowerCase());
           if (!sub) {
             throw new ApiError(`${tableName}: no submeasure for submeasureName: ${obj.submeasureName}`);
           }

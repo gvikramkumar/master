@@ -20,7 +20,7 @@ export default class DollarUploadController extends ControllerBase {
     return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.prof)
       .then(subs => {
         dums.forEach(dum => {
-          const sub = _.find(subs, {name: dum.submeasureName});
+          const sub = _.find(subs, x => x.name.toLowerCase() === dum.submeasureName.toLowerCase());
           if (!sub) {
             throw new ApiError(`${tableName}: no submeasure for submeasureName: ${dum.submeasureName}`);
           }
