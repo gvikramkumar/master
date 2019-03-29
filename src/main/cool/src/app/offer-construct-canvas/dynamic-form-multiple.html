@@ -24,11 +24,11 @@
             <p-header>
               {{item.key}}
             </p-header>
-            <div class="row" style="overflow-y: auto;">
+            <div class="row">
               <!-- Accordian content starts-->
               <div class="col-sm-2">
                 <!-- Unique -->
-                <table class="detail-lables text-left table table--compressed table--bordered">
+                <table class="detail-labels text-left table table--compressed table--bordered">
                   <tbody>
                     <tr>
                       <th>
@@ -44,7 +44,7 @@
                     <!-- </tbody> -->
                     <!-- <tbody class="offer-values"> -->
                     <tr>
-                      <th>Unique Item</th>
+                      <th class="section-label">Unique Item</th>
                     </tr>
                     <!-- <div > -->
                     <div *ngFor="let ques of item.value['questionset']">
@@ -53,7 +53,7 @@
                       </tr>
                     </div>
                     <tr>
-                      <th>Additional Item</th>
+                      <th class="section-label">Additional Item</th>
                     </tr>
                     <div *ngFor="let ques of item.value['questionset']">
                       <tr *ngIf="ques.itemType !== 'Unique Item'">
@@ -64,7 +64,7 @@
                   </tbody>
                 </table>
               </div>
-              <div class="col-sm-10" style="display:flex">
+              <div class="col-sm-10" style="display:flex;overflow-x: scroll;">
                 <div *ngFor="let queslist of item.value['productInfo']">
                   <div *ngFor="let ques of queslist|keyvalue">
                     <table class="pull-left text-left table table--compressed table--bordered"
