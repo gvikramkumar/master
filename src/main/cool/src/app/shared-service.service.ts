@@ -14,7 +14,7 @@ export class SharedService {
      * Get Functional Roles
      */
     getFunctionalRoles(): Observable<any> {
-        let url = this.environmentService.REST_API_REGISTER_NEW_USER_GET_URL;
+        let url = this.environmentService.REST_API_GET_FUNCTIONAL_ROLE_URL;
         return this._http.get(url, { withCredentials: true });
     }
 

@@ -1,6 +1,6 @@
 <div class="content solutioning">
   <div class="container">
-    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
+    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
       [stakeData]="stakeData" (updateMessage)="updateMessage($event)"> </app-menu-bar>
 
     <div class="panel-wrapper mt-15">
@@ -42,8 +42,8 @@
         <!-- Right Panel -->
         <div class="rightContent col-sm-12 col-md-3" style="margin-top: -5px;">
           <app-right-panel [stakeData]="stakeData" [offerName]="offerName" [derivedMM]="derivedMM"
-            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" (updateStakeData)="updateStakeData($event)"
-            [noOfWeeksDifference]="noOfWeeksDifference"></app-right-panel>
+            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+          </app-right-panel>
         </div>
 
       </div>
