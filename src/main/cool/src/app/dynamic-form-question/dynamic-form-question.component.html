@@ -7,7 +7,7 @@
           *ngIf='question.egineAttribue === "Item Name (PID)"' [attr.disabled]='true' class="form-control">
         <input [name]="question.egineAttribue" [id]="question.egineAttribue"
           *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
-        <label for="questionLabel">{{question.egineAttribue}}</label>
+        <label for="questionLabel">{{question.question}}</label>
       </div>
       <!-- Select -->
       <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Drop-down'">
@@ -15,17 +15,17 @@
           [(ngModel)]="question.currentValue">
           <option *ngFor="let opt of question.values" [value]="opt">{{opt}}</option>
         </select>
-        <label for="questionLabel">{{question.egineAttribue}}</label>
+        <label for="questionLabel">{{question.question}}</label>
       </div>
       <!-- Multiselect-->
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
-        <label for="questionLabel">{{question.egineAttribue}}</label>
+        <label for="questionLabel">{{question.question}}</label>
         <p-multiSelect [id]="question.egineAttribue" [name]="question.egineAttribue" [options]="question.listMutiSelect"
-          optionLabel="name" [(ngModel)]="question.currentValue"></p-multiSelect>
+          optionLabel="name" [(ngModel)]="question.listCurrentValue"></p-multiSelect>
       </div>
       <!-- Radio Button -->
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'">
-        <label class="radio half-margin-bottom" for="questionLabel">{{question.egineAttribue}}</label>
+        <label class="radio half-margin-bottom" for="questionLabel">{{question.question}}</label>
         <div>
           <label class="radio" *ngFor="let rad of question.values">
             <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"

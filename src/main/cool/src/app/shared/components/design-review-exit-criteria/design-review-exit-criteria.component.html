@@ -5,7 +5,7 @@
         <div class="card-header" id="headingOne">
           <h5 class="mb-0">
             Exit Criteria
-            <button (click)="requestForApproval()" [disabled]="!requestApprovalAvailable" class="btn pull-right"
+            <button (click)="requestForApproval()" [disabled]="!requestApprovalAvailable || readOnly" class="btn pull-right"
               type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
               aria-controls="collapseOne">
               Request Approval
