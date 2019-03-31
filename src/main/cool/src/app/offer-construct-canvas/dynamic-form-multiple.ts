@@ -18,37 +18,82 @@ export class DynamicFormMultipleComponent implements OnInit {
     public ismajorSection: boolean = true;
     public minorLineItemsActive: Boolean = false;
     public majorLineItemsActive: Boolean = false;
+    public copyAttributeResults: any;
+    private results: any;
+    private selectedProduct: any = [];
+    private selectedTab: string;
+    private itemsData: any;
+    private itemsList: any = [];
+    private lengthList: any = [];
+    private currenntHeaderName: any;
+    public viewDetails: Boolean = false;
+    public detailArray:any[]=[];
+    public headerName: any = '';
 
-    cities1: any;
 
-
-    constructor(public offerConstructService: OfferConstructService) { }
-
-    ngOnInit() {
-
+    constructor(public offerConstructService: OfferConstructService,
+        private offerConstructCanvasService: OfferconstructCanvasService) {
         this.offerInfo = this.offerConstructService.singleMultipleFormInfo;
         this.majorOfferInfo = this.offerInfo.major;
         this.minorOfferInfo = this.offerInfo.minor;
 
         this.tableShowCondition = true;
+        this.selectedTab = 'major';
+        this.createObjectForSearch();
+
     }
 
+    ngOnInit() {
 
+
+    }
+
+    createObjectForSearch() {
+        //create object with blank value for search operation
+        let major = {};
+        let minor = {};
+        let majorLength = {};
+        let minorLength = {};
+        this.majorOfferInfo.forEach((element, index) => {
+            let name: any = Object.keys(element);
+            major[name] = '';
+            majorLength[name] = false;
+            if ((element[name].questionset).length > 0) {
+                majorLength[name] = true;
+            }
+        });
+        this.minorOfferInfo.forEach(element => {
+            let name: any = Object.keys(element);
+            minor[name] = '';
+            minorLength[name] = false;
+            if ((element[name].questionset).length > 0) {
+                minorLength[name] = true;
+            }
+        });
+        this.itemsList = { major: major, minor: minor };
+        this.lengthList = { major: majorLength, minor: minorLength };
+        console.log(this.itemsList);
+        console.log(this.lengthList);
+
+    }
 
     majorSection() {
         this.ismajorSection = true;
         this.minorLineItemsActive = false;
         this.majorLineItemsActive = true;
+        this.selectedTab = 'major';
     }
 
     minorSection() {
         this.ismajorSection = false;
         this.majorLineItemsActive = false;
         this.minorLineItemsActive = true;
+        this.selectedTab = 'minor';
     }
 
     onHide() {
         this.offerConstructService.closeAddDetails = false;
+        this.closeDialog();
     }
 
     saveForm() {
@@ -92,6 +137,152 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
 
+    //search copy and paste in multiple form
 
+    onTabOpen(e, headerName) {
+        this.currenntHeaderName = headerName;
+        // this.itemsList[headerName] = {};
+
+    }
+
+    searchCopyAttributes(event) {
+        const searchString = event.query.toUpperCase();
+        this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
+            console.log(results);
+            this.copyAttributeResults = [...results];
+        },
+            (error) => {
+                this.results = [];
+            }
+        );
+    }
+
+    getSelctedProduct(event, records) {
+        console.log(event.target.checked);
+        console.log(records);
+        if (event.target.checked) {
+            if (this.selectedProduct.length == 0) {
+                this.selectedProduct.push(records);
+            } else {
+                this.selectedProduct.forEach(element => {
+                    if ((element.groupName == records.groupName) && (element.groupName == records.groupName)) {
+                        this.selectedProduct.push(records);
+                    } else {
+                        this.selectedProduct.push(records);
+                    }
+                });
+            }
+        } else {
+            if (this.selectedProduct.length > 0) {
+                console.log('-- Before remove--- ', this.selectedProduct);
+                this.selectedProduct = this.removeFromArray(this.selectedProduct, records.uniqueKey)
+                console.log('-- After remove--- ', this.selectedProduct);
+            }
+        }
+    }
+
+    removeFromArray(array, key) {
+        let index = array.findIndex(x => x.uniqueKey === key);
+        array.splice(index, 1);
+        return array;
+    }
+
+    patchvalueToSelected(groupName) {
+        let itemsData = this.itemsData;
+        // if (this.itemsData) {
+
+        console.log(this.selectedProduct);
+        if (itemsData != undefined) {
+            this.selectedProduct.forEach(product => {
+                if (groupName = product.groupName) {
+                    for (let searchValue in itemsData) {
+                        // itemsData.forEach(searchValue => {
+                        product.listOfferQuestions.forEach(element => {
+                            if (searchValue === element.question) {
+                                element.currentValue = itemsData[searchValue];
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    addItms(groupName) {
+        let selectedSection = this.selectedTab;
+        let selectedGroup = groupName;
+        if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
+            this.headerName = this.itemsList.PID;
+            this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
+                if (items != undefined) {
+                    this.itemsData = items.body;
+                } else {
+                    console.log("network error");
+                }
+            }, (err) => { },
+                () => { });
+        }
+    }
+
+    patchToALL(groupName) {
+
+        // let groupName = this.currenntHeaderName;
+
+        //copy in major section or minor section
+        if (this.ismajorSection) {
+            this.majorOfferInfo.forEach((element, index) => {
+                let gname: any = Object.keys(element);
+                if (gname == groupName) {
+                    element[gname].productInfo.forEach((questionset, index) => {
+                        let setname: any = Object.keys(questionset);
+                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                    });
+                }
+            });
+        } else {
+            this.minorOfferInfo.forEach((element, index) => {
+                let gname: any = Object.keys(element);
+                if (gname == groupName) {
+                    element[gname].productInfo.forEach((questionset, index) => {
+                        let setname: any = Object.keys(questionset);
+                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                    });
+                }
+            });
+        }
+    }
+
+    copySearchItemToAllSection(questionset) {
+        let itemsData = this.itemsData;
+        if (itemsData != undefined) {
+            for (let searchValue in itemsData) {
+                // itemsData.forEach(searchValue => {
+                questionset.forEach(element => {
+                    if (searchValue === element.question) {
+                        element.currentValue = itemsData[searchValue];
+                    }
+                });
+            }
+        }
+    }
+
+    displayViewDetails() {
+      if (this.itemsData) {
+        this.detailArray = [];
+        for (let key in this.itemsData) {
+          if (key !== 'major/minor') {
+            this.detailArray.push({
+              egenieAttribute: key,
+              value: this.itemsData[key]
+            });
+          }
+        }
+        this.viewDetails = true;
+      }
+    }
+
+    onHideViewDetails() {
+      this.viewDetails = false;
+    }
 }
 
