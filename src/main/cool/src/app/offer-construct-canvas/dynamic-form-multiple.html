@@ -42,7 +42,7 @@
                           </p-autoComplete>
                         </div>
                         <div class="col-md-6">
-                          <button type="button" class="link">
+                          <button type="button" class="link" (click)="displayViewDetails()">
                             View
                           </button>
                           <button type="button" class="link" (click)="patchvalueToSelected(item.key)">
@@ -265,6 +265,15 @@
   <!-- </div> -->
 </p-dialog>
 
-
-
-<!-- separate tables -->
+<!-- Dialog for view details-->
+<p-dialog  header="View Details for {{headerName}}" closable="true" modal="true" showHeader="false"
+(onHide)="onHideViewDetails()" [responsive]="true" [(visible)]="viewDetails"
+[contentStyle]="{'height': '450px', 'min-width':'700px'}">
+<div class="divider"></div>
+<table class="table">
+  <tr *ngFor="let item of detailArray">
+    <td>{{item.egenieAttribute}}</td>
+    <td>{{item.value}}</td>
+  </tr>
+</table>
+</p-dialog>

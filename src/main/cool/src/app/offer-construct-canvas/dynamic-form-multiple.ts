@@ -26,7 +26,9 @@ export class DynamicFormMultipleComponent implements OnInit {
     private itemsList: any = [];
     private lengthList: any = [];
     private currenntHeaderName: any;
-
+    public viewDetails: Boolean = false;
+    public detailArray:any[]=[];
+    public headerName: any = '';
 
 
     constructor(public offerConstructService: OfferConstructService,
@@ -135,7 +137,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
 
-    //search copy and paste in multiple form 
+    //search copy and paste in multiple form
 
     onTabOpen(e, headerName) {
         this.currenntHeaderName = headerName;
@@ -210,6 +212,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         let selectedSection = this.selectedTab;
         let selectedGroup = groupName;
         if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
+            this.headerName = this.itemsList.PID;
             this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
                 if (items != undefined) {
                     this.itemsData = items.body;
@@ -261,6 +264,25 @@ export class DynamicFormMultipleComponent implements OnInit {
                 });
             }
         }
+    }
+
+    displayViewDetails() {
+      if (this.itemsData) {
+        this.detailArray = [];
+        for (let key in this.itemsData) {
+          if (key !== 'major/minor') {
+            this.detailArray.push({
+              egenieAttribute: key,
+              value: this.itemsData[key]
+            });
+          }
+        }
+        this.viewDetails = true;
+      }
+    }
+
+    onHideViewDetails() {
+      this.viewDetails = false;
     }
 }
 
