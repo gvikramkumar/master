@@ -43,6 +43,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
       const childIndexUnGroupData = this.unGroupData.findIndex(fqa => parentQuestionNumber === fqa.rules.referenceQ);
 
       if (childIndexUnGroupData !== -1) {
+
         const childQuestion = this.unGroupData[childIndexUnGroupData];
         const childQuestionNumber = this.unGroupData[childIndexUnGroupData]['questionNumber'];
 
