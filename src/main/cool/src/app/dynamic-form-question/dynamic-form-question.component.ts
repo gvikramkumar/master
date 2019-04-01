@@ -9,6 +9,7 @@ import { FormGroup } from '@angular/forms';
 export class DynamicFormQuestionComponent implements OnInit {
   @Input() question: any;
   @Input() questionForm: FormGroup;
+  @Input() headerName: FormGroup;
 
   constructor() { }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, ElementRef, Renderer, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
@@ -24,13 +24,18 @@ export class DynamicFormMultipleComponent implements OnInit {
     private selectedTab: string;
     private itemsData: any;
     private itemsList: any = [];
-    private lengthList: any = [];
+    private lengthList: any;
     private currenntHeaderName: any;
-
+    @Output() valueChange = new EventEmitter();
 
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService) {
+
+
+    }
+
+    ngOnInit() {
         this.offerInfo = this.offerConstructService.singleMultipleFormInfo;
         this.majorOfferInfo = this.offerInfo.major;
         this.minorOfferInfo = this.offerInfo.minor;
@@ -38,40 +43,21 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.tableShowCondition = true;
         this.selectedTab = 'major';
         this.createObjectForSearch();
-
-    }
-
-    ngOnInit() {
-
-
     }
 
     createObjectForSearch() {
         //create object with blank value for search operation
         let major = {};
         let minor = {};
-        let majorLength = {};
-        let minorLength = {};
         this.majorOfferInfo.forEach((element, index) => {
             let name: any = Object.keys(element);
             major[name] = '';
-            majorLength[name] = false;
-            if ((element[name].questionset).length > 0) {
-                majorLength[name] = true;
-            }
         });
         this.minorOfferInfo.forEach(element => {
             let name: any = Object.keys(element);
             minor[name] = '';
-            minorLength[name] = false;
-            if ((element[name].questionset).length > 0) {
-                minorLength[name] = true;
-            }
         });
         this.itemsList = { major: major, minor: minor };
-        this.lengthList = { major: majorLength, minor: minorLength };
-        console.log(this.itemsList);
-        console.log(this.lengthList);
 
     }
 
@@ -103,8 +89,15 @@ export class DynamicFormMultipleComponent implements OnInit {
                 this.replaceOrUpdatevalue(element[title], isUdate)
             });
         });
-        this.offerConstructService.closeAddDetails = false;
 
+        let counter = 10;
+        this.valueChange.emit(counter);
+        this.offerConstructService.closeAddDetails = false;
+    }
+
+    valueChanged() { // You can give any function name
+        let counter = 10;
+        this.valueChange.emit(counter);
     }
 
     closeDialog() {
@@ -112,6 +105,15 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
             this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+                let title: any = Object.keys(element);
+                element[title].listOfferQuestions.forEach(majorProduct => {
+                    majorProduct.currentValue = majorProduct.previousValue;
+                });
+            });
+        });
+        this.minorOfferInfo.forEach((list, index) => {
+            let groupName: any = Object.keys(list);
+            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(minorProduct => {
                     minorProduct.currentValue = minorProduct.previousValue;
