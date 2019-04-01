@@ -134,7 +134,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
 
-    //search copy and paste in multiple form 
+    //search copy and paste in multiple form
 
     onTabOpen(e, headerName) {
         this.currenntHeaderName = headerName;
@@ -182,26 +182,24 @@ export class DynamicFormMultipleComponent implements OnInit {
         return array;
     }
 
-    patchvalueToSelected(groupName) {
-        let itemsData = this.itemsData;
-        // if (this.itemsData) {
-
-        console.log(this.selectedProduct);
-        if (itemsData != undefined) {
-            this.selectedProduct.forEach(product => {
-                if (groupName = product.groupName) {
-                    for (let searchValue in itemsData) {
-                        // itemsData.forEach(searchValue => {
-                        product.listOfferQuestions.forEach(element => {
-                            if (searchValue === element.question) {
-                                element.currentValue = itemsData[searchValue];
-                            }
-                        });
-                    }
+  patchvalueToSelected(groupName) {
+    let itemsData = this.itemsData;
+    if (itemsData !== undefined) {
+      if (groupName === itemsData['Item Category']) {
+        this.selectedProduct.forEach(product => {
+          if (groupName = product.groupName) {
+            for (let searchValue in itemsData) {
+              product.listOfferQuestions.forEach(element => {
+                if (searchValue === element.question) {
+                  element.currentValue = itemsData[searchValue];
                 }
-            });
-        }
+              });
+            }
+          }
+        });
+      }
     }
+  }
 
     addItms(groupName) {
         let selectedSection = this.selectedTab;
@@ -220,30 +218,34 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     patchToALL(groupName) {
 
-        // let groupName = this.currenntHeaderName;
-
-        //copy in major section or minor section
-        if (this.ismajorSection) {
+      let itemsData = this.itemsData;
+      // copy items from the same ICC type
+      if (itemsData !== undefined) {
+        if (groupName === itemsData['Item Category']) {
+          //copy in major section or minor section
+          if (this.ismajorSection) {
             this.majorOfferInfo.forEach((element, index) => {
-                let gname: any = Object.keys(element);
-                if (gname == groupName) {
-                    element[gname].productInfo.forEach((questionset, index) => {
-                        let setname: any = Object.keys(questionset);
-                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
-                    });
-                }
+              let gname: any = Object.keys(element);
+              if (gname == groupName) {
+                element[gname].productInfo.forEach((questionset, index) => {
+                  let setname: any = Object.keys(questionset);
+                  this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                });
+              }
             });
-        } else {
+          } else {
             this.minorOfferInfo.forEach((element, index) => {
-                let gname: any = Object.keys(element);
-                if (gname == groupName) {
-                    element[gname].productInfo.forEach((questionset, index) => {
-                        let setname: any = Object.keys(questionset);
-                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
-                    });
-                }
+              let gname: any = Object.keys(element);
+              if (gname == groupName) {
+                element[gname].productInfo.forEach((questionset, index) => {
+                  let setname: any = Object.keys(questionset);
+                  this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                });
+              }
             });
+          }
         }
+      }
     }
 
     copySearchItemToAllSection(questionset) {
