@@ -19,18 +19,17 @@ export class DynamicFormMultipleComponent implements OnInit {
     public minorLineItemsActive: Boolean = false;
     public majorLineItemsActive: Boolean = false;
     public copyAttributeResults: any;
-    private results: any;
-    private selectedProduct: any = [];
-    private selectedTab: string;
-    private itemsData: any;
-    private itemsList: any = [];
-    private lengthList: any;
-    private currenntHeaderName: any;
+    public results: any;
+    public selectedProduct: any = [];
+    public selectedTab: string;
+    public itemsData: any;
+    public itemsList: any = [];
+    public lengthList: any;
+    public currenntHeaderName: any;
     @Output() valueChange = new EventEmitter();
     public viewDetails: Boolean = false;
     public detailArray: any[] = [];
     public headerName: any = '';
-
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService) {
@@ -98,11 +97,6 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.offerConstructService.closeAddDetails = false;
     }
 
-    valueChanged() { // You can give any function name
-        let counter = 10;
-        this.valueChange.emit(counter);
-    }
-
     closeDialog() {
         let isUdate: boolean = true;
         this.majorOfferInfo.forEach((list, index) => {
@@ -140,7 +134,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
 
-    //search copy and paste in multiple form
+    //search copy and paste in multiple form 
 
     onTabOpen(e, headerName) {
         this.currenntHeaderName = headerName;
@@ -161,8 +155,6 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     getSelctedProduct(event, records) {
-        console.log(event.target.checked);
-        console.log(records);
         if (event.target.checked) {
             if (this.selectedProduct.length == 0) {
                 this.selectedProduct.push(records);
@@ -192,22 +184,22 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     patchvalueToSelected(groupName) {
         let itemsData = this.itemsData;
-        // copy items from the same ICC type
-        if (itemsData !== undefined) {
-            if (groupName === itemsData['Item Category']) {
-                this.selectedProduct.forEach(product => {
-                    if (groupName = product.groupName) {
-                        for (let searchValue in itemsData) {
-                            // itemsData.forEach(searchValue => {
-                            product.listOfferQuestions.forEach(element => {
-                                if (searchValue === element.question) {
-                                    element.currentValue = itemsData[searchValue];
-                                }
-                            });
-                        }
+        // if (this.itemsData) {
+
+        console.log(this.selectedProduct);
+        if (itemsData != undefined) {
+            this.selectedProduct.forEach(product => {
+                if (groupName = product.groupName) {
+                    for (let searchValue in itemsData) {
+                        // itemsData.forEach(searchValue => {
+                        product.listOfferQuestions.forEach(element => {
+                            if (searchValue === element.question) {
+                                element.currentValue = itemsData[searchValue];
+                            }
+                        });
                     }
-                });
-            }
+                }
+            });
         }
     }
 
@@ -215,7 +207,6 @@ export class DynamicFormMultipleComponent implements OnInit {
         let selectedSection = this.selectedTab;
         let selectedGroup = groupName;
         if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
-            this.headerName = this.itemsList.PID;
             this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
                 if (items != undefined) {
                     this.itemsData = items.body;
@@ -228,33 +219,30 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     patchToALL(groupName) {
-        let itemsData = this.itemsData;
-        // copy items from the same ICC type
-        if (itemsData !== undefined) {
-            if (groupName === itemsData['Item Category']) {
-                // copy in major section or minor section
-                if (this.ismajorSection) {
-                    this.majorOfferInfo.forEach((element, index) => {
-                        let gname: any = Object.keys(element);
-                        if (gname == groupName) {
-                            element[gname].productInfo.forEach((questionset, index) => {
-                                let setname: any = Object.keys(questionset);
-                                this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
-                            });
-                        }
-                    });
-                } else {
-                    this.minorOfferInfo.forEach((element, index) => {
-                        let gname: any = Object.keys(element);
-                        if (gname == groupName) {
-                            element[gname].productInfo.forEach((questionset, index) => {
-                                let setname: any = Object.keys(questionset);
-                                this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
-                            });
-                        }
+
+        // let groupName = this.currenntHeaderName;
+
+        //copy in major section or minor section
+        if (this.ismajorSection) {
+            this.majorOfferInfo.forEach((element, index) => {
+                let gname: any = Object.keys(element);
+                if (gname == groupName) {
+                    element[gname].productInfo.forEach((questionset, index) => {
+                        let setname: any = Object.keys(questionset);
+                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
                     });
                 }
-            }
+            });
+        } else {
+            this.minorOfferInfo.forEach((element, index) => {
+                let gname: any = Object.keys(element);
+                if (gname == groupName) {
+                    element[gname].productInfo.forEach((questionset, index) => {
+                        let setname: any = Object.keys(questionset);
+                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                    });
+                }
+            });
         }
     }
 
