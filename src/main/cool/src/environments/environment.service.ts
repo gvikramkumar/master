@@ -24,9 +24,7 @@ export class EnvironmentService {
 
     // LOV URLs
     REST_API_GET_FUNCTIONAL_ROLE_URL: string;
-    REST_API_REGISTER_NEW_USER_GET_URL: string;
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL: string;
-    REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL: string;
 
     //  eGenie URLs
     REST_API_OWB_CONTROLLER_URL: string;
@@ -64,7 +62,6 @@ export class EnvironmentService {
 
 
     // OFFER DIMENSIONS URLs
-
     REST_API_RETRIEVE_OFFER_DIMENSIONS_INFO_URL: string;
     REST_API_VALIDATE_OFFER_DIMENSIONS_INFO_URL: string;
     REST_API_RETRIEVE_MM_OFFER_DIMENSIONS_ATTRIBUTES_URL: string;
@@ -209,9 +206,7 @@ export class EnvironmentService {
         // ------------------------- LOV URLs---------------------------------------------------------
 
         this.REST_API_GET_FUNCTIONAL_ROLE_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
-        this.REST_API_REGISTER_NEW_USER_GET_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
         this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseApiUrl + '/LOV/getAssignee/';
-        this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
 
         // ------------------------ eGenie URLs ------------------------------------------------------
 
@@ -302,6 +297,7 @@ export class EnvironmentService {
         this.REST_API_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL = this.baseApiUrl + '/action/create/task/';
         this.REST_API_ACTION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/user/solutioningTask/action';
         this.REST_API_NOTIFICATION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/user/solutioningTask/notification';
+        this.REST_API_DESIGN_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL = this.baseApiUrl + '/action/create/user/designReviewTask/';
 
         // ------------------------- DOWNLOAD N UPLOAD URLs ----------------------------------------------
 
@@ -318,7 +314,6 @@ export class EnvironmentService {
         // --------------------------------- DESIGN REVIEW URLs ----------------------------------------------
 
         this.REST_API_DESIGN_REVIEW_GET_URL = this.baseApiUrl + '/designReview/getInfo/';
-        this.REST_API_DESIGN_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL = this.baseApiUrl + '/action/create/user/designReviewTask/';
 
         // -------------------------------------------------------------------------------------------------
 

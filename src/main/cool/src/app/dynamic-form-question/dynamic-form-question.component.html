@@ -4,7 +4,8 @@
       <!-- Input -->
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Free Text'">
         <input [name]="question.egineAttribue" [id]="question.egineAttribue"
-          *ngIf='question.egineAttribue === "Item Name (PID)"' [attr.disabled]='true' class="form-control">
+          *ngIf='question.egineAttribue === "Item Name (PID)"' [value]="headerName" [attr.disabled]='true'
+          class="form-control">
         <input [name]="question.egineAttribue" [id]="question.egineAttribue"
           *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue" maxlength="{{question.rules.maxCharacterLen}}">
         <label for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
