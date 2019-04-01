@@ -4,7 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
 import { HeaderService, UserService, ConfigurationService } from '@shared/services';
 import { MessageService } from '@app/services/message.service';
+import { OffersolutioningService } from '@app/services/offersolutioning.service';
+import { forkJoin } from 'rxjs';
 
+const STRATEGY_REVIEW_APPROVAL_SENT_FLAG = 'strategyReviewRequestApproval';
 @Component({
   selector: 'app-exit-criteria-validation',
   templateUrl: './exit-criteria-validation.component.html',
@@ -20,18 +23,18 @@ export class ExitCriteriaValidationComponent implements OnInit {
   exitCriteriaData;
   ideate = [];
   offerOwner: String = '';
-  requestApprovalAvailable: Boolean = true;
   readOnly = false;
+  requestApprovalAvailable: Boolean = false;
   approvedOfferId;
-
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private headerService: HeaderService,
-    private configurationService: ConfigurationService,
     private messageService: MessageService,
     private localStorage: LocalStorageService,
-    private userService: UserService
+    private userService: UserService,
+    private offersolutioningService: OffersolutioningService,
+    private configurationService: ConfigurationService
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -40,37 +43,38 @@ export class ExitCriteriaValidationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.approvedOfferId = this.localStorage.retrieve('approvedOfferId');
-    if (this.approvedOfferId === this.currentOfferId) {
-      this.requestApprovalAvailable = false;
-    }
-    debugger;
+
     this.readOnly = this.configurationService.startupData.readOnly;
-    this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
-      const canRequestUsers = [];
-      this.exitCriteriaData = data;
-      this.ideate = data['ideate'];
+    const getOfferFlags = this.offersolutioningService.retrieveOfferFlags(this.currentOfferId);
+    const getExitCriteria = this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId)
+    forkJoin([getOfferFlags, getExitCriteria]).subscribe(res => {
 
-      for (let i = 0; i < this.ideate.length - 1; i++) {
-        if (this.ideate[i]['status'] !== 'Completed') {
-          this.requestApprovalAvailable = false;
-          break;
-        }
-      }
-        let prop = this.configurationService.startupData.appRoleList
-        if (prop.includes('Co-Owner') || prop.includes('Owner')) {
-          let validUser = this.configurationService.startupData.userId
-            canRequestUsers.push(validUser);
-          }
-        
-      
+      const [offerFlags, exitCriteriaData] = res;
 
-      this.headerService.getCurrentUser().subscribe(user => {
-        if (!canRequestUsers.includes(user)) {
-          this.requestApprovalAvailable = false;
+      this.ideate = exitCriteriaData['ideate'];
+
+      const isRequestApprovalSent = offerFlags[STRATEGY_REVIEW_APPROVAL_SENT_FLAG];
+
+      const ideateApprovalCriteria = this.ideate.slice(0, -1);
+      const exitCriteriaMilestonesCompleted = ideateApprovalCriteria && ideateApprovalCriteria.every(milestone => milestone['status'] === 'Completed');
+
+      const arrOwnersAndCoowners = [];
+      let prop = this.configurationService.startupData.appRoleList
+      if (prop.includes('Co-Owner') || prop.includes('Owner')) {
+        let validUser = this.configurationService.startupData.userId
+        arrOwnersAndCoowners.push(validUser);
         }
-      });
+
+      const currentUserIsOwnerOrCoowner = arrOwnersAndCoowners.includes(this.userService.getUserId());
+
+      // Request approval button should show up only if
+      // Request approval was never sent (request approval status is false)
+      // Current user is the owner of the offer
+      // All of the status in the ideate phase is not completed
+      this.requestApprovalAvailable = !isRequestApprovalSent && exitCriteriaMilestonesCompleted && currentUserIsOwnerOrCoowner;
+
     });
+
   }
 
   actionStatusColor(status) {
@@ -84,21 +88,22 @@ export class ExitCriteriaValidationComponent implements OnInit {
   }
 
   requestForApproval() {
+    // Once Request for approval is clicked
+    // Disable the button
+    this.requestApprovalAvailable = false;
+
     const payload = {};
     payload['offerName'] = this.offerBuilderdata['offerName'];
     payload['owner'] = this.offerBuilderdata['offerOwner'];
     const userId = this.userService.getUserId();
-    this.exitCriteriaValidationService.updateOwbController(this.currentOfferId, userId).subscribe(data => {
-      console.log(data);
-    },
-      error => {
-        console.log('error occured');
-      });
+    this.exitCriteriaValidationService.updateOwbController(this.currentOfferId, userId).subscribe();
+
+    // Create actions and notifications for stakeholders
     this.exitCriteriaValidationService.requestApproval(this.currentOfferId).subscribe(data => {
       this.exitCriteriaValidationService.postForNewAction(this.currentOfferId, this.currentCaseId, payload).subscribe(response => {
+        // Update request approval flag to true
+        this.offersolutioningService.updateOfferFlag(this.currentOfferId, STRATEGY_REVIEW_APPROVAL_SENT_FLAG, true).subscribe();
         this.messageService.sendMessage('Strategy Review');
-        this.localStorage.store('approvedOfferId', this.currentOfferId);
-        this.requestApprovalAvailable = false;
       });
     });
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, ElementRef, Renderer, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
@@ -19,20 +19,25 @@ export class DynamicFormMultipleComponent implements OnInit {
     public minorLineItemsActive: Boolean = false;
     public majorLineItemsActive: Boolean = false;
     public copyAttributeResults: any;
-    private results: any;
-    private selectedProduct: any = [];
-    private selectedTab: string;
-    private itemsData: any;
-    private itemsList: any = [];
-    private lengthList: any = [];
-    private currenntHeaderName: any;
+    public results: any;
+    public selectedProduct: any = [];
+    public selectedTab: string;
+    public itemsData: any;
+    public itemsList: any = [];
+    public lengthList: any;
+    public currenntHeaderName: any;
+    @Output() valueChange = new EventEmitter();
     public viewDetails: Boolean = false;
-    public detailArray:any[]=[];
+    public detailArray: any[] = [];
     public headerName: any = '';
-
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService) {
+
+
+    }
+
+    ngOnInit() {
         this.offerInfo = this.offerConstructService.singleMultipleFormInfo;
         this.majorOfferInfo = this.offerInfo.major;
         this.minorOfferInfo = this.offerInfo.minor;
@@ -40,40 +45,21 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.tableShowCondition = true;
         this.selectedTab = 'major';
         this.createObjectForSearch();
-
-    }
-
-    ngOnInit() {
-
-
     }
 
     createObjectForSearch() {
         //create object with blank value for search operation
         let major = {};
         let minor = {};
-        let majorLength = {};
-        let minorLength = {};
         this.majorOfferInfo.forEach((element, index) => {
             let name: any = Object.keys(element);
             major[name] = '';
-            majorLength[name] = false;
-            if ((element[name].questionset).length > 0) {
-                majorLength[name] = true;
-            }
         });
         this.minorOfferInfo.forEach(element => {
             let name: any = Object.keys(element);
             minor[name] = '';
-            minorLength[name] = false;
-            if ((element[name].questionset).length > 0) {
-                minorLength[name] = true;
-            }
         });
         this.itemsList = { major: major, minor: minor };
-        this.lengthList = { major: majorLength, minor: minorLength };
-        console.log(this.itemsList);
-        console.log(this.lengthList);
 
     }
 
@@ -105,8 +91,10 @@ export class DynamicFormMultipleComponent implements OnInit {
                 this.replaceOrUpdatevalue(element[title], isUdate)
             });
         });
-        this.offerConstructService.closeAddDetails = false;
 
+        let counter = 10;
+        this.valueChange.emit(counter);
+        this.offerConstructService.closeAddDetails = false;
     }
 
     closeDialog() {
@@ -114,6 +102,15 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
             this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+                let title: any = Object.keys(element);
+                element[title].listOfferQuestions.forEach(majorProduct => {
+                    majorProduct.currentValue = majorProduct.previousValue;
+                });
+            });
+        });
+        this.minorOfferInfo.forEach((list, index) => {
+            let groupName: any = Object.keys(list);
+            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(minorProduct => {
                     minorProduct.currentValue = minorProduct.previousValue;
@@ -158,8 +155,6 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     getSelctedProduct(event, records) {
-        console.log(event.target.checked);
-        console.log(records);
         if (event.target.checked) {
             if (this.selectedProduct.length == 0) {
                 this.selectedProduct.push(records);
@@ -187,32 +182,29 @@ export class DynamicFormMultipleComponent implements OnInit {
         return array;
     }
 
-    patchvalueToSelected(groupName) {
-        let itemsData = this.itemsData;
-        // if (this.itemsData) {
-
-        console.log(this.selectedProduct);
-        if (itemsData != undefined) {
-            this.selectedProduct.forEach(product => {
-                if (groupName = product.groupName) {
-                    for (let searchValue in itemsData) {
-                        // itemsData.forEach(searchValue => {
-                        product.listOfferQuestions.forEach(element => {
-                            if (searchValue === element.question) {
-                                element.currentValue = itemsData[searchValue];
-                            }
-                        });
-                    }
+  patchvalueToSelected(groupName) {
+    let itemsData = this.itemsData;
+    if (itemsData !== undefined) {
+      if (groupName === itemsData['Item Category']) {
+        this.selectedProduct.forEach(product => {
+          if (groupName = product.groupName) {
+            for (let searchValue in itemsData) {
+              product.listOfferQuestions.forEach(element => {
+                if (searchValue === element.question) {
+                  element.currentValue = itemsData[searchValue];
                 }
-            });
-        }
+              });
+            }
+          }
+        });
+      }
     }
+  }
 
     addItms(groupName) {
         let selectedSection = this.selectedTab;
         let selectedGroup = groupName;
         if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
-            this.headerName = this.itemsList.PID;
             this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
                 if (items != undefined) {
                     this.itemsData = items.body;
@@ -226,30 +218,34 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     patchToALL(groupName) {
 
-        // let groupName = this.currenntHeaderName;
-
-        //copy in major section or minor section
-        if (this.ismajorSection) {
+      let itemsData = this.itemsData;
+      // copy items from the same ICC type
+      if (itemsData !== undefined) {
+        if (groupName === itemsData['Item Category']) {
+          //copy in major section or minor section
+          if (this.ismajorSection) {
             this.majorOfferInfo.forEach((element, index) => {
-                let gname: any = Object.keys(element);
-                if (gname == groupName) {
-                    element[gname].productInfo.forEach((questionset, index) => {
-                        let setname: any = Object.keys(questionset);
-                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
-                    });
-                }
+              let gname: any = Object.keys(element);
+              if (gname == groupName) {
+                element[gname].productInfo.forEach((questionset, index) => {
+                  let setname: any = Object.keys(questionset);
+                  this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                });
+              }
             });
-        } else {
+          } else {
             this.minorOfferInfo.forEach((element, index) => {
-                let gname: any = Object.keys(element);
-                if (gname == groupName) {
-                    element[gname].productInfo.forEach((questionset, index) => {
-                        let setname: any = Object.keys(questionset);
-                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
-                    });
-                }
+              let gname: any = Object.keys(element);
+              if (gname == groupName) {
+                element[gname].productInfo.forEach((questionset, index) => {
+                  let setname: any = Object.keys(questionset);
+                  this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                });
+              }
             });
+          }
         }
+      }
     }
 
     copySearchItemToAllSection(questionset) {
@@ -267,22 +263,22 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     displayViewDetails() {
-      if (this.itemsData) {
-        this.detailArray = [];
-        for (let key in this.itemsData) {
-          if (key !== 'major/minor') {
-            this.detailArray.push({
-              egenieAttribute: key,
-              value: this.itemsData[key]
-            });
-          }
+        if (this.itemsData) {
+            this.detailArray = [];
+            for (let key in this.itemsData) {
+                if (key !== 'major/minor') {
+                    this.detailArray.push({
+                        egenieAttribute: key,
+                        value: this.itemsData[key]
+                    });
+                }
+            }
+            this.viewDetails = true;
         }
-        this.viewDetails = true;
-      }
     }
 
     onHideViewDetails() {
-      this.viewDetails = false;
+        this.viewDetails = false;
     }
 }
 
