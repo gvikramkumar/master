@@ -6,6 +6,16 @@ import { OfferPhaseService } from '../services/offer-phase.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { ConfigurationService } from '@shared/services';
 import * as _ from 'lodash';
+import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
+
+export class OSForm {
+  osGroup: OSGroup[];
+}
+
+export class OSGroup {
+  osGroup = new FormArray([]);
+}
+
 
 @Component({
   selector: 'app-offer-solutioning',
@@ -13,46 +23,38 @@ import * as _ from 'lodash';
   styleUrls: ['./offer-solutioning.component.css']
 })
 export class OfferSolutioningComponent implements OnInit {
-  message;
-  firstData;
-  data;
-  caseId;
-  stakeData;
-  stake;
-  totalApprovalsCount;
-  approvedCount;
-  conditionallyApprovedCount;
-  notApprovedCount;
-  notReviewedCount;
-  strategyReviewList;
-  setFlag;
-  goBack;
-  offerDetailOverView;
-  currentOfferId;
-  offerSolutionData: Object = null;
-  offerSolutionGroups: Array<any> = [];
-  stakeHolderInfo: any;
-  stakeFunctionInfo: any;
 
 
-  derivedMM: any;
+  caseId: string;
   offerId: string;
-  primaryBE: string;
-  updateStakeData: any;
-  proceedButtonStatusValid = true;
-  backbuttonStatusValid = true;
   offerName: string;
   offerOwner: string;
 
-  displayLeadTime = false;
-  noOfWeeksDifference: string;
-  // initialOfferSolutioning;
-  initialSolutioningGroups;
+
+  derivedMM: string;
+  primaryBE: string;
   primaryPOC: Array<any> = [];
   secondaryPOC: Array<any> = [];
-  Object = Object;
 
-  constructor(private router: Router,
+  stake;
+  stakeData;
+  stakeHolderData;
+
+  backbuttonStatusValid = true;
+  proceedButtonStatusValid = true;
+
+  displayLeadTime = false;
+  noOfWeeksDifference: string;
+
+  message;
+  Object = Object;
+  offerSolutionData: Object = null;
+  offerSolutioningFormGroup: FormGroup;
+  groupedQuestionsAndAnswers: Array<any> = [];
+  unGroupedQuestionsAndAnswers: Array<any> = [];
+
+
+  constructor(private formBuilder: FormBuilder, private router: Router,
     private activatedRoute: ActivatedRoute,
     private offersolutioningService: OffersolutioningService,
     private stakeholderfullService: StakeholderfullService,
@@ -60,27 +62,29 @@ export class OfferSolutioningComponent implements OnInit {
     private rightPanelService: RightPanelService,
     private configurationService: ConfigurationService) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
+      this.offerId = params['id'];
       this.caseId = params['id2'];
     });
   }
 
   ngOnInit() {
 
-    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
+    this.offerSolutioningFormGroup = this.formBuilder.group({
+      osGroup: this.formBuilder.array([])
+    });
 
-      this.firstData = data;
-      this.offerName = data['offerName'];
-      this.offerOwner = data['offerOwner'];
-      this.derivedMM = data['derivedMM'];
-      this.offerId = this.currentOfferId;
-      this.data = this.firstData['stakeholders'];
-      this.derivedMM = this.firstData['derivedMM'];
-      // this.populateInitialQuestion(Object.assign({}, this.firstData['solutioningDetails']));
-      if (Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
-        this.primaryBE = this.firstData['primaryBEList'][0];
+    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
+
+      this.derivedMM = offerDetails['derivedMM'];
+      this.offerName = offerDetails['offerName'];
+      this.offerOwner = offerDetails['offerOwner'];
+      this.stakeHolderData = offerDetails['stakeholders'];
+
+      if (Array.isArray(offerDetails['primaryBEList']) && offerDetails['primaryBEList'].length) {
+        this.primaryBE = offerDetails['primaryBEList'][0];
       }
 
+      // TTM Info
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
           this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
@@ -91,66 +95,76 @@ export class OfferSolutioningComponent implements OnInit {
         }
       );
 
-      this.stakeHolderInfo = {};
-      this.stakeFunctionInfo = {};
-
-      for (let i = 0; i <= this.data.length - 1; i++) {
-        if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
-          this.stakeHolderInfo[this.data[i]['offerRole']] = [];
-        }
-        this.stakeHolderInfo[this.data[i]['offerRole']].push(
-          {
-            userName: this.data[i]['name'],
-            emailId: this.data[i]['_id'] + '@cisco.com',
-            _id: this.data[i]['_id'],
-            businessEntity: this.data[i]['businessEntity'],
-            functionalRole: this.data[i]['functionalRole'],
-            offerRole: this.data[i]['offerRole'],
-            stakeholderDefaults: this.data[i]['stakeholderDefaults']
-          });
-      }
-      for (let i = 0; i <= this.data.length - 1; i++) {
-        if (this.stakeFunctionInfo[this.data[i]['functionalRole']] == null) {
-          this.stakeFunctionInfo[this.data[i]['functionalRole']] = [];
-        }
-        this.stakeFunctionInfo[this.data[i]['functionalRole']].push(
-          {
-            userName: this.data[i]['name'],
-            emailId: this.data[i]['_id'] + '@cisco.com',
-            _id: this.data[i]['_id'],
-            businessEntity: this.data[i]['businessEntity'],
-            functionalRole: this.data[i]['functionalRole'],
-            offerRole: this.data[i]['offerRole'],
-            stakeholderDefaults: this.data[i]['stakeholderDefaults']
-          });
-      }
-      this.stakeData = this.stakeHolderInfo;
-      this.stake = this.stakeFunctionInfo;
+      // Populate Stake Holder Info
+      this.processStakeHolderInfo();
 
       // Call /offerDimensions API To Retrieve Offer Solutioning Details
-      this.offersolutioningService.getSolutioningPayload(this.currentOfferId).subscribe(data => {
+      this.offersolutioningService.getSolutioningPayload(this.offerId).subscribe(data => {
         this.offerSolutionData = data;
         if (this.offerSolutionData !== null && this.offerSolutionData['groups'] != null) {
-          // this.populateRuleBasedSolutionGroups();
-          this.offerSolutionQuestionAndAnswer();
+          this.retrieveSolutioningQuestionAndAnswers();
         }
       });
     });
 
   }
 
-  offerSolutionQuestionAndAnswer() {
+  // -----------------------------------------------------------------------------------------------------------------------------
+
+  private processStakeHolderInfo() {
+
+    const stakeHolderBasedOnOfferRole = {};
+    const stakeHolderBasedOnFunctionalRole = {};
+
+    for (let i = 0; i <= this.stakeHolderData.length - 1; i++) {
+      if (stakeHolderBasedOnOfferRole[this.stakeHolderData[i]['offerRole']] == null) {
+        stakeHolderBasedOnOfferRole[this.stakeHolderData[i]['offerRole']] = [];
+      }
+      stakeHolderBasedOnOfferRole[this.stakeHolderData[i]['offerRole']].push({
+        userName: this.stakeHolderData[i]['name'],
+        emailId: this.stakeHolderData[i]['_id'] + '@cisco.com',
+        _id: this.stakeHolderData[i]['_id'],
+        businessEntity: this.stakeHolderData[i]['businessEntity'],
+        functionalRole: this.stakeHolderData[i]['functionalRole'],
+        offerRole: this.stakeHolderData[i]['offerRole'],
+        stakeholderDefaults: this.stakeHolderData[i]['stakeholderDefaults']
+      });
+    }
+
+    for (let i = 0; i <= this.stakeHolderData.length - 1; i++) {
+      if (stakeHolderBasedOnFunctionalRole[this.stakeHolderData[i]['functionalRole']] == null) {
+        stakeHolderBasedOnFunctionalRole[this.stakeHolderData[i]['functionalRole']] = [];
+      }
+      stakeHolderBasedOnFunctionalRole[this.stakeHolderData[i]['functionalRole']].push({
+        userName: this.stakeHolderData[i]['name'],
+        emailId: this.stakeHolderData[i]['_id'] + '@cisco.com',
+        _id: this.stakeHolderData[i]['_id'],
+        businessEntity: this.stakeHolderData[i]['businessEntity'],
+        functionalRole: this.stakeHolderData[i]['functionalRole'],
+        offerRole: this.stakeHolderData[i]['offerRole'],
+        stakeholderDefaults: this.stakeHolderData[i]['stakeholderDefaults']
+      });
+    }
+
+    this.stakeData = stakeHolderBasedOnOfferRole;
+    this.stake = stakeHolderBasedOnFunctionalRole;
+
+  }
+
+  // -----------------------------------------------------------------------------------------------------------------------------
+
+  private retrieveSolutioningQuestionAndAnswers() {
 
     const functionalRole = this.configurationService.startupData.functionalRole[0];
 
-    this.offersolutioningService.retrieveOfferSolutionQuestions(this.currentOfferId).subscribe(resQuestionsAndAnswers => {
+    this.offersolutioningService.retrieveOfferSolutionQuestions(this.offerId).subscribe(resQuestionsAndAnswers => {
 
       // Initialize 'offerQuestionsAndAnswers' Array
       const offerQuestionsAndAnswers = resQuestionsAndAnswers as Array<any>;
 
 
       // Retrieve List Of Question and Answers In A List Format From 'offerQuestionsAndAnswers'
-      let questionsAndAnswers = offerQuestionsAndAnswers.reduce((groupQuestionAccumulator, group) => {
+      this.unGroupedQuestionsAndAnswers = offerQuestionsAndAnswers.reduce((groupQuestionAccumulator, group) => {
 
         let osGroupName;
         let selectedAttributes;
@@ -182,10 +196,9 @@ export class OfferSolutioningComponent implements OnInit {
       }, []);
 
       // Retrieve Unique Questions From 'questionsAndAnswers' Array
-      questionsAndAnswers = _.uniqBy(questionsAndAnswers, 'question');
+      this.unGroupedQuestionsAndAnswers = _.uniqBy(this.unGroupedQuestionsAndAnswers, 'question');
 
-
-      this.offersolutioningService.retrieveOfferSolutionAnswers(this.currentOfferId).subscribe(resOfferSolutioningAnswers => {
+      this.offersolutioningService.retrieveOfferSolutionAnswers(this.offerId).subscribe(resOfferSolutioningAnswers => {
 
         const offerSolutioningAnswers = resOfferSolutioningAnswers as Array<any>;
 
@@ -195,24 +208,75 @@ export class OfferSolutioningComponent implements OnInit {
           questionAnswerMap.set(qna['questionNo'], qna['answer']);
         }
         // Populate Answer Field In 'questionsAndAnswers' Array
-        for (const qna of questionsAndAnswers) {
-          qna['answerToQuestion'] = questionAnswerMap.get(qna['questionNo'])
+        for (const qna of this.unGroupedQuestionsAndAnswers) {
+          qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
+            '' : questionAnswerMap.get(qna['questionNo']);
         }
+
+        // Condtionally Hide Solutioning Question And Answers
+        this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
+
         // Group 'questionsAndAnswers' -> OsGroup -> Group -> SubGroup - In Presence Of Answers
-        this.offerSolutionGroups = this.groupQuestionAndAnsers(questionsAndAnswers);
+        this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
+        this.groupedQuestionsAndAnswers = this.groupSolutioningQuestionAndAnswers(this.unGroupedQuestionsAndAnswers);
+
+        // Create OS Form Group Template
+        // const osForm: any = this.createOfferSolutioningFormTemplate();
+        // this.offerSolutioningFormGroup = this.formBuilder.group(osForm);
+
         this.createActionAndNotification();
 
       }, (err) => {
+
         // Group 'questionsAndAnswers' -> OsGroup -> Group -> SubGroup - In Absence Of Answers
         if (err && err.status === 404) {
-          this.offerSolutionGroups = this.groupQuestionAndAnsers(questionsAndAnswers);
+
+          this.groupedQuestionsAndAnswers = this.groupSolutioningQuestionAndAnswers(this.unGroupedQuestionsAndAnswers);
+
+          // Create OS Form Group Template
+          // const osForm: any = this.createOfferSolutioningFormTemplate();
+          // this.offerSolutioningFormGroup = this.formBuilder.group(osForm);
+
           this.createActionAndNotification();
+
         }
       });
+
     });
+
+
   }
 
-  private groupQuestionAndAnsers(questionsAndAnswers: any): any {
+  private condtionallyHideSolutioningQuestionAndAnswers(): any {
+
+    this.unGroupedQuestionsAndAnswers = this.unGroupedQuestionsAndAnswers.map(childQuestionAndAnswers => {
+
+      if (!_.isEmpty(childQuestionAndAnswers.rules.referenceQ)) {
+
+        const parentQuestionIndex = this.unGroupedQuestionsAndAnswers
+          .findIndex(fqa => fqa.questionNo === childQuestionAndAnswers.rules.referenceQ);
+
+        if (parentQuestionIndex === -1) {
+          return childQuestionAndAnswers;
+        }
+
+        const parentAnswer = this.unGroupedQuestionsAndAnswers[parentQuestionIndex]['answerToQuestion'];
+        if (childQuestionAndAnswers.questionType = 'Radio Button' && parentAnswer === 'No') {
+          childQuestionAndAnswers.hideQuestion = true;
+        } else if (childQuestionAndAnswers.questionType !== 'Radio Button' && parentAnswer === '') {
+          childQuestionAndAnswers.hideQuestion = true;
+        }
+        return childQuestionAndAnswers;
+      } else {
+        return childQuestionAndAnswers;
+      }
+
+    });
+
+    return this.unGroupedQuestionsAndAnswers;
+  }
+
+  private groupSolutioningQuestionAndAnswers(questionsAndAnswers: any): any {
     const groupByOSGroup = _.chain(questionsAndAnswers)
       .groupBy('oSgroup')
       .mapValues(osGroupValues => _.chain(osGroupValues)
@@ -233,7 +297,63 @@ export class OfferSolutioningComponent implements OnInit {
     return groupByOSGroup;
   }
 
-  createActionAndNotification() {
+  private formatSolutioningQuestionAndAnswers(question: any, functionalRole: string, selectedAttributes: Array<String>) {
+
+    // Initialize Variables
+    let validUser = false;
+
+    // Validate Type Of Question Being Asked
+    if (!question.questionType) {
+      question.questionType = 'Free Text';
+    }
+
+    // When Free Text - Restrict Length Of Characters  
+    if (question.questionType === 'Free Text') {
+      question.rules.maxCharacterLen = _.isEmpty(question.rules.maxCharacterLen) ?
+        150 : question.rules.maxCharacterLen;
+    }
+
+
+
+    // Format Dropdown Display Values
+    if (question.questionType === 'dropdown') {
+      question.values = question.values.map(drpValue => {
+        const [value, display] = drpValue.split('~~');
+        return {
+          value: value,
+          display: display ? display : value
+        };
+      });
+    }
+
+    // Validate If User Can Edit Questions Based On His Functional Role
+    if (question.primaryPOC || question.secondaryPOC) {
+      if (question.primaryPOC.includes(functionalRole) || (question.secondaryPOC.includes(functionalRole))) {
+        validUser = true;
+      }
+    }
+
+    // Populate primary and secondary POC
+    this.primaryPOC = question ? [...this.primaryPOC, ...question.primaryPOC] : [...this.primaryPOC];
+    this.secondaryPOC = question ? [...this.secondaryPOC, ...question.secondaryPOC] : [...this.secondaryPOC];
+
+    // Map Values Into New Format
+    const newQuestionFormat = {
+      ...question,
+      hideQuestion: false,
+      validUser: validUser,
+      selectedAttributes: selectedAttributes
+    };
+
+    // Return New Question Format
+    return newQuestionFormat;
+
+
+  }
+
+  // -----------------------------------------------------------------------------------------------------------------------------
+
+  private createActionAndNotification() {
 
     const primaryPOC = _.uniq(this.primaryPOC);
     const secondaryPOC = _.uniq(this.secondaryPOC);
@@ -256,7 +376,7 @@ export class OfferSolutioningComponent implements OnInit {
       owner = this.stakeData['Owner'][0]['_id'];
     }
 
-    this.offersolutioningService.retrieveOfferFlags(this.currentOfferId).subscribe(resOfferStatus => {
+    this.offersolutioningService.retrieveOfferFlags(this.offerId).subscribe(resOfferStatus => {
 
       const isSolutioningActionNotificationSent = resOfferStatus && resOfferStatus['solutioningActionNotification'];
 
@@ -265,7 +385,7 @@ export class OfferSolutioningComponent implements OnInit {
         const dueDate = new Date();
         dueDate.setDate(dueDate.getDate() + 5);
         const notificationPayload = {
-          'offerId': this.currentOfferId,
+          'offerId': this.offerId,
           'caseId': this.caseId,
           'actionTitle': 'Provide Details',
           'description': 'This offer need more information',
@@ -279,7 +399,7 @@ export class OfferSolutioningComponent implements OnInit {
         };
 
         const actionPayload = {
-          'offerId': this.currentOfferId,
+          'offerId': this.offerId,
           'caseId': this.caseId,
           'actionTitle': 'Provide Details',
           'description': 'This offer need more information',
@@ -294,12 +414,146 @@ export class OfferSolutioningComponent implements OnInit {
 
         this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
           this.offersolutioningService.actionPost(actionPayload).subscribe(res => {
-            this.offersolutioningService.updateOfferFlag(this.currentOfferId, 'solutioningActionNotification', true).subscribe()
+            this.offersolutioningService.updateOfferFlag(this.offerId, 'solutioningActionNotification', true).subscribe();
           });
         });
       }
     });
   }
+
+  private createOfferSolutioningFormTemplate() {
+
+    const osForm: any = {};
+
+    for (const osGroup of Object.keys(this.groupedQuestionsAndAnswers)) {
+      osForm[osGroup] = new FormArray([]);
+      for (const group of Object.keys(this.groupedQuestionsAndAnswers[osGroup])) {
+        osForm[osGroup][group] = new FormArray([]);
+        for (const subGroup of Object.keys(this.groupedQuestionsAndAnswers[osGroup][group])) {
+          osForm[osGroup][group][subGroup] = new FormArray([]);
+          for (const question of Object.keys(this.groupedQuestionsAndAnswers[osGroup][group][subGroup]['questions'])) {
+            osForm[osGroup][group][subGroup][question] = new FormGroup({
+              questionFreeText: new FormControl(' ', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
+              questionRadioButton: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
+              questionDropdown: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
+              questionDatePicker: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
+            });
+          }
+        }
+      }
+    }
+    return osForm;
+  }
+
+  // -----------------------------------------------------------------------------------------------------------------------------
+
+  proceedToOfferComponents(routeTo) {
+
+
+    // Initialize Variables
+    let questionAnswer = [];
+    let nextStepPostData = {};
+    let miniSolutioningDetails = [];
+    nextStepPostData['solutioningDetails'] = [];
+    nextStepPostData['offerId'] = this.offerId == null ? '' : this.offerId;
+
+    // Retrieve Solutioning Details - questionAnswer, nextStepPostData
+    miniSolutioningDetails = this.populateSolutioningDetails(questionAnswer, nextStepPostData);
+    questionAnswer = miniSolutioningDetails['questionAnswer'];
+    nextStepPostData = miniSolutioningDetails['nextStepPostData'];
+
+    // Save Offer Solutioning Answers
+    const offerSolutioningAnswers = {};
+    offerSolutioningAnswers['offerId'] = this.offerId;
+
+    // Filter Values That Have No Data
+    questionAnswer = questionAnswer.filter(nonEmptyAnswer => nonEmptyAnswer.answer);
+    offerSolutioningAnswers['questionAnswer'] = questionAnswer;
+
+    // Save Offer Solution Answers
+    this.offersolutioningService.saveOfferSolutionAnswers(this.offerId, offerSolutioningAnswers).subscribe();
+
+    // Update Offer Details
+    this.offersolutioningService.updateOfferDetails(nextStepPostData).subscribe(res => {
+
+      const solutioningProceedPayload = {
+        'offerId': this.offerId,
+        'taskName': 'Offer Solutioning'
+      };
+
+      // Need to give answer for every question from offer solutioning to enable request approval button.
+      let offerSolutioningSelected = true;
+      nextStepPostData['solutioningDetails'].forEach(element => {
+        element.Details.forEach(ele => {
+          if (_.isEmpty(ele.solutioningAnswer)) {
+            offerSolutioningSelected = false;
+          }
+        });
+      });
+
+      if (offerSolutioningSelected) {
+        this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
+          if (JSON.parse(routeTo) === true) {
+            this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
+          }
+        });
+      } else {
+        if (JSON.parse(routeTo) === true) {
+          this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
+        }
+      }
+
+    });
+
+  }
+
+  private populateSolutioningDetails(questionAnswer: any[], nextStepPostData: {}) {
+
+    Object.entries(this.groupedQuestionsAndAnswers)
+      .forEach(([osGroupKey, osGroupValue]) => {
+        Object.entries(this.groupedQuestionsAndAnswers[osGroupKey])
+          .forEach(([groupKey, groupValue]) => {
+            Object.entries(this.groupedQuestionsAndAnswers[osGroupKey][groupKey])
+              .forEach(([subGroupKey, subGroupValue]) => {
+
+                const solutioningDetail = {
+                  'dimensionGroup': groupKey,
+                  'dimensionSubgroup': subGroupKey,
+                  'dimensionAttribute': subGroupValue['subGroupChoicesSelected'],
+                  'primaryFunctions': [],
+                  'secondaryFunctions': [],
+                  'Details': []
+                };
+
+                const answerList = subGroupValue['questions'].map(questions => {
+
+                  const [questionSource, attributeName] = questions['source'] ? questions['source'].split('~~') : ['', ''];
+                  const offerQuestion = {
+                    'solutioninQuestion': questions['question'],
+                    'egenieAttributeName': attributeName ? attributeName : '',
+                    'oSGroup': questions['oSgroup'],
+                    'solutioningAnswer': questions['answerToQuestion']
+                  };
+                  solutioningDetail['Details'].push(offerQuestion);
+                  return {
+                    'questionNo': questions.questionNo,
+                    'answer': questions.answerToQuestion
+                  };
+                });
+                questionAnswer = questionAnswer.concat(answerList);
+                nextStepPostData['solutioningDetails'].push(solutioningDetail);
+              });
+          });
+      });
+
+    const miniSolutioningDetails = [];
+    miniSolutioningDetails['questionAnswer'] = questionAnswer;
+    miniSolutioningDetails['nextStepPostData'] = nextStepPostData;
+    return miniSolutioningDetails;
+
+  }
+
+  // -----------------------------------------------------------------------------------------------------------------------------
 
   updateMessage(message) {
     if (message != null && message !== '') {
@@ -315,180 +569,8 @@ export class OfferSolutioningComponent implements OnInit {
     }
   }
 
-  processStakeHolderData(stakeHolderData) {
-    stakeHolderData.forEach(stakeHolder => {
-      if (this.stakeHolderInfo[stakeHolder['offerRole']] == null) {
-        this.stakeHolderInfo[stakeHolder['offerRole']] = [];
-      }
-      this.stakeHolderInfo[stakeHolder['offerRole']].push(
-        {
-          name: stakeHolder['name'],
-          email: stakeHolder['_id'] + '@cisco.com',
-          _id: stakeHolder['_id'],
-          businessEntity: stakeHolder['businessEntity'],
-          functionalRole: stakeHolder['functionalRole'],
-          offerRole: stakeHolder['offerRole'],
-          stakeholderDefaults: stakeHolder['stakeholderDefaults']
-        });
-      this.stakeData = this.stakeHolderInfo;
-    });
-  }
+  // -----------------------------------------------------------------------------------------------------------------------------
 
-  proceedToNextStep(routeTo) {
-
-
-    // --------------------
-
-    const nextStepPostData = {};
-    nextStepPostData['solutioningDetails'] = [];
-    nextStepPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-
-
-
-    // ----------------------
-
-    // Iterate - Function Names
-    let questionAnswer = [];
-    Object.entries(this.offerSolutionGroups)
-      .forEach(([osGroupKey, osGroupValue]) => {
-
-        Object.entries(this.offerSolutionGroups[osGroupKey])
-          .forEach(([groupKey, groupValue]) => {
-
-            Object.entries(this.offerSolutionGroups[osGroupKey][groupKey])
-              .forEach(([subGroupKey, subGroupValue]) => {
-
-
-                const solutioningDetail = {
-                  'dimensionGroup': groupKey,
-                  'dimensionSubgroup': subGroupKey,
-                  'dimensionAttribute': subGroupValue['subGroupChoicesSelected'],
-                  'primaryFunctions': [],
-                  'secondaryFunctions': [],
-                  'Details': []
-                };
-
-                const answerList = subGroupValue['questions'].map(questions => {
-
-                  const [questionSource, attributeName] = questions['source'] ? questions['source'].split('~~') : ['', ''];
-
-                  const offerQuestion = {
-                    'solutioninQuestion': questions['question'],
-                    'egenieAttributeName': attributeName ? attributeName : '',
-                    'oSGroup': questions['oSgroup'],
-                    'solutioningAnswer': questions['answerToQuestion']
-                  };
-                  solutioningDetail['Details'].push(offerQuestion);
-
-                  return {
-                    'questionNo': questions.questionNo,
-                    'answer': questions.answerToQuestion
-                  };
-                });
-
-                questionAnswer = questionAnswer.concat(answerList);
-                nextStepPostData['solutioningDetails'].push(solutioningDetail);
-
-              });
-          });
-
-      });
-
-
-    // Save Offer Solutioning Answers
-    const offerSolutioningAnswers = {};
-    offerSolutioningAnswers['offerId'] = this.offerId;
-
-    // Filter Values That Have No Data
-    questionAnswer = questionAnswer.filter(nonEmptyAnswer => nonEmptyAnswer.answer);
-    offerSolutioningAnswers['questionAnswer'] = questionAnswer;
-
-    this.offersolutioningService.saveOfferSolutionAnswers(this.currentOfferId, offerSolutioningAnswers).subscribe();
-
-
-    // ---------------------
-
-    // Update Offer Details
-
-    this.offersolutioningService.updateOfferDetails(nextStepPostData).subscribe(res => {
-      const solutioningProceedPayload = {
-        'taskId': '',
-        'userId': this.offerOwner,
-        'caseId': this.caseId,
-        'offerId': this.currentOfferId,
-        'taskName': 'Offer Solutioning',
-        'action': '',
-        'comment': ''
-      };
-
-      // Need to give answer for every question from offer solutioning to enable request approval button.
-      let offerSolutioningSelected = true;
-      nextStepPostData['solutioningDetails'].forEach(element => {
-        element.Details.forEach(ele => {
-          if (_.isEmpty(ele.solutioningAnswer)) {
-            offerSolutioningSelected = false;
-          }
-        });
-      });
-      if (offerSolutioningSelected) {
-        this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
-          if (JSON.parse(routeTo) === true) {
-            this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
-          }
-        });
-      } else {
-        if (JSON.parse(routeTo) === true) {
-          this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
-        }
-      }
-
-    });
-
-
-
-  }
-  formatSolutioningQuestionAndAnswers(question: any, functionalRole: string, selectedAttributes: Array<String>) {
-
-    // Initialize Variables
-    let validUser = false;
-
-    // Validate Type Of Question Being Asked
-    if (!question.questionType) {
-      question.questionType = 'Free Text';
-    }
-
-    if (question.questionType === 'dropdown') {
-      question.values = question.values.map(drpValue => {
-        const [value, display] = drpValue.split('~~');
-        return {
-          value: value,
-          display: display ? display : value
-        };
-      });
-    }
-
-    // Validate If User Can Edit Questions Based On His Functional Role
-    if (question.primaryPOC || question.secondaryPOC) {
-      if (question.primaryPOC.includes(functionalRole) || (question.secondaryPOC.includes(functionalRole))) {
-        validUser = true;
-      }
-    }
-
-    // Populate primary and secondary POC 
-    this.primaryPOC = question ? [...this.primaryPOC, ...question.primaryPOC] : [...this.primaryPOC];
-    this.secondaryPOC = question ? [...this.secondaryPOC, ...question.secondaryPOC] : [...this.secondaryPOC];
-
-    // Map Values Into New Format
-    const newQuestionFormat = {
-      ...question,
-      validUser: validUser,
-      selectedAttributes: selectedAttributes
-    };
-
-    // Return New Question Format
-    return newQuestionFormat;
-
-  }
 }
 
 

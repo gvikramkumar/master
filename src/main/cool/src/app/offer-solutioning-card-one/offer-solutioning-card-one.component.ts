@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, FormArray } from '@angular/forms';
+
 
 @Component({
   selector: 'app-offersolutioning-card-one',
@@ -6,14 +8,16 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./offer-solutioning-card-one.component.css']
 })
 export class OffersolutioningCardOneComponent implements OnInit {
-  @Input() groupData: Object;
-  @Input() stakeData: Object;
-  @Input() offerData: Object;
-  @Input() groupIndex: any;
+
   Object = Object;
+  @Input() groupData: Array<any>;
+  @Input() unGroupData: Array<any>;
+  @Input() selectedGroupData: Object;
+
   constructor() { }
 
   ngOnInit() {
+
   }
 
   checkButtonStatus(attribute, selectedAttribute) {
