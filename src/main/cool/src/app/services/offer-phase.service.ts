@@ -16,7 +16,7 @@ export class OfferPhaseService {
         return this.httpClient.get(url, { withCredentials: true });
     }
 
-    proceedToStakeHolders(data) {
+    createSolutioningActions(data) {
         const url = this.environmentService.REST_API_POST_ACTION_URL;
         const httpOptions = {
             headers: new HttpHeaders({
