@@ -27,6 +27,9 @@ export class DynamicFormMultipleComponent implements OnInit {
     private lengthList: any;
     private currenntHeaderName: any;
     @Output() valueChange = new EventEmitter();
+    public viewDetails: Boolean = false;
+    public detailArray: any[] = [];
+    public headerName: any = '';
 
 
     constructor(public offerConstructService: OfferConstructService,
@@ -137,7 +140,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
 
-    //search copy and paste in multiple form 
+    //search copy and paste in multiple form
 
     onTabOpen(e, headerName) {
         this.currenntHeaderName = headerName;
@@ -189,22 +192,22 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     patchvalueToSelected(groupName) {
         let itemsData = this.itemsData;
-        // if (this.itemsData) {
-
-        console.log(this.selectedProduct);
-        if (itemsData != undefined) {
-            this.selectedProduct.forEach(product => {
-                if (groupName = product.groupName) {
-                    for (let searchValue in itemsData) {
-                        // itemsData.forEach(searchValue => {
-                        product.listOfferQuestions.forEach(element => {
-                            if (searchValue === element.question) {
-                                element.currentValue = itemsData[searchValue];
-                            }
-                        });
+        // copy items from the same ICC type
+        if (itemsData !== undefined) {
+            if (groupName === itemsData['Item Category']) {
+                this.selectedProduct.forEach(product => {
+                    if (groupName = product.groupName) {
+                        for (let searchValue in itemsData) {
+                            // itemsData.forEach(searchValue => {
+                            product.listOfferQuestions.forEach(element => {
+                                if (searchValue === element.question) {
+                                    element.currentValue = itemsData[searchValue];
+                                }
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
@@ -212,6 +215,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         let selectedSection = this.selectedTab;
         let selectedGroup = groupName;
         if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
+            this.headerName = this.itemsList.PID;
             this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
                 if (items != undefined) {
                     this.itemsData = items.body;
@@ -224,30 +228,33 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     patchToALL(groupName) {
-
-        // let groupName = this.currenntHeaderName;
-
-        //copy in major section or minor section
-        if (this.ismajorSection) {
-            this.majorOfferInfo.forEach((element, index) => {
-                let gname: any = Object.keys(element);
-                if (gname == groupName) {
-                    element[gname].productInfo.forEach((questionset, index) => {
-                        let setname: any = Object.keys(questionset);
-                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+        let itemsData = this.itemsData;
+        // copy items from the same ICC type
+        if (itemsData !== undefined) {
+            if (groupName === itemsData['Item Category']) {
+                // copy in major section or minor section
+                if (this.ismajorSection) {
+                    this.majorOfferInfo.forEach((element, index) => {
+                        let gname: any = Object.keys(element);
+                        if (gname == groupName) {
+                            element[gname].productInfo.forEach((questionset, index) => {
+                                let setname: any = Object.keys(questionset);
+                                this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                            });
+                        }
+                    });
+                } else {
+                    this.minorOfferInfo.forEach((element, index) => {
+                        let gname: any = Object.keys(element);
+                        if (gname == groupName) {
+                            element[gname].productInfo.forEach((questionset, index) => {
+                                let setname: any = Object.keys(questionset);
+                                this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                            });
+                        }
                     });
                 }
-            });
-        } else {
-            this.minorOfferInfo.forEach((element, index) => {
-                let gname: any = Object.keys(element);
-                if (gname == groupName) {
-                    element[gname].productInfo.forEach((questionset, index) => {
-                        let setname: any = Object.keys(questionset);
-                        this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
-                    });
-                }
-            });
+            }
         }
     }
 
@@ -263,6 +270,25 @@ export class DynamicFormMultipleComponent implements OnInit {
                 });
             }
         }
+    }
+
+    displayViewDetails() {
+        if (this.itemsData) {
+            this.detailArray = [];
+            for (let key in this.itemsData) {
+                if (key !== 'major/minor') {
+                    this.detailArray.push({
+                        egenieAttribute: key,
+                        value: this.itemsData[key]
+                    });
+                }
+            }
+            this.viewDetails = true;
+        }
+    }
+
+    onHideViewDetails() {
+        this.viewDetails = false;
     }
 }
 
