@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { reference } from '@angular/core/src/render3';
+import { FormGroup } from '@angular/forms';
+
 
 
 @Component({
   selector: 'app-offer-solution-question',
   templateUrl: './offer-solution-question.component.html',
-  styleUrls: ['./offer-solution-question.component.css']
+  styleUrls: ['./offer-solution-question.component.css'],
 })
 export class OfferSolutionQuestionComponent implements OnInit {
 
