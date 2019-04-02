@@ -29,7 +29,7 @@ export class ActionsService {
   }
 
   getFunction(): Observable<any> {
-    const url = this.environmentService.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL;
+    const url = this.environmentService.REST_API_GET_FUNCTIONAL_ROLE_URL;
     return this._http.get(url, { withCredentials: true });
   }
 

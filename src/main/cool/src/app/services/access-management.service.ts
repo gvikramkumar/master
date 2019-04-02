@@ -88,7 +88,7 @@ export class AccessManagementService {
     }
 
     getregisterUserFunction() {
-        const url = this.environmentService.REST_API_REGISTER_NEW_USER_GET_URL;
+        const url = this.environmentService.REST_API_GET_FUNCTIONAL_ROLE_URL;
         return this.httpClient.get(url);
     }
 
@@ -106,7 +106,7 @@ export class AccessManagementService {
     // Else if the user if functional Admin dropdown should show values the user is funcional admin for
     // other wise don't show up any values
     getFunction(currentUserData) {
-        const url = this.environmentService.REST_API_REGISTER_NEW_USER_GET_URL;
+        const url = this.environmentService.REST_API_GET_FUNCTIONAL_ROLE_URL;
         return this.httpClient.get(url).pipe(
             map(resFunctions => {
                 if (currentUserData.isSuperAdmin) {

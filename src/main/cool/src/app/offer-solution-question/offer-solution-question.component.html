@@ -1,54 +1,120 @@
-<div class="dimensions-questions">
-  <div class="subheader margin-5-0">{{ questionData["question"] }}</div>
-  <div *ngIf="questionData['validUser']">
-    <!-- Free Text -->
-    <div *ngIf="questionData['questionType']==='Free Text'">
-      <textarea class="textarea" [value]="questionData['answer']" [(ngModel)]="questionData['answerToQuestion']"
-        [disabled]="!questionData['validUser']" rows="3"></textarea>
+<fieldset provide-parent-form>
+
+  <div class="dimensions-questions">
+
+    <div class="subheader margin-5-0">
+      <span *ngIf="question['rules']['isMandatoryOptional']==='Mandatory'">
+        <font color="red"> * </font>
+      </span>
+      <label class="subheader margin-5-0">{{ question["question"] }}</label>
     </div>
-    <!-- Radio Button -->
-    <div *ngIf="questionData['questionType']==='Radio Button'">
-      <div class="form-group form-group--inline" *ngFor="let radio of questionData['values']">
-        <label class="radio">
-          <input type="radio" [value]="radio" [(ngModel)]="questionData['answerToQuestion']"
-            name="G{{groupIndex}}_I{{questionIndex}}" [disabled]="!questionData['validUser']" /> <span
-            class="radio__input"></span>
-          <span class="radio__label hidden-xs">{{radio}}</span>
-        </label>
-      </div>
-    </div>
-    <!-- Dropdown -->
-    <div *ngIf="questionData['questionType']==='dropdown'">
-      <div class="form-group dropdown">
-        <div class="form-group__text select">
-          <select class="offer-solution-quesiton-select" [(ngModel)]="questionData['answerToQuestion']"
-            [value]="questionData['answer']" [disabled]="!questionData['validUser']">
-            <option *ngFor="let option of questionData['values']" [value]="option.value">
-              {{option.display}}</option>
-          </select>
+
+    <div *ngIf="question['validUser']">
+
+      <!-- Free Text -->
+
+      <div *ngIf="question['questionType']==='Free Text'">
+        <div class="form-group" [class.has-error]="freeText.invalid" [class.has-success]="freeText.valid">
+
+          <textarea class="textarea" name="question['questionNo']" id="question['questionNo']" #freeText="ngModel"
+            [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
+            [disabled]="question['hideQuestion']" rows="3" maxlength="question.rules['maxCharacterLen']"
+            required="question['rules']['isMandatoryOptional']==='Mandatory'"
+            (change)="showHiddenQuestionBasedOnUserInput(freeText.value, question)"></textarea>
+
+          <span class="help-block" *ngIf="freeText.invalid && (freeText.dirty || freeText.touched)">
+            <span *ngIf="freeText.errors.required">Valid input is required</span>
+            <span *ngIf="freeText.errors.maxlength">Valid input exceeds max characters allowed</span>
+          </span>
+
         </div>
       </div>
+
+      <!-- Radio Button -->
+
+      <div *ngIf="question['questionType']==='Radio Button'">
+
+        <div class="form-group form-group--inline" *ngFor="let radio of question['values']">
+
+          <label class="radio">
+            <input type="radio" name="{{question['questionNo']}}" id="question['questionNo']" #radioButton="ngModel"
+              [value]="radio" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
+              required="question['rules']['isMandatoryOptional']==='Mandatory'"
+              (change)="showHiddenQuestionBasedOnUserInput(radioButton.value, question)" /> <span
+              class="radio__input"></span>
+            <span class="radio__label hidden-xs">{{radio}}</span>
+          </label>
+
+          <span class="help-block" *ngIf="radioButton.invalid && (radioButton.dirty || radioButton.touched)">
+            <span *ngIf=" radioButton.errors.required">Please choose one option</span>
+          </span>
+
+        </div>
+      </div>
+
+      <!-- Dropdown -->
+
+      <div *ngIf="question['questionType']==='dropdown'">
+
+        <div class="form-group dropdown" [class.has-error]="dropDown.invalid" [class.has-success]="dropDown.valid">
+          <div class="form-group__text select">
+
+            <select class="offer-solution-quesiton-select" name="question['questionNo']" id="question['questionNo']"
+              #dropDown="ngModel" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
+              required="question['rules']['isMandatoryOptional']==='Mandatory'"
+              (change)="showHiddenQuestionBasedOnUserInput(dropDown.value, question)">
+
+              <option *ngFor="let option of question['values']" [value]="option.value">
+                {{option.display}}</option>
+            </select>
+
+          </div>
+
+          <span class="help-block" *ngIf="dropDown.invalid && (dropDown.dirty || dropDown.touched)">
+            <span *ngIf="dropDown.errors.required">Please choose one option</span>
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- Date Picker -->
+
+      <div *ngIf="question['questionType']==='Date'">
+        <div class="form-group label--floated input--icon half-margin-bottom col-md-6">
+
+          <div class="form-group__text" [class.has-error]="osDate.invalid" [class.has-success]="osDate.valid">
+
+            <input class="form-control" name="question['questionNo']" id="question['questionNo']"
+              [(ngModel)]="question['answerToQuestion']" #osDate="ngModel" [disabled]="question['hideQuestion']"
+              #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
+              [bsConfig]="dpConfig" [(bsValue)]="question['answerToQuestion']"
+              required="question['rules']['isMandatoryOptional']==='Mandatory'"
+              (change)="showHiddenQuestionBasedOnUserInput(osDate.value, question)">
+
+            <button type="button" class="link" tabindex="-1">
+              <span class="icon-month"></span>
+            </button>
+
+          </div>
+
+          <span class="help-block" *ngIf="osDate.invalid && (osDate.dirty || osDate.touched)">
+            <span *ngIf="osDate.errors.required">Select valid input</span>
+          </span>
+
+        </div>
+      </div>
+
     </div>
-    <!-- Data Picker -->
-    <div class="form-group label--floated input--icon half-margin-bottom col-md-6">
-      <div *ngIf="questionData['questionType']==='Date'">
+
+    <div *ngIf="!question['validUser']">
+      <div class="form-group">
         <div class="form-group__text">
-          <input class="form-control" #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate"
-            containerClass="custome-date" [bsConfig]="dpConfig" required [disabled]="!questionData['validUser']"
-            [(bsValue)]="questionData['answerToQuestion']">
-          <button type="button" class="link" tabindex="-1">
-            <span class="icon-month"></span>
-          </button>
+          <label>{{question['answerToQuestion']}}</label>
         </div>
       </div>
     </div>
-  </div>
-  <div *ngIf="!questionData['validUser']">
-    <div class="form-group">
-      <div class="form-group__text">
-        <label>{{questionData['answerToQuestion']}}</label>
-      </div>
-    </div>
+
   </div>
 
-</div>
+</fieldset>

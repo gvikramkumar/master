@@ -947,7 +947,7 @@ export class MmAssesmentComponent implements OnInit {
               'comment': ''
             };
 
-            this.offerPhaseService.proceedToStakeHolders(proceedPayload).subscribe(() => {
+            this.offerPhaseService.createSolutioningActions(proceedPayload).subscribe(() => {
               if (JSON.parse(withRouter) === true) {
                 this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
               }
@@ -1148,7 +1148,7 @@ export class MmAssesmentComponent implements OnInit {
                 });
 
                 if (offerDimensionSelected) {
-                  this.offerPhaseService.proceedToStakeHolders(dimensionProceedPayload).subscribe(result => {
+                  this.offerPhaseService.createSolutioningActions(dimensionProceedPayload).subscribe(result => {
                     this.offersolutioningService.saveSolutionData(this.currentOfferId, result);
                     if (JSON.parse(withRouter) === true) {
                       this.router.navigate(['/offerSolutioning', this.currentOfferId, this.caseId]);
