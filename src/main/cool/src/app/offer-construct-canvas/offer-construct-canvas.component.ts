@@ -28,6 +28,7 @@ import { filter } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
 import { ConfigurationService } from '@shared/services';
+import { LoaderService } from './../shared/loader.service';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offer-construct-canvas.component.html',
@@ -113,10 +114,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public isDisabledView: boolean = true;
   listOfferQuestions: any;
 
+  public isShow: boolean = false;
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
     private configurationService: ConfigurationService,
-    private activatedRoute: ActivatedRoute, private _fb: FormBuilder, private offerDetailViewService: OfferDetailViewService) {
+    private activatedRoute: ActivatedRoute,
+    private _fb: FormBuilder,
+    private offerDetailViewService: OfferDetailViewService,
+    private loaderService: LoaderService) {
 
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -160,8 +165,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    */
   dropItem($event) {
     this.initalRowAdded = false;
-    console.log(this.draggedItem);
     if (this.draggedItem['isMajorLineItem']) {
+      this.loaderService.startLoading();
       const obj = Object.create(null);
       obj['uniqueKey'] = ++this.counter;
       this.uniqueId = obj['uniqueKey'];
@@ -226,36 +231,36 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     let test = [];
     test.push(majorItem);
     let groupsName = { groups: test };
-    this.offerConstructService.addDetails(groupsName).subscribe((data) => {
-      let groupName = obj.uniqueNodeId;
-      //let groupName = obj.uniqueKey;
-      let listOfferQuestions;
-      if (isQuestionPresent == undefined) {
-        console.log("isQuestionPresent if block", isQuestionPresent);
-        listOfferQuestions = data.groups[0].listOfferQuestions;
-      } else {
-        console.log("isQuestionPresent else block", isQuestionPresent);
-        listOfferQuestions = obj.itemDetails;
-      }
-      let groupinfo = {
-        uniqueKey: obj.uniqueKey,
-        title: obj.title,
-        uniqueNodeId: obj.uniqueNodeId,
-        childCount: obj.childCount,
-        isMajor: obj.isMajorLineItem,
-        isGroupNode: obj.isGroupNode,
-        groupName: obj.productName,
-        listOfferQuestions: listOfferQuestions
-      }
+    // this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+    let groupName = obj.uniqueNodeId;
+    //let groupName = obj.uniqueKey;
+    let listOfferQuestions;
+    if (isQuestionPresent == undefined) {
+      console.log("isQuestionPresent if block", isQuestionPresent);
+      listOfferQuestions = this.listOfferQuestions;
+    } else {
+      console.log("isQuestionPresent else block", isQuestionPresent);
+      listOfferQuestions = obj.itemDetails;
+    }
+    let groupinfo = {
+      uniqueKey: obj.uniqueKey,
+      title: obj.title,
+      uniqueNodeId: obj.uniqueNodeId,
+      childCount: obj.childCount,
+      isMajor: obj.isMajorLineItem,
+      isGroupNode: obj.isGroupNode,
+      groupName: obj.productName,
+      listOfferQuestions: listOfferQuestions
+    }
 
-      let setinfo = { [groupName]: groupinfo };
+    let setinfo = { [groupName]: groupinfo };
 
-      // this.offerConstructService.singleMultipleFormInfo['productInfo'].push({ [groupName]: groupinfo });
+    // this.offerConstructService.singleMultipleFormInfo['productInfo'].push({ [groupName]: groupinfo });
 
-      console.log(this.offerConstructService.singleMultipleFormInfo);
+    console.log(this.offerConstructService.singleMultipleFormInfo);
 
-      this.setProductInfo(obj.productName, obj.isMajorLineItem, setinfo, listOfferQuestions);
-    });
+    this.setProductInfo(obj.productName, obj.isMajorLineItem, setinfo, listOfferQuestions);
+    // });
   }
 
   setProductInfo(groupName, groupType, groupInfo, questionSet) {
@@ -278,9 +283,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       });
     }
     this.isDisabledView = false;
-    console.log("---", (this.offerConstructService.singleMultipleFormInfo));
-    console.log("--- offerConstructItems", (this.offerConstructItems));
-
+    this.loaderService.stopLoading();
   }
 
   submitClickEvent() {
@@ -545,7 +548,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     obj.name = newValue;
   }
 
-  //change name of product 
+  //change name of product
   changelabel(uniqueKey, productName, isMajorLineItem, uniqueNodeId, name) {
     let groupType;
     if (isMajorLineItem) {
@@ -804,6 +807,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.loaderService.startLoading();
     this.subscription = this.messageService.getMessage()
       .subscribe(message => {
         this.saveOfferConstructChanges();
@@ -836,9 +840,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
       this.offerConstructItems = [...this.offerConstructItems];
     });
+    
     this.questionForm = new FormGroup({
     });
-
+    
     this.multipleForms = new FormGroup({
     });
 
@@ -927,6 +932,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
     }, (err) => {
       console.log(err);
+    }, () => {
+      this.loaderService.stopLoading();
     });
   }
 
@@ -1466,7 +1473,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     //     console.log(err);
     //   });
 
-    this.checkNodeUniqueKeyAndPatchQuestion(currentNode, true);
+    this.checkNodeUniqueKeyAndPatchQuestion(currentNode, true);;
+    this.questionForm = this.offerConstructService.toFormGroup(this.questionsList[this.uniqueNodeId]);
 
   }
 
