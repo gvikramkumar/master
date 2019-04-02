@@ -30,7 +30,7 @@ import { ToastModule } from 'primeng/toast';
   imports: [
     CommonModule,
     DataTableModule, DropdownModule, MultiSelectModule, FileUploadModule, TooltipModule, AccordionModule,
-    OverlayPanelModule, 
+    OverlayPanelModule,
     MenuModule,
     TableModule,
     CalendarModule,
@@ -47,8 +47,8 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     ProgressSpinnerModule,
     DialogModule,
-    RouterModule,BsDatepickerModule.forRoot(),
-    FormsModule, ReactiveFormsModule 
+    RouterModule, BsDatepickerModule.forRoot(),
+    FormsModule, ReactiveFormsModule
   ],
   providers: [
     HeaderService,

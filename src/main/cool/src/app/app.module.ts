@@ -72,6 +72,8 @@ import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeh
 import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
 import { OfferconstructChildComponent } from './child_component/offerconstruct-child/offerconstruct-child.component';
 import { OfferSetupComponent } from './offer-setup/offer-setup.component';
+import { LoaderService } from '@shared/loader.service';
+import { LoaderComponent } from '@shared/components/loader/loader.component';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -118,7 +120,8 @@ export function app_init(configService: ConfigurationService) {
     DesignReviewExitCriteriaComponent,
     StakeholderAddComponent,
     OfferconstructChildComponent,
-    OfferSetupComponent
+    OfferSetupComponent,
+    LoaderComponent
   ],
   imports: [
     NgbModule,
@@ -166,6 +169,7 @@ export function app_init(configService: ConfigurationService) {
       MenuBarService,
       RightPanelService,
       OffersolutioningService,
+      LoaderService,
       {
         provide: APP_INITIALIZER,
         multi: true,

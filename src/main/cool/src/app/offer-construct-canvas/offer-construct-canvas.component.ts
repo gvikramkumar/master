@@ -28,6 +28,7 @@ import { filter } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
 import { ConfigurationService } from '@shared/services';
+import { LoaderService } from './../shared/loader.service';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offer-construct-canvas.component.html',
@@ -113,10 +114,20 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public isDisabledView: boolean = true;
   listOfferQuestions: any;
 
+  public isShow: boolean = false;
   constructor(private cd: ChangeDetectorRef, private elRef: ElementRef, private messageService: MessageService, private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
     private configurationService: ConfigurationService,
-    private activatedRoute: ActivatedRoute, private _fb: FormBuilder, private offerDetailViewService: OfferDetailViewService) {
+    private activatedRoute: ActivatedRoute,
+    private _fb: FormBuilder,
+    private offerDetailViewService: OfferDetailViewService,
+    private loaderService: LoaderService) {
+
+    this.loaderService.loaderStatus.subscribe((value) => {
+      this.isShow = value
+      console.log("test");
+
+    });
 
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -804,6 +815,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+
+    this.loaderService.display(true);
     this.subscription = this.messageService.getMessage()
       .subscribe(message => {
         this.saveOfferConstructChanges();
@@ -927,6 +940,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
     }, (err) => {
       console.log(err);
+    }, () => {
+      this.loaderService.display(false);
     });
   }
 
