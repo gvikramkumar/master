@@ -5,7 +5,6 @@ export default {
   showStack: false,
   artUrl: 'https://wsgi-stage.cisco.com/cepm/pdpservices/authorizationmanagerservice',
   autoSyncOn: true,
-  ssoUrl: 'https://localhost:3443',
   mongo: {
     uri: 'mongodb://findp-stg-01.cisco.com/fin-dfa',
     host: 'findp-stg-01.cisco.com',
