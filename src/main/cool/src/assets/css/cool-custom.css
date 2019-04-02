@@ -677,7 +677,7 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .view-item-details .pid-data .form-group .form-group__text input:hover,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text select:hover,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text textarea:hover,
-.cool.cui .view-item-details  .pid-data form-group .form-group__text.select input:hover,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select input:hover,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text.select select:hover,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text.select textarea:hover {
     border: 1px solid #00bceb;
