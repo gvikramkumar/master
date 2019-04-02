@@ -384,7 +384,7 @@
 </p-overlayPanel>
 
 <!-- actions overlay -->
-<p-overlayPanel #popActionContent [showCloseIcon]="true" (onShow)="getActionFormValues()">
+<p-overlayPanel #popActionContent [showCloseIcon]="true" (onShow)="getActionFormValues()" [dismissable]="false">
   <div *ngIf="selectedAction" style="min-width:700px">
 
     <!-- *ngIf="showActionSection" -->
