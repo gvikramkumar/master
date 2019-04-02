@@ -617,7 +617,7 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .ui-multiselect-header .ui-multiselect-filter-container .ui-multiselect-filter-icon {
   top: .85em;
 }
-.cool.cui  .ui-multiselect-trigger.ui-state-default.ui-corner-right {
+.cool.cui  .ui-multiselect-trigger.ui-state-default.ui-corner-right, .cool.cui  .ui-dropdown .ui-dropdown-trigger {
   border-left: none;
 }
 .cool.cui .overflow-visible {
