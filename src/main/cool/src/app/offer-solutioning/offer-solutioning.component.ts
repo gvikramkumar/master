@@ -40,6 +40,7 @@ export class OfferSolutioningComponent implements OnInit {
   stakeData;
   stakeHolderData;
 
+  mandatoryQuestions = true;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
 
@@ -488,7 +489,7 @@ export class OfferSolutioningComponent implements OnInit {
       let offerSolutioningSelected = true;
       nextStepPostData['solutioningDetails'].forEach(element => {
         element.Details.forEach(ele => {
-          if (ele.mandatory && _.isEmpty(ele.solutioningAnswer)) {
+          if (ele.mandatory && _.isEmpty(JSON.stringify(ele.solutioningAnswer))) {
             offerSolutioningSelected = false;
           }
         });
@@ -501,6 +502,8 @@ export class OfferSolutioningComponent implements OnInit {
             this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
           }
         });
+      } else {
+        this.mandatoryQuestions = false;
       }
 
     });
