@@ -123,12 +123,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     private offerDetailViewService: OfferDetailViewService,
     private loaderService: LoaderService) {
 
-    this.loaderService.loaderStatus.subscribe((value) => {
-      this.isShow = value
-      console.log("test");
-
-    });
-
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -556,7 +550,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     obj.name = newValue;
   }
 
-  //change name of product 
+  //change name of product
   changelabel(uniqueKey, productName, isMajorLineItem, uniqueNodeId, name) {
     let groupType;
     if (isMajorLineItem) {
@@ -815,8 +809,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-
-    this.loaderService.display(true);
+    this.loaderService.startLoading();
     this.subscription = this.messageService.getMessage()
       .subscribe(message => {
         this.saveOfferConstructChanges();
@@ -941,7 +934,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     }, (err) => {
       console.log(err);
     }, () => {
-      this.loaderService.display(false);
+      this.loaderService.stopLoading();
     });
   }
 
