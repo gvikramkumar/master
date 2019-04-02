@@ -234,8 +234,8 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
     });
 
     if (majorItemData.length > 0 && minorItemData.length > 0) {
-      forkJoin([this.offerPhaseService.proceedToStakeHolders(operationalAssesmentProceedPayload),
-        this.offerPhaseService.proceedToStakeHolders(designReviewProceedPayload)]).subscribe(result => {
+      forkJoin([this.offerPhaseService.createSolutioningActions(operationalAssesmentProceedPayload),
+        this.offerPhaseService.createSolutioningActions(designReviewProceedPayload)]).subscribe(result => {
         this.messageService.sendMessage('Save Offer Construct Details');
         if (msg !== 'stay_on_this_page') {
           this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
