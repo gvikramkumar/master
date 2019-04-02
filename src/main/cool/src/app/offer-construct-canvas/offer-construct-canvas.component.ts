@@ -836,9 +836,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
       this.offerConstructItems = [...this.offerConstructItems];
     });
+    // this.questionForm = this.OfferconstructCanvasService.toFormGroup(this.questionsList)
     this.questionForm = new FormGroup({
     });
-
     this.multipleForms = new FormGroup({
     });
 
@@ -1467,6 +1467,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     //   });
 
     this.checkNodeUniqueKeyAndPatchQuestion(currentNode, true);
+    
+    // TODO:Sudeepthi: hook up form validations here
+    console.log("questionsList:" +this.questionsList[this.uniqueNodeId]);
+    this.questionForm = this.offerConstructService.toFormGroup(this.questionsList[this.uniqueNodeId]);
+    console.log(this.questionForm.controls);
 
   }
 
