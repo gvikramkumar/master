@@ -1,29 +1,32 @@
 <div class="content solutioning">
   <div class="container">
+   
     <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
       [stakeData]="stakeData" (updateMessage)="updateMessage($event)"> </app-menu-bar>
 
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar (onProceedToNext)="proceedToOfferComponents($event)" [showSave]="true">
-      </app-taskbar>
 
-      <div class="row">
-        <div class="leftContent col-sm-12 col-md-9">
+      <form [formGroup]='offerSolutioningFormGroup' #osForm="ngForm">
 
-          <app-offer-create-detail></app-offer-create-detail>
+        <app-taskbar (onProceedToNext)="osForm.form.valid && proceedToOfferComponents($event)" [showSave]="true">
+        </app-taskbar>
 
-          <ul class="list list--highlight base-margin-top">
-            <li>
-              <div class="panel panel--bordered"><span class="text-success"><span
-                    class="icon-check-outline icon-medium"></span>
-                  {{derivedMM}} Aligned</span></div>
-            </li>
-          </ul>
+        <div class="row">
+          <div class="leftContent col-sm-12 col-md-9">
 
-          <!-- OS Group -->
+            <app-offer-create-detail></app-offer-create-detail>
 
-          <form [formGroup]='offerSolutioningFormGroup'>
+            <ul class="list list--highlight base-margin-top">
+              <li>
+                <div class="panel panel--bordered"><span class="text-success"><span
+                      class="icon-check-outline icon-medium"></span>
+                    {{derivedMM}} Aligned</span></div>
+              </li>
+            </ul>
+
+            <!-- OS Group -->
+
             <div *ngFor="let osGroup of Object.keys(groupedQuestionsAndAnswers), let i = index">
               <div class="row">
                 <div class="col-md-12 base-padding-top text-large">
@@ -35,18 +38,23 @@
                 [groupData]="groupedQuestionsAndAnswers" [unGroupData]="unGroupedQuestionsAndAnswers">
               </app-offersolutioning-card-one>
             </div>
-          </form>
+
+
+          </div>
+
+          <!-- Right Panel -->
+          <div class="rightContent col-sm-12 col-md-3" style="margin-top: -5px;">
+            <app-right-panel [stakeData]="stakeData" [offerName]="offerName" [derivedMM]="derivedMM"
+              [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+            </app-right-panel>
+          </div>
 
         </div>
 
-        <!-- Right Panel -->
-        <div class="rightContent col-sm-12 col-md-3" style="margin-top: -5px;">
-          <app-right-panel [stakeData]="stakeData" [offerName]="offerName" [derivedMM]="derivedMM"
-            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
-          </app-right-panel>
-        </div>
+      </form>
 
-      </div>
     </div>
+
+
   </div>
 </div>

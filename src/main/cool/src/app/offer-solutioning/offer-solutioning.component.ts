@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OffersolutioningService } from '../services/offersolutioning.service';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
@@ -6,7 +6,7 @@ import { OfferPhaseService } from '../services/offer-phase.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { ConfigurationService } from '@shared/services';
 import * as _ from 'lodash';
-import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators, FormControl, NgForm } from '@angular/forms';
 
 export class OSForm {
   osGroup: OSGroup[];
@@ -40,6 +40,7 @@ export class OfferSolutioningComponent implements OnInit {
   stakeData;
   stakeHolderData;
 
+  mandatoryQuestions = true;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
 
@@ -52,6 +53,8 @@ export class OfferSolutioningComponent implements OnInit {
   offerSolutioningFormGroup: FormGroup;
   groupedQuestionsAndAnswers: Array<any> = [];
   unGroupedQuestionsAndAnswers: Array<any> = [];
+
+  @ViewChild('osForm') osForm: NgForm;
 
 
   constructor(private formBuilder: FormBuilder, private router: Router,
@@ -196,7 +199,7 @@ export class OfferSolutioningComponent implements OnInit {
       }, []);
 
       // Retrieve Unique Questions From 'questionsAndAnswers' Array
-      this.unGroupedQuestionsAndAnswers = _.uniqBy(this.unGroupedQuestionsAndAnswers, 'question');
+      this.unGroupedQuestionsAndAnswers = _.uniqBy(this.unGroupedQuestionsAndAnswers, 'questionNo');
 
       this.offersolutioningService.retrieveOfferSolutionAnswers(this.offerId).subscribe(resOfferSolutioningAnswers => {
 
@@ -231,6 +234,7 @@ export class OfferSolutioningComponent implements OnInit {
         // Group 'questionsAndAnswers' -> OsGroup -> Group -> SubGroup - In Absence Of Answers
         if (err && err.status === 404) {
 
+          this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
           this.groupedQuestionsAndAnswers = this.groupSolutioningQuestionAndAnswers(this.unGroupedQuestionsAndAnswers);
 
           // Create OS Form Group Template
@@ -485,22 +489,21 @@ export class OfferSolutioningComponent implements OnInit {
       let offerSolutioningSelected = true;
       nextStepPostData['solutioningDetails'].forEach(element => {
         element.Details.forEach(ele => {
-          if (_.isEmpty(ele.solutioningAnswer)) {
+          if (ele.mandatory && _.isEmpty(JSON.stringify(ele.solutioningAnswer))) {
             offerSolutioningSelected = false;
           }
         });
       });
 
       if (offerSolutioningSelected) {
-        this.offerPhaseService.proceedToStakeHolders(solutioningProceedPayload).subscribe(result => {
+
+        this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(result => {
           if (JSON.parse(routeTo) === true) {
             this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
           }
         });
       } else {
-        if (JSON.parse(routeTo) === true) {
-          this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
-        }
+        this.mandatoryQuestions = false;
       }
 
     });
@@ -532,7 +535,8 @@ export class OfferSolutioningComponent implements OnInit {
                     'solutioninQuestion': questions['question'],
                     'egenieAttributeName': attributeName ? attributeName : '',
                     'oSGroup': questions['oSgroup'],
-                    'solutioningAnswer': questions['answerToQuestion']
+                    'solutioningAnswer': questions['answerToQuestion'],
+                    'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false
                   };
                   solutioningDetail['Details'].push(offerQuestion);
                   return {
