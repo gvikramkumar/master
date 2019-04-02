@@ -20,17 +20,19 @@ export function healthcheck () {
     Q.allSettled([
       pingMongo(),
       pingPostgres(),
-      pingSso()
     ])
       .then(results => {
         const rtn = {
-          api: results[0].state === 'fulfilled' ? `build: ${results[0].value[0][0]}` : '',
-          mongo: results[0].state === 'fulfilled' ? `dfa-version: ${results[0].value[0][1]}, mongo-version: ${results[0].value[1].version}` : `DOWN: ${results[0].reason}`,
-          pg: results[1].state === 'fulfilled' ? results[1].value : `DOWN: ${results[1].reason}`,
-          sso: results[2].state === 'fulfilled' ? results[2].value : `DOWN: ${results[2].reason}`
+          api: `build: ${process.env.BUILD_NUMBER}`,
+          mongo: results[0].state === 'fulfilled' ? `dfa-version: ${results[0].value[0]}, mongo-version: ${results[0].value[1].version}` : `DOWN: ${results[0].reason}`,
+          pg: results[1].state === 'fulfilled' ? results[1].value : `DOWN: ${results[1].reason}`
+          // sso: results[2].state === 'fulfilled' ? results[2].value : `DOWN: ${results[2].reason}`
         };
-        const status = results.filter(result => result.state === 'rejected').length ? 503 : 200;
-        res.status(status).json(rtn);
+        // this was for showing "no service" 503 if sso was down, to load balancer. Now we have sso doing the same for us. If we depended on a service, we should return 200
+        // and specifying the service is down.
+        // const status = results.filter(result => result.state === 'rejected').length ? 503 : 200;
+        // res.status(status).json(rtn);
+        res.json(rtn);
       })
       .catch(e => next(e));
   };
@@ -40,7 +42,7 @@ function pingMongo() {
   try {
     // throw new Error('mongo');
     return Promise.all([
-      lookupRepo.getValues(['build-number', 'database-version']),
+      lookupRepo.getValue('database-version'),
       mgc.db.admin().serverInfo()
     ]);
   } catch (e) {
