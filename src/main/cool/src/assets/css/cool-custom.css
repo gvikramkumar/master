@@ -617,7 +617,7 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .ui-multiselect-header .ui-multiselect-filter-container .ui-multiselect-filter-icon {
   top: .85em;
 }
-.cool.cui  .ui-multiselect-trigger.ui-state-default.ui-corner-right {
+.cool.cui  .ui-multiselect-trigger.ui-state-default.ui-corner-right, .cool.cui  .ui-dropdown .ui-dropdown-trigger {
   border-left: none;
 }
 .cool.cui .overflow-visible {
@@ -651,17 +651,18 @@ th.ui-sortable-column.ng-star-inserted {
   width: 100%;
   display: block;
   overflow: visible;
+  max-width: 250px;
 }
 .cool.cui .view-item-details .section-label th.section-label {
   width: 100%!important;
 }
 
-.cool.cui .view-item-details .form-group .form-group__text input,
-.cool.cui .view-item-details .form-group .form-group__text select,
-.cool.cui .view-item-details .form-group .form-group__text textarea,
-.cool.cui .view-item-details .form-group .form-group__text.select input,
-.cool.cui .view-item-details .form-group .form-group__text.select select,
-.cool.cui .view-item-details .form-group .form-group__text.select textarea {
+.cool.cui .view-item-details .pid-data .form-group .form-group__text input,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text select,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text textarea,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select input,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select select,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select textarea {
     border: 1px solid transparent;
     border-radius: 2px;
     flex: 1;
@@ -670,14 +671,15 @@ th.ui-sortable-column.ng-star-inserted {
     background: transparent;
     -moz-appearance: none;
     -webkit-appearance: none;
+    max-width: 250px;
 }
 
-.cool.cui .view-item-details .form-group .form-group__text input:hover,
-.cool.cui .view-item-details .form-group .form-group__text select:hover,
-.cool.cui .view-item-details .form-group .form-group__text textarea:hover,
-.cool.cui .view-item-details .form-group .form-group__text.select input:hover,
-.cool.cui .view-item-details .form-group .form-group__text.select select:hover,
-.cool.cui .view-item-details .form-group .form-group__text.select textarea:hover {
+.cool.cui .view-item-details .pid-data .form-group .form-group__text input:hover,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text select:hover,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text textarea:hover,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select input:hover,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select select:hover,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select textarea:hover {
     border: 1px solid #00bceb;
     border-radius: 2px;
     flex: 1;
@@ -688,19 +690,22 @@ th.ui-sortable-column.ng-star-inserted {
     -webkit-appearance: none;
 }
 
-.cool.cui .view-item-details p-multiselect .ui-state-default {
+.cool.cui .view-item-details .pid-data  p-multiselect .ui-state-default {
   border: 1px solid transparent;
   background-color: transparent;
   color: #555555;
 }
-.cool.cui .view-item-details p-multiselect .ui-state-default:hover {
+.cool.cui .view-item-details .pid-data  p-multiselect .ui-state-default:hover {
   border: 1px solid #d6d6d6;
   background-color: #ffffff;
   color: #555555;
 }
 
-.cool.cui .view-item-details .ui-multiselect .ui-multiselect-label {
+.cool.cui .view-item-details .pid-data .ui-multiselect .ui-multiselect-label {
   padding: .5em;
+}
+.cool.cui p-dialog.add-details-dialog .ui-dialog {
+  max-width: 100%;
 }
 
 /* Estimated Lead Time Ribbon */

@@ -6,6 +6,7 @@ import { OfferPhaseService } from '../services/offer-phase.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { ConfigurationService } from '@shared/services';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl, NgForm } from '@angular/forms';
 
 export class OSForm {
@@ -40,6 +41,7 @@ export class OfferSolutioningComponent implements OnInit {
   stakeData;
   stakeHolderData;
 
+  mandatoryQuestions = true;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
 
@@ -207,12 +209,15 @@ export class OfferSolutioningComponent implements OnInit {
         // Initialize QnA Map
         const questionAnswerMap: Map<string, string> = new Map<string, string>();
         for (const qna of offerSolutioningAnswers['questionAnswer']) {
-          questionAnswerMap.set(qna['questionNo'], qna['answer']);
+            questionAnswerMap.set(qna['questionNo'], qna['answer']);
         }
+
         // Populate Answer Field In 'questionsAndAnswers' Array
         for (const qna of this.unGroupedQuestionsAndAnswers) {
           qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
             '' : questionAnswerMap.get(qna['questionNo']);
+          qna['answerToQuestion'] = qna['questionType'] === 'Date' ?
+          moment(qna['answer']).format('MM/DD/YYYY'): qna['answerToQuestion'];
         }
 
         // Condtionally Hide Solutioning Question And Answers
@@ -488,7 +493,7 @@ export class OfferSolutioningComponent implements OnInit {
       let offerSolutioningSelected = true;
       nextStepPostData['solutioningDetails'].forEach(element => {
         element.Details.forEach(ele => {
-          if (ele.mandatory && _.isEmpty(ele.solutioningAnswer)) {
+          if (ele.mandatory && _.isEmpty(JSON.stringify(ele.solutioningAnswer))) {
             offerSolutioningSelected = false;
           }
         });
@@ -501,6 +506,8 @@ export class OfferSolutioningComponent implements OnInit {
             this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
           }
         });
+      } else {
+        this.mandatoryQuestions = false;
       }
 
     });
@@ -532,8 +539,10 @@ export class OfferSolutioningComponent implements OnInit {
                     'solutioninQuestion': questions['question'],
                     'egenieAttributeName': attributeName ? attributeName : '',
                     'oSGroup': questions['oSgroup'],
-                    'solutioningAnswer': questions['answerToQuestion'],
-                    'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false
+                    'solutioningAnswer': questions.questionType === 'Date' ?
+                      questions['answerToQuestion'].toISOString() : questions['answerToQuestion'],
+                    'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false,
+                    'questionType': questions.questionType
                   };
                   solutioningDetail['Details'].push(offerQuestion);
                   return {

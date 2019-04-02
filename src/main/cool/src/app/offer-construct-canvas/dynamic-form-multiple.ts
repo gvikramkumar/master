@@ -30,6 +30,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     public viewDetails: Boolean = false;
     public detailArray: any[] = [];
     public headerName: any = '';
+    test: FormGroup;
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService) {
@@ -90,6 +91,14 @@ export class DynamicFormMultipleComponent implements OnInit {
                 let title: any = Object.keys(element);
                 this.replaceOrUpdatevalue(element[title], isUdate)
             });
+        });
+
+        this.minorOfferInfo.forEach((list, index) => {
+          let groupName: any = Object.keys(list);
+          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
+              let title: any = Object.keys(element);
+              this.replaceOrUpdatevalue(element[title], isUdate)
+          });
         });
 
         let counter = 10;
@@ -182,24 +191,24 @@ export class DynamicFormMultipleComponent implements OnInit {
         return array;
     }
 
-  patchvalueToSelected(groupName) {
-    let itemsData = this.itemsData;
-    if (itemsData !== undefined) {
-      if (groupName === itemsData['Item Category']) {
-        this.selectedProduct.forEach(product => {
-          if (groupName = product.groupName) {
-            for (let searchValue in itemsData) {
-              product.listOfferQuestions.forEach(element => {
-                if (searchValue === element.question) {
-                  element.currentValue = itemsData[searchValue];
-                }
-              });
+    patchvalueToSelected(groupName) {
+        let itemsData = this.itemsData;
+        if (itemsData !== undefined) {
+            if (groupName === itemsData['Item Category']) {
+                this.selectedProduct.forEach(product => {
+                    if (groupName = product.groupName) {
+                        for (let searchValue in itemsData) {
+                            product.listOfferQuestions.forEach(element => {
+                                if (searchValue === element.question) {
+                                    element.currentValue = itemsData[searchValue];
+                                }
+                            });
+                        }
+                    }
+                });
             }
-          }
-        });
-      }
+        }
     }
-  }
 
     addItms(groupName) {
         let selectedSection = this.selectedTab;
@@ -218,34 +227,34 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     patchToALL(groupName) {
 
-      let itemsData = this.itemsData;
-      // copy items from the same ICC type
-      if (itemsData !== undefined) {
-        if (groupName === itemsData['Item Category']) {
-          //copy in major section or minor section
-          if (this.ismajorSection) {
-            this.majorOfferInfo.forEach((element, index) => {
-              let gname: any = Object.keys(element);
-              if (gname == groupName) {
-                element[gname].productInfo.forEach((questionset, index) => {
-                  let setname: any = Object.keys(questionset);
-                  this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
-                });
-              }
-            });
-          } else {
-            this.minorOfferInfo.forEach((element, index) => {
-              let gname: any = Object.keys(element);
-              if (gname == groupName) {
-                element[gname].productInfo.forEach((questionset, index) => {
-                  let setname: any = Object.keys(questionset);
-                  this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
-                });
-              }
-            });
-          }
+        let itemsData = this.itemsData;
+        // copy items from the same ICC type
+        if (itemsData !== undefined) {
+            if (groupName === itemsData['Item Category']) {
+                //copy in major section or minor section
+                if (this.ismajorSection) {
+                    this.majorOfferInfo.forEach((element, index) => {
+                        let gname: any = Object.keys(element);
+                        if (gname == groupName) {
+                            element[gname].productInfo.forEach((questionset, index) => {
+                                let setname: any = Object.keys(questionset);
+                                this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                            });
+                        }
+                    });
+                } else {
+                    this.minorOfferInfo.forEach((element, index) => {
+                        let gname: any = Object.keys(element);
+                        if (gname == groupName) {
+                            element[gname].productInfo.forEach((questionset, index) => {
+                                let setname: any = Object.keys(questionset);
+                                this.copySearchItemToAllSection(questionset[setname].listOfferQuestions)
+                            });
+                        }
+                    });
+                }
+            }
         }
-      }
     }
 
     copySearchItemToAllSection(questionset) {
