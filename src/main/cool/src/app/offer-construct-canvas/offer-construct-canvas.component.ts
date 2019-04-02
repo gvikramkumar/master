@@ -171,8 +171,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    */
   dropItem($event) {
     this.initalRowAdded = false;
-    console.log(this.draggedItem);
     if (this.draggedItem['isMajorLineItem']) {
+      this.loaderService.display(true);
       const obj = Object.create(null);
       obj['uniqueKey'] = ++this.counter;
       this.uniqueId = obj['uniqueKey'];
@@ -289,9 +289,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       });
     }
     this.isDisabledView = false;
-    console.log("---", (this.offerConstructService.singleMultipleFormInfo));
-    console.log("--- offerConstructItems", (this.offerConstructItems));
-
+    this.loaderService.display(false);
   }
 
   submitClickEvent() {

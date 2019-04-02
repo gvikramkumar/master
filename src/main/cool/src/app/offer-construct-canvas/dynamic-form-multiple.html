@@ -1,7 +1,6 @@
 <p-dialog header="Add All Offer Details" closable="true" modal="true" showHeader="false" (onHide)="onHide()"
   class="add-details-dialog" [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
-  [contentStyle]="{'min-height':'450px', 'width':'100%'}" positionTop='150' positionRight='0'
-  positionLeft='0'>
+  [contentStyle]="{'min-height':'450px', 'width':'100%'}" positionTop='150' positionRight='0' positionLeft='0'>
   <div class="divider" style="margin-top: -1.5%"></div>
   <div class="line-items-nav">
     <ul id="tabsv4" class="tabs tabs--tall">
@@ -177,7 +176,8 @@
 
                             <td *ngSwitchCase="'Multiselect'">
                               <p-multiSelect [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                [options]="pInfo.listMutiSelect" optionLabel="name" [(ngModel)]="pInfo.currentValue">
+                                [options]="pInfo.listMutiSelect" optionLabel="name"
+                                [(ngModel)]="pInfo.listCurrentValue">
                               </p-multiSelect>
                             </td>
                           </tr>
