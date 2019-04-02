@@ -226,36 +226,36 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     let test = [];
     test.push(majorItem);
     let groupsName = { groups: test };
-    this.offerConstructService.addDetails(groupsName).subscribe((data) => {
-      let groupName = obj.uniqueNodeId;
-      //let groupName = obj.uniqueKey;
-      let listOfferQuestions;
-      if (isQuestionPresent == undefined) {
-        console.log("isQuestionPresent if block", isQuestionPresent);
-        listOfferQuestions = data.groups[0].listOfferQuestions;
-      } else {
-        console.log("isQuestionPresent else block", isQuestionPresent);
-        listOfferQuestions = obj.itemDetails;
-      }
-      let groupinfo = {
-        uniqueKey: obj.uniqueKey,
-        title: obj.title,
-        uniqueNodeId: obj.uniqueNodeId,
-        childCount: obj.childCount,
-        isMajor: obj.isMajorLineItem,
-        isGroupNode: obj.isGroupNode,
-        groupName: obj.productName,
-        listOfferQuestions: listOfferQuestions
-      }
+    // this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+    let groupName = obj.uniqueNodeId;
+    //let groupName = obj.uniqueKey;
+    let listOfferQuestions;
+    if (isQuestionPresent == undefined) {
+      console.log("isQuestionPresent if block", isQuestionPresent);
+      listOfferQuestions = this.listOfferQuestions;
+    } else {
+      console.log("isQuestionPresent else block", isQuestionPresent);
+      listOfferQuestions = obj.itemDetails;
+    }
+    let groupinfo = {
+      uniqueKey: obj.uniqueKey,
+      title: obj.title,
+      uniqueNodeId: obj.uniqueNodeId,
+      childCount: obj.childCount,
+      isMajor: obj.isMajorLineItem,
+      isGroupNode: obj.isGroupNode,
+      groupName: obj.productName,
+      listOfferQuestions: listOfferQuestions
+    }
 
-      let setinfo = { [groupName]: groupinfo };
+    let setinfo = { [groupName]: groupinfo };
 
-      // this.offerConstructService.singleMultipleFormInfo['productInfo'].push({ [groupName]: groupinfo });
+    // this.offerConstructService.singleMultipleFormInfo['productInfo'].push({ [groupName]: groupinfo });
 
-      console.log(this.offerConstructService.singleMultipleFormInfo);
+    console.log(this.offerConstructService.singleMultipleFormInfo);
 
-      this.setProductInfo(obj.productName, obj.isMajorLineItem, setinfo, listOfferQuestions);
-    });
+    this.setProductInfo(obj.productName, obj.isMajorLineItem, setinfo, listOfferQuestions);
+    // });
   }
 
   setProductInfo(groupName, groupType, groupInfo, questionSet) {
