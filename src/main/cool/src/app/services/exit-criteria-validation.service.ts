@@ -22,7 +22,7 @@ export class ExitCriteriaValidationService {
     return this.http.post(url, null, { withCredentials: true });
   }
   postForNewAction(offerId, caseId, payload) {
-    let url = this.environmentService.REST_API_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL;
+    let url = this.environmentService.REST_API_CREATE_STRATEGY_REVIEW_TASKS;
     url += offerId;
     url += '/' + caseId;
     return this.http.post(url, payload);
@@ -52,7 +52,7 @@ export class ExitCriteriaValidationService {
   }
 
   postForDesingReviewNewAction(offerId, caseId, payload) {
-    let url = this.environmentService.REST_API_DESIGN_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL;
+    let url = this.environmentService.REST_API_CREATE_DESIGN_REVIEW_TASKS;
     url += offerId;
     url += '/' + caseId;
     return this.http.post(url, payload);

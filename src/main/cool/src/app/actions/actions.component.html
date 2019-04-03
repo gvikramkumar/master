@@ -6,82 +6,58 @@
         <div class="card card--raised base-margin-top">
           <div class="panel">
             <div class="row card-table-header">
-              <div class="col-md-8">
+              <div class="col-md-10">
                 <h2 class="page--subheading">Action Item Tracker</h2>
+              </div>
+              <div class="col-md-2 switchButton">
+                <div class="flex-center-vertical">
+                  <p-inputSwitch (onChange)="handleSwitchChange($event)" [(ngModel)]="checked"></p-inputSwitch>
+                  <label class="text-large base-margin-left">Show My Actions</label>
+                </div>
               </div>
             </div>
             <div class="responsive-table">
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
-                <p-column field="offerId" sortable="true" header="OFFER">
+                <p-column field="offerId" sortable="true" header="ACTION COMPLETE" [style]="{'width':'150px'}">
+                  <ng-template let-col let-actionData="rowData" pTemplate="body">
+                    <div style="text-align:center"  *ngIf="actionData.completed == true">
+                      <span class="icon-check-outline icon-medium"></span>
+                    </div>
+                    <div *ngIf="actionData.completed == false">
+                      </div>
+                  </ng-template>
+                </p-column>
+                <p-column field="offerId" [filter]="true" filterPlaceholder="Filter By Offer ID" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <a (click)="showOfferPopUp($event,actionData,popturboContent)">{{actionData.offerId}}</a><br />
                     <span>{{actionData.offerName}}</span>
                   </ng-template>
                 </p-column>
-                <p-column field="actionTitle" sortable="true" header="ACTION">
+                <p-column field="actionTitle" [filter]="true" filterPlaceholder="Filter By Action Title" sortable="true" header="ACTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.actionTitle}} <br /></span>
                     <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
                     <span *ngIf="actionData.attachment == true" class="offerDesc"
                       (click)="getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
-
-                    <!-- my new code coming here -->
-                    <!-- <ng-template #popCommentContent ptemplate="body">
-                      <div  class="popover" style="width:501px;left:230px">
-
-                        <div class="popover__body">
-                          <h5>View/Edit Comment</h5>
-
-                          <app-viewcomment [taskId] = "actionData.taskId" [popContent] = "p4"></app-viewcomment>
-
-                          <a class="modal__close" id="popover_close"
-                          ><span class="icon-close"
-                            (click)="displayActionPop(p4)"></span></a>
-                        </div>
-
-                      </div>
-                    </ng-template> -->
-                    <!-- <span [ngbPopover]="popCommentContent" (click)="p4.open()" autoClose="'outside'" #p4="ngbPopover"
-                      triggers="manual" pTooltip="Comments" placement="top" class="icon-comment" aria-hidden="true"></span> -->
-                    <!--new code ending here-->
                     <span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right"
                       pTooltip="Comments" placement="top"></span>
                   </ng-template>
                 </p-column>
-                <p-column field="createdBy" sortable="true" header="ACTION CREATED BY">
+                <p-column field="createdBy" [filter]="true" filterPlaceholder="Filter By Created By" sortable="true" header="ACTION CREATED BY">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.createdBy}} <br /></span>
                   </ng-template>
                 </p-column>
-                <p-column field="defaultFunction" sortable="true" header="FUNCTION">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.defaultFunction}} <br /></span>
-                  </ng-template>
-                </p-column>
-                <p-column field="assigneeId" sortable="true" header="ASSIGNED USER">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.assigneeId}} <br /></span>
-                  </ng-template>
-                </p-column>
-                <p-column field="dueDate" header="DUE DATE" sortable="true">
+                <p-column field="dueDate" [filter]="true" filterPlaceholder="Filter By Due Date" header="DUE DATE" sortable="true">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.dueDate}} <br /></span>
                   </ng-template>
                 </p-column>
-                <p-column field="styleColor" sortable="true" header="STATUS">
+                <p-column field="actionDetails" sortable="false" header="DETAILS" [style]="{'width':'150px'}">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span *ngIf="actionData.alertType == 1">
-                      <div style="text-align:center">
-                        <span class="{{actionData.styleColor}}">
-                          <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
-                        </span>
-                      </div>
-                    </span>
-                    <span *ngIf="actionData.alertType == 2">
-                      <div style="text-align:center">
-                        <span>--</span>
-                      </div>
-                    </span>
+                    <div style="text-align:center">
+                      <a (click)="showActionDetails(actionData.taskId)">View</a>
+                    </div>
                   </ng-template>
                 </p-column>
               </p-dataTable>
@@ -223,7 +199,57 @@
       </div>
     </p-overlayPanel>
 
-
+    <!-- Action Details Dialog -->
+    <p-dialog [showHeader]="false" [responsive]="true" [width]="1500" [height]="200" [(visible)]="displayActionDetails">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right">
+            <span class="icon-close" (click)="closeActionDetails()"></span>
+          </div>
+          <div class="card__header">
+            <h5 class="card__title">Details for {{offerId}}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="row" *ngIf="!actionDetailsLoaded">
+        <div class="loader">
+          <div class="loading-dots loading-dots--info" aria-label="Loading, please wait...">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+      <div class="responsive-table" *ngIf="actionDetailsLoaded">
+        <p-dataTable [value]="actionDetailList">
+          <p-column field="defaultFunction" sortable="true" header="FUNCTION">
+            <ng-template let-col let-actionData="rowData" pTemplate="body">
+              <span>{{actionData.defaultFunction}} <br /></span>
+            </ng-template>
+          </p-column>
+          <p-column field="assigneeId" sortable="true" header="ASSIGNED USER">
+            <ng-template let-col let-actionData="rowData" pTemplate="body">
+              <span>{{actionData.assigneeId}} <br /></span>
+            </ng-template>
+          </p-column>
+          <p-column field="dueDate" header="DUE DATE" sortable="true">
+            <ng-template let-col let-actionData="rowData" pTemplate="body">
+              <span>{{actionData.dueDate}} <br /></span>
+            </ng-template>
+          </p-column>
+          <p-column field="styleColor" sortable="true" header="STATUS">
+            <ng-template let-col let-actionData="rowData" pTemplate="body">
+              <div style="text-align:center">
+                <span class="{{actionData.styleColor}}">
+                  <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
+                </span>
+              </div>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+      </div>
+    </p-dialog>
 
   </div>
 </div>

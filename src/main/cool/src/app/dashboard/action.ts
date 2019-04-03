@@ -15,12 +15,19 @@ export class ActionsAndNotifcations{
     createdBy:string;
     defaultFunction:string;
     attachment: boolean;
+    completed: boolean;
     type:string;
-
+    
     constructor() {
 
     }
 
+    setCompleted(completed) {
+        this.completed = completed;
+    }
+    getCompleted(){
+        return this.completed;
+    }
     setAttachment(attachment) {
         this.attachment = attachment;
     }
@@ -33,6 +40,10 @@ export class ActionsAndNotifcations{
     }
     setTaskId(taskId) {
         this.taskId = taskId;
+    }
+
+    getTaskId() {
+        return this.taskId;
     }
 
     getCaseId() {
