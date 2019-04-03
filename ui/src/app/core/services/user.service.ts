@@ -18,7 +18,7 @@ export class UserService extends RestBase<DfaUser> {
   }
 
   refreshUser() {
-    return this.callMethod('getUser', undefined, {uiInitialization: true}).toPromise()
+    return this.callMethod('getUser', undefined, {uiInitialization: true, showProgress: true}).toPromise()
       .then((user: DfaUser) => {
         const usr = new DfaUser(
           user.id,
