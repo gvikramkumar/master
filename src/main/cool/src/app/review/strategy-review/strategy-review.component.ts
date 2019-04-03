@@ -465,14 +465,15 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const taskName = 'Action';
     const taskId = this.currentTaskId;
     const userId = this.userService.getUserId();
-
+    const status = ''; //decide what is to be added
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,
       taskName,
       this.action,
       this.commentValue,
-      false
+      false,
+      status
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
       this.closeForm();

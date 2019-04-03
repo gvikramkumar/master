@@ -20,13 +20,20 @@ import { UserService, DashboardService } from '@shared/services';
 export class ActionsComponent implements OnInit {
   @ViewChild('createActionForm') createActionForm: NgForm;
   myActionsList;
-  myActions;
+  allActions;
+  actionDetails;
+  actionDetailList;
+  offerId;
+  actionDetailArray: ActionsAndNotifcations[] = [];
   actionCount = {
     pendingActionCount: 0,
     needImmediateActionCount: 0
   }
   myOfferArray: ActionsAndNotifcations[] = [];
   displayActionPhase: Boolean = false;
+  displayActionDetails: Boolean = false;
+  actionDetailsLoaded: Boolean = false;
+  isActionCompleted: Boolean = false;
   minDate: Date;
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
   functionList;
@@ -57,7 +64,7 @@ export class ActionsComponent implements OnInit {
   commentEvent: any;
   selectedAction;
   selectedOffer;
-
+  switchLabel = "Show Mine";
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
     private dashboardService: DashboardService,
@@ -72,8 +79,8 @@ export class ActionsComponent implements OnInit {
 
     this.actionsService.getActionsTracker()
       .subscribe(data => {
-        this.myActions = data;
-        this.processMyActionsList();
+        this.allActions = data;
+       this.processMyActionsList(false);
       });
 
     this.dashboardService.getMyOffersList().subscribe(data => {
@@ -139,125 +146,187 @@ export class ActionsComponent implements OnInit {
     }
   }
 
-  processMyActionsList() {
-
-    // Process get Actions data
-    if (this.myActions.actionList !== undefined) {
-      this.myActions['actionList'].forEach(element => {
-        const obj = new ActionsAndNotifcations();
-        obj.setOfferId(element.offerId);
-        obj.setOfferName(element.offerName);
-        obj.setOfferOwner(element.offerOwner);
-        obj.setStyleColor(element.status);
-        obj.setAssigneeId(element.assigneeId);
-        obj.setTriggerDate(this.dateFormat(element.triggerDate));
-        obj.setDueDate(this.dateFormat(element.dueDate));
-        obj.setActionDesc(element.actionDesc);
-        obj.setAttachment(element.attachment);
-        obj.setAlertType(1);
-        obj.setCaseId(element.caseId);
-        obj.setCreatedBy(element.createdBy);
-        obj.setCaseId(element.caseId);
-        obj.setTaskId(element.taskId);
-        obj.setDefaultFunctione(element.function);
-        obj.setActionTitle(element.actiontTitle);
-        // Set the status color
-        if (element.status && element.status.toLowerCase() === 'red') {
-          this.actionCount.needImmediateActionCount = this.actionCount.needImmediateActionCount + 1;
-        } else {
-          this.actionCount.pendingActionCount = this.actionCount.pendingActionCount + 1;
+  handleSwitchChange(event) {
+    let isChecked = event.checked;
+    if (isChecked == true) {
+      this.processMyActionsList(true);
+    } else {
+      this.processMyActionsList(false);
+    }
+  }
+  processMyActionsList(flag) {
+    console.log(flag);
+    this.myOfferArray = [];
+        this.myActionsList = [];
+        this.actionCount = {
+          pendingActionCount: 0,
+          needImmediateActionCount: 0
         }
-        this.myOfferArray.push(obj);
-      });
-
-      this.myActionsList = this.myOfferArray;
-    }
-  }
-  // Create New Action
-  createAction() {
-
-    // Close Dialog Box
-    this.displayActionPhase = false;
-
-    // Process post data
-    const type = 'Manual Action';
-    const selectedAssignee = [this.assigneeValue];
-
-    // Initialize CreateAction POJO
-    const createAction: CreateAction = new CreateAction(
-      this.offerNameValue,
-      this.offerCaseMap[this.offerNameValue],
-      this.titleValue,
-      this.descriptionValue,
-      this.milestoneValue,
-      this.functionNameValue,
-      selectedAssignee,
-      this.dueDateValue.toISOString(),
-      this.offerOwnerMap[this.offerNameValue],
-      this.offerNameMap[this.offerNameValue],
-      this.userService.getUserId(),
-      type,
-    );
-
-    // Call CreateAction API
-    this.actionsService.createNewAction(createAction).subscribe((data) => { });
-
-    // Reset The Form
-    this.createActionForm.reset();
-
-  }
-
-  showActionPopUp(event, action, overlaypanel: OverlayPanel) {
-    this.commentEvent = event;
-    this.selectedAction = action;
-    overlaypanel.toggle(event);
-  }
-
-
-  showOfferPopUp(event, action, overlaypanel: OverlayPanel) {
-    this.selectedOffer = {
-      caseId: action.caseId,
-      offerId: action.offerId
-    }
-    overlaypanel.toggle(event);
-  }
-
-  displayActionPop(popover) {
-    if (popover.isOpen()) {
-      popover.close();
-    }
-  }
-
-  closeActionDailog() {
-    this.displayActionPhase = false;
-    this.createActionForm.reset();
-  }
-
-  createNewAction() {
-    this.displayActionPhase = true;
-  }
-
-  dateFormat(inputDate: string) {
-    return moment(inputDate).format('DD-MMM-YYYY');
-  }
-
-  getActionDetailsFile(caseid) {
-    this.actionsService.downloadActionDetailsFile(caseid).subscribe(data => {
-      const nameOfFileToDownload = 'offer-details_' + caseid;
-      const blob = new Blob([data], { type: 'application/octet-stream' });
-
-      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
-      } else {
-        const url = `${this.environmentService.REST_API_DOWNLOAD_FILE_FOR_ACTION}/${caseid}`;
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = nameOfFileToDownload;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
+    // Process get Actions data
+    if (this.allActions.actionList !== undefined) {
+      this.actionCount.pendingActionCount = this.allActions.pendingTasksCount;
+      this.actionCount.needImmediateActionCount = this.allActions.immediateTasksCount;
+      if (flag == true) {
+        console.log('offer array '+this.myOfferArray);
+        console.log('my actions '+this.myActionsList);
+      this.allActions['actionList'].forEach(element => {
+          console.log('Element tracker contains '+element.completed);
+          if (element.tracker == false) {
+            const obj = new ActionsAndNotifcations();
+            obj.setOfferId(element.offerId);
+            obj.setOfferName(element.offerName);
+            obj.setOfferOwner(element.offerOwner);
+            obj.setActionDesc(element.actionDesc);
+            obj.setAttachment(element.attachment);
+            obj.setCompleted(element.completed);
+            obj.setCaseId(element.caseId);
+            obj.setCreatedBy(element.createdBy);
+            obj.setTaskId(element.taskId);
+            obj.setActionTitle(element.actionTitle);
+            obj.setDueDate(this.dateFormat(element.dueDate));
+            this.myOfferArray.push(obj);
+          }
+        });
+      }else{
+        this.allActions['actionList'].forEach(element => {
+            const obj = new ActionsAndNotifcations();
+            obj.setOfferId(element.offerId);
+            obj.setOfferName(element.offerName);
+            obj.setOfferOwner(element.offerOwner);
+            obj.setActionDesc(element.actionDesc);
+            obj.setAttachment(element.attachment);
+            obj.setCompleted(element.completed);
+            obj.setCaseId(element.caseId);
+            obj.setCreatedBy(element.createdBy);
+            obj.setTaskId(element.taskId);
+            obj.setActionTitle(element.actionTitle);
+            obj.setDueDate(this.dateFormat(element.dueDate));
+            this.myOfferArray.push(obj);
+        });
       }
-    });
+        
+    }
+
+    this.myActionsList = this.myOfferArray;
   }
+// Create New Action
+createAction() {
+
+  // Close Dialog Box
+  this.displayActionPhase = false;
+  this.displayActionDetails = false;
+  // Process post data
+  const type = 'Manual Action';
+  const selectedAssignee = [this.assigneeValue];
+
+  // Initialize CreateAction POJO
+  const createAction: CreateAction = new CreateAction(
+    this.offerNameValue,
+    this.offerCaseMap[this.offerNameValue],
+    this.titleValue,
+    this.descriptionValue,
+    this.milestoneValue,
+    this.functionNameValue,
+    selectedAssignee,
+    this.dueDateValue.toISOString(),
+    this.offerOwnerMap[this.offerNameValue],
+    this.offerNameMap[this.offerNameValue],
+    this.userService.getUserId(),
+    type,
+  );
+
+  // Call CreateAction API
+  this.actionsService.createNewAction(createAction).subscribe((data) => { });
+
+  // Reset The Form
+  this.createActionForm.reset();
+
+}
+
+showActionPopUp(event, action, overlaypanel: OverlayPanel) {
+  this.commentEvent = event;
+  this.selectedAction = action;
+  overlaypanel.toggle(event);
+}
+
+
+showOfferPopUp(event, action, overlaypanel: OverlayPanel) {
+  this.selectedOffer = {
+    caseId: action.caseId,
+    offerId: action.offerId
+  }
+  overlaypanel.toggle(event);
+}
+
+displayActionPop(popover) {
+  if (popover.isOpen()) {
+    popover.close();
+  }
+}
+
+closeActionDailog() {
+  this.displayActionPhase = false;
+  this.createActionForm.reset();
+}
+
+createNewAction() {
+  this.displayActionPhase = true;
+}
+
+dateFormat(inputDate: string) {
+  return moment(inputDate).format('DD-MMM-YYYY');
+}
+
+getActionDetailsFile(caseid) {
+  this.actionsService.downloadActionDetailsFile(caseid).subscribe(data => {
+    const nameOfFileToDownload = 'offer-details_' + caseid;
+    const blob = new Blob([data], { type: 'application/octet-stream' });
+
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+    } else {
+      const url = `${this.environmentService.REST_API_DOWNLOAD_FILE_FOR_ACTION}/${caseid}`;
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = nameOfFileToDownload;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+    }
+  });
+}
+
+showActionDetails(taskId) {
+  this.displayActionDetails = true;
+  this.actionDetailsLoaded = false;
+  this.actionsService.getActionDetails(taskId)
+    .subscribe(data => {
+      this.actionDetailsLoaded = true;
+      this.actionDetails = data;
+      this.offerId = this.actionDetails.offerId;
+      this.actionDetailList = [];
+      this.processMyActionDetailList();
+    });
+  console.log('show action details called')
+}
+
+processMyActionDetailList() {
+  // Process get Actions data
+  if (this.actionDetails !== undefined) {
+    const obj = new ActionsAndNotifcations();
+    obj.setStyleColor(this.actionDetails.status);
+    obj.setAssigneeId(this.actionDetails.assigneeId);
+    obj.setTriggerDate(this.dateFormat(this.actionDetails.triggerDate));
+    obj.setDueDate(this.dateFormat(this.actionDetails.dueDate));
+    obj.setDefaultFunctione(this.actionDetails.function);
+    this.actionDetailList.push(obj);
+    console.log('Action detail list contains ' + JSON.stringify(this.actionDetailList));
+  }
+}
+
+closeActionDetails(){
+  this.displayActionDetails = false;
+  // this.createActionForm.reset();
+}
 }
