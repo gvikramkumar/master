@@ -321,8 +321,6 @@ export class OfferSolutioningComponent implements OnInit {
         150 : question.rules.maxCharacterLen;
     }
 
-
-
     // Format Dropdown Display Values
     if (question.questionType === 'dropdown') {
       question.values = question.values.map(drpValue => {
@@ -486,7 +484,9 @@ export class OfferSolutioningComponent implements OnInit {
 
       const solutioningProceedPayload = {
         'offerId': this.offerId,
-        'taskName': 'Offer Solutioning'
+        'taskName': 'Offer Solutioning',
+        'caseId': this.caseId,
+        'taskId': ''
       };
 
       // Need to give answer for every question from offer solutioning to enable request approval button.
@@ -500,7 +500,7 @@ export class OfferSolutioningComponent implements OnInit {
       });
 
       if (offerSolutioningSelected) {
-
+        this.mandatoryQuestions = true;
         this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(result => {
           if (JSON.parse(routeTo) === true) {
             this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
