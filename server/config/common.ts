@@ -8,7 +8,7 @@ export default {
     fileCountMax: 1, // limit file count and size for dos attacks
   },
   art: {
-    url: ' https://wsgi-stage.cisco.com/cepm/pdpservices/authorizationmanagerservice',
+    url: 'https://wsgi-stage.cisco.com/cepm/pdpservices/authorizationmanagerservice',
     timeout: 5 * 60 * 1000 // 5 min
   },
   mail: {

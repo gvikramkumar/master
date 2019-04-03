@@ -3,7 +3,6 @@ export default {
   port: 3002,
   corsOrigin: [],
   showStack: false,
-  artUrl: 'https://wsgi-stage.cisco.com/cepm/pdpservices/authorizationmanagerservice',
   autoSyncOn: true,
   mongo: {
     uri: 'mongodb://findp-stg-01.cisco.com/fin-dfa',
