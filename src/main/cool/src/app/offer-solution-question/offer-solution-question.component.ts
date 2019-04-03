@@ -45,14 +45,15 @@ export class OfferSolutionQuestionComponent implements OnInit {
       if (childIndexUnGroupData !== -1) {
 
         const childQuestion = this.unGroupData[childIndexUnGroupData];
-        const childQuestionNumber = this.unGroupData[childIndexUnGroupData]['questionNumber'];
+        const childQuestionNumber = this.unGroupData[childIndexUnGroupData]['questionNo'];
 
         const group = childQuestion['group'];
-        const osGroup = childQuestion['osGroup'];
+        const osGroup = childQuestion['oSgroup'];
         const subGroup = childQuestion['subGroup'];
 
-        const childIndexGroupData = this.groupData[osGroup][group][subGroup].findIndex(cqa => cqa.questionNo === childQuestionNumber);
-        this.groupData[osGroup][group][subGroup][childIndexGroupData]['hideQuestion'] = false;
+      const childQuestionsGroup = this.groupData[osGroup][group][subGroup]['questions'] as Array<any>;
+        const childIndexGroupData = childQuestionsGroup.findIndex(cqa => cqa.questionNo === childQuestionNumber);
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
 
       }
 
