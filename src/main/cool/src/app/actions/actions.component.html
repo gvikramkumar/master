@@ -24,26 +24,6 @@
                     <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
                     <span *ngIf="actionData.attachment == true" class="offerDesc"
                       (click)="getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
-
-                    <!-- my new code coming here -->
-                    <!-- <ng-template #popCommentContent ptemplate="body">
-                      <div  class="popover" style="width:501px;left:230px">
-
-                        <div class="popover__body">
-                          <h5>View/Edit Comment</h5>
-
-                          <app-viewcomment [taskId] = "actionData.taskId" [popContent] = "p4"></app-viewcomment>
-
-                          <a class="modal__close" id="popover_close"
-                          ><span class="icon-close"
-                            (click)="displayActionPop(p4)"></span></a>
-                        </div>
-
-                      </div>
-                    </ng-template> -->
-                    <!-- <span [ngbPopover]="popCommentContent" (click)="p4.open()" autoClose="'outside'" #p4="ngbPopover"
-                      triggers="manual" pTooltip="Comments" placement="top" class="icon-comment" aria-hidden="true"></span> -->
-                    <!--new code ending here-->
                     <span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right"
                       pTooltip="Comments" placement="top"></span>
                   </ng-template>
