@@ -13,7 +13,11 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { HeaderService, DashboardService, CreateOfferService, ViewcommentService, TurbotaxService } from './services';
 import { RouterModule } from '@angular/router';
 import { BupmGuard, AuthGuard } from './guards';
-import { DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule, FileUploadModule, DialogModule, MenuModule, CalendarModule, AutoCompleteModule, DragDropModule, TreeTableModule, CardModule, PanelModule, TabMenuModule, TieredMenuModule, ConfirmDialogModule, ButtonModule, CheckboxModule, ProgressSpinnerModule } from 'primeng/primeng';
+import {
+  DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule,
+  FileUploadModule, DialogModule, MenuModule, CalendarModule, AutoCompleteModule, DragDropModule, TreeTableModule,
+  CardModule, PanelModule, TabMenuModule, TieredMenuModule, ConfirmDialogModule, ButtonModule, CheckboxModule, ProgressSpinnerModule
+} from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 
@@ -30,7 +34,7 @@ import { ToastModule } from 'primeng/toast';
   imports: [
     CommonModule,
     DataTableModule, DropdownModule, MultiSelectModule, FileUploadModule, TooltipModule, AccordionModule,
-    OverlayPanelModule, 
+    OverlayPanelModule,
     MenuModule,
     TableModule,
     CalendarModule,
@@ -47,8 +51,8 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     ProgressSpinnerModule,
     DialogModule,
-    RouterModule,BsDatepickerModule.forRoot(),
-    FormsModule, ReactiveFormsModule 
+    RouterModule, BsDatepickerModule.forRoot(),
+    FormsModule, ReactiveFormsModule
   ],
   providers: [
     HeaderService,

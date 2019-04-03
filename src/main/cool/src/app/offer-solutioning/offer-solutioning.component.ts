@@ -209,7 +209,7 @@ export class OfferSolutioningComponent implements OnInit {
         // Initialize QnA Map
         const questionAnswerMap: Map<string, string> = new Map<string, string>();
         for (const qna of offerSolutioningAnswers['questionAnswer']) {
-            questionAnswerMap.set(qna['questionNo'], qna['answer']);
+          questionAnswerMap.set(qna['questionNo'], qna['answer']);
         }
 
         // Populate Answer Field In 'questionsAndAnswers' Array
@@ -217,7 +217,7 @@ export class OfferSolutioningComponent implements OnInit {
           qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
             '' : questionAnswerMap.get(qna['questionNo']);
           qna['answerToQuestion'] = qna['questionType'] === 'Date' ?
-          moment(qna['answer']).format('MM/DD/YYYY'): qna['answerToQuestion'];
+            moment(qna['answer']).format('MM/DD/YYYY') : qna['answerToQuestion'];
         }
 
         // Condtionally Hide Solutioning Question And Answers
@@ -269,9 +269,9 @@ export class OfferSolutioningComponent implements OnInit {
         }
 
         const parentAnswer = this.unGroupedQuestionsAndAnswers[parentQuestionIndex]['answerToQuestion'];
-        if (childQuestionAndAnswers.questionType = 'Radio Button' && parentAnswer === 'No') {
+        if (childQuestionAndAnswers.questionType === 'Radio Button' && parentAnswer === 'No') {
           childQuestionAndAnswers.hideQuestion = true;
-        } else if (childQuestionAndAnswers.questionType !== 'Radio Button' && parentAnswer === '') {
+        } else if (childQuestionAndAnswers.questionType !== 'Radio Button' && _.isEmpty(parentAnswer)) {
           childQuestionAndAnswers.hideQuestion = true;
         }
         return childQuestionAndAnswers;
@@ -320,8 +320,6 @@ export class OfferSolutioningComponent implements OnInit {
       question.rules.maxCharacterLen = _.isEmpty(question.rules.maxCharacterLen) ?
         150 : question.rules.maxCharacterLen;
     }
-
-
 
     // Format Dropdown Display Values
     if (question.questionType === 'dropdown') {
@@ -486,7 +484,9 @@ export class OfferSolutioningComponent implements OnInit {
 
       const solutioningProceedPayload = {
         'offerId': this.offerId,
-        'taskName': 'Offer Solutioning'
+        'taskName': 'Offer Solutioning',
+        'caseId': this.caseId,
+        'taskId': ''
       };
 
       // Need to give answer for every question from offer solutioning to enable request approval button.
@@ -500,7 +500,7 @@ export class OfferSolutioningComponent implements OnInit {
       });
 
       if (offerSolutioningSelected) {
-
+        this.mandatoryQuestions = true;
         this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(result => {
           if (JSON.parse(routeTo) === true) {
             this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
