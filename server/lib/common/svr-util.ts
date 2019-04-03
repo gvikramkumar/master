@@ -24,11 +24,24 @@ export const svrUtil = {
   base64ToAscii,
   docToObject,
   postgresReplaceQuotes,
-  setPrecision5
+  setPrecision8,
+  truncate8
 };
 
-function setPrecision5(val) {
-  return Number(val.toPrecision(5));
+// truncate a decimal amount to 8 places
+function truncate8(val) {
+  const str = val.toPrecision(10);
+  const dot = str.indexOf('.');
+  if (dot !== -1) {
+    return Number(str.substr(dot, 9));
+  } else {
+    return Number(str);
+  }
+}
+
+// round a decimal precision to 8 places
+function setPrecision8(val) {
+  return Number(val.toPrecision(8));
 }
 
 // strings are bracketed by single quotes, so we have to escape single quotes within the string

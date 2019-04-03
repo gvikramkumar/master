@@ -5,10 +5,33 @@ import {svrUtil} from '../server/lib/common/svr-util';
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
+
+
+// let a = 0.123456789123;
+let a = 0.123456789;
+console.log(a);
+console.log(truncate8(a));
+
+function truncate8(val) {
+ const str = val.toPrecision(10);
+ const dot = str.indexOf('.');
+ if (dot !== -1) {
+   return Number(str.substr(dot, 9));
+ } else {
+   return Number(str);
+ }
+}
+
+
+
+
+
+/*
 const a: any = new Date();
 const b: any = new Date();
 b.setMinutes(b.getMinutes() - 1);
 console.log((a - b));
+*/
 
 
 /*
