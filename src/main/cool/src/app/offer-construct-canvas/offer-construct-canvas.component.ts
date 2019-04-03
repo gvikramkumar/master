@@ -1482,26 +1482,33 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.checkNodeUniqueKeyAndPatchQuestion(currentNode, true);
 
     // Map Drop-down values
-    this.mapDropDownValues();
+    // this.mapDropDownValues();
 
     this.questionForm = this.offerConstructService.toFormGroup(this.questionsList[this.uniqueNodeId]);
 
   }
 
   private mapDropDownValues() {
+
     this.questionsList[this.uniqueNodeId] = this.questionsList[this.uniqueNodeId].map(question => {
+
       if (question.componentType === 'Drop-down') {
         question.values = question.values.map(dropdownValue => {
+
           let [value, display] = dropdownValue.split('-');
+          value = dropdownValue;
+
           if (question.egineAttribue === 'UDI Value') {
             const temp = value;
             value = display;
             display = temp;
           }
+
           return {
-            value: display ? value.concat(display) : value,
+            value: value,
             display: display ? display : value
           };
+
         });
         return question;
       } else {
