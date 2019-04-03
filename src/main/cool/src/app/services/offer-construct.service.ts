@@ -9,8 +9,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class OfferConstructService {
 
-
-
     public singleMultipleFormInfo: any = {};  // for add details single form and multiple form
     public itemlengthList: any = [];  // for add details single form and multiple form
     public closeAddDetails: boolean;

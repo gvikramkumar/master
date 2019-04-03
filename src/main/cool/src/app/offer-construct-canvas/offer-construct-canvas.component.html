@@ -181,8 +181,8 @@
                               </div>
 
                               <!-- added to copy delete node -->
-                              <a *ngIf="!readOnly" (click)='deleteNode(rowNode)' class="remove"><span
-                                  class="icon-trash icon-small"></span>
+                              <a *ngIf="!readOnly" (click)='deleteNode(rowNode)' class="remove"
+                                [class.disabled]="isDisabledView"><span class="icon-trash icon-small"></span>
                                 <small>Remove Item</small></a>
                             </td>
                           </tr>
@@ -345,7 +345,6 @@
 
   <div class="row loading" *ngIf="isShow">
     <div class="col-md-3">
-      <div class="subheader text-center">Default</div>
       <div class="loading-spinner flex-center" aria-label="Loading, please wait...">
         <div class="wrapper">
           <div class="wheel"></div>

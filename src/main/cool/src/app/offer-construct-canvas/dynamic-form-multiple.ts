@@ -93,6 +93,14 @@ export class DynamicFormMultipleComponent implements OnInit {
             });
         });
 
+        this.minorOfferInfo.forEach((list, index) => {
+            let groupName: any = Object.keys(list);
+            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
+                let title: any = Object.keys(element);
+                this.replaceOrUpdatevalue(element[title], isUdate)
+            });
+        });
+
         let counter = 10;
         this.valueChange.emit(counter);
         this.offerConstructService.closeAddDetails = false;
