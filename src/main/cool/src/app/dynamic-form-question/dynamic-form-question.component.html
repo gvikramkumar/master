@@ -20,7 +20,7 @@
       <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Drop-down'">
         <select [id]="question.egineAttribue" [name]="question.egineAttribue" class="form-control"
           [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
-          <option *ngFor="let option of question.values" [value]="option.value">{{option.display}}</option>
+          <option *ngFor="let option of question.values" [value]="option">{{option}}</option>
         </select>
         <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
         <div class="help-block text-danger"
