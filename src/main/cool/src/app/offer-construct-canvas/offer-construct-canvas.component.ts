@@ -123,12 +123,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     private offerDetailViewService: OfferDetailViewService,
     private loaderService: LoaderService) {
 
-    this.loaderService.loaderStatus.subscribe((value) => {
-      this.isShow = value
-      console.log("test");
-
-    });
-
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];
@@ -172,7 +166,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   dropItem($event) {
     this.initalRowAdded = false;
     if (this.draggedItem['isMajorLineItem']) {
-      this.loaderService.display(true);
+      this.loaderService.startLoading();
       const obj = Object.create(null);
       obj['uniqueKey'] = ++this.counter;
       this.uniqueId = obj['uniqueKey'];
@@ -289,7 +283,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       });
     }
     this.isDisabledView = false;
-    this.loaderService.display(false);
+    this.loaderService.stopLoading();
   }
 
   submitClickEvent() {
@@ -476,7 +470,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     } else {
       // Means Remove event occurs on child elements of any parent.
       // Here we will loop through all offer array and find parent index key then
-      // Another loop of children & find Here we have to remove only that children whose uniquekey = rowData.uniqueKey
+      // Another loop of children & find d we have to remove only that children whose uniquekey = rowData.uniqueKey
       // Loop through All available offers construct items array
       this.offerConstructItems.forEach((element, index) => {
         if (element.data.uniqueKey == rowNode.parent.data.uniqueKey) {
@@ -565,7 +559,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     obj.name = newValue;
   }
 
-  //change name of product 
+  //change name of product
   changelabel(uniqueKey, productName, isMajorLineItem, uniqueNodeId, name) {
     let groupType;
     if (isMajorLineItem) {
@@ -605,6 +599,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    * @param rowData
    */
   dropOnRow($event, rowNode, rowData) {
+    this.loaderService.startLoading();
     if (this.draggedItem.parent) {
       if (this.draggedItem.parent.children) {
         this.itemCount = this.draggedItem.parent.children.length;
@@ -684,6 +679,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             obj['uniqueNodeId'] = this.draggedItem.uniqueNodeId;
             rowNode.node.children.push(this.itemToTreeNode(obj));
             this.delteFromParentObject(rowNode, this.draggedItem.data);
+            this.loaderService.stopLoading();
           }
           this.setFlag = true;
         }
@@ -718,6 +714,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           let groupsName = { groups: test };
           // obj['itemDetails'] = this.getQuestionOnDragDrop(groupsName);
           this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+
             this.listOfferQuestions = data.groups[0].listOfferQuestions;
           }, (err) => { },
             () => {
@@ -726,7 +723,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             });
 
           rowNode.node.children.push(this.itemToTreeNode(obj));
-          this.loaderService.display(false);
         }
       }
 
@@ -753,12 +749,15 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           obj['uniqueNodeId'] = this.draggedItem.uniqueNodeId;
           rowNode.node.children.push(this.itemToTreeNode(obj));
           this.delteFromParentObject(rowNode, this.draggedItem.data);
+          this.loaderService.stopLoading();
         }
       }
 
       this.offerConstructItems = [...this.offerConstructItems];
     }
     this.updateChildCount();
+
+    //this.loaderService.stopLoading();
   }
 
   /**
@@ -828,8 +827,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-
-    this.loaderService.display(true);
+    this.loaderService.startLoading();
     this.subscription = this.messageService.getMessage()
       .subscribe(message => {
         this.saveOfferConstructChanges();
@@ -954,7 +952,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     }, (err) => {
       console.log(err);
     }, () => {
-      this.loaderService.display(false);
+      this.loaderService.stopLoading();
     });
   }
 

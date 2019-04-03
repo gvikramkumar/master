@@ -2,7 +2,6 @@ import { LoaderService } from './../../loader.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { LoaderState } from './loader';
 @Component({
   selector: 'app-loader',
   templateUrl: './loader.component.html',
@@ -10,22 +9,20 @@ import { LoaderState } from './loader';
 })
 export class LoaderComponent implements OnInit, OnDestroy {
 
-  isShow = false;
-  private subscription: Subscription;
-  constructor(private loaderService: LoaderService) {
-    this.loaderService.loaderStatus.subscribe((value) => {
-      this.isShow = value
-      console.log("test");
+  loading: boolean = false;
+  loadingSubscription: Subscription;
 
-    });
+  constructor(private loaderService: LoaderService) {
   }
 
   ngOnInit() {
-    console.log("test");
+    this.loadingSubscription = this.loaderService.loadingStatus.subscribe((value) => {
+      this.loading = value;
+    });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.loadingSubscription.unsubscribe();
   }
 
 }
