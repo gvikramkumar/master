@@ -8,28 +8,28 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
     providedIn: 'root',
 })
 export class OfferConstructService {
+    constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
 
 
     public singleMultipleFormInfo: any = {};  // for add details single form and multiple form
     public itemlengthList: any = [];  // for add details single form and multiple form
     public closeAddDetails: boolean;
-    constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
     public space: Subject<string> = new BehaviorSubject<string>(null);
     submitClickEvent = new EventEmitter();
+
+    public formReset: Subject<string> = new BehaviorSubject<string>(null);
+
+    public closeDialog: Subject<string> = new BehaviorSubject<string>(null);
 
     broadcastTextChange(text) {
         this.space.next(text);
     }
 
-    public formReset: Subject<string> = new BehaviorSubject<string>(null);
-
     changeForm(val) {
         this.formReset.next(val);
     }
-
-    public closeDialog: Subject<string> = new BehaviorSubject<string>(null);
 
     closeAction(action) {
         this.closeDialog.next(action);
@@ -43,10 +43,10 @@ export class OfferConstructService {
     toFormGroup(questions) {
         const group: any = {};
         questions.forEach(question => {
-            group[question.egineAttribue] = question.rules.isMandatoryOptional === "Mandatory" ? new FormControl(question.currentValue || '', Validators.required)
+            group[question.egineAttribue] = question.rules.isMandatoryOptional === 'Mandatory'
+                && question.egineAttribue !== 'Item Name (PID)' ? new FormControl(question.currentValue || '', Validators.required)
                 : new FormControl(question.currentValue || '');
         });
         return new FormGroup(group);
     }
-
 }

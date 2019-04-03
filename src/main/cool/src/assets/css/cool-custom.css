@@ -305,6 +305,7 @@
 .cool.cui th.ui-state-default.ui-sortable-column,
 th.ui-sortable-column.ng-star-inserted {
   outline: 0;
+  padding: 1em .65em;
 }
 
 /* Tables in phase popovers  */
@@ -601,7 +602,7 @@ th.ui-sortable-column.ng-star-inserted {
   display: block;
 }
 .cool.cui .ui-multiselect-filter-container .ui-inputtext {
-  padding: .75em 1.25em;
+  padding: .125em .125em .125em 1.25em;
 }
 .cool.cui .ui-inputtext {
   padding: .75em;
@@ -614,9 +615,7 @@ th.ui-sortable-column.ng-star-inserted {
   background-color: #eeeeee;
   color: #212121;
 }
-.cool.cui .ui-multiselect-header .ui-multiselect-filter-container .ui-multiselect-filter-icon {
-  top: .85em;
-}
+
 .cool.cui  .ui-multiselect-trigger.ui-state-default.ui-corner-right, .cool.cui  .ui-dropdown .ui-dropdown-trigger {
   border-left: none;
 }
@@ -638,9 +637,10 @@ th.ui-sortable-column.ng-star-inserted {
 }
 .cool.cui .view-item-details .detail-labels {
   border-right: none;
+  max-width: 310px;
 }
 .cool.cui .view-item-details .detail-labels tbody {
-  max-width: 100%;
+  max-width: 310px;
   display: block;
 }
 .cool.cui .view-item-details tbody tr {
@@ -653,6 +653,12 @@ th.ui-sortable-column.ng-star-inserted {
   overflow: visible;
   max-width: 250px;
 }
+.cool.cui .view-item-details table.detail-labels tbody td {
+  width: 100%;
+  max-width: 100%;
+  padding-right: 25px;
+  overflow: hidden;
+}
 .cool.cui .view-item-details .section-label th.section-label {
   width: 100%!important;
 }
@@ -663,7 +669,7 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .view-item-details .pid-data .form-group .form-group__text.select input,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text.select select,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text.select textarea {
-    border: 1px solid transparent;
+    border: 1px solid #fff;
     border-radius: 2px;
     flex: 1;
     flex-shrink: 0;
@@ -672,6 +678,9 @@ th.ui-sortable-column.ng-star-inserted {
     -moz-appearance: none;
     -webkit-appearance: none;
     max-width: 250px;
+}
+.cool.cui .view-item-details .pid-data .form-group .form-group__text input:focus{
+    border: 1px solid #00bceb;
 }
 
 .cool.cui .view-item-details .pid-data .form-group .form-group__text input:hover,
@@ -691,12 +700,20 @@ th.ui-sortable-column.ng-star-inserted {
 }
 
 .cool.cui .view-item-details .pid-data  p-multiselect .ui-state-default {
-  border: 1px solid transparent;
+  border: 1px solid #fff;
+  background-color: transparent;
+}
+.cool.cui .view-item-details .pid-data  p-multiselect .ui-multiselect-filter-container .ui-state-default {
+  border: 1px solid #d6d6d6;
   background-color: transparent;
   color: #555555;
 }
-.cool.cui .view-item-details .pid-data  p-multiselect .ui-state-default:hover {
+.cool.cui .view-item-details .pid-data  p-multiselect .ui-chkbox.ui-widget .ui-state-default {
   border: 1px solid #d6d6d6;
+  background-color: transparent;
+}
+.cool.cui .view-item-details .pid-data  p-multiselect .ui-state-default:hover {
+  border: 1px solid #00bceb;
   background-color: #ffffff;
   color: #555555;
 }
@@ -706,6 +723,24 @@ th.ui-sortable-column.ng-star-inserted {
 }
 .cool.cui p-dialog.add-details-dialog .ui-dialog {
   max-width: 100%;
+}
+.cool.cui p-dialog.add-details-dialog .ui-dialog .pi-chevron-down:before {
+  content: "\e902";
+  color: #9e9ea2;
+  font-size: 16px;
+  font-weight: lighter;
+}
+.cool.cui p-dialog.add-details-dialog .ui-dialog .ui-multiselect .ui-multiselect-trigger {
+  border-right: 0;
+  border-top: 0;
+  border-bottom: 0;
+  cursor: pointer;
+  width: 1.5em;
+  height: 100%;
+  position: absolute;
+  right: 6px;
+  top: 0;
+  padding: 0 .25em;
 }
 
 /* Estimated Lead Time Ribbon */
