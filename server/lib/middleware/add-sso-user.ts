@@ -81,17 +81,23 @@ export function addSsoUser() {
                       updateUserList = true;
                       return roles;
                     } else {
-                      if (userList && userList.roles.length) {
+                      if (userList) {
                         return userList.roles;
                       } else {
-                        const msg = `No user roles set up for user: ${userId}`;
-                        console.error(msg);
-                        res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
-                        return Promise.reject(new DisregardError());
+                        return [];
                       }
                     }
                   });
               }
+            })
+            .then(roles => {
+              if (!roles.length) {
+                const msg = `No user roles set up for user: ${userId}`;
+                console.error(msg);
+                res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
+                return Promise.reject(new DisregardError());
+              }
+              return roles;
             })
             .then(roles => {
               return new DfaUser(
