@@ -7,23 +7,23 @@ import {svrUtil} from '../server/lib/common/svr-util';
 
 
 
-// let a = 0.123456789123;
-let a = 0.123456789;
+/*
+let a = .123456789123;
+// const a = 0.1234567;
+// const a = 0.0;
 console.log(a);
 console.log(truncate8(a));
 
 function truncate8(val) {
- const str = val.toPrecision(10);
+ const str = val.toString();
  const dot = str.indexOf('.');
  if (dot !== -1) {
-   return Number(str.substr(dot, 9));
+   return Number(str.substring(0, dot) + str.substr(dot, 9));
  } else {
-   return Number(str);
+   return val;
  }
 }
-
-
-
+*/
 
 
 /*
