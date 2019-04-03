@@ -27,6 +27,17 @@ export const svrUtil = {
   setPrecision5
 };
 
+// truncate a decimal amount to 8 places
+function truncate8(val) {
+  const str = val.toPrecision(10);
+  const dot = str.indexOf('.');
+  if (dot !== -1) {
+    return Number(str.substr(dot, 9));
+  } else {
+    return Number(str);
+  }
+}
+
 function setPrecision5(val) {
   return Number(val.toPrecision(5));
 }
