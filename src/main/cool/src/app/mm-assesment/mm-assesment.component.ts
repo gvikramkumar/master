@@ -60,7 +60,7 @@ export class MmAssesmentComponent implements OnInit {
   showErrorDialog: boolean;
   isChangedAttribute: boolean;
   totalApprovalsCount: Number = 0;
-
+  public isAllowedtoNextStep: Boolean = false;
   // --------------------------------------------------------------------------------------------
 
 
@@ -181,7 +181,6 @@ export class MmAssesmentComponent implements OnInit {
           mmModel: offerBuilderdata['derivedMM']
         };
       } else {
-        this.canClickNextStep = true;
         this.message = {
           contentHead: offerBuilderdata['overallStatus'],
           content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'
@@ -773,7 +772,7 @@ export class MmAssesmentComponent implements OnInit {
   // --------------------------------------------------------------------------------------------
 
   toNextStep() {
-
+    this.isAllowedtoNextStep = true;
     if (this.activeTabIndex === 0 && !this.dimensionMode) {
       this.canClickTab = true;
       let index = 0;
@@ -929,8 +928,10 @@ export class MmAssesmentComponent implements OnInit {
           // Populate Update Offer Details Request
           proceedToStakeholderPostData['stakeholders'] = totalCombinedStakeHolders;
           proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
+          if(this.isAllowedtoNextStep) {
           proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
           proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
+          }
           proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
           proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
 
@@ -946,13 +947,15 @@ export class MmAssesmentComponent implements OnInit {
               'action': '',
               'comment': ''
             };
-
+            if(this.isAllowedtoNextStep) {
             this.offerPhaseService.createSolutioningActions(proceedPayload).subscribe(() => {
               if (JSON.parse(withRouter) === true) {
                 this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
               }
             });
-
+          } else {
+            this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
+          }
           });
 
 
