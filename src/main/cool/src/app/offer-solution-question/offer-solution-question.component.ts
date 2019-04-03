@@ -37,7 +37,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
   showHiddenQuestionBasedOnUserInput(selectedValue: string, question: any) {
 
-    if (selectedValue !== '' && selectedValue !== 'No') {
+    if (selectedValue !== '') {
 
       const parentQuestionNumber = question['questionNo'];
       const childIndexUnGroupData = this.unGroupData.findIndex(fqa => parentQuestionNumber === fqa.rules.referenceQ);
