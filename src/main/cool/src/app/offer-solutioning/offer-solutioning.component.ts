@@ -209,7 +209,7 @@ export class OfferSolutioningComponent implements OnInit {
         // Initialize QnA Map
         const questionAnswerMap: Map<string, string> = new Map<string, string>();
         for (const qna of offerSolutioningAnswers['questionAnswer']) {
-            questionAnswerMap.set(qna['questionNo'], qna['answer']);
+          questionAnswerMap.set(qna['questionNo'], qna['answer']);
         }
 
         // Populate Answer Field In 'questionsAndAnswers' Array
@@ -217,7 +217,7 @@ export class OfferSolutioningComponent implements OnInit {
           qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
             '' : questionAnswerMap.get(qna['questionNo']);
           qna['answerToQuestion'] = qna['questionType'] === 'Date' ?
-          moment(qna['answer']).format('MM/DD/YYYY'): qna['answerToQuestion'];
+            moment(qna['answer']).format('MM/DD/YYYY') : qna['answerToQuestion'];
         }
 
         // Condtionally Hide Solutioning Question And Answers
@@ -269,9 +269,9 @@ export class OfferSolutioningComponent implements OnInit {
         }
 
         const parentAnswer = this.unGroupedQuestionsAndAnswers[parentQuestionIndex]['answerToQuestion'];
-        if (childQuestionAndAnswers.questionType = 'Radio Button' && parentAnswer === 'No') {
+        if (childQuestionAndAnswers.questionType === 'Radio Button' && parentAnswer === 'No') {
           childQuestionAndAnswers.hideQuestion = true;
-        } else if (childQuestionAndAnswers.questionType !== 'Radio Button' && parentAnswer === '') {
+        } else if (childQuestionAndAnswers.questionType !== 'Radio Button' && _.isEmpty(parentAnswer)) {
           childQuestionAndAnswers.hideQuestion = true;
         }
         return childQuestionAndAnswers;

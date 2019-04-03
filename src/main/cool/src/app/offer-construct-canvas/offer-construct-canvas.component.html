@@ -30,7 +30,7 @@
                 <ul class="list list--highlight">
 
                   <li *ngFor="let item of itemCategories" class="ui-helper-clearfix list-item"
-                    pDraggable="dragItem" pDroppableDisabled= "!readOnly" dragEffect="copyMove"
+                    pDraggable="dragItem" pDroppableDisabled="true" dragEffect="copyMove"
                     (onDragStart)="dragStart($event,item)" (onDragEnd)="dragEnd($event)">
                     <div class="panel panel--bordered">
                       <div *ngIf="item.isMajorLineItem; else nonMajorLineItem">
@@ -266,7 +266,7 @@
         <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
           <div [ngSwitch]="question.itemType">
             <div *ngSwitchCase="'Unique Item'">
-              <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
+              <app-dynamic-form-question [question]="question" [headerName]="popHeadName"  [questionForm]="questionForm">
               </app-dynamic-form-question>
             </div>
           </div>
@@ -311,7 +311,7 @@
       <div class="row">
         <div class="col-md-12 text-right">
           <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
-          <button class="btn btn--primary" type="submit" [disabled]="readOnly">Add Details</button>
+          <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
         </div>
       </div>
     </form>
@@ -319,7 +319,7 @@
 
   <!-- view add details -->
   <div *ngIf='display'>
-    <dynamic-form-multiple></dynamic-form-multiple>
+    <dynamic-form-multiple (valueChange)='replacetabularFormQuestion($event)'></dynamic-form-multiple>
     <!-- <app-dynamic-form-template [dataObject]='formGroupData.groups' (valueChange)='displayCounter($event)'></app-dynamic-form-template> -->
   </div>
 
