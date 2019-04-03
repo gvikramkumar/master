@@ -6,7 +6,7 @@
        <input [name]="question.egineAttribue" [id]="question.egineAttribue"
          *ngIf='question.egineAttribue === "Item Name (PID)"' [attr.disabled]='true' class="form-control">
        <input [name]="question.egineAttribue" [id]="question.egineAttribue" [formControlName]="question.egineAttribue"
-         *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue" maxlength="{{question.rules.maxCharacterLen}}">
+         *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
         <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
         <div class="help-block text-danger"
         *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
