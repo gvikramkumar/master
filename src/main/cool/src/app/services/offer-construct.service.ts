@@ -41,12 +41,11 @@ export class OfferConstructService {
     }
 
     toFormGroup(questions) {
-        const group: any = {};
-        questions.forEach(question => {
-            group[question.egineAttribue] = question.rules.isMandatoryOptional === "Mandatory" ? new FormControl(question.currentValue || '', Validators.required)
-                : new FormControl(question.currentValue || '');
+      const group: any = {};
+      questions.forEach(question => {
+          group[question.egineAttribue] = question.rules.isMandatoryOptional === "Mandatory" && question.egineAttribue !== "Item Name (PID)" ? new FormControl(question.currentValue || '', Validators.required)
+                  : new FormControl(question.currentValue || '');
         });
-        return new FormGroup(group);
+      return new FormGroup(group);
     }
-
 }
