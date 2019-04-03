@@ -75,11 +75,13 @@ export function addSsoUser() {
               if (userList &&  !req.query.uiInitialization) { // && Date.now() - userList.updatedDate.getTime() <= config.art.timeout) {
                 return userList.roles;
               } else {
-                updateUserList = true;
                 return getArtRoles(userId)
                   .then(roles => {
-                    if (!roles || roles.length === 0)  {
-                      if (userList) {
+                    if (roles && roles.length) {
+                      updateUserList = true;
+                      return roles;
+                    } else {
+                      if (userList && userList.roles.length) {
                         return userList.roles;
                       } else {
                         const msg = `No user roles set up for user: ${userId}`;
@@ -88,7 +90,6 @@ export function addSsoUser() {
                         return Promise.reject(new DisregardError());
                       }
                     }
-                    return roles;
                   });
               }
             })
