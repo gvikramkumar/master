@@ -466,7 +466,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     } else {
       // Means Remove event occurs on child elements of any parent.
       // Here we will loop through all offer array and find parent index key then
-      // Another loop of children & find Here we have to remove only that children whose uniquekey = rowData.uniqueKey
+      // Another loop of children & find d we have to remove only that children whose uniquekey = rowData.uniqueKey
       // Loop through All available offers construct items array
       this.offerConstructItems.forEach((element, index) => {
         if (element.data.uniqueKey == rowNode.parent.data.uniqueKey) {
@@ -591,6 +591,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    * @param rowData
    */
   dropOnRow($event, rowNode, rowData) {
+    this.loaderService.startLoading();
     if (this.draggedItem.parent) {
       if (this.draggedItem.parent.children) {
         this.itemCount = this.draggedItem.parent.children.length;
@@ -700,6 +701,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           let groupsName = { groups: test };
           // obj['itemDetails'] = this.getQuestionOnDragDrop(groupsName);
           this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+
             this.listOfferQuestions = data.groups[0].listOfferQuestions;
           }, (err) => { },
             () => {
@@ -738,6 +740,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.offerConstructItems = [...this.offerConstructItems];
     }
     this.updateChildCount();
+
+    // this.loaderService.stopLoading();
   }
 
   /**
