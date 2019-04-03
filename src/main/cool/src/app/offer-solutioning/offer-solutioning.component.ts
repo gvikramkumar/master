@@ -508,6 +508,9 @@ export class OfferSolutioningComponent implements OnInit {
         });
       } else {
         this.mandatoryQuestions = false;
+        if (JSON.parse(routeTo) === true) {
+          this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
+        }
       }
 
     });
