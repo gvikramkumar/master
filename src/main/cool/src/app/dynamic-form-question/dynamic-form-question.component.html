@@ -1,94 +1,94 @@
 <div class="form-group" [formGroup]="questionForm">
-    <div>
-      <div [ngSwitch]="question.componentType">
-  
-        <!-- Input -->
-        <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Free Text'">
-         <input [name]="question.egineAttribue" [id]="question.egineAttribue"
-           *ngIf='question.egineAttribue === "Item Name (PID)"' [attr.disabled]='true' class="form-control">
-         <input [name]="question.egineAttribue" [id]="question.egineAttribue" [formControlName]="question.egineAttribue"
-           *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
-          <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
-          <div class="help-block text-danger"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
-             <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
-         </div>
-         
+  <div>
+    <div [ngSwitch]="question.componentType">
+
+      <!-- Input -->
+      <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Free Text'">
+       <input [name]="question.egineAttribue" [id]="question.egineAttribue"
+         *ngIf='question.egineAttribue === "Item Name (PID)"' [attr.disabled]='true' class="form-control">
+       <input [name]="question.egineAttribue" [id]="question.egineAttribue" [formControlName]="question.egineAttribue"
+         *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
+        <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
+        <div class="help-block text-danger"
+        *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
+           <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
        </div>
-  
-        <!-- Drop Down -->
-        <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Drop-down'">
-          <select [id]="question.egineAttribue" [name]="question.egineAttribue" class="form-control"
-            [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
-            <option *ngFor="let option of question.values" [value]="option">{{option}}</option>
-          </select>
-          <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
-          <div class="help-block text-danger"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
-             <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
-         </div>
-        </div>
-  
-        <!-- Multiselect-->
-        <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
-          <label for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
-          <p-multiSelect [id]="question.egineAttribue" [name]="question.egineAttribue" [options]="question.listMutiSelect"
-            optionLabel="name" [(ngModel)]="question.listCurrentValue" [formControlName]="question.egineAttribue"></p-multiSelect>
-            <div class="help-block text-danger"
-            *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
-               <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
-           </div>
-        </div>
-  
-        <!-- Radio Button -->
-        <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'">
-          <label class="radio half-margin-bottom" for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
-          <div>
-            <label class="radio" *ngFor="let rad of question.values">
-              <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"
-                class="form-control" [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
-              <span class="radio__input"></span>
-              <span class="radio__label hidden-xs">{{rad}}</span>
-            </label>
-          </div>
-          <div class="help-block text-danger"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
-             <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
-         </div>
-        </div>
-  
-        <!-- Radio Button -->
-        <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A Radio Button'">
-          <label class="radio half-margin-bottom" for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
-          <div>
-            <label class="radio" *ngFor="let rad of question.values">
-              <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"
-                class="form-control" [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
-              <span class="radio__input"></span>
-              <span class="radio__label hidden-xs">{{rad}}</span>
-            </label>
-          </div>
-          <div class="help-block text-danger"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
-             <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
-         </div>
-        </div>
-  
-        <!-- Free Text -->
-        <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A FreeText'">
-          <div class="form-group">
-            <div class="form-group__text">
-              <input [name]="question.egineAttribue" [id]="question.question" class="form-control"
-                [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
-              <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
-            </div>
-          </div>
-          <div class="help-block text-danger"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
-             <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
-         </div>
-        </div>
-  
+       
+     </div>
+
+      <!-- Drop Down -->
+      <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Drop-down'">
+        <select [id]="question.egineAttribue" [name]="question.egineAttribue" class="form-control"
+          [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
+          <option *ngFor="let option of question.values" [value]="option">{{option}}</option>
+        </select>
+        <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
+        <div class="help-block text-danger"
+        *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
+           <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+       </div>
       </div>
+
+      <!-- Multiselect-->
+      <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
+        <label for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
+        <p-multiSelect [id]="question.egineAttribue" [name]="question.egineAttribue" [options]="question.listMutiSelect"
+          optionLabel="name" [(ngModel)]="question.listCurrentValue" [formControlName]="question.egineAttribue"></p-multiSelect>
+          <div class="help-block text-danger"
+          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
+             <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+         </div>
+      </div>
+
+      <!-- Radio Button -->
+      <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'">
+        <label class="radio half-margin-bottom" for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
+        <div>
+          <label class="radio" *ngFor="let rad of question.values">
+            <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"
+              class="form-control" [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
+            <span class="radio__input"></span>
+            <span class="radio__label hidden-xs">{{rad}}</span>
+          </label>
+        </div>
+        <div class="help-block text-danger"
+        *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
+           <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+       </div>
+      </div>
+
+      <!-- Radio Button -->
+      <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A Radio Button'">
+        <label class="radio half-margin-bottom" for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
+        <div>
+          <label class="radio" *ngFor="let rad of question.values">
+            <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"
+              class="form-control" [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
+            <span class="radio__input"></span>
+            <span class="radio__label hidden-xs">{{rad}}</span>
+          </label>
+        </div>
+        <div class="help-block text-danger"
+        *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
+           <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+       </div>
+      </div>
+
+      <!-- Free Text -->
+      <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A FreeText'">
+        <div class="form-group">
+          <div class="form-group__text">
+            <input [name]="question.egineAttribue" [id]="question.question" class="form-control"
+              [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
+            <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
+          </div>
+        </div>
+        <div class="help-block text-danger"
+        *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
+           <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+       </div>
+      </div>
+
     </div>
   </div>
+</div>
