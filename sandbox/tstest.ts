@@ -2,8 +2,23 @@ import * as _ from 'lodash';
 import AnyObj from '../shared/models/any-obj';
 import {shUtil} from '../shared/shared-util';
 import {svrUtil} from '../server/lib/common/svr-util';
+import * as Q from 'q';
+
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
+
+
+
+
+
+/*
+//timeout:
+Q.when({name: 'dank'})
+  .delay(1000)
+  .timeout(900, 'finTimeout')
+  .then(val => console.log(val))
+  .catch(err => console.error(err));
+*/
 
 
 
