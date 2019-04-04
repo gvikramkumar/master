@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription, Subject } from 'rxjs';
 import { MonetizationModelService } from '../services/monetization-model.service';
 import { OfferPhaseService } from '../services/offer-phase.service';
 import { ConfigurationService } from '@shared/services';
@@ -47,7 +46,7 @@ export class MmAssesmentComponent implements OnInit {
   groupNames = [];
   activeTabIndex = 0;
   selectedGroupData = [];
- 
+
   readOnly = false;
   canClickTab = false;
   canClickNextStep = false;
@@ -60,7 +59,7 @@ export class MmAssesmentComponent implements OnInit {
   showErrorDialog: boolean;
   isChangedAttribute: boolean;
   totalApprovalsCount: Number = 0;
-
+  public isAllowedtoNextStep: Boolean = false;
   // --------------------------------------------------------------------------------------------
 
 
@@ -181,7 +180,6 @@ export class MmAssesmentComponent implements OnInit {
           mmModel: offerBuilderdata['derivedMM']
         };
       } else {
-        this.canClickNextStep = true;
         this.message = {
           contentHead: offerBuilderdata['overallStatus'],
           content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'
@@ -277,7 +275,7 @@ export class MmAssesmentComponent implements OnInit {
       this.totalApprovalsCount = resStrategyReview.length;
     });
 
-   
+
 
   }
 
@@ -464,40 +462,40 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
- if (this.readOnly === false) {
-  this.isChangedAttribute = true;
-  if (attribute.type === 2 && attribute.status === -1) {
-    attribute.type = 0;
-    this.canClickNextStep = false;
-    return;
-  }
-  attribute.status = -attribute.status;
+    if (this.readOnly === false) {
+      this.isChangedAttribute = true;
+      if (attribute.type === 2 && attribute.status === -1) {
+        attribute.type = 0;
+        this.canClickNextStep = false;
+        return;
+      }
+      attribute.status = -attribute.status;
 
-  if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
-    if (this.groupData[0]['Offer Components'].includes(attribute)) {
-      this.changeSubGroupType(this.groupData[0]);
-    }
+      if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
+        if (this.groupData[0]['Offer Components'].includes(attribute)) {
+          this.changeSubGroupType(this.groupData[0]);
+        }
 
-    let next = 0;
-    const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
-    groupKeys.forEach(key => {
-      for (const attr of this.groupData[0][key]) {
-        if (attr.status === 1 || attr.type === 2) {
-          next += 1;
-          break;
+        let next = 0;
+        const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
+        groupKeys.forEach(key => {
+          for (const attr of this.groupData[0][key]) {
+            if (attr.status === 1 || attr.type === 2) {
+              next += 1;
+              break;
+            }
+          }
+        });
+        if (next === groupKeys.length) {
+          this.canClickNextStep = true;
+        } else {
+          this.canClickNextStep = false;
         }
       }
-    });
-    if (next === groupKeys.length) {
-      this.canClickNextStep = true;
-    } else {
-      this.canClickNextStep = false;
-    }
-  }
 
-  this.selectedGroupData = this.groupData;
- }
-    
+      this.selectedGroupData = this.groupData;
+    }
+
   }
 
 
@@ -773,7 +771,7 @@ export class MmAssesmentComponent implements OnInit {
   // --------------------------------------------------------------------------------------------
 
   toNextStep() {
-
+    this.isAllowedtoNextStep = true;
     if (this.activeTabIndex === 0 && !this.dimensionMode) {
       this.canClickTab = true;
       let index = 0;
@@ -929,8 +927,10 @@ export class MmAssesmentComponent implements OnInit {
           // Populate Update Offer Details Request
           proceedToStakeholderPostData['stakeholders'] = totalCombinedStakeHolders;
           proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
+          if(this.isAllowedtoNextStep) {
           proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
           proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
+          }
           proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
           proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
 
@@ -946,13 +946,15 @@ export class MmAssesmentComponent implements OnInit {
               'action': '',
               'comment': ''
             };
-
+            if(this.isAllowedtoNextStep) {
             this.offerPhaseService.createSolutioningActions(proceedPayload).subscribe(() => {
               if (JSON.parse(withRouter) === true) {
                 this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
               }
             });
-
+          } else {
+            this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
+          }
           });
 
 

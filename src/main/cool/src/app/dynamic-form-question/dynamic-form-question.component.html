@@ -1,10 +1,11 @@
 <div class="form-group" [formGroup]="questionForm">
   <div>
     <div [ngSwitch]="question.componentType">
+
       <!-- Input -->
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Free Text'">
        <input [name]="question.egineAttribue" [id]="question.egineAttribue"
-         *ngIf='question.egineAttribue === "Item Name (PID)"' [attr.disabled]='true' class="form-control">
+         *ngIf='question.egineAttribue === "Item Name (PID)"' [value]="headerName" [attr.disabled]='true' class="form-control">
        <input [name]="question.egineAttribue" [id]="question.egineAttribue" [formControlName]="question.egineAttribue"
          *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
         <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
@@ -15,7 +16,8 @@
       </span>
        
      </div>
-      <!-- Select -->
+
+      <!-- Drop Down -->
       <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Drop-down'">
         <select [id]="question.egineAttribue" [name]="question.egineAttribue" class="form-control"
           [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
@@ -26,6 +28,7 @@
          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
       </span>
       </div>
+
       <!-- Multiselect-->
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
         <label for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
@@ -35,6 +38,7 @@
            <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
         </span>
       </div>
+
       <!-- Radio Button -->
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'">
         <label class="radio half-margin-bottom" for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
@@ -50,6 +54,7 @@
          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
       </span>
       </div>
+
       <!-- Radio Button -->
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A Radio Button'">
         <label class="radio half-margin-bottom" for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
@@ -65,6 +70,7 @@
          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
       </span>
       </div>
+
       <!-- Free Text -->
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A FreeText'">
         <div class="form-group">
@@ -80,6 +86,7 @@
          <span *ngIf="questionForm.controls[question.egineAttribue].errors.pattern">{{question.egineAttribue}} should be in {{question.rules.textcase}}</span>
       </span>
       </div>
+
     </div>
   </div>
 </div>

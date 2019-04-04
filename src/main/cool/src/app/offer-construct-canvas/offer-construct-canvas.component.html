@@ -29,9 +29,9 @@
               <div class="col-sm-12">
                 <ul class="list list--highlight">
 
-                  <li *ngFor="let item of itemCategories" class="ui-helper-clearfix list-item"
-                    pDraggable="dragItem" pDroppableDisabled="true" dragEffect="copyMove"
-                    (onDragStart)="dragStart($event,item)" (onDragEnd)="dragEnd($event)">
+                  <li *ngFor="let item of itemCategories" class="ui-helper-clearfix list-item" pDraggable="dragItem"
+                    pDroppableDisabled="true" dragEffect="copyMove" (onDragStart)="dragStart($event,item)"
+                    (onDragEnd)="dragEnd($event)">
                     <div class="panel panel--bordered">
                       <div *ngIf="item.isMajorLineItem; else nonMajorLineItem">
                         <span class="icon-dial icon-small"></span>{{item.categoryName}} (Major)
@@ -66,11 +66,11 @@
                                     {{item.PID}}
                                   </td>
                                   <!-- <td>
-                                  {{item.PRODUCT_FAMILY}}
-                                </td>
-                                <td>
-                                  {{item.TECHNOLOGY_GROUP}}
-                                </td> -->
+                                    {{item.PRODUCT_FAMILY}}
+                                  </td>
+                                  <td>
+                                    {{item.TECHNOLOGY_GROUP}}
+                                  </td> -->
                                 </tr>
                               </tbody>
                             </ng-template>
@@ -126,14 +126,14 @@
                             [ngClass]="{'bold-row': rowData.isMajorLineItem}">
                             <td *ngIf="rowData['productName']">
                               <!-- <div *ngIf="!rowData['isGroupNode']">
-                                  <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
-                                  <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                                  <span class="treetable--product-name">{{rowData['productName']}}</span>
-                                  <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
-                                  <a *ngIf="!rowData['isGroupNode']" class="pull-right" (click)="showAddDetailsDailog(rowNode)"><span
-                                      class="icon-add-contain"></span> Add
-                                    Details</a>
-                                </div> -->
+                                    <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
+                                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                    <span class="treetable--product-name">{{rowData['productName']}}</span>
+                                    <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
+                                    <a *ngIf="!rowData['isGroupNode']" class="pull-right" (click)="showAddDetailsDailog(rowNode)"><span
+                                        class="icon-add-contain"></span> Add
+                                      Details</a>
+                                  </div> -->
                               <div>
                                 <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
@@ -148,8 +148,9 @@
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
                                     class="icon-edit" *ngIf="!rowData['eginieItem && !readOnly']"></span>
-                                  <a [id]='rowData["uniqueKey"]' *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'
-                                   (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
+                                  <a [id]='rowData["uniqueKey"]'
+                                    *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'
+                                    (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
                                   <a [id]='rowData["uniqueKey"]' (click)='disableButtons()'
                                     *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
                                 </span>
@@ -167,20 +168,21 @@
                             <td *ngIf="rowData['productName']">
                               {{rowData['productFamily']}}
                               <!-- <div *ngIf="rowData['isMajorLineItem']">
-                                <a> Add Details</a>
-                              </div> -->
+                                  <a> Add Details</a>
+                                </div> -->
                             </td>
                             <!-- to copy -->
                             <td *ngIf="rowData['productName']">
                               <span class="list-price">{{rowData['listPrice']}}</span>
                               <div *ngIf="rowData['isMajorLineItem']">
-                                <a *ngIf="!readOnly" (click)="createGroup(rowNode)"><span class="icon-folder icon-small"></span> Create a
+                                <a *ngIf="!readOnly" (click)="createGroup(rowNode)"><span
+                                    class="icon-folder icon-small"></span> Create a
                                   Group</a>
                               </div>
 
                               <!-- added to copy delete node -->
-                              <a *ngIf="!readOnly" (click)='deleteNode(rowNode)' class="remove"><span
-                                  class="icon-trash icon-small"></span>
+                              <a *ngIf="!readOnly" (click)='deleteNode(rowNode)' class="remove"
+                                [class.disabled]="isDisabledView"><span class="icon-trash icon-small"></span>
                                 <small>Remove Item</small></a>
                             </td>
                           </tr>
@@ -260,13 +262,14 @@
     [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}"
     positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
-    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()" (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm">
+    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
+      (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
         <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
           <div [ngSwitch]="question.itemType">
             <div *ngSwitchCase="'Unique Item'">
-              <app-dynamic-form-question [question]="question" [headerName]="popHeadName"  [questionForm]="questionForm">
+              <app-dynamic-form-question [question]="question" [headerName]="popHeadName" [questionForm]="questionForm">
               </app-dynamic-form-question>
             </div>
           </div>
@@ -285,7 +288,7 @@
                 [suggestions]="copyAttributeResults" (completeMethod)="searchCopyAttributes($event)" field="PID"
                 class="auto-complete-attribute" placeholder="Copy Attributes" [size]="100" [minLength]="9">
               </p-autoComplete>
-              <button [disabled]="readOnly"type="button" class="link">
+              <button [disabled]="readOnly" type="button" class="link">
                 <span class="icon-search"></span>
               </button>
             </div>
@@ -337,4 +340,3 @@
       </tr>
     </table>
   </p-dialog>
-
