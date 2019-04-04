@@ -24,7 +24,9 @@ export class EnvironmentService {
 
     // LOV URLs
     REST_API_GET_FUNCTIONAL_ROLE_URL: string;
+    REST_API_REGISTER_NEW_USER_GET_URL: string;
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL: string;
+    REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL: string;
 
     //  eGenie URLs
     REST_API_OWB_CONTROLLER_URL: string;
@@ -33,6 +35,8 @@ export class EnvironmentService {
 
     //  BPM URLs
     REST_API_ACTIONS_TRACKER_URL: string;
+    REST_API_ACTIONS_DASHBOARD_URL: string;
+    REST_API_ACTIONS_TRACKER_DETAILS_URL: string;
     REST_API_RETRIEVE_MILESTONES_URL: string;
 
     //  PDAF URLs
@@ -62,6 +66,7 @@ export class EnvironmentService {
 
 
     // OFFER DIMENSIONS URLs
+
     REST_API_RETRIEVE_OFFER_DIMENSIONS_INFO_URL: string;
     REST_API_VALIDATE_OFFER_DIMENSIONS_INFO_URL: string;
     REST_API_RETRIEVE_MM_OFFER_DIMENSIONS_ATTRIBUTES_URL: string;
@@ -102,7 +107,8 @@ export class EnvironmentService {
     REST_API_ACTION_PRIMARY_POC_POST_URL: string;
     REST_API_CREATE_MANUAL_ACTION_POST_URL: string;
     REST_API_NOTIFICATION_PRIMARY_POC_POST_URL: string;
-    REST_API_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL: string;
+    REST_API_CREATE_STRATEGY_REVIEW_TASKS: string;
+    REST_API_CREATE_DESIGN_REVIEW_TASKS: string;
 
     // DOWNLOAD N UPLOAD URLs
     REST_API_DOWNLOAD_OFFER_DETAILS_PDF_URL: string;
@@ -116,8 +122,6 @@ export class EnvironmentService {
 
     // DESIGN REVIEW URL's
     REST_API_DESIGN_REVIEW_GET_URL: string;
-    REST_API_DESIGN_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL: string;
-
     // -------------------------------------------------------------------------------------------------
 
 
@@ -206,7 +210,9 @@ export class EnvironmentService {
         // ------------------------- LOV URLs---------------------------------------------------------
 
         this.REST_API_GET_FUNCTIONAL_ROLE_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
+        this.REST_API_REGISTER_NEW_USER_GET_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
         this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseApiUrl + '/LOV/getAssignee/';
+        this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
 
         // ------------------------ eGenie URLs ------------------------------------------------------
 
@@ -216,9 +222,11 @@ export class EnvironmentService {
 
         // ------------------------------- BPM URLs ---------------------------------------------------
 
-        this.REST_API_ACTIONS_TRACKER_URL = this.baseApiUrl + '/bpmApi/getTask/';
+        this.REST_API_ACTIONS_TRACKER_URL = this.baseApiUrl + '/bpmApi/getTasksForActionTracker/';
+        this.REST_API_ACTIONS_DASHBOARD_URL = this.baseApiUrl + '/bpmApi/getTask/dashboard/';
+        this.REST_API_ACTIONS_TRACKER_DETAILS_URL = this.baseApiUrl + '/bpmApi/getInfo/task';
         this.REST_API_RETRIEVE_MILESTONES_URL = this.baseApiUrl + '/bpmApi/getMilestones';
-
+        
         // ------------------------- PDAF URLs ---------------------------------------------------------
 
         this.REST_API_PRIMARY_URL = this.baseApiUrl + '/primaryBusiness/';
@@ -293,11 +301,11 @@ export class EnvironmentService {
         this.REST_API_VIEW_COMMENT_GET_URL = this.baseApiUrl + '/action/getComment';
         this.REST_API_CREATE_COMMENT_URL = this.baseApiUrl + '/action/createComment';
         this.REST_API_RETRIEVE_ACTIONS_URL = this.baseApiUrl + '/action/getMyAction/';
-        this.REST_API_CREATE_MANUAL_ACTION_POST_URL = this.baseApiUrl + '/action/create/manualAction';
-        this.REST_API_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL = this.baseApiUrl + '/action/create/task/';
-        this.REST_API_ACTION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/user/solutioningTask/action';
-        this.REST_API_NOTIFICATION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/user/solutioningTask/notification';
-        this.REST_API_DESIGN_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL = this.baseApiUrl + '/action/create/user/designReviewTask/';
+        this.REST_API_CREATE_MANUAL_ACTION_POST_URL = this.baseApiUrl + '/action/create/task/manualAction';
+        this.REST_API_CREATE_STRATEGY_REVIEW_TASKS = this.baseApiUrl + '/action/create/tasks/strategyReviewTasks/';
+        this.REST_API_CREATE_DESIGN_REVIEW_TASKS = this.baseApiUrl + '/action/create/tasks/designReviewTasks/'
+        this.REST_API_ACTION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/task/solutioningTask/action';
+        this.REST_API_NOTIFICATION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/task/solutioningTask/notification';
 
         // ------------------------- DOWNLOAD N UPLOAD URLs ----------------------------------------------
 

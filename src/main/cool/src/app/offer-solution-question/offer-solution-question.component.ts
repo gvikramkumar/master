@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ControlContainer, NgForm } from '@angular/forms';
 
 
 
@@ -9,6 +9,7 @@ import { FormGroup } from '@angular/forms';
   selector: 'app-offer-solution-question',
   templateUrl: './offer-solution-question.component.html',
   styleUrls: ['./offer-solution-question.component.css'],
+  viewProviders: [ { provide: ControlContainer, useExisting: NgForm }]
 })
 export class OfferSolutionQuestionComponent implements OnInit {
 
@@ -37,7 +38,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
   showHiddenQuestionBasedOnUserInput(selectedValue: string, question: any) {
 
-    if (selectedValue !== '' && selectedValue !== 'No') {
+    if (selectedValue !== '') {
 
       const parentQuestionNumber = question['questionNo'];
       const childIndexUnGroupData = this.unGroupData.findIndex(fqa => parentQuestionNumber === fqa.rules.referenceQ);
@@ -45,14 +46,15 @@ export class OfferSolutionQuestionComponent implements OnInit {
       if (childIndexUnGroupData !== -1) {
 
         const childQuestion = this.unGroupData[childIndexUnGroupData];
-        const childQuestionNumber = this.unGroupData[childIndexUnGroupData]['questionNumber'];
+        const childQuestionNumber = this.unGroupData[childIndexUnGroupData]['questionNo'];
 
         const group = childQuestion['group'];
-        const osGroup = childQuestion['osGroup'];
+        const osGroup = childQuestion['oSgroup'];
         const subGroup = childQuestion['subGroup'];
 
-        const childIndexGroupData = this.groupData[osGroup][group][subGroup].findIndex(cqa => cqa.questionNo === childQuestionNumber);
-        this.groupData[osGroup][group][subGroup][childIndexGroupData]['hideQuestion'] = false;
+      const childQuestionsGroup = this.groupData[osGroup][group][subGroup]['questions'] as Array<any>;
+        const childIndexGroupData = childQuestionsGroup.findIndex(cqa => cqa.questionNo === childQuestionNumber);
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
 
       }
 

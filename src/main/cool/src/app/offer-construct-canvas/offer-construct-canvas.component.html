@@ -66,11 +66,11 @@
                                     {{item.PID}}
                                   </td>
                                   <!-- <td>
-                                  {{item.PRODUCT_FAMILY}}
-                                </td>
-                                <td>
-                                  {{item.TECHNOLOGY_GROUP}}
-                                </td> -->
+                                    {{item.PRODUCT_FAMILY}}
+                                  </td>
+                                  <td>
+                                    {{item.TECHNOLOGY_GROUP}}
+                                  </td> -->
                                 </tr>
                               </tbody>
                             </ng-template>
@@ -126,14 +126,14 @@
                             [ngClass]="{'bold-row': rowData.isMajorLineItem}">
                             <td *ngIf="rowData['productName']">
                               <!-- <div *ngIf="!rowData['isGroupNode']">
-                                  <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
-                                  <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                                  <span class="treetable--product-name">{{rowData['productName']}}</span>
-                                  <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
-                                  <a *ngIf="!rowData['isGroupNode']" class="pull-right" (click)="showAddDetailsDailog(rowNode)"><span
-                                      class="icon-add-contain"></span> Add
-                                    Details</a>
-                                </div> -->
+                                    <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
+                                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                    <span class="treetable--product-name">{{rowData['productName']}}</span>
+                                    <span *ngIf="rowData['isMajorLineItem']"> ({{itemCount}})</span>
+                                    <a *ngIf="!rowData['isGroupNode']" class="pull-right" (click)="showAddDetailsDailog(rowNode)"><span
+                                        class="icon-add-contain"></span> Add
+                                      Details</a>
+                                  </div> -->
                               <div>
                                 <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
@@ -168,8 +168,8 @@
                             <td *ngIf="rowData['productName']">
                               {{rowData['productFamily']}}
                               <!-- <div *ngIf="rowData['isMajorLineItem']">
-                                <a> Add Details</a>
-                              </div> -->
+                                  <a> Add Details</a>
+                                </div> -->
                             </td>
                             <!-- to copy -->
                             <td *ngIf="rowData['productName']">
@@ -314,7 +314,7 @@
       <div class="row">
         <div class="col-md-12 text-right">
           <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
-          <button class="btn btn--primary" type="submit" [disabled]="readOnly">Add Details</button>
+          <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
         </div>
       </div>
     </form>

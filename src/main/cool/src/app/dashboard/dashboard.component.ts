@@ -207,6 +207,10 @@ export class DashboardComponent implements OnInit {
   getActionFormValues() {
     this.selectedofferId = this.selectedAction.offerId;
     this.selectedCaseId = this.selectedAction.caseId;
+    this.actionsService.getActionDetails(this.selectedAction.taskId)
+    .subscribe(data => {
+      this.selectedAction.milestone = data.milestone;
+    });
     this.milestoneValue = this.selectedAction.milestone;
     if (this.selectedofferId != null && this.selectedfunctionRole != null
       && this.stakeHolders[this.selectedofferId] != null
@@ -278,7 +282,7 @@ export class DashboardComponent implements OnInit {
     createCommentPayload['taskName'] = 'Action';
     createCommentPayload['action'] = this.action;
     createCommentPayload['comment'] = this.commentValue;
-
+    createCommentPayload['status'] = this.selectedAction.status;
     const assignee = [this.assigneeValue];
     const offerId = this.selectedAction.offerId;
     const actionTitle = this.titleValue;
@@ -305,6 +309,7 @@ export class DashboardComponent implements OnInit {
     const userId = this.userService.getUserId();
     const taskName = 'Action';
     const action = 'Approved';
+    const status = this.selectedAction.status;
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,
@@ -312,6 +317,7 @@ export class DashboardComponent implements OnInit {
       action,
       this.commentValue,
       false,
+      status
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
       overlaypanel.hide();
@@ -326,13 +332,15 @@ export class DashboardComponent implements OnInit {
     const taskName = 'Action';
     const action = 'Approved';
     const commentValue = this.reason;
+    const status = this.selectedAction.status;
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,
       taskName,
       action,
       commentValue,
-      false
+      false,
+      status
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
       overlaypanel.hide();
@@ -354,13 +362,15 @@ export class DashboardComponent implements OnInit {
     const taskName = 'Action';
     const action = 'Approved';
     const commentValue = this.reason;
+    const status = this.selectedAction.status;
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,
       taskName,
       action,
       commentValue,
-      true
+      true,
+      status
     );
     this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
       overlaypanel.hide();
@@ -392,7 +402,8 @@ export class DashboardComponent implements OnInit {
       'caseId': '',
       'offerId': '',
       'action': '',
-      'comment': ''
+      'comment': '',
+      'status' : this.selectedAction.status
     };
     this.dashboardService.postDismissNotification(postData).subscribe(data => {
       overlaypanel.hide();

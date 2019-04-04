@@ -8,6 +8,8 @@ import { ConfigurationService } from '@shared/services';
 
 import * as _ from 'lodash';
 import { User } from '@app/models/user';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
+import { AccessManagementService } from '../../services/access-management.service';
 
 @Component({
   selector: 'app-stakeholder-add',
@@ -18,6 +20,8 @@ export class StakeholderAddComponent implements OnInit {
 
 
   caseId: string;
+  primaryBE: string;
+  derivedMM: string;
   offerName: string;
   offerOwner: string;
   currentOfferId: string;
@@ -40,8 +44,10 @@ export class StakeholderAddComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private accessMgmtService: AccessManagementService,
     private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
+    private monetizationModelService: MonetizationModelService,
     private searchCollaboratorService: SearchCollaboratorService) {
 
     this.activatedRoute.params.subscribe(params => {
@@ -60,10 +66,14 @@ export class StakeholderAddComponent implements OnInit {
     });
 
     this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
+
       this.offerName = data['offerName'];
+      this.derivedMM = data['derivedMM'];
       this.offerOwner = data['offerOwner'];
+      this.primaryBE = data['primaryBEList'][0];
       this.stakeHolderData = data['stakeholders'] ? data['stakeholders'] : [];
       this.processStakeHolderData(data['stakeholders']);
+
     });
 
   }
@@ -179,6 +189,61 @@ export class StakeholderAddComponent implements OnInit {
     };
   }
 
+  private formatDefaultUserAsStakeholder(userInfo: any): any {
+    return {
+      userName: userInfo.userName,
+      emailId: userInfo._id + '@cisco.com',
+      _id: userInfo._id,
+      userMappings: [{
+        appRoleList: userInfo['userMappings'][0]['appRoleList'] == null ?
+          [] : userInfo['userMappings'][0]['appRoleList'],
+        businessEntity: userInfo['userMappings'][0]['businessEntity'],
+        functionalRole: userInfo['userMappings'][0]['functionalRole'],
+        offerRole: userInfo['userMappings'][0]['functionalRole'],
+      }
+      ],
+      stakeholderDefaults: true
+    };
+  }
+
+  private formatStakeHolderOwnerToUpdateOffer(user: User): any {
+    return {
+      '_id': user['userId'],
+      'businessEntity': user['userMapping'][0]['businessEntity'],
+      'functionalRole': user['userMapping'][0]['functionalRole'],
+      'offerRole': user['userMapping'][0]['functionalRole'] === 'BUPM' && user['userId'] === this.offerOwner
+        ? 'Owner' : user['userMapping'][0]['functionalRole'],
+      'stakeholderDefaults': true,
+      'name': user['userName']
+    };
+  }
+
+
+  private formatStakeHolderPojoToUpdateOffer_1(user: any) {
+
+    const stakeHolderUpdateOfferFormat = [];
+
+    for (const functionalRole of Object.keys(this.stakeHolderMapInfo)) {
+      this.stakeHolderMapInfo[functionalRole]
+        .map((currentStakeHolder: User) => {
+          stakeHolderUpdateOfferFormat.push(this.formatStakeHolderPojoToUpdateOffer(currentStakeHolder));
+        });
+    }
+    return stakeHolderUpdateOfferFormat;
+  }
+
+  private formatStakeHolderPojoToUpdateOffer(user: User): any {
+    return {
+      '_id': user['_id'],
+      'businessEntity': user['userMappings'][0]['businessEntity'],
+      'functionalRole': user['userMappings'][0]['functionalRole'],
+      'offerRole': user['userMappings'][0]['functionalRole'] === 'BUPM' && user['_id'] === this.offerOwner
+        ? 'Owner' : user['userMappings'][0]['functionalRole'],
+      'stakeholderDefaults': user['stakeholderDefaults'] ? user['stakeholderDefaults'] : false,
+      'name': user['userName']
+    };
+  }
+
   private compareAndAddNewStakeHolders(newStakeHolderList: User[], existingStakeHolderList: {}): {} {
 
     newStakeHolderList.reduce((stakeHolderAccumulator, currentStakeholder) => {
@@ -187,6 +252,7 @@ export class StakeholderAddComponent implements OnInit {
         ...currentStakeholder,
         stakeholderDefaults: false
       };
+
       const stakeholderFunctionRole = currentStakeholder['userMappings'][0]['functionalRole'];
 
       // Check If Stakeholder Is Already Present In Existing Stakeholder list
@@ -212,27 +278,55 @@ export class StakeholderAddComponent implements OnInit {
 
   addSelectedStakeHolders() {
 
-    const newlyAddedStakeHolderMap = this.selectedStakeHolders.map(user =>
-      this.formatUserAsStakeholder(user, false));
 
-    this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(newlyAddedStakeHolderMap, this.stakeHolderMapInfo);
-    this.updatedStakeHolderMapInfo.emit(this.stakeHolderMapInfo);
+    this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
 
-    this.stakeHolderListInfo = _.uniqBy(this.stakeHolderListInfo.concat(this.selectedStakeHolders));
+      this.accessMgmtService.retrieveUserInfo(this.offerOwner).subscribe(ownerInfo => {
 
-    const stakeholdersPayLoad = {
-      offerId: this.currentOfferId,
-      stakeholders: this.stakeHolderListInfo
-    };
+        this.monetizationModelService.retrieveDefaultStakeHolders(data['derivedMM'], data['primaryBEList'][0])
+          .subscribe(defaultStakeholdersObj => {
 
-    this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe();
 
-    this.selectedStakeHolders = null;
-    this.stakeholderForm.reset();
+            const owner = this.formatStakeHolderOwnerToUpdateOffer(ownerInfo);
+
+            // Retrieve Default Stake Holders Details Related To Current Offer
+            const defaultStakeholders = defaultStakeholdersObj as Array<User>;
+
+            const defaultStakeHolderMap = defaultStakeholders.map(user =>
+              this.formatDefaultUserAsStakeholder(user));
+            // defaultStakeHolderMap.push(owner);
+
+            const newlyAddedStakeHolderMap = this.selectedStakeHolders.map(user =>
+              this.formatUserAsStakeholder(user, false));
+
+            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(defaultStakeHolderMap, this.stakeHolderMapInfo);
+            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(newlyAddedStakeHolderMap, this.stakeHolderMapInfo);
+
+            this.updatedStakeHolderMapInfo.emit(this.stakeHolderMapInfo);
+            this.stakeHolderListInfo = this.formatStakeHolderPojoToUpdateOffer_1(this.stakeHolderMapInfo);
+
+            this.stakeHolderListInfo.push(owner);
+            this.stakeHolderListInfo = _.uniqBy(this.stakeHolderListInfo.concat(this.selectedStakeHolders), '_id');
+
+            const stakeholdersPayLoad = {
+              offerId: this.currentOfferId,
+              stakeholders: this.stakeHolderListInfo
+            };
+
+            this.stakeholderfullService.updateOfferDetails(stakeholdersPayLoad).subscribe();
+
+            this.selectedStakeHolders = null;
+            this.stakeholderForm.reset();
+
+          });
+
+      });
+
+    });
+
   }
 
+
   // ---------------------------------------------------------------------------------------------
-
-
 
 }
