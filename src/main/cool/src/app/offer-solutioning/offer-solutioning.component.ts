@@ -231,7 +231,7 @@ export class OfferSolutioningComponent implements OnInit {
         // Group 'questionsAndAnswers' -> OsGroup -> Group -> SubGroup - In Presence Of Answers
         this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
         this.groupedQuestionsAndAnswers = this.groupSolutioningQuestionAndAnswers(this.unGroupedQuestionsAndAnswers);
-
+        this.loaderService.stopLoading();
         this.createActionAndNotification();
 
       }, (err) => {
@@ -241,7 +241,7 @@ export class OfferSolutioningComponent implements OnInit {
 
           this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
           this.groupedQuestionsAndAnswers = this.groupSolutioningQuestionAndAnswers(this.unGroupedQuestionsAndAnswers);
-
+          this.loaderService.stopLoading();
           this.createActionAndNotification();
 
         }
@@ -418,7 +418,6 @@ export class OfferSolutioningComponent implements OnInit {
         this.offersolutioningService.notificationPost(notificationPayload).subscribe(() => {
           this.offersolutioningService.actionPost(actionPayload).subscribe(() => {
             this.offersolutioningService.updateOfferFlag(this.offerId, 'solutioningActionNotification', true).subscribe();
-            this.loaderService.stopLoading();
           });
         });
       }

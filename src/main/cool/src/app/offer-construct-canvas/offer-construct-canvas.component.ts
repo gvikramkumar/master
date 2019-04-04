@@ -4,24 +4,31 @@ import {
   ChangeDetectorRef,
   ElementRef,
   Input,
+  OnChanges,
   OnDestroy
 } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { OfferconstructCanvasService } from '@app/offer-construct-canvas/service/offerconstruct-canvas.service';
+import { MMItems } from '@app/offer-construct-canvas/model/MMItems';
 import { ActivatedRoute } from '@angular/router';
+import { SubGroup } from '@app/offer-construct-canvas/model/SubGroup';
+import { Group } from '@app/offer-construct-canvas/model/Group';
 import { Groups } from '@app/models/groups';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { OfferConstructService } from '@app/services/offer-construct.service';
 import { ConstructDetails } from '@app/offer-construct-canvas/model/ConstructDetails';
 import { ConstructDetail } from '@app/offer-construct-canvas/model/ConstructDetail';
 import { ItemDetail } from '@app/offer-construct-canvas/model/ItemDetail';
-import { Subscription } from 'rxjs';
+import { group } from '@angular/animations';
+import { Observable, Subscription } from 'rxjs';
+import { async } from '@angular/core/testing';
+import { StakeHolder } from '@app/models/stakeholder';
 import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
+import { filter } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
 import { ConfigurationService } from '@shared/services';
 import { LoaderService } from './../shared/loader.service';
-
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offer-construct-canvas.component.html',
@@ -46,6 +53,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   expandView = true;
   editData: any;
   showButtons: any = false;
+  private buttonId;
   private uniqueId;
   varibableToBind;
   displayAddDetails: Boolean = false;
@@ -109,6 +117,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public isShow = false;
   constructor(
     private cd: ChangeDetectorRef,
+    private elRef: ElementRef,
     private messageService: MessageService,
     private offerConstructCanvasService: OfferconstructCanvasService,
     private offerConstructService: OfferConstructService,
@@ -158,7 +167,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    * When major line item is dragged from left to right
    * @param $event
    */
-  dropItem() {
+  dropItem($event) {
 
     this.initalRowAdded = false;
 
@@ -197,7 +206,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // this.getQuestionOnDragDrop(groupsName);  //set listOfOfferquestion to itemDeatils of objects
       this.offerConstructService.addDetails(groupsName).subscribe((data) => {
         this.listOfferQuestions = data.groups[0].listOfferQuestions;
-      }, () => { },
+      }, (err) => { },
         () => {
           obj['itemDetails'] = this.listOfferQuestions;
           this.getQuestionList(obj);
@@ -217,7 +226,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructService.addDetails(groupsName).subscribe((data) => {
       this.listOfferQuestions = data.groups[0].listOfferQuestions;
       return data.groups[0].listOfferQuestions;
-    }, () => { },
+    }, (err) => { },
       () => {
       });
   }
@@ -233,6 +242,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     const test = [];
     test.push(majorItem);
+    const groupsName = { groups: test };
     // this.offerConstructService.addDetails(groupsName).subscribe((data) => {
     const groupName = obj.uniqueNodeId;
     // let groupName = obj.uniqueKey;
@@ -308,7 +318,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       itemsData = items.body;
       // this.questionForm.patchValue(itemsData);
       this.cd.detectChanges();
-    }, () => { },
+    }, (err) => { },
       () => { this.singleFormCopy(itemsData); });
     this.setSearchItem.node.data.searchItemRef = this.itemsList;
     this.offerConstructItems = [...this.offerConstructItems];
@@ -339,7 +349,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
       this.copyAttributeResults = [...results];
     },
-      () => {
+      (error) => {
         this.results = [];
       }
     );
@@ -355,7 +365,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.minorLineItemsActive = true;
   }
 
-  showMandatory(event) {
+  showMandatory(event, id) {
     this.toggleMandatory = this.toggleMandatory ? false : true;
     this.displayMandatory = event.target.id;
     this.cd.detectChanges();
@@ -371,7 +381,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     const majorLength = {};
     const minorLength = {};
-    majorOfferInfo.forEach((element) => {
+    majorOfferInfo.forEach((element, index) => {
       const name: any = Object.keys(element);
       majorLength[name] = false;
       if ((element[name].productInfo).length > 0) {
@@ -477,7 +487,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // Here we will loop through all offer array and find parent index key then
       // Another loop of children & find Here we have to remove only that children whose uniquekey = rowData.uniqueKey
       // Loop through All available offers construct items array
-      this.offerConstructItems.forEach((element) => {
+      this.offerConstructItems.forEach((element, index) => {
         if (element.data.uniqueKey == rowNode.parent.data.uniqueKey) {
           // Loop through of all childrens of matched Parent data from Offer array
           element.children.forEach((childElement, childIndex) => {
@@ -491,8 +501,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       });
       // Check if parent is a group Node.
       if (rowNode.parent.data.isGroupNode) {
-        this.offerConstructItems.forEach((element) => {
-          element.children.forEach((childElement) => {
+        this.offerConstructItems.forEach((element, index) => {
+          element.children.forEach((childElement, childIndex) => {
             if (childElement.data.uniqueKey == rowNode.parent.data.uniqueKey) {
               // Removed the child element from Parent Array of Offer construct Array
               childElement.children.forEach((innerChildElement, innerChildIndex) => {
@@ -552,6 +562,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
 
   handleChange(obj, $event) {
+    const oldValue = obj.myField;
     const newValue = $event.target.value;
     obj.name = newValue;
   }
@@ -567,7 +578,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     debugger;
     this.offerConstructService.singleMultipleFormInfo[groupType].forEach((list, index) => {
       if (Object.keys(list) == productName) {
-        this.offerConstructService.singleMultipleFormInfo[groupType][index][productName]['productInfo'].forEach((element) => {
+        this.offerConstructService.singleMultipleFormInfo[groupType][index][productName]['productInfo'].forEach((element, index) => {
           if (Object.keys(element) == uniqueNodeId) {
             if (element[uniqueNodeId].uniqueKey == uniqueKey) {
               element[uniqueNodeId].title = name;
@@ -598,7 +609,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    * @param rowNode
    * @param rowData
    */
-  dropOnRow(rowNode) {
+  dropOnRow($event, rowNode, rowData) {
     if (this.draggedItem.parent) {
       if (this.draggedItem.parent.children) {
         this.itemCount = this.draggedItem.parent.children.length;
@@ -646,7 +657,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                 }
               });
             });
-            this.delteFromParentObject();
+            this.delteFromParentObject(rowNode, this.draggedItem.data);
             this.offerConstructItems = [...this.offerConstructItems];
           }
         }
@@ -673,7 +684,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             }
             obj['itemDetails'] = this.draggedItem.data['itemDetails'];
             rowNode.node.children.push(this.itemToTreeNode(obj));
-            this.delteFromParentObject();
+            this.delteFromParentObject(rowNode, this.draggedItem.data);
           }
           this.setFlag = true;
         } else {
@@ -707,7 +718,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           // obj['itemDetails'] = this.getQuestionOnDragDrop(groupsName);
           this.offerConstructService.addDetails(groupsName).subscribe((data) => {
             this.listOfferQuestions = data.groups[0].listOfferQuestions;
-          }, () => { },
+          }, (err) => { },
             () => {
               obj['itemDetails'] = this.listOfferQuestions;
               this.getQuestionList(obj);
@@ -737,7 +748,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           }
           obj['itemDetails'] = this.draggedItem.data['itemDetails'];
           rowNode.node.children.push(this.itemToTreeNode(obj));
-          this.delteFromParentObject();
+          this.delteFromParentObject(rowNode, this.draggedItem.data);
         }
       }
 
@@ -751,7 +762,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    * @param rowNode
    * @param child
    */
-  delteFromParentObject() {
+  delteFromParentObject(rowNode, child) {
     const tempChildArray = this.draggedItem.parent.children;
     let index = -1;
     for (let i = 0; i < tempChildArray.length; i++) {
@@ -800,7 +811,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.updateChildCount();
   }
 
-  showButton(event) {
+  showButton(event, id) {
+    this.buttonId = event.target.id;
     this.autoFocus = true;
     this.cd.detectChanges();
   }
@@ -814,7 +826,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     this.loaderService.startLoading();
     this.subscription = this.messageService.getMessage()
-      .subscribe(() => {
+      .subscribe(message => {
         this.saveOfferConstructChanges();
       });
 
@@ -1064,7 +1076,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.updateChildCount();
   }
 
-  dragStartRow(item) {
+  dragStartRow($event, item) {
     if (this.readOnly === false) {
       this.draggedItem = item.node;
       // this.selected = [...this.selected];
@@ -1072,7 +1084,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   }
 
-  dragStart(item: any) {
+  dragStart(event, item: any) {
     if (this.readOnly === false) {
       this.draggedItem = item;
     }
@@ -1080,7 +1092,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   // donwnload Zip file
-  downloadZip() {
+  downloadZip(offerId) {
     this.offerConstructCanvasService.downloadZip(this.currentOfferId).subscribe((res) => {
       const nameOfFileToDownload = 'offer-construct';
       const blob = new Blob([res], { type: 'application/zip' });
@@ -1109,7 +1121,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             if (element.data.uniqueKey == selectedItem.data.uniqueKey) {
 
               // remove list form global variable
-              this.deleteQuestionToNode(selectedItem.data.productName, selectedItem.data.isMajorLineItem, selectedItem.data.uniqueNodeId);
+              this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.productName, selectedItem.data.isMajorLineItem, selectedItem.data.uniqueNodeId);
               this.offerConstructItems.splice(index, 1);
             }
           });
@@ -1118,13 +1130,13 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           // Here we will loop through all offer array and find parent index key then
           // Another loop of children & find Here we have to remove only that children whose uniquekey = rowData.uniqueKey
           // Loop through All available offers construct items array
-          this.offerConstructItems.forEach((element) => {
+          this.offerConstructItems.forEach((element, index) => {
             if (element.data.uniqueKey == selectedItem.parent.data.uniqueKey) {
               // Loop through of all childrens of matched Parent data from Offer array
               element.children.forEach((childElement, childIndex) => {
                 if (childElement.data.uniqueKey == selectedItem.data.uniqueKey) {
                   // remove list form global variable
-                  this.deleteQuestionToNode(selectedItem.data.productName, selectedItem.data.isMajorLineItem, selectedItem.data.uniqueNodeId);
+                  this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.productName, selectedItem.data.isMajorLineItem, selectedItem.data.uniqueNodeId);
                   element.children.splice(childIndex, 1);
                   // Removed the child element from Parent Array of Offer construct Array
                 }
@@ -1133,14 +1145,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
             // Check if parent is a group Node.
             if (selectedItem.parent.data.isGroupNode) {
-              this.offerConstructItems.forEach((element) => {
-                element.children.forEach((childElement) => {
+              this.offerConstructItems.forEach((element, index) => {
+                element.children.forEach((childElement, childIndex) => {
                   if (childElement.data.uniqueKey == selectedItem.parent.data.uniqueKey) {
                     // Removed the child element from Parent Array of Offer construct Array
                     childElement.children.forEach((innerChildElement, innerChildIndex) => {
                       if (innerChildElement.data.uniqueKey == selectedItem.data.uniqueKey) {
                         // remove list form global variable
-                        this.deleteQuestionToNode(selectedItem.data.productName, selectedItem.data.isMajorLineItem, selectedItem.data.uniqueNodeId);
+                        this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.productName, selectedItem.data.isMajorLineItem, selectedItem.data.uniqueNodeId);
                         childElement.children.splice(innerChildIndex, 1);
                         // Removed the child element from Parent Array of Offer construct Array
                       }
@@ -1257,7 +1269,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
       this.results = [...results];
     },
-      () => {
+      (error) => {
         this.results = [];
       }
     );
@@ -1279,18 +1291,18 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         // Some problem in the response
       }
     },
-      () => {
+      (error) => {
         this.results = [];
       }
     );
   }
 
-  drop(rowdata) {
+  drop(event, rowdata) {
     rowdata.node.children.push(this.draggedItem);
     this.offerConstructItems = [...this.offerConstructItems];
   }
 
-  dragEnd() {
+  dragEnd(event) {
     this.draggedItem = null;
   }
 
@@ -1326,7 +1338,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.closeDailog();
   }
 
-  addItemDetails() {
+  addItemDetails(popHeadName) {
     this.setSearchItem.node.data.searchItemRef = this.itemsList;
     this.showMandatoryDetails = false;
     this.replaceSingleFormQuestionWith(this.uniqueNodeId);
@@ -1354,7 +1366,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     console.log((this.offerConstructService.singleMultipleFormInfo));
   }
 
-  replacetabularFormQuestion() {
+  replacetabularFormQuestion(counter) {
     // replace tabular form  question with offerConstructItems itemsDeatails
     // for major group
 
@@ -1363,6 +1375,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     let groupName;
     let title;
+    let uniqueId;
     this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
       groupName = Object.keys(list);
       this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach(element => {
@@ -1475,6 +1488,34 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   }
 
+  private mapDropDownValues() {
+
+    this.questionsList[this.uniqueNodeId] = this.questionsList[this.uniqueNodeId].map(question => {
+
+      if (question.componentType === 'Drop-down') {
+        question.values = question.values.map(dropdownValue => {
+
+          let [value, display] = dropdownValue.split('-');
+          value = dropdownValue;
+
+          if (question.egineAttribue === 'UDI Value') {
+            const temp = value;
+            value = display;
+            display = temp;
+          }
+
+          return {
+            value: value,
+            display: display ? display : value
+          };
+
+        });
+        return question;
+      } else {
+        return question;
+      }
+    });
+  }
 
   showViewDetailsDailog(currentNode) {
     this.popHeadName = currentNode.node.data.title;
@@ -1545,6 +1586,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           cd.itemDetails = node.data.itemDetails;
 
         } else {
+          let id: ItemDetail;
           // for (const key in node.data.itemDetails) {
           //   id = new ItemDetail();
           //   id.attributeName = key;
@@ -1649,7 +1691,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     console.log('cds', cds);
 
 
-    this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
+    this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
     },
       (error) => {
         console.log(error);
@@ -1715,7 +1757,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     if (patchQuestion) {
       this.patchQuestionToNode(rowNode.node.data.uniqueKey, rowNode.node.data.productName, rowNode.node.data.isMajorLineItem, rowNode.node.data.uniqueNodeId);
     } else {
-      this.deleteQuestionToNode(rowNode.node.data.productName, rowNode.node.data.isMajorLineItem, rowNode.node.data.uniqueNodeId);
+      this.deleteQuestionToNode(rowNode.node.data.uniqueKey, rowNode.node.data.productName, rowNode.node.data.isMajorLineItem, rowNode.node.data.uniqueNodeId);
     }
   }
 
@@ -1749,7 +1791,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  deleteQuestionToNode(groupName, isMajor, title) {
+  deleteQuestionToNode(uniqueId, groupName, isMajor, title) {
     let MajordeletedJson: any;
     let minordeletedJson: any;
     let indexCount: number;
@@ -1757,7 +1799,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
         if (Object.keys(list) == groupName) {
           indexCount = index;
-          MajordeletedJson = this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].filter((element) => {
+          MajordeletedJson = this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].filter((element, index) => {
             return Object.keys(element) != title;
           });
         }
@@ -1766,9 +1808,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     } else {
       this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
+        const gName: any = Object.keys(list);
         if (Object.keys(list) == groupName) {
           indexCount = index;
-          minordeletedJson = this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].filter((element) => {
+          minordeletedJson = this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].filter((element, index) => {
             return Object.keys(element) != title;
           });
         }
@@ -1784,7 +1827,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     if (this.QuestionsNodeInfo[popHeadName].isMajor) {     // for major group
       this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
         if (Object.keys(list) == this.QuestionsNodeInfo[popHeadName].groupName) {
-          this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element) => {
+          this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
             if (Object.keys(element) == title) {
               if (element[title].uniqueKey == uniqueId) {
                 this.replaceOrUpdatevalue(element[title].listOfferQuestions, isUdate);
@@ -1796,7 +1839,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     } else {
       this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
         if (Object.keys(list) == this.QuestionsNodeInfo[popHeadName].groupName) {
-          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element) => {
+          this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
             if (Object.keys(element) == title) {
               if (element[title].uniqueKey == uniqueId) {
                 this.replaceOrUpdatevalue(element[title].listOfferQuestions, isUdate);
@@ -1826,4 +1869,3 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
 
 }
-
