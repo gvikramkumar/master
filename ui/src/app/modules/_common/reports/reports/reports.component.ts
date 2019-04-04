@@ -75,10 +75,11 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       type: 'valid-driver', hasNoChoices: true, text: 'Valid Driver', disabled: false,
       filename: 'Valid_Driver_Report'
     },
-    {
-      type: 'valid-slpf-driver', hasMultiSmAndFiscalMonth: true, text: 'Valid SL/PF Driver Report', disabled: false,
-      filename: 'Valid_SL_PF_Driver_Report'
-    },
+    // REMEMBER, YOU HAVE TO CHANGE THE HTML PAGE TO INDEX 8 FROM 7 IN 2 PLACES OF ngFor
+    // {
+    //   type: 'valid-slpf-driver', hasMultiSmAndFiscalMonth: true, text: 'Valid SL/PF Driver Report', disabled: false,
+    //   filename: 'Valid_SL_PF_Driver_Report'
+    // },
     {
       type: 'submeasure', hasNoChoices: true, text: 'Sub-Measure Updates', disabled: false,
       filename: 'Submeasure_Update_Report'
@@ -241,6 +242,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       obsMeasure.subscribe(smKeys => {
         this.submeasuresInData = this.submeasuresAll.filter(sm => _.includes(smKeys, sm.submeasureKey));
         this.measures = this.measuresAll.filter(m => _.includes(_.uniq(this.submeasuresInData.map(sm => sm.measureId)), m.measureId));
+        if (this.measures.length) {
+          this.measureId = this.measures[0].measureId;
+          this.measureChange();
+        }
       });
     }
   }
