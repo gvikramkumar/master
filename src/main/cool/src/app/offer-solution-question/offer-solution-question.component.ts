@@ -2,8 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { FormGroup, ControlContainer, NgForm } from '@angular/forms';
-// import { CurrencyPipe } from '@angular/common';
-
 
 
 @Component({
@@ -25,7 +23,6 @@ export class OfferSolutionQuestionComponent implements OnInit {
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
 
   constructor(
-    // private currencyPipe: CurrencyPipe,
     private activatedRoute: ActivatedRoute
   ) {
     this.activatedRoute.params.subscribe(params => {

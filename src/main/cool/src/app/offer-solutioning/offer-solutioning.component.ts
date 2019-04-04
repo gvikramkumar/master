@@ -221,7 +221,7 @@ export class OfferSolutioningComponent implements OnInit {
           qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
             '' : questionAnswerMap.get(qna['questionNo']);
           qna['answerToQuestion'] = qna['questionType'] === 'Date' ?
-            moment(qna['answer']).format('DD/MM/YYYY') : qna['answerToQuestion'];
+            moment(qna['answer']).format('MM/DD/YYYY') : qna['answerToQuestion'];
         }
 
         // Condtionally Hide Solutioning Question And Answers
