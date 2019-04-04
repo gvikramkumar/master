@@ -37,7 +37,7 @@ export class StakeholderFullComponent implements OnInit {
     { field: 'functionalRole', header: 'FUNCTION' }
   ];
 
-   // ---------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------------------
 
   constructor(private stakeholderfullService: StakeholderfullService,
     private searchCollaboratorService: SearchCollaboratorService,
@@ -242,6 +242,7 @@ export class StakeholderFullComponent implements OnInit {
   }
 
   deleteStakeHolder(stakeHolderId) {
+
     this.stakeHolderListInfo.splice(this.stakeHolderListInfo.findIndex(matchesEl), 1);
     function matchesEl(el) {
       return el._id === stakeHolderId;
@@ -269,13 +270,11 @@ export class StakeholderFullComponent implements OnInit {
 
   canUserDeleteStakeHolder(stakeholder) {
 
-    const adminRole = ['Owner', 'Co-Owner'];
     const currentUserId = this.userService.getUserId();
-    const currentUserRole = this.configurationService.startupData.appRoleList;
     const currentUserFunctions = this.configurationService.startupData.functionalRole;
 
-    return !stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId
-      && (adminRole.includes(currentUserRole) || currentUserFunctions.includes(stakeholder.functionalRole));
+    return (!stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId 
+    && (currentUserFunctions.includes(stakeholder.functionalRole)));
 
   }
 

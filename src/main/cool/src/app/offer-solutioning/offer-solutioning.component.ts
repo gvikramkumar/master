@@ -7,7 +7,8 @@ import { RightPanelService } from '../services/right-panel.service';
 import { ConfigurationService } from '@shared/services';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { FormGroup, FormBuilder, FormArray, Validators, FormControl, NgForm } from '@angular/forms';
+import { FormGroup, FormArray, NgForm } from '@angular/forms';
+import { LoaderService } from '@shared/loader.service';
 
 export class OSForm {
   osGroup: OSGroup[];
@@ -58,13 +59,16 @@ export class OfferSolutioningComponent implements OnInit {
   @ViewChild('osForm') osForm: NgForm;
 
 
-  constructor(private formBuilder: FormBuilder, private router: Router,
+  constructor(
+    private router: Router,
+    private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
-    private offersolutioningService: OffersolutioningService,
-    private stakeholderfullService: StakeholderfullService,
     private offerPhaseService: OfferPhaseService,
     private rightPanelService: RightPanelService,
-    private configurationService: ConfigurationService) {
+    private configurationService: ConfigurationService,
+    private stakeholderfullService: StakeholderfullService,
+    private offersolutioningService: OffersolutioningService
+  ) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       this.caseId = params['id2'];
@@ -73,9 +77,7 @@ export class OfferSolutioningComponent implements OnInit {
 
   ngOnInit() {
 
-    this.offerSolutioningFormGroup = this.formBuilder.group({
-      osGroup: this.formBuilder.array([])
-    });
+    this.loaderService.startLoading();
 
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
@@ -109,6 +111,9 @@ export class OfferSolutioningComponent implements OnInit {
           this.retrieveSolutioningQuestionAndAnswers();
         }
       });
+
+
+
     });
 
   }
@@ -226,11 +231,7 @@ export class OfferSolutioningComponent implements OnInit {
         // Group 'questionsAndAnswers' -> OsGroup -> Group -> SubGroup - In Presence Of Answers
         this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
         this.groupedQuestionsAndAnswers = this.groupSolutioningQuestionAndAnswers(this.unGroupedQuestionsAndAnswers);
-
-        // Create OS Form Group Template
-        // const osForm: any = this.createOfferSolutioningFormTemplate();
-        // this.offerSolutioningFormGroup = this.formBuilder.group(osForm);
-
+        this.loaderService.stopLoading();
         this.createActionAndNotification();
 
       }, (err) => {
@@ -240,11 +241,7 @@ export class OfferSolutioningComponent implements OnInit {
 
           this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
           this.groupedQuestionsAndAnswers = this.groupSolutioningQuestionAndAnswers(this.unGroupedQuestionsAndAnswers);
-
-          // Create OS Form Group Template
-          // const osForm: any = this.createOfferSolutioningFormTemplate();
-          // this.offerSolutioningFormGroup = this.formBuilder.group(osForm);
-
+          this.loaderService.stopLoading();
           this.createActionAndNotification();
 
         }
@@ -291,7 +288,7 @@ export class OfferSolutioningComponent implements OnInit {
         .groupBy('group')
         .mapValues(groupValue => _.chain(groupValue)
           .groupBy('subGroup')
-          .mapValues((value, key) => {
+          .mapValues((value) => {
             const returnObj = {
               questions: value, subGroupChoicesGiven:
                 _.uniq(value.reduce((acc, val) => { acc = acc.concat(val.attribute); return acc; }, [])),
@@ -418,37 +415,13 @@ export class OfferSolutioningComponent implements OnInit {
           'type': 'Solutioning Action',
         };
 
-        this.offersolutioningService.notificationPost(notificationPayload).subscribe(result => {
-          this.offersolutioningService.actionPost(actionPayload).subscribe(res => {
+        this.offersolutioningService.notificationPost(notificationPayload).subscribe(() => {
+          this.offersolutioningService.actionPost(actionPayload).subscribe(() => {
             this.offersolutioningService.updateOfferFlag(this.offerId, 'solutioningActionNotification', true).subscribe();
           });
         });
       }
     });
-  }
-
-  private createOfferSolutioningFormTemplate() {
-
-    const osForm: any = {};
-
-    for (const osGroup of Object.keys(this.groupedQuestionsAndAnswers)) {
-      osForm[osGroup] = new FormArray([]);
-      for (const group of Object.keys(this.groupedQuestionsAndAnswers[osGroup])) {
-        osForm[osGroup][group] = new FormArray([]);
-        for (const subGroup of Object.keys(this.groupedQuestionsAndAnswers[osGroup][group])) {
-          osForm[osGroup][group][subGroup] = new FormArray([]);
-          for (const question of Object.keys(this.groupedQuestionsAndAnswers[osGroup][group][subGroup]['questions'])) {
-            osForm[osGroup][group][subGroup][question] = new FormGroup({
-              questionFreeText: new FormControl(' ', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
-              questionRadioButton: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
-              questionDropdown: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
-              questionDatePicker: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
-            });
-          }
-        }
-      }
-    }
-    return osForm;
   }
 
   // -----------------------------------------------------------------------------------------------------------------------------
@@ -480,7 +453,7 @@ export class OfferSolutioningComponent implements OnInit {
     this.offersolutioningService.saveOfferSolutionAnswers(this.offerId, offerSolutioningAnswers).subscribe();
 
     // Update Offer Details
-    this.offersolutioningService.updateOfferDetails(nextStepPostData).subscribe(res => {
+    this.offersolutioningService.updateOfferDetails(nextStepPostData).subscribe(() => {
 
       const solutioningProceedPayload = {
         'offerId': this.offerId,
@@ -501,7 +474,7 @@ export class OfferSolutioningComponent implements OnInit {
 
       if (offerSolutioningSelected) {
         this.mandatoryQuestions = true;
-        this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(result => {
+        this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(() => {
           if (JSON.parse(routeTo) === true) {
             this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
           }
@@ -520,9 +493,9 @@ export class OfferSolutioningComponent implements OnInit {
   private populateSolutioningDetails(questionAnswer: any[], nextStepPostData: {}) {
 
     Object.entries(this.groupedQuestionsAndAnswers)
-      .forEach(([osGroupKey, osGroupValue]) => {
+      .forEach(([osGroupKey]) => {
         Object.entries(this.groupedQuestionsAndAnswers[osGroupKey])
-          .forEach(([groupKey, groupValue]) => {
+          .forEach(([groupKey]) => {
             Object.entries(this.groupedQuestionsAndAnswers[osGroupKey][groupKey])
               .forEach(([subGroupKey, subGroupValue]) => {
 
@@ -537,13 +510,15 @@ export class OfferSolutioningComponent implements OnInit {
 
                 const answerList = subGroupValue['questions'].map(questions => {
 
-                  const [questionSource, attributeName] = questions['source'] ? questions['source'].split('~~') : ['', ''];
+                  const [, attributeName] = questions['source'] ? questions['source'].split('~~') : ['', ''];
+                  const answerToQuestion = questions['answerToQuestion']; // this.osForm.value[questions['questionNo']];
                   const offerQuestion = {
                     'solutioninQuestion': questions['question'],
                     'egenieAttributeName': attributeName ? attributeName : '',
                     'oSGroup': questions['oSgroup'],
                     'solutioningAnswer': questions.questionType === 'Date' ?
-                      questions['answerToQuestion'].toISOString() : questions['answerToQuestion'],
+                      answerToQuestion.toISOString() : answerToQuestion,
+                    // questions['answerToQuestion'].toISOString() : questions['answerToQuestion'], //osForm[questions['questionNo']]
                     'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false,
                     'questionType': questions.questionType
                   };

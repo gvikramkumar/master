@@ -84,10 +84,12 @@ export class ConfigurationService {
     }
 
 
-    //check if the login user is owner/co-owner to determine the edit auth
+    // Check if the login user is owner/co-owner to determine the Edit authorization
+
     editAuthValidation(currentUserRole: any): boolean {
 
-        let readOnly: boolean = false;
+        let readOnly = false;
+
         const adminRole = ['Owner', 'Co-Owner'];
         if (adminRole.some(user => currentUserRole.includes(user))) {
             readOnly = false;

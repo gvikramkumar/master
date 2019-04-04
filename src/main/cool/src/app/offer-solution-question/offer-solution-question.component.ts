@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ControlContainer, NgForm } from '@angular/forms';
 
 
 
@@ -9,6 +9,7 @@ import { FormGroup } from '@angular/forms';
   selector: 'app-offer-solution-question',
   templateUrl: './offer-solution-question.component.html',
   styleUrls: ['./offer-solution-question.component.css'],
+  viewProviders: [ { provide: ControlContainer, useExisting: NgForm }]
 })
 export class OfferSolutionQuestionComponent implements OnInit {
 

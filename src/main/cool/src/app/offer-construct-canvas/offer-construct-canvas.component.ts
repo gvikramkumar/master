@@ -1869,4 +1869,3 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
 
 }
-
