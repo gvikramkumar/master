@@ -40,12 +40,32 @@ export class OfferConstructService {
         return this.httpClient.post(this.environmentService.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL, groups, { withCredentials: true });
     }
 
+    
     toFormGroup(questions) {
-      const group: any = {};
-      questions.forEach(question => {
-          group[question.egineAttribue] = question.rules.isMandatoryOptional === "Mandatory" && question.egineAttribue !== "Item Name (PID)" ? new FormControl(question.currentValue || '', Validators.required)
-                  : new FormControl(question.currentValue || '');
+        const group: any = {};
+        questions.forEach(question => {
+            let validators: any[] = [];
+            if (question.egineAttribue !== "Item Name (PID)") {
+                if (typeof question.rules.maxCharacterLen != 'undefined'  && question.rules.maxCharacterLen) {
+                    validators.push(Validators.maxLength(question.rules.maxCharacterLen))
+                }
+                if ( typeof question.rules.isMandatoryOptional != 'undefined' && question.rules.isMandatoryOptional === "Mandatory") {
+                    validators.push(Validators.required)
+                }
+                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
+                    validators.push(Validators.pattern("^[0-9]*$"))
+                }
+                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "camel") {
+                    validators.push(Validators.pattern("^((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$"))
+                }
+                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
+                    validators.push(Validators.pattern("^[0-9]*\.[0-9][0-9]$"))
+                }
+                
+            }
+            group[question.egineAttribue] =  new FormControl(question.rules.defaultSel || '', validators);
+            
         });
-      return new FormGroup(group);
+        return new FormGroup(group);
     }
 }
