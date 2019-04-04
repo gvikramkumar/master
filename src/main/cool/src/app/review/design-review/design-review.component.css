@@ -294,6 +294,18 @@
     padding: 0;
     overflow: hidden;
   }
+
+  .reviewed-comments {
+    display: inline-block;
+    line-height: 1;
+    margin-left: 2em;
+    padding-left: 1em;
+    border-left: solid 1px #c3c3c3;
+    float: right;
+    min-width: 150px;
+    padding-top: 2px;
+    color: #005073;
+  }
   
   span.total {
     position: absolute;
@@ -304,6 +316,10 @@
     font-family: "CiscoSans", "Arial", sans-serif;
     font-size: .55em;
     line-height: 1.8em;
+  }
+  
+  .not-reviewed {
+    text-align: center;
   }
   
   
