@@ -5,7 +5,7 @@
       <!-- Input -->
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Free Text'">
        <input [name]="question.egineAttribue" [id]="question.egineAttribue"
-         *ngIf='question.egineAttribue === "Item Name (PID)"' [attr.disabled]='true' class="form-control">
+         *ngIf='question.egineAttribue === "Item Name (PID)"' [value]="headerName" [attr.disabled]='true' class="form-control">
        <input [name]="question.egineAttribue" [id]="question.egineAttribue" [formControlName]="question.egineAttribue"
          *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
         <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
@@ -13,7 +13,7 @@
         *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)  " tabindex="-1">
            <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
        </div>
-       
+
      </div>
 
       <!-- Drop Down -->
