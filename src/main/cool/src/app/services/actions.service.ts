@@ -14,10 +14,14 @@ export class ActionsService {
   constructor(private _http: HttpClient, private userService: UserService, private environmentService: EnvironmentService) { }
 
   getActionsTracker(): Observable<any> {
-    const url = this.environmentService.REST_API_ACTIONS_TRACKER_URL + this.userService.getUserId() + '/true';
+    const url = this.environmentService.REST_API_ACTIONS_TRACKER_URL + this.userService.getUserId();
     return this._http.get(url, { withCredentials: true });
   }
 
+  getActionDetails(taskId): Observable<any> {
+    const url = `${this.environmentService.REST_API_ACTIONS_TRACKER_DETAILS_URL}/${taskId}`;
+    return this._http.get(url, { withCredentials: true });
+  }
   getMilestones(caseId): Observable<any> {
     const url = `${this.environmentService.REST_API_RETRIEVE_MILESTONES_URL}/${caseId}/false`;
     return this._http.get(url, { withCredentials: true });
@@ -76,7 +80,7 @@ export class ActionsService {
   }
 
   postForNewAction(offerId, caseId, createActionPayload) {
-    const url = `${this.environmentService.REST_API_EXIT_CRITERIA_REQUEST_ACTION_AUTO_CREATION_URL}${offerId}/${caseId}`;
+    const url = `${this.environmentService.REST_API_CREATE_STRATEGY_REVIEW_TASKS}${offerId}/${caseId}`;
     return this._http.post(url, createActionPayload);
   }
 
