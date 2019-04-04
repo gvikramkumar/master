@@ -10,19 +10,41 @@
   <div *ngIf="question['validUser']">
 
     <!-- Free Text -->
-    
+
     <div *ngIf="question['questionType']==='Free Text'">
       <div class="form-group" [class.has-error]="freeText.invalid" [class.has-success]="freeText.valid">
 
         <textarea class="textarea" name="{{question['questionNo']}}" id="question['questionNo']" #freeText="ngModel"
           [value]="question['answer']" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
-          rows="3" maxlength="question.rules['maxCharacterLen']"
+          rows="3" maxlength="{{question['rules']['maxCharacterLen']}}"
           required="question['rules']['isMandatoryOptional']==='Mandatory'"
           (change)="showHiddenQuestionBasedOnUserInput(freeText.value, question)"></textarea>
 
+        <span class="help-block" *ngIf="question['answerToQuestion']?.length === question['rules']['maxCharacterLen']">
+          Only {{question['rules']['maxCharacterLen']}} characters allowed
+        </span>
+
         <span class="help-block" *ngIf="freeText.invalid && (freeText.dirty || freeText.touched)">
           <span *ngIf="freeText.errors.required">Valid input is required</span>
-          <span *ngIf="freeText.errors.maxlength">Valid input exceeds max characters allowed</span>
+        </span>
+
+      </div>
+    </div>
+
+    <!-- Currency Text -->
+
+    <div *ngIf="question['questionType']==='Currency Text'">
+      <div class="form-group" [class.has-error]="currencyText.invalid" [class.has-success]="currencyText.valid">
+
+        $ <input type="number" class="text" name="{{question['questionNo']}}" id="question['questionNo']"
+          #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
+          [disabled]="question['hideQuestion']" rows="3"
+          required="question['rules']['isMandatoryOptional']==='Mandatory'"
+          (change)="showHiddenQuestionBasedOnUserInput(currencyText.value, question)"
+          (blur)="transformAmount(currencyText.value, question)" />
+
+        <span class="help-block" *ngIf="currencyText.invalid && (currencyText.dirty || currencyText.touched)">
+          <span *ngIf="currencyText.errors.required">Valid input is required</span>
         </span>
 
       </div>

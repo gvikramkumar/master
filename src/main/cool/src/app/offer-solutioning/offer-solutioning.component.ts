@@ -42,7 +42,6 @@ export class OfferSolutioningComponent implements OnInit {
   stakeData;
   stakeHolderData;
 
-  mandatoryQuestions = true;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
 
@@ -222,7 +221,7 @@ export class OfferSolutioningComponent implements OnInit {
           qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
             '' : questionAnswerMap.get(qna['questionNo']);
           qna['answerToQuestion'] = qna['questionType'] === 'Date' ?
-            moment(qna['answer']).format('MM/DD/YYYY') : qna['answerToQuestion'];
+            moment(qna['answer']).format('DD/MM/YYYY') : qna['answerToQuestion'];
         }
 
         // Condtionally Hide Solutioning Question And Answers
@@ -315,7 +314,7 @@ export class OfferSolutioningComponent implements OnInit {
     // When Free Text - Restrict Length Of Characters  
     if (question.questionType === 'Free Text') {
       question.rules.maxCharacterLen = _.isEmpty(question.rules.maxCharacterLen) ?
-        150 : question.rules.maxCharacterLen;
+        150 : Number(question.rules.maxCharacterLen);
     }
 
     // Format Dropdown Display Values
@@ -472,15 +471,13 @@ export class OfferSolutioningComponent implements OnInit {
         });
       });
 
-      if (offerSolutioningSelected) {
-        this.mandatoryQuestions = true;
+      if (this.osForm.valid) {
         this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(() => {
           if (JSON.parse(routeTo) === true) {
             this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
           }
         });
       } else {
-        this.mandatoryQuestions = false;
         if (JSON.parse(routeTo) === true) {
           this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
         }
