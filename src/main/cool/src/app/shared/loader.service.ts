@@ -7,7 +7,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class LoaderService {
 
-  private _loading: boolean = false;
+  private _loading = false;
   loadingStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._loading);
 
   get loading():boolean {
