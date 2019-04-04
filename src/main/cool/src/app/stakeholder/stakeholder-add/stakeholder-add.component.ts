@@ -294,7 +294,6 @@ export class StakeholderAddComponent implements OnInit {
 
             const defaultStakeHolderMap = defaultStakeholders.map(user =>
               this.formatDefaultUserAsStakeholder(user));
-            // defaultStakeHolderMap.push(owner);
 
             const newlyAddedStakeHolderMap = this.selectedStakeHolders.map(user =>
               this.formatUserAsStakeholder(user, false));

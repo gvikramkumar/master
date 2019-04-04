@@ -4,12 +4,11 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { FormGroup, ControlContainer, NgForm } from '@angular/forms';
 
 
-
 @Component({
   selector: 'app-offer-solution-question',
   templateUrl: './offer-solution-question.component.html',
   styleUrls: ['./offer-solution-question.component.css'],
-  viewProviders: [ { provide: ControlContainer, useExisting: NgForm }]
+  viewProviders: [{ provide: ControlContainer, useExisting: NgForm }]
 })
 export class OfferSolutionQuestionComponent implements OnInit {
 
@@ -52,7 +51,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
         const osGroup = childQuestion['oSgroup'];
         const subGroup = childQuestion['subGroup'];
 
-      const childQuestionsGroup = this.groupData[osGroup][group][subGroup]['questions'] as Array<any>;
+        const childQuestionsGroup = this.groupData[osGroup][group][subGroup]['questions'] as Array<any>;
         const childIndexGroupData = childQuestionsGroup.findIndex(cqa => cqa.questionNo === childQuestionNumber);
         this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
 
