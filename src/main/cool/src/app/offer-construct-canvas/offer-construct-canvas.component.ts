@@ -1600,6 +1600,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   saveOfferConstructChanges() {
 
+    //save  loader
+    this.loaderService.startLoading();
+
     this.downloadEnable = true;
     this.offerConstructItems = [... this.offerConstructItems];
 
@@ -1636,7 +1639,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           // id.eGenieExistingPid = cd.eGenieFlag;
           // cd.itemDetails.push(id);
           cd.itemDetails = node.data.itemDetails;
-
+          cd.itemDetails['eGenieFlag'] = cd.eGenieFlag;
+          cd.itemDetails['attributeName'] = cd.eGenieFlag;
+          cd.itemDetails['eGenieExistingPid'] = cd.eGenieFlag;
         } else {
           let id: ItemDetail;
           // for (const key in node.data.itemDetails) {
@@ -1648,6 +1653,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           //   cd.itemDetails.push(id);
           // }
           cd.itemDetails = node.data.itemDetails;
+          cd.itemDetails['eGenieFlag'] = cd.eGenieFlag;
+          cd.itemDetails['attributeName'] = cd.eGenieFlag;
+          cd.itemDetails['eGenieExistingPid'] = cd.eGenieFlag;
         }
         cds.constructDetails.push(cd);
       }
@@ -1677,6 +1685,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               // id.eGenieExistingPid = cd.eGenieFlag;
               // cd.itemDetails.push(id);
               cd.itemDetails = child.data.itemDetails;
+              cd.itemDetails['eGenieFlag'] = cd.eGenieFlag;
+              cd.itemDetails['attributeName'] = cd.eGenieFlag;
+              cd.itemDetails['eGenieExistingPid'] = cd.eGenieFlag;
 
             } else {
 
@@ -1690,6 +1701,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               //   cd.itemDetails.push(id);
               // }
               cd.itemDetails = child.data.itemDetails;
+              cd.itemDetails['eGenieFlag'] = cd.eGenieFlag;
+              cd.itemDetails['attributeName'] = cd.eGenieFlag;
+              cd.itemDetails['eGenieExistingPid'] = cd.eGenieFlag;
             }
             cds.constructDetails.push(cd);
           } else {
@@ -1721,14 +1735,19 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                 }
                 if (gchild.data.itemDetails !== undefined) {
                   let id: ItemDetail;
-                  for (const key in gchild.data.itemDetails) {
-                    id = new ItemDetail();
-                    id.attributeName = key;
-                    id.attributeValue = this.convertToArray(gchild.data.itemDetails[key]);
-                    id.eGenieFlag = cd.eGenieFlag;
-                    id.eGenieExistingPid = cd.eGenieFlag;
-                    cd.itemDetails.push(id);
-                  }
+                  cd.itemDetails = gchild.data.itemDetails;
+                  cd.itemDetails['eGenieFlag'] = cd.eGenieFlag;
+                  cd.itemDetails['attributeName'] = cd.eGenieFlag;
+                  cd.itemDetails['eGenieExistingPid'] = cd.eGenieFlag;
+
+                  // for (const key in gchild.data.itemDetails) {
+                  //   id = new ItemDetail();
+                  //   id.attributeName = key;
+                  //   id.attributeValue = this.convertToArray(gchild.data.itemDetails[key]);
+                  //   id.eGenieFlag = cd.eGenieFlag;
+                  //   id.eGenieExistingPid = cd.eGenieFlag;
+                  //   cd.itemDetails.push(id);
+                  // }
                 }
                 cds.constructDetails.push(cd);
               });
@@ -1739,12 +1758,12 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     });
 
     console.log("cds", cds);
-
-
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(data => {
+      this.loaderService.stopLoading();
     },
       (error) => {
         console.log(error);
+        this.loaderService.stopLoading();
       });
   }
 
