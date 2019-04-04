@@ -334,15 +334,27 @@
   }
 
   .GREEN {
-    color: green;
+    background-color: #6EBE4A;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    border-radius: 15px;
    }
 
   .YELLOW {
-    color: yellow;
+    background-color: #FBAB18;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    border-radius: 15px;
    }
 
-   .RED {
-    color: red;
+  .RED {
+    background-color: #E2231A;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    border-radius: 15px;
   }
   .icon-comment{
     color:#017CAD;
