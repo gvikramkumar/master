@@ -105,7 +105,7 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
         }
       }
 
-       let prop = this.configurationService.startupData.appRoleList
+       let prop = this.configurationService.startupData.appRoleList;
         if (prop.includes('Co-Owner') || prop.includes('Owner')) {
           let validUser = this.configurationService.startupData.userId
             canRequestUsers.push(validUser);
@@ -132,6 +132,7 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
   }
 
   requestForApproval() {
+    this.requestApprovalAvailable = false;
     const payload = {};
     payload['offerName'] = this.offerBuilderdata['offerName'];
     payload['owner'] = this.offerBuilderdata['offerOwner'];
@@ -147,7 +148,6 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
       .subscribe(response => {
         this.messageService.sendMessage('Design Review');
         this.exitCriteriaValidationService.requestApprovalButtonDisable(this.currentOfferId).subscribe(resData => {
-          this.requestApprovalAvailable = false;
         });
       });
     });

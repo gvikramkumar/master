@@ -449,15 +449,20 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const actionDescription = this.descriptionValue;
 
     this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
+      this.actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription);
+    }, (error) => {
+      console.log(error);
+      this.actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription);
+    });
+    this.createActionForm.reset();
+  }
+
+  actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription) {
       this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
         this.closeForm();
         this.getStrategyReviewInfo();
         this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
       });
-    });
-
-    this.createActionForm.reset();
-
   }
 
   createActionApprove() {
@@ -465,7 +470,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const taskName = 'Action';
     const taskId = this.currentTaskId;
     const userId = this.userService.getUserId();
-    const status = ''; //decide what is to be added
+    const status = ''; // decide what is to be added
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,
