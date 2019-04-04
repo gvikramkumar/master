@@ -606,8 +606,7 @@
                   <div class="timeline__item" *ngIf="offerOverviewDetailsList.plan[4]?.status != null">
                     <div
                       [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Completed')?'timeline__icon timeline--success':'timeline__icon timeline--warning'">
-                      <span
-                        [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Completed')?'icon-check':'icon-warning'"></span>
+                      <span [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Completed')?'icon-check':'icon-warning'"></span>
                     </div>
                     <div class="timeline__content">
                       <div class="text-bold">
@@ -615,7 +614,37 @@
                           [ngClass]="(offerOverviewDetailsList.plan[4].status == 'Completed')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.plan[4].subMilestone}}
                       </div>
-                      <div [hidden]="offerOverviewDetailsList.plan[4].status != 'Completed'">
+                      <div>
+                        <div class="offer-header card base-margin-top">
+                          <div class="responsive-table">
+                            <table class="table table--nostripes table--highlight table--hover table--selectable">
+                              <thead>
+                                <tr>
+                                  <th class="sortable">Function </th>
+                                  <th class="sortable">Approval status </th>
+                                  <th class="sortable">Reviewed On </th>
+                                  <th class="sortable">Reviewed By </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let designReviewData of designReviewList">
+                                  <td><span class="icon-check-outline icon-eye-closed text-darkgray"
+                                      *ngIf="designReviewData.status && designReviewData.status.toLowerCase() == 'not reviewed'"></span>
+                                    <span class="icon-warning-outline text-warning"
+                                      *ngIf="designReviewData.status && designReviewData.status.toLowerCase() == 'conditionally approved'"></span>
+                                    <span class="icon-error-outline text-danger"
+                                      *ngIf="designReviewData.status && designReviewData.status.toLowerCase() == 'not approved'"></span>
+                                    <span class="icon-check-outline text-success"
+                                      *ngIf="designReviewData.status && designReviewData.status.toLowerCase() == 'approved'"></span>
+                                    {{ designReviewData.function }}</td>
+                                  <td>{{ designReviewData.status }}</td>
+                                  <td>{{ designReviewData.reviewedOn | date:'dd-MMM-yyyy' }}</td>
+                                  <td>{{ designReviewData.reviewedBy }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

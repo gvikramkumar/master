@@ -418,15 +418,20 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     const actionDescription = this.descriptionValue;
 
     this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
-      this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
-        this.closeForm();
-        this.getDesignReviewInfo();
-        this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
-      });
+      this.actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription);
+    }, (error) => {
+      console.log(error);
+      this.actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription);
     });
-
     this.createActionForm.reset();
+  }
 
+  actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription) {
+    this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
+      this.closeForm();
+      this.getDesignReviewInfo();
+      this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
+    });
   }
 
   createActionApprove() {
@@ -434,7 +439,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     const taskName = 'Action';
     const taskId = this.currentTaskId;
     const userId = this.userService.getUserId();
-    const status = ''; //decide what is to be sent
+    const status = ''; // decide what is to be sent
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,
