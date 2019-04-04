@@ -461,16 +461,8 @@ export class OfferSolutioningComponent implements OnInit {
         'taskId': ''
       };
 
-      // Need to give answer for every question from offer solutioning to enable request approval button.
-      let offerSolutioningSelected = true;
-      nextStepPostData['solutioningDetails'].forEach(element => {
-        element.Details.forEach(ele => {
-          if (ele.mandatory && _.isEmpty(JSON.stringify(ele.solutioningAnswer))) {
-            offerSolutioningSelected = false;
-          }
-        });
-      });
 
+      // Proceed To Offer Components
       if (this.osForm.valid) {
         this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(() => {
           if (JSON.parse(routeTo) === true) {
