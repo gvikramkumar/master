@@ -61,9 +61,7 @@
   word-break: break-word !important;
 }
 
-.icon-info-outline:before {
-  content: "";
-}
+
 
 .cui ul.tabs .tab__heading, .cui .nav-tabs .tab__heading {
   display: block;
