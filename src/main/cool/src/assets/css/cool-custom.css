@@ -69,6 +69,7 @@
 .cui .header-toolbar .avatar {
   margin-right: 30px;
   line-height: 1;
+  display: inline-block;
 }
 
 .cui .avatar span.role.userIdSpacing {
@@ -278,6 +279,7 @@
   padding: 10px;
   display: block;
   border-radius: 2px;
+  min-height: initial;
 }
 
 .cool.cui .card.card--raised,
@@ -624,6 +626,43 @@ th.ui-sortable-column.ng-star-inserted {
 }
 
 /* Add All Offer Details CUstom Data Table  */
+.cui.cool .add-details-dialog .ui-accordion .ui-accordion-header.ui-state-active {
+  background: #fff;
+}
+.cool.cui .add-details-dialog ul.tabs {
+  font-size: initial;
+}
+.cool.cui .add-details-dialog button {
+  border-radius: 6px;
+}
+.cool.cui .icon-export--cool {
+  display:inline-block;
+  height: 1em;
+  width: 1em;
+  background: no-repeat center url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAxNiAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTUuMDAwMDIgOC44TDYuMjAwMDIgMTBMMTIuOCAzLjRMMTUuNCA2TDE1LjQgMEw5LjQwMDAyIDUuMjQ1MzdlLTA3TDExLjYgMi4yTDUuMDAwMDIgOC44WiIgZmlsbD0iIzU4NTg1QiIvPgo8cGF0aCBkPSJNMTUgMTVIMFYwSDhWMkgyVjEzSDEzVjdIMTVWMTVaIiBmaWxsPSIjNTg1ODVCIi8+Cjwvc3ZnPgo=);
+  background-size: cover;
+}
+.cool.cui .form-group__text.search-icon p-autocomplete:before {
+  display: inline-block;
+  content: "";
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 10px;
+  z-index: 9;
+  top: -1px;
+  font-family: "cui-font";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  text-decoration: inherit;
+  text-transform: none;
+  text-rendering: optimizeLegibility;
+  vertical-align: middle;
+  text-indent: 0.5px;
+  -webkit-font-smoothing: antialiased;
+  color: #049fd9
+}
 .cool.cui .section-label {
   color:white;
   background:#017CAD;
@@ -640,12 +679,15 @@ th.ui-sortable-column.ng-star-inserted {
   max-width: 310px;
 }
 .cool.cui .view-item-details .detail-labels tbody {
-  max-width: 310px;
+  max-width: 260px;
   display: block;
 }
 .cool.cui .view-item-details tbody tr {
   width: 100%;
   display: block;
+}
+.cool.cui .view-item-details tbody th {
+  background: transparent;
 }
 .cool.cui .view-item-details tbody td {
   width: 100%;
@@ -1238,6 +1280,10 @@ span[class*="display-"] {
 
 .cool.cui .one-qtr-width {
   width: 25%;
+}
+
+.cool.cui .ui-paginator .ui-paginator-page.ui-state-active {
+  display: inline-block;
 }
 
 /* Offer Solutioning */
