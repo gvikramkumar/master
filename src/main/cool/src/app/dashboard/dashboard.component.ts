@@ -290,12 +290,19 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.postComments(createCommentPayload).subscribe((data) => {
       this.dashboardService.postActionForNapprove(createActionPayload).subscribe(response => {
-        overlaypanel.hide();
-        this.getMyActionsAndNotifications();
-        this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
+        this.actionComment(overlaypanel, assignee, offerId, actionTitle, actionDescription);
+      }, (error) => {
+        console.log(error);
+        this.actionComment(overlaypanel, assignee, offerId, actionTitle, actionDescription);
       });
     });
     this.createActionForm.reset();
+  }
+
+  actionComment(overlaypanel, assignee, offerId, actionTitle, actionDescription) {
+    overlaypanel.hide();
+    this.getMyActionsAndNotifications();
+    this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
   }
 
   // Modified create approve function to add comments as like in Provide Deatils Section

@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { OfferCharacteristics } from '../models/OfferCharacteristics';
 import { StrategyReviewService } from '../services/strategy-review.service';
 import { MonetizationModelService } from '../services/monetization-model.service';
+import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class OfferDetailViewComponent implements OnInit {
   allignedStatus: string;
 
   strategyReviewList;
+  designReviewList;
   offerOverviewDetailsList;
   offerOwnerCount: any = 1;
   coOwnerTotalCount: any = 0;
@@ -54,6 +56,7 @@ export class OfferDetailViewComponent implements OnInit {
     private _route: Router,
     private offerDetailViewService: OfferDetailViewService,
     private strategyReviewService: StrategyReviewService,
+    private exitCriteriaValidationService: ExitCriteriaValidationService,
     private _location: Location) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
@@ -67,12 +70,19 @@ export class OfferDetailViewComponent implements OnInit {
   ngOnInit() {
     this.getOfferOverviewDetails();
     this.getStrategyReviewInfo();
+    this.getDesignReviewInfo();
     // this.getofferDimensions();
   }
 
   getStrategyReviewInfo() {
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe(data => {
       this.strategyReviewList = data;
+    });
+  }
+
+  getDesignReviewInfo() {
+    this.exitCriteriaValidationService.getDesignReview(this.caseId).subscribe(data => {
+      this.designReviewList = data;
     });
   }
 
