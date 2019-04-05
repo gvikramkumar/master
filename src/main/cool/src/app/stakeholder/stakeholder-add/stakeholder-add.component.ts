@@ -244,13 +244,13 @@ export class StakeholderAddComponent implements OnInit {
     };
   }
 
-  private compareAndAddNewStakeHolders(newStakeHolderList: User[], existingStakeHolderList: {}): {} {
+  private compareAndAddNewStakeHolders(newStakeHolderList: User[], existingStakeHolderList: {}, defaultStakeHolder: boolean): {} {
 
     newStakeHolderList.reduce((stakeHolderAccumulator, currentStakeholder) => {
 
       const stakeholder = {
         ...currentStakeholder,
-        stakeholderDefaults: false
+        stakeholderDefaults: defaultStakeHolder
       };
 
       const stakeholderFunctionRole = currentStakeholder['userMappings'][0]['functionalRole'];
@@ -294,13 +294,12 @@ export class StakeholderAddComponent implements OnInit {
 
             const defaultStakeHolderMap = defaultStakeholders.map(user =>
               this.formatDefaultUserAsStakeholder(user));
-            // defaultStakeHolderMap.push(owner);
 
             const newlyAddedStakeHolderMap = this.selectedStakeHolders.map(user =>
               this.formatUserAsStakeholder(user, false));
 
-            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(defaultStakeHolderMap, this.stakeHolderMapInfo);
-            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(newlyAddedStakeHolderMap, this.stakeHolderMapInfo);
+            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(defaultStakeHolderMap, this.stakeHolderMapInfo, true);
+            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(newlyAddedStakeHolderMap, this.stakeHolderMapInfo, false);
 
             this.updatedStakeHolderMapInfo.emit(this.stakeHolderMapInfo);
             this.stakeHolderListInfo = this.formatStakeHolderPojoToUpdateOffer_1(this.stakeHolderMapInfo);
