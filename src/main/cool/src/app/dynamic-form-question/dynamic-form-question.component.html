@@ -7,7 +7,7 @@
        <input [name]="question.egineAttribue" [id]="question.egineAttribue"
          *ngIf='question.egineAttribue === "Item Name (PID)"' [value]="headerName" [attr.disabled]='true' class="form-control">
        <input [name]="question.egineAttribue" [id]="question.egineAttribue" [formControlName]="question.egineAttribue"
-         *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
+         *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="questionForm.controls[question.egineAttribue].value">
         <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
         <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
@@ -20,8 +20,8 @@
       <!-- Drop Down -->
       <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Drop-down'">
         <select [id]="question.egineAttribue" [name]="question.egineAttribue" class="form-control"
-          [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
-          <option *ngFor="let option of question.values" [value]="questionForm.controls[question.egineAttribue].value">{{option}}</option>
+          [(ngModel)]="questionForm.controls[question.egineAttribue].value" [formControlName]="question.egineAttribue">
+          <option *ngFor="let option of question.values" [value]="option">{{option}}</option>
         </select>
         <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
         <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
@@ -45,7 +45,7 @@
         <div>
           <label class="radio" *ngFor="let rad of question.values">
             <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"
-              class="form-control" [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
+              class="form-control" [value]="rad" [(ngModel)]="questionForm.controls[question.egineAttribue].value" [formControlName]="question.egineAttribue">
             <span class="radio__input"></span>
             <span class="radio__label hidden-xs">{{rad}}</span>
           </label>
@@ -61,7 +61,7 @@
         <div>
           <label class="radio" *ngFor="let rad of question.values">
             <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"
-              class="form-control" [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
+              class="form-control" [value]="rad" [(ngModel)]="questionForm.controls[question.egineAttribue].value" [formControlName]="question.egineAttribue">
             <span class="radio__input"></span>
             <span class="radio__label hidden-xs">{{rad}}</span>
           </label>
