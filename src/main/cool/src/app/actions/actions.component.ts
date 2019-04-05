@@ -315,7 +315,10 @@ processMyActionDetailList() {
     obj.setTriggerDate(this.dateFormat(this.actionDetails.triggerDate));
     obj.setDueDate(this.dateFormat(this.actionDetails.dueDate));
     obj.setDefaultFunctione(this.actionDetails.function);
-    obj.setCompletedDate(this.dateFormat(this.actionDetails.reviewedOn));
+    if(this.actionDetails.completed == false)
+      obj.setCompletedDate('');
+    else  
+      obj.setCompletedDate(this.dateFormat(this.actionDetails.reviewedOn));
     this.actionDetailList.push(obj);
   }
 }
