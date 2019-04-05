@@ -97,7 +97,7 @@
               <div class="col-md-6">
                 <div class="form-group half-margin-bottom">
                   <div class="form-group__text select">
-                    <label for="offerName">SELECT OFFER NAME</label>
+                    <label for="offerName">OFFER NAME</label>
                     <select id="offerName" type="text" class="form-control" name="offerName"
                       [(ngModel)]="offerNameValue" (change)="onChange($event.target.value)" required ngModel
                       #offerName="ngModel">
@@ -142,7 +142,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <div class="form-group__text select">
-                    <label for="functionName">SELECT FUNCTION</label>
+                    <label for="functionName">FUNCTION</label>
                     <select id="functionName" class="form-control" name="functionName"
                       (change)="getSelectFunctionRole($event.target.value)" [(ngModel)]="functionNameValue" ngModel
                       required>
@@ -154,7 +154,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group label--floated input--icon half-margin-bottom">
-                  <label for="assigneeName">ASSIGNEE</label>
+                  <label for="assigneeName">ASSIGNED USER</label>
                   <div class="form-group__text select">
                     <select id="assigneeName" class="form-control" name="assigneeName" [(ngModel)]="assigneeValue"
                       required ngModel>
@@ -246,6 +246,11 @@
                 </span>
               </div>
             </ng-template>
+          </p-column>
+          <p-column field="completedDate" header="COMPLETE DATE" sortable="true">
+              <ng-template let-col let-actionData="rowData" pTemplate="body">
+                <span>{{actionData.completedDate}} <br /></span>
+              </ng-template>
           </p-column>
         </p-dataTable>
       </div>

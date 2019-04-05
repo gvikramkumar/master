@@ -500,14 +500,11 @@ export class OfferSolutioningComponent implements OnInit {
                 const answerList = subGroupValue['questions'].map(questions => {
 
                   const [, attributeName] = questions['source'] ? questions['source'].split('~~') : ['', ''];
-                  const answerToQuestion = questions['answerToQuestion']; // this.osForm.value[questions['questionNo']];
                   const offerQuestion = {
                     'solutioninQuestion': questions['question'],
                     'egenieAttributeName': attributeName ? attributeName : '',
                     'oSGroup': questions['oSgroup'],
-                    'solutioningAnswer': questions.questionType === 'Date' ?
-                      answerToQuestion.toISOString() : answerToQuestion,
-                    // questions['answerToQuestion'].toISOString() : questions['answerToQuestion'], //osForm[questions['questionNo']]
+                    'solutioningAnswer': questions['answerToQuestion'],
                     'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false,
                     'questionType': questions.questionType
                   };
