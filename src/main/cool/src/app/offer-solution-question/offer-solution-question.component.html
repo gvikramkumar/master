@@ -110,13 +110,18 @@
             #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
             [bsConfig]="dpConfig" [(bsValue)]="question['answerToQuestion']"
             required="question['rules']['isMandatoryOptional']==='Mandatory'"
-            (change)="showHiddenQuestionBasedOnUserInput(osDate.value, question)">
+            (change)="showHiddenQuestionBasedOnUserInput(osDate.value, question)"
+            (blur)="validateDate(osDate.value, question)">
 
           <button type="button" class="link" tabindex="-1">
             <span class="icon-month"></span>
           </button>
 
         </div>
+
+        <span class="help-block" *ngIf="inValidDate">
+           Due Date cannot be more than 180 days than Assigned Date
+        </span>
 
         <span class="help-block" *ngIf="osDate.invalid && (osDate.dirty || osDate.touched)">
           <span *ngIf="osDate.errors.required">Select valid date</span>
