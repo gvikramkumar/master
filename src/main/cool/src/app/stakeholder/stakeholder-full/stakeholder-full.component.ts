@@ -273,8 +273,8 @@ export class StakeholderFullComponent implements OnInit {
     const currentUserId = this.userService.getUserId();
     const currentUserFunctions = this.configurationService.startupData.functionalRole;
 
-    return (!stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId 
-    && (currentUserFunctions.includes(stakeholder.functionalRole)));
+    return !stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId && (currentUserFunctions.includes('BUPM')
+      || currentUserFunctions.includes(stakeholder.functionalRole));
 
   }
 
