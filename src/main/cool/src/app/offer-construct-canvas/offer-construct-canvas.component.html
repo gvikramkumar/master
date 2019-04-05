@@ -284,9 +284,10 @@
         <div class="col-md-6 search-buffer">
           <div class="form-group input--icon half-margin-bottom">
             <div class="form-group__text search-icon">
-              <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}" [(ngModel)]="itemsList"
-                [suggestions]="copyAttributeResults" (completeMethod)="searchCopyAttributes($event)" field="PID"
-                class="auto-complete-attribute" placeholder="Copy Attributes" [size]="100" [minLength]="9">
+              <p-autoComplete (click)='addItms(uniqueNodeId)' [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
+                (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
+                placeholder="Copy Attributes" [size]="100" [minLength]="9">
               </p-autoComplete>
               <button [disabled]="readOnly" type="button" class="link">
                 <span class="icon-search"></span>
@@ -314,7 +315,7 @@
       <div class="row">
         <div class="col-md-12 text-right">
           <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
-          <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
+          <button class="btn btn--primary" type="submit">Add Details</button>
         </div>
       </div>
     </form>
@@ -330,8 +331,7 @@
 
   <!-- Dialog for view details-->
   <p-dialog header="View Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
-    (onHide)="onHide()" [responsive]="true" [(visible)]="displayViewDetails"
-    [contentStyle]="{'height': '450px', 'min-width':'700px'}">
+    [responsive]="true" [(visible)]="displayViewDetails" [contentStyle]="{'height': '450px', 'min-width':'700px'}">
     <div class="divider"></div>
     <table class="table">
       <tr *ngFor="let item of viewDetails">

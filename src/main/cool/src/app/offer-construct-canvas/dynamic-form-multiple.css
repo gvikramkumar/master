@@ -12,7 +12,11 @@
 .search-icon .icon-search {
   position: absolute;
   top: 13px;
-  left: 350px;
+  left: 20px;
+}
+
+.link-style {
+  color: #58585b !important;
 }
 
 .auto-complete-attribute {
