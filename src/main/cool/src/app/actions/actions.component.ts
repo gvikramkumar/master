@@ -155,7 +155,6 @@ export class ActionsComponent implements OnInit {
     }
   }
   processMyActionsList(flag) {
-    console.log(flag);
     this.myOfferArray = [];
         this.myActionsList = [];
         this.actionCount = {
@@ -167,10 +166,7 @@ export class ActionsComponent implements OnInit {
       this.actionCount.pendingActionCount = this.allActions.pendingTasksCount;
       this.actionCount.needImmediateActionCount = this.allActions.immediateTasksCount;
       if (flag == true) {
-        console.log('offer array '+this.myOfferArray);
-        console.log('my actions '+this.myActionsList);
       this.allActions['actionList'].forEach(element => {
-          console.log('Element tracker contains '+element.completed);
           if (element.tracker == false) {
             const obj = new ActionsAndNotifcations();
             obj.setOfferId(element.offerId);
@@ -308,7 +304,6 @@ showActionDetails(taskId) {
       this.actionDetailList = [];
       this.processMyActionDetailList();
     });
-  console.log('show action details called')
 }
 
 processMyActionDetailList() {
@@ -320,8 +315,8 @@ processMyActionDetailList() {
     obj.setTriggerDate(this.dateFormat(this.actionDetails.triggerDate));
     obj.setDueDate(this.dateFormat(this.actionDetails.dueDate));
     obj.setDefaultFunctione(this.actionDetails.function);
+    obj.setCompletedDate(this.dateFormat(this.actionDetails.reviewedOn));
     this.actionDetailList.push(obj);
-    console.log('Action detail list contains ' + JSON.stringify(this.actionDetailList));
   }
 }
 
