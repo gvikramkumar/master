@@ -677,6 +677,13 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .view-item-details .detail-labels {
   border-right: none;
   max-width: 310px;
+  -moz-box-shadow: 3px 0 4px rgba(0,0,0,.25);
+  -webkit-box-shadow: 3px 0 4px rgba(0,0,0,.25);
+  box-shadow: 3px 0 4px rgba(0,0,0,.25);
+  background: rgba(0,0,0,.05);
+  border-right: none;
+  position: relative;
+  z-index: 9;
 }
 .cool.cui .view-item-details .detail-labels tbody {
   max-width: 260px;
@@ -783,6 +790,9 @@ th.ui-sortable-column.ng-star-inserted {
   right: 6px;
   top: 0;
   padding: 0 .25em;
+}
+.cool.cui .nav-tabs {
+  box-shadow: none;
 }
 
 /* Estimated Lead Time Ribbon */
