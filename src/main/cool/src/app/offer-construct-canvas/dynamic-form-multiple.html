@@ -4,7 +4,7 @@
   <div class="divider" style="margin-top: -1.5%"></div>
   <div class="line-items-nav">
     <div class="row">
-      <div class="col-sm-12 col-md-9">
+      <div class="col-sm-12">
         <ul id="tabsv4" class="tabs tabs--tall">
           <li id="tabsv4-1" class="tab">
             <a (click)='majorSection()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true,'bBtm':onLoad}">Add Major Line
@@ -14,17 +14,15 @@
             <a (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
               Details</a>
           </li>
+
+          <div class="pull-right flex-center-vertical">
+              <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
+             <button class="display-none"></button>
+             <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
+             <button class="btn btn--primary" (click)='saveForm()'>Save</button>
+             </div>
+
         </ul>
-      </div>
-      <div class="col-sm-12 col-md-3 text-right">
-        <div class="flex-center-vertical">
-          <span href="#" class="base-margin-right link-style"><span
-              class="icon-download-contain half-margin-right"></span> Export as
-            .XLS</span>
-          <button class="display-none"></button>
-          <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
-          <button class="btn btn--primary" (click)='saveForm()'>Save</button>
-        </div>
       </div>
     </div>
   </div>
@@ -38,36 +36,39 @@
               {{item.key}}
             </p-header>
             <div class="row">
-              <div class="col-md-6">
-              </div>
-              <div class="col-md-6 search-buffer">
+              <div class="search-buffer">
                 <div class="form-group input--icon half-margin-bottom">
                   <div class="form-group__text search-icon">
                     <div class="row">
-                      <div class="flex-center-vertical">
-                        <div class="col-md-6">
-                          <p-autoComplete (click)='addItms(item.key)' [ngModelOptions]="{standalone: true}"
-                            [(ngModel)]="itemsList[selectedTab][item.key]" [suggestions]="copyAttributeResults"
-                            (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
-                            placeholder="Copy Attributes" [size]="100" [minLength]="9" [name]="item.key"
-                            [id]="item.key">
-                          </p-autoComplete>
-                          <button [disabled]="readOnly" type="button" class="link copy-attributes-icon">
-                            <span class="icon-search"></span>
-                          </button>
+
+                        <div class="col-md-12">
+                          <p>Product ID’s and item details</p>
+                          <div class="row">
+                              <div class="flex-center-vertical">
+                              <div class="col-md-6">
+                                  <p-autoComplete (click)='addItms(item.key)' [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="itemsList[selectedTab][item.key]" [suggestions]="copyAttributeResults"
+                                    (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
+                                    placeholder="Copy Attributes" [size]="100" [minLength]="9" [name]="item.key" [id]="item.key">
+                                  </p-autoComplete>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <button type="button" class="link" (click)="displayViewDetails()">
+                                        View
+                                      </button><div class="text-indigo v-separator"></div>
+                                      <button type="button" class="link" (click)="patchvalueToSelected(item.key)">
+                                        Apply to Selected
+                                      </button><div class="text-indigo v-separator"></div>
+                                      <button type="button" class="link" (click)="patchToALL(item.key)">
+                                        Apply to All
+                                      </button>
+                                    </div>
+                                    </div>
+                          </div>
+                          <p>Edit attribute values or select a Product ID below and search for a product to copy values from</p>
                         </div>
-                        <div class="col-md-6">
-                          <button type="button" class="link" (click)="displayViewDetails()">
-                            View &nbsp;&nbsp;|
-                          </button>
-                          <button type="button" class="link" (click)="patchvalueToSelected(item.key)">
-                            Apply to Selected &nbsp;&nbsp;|
-                          </button>
-                          <button type="button" class="link" (click)="patchToALL(item.key)">
-                            Apply to All
-                          </button>
-                        </div>
-                      </div>
+
+
                     </div>
                   </div>
                 </div>
@@ -274,12 +275,6 @@
             </div>
           </p-accordionTab>
         </p-accordion>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12 text-right">
-        <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
-        <button class="btn btn--primary" (click)='saveForm()'>Save</button>
       </div>
     </div>
   </div>
