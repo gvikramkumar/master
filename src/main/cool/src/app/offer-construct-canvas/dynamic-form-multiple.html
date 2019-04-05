@@ -1,6 +1,6 @@
-<p-dialog header="Add All Offer Details" closable="true" modal="true" showHeader="false" (onHide)="onHide()"
-  class="add-details-dialog" [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
-  [contentStyle]="{'min-height':'450px', 'width':'100%'}" positionTop='150' positionRight='0' positionLeft='0'>
+<p-dialog header="Add All Offer Details" (onHide)="onHide()" class="add-details-dialog"
+  [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
+  [contentStyle]="{'min-height':'450px', 'width':'100%'}">
   <div class="divider" style="margin-top: -1.5%"></div>
   <div class="line-items-nav">
     <div class="row">
@@ -18,11 +18,13 @@
       </div>
       <div class="col-sm-12 col-md-3 text-right">
         <div class="flex-center-vertical">
-           <a href="#" class="base-margin-right"><span class="icon-download-contain half-margin-right"></span> Export as .XLS</a>
+          <span href="#" class="base-margin-right link-style"><span
+              class="icon-download-contain half-margin-right"></span> Export as
+            .XLS</span>
           <button class="display-none"></button>
           <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
           <button class="btn btn--primary" (click)='saveForm()'>Save</button>
-          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -47,15 +49,19 @@
                           <p-autoComplete (click)='addItms(item.key)' [ngModelOptions]="{standalone: true}"
                             [(ngModel)]="itemsList[selectedTab][item.key]" [suggestions]="copyAttributeResults"
                             (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
-                            placeholder="Copy Attributes" [size]="100" [minLength]="9" [name]="item.key" [id]="item.key">
+                            placeholder="Copy Attributes" [size]="100" [minLength]="9" [name]="item.key"
+                            [id]="item.key">
                           </p-autoComplete>
+                          <button [disabled]="readOnly" type="button" class="link copy-attributes-icon">
+                            <span class="icon-search"></span>
+                          </button>
                         </div>
                         <div class="col-md-6">
                           <button type="button" class="link" (click)="displayViewDetails()">
-                            View
+                            View &nbsp;&nbsp;|
                           </button>
                           <button type="button" class="link" (click)="patchvalueToSelected(item.key)">
-                            Apply to Selected
+                            Apply to Selected &nbsp;&nbsp;|
                           </button>
                           <button type="button" class="link" (click)="patchToALL(item.key)">
                             Apply to All
@@ -272,7 +278,6 @@
     </div>
     <div class="row">
       <div class="col-md-12 text-right">
-        <button class="display-none"></button>
         <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
         <button class="btn btn--primary" (click)='saveForm()'>Save</button>
       </div>
