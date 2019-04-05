@@ -735,7 +735,7 @@ export class MmAssesmentComponent implements OnInit {
 
       const stakeholder = {
         ...currentStakeholder,
-        stakeholderDefaults: false
+        stakeholderDefaults: true
       };
       const stakeholderFunctionRole = currentStakeholder['userMappings'][0]['functionalRole'];
 

@@ -677,10 +677,10 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .view-item-details .detail-labels {
   border-right: none;
   max-width: 310px;
-  -moz-box-shadow: 3px 0 4px rgba(0,0,0,.25);
-  -webkit-box-shadow: 3px 0 4px rgba(0,0,0,.25);
-  box-shadow: 3px 0 4px rgba(0,0,0,.25);
-  background: rgba(0,0,0,.05);
+  -moz-box-shadow: 3px 0 4px rgba(0,0,0,.15);
+  -webkit-box-shadow: 3px 0 4px rgba(0,0,0,.15);
+  box-shadow: 3px 0 4px rgba(0,0,0,.15);
+  background: #fff;
   border-right: none;
   position: relative;
   z-index: 9;
@@ -688,6 +688,7 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .view-item-details .detail-labels tbody {
   max-width: 260px;
   display: block;
+  background: #f7f7f7;
 }
 .cool.cui .view-item-details tbody tr {
   width: 100%;

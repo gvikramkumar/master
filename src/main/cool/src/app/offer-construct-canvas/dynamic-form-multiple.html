@@ -1,13 +1,13 @@
-<p-dialog header="Review / Edit Item Details" closable="true" modal="true" showHeader="false" (onHide)="onHide()"
-  class="add-details-dialog" [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
-  [contentStyle]="{'min-height':'450px', 'width':'100%'}" positionTop='150' positionRight='0' positionLeft='0'>
-  <p class="base-margin-bottom no-margin">Review items by category. Edit attribute values below</p>
+<p-dialog header="Add All Offer Details" (onHide)="onHide()" class="add-details-dialog"
+  [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
+  [contentStyle]="{'min-height':'450px', 'width':'100%'}">
+  <div class="divider" style="margin-top: -1.5%"></div>
   <div class="line-items-nav">
     <div class="row">
       <div class="col-sm-12">
         <ul id="tabsv4" class="tabs tabs--tall">
           <li id="tabsv4-1" class="tab">
-            <a (click)='majorSection()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true}">Add Major Line
+            <a (click)='majorSection()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true,'bBtm':onLoad}">Add Major Line
               Details</a>
           </li>
           <li id="tabsv4-2" class="tab">
@@ -16,7 +16,7 @@
           </li>
 
           <div class="pull-right flex-center-vertical">
-              <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a>
+              <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
              <button class="display-none"></button>
              <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
              <button class="btn btn--primary" (click)='saveForm()'>Save</button>
@@ -24,7 +24,6 @@
 
         </ul>
       </div>
-
     </div>
   </div>
   <!-- <div class="row"> -->
@@ -86,8 +85,8 @@
                         <div class="form-group form-group--inline">
                           <label class="checkbox">
                             <input type="checkbox" />
-                            <span class="checkbox__input opacity-0"></span>
-                            <span class="checkbox__label hidden-xs">Product ID</span>
+                            <span class="checkbox__input opacity-0" *ngIf="$ChildIndex!==0" ></span>
+                            <span class="checkbox__label hidden-xs" [ngClass]="{'ml0':$ChildIndex===0}" >Product ID</span>
                           </label>
                         </div>
                       </th>
@@ -278,7 +277,6 @@
         </p-accordion>
       </div>
     </div>
-
   </div>
   <!-- </div> -->
 </p-dialog>
