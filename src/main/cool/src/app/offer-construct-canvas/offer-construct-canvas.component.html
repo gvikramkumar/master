@@ -331,8 +331,7 @@
 
   <!-- Dialog for view details-->
   <p-dialog header="View Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
-    (onHide)="onHideViewDetailsModal()" [responsive]="true" [(visible)]="displayViewDetails"
-    [contentStyle]="{'height': '450px', 'min-width':'700px'}">
+    [responsive]="true" [(visible)]="displayViewDetails" [contentStyle]="{'height': '450px', 'min-width':'700px'}">
     <div class="divider"></div>
     <table class="table">
       <tr *ngFor="let item of viewDetails">
