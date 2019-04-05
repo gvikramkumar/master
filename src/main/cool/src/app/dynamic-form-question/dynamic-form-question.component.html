@@ -33,7 +33,7 @@
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
         <label for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
         <p-multiSelect [id]="question.egineAttribue" [name]="question.egineAttribue" [options]="question.listMutiSelect"
-          optionLabel="name" [(ngModel)]="question.listCurrentValue" [formControlName]="question.egineAttribue"></p-multiSelect>
+          optionLabel="name" [(ngModel)]="questionForm.controls[question.egineAttribue].value" [formControlName]="question.egineAttribue"></p-multiSelect>
           <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
            <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
         </span>
@@ -76,7 +76,7 @@
         <div class="form-group">
           <div class="form-group__text">
             <input [name]="question.egineAttribue" [id]="question.question" class="form-control"
-              [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
+              [(ngModel)]="questionForm.controls[question.egineAttribue].value" [formControlName]="question.egineAttribue">
             <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
           </div>
         </div>
