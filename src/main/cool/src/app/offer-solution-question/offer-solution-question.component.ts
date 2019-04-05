@@ -2,14 +2,14 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { FormGroup, ControlContainer, NgForm } from '@angular/forms';
-
+import * as moment from 'moment';
 
 
 @Component({
   selector: 'app-offer-solution-question',
   templateUrl: './offer-solution-question.component.html',
   styleUrls: ['./offer-solution-question.component.css'],
-  viewProviders: [ { provide: ControlContainer, useExisting: NgForm }]
+  viewProviders: [{ provide: ControlContainer, useExisting: NgForm }]
 })
 export class OfferSolutionQuestionComponent implements OnInit {
 
@@ -20,6 +20,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
 
   caseId: string;
+  inValidDate = false;
   currentOfferId: string;
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
 
@@ -36,9 +37,34 @@ export class OfferSolutionQuestionComponent implements OnInit {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
   }
 
+  validateDate(childDate: any, question: any) {
+
+    this.inValidDate = false;
+    const group = question['group'];
+    const osGroup = question['oSgroup'];
+    const subGroup = question['subGroup'];
+    const parentIndex = this.groupData[osGroup][group][subGroup]['questions']
+      .findIndex(qna => qna.question === 'Announcement Start Date: ');
+
+    let parentDate = this.groupData[osGroup][group][subGroup]['questions'][parentIndex]['answerToQuestion'];
+    parentDate = new Date(moment(parentDate).format('YYYY-MM-DD'));
+    childDate = new Date(moment(childDate).format('YYYY-MM-DD'));
+
+    const diffInDays = Math.ceil((childDate.valueOf() - parentDate.valueOf()) / (1000 * 3600 * 24));
+
+    if (diffInDays > 180 || (parentDate > childDate)) {
+      this.inValidDate = true;
+    }
+
+  }
+
   showHiddenQuestionBasedOnUserInput(selectedValue: string, question: any) {
 
     if (selectedValue !== '') {
+
+      if (question['questionType'] === 'Date') {
+        this.validateDate(selectedValue, question);
+      }
 
       const parentQuestionNumber = question['questionNo'];
       const childIndexUnGroupData = this.unGroupData.findIndex(fqa => parentQuestionNumber === fqa.rules.referenceQ);
@@ -52,7 +78,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
         const osGroup = childQuestion['oSgroup'];
         const subGroup = childQuestion['subGroup'];
 
-      const childQuestionsGroup = this.groupData[osGroup][group][subGroup]['questions'] as Array<any>;
+        const childQuestionsGroup = this.groupData[osGroup][group][subGroup]['questions'] as Array<any>;
         const childIndexGroupData = childQuestionsGroup.findIndex(cqa => cqa.questionNo === childQuestionNumber);
         this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
 
