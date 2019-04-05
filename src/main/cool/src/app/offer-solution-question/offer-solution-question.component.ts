@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { FormGroup, ControlContainer, NgForm } from '@angular/forms';
+import * as moment from 'moment';
 
 
 @Component({
@@ -33,6 +34,18 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
   ngOnInit() {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
+  }
+
+  validateDate(childDate: string, question: any) {
+    let invalidDate:boolean = false;
+    const group = question['group'];
+    const osGroup = question['oSgroup'];
+    const subGroup = question['subGroup'];
+    const parentIndex = this.groupData[osGroup][group][subGroup]['questions'].findIndex(qna => qna.question === 'Announcement Start Date: ')
+    let parentDate:string = this.groupData[osGroup][group][subGroup]['questions'][parentIndex]['answerToQuestion']
+    moment(parentDate).format('MM/DD/YYYY');
+    if(moment(childDate).diff(parentDate) > 180) 
+       invalidDate = true;
   }
 
   showHiddenQuestionBasedOnUserInput(selectedValue: string, question: any) {
