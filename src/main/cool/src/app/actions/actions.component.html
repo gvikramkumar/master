@@ -247,6 +247,11 @@
               </div>
             </ng-template>
           </p-column>
+          <p-column field="completedDate" header="COMPLETE DATE" sortable="true">
+              <ng-template let-col let-actionData="rowData" pTemplate="body">
+                <span>{{actionData.completedDate}} <br /></span>
+              </ng-template>
+          </p-column>
         </p-dataTable>
       </div>
     </p-dialog>
