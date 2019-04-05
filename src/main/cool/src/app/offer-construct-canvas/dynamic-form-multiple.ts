@@ -83,6 +83,12 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.closeDialog();
     }
 
+    onHideViewDetailsModal() {
+        console.log("test");
+
+        //this.closeDailog(false);  //reset form info
+    }
+
     saveForm() {
         let isUdate: boolean = true;
         this.majorOfferInfo.forEach((list, index) => {
@@ -108,6 +114,7 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     closeDialog() {
         let isUdate: boolean = true;
+        this.majorSection();
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
             this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
