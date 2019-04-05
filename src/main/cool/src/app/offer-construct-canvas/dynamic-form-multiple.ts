@@ -31,6 +31,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     public detailArray: any[] = [];
     public headerName: any = '';
     test: FormGroup;
+    onLoad: boolean = false;
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService) {
@@ -39,6 +40,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.onLoad = true;
         this.offerInfo = this.offerConstructService.singleMultipleFormInfo;
         this.majorOfferInfo = this.offerInfo.major;
         this.minorOfferInfo = this.offerInfo.minor;
@@ -72,6 +74,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     minorSection() {
+        this.onLoad = false;
         this.ismajorSection = false;
         this.majorLineItemsActive = false;
         this.minorLineItemsActive = true;

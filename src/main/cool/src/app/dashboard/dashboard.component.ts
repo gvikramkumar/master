@@ -109,6 +109,8 @@ export class DashboardComponent implements OnInit {
         let notifications = [];
         if (resActionsAndNotifications && resActionsAndNotifications.actionList) {
           actions = this.processActions(resActionsAndNotifications.actionList);
+          this.actionCount.pendingActionCount = resActionsAndNotifications.pendingTasksCount;
+          this.actionCount.needImmediateActionCount = resActionsAndNotifications.immediateTasksCount;
         }
         if (resActionsAndNotifications && resActionsAndNotifications.notificationList) {
           notifications = this.processNotifications(resActionsAndNotifications.notificationList);
@@ -129,12 +131,10 @@ export class DashboardComponent implements OnInit {
   }
 
   private processActions(actions: any) {
-    this.actionCount.needImmediateActionCount = 0;
-    this.actionCount.pendingActionCount = 0;
     return actions.map(action => {
-      this.processActionCount(action);
+      //this.processActionCount(action);
       action.alertType = 'action';
-      action.title = action.actiontTitle;
+      action.title = action.actionTitle;
       action.desc = action.actionDesc;
       // action.assigneeId = action.assigneeId ? action.assigneeId.split(',').join(', ') : '';
 
