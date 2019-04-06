@@ -15,7 +15,7 @@ body.cui {
 }
 
 /* alert messages styles */
-body.cui .alert,
+/* body.cui .alert,
 body.cui .alert--info {
   background: #049fd9;
   border: 1px solid transparent;
@@ -238,7 +238,7 @@ body.cui .alert__close:hover {
 
 .cui * {
   box-sizing: border-box;
-}
+}*/
 
 .textUser,
 .textUser span {

@@ -34,8 +34,7 @@ const routes: Routes = [
   },
   {
     path: 'coolOffer',
-    component: CreateOfferCoolComponent,
-    canActivate: [BupmGuard]
+    component: CreateOfferCoolComponent
   },
   {
     path: 'coolOffer/:id/:id2',

@@ -34,10 +34,10 @@
                     (onDragEnd)="dragEnd($event)">
                     <div class="panel panel--bordered">
                       <div *ngIf="item.isMajorLineItem; else nonMajorLineItem">
-                        <span class="icon-dial icon-small"></span>{{item.categoryName}} (Major)
+                        <span class="half-margin-right icon-dial icon-small"></span>{{item.categoryName}} (Major)
                       </div>
                       <ng-template #nonMajorLineItem>
-                        <span class="icon-dial icon-small"></span>{{item.categoryName}}
+                        <span class="half-margin-right icon-dial icon-small"></span>{{item.categoryName}}
                       </ng-template>
                     </div>
                   </li>
@@ -93,16 +93,16 @@
                   </div>
                   <div class="col text-right" [class.disabled]="isDisabledView">
                     <span (click)='showDialog(); displayAddDetails=false'><a href="javascript:;"><span
-                          class="icon-add-contain"></span>
+                          class="half-margin-right icon-add-contain"></span>
                         Add All Item Detail&nbsp;&nbsp;</a></span>
                     <span class="vertical-divider" *ngIf="expandView">|</span>
                     <a *ngIf="expandView" href="javascript:;" (click)="toggleSidebar()">
-                      <span class="icon-expand icon-small" title="Expand View"></span>
+                      <span class="half-margin-right icon-expand icon-small" title="Expand View"></span>
                     </a>
                     <span class="vertical-divider" *ngIf="!expandView">|</span>
                     <a *ngIf="!expandView" (click)="addMore()">
                       <!-- <button class="btn btn--small">Add More Items</button> -->
-                      <span class="icon-collapse icon-small" title="Collapse View"></span>
+                      <span class="half-margin-right icon-collapse icon-small" title="Collapse View"></span>
                     </a>
                   </div>
                 </div>
@@ -147,7 +147,7 @@
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
-                                    class="icon-edit" *ngIf="!rowData['eginieItem && !readOnly']"></span>
+                                    class="half-margin-right icon-edit" *ngIf="!rowData['eginieItem && !readOnly']"></span>
                                   <a [id]='rowData["uniqueKey"]'
                                     *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'
                                     (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
@@ -156,11 +156,11 @@
                                 </span>
                                 <a *ngIf="!rowData['isGroupNode'] && !rowData['eginieItem']" class="pull-right"
                                   (click)="showAddDetailsDailog(rowNode)" [class.disabled]="isDisabledView"><span
-                                    class="icon-add-contain"></span> Add
+                                    class="half-margin-right icon-add-contain"></span> Add
                                   Details</a>
                                 <a *ngIf="rowData['eginieItem']" class="pull-right"
                                   (click)="showViewDetailsDailog(rowNode)" [class.disabled]="isDisabledView"><span
-                                    class="icon-add-contain"></span> View
+                                    class="half-margin-right icon-add-contain"></span> View
                                   Details</a>
                               </div>
                             </td>
@@ -176,13 +176,13 @@
                               <span class="list-price">{{rowData['listPrice']}}</span>
                               <div *ngIf="rowData['isMajorLineItem']">
                                 <a *ngIf="!readOnly" (click)="createGroup(rowNode)"><span
-                                    class="icon-folder icon-small"></span> Create a
+                                    class="half-margin-right icon-folder icon-small"></span> Create a
                                   Group</a>
                               </div>
 
                               <!-- added to copy delete node -->
                               <a *ngIf="!readOnly" (click)='deleteNode(rowNode)' class="remove"
-                                [class.disabled]="isDisabledView"><span class="icon-trash icon-small"></span>
+                                [class.disabled]="isDisabledView"><span class="half-margin-right icon-trash icon-small"></span>
                                 <small>Remove Item</small></a>
                             </td>
                           </tr>
@@ -190,7 +190,7 @@
                       </p-treeTable>
                       <div class="pane--container-empty" [hidden]="!initalRowAdded">
                         <div class="pane--message-group">
-                          <span class="cart-icon">
+                          <span class="half-margin-right cart-icon">
                             <svg width="95" height="124" viewBox="0 0 95 124" fill="none"
                               xmlns="http://www.w3.org/2000/svg">
                               <path fill-rule="evenodd" clip-rule="evenodd"
@@ -230,8 +230,6 @@
                                 d="M54.5 3C54.5 1.61929 53.3807 0.500001 52 0.5C50.6193 0.499999 49.5 1.61929 49.5 3L54.5 3ZM50.2322 43.9921C51.2085 44.9685 52.7914 44.9685 53.7677 43.9921L69.6777 28.0822C70.654 27.1059 70.654 25.523 69.6777 24.5467C68.7014 23.5704 67.1184 23.5704 66.1421 24.5467L52 38.6888L37.8579 24.5467C36.8815 23.5704 35.2986 23.5704 34.3223 24.5467C33.346 25.523 33.346 27.1059 34.3223 28.0822L50.2322 43.9921ZM49.5 3L49.5 42.2244L54.5 42.2244L54.5 3L49.5 3Z"
                                 fill="#E0E0E0" />
                             </svg>
-
-
                           </span>
                           <h4 class="subheading">No SKU Items have been added</h4>
                           <p>Start adding the products by searching or drag and drop from a category</p>
@@ -315,7 +313,7 @@
       <div class="row">
         <div class="col-md-12 text-right">
           <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
-          <button class="btn btn--primary" type="submit">Add Details</button>
+           <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
         </div>
       </div>
     </form>

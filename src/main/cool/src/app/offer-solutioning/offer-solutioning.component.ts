@@ -42,6 +42,7 @@ export class OfferSolutioningComponent implements OnInit {
   stakeData;
   stakeHolderData;
 
+  mandatoryQuestions: boolean;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
 
@@ -461,9 +462,19 @@ export class OfferSolutioningComponent implements OnInit {
         'taskId': ''
       };
 
+      // Need to give answer for every question from offer solutioning to enable request approval button.
+      this.mandatoryQuestions = true;
+      nextStepPostData['solutioningDetails'].forEach(element => {
+        element.Details.forEach(ele => {
+          if (ele.mandatory && _.isEmpty(JSON.stringify(ele.solutioningAnswer))) {
+            this.mandatoryQuestions = false;
+          }
+        });
+      });
+
 
       // Proceed To Offer Components
-      if (this.osForm.valid) {
+      if (this.mandatoryQuestions) {
         this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(() => {
           if (JSON.parse(routeTo) === true) {
             this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
@@ -500,14 +511,11 @@ export class OfferSolutioningComponent implements OnInit {
                 const answerList = subGroupValue['questions'].map(questions => {
 
                   const [, attributeName] = questions['source'] ? questions['source'].split('~~') : ['', ''];
-                  const answerToQuestion = questions['answerToQuestion']; // this.osForm.value[questions['questionNo']];
                   const offerQuestion = {
                     'solutioninQuestion': questions['question'],
                     'egenieAttributeName': attributeName ? attributeName : '',
                     'oSGroup': questions['oSgroup'],
-                    'solutioningAnswer': questions.questionType === 'Date' ?
-                      answerToQuestion.toISOString() : answerToQuestion,
-                    // questions['answerToQuestion'].toISOString() : questions['answerToQuestion'], //osForm[questions['questionNo']]
+                    'solutioningAnswer': questions['answerToQuestion'],
                     'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false,
                     'questionType': questions.questionType
                   };
