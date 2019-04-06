@@ -466,7 +466,8 @@ export class OfferSolutioningComponent implements OnInit {
       this.mandatoryQuestions = true;
       nextStepPostData['solutioningDetails'].forEach(element => {
         element.Details.forEach(ele => {
-          if (ele.mandatory && _.isEmpty(JSON.stringify(ele.solutioningAnswer))) {
+          // if (ele.mandatory && _.isEmpty(JSON.stringify(ele.solutioningAnswer))) {
+            if (ele.mandatory && _.isEmpty(ele.solutioningAnswer)) {
             this.mandatoryQuestions = false;
           }
         });
