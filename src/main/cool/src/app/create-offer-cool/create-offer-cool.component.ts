@@ -110,6 +110,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
           this.idpvalue = offerDetailRes.iDPId;
           this.loadPrimaryBe();
+          this.disablePrimaryBEList = true;
         });
 
         // if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
@@ -437,7 +438,8 @@ export class CreateOfferCoolComponent implements OnInit {
   proceedCheck(event) {
     let inputText = event.target.value;
     let inputValue = inputText.trim();
-    this.offerDescValueTrim = this.offerDescValue.trim();
+    if(this.offerDescValue !== undefined)
+      {this.offerDescValueTrim = this.offerDescValue.trim();}
     this.offerNameValueTrim = this.offerNameValue.trim();
 
     if (inputValue === "" || inputValue === null) {

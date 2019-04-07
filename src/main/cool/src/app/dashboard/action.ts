@@ -17,9 +17,17 @@ export class ActionsAndNotifcations{
     attachment: boolean;
     completed: boolean;
     type:string;
-    
+    completedDate:string;
     constructor() {
 
+    }
+
+    setCompletedDate(completedDate) {
+        this.completedDate = completedDate;
+    }
+
+    getCompletedDate(){
+        return this.completedDate;
     }
 
     setCompleted(completed) {
