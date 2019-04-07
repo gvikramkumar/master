@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfigurationService, CreateOfferService } from '@shared/services';
 import { HeaderService } from '@shared/services';
+import { SharedService } from '@app/shared-service.service';
 
 @Component({
   selector: 'app-header',
@@ -54,7 +55,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(private headerService: HeaderService, private router: Router,
     private createOfferService: CreateOfferService,
-    private startupService: ConfigurationService) {
+    private startupService: ConfigurationService, private sharedService:SharedService) {
 
     this.headerService.getCurrentUser().subscribe((user: any) => {
       this.userId = user;
@@ -68,8 +69,11 @@ export class HeaderComponent implements OnInit {
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       this.functionalRole = data.userMappings[0].functionalRole;
-      if (this.functionalRole === 'BUPM') {
+      if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
         this.isBupmUser = true;
+        this.sharedService.userEventEmit.next(true) ;
+      }else{
+        this.sharedService.userEventEmit.next(false) ;
       }
     });
 

@@ -35,8 +35,7 @@
 
     <div *ngIf="question['questionType']==='Currency Text'">
       <div class="form-group" [class.has-error]="currencyText.invalid" [class.has-success]="currencyText.valid">
-
-        $ <input type="number" class="text" name="{{question['questionNo']}}" id="question['questionNo']"
+         <input type="number" class="text" name="{{question['questionNo']}}" id="question['questionNo']"
           #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
           [disabled]="question['hideQuestion']" rows="3"
           required="{{question['rules']['isMandatoryOptional']}}==='Mandatory'"
