@@ -17,7 +17,7 @@
         <textarea class="textarea" name="{{question['questionNo']}}" id="question['questionNo']" #freeText="ngModel"
           [value]="question['answer']" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
           rows="3" maxlength="{{question['rules']['maxCharacterLen']}}"
-          required="{{question['rules']['isMandatoryOptional']}}==='Mandatory'"
+          [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
           (change)="showHiddenQuestionBasedOnUserInput(freeText.value, question)"></textarea>
 
         <span class="help-block" *ngIf="question['answerToQuestion']?.length === question['rules']['maxCharacterLen']">
@@ -38,7 +38,7 @@
          <input type="number" class="text" name="{{question['questionNo']}}" id="question['questionNo']"
           #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
           [disabled]="question['hideQuestion']" rows="3"
-          required="{{question['rules']['isMandatoryOptional']}}==='Mandatory'"
+          [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
           (change)="showHiddenQuestionBasedOnUserInput(currencyText.value, question)"
           (blur)="transformAmount(currencyText.value, question)" />
 
@@ -58,7 +58,7 @@
         <label class="radio">
           <input type="radio" name="{{question['questionNo']}}" id="question['questionNo']" #radioButton="ngModel"
             [value]="radio" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
-            required="{{question['rules']['isMandatoryOptional']}}==='Mandatory'"
+            [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (change)="showHiddenQuestionBasedOnUserInput(radioButton.value, question)" /> <span
             class="radio__input"></span>
           <span class="radio__label hidden-xs">{{radio}}</span>
@@ -79,8 +79,8 @@
         <div class="form-group__text select">
 
           <select class="offer-solution-quesiton-select" name="{{question['questionNo']}}" id="question['questionNo']"
-            #dropDown="ngModel" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
-            required="{{question['rules']['isMandatoryOptional']}}==='Mandatory'"
+            #dropDown="ngModel" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']" 
+            [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (change)="showHiddenQuestionBasedOnUserInput(dropDown.value, question)">
 
             <option *ngFor="let option of question['values']" [value]="option.value">
@@ -108,7 +108,7 @@
             [(ngModel)]="question['answerToQuestion']" #osDate="ngModel" [disabled]="question['hideQuestion']"
             #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
             [bsConfig]="dpConfig" [(bsValue)]="question['answerToQuestion']"
-            required="{{question['rules']['isMandatoryOptional']}}==='Mandatory'"
+            [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (change)="showHiddenQuestionBasedOnUserInput(osDate.value, question)">
 
           <button type="button" class="link" tabindex="-1">
@@ -118,7 +118,7 @@
         </div>
 
         <span class="help-block" *ngIf="inValidDate">
-           Difference between End Date and Start Date should be less than 180 days
+          Difference between End Date and Start Date should be less than 180 days
         </span>
 
         <span class="help-block" *ngIf="osDate.invalid && (osDate.dirty || osDate.touched)">
