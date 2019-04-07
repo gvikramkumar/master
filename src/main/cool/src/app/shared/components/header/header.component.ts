@@ -71,9 +71,9 @@ export class HeaderComponent implements OnInit {
       this.functionalRole = data.userMappings[0].functionalRole;
       if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
         this.isBupmUser = true;
-        this.sharedService.userFunctionalRole.next(true) ;
+        this.sharedService.userEventEmit.next(true) ;
       }else{
-        this.sharedService.userFunctionalRole.next(false) ;
+        this.sharedService.userEventEmit.next(false) ;
       }
     });
 

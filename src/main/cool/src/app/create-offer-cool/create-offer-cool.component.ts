@@ -438,7 +438,8 @@ export class CreateOfferCoolComponent implements OnInit {
   proceedCheck(event) {
     let inputText = event.target.value;
     let inputValue = inputText.trim();
-    this.offerDescValueTrim = this.offerDescValue.trim();
+    if(this.offerDescValue !== undefined)
+      {this.offerDescValueTrim = this.offerDescValue.trim();}
     this.offerNameValueTrim = this.offerNameValue.trim();
 
     if (inputValue === "" || inputValue === null) {

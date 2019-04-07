@@ -31,7 +31,7 @@ export class TaskbarComponent implements OnInit {
   isLastStep: boolean;
   currentPage: string = 'dashboard';
   proceedToOfferSetup: Boolean = false;
-  userRole:string;
+  userRole:boolean;
 
   constructor(
     private router: Router,
@@ -45,8 +45,10 @@ export class TaskbarComponent implements OnInit {
     this.currentOfferId = this.activatedRoute.snapshot.params["id"];
     this.caseId = this.activatedRoute.snapshot.params['id2'];
     this.setTaskBar();
-    this.sharedService.userFunctionalRole.subscribe((role)=>{
+    this.userRole = this.sharedService.userFunctionalRole;
+    this.sharedService.userEventEmit.subscribe((role)=>{
       this.userRole = role;
+      this.sharedService.userFunctionalRole = role;
     });
   }
 
