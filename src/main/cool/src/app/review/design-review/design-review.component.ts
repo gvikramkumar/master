@@ -185,19 +185,24 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
       );
       this.stakeHolderInfo = {};
       for (let i = 0; i <= this.data.length - 1; i++) {
-        if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
-          this.stakeHolderInfo[this.data[i]['offerRole']] = [];
+        if (this.data[i]['offerRole'] === 'Owner' || this.data[i]['functionalRole'] === 'OLE'
+          || this.data[i]['functionalRole'] === 'SOE' || this.data[i]['functionalRole'] === 'NPPM'
+          || this.data[i]['functionalRole'] === 'PLPM' || this.data[i]['functionalRole'] === 'CPS'
+          || this.data[i]['functionalRole'] === 'TAX' || this.data[i]['functionalRole'] === 'Legal') {
+          if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
+            this.stakeHolderInfo[this.data[i]['offerRole']] = [];
+          }
+          this.stakeHolderInfo[this.data[i]['offerRole']].push(
+            {
+              userName: this.data[i]['name'],
+              emailId: this.data[i]['_id'] + '@cisco.com',
+              _id: this.data[i]['_id'],
+              businessEntity: this.data[i]['businessEntity'],
+              functionalRole: this.data[i]['functionalRole'],
+              offerRole: this.data[i]['offerRole'],
+              stakeholderDefaults: this.data[i]['stakeholderDefaults']
+            });
         }
-        this.stakeHolderInfo[this.data[i]['offerRole']].push(
-          {
-            userName: this.data[i]['name'],
-            emailId: this.data[i]['_id'] + '@cisco.com',
-            _id: this.data[i]['_id'],
-            businessEntity: this.data[i]['businessEntity'],
-            functionalRole: this.data[i]['functionalRole'],
-            offerRole: this.data[i]['offerRole'],
-            stakeholderDefaults: this.data[i]['stakeholderDefaults']
-          });
       }
       this.stakeData = this.stakeHolderInfo;
 
