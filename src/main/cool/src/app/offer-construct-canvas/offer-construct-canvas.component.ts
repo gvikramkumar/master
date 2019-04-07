@@ -849,7 +849,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // Initialize Offer Types
       const componentsObj = offerDetails['selectedCharacteristics'] == null ? null : offerDetails['selectedCharacteristics'].
         filter(char => char.subgroup === 'Offer Components');
-      const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
+        // const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
+        let components = null;
+        if (componentsObj.length > 0) {
+          components = componentsObj == null ? null : componentsObj[0]['characteristics'] !== undefined ?
+          componentsObj[0]['characteristics'] : null;
+        } else {
+          components = null;
+        }
 
       // Initialize Components
       const offerTypeObj = !offerDetails['solutioningDetails'] ? [] :
