@@ -7,7 +7,8 @@ import { EnvironmentService } from '../environments/environment.service';
 @Injectable()
 export class SharedService {
     businessEntityUrl: string = this.environmentService.PDAF_API + '?columns=BE&distinct=true';
-    userFunctionalRole = new EventEmitter();;
+    userEventEmit = new EventEmitter();
+    userFunctionalRole:boolean;
     constructor(private _http: HttpClient, private environmentService: EnvironmentService) {
     }
 
