@@ -124,6 +124,9 @@ export class DynamicFormMultipleComponent implements OnInit {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(majorProduct => {
                     majorProduct.currentValue = majorProduct.previousValue;
+                    if(majorProduct.listCurrentValue){
+                        majorProduct.listCurrentValue = "";
+                    }
                 });
             });
         });
@@ -133,6 +136,9 @@ export class DynamicFormMultipleComponent implements OnInit {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(minorProduct => {
                     minorProduct.currentValue = minorProduct.previousValue;
+                    if(minorProduct.listCurrentValue){
+                        minorProduct.listCurrentValue = "";
+                    }
                 });
             });
         });
