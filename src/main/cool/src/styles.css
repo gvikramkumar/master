@@ -1277,4 +1277,4 @@ span.icon-check-outline.icon-medium {
   font-size: 18px;
 }
 .font-16{font-size: 16px}
-.ui-dialog.ui-widget .ui-dialog-content{height: 350px !important;}
+.ui-dialog.ui-widget .ui-dialog-content{height: 350px ;min-height: 100%}
