@@ -628,7 +628,8 @@ export class MmAssesmentComponent implements OnInit {
       '_id': user['_id'],
       'businessEntity': user['userMappings'][0]['businessEntity'],
       'functionalRole': user['userMappings'][0]['functionalRole'],
-      'offerRole': user['userMappings'][0]['functionalRole'] === 'BUPM' && user['_id'] === this.offerBuilderdata['offerOwner']
+      'offerRole': (((user['userMappings'][0]['functionalRole'] === 'BUPM') || (user['userMappings'][0]['functionalRole'] === 'CXPM'))
+        && user['_id'] === this.offerBuilderdata['offerOwner'])
         ? 'Owner' : user['userMappings'][0]['functionalRole'],
       'stakeholderDefaults': user['stakeholderDefaults'] ? user['stakeholderDefaults'] : false,
       'name': user['userName']
@@ -640,7 +641,8 @@ export class MmAssesmentComponent implements OnInit {
       '_id': user['userId'],
       'businessEntity': user['userMapping'][0]['businessEntity'],
       'functionalRole': user['userMapping'][0]['functionalRole'],
-      'offerRole': user['userMapping'][0]['functionalRole'] === 'BUPM' && user['userId'] === this.offerBuilderdata['offerOwner']
+      'offerRole': (((user['userMapping'][0]['functionalRole'] === 'BUPM') || (user['userMapping'][0]['functionalRole'] === 'CXPM'))
+        && user['_id'] === this.offerBuilderdata['offerOwner'])
         ? 'Owner' : user['userMapping'][0]['functionalRole'],
       'stakeholderDefaults': true,
       'name': user['userName']
@@ -927,9 +929,9 @@ export class MmAssesmentComponent implements OnInit {
           // Populate Update Offer Details Request
           proceedToStakeholderPostData['stakeholders'] = totalCombinedStakeHolders;
           proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
-          if(this.isAllowedtoNextStep) {
-          proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
-          proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
+          if (this.isAllowedtoNextStep) {
+            proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
+            proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
           }
           proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
           proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
@@ -946,15 +948,15 @@ export class MmAssesmentComponent implements OnInit {
               'action': '',
               'comment': ''
             };
-            if(this.isAllowedtoNextStep) {
-            this.offerPhaseService.createSolutioningActions(proceedPayload).subscribe(() => {
-              if (JSON.parse(withRouter) === true) {
-                this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
-              }
-            });
-          } else {
-            this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
-          }
+            if (this.isAllowedtoNextStep) {
+              this.offerPhaseService.createSolutioningActions(proceedPayload).subscribe(() => {
+                if (JSON.parse(withRouter) === true) {
+                  this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
+                }
+              });
+            } else {
+              this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
+            }
           });
 
 

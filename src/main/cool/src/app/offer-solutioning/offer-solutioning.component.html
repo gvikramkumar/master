@@ -23,6 +23,11 @@
             </li>
           </ul>
 
+          <!-- Note -->
+
+          <div class="col-lg-6 col-xl-3">
+            <br><span *ngIf="!osForm.valid" class="text-danger">* Please answer mandatory questions</span><br>
+          </div>
 
           <!-- OS Group -->
 
@@ -42,12 +47,6 @@
 
           </form>
 
-          
-          <!-- Note -->
-
-          <div class="col-lg-6 col-xl-3">
-            <br><span class="text-danger">* Please answer mandatory questions</span><br>
-          </div>
 
         </div>
 

@@ -36,7 +36,9 @@ export class StakeholderAddComponent implements OnInit {
   selectedStakeHolders;
   searchStakeHolderInput;
   searchStakeHolderResults: String[];
-
+  newUserAddedInfo:string[];
+  strnewUserAddedInfo:string;
+  showUserAddedInfoNotification: boolean = false;
   stakeholderForm: FormGroup;
   @Output() updatedStakeHolderMapInfo = new EventEmitter<any>();
 
@@ -297,7 +299,12 @@ export class StakeholderAddComponent implements OnInit {
 
             const newlyAddedStakeHolderMap = this.selectedStakeHolders.map(user =>
               this.formatUserAsStakeholder(user, false));
-
+              this.showUserAddedInfoNotification = true;
+              setTimeout(()=>{
+                this.showUserAddedInfoNotification = false;
+              },5000)
+              this.newUserAddedInfo = newlyAddedStakeHolderMap.map(user=>user.userName);
+              this.strnewUserAddedInfo = this.newUserAddedInfo.toString()
             this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(defaultStakeHolderMap, this.stakeHolderMapInfo, true);
             this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(newlyAddedStakeHolderMap, this.stakeHolderMapInfo, false);
 
