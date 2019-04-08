@@ -58,11 +58,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
   productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
   scmsMatches = [{match: 'SCMS'}];
-  legalEntityMatches = [{match: 'Business Entity'}];
-  beMatches = [{match: 'BE'}, {match: 'Sub BE'}];
-  countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name'}];
-  extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name'}];
-  glSegmentMatches = [{name: 'Account', value: 'ACCOUNT'}, {name: 'Sub Account', value: 'SUB ACCOUNT'}, {name: 'Company', value: 'COMPANY'}];
+  legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
+  beMatches = [{match: 'BE'}, {match: 'Sub BE', abbrev: 'SubBE'}];
+  countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
+  extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXT'}];
+  glSegmentMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACCT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACCT'},
+    {name: 'Company', value: 'COMPANY', abbrev: 'COMP'}];
   // SELECT options to be taken from Postgres
   salesSL1Choices: { name: string }[] = [];
   prodTgChoices: { name: string }[] = [];
