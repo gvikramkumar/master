@@ -47,6 +47,9 @@ export function databaseUpdate() {
   return lookupRepo.getValue('database-version')
     .then(version => {
       const databaseVersion = version;
+      if (databaseVersion > latestVersion) {
+        return Promise.reject(`Database update version: ${databaseVersion} is greater than code update version: ${latestVersion}`);
+      }
       let dbUpdateIndex = _.findIndex(updates, {version: databaseVersion});
       dbUpdateIndex = dbUpdateIndex === -1 ? 0 : dbUpdateIndex + 1;
       if (dbUpdateIndex !== 0) {
