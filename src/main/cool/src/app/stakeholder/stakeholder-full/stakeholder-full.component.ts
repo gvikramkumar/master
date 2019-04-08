@@ -273,8 +273,7 @@ export class StakeholderFullComponent implements OnInit {
     const currentUserId = this.userService.getUserId();
     const currentUserFunctions = this.configurationService.startupData.functionalRole.toString();
     const readOnly = this.configurationService.startupData.readOnly;
-    return (!stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId  && 
-    (stakeholder.offerRole==='Owner'||stakeholder.offerRole==='Co-Owner'||stakeholder.functionalRole===currentUserFunctions));
+    return (!stakeholder.stakeholderDefaults && stakeholder['_id'] !== currentUserId && (!readOnly || stakeholder.functionalRole===currentUserFunctions) );
 
   }
 
