@@ -99,7 +99,13 @@
                     <!-- <div > -->
                     <div *ngFor="let ques of item.value['questionset']">
                       <tr *ngIf="ques.itemType == 'Unique Item'">
-                        <td>{{ques.question}}</td>
+                        <td>
+                          <div class="tool-container">
+                            <div class="has-tooltip" href="#"> {{ques.question}}
+                                <span class="tooltip-wrapper"><span class="tooltip"> {{ques.question}}</span></span>
+                            </div>
+                          </div>
+                        </td>
                       </tr>
                     </div>
                     <tr class="section-tr-label">
@@ -107,7 +113,13 @@
                     </tr>
                     <div *ngFor="let ques of item.value['questionset']">
                       <tr *ngIf="ques.itemType !== 'Unique Item'">
-                        <td>{{ques.question}}</td>
+                        <td>
+                          <div class="tool-container">
+                              <div class="has-tooltip" href="#"> {{ques.question}}
+                                  <span class="tooltip-wrapper"><span class="tooltip"> {{ques.question}}</span></span>
+                              </div>
+                          </div>
+                        </td>
                       </tr>
                     </div>
                     <!-- </div> -->
