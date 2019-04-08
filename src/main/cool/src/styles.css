@@ -1276,3 +1276,5 @@ span.icon-check-outline.icon-medium {
   color: #666666;
   font-size: 18px;
 }
+.font-16{font-size: 16px}
+.ui-dialog.ui-widget .ui-dialog-content{height: 350px !important;}
