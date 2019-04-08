@@ -19,7 +19,7 @@
                   <div class="form-group input--icon half-margin-bottom">
                     <div class="form-group__text">
                       <i id="input-type-search" type="search"></i>
-                      <input #gbforactions type="text" pInputText size="50" placeholder="Search by keywords">
+                      <input #globalFilterForActions type="text" pInputText size="50" placeholder="Search by keywords">
                       <button type="button" class="link">
                         <span class="icon-search"></span>
                       </button>
@@ -28,7 +28,7 @@
               </div>
             </div>
             <div class="responsive-table">
-              <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="gbforactions">
+              <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="globalFilterForActions">
                 <p-column field="offerId" sortable="true" header="ACTION COMPLETE" [style]="{'width':'150px'}">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <div style="text-align:center" *ngIf="actionData.completed == true">
