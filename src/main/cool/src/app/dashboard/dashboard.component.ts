@@ -4,10 +4,6 @@ import { NgForm } from '@angular/forms';
 import { ActionsService } from '../services/actions.service';
 import { CreateActionApprove } from '../models/create-action-approve';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { MenuItem } from 'primeng/api';
-import { CheckboxModule } from 'primeng/checkbox';
-import { TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { lifeCycleStatusEnum } from '@shared/enums';
@@ -74,8 +70,6 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private actionsService: ActionsService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService,
     private createOfferService: CreateOfferService,
   ) {
   }
@@ -109,6 +103,8 @@ export class DashboardComponent implements OnInit {
         let notifications = [];
         if (resActionsAndNotifications && resActionsAndNotifications.actionList) {
           actions = this.processActions(resActionsAndNotifications.actionList);
+          this.actionCount.pendingActionCount = resActionsAndNotifications.pendingTasksCount;
+          this.actionCount.needImmediateActionCount = resActionsAndNotifications.immediateTasksCount;
         }
         if (resActionsAndNotifications && resActionsAndNotifications.notificationList) {
           notifications = this.processNotifications(resActionsAndNotifications.notificationList);
@@ -129,12 +125,10 @@ export class DashboardComponent implements OnInit {
   }
 
   private processActions(actions: any) {
-    this.actionCount.needImmediateActionCount = 0;
-    this.actionCount.pendingActionCount = 0;
     return actions.map(action => {
-      this.processActionCount(action);
+      //this.processActionCount(action);
       action.alertType = 'action';
-      action.title = action.actiontTitle;
+      action.title = action.actionTitle;
       action.desc = action.actionDesc;
       // action.assigneeId = action.assigneeId ? action.assigneeId.split(',').join(', ') : '';
 
@@ -142,14 +136,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  private processActionCount(action: any) {
-    if (action.status && action.status.toLowerCase() === 'red') {
-      ++this.actionCount.needImmediateActionCount;
-    } else {
-      ++this.actionCount.pendingActionCount;
-    }
-
-  }
   private addLifeCycleSortingColumn(resOffers) {
 
     this.myOffers = resOffers.map((data) => {
@@ -288,8 +274,8 @@ export class DashboardComponent implements OnInit {
     const actionTitle = this.titleValue;
     const actionDescription = this.descriptionValue;
 
-    this.dashboardService.postComments(createCommentPayload).subscribe((data) => {
-      this.dashboardService.postActionForNapprove(createActionPayload).subscribe(response => {
+    this.dashboardService.postComments(createCommentPayload).subscribe(() => {
+      this.dashboardService.postActionForNapprove(createActionPayload).subscribe(() => {
         this.actionComment(overlaypanel, assignee, offerId, actionTitle, actionDescription);
       }, (error) => {
         console.log(error);
@@ -302,7 +288,7 @@ export class DashboardComponent implements OnInit {
   actionComment(overlaypanel, assignee, offerId, actionTitle, actionDescription) {
     overlaypanel.hide();
     this.getMyActionsAndNotifications();
-    this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
+    this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(() => { });
   }
 
   // Modified create approve function to add comments as like in Provide Deatils Section
@@ -326,7 +312,7 @@ export class DashboardComponent implements OnInit {
       false,
       status
     );
-    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+    this.actionsService.createActionApprove(createActionApprove).subscribe(() => {
       overlaypanel.hide();
       this.getMyActionsAndNotifications();
     });
@@ -349,7 +335,7 @@ export class DashboardComponent implements OnInit {
       false,
       status
     );
-    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+    this.actionsService.createActionApprove(createActionApprove).subscribe(() => {
       overlaypanel.hide();
       this.getMyActionsAndNotifications();
     });
@@ -360,7 +346,7 @@ export class DashboardComponent implements OnInit {
     if (this.selectedFile) {
       const fd = new FormData();
       fd.append('file', this.selectedFile, this.selectedFile.name);
-      this.dashboardService.postFileUploadForAction(this.selectedCaseId, fd).subscribe(data => {
+      this.dashboardService.postFileUploadForAction(this.selectedCaseId, fd).subscribe(() => {
       });
     }
 
@@ -379,7 +365,7 @@ export class DashboardComponent implements OnInit {
       true,
       status
     );
-    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+    this.actionsService.createActionApprove(createActionApprove).subscribe(() => {
       overlaypanel.hide();
       this.getMyActionsAndNotifications();
     });
@@ -412,7 +398,7 @@ export class DashboardComponent implements OnInit {
       'comment': '',
       'status' : this.selectedAction.status
     };
-    this.dashboardService.postDismissNotification(postData).subscribe(data => {
+    this.dashboardService.postDismissNotification(postData).subscribe(() => {
       overlaypanel.hide();
       this.getMyActionsAndNotifications();
     });
@@ -430,14 +416,14 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  onBasicUpload(event) {
+  onBasicUpload() {
     console.log('milsss');
   }
 
   createNewOffer() {
     this.createOfferService.disablePrBEList = false;
-    this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
-    this.createOfferService.currenTOffer.next('');
+    // this.createOfferService.coolOffer = this.createOfferService.coolOfferCopy;
+    // this.createOfferService.currenTOffer.next('');
     this.router.navigate(['/coolOffer']);
   }
   enableSubmit(event): void {

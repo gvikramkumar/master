@@ -42,7 +42,7 @@ export class OfferSolutioningComponent implements OnInit {
   stakeData;
   stakeHolderData;
 
-  mandatoryQuestions = true;
+  mandatoryQuestions: boolean;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
 
@@ -315,7 +315,7 @@ export class OfferSolutioningComponent implements OnInit {
     // When Free Text - Restrict Length Of Characters  
     if (question.questionType === 'Free Text') {
       question.rules.maxCharacterLen = _.isEmpty(question.rules.maxCharacterLen) ?
-        150 : question.rules.maxCharacterLen;
+        150 : Number(question.rules.maxCharacterLen);
     }
 
     // Format Dropdown Display Values
@@ -462,25 +462,14 @@ export class OfferSolutioningComponent implements OnInit {
         'taskId': ''
       };
 
-      // Need to give answer for every question from offer solutioning to enable request approval button.
-      let offerSolutioningSelected = true;
-      nextStepPostData['solutioningDetails'].forEach(element => {
-        element.Details.forEach(ele => {
-          if (ele.mandatory && _.isEmpty(JSON.stringify(ele.solutioningAnswer))) {
-            offerSolutioningSelected = false;
-          }
-        });
-      });
-
-      if (offerSolutioningSelected) {
-        this.mandatoryQuestions = true;
+      // Proceed To Offer Components
+      if (this.osForm.valid) {
         this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(() => {
           if (JSON.parse(routeTo) === true) {
             this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
           }
         });
       } else {
-        this.mandatoryQuestions = false;
         if (JSON.parse(routeTo) === true) {
           this.router.navigate(['/offerConstruct', this.offerId, this.caseId]);
         }
@@ -511,14 +500,11 @@ export class OfferSolutioningComponent implements OnInit {
                 const answerList = subGroupValue['questions'].map(questions => {
 
                   const [, attributeName] = questions['source'] ? questions['source'].split('~~') : ['', ''];
-                  const answerToQuestion = questions['answerToQuestion']; // this.osForm.value[questions['questionNo']];
                   const offerQuestion = {
                     'solutioninQuestion': questions['question'],
                     'egenieAttributeName': attributeName ? attributeName : '',
                     'oSGroup': questions['oSgroup'],
-                    'solutioningAnswer': questions.questionType === 'Date' ?
-                      answerToQuestion.toISOString() : answerToQuestion,
-                    // questions['answerToQuestion'].toISOString() : questions['answerToQuestion'], //osForm[questions['questionNo']]
+                    'solutioningAnswer': questions['answerToQuestion'],
                     'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false,
                     'questionType': questions.questionType
                   };
@@ -560,5 +546,4 @@ export class OfferSolutioningComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------------------------
 
 }
-
 

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, ResolveEnd } from '@angular/router';
 import { offerBuilderStepsEnum } from '@shared/enums';
 import { taskBarNavConstant } from '@shared/constants/taskBarNav.constants';
 import { BehaviorSubject } from 'rxjs';
+import { SharedService } from '@app/shared-service.service';
 
 @Component({
   selector: 'app-taskbar',
@@ -30,10 +31,12 @@ export class TaskbarComponent implements OnInit {
   isLastStep: boolean;
   currentPage: string = 'dashboard';
   proceedToOfferSetup: Boolean = false;
+  userRole:boolean;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private sharedService:SharedService
   ) { }
 
 
@@ -42,6 +45,11 @@ export class TaskbarComponent implements OnInit {
     this.currentOfferId = this.activatedRoute.snapshot.params["id"];
     this.caseId = this.activatedRoute.snapshot.params['id2'];
     this.setTaskBar();
+    this.userRole = this.sharedService.userFunctionalRole;
+    this.sharedService.userEventEmit.subscribe((role)=>{
+      this.userRole = role;
+      this.sharedService.userFunctionalRole = role;
+    });
   }
 
   setTaskBar() {

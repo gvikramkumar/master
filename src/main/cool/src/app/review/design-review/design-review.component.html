@@ -23,16 +23,14 @@
             </li>
           </ul>
 
-          <div class="alert base-margin-top half-margin-bottom" [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green',
-              'alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
-
-            <div class="alert__icon mm-alert-icon" [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red',
-                'icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}">
-            </div>
-
-            <div class="alert__message" [ngStyle]="{'color': message['color']}">
-              <b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
+          <div class="alert base-margin-top half-margin-bottom"
+          [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
+          <div class="alert__icon mm-alert-icon"
+            [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}">
           </div>
+          <div class="alert__message" [ngStyle]="{'color': message['color']}">
+            <b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
+        </div>
 
           <!-- <Exit Criteria Validation> -->
           <app-design-review-exit-criteria *ngIf="loadExitCriteria" [stakeData]="stakeData" [offerBuilderdata]='offerBuilderdata'>
@@ -108,8 +106,8 @@
                         </div>
                       </p-header>
 
-                      <!-- 
-                            If the action is still in 'Not Reviewed' status 
+                      <!--
+                            If the action is still in 'Not Reviewed' status
                             then  users who belong to the escalate users group will see the escalate section
                             and, users who the task is assigned to will see the approval section
                             everyone will see the comments irrespective of the status of the action
@@ -464,7 +462,7 @@
             [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
           </app-right-panel>
         </div>
-        
+
       </div>
     </div>
   </div>

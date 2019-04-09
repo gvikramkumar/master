@@ -1,28 +1,28 @@
-<p-dialog header="Add All Offer Details" closable="true" modal="true" showHeader="false" (onHide)="onHide()"
-  class="add-details-dialog" [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
-  [contentStyle]="{'min-height':'450px', 'width':'100%'}" positionTop='150' positionRight='0' positionLeft='0'>
+<p-dialog header="Add All Offer Details" (onHide)="onHide()" class="add-details-dialog"
+  [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
+  [contentStyle]="{'min-height':'450px', 'width':'100%'}">
   <div class="divider" style="margin-top: -1.5%"></div>
   <div class="line-items-nav">
     <div class="row">
-      <div class="col-sm-12 col-md-9">
+      <div class="col-sm-12">
         <ul id="tabsv4" class="tabs tabs--tall">
           <li id="tabsv4-1" class="tab">
-            <a (click)='majorSection()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true}">Add Major Line
+            <a (click)='majorSection()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true,'bBtm':onLoad}">Add Major Line
               Details</a>
           </li>
           <li id="tabsv4-2" class="tab">
             <a (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
               Details</a>
           </li>
+
+          <div class="pull-right flex-center-vertical">
+              <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
+             <button class="display-none"></button>
+             <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
+             <button class="btn btn--primary" (click)='saveForm()'>Save</button>
+             </div>
+
         </ul>
-      </div>
-      <div class="col-sm-12 col-md-3 text-right">
-        <div class="flex-center-vertical">
-           <a href="#" class="base-margin-right"><span class="icon-download-contain half-margin-right"></span> Export as .XLS</a>
-          <button class="display-none"></button>
-          <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
-          <button class="btn btn--primary" (click)='saveForm()'>Save</button>
-          </div>
       </div>
     </div>
   </div>
@@ -36,32 +36,39 @@
               {{item.key}}
             </p-header>
             <div class="row">
-              <div class="col-md-6">
-              </div>
-              <div class="col-md-6 search-buffer">
+              <div class="search-buffer">
                 <div class="form-group input--icon half-margin-bottom">
                   <div class="form-group__text search-icon">
                     <div class="row">
-                      <div class="flex-center-vertical">
-                        <div class="col-md-6">
-                          <p-autoComplete (click)='addItms(item.key)' [ngModelOptions]="{standalone: true}"
-                            [(ngModel)]="itemsList[selectedTab][item.key]" [suggestions]="copyAttributeResults"
-                            (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
-                            placeholder="Copy Attributes" [size]="100" [minLength]="9" [name]="item.key" [id]="item.key">
-                          </p-autoComplete>
+
+                        <div class="col-md-12">
+                          <p>Product ID’s and item details</p>
+                          <div class="row">
+                              <div class="flex-center-vertical">
+                              <div class="col-md-6">
+                                  <p-autoComplete (click)='addItms(item.key)' [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="itemsList[selectedTab][item.key]" [suggestions]="copyAttributeResults"
+                                    (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
+                                    placeholder="Copy Attributes" [size]="100" [minLength]="9" [name]="item.key" [id]="item.key">
+                                  </p-autoComplete>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <button type="button" class="link" (click)="displayViewDetails()">
+                                        View
+                                      </button><div class="text-indigo v-separator"></div>
+                                      <button type="button" class="link" (click)="patchvalueToSelected(item.key)">
+                                        Apply to Selected
+                                      </button><div class="text-indigo v-separator"></div>
+                                      <button type="button" class="link" (click)="patchToALL(item.key)">
+                                        Apply to All
+                                      </button>
+                                    </div>
+                                    </div>
+                          </div>
+                          <p>Edit attribute values or select a Product ID below and search for a product to copy values from</p>
                         </div>
-                        <div class="col-md-6">
-                          <button type="button" class="link" (click)="displayViewDetails()">
-                            View
-                          </button>
-                          <button type="button" class="link" (click)="patchvalueToSelected(item.key)">
-                            Apply to Selected
-                          </button>
-                          <button type="button" class="link" (click)="patchToALL(item.key)">
-                            Apply to All
-                          </button>
-                        </div>
-                      </div>
+
+
                     </div>
                   </div>
                 </div>
@@ -69,7 +76,7 @@
             </div>
             <div class="row">
               <!-- Accordian content starts-->
-              <div class="col-sm-2" style="padding-right: 0;">
+              <div class="col-sm-2" style="padding-right: 0;overflow: hidden;">
                 <!-- Unique -->
                 <table class="detail-labels text-left table table--compressed table--bordered">
                   <tbody>
@@ -78,8 +85,8 @@
                         <div class="form-group form-group--inline">
                           <label class="checkbox">
                             <input type="checkbox" />
-                            <span class="checkbox__input opacity-0"></span>
-                            <span class="checkbox__label hidden-xs">Product ID</span>
+                            <span class="checkbox__input opacity-0" *ngIf="$ChildIndex!==0" ></span>
+                            <span class="checkbox__label hidden-xs" [ngClass]="{'ml0':$ChildIndex===0}" >Product ID</span>
                           </label>
                         </div>
                       </th>
@@ -107,7 +114,7 @@
                   </tbody>
                 </table>
               </div>
-              <div class="col-sm-10" style="display:flex;overflow-x: scroll;padding-left: 0;">
+              <div class="pid-data-columns col-sm-10">
                 <div *ngFor="let queslist of item.value['productInfo']">
                   <div *ngFor="let ques of queslist|keyvalue">
                     <table class="pid-data pull-left text-left table table--compressed table--bordered"
@@ -268,13 +275,6 @@
             </div>
           </p-accordionTab>
         </p-accordion>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12 text-right">
-        <button class="display-none"></button>
-        <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
-        <button class="btn btn--primary" (click)='saveForm()'>Save</button>
       </div>
     </div>
   </div>

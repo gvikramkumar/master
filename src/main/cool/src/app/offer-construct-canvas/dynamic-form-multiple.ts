@@ -31,6 +31,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     public detailArray: any[] = [];
     public headerName: any = '';
     test: FormGroup;
+    onLoad: boolean = false;
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService) {
@@ -39,6 +40,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.onLoad = true;
         this.offerInfo = this.offerConstructService.singleMultipleFormInfo;
         this.majorOfferInfo = this.offerInfo.major;
         this.minorOfferInfo = this.offerInfo.minor;
@@ -72,6 +74,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     minorSection() {
+        this.onLoad = false;
         this.ismajorSection = false;
         this.majorLineItemsActive = false;
         this.minorLineItemsActive = true;
@@ -81,6 +84,12 @@ export class DynamicFormMultipleComponent implements OnInit {
     onHide() {
         this.offerConstructService.closeAddDetails = false;
         this.closeDialog();
+    }
+
+    onHideViewDetailsModal() {
+        console.log("test");
+
+        //this.closeDailog(false);  //reset form info
     }
 
     saveForm() {
@@ -108,12 +117,16 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     closeDialog() {
         let isUdate: boolean = true;
+        this.majorSection();
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
             this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(majorProduct => {
                     majorProduct.currentValue = majorProduct.previousValue;
+                    if(majorProduct.listCurrentValue){
+                        majorProduct.listCurrentValue = "";
+                    }
                 });
             });
         });
@@ -123,6 +136,9 @@ export class DynamicFormMultipleComponent implements OnInit {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(minorProduct => {
                     minorProduct.currentValue = minorProduct.previousValue;
+                    if(minorProduct.listCurrentValue){
+                        minorProduct.listCurrentValue = "";
+                    }
                 });
             });
         });

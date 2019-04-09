@@ -36,7 +36,9 @@ export class StakeholderAddComponent implements OnInit {
   selectedStakeHolders;
   searchStakeHolderInput;
   searchStakeHolderResults: String[];
-
+  newUserAddedInfo:string[];
+  strnewUserAddedInfo:string;
+  showUserAddedInfoNotification: boolean = false;
   stakeholderForm: FormGroup;
   @Output() updatedStakeHolderMapInfo = new EventEmitter<any>();
 
@@ -244,13 +246,13 @@ export class StakeholderAddComponent implements OnInit {
     };
   }
 
-  private compareAndAddNewStakeHolders(newStakeHolderList: User[], existingStakeHolderList: {}): {} {
+  private compareAndAddNewStakeHolders(newStakeHolderList: User[], existingStakeHolderList: {}, defaultStakeHolder: boolean): {} {
 
     newStakeHolderList.reduce((stakeHolderAccumulator, currentStakeholder) => {
 
       const stakeholder = {
         ...currentStakeholder,
-        stakeholderDefaults: false
+        stakeholderDefaults: defaultStakeHolder
       };
 
       const stakeholderFunctionRole = currentStakeholder['userMappings'][0]['functionalRole'];
@@ -294,13 +296,17 @@ export class StakeholderAddComponent implements OnInit {
 
             const defaultStakeHolderMap = defaultStakeholders.map(user =>
               this.formatDefaultUserAsStakeholder(user));
-            // defaultStakeHolderMap.push(owner);
 
             const newlyAddedStakeHolderMap = this.selectedStakeHolders.map(user =>
               this.formatUserAsStakeholder(user, false));
-
-            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(defaultStakeHolderMap, this.stakeHolderMapInfo);
-            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(newlyAddedStakeHolderMap, this.stakeHolderMapInfo);
+              this.showUserAddedInfoNotification = true;
+              setTimeout(()=>{
+                this.showUserAddedInfoNotification = false;
+              },5000)
+              this.newUserAddedInfo = newlyAddedStakeHolderMap.map(user=>user.userName);
+              this.strnewUserAddedInfo = this.newUserAddedInfo.toString()
+            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(defaultStakeHolderMap, this.stakeHolderMapInfo, true);
+            this.stakeHolderMapInfo = this.compareAndAddNewStakeHolders(newlyAddedStakeHolderMap, this.stakeHolderMapInfo, false);
 
             this.updatedStakeHolderMapInfo.emit(this.stakeHolderMapInfo);
             this.stakeHolderListInfo = this.formatStakeHolderPojoToUpdateOffer_1(this.stakeHolderMapInfo);

@@ -54,14 +54,16 @@ export class OfferConstructService {
                     validators.push(Validators.pattern("^[0-9]*$"))
                 }
                 if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "camel") {
-                    validators.push(Validators.pattern("^((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$"))
+                    validators.push(Validators.pattern("^(([0-9])|([A-Z0-9][a-z0-9]+))*([A-Z])?$"))
                 }
                 if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
                     validators.push(Validators.pattern("^[0-9]*\.[0-9][0-9]$"))
                 }
-                
+                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperate numeric with no space") {
+                    validators.push(Validators.pattern("^[0-9]+(,[0-9]+)*$"))
+                }
             }
-            group[question.egineAttribue] =  new FormControl(question.rules.defaultSel || '', validators);
+            group[question.egineAttribue] =  new FormControl(question.currentValue || '', validators);
             
         });
         return new FormGroup(group);

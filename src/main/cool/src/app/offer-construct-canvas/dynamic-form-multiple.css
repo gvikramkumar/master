@@ -6,13 +6,17 @@
 
 .section-tr-label {
   color: #ffffff;
-  background-color: #005073 !important;
+  background-color: #017CAD !important;
 }
 
 .search-icon .icon-search {
   position: absolute;
   top: 13px;
-  left: 350px;
+  left: 20px;
+}
+
+.link-style {
+  color: #58585b !important;
 }
 
 .auto-complete-attribute {
@@ -223,3 +227,16 @@ span.icon-cart {
 .bold-row {
   font-weight: bold;
 }
+
+
+.ml0  {
+  margin-left: 0px !important;
+}
+
+.bBtm {
+  border-bottom: 4px solid #007493 !important;
+}
+
+
+
+

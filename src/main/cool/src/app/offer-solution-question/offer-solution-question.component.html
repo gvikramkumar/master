@@ -10,19 +10,40 @@
   <div *ngIf="question['validUser']">
 
     <!-- Free Text -->
-    
+
     <div *ngIf="question['questionType']==='Free Text'">
       <div class="form-group" [class.has-error]="freeText.invalid" [class.has-success]="freeText.valid">
 
         <textarea class="textarea" name="{{question['questionNo']}}" id="question['questionNo']" #freeText="ngModel"
           [value]="question['answer']" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
-          rows="3" maxlength="question.rules['maxCharacterLen']"
-          required="question['rules']['isMandatoryOptional']==='Mandatory'"
+          rows="3" maxlength="{{question['rules']['maxCharacterLen']}}"
+          [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
           (change)="showHiddenQuestionBasedOnUserInput(freeText.value, question)"></textarea>
+
+        <span class="help-block" *ngIf="question['answerToQuestion']?.length === question['rules']['maxCharacterLen']">
+          Only {{question['rules']['maxCharacterLen']}} characters allowed
+        </span>
 
         <span class="help-block" *ngIf="freeText.invalid && (freeText.dirty || freeText.touched)">
           <span *ngIf="freeText.errors.required">Valid input is required</span>
-          <span *ngIf="freeText.errors.maxlength">Valid input exceeds max characters allowed</span>
+        </span>
+
+      </div>
+    </div>
+
+    <!-- Currency Text -->
+
+    <div *ngIf="question['questionType']==='Currency Text'">
+      <div class="form-group" [class.has-error]="currencyText.invalid" [class.has-success]="currencyText.valid">
+         <input type="number" class="text" name="{{question['questionNo']}}" id="question['questionNo']"
+          #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
+          [disabled]="question['hideQuestion']" rows="3"
+          [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+          (change)="showHiddenQuestionBasedOnUserInput(currencyText.value, question)"
+          (blur)="transformAmount(currencyText.value, question)" />
+
+        <span class="help-block" *ngIf="currencyText.invalid && (currencyText.dirty || currencyText.touched)">
+          <span *ngIf="currencyText.errors.required">Valid input is required</span>
         </span>
 
       </div>
@@ -37,7 +58,7 @@
         <label class="radio">
           <input type="radio" name="{{question['questionNo']}}" id="question['questionNo']" #radioButton="ngModel"
             [value]="radio" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
-            required="question['rules']['isMandatoryOptional']==='Mandatory'"
+            [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (change)="showHiddenQuestionBasedOnUserInput(radioButton.value, question)" /> <span
             class="radio__input"></span>
           <span class="radio__label hidden-xs">{{radio}}</span>
@@ -58,8 +79,8 @@
         <div class="form-group__text select">
 
           <select class="offer-solution-quesiton-select" name="{{question['questionNo']}}" id="question['questionNo']"
-            #dropDown="ngModel" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
-            required="question['rules']['isMandatoryOptional']==='Mandatory'"
+            #dropDown="ngModel" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']" 
+            [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (change)="showHiddenQuestionBasedOnUserInput(dropDown.value, question)">
 
             <option *ngFor="let option of question['values']" [value]="option.value">
@@ -87,7 +108,7 @@
             [(ngModel)]="question['answerToQuestion']" #osDate="ngModel" [disabled]="question['hideQuestion']"
             #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
             [bsConfig]="dpConfig" [(bsValue)]="question['answerToQuestion']"
-            required="question['rules']['isMandatoryOptional']==='Mandatory'"
+            [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (change)="showHiddenQuestionBasedOnUserInput(osDate.value, question)">
 
           <button type="button" class="link" tabindex="-1">
@@ -95,6 +116,10 @@
           </button>
 
         </div>
+
+        <span class="help-block" *ngIf="inValidDate">
+          Difference between End Date and Start Date should be less than 180 days
+        </span>
 
         <span class="help-block" *ngIf="osDate.invalid && (osDate.dirty || osDate.touched)">
           <span *ngIf="osDate.errors.required">Select valid date</span>

@@ -77,11 +77,7 @@ export class ActionsComponent implements OnInit {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
 
 
-    this.actionsService.getActionsTracker()
-      .subscribe(data => {
-        this.allActions = data;
-       this.processMyActionsList(false);
-      });
+    this.getAllActions();
 
     this.dashboardService.getMyOffersList().subscribe(data => {
       this.myOfferList = data;
@@ -146,6 +142,14 @@ export class ActionsComponent implements OnInit {
     }
   }
 
+  getAllActions(){
+    this.actionsService.getActionsTracker()
+      .subscribe(data => {
+        this.allActions = data;
+        this.processMyActionsList(false);
+      });
+  }
+
   handleSwitchChange(event) {
     let isChecked = event.checked;
     if (isChecked == true) {
@@ -155,7 +159,6 @@ export class ActionsComponent implements OnInit {
     }
   }
   processMyActionsList(flag) {
-    console.log(flag);
     this.myOfferArray = [];
         this.myActionsList = [];
         this.actionCount = {
@@ -167,10 +170,7 @@ export class ActionsComponent implements OnInit {
       this.actionCount.pendingActionCount = this.allActions.pendingTasksCount;
       this.actionCount.needImmediateActionCount = this.allActions.immediateTasksCount;
       if (flag == true) {
-        console.log('offer array '+this.myOfferArray);
-        console.log('my actions '+this.myActionsList);
       this.allActions['actionList'].forEach(element => {
-          console.log('Element tracker contains '+element.completed);
           if (element.tracker == false) {
             const obj = new ActionsAndNotifcations();
             obj.setOfferId(element.offerId);
@@ -236,7 +236,9 @@ createAction() {
   );
 
   // Call CreateAction API
-  this.actionsService.createNewAction(createAction).subscribe((data) => { });
+  this.actionsService.createNewAction(createAction).subscribe((data) => { 
+    this.getAllActions();  //refresh the table
+  })
 
   // Reset The Form
   this.createActionForm.reset();
@@ -308,7 +310,6 @@ showActionDetails(taskId) {
       this.actionDetailList = [];
       this.processMyActionDetailList();
     });
-  console.log('show action details called')
 }
 
 processMyActionDetailList() {
@@ -320,8 +321,13 @@ processMyActionDetailList() {
     obj.setTriggerDate(this.dateFormat(this.actionDetails.triggerDate));
     obj.setDueDate(this.dateFormat(this.actionDetails.dueDate));
     obj.setDefaultFunctione(this.actionDetails.function);
+    if(this.actionDetails.completed == false){
+      obj.setCompletedDate('');
+    }
+    else{  
+      obj.setCompletedDate(this.dateFormat(this.actionDetails.reviewedOn));
+    }
     this.actionDetailList.push(obj);
-    console.log('Action detail list contains ' + JSON.stringify(this.actionDetailList));
   }
 }
 
