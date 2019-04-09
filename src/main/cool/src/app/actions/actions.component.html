@@ -29,7 +29,7 @@
             </div>
             <div class="responsive-table">
               <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="globalFilterForActions">
-                <p-column field="offerId" sortable="true" header="ACTION COMPLETE" [style]="{'width':'150px'}">
+                <p-column field="completed" sortable="true" header="ACTION COMPLETE" [style]="{'width':'150px'}">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <div style="text-align:center" *ngIf="actionData.completed == true">
                       <span class="icon-check-outline icon-medium"></span>
