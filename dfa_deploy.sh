@@ -6,10 +6,6 @@ echo "must pass in: buildno, environment (sdev, stage, prod) mongoPass, pgPass, 
 exit 1
 fi
 
-echo "stopping server..."
-pm2 stop fin-dfa
-pm2 flush fin-dfa
-pm2 reset fin-dfa
 echo "deploying fin-dfa build $1"
 echo "create dfa directories"
 mkdir -p /apps/sparkadm/dfa/dfa_ui
@@ -26,6 +22,6 @@ echo "Run Seedsh dev"
 #cd database
 #NODE_ENV=stage ./seed.sh findp-dev-01.cisco.com 27017 fin-dfa
 echo "NPM Start"
-BUILD_NUMBER=$1 NODE_ENV=$2 MONGODB_USER=mongodfa MONGODB_PASSWORD=$3 POSTGRES_USER=pgdfa POSTGRES_PASSWORD=$4 ART_USER=cepm-dfadoption.gen ART_PASSWORD=$5 pm2 start fin-dfa
+BUILD_NUMBER=$1 NODE_ENV=$2 MONGODB_USER=mongodfa MONGODB_PASSWORD=$3 POSTGRES_USER=pgdfa POSTGRES_PASSWORD=$4 ART_USER=cepm-dfadoption.gen ART_PASSWORD=$5 npm start
 
 
