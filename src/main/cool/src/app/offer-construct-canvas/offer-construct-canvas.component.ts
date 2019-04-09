@@ -574,7 +574,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    * @param rowData
    */
   dropOnRow($event, rowNode, rowData) {
-    this.loaderService.startLoading();
     if (this.draggedItem.parent) {
       if (this.draggedItem.parent.children) {
         this.itemCount = this.draggedItem.parent.children.length;
@@ -588,6 +587,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         rowNode.node.data['isMajorLineItem'] &&
         !this.draggedItem['isMajorLineItem']
       ) {
+        this.loaderService.startLoading();
         if (this.draggedItem.data) {
           if (this.draggedItem.data.isGroupNode && this.draggedItem.children.length > 0) {
             const obj = Object.create(null);
@@ -625,7 +625,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             });
             this.delteFromParentObject(rowNode, this.draggedItem.data);
             this.offerConstructItems = [...this.offerConstructItems];
+            this.loaderService.stopLoading();
           }
+          this.loaderService.stopLoading();
         }
         if (this.draggedItem.parent !== undefined) {
           if (this.setFlag) {
@@ -729,8 +731,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.offerConstructItems = [...this.offerConstructItems];
     }
     this.updateChildCount();
-
-    //this.loaderService.stopLoading();
+    this.isDisabledView = false;  // for enable button
   }
 
   /**
@@ -1467,8 +1468,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   showAddDetailsDailog(currentNode) {
-    console.log(currentNode);
-
     // const productName = product;
     this.setSearchItem = currentNode;
     this.currentRowClicked = currentNode;
