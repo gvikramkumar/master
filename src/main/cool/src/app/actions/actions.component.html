@@ -6,34 +6,45 @@
         <div class="card card--raised base-margin-top">
           <div class="panel">
             <div class="row card-table-header">
-              <div class="col-md-10">
+              <div class="col-md-7">
                 <h2 class="page--subheading">Action Item Tracker</h2>
               </div>
               <div class="col-md-2 switchButton">
-                <div class="flex-center-vertical">
+                <div class="flex-center-vertical qtr-margin-top">
                   <p-inputSwitch (onChange)="handleSwitchChange($event)"></p-inputSwitch>
-                  <label class="text-large base-margin-left">Show My Actions</label>
+                  <label class="text-large half-margin-left">Show My Actions</label>
                 </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group input--icon half-margin-bottom">
+                    <div class="form-group__text">
+                      <i id="input-type-search" type="search"></i>
+                      <input #globalFilterForActions type="text" pInputText size="50" placeholder="Search by keywords">
+                      <button type="button" class="link">
+                        <span class="icon-search"></span>
+                      </button>
+                    </div>
+                  </div>
               </div>
             </div>
             <div class="responsive-table">
-              <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true">
+              <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="globalFilterForActions">
                 <p-column field="offerId" sortable="true" header="ACTION COMPLETE" [style]="{'width':'150px'}">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <div style="text-align:center"  *ngIf="actionData.completed == true">
+                    <div style="text-align:center" *ngIf="actionData.completed == true">
                       <span class="icon-check-outline icon-medium"></span>
                     </div>
                     <div *ngIf="actionData.completed == false">
-                      </div>
+                    </div>
                   </ng-template>
                 </p-column>
-                <p-column field="offerId" [filter]="true" filterPlaceholder="Filter By Offer ID" sortable="true" header="OFFER">
+                <p-column field="offerId" sortable="true" header="OFFER">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <a (click)="showOfferPopUp($event,actionData,popturboContent)">{{actionData.offerId}}</a><br />
                     <span>{{actionData.offerName}}</span>
                   </ng-template>
                 </p-column>
-                <p-column field="actionTitle" [filter]="true" filterPlaceholder="Filter By Action Title" sortable="true" header="ACTION">
+                <p-column field="actionTitle" sortable="true" header="ACTION">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.actionTitle}} <br /></span>
                     <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
@@ -43,12 +54,12 @@
                       pTooltip="Comments" placement="top"></span>
                   </ng-template>
                 </p-column>
-                <p-column field="createdBy" [filter]="true" filterPlaceholder="Filter By Created By" sortable="true" header="ACTION CREATED BY">
+                <p-column field="createdBy" sortable="true" header="ACTION CREATED BY">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.createdBy}} <br /></span>
                   </ng-template>
                 </p-column>
-                <p-column field="dueDate" [filter]="true" filterPlaceholder="Filter By Due Date" header="DUE DATE" sortable="true">
+                <p-column field="dueDate" header="DUE DATE" sortable="true">
                   <ng-template let-col let-actionData="rowData" pTemplate="body">
                     <span>{{actionData.dueDate}} <br /></span>
                   </ng-template>
@@ -248,9 +259,9 @@
             </ng-template>
           </p-column>
           <p-column field="completedDate" header="COMPLETE DATE" sortable="true">
-              <ng-template let-col let-actionData="rowData" pTemplate="body">
-                <span>{{actionData.completedDate}} <br /></span>
-              </ng-template>
+            <ng-template let-col let-actionData="rowData" pTemplate="body">
+              <span>{{actionData.completedDate}} <br /></span>
+            </ng-template>
           </p-column>
         </p-dataTable>
       </div>

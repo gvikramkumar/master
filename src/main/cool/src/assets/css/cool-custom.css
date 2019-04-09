@@ -677,18 +677,26 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .view-item-details .detail-labels {
   border-right: none;
   max-width: 310px;
-  -moz-box-shadow: 3px 0 4px rgba(0,0,0,.15);
-  -webkit-box-shadow: 3px 0 4px rgba(0,0,0,.15);
-  box-shadow: 3px 0 4px rgba(0,0,0,.15);
   background: #fff;
   border-right: none;
   position: relative;
   z-index: 9;
 }
+.cool.cui .view-item-details .pid-data-columns {
+  -moz-box-shadow: inset 0 0 10px rgba(0,0,0,.15);
+  -webkit-box-shadow: inset 0 0 10px rgba(0,0,0,.15);
+  box-shadow: inset 0 0 10px rgba(0,0,0,.15);
+  display:flex;
+  overflow-x: scroll;
+  padding-left: 0;
+}
 .cool.cui .view-item-details .detail-labels tbody {
-  max-width: 260px;
+  max-width: 310px;
   display: block;
   background: #f7f7f7;
+}
+.cool.cui .view-item-details tbody tr:first-of-type {
+  background-color: transparent;
 }
 .cool.cui .view-item-details tbody tr {
   width: 100%;
@@ -706,7 +714,7 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .view-item-details table.detail-labels tbody td {
   width: 100%;
   max-width: 100%;
-  padding-right: 25px;
+  padding-right: 90px;
   overflow: hidden;
 }
 .cool.cui .view-item-details .section-label th.section-label {
@@ -719,7 +727,7 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .view-item-details .pid-data .form-group .form-group__text.select input,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text.select select,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text.select textarea {
-    border: 1px solid #fff;
+    border: 1px solid transparent;
     border-radius: 2px;
     flex: 1;
     flex-shrink: 0;
@@ -750,7 +758,7 @@ th.ui-sortable-column.ng-star-inserted {
 }
 
 .cool.cui .view-item-details .pid-data  p-multiselect .ui-state-default {
-  border: 1px solid #fff;
+  border: 1px solid transparent;
   background-color: transparent;
 }
 .cool.cui .view-item-details .pid-data  p-multiselect .ui-multiselect-filter-container .ui-state-default {
@@ -770,6 +778,7 @@ th.ui-sortable-column.ng-star-inserted {
 
 .cool.cui .view-item-details .pid-data .ui-multiselect .ui-multiselect-label {
   padding: .5em;
+  background-color: transparent;
 }
 .cool.cui p-dialog.add-details-dialog .ui-dialog {
   max-width: 100%;
