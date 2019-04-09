@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '../environments/environment.service';
@@ -7,6 +7,8 @@ import { EnvironmentService } from '../environments/environment.service';
 @Injectable()
 export class SharedService {
     businessEntityUrl: string = this.environmentService.PDAF_API + '?columns=BE&distinct=true';
+    userEventEmit = new EventEmitter();
+    userFunctionalRole:boolean;
     constructor(private _http: HttpClient, private environmentService: EnvironmentService) {
     }
 

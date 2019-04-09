@@ -77,11 +77,7 @@ export class ActionsComponent implements OnInit {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
 
 
-    this.actionsService.getActionsTracker()
-      .subscribe(data => {
-        this.allActions = data;
-       this.processMyActionsList(false);
-      });
+    this.getAllActions();
 
     this.dashboardService.getMyOffersList().subscribe(data => {
       this.myOfferList = data;
@@ -144,6 +140,14 @@ export class ActionsComponent implements OnInit {
     } else {
       this.assigneeList = [];
     }
+  }
+
+  getAllActions(){
+    this.actionsService.getActionsTracker()
+      .subscribe(data => {
+        this.allActions = data;
+        this.processMyActionsList(false);
+      });
   }
 
   handleSwitchChange(event) {
@@ -232,7 +236,9 @@ createAction() {
   );
 
   // Call CreateAction API
-  this.actionsService.createNewAction(createAction).subscribe((data) => { });
+  this.actionsService.createNewAction(createAction).subscribe((data) => { 
+    this.getAllActions();  //refresh the table
+  })
 
   // Reset The Form
   this.createActionForm.reset();
@@ -315,7 +321,12 @@ processMyActionDetailList() {
     obj.setTriggerDate(this.dateFormat(this.actionDetails.triggerDate));
     obj.setDueDate(this.dateFormat(this.actionDetails.dueDate));
     obj.setDefaultFunctione(this.actionDetails.function);
-    obj.setCompletedDate(this.dateFormat(this.actionDetails.reviewedOn));
+    if(this.actionDetails.completed == false){
+      obj.setCompletedDate('');
+    }
+    else{  
+      obj.setCompletedDate(this.dateFormat(this.actionDetails.reviewedOn));
+    }
     this.actionDetailList.push(obj);
   }
 }

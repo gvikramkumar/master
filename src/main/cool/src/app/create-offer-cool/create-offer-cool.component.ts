@@ -11,6 +11,8 @@ import * as moment from 'moment';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { HeaderService, UserService, CreateOfferService, ConfigurationService } from '@shared/services';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject } from 'rxjs/internal/Subject';
 
 
 @Component({
@@ -64,7 +66,7 @@ export class CreateOfferCoolComponent implements OnInit {
   secondaryBUbackup: any;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
- 
+
 
   derivedMM;
   firstData: Object;
@@ -83,6 +85,7 @@ export class CreateOfferCoolComponent implements OnInit {
   offerDescValueTrim: string = '';
   offerNameValueTrim: string = '';
 
+  subject: Subject<any> = new Subject();
 
   constructor(private createOfferService: CreateOfferService,
     private configurationService: ConfigurationService,
@@ -110,6 +113,7 @@ export class CreateOfferCoolComponent implements OnInit {
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
           this.idpvalue = offerDetailRes.iDPId;
           this.loadPrimaryBe();
+          this.disablePrimaryBEList = true;
         });
 
         // if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
@@ -360,6 +364,9 @@ export class CreateOfferCoolComponent implements OnInit {
 
 
   ngOnInit() {
+    this.subject.pipe(debounceTime(1000)).subscribe(() => {
+      this.getValidData();
+    })
     const canEscalateUsers = [];
     const canApproveUsers = [];
     this.data = [];
@@ -370,7 +377,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.loadSecondaryBu();
       this.autoSelectBE();
     }
-   
+
     this.readOnly = this.configurationService.startupData.readOnly;
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(data => {
       this.firstData = data;
@@ -437,7 +444,7 @@ export class CreateOfferCoolComponent implements OnInit {
   proceedCheck(event) {
     let inputText = event.target.value;
     let inputValue = inputText.trim();
-    this.offerDescValueTrim = this.offerDescValue.trim();
+    if (this.offerDescValue !== undefined) { this.offerDescValueTrim = this.offerDescValue.trim(); }
     this.offerNameValueTrim = this.offerNameValue.trim();
 
     if (inputValue === "" || inputValue === null) {
@@ -537,11 +544,19 @@ export class CreateOfferCoolComponent implements OnInit {
       });
   }
 
+
   getidptoken(event) {
+    this.subject.next();
     // this.createOfferService.getIdpid().subscribe(data => {
     //  this.idpid = data;
     this.iDPId = event.target.value;
     // let header = `${this.idpid['token_type']} ${this.idpid['access_token']}`;
+
+    // })
+
+  }
+
+  getValidData() {
     this.createOfferService.validateIdpid(this.iDPId).subscribe(data => {
       this.isIdpIdValid = true;
       if (this.offerCreateForm.valid == true && this.isIdpIdValid == true) {
@@ -555,8 +570,6 @@ export class CreateOfferCoolComponent implements OnInit {
         this.idpidInvalid = true;
         this.enableOfferbuild = true;
       })
-    // })
-
   }
 
   updateMessage(message) {

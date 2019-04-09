@@ -42,6 +42,7 @@ export class OfferSolutioningComponent implements OnInit {
   stakeData;
   stakeHolderData;
 
+  mandatoryQuestions: boolean;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
 
@@ -461,7 +462,6 @@ export class OfferSolutioningComponent implements OnInit {
         'taskId': ''
       };
 
-
       // Proceed To Offer Components
       if (this.osForm.valid) {
         this.offerPhaseService.createSolutioningActions(solutioningProceedPayload).subscribe(() => {
@@ -546,5 +546,4 @@ export class OfferSolutioningComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------------------------
 
 }
-
 
