@@ -62,6 +62,9 @@ export class OfferConstructService {
                 if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperate numeric with no space") {
                     validators.push(Validators.pattern("^[0-9]+(,[0-9]+)*$"))
                 }
+                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "firstCaps") {
+                    validators.push(Validators.pattern("^[A-Z][a-z0-9\\s]*$"))
+                }
             }
             group[question.egineAttribue] =  new FormControl(question.currentValue || '', validators);
             
