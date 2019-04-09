@@ -85,6 +85,7 @@ export class CreateOfferCoolComponent implements OnInit {
   offerDescValueTrim: string = '';
   offerNameValueTrim: string = '';
 
+  subject: Subject<any> = new Subject();
 
   constructor(private createOfferService: CreateOfferService,
     private configurationService: ConfigurationService,
@@ -542,8 +543,6 @@ export class CreateOfferCoolComponent implements OnInit {
         console.log(err);
       });
   }
-
-  subject: Subject<any> = new Subject();
 
 
   getidptoken(event) {
