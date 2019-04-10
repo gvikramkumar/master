@@ -1,6 +1,6 @@
-<p-dialog header="Add All Offer Details" (onHide)="onHide()" class="add-details-dialog"
-  [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
-  [contentStyle]="{'min-height':'450px', 'width':'100%'}">
+<p-dialog header="Add All Item Detail" (onHide)="onHide()" class="add-details-dialog"
+  [(visible)]="offerConstructService.closeAddDetails" [resizable]="false" [draggable]="false" [maximizable]="true"
+  [contentStyle]="{'min-height':'450px', 'overflow-y':'scroll', 'width':'100%'}">
   <div class="divider" style="margin-top: -1.5%"></div>
   <div class="line-items-nav">
     <div class="row">
@@ -76,7 +76,7 @@
             </div>
             <div class="row">
               <!-- Accordian content starts-->
-              <div class="col-sm-2" style="padding-right: 0;overflow: hidden;">
+              <div class="col-sm-2" style="padding: 0;overflow: hidden;">
                 <!-- Unique -->
                 <table class="detail-labels text-left table table--compressed table--bordered">
                   <tbody>
