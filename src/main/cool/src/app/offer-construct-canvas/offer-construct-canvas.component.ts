@@ -368,6 +368,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   showDialog() {
+    
     this.ind--;
     const offerInfo = this.offerConstructService.singleMultipleFormInfo;
     const majorOfferInfo = offerInfo.major;
