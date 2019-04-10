@@ -215,7 +215,9 @@ span.icon-cart {
 .view-item-details tr {
   height: 42px !important;
 }
-
+.cool.cui .add-details-dialog .ui-dialog.ui-widget .ui-dialog-content {
+  overflow: scroll;
+}
 
 @media only screen and (min-width: 768px) {
   ul.list.list--highlight {

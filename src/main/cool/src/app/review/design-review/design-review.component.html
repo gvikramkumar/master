@@ -87,7 +87,7 @@
 
                   <p-accordion>
 
-                    <p-accordionTab *ngFor="let strategyReviewData of designReviewList" (click)="onTabOpen(strategyReviewData.taskId)">
+                    <p-accordionTab *ngFor="let strategyReviewData of designReviewList" (click)="onTabOpen(strategyReviewData.taskId, strategyReviewData.colorStatus)">
 
                       <p-header>
                         <div class="row" style="vertical-align: middle;margin-left: 20px">

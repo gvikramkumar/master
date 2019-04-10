@@ -7,7 +7,7 @@
 .search-icon .icon-search {
   position: absolute;
   top: 13px;
-  left: 350px;
+  right: 30px;
 }
 
 .auto-complete-attribute {

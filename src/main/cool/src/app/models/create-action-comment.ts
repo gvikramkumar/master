@@ -10,6 +10,7 @@ export class CreateActionComment {
     selectedFunction: string;
     assignee: Array<any>;
     dueDate: string;
+    status: string;
     constructor(
       taskId: string,
       userId: string,
@@ -21,7 +22,8 @@ export class CreateActionComment {
       mileStone: string,
       selectedFunction: string,
       assignee: Array<any>,
-      dueDate: string) {
+      dueDate: string,
+      status: string) {
           this.taskId = taskId;
           this.userId = userId;
           this.taskName = taskName;
@@ -33,5 +35,6 @@ export class CreateActionComment {
           this.selectedFunction = selectedFunction;
           this.assignee = assignee;
           this.dueDate = dueDate;
+          this.status = status;
     }
   }
