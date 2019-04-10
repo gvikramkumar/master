@@ -45,7 +45,15 @@ Promise.all([
       }
       createSelectArrays(rule);
       createNewName(rule, driver, period);
-      buf.push(props.map(prop => rule[prop]).toString());
+      // buf.push(props.map(prop => rule[prop]).toString());
+
+      buf.push(props.map(prop => {
+        if (_.isArray(rule[prop]) && rule[prop].length) {
+          return `${rule[prop].join('/')}`;
+        } else {
+          return rule[prop];
+        }
+      }).toString());
     });
     const fileName = 'rule-name-change.csv';
     fs.writeFileSync(fileName, buf.join('\n'));
@@ -54,9 +62,7 @@ Promise.all([
     process.exit(0);
     // need to look for duplicates too, but your output would show that right? Sort by newname then?
 
-
   })
-
 
 function createNewName(rule, driver, period) {
   rule.newName = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
@@ -64,11 +70,50 @@ function createNewName(rule, driver, period) {
   addSelects(rule);
 }
 
+function getMatchText(values, prop, value) {
+  const val = _.find(values, {[prop]: value});
+  if (!val) {
+    throw new Error(`getMatchText couldn't find: ${value} in prop: ${prop} of values: ${values}`);
+  }
+  return val.abbrev || val[prop];
+}
+
+function getMatchTextArray(values, prop, arr) {
+  const rtn = [];
+  arr.forEach(aval => {
+    const val = _.find(values, {[prop]: aval});
+    if (!val) {
+      throw new Error(`getMatchText couldn't find: ${aval} in prop: ${prop} of values: ${values.map(x => x[prop])}`);
+    }
+    rtn.push(val.abbrev || val[prop]);
+  });
+  return rtn.join('');
+}
+
+const salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
+const productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
+const scmsMatches = [{match: 'SCMS'}];
+const legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
+const beMatches = [{match: 'BE'}, {match: 'Sub BE', abbrev: 'SubBE'}];
+const countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
+const extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXT'}];
+const glSegmentsMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACCT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACCT'},
+  {name: 'Company', value: 'COMPANY', abbrev: 'COMP'}];
+
 function addMatches(rule) {
   let str = '';
 
+  str += rule.salesMatch ? getMatchText(salesMatches, 'match', rule.salesMatch) : '';
+  str += rule.productMatch ? getMatchText(productMatches, 'match', rule.productMatch) : '';
+  str += rule.scmsMatch ? getMatchText(scmsMatches, 'match', rule.scmsMatch) : '';
+  str += rule.beMatch ? getMatchText(beMatches, 'match', rule.beMatch) : '';
+  str += rule.legalEntityMatch ? getMatchText(legalEntityMatches, 'match', rule.legalEntityMatch) : '';
+  str += rule.countryMatch ? getMatchText(countryMatches, 'value', rule.countryMatch) : '';
+  str += rule.extTheaterMatch ? getMatchText(extTheaterMatches, 'value', rule.extTheaterMatch) : '';
+  str += rule.glSegmentsMatch.length ? getMatchTextArray(glSegmentsMatches, 'value', rule.glSegmentsMatch) : '';
+
   if (str) {
-    rule.newName += str;
+    rule.newName += `-${str}`;
   }
 }
 
