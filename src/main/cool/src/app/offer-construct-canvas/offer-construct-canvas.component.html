@@ -318,7 +318,7 @@
 
   <!-- view add details -->
   <div *ngIf='display'>
-    <dynamic-form-multiple (valueChange)='replacetabularFormQuestion($event)'></dynamic-form-multiple>
+    <dynamic-form-multiple (valueChange)='replacetabularFormQuestion($event)' [indexVal]="ind"></dynamic-form-multiple>
     <!-- <app-dynamic-form-template [dataObject]='formGroupData.groups' (valueChange)='displayCounter($event)'></app-dynamic-form-template> -->
   </div>
 

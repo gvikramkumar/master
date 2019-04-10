@@ -32,6 +32,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     public headerName: any = '';
     test: FormGroup;
     onLoad: boolean = false;
+    @Input() indexVal;
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService) {
