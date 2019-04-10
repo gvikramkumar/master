@@ -78,7 +78,7 @@
                         </span>
                       </div>
                       <div class="col-md-2">
-                        <button class="btn btn--small" type="submit" [disabled]="!eGinieSearchForm.valid">Add</button>
+                        <button class="btn" type="submit" [disabled]="!eGinieSearchForm.valid">Add</button>
                       </div>
                     </div>
                   </form>
@@ -255,9 +255,9 @@
         Changes</button>
     </div>
   </div>
-  <p-dialog header="Add Details for {{this.popHeadName}}" closable="true" modal="true" showHeader="false"
+  <p-dialog header="Add Details for {{this.popHeadName}}" [resizable]="false" [draggable]="false" closable="true" modal="true" [showHeader]="true"
     (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
-    [contentStyle]="{'height': '450px', 'width': '850px', 'max-height':'450px', 'max-width':'1000px'}"
+    [contentStyle]="{'height': '450px',  'max-height':'450px', 'max-width':'1000px', 'overflow-y':'scroll'}"
     positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
     <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
@@ -309,13 +309,10 @@
         </div>
         <!-- ends Mandatory Items -->
       </div>
-      <div class="divider" style="margin-top: 1%"></div>
-      <div class="row">
-        <div class="col-md-12 text-right">
+      <p-footer class="pull-right">
           <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
            <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
-        </div>
-      </div>
+      </p-footer>
     </form>
   </p-dialog>
 

@@ -11,6 +11,9 @@ import * as moment from 'moment';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { HeaderService, UserService, CreateOfferService, ConfigurationService } from '@shared/services';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject } from 'rxjs/internal/Subject';
+import { LoaderService } from '@shared/loader.service';
 
 
 @Component({
@@ -64,7 +67,7 @@ export class CreateOfferCoolComponent implements OnInit {
   secondaryBUbackup: any;
   proceedButtonStatusValid = false;
   backbuttonStatusValid = true;
- 
+
 
   derivedMM;
   firstData: Object;
@@ -83,6 +86,7 @@ export class CreateOfferCoolComponent implements OnInit {
   offerDescValueTrim: string = '';
   offerNameValueTrim: string = '';
 
+  subject: Subject<any> = new Subject();
 
   constructor(private createOfferService: CreateOfferService,
     private configurationService: ConfigurationService,
@@ -90,6 +94,7 @@ export class CreateOfferCoolComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private headerService: HeaderService,
+    private loaderService: LoaderService,
     private stakeholderfullService: StakeholderfullService,
     private rightPanelService: RightPanelService,
     private _location: Location) {
@@ -97,6 +102,7 @@ export class CreateOfferCoolComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       if (this.offerId) {
+        this.loaderService.startLoading(); 
         this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerDetailRes => {
           this.offerDetailRes = offerDetailRes;
           this.caseId = offerDetailRes.caseId;
@@ -137,6 +143,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
       this.primaryBusinessEntities = primaryBeArry;
       this.secondaryBusinessEntities = primaryBeArry;
+      this.loaderService.stopLoading();
       // This if condition executes only when user moves back from mm page to offer creation page.
       if (this.offerId !== undefined) {
         this.primaryBusinessEntitiesValue = this.offerDetailRes.primaryBEList[0];
@@ -361,6 +368,9 @@ export class CreateOfferCoolComponent implements OnInit {
 
 
   ngOnInit() {
+    this.subject.pipe(debounceTime(1000)).subscribe(() => {
+      this.getValidData();
+    })
     const canEscalateUsers = [];
     const canApproveUsers = [];
     this.data = [];
@@ -371,7 +381,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.loadSecondaryBu();
       this.autoSelectBE();
     }
-   
+
     this.readOnly = this.configurationService.startupData.readOnly;
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(data => {
       this.firstData = data;
@@ -438,8 +448,7 @@ export class CreateOfferCoolComponent implements OnInit {
   proceedCheck(event) {
     let inputText = event.target.value;
     let inputValue = inputText.trim();
-    if(this.offerDescValue !== undefined)
-      {this.offerDescValueTrim = this.offerDescValue.trim();}
+    if (this.offerDescValue !== undefined) { this.offerDescValueTrim = this.offerDescValue.trim(); }
     this.offerNameValueTrim = this.offerNameValue.trim();
 
     if (inputValue === "" || inputValue === null) {
@@ -539,11 +548,19 @@ export class CreateOfferCoolComponent implements OnInit {
       });
   }
 
+
   getidptoken(event) {
+    this.subject.next();
     // this.createOfferService.getIdpid().subscribe(data => {
     //  this.idpid = data;
     this.iDPId = event.target.value;
     // let header = `${this.idpid['token_type']} ${this.idpid['access_token']}`;
+
+    // })
+
+  }
+
+  getValidData() {
     this.createOfferService.validateIdpid(this.iDPId).subscribe(data => {
       this.isIdpIdValid = true;
       if (this.offerCreateForm.valid == true && this.isIdpIdValid == true) {
@@ -557,8 +574,6 @@ export class CreateOfferCoolComponent implements OnInit {
         this.idpidInvalid = true;
         this.enableOfferbuild = true;
       })
-    // })
-
   }
 
   updateMessage(message) {

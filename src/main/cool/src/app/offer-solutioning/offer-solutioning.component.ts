@@ -211,25 +211,29 @@ export class OfferSolutioningComponent implements OnInit {
 
         const offerSolutioningAnswers = resOfferSolutioningAnswers as Array<any>;
 
-        // Initialize QnA Map
-        const questionAnswerMap: Map<string, string> = new Map<string, string>();
-        for (const qna of offerSolutioningAnswers['questionAnswer']) {
-          questionAnswerMap.set(qna['questionNo'], qna['answer']);
+        if (!_.isEmpty(resOfferSolutioningAnswers)) {
+
+          // Initialize QnA Map
+          const questionAnswerMap: Map<string, string> = new Map<string, string>();
+          for (const qna of offerSolutioningAnswers['questionAnswer']) {
+            questionAnswerMap.set(qna['questionNo'], qna['answer']);
+          }
+
+          // Populate Answer Field In 'questionsAndAnswers' Array
+          for (const qna of this.unGroupedQuestionsAndAnswers) {
+            qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
+              '' : questionAnswerMap.get(qna['questionNo']);
+            qna['answerToQuestion'] = qna['questionType'] === 'Date' ?
+              moment(qna['answer']).format('MM/DD/YYYY') : qna['answerToQuestion'];
+          }
+
         }
 
-        // Populate Answer Field In 'questionsAndAnswers' Array
-        for (const qna of this.unGroupedQuestionsAndAnswers) {
-          qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
-            '' : questionAnswerMap.get(qna['questionNo']);
-          qna['answerToQuestion'] = qna['questionType'] === 'Date' ?
-            moment(qna['answer']).format('MM/DD/YYYY') : qna['answerToQuestion'];
-        }
 
         // Condtionally Hide Solutioning Question And Answers
         this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
 
         // Group 'questionsAndAnswers' -> OsGroup -> Group -> SubGroup - In Presence Of Answers
-        this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
         this.groupedQuestionsAndAnswers = this.groupSolutioningQuestionAndAnswers(this.unGroupedQuestionsAndAnswers);
         this.loaderService.stopLoading();
         this.createActionAndNotification();

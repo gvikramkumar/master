@@ -7,7 +7,7 @@
 .search-icon .icon-search {
   position: absolute;
   top: 13px;
-  left: 350px;
+  right: 30px;
 }
 
 .auto-complete-attribute {
@@ -18,7 +18,13 @@
   display: none
 }
 
-;
+.auto-complete-attribute::before {
+  content: none !important;
+}
+
+.icon-add-contain {
+  margin-right: 10px;
+}
 
 .search-fa-icon::after {
   content: '\f0da';
