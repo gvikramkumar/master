@@ -215,10 +215,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // this.getQuestionOnDragDrop(groupsName);  //set listOfOfferquestion to itemDeatils of objects
       this.offerConstructService.addDetails(groupsName).subscribe((data) => {
         this.listOfferQuestions = data.groups[0].listOfferQuestions;
-      }, (err) => {
-        console.log('error' + err);
-        this.loaderService.stopLoading();
-       },
+      }, (err) => { },
         () => {
           obj['itemDetails'] = this.listOfferQuestions;
           this.getQuestionList(obj);
@@ -604,8 +601,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         if (this.draggedItem.data) {
           if (this.draggedItem.data.isGroupNode && this.draggedItem.children.length > 0) {
             const obj = Object.create(null);
-            // obj['uniqueKey'] = ++this.counter;
-            obj['uniqueKey'] = this.draggedItem.data.uniqueKey;
+            obj['uniqueKey'] = ++this.counter;
             this.uniqueId = obj['uniqueKey'];
             obj['isGroupNode'] = true;
             obj['productName'] = this.draggedItem.data.productName;
@@ -620,8 +616,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               rowNode.node.children.forEach(element => {
                 if (element.data.uniqueKey === obj.uniqueKey && element.data.isGroupNode) {
                   const obj1 = Object.create(null);
-                  // obj1['uniqueKey'] = ++this.counter;
-                  obj1['uniqueKey'] = element1.data.uniqueKey;
+                  obj1['uniqueKey'] = ++this.counter;
                   this.uniqueId = obj['uniqueKey'];
                   obj1['isGroupNode'] = false;
                   obj1['productName'] = element1.data.productName;
@@ -706,10 +701,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           this.offerConstructService.addDetails(groupsName).subscribe((data) => {
 
             this.listOfferQuestions = data.groups[0].listOfferQuestions;
-          }, (err) => { 
-            console.log('error' + err);
-            this.loaderService.stopLoading();
-          },
+          }, (err) => { },
             () => {
               obj['itemDetails'] = this.listOfferQuestions;
               this.getQuestionList(obj);
@@ -1009,8 +1001,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructItems = [...this.offerConstructItems];
     this.countableItems.push(node.constructNodeId);
 
-    obj['uniqueNodeId'] = node.constructType + '_' + obj['uniqueKey'];
-    this.getQuestionList(obj, true);
+    if (node.eGenieFlag == false) {
+      obj['uniqueNodeId'] = node.constructType + '_' + obj['uniqueKey'];
+      this.getQuestionList(obj, true);
+    }
 
     return tempNode;
   }
@@ -1042,8 +1036,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.updateChildCount();
 
     // set question for respective major or minor section
-    obj['uniqueNodeId'] = childNode.constructType + '_' + obj['uniqueKey'];
-    this.getQuestionList(obj, true);
+    if (childNode.eGenieFlag == false) {
+      obj['uniqueNodeId'] = childNode.constructType + '_' + obj['uniqueKey'];
+      this.getQuestionList(obj, true);
+    }
 
     return tempNode;
   }
