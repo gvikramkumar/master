@@ -1,6 +1,6 @@
 <p-dialog header="Add All Offer Details" (onHide)="onHide()" class="add-details-dialog"
-  [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
-  [contentStyle]="{'min-height':'450px', 'width':'100%'}">
+  [(visible)]="offerConstructService.closeAddDetails" [resizable]="false" [draggable]="false" [maximizable]="true"
+  [contentStyle]="{'min-height':'450px', 'overflow-y':'scroll', 'width':'100%'}">
   <div class="divider" style="margin-top: -1.5%"></div>
   <div class="line-items-nav">
     <div class="row">
