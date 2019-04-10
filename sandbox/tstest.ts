@@ -3,120 +3,16 @@ import AnyObj from '../shared/models/any-obj';
 import {shUtil} from '../shared/shared-util';
 import {svrUtil} from '../server/lib/common/svr-util';
 import * as Q from 'q';
-
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
-/* 1 */
-const arr = [
-  {
-    "name" : "Software POS Revenue",
-    "value" : "POSREVSW"
-  },
-  {
-    "name" : "Svc Channel Revenue",
-    "value" : "MSCP"
-  },
-  {
-    "name" : "Shipped Revenue",
-    "value" : "SHIPREV"
-  },
-  {
-    "name" : "POS Revenue",
-    "value" : "REVPOS"
-  },
-  {
-    "name" : "Partner Dev Fund",
-    "value" : "PDF"
-  },
-  {
-    "name" : "Gross Revenue CMDM",
-    "value" : "GLREV"
-  },
-  {
-    "name" : "Legacy Driver",
-    "value" : "LEGACYDRVR"
-  },
-  {
-    "name" : "2T Subscription Revenue",
-    "value" : "2TSUBDIR"
-  },
-  {
-    "name" : "Net Revenue",
-    "value" : "GLREVMIX"
-  },
-  {
-    "name" : "Shipment",
-    "value" : "SHIPMENT"
-  },
-  {
-    "name" : "Remarketing Revenue",
-    "value" : "REMKTREV"
-  },
-  {
-    "name" : "VIP Rebate",
-    "value" : "VIP"
-  },
-  {
-    "name" : "POS Revenue Disty",
-    "value" : "REVPOSDIS"
-  },
-  {
-    "name" : "Svc Map",
-    "value" : "SERVMAP"
-  },
-  {
-    "name" : "Svc Sales Split PCT Map",
-    "value" : "SERVSLSMAP"
-  },
-  {
-    "name" : "Svc Training Split PCT Map",
-    "value" : "SERVTRNMAP"
-  },
-  {
-    "name" : "Svc Revenue",
-    "value" : "SVCREVT3"
-  },
-  {
-    "name" : "Def POS Revenue SW",
-    "value" : "DRPOSREVSW"
-  },
-  {
-    "name" : "Def Shipment",
-    "value" : "DRSHIPMENT"
-  },
-  {
-    "name" : "Def Ship Revenue SW",
-    "value" : "DRSHPREVSW"
-  },
-  {
-    "name" : "Default Driver DO NOT USE",
-    "value" : "DEFAULT"
-  },
-  {
-    "name" : "Shipped Revenue with POS Adj",
-    "value" : "SHREVPOS"
-  }
-];
+
+
+
+/*
 console.log(arr.length);
 console.log(_.sortBy(arr, 'value').map(x => x.value));
-
-
-/*
-const periodMap = {
-  MTD: 'MTD',
-  PERCENT: 'PCT',
-  ['PRIOR ROLL3']: 'ROLL3',
-  ['PRIOR ROLL6']: 'PROLL6',
-  QTD: 'QTD',
-  ROLL3: 'ROLL3',
-  ROLL6: 'ROLL6'
-};
 */
-
-
-/*
-
 
 
 

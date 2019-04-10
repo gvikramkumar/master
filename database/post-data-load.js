@@ -19,7 +19,7 @@ db.dfa_open_period.insertMany([
 db.dfa_lookup.insertMany([
   {
     key: 'database-version',
-    value: 17
+    value: 18
   },
   {
     key: 'build-number',
@@ -48,95 +48,112 @@ db.dfa_lookup.insertMany([
   {
     key: 'drivers',
     value: [
-        {
-          "name" : "Software POS Revenue",
-          "value" : "POSREVSW"
-        },
-        {
-          "name" : "Svc Channel Revenue",
-          "value" : "MSCP"
-        },
-        {
-          "name" : "Shipped Revenue",
-          "value" : "SHIPREV"
-        },
-        {
-          "name" : "POS Revenue",
-          "value" : "REVPOS"
-        },
-        {
-          "name" : "Partner Dev Fund",
-          "value" : "PDF"
-        },
-        {
-          "name" : "Gross Revenue CMDM",
-          "value" : "GLREV"
-        },
-        {
-          "name" : "Legacy Driver",
-          "value" : "LEGACYDRVR"
-        },
-        {
-          "name" : "2T Subscription Revenue",
-          "value" : "2TSUBDIR"
-        },
-        {
-          "name" : "Net Revenue",
-          "value" : "GLREVMIX"
-        },
-        {
-          "name" : "Shipment",
-          "value" : "SHIPMENT"
-        },
-        {
-          "name" : "Remarketing Revenue",
-          "value" : "REMKTREV"
-        },
-        {
-          "name" : "VIP Rebate",
-          "value" : "VIP"
-        },
-        {
-          "name" : "POS Revenue Disty",
-          "value" : "REVPOSDIS"
-        },
-        {
-          "name" : "Svc Map",
-          "value" : "SERVMAP"
-        },
-        {
-          "name" : "Svc Sales Split PCT Map",
-          "value" : "SERVSLSMAP"
-        },
-        {
-          "name" : "Svc Training Split PCT Map",
-          "value" : "SERVTRNMAP"
-        },
-        {
-          "name" : "Svc Revenue",
-          "value" : "SVCREVT3"
-        },
-        {
-          "name" : "Def POS Revenue SW",
-          "value" : "DRPOSREVSW"
-        },
-        {
-          "name" : "Def Shipment",
-          "value" : "DRSHIPMENT"
-        },
-        {
-          "name" : "Def Ship Revenue SW",
-          "value" : "DRSHPREVSW"
-        },
-        {
-          "name" : "Default Driver DO NOT USE",
-          "value" : "DEFAULT"
-        },
-        {
-          "name" : "Shipped Revenue with POS Adj",
-          "value" : "SHREVPOS"
-        }
-      ]
+      {
+        "name" : "Software POS Revenue",
+        "value" : "POSREVSW"
+      },
+      {
+        "name" : "Svc Channel Revenue",
+        "value" : "MSCP"
+      },
+      {
+        "name" : "Shipped Revenue",
+        "value" : "SHIPREV"
+      },
+      {
+        "name" : "POS Revenue",
+        "value" : "REVPOS"
+      },
+      {
+        "name" : "Partner Dev Fund",
+        "value" : "PDF"
+      },
+      {
+        "name" : "Gross Revenue CMDM",
+        "value" : "GLREV"
+      },
+      {
+        "name" : "Legacy Driver",
+        "value" : "LEGACYDRVR"
+      },
+      {
+        "name" : "2T Subscription Revenue",
+        "value" : "2TSUBDIR"
+      },
+      {
+        "name" : "Net Revenue",
+        "value" : "GLREVMIX"
+      },
+      {
+        "name" : "Shipment",
+        "value" : "SHIPMENT"
+      },
+      {
+        "name" : "Remarketing Revenue",
+        "value" : "REMKTREV"
+      },
+      {
+        "name" : "VIP Rebate",
+        "value" : "VIP"
+      },
+      {
+        "name" : "POS Revenue Disty",
+        "value" : "REVPOSDIS"
+      },
+      {
+        "name" : "Svc Map",
+        "value" : "SERVMAP"
+      },
+      {
+        "name" : "Svc Sales Split PCT Map",
+        "value" : "SERVSLSMAP"
+      },
+      {
+        "name" : "Svc Training Split PCT Map",
+        "value" : "SERVTRNMAP"
+      },
+      {
+        "name" : "Svc Revenue",
+        "value" : "SVCREVT3"
+      },
+      {
+        "name" : "Def POS Revenue SW",
+        "value" : "DRPOSREVSW"
+      },
+      {
+        "name" : "Def Shipment",
+        "value" : "DRSHIPMENT"
+      },
+      {
+        "name" : "Def Ship Revenue SW",
+        "value" : "DRSHPREVSW"
+      },
+      {
+        "name" : "Default Driver DO NOT USE",
+        "value" : "DEFAULT"
+      },
+      {
+        "name" : "Shipped Revenue with POS Adj",
+        "value" : "SHREVPOS"
+      },
+      // new triangulation rules ram's supposed to add
+      {
+        "name" : "AMERICASMISC",
+        "value" : "AMERICASMISC"
+      },
+      {
+        "name" : "CORPADJ",
+        "value" : "CORPADJ"
+      },
+      {
+        "name" : "EMERGINGMKTSMISC",
+        "value" : "EMERGINGMKTSMISC"
+      },
+      {
+        "name" : "USCANMISC",
+        "value" : "USCANMISC"
+      },
+    ]
   },
   {
     "key" : "periods",
@@ -154,13 +171,16 @@ db.dfa_lookup.insertMany([
         "period" : "ROLL6"
       },
       {
-        "period" : "PRIOR ROLL3"
+        "period" : "PRIOR ROLL3",
+        "abbrev" : "PRIOR3"
       },
       {
-        "period" : "PRIOR ROLL6"
+        "period" : "PRIOR ROLL6",
+        "abbrev" : "PRIOR6"
       },
       {
-        "period" : "PERCENT"
+        "period" : "PERCENT",
+        "abbrev" : "PCT"
       }
     ]
   }

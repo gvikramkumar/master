@@ -4,22 +4,16 @@ import {mgc} from '../server/lib/database/mongoose-conn';
 import AllocationRuleRepo from '../server/api/common/allocation-rule/repo';
 import AnyObj from '../shared/models/any-obj';
 import * as fs from 'fs';
-import * as path from 'path';
+import * as _ from 'lodash';
+import LookupRepo from '../server/api/lookup/repo';
 
-const repo = new AllocationRuleRepo();
+const ruleRepo = new AllocationRuleRepo();
+const lookupRepo = new LookupRepo();
+let drivers, periods;
 /*
 get A/I >> get new name >> update all with that name to new name... done
  */
 
-const periodMap = {
-  MTD: 'MTD',
-  PERCENT: 'PCT',
-  ['PRIOR ROLL3']: 'ROLL3',
-  ['PRIOR ROLL6']: 'PROLL6',
-  QTD: 'QTD',
-  ROLL3: 'ROLL3',
-  ROLL6: 'ROLL6'
-};
 const buf = [];
 const header = ['Old Name', 'New Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
   'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Status'
@@ -30,19 +24,32 @@ const props =       ['name', 'newName', 'driverName', 'period', 'salesMatch', 'p
 buf.push(header.toString());
 
 Promise.all([
-  repo.getMany({moduleId: 1}),
-  repo.getManyLatestGroupByNameActiveInactive(1)
+  ruleRepo.getMany({moduleId: 1}),
+  ruleRepo.getManyLatestGroupByNameActiveInactive(1),
+  lookupRepo.getValues(['drivers', 'periods'])
 ])
   .then(results => {
     const allRules = results[0];
     const latestRules = results[1];
+    drivers = results[2][0];
+    periods = results[2][1];
 
     latestRules.forEach((rule: AnyObj) => {
+      const driver = _.find(drivers, {value: rule.driverName});
+      if (!driver) {
+        throw new Error(`Missing driver: ${rule.driverName}`);
+      }
+      const period = _.find(periods, {period: rule.period});
+      if (!period) {
+        throw new Error(`Missing period: ${rule.period}`);
+      }
       createSelectArrays(rule);
-      createNewName(rule);
+      createNewName(rule, driver, period);
       buf.push(props.map(prop => rule[prop]).toString());
     });
-    fs.writeFileSync('rule-name-change.csv', buf.join('\n'));
+    const fileName = 'rule-name-change.csv';
+    fs.writeFileSync(fileName, buf.join('\n'));
+    console.log(`${latestRules.length} rules processed to /dist/sandbox/${fileName}`);
 
     process.exit(0);
     // need to look for duplicates too, but your output would show that right? Sort by newname then?
@@ -51,8 +58,8 @@ Promise.all([
   })
 
 
-function createNewName(rule) {
-  rule.newName = `${rule.driverName}-${periodMap[rule.period]}`;
+function createNewName(rule, driver, period) {
+  rule.newName = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
   addMatches(rule);
   addSelects(rule);
 }

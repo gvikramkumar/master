@@ -27,7 +27,6 @@ envs.forEach(x => {
 if (!env) {
   throw new Error('Bad NODE_ENV value');
 }
-console.log('BUILD_NUMBER:', process.env.BUILD_NUMBER);
 console.log('NODE_ENV:', env);
 
 const envConfig = configs[env + 'Config'] || {};

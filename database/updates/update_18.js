@@ -93,7 +93,24 @@ db.dfa_lookup.updateOne({key:'drivers'}, {$set: {value:  [
       {
         "name" : "Shipped Revenue with POS Adj",
         "value" : "SHREVPOS"
-      }
+      },
+      // new triangulation rules ram's supposed to add
+      {
+        "name" : "AMERICASMISC",
+        "value" : "AMERICASMISC"
+      },
+      {
+        "name" : "CORPADJ",
+        "value" : "CORPADJ"
+      },
+      {
+        "name" : "EMERGINGMKTSMISC",
+        "value" : "EMERGINGMKTSMISC"
+      },
+      {
+        "name" : "USCANMISC",
+        "value" : "USCANMISC"
+      },
     ]}});
 
 db.dfa_lookup.updateOne({key:'periods'}, {$set: {value:  [
@@ -111,11 +128,11 @@ db.dfa_lookup.updateOne({key:'periods'}, {$set: {value:  [
       },
       {
         "period" : "PRIOR ROLL3",
-        "abbrev" : "PROLL3"
+        "abbrev" : "PRIOR3"
       },
       {
         "period" : "PRIOR ROLL6",
-        "abbrev" : "PROLL6"
+        "abbrev" : "PRIOR6"
       },
       {
         "period" : "PERCENT",
