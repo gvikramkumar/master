@@ -91,6 +91,7 @@
                   <div class="col-md-3">
                     <h6>Offer Configuration </h6>
                   </div>
+                  
                   <div class="col text-right" [class.disabled]="isDisabledView">
                     <span (click)='showDialog(); displayAddDetails=false'><a href="javascript:;"><span
                           class="half-margin-right icon-add-contain"></span>
@@ -318,7 +319,7 @@
 
   <!-- view add details -->
   <div *ngIf='display'>
-    <dynamic-form-multiple (valueChange)='replacetabularFormQuestion($event)'></dynamic-form-multiple>
+    <dynamic-form-multiple (valueChange)='replacetabularFormQuestion($event)' [indexVal]="ind"></dynamic-form-multiple>
     <!-- <app-dynamic-form-template [dataObject]='formGroupData.groups' (valueChange)='displayCounter($event)'></app-dynamic-form-template> -->
   </div>
 

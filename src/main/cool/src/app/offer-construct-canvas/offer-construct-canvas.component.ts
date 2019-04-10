@@ -36,6 +36,7 @@ import { LoaderService } from './../shared/loader.service';
   providers: [OfferConstructService]
 })
 export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
+  public ind = 0;;
   questionForm: FormGroup;
   currentOfferId;
   caseId;
@@ -367,7 +368,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   showDialog() {
-
+    
+    this.ind--;
     const offerInfo = this.offerConstructService.singleMultipleFormInfo;
     const majorOfferInfo = offerInfo.major;
     const minorOfferInfo = offerInfo.minor;

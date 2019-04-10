@@ -1,6 +1,6 @@
-<p-dialog header="Add All Offer Details" (onHide)="onHide()" class="add-details-dialog"
-  [(visible)]="offerConstructService.closeAddDetails" [maximizable]="true"
-  [contentStyle]="{'min-height':'450px', 'width':'100%'}">
+<p-dialog header="Add All Item Detail" (onHide)="onHide()" class="add-details-dialog"
+  [(visible)]="offerConstructService.closeAddDetails" [resizable]="false" [draggable]="false" [maximizable]="true"
+  [contentStyle]="{'min-height':'450px', 'overflow-y':'scroll', 'width':'100%'}">
   <div class="divider" style="margin-top: -1.5%"></div>
   <div class="line-items-nav">
     <div class="row">
@@ -30,7 +30,7 @@
   <div class="container-fluid" class="view-item-details" style="width: 100%">
     <div *ngFor="let items of ismajorSection ? majorOfferInfo:  minorOfferInfo ;  let $parentIndex = index">
       <div *ngFor="let item of items |keyvalue; let $ChildIndex = index;">
-        <p-accordion (onOpen)="onTabOpen($event, item.key)">
+        <p-accordion (onOpen)="onTabOpen($event, item.key)" [activeIndex]="indexVal">
           <p-accordionTab *ngIf="offerConstructService.itemlengthList[selectedTab][item.key]">
             <p-header>
               {{item.key}}
@@ -40,7 +40,6 @@
                 <div class="form-group input--icon half-margin-bottom">
                   <div class="form-group__text search-icon">
                     <div class="row">
-
                         <div class="col-md-12">
                           <p>Product ID’s and item details</p>
                           <div class="row">
@@ -76,7 +75,7 @@
             </div>
             <div class="row">
               <!-- Accordian content starts-->
-              <div class="col-sm-2" style="padding-right: 0;overflow: hidden;">
+              <div class="col-sm-2" style="padding: 0;overflow: hidden;">
                 <!-- Unique -->
                 <table class="detail-labels text-left table table--compressed table--bordered">
                   <tbody>
