@@ -156,11 +156,11 @@
                                     *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
                                 </span>
                                 <a *ngIf="!rowData['isGroupNode'] && !rowData['eginieItem']" class="pull-right"
-                                  (click)="showAddDetailsDailog(rowNode)"><span
+                                  (click)="showAddDetailsDailog(rowNode)" [class.disabled]="isDisabledView"><span
                                     class="half-margin-right icon-add-contain"></span> Add
                                   Details</a>
                                 <a *ngIf="rowData['eginieItem']" class="pull-right"
-                                  (click)="showViewDetailsDailog(rowNode)"><span
+                                  (click)="showViewDetailsDailog(rowNode)" [class.disabled]="isDisabledView"><span
                                     class="half-margin-right icon-add-contain"></span> View
                                   Details</a>
                               </div>
@@ -182,7 +182,8 @@
                               </div>
 
                               <!-- added to copy delete node -->
-                              <a *ngIf="!readOnly" (click)='deleteNode(rowNode)' class="remove"><span class="half-margin-right icon-trash icon-small"></span>
+                              <a *ngIf="!readOnly" (click)='deleteNode(rowNode)' class="remove"
+                                [class.disabled]="isDisabledView"><span class="half-margin-right icon-trash icon-small"></span>
                                 <small>Remove Item</small></a>
                             </td>
                           </tr>
