@@ -139,7 +139,7 @@
                                 <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                                 <span (focusout)='editData=true' (click)='enableEdit()'>
-                                  <input [id]='rowData["uniqueKey"]' autocomplete="off"
+                                  <input (keyup)="onValidateChars($event)" maxlength="18" [id]='rowData["uniqueKey"]' autocomplete="off"
                                     (click)='showButton($event, rowData["uniqueKey"]);'
                                     (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
                                     [disabled]="editData ? true : null" value="{{rowData['title']}}"
