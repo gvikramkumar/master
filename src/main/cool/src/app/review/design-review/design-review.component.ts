@@ -189,7 +189,9 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
         if (this.data[i]['offerRole'] === 'Owner' || this.data[i]['functionalRole'] === 'OLE'
           || this.data[i]['functionalRole'] === 'SOE' || this.data[i]['functionalRole'] === 'NPPM'
           || this.data[i]['functionalRole'] === 'PLPM' || this.data[i]['functionalRole'] === 'CPS'
-          || this.data[i]['functionalRole'] === 'TAX' || this.data[i]['functionalRole'] === 'Legal') {
+          || this.data[i]['functionalRole'] === 'TAX' || this.data[i]['functionalRole'] === 'Legal'
+          || this.data[i]['functionalRole'] === 'Channels' || this.data[i]['functionalRole'] === 'Marketing'
+          || this.data[i]['functionalRole'] === 'Security Compliance') {
           if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
             this.stakeHolderInfo[this.data[i]['offerRole']] = [];
           }
