@@ -869,7 +869,12 @@ export class MmAssesmentComponent implements OnInit {
       }
     }
 
-    this.proceedToStakeholder('false');
+    
+    if(this.dimensionMode === false) {
+      this.proceedToStakeholder('false');
+    } else {
+      this.proceedToOfferSolution('false');
+    }
 
   }
 
