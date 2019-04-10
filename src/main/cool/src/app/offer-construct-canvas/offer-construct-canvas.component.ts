@@ -138,6 +138,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     });
   }
 
+  // 
+  onValidateChars(event) {
+
+    event.target.value = event.target.value.replace(/[&\/\\#,+()$~%.!@^_'":;*?|<>{}=-]/g, '');
+    event.target.value = event.target.value.replace(/[^\w\s]/gi, '');
+    event.target.value = event.target.value.replace(event.target.value, event.target.value.toUpperCase());
+
+  }
 
   // create a json skelaton for major and minor group
 
