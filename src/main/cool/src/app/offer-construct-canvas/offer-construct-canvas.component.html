@@ -91,7 +91,7 @@
                   <div class="col-md-3">
                     <h6>Offer Configuration </h6>
                   </div>
-                  
+
                   <div class="col text-right" [class.disabled]="isDisabledView">
                     <span (click)='showDialog(); displayAddDetails=false'><a href="javascript:;"><span
                           class="half-margin-right icon-add-contain"></span>
@@ -139,8 +139,8 @@
                                 <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                                 <span (focusout)='editData=true' (click)='enableEdit()'>
-                                  <input (keyup)="onValidateChars($event)" maxlength="18" [id]='rowData["uniqueKey"]' autocomplete="off"
-                                    (click)='showButton($event, rowData["uniqueKey"]);'
+                                  <input (keyup)="onValidateChars($event)" maxlength="18" [id]='rowData["uniqueKey"]'
+                                    autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
                                     (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
                                     [disabled]="editData ? true : null" value="{{rowData['title']}}"
                                     [autofocus]='autoFocus' *ngIf="!rowData['eginieItem']">
@@ -148,7 +148,8 @@
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
-                                    class="half-margin-right icon-edit" *ngIf="!rowData['eginieItem && !readOnly']"></span>
+                                    class="half-margin-right icon-edit"
+                                    *ngIf="!rowData['eginieItem && !readOnly']"></span>
                                   <a [id]='rowData["uniqueKey"]'
                                     *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'
                                     (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
@@ -183,7 +184,8 @@
 
                               <!-- added to copy delete node -->
                               <a *ngIf="!readOnly" (click)='deleteNode(rowNode)' class="remove"
-                                [class.disabled]="isDisabledView"><span class="half-margin-right icon-trash icon-small"></span>
+                                [class.disabled]="isDisabledView"><span
+                                  class="half-margin-right icon-trash icon-small"></span>
                                 <small>Remove Item</small></a>
                             </td>
                           </tr>
@@ -256,16 +258,16 @@
         Changes</button>
     </div>
   </div>
-  <p-dialog header="Add Details for {{this.popHeadName}}" [resizable]="false" [draggable]="false" closable="true" modal="true" [showHeader]="true"
-    (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
+  <p-dialog header="Add Details for {{this.popHeadName}}" [resizable]="false" [draggable]="false" closable="true"
+    modal="true" [showHeader]="true" (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
     [contentStyle]="{'height': '450px',  'max-height':'450px', 'max-width':'1000px', 'overflow-y':'scroll'}"
     positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
     <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
-      (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm">
+      (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm" id="addDetailsSection">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
-        <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
+        <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId];">
           <div [ngSwitch]="question.itemType">
             <div *ngSwitchCase="'Unique Item'">
               <app-dynamic-form-question [question]="question" [headerName]="popHeadName" [questionForm]="questionForm">
@@ -299,10 +301,10 @@
       <div *ngIf="showMandatoryDetails">
         <!-- starts Mandatory Items -->
         <div class="row half-margin-bottom">
-          <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
+          <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]; last as isLast">
             <div [ngSwitch]="question.itemType">
               <div *ngSwitchCase="'Item'">
-                <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
+                <app-dynamic-form-question [question]="question" [questionForm]="questionForm" [isLast]="isLast">
                 </app-dynamic-form-question>
               </div>
             </div>
@@ -311,8 +313,8 @@
         <!-- ends Mandatory Items -->
       </div>
       <p-footer class="pull-right">
-          <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
-           <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
+        <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
+        <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
       </p-footer>
     </form>
   </p-dialog>

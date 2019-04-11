@@ -38,36 +38,43 @@ export class OfferConstructService {
         return this.httpClient.post(this.environmentService.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL, groups, { withCredentials: true });
     }
 
-    
+
     toFormGroup(questions) {
         const group: any = {};
         questions.forEach(question => {
             let validators: any[] = [];
             if (question.egineAttribue !== "Item Name (PID)") {
-                if (typeof question.rules.maxCharacterLen != 'undefined'  && question.rules.maxCharacterLen) {
+                if (typeof question.rules.maxCharacterLen != 'undefined' && question.rules.maxCharacterLen) {
                     validators.push(Validators.maxLength(question.rules.maxCharacterLen))
                 }
-                if ( typeof question.rules.isMandatoryOptional != 'undefined' && question.rules.isMandatoryOptional === "Mandatory") {
+                if (typeof question.rules.isMandatoryOptional != 'undefined' && question.rules.isMandatoryOptional === "Mandatory") {
                     validators.push(Validators.required)
                 }
-                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
                     validators.push(Validators.pattern("^[0-9]*$"))
                 }
-                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "camel") {
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "camel") {
                     validators.push(Validators.pattern("^(([0-9])|([A-Z0-9][a-z0-9]+))*([A-Z])?$"))
                 }
-                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
                     validators.push(Validators.pattern("^[0-9]*\.[0-9][0-9]$"))
                 }
-                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperate numeric with no space") {
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperate numeric with no space") {
                     validators.push(Validators.pattern("^[0-9]+(,[0-9]+)*$"))
                 }
-                if ( typeof question.rules.textcase != 'undefined' && question.rules.textcase === "firstCaps") {
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "firstCaps") {
                     validators.push(Validators.pattern("^[A-Z][a-z0-9\\s]*$"))
                 }
             }
-            group[question.egineAttribue] =  new FormControl(question.currentValue || '', validators);
-            
+
+            if (question.componentType == 'Multiselect') {
+                group[question.egineAttribue] = new FormControl(question.listCurrentValue || '', validators);
+            } else {
+                group[question.egineAttribue] = new FormControl(question.currentValue || '', validators);
+            }
+
+
+
         });
         return new FormGroup(group);
     }
