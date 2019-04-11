@@ -9,7 +9,7 @@
         </div>
       </div>
 
-      <p-dataTable [value]="searchStakeHolderResultList" [(selection)]="selectedStakeHolders" [paginator]="true" [rows]="5">
+      <p-dataTable [value]="searchStakeHolderResultList" [(selection)]="selectedStakeHolders" [paginator]="true" [rows]="10">
         <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
         <p-column field="name" header="Name" [sortable]="true"></p-column>
         <p-column field="emailId" header="Email" [sortable]="true"></p-column>
