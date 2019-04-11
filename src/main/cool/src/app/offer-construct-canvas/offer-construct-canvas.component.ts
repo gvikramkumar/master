@@ -114,8 +114,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public isMajorMinorGroupCreated = false;
   public isDisabledView = true;
   listOfferQuestions: any;
-
   public isShow = false;
+  public showLoader: boolean = false;
+
   constructor(
     private cd: ChangeDetectorRef,
     private elRef: ElementRef,
@@ -210,7 +211,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }, (err) => {
         console.log('error' + err);
         this.loaderService.stopLoading();
-       },
+      },
         () => {
           obj['itemDetails'] = this.listOfferQuestions;
           this.getQuestionList(obj);
@@ -310,18 +311,27 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   addItms(uniqueNodeId) {
     let itemsData: any;
-    console.log(this.itemsList);
-
-    if (this.itemsList != null) {
-      this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(items => {
-        itemsData = items.body;
-        // this.questionForm.patchValue(itemsData);
+    if (this.showLoader) {
+      this.loaderService.startLoading();
+      if (this.itemsList != null) {
+        this.offerConstructCanvasService.getPidDetails(this.itemsList.PID).subscribe(items => {
+          this.loaderService.stopLoading();
+          this.showLoader = false;
+          itemsData = items.body;
+          // this.questionForm.patchValue(itemsData);
+          this.cd.detectChanges();
+        }, (err) => {
+          this.loaderService.stopLoading();
+          this.showLoader = false;
+        }, () => {
+          this.singleFormCopy(itemsData, uniqueNodeId);
+          this.loaderService.stopLoading();
+          this.showLoader = false;
+        });
+        this.setSearchItem.node.data.searchItemRef = this.itemsList;
+        this.offerConstructItems = [...this.offerConstructItems];
         this.cd.detectChanges();
-      }, (err) => { },
-        () => { this.singleFormCopy(itemsData, uniqueNodeId); });
-      this.setSearchItem.node.data.searchItemRef = this.itemsList;
-      this.offerConstructItems = [...this.offerConstructItems];
-      this.cd.detectChanges();
+      }
     }
   }
 
@@ -347,6 +357,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     const searchString = event.query.toUpperCase();
     this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
       this.copyAttributeResults = [...results];
+      this.showLoader = true;
     },
       (error) => {
         this.results = [];
@@ -371,7 +382,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   showDialog() {
-    
+
     this.ind--;
     const offerInfo = this.offerConstructService.singleMultipleFormInfo;
     const majorOfferInfo = offerInfo.major;
@@ -698,7 +709,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           this.offerConstructService.addDetails(groupsName).subscribe((data) => {
 
             this.listOfferQuestions = data.groups[0].listOfferQuestions;
-          }, (err) => { 
+          }, (err) => {
             console.log('error' + err);
             this.loaderService.stopLoading();
           },
@@ -860,14 +871,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // Initialize Offer Types
       const componentsObj = offerDetails['selectedCharacteristics'] == null ? null : offerDetails['selectedCharacteristics'].
         filter(char => char.subgroup === 'Offer Components');
-        // const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
-        let components = null;
-        if (componentsObj.length > 0) {
-          components = componentsObj == null ? null : componentsObj[0]['characteristics'] !== undefined ?
+      // const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
+      let components = null;
+      if (componentsObj.length > 0) {
+        components = componentsObj == null ? null : componentsObj[0]['characteristics'] !== undefined ?
           componentsObj[0]['characteristics'] : null;
-        } else {
-          components = null;
-        }
+      } else {
+        components = null;
+      }
 
       // Initialize Components
       const offerTypeObj = !offerDetails['solutioningDetails'] ? [] :
@@ -1001,8 +1012,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructItems = [...this.offerConstructItems];
     this.countableItems.push(node.constructNodeId);
 
-    obj['uniqueNodeId'] = node.constructType + '_' + obj['uniqueKey'];
-    this.getQuestionList(obj, true);
+    if (node.eGenieFlag == false) {
+      obj['uniqueNodeId'] = node.constructType + '_' + obj['uniqueKey'];
+      this.getQuestionList(obj, true);
+    }
 
     return tempNode;
   }
@@ -1034,8 +1047,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.updateChildCount();
 
     // set question for respective major or minor section
-    obj['uniqueNodeId'] = childNode.constructType + '_' + obj['uniqueKey'];
-    this.getQuestionList(obj, true);
+    if (childNode.eGenieFlag == false) {
+      obj['uniqueNodeId'] = childNode.constructType + '_' + obj['uniqueKey'];
+      this.getQuestionList(obj, true);
+    }
 
     return tempNode;
   }
@@ -1325,7 +1340,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    * @param $event Search for PID
    */
   addSearchedItemToOfferConfig() {
+    this.loaderService.startLoading();
     this.offerConstructCanvasService.getPidDetails(this.selectedPids.PID).subscribe((results) => {
+      this.loaderService.stopLoading();
       if (results.body['major/minor'] === 'Minor Line') {
         // Call to add minor line item.
         this.addMinorItem(results.body);
@@ -1338,6 +1355,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     },
       (error) => {
         this.results = [];
+        this.loaderService.stopLoading();
       }
     );
   }
@@ -1438,10 +1456,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   changeItemDetails(isManjor, info) {
     // Construct all group Nodes.
-    console.log(info);
-
     this.offerConstructItems.forEach((node) => {
-      console.log(node);
       // check if this item is major item
       if (isManjor) {
         if (node.parent === null) {
@@ -1822,16 +1837,33 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.offerConstructService.singleMultipleFormInfo[groupType][index][groupName]['productInfo'].forEach(element => {
         let productName: any = Object.keys(element);
         if (element[productName].uniqueKey == uniqueId) {
-          this.questionsList[this.uniqueNodeId] = element[productName].listOfferQuestions;
-          this.QuestionsNodeInfo[this.uniqueNodeId] = {
-            'uniqueId': uniqueId, 'groupName': groupName,
-            'isMajor': isMajor, 'title': title,
-            'uniqueNodeId': this.uniqueNodeId,
-            'questionList': element[productName].listOfferQuestions
-          };
+          if (this.questionsList[this.uniqueNodeId] == undefined) {
+            this.questionsList[this.uniqueNodeId] = element[productName].listOfferQuestions;
+            this.QuestionsNodeInfo[this.uniqueNodeId] = {
+              'uniqueId': uniqueId, 'groupName': groupName,
+              'isMajor': isMajor, 'title': title,
+              'uniqueNodeId': this.uniqueNodeId,
+              'questionList': element[productName].listOfferQuestions
+            };
+          } else {
+            this.questionsList[this.uniqueNodeId].forEach(item => {
+              if (Object.keys(item) != this.uniqueNodeId) {
+                this.questionsList[this.uniqueNodeId] = element[productName].listOfferQuestions;
+                this.QuestionsNodeInfo[this.uniqueNodeId] = {
+                  'uniqueId': uniqueId, 'groupName': groupName,
+                  'isMajor': isMajor, 'title': title,
+                  'uniqueNodeId': this.uniqueNodeId,
+                  'questionList': element[productName].listOfferQuestions
+                };
+              }
+            });
+          }
         }
       });
     });
+
+    console.log("question set", this.questionsList[this.uniqueNodeId]);
+
   }
 
   deleteQuestionToNode(uniqueId, groupName, isMajor, title) {
@@ -1921,6 +1953,26 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     });
 
   }
+  // replaceOrUpdatevalue(listOfferQuestions, isUdate) {
+  //   console.log("before change", listOfferQuestions);
+  //   listOfferQuestions.forEach(element => {
+  //     if (isUdate) {  //update the value
+  //       if (element.componentType !== "Multiselect") {
+  //         element.previousValue = element.currentValue;
+  //       } else {
+  //         element.listPreviousValue = element.listCurrentValue;
+  //       }
+  //     } else {  // for cancel the form 
+  //       if (element.componentType !== "Multiselect") {
+  //         element.currentValue = element.previousValue;
+  //       } else {
+  //         element.listCurrentValue = element.listPreviousValue;
+  //         //element.previousValue = element.listCurrentValue;
+  //       }
+  //     }
+  //   });
+  //   console.log(listOfferQuestions);
+  // }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

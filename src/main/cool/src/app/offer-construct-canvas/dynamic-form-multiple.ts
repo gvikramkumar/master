@@ -1,3 +1,4 @@
+import { LoaderService } from './../shared/loader.service';
 import { Component, OnInit, Input, Output, ViewChild, ElementRef, Renderer, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -32,11 +33,13 @@ export class DynamicFormMultipleComponent implements OnInit {
     public headerName: any = '';
     test: FormGroup;
     onLoad: boolean = false;
+    public showLoader: boolean = false;
 
     @Input() indexVal;
 
     constructor(public offerConstructService: OfferConstructService,
-        private offerConstructCanvasService: OfferconstructCanvasService) {
+        private offerConstructCanvasService: OfferconstructCanvasService,
+        private loaderService: LoaderService) {
 
 
     }
@@ -125,9 +128,10 @@ export class DynamicFormMultipleComponent implements OnInit {
             this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(majorProduct => {
-                    majorProduct.currentValue = majorProduct.previousValue;
-                    if(majorProduct.listCurrentValue){
-                        majorProduct.listCurrentValue = "";
+                    if (majorProduct.componentType !== "Multiselect") {
+                        majorProduct.currentValue = majorProduct.previousValue;
+                    } else {
+                        majorProduct.listCurrentValue = majorProduct.listPreviousValue;
                     }
                 });
             });
@@ -137,15 +141,36 @@ export class DynamicFormMultipleComponent implements OnInit {
             this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(minorProduct => {
-                    minorProduct.currentValue = minorProduct.previousValue;
-                    if(minorProduct.listCurrentValue){
-                        minorProduct.listCurrentValue = "";
+                    if (minorProduct.componentType !== "Multiselect") {
+                        minorProduct.currentValue = minorProduct.previousValue;
+                    } else {
+                        minorProduct.listCurrentValue = minorProduct.listPreviousValue;
                     }
                 });
             });
         });
         this.offerConstructService.closeAddDetails = false;
     }
+
+    // replaceOrUpdatevalue(questions, isUdate) {
+    //     if (isUdate) {
+    //         questions.listOfferQuestions.forEach(list => {
+    //             if (list.componentType !== "Multiselect") {
+    //                 list.previousValue = list.currentValue;
+    //             } else {
+    //                 list.listPreviousValue = list.listCurrentValue;
+    //             }
+    //         });
+    //     } else {
+    //         questions.listOfferQuestions.forEach(item => {
+    //             if (item.componentType !== "Multiselect") {
+    //                 item.currentValue = item.previousValue;
+    //             } else {
+    //                 item.listCurrentValue = item.listPreviousValue;
+    //             }
+    //         });
+    //     }
+    // }    
 
     replaceOrUpdatevalue(questions, isUdate) {
 
@@ -172,7 +197,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     searchCopyAttributes(event) {
         const searchString = event.query.toUpperCase();
         this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
-            console.log(results);
+            this.showLoader = true;
             this.copyAttributeResults = [...results];
         },
             (error) => {
@@ -231,15 +256,26 @@ export class DynamicFormMultipleComponent implements OnInit {
     addItms(groupName) {
         let selectedSection = this.selectedTab;
         let selectedGroup = groupName;
-        if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
-            this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
-                if (items != undefined) {
-                    this.itemsData = items.body;
-                } else {
-                    console.log("network error");
-                }
-            }, (err) => { },
-                () => { });
+        if (this.showLoader) {
+            if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
+                this.loaderService.startLoading();
+                this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
+                    this.loaderService.stopLoading();
+                    this.showLoader = false;
+                    if (items != undefined) {
+                        this.itemsData = items.body;
+                    } else {
+                        console.log("network error");
+                    }
+                }, (err) => {
+                    this.showLoader = false;
+                    this.loaderService.stopLoading();
+
+                }, () => {
+                    this.loaderService.stopLoading();
+                    this.showLoader = false;
+                });
+            }
         }
     }
 
