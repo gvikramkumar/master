@@ -82,12 +82,15 @@ export class OfferSolutionQuestionComponent implements OnInit {
         const childIndexGroupData = childQuestionsGroup.findIndex(cqa => cqa.questionNo === childQuestionNumber);
 
 
-        if (question['questionType'] === 'Radio Button' && selectedValue === 'No') {
+        if ((question['questionType'] === 'Radio Button' || question['questionType'] === 'dropdown')
+          && (selectedValue === 'No' || selectedValue === 'N/A')) {
+          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = true;
           this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['answerToQuestion'] = 'N/A';
           this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = '';
           this.showHiddenQuestionBasedOnUserInput('N/A', this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]);
         } else {
           this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
+          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = 'Mandatory';
         }
 
       }
