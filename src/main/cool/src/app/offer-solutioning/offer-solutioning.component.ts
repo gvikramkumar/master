@@ -349,6 +349,7 @@ export class OfferSolutioningComponent implements OnInit {
       ...question,
       hideQuestion: false,
       validUser: validUser,
+      inValidDate: question.questionType === 'Date' ? true : false,
       selectedAttributes: selectedAttributes
     };
 
