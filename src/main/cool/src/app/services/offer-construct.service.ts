@@ -73,8 +73,6 @@ export class OfferConstructService {
                 group[question.egineAttribue] = new FormControl(question.currentValue || '', validators);
             }
 
-
-
         });
         return new FormGroup(group);
     }
