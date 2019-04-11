@@ -16,11 +16,8 @@ export class DynamicFormQuestionComponent implements OnInit {
 
   ngOnInit() {
     let item = document.getElementById('addDetailsSection');
-
-    console.log(item);
-
-    console.log("isLast", this.isLast);
-
+    item.scrollTop = 0;
+    item.scrollIntoView(true);
   }
 
 }

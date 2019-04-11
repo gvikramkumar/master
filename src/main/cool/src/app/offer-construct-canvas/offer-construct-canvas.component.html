@@ -263,60 +263,63 @@
     [contentStyle]="{'height': '450px',  'max-height':'450px', 'max-width':'1000px', 'overflow-y':'scroll'}"
     positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
-    <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
-      (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm" id="addDetailsSection">
-      <!-- Items Top Section -->
-      <div class="row half-margin-bottom">
-        <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId];">
-          <div [ngSwitch]="question.itemType">
-            <div *ngSwitchCase="'Unique Item'">
-              <app-dynamic-form-question [question]="question" [headerName]="popHeadName" [questionForm]="questionForm">
-              </app-dynamic-form-question>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="divider" style="margin-top: 1%"></div>
-      <!-- Unique Item  Mandatory Section -->
-      <div class="row">
-        <div class="col-md-6">
-          <a (click)="openMandatory()"><span class="icon-add-contain"></span> Mandatory Item Attributes</a>
-        </div>
-        <div class="col-md-6 search-buffer">
-          <div class="form-group input--icon half-margin-bottom">
-            <div class="form-group__text search-icon">
-              <p-autoComplete (click)='addItms(uniqueNodeId)' [ngModelOptions]="{standalone: true}"
-                [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
-                (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
-                placeholder="Copy Attributes" [size]="100" [minLength]="9">
-              </p-autoComplete>
-              <button [disabled]="readOnly" type="button" class="link">
-                <span class="icon-search"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="divider" style="margin-top: 1%"></div>
-      <div *ngIf="showMandatoryDetails">
-        <!-- starts Mandatory Items -->
+    <div id="addDetailsSection">
+      <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
+        (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm">
+        <!-- Items Top Section -->
         <div class="row half-margin-bottom">
           <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId];">
             <div [ngSwitch]="question.itemType">
-              <div *ngSwitchCase="'Item'">
-                <app-dynamic-form-question [question]="question" [questionForm]="questionForm" [isLast]="isLast">
+              <div *ngSwitchCase="'Unique Item'">
+                <app-dynamic-form-question [question]="question" [headerName]="popHeadName"
+                  [questionForm]="questionForm">
                 </app-dynamic-form-question>
               </div>
             </div>
           </div>
         </div>
-        <!-- ends Mandatory Items -->
-      </div>
-      <p-footer class="pull-right">
-        <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
-        <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
-      </p-footer>
-    </form>
+        <div class="divider" style="margin-top: 1%"></div>
+        <!-- Unique Item  Mandatory Section -->
+        <div class="row">
+          <div class="col-md-6">
+            <a (click)="openMandatory()"><span class="icon-add-contain"></span> Mandatory Item Attributes</a>
+          </div>
+          <div class="col-md-6 search-buffer">
+            <div class="form-group input--icon half-margin-bottom">
+              <div class="form-group__text search-icon">
+                <p-autoComplete (click)='addItms(uniqueNodeId)' [ngModelOptions]="{standalone: true}"
+                  [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
+                  (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
+                  placeholder="Copy Attributes" [size]="100" [minLength]="9">
+                </p-autoComplete>
+                <button [disabled]="readOnly" type="button" class="link">
+                  <span class="icon-search"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="divider" style="margin-top: 1%"></div>
+        <div *ngIf="showMandatoryDetails">
+          <!-- starts Mandatory Items -->
+          <div class="row half-margin-bottom">
+            <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
+              <div [ngSwitch]="question.itemType">
+                <div *ngSwitchCase="'Item'">
+                  <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
+                  </app-dynamic-form-question>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ends Mandatory Items -->
+        </div>
+        <p-footer class="pull-right">
+          <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
+          <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
+        </p-footer>
+      </form>
+    </div>
   </p-dialog>
 
   <!-- view add details -->

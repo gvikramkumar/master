@@ -1547,7 +1547,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     // this.mapDropDownValues();
 
     this.questionForm = this.offerConstructService.toFormGroup(this.questionsList[this.uniqueNodeId]);
-
   }
 
   private mapDropDownValues() {
