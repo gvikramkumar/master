@@ -175,10 +175,7 @@ export default class SubmeasureController extends ApprovalController {
     if (!measureId) {
       throw new ApiError('getGroupingSubmeasures called with no measureId');
     }
-    this.repo.getManyByGroupLatest({
-      groupField: 'name',
-      status: 'A',
-      moduleId: req.body.moduleId,
+    this.repo.getManyLatestGroupByNameActive(req.body.moduleId, {
       measureId,
       'indicators.groupFlag': 'Y'
     })
