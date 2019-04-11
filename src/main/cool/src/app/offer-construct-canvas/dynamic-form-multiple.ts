@@ -152,39 +152,25 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.offerConstructService.closeAddDetails = false;
     }
 
-    // replaceOrUpdatevalue(questions, isUdate) {
-    //     if (isUdate) {
-    //         questions.listOfferQuestions.forEach(list => {
-    //             if (list.componentType !== "Multiselect") {
-    //                 list.previousValue = list.currentValue;
-    //             } else {
-    //                 list.listPreviousValue = list.listCurrentValue;
-    //             }
-    //         });
-    //     } else {
-    //         questions.listOfferQuestions.forEach(item => {
-    //             if (item.componentType !== "Multiselect") {
-    //                 item.currentValue = item.previousValue;
-    //             } else {
-    //                 item.listCurrentValue = item.listPreviousValue;
-    //             }
-    //         });
-    //     }
-    // }    
-
     replaceOrUpdatevalue(questions, isUdate) {
-
         if (isUdate) {
             questions.listOfferQuestions.forEach(list => {
-                list.previousValue = list.currentValue;
+                if (list.componentType !== "Multiselect") {
+                    list.previousValue = list.currentValue;
+                } else {
+                    list.listPreviousValue = list.listCurrentValue;
+                }
             });
         } else {
             questions.listOfferQuestions.forEach(item => {
-                item.currentValue = item.previousValue;
+                if (item.componentType !== "Multiselect") {
+                    item.currentValue = item.previousValue;
+                } else {
+                    item.listCurrentValue = item.listPreviousValue;
+                }
             });
         }
     }
-
 
     //search copy and paste in multiple form
 

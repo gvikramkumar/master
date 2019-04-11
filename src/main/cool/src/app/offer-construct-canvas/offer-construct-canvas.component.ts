@@ -241,9 +241,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   getQuestionList(obj, isQuestionPresent?) {
-
-    console.log('isQuestionPresent', isQuestionPresent);
-
     const group_name = obj.productName;
     const majorItem = {
       groupName: group_name
@@ -832,7 +829,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.subscription = this.messageService.getMessage()
       .subscribe(message => {
         this.saveOfferConstructChanges();
-      });
+      }, (err) => { this.loaderService.stopLoading(); },
+        () => { });
 
     this.eGinieSearchForm = new FormGroup({
       searchPID: new FormControl(null, Validators.required)
@@ -857,9 +855,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         if (val == 'close') {
           this.display = false;
         }
-      });
+      }, (err) => { this.loaderService.stopLoading(); },
+        () => { });
 
       this.offerConstructItems = [...this.offerConstructItems];
+    }, (err) => {
+      this.loaderService.stopLoading();
+    }, () => {
+
     });
 
     this.questionForm = new FormGroup({
@@ -932,7 +935,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         this.itemCategories = majorItemsList.concat(minorItemsList);
 
 
-      }, (err) => { console.log(err); },
+      }, (err) => {
+        console.log(err);
+        this.loaderService.stopLoading();
+      },
         () => (this.createMajorMinorGroup(), this.offerDetailView()));
 
     });
@@ -946,9 +952,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       { field: 'listPrice', header: 'LIST PRICE(USD)' }
     ];
 
-
     this.readOnly = this.configurationService.startupData.readOnly;
-
   }
 
 
@@ -1089,6 +1093,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
     });
     this.updateChildCount();
+
+    console.log("--------------------offerDetailRes.constructDetails", offerDetailRes.constructDetails);
+
   }
 
   dragStartRow($event, item) {
@@ -1867,9 +1874,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         }
       });
     });
-
-    console.log("question set", this.questionsList[this.uniqueNodeId]);
-
   }
 
   deleteQuestionToNode(uniqueId, groupName, isMajor, title) {
@@ -1951,34 +1955,21 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   replaceOrUpdatevalue(listOfferQuestions, isUdate) {
     listOfferQuestions.forEach(element => {
-      if (isUdate) {
-        element.previousValue = element.currentValue;
-      } else {
-        element.currentValue = element.previousValue;
+      if (isUdate) {  //update the value
+        if (element.componentType !== "Multiselect") {
+          element.previousValue = element.currentValue;
+        } else {
+          element.listPreviousValue = element.listCurrentValue;
+        }
+      } else {  // for cancel the form 
+        if (element.componentType !== "Multiselect") {
+          element.currentValue = element.previousValue;
+        } else {
+          element.listCurrentValue = element.listPreviousValue;
+        }
       }
     });
-
   }
-  // replaceOrUpdatevalue(listOfferQuestions, isUdate) {
-  //   console.log("before change", listOfferQuestions);
-  //   listOfferQuestions.forEach(element => {
-  //     if (isUdate) {  //update the value
-  //       if (element.componentType !== "Multiselect") {
-  //         element.previousValue = element.currentValue;
-  //       } else {
-  //         element.listPreviousValue = element.listCurrentValue;
-  //       }
-  //     } else {  // for cancel the form
-  //       if (element.componentType !== "Multiselect") {
-  //         element.currentValue = element.previousValue;
-  //       } else {
-  //         element.listCurrentValue = element.listPreviousValue;
-  //         //element.previousValue = element.listCurrentValue;
-  //       }
-  //     }
-  //   });
-  //   console.log(listOfferQuestions);
-  // }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

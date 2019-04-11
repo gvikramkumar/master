@@ -10,10 +10,17 @@ export class DynamicFormQuestionComponent implements OnInit {
   @Input() question: any;
   @Input() questionForm: FormGroup;
   @Input() headerName: FormGroup;
+  @Input() isLast: any;
 
   constructor() { }
 
   ngOnInit() {
+    let item = document.getElementById('addDetailsSection');
+
+    console.log(item);
+
+    console.log("isLast", this.isLast);
+
   }
 
 }
