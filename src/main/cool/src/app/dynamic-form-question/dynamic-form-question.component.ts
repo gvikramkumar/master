@@ -14,11 +14,7 @@ export class DynamicFormQuestionComponent implements OnInit {
   constructor(public offerConstructService: OfferConstructService) {
   }
 
-  ngOnInit() {
-    let item = document.querySelector('#addDetailsSection');
-    item.scrollTop = 0;
-    item.scrollIntoView(true);
-  }
+  ngOnInit() { }
 
 
 
