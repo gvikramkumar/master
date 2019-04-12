@@ -37,16 +37,28 @@ export class OfferSolutionQuestionComponent implements OnInit {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
   }
 
-  validateDate(childDate: any, question: any) {
+  validateDate(date: any, question: any) {
 
-    this.inValidDate = false;
+    question['inValidDate'] = false;
     const group = question['group'];
     const osGroup = question['oSgroup'];
     const subGroup = question['subGroup'];
+
     const parentIndex = this.groupData[osGroup][group][subGroup]['questions']
       .findIndex(qna => qna.question === 'Announcement Start Date: ');
-
     let parentDate = this.groupData[osGroup][group][subGroup]['questions'][parentIndex]['answerToQuestion'];
+
+    const childIndex = this.groupData[osGroup][group][subGroup]['questions']
+      .findIndex(qna => qna.question === 'Announcement End Date: ');
+    let childDate = this.groupData[osGroup][group][subGroup]['questions'][childIndex]['answerToQuestion'];
+
+
+    if (question['question'] === 'Announcement Start Date: ') {
+      parentDate = date;
+    } else {
+      childDate = date;
+    }
+
     parentDate = new Date(moment(parentDate).format('YYYY-MM-DD'));
     childDate = new Date(moment(childDate).format('YYYY-MM-DD'));
 
@@ -54,6 +66,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
     if (diffInDays > 180 || (parentDate > childDate)) {
       this.inValidDate = true;
+      question['inValidDate'] = true;
     }
 
   }
@@ -82,12 +95,15 @@ export class OfferSolutionQuestionComponent implements OnInit {
         const childIndexGroupData = childQuestionsGroup.findIndex(cqa => cqa.questionNo === childQuestionNumber);
 
 
-        if (question['questionType'] === 'Radio Button' && selectedValue === 'No') {
+        if ((question['questionType'] === 'Radio Button' || question['questionType'] === 'dropdown')
+          && (selectedValue === 'No' || selectedValue === 'N/A')) {
+          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = true;
           this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['answerToQuestion'] = 'N/A';
           this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = '';
           this.showHiddenQuestionBasedOnUserInput('N/A', this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]);
         } else {
           this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
+          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = 'Mandatory';
         }
 
       }

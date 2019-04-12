@@ -87,6 +87,7 @@ export class CreateOfferCoolComponent implements OnInit {
   offerNameValueTrim: string = '';
 
   subject: Subject<any> = new Subject();
+  validFlag: boolean = true;
 
   constructor(private createOfferService: CreateOfferService,
     private configurationService: ConfigurationService,
@@ -550,6 +551,11 @@ export class CreateOfferCoolComponent implements OnInit {
 
 
   getidptoken(event) {
+    if(event.target.value.length === 9) {
+      this.validFlag = false;
+    } else {
+      this.validFlag = true;
+    }
     this.subject.next();
     // this.createOfferService.getIdpid().subscribe(data => {
     //  this.idpid = data;
