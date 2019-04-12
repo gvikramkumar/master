@@ -162,12 +162,13 @@
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
                                   <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' [(ngModel)]="pInfo.currentValue" class="form-control" [formControlName]="pInfo.egineAttribue">
-                                </div>
+                                
                                 <span class="help-block" *ngIf="offerForm.controls[pInfo.egineAttribue].errors && (offerForm.controls[pInfo.egineAttribue].touched || offerForm.controls[pInfo.egineAttribue].dirty)" >
                                  <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.required">{{pInfo.egineAttribue}} is required</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
                               </span>
+                              </div>
                               </div>
                             </td>
 
@@ -178,12 +179,12 @@
                                     [(ngModel)]="pInfo.currentValue" class="form-control" [formControlName]="pInfo.egineAttribue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                </div>
                                 <span class="help-block" *ngIf="offerForm.controls[pInfo.egineAttribue].errors && (offerForm.controls[pInfo.egineAttribue].touched || offerForm.controls[pInfo.egineAttribue].dirty)" >
                                  <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.required">{{pInfo.egineAttribue}} is required</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
                               </span>
+                            </div>
                               </div>
                             </td>
 
@@ -194,12 +195,12 @@
                                     [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                </div>
                                 <span class="help-block" *ngIf="offerForm.controls[pInfo.egineAttribue].errors && (offerForm.controls[pInfo.egineAttribue].touched || offerForm.controls[pInfo.egineAttribue].dirty)" >
                                  <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.required">{{pInfo.egineAttribue}} is required</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
                               </span>
+                            </div>
                               </div>
                             </td>
 
@@ -210,12 +211,12 @@
                                     [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                </div>
                                 <span class="help-block" *ngIf="offerForm.controls[pInfo.egineAttribue].errors && (offerForm.controls[pInfo.egineAttribue].touched || offerForm.controls[pInfo.egineAttribue].dirty)" >
                                  <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.required">{{pInfo.egineAttribue}} is required</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
                               </span>
+                            </div>
                               </div>
                             </td>
 
@@ -257,6 +258,11 @@
                                 <div class="form-group__text">
                                   <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
                                     [(ngModel)]="pInfo.currentValue" class="form-control" [formControlName]="pInfo.egineAttribue">
+                                    <span class="help-block" *ngIf="offerForm.controls[pInfo.egineAttribue].errors && (offerForm.controls[pInfo.egineAttribue].touched || offerForm.controls[pInfo.egineAttribue].dirty)" >
+                                     <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.required">{{pInfo.egineAttribue}} is required</span>
+                                    <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
+                                    <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
+                                  </span>
                                 </div>
                               </div>
                             </td>
@@ -268,12 +274,12 @@
                                     [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                </div>
                                 <span class="help-block" *ngIf="offerForm.controls[pInfo.egineAttribue].errors && (offerForm.controls[pInfo.egineAttribue].touched || offerForm.controls[pInfo.egineAttribue].dirty)" >
                                  <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.required">{{pInfo.egineAttribue}} is required</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
                               </span>
+                            </div>
                               </div>
                             </td>
 
@@ -284,12 +290,12 @@
                                     [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                </div>
                                 <span class="help-block" *ngIf="offerForm.controls[pInfo.egineAttribue].errors && (offerForm.controls[pInfo.egineAttribue].touched || offerForm.controls[pInfo.egineAttribue].dirty)" >
                                  <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.required">{{pInfo.egineAttribue}} is required</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
                               </span>
+                            </div>
                               </div>
                             </td>
 
@@ -300,12 +306,12 @@
                                     [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                </div>
                                 <span class="help-block" *ngIf="offerForm.controls[pInfo.egineAttribue].errors && (offerForm.controls[pInfo.egineAttribue].touched || offerForm.controls[pInfo.egineAttribue].dirty)" >
                                  <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.required">{{pInfo.egineAttribue}} is required</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
                                 <span *ngIf="offerForm.controls[pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
                               </span>
+                            </div>
                               </div>
                             </td>
 
