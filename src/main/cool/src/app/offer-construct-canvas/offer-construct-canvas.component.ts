@@ -395,11 +395,18 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     const majorLength = {};
     const minorLength = {};
+    let questionsSet = new Set();
+    
     majorOfferInfo.forEach((element, index) => {
       const name: any = Object.keys(element);
       majorLength[name] = false;
       if ((element[name].productInfo).length > 0) {
         majorLength[name] = true;
+      }
+      if ((element[name].questionset).length > 0) {
+        (element[name].questionset).forEach (item => {
+            questionsSet.add(item);
+        });
       }
     });
     minorOfferInfo.forEach(element => {
@@ -408,10 +415,18 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       if ((element[name].productInfo).length > 0) {
         minorLength[name] = true;
       }
+      if ((element[name].questionset).length > 0) {
+        (element[name].questionset).forEach (item => {
+            questionsSet.add(item);
+        });
+      }
     });
+    
     this.offerConstructService.itemlengthList = { major: majorLength, minor: minorLength };
     this.display = true;
     this.offerConstructService.closeAddDetails = true;
+    
+    this.offerConstructService.setQuestionsSet(questionsSet);    
   }
 
   //remove node from offerConstructService.singleMultipleFormInfo
@@ -867,7 +882,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     this.questionForm = new FormGroup({
     });
-
+    
     this.multipleForms = new FormGroup({
     });
 

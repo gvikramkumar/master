@@ -31,7 +31,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     public viewDetails: Boolean = false;
     public detailArray: any[] = [];
     public headerName: any = '';
-    test: FormGroup;
+    offerForm: FormGroup;
     onLoad: boolean = false;
     public showLoader: boolean = false;
 
@@ -53,6 +53,12 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.tableShowCondition = true;
         this.selectedTab = 'major';
         this.createObjectForSearch();
+        
+         this.offerForm = new FormGroup({
+            });
+            
+        this.offerForm = this.offerConstructService.toFormGroup(this.offerConstructService.questionsSet);
+        
     }
 
     createObjectForSearch() {
@@ -93,7 +99,7 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     onHideViewDetailsModal() {
         console.log("test");
-
+        
         //this.closeDailog(false);  //reset form info
     }
 
@@ -177,6 +183,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     onTabOpen(e, headerName) {
         this.currenntHeaderName = headerName;
         // this.itemsList[headerName] = {};
+        this.offerForm = this.offerConstructService.toFormGroup(this.offerConstructService.questionsSet);
 
     }
 
@@ -324,6 +331,7 @@ export class DynamicFormMultipleComponent implements OnInit {
             }
             this.viewDetails = true;
         }
+        //this.offerForm = this.offerConstructService.toFormGroup(this.detailArray);
     }
 
     onHideViewDetails() {
