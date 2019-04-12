@@ -10,6 +10,7 @@ import { OfferConstructService } from '@app/services/offer-construct.service';
 export class DynamicFormQuestionComponent implements OnInit {
   @Input() question: any;
   @Input() questionForm: FormGroup;
+  @Input() offerForm: FormGroup;
   @Input() headerName: FormGroup;
   constructor(public offerConstructService: OfferConstructService) {
   }
