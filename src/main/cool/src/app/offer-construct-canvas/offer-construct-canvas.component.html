@@ -264,7 +264,7 @@
     positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
     <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
-      (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm" id="addDetailsSection">
+      (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
         <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId];">
@@ -301,10 +301,10 @@
       <div *ngIf="showMandatoryDetails">
         <!-- starts Mandatory Items -->
         <div class="row half-margin-bottom">
-          <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId];">
+          <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
             <div [ngSwitch]="question.itemType">
               <div *ngSwitchCase="'Item'">
-                <app-dynamic-form-question [question]="question" [questionForm]="questionForm" [isLast]="isLast">
+                <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
                 </app-dynamic-form-question>
               </div>
             </div>

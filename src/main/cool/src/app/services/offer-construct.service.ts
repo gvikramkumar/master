@@ -13,6 +13,7 @@ export class OfferConstructService {
     public singleMultipleFormInfo: any = {};  // for add details single form and multiple form
     public itemlengthList: any = [];  // for add details single form and multiple form
     public closeAddDetails: boolean;
+    public questionsSet = new Set();
 
     public space: Subject<string> = new BehaviorSubject<string>(null);
     submitClickEvent = new EventEmitter();
@@ -36,6 +37,10 @@ export class OfferConstructService {
 
     addDetails(groups): Observable<any> {
         return this.httpClient.post(this.environmentService.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL, groups, { withCredentials: true });
+    }
+    
+    setQuestionsSet(questionsSet) {
+        this.questionsSet = questionsSet;
     }
 
 
@@ -62,7 +67,7 @@ export class OfferConstructService {
                 if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperate numeric with no space") {
                     validators.push(Validators.pattern("^[0-9]+(,[0-9]+)*$"))
                 }
-                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "firstCaps") {
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
                     validators.push(Validators.pattern("^[A-Z][a-z0-9\\s]*$"))
                 }
             }
@@ -76,4 +81,5 @@ export class OfferConstructService {
         });
         return new FormGroup(group);
     }
+    
 }

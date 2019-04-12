@@ -31,6 +31,24 @@
       </div>
     </div>
 
+    <!-- Free Text with No Space -->
+
+    <div *ngIf="question['questionType']==='Free Text with No Space'">
+      <div class="form-group" [class.has-error]="freeTextWithNoSpace.invalid" [class.has-success]="freeTextWithNoSpace.valid">
+
+        <textarea class="textarea" name="{{question['questionNo']}}" id="question['questionNo']" #freeTextWithNoSpace="ngModel"
+          [value]="question['answer']" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion']"
+          rows="3" maxlength="{{question['rules']['maxCharacterLen']}}"
+          [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+          (change)="showHiddenQuestionBasedOnUserInput(freeTextWithNoSpace.value, question)"></textarea>
+
+        <span class="help-block" *ngIf="freeTextWithNoSpace.invalid && (freeTextWithNoSpace.dirty || freeTextWithNoSpace.touched)">
+          <span *ngIf="freeTextWithNoSpace.errors.required">Valid input is required</span>
+        </span>
+
+      </div>
+    </div>
+
     <!-- Currency Text -->
 
     <div *ngIf="question['questionType']==='Currency Text'">

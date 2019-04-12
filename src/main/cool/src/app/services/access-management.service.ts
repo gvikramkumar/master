@@ -71,7 +71,7 @@ export class AccessManagementService {
      */
     canCurrentUserTakeAction(currentUserData: any, userData: any) {
         return currentUserData.isSuperAdmin ||
-            (currentUserData.isFunctionalAdmin && currentUserData.functionsUserCanAddTo.includes(userData['functionalRole']));
+            (currentUserData.isFunctionalAdmin && currentUserData.functionalRole.includes(userData['functionalRole']));
     }
     getUserDetails(user: string) {
         return this.httpClient.post<[]>(this.environmentService.REST_API_LDAP_USER_DETAILS_URL, {userId: user}, { withCredentials: true });
@@ -112,7 +112,7 @@ export class AccessManagementService {
                 if (currentUserData.isSuperAdmin) {
                     return resFunctions;
                 } else if (currentUserData.isFunctionalAdmin) {
-                    return _.uniq(currentUserData.functionsUserCanAddTo);
+                    return _.uniq(currentUserData.functionalRole);
                 }
             })
         );
