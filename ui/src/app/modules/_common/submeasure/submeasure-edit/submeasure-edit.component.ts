@@ -292,7 +292,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         const promises2: Promise<any>[] = [
           this.pgLookupService.callRepoMethod('getSubmeasureFlashCategories', {submeasureKey: this.sm.submeasureKey || 0}).toPromise(),
           this.pgLookupService.callRepoMethod('getSubmeasureAdjustmentTypes', {submeasureKey: this.sm.submeasureKey || 0}).toPromise()
-        ]
+        ];
         if ((this.viewMode || this.editMode) && this.isManualMix()) { // needs submeasureKey for this call
           promises2.push(this.pgLookupService.callRepoMethod('getManualMixHwSwBySubmeasureKey',
             {submeasureKey: this.sm.submeasureKey, moduleId: this.store.module.moduleId}).toPromise());
@@ -467,6 +467,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     const sms = _.clone(this.groupingSubmeasuresAll);
     if (this.isService()) {
       this.groupingSubmeasures = sms.filter(sm => sm.indicators.service === 'Y');
+      UiUtil.clearPropertyIfNotInList(this.sm, 'groupingSubmeasureId', this.groupingSubmeasures);
     } else {
       this.groupingSubmeasures = sms.filter(sm => sm.indicators.service === 'N');
     }
