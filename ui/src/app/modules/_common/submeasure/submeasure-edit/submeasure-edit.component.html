@@ -301,7 +301,7 @@
       <div class="row">
         <div class="col-12">
           <div class="inline-check-row">
-            <div [class.disabled]="isUnallocatedGroup()">
+            <div [class.disabled]="isUnallocatedGroup()" style="display:inline-block">
               <div class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Retained Earnings" [(model)]="sm.indicators.retainedEarnings" trueVal="Y"
                               falseVal="N"></fin-checkbox>
@@ -311,24 +311,26 @@
                               falseVal="N"></fin-checkbox>
               </div>
               <div class="form-group-check form-group-inline-20">
-                <fin-checkbox label="Corporate Revenue" [(model)]="sm.indicators.corpRevenue" trueVal="Y"
-                              falseVal="N"></fin-checkbox>
-              </div>
-              <div class="form-group-check form-group-inline-20">
                 <fin-checkbox label="2 Tier" [(model)]="sm.indicators.twoTier" trueVal="Y" falseVal="N"></fin-checkbox>
               </div>
               <div class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Dual Gaap" [(model)]="sm.indicators.dualGaap" trueVal="Y"
                               falseVal="N"></fin-checkbox>
               </div>
+              <div class="form-group-check form-group-inline-20" [class.disabled]="isGroup()">
+                <fin-checkbox label="Pass Through" [(model)]="sm.indicators.passThrough" trueVal="Y" falseVal="N"
+                              [inline]="true" (modelChange)="handlePassThroughChange()"></fin-checkbox>
+              </div>
+            </div>
+            <div style="display:inline-block">
+              <div class="form-group-check form-group-inline-20">
+                <fin-checkbox label="Corporate Revenue" [(model)]="sm.indicators.corpRevenue" trueVal="Y"
+                              falseVal="N"></fin-checkbox>
+              </div>
               <div class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
                               (change)="filterGroupingSubmeasuresIfService()" [inline]="true"></fin-checkbox>
               </div>
-            </div>
-            <div class="form-group-check form-group-inline-20" [class.disabled]="isGroup()">
-              <fin-checkbox label="Pass Through" [(model)]="sm.indicators.passThrough" trueVal="Y" falseVal="N"
-                            [inline]="true" (modelChange)="handlePassThroughChange()"></fin-checkbox>
             </div>
           </div>
         </div>

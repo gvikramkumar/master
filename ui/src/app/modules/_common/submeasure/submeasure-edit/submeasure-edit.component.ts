@@ -273,8 +273,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         }
         if (this.editMode) {
           if (this.editModeAI) {
-            delete this.sm.createdBy;
-            delete this.sm.createdDate;
             if (this.isDeptUpload()) {
               this.sm.indicators.deptAcct = 'Y';
             }
@@ -292,7 +290,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         const promises2: Promise<any>[] = [
           this.pgLookupService.callRepoMethod('getSubmeasureFlashCategories', {submeasureKey: this.sm.submeasureKey || 0}).toPromise(),
           this.pgLookupService.callRepoMethod('getSubmeasureAdjustmentTypes', {submeasureKey: this.sm.submeasureKey || 0}).toPromise()
-        ]
+        ];
         if ((this.viewMode || this.editMode) && this.isManualMix()) { // needs submeasureKey for this call
           promises2.push(this.pgLookupService.callRepoMethod('getManualMixHwSwBySubmeasureKey',
             {submeasureKey: this.sm.submeasureKey, moduleId: this.store.module.moduleId}).toPromise());
@@ -437,7 +435,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .subscribe(groupingSubmeasures => {
         this.groupingSubmeasuresAll = groupingSubmeasures;
         this.filterGroupingSubmeasuresIfService();
-        UiUtil.clearPropertyIfNotInList(this.sm, 'groupingSubmeasureId', this.groupingSubmeasures, 'submeasureKey');
       });
 
     this.currentMeasure = _.find(this.measures, {measureId: this.sm.measureId});
@@ -470,6 +467,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     } else {
       this.groupingSubmeasures = sms.filter(sm => sm.indicators.service === 'N');
     }
+    UiUtil.clearPropertyIfNotInList(this.sm, 'groupingSubmeasureId', this.groupingSubmeasures, 'submeasureKey');
   }
 
   updateReportingLevel3() {

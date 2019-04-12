@@ -55,12 +55,6 @@ export default class ControllerBase {
       .catch(next);
   }
 
-  getManyLatestGroupByNameActive(req, res, next) {
-    this.repo.getManyLatestGroupByNameActive(Number(req.query.moduleId) || req.body.moduleId)
-      .then(docs => res.send(docs))
-      .catch(next);
-  }
-
   // get /query-one
   getQueryOne(req, res, next) {
     const setNoError = req.query.setNoError;

@@ -30,10 +30,15 @@ export class UiUtil {
     private matToast: MatSnackBar) {
   }
 
-// clear the object's property if not in list. Uses lodash path for obj and list
+  // clear the object's property if not in list. Uses lodash "path" for obj and list
+  // compares against values in a list, or a property in a list of objects
   static clearPropertyIfNotInList(obj, prop, list, listProp?) {
     if (!obj || !prop || !list) {
       console.error('uiUtil.clearPropertyIfNotInList called with no obj, prop, or list');
+      return;
+    }
+    if (list.length && typeof list[0] === 'object' && !listProp) {
+      console.error('uiUtil.clearPropertyIfNotInList called list of objects, but no listProp');
       return;
     }
     if (listProp) {
