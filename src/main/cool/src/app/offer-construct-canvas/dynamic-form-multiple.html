@@ -134,7 +134,7 @@
                         <tr class="section-tr-label">
                           <th></th>
                         </tr>
-                        <div [formGroup]="offerForm" *ngFor="let pInfo of ques.value['listOfferQuestions']; let i = index;">
+                        <div class="form-group" [formGroup]="offerForm" *ngFor="let pInfo of ques.value['listOfferQuestions']; let i = index;">
                           <tr class="overflow-visible" [ngSwitch]="pInfo.componentType"
                             *ngIf="pInfo.itemType == 'Unique Item'">
                             <td *ngSwitchCase="'Free Text'">
@@ -236,7 +236,7 @@
                         <tr class="section-tr-label">
                           <th></th>
                         </tr>
-                        <div [formGroup]="offerForm" *ngFor="let pInfo of ques.value['listOfferQuestions']">
+                        <div class="form-group" [formGroup]="offerForm" *ngFor="let pInfo of ques.value['listOfferQuestions']">
                           <tr [ngSwitch]="pInfo.componentType" *ngIf="pInfo.itemType !== 'Unique Item'">
                             <td *ngSwitchCase="'Free Text'">
                               <div class="form-group input--compressed">

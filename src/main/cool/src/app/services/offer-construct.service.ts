@@ -68,7 +68,7 @@ export class OfferConstructService {
                     validators.push(Validators.pattern("^[0-9]+(,[0-9]+)*$"))
                 }
                 if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
-                    validators.push(Validators.pattern("^[A-Z][a-z0-9\\s]*$"))
+                    validators.push(Validators.pattern("^[A-Z][A-Za-z0-9\\s]*$"))
                 }
             }
 
