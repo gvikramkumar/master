@@ -95,7 +95,7 @@
                   <div class="col text-right" [class.disabled]="isDisabledView">
                     <span (click)='showDialog(); displayAddDetails=false'><a href="javascript:;"><span
                           class="half-margin-right icon-add-contain"></span>
-                        Add All Item Detail&nbsp;&nbsp;</a></span>
+                        Add All Item Details&nbsp;&nbsp;</a></span>
                     <span class="vertical-divider" *ngIf="expandView">|</span>
                     <a *ngIf="expandView" href="javascript:;" (click)="toggleSidebar()">
                       <span class="half-margin-right icon-expand icon-small" title="Expand View"></span>
@@ -314,7 +314,7 @@
       </div>
       <p-footer class="pull-right">
         <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
-        <button class="btn btn--primary" type="submit" [disabled]="!questionForm.valid">Add Details</button>
+        <button class="btn btn--primary" type="submit" [disabled]="readOnly">Add Details</button>
       </p-footer>
     </form>
   </p-dialog>
