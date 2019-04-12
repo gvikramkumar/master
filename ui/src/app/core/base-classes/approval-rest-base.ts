@@ -55,7 +55,7 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
     const moduleId = this.store.module.moduleId;
     const user = this.store.user;
     if (user.isModuleEndUser()) {
-      return this.getLatestByName({status: 'A'});
+      return this.callMethod('getManyLatestByNameActiveInactive');
     } else if (user.isModuleSuperUser()) {
       return this.callMethod('getManyLatestByNameActiveInactiveConcatDraftPendingOfUser');
     } else if (user.isModuleAdminOrGreater()) {

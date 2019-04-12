@@ -102,12 +102,17 @@ export default class RepoBase {
     return this.getManyByGroupLatestOrEaliest(filter, 1);
   }
 
-  // get the latest version that's active or inactive, but only the actives from those
+  // get the latest version that's active OR inactive, THEN only the actives from those. I.e. the latest version may be
+  // "inactive" and if so, we will not consider it, so we get the latest version that's either active or inactive THEN
+  // filter those for active only.
   getManyLatestGroupByNameActive(moduleId, filter = {}) {
     return this.getManyLatestGroupByNameActiveInactive(moduleId, filter)
       .then((docs: any) => docs.filter(doc => doc.status === 'A'));
   }
 
+/*
+  // no need for this currently. If there were a need, I'd assume it would be: getManyLatestGroupByNameActiveInactive() filtered for inactive
+  // like getManyLatestGroupByNameActive
   getManyLatestGroupByNameInactive(moduleId, _filter = {}) {
     if (!moduleId) {
       throw new ApiError('getManyLatestGroupByNameInactive: no moduleId');
@@ -119,8 +124,9 @@ export default class RepoBase {
     });
     return this.getManyByGroupLatest(filter);
   }
+*/
 
-  // get lastest active or inactive version, whichever is later
+  // get lastest active or inactive version, whichever is later, refer to getManyLatestGroupByNameActive() comments
   getManyLatestGroupByNameActiveInactive(moduleId, _filter = {}) {
     if (!moduleId) {
       throw new ApiError('getManyLatestGroupByNameActiveInactive: no moduleId');
@@ -133,6 +139,10 @@ export default class RepoBase {
     return this.getManyByGroupLatest(filter);
   }
 
+  // this is different from getManyEarliestGroupByNameActive, currently we're using this to show "original" rules and submeasures in reports, in that
+  // case we're looking for the earliest version that was active. This is different from getManyLatestGroupByNameActive, which has to consider that the latest
+  // version maybe be "inactive", so it gets the latest version whether that's active or inactive, THEN filters for active. This version just gets the first
+  // active period
   getManyEarliestGroupByNameActive(moduleId, _filter = {}) {
     if (!moduleId) {
       throw new ApiError('getManyEarliestGroupByNameActive: no moduleId');

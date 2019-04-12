@@ -67,7 +67,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
         this.nameFilter.next(name);
       });
 
-    this.measureService.getManyLatest('name')
+    this.measureService.getManyActive()
       .subscribe(measures => {
         for (let i = 0; i < measures.length; i++) {
           this.measureNameMap.set(measures[i].measureId, measures[i].name);

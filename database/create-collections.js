@@ -3,8 +3,8 @@
 print(`host: ${host}, port: ${port}, db: ${_db}`);
 
 let uri;
-uri = `mongodb://${user}:${pass}@${host}:${port}/${_db}`;
-// uri = `mongodb://${host}:${port}/${_db}`;
+// uri = `mongodb://${user}:${pass}@${host}:${port}/${_db}`;
+uri = `mongodb://${host}:${port}/${_db}`;
 print(uri);
 
 db = connect(uri);

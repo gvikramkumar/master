@@ -102,6 +102,18 @@ export default class ApprovalController extends ControllerBase {
     this.updateOneNoValidate(req, res, next);
   }
 
+  getManyLatestGroupByNameActive(req, res, next) {
+    this.repo.getManyLatestGroupByNameActive(Number(req.query.moduleId) || req.body.moduleId)
+      .then(docs => res.send(docs))
+      .catch(next);
+  }
+
+  getManyLatestByNameActiveInactive(req, res, next) {
+    this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId)
+      .then(docs => res.send(docs))
+      .catch(next);
+  }
+
   getManyLatestByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
       this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId),
