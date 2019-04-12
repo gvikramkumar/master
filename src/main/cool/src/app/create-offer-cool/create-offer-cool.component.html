@@ -160,7 +160,7 @@
                     <div class="form-group half-margin-bottom">
                       <div class="form-group__text">
                         <label for="idpid">IDP ID</label>
-                       {{idpvalue.length}} <input id="idpid" type="text" class="form-control" name="iDPId" [(ngModel)]="idpvalue" (keyup)="getidptoken($event)"
+                       <input id="idpid" type="text" class="form-control" name="iDPId" [(ngModel)]="idpvalue" (keyup)="getidptoken($event)"
                           required>
                       </div>
                       <span class="text-success" *ngIf="idpidValid">Valid</span>
