@@ -15,7 +15,7 @@
         </div>
         <div class="col-sm-8 text-right">
           <span>
-            <button class="btn btn--white" [disabled]="enableOfferbuild" (click)="proceedToOfferBuilder()">Proceed to
+           <button class="btn btn--white" [disabled]="enableOfferbuild || validFlag" (click)="proceedToOfferBuilder()">Proceed to
               Offer Builder <span class="icon-chevron-right"></span></button>
           </span>
         </div>
@@ -160,7 +160,7 @@
                     <div class="form-group half-margin-bottom">
                       <div class="form-group__text">
                         <label for="idpid">IDP ID</label>
-                        <input id="idpid" type="text" class="form-control" name="iDPId" [(ngModel)]="idpvalue" (keyup)="getidptoken($event)"
+                       {{idpvalue.length}} <input id="idpid" type="text" class="form-control" name="iDPId" [(ngModel)]="idpvalue" (keyup)="getidptoken($event)"
                           required>
                       </div>
                       <span class="text-success" *ngIf="idpidValid">Valid</span>
