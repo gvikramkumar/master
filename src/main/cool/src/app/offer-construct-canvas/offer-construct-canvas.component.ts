@@ -829,7 +829,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.subscription = this.messageService.getMessage()
       .subscribe(message => {
         this.saveOfferConstructChanges();
-      }, (err) => { this.loaderService.stopLoading(); },
+      },
+        (err) => { this.loaderService.stopLoading() },
         () => { });
 
     this.eGinieSearchForm = new FormGroup({
@@ -887,6 +888,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           componentsObj[0]['characteristics'] : null;
       } else {
         components = null;
+        this.loaderService.stopLoading();
       }
 
       // Initialize Components
@@ -964,6 +966,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
     }, (err) => {
       console.log(err);
+      this.loaderService.stopLoading();
     }, () => {
       this.loaderService.stopLoading();
     });
