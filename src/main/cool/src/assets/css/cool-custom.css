@@ -1200,6 +1200,14 @@ span[class*="display-"] {
 }
 
 /* helpers */
+.btns-right .btn + .btn {
+  margin-right: 10px;
+}
+.btns-right {
+  width: 30%;
+  direction: rtl;
+}
+
 .borderless {
   border: none !important;
 }
