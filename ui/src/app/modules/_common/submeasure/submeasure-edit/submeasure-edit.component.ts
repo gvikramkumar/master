@@ -437,7 +437,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       .subscribe(groupingSubmeasures => {
         this.groupingSubmeasuresAll = groupingSubmeasures;
         this.filterGroupingSubmeasuresIfService();
-        UiUtil.clearPropertyIfNotInList(this.sm, 'groupingSubmeasureId', this.groupingSubmeasures, 'submeasureKey');
       });
 
     this.currentMeasure = _.find(this.measures, {measureId: this.sm.measureId});
@@ -467,10 +466,10 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     const sms = _.clone(this.groupingSubmeasuresAll);
     if (this.isService()) {
       this.groupingSubmeasures = sms.filter(sm => sm.indicators.service === 'Y');
-      UiUtil.clearPropertyIfNotInList(this.sm, 'groupingSubmeasureId', this.groupingSubmeasures);
     } else {
       this.groupingSubmeasures = sms.filter(sm => sm.indicators.service === 'N');
     }
+    UiUtil.clearPropertyIfNotInList(this.sm, 'groupingSubmeasureId', this.groupingSubmeasures, 'submeasureKey');
   }
 
   updateReportingLevel3() {
