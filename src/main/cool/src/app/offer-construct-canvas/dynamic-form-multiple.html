@@ -169,8 +169,8 @@
                             <td *ngSwitchCase="'Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' class="form-control" 
-                                    [(ngModel)]="pInfo.currentValue" class="form-control" [formControlName]="pInfo.currentValue">
+                                  <select [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'  
+                                    [(ngModel)]="pInfo.currentValue" class="form-control" [formControlName]="pInfo.egineAttribue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
                                 </div>
