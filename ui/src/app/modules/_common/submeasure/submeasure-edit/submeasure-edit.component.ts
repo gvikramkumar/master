@@ -273,8 +273,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
         }
         if (this.editMode) {
           if (this.editModeAI) {
-            delete this.sm.createdBy;
-            delete this.sm.createdDate;
             if (this.isDeptUpload()) {
               this.sm.indicators.deptAcct = 'Y';
             }
