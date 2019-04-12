@@ -870,6 +870,10 @@ th.ui-sortable-column.ng-star-inserted {
 }
 
 /* Form Elements */
+.cool.cui input[type="number"] {
+  min-height: 40px;
+}
+
 .cool.cui .ui-multiselect {
   display: block;
 }
