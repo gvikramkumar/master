@@ -9,6 +9,18 @@ import * as Q from 'q';
 
 
 
+const a = ['one', 'Two'].map(x => x.toLowerCase());
+const b = ['one', 'two', 'three'].map(x => x.toLowerCase());
+
+if (!a.length && !b.length) {
+  console.log('both empty');
+} else if (a.length === b.length && _.union(a, b).length === a.length) {
+  console.log('equal');
+} else {
+  console.log('not equal');
+}
+
+
 /*
 console.log(arr.length);
 console.log(_.sortBy(arr, 'value').map(x => x.value));

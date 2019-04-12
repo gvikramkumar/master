@@ -44,8 +44,9 @@ Promise.all([
         throw new Error(`Missing period: ${rule.period}`);
       }
       createSelectArrays(rule);
-      createNewName(rule, driver, period);
-      // buf.push(props.map(prop => rule[prop]).toString());
+      rule.newName = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
+      addMatches(rule);
+      addSelects(rule);
 
       buf.push(props.map(prop => {
         if (_.isArray(rule[prop]) && rule[prop].length) {
@@ -110,7 +111,7 @@ function addMatches(rule) {
   str += rule.legalEntityMatch ? getMatchText(legalEntityMatches, 'match', rule.legalEntityMatch) : '';
   str += rule.countryMatch ? getMatchText(countryMatches, 'value', rule.countryMatch) : '';
   str += rule.extTheaterMatch ? getMatchText(extTheaterMatches, 'value', rule.extTheaterMatch) : '';
-  str += rule.glSegmentsMatch.length ? getMatchTextArray(glSegmentsMatches, 'value', rule.glSegmentsMatch) : '';
+  str += rule.glSegmentsMatch && rule.glSegmentsMatch.length ? getMatchTextArray(glSegmentsMatches, 'value', rule.glSegmentsMatch) : '';
 
   if (str) {
     rule.newName += `-${str}`;
