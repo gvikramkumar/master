@@ -55,7 +55,7 @@ export class AccessManagementComponent implements OnInit {
     this.currentUserData = {
       isSuperAdmin: startUpData.isSuperAdmin,
       isFunctionalAdmin: startUpData.isFunctionalAdmin,
-      functionsUserCanAddTo: startUpData.functionsUserCanAddTo
+      functionalRole: startUpData.functionalRole
     };
 
     const getFunctions = this.accessManagementService.getFunction(this.currentUserData);
