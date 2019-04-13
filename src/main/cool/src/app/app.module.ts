@@ -48,9 +48,9 @@ import { OfferDimensionComponent } from './offer-dimension/offer-dimension.compo
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
-import { OfferConstructComponent } from './offer-construct/offer-construct.component';
-import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
-import { OfferconstructCanvasComponent } from '@app/offer-construct-canvas/offer-construct-canvas.component';
+import { OfferConstructComponent } from '@app/construct/offer-construct/offer-construct.component';
+import { DynamicFormQuestionComponent } from './construct/dynamic-form-question/dynamic-form-question.component';
+import { OfferconstructCanvasComponent } from '@app/construct/offer-construct-canvas/offer-construct-canvas.component';
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './solutioning/offer-solution-question/offer-solution-question.component';
@@ -59,7 +59,7 @@ import { ViewStrategyComponent as ViewStrategyComponent } from '@app/review/view
 import { OasComponent } from './oas/oas.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { DynamicFormMultipleComponent } from './offer-construct-canvas/dynamic-form-multiple';
+import { DynamicFormMultipleComponent } from '@app/construct/offer-construct-canvas/dynamic-form-multiple';
 import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import { SharedModule } from '@shared/shared.module';

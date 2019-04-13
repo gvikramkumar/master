@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MonetizationModelService } from '../services/monetization-model.service';
-import { StakeholderfullService } from '../services/stakeholderfull.service';
-import { OfferConstructService } from '../services/offer-construct.service';
-import { RightPanelService } from '../services/right-panel.service';
-import { LeadTime } from '../right-panel/lead-time';
-import { OfferPhaseService } from '../services/offer-phase.service';
-import { MessageService } from '../services/message.service';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { OfferConstructService } from '@app/services/offer-construct.service';
+import { RightPanelService } from '@app/services/right-panel.service';
+import { LeadTime } from '@app/right-panel/lead-time';
+import { OfferPhaseService } from '@app/services/offer-phase.service';
+import { MessageService } from '@app/services/message.service';
 import { forkJoin, Subscription } from 'rxjs';
-import { OfferconstructCanvasService } from '@app/offer-construct-canvas/service/offerconstruct-canvas.service';
+import { OfferconstructCanvasService } from '@app/construct/offer-construct-canvas/service/offerconstruct-canvas.service';
 import * as _ from 'lodash';
 
 @Component({

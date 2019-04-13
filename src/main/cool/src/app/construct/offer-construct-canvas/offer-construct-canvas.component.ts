@@ -8,17 +8,17 @@ import {
   OnDestroy
 } from '@angular/core';
 import { TreeNode } from 'primeng/api';
-import { OfferconstructCanvasService } from '@app/offer-construct-canvas/service/offerconstruct-canvas.service';
-import { MMItems } from '@app/offer-construct-canvas/model/MMItems';
+import { OfferconstructCanvasService } from '@app/construct/offer-construct-canvas/service/offerconstruct-canvas.service';
+import { MMItems } from '@app/construct/offer-construct-canvas/model/MMItems';
 import { ActivatedRoute } from '@angular/router';
-import { SubGroup } from '@app/offer-construct-canvas/model/SubGroup';
-import { Group } from '@app/offer-construct-canvas/model/Group';
+import { SubGroup } from '@app/construct/offer-construct-canvas/model/SubGroup';
+import { Group } from '@app/construct/offer-construct-canvas/model/Group';
 import { Groups } from '@app/models/groups';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { OfferConstructService } from '@app/services/offer-construct.service';
-import { ConstructDetails } from '@app/offer-construct-canvas/model/ConstructDetails';
-import { ConstructDetail } from '@app/offer-construct-canvas/model/ConstructDetail';
-import { ItemDetail } from '@app/offer-construct-canvas/model/ItemDetail';
+import { ConstructDetails } from '@app/construct/offer-construct-canvas/model/ConstructDetails';
+import { ConstructDetail } from '@app/construct/offer-construct-canvas/model/ConstructDetail';
+import { ItemDetail } from '@app/construct/offer-construct-canvas/model/ItemDetail';
 import { group } from '@angular/animations';
 import { Observable, Subscription } from 'rxjs';
 import { async, TestBed } from '@angular/core/testing';
@@ -28,7 +28,7 @@ import { filter, map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
 import { ConfigurationService } from '@shared/services';
-import { LoaderService } from './../shared/loader.service';
+import { LoaderService } from '../../shared/loader.service';
 @Component({
   selector: 'app-offerconstruct-canvas',
   templateUrl: './offer-construct-canvas.component.html',
