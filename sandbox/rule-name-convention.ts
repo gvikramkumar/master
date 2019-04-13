@@ -77,11 +77,10 @@ class SelectExceptionMap {
 
 const selectMap = new SelectExceptionMap();
 const buf = [];
-const header = ['Old Name', 'New Name', 'Duplicate', 'Description', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
-  'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Status'
-];
-const props =       ['name', 'newName', 'duplicate', 'description', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
-  'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'status'];
+const header = ['Status', 'Old Name', 'New Name', 'Duplicates', 'Description', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
+  'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Created By', 'Created Date', 'Updated By', 'UpdatedDate'];
+const props =       ['status', 'name', 'newName', 'duplicates', 'desc', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+  'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
 
 buf.push(header.toString());
 
@@ -109,7 +108,11 @@ Promise.all([
       rule.newName = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
       addMatches(rule);
       addSelects(rule, selectMap);
-
+      addDescription(rule, driver, period);
+      quoteSelectText(rule);
+    });
+    addDuplicate(latestRules);
+    latestRules.forEach(rule => {
       buf.push(props.map(prop => {
         if (_.isArray(rule[prop]) && rule[prop].length) {
           return `${rule[prop].join('/')}`;
@@ -117,7 +120,8 @@ Promise.all([
           return rule[prop];
         }
       }).toString());
-    });
+    })
+
     const fileName = 'rule-name-change.csv';
     fs.writeFileSync(fileName, buf.join('\n'));
     console.log(`${latestRules.length} rules processed to /dist/sandbox/${fileName}`);
@@ -145,6 +149,67 @@ Promise.all([
     // need to look for duplicates too, but your output would show that right? Sort by newname then?
 
   })
+
+/*
+  sl1Select?: string;
+  sl2Select?: string;
+  sl3Select?: string;
+  prodTGSelect?: string;
+  prodBUSelect?: string;
+  prodPFSelect?: string;
+  scmsSelect?: string;
+  beSelect?: string;
+ */
+
+function addDescription(rule, driver, period) {
+  let desc = `Name:  ${rule.newName}`;
+  desc += `Old Name:  ${rule.name}`;
+  desc += `Driver:  ${driver.name}`;
+  desc += `\nPeriod:  ${period.period}`;
+
+  desc += rule.salesMatch ? `\nSales:  ${rule.salesMatch}` : '';
+  desc += rule.productMatch ? `\nProduct:  ${rule.productMatch}` : '';
+  desc += rule.scmsMatch ? `\nSCMS:  ${rule.scmsMatch}` : '';
+  desc += rule.beMatch ? `\nInternal Business Entity:  ${rule.beMatch}` : '';
+  desc += rule.legalEntityMatch ? `\nLegal Entity:  ${rule.legalEntityMatch}` : '';
+  desc += rule.countryMatch ? `\nCountry:  ${rule.countryMatch}` : '';
+  desc += rule.extTheaterMatch ? `\nExternal Theater:  ${rule.extTheaterMatch}` : '';
+  desc += rule.glSegmentsMatch && rule.glSegmentsMatch.length ? `\nGL Segments:  ${rule.glSegmentsMatch}` : '';
+
+  desc += rule.sl1Select ? `\nSL1 Select:  ${rule.sl1Select}` : '';
+  desc += rule.sl2Select ? `\nSL2 Select:  ${rule.sl2Select}` : '';
+  desc += rule.sl3Select ? `\nSL3 Select:  ${rule.sl3Select}` : '';
+  desc += rule.prodTGSelect ? `\nTG Select:  ${rule.prodTGSelect}` : '';
+  desc += rule.prodBUSelect ? `\nBU Select:  ${rule.prodBUSelect}` : '';
+  desc += rule.prodPFSelect ? `\nPF Select:  ${rule.prodPFSelect}` : '';
+  desc += rule.scmsSelect ? `\nSCMS Select:  ${rule.scmsSelect}` : '';
+  desc += rule.beSelect ? `\nBE Select:  ${rule.beSelect}` : '';
+  rule.desc = `"${desc}"`;
+}
+
+function quoteSelectText(rule) {
+  rule.sl1Select = `"${rule.sl1Select}"`;
+  rule.sl2Select = `"${rule.sl2Select}"`;
+  rule.sl3Select = `"${rule.sl3Select}"`;
+  rule.prodTGSelect = `"${rule.prodTGSelect}"`;
+  rule.prodBUSelect = `"${rule.prodBUSelect}"`;
+  rule.prodPFSelect = `"${rule.prodPFSelect}"`;
+  rule.scmsSelect = `"${rule.scmsSelect}"`;
+  rule.beSelect = `"${rule.beSelect}"`;
+}
+
+function addDuplicate(rules) {
+  const duplicates = [];
+  rules.forEach(rule => {
+    const entry = _.find(duplicates, {name: rule.newName});
+    if (entry) {
+      entry.count++;
+    } else {
+      duplicates.push({name: rule.newName, count: 1});
+    }
+  });
+  rules.forEach(rule => rule.duplicates = _.find(duplicates, {name: rule.newName}).count);
+}
 
 function getMatchText(values, prop, value) {
   const val = _.find(values, {[prop]: value});
@@ -230,17 +295,17 @@ function createSelectArrays(rule) {
   rule.salesSL3CritCond = parse.cond;
   rule.salesSL3CritChoices = parse.arr;
 
-  parse = parseSelect(rule.prodPFSelect);
-  rule.prodPFCritCond = parse.cond;
-  rule.prodPFCritChoices = parse.arr;
+  parse = parseSelect(rule.prodTGSelect);
+  rule.prodTGCritCond = parse.cond;
+  rule.prodTGCritChoices = parse.arr;
 
   parse = parseSelect(rule.prodBUSelect);
   rule.prodBUCritCond = parse.cond;
   rule.prodBUCritChoices = parse.arr;
 
-  parse = parseSelect(rule.prodTGSelect);
-  rule.prodTGCritCond = parse.cond;
-  rule.prodTGCritChoices = parse.arr;
+  parse = parseSelect(rule.prodPFSelect);
+  rule.prodPFCritCond = parse.cond;
+  rule.prodPFCritChoices = parse.arr;
 
   parse = parseSelect(rule.scmsSelect);
   rule.scmsCritCond = parse.cond;

@@ -355,27 +355,27 @@ export default class ReportController extends ControllerBase {
       case 'allocation-rule':
         multiSheetReport = true;
         excelSheetname = [['Original'], ['Rule History'], ['As Of Now']];
-        excelHeaders = [['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
+        excelHeaders = [['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
           'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select',
           'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
-          ['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
+          ['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
             'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select',
             'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
-          ['RuleName', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
+          ['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
             'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select',
             'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date']];
 
-        excelProperties = [['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+        excelProperties = [['name', 'oldName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
           'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect',
           'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-          ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+          ['name', 'oldName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
             'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect',
             'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-          ['name', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+          ['name', 'oldName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
             'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect',
             'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate']];
 

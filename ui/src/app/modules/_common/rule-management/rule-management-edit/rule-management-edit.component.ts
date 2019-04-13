@@ -498,17 +498,17 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     this.salesSL3CritCond = parse.cond;
     this.salesSL3CritChoices = parse.arr;
 
-    parse = this.parseSelect(this.rule.prodPFSelect);
-    this.prodPFCritCond = parse.cond;
-    this.prodPFCritChoices = parse.arr;
+    parse = this.parseSelect(this.rule.prodTGSelect);
+    this.prodTGCritCond = parse.cond;
+    this.prodTGCritChoices = parse.arr;
 
     parse = this.parseSelect(this.rule.prodBUSelect);
     this.prodBUCritCond = parse.cond;
     this.prodBUCritChoices = parse.arr;
 
-    parse = this.parseSelect(this.rule.prodTGSelect);
-    this.prodTGCritCond = parse.cond;
-    this.prodTGCritChoices = parse.arr;
+    parse = this.parseSelect(this.rule.prodPFSelect);
+    this.prodPFCritCond = parse.cond;
+    this.prodPFCritChoices = parse.arr;
 
     parse = this.parseSelect(this.rule.scmsSelect);
     this.scmsCritCond = parse.cond;
