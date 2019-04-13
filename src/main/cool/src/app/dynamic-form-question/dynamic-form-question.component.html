@@ -78,13 +78,15 @@
             <input [name]="question.egineAttribue" [id]="question.question" class="form-control"
               [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
             <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
+            <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
+             <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+             <span *ngIf="questionForm.controls[question.egineAttribue].errors.maxlength">{{question.egineAttribue}} exceeds max characters({{question.rules.maxCharacterLen}}) allowed</span>
+             <span *ngIf="questionForm.controls[question.egineAttribue].errors.pattern">{{question.egineAttribue}} should be in {{question.rules.textcase}}</span>
+          </span>
+          
           </div>
         </div>
-        <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
-         <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
-         <span *ngIf="questionForm.controls[question.egineAttribue].errors.maxlength">{{question.egineAttribue}} exceeds max characters({{question.rules.maxCharacterLen}}) allowed</span>
-         <span *ngIf="questionForm.controls[question.egineAttribue].errors.pattern">{{question.egineAttribue}} should be in {{question.rules.textcase}}</span>
-      </span>
+    
       </div>
 
     </div>

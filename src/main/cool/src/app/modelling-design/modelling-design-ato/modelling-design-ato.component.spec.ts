@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateNewOfferComponent } from './create-new-offer.component';
+import { ModellingDesignAtoComponent } from './modelling-design-ato.component';
 
-describe('CreateNewOfferComponent', () => {
-  let component: CreateNewOfferComponent;
-  let fixture: ComponentFixture<CreateNewOfferComponent>;
+describe('ModellingDesignAtoComponent', () => {
+  let component: ModellingDesignAtoComponent;
+  let fixture: ComponentFixture<ModellingDesignAtoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateNewOfferComponent ]
+      declarations: [ ModellingDesignAtoComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateNewOfferComponent);
+    fixture = TestBed.createComponent(ModellingDesignAtoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

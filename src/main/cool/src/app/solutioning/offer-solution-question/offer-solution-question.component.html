@@ -53,6 +53,7 @@
 
     <div *ngIf="question['questionType']==='Currency Text'">
       <div class="form-group" [class.has-error]="currencyText.invalid" [class.has-success]="currencyText.valid">
+        
         <input type="number" class="form-group__text" name="{{question['questionNo']}}" id="question['questionNo']"
           #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
           [disabled]="question['hideQuestion']" rows="3" [min]="0" [max]="1000"
@@ -72,7 +73,7 @@
 
     <div *ngIf="question['questionType']==='Percentage'">
       <div class="form-group" [class.has-error]="percentageText.invalid" [class.has-success]="percentageText.valid">
-        <input type="number" class="form-group__text" name="{{question['questionNo']}}" id="question['questionNo']"
+        <input type="number" class="text" name="{{question['questionNo']}}" id="question['questionNo']"
           #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
           [disabled]="question['hideQuestion']" rows="3" [min]="0" [max]="100"
           [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"

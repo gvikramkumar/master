@@ -13,6 +13,7 @@ import { RightPanelService } from '../services/right-panel.service';
 import { HeaderService, UserService, CreateOfferService, ConfigurationService } from '@shared/services';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
+import { LoaderService } from '@shared/loader.service';
 
 
 @Component({
@@ -86,6 +87,7 @@ export class CreateOfferCoolComponent implements OnInit {
   offerNameValueTrim: string = '';
 
   subject: Subject<any> = new Subject();
+  validFlag: boolean = true;
 
   constructor(private createOfferService: CreateOfferService,
     private configurationService: ConfigurationService,
@@ -93,6 +95,7 @@ export class CreateOfferCoolComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private headerService: HeaderService,
+    private loaderService: LoaderService,
     private stakeholderfullService: StakeholderfullService,
     private rightPanelService: RightPanelService,
     private _location: Location) {
@@ -100,6 +103,7 @@ export class CreateOfferCoolComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       if (this.offerId) {
+        this.loaderService.startLoading(); 
         this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerDetailRes => {
           this.offerDetailRes = offerDetailRes;
           this.caseId = offerDetailRes.caseId;
@@ -140,6 +144,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
       this.primaryBusinessEntities = primaryBeArry;
       this.secondaryBusinessEntities = primaryBeArry;
+      this.loaderService.stopLoading();
       // This if condition executes only when user moves back from mm page to offer creation page.
       if (this.offerId !== undefined) {
         this.primaryBusinessEntitiesValue = this.offerDetailRes.primaryBEList[0];
@@ -546,6 +551,11 @@ export class CreateOfferCoolComponent implements OnInit {
 
 
   getidptoken(event) {
+    if(event.target.value.length === 9) {
+      this.validFlag = false;
+    } else {
+      this.validFlag = true;
+    }
     this.subject.next();
     // this.createOfferService.getIdpid().subscribe(data => {
     //  this.idpid = data;

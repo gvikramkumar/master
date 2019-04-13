@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { OffersolutioningCardOneComponent } from '@app/offer-solutioning-card-one/offer-solutioning-card-one.component';
+import { OffersolutioningCardOneComponent } from './offer-solutioning-card-one.component';
 
 describe('OffersolutioningCardOneComponent', () => {
   let component: OffersolutioningCardOneComponent;

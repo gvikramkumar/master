@@ -12,7 +12,7 @@ import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-re
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
-import {OfferSetupComponent} from './offer-setup/offer-setup.component';
+import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 
 // Temporoary
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
@@ -24,6 +24,7 @@ import { OfferDimensionComponent } from './offer-dimension/offer-dimension.compo
 import { BupmGuard } from '@shared/guards';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeholder-add.component';
+import { ModellingDesignAtoListComponent } from './modelling-design/modelling-design-ato-list/modelling-design-ato-list.component';
 
 
 const routes: Routes = [
@@ -140,13 +141,13 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'stakeholder-add',
-    component: StakeholderAddComponent
-  },
-  {
     path: 'offerSetup',
     component: OfferSetupComponent
-  }
+  },
+  {
+    path: 'modelling-design-ato-list',
+    component: ModellingDesignAtoListComponent
+  },
 
 ];
 

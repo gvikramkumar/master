@@ -80,6 +80,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   showApproveSection = false;
   action: any;
   currentTaskId: any;
+  currentStatus: string;
   commentValue: string;
   titleValue: string;
   descriptionValue: string;
@@ -318,8 +319,9 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  onTabOpen(taskId) {
+  onTabOpen(taskId, status) {
     this.currentTaskId = taskId;
+    this.currentStatus = status;
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
@@ -387,7 +389,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     const taskName = 'Action';
     const taskId = this.currentTaskId;
     const userId = this.userService.getUserId();
-
+    const status = this.currentStatus;
     const createActionPayload = {};
     createActionPayload['offerName'] = this.offerBuilderdata['offerName'];
     createActionPayload['owner'] = this.offerBuilderdata['offerOwner'];
@@ -401,7 +403,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     createActionPayload['selectedFunction'] = this.functionNameValue;
     createActionPayload['actionCreator'] = userId;
     createActionPayload['type'] = 'Manual Action';
-
+    createActionPayload['status'] = status;
     const createActionComment: CreateActionComment = new CreateActionComment(
       taskId,
       userId,
@@ -414,6 +416,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
       this.functionNameValue,
       this.assigneeValue,
       this.dueDateValue.toISOString(),
+      status
     );
 
     const offerId = this.offerId;
@@ -443,7 +446,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     const taskName = 'Action';
     const taskId = this.currentTaskId;
     const userId = this.userService.getUserId();
-    const status = ''; // decide what is to be sent
+    const status = this.currentStatus;
     const createActionApprove: CreateActionApprove = new CreateActionApprove(
       taskId,
       userId,

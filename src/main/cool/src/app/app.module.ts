@@ -14,7 +14,6 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CreateOfferCoolComponent } from './create-offer-cool/create-offer-cool.component';
 import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
-import { CreateNewOfferComponent } from './create-new-offer/create-new-offer.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchCollaboratorService } from './services/search-collaborator.service';
@@ -35,7 +34,7 @@ import { StakeholderfullService } from './services/stakeholderfull.service';
 import { OfferPhaseService } from './services/offer-phase.service';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { StrategyReviewService } from './services/strategy-review.service';
-import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
+import { OfferSolutioningComponent } from './solutioning/offer-solutioning/offer-solutioning.component';
 import { PackingComponent } from './offer-dimension-groups/packing/packing.component';
 import { SupportComponent } from './offer-dimension-groups/support/support.component';
 import { OfferPricingComponent } from './offer-dimension-groups/offer-pricing/offer-pricing.component';
@@ -44,7 +43,7 @@ import { ProgramComponent } from './offer-dimension-groups/program/program.compo
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
-import { OffersolutioningCardOneComponent } from '@app/offer-solutioning-card-one/offer-solutioning-card-one.component';
+import { OffersolutioningCardOneComponent } from './solutioning/offer-solutioning-card-one/offer-solutioning-card-one.component';
 import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
@@ -54,7 +53,7 @@ import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-fo
 import { OfferconstructCanvasComponent } from '@app/offer-construct-canvas/offer-construct-canvas.component';
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
-import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
+import { OfferSolutionQuestionComponent } from './solutioning/offer-solution-question/offer-solution-question.component';
 import { EditfieldsComponent } from './editfields/editfields.component';
 import { ViewStrategyComponent as ViewStrategyComponent } from '@app/review/view-strategy/view-strategy.component';
 import { OasComponent } from './oas/oas.component';
@@ -74,6 +73,8 @@ import { OfferconstructChildComponent } from './child_component/offerconstruct-c
 import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 import { LoaderService } from '@shared/loader.service';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
+import { ModellingDesignAtoListComponent } from './modelling-design/modelling-design-ato-list/modelling-design-ato-list.component';
+import { ModellingDesignAtoComponent } from './modelling-design/modelling-design-ato/modelling-design-ato.component';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -87,7 +88,6 @@ export function app_init(configService: ConfigurationService) {
     CreateOfferCoolComponent,
     OfferSolutioningComponent,
     MmAssesmentComponent,
-    CreateNewOfferComponent,
     RightPanelComponent,
     OfferDetailViewComponent,
     ExitCriteriaValidationComponent,
@@ -121,7 +121,9 @@ export function app_init(configService: ConfigurationService) {
     StakeholderAddComponent,
     OfferconstructChildComponent,
     OfferSetupComponent,
-    LoaderComponent
+    LoaderComponent,
+    ModellingDesignAtoListComponent,
+    ModellingDesignAtoComponent
   ],
   imports: [
     NgbModule,

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { OfferConstructService } from '@app/services/offer-construct.service';
 
 @Component({
   selector: 'app-dynamic-form-question',
@@ -9,11 +10,13 @@ import { FormGroup } from '@angular/forms';
 export class DynamicFormQuestionComponent implements OnInit {
   @Input() question: any;
   @Input() questionForm: FormGroup;
+  @Input() offerForm: FormGroup;
   @Input() headerName: FormGroup;
-
-  constructor() { }
-
-  ngOnInit() {
+  constructor(public offerConstructService: OfferConstructService) {
   }
+
+  ngOnInit() { }
+
+
 
 }

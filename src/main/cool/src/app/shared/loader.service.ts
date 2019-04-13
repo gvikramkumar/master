@@ -19,6 +19,7 @@ export class LoaderService {
   }
 
   startLoading() {
+    // this.loading = false;
     this.loading = true;
   }
 

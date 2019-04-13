@@ -1,3 +1,4 @@
+import { LoaderService } from './../shared/loader.service';
 import { Component, OnInit, Input, Output, ViewChild, ElementRef, Renderer, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -30,11 +31,15 @@ export class DynamicFormMultipleComponent implements OnInit {
     public viewDetails: Boolean = false;
     public detailArray: any[] = [];
     public headerName: any = '';
-    test: FormGroup;
+    offerForm: FormGroup;
     onLoad: boolean = false;
+    public showLoader: boolean = false;
+
+    @Input() indexVal;
 
     constructor(public offerConstructService: OfferConstructService,
-        private offerConstructCanvasService: OfferconstructCanvasService) {
+        private offerConstructCanvasService: OfferconstructCanvasService,
+        private loaderService: LoaderService) {
 
 
     }
@@ -48,6 +53,12 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.tableShowCondition = true;
         this.selectedTab = 'major';
         this.createObjectForSearch();
+        
+         this.offerForm = new FormGroup({
+            });
+            
+        this.offerForm = this.offerConstructService.toFormGroup(this.offerConstructService.questionsSet);
+        
     }
 
     createObjectForSearch() {
@@ -88,7 +99,7 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     onHideViewDetailsModal() {
         console.log("test");
-
+        
         //this.closeDailog(false);  //reset form info
     }
 
@@ -123,9 +134,10 @@ export class DynamicFormMultipleComponent implements OnInit {
             this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(majorProduct => {
-                    majorProduct.currentValue = majorProduct.previousValue;
-                    if(majorProduct.listCurrentValue){
-                        majorProduct.listCurrentValue = "";
+                    if (majorProduct.componentType !== "Multiselect") {
+                        majorProduct.currentValue = majorProduct.previousValue;
+                    } else {
+                        majorProduct.listCurrentValue = majorProduct.listPreviousValue;
                     }
                 });
             });
@@ -135,9 +147,10 @@ export class DynamicFormMultipleComponent implements OnInit {
             this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
                 let title: any = Object.keys(element);
                 element[title].listOfferQuestions.forEach(minorProduct => {
-                    minorProduct.currentValue = minorProduct.previousValue;
-                    if(minorProduct.listCurrentValue){
-                        minorProduct.listCurrentValue = "";
+                    if (minorProduct.componentType !== "Multiselect") {
+                        minorProduct.currentValue = minorProduct.previousValue;
+                    } else {
+                        minorProduct.listCurrentValue = minorProduct.listPreviousValue;
                     }
                 });
             });
@@ -146,31 +159,38 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
     replaceOrUpdatevalue(questions, isUdate) {
-
         if (isUdate) {
             questions.listOfferQuestions.forEach(list => {
-                list.previousValue = list.currentValue;
+                if (list.componentType !== "Multiselect") {
+                    list.previousValue = list.currentValue;
+                } else {
+                    list.listPreviousValue = list.listCurrentValue;
+                }
             });
         } else {
             questions.listOfferQuestions.forEach(item => {
-                item.currentValue = item.previousValue;
+                if (item.componentType !== "Multiselect") {
+                    item.currentValue = item.previousValue;
+                } else {
+                    item.listCurrentValue = item.listPreviousValue;
+                }
             });
         }
     }
-
 
     //search copy and paste in multiple form
 
     onTabOpen(e, headerName) {
         this.currenntHeaderName = headerName;
         // this.itemsList[headerName] = {};
+        this.offerForm = this.offerConstructService.toFormGroup(this.offerConstructService.questionsSet);
 
     }
 
     searchCopyAttributes(event) {
         const searchString = event.query.toUpperCase();
         this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
-            console.log(results);
+            this.showLoader = true;
             this.copyAttributeResults = [...results];
         },
             (error) => {
@@ -229,15 +249,26 @@ export class DynamicFormMultipleComponent implements OnInit {
     addItms(groupName) {
         let selectedSection = this.selectedTab;
         let selectedGroup = groupName;
-        if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
-            this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
-                if (items != undefined) {
-                    this.itemsData = items.body;
-                } else {
-                    console.log("network error");
-                }
-            }, (err) => { },
-                () => { });
+        if (this.showLoader) {
+            if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
+                this.loaderService.startLoading();
+                this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
+                    this.loaderService.stopLoading();
+                    this.showLoader = false;
+                    if (items != undefined) {
+                        this.itemsData = items.body;
+                    } else {
+                        console.log("network error");
+                    }
+                }, (err) => {
+                    this.showLoader = false;
+                    this.loaderService.stopLoading();
+
+                }, () => {
+                    this.loaderService.stopLoading();
+                    this.showLoader = false;
+                });
+            }
         }
     }
 
@@ -300,6 +331,7 @@ export class DynamicFormMultipleComponent implements OnInit {
             }
             this.viewDetails = true;
         }
+        //this.offerForm = this.offerConstructService.toFormGroup(this.detailArray);
     }
 
     onHideViewDetails() {

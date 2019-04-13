@@ -1,0 +1,112 @@
+<div class="content">
+  <div class="container">
+
+    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
+      [stakeData]="stakeholders">
+    </app-menu-bar>
+
+    <div class="panel-wrapper mt-15">
+
+      <app-taskbar [showSave]="false"></app-taskbar>
+
+      <div class="row">
+
+        <div class="leftContent col-sm-12 col-md-9">
+
+          <div>
+
+            <br>
+            <button class="btn btn--small tooltip" placement="top" (click)="goToDesignCanvas(attribute)">
+              Go To Design Canvas <i class="icon-popout"></i>
+            </button>
+
+            <div class="pull-right">
+
+              Viewing
+
+              <select [(ngModel)]="atoDropDownList[0]">
+                <option *ngFor="let ato of atoDropDownList" [value]="ato">
+                  {{ato}}</option>
+              </select>
+
+            </div>
+
+          </div>
+
+          <br>Status: {{atoTask['itemStatus']}}<br>
+
+          <br><br>
+          <h3>ATO List</h3><br><br>
+          <div class="responsive-table">
+            <table class="table">
+
+              <thead>
+                <th>ATO/PID</th>
+                <th>STATUS</th>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let ato of atoList['tasks']">
+                  <td>{{ato['itemName']}}</td>
+                  <td>{{ato['itemStatus']}}</td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+
+          <br><br>
+          <h3>Modelling</h3><br><br>
+          <div class="responsive-table">
+            <table class="table">
+
+              <thead>
+                <th>TASKS</th>
+                <th>STATUS</th>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let modelTask of atoTask.modelTasks">
+                  <td>{{modelTask['taskName']}}</td>
+                  <td>{{modelTask['taskStatus']}}</td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+
+          <br><br>
+          <h3>Provisioning & Mediation</h3><br><br>
+          <div class="responsive-table">
+            <table class="table">
+
+              <thead>
+                <th>TASKS</th>
+                <th>STATUS</th>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let provisionTask of atoTask.provisionTasks">
+                  <td>{{provisionTask['taskName']}}</td>
+                  <td>{{provisionTask['taskStatus']}}</td>
+                </tr>
+              </tbody>
+
+
+            </table>
+          </div>
+
+        </div>
+
+        <div class="rightContent col-sm-12 col-md-3">
+          <app-right-panel [stakeData]="stakeHolderBasedOnOfferRole" [offerName]="offerName" [derivedMM]="derivedMM"
+            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [offerBuilderdata]="offerBuilderdata"
+            [noOfWeeksDifference]="noOfWeeksDifference"></app-right-panel>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

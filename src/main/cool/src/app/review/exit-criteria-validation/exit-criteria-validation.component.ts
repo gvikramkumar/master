@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
 import { ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from 'ngx-webstorage';
 import { HeaderService, UserService, ConfigurationService } from '@shared/services';
 import { MessageService } from '@app/services/message.service';
 import { OffersolutioningService } from '@app/services/offersolutioning.service';
@@ -29,9 +28,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
     private exitCriteriaValidationService: ExitCriteriaValidationService,
-    private headerService: HeaderService,
     private messageService: MessageService,
-    private localStorage: LocalStorageService,
     private userService: UserService,
     private offersolutioningService: OffersolutioningService,
     private configurationService: ConfigurationService
