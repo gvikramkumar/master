@@ -14,11 +14,73 @@ let drivers, periods;
 get A/I >> get new name >> update all with that name to new name... done
  */
 
+class SelectExceptionIndexMap {
+  constructor(public selectArr: string[], public index) {
+  }
+}
+
+class SelectExceptionMap {
+  sl1Idx = 0;
+  sl2Idx = 0;
+  sl3Idx = 0;
+  tgIdx = 0;
+  buIdx = 0;
+  pfIdx = 0;
+  scmsIdx = 0;
+  beIdx = 0;
+  sl1Map: SelectExceptionIndexMap[] = [];
+  sl2Map: SelectExceptionIndexMap[] = [];
+  sl3Map: SelectExceptionIndexMap[] = [];
+  tgMap: SelectExceptionIndexMap[] = [];
+  buMap: SelectExceptionIndexMap[] = [];
+  pfMap: SelectExceptionIndexMap[] = [];
+  scmsMap: SelectExceptionIndexMap[] = [];
+  beMap: SelectExceptionIndexMap[] = [];
+
+  getSelectArray(cond, choices) {
+    return ([cond].concat(choices)).map(x => x.toUpperCase());
+  }
+
+  getSelectString(prop, cond, choices) {
+    const mapArr = this[`${prop}Map`];
+    const prefix = prop.toUpperCase();
+    if (!cond || !choices.length) {
+      return;
+    }
+    const selectArr = ([cond].concat(choices)).map(x => x.toUpperCase());
+    if (!selectArr.length || selectArr.length === 1) {
+      throw new Error(`SelectExceptionMap.getSl1SelectString: selectArray with length < 2, ${selectArr.length}`);
+    }
+    const map = this.findSelectInMapArray(mapArr, selectArr);
+    if (map) {
+      return `${prefix}E${map.index}`;
+    } else {
+      mapArr.push(new SelectExceptionIndexMap(selectArr, ++this[`${prop}Idx`]));
+      return `${prefix}E${this[`${prop}Idx`]}`;
+    }
+  }
+
+  findSelectInMapArray(mapArr, selectArr): SelectExceptionIndexMap {
+    if (!mapArr.length) {
+      return;
+    }
+    let found: SelectExceptionIndexMap;
+    _.each(mapArr, map => {
+      if (map.selectArr.length === selectArr.length && _.union(map.selectArr, selectArr).length === map.selectArr.length) {
+        found = map;
+        return false; // get out
+      }
+    });
+    return found;
+  }
+}
+
+const selectMap = new SelectExceptionMap();
 const buf = [];
-const header = ['Old Name', 'New Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
+const header = ['Old Name', 'New Name', 'Duplicate', 'Description', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
   'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Status'
 ];
-const props =       ['name', 'newName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+const props =       ['name', 'newName', 'duplicate', 'description', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
   'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'status'];
 
 buf.push(header.toString());
@@ -46,7 +108,7 @@ Promise.all([
       createSelectArrays(rule);
       rule.newName = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
       addMatches(rule);
-      addSelects(rule);
+      addSelects(rule, selectMap);
 
       buf.push(props.map(prop => {
         if (_.isArray(rule[prop]) && rule[prop].length) {
@@ -60,16 +122,29 @@ Promise.all([
     fs.writeFileSync(fileName, buf.join('\n'));
     console.log(`${latestRules.length} rules processed to /dist/sandbox/${fileName}`);
 
+/*
+    console.log('>>>>>>> sl1');
+    selectMap.sl1Map.forEach(x => console.log(x.index, x.selectArr));
+    console.log('>>>>>>> sl2');
+    selectMap.sl2Map.forEach(x => console.log(x.index, x.selectArr));
+    console.log('>>>>>>> sl3');
+    selectMap.sl3Map.forEach(x => console.log(x.index, x.selectArr));
+    console.log('>>>>>>> tg');
+    selectMap.tgMap.forEach(x => console.log(x.index, x.selectArr));
+    console.log('>>>>>>> bu');
+    selectMap.buMap.forEach(x => console.log(x.index, x.selectArr));
+    console.log('>>>>>>> pf');
+    selectMap.pfMap.forEach(x => console.log(x.index, x.selectArr));
+    console.log('>>>>>>> scms');
+    selectMap.scmsMap.forEach(x => console.log(x.index, x.selectArr));
+    console.log('>>>>>>> be');
+    selectMap.beMap.forEach(x => console.log(x.index, x.selectArr));
+*/
+
     process.exit(0);
     // need to look for duplicates too, but your output would show that right? Sort by newname then?
 
   })
-
-function createNewName(rule, driver, period) {
-  rule.newName = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
-  addMatches(rule);
-  addSelects(rule);
-}
 
 function getMatchText(values, prop, value) {
   const val = _.find(values, {[prop]: value});
@@ -118,9 +193,25 @@ function addMatches(rule) {
   }
 }
 
-function addSelects(rule) {
+function addSelects(rule, selectMap) {
+  // order: SL1, SL2, SL3, TG, BU, PF, SCMS, BE
   let str = '';
-
+  const sl1 = selectMap.getSelectString('sl1', rule.salesSL1CritCond, rule.salesSL1CritChoices);
+  const sl2 = selectMap.getSelectString('sl2', rule.salesSL2CritCond, rule.salesSL2CritChoices);
+  const sl3 = selectMap.getSelectString('sl3', rule.salesSL3CritCond, rule.salesSL3CritChoices);
+  const tg = selectMap.getSelectString('tg', rule.prodTGCritCond, rule.prodTGCritChoices);
+  const bu = selectMap.getSelectString('bu', rule.prodBUCritCond, rule.prodBUCritChoices);
+  const pf = selectMap.getSelectString('pf', rule.prodPFCritCond, rule.prodPFCritChoices);
+  const scms = selectMap.getSelectString('scms', rule.scmsCritCond, rule.scmsCritChoices);
+  const be = selectMap.getSelectString('be', rule.beCritCond, rule.beCritChoices);
+  str += sl1 ? `-${sl1}` : '';
+  str += sl2 ? `-${sl2}` : '';
+  str += sl3 ? `-${sl3}` : '';
+  str += tg ? `-${tg}` : '';
+  str += bu ? `-${bu}` : '';
+  str += pf ? `-${pf}` : '';
+  str += scms ? `-${scms}` : '';
+  str += be ? `-${be}` : '';
   if (str) {
     rule.newName += str;
   }
