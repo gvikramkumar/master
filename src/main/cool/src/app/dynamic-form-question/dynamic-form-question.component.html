@@ -4,26 +4,18 @@
 
       <!-- Input -->
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Free Text'">
-        <input [name]="question.egineAttribue" [id]="question.egineAttribue"
-          *ngIf='question.egineAttribue === "Item Name (PID)"' [value]="headerName" [attr.disabled]='true'
-          class="form-control">
-        <input [name]="question.egineAttribue" [id]="question.egineAttribue" [formControlName]="question.egineAttribue"
-          *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
-        <label for="questionLabel"><span
-            *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required">
-            <font color="red">*</font>
-          </span>{{question.egineAttribue}}</label>
-        <span class="help-block"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)">
-          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is
-            required</span>
-          <span *ngIf="questionForm.controls[question.egineAttribue].errors.maxlength">{{question.egineAttribue}}
-            exceeds max characters({{question.rules.maxCharacterLen}}) allowed</span>
-          <span *ngIf="questionForm.controls[question.egineAttribue].errors.pattern">{{question.egineAttribue}} should
-            be in {{question.rules.textcase}}</span>
-        </span>
-
-      </div>
+       <input [name]="question.egineAttribue" [id]="question.egineAttribue"
+         *ngIf='question.egineAttribue === "Item Name (PID)"' [value]="headerName" [attr.disabled]='true' class="form-control">
+       <input [name]="question.egineAttribue" [id]="question.egineAttribue" [formControlName]="question.egineAttribue"
+         *ngIf='question.egineAttribue !== "Item Name (PID)"' class="form-control" [(ngModel)]="question.currentValue">
+        <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
+        <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
+         <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+        <span *ngIf="questionForm.controls[question.egineAttribue].errors.maxlength">{{question.egineAttribue}} exceeds max characters({{question.rules.maxCharacterLen}}) allowed</span>
+        <span *ngIf="questionForm.controls[question.egineAttribue].errors.pattern">{{question.egineAttribue}} should be in {{question.rules.textcase}}</span>
+      </span>
+       
+     </div>
 
       <!-- Drop Down -->
       <div class="form-group__text select half-margin-bottom half-margin-top" *ngSwitchCase="'Drop-down'">
@@ -31,71 +23,52 @@
           [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
           <option *ngFor="let option of question.values" [value]="option">{{option}}</option>
         </select>
-        <label for="questionLabel"><span
-            *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required">
-            <font color="red">*</font>
-          </span>{{question.egineAttribue}}</label>
-        <span class="help-block"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)">
-          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is
-            required</span>
-        </span>
+        <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
+        <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
+         <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+      </span>
       </div>
 
       <!-- Multiselect-->
       <div class="form-group__text half-margin-bottom half-margin-top" *ngSwitchCase="'Multiselect'">
-        <label
-          for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
+        <label for="questionLabel">{{question.egineAttribue}}{{question.rules.isMandatoryOptional == "Mandatory" ? "*" : ""}}</label>
         <p-multiSelect [id]="question.egineAttribue" [name]="question.egineAttribue" [options]="question.listMutiSelect"
-          optionLabel="name" [(ngModel)]="question.listCurrentValue" [formControlName]="question.egineAttribue">
-        </p-multiSelect>
-        <span class="help-block"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)">
-          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is
-            required</span>
+          optionLabel="name" [(ngModel)]="question.listCurrentValue" [formControlName]="question.egineAttribue"></p-multiSelect>
+          <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
+           <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
         </span>
       </div>
 
       <!-- Radio Button -->
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Radio Button'">
-        <label class="radio half-margin-bottom" for="questionLabel"><span
-            *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required">
-            <font color="red">*</font>
-          </span>{{question.egineAttribue}}</label>
+        <label class="radio half-margin-bottom" for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.egineAttribue}}</label>
         <div>
           <label class="radio" *ngFor="let rad of question.values">
-            <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue" class="form-control"
-              [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
+            <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"
+              class="form-control" [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
             <span class="radio__input"></span>
             <span class="radio__label hidden-xs">{{rad}}</span>
           </label>
         </div>
-        <span class="help-block"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)">
-          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is
-            required</span>
-        </span>
+        <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
+         <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+      </span>
       </div>
 
       <!-- Radio Button -->
       <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Q&A Radio Button'">
-        <label class="radio half-margin-bottom" for="questionLabel"><span
-            *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required">
-            <font color="red">*</font>
-          </span>{{question.question}}</label>
+        <label class="radio half-margin-bottom" for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
         <div>
           <label class="radio" *ngFor="let rad of question.values">
-            <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue" class="form-control"
-              [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
+            <input type="radio" [id]="question.egineAttribue" [name]="question.egineAttribue"
+              class="form-control" [value]="rad" [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
             <span class="radio__input"></span>
             <span class="radio__label hidden-xs">{{rad}}</span>
           </label>
         </div>
-        <span class="help-block"
-          *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)">
-          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is
-            required</span>
-        </span>
+        <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
+         <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+      </span>
       </div>
 
       <!-- Free Text -->
@@ -104,23 +77,16 @@
           <div class="form-group__text">
             <input [name]="question.egineAttribue" [id]="question.question" class="form-control"
               [(ngModel)]="question.currentValue" [formControlName]="question.egineAttribue">
-            <label for="questionLabel"><span
-                *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required">
-                <font color="red">*</font>
-              </span>{{question.question}}</label>
-            <span class="help-block"
-              *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)">
-              <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is
-                required</span>
-              <span *ngIf="questionForm.controls[question.egineAttribue].errors.maxlength">{{question.egineAttribue}}
-                exceeds max characters({{question.rules.maxCharacterLen}}) allowed</span>
-              <span *ngIf="questionForm.controls[question.egineAttribue].errors.pattern">{{question.egineAttribue}}
-                should be in {{question.rules.textcase}}</span>
-            </span>
-
+            <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
+            <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
+             <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
+             <span *ngIf="questionForm.controls[question.egineAttribue].errors.maxlength">{{question.egineAttribue}} exceeds max characters({{question.rules.maxCharacterLen}}) allowed</span>
+             <span *ngIf="questionForm.controls[question.egineAttribue].errors.pattern">{{question.egineAttribue}} should be in {{question.rules.textcase}}</span>
+          </span>
+          
           </div>
         </div>
-
+    
       </div>
 
     </div>

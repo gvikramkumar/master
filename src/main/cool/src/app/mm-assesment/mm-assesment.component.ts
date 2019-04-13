@@ -60,6 +60,7 @@ export class MmAssesmentComponent implements OnInit {
   isChangedAttribute: boolean;
   totalApprovalsCount: Number = 0;
   public isAllowedtoNextStep: Boolean = false;
+
   // --------------------------------------------------------------------------------------------
 
 
@@ -610,20 +611,20 @@ export class MmAssesmentComponent implements OnInit {
 
   // --------------------------------------------------------------------------------------------
 
-  private formatStakeHolderPojoToUpdateOffer_1(user: any) {
+  private formatStakeHolderPojoToUpdateOffer_1(user: any, defaultStakeHolder: boolean) {
 
     const stakeHolderUpdateOfferFormat = [];
 
     for (const functionalRole of Object.keys(this.stakeholders)) {
       this.stakeholders[functionalRole]
         .map((currentStakeHolder: User) => {
-          stakeHolderUpdateOfferFormat.push(this.formatStakeHolderPojoToUpdateOffer(currentStakeHolder));
+          stakeHolderUpdateOfferFormat.push(this.formatStakeHolderPojoToUpdateOffer(currentStakeHolder, defaultStakeHolder));
         });
     }
     return stakeHolderUpdateOfferFormat;
   }
 
-  private formatStakeHolderPojoToUpdateOffer(user: User): any {
+  private formatStakeHolderPojoToUpdateOffer(user: User, defaultStakeHolder: boolean): any {
     return {
       '_id': user['_id'],
       'businessEntity': user['userMappings'][0]['businessEntity'],
@@ -631,7 +632,7 @@ export class MmAssesmentComponent implements OnInit {
       'offerRole': (((user['userMappings'][0]['functionalRole'] === 'BUPM') || (user['userMappings'][0]['functionalRole'] === 'CXPM'))
         && user['_id'] === this.offerBuilderdata['offerOwner'])
         ? 'Owner' : user['userMappings'][0]['functionalRole'],
-      'stakeholderDefaults': user['stakeholderDefaults'] ? user['stakeholderDefaults'] : false,
+      'stakeholderDefaults': defaultStakeHolder ? defaultStakeHolder : (user['stakeholderDefaults'] ? user['stakeholderDefaults'] : false),
       'name': user['userName']
     };
   }
@@ -922,8 +923,11 @@ export class MmAssesmentComponent implements OnInit {
         // Retrieve Existing Stake Holders Details From Current Offer 
         this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
 
+          // Update Default Stake Holders In Offer
+          const existingStakeHolders = this.formatStakeHolderPojoToUpdateOffer_1(this.stakeholders, true);
+
+          // Combine Default N Manually Added Stake Holders
           const updatedStakeHolders = offerDetailsData['stakeholders'];
-          const existingStakeHolders = this.formatStakeHolderPojoToUpdateOffer_1(this.stakeholders);
           const totalCombinedStakeHolders = _.compact(_.uniqBy(existingStakeHolders.concat(updatedStakeHolders), '_id'));
 
           // Transform StakeHolder Info To Display On UI
@@ -1057,7 +1061,7 @@ export class MmAssesmentComponent implements OnInit {
         selectedMonetizationAttributes.push(offerChars);
       });
 
-      // Retrieve Existing Stake Holders Details From Current Offer 
+      // Retrieve Existing Stake Holders Details From Current Offer
       this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
 
         this.stakeholders = [];
@@ -1088,7 +1092,7 @@ export class MmAssesmentComponent implements OnInit {
             .subscribe(stakeHolderRelatedToSelectedAttributesList => {
 
               const stakeHolderRelatedToSelectedAttributes = stakeHolderRelatedToSelectedAttributesList
-                .map(user => this.formatStakeHolderPojoToUpdateOffer(user));
+                .map(user => this.formatStakeHolderPojoToUpdateOffer(user, true));
 
               existingStakeHolders = existingStakeHolders.concat(stakeHolderRelatedToSelectedAttributes);
 

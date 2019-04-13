@@ -37,6 +37,33 @@ export class OfferSolutionQuestionComponent implements OnInit {
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
   }
 
+  formatFreeTextWithNoSpaceInput(answer: string, question: any): any {
+
+    let splitAnswer: string[] = answer.split(',');
+
+    splitAnswer = splitAnswer.reduce((acc, val) => {
+      val = val.replace(/\s+/g, ' ').trim();
+      acc.push(val);
+      return acc;
+    }, []);
+
+    let firstTime = true;
+    let concatAnswer = '';
+
+    splitAnswer.map(splitWord => {
+      if (firstTime) {
+        concatAnswer = splitWord;
+        firstTime = false;
+      } else {
+        concatAnswer = concatAnswer + ', ' + splitWord;
+      }
+    });
+
+    question['answerToQuestion'] = concatAnswer;
+    return question;
+
+  }
+
   validateDate(date: any, question: any) {
 
     question['inValidDate'] = false;
@@ -77,6 +104,8 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
       if (question['questionType'] === 'Date') {
         this.validateDate(selectedValue, question);
+      } else if (question['questionType'] === 'Free Text with No Space') {
+        question = this.formatFreeTextWithNoSpaceInput(selectedValue, question);
       }
 
       const parentQuestionNumber = question['questionNo'];

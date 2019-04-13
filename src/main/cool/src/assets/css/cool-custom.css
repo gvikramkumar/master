@@ -870,6 +870,10 @@ th.ui-sortable-column.ng-star-inserted {
 }
 
 /* Form Elements */
+.cool.cui input[type="number"] {
+  min-height: 40px;
+}
+
 .cool.cui .ui-multiselect {
   display: block;
 }
@@ -1200,6 +1204,14 @@ span[class*="display-"] {
 }
 
 /* helpers */
+.btns-right .btn + .btn {
+  margin-right: 10px;
+}
+.btns-right {
+  width: 30%;
+  direction: rtl;
+}
+
 .borderless {
   border: none !important;
 }
