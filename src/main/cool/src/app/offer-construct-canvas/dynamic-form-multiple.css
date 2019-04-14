@@ -254,28 +254,28 @@ span.icon-cart {
 	text-shadow: none;
 	font-size: .8em;
 	visibility: hidden;
-	-webkit-border-radius: 7px; 
-	-moz-border-radius: 7px; 
-	-o-border-radius: 7px; 
-	border-radius: 7px;	
-	text-align: center;	
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	-o-border-radius: 7px;
+	border-radius: 7px;
+	text-align: center;
 	opacity: 0;
 	z-index: 999;
-	padding: 3px 8px;	
+	padding: 3px 8px;
 	position: absolute;
 	cursor: default;
 	-webkit-transition: all 240ms ease-in-out;
 	-moz-transition: all 240ms ease-in-out;
 	-ms-transition: all 240ms ease-in-out;
 	-o-transition: all 240ms ease-in-out;
-	transition: all 240ms ease-in-out;	
+	transition: all 240ms ease-in-out;
 }
 
 .tool-tip,
 .tool-tip.top{
 	top: auto;
 	bottom: 114%;
-	left: 50%;		
+	left: 50%;
 }
 
 .tool-tip.top:after,
@@ -288,17 +288,24 @@ span.icon-cart {
 	height: 0px;
 	width: 0px;
 	border: 6px solid transparent;
-    border-top-color: #005073;	
+    border-top-color: #005073;
 }
 
 /* default heights, width and margin w/o Javscript */
 
+.tool-tip ul {
+  margin: 0;
+  padding: 5px 5px 5px 20px;
+}
+.tool-tip ul li {
+  list-style: disc;
+}
 .tool-tip,
 .tool-tip.top{
 	min-width: 80px;
-    max-width: 300px;
-	min-height: 22px;
-	margin-left: -43px;
+  max-width: 300px;
+  min-height: 22px;
+  transform: translateX(-50%);
 }
 
 /* tool tip position right */
@@ -308,17 +315,17 @@ span.icon-cart {
 	right: auto;
 	left: 106%;
 	margin-top: -15px;
-	margin-right: auto;	
+	margin-right: auto;
 	margin-left: auto;
 }
 
 .tool-tip.right:after{
 	left: -5px;
-	top: 50%;	
+	top: 50%;
 	margin-top: -6px;
 	bottom: auto;
-	border-top-color: transparent;	
-    border-right-color: #005073;	
+	border-top-color: transparent;
+    border-right-color: #005073;
 }
 
 
@@ -336,7 +343,7 @@ span.icon-cart {
 	-moz-transition: all 240ms ease-in-out;
 	-ms-transition: all 240ms ease-in-out;
 	-o-transition: all 240ms ease-in-out;
-	transition: all 240ms ease-in-out;		
+	transition: all 240ms ease-in-out;
 }
 
 
@@ -371,7 +378,7 @@ span.icon-cart {
 .on-focus > input:focus + .tool-tip.slideIn,
 .on-focus > input:focus + .tool-tip.slideIn.top{
 	bottom: 110%;
-}	
+}
 
 
 

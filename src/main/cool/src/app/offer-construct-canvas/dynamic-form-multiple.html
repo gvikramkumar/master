@@ -151,11 +151,11 @@
                               </div>
                               <div class="form-group input--compressed" *ngIf="i !== 0">
                                 <div class="form-group__text">
-                                  <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
-                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                                  <div class="on-focus clearfix" >
+                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                  
-                                   class="form-control btn btn--small tooltip" [(ngModel)]="pInfo.currentValue" placement="top" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
+
+                                   class="form-control" [(ngModel)]="pInfo.currentValue" placement="top" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
                                <!-- <div *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" > -->
                                <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
                                <ul>
@@ -165,19 +165,19 @@
                                </ul>
                                </div>
                                </div>
-                                   
-                                
+
+
                               </div>
-                                 
+
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Q&A FreeText'">
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
-                                <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
-                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue" 
+                                <div class="on-focus clearfix" >
+                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
+                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                   [(ngModel)]="pInfo.currentValue" class="form-control">
                                   <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
                                   <ul>
@@ -187,8 +187,8 @@
                                   </ul>
                                   </div>
                                   </div>
-                                
-                                
+
+
                               </div>
                               </div>
                             </td>
@@ -196,9 +196,9 @@
                             <td *ngSwitchCase="'Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"  
+                                  <div class="on-focus clearfix" >
+                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
+                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                     [(ngModel)]="pInfo.currentValue" class="form-control">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
@@ -210,7 +210,7 @@
                                   </ul>
                                   </div>
                                   </div>
-                                
+
                             </div>
                               </div>
                             </td>
@@ -218,8 +218,8 @@
                             <td *ngSwitchCase="'Q&A Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                    <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                                    <div class="on-focus clearfix" >
+                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                     [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -232,8 +232,8 @@
                                   </ul>
                                   </div>
                                   </div>
-                                  
-                                
+
+
                             </div>
                               </div>
                             </td>
@@ -241,8 +241,8 @@
                             <td *ngSwitchCase="'Drop-down'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                    <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                                    <div class="on-focus clearfix" >
+                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                     [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -255,16 +255,16 @@
                                   </ul>
                                   </div>
                                   </div>
-                                  
+
                             </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Multiselect'">
                                 <div class="on-focus clearfix">
-                              <p-multiSelect [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                              <p-multiSelect [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                [options]="pInfo.listMutiSelect" optionLabel="name" 
+                                [options]="pInfo.listMutiSelect" optionLabel="name"
                                 [(ngModel)]="pInfo.listCurrentValue" >
                               </p-multiSelect>
                               <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
@@ -275,7 +275,7 @@
                               </ul>
                               </div>
                               </div>
-                              
+
                             </td>
                           </tr>
                         </div>
@@ -287,11 +287,11 @@
                             <td *ngSwitchCase="'Free Text'">
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
-                                  <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
-                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                                  <div class="on-focus clearfix" >
+                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue">
-                                    
+                                    [(ngModel)]="pInfo.currentValue" class="form-control">
+
                                     <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
                                     <ul>
                                        <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
@@ -300,7 +300,7 @@
                                     </ul>
                                     </div>
                                     </div>
-                                
+
                               </div>
                               </div>
                             </td>
@@ -308,10 +308,10 @@
                             <td *ngSwitchCase="'Q&A FreeText'">
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
-                                 <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
-                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                                 <div class="on-focus clearfix" >
+                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" >
+                                    [(ngModel)]="pInfo.currentValue" class="form-control">
                                     <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
                                     <ul>
                                        <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
@@ -320,7 +320,7 @@
                                     </ul>
                                     </div>
                                     </div>
-                                    
+
                                 </div>
                               </div>
                             </td>
@@ -328,8 +328,8 @@
                             <td *ngSwitchCase="'Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                                  <div class="on-focus clearfix" >
+                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                     [(ngModel)]="pInfo.currentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -349,8 +349,8 @@
                             <td *ngSwitchCase="'Q&A Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                    <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                                    <div class="on-focus clearfix" >
+                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                     [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -371,7 +371,7 @@
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
                                     <div class="on-focus clearfix">
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                     [(ngModel)]="pInfo.currentValue" >
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -384,14 +384,14 @@
                                   </ul>
                                   </div>
                                   </div>
-                                  
+
                             </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Multiselect'">
                                 <div class="on-focus clearfix">
-                              <p-multiSelect [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                              <p-multiSelect [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                 [options]="pInfo.listMutiSelect" optionLabel="name"
                                 [(ngModel)]="pInfo.listCurrentValue" >
@@ -404,7 +404,7 @@
                               </ul>
                               </div>
                               </div>
-                              
+
                             </td>
                           </tr>
                         </div>
