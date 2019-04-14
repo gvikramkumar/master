@@ -57,7 +57,7 @@ export class DynamicFormMultipleComponent implements OnInit {
          this.offerForm = new FormGroup({
             });
             
-        this.offerForm = this.offerConstructService.toFormGroup(this.offerConstructService.questionsSet);
+        this.offerForm = this.offerConstructService.toOfferFormGroup(this.offerConstructService.questionsSet);
         
     }
 
@@ -183,7 +183,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     onTabOpen(e, headerName) {
         this.currenntHeaderName = headerName;
         // this.itemsList[headerName] = {};
-        this.offerForm = this.offerConstructService.toFormGroup(this.offerConstructService.questionsSet);
+        this.offerForm = this.offerConstructService.toOfferFormGroup(this.offerConstructService.questionsSet);
 
     }
 
