@@ -79,7 +79,7 @@ const selectMap = new SelectExceptionMap();
 const buf = [];
 const header = ['Status', 'Old Name', 'New Name', 'Duplicates', 'Description', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
   'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Created By', 'Created Date', 'Updated By', 'UpdatedDate'];
-const props =       ['status', 'name', 'newName', 'duplicates', 'desc', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+const props =       ['status', 'oldName', 'name', 'duplicates', 'desc', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
   'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
 
 buf.push(header.toString());
@@ -105,7 +105,8 @@ Promise.all([
         throw new Error(`Missing period: ${rule.period}`);
       }
       createSelectArrays(rule);
-      rule.newName = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
+      rule.oldName = rule.name;
+      rule.name = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
       addMatches(rule);
       addSelects(rule, selectMap);
       addDescription(rule, driver, period);
@@ -162,9 +163,9 @@ Promise.all([
  */
 
 function addDescription(rule, driver, period) {
-  let desc = `Name:  ${rule.newName}`;
-  desc += `Old Name:  ${rule.name}`;
-  desc += `Driver:  ${driver.name}`;
+  let desc = `Name:  ${rule.name}`;
+  desc += rule.oldName ? `\nOld Name:  ${rule.oldName}` : '';
+  desc += `\nDriver:  ${driver.name}`;
   desc += `\nPeriod:  ${period.period}`;
 
   desc += rule.salesMatch ? `\nSales:  ${rule.salesMatch}` : '';
@@ -201,14 +202,14 @@ function quoteSelectText(rule) {
 function addDuplicate(rules) {
   const duplicates = [];
   rules.forEach(rule => {
-    const entry = _.find(duplicates, {name: rule.newName});
+    const entry = _.find(duplicates, {name: rule.name});
     if (entry) {
       entry.count++;
     } else {
-      duplicates.push({name: rule.newName, count: 1});
+      duplicates.push({name: rule.name, count: 1});
     }
   });
-  rules.forEach(rule => rule.duplicates = _.find(duplicates, {name: rule.newName}).count);
+  rules.forEach(rule => rule.duplicates = _.find(duplicates, {name: rule.name}).count);
 }
 
 function getMatchText(values, prop, value) {
@@ -254,7 +255,7 @@ function addMatches(rule) {
   str += rule.glSegmentsMatch && rule.glSegmentsMatch.length ? getMatchTextArray(glSegmentsMatches, 'value', rule.glSegmentsMatch) : '';
 
   if (str) {
-    rule.newName += `-${str}`;
+    rule.name += `-${str}`;
   }
 }
 
@@ -278,7 +279,7 @@ function addSelects(rule, selectMap) {
   str += scms ? `-${scms}` : '';
   str += be ? `-${be}` : '';
   if (str) {
-    rule.newName += str;
+    rule.name += str;
   }
 }
 
