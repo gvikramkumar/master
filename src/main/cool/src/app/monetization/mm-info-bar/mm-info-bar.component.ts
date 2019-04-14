@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { StakeholderfullService } from '../services/stakeholderfull.service';
+import { StakeholderfullService } from '../../services/stakeholderfull.service';
 
 @Component({
   selector: 'app-mm-info-bar',

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CreateOfferCoolComponent } from './create-offer-cool/create-offer-cool.component';
-import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
+import { MmAssesmentComponent } from './monetization/mm-assesment/mm-assesment.component';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
 import { ExitCriteriaValidationComponent } from '@app/review/exit-criteria-validation/exit-criteria-validation.component';
 import { StakeholderFullComponent } from '@app/stakeholder/stakeholder-full/stakeholder-full.component';
@@ -14,12 +14,12 @@ import { OfferSolutioningComponent } from './solutioning/offer-solutioning/offer
 import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 
 // Temporoary
-import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
+import { MmInfoBarComponent } from './monetization/mm-info-bar/mm-info-bar.component';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
-import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
+import { MmMessageBarComponent } from './monetization/mm-message-bar/mm-message-bar.component';
 import { OfferConstructComponent } from '@app/construct/offer-construct/offer-construct.component';
 import { OasComponent } from './oas/oas.component';
-import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
+import { OfferDimensionComponent } from './dimensions/offer-dimension/offer-dimension.component';
 import { BupmGuard } from '@shared/guards';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeholder-add.component';

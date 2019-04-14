@@ -13,7 +13,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CreateOfferCoolComponent } from './create-offer-cool/create-offer-cool.component';
-import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
+import { MmAssesmentComponent } from './monetization/mm-assesment/mm-assesment.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchCollaboratorService } from './services/search-collaborator.service';
@@ -35,16 +35,16 @@ import { OfferPhaseService } from './services/offer-phase.service';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { StrategyReviewService } from './services/strategy-review.service';
 import { OfferSolutioningComponent } from './solutioning/offer-solutioning/offer-solutioning.component';
-import { PackingComponent } from './offer-dimension-groups/packing/packing.component';
-import { SupportComponent } from './offer-dimension-groups/support/support.component';
-import { OfferPricingComponent } from './offer-dimension-groups/offer-pricing/offer-pricing.component';
-import { BillingComponent } from './offer-dimension-groups/billing/billing.component';
-import { ProgramComponent } from './offer-dimension-groups/program/program.component';
+import { PackingComponent } from './dimensions/offer-dimension-groups/packing/packing.component';
+import { SupportComponent } from './dimensions/offer-dimension-groups/support/support.component';
+import { OfferPricingComponent } from './dimensions/offer-dimension-groups/offer-pricing/offer-pricing.component';
+import { BillingComponent } from './dimensions/offer-dimension-groups/billing/billing.component';
+import { ProgramComponent } from './dimensions/offer-dimension-groups/program/program.component';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
-import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
-import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
+import { MmInfoBarComponent } from './monetization/mm-info-bar/mm-info-bar.component';
+import { MmMessageBarComponent } from './monetization/mm-message-bar/mm-message-bar.component';
 import { OffersolutioningCardOneComponent } from './solutioning/offer-solutioning-card-one/offer-solutioning-card-one.component';
-import { OfferDimensionComponent } from './offer-dimension/offer-dimension.component';
+import { OfferDimensionComponent } from './dimensions/offer-dimension/offer-dimension.component';
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
@@ -75,6 +75,8 @@ import { LoaderService } from '@shared/loader.service';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
 import { ModellingDesignAtoListComponent } from './modelling-design/modelling-design-ato-list/modelling-design-ato-list.component';
 import { ModellingDesignAtoComponent } from './modelling-design/modelling-design-ato/modelling-design-ato.component';
+import { CustomRangeValidatorDirective } from '@app/validators/custom-range-validator.directive';
+import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -123,7 +125,9 @@ export function app_init(configService: ConfigurationService) {
     OfferSetupComponent,
     LoaderComponent,
     ModellingDesignAtoListComponent,
-    ModellingDesignAtoComponent
+    ModellingDesignAtoComponent,
+    CustomRangeValidatorDirective,
+    CustomMinValidatorDirective
   ],
   imports: [
     NgbModule,

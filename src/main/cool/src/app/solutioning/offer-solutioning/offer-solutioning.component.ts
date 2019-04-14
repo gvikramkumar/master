@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { OffersolutioningService } from '../services/offersolutioning.service';
-import { StakeholderfullService } from '../services/stakeholderfull.service';
-import { OfferPhaseService } from '../services/offer-phase.service';
-import { RightPanelService } from '../services/right-panel.service';
+import { OffersolutioningService } from '../../services/offersolutioning.service';
+import { StakeholderfullService } from '../../services/stakeholderfull.service';
+import { OfferPhaseService } from '../../services/offer-phase.service';
+import { RightPanelService } from '../../services/right-panel.service';
 import { ConfigurationService } from '@shared/services';
 import * as _ from 'lodash';
 import * as moment from 'moment';
