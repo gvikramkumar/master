@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { MenuBarService } from '../services/menu-bar.service';
+import { MenuBarService } from '@app/services/menu-bar.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EnvironmentService } from '../../environments/environment.service';
+import { EnvironmentService } from '@env/environment.service';
 import { UserService } from '@shared/services';
 
 @Component({

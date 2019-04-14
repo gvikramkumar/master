@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MonetizationModelService } from '../services/monetization-model.service';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
 
 @Component({
   selector: 'app-offer-create-detail',

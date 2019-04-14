@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { ActionsService } from '../services/actions.service';
+import { ActionsService } from '@app/services/actions.service';
 
 @Component({
   selector: 'app-notification-offer-detail-popup',

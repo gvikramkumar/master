@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { OfferDetailViewService } from '../services/offer-detail-view.service';
+import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StakeHolder } from '../models/stakeholder';
+import { StakeHolder } from '@app/models/stakeholder';
 import { Location } from '@angular/common';
-import { OfferCharacteristics } from '../models/OfferCharacteristics';
-import { StrategyReviewService } from '../services/strategy-review.service';
-import { MonetizationModelService } from '../services/monetization-model.service';
+import { OfferCharacteristics } from '@app/models/OfferCharacteristics';
+import { StrategyReviewService } from '@app/services/strategy-review.service';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
 import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
 
 

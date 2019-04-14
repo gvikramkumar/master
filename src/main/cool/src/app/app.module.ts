@@ -17,16 +17,16 @@ import { MmAssesmentComponent } from './monetization/mm-assesment/mm-assesment.c
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchCollaboratorService } from './services/search-collaborator.service';
-import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
+import { OfferDetailViewComponent } from '@app/offer-detail/offer-detail-view/offer-detail-view.component';
 import { OfferDetailViewService } from './services/offer-detail-view.service';
 import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
 import { ExitCriteriaValidationComponent } from '@app/review/exit-criteria-validation/exit-criteria-validation.component';
 import { ExitCriteriaValidationService } from './services/exit-criteria-validation.service';
 import { StakeholderFullComponent } from '@app/stakeholder/stakeholder-full/stakeholder-full.component';
-import { MenuBarComponent } from './menu-bar/menu-bar.component';
-import { OfferCreateDetailComponent } from './offer-create-detail/offer-create-detail.component';
+import { MenuBarComponent } from '@app/menu/menu-bar/menu-bar.component';
+import { OfferCreateDetailComponent } from '@app/offer-detail/offer-create-detail/offer-create-detail.component';
 import { AccessManagementService } from './services/access-management.service';
-import { MenuBarPopupComponent } from './menu-bar-popup/menu-bar-popup.component';
+import { MenuBarPopupComponent } from '@app/menu/menu-bar-popup/menu-bar-popup.component';
 import { MenuBarService } from './services/menu-bar.service';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { CreateActionService } from './services/create-action.service';
@@ -54,13 +54,12 @@ import { OfferconstructCanvasComponent } from '@app/construct/offer-construct-ca
 import { RightPanelService } from './services/right-panel.service';
 import { OffersolutioningService } from './services/offersolutioning.service';
 import { OfferSolutionQuestionComponent } from './solutioning/offer-solution-question/offer-solution-question.component';
-import { EditfieldsComponent } from './editfields/editfields.component';
-import { ViewStrategyComponent as ViewStrategyComponent } from '@app/review/view-strategy/view-strategy.component';
+import { ViewStrategyComponent } from '@app/review/view-strategy/view-strategy.component';
 import { OasComponent } from './oas/oas.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DynamicFormMultipleComponent } from '@app/construct/offer-construct-canvas/dynamic-form-multiple';
-import { NotificationOfferDetailPopupComponent } from './notification-offer-detail-popup/notification-offer-detail-popup.component';
+import { NotificationOfferDetailPopupComponent } from '@app/offer-detail/notification-offer-detail-popup/notification-offer-detail-popup.component';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import { SharedModule } from '@shared/shared.module';
 import { EnvironmentService } from 'src/environments/environment.service';
@@ -114,7 +113,6 @@ export function app_init(configService: ConfigurationService) {
     DynamicFormQuestionComponent,
     OfferconstructCanvasComponent,
     OfferSolutionQuestionComponent,
-    EditfieldsComponent,
     ViewStrategyComponent,
     OasComponent,
     NotificationOfferDetailPopupComponent,
