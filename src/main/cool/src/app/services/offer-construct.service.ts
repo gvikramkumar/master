@@ -38,17 +38,22 @@ export class OfferConstructService {
     addDetails(groups): Observable<any> {
         return this.httpClient.post(this.environmentService.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL, groups, { withCredentials: true });
     }
-    
+
     setQuestionsSet(questionsSet) {
         this.questionsSet = questionsSet;
     }
 
 
     toFormGroup(questions) {
+
         const group: any = {};
+
         questions.forEach(question => {
-            let validators: any[] = [];
+
+            const validators: any[] = [];
+
             if (question.egineAttribue !== "Item Name (PID)") {
+
                 if (typeof question.rules.maxCharacterLen != 'undefined' && question.rules.maxCharacterLen) {
                     validators.push(Validators.maxLength(question.rules.maxCharacterLen))
                 }
@@ -81,5 +86,5 @@ export class OfferConstructService {
         });
         return new FormGroup(group);
     }
-    
+
 }
