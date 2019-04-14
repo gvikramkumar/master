@@ -6,8 +6,10 @@ import AnyObj from '../shared/models/any-obj';
 import * as fs from 'fs';
 import * as _ from 'lodash';
 import LookupRepo from '../server/api/lookup/repo';
+import SubmeasureRepo from '../server/api/common/submeasure/repo';
 
 const ruleRepo = new AllocationRuleRepo();
+const smRepo = new SubmeasureRepo();
 const lookupRepo = new LookupRepo();
 let drivers, periods;
 /*
@@ -76,24 +78,38 @@ class SelectExceptionMap {
 }
 
 const selectMap = new SelectExceptionMap();
-const buf = [];
-const header = ['Status', 'Old Name', 'New Name', 'Duplicates', 'Description', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
+const ruleBuf = [];
+const ruleHeader = ['Status', 'Old Name', 'New Name', 'Duplicates', 'Description', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
   'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Created By', 'Created Date', 'Updated By', 'UpdatedDate'];
-const props =       ['status', 'oldName', 'name', 'duplicates', 'desc', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+const ruleProps =       ['status', 'oldName', 'name', 'duplicates', 'desc', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
   'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
 
-buf.push(header.toString());
+ruleBuf.push(ruleHeader.toString());
+
+const smBuf = [];
+const smHeader = ['Status', 'Name',
+  'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
+  'Old Rule 1', 'Old Rule 2', 'Old Rule 3', 'Old Rule 4', 'Old Rule 5', 'Old Rule 6', 'Old Rule 7', 'Old Rule 8', 'Old Rule 9', 'Old Rule 10', 'Old Rule 11', 'Old Rule 12', 'Old Rule 13', 'Old Rule 14', 'Old Rule 15',
+  'Created By', 'Created Date', 'Updated By', 'UpdatedDate'];
+const smProps =       ['status', 'name',
+  'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'rules[5]', 'rules[6]', 'rules[7]', 'rules[8]', 'rules[9]', 'rules[10]', 'rules[11]', 'rules[12]', 'rules[13]', 'rules[14]',
+  'oldRules[0]', 'oldRules[1]', 'oldRules[2]', 'oldRules[3]', 'oldRules[4]', 'oldRules[5]', 'oldRules[6]', 'oldRules[7]', 'oldRules[8]', 'oldRules[9]', 'oldRules[10]', 'oldRules[11]', 'oldRules[12]', 'oldRules[13]', 'oldRules[14]',
+  'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
+
+smBuf.push(smHeader.toString());
 
 Promise.all([
   ruleRepo.getMany({moduleId: 1}),
   ruleRepo.getManyLatestGroupByNameActiveInactive(1),
+  smRepo.getManyLatestGroupByNameActiveInactive(1),
   lookupRepo.getValues(['drivers', 'periods'])
 ])
   .then(results => {
     const allRules = results[0];
     const latestRules = results[1];
-    drivers = results[2][0];
-    periods = results[2][1];
+    const latestSms = results[2];
+    drivers = results[3][0];
+    periods = results[3][1];
 
     latestRules.forEach((rule: AnyObj) => {
       const driver = _.find(drivers, {value: rule.driverName});
@@ -114,19 +130,51 @@ Promise.all([
     });
     addDuplicate(latestRules);
     latestRules.forEach(rule => {
-      buf.push(props.map(prop => {
+      ruleBuf.push(ruleProps.map(prop => {
         if (_.isArray(rule[prop]) && rule[prop].length) {
-          return `${rule[prop].join('/')}`;
+          return `${_.get(rule, prop).join('/')}`;
         } else {
-          return rule[prop];
+          return _.get(rule, prop);
         }
       }).toString());
     })
 
-    const fileName = 'rule-name-change.csv';
-    fs.writeFileSync(fileName, buf.join('\n'));
-    console.log(`${latestRules.length} rules processed to /dist/sandbox/${fileName}`);
+    const ruleFileName = 'rule-name-change.csv';
+    fs.writeFileSync(ruleFileName, ruleBuf.join('\n'));
+    console.log(`${latestRules.length} rules processed to /dist/sandbox/${ruleFileName}`);
 
+    ///////////// submeasures
+    
+    latestSms.forEach(sm => {
+      const ruleNames = [];
+      const oldRuleNames = [];
+      sm.rules.forEach(ruleName => {
+        const rule = _.find(latestRules, {oldName: ruleName});
+        if (!rule) {
+          throw new Error(`submeasure rule lookup: rule not found for ruleName: ${ruleName}`);
+        }
+        ruleNames.push(rule.name);
+        oldRuleNames.push(ruleName);
+      });
+      sm.rules = ruleNames;
+      sm.oldRules = oldRuleNames;
+    });
+
+    latestSms.forEach(sm => {
+      smBuf.push(smProps.map(prop => {
+        if (_.isArray(sm[prop]) && sm[prop].length) {
+          return `${_.get(sm, prop).join('/')}`;
+        } else {
+          return _.get(sm, prop);
+        }
+      }).toString());
+    })
+
+    const smFileName = 'submeasure-rule-change.csv';
+    fs.writeFileSync(smFileName, smBuf.join('\n'));
+    console.log(`${latestSms.length} submeasures processed to /dist/sandbox/${smFileName}`);
+
+    
 /*
     console.log('>>>>>>> sl1');
     selectMap.sl1Map.forEach(x => console.log(x.index, x.selectArr));
