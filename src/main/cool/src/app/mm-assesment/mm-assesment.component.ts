@@ -1064,7 +1064,6 @@ export class MmAssesmentComponent implements OnInit {
       // Retrieve Existing Stake Holders Details From Current Offer
       this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
 
-        this.stakeholders = [];
         let existingStakeHolders = [];
         existingStakeHolders = offerDetailsData['stakeholders'].map(user => {
           return {
