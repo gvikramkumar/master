@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModellingDesignService } from '../../services/modelling-design.service';
 import { StakeholderfullService } from '../../services/stakeholderfull.service';
+import { ModellingDesign } from '../model/modelling-design';
+import { Ato } from '../model/ato';
 
 @Component({
   selector: 'app-modelling-design-ato-list',
@@ -10,10 +12,9 @@ import { StakeholderfullService } from '../../services/stakeholderfull.service';
 })
 export class ModellingDesignAtoListComponent implements OnInit {
 
-  atoTask: {};
-  atoList: {};
-  atoStatusList: any;
-  atoDropDownList: any;
+  atoTask: Ato;
+  atoList: Array<Ato>;
+  modellingDesign: ModellingDesign;
 
   caseId: string;
   offerId: string;
@@ -71,20 +72,11 @@ export class ModellingDesignAtoListComponent implements OnInit {
     // };
 
     this.offerId = 'COOL_123';
-    this.modellingDesignService.retrieveAtoList(this.offerId).subscribe(atoListResponse => {
+    this.modellingDesignService.retrieveAtoList(this.offerId).subscribe(modellingDesignRes => {
 
-      this.atoList = atoListResponse as Array<any>;
-      this.atoTask = this.atoList['tasks'].find(ato => ato.itemName = 'ATO-123');
-      this.atoDropDownList = this.atoList['tasks'].map(dropDownValue => {
-        return dropDownValue.itemName;
-      });
-
-      this.atoStatusList = this.atoList['tasks'].map(ato => {
-        return {
-          'itemName': ato.itemName,
-          'status': ato.status
-        };
-      });
+      this.modellingDesign = modellingDesignRes;
+      this.atoList = this.modellingDesign['tasks'];
+      this.atoTask = this.atoList.find(ato => ato.itemName === 'ATO-123');
 
     });
 
@@ -112,7 +104,6 @@ export class ModellingDesignAtoListComponent implements OnInit {
     url += urlToOpen;
     window.open(url, '_blank');
 
-    // window.open('www.google.com', '_blank');
   }
 
   // -------------------------------------------------------------------------------------------------------------------

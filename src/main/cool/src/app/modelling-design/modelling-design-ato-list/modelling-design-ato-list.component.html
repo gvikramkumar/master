@@ -16,7 +16,7 @@
           <div>
 
             <br>
-            <button class="btn btn--small tooltip" placement="top" (click)="goToDesignCanvas(attribute)">
+            <button class="btn btn--small tooltip" placement="top" (click)="goToDesignCanvas()">
               Go To Design Canvas <i class="icon-popout"></i>
             </button>
 
@@ -24,9 +24,9 @@
 
               Viewing
 
-              <select [(ngModel)]="atoDropDownList[0]">
-                <option *ngFor="let ato of atoDropDownList" [value]="ato">
-                  {{ato}}</option>
+              <select [(ngModel)]="atoList[0]['itemName']">
+                <option *ngFor="let ato of atoList" [value]="ato['itemName']">
+                  {{ato['itemName']}}</option>
               </select>
 
             </div>
@@ -46,7 +46,7 @@
               </thead>
 
               <tbody>
-                <tr *ngFor="let ato of atoList['tasks']">
+                <tr *ngFor="let ato of atoList">
                   <td>{{ato['itemName']}}</td>
                   <td>{{ato['itemStatus']}}</td>
                 </tr>
@@ -99,7 +99,7 @@
         </div>
 
         <div class="rightContent col-sm-12 col-md-3">
-          <app-right-panel [stakeData]="stakeHolderBasedOnOfferRole" [offerName]="offerName" [derivedMM]="derivedMM"
+          <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
             [primaryBE]="primaryBE"></app-right-panel>
         </div>
 

@@ -18,8 +18,9 @@ export class MenuBarComponent implements OnInit {
     @Input() offerName: string;
     @Input() stakeData: object;
     @Output() updateMessage = new EventEmitter<string>();
+
     items: MenuItem[];
-    showPopup = false;
+    showPopup: boolean;
     popupType: String = '';
     itemShow: Object = {};
     navigateHash: Object = {};
@@ -33,6 +34,8 @@ export class MenuBarComponent implements OnInit {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private environmentService: EnvironmentService) {
+
+        this.showPopup = false;
 
         this.activatedRoute.params.subscribe(params => {
             this.currentOfferId = params['id'];
@@ -200,6 +203,7 @@ export class MenuBarComponent implements OnInit {
             this.updateMessage.next(message);
         }
         this.showPopup = false;
+
     }
 
     navigate(name) {

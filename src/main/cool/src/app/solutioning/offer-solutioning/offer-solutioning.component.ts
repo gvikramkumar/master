@@ -51,7 +51,7 @@ export class OfferSolutioningComponent implements OnInit {
 
   message;
   Object = Object;
-  offerSolutionData: Object = null;
+  offerSolutionData: Object;
   offerSolutioningFormGroup: FormGroup;
   groupedQuestionsAndAnswers: Array<any> = [];
   unGroupedQuestionsAndAnswers: Array<any> = [];
@@ -451,7 +451,7 @@ export class OfferSolutioningComponent implements OnInit {
     offerSolutioningAnswers['offerId'] = this.offerId;
 
     // Filter Values That Have No Data
-    questionAnswer = questionAnswer.filter(nonEmptyAnswer => nonEmptyAnswer.answer);
+    questionAnswer = questionAnswer.filter(nonEmptyAnswer => nonEmptyAnswer['answer']);
     offerSolutioningAnswers['questionAnswer'] = questionAnswer;
 
     // Save Offer Solution Answers
