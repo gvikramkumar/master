@@ -71,7 +71,7 @@ function getUpdateTable(updates: ObjectDiffVal[]): string {
   return result;
 }
 
-function getObjectChanges(_obj1, _obj2, omitProperties: string[]): ObjectDiffVal[] {
+function getObjectChanges(_obj1, _obj2, omitProperties: string[] = []): ObjectDiffVal[] {
   let arr: ObjectDiffVal[] = [];
   const obj1 = _.omit(_.cloneDeep(_obj1), omitProperties);
   const obj2 = _.omit(_.cloneDeep(_obj2), omitProperties);

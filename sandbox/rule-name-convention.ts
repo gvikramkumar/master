@@ -174,7 +174,11 @@ Promise.all([
     fs.writeFileSync(smFileName, smBuf.join('\n'));
     console.log(`${latestSms.length} submeasures processed to /dist/sandbox/${smFileName}`);
 
-    
+
+    //////// update database
+
+
+
 /*
     console.log('>>>>>>> sl1');
     selectMap.sl1Map.forEach(x => console.log(x.index, x.selectArr));
