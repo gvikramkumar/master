@@ -721,6 +721,9 @@ th.ui-sortable-column.ng-star-inserted {
   width: 100%!important;
 }
 
+.cool.cui .view-item-details .pid-data .form-group .form-group__text input.ng-invalid{
+    border: 1px solid initial;
+}
 .cool.cui .view-item-details .pid-data .form-group .form-group__text input,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text select,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text textarea,

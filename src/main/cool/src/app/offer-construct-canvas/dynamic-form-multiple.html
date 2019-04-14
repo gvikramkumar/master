@@ -149,23 +149,23 @@
                                     value="{{ques.value['title']}}" [attr.disabled]='true'>
                                 </div>
                               </div>
-                              <div [className]="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors ? form-group input--compressed form-group--error : form-group input--compressed" *ngIf="i !== 0">
+                              <div class="form-group input--compressed" *ngIf="i !== 0">
                                 <div class="form-group__text">
-                                    <mat-form-field class="example-full-width">
-                                  <input matInput [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
+                                  <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
+                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                   
-                                   class="form-control" [(ngModel)]="pInfo.currentValue">
-                                   <span class="form-group form-group--error" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
+                                   class="form-control btn btn--small tooltip" [(ngModel)]="pInfo.currentValue" placement="top" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
+                               <!-- <div *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" > -->
+                               <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                               <ul>
+                                  <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                  <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                  <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                               </ul>
+                               </div>
+                               </div>
                                    
-                                   <span *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" tabindex="0" data-balloon="indigo" data-balloon-indigo data-balloon-visible data-balloon-pos="up"></span>
-                                 
-                                   <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                   <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
-                               
-                                  </span>
-                                   
-                                 </mat-form-field>
                                 
                               </div>
                                  
@@ -175,19 +175,18 @@
                             <td *ngSwitchCase="'Q&A FreeText'">
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
-                                  <mat-form-field class="example-full-width">
+                                <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
                                   <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue" 
-                                  [(ngModel)]="pInfo.currentValue" class="form-control" (mouseenter) ="showError = true;"  (mouseleave) ="showError = false;">
-                                  <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                                  {{pInfo.egineAttribue}} is required</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
-                                  
-                                 </span>
-                                  
-                                </mat-form-field>
+                                  [(ngModel)]="pInfo.currentValue" class="form-control">
+                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                                  <ul>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                                  </ul>
+                                  </div>
+                                  </div>
                                 
                                 
                               </div>
@@ -197,21 +196,20 @@
                             <td *ngSwitchCase="'Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <mat-form-field class="example-full-width">
+                                  <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
                                   <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"  
-                                    [(ngModel)]="pInfo.currentValue" class="form-control" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
+                                    [(ngModel)]="pInfo.currentValue" class="form-control">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                  <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                                  {{pInfo.egineAttribue}} is required</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
-                                  
-                                 </span>
-                                  
-                                </mat-form-field>
+                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                                  <ul>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                                  </ul>
+                                  </div>
+                                  </div>
                                 
                             </div>
                               </div>
@@ -220,21 +218,21 @@
                             <td *ngSwitchCase="'Q&A Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <mat-form-field>
+                                    <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
                                   <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
+                                    [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                  <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                                  {{pInfo.egineAttribue}} is required</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
+                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                                  <ul>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                                  </ul>
+                                  </div>
+                                  </div>
                                   
-                                 </span>
-                                  
-                                </mat-form-field>
                                 
                             </div>
                               </div>
@@ -243,41 +241,41 @@
                             <td *ngSwitchCase="'Drop-down'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <mat-form-field>
+                                    <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
                                   <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
+                                    [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                  <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                                  {{pInfo.egineAttribue}} is required</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
+                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                                  <ul>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                                  </ul>
+                                  </div>
+                                  </div>
                                   
-                                 </span>
-                                  
-                                </mat-form-field>
                             </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Multiselect'">
-                              <mat-form-field class="example-full-width">
+                                <div class="on-focus clearfix">
                               <p-multiSelect [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                 [options]="pInfo.listMutiSelect" optionLabel="name" 
-                                [(ngModel)]="pInfo.listCurrentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
+                                [(ngModel)]="pInfo.listCurrentValue" >
                               </p-multiSelect>
-                              <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                              <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                              {{pInfo.egineAttribue}} is required</span>
-                              <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                              <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
+                              <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                              <ul>
+                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                              </ul>
+                              </div>
+                              </div>
                               
-                             </span>
-                              
-                            </mat-form-field>
                             </td>
                           </tr>
                         </div>
@@ -289,19 +287,19 @@
                             <td *ngSwitchCase="'Free Text'">
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
-                                  <mat-form-field class="example-full-width">
+                                  <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
                                   <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
-                                    <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                                    <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                                    {{pInfo.egineAttribue}} is required</span>
-                                    <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                    <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
+                                    [(ngModel)]="pInfo.currentValue">
                                     
-                                   </span>
-                                    
-                                  </mat-form-field>
+                                    <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                                    <ul>
+                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                                    </ul>
+                                    </div>
+                                    </div>
                                 
                               </div>
                               </div>
@@ -310,19 +308,19 @@
                             <td *ngSwitchCase="'Q&A FreeText'">
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
-                                  <mat-form-field class="example-full-width">
+                                 <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
                                   <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
-                                    <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                                    <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                                    {{pInfo.egineAttribue}} is required</span>
-                                    <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                    <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
+                                    [(ngModel)]="pInfo.currentValue" >
+                                    <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                                    <ul>
+                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                                    </ul>
+                                    </div>
+                                    </div>
                                     
-                                   </span>
-                                    
-                                  </mat-form-field>
                                 </div>
                               </div>
                             </td>
@@ -330,21 +328,20 @@
                             <td *ngSwitchCase="'Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <mat-form-field class="example-full-width">
+                                  <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
                                   <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                     [(ngModel)]="pInfo.currentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                  <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                                  {{pInfo.egineAttribue}} is required</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
-                                  
-                                 </span>
-                                  
-                                </mat-form-field>
+                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                                  <ul>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                                  </ul>
+                                  </div>
+                                  </div>
                             </div>
                               </div>
                             </td>
@@ -352,21 +349,20 @@
                             <td *ngSwitchCase="'Q&A Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <mat-form-field class="example-full-width">
+                                    <div class="on-focus clearfix" style="position: relative; padding: 0px; display: table; float: left">
                                   <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
+                                    [(ngModel)]="pInfo.currentValue">
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                  <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                                  {{pInfo.egineAttribue}} is required</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
-                                  
-                                 </span>
-                                  
-                                </mat-form-field>
+                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                                  <ul>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                                  </ul>
+                                  </div>
+                                  </div>
                             </div>
                               </div>
                             </td>
@@ -374,41 +370,41 @@
                             <td *ngSwitchCase="'Drop-down'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <mat-form-field class="example-full-width">
+                                    <div class="on-focus clearfix">
                                   <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
+                                    [(ngModel)]="pInfo.currentValue" >
                                     <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                   </select>
-                                  <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                                  {{pInfo.egineAttribue}} is required</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                                  <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
+                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                                  <ul>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                                  </ul>
+                                  </div>
+                                  </div>
                                   
-                                 </span>
-                                  
-                                </mat-form-field>
                             </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Multiselect'">
-                              <mat-form-field class="example-full-width">
+                                <div class="on-focus clearfix">
                               <p-multiSelect [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                    [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
                                 [options]="pInfo.listMutiSelect" optionLabel="name"
-                                [(ngModel)]="pInfo.listCurrentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
+                                [(ngModel)]="pInfo.listCurrentValue" >
                               </p-multiSelect>
-                              <span class="help-block" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" >
-                              <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" class="help-block text-danger" role="alert">
-                              {{pInfo.egineAttribue}} is required</span>
-                              <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</span>
-                              <span *ngIf="showError  && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern" class="help-block text-danger" role="alert">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</span>
+                              <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
+                              <ul>
+                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
+                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
+                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
+                              </ul>
+                              </div>
+                              </div>
                               
-                             </span>
-                              
-                            </mat-form-field>
                             </td>
                           </tr>
                         </div>
