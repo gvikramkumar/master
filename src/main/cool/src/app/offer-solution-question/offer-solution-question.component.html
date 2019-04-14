@@ -155,9 +155,7 @@
 
         </div>
 
-        <span class="help-block" *ngIf="(osDate.dirty || osDate.touched) && question['inValidDate']">
-          Difference between End Date and Start Date should be less than 180 days
-        </span>
+        <span class="help-block" *ngIf="(osDate.dirty || osDate.touched) && question['inValidDate']">End date must be within 6 months (180 days) of start date</span>
 
         <span class="help-block" *ngIf="osDate.invalid && (osDate.dirty || osDate.touched)">
           <span *ngIf="osDate.errors.required">Select valid date</span>
