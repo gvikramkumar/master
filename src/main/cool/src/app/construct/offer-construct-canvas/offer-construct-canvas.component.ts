@@ -395,31 +395,39 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     const majorLength = {};
     const minorLength = {};
-    let questionsSet = new Set();
+    const questionsSet = {};
     
     majorOfferInfo.forEach((element, index) => {
-      const name: any = Object.keys(element);
-      majorLength[name] = false;
-      if ((element[name].productInfo).length > 0) {
-        majorLength[name] = true;
-      }
-      if ((element[name].questionset).length > 0) {
-        (element[name].questionset).forEach (item => {
-            questionsSet.add(item);
-        });
-      }
+        const name: any = Object.keys(element);
+        majorLength[name] = false;
+        if ((element[name].productInfo).length > 0) {
+            majorLength[name] = true;
+            if ((element[name].questionset).length > 0) {
+                element[name].productInfo.forEach(productElement =>{
+                    const productTitle: any = Object.keys(productElement);
+                    if ((productElement[productTitle].listOfferQuestions).length > 0) {
+                        const title = productElement[productTitle].title;
+                        questionsSet[title] = element[name].questionset;
+                    }
+                });
+            }
+        }
     });
     minorOfferInfo.forEach(element => {
-      const name: any = Object.keys(element);
-      minorLength[name] = false;
-      if ((element[name].productInfo).length > 0) {
-        minorLength[name] = true;
-      }
-      if ((element[name].questionset).length > 0) {
-        (element[name].questionset).forEach (item => {
-            questionsSet.add(item);
-        });
-      }
+        const name: any = Object.keys(element);
+        minorLength[name] = false;
+        if ((element[name].productInfo).length > 0) {
+            minorLength[name] = true;
+            if ((element[name].questionset).length > 0) {
+                element[name].productInfo.forEach(productElement =>{
+                    const productTitle: any = Object.keys(productElement);
+                    if ((productElement[productTitle].listOfferQuestions).length > 0) {
+                        const title = productElement[productTitle].title;
+                        questionsSet[title] = element[name].questionset;
+                    }
+                });
+            }
+        }
     });
     
     this.offerConstructService.itemlengthList = { major: majorLength, minor: minorLength };
