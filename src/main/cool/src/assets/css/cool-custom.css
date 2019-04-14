@@ -721,6 +721,23 @@ th.ui-sortable-column.ng-star-inserted {
   width: 100%!important;
 }
 
+.cool.cui .view-item-details .pid-data .form-group .form-group__text input.ng-touched.ng-invalid,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text select.ng-touched.ng-invalid,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text textarea.ng-touched.ng-invalid,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select input.ng-touched.ng-invalid,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select select.ng-touched.ng-invalid,
+.cool.cui .view-item-details .pid-data .form-group .form-group__text.select textarea.ng-touched.ng-invalid{
+    border: 1px solid #e2231a;
+}
+.cool.cui .view-item-details .pid-data .form-group .form-group__text input.ng-touched.ng-invalid:after {
+  content: "";
+  color: red;
+  font-size: 1.6rem;
+  bottom: 10px;
+  right: 10px;
+  position: absolute;
+  font-family: "cui-font";
+}
 .cool.cui .view-item-details .pid-data .form-group .form-group__text input,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text select,
 .cool.cui .view-item-details .pid-data .form-group .form-group__text textarea,
@@ -736,6 +753,7 @@ th.ui-sortable-column.ng-star-inserted {
     -moz-appearance: none;
     -webkit-appearance: none;
     max-width: 250px;
+    width: 100%;
 }
 .cool.cui .view-item-details .pid-data .form-group .form-group__text input:focus{
     border: 1px solid #00bceb;
