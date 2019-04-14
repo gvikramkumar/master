@@ -69,7 +69,7 @@ import { DesignReviewExitCriteriaComponent } from '@shared/components';
 import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeholder-add.component';
 
 import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
-import { OfferconstructChildComponent } from './child_component/offerconstruct-child/offerconstruct-child.component';
+import { OfferconstructChildComponent } from '@app/construct/child_component/offerconstruct-child/offerconstruct-child.component';
 import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 import { LoaderService } from '@shared/loader.service';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
