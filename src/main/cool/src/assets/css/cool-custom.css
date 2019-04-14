@@ -701,6 +701,7 @@ th.ui-sortable-column.ng-star-inserted {
 .cool.cui .view-item-details tbody tr {
   width: 100%;
   display: block;
+  overflow: visible;
 }
 .cool.cui .view-item-details tbody th {
   background: transparent;
