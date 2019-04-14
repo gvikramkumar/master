@@ -84,9 +84,11 @@ export class OfferConstructService {
     
     toOfferFormGroup(titleQuestionsMap) {
         const group: any = {};
-        for (const [title, questions] of Object.entries(titleQuestionsMap)) {
-            console.log(title, questions);
-  
+        // for (const [title, questions] of Object.entries(titleQuestionsMap)) {
+        //     console.log(title, questions);
+        for (let title in titleQuestionsMap){
+        let questions = titleQuestionsMap[title];    
+        
         questions.forEach(question => {
             let validators: any[] = [];
             if (question.egineAttribue !== "Item Name (PID)") {
@@ -112,16 +114,16 @@ export class OfferConstructService {
                     validators.push(Validators.pattern("^[A-Z][A-Za-z0-9\\s]*$"))
                 }
             }
-
+            
             if (question.componentType == 'Multiselect') {
                 group[title+"_"+question.egineAttribue] = new FormControl(question.listCurrentValue || '', validators);
             } else {
                 group[title+"_"+question.egineAttribue] = new FormControl(question.currentValue || '', validators);
             }
-
+            
         });
     }
-        return new FormGroup(group);
+    return new FormGroup(group);
     }
     
 }

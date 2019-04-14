@@ -398,56 +398,36 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     const questionsSet = {};
     
     majorOfferInfo.forEach((element, index) => {
-      const name: any = Object.keys(element);
-      majorLength[name] = false;
-      if ((element[name].productInfo).length > 0) {
-        majorLength[name] = true;
-        if ((element[name].questionset).length > 0) {
-        element[name].productInfo.forEach(productElement =>{
-            const productTitle: any = Object.keys(productElement);
-            if ((productElement[productTitle].listOfferQuestions).length > 0) {
-                const title = productElement[productTitle].title;
-                questionsSet[title] = element[name].questionset;
-                
-              //   (productElement[productTitle].listOfferQuestions).forEach (item => {
-              //     questionsSet[title] = item;
-              // });
+        const name: any = Object.keys(element);
+        majorLength[name] = false;
+        if ((element[name].productInfo).length > 0) {
+            majorLength[name] = true;
+            if ((element[name].questionset).length > 0) {
+                element[name].productInfo.forEach(productElement =>{
+                    const productTitle: any = Object.keys(productElement);
+                    if ((productElement[productTitle].listOfferQuestions).length > 0) {
+                        const title = productElement[productTitle].title;
+                        questionsSet[title] = element[name].questionset;
+                    }
+                });
             }
-        });
-    }
-      }
-
-      // if ((element[name].questionset).length > 0) {
-      //   (element[name].questionset).forEach (item => {
-      //       questionsSet.add({name: item});
-      //   });
-      // }
+        }
     });
     minorOfferInfo.forEach(element => {
-      const name: any = Object.keys(element);
-      minorLength[name] = false;
-      if ((element[name].productInfo).length > 0) {
-        minorLength[name] = true;
-        if ((element[name].questionset).length > 0) {
-        element[name].productInfo.forEach(productElement =>{
-            const productTitle: any = Object.keys(productElement);
-            if ((productElement[productTitle].listOfferQuestions).length > 0) {
-                const title = productElement[productTitle].title;
-                questionsSet[title] = element[name].questionset;
-                
-              //   (productElement[productTitle].listOfferQuestions).forEach (item => {
-              //     questionsSet[title] = item;
-              // });
+        const name: any = Object.keys(element);
+        minorLength[name] = false;
+        if ((element[name].productInfo).length > 0) {
+            minorLength[name] = true;
+            if ((element[name].questionset).length > 0) {
+                element[name].productInfo.forEach(productElement =>{
+                    const productTitle: any = Object.keys(productElement);
+                    if ((productElement[productTitle].listOfferQuestions).length > 0) {
+                        const title = productElement[productTitle].title;
+                        questionsSet[title] = element[name].questionset;
+                    }
+                });
             }
-        });
-        
-      }
-  }
-      // if ((element[name].questionset).length > 0) {
-      //   (element[name].questionset).forEach (item => {
-      //       questionsSet.add({name: item});
-      //   });
-      // }
+        }
     });
     
     this.offerConstructService.itemlengthList = { major: majorLength, minor: minorLength };
