@@ -13,7 +13,7 @@ const schema = new Schema(
     productMatch: String,
     scmsMatch: String,
     legalEntityMatch: String,
-    ibeMatch: String,
+    beMatch: String,
     countryMatch: String,
     extTheaterMatch: String,
     glSegmentsMatch: {type: [String], enum: ['ACCOUNT', 'SUB ACCOUNT', 'COMPANY']},
