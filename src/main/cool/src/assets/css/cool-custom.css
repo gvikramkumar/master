@@ -910,6 +910,10 @@ th.ui-sortable-column.ng-star-inserted {
   background-color: #005073;
 }
 
+.cui .theme-green .bs-datepicker-head {
+  background-color: #005073;
+}
+
 /* Strategy Review */
 .cui span.ui-accordion-toggle-icon.fa.fa-fw.fa-caret-right,
 .cui span.ui-accordion-toggle-icon.fa.fa-fw.fa-caret-down {
