@@ -778,7 +778,6 @@ export class MmAssesmentComponent implements OnInit {
 
   toNextStep() {
 
-    this.derivedMM = '';
     this.isAllowedtoNextStep = true;
 
     if (this.activeTabIndex === 0 && !this.dimensionMode) {
