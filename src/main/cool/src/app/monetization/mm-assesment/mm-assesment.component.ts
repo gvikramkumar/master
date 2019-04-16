@@ -1053,19 +1053,7 @@ export class MmAssesmentComponent implements OnInit {
       // Retrieve Existing Stake Holders Details From Current Offer
       this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailsData => {
 
-        // let existingStakeHolders = [];
         let existingStakeHolders = offerDetailsData['stakeholders'];
-        // .map(user => {
-        //   return {
-        //     '_id': user['_id'],
-        //     'businessEntity': user['businessEntity'],
-        //     'functionalRole': user['functionalRole'],
-        //     'offerRole': user['offerRole'],
-        //     'stakeholderDefaults': user['stakeholderDefaults'],
-        //     'name': user['name']
-        //   };
-        // });
-
 
         // Retrieve Owner Details  Of From Current Offer
         this.accessMgmtService.retrieveUserInfo(this.offerOwner).subscribe(ownerInfo => {
@@ -1094,9 +1082,9 @@ export class MmAssesmentComponent implements OnInit {
               // Populate Paramters Needed To Update Offer Details
               const proceedToStakeholderPostData = {};
               proceedToStakeholderPostData['solutioningDetails'] = [];
+              proceedToStakeholderPostData['stakeholders'] = existingStakeHolders;
               proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
               proceedToStakeholderPostData['additionalCharacteristics'] = additionalCharacteristics;
-              proceedToStakeholderPostData['stakeholders'] = _.uniqBy(existingStakeHolders, '_id');
               proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
               // Populate Solutioning Details
