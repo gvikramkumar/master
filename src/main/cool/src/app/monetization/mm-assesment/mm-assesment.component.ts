@@ -31,7 +31,6 @@ export class MmAssesmentComponent implements OnInit {
   offerName: string;
   offerOwner: string;
   currentOfferId: string;
-  currentMMModel: string = null;
 
   primaryBE: string;
   derivedMM: string;
@@ -154,7 +153,7 @@ export class MmAssesmentComponent implements OnInit {
 
 
       // mm model and message section
-      this.currentMMModel = offerBuilderdata['derivedMM'];
+      this.derivedMM = offerBuilderdata['derivedMM'];
       if (offerBuilderdata['derivedMM'] != null && offerBuilderdata['derivedMM'] !== '') {
         this.canClickNextStep = true;
       }
@@ -779,6 +778,7 @@ export class MmAssesmentComponent implements OnInit {
 
   toNextStep() {
 
+    this.derivedMM = '';
     this.isAllowedtoNextStep = true;
 
     if (this.activeTabIndex === 0 && !this.dimensionMode) {
@@ -806,7 +806,6 @@ export class MmAssesmentComponent implements OnInit {
       this.monetizationModelService.validateOfferDimension(postData).subscribe(data => {
 
         let tempMessage: any = {};
-        this.derivedMM = data['mmModel'];
 
         if (data['mmMapperStatus'] === 'Aligned') {
           tempMessage = {
@@ -827,37 +826,19 @@ export class MmAssesmentComponent implements OnInit {
           };
         }
 
-        if (this.totalApprovalsCount > 0 && this.isChangedAttribute && (tempMessage['contentHead'] != this.message['contentHead']
-          || tempMessage['content'] != this.message['content'])) {
+        if (this.totalApprovalsCount > 0 && this.isChangedAttribute && (tempMessage['contentHead'] !== this.message['contentHead']
+          || tempMessage['content'] !== this.message['content'])) {
           this.showDialog = true;
           return;
-        }
-
-        if (data['mmMapperStatus'] === 'Aligned') {
-          this.message = {
-            contentHead: data['mmMapperStatus'],
-            content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${data['mmModel']}`,
-            mmModel: data['mmModel']
-          };
-        } else if (data['mmMapperStatus'] === 'Partially Aligned') {
-          this.message = {
-            contentHead: data['mmMapperStatus'],
-            content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${data['mmModel']}.`,
-            mmModel: data['mmModel']
-          };
-        } else {
-          this.message = {
-            contentHead: data['mmMapperStatus'],
-            content: ' Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'
-          };
         }
 
         if (this.activeTabIndex < this.groupNames.length - 1) {
           this.activeTabIndex += 1;
         }
 
-        if (this.currentMMModel !== data['mmModel']) {
-          this.currentMMModel = data['mmModel'];
+        if (this.derivedMM !== data['mmModel']) {
+          this.derivedMM = data['mmModel'];
+          this.message = tempMessage;
           this.groupData.splice(1);
           this.groupNames.splice(1);
           data['dimgroups'].forEach(group => {
@@ -942,9 +923,9 @@ export class MmAssesmentComponent implements OnInit {
 
           // Populate Update Offer Details Request
           proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
+          proceedToStakeholderPostData['derivedMM'] = this.derivedMM == null ? '' : this.derivedMM;
           proceedToStakeholderPostData['stakeholders'] = this.formatStakeHolderPojoToUpdateOffer_1(_, false);
           proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
-          proceedToStakeholderPostData['derivedMM'] = this.currentMMModel == null ? '' : this.currentMMModel;
 
           if (this.isAllowedtoNextStep) {
             proceedToStakeholderPostData['selectedCharacteristics'] = selectedCharacteristics;
@@ -1029,7 +1010,7 @@ export class MmAssesmentComponent implements OnInit {
     const postOfferSolutioningData = {};
     postOfferSolutioningData['groups'] = groups;
     postOfferSolutioningData['mmMapperStatus'] = this.message['contentHead'];
-    postOfferSolutioningData['mmModel'] = this.currentMMModel == null ? '' : this.currentMMModel;
+    postOfferSolutioningData['mmModel'] = this.derivedMM == null ? '' : this.derivedMM;
     postOfferSolutioningData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
     postOfferSolutioningData['functionalRole'] = this.configurationService.startupData.functionalRole[0];
 
