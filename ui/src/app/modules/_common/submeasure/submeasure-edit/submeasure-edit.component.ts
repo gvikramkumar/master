@@ -433,7 +433,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
     this.submeasureService.callMethod('getGroupingSubmeasures', {measureId: this.sm.measureId})
       .subscribe(groupingSubmeasures => {
-        this.groupingSubmeasuresAll = groupingSubmeasures;
+        this.groupingSubmeasuresAll = groupingSubmeasures.filter(groupingSubMeasure => groupingSubMeasure.name !== this.sm.name);
         this.filterGroupingSubmeasuresIfService();
       });
 
