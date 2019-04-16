@@ -445,6 +445,9 @@ export class DashboardComponent implements OnInit {
       case 'Solutioning Action':
         page = 'offerSolutioning';
         break;
+      case 'Design Review':
+        page = 'designReview';
+        break;
       default:
         page = 'offerDetailView';
         break;
