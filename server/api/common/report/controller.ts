@@ -396,14 +396,14 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['History'];
         excelHeaders = ['Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Measure Name', 'Source System',
           'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL BE Level', 'IFL GL Segments',
-          'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM BE Level',
+          'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM BE Level', 'HW Split %', 'SW Split %',
           'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
           'Status', 'Updated By', 'Updated Date'];
 
         excelProperties = [
           'fiscalMonth', 'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.measureName', 'sm.sourceName',
           'sm.inputFilterLevel.salesLevel', 'sm.inputFilterLevel.productLevel', 'sm.inputFilterLevel.scmsLevel', 'sm.inputFilterLevel.entityLevel', 'sm.inputFilterLevel.internalBELevel', 'sm.inputFilterLevel.glSegLevel',
-          'sm.manualMapping.salesLevel', 'sm.manualMapping.productLevel', 'sm.manualMapping.scmsLevel', 'sm.manualMapping.entityLevel', 'sm.manualMapping.internalBELevel',
+          'sm.manualMapping.salesLevel', 'sm.manualMapping.productLevel', 'sm.manualMapping.scmsLevel', 'sm.manualMapping.entityLevel', 'sm.manualMapping.internalBELevel', 'hardware', 'software',
           'sm.rules[0]', 'sm.rules[1]', 'sm.rules[2]', 'sm.rules[3]', 'sm.rules[4]', 'sm.rules[5]', 'sm.rules[6]', 'sm.rules[7]', 'sm.rules[8]', 'sm.rules[9]', 'sm.rules[10]', 'sm.rules[11]', 'sm.rules[12]', 'sm.rules[13]', 'sm.rules[14]',
           'sm.status', 'sm.updatedBy', 'sm.updatedDate'];
         promise = Promise.all([
@@ -421,6 +421,7 @@ export default class ReportController extends ControllerBase {
               promises.push(Promise.all([
                 Promise.resolve(fimo),
                 this.submeasureRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
+                this.productClassUploadPgRepo.getMany({fiscalMonth: fimo})
               ]));
             });
             return Promise.all(promises);
@@ -430,9 +431,24 @@ export default class ReportController extends ControllerBase {
             results.forEach(result => {
               const fiscalMonth = result[0];
               this.submeasures = _.sortBy(result[1], 'name');
+              const rtn = result[2];
               const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
               sms.forEach(sm => {
+                let hardware;
+                let software;
                 rows.push({fiscalMonth, sm});
+                rtn.map(doc => {
+                  if (doc.submeasureKey === sm.submeasureKey) {
+                    if (doc.splitCategory === 'HARDWARE') {
+                      hardware = doc.splitPercentage ? doc.splitPercentage * 100 : doc.splitPercentage;
+                    }
+                    if (doc.splitCategory === 'SOFTWARE') {
+                      software = doc.splitPercentage ? doc.splitPercentage * 100 : doc.splitPercentage;
+                    }
+                    rows.push({hardware, sm});
+                    rows.push({software, sm});
+                  }
+                });
               });
             });
             return _.orderBy(rows, ['fiscalMonth', 'sm.measureName', 'sm.name']);
