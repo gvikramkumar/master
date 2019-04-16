@@ -7,7 +7,8 @@
       <div class="col-sm-12">
         <ul id="tabsv4" class="tabs tabs--tall">
           <li id="tabsv4-1" class="tab">
-            <a (click)='majorSection()' [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true,'bBtm':onLoad}">Add Major Line
+            <a (click)='majorSection()'
+              [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true,'bBtm':onLoad}">Add Major Line
               Details</a>
           </li>
           <li id="tabsv4-2" class="tab">
@@ -16,11 +17,11 @@
           </li>
 
           <div class="btns-right pull-right flex-center-vertical">
-              <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
-             <button class="display-none"></button>
-             <button class="btn btn--primary" (click)='saveForm()'>Save</button>
-             <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
-             </div>
+            <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
+            <button class="display-none"></button>
+            <button class="btn btn--primary" (click)='saveForm()'>Save</button>
+            <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
+          </div>
 
         </ul>
       </div>
@@ -29,7 +30,7 @@
   <!-- <div class="row"> -->
   <div class="container-fluid" class="view-item-details" style="width: 100%">
     <div *ngFor="let items of ismajorSection ? majorOfferInfo:  minorOfferInfo ;  let parentIndex = index">
-      <div *ngFor="let item of items |keyvalue; let childIndex = index;">
+      <div *ngFor="let item of items |keyvalue; let ChildIndex = index;">
         <p-accordion (onOpen)="onTabOpen($event, item.key)" [activeIndex]="indexVal">
           <p-accordionTab *ngIf="offerConstructService.itemlengthList[selectedTab][item.key]">
             <p-header>
@@ -40,34 +41,36 @@
                 <div class="form-group input--icon half-margin-bottom">
                   <div class="form-group__text search-icon">
                     <div class="row">
-                        <div class="col-md-12">
-                          <p>Product ID’s and item details</p>
-                          <div class="row">
-                              <div class="flex-center-vertical">
-                              <div class="col-md-6">
-                                  <p-autoComplete (click)='addItms(item.key)' [ngModelOptions]="{standalone: true}"
-                                    [(ngModel)]="itemsList[selectedTab][item.key]" [suggestions]="copyAttributeResults"
-                                    (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
-                                    placeholder="Copy Attributes" [size]="100" [minLength]="9" [name]="item.key" [id]="item.key">
-                                  </p-autoComplete>
-                                  </div>
-                                  <div class="col-md-6">
-                                      <button type="button" class="link" (click)="displayViewDetails()">
-                                        View
-                                      </button><div class="text-indigo v-separator"></div>
-                                      <button type="button" class="link" (click)="patchvalueToSelected(item.key)">
-                                        Apply to Selected
-                                      </button><div class="text-indigo v-separator"></div>
-                                      <button type="button" class="link" (click)="patchToALL(item.key)">
-                                        Apply to All
-                                      </button>
-                                    </div>
-                                    </div>
+                      <div class="col-md-12">
+                        <p>Product ID’s and item details</p>
+                        <div class="row">
+                          <div class="flex-center-vertical">
+                            <div class="col-md-6">
+                              <p-autoComplete (click)='addItms(item.key)' [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="itemsList[selectedTab][item.key]" [suggestions]="copyAttributeResults"
+                                (completeMethod)="searchCopyAttributes($event)" field="PID"
+                                class="auto-complete-attribute" placeholder="Copy Attributes" [size]="100"
+                                [minLength]="9" [name]="item.key" [id]="item.key">
+                              </p-autoComplete>
+                            </div>
+                            <div class="col-md-6">
+                              <button type="button" class="link" (click)="displayViewDetails()">
+                                View
+                              </button>
+                              <div class="text-indigo v-separator"></div>
+                              <button type="button" class="link" (click)="patchvalueToSelected(item.key)">
+                                Apply to Selected
+                              </button>
+                              <div class="text-indigo v-separator"></div>
+                              <button type="button" class="link" (click)="patchToALL(item.key)">
+                                Apply to All
+                              </button>
+                            </div>
                           </div>
-                          <p>Edit attribute values or select a Product ID below and search for a product to copy values from</p>
                         </div>
-
-
+                        <p>Edit attribute values or select a Product ID below and search for a product to copy values
+                          from</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -84,8 +87,9 @@
                         <div class="form-group form-group--inline">
                           <label class="checkbox">
                             <input type="checkbox" />
-                            <span class="checkbox__input opacity-0" *ngIf="$ChildIndex!==0" ></span>
-                            <span class="checkbox__label hidden-xs" [ngClass]="{'ml0':$ChildIndex===0}" >Product ID</span>
+                            <span class="checkbox__input opacity-0" *ngIf="ChildIndex!==0"></span>
+                            <span class="checkbox__label hidden-xs" [ngClass]="{'ml0':ChildIndex===0}">Product
+                              ID</span>
                           </label>
                         </div>
                       </th>
@@ -98,10 +102,7 @@
                     <!-- <div > -->
                     <div *ngFor="let ques of item.value['questionset']">
                       <tr *ngIf="ques.itemType == 'Unique Item'">
-                        <td title="{{ques.question}}">
-                            <!-- <span *ngIf="offerForm.controls[ques.egineAttribue].errors && offerForm.controls[ques.egineAttribue].errors.required"> -->
-                                <!-- <font color="red">*</font></span> -->
-                                {{ques.question}}</td>
+                        <td title="{{ques.question}}">{{ques.question}}</td>
                       </tr>
                     </div>
                     <tr class="section-tr-label">
@@ -109,9 +110,7 @@
                     </tr>
                     <div *ngFor="let ques of item.value['questionset']">
                       <tr *ngIf="ques.itemType !== 'Unique Item'">
-                        <td title="{{ques.question}}">
-                            <!-- <span *ngIf="offerForm.controls[ques.egineAttribue].errors && offerForm.controls[ques.egineAttribue].errors.required"><font color="red">*</font></span> -->
-                            {{ques.question}}</td>
+                        <td title="{{ques.question}}">{{ques.question}}</td>
                       </tr>
                     </div>
                     <!-- </div> -->
@@ -129,7 +128,7 @@
                             <div class="form-group form-group--inline">
                               <label class="checkbox">
                                 <input type="checkbox" (change)="getSelctedProduct($event, ques.value)"
-                                  class="product_check_box" />
+                                  class="product_check_box" *ngIf="!(ques.value['eGenieFlag'])" />
                                 <span class="checkbox__input"></span>
                                 <span class="checkbox__label hidden-xs">{{ques.value['title']}}</span>
                               </label>
@@ -139,188 +138,110 @@
                         <tr class="section-tr-label">
                           <th></th>
                         </tr>
-                        <div [formGroup]="offerForm" *ngFor="let pInfo of ques.value['listOfferQuestions']; let i = index;">
+                        <div *ngFor="let pInfo of ques.value['listOfferQuestions']; let i = index;">
                           <tr class="overflow-visible" [ngSwitch]="pInfo.componentType"
                             *ngIf="pInfo.itemType == 'Unique Item'">
                             <td *ngSwitchCase="'Free Text'">
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
-                                  <input [name]='item.egineAttribue_+parentIndex+ childIndex'
+                                  <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                     value="{{ques.value['title']}}" [attr.disabled]='true'>
                                 </div>
                               </div>
                               <div class="form-group input--compressed" *ngIf="i !== 0">
                                 <div class="form-group__text">
-                                  <div class="on-focus clearfix" >
-                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-
-                                   class="form-control" [(ngModel)]="pInfo.currentValue" placement="top" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
-                               <!-- <div *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)" > -->
-                               <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                               <ul>
-                                  <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                  <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                  <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                               </ul>
-                               </div>
-                               </div>
-
-
-                              </div>
-
+                                  <div class="on-focus clearfix">
+                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                      [(ngModel)]="pInfo.currentValue" [readonly]="ques.value['eGenieFlag']">
+                                  </div>
+                                </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Q&A FreeText'">
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
-                                <div class="on-focus clearfix" >
-                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                  [(ngModel)]="pInfo.currentValue" class="form-control">
-                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                                  <ul>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                                  </ul>
+                                  <div class="on-focus clearfix">
+                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                      [(ngModel)]="pInfo.currentValue" [readonly]="ques.value['eGenieFlag']">
                                   </div>
-                                  </div>
-
-
-                              </div>
+                                </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <div class="on-focus clearfix" >
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" class="form-control">
-                                    <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                  </select>
-                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                                  <ul>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                                  </ul>
+                                  <div class="on-focus clearfix">
+                                    <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue" [disabled]="ques.value['eGenieFlag']">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
                                   </div>
-                                  </div>
-
-                            </div>
+                                </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Q&A Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                    <div class="on-focus clearfix" >
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue">
-                                    <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                  </select>
-                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                                  <ul>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                                  </ul>
+                                  <div class="on-focus clearfix">
+                                    <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue" [disabled]="ques.value['eGenieFlag']">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
                                   </div>
-                                  </div>
-
-
-                            </div>
+                                </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Drop-down'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                    <div class="on-focus clearfix" >
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue">
-                                    <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                  </select>
-                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                                  <ul>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                                  </ul>
+                                  <div class="on-focus clearfix">
+                                    <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue" [disabled]="ques.value['eGenieFlag']">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
                                   </div>
-                                  </div>
-
-                            </div>
+                                </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Multiselect'">
-                                <div class="on-focus clearfix">
-                              <p-multiSelect [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                [options]="pInfo.listMutiSelect" optionLabel="name"
-                                [(ngModel)]="pInfo.listCurrentValue" >
-                              </p-multiSelect>
-                              <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                              <ul>
-                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                              </ul>
+                              <div class="on-focus clearfix">
+                                <p-multiSelect [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                  [options]="pInfo.listMutiSelect" optionLabel="name"
+                                  [(ngModel)]="pInfo.listCurrentValue" [readonly]="ques.value['eGenieFlag']">
+                                </p-multiSelect>
                               </div>
-                              </div>
-
                             </td>
                           </tr>
                         </div>
                         <tr class="section-tr-label">
                           <th></th>
                         </tr>
-                        <div [formGroup]="offerForm" *ngFor="let pInfo of ques.value['listOfferQuestions']">
+                        <div *ngFor="let pInfo of ques.value['listOfferQuestions']">
                           <tr [ngSwitch]="pInfo.componentType" *ngIf="pInfo.itemType !== 'Unique Item'">
                             <td *ngSwitchCase="'Free Text'">
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
-                                  <div class="on-focus clearfix" >
-                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" class="form-control">
-
-                                    <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                                    <ul>
-                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                                    </ul>
-                                    </div>
-                                    </div>
-
-                              </div>
+                                  <div class="on-focus clearfix">
+                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                      [(ngModel)]="pInfo.currentValue" [readonly]="ques.value['eGenieFlag']">
+                                  </div>
+                                </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Q&A FreeText'">
                               <div class="form-group input--compressed">
                                 <div class="form-group__text">
-                                 <div class="on-focus clearfix" >
-                                  <input [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" class="form-control">
-                                    <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                                    <ul>
-                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                       <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                                    </ul>
-                                    </div>
-                                    </div>
-
+                                  <div class="on-focus clearfix">
+                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                      [(ngModel)]="pInfo.currentValue" class="form-control"
+                                      [readonly]="ques.value['eGenieFlag']">
+                                  </div>
                                 </div>
                               </div>
                             </td>
@@ -328,83 +249,49 @@
                             <td *ngSwitchCase="'Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                  <div class="on-focus clearfix" >
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
-                                    <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                  </select>
-                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                                  <ul>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                                  </ul>
+                                  <div class="on-focus clearfix">
+                                    <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue" [disabled]="ques.value['eGenieFlag']">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
                                   </div>
-                                  </div>
-                            </div>
+                                </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Q&A Radio Button'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                    <div class="on-focus clearfix" >
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue">
-                                    <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                  </select>
-                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                                  <ul>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                                  </ul>
+                                  <div class="on-focus clearfix">
+                                    <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue" [disabled]="ques.value['eGenieFlag']">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
                                   </div>
-                                  </div>
-                            </div>
+                                </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Drop-down'">
                               <div class="form-group dropdown input--compressed">
                                 <div class="form-group__text select">
-                                    <div class="on-focus clearfix">
-                                  <select [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                    [(ngModel)]="pInfo.currentValue" >
-                                    <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                  </select>
-                                  <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                                  <ul>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                     <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                                  </ul>
+                                  <div class="on-focus clearfix">
+                                    <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
+                                      [(ngModel)]="pInfo.currentValue" [disabled]="ques.value['eGenieFlag']">
+                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
+                                    </select>
                                   </div>
-                                  </div>
-
-                            </div>
+                                </div>
                               </div>
                             </td>
 
                             <td *ngSwitchCase="'Multiselect'">
-                                <div class="on-focus clearfix">
-                              <p-multiSelect [name]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
-                                   [formControlName]="ques.value['title']+'_'+pInfo.egineAttribue"
-                                [options]="pInfo.listMutiSelect" optionLabel="name"
-                                [(ngModel)]="pInfo.listCurrentValue" >
-                              </p-multiSelect>
-                              <div class="tool-tip  slideIn" *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty)">
-                              <ul>
-                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.required" >{{pInfo.egineAttribue}} is required</li>
-                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.maxlength">{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed </li>
-                                 <li *ngIf="offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors && (offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].touched || offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].dirty) && offerForm.controls[ques.value['title']+'_'+pInfo.egineAttribue].errors.pattern">{{pInfo.egineAttribue}} should be in {{pInfo.rules.textcase}}</li>
-                              </ul>
+                              <div class="on-focus clearfix">
+                                <p-multiSelect [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                  [options]="pInfo.listMutiSelect" optionLabel="name"
+                                  [(ngModel)]="pInfo.listCurrentValue" [readonly]="ques.value['eGenieFlag']">
+                                </p-multiSelect>
                               </div>
-                              </div>
-
                             </td>
                           </tr>
                         </div>

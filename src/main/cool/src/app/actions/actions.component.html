@@ -16,62 +16,74 @@
                 </div>
               </div>
               <div class="col-md-3">
-                  <div class="form-group input--icon half-margin-bottom">
-                    <div class="form-group__text">
-                      <i id="input-type-search" type="search"></i>
-                      <input #globalFilterForActions type="text" pInputText size="50" placeholder="Search by keywords">
-                      <button type="button" class="link">
-                        <span class="icon-search"></span>
-                      </button>
-                    </div>
+                <div class="form-group input--icon half-margin-bottom">
+                  <div class="form-group__text">
+                    <i id="input-type-search" type="search"></i>
+                    <input type="text" pInputText size="50" placeholder="Search by keywords"
+                      (input)="globalFilterForActions.filterGlobal($event.target.value, 'contains')">
+                    <button type="button" class="link">
+                      <span class="icon-search"></span>
+                    </button>
                   </div>
+                </div>
               </div>
             </div>
             <div class="responsive-table">
-              <p-dataTable [value]="myActionsList" [rows]="10" [paginator]="true" [globalFilter]="globalFilterForActions">
-                <p-column field="completed" sortable="true" header="ACTION COMPLETE" [style]="{'width':'150px'}">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <div style="text-align:center" *ngIf="actionData.completed == true">
-                      <span class="icon-check-outline icon-medium"></span>
-                    </div>
-                    <div *ngIf="actionData.completed == false">
-                    </div>
-                  </ng-template>
-                </p-column>
-                <p-column field="offerId" sortable="true" header="OFFER">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <a (click)="showOfferPopUp($event,actionData,popturboContent)">{{actionData.offerId}}</a><br />
-                    <span>{{actionData.offerName}}</span>
-                  </ng-template>
-                </p-column>
-                <p-column field="actionTitle" sortable="true" header="ACTION">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.actionTitle}} <br /></span>
-                    <span *ngIf="actionData.attachment == false" class="offerDesc">{{actionData.actionDesc}}</span>
-                    <span *ngIf="actionData.attachment == true" class="offerDesc"
-                      (click)="getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
-                    <span (click)="showActionPopUp($event,actionData,popCommentContent)" class="icon-comment pull-right"
-                      pTooltip="Comments" placement="top"></span>
-                  </ng-template>
-                </p-column>
-                <p-column field="createdBy" sortable="true" header="ACTION CREATED BY">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.createdBy}} <br /></span>
-                  </ng-template>
-                </p-column>
-                <p-column field="dueDate" header="DUE DATE" sortable="true">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <span>{{actionData.dueDate}} <br /></span>
-                  </ng-template>
-                </p-column>
-                <p-column field="actionDetails" sortable="false" header="DETAILS" [style]="{'width':'150px'}">
-                  <ng-template let-col let-actionData="rowData" pTemplate="body">
-                    <div style="text-align:center">
-                      <a (click)="showActionDetails(actionData.taskId)">View</a>
-                    </div>
-                  </ng-template>
-                </p-column>
-              </p-dataTable>
+              <p-table [columns]="actionColumns" [value]="myActionsList" [rows]="10" [paginator]="true"
+                #globalFilterForActions [globalFilterFields]="['offerId','offerName','actionTitle', 'actionDesc','createdBy','dueDate']"
+                sortMode="multiple">
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <ng-container *ngFor="let col of columns">
+                      <th [pSortableColumn]="col.field"
+                        [ngClass]="{'smallColWidth':col.field === 'completed' || col.field === 'actionDetails'}"
+                        [ngStyle]="col.style" [style.display]="col.hidden ? 'none' : 'col.header'">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                      </th>
+                    </ng-container>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-actionData let-columns="columns">
+                  <tr>
+                    <ng-container *ngFor="let col of columns">
+                      <td [ngStyle]="col.style" [style.display]="col.hidden ? 'none' : 'col.header'">
+                        <span *ngIf="col.field == 'completed'">
+                          <div *ngIf="actionData.completed == true" style="text-align:center;">
+                            <span class="icon-check-outline icon-medium"></span>
+                          </div>
+                          <div *ngIf="actionData.completed == false">
+                          </div>
+                        </span>
+                        <span *ngIf="col.field == 'offerId'">
+                          <a (click)="showOfferPopUp($event,actionData,popturboContent)">{{actionData.offerId}}</a><br />
+                          <span>{{actionData.offerName}}</span>
+                        </span>
+                        <span *ngIf="col.field == 'actionTitle'">
+                          <span>{{actionData.actionTitle}} <br /></span>
+                          <span *ngIf="actionData.attachment == false"
+                            class="offerDesc">{{actionData.actionDesc}}</span>
+                          <span *ngIf="actionData.attachment == true" class="offerDesc"
+                            (click)="getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
+                          <span (click)="showActionPopUp($event,actionData,popCommentContent)"
+                            class="icon-comment pull-right" pTooltip="Comments" placement="top"></span>
+                        </span>
+                        <span *ngIf="col.field == 'createdBy'">
+                          <span>{{actionData.createdBy}} <br /></span>
+                        </span>
+                        <span *ngIf="col.field == 'dueDate'">
+                          <span>{{actionData.dueDate}} <br /></span>
+                        </span>
+                        <span *ngIf="col.field == 'actionDetails'">
+                          <div style="text-align:center;">
+                            <a (click)="showActionDetails(actionData.taskId)">View</a>
+                          </div>
+                        </span>
+                      </td>
+                    </ng-container>
+                  </tr>
+                </ng-template>
+              </p-table>
             </div>
           </div>
         </div>

@@ -303,6 +303,10 @@
     /* border-width: 0; */
     padding: 0.65em .5em;
   }
+  ::ng-deep .ui-table .ui-table-thead>tr>th, .ui-table .ui-table-tbody>tr>td,.ui-table .ui-table-tfoot>tr>td {
+    padding: 1em 0.65em !important;
+  }
+  
   /* ::ng-deep .ui-widget-header {
     background: transparent;
     border: 0;
@@ -360,3 +364,6 @@
     color:#017CAD;
   }
 
+  .smallColWidth{
+    width: 150px;
+  }

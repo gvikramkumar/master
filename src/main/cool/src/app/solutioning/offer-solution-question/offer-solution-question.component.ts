@@ -126,8 +126,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
 
         if ((question['questionType'] === 'Radio Button' || question['questionType'] === 'dropdown'
-          || question['questionType'] === 'Date')
-          && (selectedValue === 'No' || selectedValue === 'N/A')) {
+          || question['questionType'] === 'Date') && (selectedValue === 'No' || selectedValue === 'N/A')) {
           this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = true;
           this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['answerToQuestion'] = 'N/A';
           this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = '';
