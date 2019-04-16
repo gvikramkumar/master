@@ -1051,10 +1051,14 @@ export class MmAssesmentComponent implements OnInit {
             retrieveStakeHoldersRelatedToSelectedAttributes(this.primaryBE, selectedMonetizationAttributes)
             .subscribe(stakeHolderRelatedToSelectedAttributesList => {
 
-              const stakeHolderRelatedToSelectedAttributes = stakeHolderRelatedToSelectedAttributesList
-                .map(user => this.formatStakeHolderPojoToUpdateOffer(user, true));
+              // Add Stakeholders Related To Attribute When Proceed To Offer Solutioning
+              if (JSON.parse(withRouter) === true) {
+                const stakeHolderRelatedToSelectedAttributes = stakeHolderRelatedToSelectedAttributesList
+                  .map(user => this.formatStakeHolderPojoToUpdateOffer(user, true));
+                existingStakeHolders = existingStakeHolders.concat(stakeHolderRelatedToSelectedAttributes);
+              }
 
-              existingStakeHolders = existingStakeHolders.concat(stakeHolderRelatedToSelectedAttributes);
+              // Remove Duplicate Stakeholders
               existingStakeHolders = _.uniqBy(existingStakeHolders, '_id');
 
               // Transform StakeHolder Info To Display On UI

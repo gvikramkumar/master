@@ -223,7 +223,7 @@ export class OfferSolutioningComponent implements OnInit {
           for (const qna of this.unGroupedQuestionsAndAnswers) {
             qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
               '' : questionAnswerMap.get(qna['questionNo']);
-            qna['answerToQuestion'] = qna['questionType'] === 'Date' ?
+            qna['answerToQuestion'] = qna['questionType'] === 'Date' && !_.isEmpty(qna['answerToQuestion']) ?
               moment(qna['answerToQuestion']).format('MM/DD/YYYY') : qna['answerToQuestion'];
           }
 
@@ -275,6 +275,8 @@ export class OfferSolutioningComponent implements OnInit {
         } else if (childQuestionAndAnswers.questionType !== 'Radio Button' && _.isEmpty(parentAnswer)) {
           childQuestionAndAnswers.hideQuestion = true;
         }
+
+
         return childQuestionAndAnswers;
       } else {
         return childQuestionAndAnswers;
@@ -509,7 +511,7 @@ export class OfferSolutioningComponent implements OnInit {
                     'solutioninQuestion': questions['question'],
                     'egenieAttributeName': attributeName ? attributeName : '',
                     'oSGroup': questions['oSgroup'],
-                    'solutioningAnswer': questions['answerToQuestion'],
+                    'solutioningAnswer': _.isEmpty(questions['answerToQuestion']) ? '' : questions['answerToQuestion'],
                     'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false,
                     'questionType': questions.questionType
                   };
