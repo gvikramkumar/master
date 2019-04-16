@@ -18,7 +18,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
   @Input() unGroupData: Array<any>;
   @Input() questionGroup: FormGroup;
 
-
+  minDate: Date;
   caseId: string;
   inValidDate = false;
   currentOfferId: string;
@@ -34,6 +34,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.minDate = new Date();
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
   }
 
