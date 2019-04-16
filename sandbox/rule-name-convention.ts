@@ -29,7 +29,7 @@ class SelectExceptionMap {
   buIdx = 0;
   pfIdx = 0;
   scmsIdx = 0;
-  beIdx = 0;
+  ibeIdx = 0;
   sl1Map: SelectExceptionIndexMap[] = [];
   sl2Map: SelectExceptionIndexMap[] = [];
   sl3Map: SelectExceptionIndexMap[] = [];
@@ -37,7 +37,7 @@ class SelectExceptionMap {
   buMap: SelectExceptionIndexMap[] = [];
   pfMap: SelectExceptionIndexMap[] = [];
   scmsMap: SelectExceptionIndexMap[] = [];
-  beMap: SelectExceptionIndexMap[] = [];
+  ibeMap: SelectExceptionIndexMap[] = [];
 
   getSelectArray(cond, choices) {
     return ([cond].concat(choices)).map(x => x.toUpperCase());
@@ -79,10 +79,10 @@ class SelectExceptionMap {
 
 const selectMap = new SelectExceptionMap();
 const ruleBuf = [];
-const ruleHeader = ['Status', 'Old Name', 'New Name', 'Duplicates', 'Description', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'Legal Entity Match', 'BE Match', 'Country', 'External Theater', 'GL Segments',
-  'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select', 'Created By', 'Created Date', 'Updated By', 'UpdatedDate'];
-const ruleProps =       ['status', 'oldName', 'name', 'duplicates', 'desc', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'legalEntityMatch', 'beMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
-  'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
+const ruleHeader = ['Status', 'Old Name', 'New Name', 'Duplicates', 'Description', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'IBE Match', 'Legal Entity Match', 'Country', 'External Theater', 'GL Segments',
+  'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select', 'Created By', 'Created Date', 'Updated By', 'UpdatedDate'];
+const ruleProps =       ['status', 'oldName', 'name', 'duplicates', 'desc', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'beMatch', 'legalEntityMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+  'sl1SelectQ', 'sl2SelectQ', 'sl3SelectQ', 'prodTGSelectQ', 'prodBUSelectQ', 'prodPFSelectQ', 'scmsSelectQ', 'beSelectQ', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
 
 ruleBuf.push(ruleHeader.toString());
 
@@ -105,9 +105,8 @@ Promise.all([
   lookupRepo.getValues(['drivers', 'periods'])
 ])
   .then(results => {
-    const allRules = results[0];
-    const latestRules = results[1];
-    const latestSms = results[2];
+    const latestRules = _.sortBy(results[1], 'name');
+    const latestSms = _.sortBy(results[2], 'name');
     drivers = results[3][0];
     periods = results[3][1];
 
@@ -120,6 +119,7 @@ Promise.all([
       if (!period) {
         throw new Error(`Missing period: ${rule.period}`);
       }
+      rule.approvedOnce = 'Y'; // lots of them are missing this, we'll set them all to "Y" then
       createSelectArrays(rule);
       rule.oldName = rule.name;
       rule.name = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
@@ -129,6 +129,7 @@ Promise.all([
       quoteSelectText(rule);
     });
     addDuplicate(latestRules);
+
     latestRules.forEach(rule => {
       ruleBuf.push(ruleProps.map(prop => {
         if (_.isArray(rule[prop]) && rule[prop].length) {
@@ -176,6 +177,21 @@ Promise.all([
 
 
     //////// update database
+    Promise.all([
+      ruleRepo.removeMany({}),
+      smRepo.removeMany({})
+    ])
+      .then(() => {
+        return Promise.all([
+          ruleRepo.addMany(latestRules, 'system', true, true),
+          smRepo.addMany(latestSms, 'system', true, true)
+        ])
+          .then(() => {
+            console.log(`${latestRules.length} rules updated in database`);
+            console.log(`${latestSms.length} submeasures updated in database`);
+            process.exit(0);
+          });
+      });
 
 
 
@@ -198,7 +214,6 @@ Promise.all([
     selectMap.beMap.forEach(x => console.log(x.index, x.selectArr));
 */
 
-    process.exit(0);
     // need to look for duplicates too, but your output would show that right? Sort by newname then?
 
   })
@@ -236,19 +251,19 @@ function addDescription(rule, driver, period) {
   desc += rule.prodBUSelect ? `\nBU Select:  ${rule.prodBUSelect}` : '';
   desc += rule.prodPFSelect ? `\nPF Select:  ${rule.prodPFSelect}` : '';
   desc += rule.scmsSelect ? `\nSCMS Select:  ${rule.scmsSelect}` : '';
-  desc += rule.beSelect ? `\nBE Select:  ${rule.beSelect}` : '';
+  desc += rule.beSelect ? `\nIBE Select:  ${rule.beSelect}` : '';
   rule.desc = `"${desc}"`;
 }
 
 function quoteSelectText(rule) {
-  rule.sl1Select = `"${rule.sl1Select}"`;
-  rule.sl2Select = `"${rule.sl2Select}"`;
-  rule.sl3Select = `"${rule.sl3Select}"`;
-  rule.prodTGSelect = `"${rule.prodTGSelect}"`;
-  rule.prodBUSelect = `"${rule.prodBUSelect}"`;
-  rule.prodPFSelect = `"${rule.prodPFSelect}"`;
-  rule.scmsSelect = `"${rule.scmsSelect}"`;
-  rule.beSelect = `"${rule.beSelect}"`;
+  rule.sl1SelectQ = `"${rule.sl1Select}"`;
+  rule.sl2SelectQ = `"${rule.sl2Select}"`;
+  rule.sl3SelectQ = `"${rule.sl3Select}"`;
+  rule.prodTGSelectQ = `"${rule.prodTGSelect}"`;
+  rule.prodBUSelectQ = `"${rule.prodBUSelect}"`;
+  rule.prodPFSelectQ = `"${rule.prodPFSelect}"`;
+  rule.scmsSelectQ = `"${rule.scmsSelect}"`;
+  rule.beSelectQ = `"${rule.beSelect}"`;
 }
 
 function addDuplicate(rules) {
@@ -288,10 +303,10 @@ const salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'S
 const productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
 const scmsMatches = [{match: 'SCMS'}];
 const legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
-const beMatches = [{match: 'BE'}, {match: 'Sub BE', abbrev: 'SubBE'}];
+const beMatches = [{match: 'BE', abbrev: 'IBE'}, {match: 'Sub BE', abbrev: 'ISBE'}];
 const countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
-const extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXT'}];
-const glSegmentsMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACCT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACCT'},
+const extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXTTH'}];
+const glSegmentsMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACT'},
   {name: 'Company', value: 'COMPANY', abbrev: 'COMP'}];
 
 function addMatches(rule) {
@@ -321,7 +336,7 @@ function addSelects(rule, selectMap) {
   const bu = selectMap.getSelectString('bu', rule.prodBUCritCond, rule.prodBUCritChoices);
   const pf = selectMap.getSelectString('pf', rule.prodPFCritCond, rule.prodPFCritChoices);
   const scms = selectMap.getSelectString('scms', rule.scmsCritCond, rule.scmsCritChoices);
-  const be = selectMap.getSelectString('be', rule.beCritCond, rule.beCritChoices);
+  const ibe = selectMap.getSelectString('ibe', rule.beCritCond, rule.beCritChoices);
   str += sl1 ? `-${sl1}` : '';
   str += sl2 ? `-${sl2}` : '';
   str += sl3 ? `-${sl3}` : '';
@@ -329,7 +344,7 @@ function addSelects(rule, selectMap) {
   str += bu ? `-${bu}` : '';
   str += pf ? `-${pf}` : '';
   str += scms ? `-${scms}` : '';
-  str += be ? `-${be}` : '';
+  str += ibe ? `-${ibe}` : '';
   if (str) {
     rule.name += str;
   }

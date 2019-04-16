@@ -16,6 +16,10 @@ db.dfa_open_period.insertMany([
   {moduleId: NumberInt(11), fiscalMonth: NumberInt(201904), openFlag: "Y"},
 ]);
 
+// temp fix: ram's backend upload is not setting approvedOnce and setting glSegmentsMatch to an empty string
+db.getCollection('dfa_allocation_rule').updateMany({}, {$set: {approvedOnce: 'Y'}});
+db.getCollection('dfa_allocation_rule').updateMany({glSegmentsMatch: ''}, {$set: {glSegmentsMatch: []}});
+
 db.dfa_lookup.insertMany([
   {
     key: 'database-version',
