@@ -202,7 +202,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
             offerRole: this.data[i]['offerRole'],
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
-
+          
       }
       this.stakeData = this.stakeHolderInfo;
 

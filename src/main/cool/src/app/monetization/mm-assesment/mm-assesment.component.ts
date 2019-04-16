@@ -778,8 +778,11 @@ export class MmAssesmentComponent implements OnInit {
   // --------------------------------------------------------------------------------------------
 
   toNextStep() {
+
     this.isAllowedtoNextStep = true;
+
     if (this.activeTabIndex === 0 && !this.dimensionMode) {
+
       this.canClickTab = true;
       let index = 0;
       const groupKeys = this.getGroupKeys(this.groupData[0]);

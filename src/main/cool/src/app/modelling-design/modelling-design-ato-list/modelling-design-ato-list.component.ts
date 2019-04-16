@@ -4,6 +4,7 @@ import { ModellingDesignService } from '../../services/modelling-design.service'
 import { StakeholderfullService } from '../../services/stakeholderfull.service';
 import { ModellingDesign } from '../model/modelling-design';
 import { Ato } from '../model/ato';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-modelling-design-ato-list',
@@ -14,7 +15,7 @@ export class ModellingDesignAtoListComponent implements OnInit {
 
   atoTask: Ato;
   atoList: Array<Ato>;
-  modellingDesign: ModellingDesign;
+  modellingDesign$: Observable<ModellingDesign>;
 
   caseId: string;
   offerId: string;
@@ -42,43 +43,11 @@ export class ModellingDesignAtoListComponent implements OnInit {
 
   ngOnInit() {
 
-    // this.atoList = {
-    //   'requestId': '238434092834234', 'action': 'STATUS', 'module': 'MODELLING&DESIGN',
-    //   'coolOfferId': 'COOL_123', 'planId': '23423234',
-    //   'planStatus': 'INPROGRESS|COMPLETE',
-    //   'tasks': [{
-    //     'itemName': 'ATO-123', 'itemStatus': 'COMPLETE',
-    //     'modelTasks': [{ 'taskName': 'OFFER DESIGN', 'taskStatus': 'COMPLETE' },
-    //     { 'taskName': 'BU CONFIG', 'taskStatus': 'COMPLETE' },
-    //     { 'taskName': 'TRANSACTION VERIFICATION & PUBLISH TO PROD', 'taskStatus': 'INPROGRESS' },
-    //     { 'taskName': 'NPI TEST ORDERABILITY', 'taskStatus': 'NOT STARTED' }],
-    //     'provisionTasks': [{ 'taskName': 'SETUP', 'taskStatus': 'NOT REQUIRED' },
-    //     { 'taskName': 'MODEL (iService Configuration)', 'taskStatus': 'NOT REQUIRED' },
-    //     { 'taskName': 'PROVISIONING VALIDATION', 'taskStatus': 'NOT REQUIRED' },
-    //     { 'taskName': 'ISERVICE VALIDATION', 'taskStatus': 'NOT REQUIRED' }]
-    //   },
-    //   {
-    //     'itemName': 'ATO-1231', 'itemStatus': 'COMPLETE',
-    //     'modelTasks': [{ 'taskName': 'OFFER DESIGN', 'taskStatus': 'COMPLETE' },
-    //     { 'taskName': 'BU CONFIG', 'taskStatus': 'COMPLETE' },
-    //     { 'taskName': 'TRANSACTION VERIFICATION & PUBLISH TO PROD', 'taskStatus': 'INPROGRESS' },
-    //     { 'taskName': 'NPI TEST ORDERABILITY', 'taskStatus': 'NOT STARTED' }],
-    //     'provisionTasks': [{ 'taskName': 'SETUP', 'taskStatus': 'NOT REQUIRED' }, {
-    //       'taskName': 'MODEL (iService Configuration)', 'taskStatus': 'NOT REQUIRED'
-    //     },
-    //     { 'taskName': 'PROVISIONING VALIDATION', 'taskStatus': 'NOT REQUIRED' },
-    //     { 'taskName': 'ISERVICE VALIDATION', 'taskStatus': 'NOT REQUIRED' }]
-    //   }]
-    // };
-
     this.offerId = 'COOL_123';
-    this.modellingDesignService.retrieveAtoList(this.offerId).subscribe(modellingDesignRes => {
+    this.modellingDesign$ = this.modellingDesignService.retrieveAtoList(this.offerId);
 
-      this.modellingDesign = modellingDesignRes;
-      this.atoList = this.modellingDesign['tasks'];
-      this.atoTask = this.atoList.find(ato => ato.itemName === 'ATO-123');
-
-    });
+    this.atoList = this.modellingDesign$['tasks'];
+    this.atoTask = this.atoList.find(ato => ato.itemName === 'ATO-123');
 
     // Retrieve Offer Details
     // this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {

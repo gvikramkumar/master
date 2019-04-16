@@ -299,13 +299,16 @@ span.icon-cart {
 }
 .tool-tip ul li {
   list-style: disc;
+  white-space: normal;
 }
 .tool-tip,
 .tool-tip.top{
 	min-width: 80px;
-  max-width: 300px;
+  max-width: 240px;
   min-height: 22px;
   transform: translateX(-50%);
+  width: 240px;
+
 }
 
 /* tool tip position right */
