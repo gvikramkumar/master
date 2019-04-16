@@ -64,6 +64,7 @@ export class ActionsComponent implements OnInit {
   commentEvent: any;
   selectedAction;
   selectedOffer;
+  actionColumns: any[];
   switchLabel = "Show Mine";
   constructor(private router: Router, private actionsService: ActionsService,
     private userService: UserService, private httpClient: HttpClient,
@@ -76,7 +77,14 @@ export class ActionsComponent implements OnInit {
     this.minDate = new Date();
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
 
-
+    this.actionColumns = [
+      { field: 'completed', header: 'ACTION COMPLETE'},
+      { field: 'offerId', header: 'OFFER' },
+      { field: 'actionTitle', header: 'ACTION' },
+      { field: 'createdBy', header: 'ACTION CREATED BY' },
+      { field: 'dueDate', header: 'DUE DATE' },
+      { field: 'actionDetails', header: 'DETAILS'}
+    ];
     this.getAllActions();
 
     this.dashboardService.getMyOffersList().subscribe(data => {
