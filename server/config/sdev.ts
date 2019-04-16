@@ -1,5 +1,5 @@
 export default {
-  autoSyncOn: false,
+  autoSyncOn: true,
   ssoUrl: 'http://localhost:8080',
   mongo: {
     uri: 'mongodb://findp-dev-01.cisco.com/fin-dfa',
