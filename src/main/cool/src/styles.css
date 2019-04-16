@@ -1278,3 +1278,4 @@ span.icon-check-outline.icon-medium {
 }
 .font-16{font-size: 16px}
 .ui-dialog.ui-widget .ui-dialog-content{height: 350px ;min-height: 100%}
+.readOnlyUser input[bsDatepicker]+label{transition:none !important;-webkit-transform: translate3d(-40px, -30px, 0);  transform: translate3d(-40px, -30px, 0);}
