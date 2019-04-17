@@ -163,7 +163,7 @@
                                <ul>
                                   <!-- <li *ngIf="pInfo['rules']['maxCharacterLen'] && pInfo['currentValue'].length === pInfo['rules']['maxCharacterLen']" >{{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}}) allowed</li> -->
                                   <li *ngIf="freeText.errors.required">{{pInfo.egineAttribue}} is required </li>
-                                  <li *ngIf="pInfo.currentValue.length == pInfo.rules.maxCharacterLen">Only {{pInfo.rules.maxCharacterLen}} characters allowed</li>
+                                  <li *ngIf="pInfo.rules.maxCharacterLen && pInfo.currentValue.length == pInfo.rules.maxCharacterLen">Only {{pInfo.rules.maxCharacterLen}} characters allowed</li>
                               </ul>
                           </div>
                         
