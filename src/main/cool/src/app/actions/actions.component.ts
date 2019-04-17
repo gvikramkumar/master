@@ -76,11 +76,13 @@ export class ActionsComponent implements OnInit {
 
     this.minDate = new Date();
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
-
+    
     this.actionColumns = [
       { field: 'completed', header: 'ACTION COMPLETE'},
       { field: 'offerId', header: 'OFFER' },
+      { field: 'offerName', hidden: true},
       { field: 'actionTitle', header: 'ACTION' },
+      { field: 'actionDesc', hidden: true},
       { field: 'createdBy', header: 'ACTION CREATED BY' },
       { field: 'dueDate', header: 'DUE DATE' },
       { field: 'actionDetails', header: 'DETAILS'}

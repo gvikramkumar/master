@@ -223,8 +223,8 @@ export class OfferSolutioningComponent implements OnInit {
           for (const qna of this.unGroupedQuestionsAndAnswers) {
             qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
               '' : questionAnswerMap.get(qna['questionNo']);
-            qna['answerToQuestion'] = qna['questionType'] === 'Date' ?
-              moment(qna['answerToQuestion']).format('MM/DD/YYYY') : qna['answerToQuestion'];
+            qna['answerToQuestion'] = qna['questionType'] === 'Date' && !_.isEmpty(qna['answerToQuestion']) ?
+              moment(qna['answerToQuestion']).format('DD-MMM-YYYY') : qna['answerToQuestion'];
           }
 
         }

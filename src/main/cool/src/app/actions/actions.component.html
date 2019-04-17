@@ -30,14 +30,14 @@
             </div>
             <div class="responsive-table">
               <p-table [columns]="actionColumns" [value]="myActionsList" [rows]="10" [paginator]="true"
-                #globalFilterForActions [globalFilterFields]="['offerId','actionTitle','createdBy','dueDate']"
+                #globalFilterForActions [globalFilterFields]="['offerId','offerName','actionTitle', 'actionDesc','createdBy','dueDate']"
                 sortMode="multiple">
                 <ng-template pTemplate="header" let-columns>
                   <tr>
                     <ng-container *ngFor="let col of columns">
                       <th [pSortableColumn]="col.field"
-                        [ngClass]="{'smallColWidth':col.field === 'completed' || col.field === 'actionDetails'}">
-                        <!-- [ngStyle]="{'width' : col.field === 'completed' || col.field === 'actionDetails' ? '150px' : ''}"> -->
+                        [ngClass]="{'smallColWidth':col.field === 'completed' || col.field === 'actionDetails'}"
+                        [ngStyle]="col.style" [style.display]="col.hidden ? 'none' : 'col.header'">
                         {{col.header}}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                       </th>
@@ -47,7 +47,7 @@
                 <ng-template pTemplate="body" let-actionData let-columns="columns">
                   <tr>
                     <ng-container *ngFor="let col of columns">
-                      <td>
+                      <td [ngStyle]="col.style" [style.display]="col.hidden ? 'none' : 'col.header'">
                         <span *ngIf="col.field == 'completed'">
                           <div *ngIf="actionData.completed == true" style="text-align:center;">
                             <span class="icon-check-outline icon-medium"></span>

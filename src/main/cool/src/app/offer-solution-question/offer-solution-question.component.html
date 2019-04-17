@@ -145,7 +145,7 @@
           <input class="form-control" name="{{question['questionNo']}}" id="question['questionNo']"
             [(ngModel)]="question['answerToQuestion']" #osDate="ngModel" [disabled]="question['hideQuestion']"
             #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
-            [bsConfig]="dpConfig" [(bsValue)]="question['answerToQuestion']"
+            [bsConfig]="{dateInputFormat: 'DD-MMM-YYYY'}" [(bsValue)]="question['answerToQuestion']"
             [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (ngModelChange)="showHiddenQuestionBasedOnUserInput(osDate.value, question)">
 
