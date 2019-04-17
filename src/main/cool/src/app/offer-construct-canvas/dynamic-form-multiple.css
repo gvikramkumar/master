@@ -240,8 +240,6 @@ span.icon-cart {
 }
 
 
-
-
 /* custom css for ToolTip validation*/
 
 
@@ -382,6 +380,5 @@ span.icon-cart {
 .on-focus > input:focus + .tool-tip.slideIn.top{
 	bottom: 110%;
 }
-
 
 
