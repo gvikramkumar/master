@@ -48,6 +48,7 @@ export class MmAssesmentComponent implements OnInit {
 
   readOnly = false;
   canClickTab = false;
+  changeInMM = false;
   canClickNextStep = false;
   backbuttonStatusValid = true;
   dimensionMode: Boolean = false;
@@ -836,10 +837,11 @@ export class MmAssesmentComponent implements OnInit {
         }
 
         if (this.derivedMM !== data['mmModel']) {
-          this.derivedMM = data['mmModel'];
-          this.message = tempMessage;
+          this.changeInMM = true;
           this.groupData.splice(1);
           this.groupNames.splice(1);
+          this.message = tempMessage;
+          this.derivedMM = data['mmModel'];
           data['dimgroups'].forEach(group => {
             this.getGroupData(group, {}, true);
           });
@@ -904,6 +906,14 @@ export class MmAssesmentComponent implements OnInit {
       this.existingStakeHolders = offerDetailsData['stakeholders'] ? offerDetailsData['stakeholders'] : [];
       this.existingStakeHolders = _.uniqBy(this.existingStakeHolders, '_id');
 
+      // When change in MM is true, remove default stakeholders from existing list
+      if (this.changeInMM) {
+        this.changeInMM = false;
+        this.existingStakeHolders = this.existingStakeHolders
+          .filter(stakeholder => !stakeholder.stakeholderDefaults);
+      }
+
+      // Convert Users To Default Format
       this.existingStakeHolders = this.existingStakeHolders
         .map(stakeholder => this.formatExistingUserAsStakeholder(stakeholder));
 

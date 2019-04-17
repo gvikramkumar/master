@@ -410,8 +410,8 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  goToofferSolutioning(offerId, caseId, actiontTitle) {
-    if (actiontTitle.toLowerCase() === 'provide details') {
+  goToofferSolutioning(offerId, caseId, actionTitle) {
+    if (actionTitle.toLowerCase() === 'provide details') {
       this.router.navigate(['/offerSolutioning', offerId, caseId]);
     }
   }

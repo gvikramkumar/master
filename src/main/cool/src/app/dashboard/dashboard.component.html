@@ -64,7 +64,7 @@
                         <span [ngSwitch]="actionData.type">
                           <!-- view for solutioning action -->
                           <span *ngSwitchCase="'Solutioning Action'">
-                            <a (click)="goToofferSolutioning(actionData.offerId,actionData.caseId,actionData.actiontTitle)">
+                            <a (click)="goToofferSolutioning(actionData.offerId,actionData.caseId,actionData.actionTitle)">
                               <span class="text-indigo">{{actionData.title}}&nbsp;
                                 &nbsp;&nbsp;</span>
                             </a>
