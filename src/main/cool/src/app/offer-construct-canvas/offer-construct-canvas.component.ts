@@ -358,17 +358,18 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   singleFormCopy(itemsData, uniqueNodeId) {
 
     let title = this.uniqueNodeId;
-    for (const searchValue in itemsData) {
+    if (this.lineItemName === itemsData['Item Category']) {
+      for (const searchValue in itemsData) {
 
-      this.questionsList[title].forEach(element => {
+        this.questionsList[title].forEach(element => {
 
-        if (searchValue === element.question) {
-          element.currentValue = itemsData[searchValue];
-        }
+          if (searchValue === element.question) {
+            element.currentValue = itemsData[searchValue];
+          }
 
-      });
+        });
+      }
     }
-
   }
 
   searchCopyAttributes(event) {
@@ -1417,7 +1418,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     );
   }
 
-  //getAndSetQUestionAccordingToPID 
+  //getAndSetQUestionAccordingToPID
 
   getSetQuestionAccordingToPID(searchResult, productName, obj, isFromDB, isMajorOrMinor) {
 
@@ -2070,7 +2071,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           } else {
             element.listPreviousValue = element.listCurrentValue;
           }
-        } else {  // for cancel the form 
+        } else {  // for cancel the form
           if (element.componentType !== "Multiselect") {
             element.currentValue = element.previousValue;
           } else {
