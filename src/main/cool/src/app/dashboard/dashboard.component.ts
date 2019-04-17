@@ -410,8 +410,8 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  goToofferSolutioning(offerId, caseId, actiontTitle) {
-    if (actiontTitle.toLowerCase() === 'provide details') {
+  goToofferSolutioning(offerId, caseId, actionTitle) {
+    if (actionTitle.toLowerCase() === 'provide details') {
       this.router.navigate(['/offerSolutioning', offerId, caseId]);
     }
   }
@@ -444,6 +444,9 @@ export class DashboardComponent implements OnInit {
         break;
       case 'Solutioning Action':
         page = 'offerSolutioning';
+        break;
+      case 'Design Review':
+        page = 'designReview';
         break;
       default:
         page = 'offerDetailView';

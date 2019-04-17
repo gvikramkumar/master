@@ -252,12 +252,22 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     const groupName = obj.uniqueNodeId;
     // let groupName = obj.uniqueKey;
 
+    if (this.listOfferQuestions != undefined) {
+      this.listOfferQuestions.forEach(ques => {
+        if (ques.egineAttribue == "Item Name (PID)") {
+          ques.currentValue = obj.title;
+          ques.previousValue = obj.title;
+        }
+      });
+    }
+
+
     let listOfferQuestions;
     if (isQuestionPresent == undefined) {
-      console.log('isQuestionPresent if block', isQuestionPresent);
+      //for newly drag and drop
       listOfferQuestions = this.listOfferQuestions;
     } else {
-      console.log('isQuestionPresent else block', isQuestionPresent);
+      //for previous save value
       listOfferQuestions = obj.itemDetails;
     }
 
@@ -274,6 +284,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     };
 
     const setinfo = { [groupName]: groupinfo };
+
+    console.log("setinfo", setinfo);
+
 
     this.setProductInfo(obj.productName, obj.isMajorLineItem, setinfo, listOfferQuestions);
     // });
@@ -345,17 +358,18 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   singleFormCopy(itemsData, uniqueNodeId) {
 
     let title = this.uniqueNodeId;
-    for (const searchValue in itemsData) {
+    if (this.lineItemName === itemsData['Item Category']) {
+      for (const searchValue in itemsData) {
 
-      this.questionsList[title].forEach(element => {
+        this.questionsList[title].forEach(element => {
 
-        if (searchValue === element.question) {
-          element.currentValue = itemsData[searchValue];
-        }
+          if (searchValue === element.question) {
+            element.currentValue = itemsData[searchValue];
+          }
 
-      });
+        });
+      }
     }
-
   }
 
   searchCopyAttributes(event) {
@@ -388,6 +402,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   showDialog() {
 
+    console.log("this.offerConstructService.singleMultipleFormInfo", this.offerConstructService.singleMultipleFormInfo);
+
     this.ind--;
     const offerInfo = this.offerConstructService.singleMultipleFormInfo;
     const majorOfferInfo = offerInfo.major;
@@ -409,7 +425,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         minorLength[name] = true;
       }
     });
-    
+
     this.offerConstructService.itemlengthList = { major: majorLength, minor: minorLength };
     this.display = true;
     this.offerConstructService.closeAddDetails = true;
@@ -570,9 +586,19 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         let productname: any = Object.keys(element)
         if (element[productname].uniqueKey == uniqueKey) {
           element[productname].title = name;
+          //change name in Item Name (PID)  as per requirement
+          element[productname].listOfferQuestions.forEach(ques => {
+            if (ques.question == "Item Name (PID)") {
+              ques.currentValue = name;
+              ques.previousValue = name;
+            }
+          });
         }
       });
     });
+
+    console.log(this.offerConstructService.singleMultipleFormInfo);
+
   }
 
   /**
@@ -1392,7 +1418,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     );
   }
 
-  //getAndSetQUestionAccordingToPID 
+  //getAndSetQUestionAccordingToPID
 
   getSetQuestionAccordingToPID(searchResult, productName, obj, isFromDB, isMajorOrMinor) {
 
@@ -1411,6 +1437,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           questionsList.forEach(ques => {
             if (element == ques.question) {
               ques.currentValue = searchResult[element];
+            }
+            if (ques.egineAttribue == "Item Name (PID)") {
+              ques.currentValue = obj.title;
+              ques.previousValue = obj.title;
             }
           });
         }
@@ -2045,7 +2075,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           } else {
             element.listPreviousValue = element.listCurrentValue;
           }
-        } else {  // for cancel the form 
+        } else {  // for cancel the form
           if (element.componentType !== "Multiselect") {
             element.currentValue = element.previousValue;
           } else {
