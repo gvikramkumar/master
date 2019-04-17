@@ -793,6 +793,19 @@ export default class PgLookupRepo {
       .then(vals => _.sortBy(vals, _.identity));
   }
 
+  getDealIdSortedUpper(fiscalMonth) {
+    const sql = `
+      select bk_deal_id from 
+      fpacon.vw_fpa_fcm_deal_mapping
+      where bk_dv_fiscal_year_mth_num_int = ${fiscalMonth}
+      union
+      select bk_deal_id from fpacon.vw_fpa_cross_catalog_deal
+      `
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows.map(row => row.bk_deal_id))
+      .then(vals => _.sortBy(vals, _.identity));
+  }
+
   verifyNodeValueInPlOrMgmtHierarchies(nodeValue): Promise<boolean> {
     const sqlPlHierarchy = `
       SELECT DISTINCT column_name
