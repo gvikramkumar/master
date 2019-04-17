@@ -23,7 +23,10 @@
 
       <ng-container matColumnDef="name">
         <mat-header-cell style="min-width:400px;" *matHeaderCellDef mat-sort-header> Rule Name</mat-header-cell>
-        <mat-cell style="min-width:400px;" *matCellDef="let row"> <a href="" [routerLink]="['edit', row.id, {mode: 'view'}]">{{row.name}}</a> </mat-cell>
+        <mat-cell style="min-width:400px;" *matCellDef="let row">
+          <i class="icon-info-outline icon-small description-icon" (click)="showDescription(row)"></i>
+          <a href="" [routerLink]="['edit', row.id, {mode: 'view'}]">{{row.name}}</a>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="period">

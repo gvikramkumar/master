@@ -54,8 +54,12 @@ export default class DistiDirectUploadUploadController extends UploadController 
       this.validateGroupId(),
       this.validateNodeType(),
       this.validateSalesFinanceHierarchy(),
-      this.validateNodeCode()
+      this.validateNodeCodeRequired()
     ])
+      .then(() => this.lookForErrors())
+      .then(() => Promise.all([
+        this.validateNodeCode()
+      ]))
       .then(() => this.lookForErrors());
   }
 
@@ -168,10 +172,15 @@ export default class DistiDirectUploadUploadController extends UploadController 
     return Promise.resolve();
   }
 
-  validateNodeCode() {
+  validateNodeCodeRequired() {
     if (!this.temp.nodeCode) {
       this.addErrorRequired(this.PropNames.nodeCode);
-    } else if (this.temp.nodeType.toLowerCase() === 'disti sl3' && this.notExists(this.data.distiSL3NodeCodes, this.temp.nodeCode)) {
+    }
+    return Promise.resolve();
+  }
+
+  validateNodeCode() {
+    if (this.temp.nodeType.toLowerCase() === 'disti sl3' && this.notExists(this.data.distiSL3NodeCodes, this.temp.nodeCode)) {
       this.addErrorInvalid(this.PropNames.nodeCode, this.temp.nodeCode);
     } else if (this.temp.nodeType.toLowerCase() === 'direct sl2' && this.notExists(this.data.directSL2NodeCodes, this.temp.nodeCode)) {
       this.addErrorInvalid(this.PropNames.nodeCode, this.temp.nodeCode);

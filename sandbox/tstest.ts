@@ -8,7 +8,7 @@ import * as Q from 'q';
 
 
 
-console.log(`one\ntwo`);
+console.log(`one\ntwo\nthree`.replace(/\n/g, '<br>'));
 
 /*
 console.log(arr.length);

@@ -252,7 +252,8 @@ function addDescription(rule, driver, period) {
   desc += rule.prodPFSelect ? `\nPF Select:  ${rule.prodPFSelect}` : '';
   desc += rule.scmsSelect ? `\nSCMS Select:  ${rule.scmsSelect}` : '';
   desc += rule.beSelect ? `\nIBE Select:  ${rule.beSelect}` : '';
-  rule.desc = `"${desc}"`;
+  rule.descO = `"${desc}"`;
+  rule.desc = desc;
 }
 
 function quoteSelectText(rule) {

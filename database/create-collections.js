@@ -12,13 +12,13 @@ print(uri);
 db = connect(uri);
 
 /*
-rollover tables
-•	fpadfa.dfa_prof_disti_to_direct_map_upld
-•	fpadfa.dfa_prof_manual_map_upld
-•	fpadfa.dfa_prof_sales_split_pctmap_upld
-•	fpadfa.dfa_prof_scms_triang_altsl2_map_upld
-•	fpadfa.dfa_prof_scms_triang_corpadj_map_upld
-•	fpadfa.dfa_prof_swalloc_manualmix_upld
+// rollover tables
+fpadfa.dfa_prof_disti_to_direct_map_upld // autosync: replace all
+fpadfa.dfa_prof_manual_map_upld // autosync: insert/update
+fpadfa.dfa_prof_sales_split_pctmap_upld // autosync: insert/update
+fpadfa.dfa_prof_swalloc_manualmix_upld // autosync: insert/update
+fpadfa.dfa_prof_scms_triang_altsl2_map_upld // autosync: replace all
+fpadfa.dfa_prof_scms_triang_corpadj_map_upld // autosync: insert/update
  */
 
 // this is a case INsensitive database because of this collation setting we do. All collections
