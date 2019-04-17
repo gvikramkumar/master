@@ -47,7 +47,7 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
   getValidationAndImportData() {
     return Promise.all([
       super.getValidationAndImportData(),
-      this.pgLookupRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_fcm_deal_mapping', 'bk_deal_id', `bk_dv_fiscal_year_mth_num_int = ${this.req.dfa.fiscalMonths.prof}`),
+      this.pgLookupRepo.getDealIdSortedUpper(this.req.dfa.fiscalMonths.prof),
     ])
       .then(results => {
         this.data.dealIds = results[1];
