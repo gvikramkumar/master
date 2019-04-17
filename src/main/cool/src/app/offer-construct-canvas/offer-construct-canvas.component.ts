@@ -1438,6 +1438,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             if (element == ques.question) {
               ques.currentValue = searchResult[element];
             }
+            if (ques.egineAttribue == "Item Name (PID)") {
+              ques.currentValue = obj.title;
+              ques.previousValue = obj.title;
+            }
           });
         }
         const groupinfo = {
