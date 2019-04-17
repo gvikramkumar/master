@@ -15,7 +15,12 @@ export class ModellingDesignAtoListComponent implements OnInit {
 
   atoTask: Ato;
   atoList: Array<Ato>;
-  modellingDesign$: Observable<ModellingDesign>;
+  modellingDesign: ModellingDesign;
+
+
+  selectedAto: any;
+  overAllAtoView: boolean;
+  atoNames: string[] = [];
 
   caseId: string;
   offerId: string;
@@ -33,6 +38,7 @@ export class ModellingDesignAtoListComponent implements OnInit {
     private modellingDesignService: ModellingDesignService,
     private stakeholderfullService: StakeholderfullService) {
 
+    this.overAllAtoView = true;
 
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
@@ -44,10 +50,19 @@ export class ModellingDesignAtoListComponent implements OnInit {
   ngOnInit() {
 
     this.offerId = 'COOL_123';
-    this.modellingDesign$ = this.modellingDesignService.retrieveAtoList(this.offerId);
+    this.selectedAto = 'Overall Offer';
+    this.atoNames.push(this.selectedAto);
 
-    this.atoList = this.modellingDesign$['tasks'];
-    this.atoTask = this.atoList.find(ato => ato.itemName === 'ATO-123');
+    this.modellingDesignService.retrieveAtoList(this.offerId).subscribe(modellingDesignRes => {
+
+      this.modellingDesign = modellingDesignRes;
+      this.atoList = this.modellingDesign['tasks'];
+
+      this.atoList.map(dropDownValue => {
+        this.atoNames.push(dropDownValue.itemName);
+      });
+
+    });
 
     // Retrieve Offer Details
     // this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
@@ -73,6 +88,19 @@ export class ModellingDesignAtoListComponent implements OnInit {
     url += urlToOpen;
     window.open(url, '_blank');
 
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+
+  showSelectedAtoView(dropDownValue: string) {
+
+    if (dropDownValue === 'Overall Offer') {
+      this.selectedAto = dropDownValue;
+    } else {
+      this.selectedAto = dropDownValue;
+      this.atoTask = this.atoList.find(ato => ato.itemName === dropDownValue);
+    }
   }
 
   // -------------------------------------------------------------------------------------------------------------------

@@ -73,7 +73,6 @@ import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 import { LoaderService } from '@shared/loader.service';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
 import { ModellingDesignAtoListComponent } from './modelling-design/modelling-design-ato-list/modelling-design-ato-list.component';
-import { ModellingDesignAtoComponent } from './modelling-design/modelling-design-ato/modelling-design-ato.component';
 import { CustomRangeValidatorDirective } from '@app/validators/custom-range-validator.directive';
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 
@@ -123,7 +122,6 @@ export function app_init(configService: ConfigurationService) {
     OfferSetupComponent,
     LoaderComponent,
     ModellingDesignAtoListComponent,
-    ModellingDesignAtoComponent,
     CustomRangeValidatorDirective,
     CustomMinValidatorDirective
   ],
