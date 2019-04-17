@@ -224,11 +224,10 @@ export class OfferSolutioningComponent implements OnInit {
             qna['answerToQuestion'] = _.isEmpty(questionAnswerMap.get(qna['questionNo'])) ?
               '' : questionAnswerMap.get(qna['questionNo']);
             qna['answerToQuestion'] = qna['questionType'] === 'Date' && !_.isEmpty(qna['answerToQuestion']) ?
-              moment(qna['answerToQuestion']).format('MM/DD/YYYY') : qna['answerToQuestion'];
+              moment(qna['answerToQuestion']).format('DD-MMM-YYYY') : qna['answerToQuestion'];
           }
 
         }
-
 
         // Condtionally Hide Solutioning Question And Answers
         this.unGroupedQuestionsAndAnswers = this.condtionallyHideSolutioningQuestionAndAnswers();
@@ -270,12 +269,9 @@ export class OfferSolutioningComponent implements OnInit {
         }
 
         const parentAnswer = this.unGroupedQuestionsAndAnswers[parentQuestionIndex]['answerToQuestion'];
-        if (childQuestionAndAnswers.questionType === 'Radio Button' && parentAnswer === 'No') {
-          childQuestionAndAnswers.hideQuestion = true;
-        } else if (childQuestionAndAnswers.questionType !== 'Radio Button' && _.isEmpty(parentAnswer)) {
+        if (_.isEmpty(parentAnswer)) {
           childQuestionAndAnswers.hideQuestion = true;
         }
-
 
         return childQuestionAndAnswers;
       } else {

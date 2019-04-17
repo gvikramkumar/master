@@ -88,10 +88,10 @@ export class OfferSolutionQuestionComponent implements OnInit {
       childDate = date;
     }
 
-    if (_.isEmpty(parentDate) || _.isEmpty(childDate)) {
+    if (!(_.isEmpty(parentDate) || _.isEmpty(childDate))) {
 
-      childDate = new Date(moment(childDate).format('YYYY-MM-DD'));
-      parentDate = new Date(moment(parentDate).format('YYYY-MM-DD'));
+      childDate = new Date(moment(childDate).format('DD-MMM-YYYY'));
+      parentDate = new Date(moment(parentDate).format('DD-MMM-YYYY'));
 
       const diffInDays = Math.ceil((childDate.valueOf() - parentDate.valueOf()) / (1000 * 3600 * 24));
 
@@ -106,49 +106,63 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
   showHiddenQuestionBasedOnUserInput(selectedValue: string, question: any) {
 
-    if (!_.isEmpty(selectedValue) || question['questionType'] === 'Date') {
+    if (question['questionType'] === 'Date') {
+      this.validateDate(selectedValue, question);
+    } else if (question['questionType'] === 'Free Text with No Space') {
+      question = this.formatFreeTextWithNoSpaceInput(selectedValue, question);
+    }
 
-      if (question['questionType'] === 'Date') {
-        this.validateDate(selectedValue, question);
-      } else if (question['questionType'] === 'Free Text with No Space') {
-        question = this.formatFreeTextWithNoSpaceInput(selectedValue, question);
+    const parentQuestionNumber = question['questionNo'];
+    const childIndexUnGroupData = this.unGroupData.findIndex(fqa => parentQuestionNumber === fqa.rules.referenceQ);
+
+    if (childIndexUnGroupData !== -1) {
+
+      const childQuestion = this.unGroupData[childIndexUnGroupData];
+      const childQuestionNumber = this.unGroupData[childIndexUnGroupData]['questionNo'];
+
+      const group = childQuestion['group'];
+      const osGroup = childQuestion['oSgroup'];
+      const subGroup = childQuestion['subGroup'];
+
+      const childQuestionsGroup = this.groupData[osGroup][group][subGroup]['questions'] as Array<any>;
+      const childIndexGroupData = childQuestionsGroup.findIndex(cqa => cqa.questionNo === childQuestionNumber);
+      const childQuestionType = this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['questionType'];
+      const selectedOption = this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['selectedOption'];
+
+      let stringInputZero = false;
+      const textDateQuestionDependency =
+        question['question'] === 'If needed, provide text for a product line level announcement. '
+          + 'This will be seen internally and externally on CCW. ' ? true : false;
+      if (textDateQuestionDependency) {
+        stringInputZero = (selectedValue.replace(/\s+/g, ' ').trim()).length === 0 ? true : false;
       }
 
-      const parentQuestionNumber = question['questionNo'];
-      const childIndexUnGroupData = this.unGroupData.findIndex(fqa => parentQuestionNumber === fqa.rules.referenceQ);
-
-      if (childIndexUnGroupData !== -1) {
-
-        const childQuestion = this.unGroupData[childIndexUnGroupData];
-        const childQuestionNumber = this.unGroupData[childIndexUnGroupData]['questionNo'];
-
-        const group = childQuestion['group'];
-        const osGroup = childQuestion['oSgroup'];
-        const subGroup = childQuestion['subGroup'];
-
-        const childQuestionsGroup = this.groupData[osGroup][group][subGroup]['questions'] as Array<any>;
-        const childIndexGroupData = childQuestionsGroup.findIndex(cqa => cqa.questionNo === childQuestionNumber);
-        const selectedOption = this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['selectedOption'];
-
-        if (selectedValue === selectedOption) {
-          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
-          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = 'Mandatory';
-          this.showHiddenQuestionBasedOnUserInput
-            (selectedValue, this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]);
-        } else if (selectedOption === 'Announcement Start Date' || selectedOption === 'Announcement End Date') {
-          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
-          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = 'Mandatory';
-        } else {
-          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = true;
-          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['answerToQuestion'] = '';
-          this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = '';
-        }
-
+      if (selectedValue === selectedOption) {
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = 'Mandatory';
+        this.showHiddenQuestionBasedOnUserInput
+          (selectedValue, this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]);
+      } else if (textDateQuestionDependency && stringInputZero) {
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = true;
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['answerToQuestion'] = '';
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = '';
+        this.showHiddenQuestionBasedOnUserInput
+          ('', this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]);
+      } else if (childQuestionType === 'Date' && selectedValue !== '') {
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = 'Mandatory';
+      } else {
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = true;
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['answerToQuestion'] = '';
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = '';
+        this.showHiddenQuestionBasedOnUserInput
+          ('', this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]);
       }
 
     }
 
   }
+
 }
 
 
