@@ -426,7 +426,6 @@ export default class ReportController extends ControllerBase {
               promises.push(Promise.all([
                 Promise.resolve(fimo),
                 this.submeasureRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
-                this.productClassUploadPgRepo.getMany({fiscalMonth: fimo})
               ]));
             });
             return Promise.all(promises);
@@ -436,24 +435,9 @@ export default class ReportController extends ControllerBase {
             results.forEach(result => {
               const fiscalMonth = result[0];
               this.submeasures = _.sortBy(result[1], 'name');
-              const rtn = result[2];
               const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
               sms.forEach(sm => {
-                let hardware;
-                let software;
                 rows.push({fiscalMonth, sm});
-                rtn.map(doc => {
-                  if (doc.submeasureKey === sm.submeasureKey) {
-                    if (doc.splitCategory === 'HARDWARE') {
-                      hardware = doc.splitPercentage ? doc.splitPercentage * 100 : doc.splitPercentage;
-                    }
-                    if (doc.splitCategory === 'SOFTWARE') {
-                      software = doc.splitPercentage ? doc.splitPercentage * 100 : doc.splitPercentage;
-                    }
-                    rows.push({hardware, sm});
-                    rows.push({software, sm});
-                  }
-                });
               });
             });
             return _.orderBy(rows, ['fiscalMonth', 'sm.measureName', 'sm.name']);
