@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import * as moment from 'moment';
 import { ActionsService } from '../services/actions.service';
 import { CreateActionApprove } from '../models/create-action-approve';
 import { OverlayPanel } from 'primeng/overlaypanel';
@@ -35,7 +36,7 @@ export class DashboardComponent implements OnInit {
 
   minDate = new Date();
   offerColumns: any[];
-
+  myActionColumns: any[];
   commentValue: string;
   titleValue: string;
   descriptionValue: string;
@@ -85,7 +86,16 @@ export class DashboardComponent implements OnInit {
       { field: 'lifeCyclePriority', header: 'LIFE CYCLE STATUS' }
     ];
 
-
+    this.myActionColumns = [
+      { field: 'offerId', header: 'OFFER ID' },
+      { field: 'title', header: 'ACTIONS AND NOTIFICATIONS'},
+      { field: 'offerName', header: 'OFFER NAME' },
+      { field: 'titleDesc', hidden: true },
+      { field: 'offerOwner', header: 'OFFER OWNER' },
+      { field: 'status', header: 'STATUS'},
+      { field: 'triggerDate', header: 'TRIGGER DATE' },
+      { field: 'dueDate', header: 'DUE DATE' },
+    ]
     this.getMyActionsAndNotifications();
     this.getMyOffers();
     this.getFunctions();
@@ -103,6 +113,7 @@ export class DashboardComponent implements OnInit {
         let notifications = [];
         if (resActionsAndNotifications && resActionsAndNotifications.actionList) {
           actions = this.processActions(resActionsAndNotifications.actionList);
+          
           this.actionCount.pendingActionCount = resActionsAndNotifications.pendingTasksCount;
           this.actionCount.needImmediateActionCount = resActionsAndNotifications.immediateTasksCount;
         }
@@ -118,6 +129,8 @@ export class DashboardComponent implements OnInit {
       notification.alertType = 'notification';
       notification.title = notification.notifcationTitle;
       notification.desc = notification.notificationDesc;
+      notification.dueDate = this.dateFormat(notification.dueDate);
+      notification.triggerDate = this.dateFormat(notification.triggerDate);
       // notification.assigneeId = notification.offerOwner ? notification.assigneeId.split(',').join(', ') : '';
 
       return notification;
@@ -130,12 +143,18 @@ export class DashboardComponent implements OnInit {
       action.alertType = 'action';
       action.title = action.actionTitle;
       action.desc = action.actionDesc;
+      action.dueDate = this.dateFormat(action.dueDate);
+      action.triggerDate = this.dateFormat(action.triggerDate);
       // action.assigneeId = action.assigneeId ? action.assigneeId.split(',').join(', ') : '';
 
       return action;
     });
   }
 
+  dateFormat(inputDate: string) {
+    return moment(inputDate).format('DD-MMM-YYYY');
+  }
+  
   private addLifeCycleSortingColumn(resOffers) {
 
     this.myOffers = resOffers.map((data) => {
