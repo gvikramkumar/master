@@ -193,7 +193,7 @@ export default class SubmeasureController extends ApprovalController {
   preApproveStep(sm, req) {
     const promises = [];
     // remove product class uploads for this submeasure and add new ones
-    if (sm.categoryType === 'Manual Mix') {
+    if (shUtil.isManualMix(sm)) {
       promises.push(this.productClassUploadRepo.removeMany({submeasureName: sm.name})
         .then(() => {
           return this.productClassUploadRepo.addManyTransaction([
@@ -230,7 +230,7 @@ export default class SubmeasureController extends ApprovalController {
     // to overcome. See DatabaseController constructor for more info
     const databaseCtrl = injector.get(DatabaseController);
     const syncMap = new SyncMap();
-    if (sm.categoryType === 'Manual Mix') {
+    if (shUtil.isManualMix(sm)) {
       syncMap.dfa_prof_swalloc_manualmix_upld = true;
     }
     if (shUtil.isDeptUpload(sm)) {
