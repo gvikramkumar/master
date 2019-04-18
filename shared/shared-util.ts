@@ -14,7 +14,8 @@ export const shUtil = {
   getHtmlForLargeSingleMessage,
   isDeptUpload,
   isDeptUploadMeasure,
-  fiscalYearFromFiscalMonth
+  fiscalYearFromFiscalMonth,
+  isManualMix
 };
 
 export interface ObjectDiffVal {
@@ -228,6 +229,10 @@ function getMonthNameFromNum(mon) {
     '12': 'Dec',
   };
   return months[mon.toString()];
+}
+
+function isManualMix(submeasure) {
+  return submeasure.categoryType === 'Manual Mix';
 }
 
 

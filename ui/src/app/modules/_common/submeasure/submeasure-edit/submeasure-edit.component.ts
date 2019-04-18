@@ -993,7 +993,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   isManualMix() {
-    return this.sm.categoryType === 'Manual Mix';
+    return shUtil.isManualMix(this.sm);
   }
 
   isPassThrough() {
