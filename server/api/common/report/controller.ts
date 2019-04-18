@@ -396,7 +396,7 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['History'];
         excelHeaders = ['Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Description',  'Measure Name', 'Source System',
           'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments', 'Frequency/Timing of Sub-measure Processing',
-          'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level', 'HW Split %', 'SW Split %',
+          'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
           'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
           'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure',
           'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier',
@@ -406,11 +406,17 @@ export default class ReportController extends ControllerBase {
           'fiscalMonth', 'sm.startFiscalMonth', 'sm.endFiscalMonth', 'sm.submeasureKey', 'sm.name', 'sm.desc', 'sm.measureName', 'sm.sourceName',
           'sm.inputFilterLevel.salesLevel', 'sm.inputFilterLevel.productLevel', 'sm.inputFilterLevel.scmsLevel', 'sm.inputFilterLevel.entityLevel',
           'sm.inputFilterLevel.internalBELevel', 'sm.inputFilterLevel.glSegLevel', 'sm.processingTime', 'sm.indicators.manualMapping',
-          'sm.manualMapping.salesLevel', 'sm.manualMapping.productLevel', 'sm.manualMapping.scmsLevel', 'sm.manualMapping.entityLevel', 'sm.manualMapping.internalBELevel', 'sm.manualMixHw', 'sm.manualMixSw',
+          'sm.manualMapping.salesLevel', 'sm.manualMapping.productLevel', 'sm.manualMapping.scmsLevel', 'sm.manualMapping.entityLevel', 'sm.manualMapping.internalBELevel',
           'sm.rules[0]', 'sm.rules[1]', 'sm.rules[2]', 'sm.rules[3]', 'sm.rules[4]', 'sm.rules[5]', 'sm.rules[6]', 'sm.rules[7]', 'sm.rules[8]', 'sm.rules[9]', 'sm.rules[10]', 'sm.rules[11]', 'sm.rules[12]', 'sm.rules[13]', 'sm.rules[14]',
           'sm.indicators.groupFlag', 'sm.indicators.allocationRequired', 'sm.groupingSubmeasureName', 'sm.categoryType',
           'sm.indicators.retainedEarnings', 'sm.indicators.transition', 'sm.indicators.service', 'sm.indicators.passThrough', 'sm.indicators.corpRevenue', 'sm.indicators.dualGaap', 'sm.indicators.twoTier', 'sm.status', 'sm.createdBy',
           'sm.createdDate', 'sm.updatedBy', 'sm.updatedDate'];
+
+        if (req.dfa.module.moduleId === 1) {
+          excelHeaders.splice(8, 0, 'HW Split %', 'SW Split %');
+          excelProperties.splice(8, 0, 'sm.manualMixHw', 'sm.manualMixSw');
+        }
+
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.sourceRepo.getManyActive()
@@ -439,11 +445,7 @@ export default class ReportController extends ControllerBase {
               const pgManualMixes = result[2];
               let sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
               if (req.dfa.module.moduleId === 1) {
-                sms = sms.map(sm => {
-                  if (shUtil.isManualMix(sm)) {
-                    return this.transformAddManualMix(sm, pgManualMixes);
-                  }
-                });
+                sms = this.submeasures.map(sm => this.transformAddManualMix(sm, pgManualMixes));
               }
               sms.forEach(sm => {
                 rows.push({fiscalMonth, sm});
@@ -546,21 +548,13 @@ export default class ReportController extends ControllerBase {
     return sm;
   }
 
-  transformAddManualMix(sm, manualMix) {
-    _.forEach(manualMix, mm => {
-      if (sm.submeasureKey === mm.submeasureKey) {
-        switch (mm.splitCategory) {
-          case 'HARDWARE':
-            sm.manualMixHw = mm.splitPercentage * 100;
-            break;
-          case 'SOFTWARE':
-            sm.manualMixSw = mm.splitPercentage * 100;
-            break;
-          default:
-            break;
-        }
-      }
-    });
+  transformAddManualMix(sm, manualMixes) {
+    if (shUtil.isManualMix(sm)) {
+      const recHw = _.find(manualMixes, {submeasureKey: sm.submeasureKey, splitCategory: 'HARDWARE'});
+      const recSw = _.find(manualMixes, {submeasureKey: sm.submeasureKey, splitCategory: 'SOFTWARE'});
+      sm.manualMixHw = recHw && recHw.splitPercentage * 100;
+      sm.manualMixSw = recSw && recSw.splitPercentage * 100;
+    }
     return sm;
   }
 
