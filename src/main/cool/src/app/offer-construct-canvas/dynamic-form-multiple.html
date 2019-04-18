@@ -150,7 +150,7 @@
                         </div>
                       </div>
                       <div class="form-group input--compressed" *ngIf="i !== 0">
-                        <div class="form-group__text" [class.has-error]="freeText.invalid || !pInfo.rules.isvalid" [class.has-success]="freeText.valid">
+                        <div class="form-group__text" [class.has-error]="freeText.invalid" [class.has-success]="freeText.valid">
                           <div class="on-focus clearfix">
                           <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' id="" [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo)" maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                           [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false" 
