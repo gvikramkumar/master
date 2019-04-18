@@ -349,29 +349,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     onHideViewDetails() {
         this.viewDetails = false;
     }
-    
-    addAllDetailsValidations(question){
-    var validatorPattern = '';
-    if (question.egineAttribue !== "Item Name (PID)") {
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
-            validatorPattern = "^[0-9]*$";
-        }
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "camel") {
-            validatorPattern = "^(([0-9])|([A-Z0-9][a-z0-9]+))*([A-Z])?$";
-        }
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
-            validatorPattern = "^[0-9]*\.[0-9][0-9]$";
-        }
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperate numeric with no space") {
-            validatorPattern = "^[0-9]+(,[0-9]+)*$";
-        }
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
-            validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
-        }
-        
-        return validatorPattern;
-    }
-}
+
 
 addAllDetailsValidationsonChange(e,question){
     
