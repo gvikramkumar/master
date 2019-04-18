@@ -15,7 +15,8 @@
         <span *ngIf="question.egineAttribue !== 'Base Price' && question.egineAttribue !== 'Default Initial Term' && question.egineAttribue !== 'Grace Window For Renewal' && question.egineAttribue !== 'REQ Start Date Window' && questionForm.controls[question.egineAttribue].errors.pattern">{{question.egineAttribue}} should be in {{question.rules.textcase}}</span>
         <span *ngIf="question.egineAttribue === 'Default Initial Term' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 value from the Initial Term range</span>
         <span *ngIf="question.egineAttribue === 'Base Price' && questionForm.controls[question.egineAttribue].errors.pattern">Base Price must contain a number with 2 decimal places</span> 
-         <span *ngIf="(question.egineAttribue === 'Grace Window For Renewal' || question.egineAttribue === 'REQ Start Date Window') && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value</span>           
+        <span *ngIf="(question.egineAttribue === 'Grace Window For Renewal' || question.egineAttribue === 'REQ Start Date Window') && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value</span>           
+        <span *ngIf="question.egineAttribue === 'Default Auto Renewal Term' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 value from the Std Auto Renewal Term Range</span>   
       </span>
        
      </div>
