@@ -253,6 +253,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         let selectedGroup = groupName;
         if (this.showLoader) {
             if (this.itemsList[selectedSection][selectedGroup].PID != undefined) {
+                this.headerName = this.itemsList[selectedSection][selectedGroup].PID;
                 this.loaderService.startLoading();
                 this.offerConstructCanvasService.getPidDetails(this.itemsList[selectedSection][selectedGroup].PID).subscribe(items => {
                     this.loaderService.stopLoading();
@@ -274,7 +275,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         }
     }
     dateFormat(val){
-        if(val!==''){ 
+        if(val!==''){
             return this.datePipe.transform(new Date(val), 'MM/dd/yyyy');
         }
     }
@@ -352,7 +353,7 @@ export class DynamicFormMultipleComponent implements OnInit {
 
 
 addAllDetailsValidationsonChange(e,question){
-    
+
     var validatorPattern = '';
     if (question.egineAttribue !== "Item Name (PID)") {
         if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
@@ -375,8 +376,8 @@ addAllDetailsValidationsonChange(e,question){
                 question.rules.validationMessage = "";
                 question.rules.isvalid = true;
             }
-            
-            
+
+
         }
         if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
             if(!(/^[0-9]*\.[0-9][0-9]$/.test(question.currentValue))){
