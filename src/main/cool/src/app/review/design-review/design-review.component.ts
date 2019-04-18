@@ -461,7 +461,8 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  async onEscalate(functionName: string) {
+  async onEscalate(functionName: string, element) {
+    element.disabled = true;
     // Initialize Variables
     const mailList = [];
     const functionNameMap = this.stakeData[functionName];

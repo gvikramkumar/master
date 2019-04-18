@@ -55,7 +55,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   milestone: any;
   selectedfunctionRole: string = null;
   stakeHolders = {};
-
+  
   public data = [];
   public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
 
@@ -492,8 +492,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  async onEscalate(functionName: string) {
-
+  async onEscalate(functionName: string, element) {
+    element.disabled = true;
     // Initialize Variables
     const mailList = [];
     const functionNameMap = this.stakeData[functionName];
