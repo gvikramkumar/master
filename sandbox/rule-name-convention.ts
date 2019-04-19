@@ -81,7 +81,7 @@ const selectMap = new SelectExceptionMap();
 const ruleBuf = [];
 const ruleHeader = ['Status', 'Old Name', 'New Name', 'Duplicates', 'Description', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'IBE Match', 'Legal Entity Match', 'Country', 'External Theater', 'GL Segments',
   'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select', 'Created By', 'Created Date', 'Updated By', 'UpdatedDate'];
-const ruleProps =       ['status', 'oldName', 'name', 'duplicates', 'desc', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'beMatch', 'legalEntityMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+const ruleProps =       ['status', 'oldName', 'name', 'duplicates', 'descQ', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'beMatch', 'legalEntityMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
   'sl1SelectQ', 'sl2SelectQ', 'sl3SelectQ', 'prodTGSelectQ', 'prodBUSelectQ', 'prodPFSelectQ', 'scmsSelectQ', 'beSelectQ', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
 
 ruleBuf.push(ruleHeader.toString());
@@ -252,7 +252,7 @@ function addDescription(rule, driver, period) {
   desc += rule.prodPFSelect ? `\nPF Select:  ${rule.prodPFSelect}` : '';
   desc += rule.scmsSelect ? `\nSCMS Select:  ${rule.scmsSelect}` : '';
   desc += rule.beSelect ? `\nIBE Select:  ${rule.beSelect}` : '';
-  rule.descO = `"${desc}"`;
+  rule.descQ = `"${desc}"`;
   rule.desc = desc;
 }
 

@@ -196,14 +196,14 @@ export class UiUtil {
       }
     */
 
-  genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small): Observable<any> {
+  genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small, showPre = true): Observable<any> {
     if (this.dialog.openDialogs.length) {
       console.log('genericDialog: dialog already open');
       return;
     }
 
     const config = <MatDialogConfig> {
-      data: {message, title, mode, data},
+      data: {message, title, mode, showPre, data},
       width: size,
       backdropClass: 'bg-modal-backdrop'
     };

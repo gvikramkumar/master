@@ -38,6 +38,7 @@ import {AuthOnlyDirective} from './directives/auth-only.directive';
 import {ProgressComponent} from './components/progress/progress.component';
 import { StatusChoiceComponent } from './components/status-choice/status-choice.component';
 import { TestSelectsComponent } from './components/test/test-selects/test-selects.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 @NgModule({
   imports: [
@@ -84,6 +85,7 @@ import { TestSelectsComponent } from './components/test/test-selects/test-select
     ProgressComponent,
     StatusChoiceComponent,
     TestSelectsComponent,
+    SafeHtmlPipe,
     // CuiSelectModule,
     // CuiMultiselectModule,
   ],
@@ -119,6 +121,7 @@ import { TestSelectsComponent } from './components/test/test-selects/test-select
     ProgressComponent,
     StatusChoiceComponent,
     TestSelectsComponent,
+    SafeHtmlPipe,
   ],
   entryComponents: [
     ErrorModalComponent,

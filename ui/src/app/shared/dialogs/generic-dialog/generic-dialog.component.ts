@@ -11,6 +11,7 @@ export class GenericDialogComponent implements OnInit {
   cancelText: string;
   submitText: string;
 
+
   constructor(public dialogRef: MatDialogRef<GenericDialogComponent>, @Inject(MAT_DIALOG_DATA) public  data: any) {
   }
 

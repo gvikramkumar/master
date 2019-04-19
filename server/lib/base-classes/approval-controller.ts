@@ -147,12 +147,12 @@ export default class ApprovalController extends ControllerBase {
 
   // this step can modify the data, as it's pre-save
   preApproveStep(data, req) {
-    return Promise.resolve(data);
+    return Promise.resolve();
   }
 
   // this "doesn't" modify data as it's already saved
   postApproveStep(data, req) {
-    return Promise.resolve(data);
+    return Promise.resolve();
   }
 
   // this step can modify the item, so any overrides are responsible for returning the passed item
