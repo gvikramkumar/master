@@ -73,9 +73,9 @@ export default class SalesSplitUploadUploadController extends UploadController {
   }
 
   verifyUniqueCombination() {
-    const temps = this.rows1.map(row => new SalesSplitUploadTemplate(row));
+    const imports = this.rows1.map(row => new SalesSplitUploadImport(row, this.fiscalMonth));
     const results = {};
-    temps.forEach(temp => {
+    imports.forEach(temp => {
       const val = _.get(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.${temp.salesTerritoryCode}.count`) || 0;
       _.set(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.${temp.salesTerritoryCode}.count`, val + 1);
     })
@@ -95,9 +95,9 @@ export default class SalesSplitUploadUploadController extends UploadController {
   }
 
   accountId_companyCode_subaccountCode_addUpTo1() {
-    const temps = this.rows1.map(row => new SalesSplitUploadTemplate(row));
+    const imports = this.rows1.map(row => new SalesSplitUploadImport(row, this.fiscalMonth));
     const results = {};
-    temps.forEach(temp => {
+    imports.forEach(temp => {
       const val = _.get(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.total`) || 0.0;
       _.set(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.total`, val + temp.splitPercentage);
     })
@@ -105,7 +105,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
     Object.keys(results).forEach(accountId => {
       Object.keys(results[accountId]).forEach(companyCode => {
         Object.keys(results[accountId][companyCode]).forEach(subaccountCode => {
-          if (svrUtil.truncateNumber(results[accountId][companyCode][subaccountCode].total, 8) !== 1.0) {
+          if (svrUtil.truncateNumber8(results[accountId][companyCode][subaccountCode].total) !== 1.0) {
             this.addErrorMessageOnly(`${this.PropNames.accountId}/${this.PropNames.companyCode}/${this.PropNames.subaccountCode}, ${accountId}/${companyCode}/${subaccountCode} total does not add up to 1.`);
           }
         });
@@ -114,11 +114,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
   }
 
   getImportArray() {
-    const imports = this.rows1.map(row => {
-      const salesSplits = new SalesSplitUploadImport(row, this.fiscalMonth);
-      salesSplits.splitPercentage = svrUtil.setPrecision(salesSplits.splitPercentage, 8);
-      return salesSplits;
-    });
+    const imports = this.rows1.map(row => new SalesSplitUploadImport(row, this.fiscalMonth));
     return Promise.resolve(imports);
   }
 

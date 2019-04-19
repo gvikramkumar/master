@@ -8,7 +8,7 @@ import * as Q from 'q';
 // import {take, first} from 'rxjs/operators';
 
 
-
+console.log(.1 + .2);
 
 
 /*

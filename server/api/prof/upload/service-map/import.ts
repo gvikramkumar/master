@@ -28,7 +28,7 @@ export default class ServiceMapUploadImport {
     this.technologyGroup = row[8] && String(row[8])
     this.businessUnit = row[9] && String(row[9])
     this.productFamily = row[10] && String(row[10])
-    this.splitPercentage = row[11] && Number(row[11])
+    this.splitPercentage = row[11] && svrUtil.truncateNumber8(Number(row[11]));
 
     svrUtil.trimStringProperties(this);
   }

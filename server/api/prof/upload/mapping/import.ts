@@ -17,7 +17,7 @@ export default class MappingUploadImport {
     this.legalEntity = row[3] && String(row[3]);
     this.intBusinessEntity = row[4] && String(row[4]);
     this.scms = row[5] && String(row[5]);
-    this.percentage = row[6] && Number(row[6]);
+    this.percentage = row[6] && svrUtil.truncateNumber8(Number(row[6]));
     this.fiscalMonth = fiscalMonth;
 
     svrUtil.trimStringProperties(this);

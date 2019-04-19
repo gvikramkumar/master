@@ -93,11 +93,7 @@ imports: ServiceMapUploadImport[];
 
   validate() {
     // sort by submeasureName, add up splitPercentage, error if not 1.0
-    this.imports = this.rows1.map(row => {
-      const serviceMap = new ServiceMapUploadImport(row, this.fiscalMonth);
-      serviceMap.splitPercentage = svrUtil.setPrecision(serviceMap.splitPercentage, 8);
-      return serviceMap;
-    });
+    this.imports = this.rows1.map(row => new ServiceMapUploadImport(row, this.fiscalMonth));
     const obj = {};
     this.imports.forEach(val => {
       const salesTerritoryCode = val.salesTerritoryCode.toUpperCase();
@@ -110,7 +106,7 @@ imports: ServiceMapUploadImport[];
     });
     _.forEach(obj, (obj1, salesTerr) => {
       _.forEach(obj1, (val, busEntity) => {
-        if (svrUtil.truncateNumber(val, 8) !== 1.0) {
+        if (svrUtil.truncateNumber8(val) !== 1.0) {
           this.addError(`${salesTerr} / ${busEntity}`, val);
         }
       });
