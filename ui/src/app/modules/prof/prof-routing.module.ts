@@ -173,6 +173,19 @@ const routes: Routes = [
                 routerUrl: '/prof/rule-management'}, {label: 'Update'}]
             }
           },
+          {
+            path: 'view/:id', component: RuleManagementEditComponent,
+            canActivate: [AuthorizationGuard],
+            data: {
+              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+              hero: {
+                title: 'View Rule',
+                desc: 'View the selected rule'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management',
+                routerUrl: '/prof/rule-management'}, {label: 'View'}]
+            }
+          }
         ],
       },
       {
