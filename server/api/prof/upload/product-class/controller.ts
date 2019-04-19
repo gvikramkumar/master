@@ -53,7 +53,11 @@ export default class ProductClassUploadUploadController extends UploadController
   validate() {
     // sort by submeasureName, add up splitPercentage, error if not 1.0
     this.imports =
-      _.sortBy(this.rows1.map(row => new ProductClassUploadImport(row, this.fiscalMonth)), 'submeasureName');
+      _.sortBy(this.rows1.map(row => {
+        const productClass = new ProductClassUploadImport(row, this.fiscalMonth);
+        productClass.splitPercentage = svrUtil.setPrecision(productClass.splitPercentage, 8);
+        return productClass;
+      }), 'submeasureName');
 
     let obj = {};
     this.imports.forEach(val => {
@@ -85,7 +89,7 @@ export default class ProductClassUploadUploadController extends UploadController
       }
     });
     _.forEach(obj, (val, key) => {
-      if (svrUtil.setPrecision5(val) !== 1.0) {
+      if (val !== 1.0) {
         this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
       }
     });

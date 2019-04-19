@@ -67,7 +67,11 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
   validate() {
     // sort by submeasureName, add up splitPercentage, error if not 1.0
     this.imports =
-      _.sortBy(this.rows1.map(row => new MappingUploadImport(row, this.fiscalMonth)), 'submeasureName');
+      _.sortBy(this.rows1.map(row => {
+        const mappingUploads = new MappingUploadImport(row, this.fiscalMonth);
+        mappingUploads.percentage = svrUtil.setPrecision(mappingUploads.percentage, 8);
+        return mappingUploads;
+      }), 'submeasureName');
     const obj = {};
     this.imports.forEach(val => {
       if (obj[val.submeasureName]) {
@@ -77,7 +81,7 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
       }
     });
     _.forEach(obj, (val, key) => {
-      if (svrUtil.setPrecision5(val) !== 1.0) {
+      if (val !== 1.0) {
         this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
       }
     });
