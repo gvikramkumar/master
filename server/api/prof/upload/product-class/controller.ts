@@ -89,7 +89,7 @@ export default class ProductClassUploadUploadController extends UploadController
       }
     });
     _.forEach(obj, (val, key) => {
-      if (val !== 1.0) {
+      if (svrUtil.truncateNumber(val, 8) !== 1.0) {
         this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
       }
     });
