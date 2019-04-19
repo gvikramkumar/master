@@ -73,9 +73,9 @@ export default class SalesSplitUploadUploadController extends UploadController {
   }
 
   verifyUniqueCombination() {
-    const imports = this.rows1.map(row => new SalesSplitUploadImport(row, this.fiscalMonth));
+    const temps = this.rows1.map(row => new SalesSplitUploadTemplate(row));
     const results = {};
-    imports.forEach(temp => {
+    temps.forEach(temp => {
       const val = _.get(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.${temp.salesTerritoryCode}.count`) || 0;
       _.set(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.${temp.salesTerritoryCode}.count`, val + 1);
     })
@@ -95,9 +95,9 @@ export default class SalesSplitUploadUploadController extends UploadController {
   }
 
   accountId_companyCode_subaccountCode_addUpTo1() {
-    const imports = this.rows1.map(row => new SalesSplitUploadImport(row, this.fiscalMonth));
+    const temps = this.rows1.map(row => new SalesSplitUploadTemplate(row));
     const results = {};
-    imports.forEach(temp => {
+    temps.forEach(temp => {
       const val = _.get(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.total`) || 0.0;
       _.set(results, `${temp.accountId}.${temp.companyCode}.${temp.subaccountCode}.total`, val + temp.splitPercentage);
     })
