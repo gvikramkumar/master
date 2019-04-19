@@ -280,7 +280,7 @@ export class DashboardComponent implements OnInit {
     createActionPayload['selectedFunction'] = this.functionNameValue;
     createActionPayload['actionCreator'] = this.userService.getUserId();
     createActionPayload['type'] = 'Manual Action';
-
+    
     const createCommentPayload = {};
     createCommentPayload['taskId'] = this.selectedAction.taskId;
     createCommentPayload['userId'] = this.userService.getUserId();
@@ -405,6 +405,20 @@ export class DashboardComponent implements OnInit {
     overlaypanel1.hide();
     overlaypanel2.show(event);
   }
+  
+  solutioningAction(taskId,status){
+    const postData = {
+      'taskId': taskId,
+      'userId': this.userService.getUserId(),
+      'taskName': 'Action',
+      'attachment': false,
+      'comment': false,
+      'action': 'Provide Details',
+      'status' : status
+    };
+    this.dashboardService.postComments(postData).subscribe(() =>  {
+    });
+  }
 
   dismissNotification(overlaypanel: OverlayPanel) {
     const postData = {
@@ -429,9 +443,10 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  goToofferSolutioning(offerId, caseId, actionTitle) {
-    if (actionTitle.toLowerCase() === 'provide details') {
-      this.router.navigate(['/offerSolutioning', offerId, caseId]);
+  goToofferSolutioning(actionData) {
+    if (actionData.title.toLowerCase() === 'provide details') {
+      this.solutioningAction(actionData.taskId, actionData.status);
+      this.router.navigate(['/offerSolutioning', actionData.offerId, actionData.caseId]);
     }
   }
 
