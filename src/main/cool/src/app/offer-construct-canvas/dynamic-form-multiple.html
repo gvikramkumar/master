@@ -171,7 +171,7 @@
                           </div> 
                           <div class="tool-tip  slideIn" *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false && (freeText.dirty || freeText.touched)">
                               <ul>
-                                    <li *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">{{pInfo.rules.validationMessage}}</li>   
+                                    <li *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">{{pInfo.rules.validationMessage}}</li>   
                                     <li *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">Mandatory entry of 1 value from the Initial Term range</li>
                                     <li *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">Base Price must contain a number with 2 decimal places</li> 
                                     <li *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">Mandatory entry of 1 numeric value</li>   
