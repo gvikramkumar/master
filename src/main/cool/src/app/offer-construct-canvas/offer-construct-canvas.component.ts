@@ -141,12 +141,18 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   //
   onValidateChars(event) {
-
-    event.target.value = event.target.value.replace(/[&\/\\#,+()$~%.!@^_'":;*?|<>{}=-]/g, '');
-    event.target.value = event.target.value.replace(/[^\w\s]/gi, '');
-    event.target.value = event.target.value.replace(event.target.value, event.target.value.toUpperCase());
-
-  }
+    event.target.value = event.target.value.replace(event.target.value, event.target.value.toUpperCase());  
+          if((event.target.value.charAt(0)== "!" || event.target.value.charAt(0)== "+" || event.target.value.charAt(0)== "=" || event.target.value.charAt(0)== ">"
+          || event.target.value.charAt(0)== "<" || event.target.value.charAt(0)== "#" || event.target.value.charAt(0)== "/" || event.target.value.charAt(0)== "." 
+          || event.target.value.charAt(0)== "-" || event.target.value.charAt(0)== "[" || event.target.value.charAt(0)== "]" 
+          )|| event.target.value.charAt(0)===" ") {
+       event.target.value = event.target.value.replace(event.target.value.charAt(0),"")
+        }
+        event.target.value = event.target.value.replace(/[&\\\#,$%!@^':;'*?|<>{}=]/g, '');
+        event.target.value = event.target.value.replace(/\[.*?\]/g,"");
+        
+      }
+    
 
   // create a json skelaton for major and minor group
 
