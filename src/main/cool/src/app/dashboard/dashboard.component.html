@@ -79,7 +79,7 @@
                                 <!-- view for solutioning action -->
                                 <span *ngSwitchCase="'Solutioning Action'">
                                   <a
-                                    (click)="goToofferSolutioning(actionData.offerId,actionData.caseId,actionData.actionTitle)">
+                                    (click)="goToofferSolutioning(actionData)">
                                     <span class="text-indigo">{{actionData.title}}&nbsp;
                                       &nbsp;&nbsp;</span>
                                   </a>
@@ -431,7 +431,7 @@
             View Offer
           </button>
 
-          <button class="btn btn--secondary" *ngIf="selectedAction.type == 'Solutioning Action'"
+          <button class="btn btn--secondary" *ngIf="selectedAction.type == 'Solutioning Action'" (click)="solutioningAction(selectedAction.taskId,selectedAction.status)"
             [routerLink]="['/offerSolutioning', selectedAction.offerId, selectedAction.caseId]">
             Provide Details
           </button>
