@@ -1,0 +1,24 @@
+<div class="responsive-table">
+
+  <p-dataTable [value]="tasks" scrollable="true" [rows]="10" [paginator]="true" scrollHeight="350px"
+    [globalFilter]="gbForTask" [resizableColumns]="true">
+
+    <p-column field="ato" sortable="true" header="ATO/PID">
+      <ng-template let-col let-task="rowData" pTemplate="body">
+        <span>{{task['taskName']}}<br /></span>
+      </ng-template>
+    </p-column>
+
+    <p-column field="status" header="STATUS" sortable="true">
+      <ng-template let-col let-task="rowData" pTemplate="body">
+        <div class="text-center">
+          <span class="{{task['taskStatus']|lowercase}}">
+            <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
+          </span>
+        </div>
+      </ng-template>
+    </p-column>
+
+  </p-dataTable>
+
+</div>

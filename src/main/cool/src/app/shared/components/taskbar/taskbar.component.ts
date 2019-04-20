@@ -31,12 +31,12 @@ export class TaskbarComponent implements OnInit {
   isLastStep: boolean;
   currentPage: string = 'dashboard';
   proceedToOfferSetup: Boolean = false;
-  userRole:boolean;
+  userRole: boolean;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private sharedService:SharedService
+    private sharedService: SharedService
   ) { }
 
 
@@ -46,7 +46,7 @@ export class TaskbarComponent implements OnInit {
     this.caseId = this.activatedRoute.snapshot.params['id2'];
     this.setTaskBar();
     this.userRole = this.sharedService.userFunctionalRole;
-    this.sharedService.userEventEmit.subscribe((role)=>{
+    this.sharedService.userEventEmit.subscribe((role) => {
       this.userRole = role;
       this.sharedService.userFunctionalRole = role;
     });
@@ -63,12 +63,15 @@ export class TaskbarComponent implements OnInit {
       this.proceedToOfferSetup = true;
     }
   }
+
   saveCurrentState() {
     this.onProceedToNext.emit('false')
   }
+
   proceedToNextStep() {
     this.onProceedToNext.emit('true');
   }
+
   goBack() {
     if (this.currentStepIndex > 0 && this.currentOfferId) {
       const prevPage = offerBuilderStepsEnum[this.currentStepIndex - 1];

@@ -73,9 +73,11 @@ import { OfferconstructChildComponent } from '@app/construct/child_component/off
 import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 import { LoaderService } from '@shared/loader.service';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
-import { ModellingDesignAtoListComponent } from './modelling-design/modelling-design-ato-list/modelling-design-ato-list.component';
-import { CustomRangeValidatorDirective } from '@app/validators/custom-range-validator.directive';
-import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
+
+
+import { AtoMainComponent } from './modelling-design/ato-main/ato-main.component';
+import { AtoListComponent } from './modelling-design/ato-list/ato-list.component';
+import { AtoSummaryComponent } from './modelling-design/ato-summary/ato-summary.component';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -122,9 +124,9 @@ export function app_init(configService: ConfigurationService) {
     OfferconstructChildComponent,
     OfferSetupComponent,
     LoaderComponent,
-    ModellingDesignAtoListComponent,
-    CustomRangeValidatorDirective,
-    CustomMinValidatorDirective
+    AtoListComponent,
+    AtoMainComponent,
+    AtoSummaryComponent
   ],
   imports: [
     NgbModule,

@@ -53,6 +53,7 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private rightPanelService: RightPanelService,
     private offerConstructCanvasService: OfferconstructCanvasService) {
+
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['id'];
       this.caseId = params['id2'];

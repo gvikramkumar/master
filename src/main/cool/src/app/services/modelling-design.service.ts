@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '@env/environment.service';
 import { ModellingDesign } from '../modelling-design/model/modelling-design';
 import { Observable } from 'rxjs';
+import { retry } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ModellingDesignService {
 
   retrieveAtoList(offerId: string): Observable<ModellingDesign> {
     const url = this.environmentService.REST_API_RETRIEVE_ATO_LIST_URL + '?OfferID=' + offerId;
-    return this.httpClient.get<ModellingDesign>(url);
+    return this.httpClient.get<ModellingDesign>(url).pipe(retry(1));
   }
 
 }

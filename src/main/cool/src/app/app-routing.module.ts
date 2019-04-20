@@ -13,17 +13,14 @@ import { OfferOverViewResolver } from './services/offer-overview-resolver.servic
 import { OfferSolutioningComponent } from './solutioning/offer-solutioning/offer-solutioning.component';
 import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 
-// Temporoary
 import { MmInfoBarComponent } from './monetization/mm-info-bar/mm-info-bar.component';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmMessageBarComponent } from './monetization/mm-message-bar/mm-message-bar.component';
 import { OfferConstructComponent } from '@app/construct/offer-construct/offer-construct.component';
 import { OasComponent } from './oas/oas.component';
 import { OfferDimensionComponent } from './dimensions/offer-dimension/offer-dimension.component';
-import { BupmGuard } from '@shared/guards';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
-import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeholder-add.component';
-import { ModellingDesignAtoListComponent } from './modelling-design/modelling-design-ato-list/modelling-design-ato-list.component';
+import { AtoMainComponent } from './modelling-design/ato-main/ato-main.component';
 
 
 const routes: Routes = [
@@ -140,9 +137,9 @@ const routes: Routes = [
     component: OfferSetupComponent
   },
   {
-    path: 'modelling-design-ato-list',
-    component: ModellingDesignAtoListComponent
-  },
+    path: 'ato-main',
+    component: AtoMainComponent
+  }
 
 ];
 

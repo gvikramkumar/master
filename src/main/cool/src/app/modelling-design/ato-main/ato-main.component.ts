@@ -1,25 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModellingDesignService } from '../../services/modelling-design.service';
 import { StakeholderfullService } from '../../services/stakeholderfull.service';
 import { ModellingDesign } from '../model/modelling-design';
 import { Ato } from '../model/ato';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-modelling-design-ato-list',
-  templateUrl: './modelling-design-ato-list.component.html',
-  styleUrls: ['./modelling-design-ato-list.component.scss']
+  selector: 'app-ato-main',
+  templateUrl: './ato-main.component.html',
+  styleUrls: ['./ato-main.component.scss']
 })
-export class ModellingDesignAtoListComponent implements OnInit {
+export class AtoMainComponent implements OnInit, OnDestroy {
 
   atoTask: Ato;
   atoList: Array<Ato>;
   modellingDesign: ModellingDesign;
-
+  modellingDesignSubscription: Subscription;
 
   selectedAto: any;
-  overAllAtoView: boolean;
   atoNames: string[] = [];
 
   caseId: string;
@@ -38,8 +37,6 @@ export class ModellingDesignAtoListComponent implements OnInit {
     private modellingDesignService: ModellingDesignService,
     private stakeholderfullService: StakeholderfullService) {
 
-    this.overAllAtoView = true;
-
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['id'];
       this.caseId = params['id2'];
@@ -53,16 +50,17 @@ export class ModellingDesignAtoListComponent implements OnInit {
     this.selectedAto = 'Overall Offer';
     this.atoNames.push(this.selectedAto);
 
-    this.modellingDesignService.retrieveAtoList(this.offerId).subscribe(modellingDesignRes => {
+    this.modellingDesignSubscription = this.modellingDesignService.retrieveAtoList(this.offerId)
+      .subscribe((modellingDesignResponse: ModellingDesign) => {
 
-      this.modellingDesign = modellingDesignRes;
-      this.atoList = this.modellingDesign['tasks'];
+        this.modellingDesign = modellingDesignResponse;
+        this.atoList = this.modellingDesign['tasks'];
 
-      this.atoList.map(dropDownValue => {
-        this.atoNames.push(dropDownValue.itemName);
+        this.atoList.map(dropDownValue => {
+          this.atoNames.push(dropDownValue.itemName);
+        });
+
       });
-
-    });
 
     // Retrieve Offer Details
     // this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
@@ -72,6 +70,10 @@ export class ModellingDesignAtoListComponent implements OnInit {
     // });
 
 
+  }
+
+  ngOnDestroy(): void {
+    this.modellingDesignSubscription.unsubscribe();
   }
 
   // -------------------------------------------------------------------------------------------------------------------
