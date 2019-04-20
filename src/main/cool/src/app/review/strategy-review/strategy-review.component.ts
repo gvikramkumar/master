@@ -492,8 +492,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  async onEscalate(functionName: string) {
-
+  async onEscalate(functionName: string, element) {
+    element.disabled = true; //Immediately disable the button on click
     // Initialize Variables
     const mailList = [];
     const functionNameMap = this.stakeData[functionName];

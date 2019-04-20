@@ -67,7 +67,7 @@ export class OfferConstructService {
                     validators.push(Validators.pattern('^(([0-9])|([A-Z0-9][a-z0-9]+))*([A-Z])?$'));
                 }
                 if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
-                    validators.push(Validators.pattern("^[0-9]+\\.[0-9]{1,2}$"))
+                    validators.push(Validators.pattern("^[0-9]+\\.[0-9]{2}$"))
                 }
                 if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === 'comma seperate numeric with no space') {
                     validators.push(Validators.pattern('^[0-9]+(,[0-9]+)*$'));
@@ -131,5 +131,6 @@ export class OfferConstructService {
         }
         return new FormGroup(group);
     }
+    
 
 }

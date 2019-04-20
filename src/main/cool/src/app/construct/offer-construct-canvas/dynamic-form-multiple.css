@@ -240,8 +240,6 @@ span.icon-cart {
 }
 
 
-
-
 /* custom css for ToolTip validation*/
 
 
@@ -258,7 +256,6 @@ span.icon-cart {
 	-moz-border-radius: 7px;
 	-o-border-radius: 7px;
 	border-radius: 7px;
-	text-align: center;
 	opacity: 0;
 	z-index: 999;
 	padding: 3px 8px;
@@ -288,7 +285,7 @@ span.icon-cart {
 	height: 0px;
 	width: 0px;
 	border: 6px solid transparent;
-    border-top-color: #005073;
+  border-top-color: #005073;
 }
 
 /* default heights, width and margin w/o Javscript */
@@ -328,7 +325,7 @@ span.icon-cart {
 	margin-top: -6px;
 	bottom: auto;
 	border-top-color: transparent;
-    border-right-color: #005073;
+  border-right-color: #005073;
 }
 
 
@@ -339,9 +336,13 @@ span.icon-cart {
 /* on hover of element containing tooltip default*/
 
 *:not(.on-focus):hover > .tool-tip,
-.on-focus input:focus + .tool-tip{
+.on-focus input:focus + .tool-tip,
+.on-focus select:focus + .tool-tip
+
+{
 	visibility: visible;
-	opacity: 1;
+  opacity: 1;
+  text-align: left;
 	-webkit-transition: all 240ms ease-in-out;
 	-moz-transition: all 240ms ease-in-out;
 	-ms-transition: all 240ms ease-in-out;
@@ -361,7 +362,10 @@ span.icon-cart {
 	z-index: -1;
 }
 
-.on-focus > input:focus + .tool-tip.slideIn{
+.on-focus > input:focus + .tool-tip.slideIn,
+.on-focus > select:focus + .tool-tip.slideIn
+
+{
 	z-index: 1;
 }
 
@@ -379,9 +383,11 @@ span.icon-cart {
 *:not(.on-focus):hover > .tool-tip.slideIn,
 *:not(.on-focus):hover > .tool-tip.slideIn.top,
 .on-focus > input:focus + .tool-tip.slideIn,
-.on-focus > input:focus + .tool-tip.slideIn.top{
+.on-focus > input:focus + .tool-tip.slideIn.top,
+.on-focus > select:focus + .tool-tip.slideIn,
+.on-focus > select:focus + .tool-tip.slideIn.top
+
+{
 	bottom: 110%;
 }
-
-
 
