@@ -67,9 +67,9 @@ export default class SalesSplitUploadUploadController extends UploadController {
 
   validate() {
     return this.verifyUniqueCombination()
-      .then(() => this.lookForErrors())
+      .then(() => this.lookForErrors(`${this.PropNames.accountId} / ${this.PropNames.companyCode} / ${this.PropNames.subaccountCode} / ${this.PropNames.salesTerritoryCode} having duplicate entries`))
       .then(() => this.accountId_companyCode_subaccountCode_addUpTo1())
-      .then(() => this.lookForErrors());
+      .then(() => this.lookForErrors(`${this.PropNames.accountId} / ${this.PropNames.companyCode} / ${this.PropNames.subaccountCode} totals not adding up to 1`));
   }
 
   verifyUniqueCombination() {
@@ -85,7 +85,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
         Object.keys(results[accountId][companyCode]).forEach(subaccountCode => {
           Object.keys(results[accountId][companyCode][subaccountCode]).forEach(salesTerritoryCode => {
           if (results[accountId][companyCode][subaccountCode][salesTerritoryCode].count > 1) {
-            this.addErrorMessageOnly(`${this.PropNames.accountId}/${this.PropNames.companyCode}/${this.PropNames.subaccountCode}/${this.PropNames.salesTerritoryCode}, ${accountId}/${companyCode}/${subaccountCode}/${salesTerritoryCode} has duplicate entries.`);
+            this.addErrorMessageOnly(`${accountId} / ${companyCode} / ${subaccountCode} /  ${salesTerritoryCode}`);
           }
           });
         });
@@ -105,8 +105,8 @@ export default class SalesSplitUploadUploadController extends UploadController {
     Object.keys(results).forEach(accountId => {
       Object.keys(results[accountId]).forEach(companyCode => {
         Object.keys(results[accountId][companyCode]).forEach(subaccountCode => {
-          if (svrUtil.setPrecision5(results[accountId][companyCode][subaccountCode].total) !== 1.0) {
-            this.addErrorMessageOnly(`${this.PropNames.accountId}/${this.PropNames.companyCode}/${this.PropNames.subaccountCode}, ${accountId}/${companyCode}/${subaccountCode} total does not add up to 1.`);
+          if (svrUtil.roundDecimal8(results[accountId][companyCode][subaccountCode].total) !== 1.0) {
+            this.addErrorMessageOnly(`${accountId} / ${companyCode} / ${subaccountCode}`);
           }
         });
       });

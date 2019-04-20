@@ -14,10 +14,10 @@ export default class ServiceTrainingUploadImport {
     this.fiscalYear = shUtil.fiscalYearFromFiscalMonth(fiscalMonth);
     this.salesTerritoryCode = row[0] && String(row[0]);
     this.salesNodeLevel3Code = row[1] && String(row[1]);
-    this.extTheaterName = row[2] && String(row[2])
-    this.salesCountryName = row[3] && String(row[3])
-    this.productFamily = (row[4] && String(row[4]) || 'TRAINING')
-    this.splitPercentage = row[5] && Number(row[5])
+    this.extTheaterName = row[2] && String(row[2]);
+    this.salesCountryName = row[3] && String(row[3]);
+    this.productFamily = (row[4] && String(row[4]) || 'TRAINING');
+    this.splitPercentage = row[5] && svrUtil.truncateDecimal8(Number(row[5]));
 
     svrUtil.trimStringProperties(this);
   }

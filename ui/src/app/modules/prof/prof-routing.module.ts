@@ -62,7 +62,7 @@ const routes: Routes = [
                   breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Admin'},
                     {label: 'Measure', routerUrl: '/prof/admin/measure'}, {label: 'Update'}]
                 }
-              }
+              },
             ]
           },
           {
@@ -117,7 +117,19 @@ const routes: Routes = [
               },
               breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/prof/submeasure'}, {label: 'Update'}]
             }
-          }
+          },
+          {
+            path: 'view/:id', component: SubmeasureEditComponent,
+            canActivate: [AuthorizationGuard],
+            data: {
+              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+              hero: {
+                title: 'View Sub-Measure',
+                desc: 'View the selected sub-measure'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/prof/submeasure'}, {label: 'View'}]
+            }
+          },
         ]
       },
       {
@@ -159,6 +171,19 @@ const routes: Routes = [
               },
               breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management',
                 routerUrl: '/prof/rule-management'}, {label: 'Update'}]
+            }
+          },
+          {
+            path: 'view/:id', component: RuleManagementEditComponent,
+            canActivate: [AuthorizationGuard],
+            data: {
+              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+              hero: {
+                title: 'View Rule',
+                desc: 'View the selected rule'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Rule Management',
+                routerUrl: '/prof/rule-management'}, {label: 'View'}]
             }
           }
         ],

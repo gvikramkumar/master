@@ -77,7 +77,7 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
       }
     });
     _.forEach(obj, (val, key) => {
-      if (svrUtil.setPrecision5(val) !== 1.0) {
+      if (svrUtil.roundDecimal8(val) !== 1.0) {
         this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
       }
     });
