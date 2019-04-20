@@ -82,7 +82,7 @@ imports: ServiceTrainingUploadImport[];
     });
     _.forEach(obj, (obj1, salesTerr) => {
       _.forEach(obj1, (val, busEntity) => {
-        if (svrUtil.truncateNumber8(val) !== 1.0) {
+        if (svrUtil.roundDecimal8(val) !== 1.0) {
           this.addError(`${salesTerr} / ${busEntity}`, val);
         }
       });

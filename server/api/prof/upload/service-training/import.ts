@@ -17,7 +17,7 @@ export default class ServiceTrainingUploadImport {
     this.extTheaterName = row[2] && String(row[2]);
     this.salesCountryName = row[3] && String(row[3]);
     this.productFamily = (row[4] && String(row[4]) || 'TRAINING');
-    this.splitPercentage = row[5] && svrUtil.truncateNumber8(Number(row[5]));
+    this.splitPercentage = row[5] && svrUtil.truncateDecimal8(Number(row[5]));
 
     svrUtil.trimStringProperties(this);
   }
