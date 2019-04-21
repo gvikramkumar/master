@@ -18,7 +18,8 @@ export const shUtil = {
   fiscalYearFromFiscalMonth,
   isManualMix,
   createSelectArrays,
-  parseSelect
+  parseSelect,
+  createSelect
 };
 
 function createSelectArrays(rule) {
@@ -66,6 +67,18 @@ function parseSelect(str) {
   rtn.arr = str.substr(idx).replace(/(\(|\)|'|")/g, '').trim().split(',');
   rtn.arr = rtn.arr.map(x => x.trim());
   return rtn;
+}
+
+function createSelect(cond, choices) {
+  let sql = ` ${cond} ( `;
+  choices.forEach((choice, idx) => {
+    sql += `'${choice.trim()}'`;
+    if (idx < choices.length - 1) {
+      sql += ', ';
+    }
+  });
+  sql += ` ) `;
+  return sql;
 }
 
 function fiscalYearFromFiscalMonth(fimo) {
