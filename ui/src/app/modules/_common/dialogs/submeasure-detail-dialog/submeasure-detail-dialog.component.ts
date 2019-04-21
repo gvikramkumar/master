@@ -77,5 +77,9 @@ export class SubmeasureDetailDialogComponent {
     return UiUtil.getStatusText(status);
   }
 
+  isManualMix() {
+    return shUtil.isManualMix(this.sm);
+  }
+
 }
 

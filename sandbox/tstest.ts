@@ -8,13 +8,44 @@ import * as Q from 'q';
 
 
 
-console.log(`one\ntwo\nthree`.replace(/\n/g, '<br>'));
+
 
 /*
-console.log(arr.length);
-console.log(_.sortBy(arr, 'value').map(x => x.value));
-*/
+console.log(roundDecimal('xx.123456789', 8));
+console.log(roundDecimal(12, 8));
+console.log(roundDecimal(12., 8));
+console.log(roundDecimal(12.0, 8));
+console.log(roundDecimal(12.1, 8));
+console.log(roundDecimal(0.123456789, 8));
+console.log(roundDecimal(1.123456789, 8));
+console.log(roundDecimal(12.123456789, 8));
+console.log(roundDecimal(123.123456789, 8));
 
+
+function roundDecimal(val, places) {
+  if (val === undefined || typeof val !== 'number' || val.toString().indexOf('.') === -1) {
+    return val;
+  }
+  const str = val.toString();
+  const dot = str.indexOf('.');
+  let beforeDecimal;
+  if (dot === 1 && str[0] === '0') {
+    beforeDecimal = 0;
+  } else {
+    beforeDecimal = dot;
+  }
+  return Number(val.toPrecision(beforeDecimal + places));
+}
+
+function truncateDecimal(val, places) {
+  if (val === undefined || typeof val !== 'number' || val.toString().indexOf('.') === -1) {
+    return val;
+  }
+  const str = val.toString();
+  const dot = str.indexOf('.');
+  return Number(str.substring(0, dot) + str.substr(dot, places + 1));
+}
+*/
 
 
 /*
@@ -52,6 +83,7 @@ const a: any = new Date();
 const b: any = new Date();
 b.setMinutes(b.getMinutes() - 1);
 console.log((a - b));
+*/
 
 
 /*

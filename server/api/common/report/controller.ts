@@ -285,25 +285,25 @@ export default class ReportController extends ControllerBase {
         multiSheetReport = true;
         excelSheetname = [['Original'], ['SM History'], ['As Of Now']];
         excelHeaders = [['Measure Name', 'Sub-Measure Key', 'Sub-Measure Name', 'Description', 'Source',
-          'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL BE Level', 'IFL GL Segments',
+          'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments',
           'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
-          'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM BE Level',
+          'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
           'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
           'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
           , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'],
 
           ['Measure Name', 'Sub-Measure Key', 'Sub-Measure Name', 'Description', 'Source',
-            'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL BE Level', 'IFL GL Segments',
+            'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments',
             'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
-            'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM BE Level',
+            'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
             'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
             'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
             , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'],
 
           ['Measure Name', 'Sub-Measure Key', 'Sub-Measure Name', 'Description', 'Source',
-            'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL BE Level', 'IFL GL Segments',
+            'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments',
             'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
-            'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM BE Level',
+            'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
             'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
             'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
             , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date']];
@@ -356,15 +356,15 @@ export default class ReportController extends ControllerBase {
         multiSheetReport = true;
         excelSheetname = [['Original'], ['Rule History'], ['As Of Now']];
         excelHeaders = [['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'IBE Match', 'Legal Entity Match', 'Country', 'External Theater', 'GL Segments',
-          'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select',
+          'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select',
           'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
           ['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'IBE Match', 'Legal Entity Match', 'Country', 'External Theater', 'GL Segments',
-            'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select',
+            'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select',
             'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
           ['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'IBE Match', 'Legal Entity Match', 'Country', 'External Theater', 'GL Segments',
-            'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'BE Select',
+            'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select',
             'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date']];
 
         excelProperties = [['name', 'oldName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'beMatch', 'legalEntityMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
@@ -395,10 +395,10 @@ export default class ReportController extends ControllerBase {
       case 'rule-submeasure':
         excelSheetname = ['History'];
         excelHeaders = ['Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Description',  'Measure Name', 'Source System',
-          'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL BE Level', 'IFL GL Segments', 'Frequency/Timing of Sub-measure Processing',
-          'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM BE Level',
+          'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments', 'Frequency/Timing of Sub-measure Processing',
+          'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
           'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
-          'Is Group Sub-Measure', 'Allocation Required', 'Grouping Sub-Measure',
+          'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure',
           'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier',
           'Approval Status', 'Created By', 'Created Date', 'Updated By', 'Updated Date'];
 
@@ -411,6 +411,12 @@ export default class ReportController extends ControllerBase {
           'sm.indicators.groupFlag', 'sm.indicators.allocationRequired', 'sm.groupingSubmeasureName', 'sm.categoryType',
           'sm.indicators.retainedEarnings', 'sm.indicators.transition', 'sm.indicators.service', 'sm.indicators.passThrough', 'sm.indicators.corpRevenue', 'sm.indicators.dualGaap', 'sm.indicators.twoTier', 'sm.status', 'sm.createdBy',
           'sm.createdDate', 'sm.updatedBy', 'sm.updatedDate'];
+
+        if (req.dfa.module.moduleId === 1) {
+          excelHeaders.splice(8, 0, 'HW Split %', 'SW Split %');
+          excelProperties.splice(8, 0, 'sm.manualMixHw', 'sm.manualMixSw');
+        }
+
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.sourceRepo.getManyActive()
@@ -426,6 +432,7 @@ export default class ReportController extends ControllerBase {
               promises.push(Promise.all([
                 Promise.resolve(fimo),
                 this.submeasureRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
+                this.productClassUploadPgRepo.getMany({fiscalMonth: fimo})
               ]));
             });
             return Promise.all(promises);
@@ -435,7 +442,11 @@ export default class ReportController extends ControllerBase {
             results.forEach(result => {
               const fiscalMonth = result[0];
               this.submeasures = _.sortBy(result[1], 'name');
-              const sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
+              const pgManualMixes = result[2];
+              let sms = this.submeasures.map(sm => this.transformSubmeasure(sm)); // update this for more props if needed
+              if (req.dfa.module.moduleId === 1) {
+                sms = this.submeasures.map(sm => this.transformAddManualMix(sm, pgManualMixes));
+              }
               sms.forEach(sm => {
                 rows.push({fiscalMonth, sm});
               });
@@ -533,6 +544,16 @@ export default class ReportController extends ControllerBase {
     if (sm.groupingSubmeasureId) {
       const parent = _.find(this.submeasures, {submeasureKey: sm.groupingSubmeasureId});
       sm.groupingSubmeasureName = parent && parent.name;
+    }
+    return sm;
+  }
+
+  transformAddManualMix(sm, manualMixes) {
+    if (shUtil.isManualMix(sm)) {
+      const recHw = _.find(manualMixes, {submeasureKey: sm.submeasureKey, splitCategory: 'HARDWARE'});
+      const recSw = _.find(manualMixes, {submeasureKey: sm.submeasureKey, splitCategory: 'SOFTWARE'});
+      sm.manualMixHw = recHw && recHw.splitPercentage * 100;
+      sm.manualMixSw = recSw && recSw.splitPercentage * 100;
     }
     return sm;
   }

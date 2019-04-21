@@ -215,7 +215,7 @@ export default class UploadController {
   // validateRows will add "Row X" instead
   // this is our break out of the validateRow promise chain, call this to get out if no reason to continue
   // say no submeasure, then can't continue submeasure based validations
-  lookForErrors(message?) {
+  lookForErrors(message = '') {
     if (this.errors.length) {
       return Promise.reject(new NamedApiError(this.UploadValidationError, message, _.sortBy(this.errors, 'property')));
     }

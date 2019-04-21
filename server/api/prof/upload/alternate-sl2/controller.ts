@@ -91,9 +91,7 @@ export default class AlternateSl2UploadUploadController extends UploadController
   }
 
   removeDuplicatesFromDatabase(imports: AlternateSl2UploadImport[]) {
-    const duplicates = _.uniqWith(imports, (a, b) => a.actualSl2Code === b.actualSl2Code && a.alternateSl2Code === b.alternateSl2Code)
-      .map(x => _.pick(x, ['actualSl2Code', 'alternateSl2Code']))
-    return this.repo.bulkRemove(duplicates);
+    return this.repo.removeMany({});
   }
 
   validateActualSl2Code() {
