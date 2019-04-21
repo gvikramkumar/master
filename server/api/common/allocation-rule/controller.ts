@@ -30,10 +30,10 @@ export default class AllocationRuleController extends ApprovalController {
 
   validateChoices(rule) {
     return Promise.all([
-      this._validateSalesSL2CritChoices(this.parseSelect(rule.sl2Select)),
-      this._validateSalesSL3CritChoices(this.parseSelect(rule.sl3Select)),
-      this._validateProdPFCritChoices(this.parseSelect(rule.prodPFSelect)),
-      this._validateProdBUCritChoices(this.parseSelect(rule.prodBUSelect))
+      this._validateSalesSL2CritChoices(shUtil.parseSelect(rule.sl2Select)),
+      this._validateSalesSL3CritChoices(shUtil.parseSelect(rule.sl3Select)),
+      this._validateProdPFCritChoices(shUtil.parseSelect(rule.prodPFSelect)),
+      this._validateProdBUCritChoices(shUtil.parseSelect(rule.prodBUSelect))
     ]).then(results => {
       const errors = [
         {message: 'Some sales SL2 select fields don\'t exist.'},
@@ -52,16 +52,6 @@ export default class AllocationRuleController extends ApprovalController {
         throw new ApiError('Add rule errors', errs, 400);
       }
     });
-  }
-
-  parseSelect(str) {
-    if (!str) {
-      return [];
-    }
-    const idx = str.indexOf('(');
-    let arr = str.substr(idx).replace(/(\(|\)|'|")/g, '').trim().split(',');
-    arr = arr.map(x => x.trim());
-    return arr;
   }
 
   _validateSalesSL2CritChoices(choices): Promise<{values: any[], exist: boolean}> {
