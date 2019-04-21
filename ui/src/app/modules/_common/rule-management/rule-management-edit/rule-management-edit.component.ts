@@ -182,9 +182,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.updateSelectStatements();
       this.orgRule = _.cloneDeep(this.rule);
       this.rules.forEach(rule => shUtil.createSelectArrays(rule));
-      // this.exceptionMap = new SelectExceptionMap();
-      // this.exceptionMap.parseRules(this.rules);
-      const i = 5;
+      this.exceptionMap = new SelectExceptionMap();
+      this.exceptionMap.parseRules(this.rules);
     }
   }
 

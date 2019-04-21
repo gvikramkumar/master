@@ -52,8 +52,14 @@ export class SelectExceptionMap {
     rules.forEach(rule => {
       const exceptions = rule.name.split('-').filter(x => x.match(/([A-Z]|[1-9])+E\d+/));
       exceptions.forEach(ex => {
-        const prefix = ex.substring(0, ex.indexOf('E')).toLowerCase();
-        const idx = Number(ex.substring(ex.indexOf('E') + 1));
+        const prefix = ex.substring(0, ex.lastIndexOf('E')).toLowerCase();
+        if (!_.includes(['sl1', 'sl2', 'sl3', 'tg', 'bu', 'pf', 'scms', 'ibe'], prefix)) {
+          throw new Error(`SelectExceptionMap.parseRules: bad prefix: ${prefix}, exception: ${ex}, name: ${rule.name}`);
+        }
+        const idx = Number(ex.substring(ex.lastIndexOf('E') + 1));
+        if (!idx || _.isNaN(idx)) {
+          throw new Error(`SelectExceptionMap.parseRules: bad index: ${idx}, exception: ${ex}, name: ${rule.name}`);
+        }
         const map = this[`${prefix}Map`];
         const entry = _.find(map, {index: idx});
         const selectArr = this.getSelectArrayFromRule(prefix, rule);
@@ -95,7 +101,8 @@ export class SelectExceptionMap {
   }
 
   verifyEntryInMapArray(entry, selectArr) {
-    return entry.selectArr.length === selectArr.length && _.union(entry.selectArr, selectArr).length === entry.selectArr.length;
+    const bool =  entry.selectArr.length === selectArr.length && _.union(entry.selectArr, selectArr).length === entry.selectArr.length;
+    return bool;
   }
 
   findSelectInMapArray(mapArr, selectArr): SelectExceptionIndexMap {
