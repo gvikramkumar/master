@@ -14,6 +14,7 @@ import {ValidationInputOptions} from '../../../../shared/components/validation-i
 import {map} from 'rxjs/operators';
 import {LookupService} from '../../services/lookup.service';
 import AnyObj from '../../../../../../../shared/models/any-obj';
+import {SelectExceptionMap} from '../../../../../../../shared/classes/select-exception-map';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -21,6 +22,8 @@ import AnyObj from '../../../../../../../shared/models/any-obj';
   styleUrls: ['./rule-management-edit.component.scss']
 })
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
+  rules: AllocationRule[];
+  exceptionMap: SelectExceptionMap;
   salesSL1CritCond: string;
   salesSL2CritCond: string;
   salesSL3CritCond: string;
@@ -95,7 +98,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
-      this.ruleService.getDistinct('name', {moduleId: this.store.module.moduleId}).toPromise(),
+      this.ruleService.callMethod('getManyLatestGroupByNameActiveInactive').toPromise(),
       this.lookupService.getValues(['drivers', 'periods']).toPromise()
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
@@ -109,7 +112,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
-        this.ruleNames = results[4].map(x => x.toUpperCase());
+        this.rules = _.sortBy(results[4], 'name'); // sort by name for comparison selectMap generaged by sandbox/rule-name-convention.ts
+        this.ruleNames = this.rules.map(x => x.name.toUpperCase());
         this.drivers = _.sortBy(results[5][0], 'name');
         this.periods = results[5][1];
 
@@ -186,12 +190,16 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   init(initial?) {
-    this.createSelectArrays();
+    this.createSelectArrays(this.rule);
     if (initial) {
       // we need these statements to be exactly how the ui would generate so they can be compared for changes
       // so update them right after creating the select arrays, "then" save to orgRule
       this.updateSelectStatements();
       this.orgRule = _.cloneDeep(this.rule);
+      this.rules.forEach(rule => this.createSelectArrays(rule));
+      this.exceptionMap = new SelectExceptionMap();
+      this.exceptionMap.parseRules(this.rules);
+      const i = 5;
     }
   }
 
@@ -485,36 +493,36 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     return sql;
   }
 
-  createSelectArrays() {
-    let parse = this.parseSelect(this.rule.sl1Select);
+  createSelectArrays(rule, obj) {
+    let parse = this.parseSelect(rule.sl1Select);
     this.salesSL1CritCond = parse.cond;
     this.salesSL1CritChoices = parse.arr;
 
-    parse = this.parseSelect(this.rule.sl2Select);
+    parse = this.parseSelect(rule.sl2Select);
     this.salesSL2CritCond = parse.cond;
     this.salesSL2CritChoices = parse.arr;
 
-    parse = this.parseSelect(this.rule.sl3Select);
+    parse = this.parseSelect(rule.sl3Select);
     this.salesSL3CritCond = parse.cond;
     this.salesSL3CritChoices = parse.arr;
 
-    parse = this.parseSelect(this.rule.prodTGSelect);
+    parse = this.parseSelect(rule.prodTGSelect);
     this.prodTGCritCond = parse.cond;
     this.prodTGCritChoices = parse.arr;
 
-    parse = this.parseSelect(this.rule.prodBUSelect);
+    parse = this.parseSelect(rule.prodBUSelect);
     this.prodBUCritCond = parse.cond;
     this.prodBUCritChoices = parse.arr;
 
-    parse = this.parseSelect(this.rule.prodPFSelect);
+    parse = this.parseSelect(rule.prodPFSelect);
     this.prodPFCritCond = parse.cond;
     this.prodPFCritChoices = parse.arr;
 
-    parse = this.parseSelect(this.rule.scmsSelect);
+    parse = this.parseSelect(rule.scmsSelect);
     this.scmsCritCond = parse.cond;
     this.scmsCritChoices = parse.arr;
 
-    parse = this.parseSelect(this.rule.beSelect);
+    parse = this.parseSelect(rule.beSelect);
     this.beCritCond = parse.cond;
     this.beCritChoices = parse.arr;
   }

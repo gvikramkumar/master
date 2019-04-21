@@ -55,11 +55,11 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
     const moduleId = this.store.module.moduleId;
     const user = this.store.user;
     if (user.isModuleEndUser()) {
-      return this.callMethod('getManyLatestByNameActiveInactive');
+      return this.callMethod('getManyLatestGroupByNameActiveInactive');
     } else if (user.isModuleSuperUser()) {
-      return this.callMethod('getManyLatestByNameActiveInactiveConcatDraftPendingOfUser');
+      return this.callMethod('getManyLatestGroupByNameActiveInactiveConcatDraftPendingOfUser');
     } else if (user.isModuleAdminOrGreater()) {
-      return this.callMethod('getManyLatestByNameActiveInactiveConcatDraftPending');
+      return this.callMethod('getManyLatestGroupByNameActiveInactiveConcatDraftPending');
     }
   }
 

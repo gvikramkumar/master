@@ -108,13 +108,13 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
-  getManyLatestByNameActiveInactive(req, res, next) {
+  getManyLatestGroupByNameActiveInactive(req, res, next) {
     this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId)
       .then(docs => res.send(docs))
       .catch(next);
   }
 
-  getManyLatestByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
+  getManyLatestGroupByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
       this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId),
       this.repo.getMany({
@@ -130,7 +130,7 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
-  getManyLatestByNameActiveInactiveConcatDraftPending(req, res, next) {
+  getManyLatestGroupByNameActiveInactiveConcatDraftPending(req, res, next) {
     return Promise.all([
       this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId),
       this.repo.getMany({

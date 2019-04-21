@@ -61,6 +61,7 @@ export class RestBase<T extends AnyObj> {
     return this.getManyLatest('name', params);
   }
 
+  // this calls getManyLatestGroupByNameActiveInactive, then filters for active only
   getManyLatestGroupByNameActive(moduleId?) {
       const data = moduleId ? {moduleId: moduleId} : {};
     this.addModuleId(data);

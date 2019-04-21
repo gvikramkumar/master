@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import * as _ from 'lodash';
 import LookupRepo from '../server/api/lookup/repo';
 import SubmeasureRepo from '../server/api/common/submeasure/repo';
+import {SelectExceptionMap} from '../shared/classes/select-exception-map';
 
 const ruleRepo = new AllocationRuleRepo();
 const smRepo = new SubmeasureRepo();
@@ -16,66 +17,6 @@ let drivers, periods;
 get A/I >> get new name >> update all with that name to new name... done
  */
 
-class SelectExceptionIndexMap {
-  constructor(public selectArr: string[], public index) {
-  }
-}
-
-class SelectExceptionMap {
-  sl1Idx = 0;
-  sl2Idx = 0;
-  sl3Idx = 0;
-  tgIdx = 0;
-  buIdx = 0;
-  pfIdx = 0;
-  scmsIdx = 0;
-  ibeIdx = 0;
-  sl1Map: SelectExceptionIndexMap[] = [];
-  sl2Map: SelectExceptionIndexMap[] = [];
-  sl3Map: SelectExceptionIndexMap[] = [];
-  tgMap: SelectExceptionIndexMap[] = [];
-  buMap: SelectExceptionIndexMap[] = [];
-  pfMap: SelectExceptionIndexMap[] = [];
-  scmsMap: SelectExceptionIndexMap[] = [];
-  ibeMap: SelectExceptionIndexMap[] = [];
-
-  getSelectArray(cond, choices) {
-    return ([cond].concat(choices)).map(x => x.toUpperCase());
-  }
-
-  getSelectString(prop, cond, choices) {
-    const mapArr = this[`${prop}Map`];
-    const prefix = prop.toUpperCase();
-    if (!cond || !choices.length) {
-      return;
-    }
-    const selectArr = ([cond].concat(choices)).map(x => x.toUpperCase());
-    if (!selectArr.length || selectArr.length === 1) {
-      throw new Error(`SelectExceptionMap.getSl1SelectString: selectArray with length < 2, ${selectArr.length}`);
-    }
-    const map = this.findSelectInMapArray(mapArr, selectArr);
-    if (map) {
-      return `${prefix}E${map.index}`;
-    } else {
-      mapArr.push(new SelectExceptionIndexMap(selectArr, ++this[`${prop}Idx`]));
-      return `${prefix}E${this[`${prop}Idx`]}`;
-    }
-  }
-
-  findSelectInMapArray(mapArr, selectArr): SelectExceptionIndexMap {
-    if (!mapArr.length) {
-      return;
-    }
-    let found: SelectExceptionIndexMap;
-    _.each(mapArr, map => {
-      if (map.selectArr.length === selectArr.length && _.union(map.selectArr, selectArr).length === map.selectArr.length) {
-        found = map;
-        return false; // get out
-      }
-    });
-    return found;
-  }
-}
 
 const selectMap = new SelectExceptionMap();
 const ruleBuf = [];
@@ -193,7 +134,7 @@ Promise.all([
           });
       });
 
-
+    fs.writeFileSync('select-map.json', JSON.stringify(selectMap, null, 2));
 
 /*
     console.log('>>>>>>> sl1');
