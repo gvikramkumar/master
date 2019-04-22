@@ -1,7 +1,7 @@
 <div class="responsive-table">
 
   <p-dataTable [value]="tasks" scrollable="true" [rows]="10" [paginator]="true" scrollHeight="350px"
-    [globalFilter]="gbForTask" [resizableColumns]="true">
+    [resizableColumns]="true">
 
     <p-column field="ato" sortable="true" header="ATO/PID">
       <ng-template let-col let-task="rowData" pTemplate="body">

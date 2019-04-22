@@ -1,24 +1,24 @@
 <div class="responsive-table">
 
-    <p-dataTable [value]="atoList" scrollable="true" [rows]="10" [paginator]="true" scrollHeight="350px"
-      [globalFilter]="gbForAto" [resizableColumns]="true">
-  
-      <p-column field="ato" sortable="true" header="ATO/PID">
-        <ng-template let-col let-ato="rowData" pTemplate="body">
-          <span>{{ato['itemName']}}<br /></span>
-        </ng-template>
-      </p-column>
-  
-      <p-column field="status" header="STATUS" sortable="true">
-        <ng-template let-col let-ato="rowData" pTemplate="body">
-          <div class="text-center">
-            <span class="{{ato['itemStatus']|lowercase}}">
-              <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
-            </span>
-          </div>
-        </ng-template>
-      </p-column>
-  
-    </p-dataTable>
-  
-  </div>
+  <p-dataTable [value]="atoList" scrollable="true" [rows]="10" [paginator]="true" scrollHeight="350px"
+    [resizableColumns]="true">
+
+    <p-column field="ato" sortable="true" header="ATO/PID">
+      <ng-template let-col let-ato="rowData" pTemplate="body">
+        <span>{{ato['itemName']}}<br /></span>
+      </ng-template>
+    </p-column>
+
+    <p-column field="status" header="STATUS" sortable="true">
+      <ng-template let-col let-ato="rowData" pTemplate="body">
+        <div class="text-center">
+          <span class="{{ato['itemStatus']|lowercase}}">
+            <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
+          </span>
+        </div>
+      </ng-template>
+    </p-column>
+
+  </p-dataTable>
+
+</div>

@@ -74,10 +74,9 @@ import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 import { LoaderService } from '@shared/loader.service';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
 
-
-import { AtoMainComponent } from './modelling-design/ato-main/ato-main.component';
-import { AtoListComponent } from './modelling-design/ato-list/ato-list.component';
-import { AtoSummaryComponent } from './modelling-design/ato-summary/ato-summary.component';
+import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
+import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
+import { ModellingDesignModule } from './modelling-design/modelling-design.module';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -124,9 +123,8 @@ export function app_init(configService: ConfigurationService) {
     OfferconstructChildComponent,
     OfferSetupComponent,
     LoaderComponent,
-    AtoListComponent,
-    AtoMainComponent,
-    AtoSummaryComponent
+    CustomMinValidatorDirective,
+    CustomRangeValidatorDirective
   ],
   imports: [
     NgbModule,
@@ -136,7 +134,6 @@ export function app_init(configService: ConfigurationService) {
     CuiPagerModule,
     HttpClientModule,
     RouterModule,
-    AppRoutingModule,
     ClickOutsideModule,
     PerfectScrollbarModule,
     ModalModule.forRoot(),
@@ -146,7 +143,9 @@ export function app_init(configService: ConfigurationService) {
     FlexLayoutModule,
     NgxWebstorageModule.forRoot(),
     UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 }),
-    SharedModule
+    SharedModule,
+    ModellingDesignModule,
+    AppRoutingModule
   ],
   providers:
     [

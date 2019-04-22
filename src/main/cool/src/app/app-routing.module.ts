@@ -137,7 +137,7 @@ const routes: Routes = [
     component: OfferSetupComponent
   },
   {
-    path: 'ato-main',
+    path: 'modelling-design',
     component: AtoMainComponent
   }
 
