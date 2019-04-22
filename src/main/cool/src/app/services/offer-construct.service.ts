@@ -45,30 +45,35 @@ export class OfferConstructService {
 
 
     toFormGroup(questions) {
+
         const group: any = {};
+
         questions.forEach(question => {
-            let validators: any[] = [];
-            if (question.egineAttribue !== "Item Name (PID)") {
+
+            const validators: any[] = [];
+
+            if (question.egineAttribue !== 'Item Name (PID)') {
+
                 if (typeof question.rules.maxCharacterLen != 'undefined' && question.rules.maxCharacterLen) {
-                    validators.push(Validators.maxLength(question.rules.maxCharacterLen))
+                    validators.push(Validators.maxLength(question.rules.maxCharacterLen));
                 }
-                if (typeof question.rules.isMandatoryOptional != 'undefined' && question.rules.isMandatoryOptional === "Mandatory") {
-                    validators.push(Validators.required)
+                if (typeof question.rules.isMandatoryOptional != 'undefined' && question.rules.isMandatoryOptional === 'Mandatory') {
+                    validators.push(Validators.required);
                 }
-                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
-                    validators.push(Validators.pattern("^[0-9]*$"))
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === 'numeric') {
+                    validators.push(Validators.pattern('^[0-9]*$'));
                 }
-                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "camel") {
-                    validators.push(Validators.pattern("^(([0-9])|([A-Z0-9][a-z0-9]+))*([A-Z])?$"))
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === 'camel') {
+                    validators.push(Validators.pattern('^(([0-9])|([A-Z0-9][a-z0-9]+))*([A-Z])?$'));
                 }
                 if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
                     validators.push(Validators.pattern("^[0-9]+\\.[0-9]{2}$"))
                 }
-                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperate numeric with no space") {
-                    validators.push(Validators.pattern("^[0-9]+(,[0-9]+)*$"))
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === 'comma seperate numeric with no space') {
+                    validators.push(Validators.pattern('^[0-9]+(,[0-9]+)*$'));
                 }
-                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
-                    validators.push(Validators.pattern("^[A-Z][A-Za-z0-9\\s]*$"))
+                if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === 'First letter Caps, No special characters allowed and max of 60 characters') {
+                    validators.push(Validators.pattern('^[A-Z][A-Za-z0-9\\s]*$'));
                 }
             }
 
@@ -82,8 +87,8 @@ export class OfferConstructService {
         return new FormGroup(group);
     }
 
-
     toOfferFormGroup(titleQuestionsMap) {
+
         const group: any = {};
         // for (const [title, questions] of Object.entries(titleQuestionsMap)) {
         //     console.log(title, questions);

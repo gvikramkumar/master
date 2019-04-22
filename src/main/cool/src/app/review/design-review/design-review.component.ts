@@ -135,7 +135,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
       });
 
     forkJoin([this.exitCriteriaValidationService.getDesignReview(this.caseId),
-        this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
+    this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;
       this.getDesignReview(designReviewData);
       this.getMilestones(milstones);
@@ -172,8 +172,8 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
       this.offerName = this.firstData['offerName'];
-      if(Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
-       this.primaryBE = this.firstData['primaryBEList'][0];
+      if (Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
+        this.primaryBE = this.firstData['primaryBEList'][0];
       }
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
@@ -185,10 +185,13 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
         }
       );
       this.stakeHolderInfo = {};
+
       for (let i = 0; i <= this.data.length - 1; i++) {
+
         if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
           this.stakeHolderInfo[this.data[i]['offerRole']] = [];
         }
+
         this.stakeHolderInfo[this.data[i]['offerRole']].push(
           {
             userName: this.data[i]['name'],
@@ -199,6 +202,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
             offerRole: this.data[i]['offerRole'],
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
+          
       }
       this.stakeData = this.stakeHolderInfo;
 
@@ -227,9 +231,9 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     this.getOfferDetails();
   }
 
- // --------------------------------------------------------------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------------------------
 
- offerDetailOverView() {}
+  offerDetailOverView() { }
 
   private getMilestones(milestones) {
     const result = milestones.plan;
