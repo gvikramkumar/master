@@ -13,31 +13,27 @@
 
         <div class="leftContent col-sm-12 col-md-9">
 
-          <div>
-
-            <br>
+          <div class="row flex-center-vertical">
+           <div class="col-sm-9">
             <button class="btn btn--small tooltip" placement="top" (click)="goToDesignCanvas()">
               Go To Design Canvas <i class="icon-popout"></i>
             </button>
-
-            <div class="pull-right form-group dropdown">
-
-              <h6>Viewing</h6>
+            </div>
+            <div class="col-sm-3">
+            <div class="form-group dropdown label--inline">
               <div class="form-group__text select">
-
+                <label>Viewing</label>
                 <select #dropDown="ngModel" [(ngModel)]="selectedAto" (change)="showSelectedAtoView(dropDown.value)">
                   <option *ngFor=" let ato of atoNames" [value]="ato">
                     {{ato}}</option>
                 </select>
-
               </div>
             </div>
-
+            </div>
           </div>
 
-          <div *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
 
-            <br><br>
             <app-ato-list [atoList]="atoList"></app-ato-list>
 
           </div>
