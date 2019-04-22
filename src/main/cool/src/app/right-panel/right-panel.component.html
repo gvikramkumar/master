@@ -326,7 +326,7 @@
 
   <!-- Dialog - Add Stakeholders  -->
   <p-dialog header="Add Stakeholders" closable="true" (onHide)="closeStakeHolderDialog()" [responsive]="true"
-    [(visible)]="addStakeHolder" [transitionOptions]="'2ms'">
+    [(visible)]="addStakeHolder" [width]="1400" [height]="700" [minWidth]="500" [minHeight]="500">
     <app-stakeholder-add (addSelectedStakeHolders)="updateStakeHodlerInfo($event)"></app-stakeholder-add>
   </p-dialog>
 
