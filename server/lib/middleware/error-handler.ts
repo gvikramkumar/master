@@ -61,7 +61,9 @@ export function errorHandler (options) {
       }
     }
     console.error(obj);
-    res.status(statusCode).send(obj);
+    if (!res.headersSent) {
+      res.status(statusCode).send(obj);
+    }
   };
 
 }
