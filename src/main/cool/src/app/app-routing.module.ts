@@ -138,7 +138,7 @@ const routes: Routes = [
   },
   {
     path: 'modelling-design',
-    component: AtoMainComponent
+    loadChildren: './modelling-design/modelling-design.module#ModellingDesignModule'
   }
 
 ];

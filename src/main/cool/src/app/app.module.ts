@@ -76,7 +76,6 @@ import { LoaderComponent } from '@shared/components/loader/loader.component';
 
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
-import { ModellingDesignModule } from './modelling-design/modelling-design.module';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -144,7 +143,6 @@ export function app_init(configService: ConfigurationService) {
     NgxWebstorageModule.forRoot(),
     UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 }),
     SharedModule,
-    ModellingDesignModule,
     AppRoutingModule
   ],
   providers:
