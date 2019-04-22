@@ -6,9 +6,9 @@ export function timeoutHandler() {
     setTimeout(() => {
       if (!res.headersSent) {
         if (/^\/api\/[a-z]{4}\/upload$/.test(req.path)) {
-          next(new ApiError('Your request has timed out. Please check email for success/fail status', null));
+          next(new ApiError('Your upload request has timed out, but is still being processed. Please check email for success/fail status'));
         } else {
-          next(new ApiError('Your request has timed out', null));
+          next(new ApiError('Your request has timed out'));
         }
       }
     }, config.expressTimeout);
