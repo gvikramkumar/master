@@ -7,7 +7,7 @@ import {RuleManagementEditComponent} from '../_common/rule-management/rule-manag
 import {BusinessUploadComponent} from '../_common/business-upload/business-upload/business-upload.component';
 import {ReportsComponent} from '../_common/reports/reports/reports.component';
 import {MainComponent} from '../../shared/components/main/main.component';
-import {DfaModuleIds} from '../../../../../shared/enums';
+import {DfaModuleIds} from '../../../../../shared/misc/enums';
 import {AuthorizationGuard} from '../../core/guards/authorization.guard';
 import {MeasureComponent} from '../_common/admin/measure/measure/measure.component';
 import {MeasureEditComponent} from '../_common/admin/measure/measure-edit/measure-edit.component';

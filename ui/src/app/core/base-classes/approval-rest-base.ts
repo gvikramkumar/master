@@ -3,7 +3,7 @@ import {environment} from '../../../environments/environment';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {AppStore} from '../../app/app-store';
 import {RestBase} from './rest-base';
-import {shUtil} from '../../../../../shared/shared-util';
+import {shUtil} from '../../../../../shared/misc/shared-util';
 
 const apiUrl = environment.apiUrl;
 

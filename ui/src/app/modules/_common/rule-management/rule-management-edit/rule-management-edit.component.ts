@@ -15,7 +15,8 @@ import {map} from 'rxjs/operators';
 import {LookupService} from '../../services/lookup.service';
 import AnyObj from '../../../../../../../shared/models/any-obj';
 import {SelectExceptionMap} from '../../../../../../../shared/classes/select-exception-map';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
+import {ruleUtil} from '../../../../../../../shared/misc/rule-util';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -24,7 +25,7 @@ import {shUtil} from '../../../../../../../shared/shared-util';
 })
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
   rules: AllocationRule[];
-  exceptionMap: SelectExceptionMap;
+  selectMap: SelectExceptionMap;
   ruleNames: string[] = [];
   salesSL2ChoiceOptions: ValidationInputOptions;
   salesSL3ChoiceOptions: ValidationInputOptions;
@@ -97,8 +98,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
-        this.rules = _.sortBy(results[4], 'name'); // sort by name for comparison selectMap generaged by sandbox/rule-name-convention.ts
-        this.ruleNames = this.rules.map(x => x.name.toUpperCase());
+        // sort by oldName || name for comparison selectMap generaged by sandbox/rule-name-change.ts
+        // the original order by rule-name-change order by old name
+        // this.rules = _.sortBy(results[4], r => r.oldName || r.name);
+        this.rules = results[4];
+        this.ruleNames = this.rules.map(x => x.name);
         this.drivers = _.sortBy(results[5][0], 'name');
         this.periods = results[5][1];
 
@@ -117,7 +121,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
             delete this.rule.createdBy;
             delete this.rule.createdDate;
           }
-          this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
+          this.ruleNames = _.without(this.ruleNames, this.rule.name);
         }
 
         this.salesSL2ChoiceOptions = {
@@ -175,15 +179,16 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   init(initial?) {
-    shUtil.createSelectArrays(this.rule);
+    ruleUtil.createSelectArrays(this.rule);
     if (initial) {
       // we need these statements to be exactly how the ui would generate so they can be compared for changes
       // so update them right after creating the select arrays, "then" save to orgRule
       this.updateSelectStatements();
       this.orgRule = _.cloneDeep(this.rule);
-      this.rules.forEach(rule => shUtil.createSelectArrays(rule));
-      this.exceptionMap = new SelectExceptionMap();
-      this.exceptionMap.parseRules(this.rules);
+      this.rules.forEach(rule => ruleUtil.createSelectArrays(rule));
+      this.selectMap = new SelectExceptionMap();
+      this.selectMap.parseRules(this.rules);
+      const i = 5;
     }
   }
 
@@ -417,48 +422,48 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   updateSelectStatements() {
     if (this.rule.salesSL1CritCond && this.rule.salesSL1CritChoices.length) {
-      this.rule.sl1Select = shUtil.createSelect(this.rule.salesSL1CritCond, this.rule.salesSL1CritChoices);
+      this.rule.sl1Select = ruleUtil.createSelect(this.rule.salesSL1CritCond, this.rule.salesSL1CritChoices);
     } else {
       this.rule.sl1Select = undefined;
     }
 
     if (this.rule.salesSL2CritCond && this.rule.salesSL2CritChoices.length) {
-      this.rule.sl2Select = shUtil.createSelect(this.rule.salesSL2CritCond, this.rule.salesSL2CritChoices);
+      this.rule.sl2Select = ruleUtil.createSelect(this.rule.salesSL2CritCond, this.rule.salesSL2CritChoices);
     } else {
       this.rule.sl2Select = undefined;
     }
 
     if (this.rule.salesSL3CritCond && this.rule.salesSL3CritChoices.length) {
-      this.rule.sl3Select = shUtil.createSelect(this.rule.salesSL3CritCond, this.rule.salesSL3CritChoices);
+      this.rule.sl3Select = ruleUtil.createSelect(this.rule.salesSL3CritCond, this.rule.salesSL3CritChoices);
     } else {
       this.rule.sl3Select = undefined;
     }
 
     if (this.rule.prodPFCritCond && this.rule.prodPFCritChoices.length) {
-      this.rule.prodPFSelect = shUtil.createSelect(this.rule.prodPFCritCond, this.rule.prodPFCritChoices);
+      this.rule.prodPFSelect = ruleUtil.createSelect(this.rule.prodPFCritCond, this.rule.prodPFCritChoices);
     } else {
       this.rule.prodPFSelect = undefined;
     }
     if (this.rule.prodBUCritCond && this.rule.prodBUCritChoices.length) {
       // validate BU choices and gen sql
-      this.rule.prodBUSelect = shUtil.createSelect(this.rule.prodBUCritCond, this.rule.prodBUCritChoices);
+      this.rule.prodBUSelect = ruleUtil.createSelect(this.rule.prodBUCritCond, this.rule.prodBUCritChoices);
     } else {
       this.rule.prodBUSelect = undefined;
     }
     if (this.rule.prodTGCritCond && this.rule.prodTGCritChoices.length) {
-      this.rule.prodTGSelect = shUtil.createSelect(this.rule.prodTGCritCond, this.rule.prodTGCritChoices);
+      this.rule.prodTGSelect = ruleUtil.createSelect(this.rule.prodTGCritCond, this.rule.prodTGCritChoices);
     } else {
       this.rule.prodTGSelect = undefined;
     }
 
     if (this.rule.scmsCritCond && this.rule.scmsCritChoices.length) {
-      this.rule.scmsSelect = shUtil.createSelect(this.rule.scmsCritCond, this.rule.scmsCritChoices);
+      this.rule.scmsSelect = ruleUtil.createSelect(this.rule.scmsCritCond, this.rule.scmsCritChoices);
     } else {
       this.rule.scmsSelect = undefined;
     }
 
     if (this.rule.beCritCond && this.rule.beCritChoices.length) {
-      this.rule.beSelect = shUtil.createSelect(this.rule.beCritCond, this.rule.beCritChoices);
+      this.rule.beSelect = ruleUtil.createSelect(this.rule.beCritCond, this.rule.beCritChoices);
     } else {
       this.rule.beSelect = undefined;
     }
@@ -467,6 +472,24 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   isApprovedOnce() {
     return this.rule.approvedOnce === 'Y';
+  }
+
+  valueChange() {
+    if (!(this.rule.driverName && this.rule.period)) {
+      delete this.rule.name;
+      delete this.rule.desc;
+      return;
+    }
+    const oldName = this.rule.name;
+    const oldDesc = this.rule.desc;
+    ruleUtil.addRuleNameAndDescription(this.rule, this.selectMap, this.drivers, this.periods);
+    if (_.includes(this.ruleNames, this.rule.name)) {
+      this.uiUtil.genericDialog(`A rule by this name already exists: ${this.rule.name}`)
+        .subscribe(() => {
+          this.rule.name = oldName;
+          this.rule.desc = oldDesc;
+        });
+    }
   }
 
 }

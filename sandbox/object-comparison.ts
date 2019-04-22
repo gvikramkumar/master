@@ -1,7 +1,7 @@
 import {injector} from '../server/lib/common/inversify.config';
 const inj = injector; // required to import reflect-metadata before any injection
 import AllocationRuleRepo from '../server/api/common/allocation-rule/repo';
-import {shUtil} from '../shared/shared-util';
+import {shUtil} from '../shared/misc/shared-util';
 
 
 

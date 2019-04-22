@@ -1,6 +1,6 @@
 
 import * as _ from 'lodash';
-import AnyObj from './models/any-obj';
+import AnyObj from '../models/any-obj';
 
 export const shUtil = {
   getUpdateTable,
@@ -17,69 +17,7 @@ export const shUtil = {
   isDeptUploadMeasure,
   fiscalYearFromFiscalMonth,
   isManualMix,
-  createSelectArrays,
-  parseSelect,
-  createSelect
 };
-
-function createSelectArrays(rule) {
-  let parse = parseSelect(rule.sl1Select);
-  rule.salesSL1CritCond = parse.cond;
-  rule.salesSL1CritChoices = parse.arr;
-
-  parse = parseSelect(rule.sl2Select);
-  rule.salesSL2CritCond = parse.cond;
-  rule.salesSL2CritChoices = parse.arr;
-
-  parse = parseSelect(rule.sl3Select);
-  rule.salesSL3CritCond = parse.cond;
-  rule.salesSL3CritChoices = parse.arr;
-
-  parse = parseSelect(rule.prodTGSelect);
-  rule.prodTGCritCond = parse.cond;
-  rule.prodTGCritChoices = parse.arr;
-
-  parse = parseSelect(rule.prodBUSelect);
-  rule.prodBUCritCond = parse.cond;
-  rule.prodBUCritChoices = parse.arr;
-
-  parse = parseSelect(rule.prodPFSelect);
-  rule.prodPFCritCond = parse.cond;
-  rule.prodPFCritChoices = parse.arr;
-
-  parse = parseSelect(rule.scmsSelect);
-  rule.scmsCritCond = parse.cond;
-  rule.scmsCritChoices = parse.arr;
-
-  parse = parseSelect(rule.beSelect);
-  rule.beCritCond = parse.cond;
-  rule.beCritChoices = parse.arr;
-}
-
-function parseSelect(str) {
-  // we need to not only parse but also clear off if reset
-  if (!str || !str.trim().length) {
-    return {cond: undefined, arr: []};
-  }
-  const rtn: AnyObj = {};
-  const idx = str.indexOf('(');
-  rtn.cond = str.substr(0, idx).trim();
-  rtn.arr = str.substr(idx).replace(/(\(|\)|'|")/g, '').trim().split(',');
-  rtn.arr = rtn.arr.map(x => x.trim());
-  return rtn;
-}
-
-function createSelect(cond, choices) {
-  let sql = ` ${cond} ( `;
-  choices.forEach((choice, idx) => {
-    sql += `'${choice.trim()}'`;
-    if (idx < choices.length - 1) {
-      sql += ', ';
-    }
-  });
-  sql += ` ) `;
-  return sql;
-}
 
 function fiscalYearFromFiscalMonth(fimo) {
   return Number(fimo.toString().substr(0, 4));

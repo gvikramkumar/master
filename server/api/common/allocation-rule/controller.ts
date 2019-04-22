@@ -3,13 +3,14 @@ import {injectable} from 'inversify';
 import PgLookupRepo from '../../pg-lookup/repo';
 import {ApiError} from '../../../lib/common/api-error';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
-import {ApprovalMode} from '../../../../shared/enums';
+import {ApprovalMode} from '../../../../shared/misc/enums';
 import {sendHtmlMail} from '../../../lib/common/mail';
 import LookupRepo from '../../lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
-import {shUtil} from '../../../../shared/shared-util';
+import {shUtil} from '../../../../shared/misc/shared-util';
 import * as _ from 'lodash';
 import AnyObj from '../../../../shared/models/any-obj';
+import {ruleUtil} from '../../../../shared/misc/rule-util';
 
 @injectable()
 export default class AllocationRuleController extends ApprovalController {
@@ -30,10 +31,10 @@ export default class AllocationRuleController extends ApprovalController {
 
   validateChoices(rule) {
     return Promise.all([
-      this._validateSalesSL2CritChoices(shUtil.parseSelect(rule.sl2Select)),
-      this._validateSalesSL3CritChoices(shUtil.parseSelect(rule.sl3Select)),
-      this._validateProdPFCritChoices(shUtil.parseSelect(rule.prodPFSelect)),
-      this._validateProdBUCritChoices(shUtil.parseSelect(rule.prodBUSelect))
+      this._validateSalesSL2CritChoices(ruleUtil.parseSelect(rule.sl2Select)),
+      this._validateSalesSL3CritChoices(ruleUtil.parseSelect(rule.sl3Select)),
+      this._validateProdPFCritChoices(ruleUtil.parseSelect(rule.prodPFSelect)),
+      this._validateProdBUCritChoices(ruleUtil.parseSelect(rule.prodBUSelect))
     ]).then(results => {
       const errors = [
         {message: 'Some sales SL2 select fields don\'t exist.'},

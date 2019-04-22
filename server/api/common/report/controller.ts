@@ -9,7 +9,7 @@ import {ApiError} from '../../../lib/common/api-error';
 import {svrUtil} from '../../../lib/common/svr-util';
 import xlsx from 'node-xlsx';
 import ControllerBase from '../../../lib/base-classes/controller-base';
-import {shUtil} from '../../../../shared/shared-util';
+import {shUtil} from '../../../../shared/misc/shared-util';
 import SubmeasureRepo from '../submeasure/repo';
 import AllocationRuleRepo from '../allocation-rule/repo';
 import MeasureRepo from '../measure/repo';

@@ -11,7 +11,7 @@ import {MappingUploadService} from '../../../prof/services/mapping-upload.servic
 import {environment} from '../../../../../environments/environment';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {PgLookupService} from '../../services/pg-lookup.service';
 import * as moment from 'moment';
 

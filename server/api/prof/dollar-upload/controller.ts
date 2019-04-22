@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
 import DollarUploadRepo from './repo';
 import ControllerBase from '../../../lib/base-classes/controller-base';
-import {DfaModuleIds} from '../../../../shared/enums';
+import {DfaModuleIds} from '../../../../shared/misc/enums';
 import {ApiError} from '../../../lib/common/api-error';
 import SubmeasureRepo from '../../common/submeasure/repo';
 import {DollarUploadPg, DollarUploadPgRepo} from './pgrepo';

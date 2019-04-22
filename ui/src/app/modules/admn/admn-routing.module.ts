@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {MainComponent} from '../../shared/components/main/main.component';
 import {AuthorizationGuard} from '../../core/guards/authorization.guard';
-import {DfaModuleIds} from '../../../../../shared/enums';
+import {DfaModuleIds} from '../../../../../shared/misc/enums';
 import {OpenPeriodComponent} from './open-period/open-period.component';
 import {SourceComponent} from './source/source.component';
 import {SourceMappingComponent} from './source-mapping/source-mapping.component';

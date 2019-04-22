@@ -11,7 +11,7 @@ import {ModuleSourceController} from '../common/module-source/controller';
 import ProductClassUploadController from '../prof/product-class-upload/controller';
 import SalesSplitUploadController from '../prof/sales-split-upload/controller';
 import OpenPeriodRepo from '../common/open-period/repo';
-import {shUtil} from '../../../shared/shared-util';
+import {shUtil} from '../../../shared/misc/shared-util';
 import {SyncMap} from '../../../shared/models/sync-map';
 import SubmeasureRepo from '../common/submeasure/repo';
 import AlternateSl2UploadController from '../prof/alternate-sl2-upload/controller';

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import AnyObj from '../shared/models/any-obj';
-import {shUtil} from '../shared/shared-util';
+import {shUtil} from '../shared/misc/shared-util';
 import {svrUtil} from '../server/lib/common/svr-util';
 import * as Q from 'q';
 // import {Subject, BehaviorSubject} from 'rxjs';
@@ -8,6 +8,7 @@ import * as Q from 'q';
 
 
 
+console.log(/^\/api\/[a-z]{4}\/upload$/.test('/api/prof/upload'));
 
 
 /*

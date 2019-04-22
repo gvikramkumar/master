@@ -9,7 +9,7 @@ import {AppStore} from '../../../../app/app-store';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {DialogSize, DialogType} from '../../../../core/models/ui-enums';
 
 @Component({

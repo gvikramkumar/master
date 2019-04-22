@@ -5,7 +5,7 @@ import {DeptUploadPgRepo} from './pgrepo';
 import SubmeasureRepo from '../../common/submeasure/repo';
 import * as _ from 'lodash';
 import {ApiError} from '../../../lib/common/api-error';
-import {DfaModuleIds} from '../../../../shared/enums';
+import {DfaModuleIds} from '../../../../shared/misc/enums';
 
 @injectable()
 export default class DeptUploadController extends ControllerBase {

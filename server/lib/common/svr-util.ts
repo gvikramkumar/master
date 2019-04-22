@@ -2,7 +2,7 @@ import {Duplex} from 'stream';
 import {Buffer} from 'buffer';
 import _ from 'lodash';
 import {ApiError} from './api-error';
-import {DfaModuleIds} from '../../../shared/enums';
+import {DfaModuleIds} from '../../../shared/misc/enums';
 
 export const svrUtil = {
   isLocalEnv,

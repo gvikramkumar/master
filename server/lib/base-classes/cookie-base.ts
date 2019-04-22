@@ -1,5 +1,5 @@
 import AnyObj from '../../../shared/models/any-obj';
-import {shUtil} from '../../../shared/shared-util';
+import {shUtil} from '../../../shared/misc/shared-util';
 import * as _ from 'lodash';
 import {ApiError} from '../common/api-error';
 import {svrUtil} from '../common/svr-util';

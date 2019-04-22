@@ -11,7 +11,7 @@ import {UiUtil} from '../../../../../core/services/ui-util';
 import {Source} from '../../../../../../../../shared/models/source';
 import {SourceService} from '../../../services/source.service';
 import {ModuleLookupService} from '../../../services/module-lookup.service';
-import {shUtil} from '../../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../../shared/misc/shared-util';
 import {NgForm} from '@angular/forms';
 import {ModuleSourceService} from '../../../services/module-source.service';
 import AnyObj from '../../../../../../../../shared/models/any-obj';

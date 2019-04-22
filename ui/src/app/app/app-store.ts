@@ -6,7 +6,7 @@ import {first} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {DfaModule} from '../modules/_common/models/module';
 import DfaUser from '../../../../shared/models/dfa-user';
-import {shUtil} from '../../../../shared/shared-util';
+import {shUtil} from '../../../../shared/misc/shared-util';
 import {Location} from '@angular/common';
 
 /* tslint:disable:member-ordering*/

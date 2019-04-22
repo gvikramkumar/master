@@ -18,12 +18,12 @@ import {
   Submeasure, SubmeasureIndicators,
   SubmeasureInputFilterLevel
 } from '../../../../../../../shared/models/submeasure';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {PgLookupService} from '../../services/pg-lookup.service';
 import {ProductClassUploadService} from '../../../prof/services/product-class.service';
 import {environment} from '../../../../../environments/environment';
 import {FsFile} from '../../models/fsfile';
-import {BusinessUploadFileType, Directory} from '../../../../../../../shared/enums';
+import {BusinessUploadFileType, Directory} from '../../../../../../../shared/misc/enums';
 import {FsFileService} from '../../../../core/services/fsfile.service';
 import {BusinessUploadService} from '../../services/business-upload.service';
 

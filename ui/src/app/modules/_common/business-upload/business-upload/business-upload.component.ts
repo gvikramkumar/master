@@ -7,11 +7,11 @@ import {FsFileService} from '../../../../core/services/fsfile.service';
 import * as _ from 'lodash';
 import {environment} from '../../../../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {BusinessUploadFileType, Directory} from '../../../../../../../shared/enums';
+import {BusinessUploadFileType, Directory} from '../../../../../../../shared/misc/enums';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {OpenPeriodService} from '../../services/open-period.service';
 import {OpenPeriod} from '../../models/open-period';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {UploadResults} from '../../models/upload-results';
 import {BusinessUploadService} from '../../services/business-upload.service';
 
