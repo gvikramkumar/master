@@ -1608,6 +1608,9 @@ span.icon-collapse.icon-small:hover {
   background-color: inherit;
   color: black;
 }
+
+/* Custom Icons */
+/* In-Progress */
 .cool.cui span.in-progress {
   width:24px;
   height:24px;
@@ -1623,6 +1626,7 @@ span.icon-collapse.icon-small:hover {
   width: 24px;
   display: inline-block;
 }
+/* Milestone */
 .cool.cui span.milestone {
   width:24px;
   height:24px;
@@ -1638,6 +1642,7 @@ span.icon-collapse.icon-small:hover {
   width: 24px;
   display: inline-block;
 }
+/* Completed */
 .cool.cui span.completed {
   width:24px;
   height:24px;
@@ -1646,6 +1651,36 @@ span.icon-collapse.icon-small:hover {
   border-radius: 24px;
   display: inline-block;
   color:#fff;
+  padding-top: 2px;
+}
+/* Available */
+.cool.cui span.available {
+  width:24px;
+  height:24px;
+  background-color:#017CAD;
+  overflow: hidden;
+  border-radius: 24px;
+  display: inline-block;
+  color:#fff;
+}
+/* Not Available */
+.cool.cui span.not-available {
+  width:24px;
+  height:24px;
+  background-color:#fff;
+  overflow: hidden;
+  border-radius: 24px;
+  display: inline-block;
+  border: 1px solid #999999;
+}
+/* Not Required */
+.cool.cui span.not-required {
+  width:24px;
+  height:24px;
+  background: rgba(76, 76, 76, 0.1);
+  overflow: hidden;
+  border-radius: 24px;
+  display: inline-block;
 }
 
 @media (min-width: 1200px) {
