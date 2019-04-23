@@ -86,22 +86,11 @@ export default class UploadController {
       next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
       return;
     }
-
-    if (Object.keys(this.PropNames).length !== templateRow.length) {
+    const propNames = _.values(this.PropNames).map(x => x.trim().toLowerCase());
+    templateRow = _.map(templateRow, (arrElem) => _.replace(arrElem, '*', '').trim().toLowerCase());
+    if (propNames.length !== templateRow.length || propNames.length !== _.intersection(propNames, templateRow).length) {
       next(new ApiError('Wrong template uploaded. Please use the appropriate upload template.', null, 400));
       return;
-    } else {
-      let val = false;
-      templateRow = _.map(templateRow, (arrElem) => {
-        return _.startsWith(arrElem, '*') ? _.replace(arrElem, '*', ' ').trim() : arrElem;
-      });
-      _.forEach(this.PropNames, (value, key) => {
-        val = _.includes(templateRow, value);
-       if (!val) {
-         next(new ApiError('Wrong template uploaded. Please use the appropriate upload template.', null, 400));
-         return;
-       }
-      });
     }
 
     this.getInitialData()
