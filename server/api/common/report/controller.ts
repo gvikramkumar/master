@@ -474,8 +474,7 @@ export default class ReportController extends ControllerBase {
                 .map(prop => {
                   const val = _.get(obj, prop);
                   if (val instanceof Date) {
-                    const str = val.toISOString();
-                    return str.substr(0, str.length - 5).replace('T', '  ');
+                    return shUtil.convertToPSTTime(val);
                   } else {
                     return val;
                   }
@@ -500,8 +499,7 @@ export default class ReportController extends ControllerBase {
             return objs.map(obj => excelProperties.map(prop => {
               const val = _.get(obj, prop);
               if (val instanceof Date) {
-                const str = val.toISOString();
-                return str.substr(0, str.length - 5).replace('T', '  ');
+                return shUtil.convertToPSTTime(val);
               } else {
                 return val;
               }
