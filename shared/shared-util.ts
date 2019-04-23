@@ -1,5 +1,6 @@
 
 import * as _ from 'lodash';
+import moment from 'moment-timezone';
 
 export const shUtil = {
   getUpdateTable,
@@ -15,7 +16,8 @@ export const shUtil = {
   isDeptUpload,
   isDeptUploadMeasure,
   fiscalYearFromFiscalMonth,
-  isManualMix
+  isManualMix,
+  convertToPSTTime
 };
 
 export interface ObjectDiffVal {
@@ -233,6 +235,10 @@ function getMonthNameFromNum(mon) {
 
 function isManualMix(submeasure) {
   return submeasure.categoryType === 'Manual Mix';
+}
+
+function convertToPSTTime(date) {
+  return moment(date).tz('America/Los_Angeles').format('MM/DD/YYYY hh:mm A');
 }
 
 
