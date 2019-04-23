@@ -43,5 +43,4 @@ export class DashboardService {
   postActionForNapprove(data) {
     return this.http.post(this.environmentService.REST_API_CREATE_MANUAL_ACTION_POST_URL, data);
   }
-
 }
