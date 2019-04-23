@@ -357,7 +357,6 @@ addAllDetailsValidationsonChange(e,question){
     var validatorPattern = '';
     if (question.egineAttribue !== "Item Name (PID)") {
         if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
-            // validatorPattern = "^[0-9]*$";
             if(!(/^[0-9]*$/.test(question.currentValue))){
                 question.rules.validationMessage = question.egineAttribue+" should be in "+question.rules.textcase;
                 question.rules.isvalid = false ;
@@ -403,6 +402,71 @@ addAllDetailsValidationsonChange(e,question){
             // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
             if(!(/^[A-Z][A-Za-z0-9\\s]*$/.test(question.currentValue))){
                 question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
+                question.rules.isvalid = false ;
+            }
+            else{
+                question.rules.validationMessage = "";
+                question.rules.isvalid = true;
+            }
+        }
+        if (question.egineAttribue == 'Non Standard True Up Term') {
+            if(!(/^0*([2-6])$/.test(question.currentValue))){
+                question.rules.validationMessage = "Value should be a numeric range (ex. 2-6)" ;
+                question.rules.isvalid = false ;
+            }
+            else{
+                question.rules.validationMessage = "";
+                question.rules.isvalid = true;
+            }
+        }
+        if (question.egineAttribue == 'Initial Term') {
+            // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
+            if(!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(,(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))*$/.test(question.currentValue))){
+                question.rules.validationMessage = "Mandatory entry of a numeric range where 1 is min and 120 is max";
+                question.rules.isvalid = false ;
+            }
+            else{
+                question.rules.validationMessage = "";
+                question.rules.isvalid = true;
+            }
+        }
+        if (question.egineAttribue == 'NON STD INITIAL TERM') {
+            // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
+            if(!(/^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$/.test(question.currentValue))){
+                question.rules.validationMessage = "Value should be a numeric range where 1 is min and 120 is max";
+                question.rules.isvalid = false ;
+            }
+            else{
+                question.rules.validationMessage = "";
+                question.rules.isvalid = true;
+            }
+        }
+        if (question.egineAttribue == 'STD AUTO RENEWAL TERM') {
+            // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
+            if(!(/^0*([1-9]|1[0-2])$/.test(question.currentValue))){
+                question.rules.validationMessage = "Mandatory numeric range value where 1 is min and 12 is max" ;
+                question.rules.isvalid = false ;
+            }
+            else{
+                question.rules.validationMessage = "";
+                question.rules.isvalid = true;
+            }
+        }
+        if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
+            // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
+            if(!(/^0*([1-9]|1[0-2])$/.test(question.currentValue))){
+                question.rules.validationMessage = question.egineAttribue + "Value should be a numeric range where 1 is min and 12 is max" ;
+                question.rules.isvalid = false ;
+            }
+            else{
+                question.rules.validationMessage = "";
+                question.rules.isvalid = true;
+            }
+        }
+        if (question.egineAttribue == 'Subscription Offset(In Days)') {
+            // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
+            if(!(/^0*([1-9]|[1-5][0-9]|60)$/.test(question.currentValue))){
+                question.rules.validationMessage = "Mandatory entry of 1 numeric value between 1 and 60" ;
                 question.rules.isvalid = false ;
             }
             else{
