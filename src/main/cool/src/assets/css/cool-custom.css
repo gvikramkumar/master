@@ -1048,9 +1048,9 @@ span[class*="display-"] {
   border-radius: 30px;
 }
 
-/* .cool.cui .btn {
+.cool.cui .btn--cool {
   border-radius: 6px;
-} */
+}
 .cool.cui .btns.btn-group--wide>.btn,
 .cool.cui .btn-group.btn-group--wide>.btn {
   border-radius: 0;
@@ -1608,7 +1608,45 @@ span.icon-collapse.icon-small:hover {
   background-color: inherit;
   color: black;
 }
-
+.cool.cui span.in-progress {
+  width:24px;
+  height:24px;
+  background-color:#FBAB18;
+  overflow: hidden;
+  border-radius: 24px;
+  display: inline-block;
+}
+.cool.cui span.in-progress:before {
+  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTciIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCAxNyAxMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEuMTY3MjkgNS4yMDI5NUwzLjgwODg1IDcuNTUyMUw5Ljk5MzMxIDEiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CjxyZWN0IHg9IjExLjUzOTEiIHk9IjMuODkxNjgiIHdpZHRoPSI0LjAxOTU4IiBoZWlnaHQ9IjEiIHJ4PSIwLjUiIGZpbGw9IiM2NjY2NjYiIHN0cm9rZT0id2hpdGUiLz4KPHJlY3QgeD0iNy41MjM0NCIgeT0iNy44OTE2OCIgd2lkdGg9IjguMDM1MjQiIGhlaWdodD0iMSIgcng9IjAuNSIgZmlsbD0iIzY2NjY2NiIgc3Ryb2tlPSJ3aGl0ZSIvPgo8L3N2Zz4K) no-repeat center;
+  content: '';
+  height: 24px;
+  width: 24px;
+  display: inline-block;
+}
+.cool.cui span.milestone {
+  width:24px;
+  height:24px;
+  background-color:#9E9EA2;
+  overflow: hidden;
+  border-radius: 24px;
+  display: inline-block;
+}
+.cool.cui span.milestone:before {
+  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAxMyAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMgMS42Mjk1NEwzIDguMzkzNDNDMyA5LjEzNDAzIDMuNzc3IDkuNjE3NjcgNC40NDE1MSA5LjI5MDY5TDExLjIwNTQgNS45NjI0M0MxMS45NDQ4IDUuNTk4NTkgMTEuOTUxNSA0LjU0Njc4IDExLjIxNjggNC4xNzM1OUw0LjQ1Mjg3IDAuNzM3OTY0QzMuNzg3NjEgMC40MDAwNTggMyAwLjg4MzM5MiAzIDEuNjI5NTRaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMSAxVjE0IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K) no-repeat center;
+  content: '';
+  height: 24px;
+  width: 24px;
+  display: inline-block;
+}
+.cool.cui span.completed {
+  width:24px;
+  height:24px;
+  background-color:#6ebe4a;
+  overflow: hidden;
+  border-radius: 24px;
+  display: inline-block;
+  color:#fff;
+}
 
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {

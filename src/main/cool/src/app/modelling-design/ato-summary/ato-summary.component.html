@@ -12,9 +12,27 @@
     <p-column field="status" header="STATUS" sortable="true">
       <ng-template let-col let-task="rowData" pTemplate="body">
         <div class="text-center">
-          <span class="{{task['taskStatus']|lowercase}}">
+          <!-- <span class="{{task['taskStatus']|lowercase}}">
             <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
+          </span> -->
+
+          <!-- custom in-progress icon -->
+          <span class="in-progress">
           </span>
+          <!-- // end custom icon -->
+        </div>
+        <div class="text-center">
+          <!-- custom milestone icon -->
+          <span class="milestone">
+          </span>
+          <!-- // end custom icon -->
+        </div>
+        <div class="text-center">
+          <!-- completed icon -->
+          <span class="completed success">
+            <span class="icon-check"></span>
+          </span>
+          <!-- // end completed icon -->
         </div>
       </ng-template>
     </p-column>
