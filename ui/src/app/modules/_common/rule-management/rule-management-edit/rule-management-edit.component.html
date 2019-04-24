@@ -11,7 +11,8 @@
     <div class="row" style="margin-top:5px; margin-bottom:23px;">
       <div class="col-lg-6">
         <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [notInList]="ruleNames"
-                   notInListMessage="Rule name already exists" [required]="true" [disabled]="editMode"></fin-input>
+                   notInListMessage="Rule name already exists" [disabled]="true"
+                   [matTooltip]="rule.name" [matTooltipDisabled]="rule.name.length<50" matTooltipPosition="above"></fin-input>
       </div>
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center start" class="status-section">
@@ -28,11 +29,11 @@
       <div class="row">
         <div class="col-lg-6">
           <cui-select name="driver" [(ngModel)]="rule.driverName" [items]="drivers" label="Driver*"
-                      optionsKey="name" optionsValue="value" [required]="true"></cui-select>
+                      optionsKey="name" optionsValue="value" [required]="true" (ngModelChange)="valueChange()"></cui-select>
         </div>
         <div class="col-lg-6">
           <cui-select name="period" [(ngModel)]="rule.period" [items]="periods" label="Driver Period*" dropdownMaxHeight="220px"
-                      [required]="true" optionsKey="period" optionsValue="period"></cui-select>
+                      [required]="true" optionsKey="period" optionsValue="period" (ngModelChange)="valueChange()"></cui-select>
         </div>
       </div>
       <br>
@@ -44,21 +45,21 @@
               <div style="margin-bottom:-10px;">
                 <div class="left text-center half-margin-bottom form-group-max-width">Matching Criteria</div>
                 <cui-select name="salesMatch" [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
-                            optionsKey="match" optionsValue="match"></cui-select>
+                            optionsKey="match" optionsValue="match" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="productMatch" [disabled]="!!rule.beMatch" [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product"
-                            empty="true" optionsKey="match" optionsValue="match"></cui-select>
+                            empty="true" optionsKey="match" optionsValue="match" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="scmsMatch" [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS"
-                            empty="true" optionsKey="match" optionsValue="match"></cui-select>
+                            empty="true" optionsKey="match" optionsValue="match" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="beMatch" [disabled]="!!rule.productMatch" [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
-                            empty="true" optionsKey="match" optionsValue="match"></cui-select>
+                            empty="true" optionsKey="match" optionsValue="match" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="leMatch" [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
-                            empty="true" optionsKey="match" optionsValue="match"></cui-select>
+                            empty="true" optionsKey="match" optionsValue="match" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="cntyMatch" [(ngModel)]="rule.countryMatch" [items]="countryMatches" dropdownMaxHeight="300"
-                            optionsKey="name" optionsValue="value" empty="true" label="Country"></cui-select>
+                            optionsKey="name" optionsValue="value" empty="true" label="Country" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="extTheaterMatch" [(ngModel)]="rule.extTheaterMatch" [items]="extTheaterMatches"
-                            optionsKey="name" optionsValue="value" empty="true" label="External Theater"></cui-select>
+                            optionsKey="name" optionsValue="value" empty="true" label="External Theater" (ngModelChange)="valueChange()"></cui-select>
                 <cui-multiselect name="glSegmentsMatch" [(ngModel)]="rule.glSegmentsMatch" [items]="glSegmentMatches"
-                                 optionsKey="name" optionsValue="value" empty="true" label="GL Segments"></cui-multiselect>
+                                 optionsKey="name" optionsValue="value" empty="true" label="GL Segments" (ngModelChange)="valueChange()"></cui-multiselect>
               </div>
             </div>
           </div>
@@ -82,45 +83,45 @@
                   </div>
                   <div class="col-3">
                     <cui-select name="salesSL1Cond" class="replace-label-space" [(ngModel)]="rule.salesSL1CritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.salesSL1CritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                                empty="true" [required]="!!rule.salesSL1CritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select name="salesSL2Cond" class="replace-label-space" [(ngModel)]="rule.salesSL2CritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.salesSL2CritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                                empty="true" [required]="!!rule.salesSL2CritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select name="salesSL3Cond" class="replace-label-space" [(ngModel)]="rule.salesSL3CritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.salesSL3CritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                                empty="true" [required]="!!rule.salesSL3CritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select name="prodTGCond" class="replace-label-space" [(ngModel)]="rule.prodTGCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.prodTGCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                                empty="true" [required]="!!rule.prodTGCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select name="prodBUCond" class="replace-label-space" [(ngModel)]="rule.prodBUCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.prodBUCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                                empty="true" [required]="!!rule.prodBUCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select name="prodPFCond" class="replace-label-space" [(ngModel)]="rule.prodPFCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.prodPFCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                                empty="true" [required]="!!rule.prodPFCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select name="scmsCond" class="replace-label-space" [(ngModel)]="rule.scmsCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.scmsCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                                empty="true" [required]="!!rule.scmsCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select name="beCond" class="replace-label-space" [(ngModel)]="rule.beCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.beCritChoices.length" optionsKey="operator" optionsValue="operator"></cui-select>
+                                empty="true" [required]="!!rule.beCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                   </div>
                   <div class="col-8">
                     <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices"
-                                     class="replace-label-space" optionsKey="name" optionsValue="name" empty="true"></cui-multiselect>
+                                     class="replace-label-space" optionsKey="name" optionsValue="name" empty="true" (ngModelChange)="valueChange()"></cui-multiselect>
                     <fin-input name="sl2SalesChoice" [(ngModel)]="rule.salesSL2CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
-                               [stringToArray]="true" [options]="salesSL2ChoiceOptions"></fin-input>
+                               [stringToArray]="true" [options]="salesSL2ChoiceOptions" (ngModelChange)="valueChange()"></fin-input>
                     <fin-input name="sl3SalesChoice" [(ngModel)]="rule.salesSL3CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
-                               [stringToArray]="true" [options]="salesSL3ChoiceOptions"></fin-input>
+                               [stringToArray]="true" [options]="salesSL3ChoiceOptions" (ngModelChange)="valueChange()"></fin-input>
                     <cui-multiselect name="prodTGChoice" [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
                                      class="replace-label-space" optionsValue="name" dropdownMaxHeight="300"
-                                     empty="true"></cui-multiselect>
+                                     empty="true" (ngModelChange)="valueChange()"></cui-multiselect>
                     <fin-input name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
-                               [stringToArray]="true" [options]="prodBUChoiceOptions"></fin-input>
+                               [stringToArray]="true" [options]="prodBUChoiceOptions" (ngModelChange)="valueChange()"></fin-input>
                     <fin-input name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
-                               [stringToArray]="true" [options]="prodPFChoiceOptions"></fin-input>
+                               [stringToArray]="true" [options]="prodPFChoiceOptions" (ngModelChange)="valueChange()"></fin-input>
                     <cui-multiselect name="scmsChoice" [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name"
-                                     class="replace-label-space" optionsValue="name" empty="true"></cui-multiselect>
+                                     class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange()"></cui-multiselect>
                     <cui-multiselect name="beChoice" [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
                                      optionsValue="name" dropdownMaxHeight="300"
-                                     class="replace-label-space" empty="true"></cui-multiselect>
+                                     class="replace-label-space" empty="true" (ngModelChange)="valueChange()"></cui-multiselect>
                   </div>
                 </div>
               </div>
@@ -134,8 +135,7 @@
 
     <div *ngIf="!viewMode" finAuth="super-user" class="fin-footer-buttons">
       <button type="submit" finErrorFlash cuiButton color="primary" (click)="submitForApproval()">Submit</button>
-      <button type="button" finErrorFlash cuiButton color="primary" [disabled]="!rule.name" (click)="saveToDraft()"
-              matTooltip="Can't save to draft without a unique rule name" [matTooltipShowDelay]="3000">Save as Draft</button>
+      <button type="button" finErrorFlash cuiButton color="primary" (click)="saveToDraft()">Save as Draft</button>
       <button type="button" cuiButton color="secondary" (click)="cancel()">Cancel</button>
       <button type="button" cuiButton color="secondary" (click)="reset()">Reset</button>
     </div>

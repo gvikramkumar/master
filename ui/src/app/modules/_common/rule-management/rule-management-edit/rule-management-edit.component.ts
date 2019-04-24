@@ -17,6 +17,7 @@ import AnyObj from '../../../../../../../shared/models/any-obj';
 import {SelectExceptionMap} from '../../../../../../../shared/classes/select-exception-map';
 import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {ruleUtil} from '../../../../../../../shared/misc/rule-util';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -66,7 +67,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private pgLookupService: PgLookupService,
     private store: AppStore,
     public uiUtil: UiUtil,
-    private lookupService: LookupService
+    private lookupService: LookupService,
+    public dialog: MatDialog
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -120,8 +122,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (this.editModeAI) {
             delete this.rule.createdBy;
             delete this.rule.createdDate;
+            // they can't edit approvedOnce rules other than to set active/inactive. The ruleNames are all status = active/inactive,
+            // not draft/pending which is what they'll be editing with, so complain if rulename already exists in A/I bunch. We have a catchall in
+            // approvalController.approve() that won't approve if name already exists, but we want them to see that here as well
+            this.ruleNames = _.without(this.ruleNames, this.rule.name); // if setting active/inactive, then allow name existence
           }
-          this.ruleNames = _.without(this.ruleNames, this.rule.name);
         }
 
         this.salesSL2ChoiceOptions = {
@@ -188,7 +193,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.rules.forEach(rule => ruleUtil.createSelectArrays(rule));
       this.selectMap = new SelectExceptionMap();
       this.selectMap.parseRules(this.rules);
-      const i = 5;
+      this.checkIfRuleNameAlreadyExists();
     }
   }
 
@@ -255,11 +260,13 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     this.updateSelectStatements();
   }
 
-  validateSaveToDraft() {
+  validate() {
     const errors = [];
+    // shouldn't happen
     if (!(this.rule.name && this.rule.name.trim())) {
       errors.push('You must define a name to save to draft.');
     }
+    // shouldn't happen
     if (_.includes(this.ruleNames, this.rule.name)) {
       errors.push('Rule name already exists.');
     }
@@ -267,23 +274,28 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   saveToDraft() {
-    const errors = this.validateSaveToDraft();
-    if (errors) {
-      this.uiUtil.validationErrorsDialog(errors);
-    } else {
-      this.cleanUp();
-      const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-      this.ruleService.saveToDraft(this.rule, {saveMode})
-        .subscribe(rule => {
-          // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
-          this.addMode = false;
-          this.copyMode = false;
-          this.editMode = true;
-          this.rule = rule;
-          this.orgRule = _.cloneDeep(rule);
-          this.uiUtil.toast('Rule saved to draft.');
-        });
-    }
+    UiUtil.triggerBlur('.fin-container form');
+    UiUtil.waitForAsyncValidations(this.form)
+      .then(() => {
+        if (this.form.valid) {
+          const errors = this.validate();
+          if (errors) {
+            this.uiUtil.validationErrorsDialog(errors);
+          } else {
+            const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+            this.ruleService.saveToDraft(this.rule, {saveMode})
+              .subscribe(rule => {
+                // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
+                this.addMode = false;
+                this.copyMode = false;
+                this.editMode = true;
+                this.rule = rule;
+                this.orgRule = _.cloneDeep(rule);
+                this.uiUtil.toast('Rule saved to draft.');
+              });
+          }
+        }
+      });
   }
 
   reject() {
@@ -306,22 +318,24 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   approve() {
-    this.uiUtil.confirmApprove('rule')
-      .subscribe(resultConfirm => {
-        if (resultConfirm) {
-          this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
-            .subscribe(resultPrompt => {
-              if (resultPrompt !== 'DIALOG_CANCEL') {
-                this.rule.approveRejectMessage = resultPrompt;
-                this.cleanUp();
-                this.ruleService.approve(this.rule)
-                  .subscribe(() => {
-                    history.go(-1);
-                  });
-              }
-            });
-        }
-      });
+    if (!this.checkIfRuleNameAlreadyExists()) {
+      this.uiUtil.confirmApprove('rule')
+        .subscribe(resultConfirm => {
+          if (resultConfirm) {
+            this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
+              .subscribe(resultPrompt => {
+                if (resultPrompt !== 'DIALOG_CANCEL') {
+                  this.rule.approveRejectMessage = resultPrompt;
+                  this.cleanUp();
+                  this.ruleService.approve(this.rule)
+                    .subscribe(() => {
+                      history.go(-1);
+                    });
+                }
+              });
+          }
+        });
+    }
   }
 
   submitForApproval() {
@@ -329,17 +343,22 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
-          this.uiUtil.confirmSubmitForApproval()
-            .subscribe(result => {
-              if (result) {
-                this.cleanUp();
-                const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-                this.ruleService.submitForApproval(this.rule, {saveMode})
-                  .subscribe(() => {
-                    history.go(-1);
-                  });
-              }
-            });
+          const errors = this.validate();
+          if (errors) {
+            this.uiUtil.validationErrorsDialog(errors);
+          } else {
+            this.uiUtil.confirmSubmitForApproval()
+              .subscribe(result => {
+                if (result) {
+                  this.cleanUp();
+                  const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+                  this.ruleService.submitForApproval(this.rule, {saveMode})
+                    .subscribe(() => {
+                      history.go(-1);
+                    });
+                }
+              });
+          }
         }
       });
   }
@@ -475,20 +494,33 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   valueChange() {
+    // code below would work, but this would be faster than waiting for asyncs
     if (!(this.rule.driverName && this.rule.period)) {
       delete this.rule.name;
       delete this.rule.desc;
       return;
     }
-    const oldName = this.rule.name;
-    const oldDesc = this.rule.desc;
-    ruleUtil.addRuleNameAndDescription(this.rule, this.selectMap, this.drivers, this.periods);
+    UiUtil.waitForAsyncValidations(this.form)
+      .then(() => {
+        if (this.form.valid) {
+          ruleUtil.addRuleNameAndDescription(this.rule, this.selectMap, this.drivers, this.periods);
+          this.checkIfRuleNameAlreadyExists();
+        } else {
+          delete this.rule.name;
+          delete this.rule.desc;
+        }
+      });
+  }
+
+  checkIfRuleNameAlreadyExists() {
     if (_.includes(this.ruleNames, this.rule.name)) {
-      this.uiUtil.genericDialog(`A rule by this name already exists: ${this.rule.name}`)
-        .subscribe(() => {
-          this.rule.name = oldName;
-          this.rule.desc = oldDesc;
-        });
+      // we call blur on all selects which all call this all at once and crashes with all the modal calls, so look for it and if there, don't put it up
+      if (!this.dialog.openDialogs.length) {
+        this.uiUtil.genericDialog(`A rule by this name already exists: ${this.rule.name}`);
+      }
+      return true;
+    } else {
+      return false;
     }
   }
 
