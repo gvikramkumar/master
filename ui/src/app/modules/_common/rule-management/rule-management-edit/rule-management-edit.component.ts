@@ -159,16 +159,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           ]
         };
 
-        this.prodPFChoiceOptions = {
-          asyncValidations: [
-            {
-              name: 'prodPFChoices',
-              message: 'Some product PF select fields don\'t exist',
-              fcn: this.prodPFChoicesValidator()
-            }
-          ]
-        };
-
         this.prodBUChoiceOptions = {
           asyncValidations: [
             {
