@@ -20,7 +20,7 @@ import { OfferConstructComponent } from '@app/construct/offer-construct/offer-co
 import { OasComponent } from './oas/oas.component';
 import { OfferDimensionComponent } from './dimensions/offer-dimension/offer-dimension.component';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
-import { AtoMainComponent } from './modelling-design/ato-main/ato-main.component';
+
 
 
 const routes: Routes = [
@@ -135,11 +135,8 @@ const routes: Routes = [
   {
     path: 'offerSetup',
     component: OfferSetupComponent
-  },
-  {
-    path: 'modelling-design',
-    loadChildren: './modelling-design/modelling-design.module#ModellingDesignModule'
   }
+
 
 ];
 
