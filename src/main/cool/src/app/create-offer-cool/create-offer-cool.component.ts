@@ -117,6 +117,9 @@ export class CreateOfferCoolComponent implements OnInit {
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
           this.idpvalue = offerDetailRes.iDPId;
           this.loadPrimaryBe();
+          /* Enable 'Proceed to Offer Builder' button */
+          this.enableOfferbuild = false;
+          this.validFlag = false;
           this.disablePrimaryBEList = true;
         });
 
