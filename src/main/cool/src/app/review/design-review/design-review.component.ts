@@ -135,7 +135,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
       });
 
     forkJoin([this.exitCriteriaValidationService.getDesignReview(this.caseId),
-        this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
+    this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;
       this.getDesignReview(designReviewData);
       this.getMilestones(milstones);
@@ -172,8 +172,8 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
       this.offerName = this.firstData['offerName'];
-      if(Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
-       this.primaryBE = this.firstData['primaryBEList'][0];
+      if (Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
+        this.primaryBE = this.firstData['primaryBEList'][0];
       }
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
@@ -185,10 +185,13 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
         }
       );
       this.stakeHolderInfo = {};
+
       for (let i = 0; i <= this.data.length - 1; i++) {
+
         if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
           this.stakeHolderInfo[this.data[i]['offerRole']] = [];
         }
+
         this.stakeHolderInfo[this.data[i]['offerRole']].push(
           {
             userName: this.data[i]['name'],
@@ -199,6 +202,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
             offerRole: this.data[i]['offerRole'],
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
+          
       }
       this.stakeData = this.stakeHolderInfo;
 
@@ -227,9 +231,9 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     this.getOfferDetails();
   }
 
- // --------------------------------------------------------------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------------------------
 
- offerDetailOverView() {}
+  offerDetailOverView() { }
 
   private getMilestones(milestones) {
     const result = milestones.plan;
@@ -461,11 +465,12 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  async onEscalate(functionName: string, element) {
-    element.disabled = true; //Immediately disable the button on click
+  async onEscalate(element, designReviewData) {
+    element.disabled = true;
     // Initialize Variables
     const mailList = [];
-    const functionNameMap = this.stakeData[functionName];
+    const functionNameMap = this.stakeData[designReviewData["function"]];
+    const payload = {};
     // Iterate - Function Names
     for (const employee of Array.from(functionNameMap.values())) {
       // Compute Manager List
@@ -476,18 +481,25 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
         mailList.push(manager['manager']);
       }
     }
-
+    // Payload for updating Escalation Details
+    payload['escalatedBy'] = this.stakeData['Owner'][0]._id;
+    payload['escalatedOn'] = designReviewData.assignees;
+    payload['escalatedTo'] = mailList;
+    payload['taskId'] = designReviewData.taskId;
+    payload['caseId'] = this.caseId;
+    payload['offerId'] = this.currentOfferId;
     // Initialize Email Variables
     const emailPayload = {};
     emailPayload['toMailLists'] = mailList;
     emailPayload['subject'] = 'Immediate Attention needed! ' + this.currentOfferId + ' + ' + this.offerName + ' Approval pending';
     emailPayload['emailBody'] = 'Hello You are receiving this message because the below offer has a pending approval that requires review from a member of your team. Offer ID: ' + this.currentOfferId + ' Offer Name: ' + this.offerName + ' Your immediate attention is highly appreciated. Thanks';
-
+    //Update Escalation Details
+    this.actionsService.updateEscalationDetails(payload).subscribe(data =>{
+    });
     // Send EMail
     this.actionsService.escalateNotification(emailPayload).subscribe(data => {
       this.getDesignReviewInfo();
     });
-
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------

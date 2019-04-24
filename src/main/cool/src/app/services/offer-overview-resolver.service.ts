@@ -5,8 +5,9 @@ import { OfferPhaseService } from './offer-phase.service';
 
 @Injectable()
 export class OfferOverViewResolver implements Resolve<any> {
-    offerOverviewDetailsList;
+
     caseId;
+    offerOverviewDetailsList;
 
     constructor(private offerPhaseService: OfferPhaseService) {
     }

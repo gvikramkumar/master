@@ -28,8 +28,11 @@ export class EnvironmentService {
     REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL: string;
     REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL: string;
 
-    //  eGenie URLs
+    //  OWB URLs
     REST_API_OWB_CONTROLLER_URL: string;
+    REST_API_RETRIEVE_ATO_LIST_URL: string;
+
+    //  eGenie URLs
     REST_API_GET_PID_DETAILS_URL: string;
     REST_API_DOWNLOAD_ZIP_GET_URL: string;
 
@@ -122,7 +125,8 @@ export class EnvironmentService {
 
     // DESIGN REVIEW URL's
     REST_API_DESIGN_REVIEW_GET_URL: string;
-    // -------------------------------------------------------------------------------------------------
+
+      // -------------------------------------------------------------------------------------------------
 
 
     constructor() {
@@ -214,9 +218,13 @@ export class EnvironmentService {
         this.REST_API_CREATE_NEW_ACTION_GET_ASSIGNEE_URL = this.baseApiUrl + '/LOV/getAssignee/';
         this.REST_API_CREATE_NEW_ACTION_GET_FUNCTION_URL = this.baseApiUrl + '/LOV/getFunctionalRoles';
 
-        // ------------------------ eGenie URLs ------------------------------------------------------
+        // ------------------------ OWB URLs ------------------------------------------------------
 
         this.REST_API_OWB_CONTROLLER_URL = this.baseApiUrl + '/owb/create';
+        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + '/owb/getATOItemStatus';
+
+        // ------------------------ eGenie URLs ------------------------------------------------------
+
         this.REST_API_DOWNLOAD_ZIP_GET_URL = this.baseApiUrl + '/eGenie/zip/';
         this.REST_API_GET_PID_DETAILS_URL = this.baseApiUrl + '/eGenie/getAttribute/';
 
@@ -226,7 +234,7 @@ export class EnvironmentService {
         this.REST_API_ACTIONS_DASHBOARD_URL = this.baseApiUrl + '/bpmApi/getTask/dashboard/';
         this.REST_API_ACTIONS_TRACKER_DETAILS_URL = this.baseApiUrl + '/bpmApi/getInfo/task';
         this.REST_API_RETRIEVE_MILESTONES_URL = this.baseApiUrl + '/bpmApi/getMilestones';
-        
+
         // ------------------------- PDAF URLs ---------------------------------------------------------
 
         this.REST_API_PRIMARY_URL = this.baseApiUrl + '/primaryBusiness/';

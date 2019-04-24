@@ -8627,11 +8627,14 @@ html {
       padding: 0 40px 0 10px; }
     .cui .form-group .form-group__text label,
     .cui .form-group .form-group__text.select label {
-      top: 10px; }
+      top: 10px; },
     .cui .form-group .form-group__text:after,
     .cui .form-group .form-group__text.select:after {
       bottom: 10px; }
     .cui .form-group .form-group__text input[type="password"],
+    .cui .form-group .form-group__text.select input[type="number"] {
+      font: caption;
+      font-size: 1.8rem; }
     .cui .form-group .form-group__text.select input[type="password"] {
       font: caption;
       font-size: 1.8rem; }
