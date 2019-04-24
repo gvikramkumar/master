@@ -420,38 +420,38 @@ addAllDetailsValidationsonChange(e,question){
             }
         }
         if (question.egineAttribue == 'Initial Term') {
-            // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
-            if(!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(,(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))*$/.test(question.currentValue))){
-                question.rules.validationMessage = "Mandatory entry of a numeric range where 1 is min and 120 is max";
-                question.rules.isvalid = false ;
-            }
-            else{
-                question.rules.validationMessage = "";
-                question.rules.isvalid = true;
-            }
-        }
-        if (question.egineAttribue == 'NON STD INITIAL TERM') {
-            // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
-            if(!(/^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$/.test(question.currentValue))){
-                question.rules.validationMessage = "Value should be a numeric range where 1 is min and 120 is max";
-                question.rules.isvalid = false ;
-            }
-            else{
-                question.rules.validationMessage = "";
-                question.rules.isvalid = true;
-            }
-        }
-        if (question.egineAttribue == 'STD AUTO RENEWAL TERM') {
-            // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
-            if(!(/^0*([1-9]|1[0-2])$/.test(question.currentValue))){
-                question.rules.validationMessage = "Mandatory numeric range value where 1 is min and 12 is max" ;
-                question.rules.isvalid = false ;
-            }
-            else{
-                question.rules.validationMessage = "";
-                question.rules.isvalid = true;
-            }
-        }
+           // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
+           if(!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(,(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))*$/.test(question.currentValue))){
+               question.rules.validationMessage = "Comma separated numeric range with no spaces (example: 1,12) where 1 is min and 120 is max";
+               question.rules.isvalid = false ;
+           }
+           else{
+               question.rules.validationMessage = "";
+               question.rules.isvalid = true;
+           }
+       }
+       if (question.egineAttribue == 'NON STD INITIAL TERM') {
+           // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
+           if(!(/^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$/.test(question.currentValue))){
+               question.rules.validationMessage = "Value should be a numeric range where 1 is min and 120 is max (example: 1-12)";
+               question.rules.isvalid = false ;
+           }
+           else{
+               question.rules.validationMessage = "";
+               question.rules.isvalid = true;
+           }
+       }
+       if (question.egineAttribue == 'STD AUTO RENEWAL TERM') {
+           // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
+           if(!(/^0*([1-9]|[1-5][0-9]|60)$/.test(question.currentValue))){
+               question.rules.validationMessage = "Mandatory entry of 1 numeric  value where 1 is min and 60 is max" ;
+               question.rules.isvalid = false ;
+           }
+           else{
+               question.rules.validationMessage = "";
+               question.rules.isvalid = true;
+           }
+       }
         if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
             // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
             if(!(/^0*([1-9]|1[0-2])$/.test(question.currentValue))){

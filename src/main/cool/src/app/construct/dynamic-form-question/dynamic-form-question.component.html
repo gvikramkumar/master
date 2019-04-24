@@ -24,9 +24,9 @@
         <span *ngIf="question.egineAttribue === 'Non Standard True Up Term' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range (ex. 2-6)</span>     
         <span *ngIf="question.egineAttribue === 'Req Start Date Window' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value</span> 
         <span *ngIf="question.egineAttribue === 'Asset Quantity' && questionForm.controls[question.egineAttribue].errors.pattern">Must be a numeric value</span>     
-        <span *ngIf="question.egineAttribue === 'Initial Term' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of a numeric range where 1 is min and 120 is max</span>     
-        <span *ngIf="question.egineAttribue === 'NON STD INITIAL TERM' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range where 1 is min and 120 is max</span>     
-        <span *ngIf="question.egineAttribue === 'STD AUTO RENEWAL TERM' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory numeric range value where 1 is min and 12 is max</span>     
+        <span *ngIf="question.egineAttribue === 'Initial Term' && questionForm.controls[question.egineAttribue].errors.pattern">Comma separated numeric range with no spaces (example: 1,12) where 1 is min and 120 is max</span>     
+        <span *ngIf="question.egineAttribue === 'NON STD INITIAL TERM' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range where 1 is min and 120 is max (example: 1-12)</span>     
+        <span *ngIf="question.egineAttribue === 'STD AUTO RENEWAL TERM' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric  value where 1 is min and 60 is max</span>    
         <span *ngIf="question.egineAttribue === 'NON STD AUTO RENEWAL TERM' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range where 1 is min and 12 is max</span>     
         <span *ngIf="question.egineAttribue === 'Subscription Offset(In Days)' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value between 1 and 60</span>     
       </span>
