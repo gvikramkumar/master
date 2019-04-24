@@ -12,7 +12,7 @@
       <div class="col-lg-6">
         <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [notInList]="ruleNames"
                    notInListMessage="Rule name already exists" [disabled]="true"
-                   [matTooltip]="rule.name" [matTooltipDisabled]="rule.name.length<50" matTooltipPosition="above"></fin-input>
+                   [matTooltip]="rule.name" [matTooltipDisabled]="!rule.name || rule.name.length<50" matTooltipPosition="above"></fin-input>
       </div>
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center start" class="status-section">
@@ -100,28 +100,28 @@
                                 empty="true" [required]="!!rule.beCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                   </div>
                   <div class="col-8">
-                    <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices"
-                                     class="replace-label-space" optionsKey="name" optionsValue="name" empty="true" (ngModelChange)="valueChange()"></cui-multiselect>
+                    <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices" class="replace-label-space" optionsKey="name" optionsValue="name"
+                                     empty="true" (ngModelChange)="valueChange()" [required]="!!rule.salesSL1CritCond"></cui-multiselect>
                     <fin-input name="sl2SalesChoice" [(ngModel)]="rule.salesSL2CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
-                               [stringToArray]="true" [options]="salesSL2ChoiceOptions" (ngModelChange)="valueChange()"></fin-input>
+                               [stringToArray]="true" [options]="salesSL2ChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.salesSL2CritCond"></fin-input>
                     <fin-input name="sl3SalesChoice" [(ngModel)]="rule.salesSL3CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
-                               [stringToArray]="true" [options]="salesSL3ChoiceOptions" (ngModelChange)="valueChange()"></fin-input>
+                               [stringToArray]="true" [options]="salesSL3ChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.salesSL3CritCond"></fin-input>
                     <cui-multiselect name="prodTGChoice" [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
                                      class="replace-label-space" optionsValue="name" dropdownMaxHeight="300"
-                                     empty="true" (ngModelChange)="valueChange()"></cui-multiselect>
+                                     empty="true" (ngModelChange)="valueChange()" [required]="!!rule.prodTGCritCond"></cui-multiselect>
                     <fin-input name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
-                               [stringToArray]="true" [options]="prodBUChoiceOptions" (ngModelChange)="valueChange()"></fin-input>
+                               [stringToArray]="true" [options]="prodBUChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.prodBUCritCond"></fin-input>
                     <fin-input name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
-                               [stringToArray]="true" [options]="prodPFChoiceOptions" (ngModelChange)="valueChange()"></fin-input>
+                               [stringToArray]="true" [options]="prodPFChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.prodPFCritCond"></fin-input>
                     <cui-multiselect name="scmsChoice" [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name"
-                                     class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange()"></cui-multiselect>
+                                     class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange()" [required]="!!rule.scmsCritCond"></cui-multiselect>
                     <cui-multiselect name="beChoice" [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
                                      optionsValue="name" dropdownMaxHeight="300"
-                                     class="replace-label-space" empty="true" (ngModelChange)="valueChange()"></cui-multiselect>
+                                     class="replace-label-space" empty="true" (ngModelChange)="valueChange()" [required]="!!rule.beCritCond"></cui-multiselect>
                   </div>
                 </div>
               </div>

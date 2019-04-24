@@ -281,6 +281,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 this.editMode = true;
                 this.rule = rule;
                 this.orgRule = _.cloneDeep(rule);
+                this.init();
                 this.uiUtil.toast('Rule saved to draft.');
               });
           }
@@ -493,7 +494,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
-          ruleUtil.addRuleNameAndDescription(this.rule, this.selectMap, this.drivers, this.periods);
+          // we need to clone the selectMap, otherwise they add to it then remove their entry, but addition is still there
+          // so we'll clone it every time we generate a new name
+          const smap = _.cloneDeep(this.selectMap);
+          ruleUtil.addRuleNameAndDescription(this.rule, smap, this.drivers, this.periods);
+          // console.log(smap.buMap);
           this.checkIfRuleNameAlreadyExists();
         } else {
           delete this.rule.name;
