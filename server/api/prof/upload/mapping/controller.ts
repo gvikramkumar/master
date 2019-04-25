@@ -69,16 +69,24 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
     this.imports =
       _.sortBy(this.rows1.map(row => new MappingUploadImport(row, this.fiscalMonth)), 'submeasureName');
     const obj = {};
+    const arr = [];
     this.imports.forEach(val => {
+
       if (obj[val.submeasureName]) {
-        obj[val.submeasureName] += val.percentage;
+        // obj[val.submeasureName] = svrUtil.roundDecimal8(obj[val.submeasureName] + val.percentage);
+        arr.push(val.percentage);
+        obj[val.submeasureName] = obj[val.submeasureName] + val.percentage;
       } else {
+        arr.push(val.percentage);
+
         obj[val.submeasureName] = val.percentage;
       }
     });
+
+    console.log(arr);
     _.forEach(obj, (val, key) => {
       if (svrUtil.roundDecimal8(val) !== 1.0) {
-        this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
+        this.addError(key, svrUtil.roundDecimal8(val)); // resuse (prop, error) error list for (submeasureName, total)
       }
     });
 

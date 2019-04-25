@@ -3,12 +3,15 @@ import AnyObj from '../shared/models/any-obj';
 import {shUtil} from '../shared/shared-util';
 import {svrUtil} from '../server/lib/common/svr-util';
 import * as Q from 'q';
+import * as math from 'mathjs';
+console.log(math.add(0.1, 0.2));
+console.log(0.1 * 0.2);
 
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
 
-console.log(roundDecimal('xx.123456789', 8));
+/*console.log(roundDecimal('xx.123456789', 8));
 console.log(roundDecimal(12, 8));
 console.log(roundDecimal(12., 8));
 console.log(roundDecimal(12.0, 8));
@@ -17,30 +20,63 @@ console.log(roundDecimal(0.123456789, 8));
 console.log(roundDecimal(1.123456789, 8));
 console.log(roundDecimal(12.123456789, 8));
 console.log(roundDecimal(123.123456789, 8));
+console.log(roundDecimal(0.00000001, 8));
+console.log(roundDecimal(0.0000000001, 8));
+console.log(roundDecimal(1.000000000009, 8));
+console.log(roundDecimal(.999999999679, 8));*/
+// const x = roundDecimal(1.00000000000009, 8);
+// const y = roundDecimal(0.9999999999999997, 8);
+
+// console.log(truncateDecimal(0.0000041, 8));
+// console.log(0.0000041.toFixed(8));
+
 
 function roundDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number' || val.toString().indexOf('.') === -1) {
+  if (val === undefined || typeof val !== 'number') {
     return val;
   }
+return val.toFixed(places);
+}
+// console.log(roundDecimal(0.00000000354, 8));
+// console.log(roundDecimal(0, 8));
+// console.log(roundDecimal(1.00004567780, 8));
+// console.log(roundDecimal(0.987654322, 8));
+// console.log(roundDecimal(1234.0000054, 8));
+
+
+/*function roundDecimal(val, places) {
+  if (val === undefined || typeof val !== 'number') {
+    return val;
+  }
+  val = Number(val.toFixed(places));
   const str = val.toString();
   const dot = str.indexOf('.');
   let beforeDecimal;
+  const decimal = Number(str.substr(dot + 1));
   if (dot === 1 && str[0] === '0') {
     beforeDecimal = 0;
   } else {
     beforeDecimal = dot;
   }
-  return Number(val.toPrecision(beforeDecimal + places));
-}
-
+  const num = beforeDecimal + places + Math.log(decimal) + 1;
+  return Number(val.toPrecision(num));
+}*/
+// console.log(truncateDecimal(1.100000001, 8));
 function truncateDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number' || val.toString().indexOf('.') === -1) {
+  if (val === undefined || typeof val !== 'number') {
     return val;
   }
-  const str = val.toString();
-  const dot = str.indexOf('.');
-  return Number(str.substring(0, dot) + str.substr(dot, places + 1));
+
+  const pow = Math.pow(10, places);
+  const x = val * pow;
+  // math.multiply
+  const z = Math.floor(x);
+  const y = z / pow;
+  // const rtn = Math.floor(val * Math.pow(10, places)) / Math.pow(10, places);
+  return y;
 }
+
+
 
 
 /*
