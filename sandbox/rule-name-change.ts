@@ -51,6 +51,24 @@ Promise.all([
     drivers = results[3][0];
     periods = results[3][1];
 
+    const missingRules: AnyObj = {};
+    latestSms.forEach(sm => {
+      sm.rules.forEach(ruleName => {
+        if (!_.find(latestRules, {name: ruleName})) {
+          if (missingRules[ruleName]) {
+            missingRules[ruleName].push(sm.name);
+          } else {
+            missingRules[ruleName] = [sm.name];
+          }
+        }
+      });
+    });
+
+    if (_.keys(missingRules).length) {
+      console.log('RULES MISSING THAT EXIST IN SUBMEASURES:')
+      _.keys(missingRules).forEach(key => console.log(`\nRULE:  ${key}\nSUBMEASURES:  ${missingRules[key].join(', ')}`));
+    }
+
     latestRules.forEach((rule: AnyObj) => {
       // fix ram's bad imports on approvedOnce and glSegmentsMatch
       rule.approvedOnce = 'Y';

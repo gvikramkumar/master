@@ -65,7 +65,10 @@ function addMatches(rule) {
   str += rule.legalEntityMatch ? getMatchText(legalEntityMatches, 'match', rule.legalEntityMatch) : '';
   str += rule.countryMatch ? getMatchText(countryMatches, 'value', rule.countryMatch) : '';
   str += rule.extTheaterMatch ? getMatchText(extTheaterMatches, 'value', rule.extTheaterMatch) : '';
-  str += rule.glSegmentsMatch && rule.glSegmentsMatch.length ? getMatchTextArray(glSegmentsMatches, 'value', rule.glSegmentsMatch) : '';
+  if (!_.isArray(rule.glSegmentsMatch)) {
+    throw Error(`glSegmentsMatch is not an array: ${rule.oldName}`);
+  }
+  str += rule.glSegmentsMatch.length ? getMatchTextArray(glSegmentsMatches, 'value', rule.glSegmentsMatch) : '';
 
   if (str) {
     rule.name += `-${str}`;
