@@ -65,10 +65,6 @@ const routes: Routes = [
     component: StakeholderFullComponent
   },
   {
-    path: 'menu',
-    component: MenuBarComponent
-  },
-  {
     path: 'strategyReview/:id/:id2',
     component: StrategyReviewComponent,
     resolve: { offerData: OfferOverViewResolver }
@@ -133,7 +129,7 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'offerSetup/:offerId/:selectedAto',
+    path: 'offer-setup/:offerId/:selectedAto',
     component: OfferSetupComponent
   },
   {

@@ -92,6 +92,10 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   }
 
+  goToPirateShip() {
+    this.router.navigate(['/offer-setup', this.offerId, this.selectedAto]);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
 
 
