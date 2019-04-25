@@ -58,13 +58,12 @@
 
         <input type="number" class="form-group__text" name="{{question['questionNo']}}" id="question['questionNo']"
           #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
-          [disabled]="question['hideQuestion']" rows="3" pattern="^[0-9]{1,5}(\.[0-9]{1,2})?$"
+          [disabled]="question['hideQuestion']" rows="3" 
           [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
           (change)="showHiddenQuestionBasedOnUserInput(currencyText.value, question)" />
 
         <span class="help-block" *ngIf="currencyText.invalid && (currencyText.dirty || currencyText.touched)">
           <span *ngIf="currencyText.errors.required">Valid input is required</span>
-          <span *ngIf="currencyText.errors.pattern">5 digit number is required (XXXXX.XX)</span>
         </span>
 
       </div>
@@ -76,13 +75,12 @@
       <div class="form-group" [class.has-error]="percentageText.invalid" [class.has-success]="percentageText.valid">
         <input type="number" class="text" name="{{question['questionNo']}}" id="question['questionNo']"
           #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
-          [disabled]="question['hideQuestion']" rows="3" pattern="^[1-9][0-9]?$|^100$"
+          [disabled]="question['hideQuestion']" rows="3" 
           [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
           (change)="showHiddenQuestionBasedOnUserInput(percentageText.value, question)" />
 
         <span class="help-block" *ngIf="percentageText.invalid && (percentageText.dirty || percentageText.touched)">
           <span *ngIf="percentageText.errors.required">Valid input is required</span>
-          <span *ngIf="percentageText.errors.pattern">Input should be in range: 1-100</span>
         </span>
 
       </div>

@@ -20,7 +20,7 @@ import { OfferConstructComponent } from '@app/construct/offer-construct/offer-co
 import { OasComponent } from './oas/oas.component';
 import { OfferDimensionComponent } from './dimensions/offer-dimension/offer-dimension.component';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
-import { AtoMainComponent } from './modelling-design/ato-main/ato-main.component';
+
 
 
 const routes: Routes = [
@@ -131,11 +131,15 @@ const routes: Routes = [
   {
     path: 'offer-setup/:offerId/:caseId/:selectedAto',
     component: OfferSetupComponent
+<<<<<<< HEAD
   },
   {
     path: 'modelling-design/:offerId/:caseId/:selectedAto',
     loadChildren: './modelling-design/modelling-design.module#ModellingDesignModule'
+=======
+>>>>>>> 1255c1703c4e1bfaafbc5e62669db1494e59b8a6
   }
+
 
 ];
 
