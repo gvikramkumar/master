@@ -3,6 +3,7 @@ export default {
   ssl: false,
   corsOrigin: [],
   showStack: true,
+  expressTimeout: 1000 * (55 + 60),
   fileUpload: {
     fileSizeMax: 10000000, // 10mb
     fileCountMax: 1, // limit file count and size for dos attacks

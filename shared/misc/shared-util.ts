@@ -1,5 +1,6 @@
 
 import * as _ from 'lodash';
+import moment from 'moment-timezone';
 import AnyObj from '../models/any-obj';
 
 export const shUtil = {
@@ -17,6 +18,7 @@ export const shUtil = {
   isDeptUploadMeasure,
   fiscalYearFromFiscalMonth,
   isManualMix,
+  convertToPSTTime
 };
 
 function fiscalYearFromFiscalMonth(fimo) {
@@ -236,6 +238,9 @@ function isManualMix(submeasure) {
   return submeasure.categoryType === 'Manual Mix';
 }
 
+function convertToPSTTime(date) {
+  return moment(date).tz('America/Los_Angeles').format('MM/DD/YYYY hh:mm A');
+}
 
 
 

@@ -31,6 +31,8 @@ import {databaseRouter} from './api/database/router';
 import {addGlobalData} from './lib/middleware/add-global-data';
 import {healthcheck} from './lib/middleware/healthcheck';
 import {distiDirectUploadRouter} from './api/prof/disti-direct-upload/router';
+import {timeoutHandler} from './lib/middleware/timeout-handler';
+
 import AnyObj from '../shared/models/any-obj';
 import Q from 'q';
 
@@ -46,6 +48,8 @@ export default function () {
     next();
   })
 */
+
+  app.use(timeoutHandler());
 
   app.use(express.static(path.resolve(__dirname, '../../ui/dist'), {index: false}));
 
@@ -116,7 +120,6 @@ export default function () {
       }
     })
 */
-
 
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/database', databaseRouter);

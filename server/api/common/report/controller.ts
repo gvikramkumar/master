@@ -328,15 +328,22 @@ export default class ReportController extends ControllerBase {
             'indicators.manualMapping', 'manualMapping.salesLevel', 'manualMapping.productLevel', 'manualMapping.scmsLevel', 'manualMapping.entityLevel', 'manualMapping.internalBELevel',
             'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'rules[5]', 'rules[6]', 'rules[7]', 'rules[8]', 'rules[9]', 'rules[10]', 'rules[11]', 'rules[12]', 'rules[13]', 'rules[14]',
             'indicators.groupFlag', 'indicators.allocationRequired', 'groupingSubmeasureName', 'categoryType', 'indicators.retainedEarnings', 'indicators.transition', 'indicators.service', 'indicators.passThrough', 'indicators.corpRevenue', 'indicators.dualGaap', 'indicators.twoTier', 'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate']];
+        if (req.dfa.module.moduleId === 1) {
+          excelHeaders[2].splice(43, 0, 'HW Split %', 'SW Split %');
+          excelProperties[2].splice(43, 0, 'manualMixHw', 'manualMixSw');
+        }
+
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.sourceRepo.getManyActive(),
-          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.productClassUploadPgRepo.getMany({fiscalMonth: req.dfa.module.fiscalMonth})
         ])
           .then(results => {
             this.measures = results[0];
             this.sources = results[1];
             this.submeasures = results[2];
+            const pgManualMixes = results[3];
             return Promise.all([
               this.submeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
                 .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
@@ -345,7 +352,13 @@ export default class ReportController extends ControllerBase {
                 .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
                 .then(vals => _.orderBy(vals, ['measureName', 'name'])),
               this.submeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
-                .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
+                .then(docs => docs.map(doc => {
+                  let sm = this.transformSubmeasure(doc);
+                  if (req.dfa.module.moduleId === 1) {
+                    sm = this.transformAddManualMix(sm, pgManualMixes);
+                  }
+                  return sm;
+                }))
                 .then(vals => _.orderBy(vals, ['measureName', 'name']))
             ]);
 
@@ -413,8 +426,8 @@ export default class ReportController extends ControllerBase {
           'sm.createdDate', 'sm.updatedBy', 'sm.updatedDate'];
 
         if (req.dfa.module.moduleId === 1) {
-          excelHeaders.splice(8, 0, 'HW Split %', 'SW Split %');
-          excelProperties.splice(8, 0, 'sm.manualMixHw', 'sm.manualMixSw');
+          excelHeaders.splice(40, 0, 'HW Split %', 'SW Split %');
+          excelProperties.splice(40, 0, 'sm.manualMixHw', 'sm.manualMixSw');
         }
 
         promise = Promise.all([
@@ -474,8 +487,7 @@ export default class ReportController extends ControllerBase {
                 .map(prop => {
                   const val = _.get(obj, prop);
                   if (val instanceof Date) {
-                    const str = val.toISOString();
-                    return str.substr(0, str.length - 5).replace('T', '  ');
+                    return shUtil.convertToPSTTime(val);
                   } else {
                     return val;
                   }
@@ -500,8 +512,7 @@ export default class ReportController extends ControllerBase {
             return objs.map(obj => excelProperties.map(prop => {
               const val = _.get(obj, prop);
               if (val instanceof Date) {
-                const str = val.toISOString();
-                return str.substr(0, str.length - 5).replace('T', '  ');
+                return shUtil.convertToPSTTime(val);
               } else {
                 return val;
               }

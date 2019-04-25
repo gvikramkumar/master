@@ -70,6 +70,7 @@ export default class UploadController {
     this.startUpload = Date.now();
     this.userId = req.user.id;
     const sheets = xlsx.parse(req.file.buffer);
+    let templateRow = sheets[0].data[4];
     this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 0);
     this.rows2 = [];
     if (this.hasTwoSheets) {
@@ -83,6 +84,12 @@ export default class UploadController {
     this.hasTotalErrors = false;
     if (this.rows1.length === 0) {
       next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
+      return;
+    }
+    const propNames = _.values(this.PropNames).map(x => x.trim().toLowerCase());
+    templateRow = _.map(templateRow, (arrElem) => _.replace(arrElem, '*', '').trim().toLowerCase());
+    if (propNames.length !== templateRow.length || propNames.length !== _.intersection(propNames, templateRow).length) {
+      next(new ApiError('Wrong template uploaded. Please use the appropriate upload template.', null, 400));
       return;
     }
 
@@ -99,12 +106,16 @@ export default class UploadController {
       .then(() => this.autoSync())
       .then(() => {
         this.sendSuccessEmail();
-        res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
+        if (!res.headersSent) {
+          res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
+        }
       })
       .catch(err => {
         if (err && err.name === this.UploadValidationError) {
           this.sendValidationEmail();
-          res.json({status: 'failure', uploadName: this.uploadName});
+          if (!res.headersSent) {
+            res.json({status: 'failure', uploadName: this.uploadName});
+          }
         } else {
           const data = Object.assign({}, err);
           if (err.message) {
