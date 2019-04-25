@@ -110,8 +110,8 @@
         <div class="form-group label--floated input--icon half-margin-bottom">
             <div class="form-group__text">
                 <input type="text"  [name]="question.egineAttribue" [id]="question.question" class="form-control"
-                 [formControlName]="question.egineAttribue" #dp4="bsDatepicker" bsDatepicker containerClass="custome-date"
-                [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY' }" 
+                [formControlName]="question.egineAttribue" #dp4="bsDatepicker" bsDatepicker containerClass="custome-date"
+                [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY' }"
                 [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                 [ngModel]="dateFormat(question.currentValue)" (ngModelChange)="question.currentValue = updateDate($event)">
                 <label for="questionLabel"><span *ngIf="questionForm.controls[question.egineAttribue].errors && questionForm.controls[question.egineAttribue].errors.required"><font color="red">*</font></span>{{question.question}}</label>
