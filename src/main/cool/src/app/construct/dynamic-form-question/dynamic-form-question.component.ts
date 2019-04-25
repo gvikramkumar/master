@@ -15,6 +15,8 @@ export class DynamicFormQuestionComponent implements OnInit {
   @Input() questionForm: FormGroup;
   @Input() offerForm: FormGroup;
   @Input() headerName: FormGroup;
+  @ViewChild('dp4') datepicker: BsDaterangepickerDirective;
+
   minDate: Date;
   constructor(public offerConstructService: OfferConstructService,private datePipe: DatePipe) {
   }
@@ -23,12 +25,17 @@ export class DynamicFormQuestionComponent implements OnInit {
   }
   dateFormat(val){
     if(val!==''){
-      return this.datePipe.transform(new Date(val),'dd-MMM-yyyy');
+      try{
+        return this.datePipe.transform(new Date(val),'dd-MMM-yyyy');
+      }catch(err){}
     }
   }
   updateDate(e){
     if(e!==''){
-      return this.datePipe.transform(new Date(e));
+      try{
+        return this.datePipe.transform(new Date(e),'dd-MMM-yyyy');
+      }catch(err){}
     }
   }
+
 }

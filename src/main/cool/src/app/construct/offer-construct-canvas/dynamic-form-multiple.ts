@@ -280,7 +280,7 @@ export class DynamicFormMultipleComponent implements OnInit {
          }
     }
     updateDate(e){
-        return this.datePipe.transform(new Date(e));
+        return this.datePipe.transform(new Date(e),'dd-MMM-yyyy');
     }
     patchToALL(groupName) {
 
