@@ -221,16 +221,16 @@
                               </div>
                             </td>
                             <td *ngSwitchCase="'Date'">
-                              <div class="form-group input--compressed">
+                                <div class="form-group input--compressed">
                                 <div class="form-group__text">
                                   <div class="on-focus clearfix">
-                                    <input type="text" [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control" bsDatepicker
-                                      [readonly]="ques.value['eGenieFlag']"
-                                      [ngModel]="dateFormat(pInfo.currentValue)" (ngModelChange)="pInfo.currentValue = updateDate($event)">
+                                  <input type="text" [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control" bsDatepicker
+                                    [readonly]="ques.value['eGenieFlag']" [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY' }"
+                                    [ngModel]="dateFormat(pInfo.currentValue)" (ngModelChange)="pInfo.currentValue = updateDate($event)">
                                   </div>
                                 </div>
-                              </div>
-                            </td>
+                                </div>
+                              </td>
                             
                             <td *ngSwitchCase="'Radio Button'">
                               <div class="form-group dropdown input--compressed">
