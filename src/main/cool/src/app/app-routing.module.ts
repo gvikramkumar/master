@@ -131,13 +131,10 @@ const routes: Routes = [
   {
     path: 'offer-setup/:offerId/:caseId/:selectedAto',
     component: OfferSetupComponent
-<<<<<<< HEAD
   },
   {
     path: 'modelling-design/:offerId/:caseId/:selectedAto',
     loadChildren: './modelling-design/modelling-design.module#ModellingDesignModule'
-=======
->>>>>>> 1255c1703c4e1bfaafbc5e62669db1494e59b8a6
   }
 
 
