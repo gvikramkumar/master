@@ -38,6 +38,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
     private stakeholderfullService: StakeholderfullService) {
 
     this.activatedRoute.params.subscribe(params => {
+      this.caseId = params['caseId'];
       this.offerId = params['offerId'];
       this.selectedAto = params['selectedAto'];
     });

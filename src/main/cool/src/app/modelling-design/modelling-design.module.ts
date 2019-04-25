@@ -1,7 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { DataTableModule, SharedModule, AccordionModule, DialogModule } from 'primeng/primeng';
+import { DataTableModule, SharedModule } from 'primeng/primeng';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import * as _ from 'lodash';

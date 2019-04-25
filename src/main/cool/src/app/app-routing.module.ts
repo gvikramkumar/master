@@ -129,11 +129,11 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'offer-setup/:offerId/:selectedAto',
+    path: 'offer-setup/:offerId/:caseId/:selectedAto',
     component: OfferSetupComponent
   },
   {
-    path: 'modelling-design/:offerId/:selectedAto',
+    path: 'modelling-design/:offerId/:caseId/:selectedAto',
     loadChildren: './modelling-design/modelling-design.module#ModellingDesignModule'
   }
 
