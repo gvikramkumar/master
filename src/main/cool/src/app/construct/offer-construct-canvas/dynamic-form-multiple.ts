@@ -452,7 +452,7 @@ addAllDetailsValidationsonChange(e,question){
         if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
             // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
             if(!(/^0*([1-9]|1[0-2])$/.test(question.currentValue))){
-                question.rules.validationMessage = question.egineAttribue + "Value should be a numeric range where 1 is min and 12 is max" ;
+                question.rules.validationMessage = "Value should be a numeric range where 1 is min and 12 is max" ;
                 question.rules.isvalid = false ;
             }
             else{
