@@ -1,7 +1,6 @@
 import { LoaderService } from '../../shared/loader.service';
 import { Component, OnInit, Input, Output, ViewChild, ElementRef, Renderer, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
 import { OfferConstructService } from '@app/services/offer-construct.service';
@@ -11,8 +10,7 @@ import * as moment from 'moment';
 @Component({
     selector: 'dynamic-form-multiple',
     templateUrl: './dynamic-form-multiple.html',
-    styleUrls: ['./dynamic-form-multiple.css'],
-    providers: [DatePipe]
+    styleUrls: ['./dynamic-form-multiple.css']
 })
 export class DynamicFormMultipleComponent implements OnInit {
     public offerInfo: any;
@@ -43,8 +41,7 @@ export class DynamicFormMultipleComponent implements OnInit {
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
-        private loaderService: LoaderService,
-        private datePipe: DatePipe) {
+        private loaderService: LoaderService) {
     }
 
     ngOnInit() {
@@ -276,11 +273,11 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
     dateFormat(val){
         if(val!==''){
-            return this.datePipe.transform(new Date(val),'dd-MMM-yyyy');
+            return moment(val).format('DD-MMM-YYYY');
          }
     }
     updateDate(e){
-        return this.datePipe.transform(new Date(e),'dd-MMM-yyyy');
+        return moment(e).toISOString();
     }
     patchToALL(groupName) {
 

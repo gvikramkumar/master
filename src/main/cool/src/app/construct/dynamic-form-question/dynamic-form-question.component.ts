@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { OfferConstructService } from '@app/services/offer-construct.service';
 import { BsDatepickerConfig,BsDaterangepickerDirective } from 'ngx-bootstrap/datepicker';
-import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 
 
 @Component({
@@ -18,7 +18,7 @@ export class DynamicFormQuestionComponent implements OnInit {
   @ViewChild('dp4') datepicker: BsDaterangepickerDirective;
 
   minDate: Date;
-  constructor(public offerConstructService: OfferConstructService,private datePipe: DatePipe) {
+  constructor(public offerConstructService: OfferConstructService) {
   }
   ngOnInit() { 
     this.minDate = new Date();
@@ -26,14 +26,14 @@ export class DynamicFormQuestionComponent implements OnInit {
   dateFormat(val){
     if(val!==''){
       try{
-        return this.datePipe.transform(new Date(val),'dd-MMM-yyyy');
+        return moment(val).format('DD-MMM-YYYY');
       }catch(err){}
     }
   }
   updateDate(e){
     if(e!==''){
       try{
-        return this.datePipe.transform(new Date(e),'dd-MMM-yyyy');
+        return moment(e).toISOString();
       }catch(err){}
     }
   }

@@ -85,7 +85,7 @@ export class OfferConstructService {
                     validators.push(Validators.pattern("^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$"))
                 }
                 if (question.egineAttribue == 'STD AUTO RENEWAL TERM') {
-                    validators.push(Validators.pattern("^0*([1-9]|1[0-2])$"))
+                    validators.push(Validators.pattern("^0*([1-9]|[1-5][0-9]|60)$"))
                 }
                 if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
                     validators.push(Validators.pattern("^0*([1-9]|1[0-2])$"))
