@@ -276,11 +276,11 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
     dateFormat(val){
         if(val!==''){
-            return this.datePipe.transform(new Date(val), 'MM/dd/yyyy');
-        }
+            return this.datePipe.transform(new Date(val),'dd-MMM-yyyy');
+         }
     }
     updateDate(e){
-        return this.datePipe.transform(new Date(e), 'MM/dd/yyyy');
+        return this.datePipe.transform(new Date(e));
     }
     patchToALL(groupName) {
 
