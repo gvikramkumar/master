@@ -139,7 +139,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
 
       if (selectedValue === selectedOption) {
         this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['hideQuestion'] = false;
-        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = 'Mandatory';
+        this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]['rules']['isMandatoryOptional'] = '';
         this.showHiddenQuestionBasedOnUserInput
           (selectedValue, this.groupData[osGroup][group][subGroup]['questions'][childIndexGroupData]);
       } else if (textDateQuestionDependency && stringInputZero) {

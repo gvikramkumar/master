@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { OfferPhaseService } from '../services/offer-phase.service';
-import { RightPanelService } from '../services/right-panel.service';
-import { LeadTime } from './lead-time';
+import { OfferPhaseService } from '@app/services/offer-phase.service';
+import { RightPanelService } from '@app/services/right-panel.service';
+import { LeadTime } from '@app/right-panel/models/lead-time';
 import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';

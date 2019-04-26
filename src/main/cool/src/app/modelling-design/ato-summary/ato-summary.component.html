@@ -1,0 +1,40 @@
+<div class="responsive-table">
+
+  <p-dataTable [value]="tasks" scrollable="true" [rows]="10" [paginator]="true" scrollHeight="350px"
+    [resizableColumns]="true">
+
+    <p-column field="ato" sortable="true" header="ATO/PID">
+      <ng-template let-col let-task="rowData" pTemplate="body">
+        <span>{{task['taskName']}}<br /></span>
+      </ng-template>
+    </p-column>
+
+    <p-column field="status" header="STATUS" sortable="true">
+      <ng-template let-col let-task="rowData" pTemplate="body">
+        <div class="text-center">
+
+          <ng-container *ngIf="task['taskStatus'] ==='COMPLETE'; else notRequired">
+            <span class="completed success">
+              <span class="icon-check"></span>
+            </span>
+          </ng-container>
+
+          <ng-template #notRequired>
+            <ng-container *ngIf="task['taskStatus'] ==='NOT REQUIRED';else other">
+              <span class="in-progress">
+              </span>
+            </ng-container>
+          </ng-template>
+
+          <ng-template #other>
+            <span class="not-available">
+            </span>
+          </ng-template>
+
+        </div>
+      </ng-template>
+    </p-column>
+
+  </p-dataTable>
+
+</div>
