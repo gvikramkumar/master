@@ -487,7 +487,6 @@ export class CreateOfferCoolComponent implements OnInit {
 
     const offerCreationDate = moment(new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })).format();
     const selectedPrimaryBe = [];
-    const constructDetails = null;
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
