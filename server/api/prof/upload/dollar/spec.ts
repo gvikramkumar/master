@@ -4,7 +4,7 @@ import DollarUploadRepo from '../../dollar-upload/repo';
 import {mockRepo} from '../../../../../spec/mocks/mock-repo';
 
 
-fdescribe('upload/dollar tests', () => {
+describe('upload/dollar tests', () => {
   let sut;
   beforeAll(() => {
     if (injector.isBound(DollarUploadRepo)) {

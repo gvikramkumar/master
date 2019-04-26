@@ -24,7 +24,8 @@ export const svrUtil = {
   base64ToAscii,
   docToObject,
   postgresReplaceQuotes,
-  toFixed8
+  toFixed8,
+  toFixed
 };
 
 function toFixed8(val) {
