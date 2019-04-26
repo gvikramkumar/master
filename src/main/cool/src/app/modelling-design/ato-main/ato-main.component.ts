@@ -88,7 +88,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
     const urlToOpen = this.environmentService.owbUrl;
     const functionalRole: Array<String> = this.configurationService.startupData.functionalRole;
 
-    if (functionalRole.includes('OLE')) {
+    if (functionalRole.includes('BUPM')) {
       window.open(urlToOpen, '_blank');
     }
 
