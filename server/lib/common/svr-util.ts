@@ -24,63 +24,17 @@ export const svrUtil = {
   base64ToAscii,
   docToObject,
   postgresReplaceQuotes,
-  truncateDecimal8,
-  roundDecimal8
+  toFixed8
 };
 
-function roundDecimal8(val) {
-  return roundDecimal(val, 8);
-}
-
-function truncateDecimal8(val) {
-  return truncateDecimal(val, 8);
+function toFixed8(val) {
+  return toFixed(val, 8);
 }
 
 // round off a number's decimal part to x decimal places, this works with or without numbers before the decimal
-/*function roundDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number') {
-    return val;
-  }
-  const str = val.toString();
-
-  const dot = str.indexOf('.');
-  let beforeDecimal;
-  if (dot === 1 && str[0] === '0') {
-    beforeDecimal = 0;
-  } else {
-    beforeDecimal = dot;
-  }
-  return Number(val.toPrecision(beforeDecimal + places));
-}*/
-
-function roundDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number') {
-    return val;
-  }
-  return val.toFixed(places);
+function toFixed(val, places) {
+  return Number(Number(val).toFixed(places));
 }
-
-// truncate a number's decimal part to x decimal places, this works with or without numbers before the decimal
-function truncateDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number') {
-    return val;
-  }
-
-  return Math.floor(val * Math.pow(10, places)) / Math.pow(10, places);
-}
-/*function truncateDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number') {
-    return val;
-  }
-  val = Number(val.toFixed(places));
-  const str = val.toString();
-
-  if (str.indexOf('.') === -1) {
-    return val;
-  }
-  const dot = str.indexOf('.');
-  return Number(str.substring(0, dot) + str.substr(dot, places + 1));
-}*/
 
 // strings are bracketed by single quotes, so we have to escape single quotes within the string
 function postgresReplaceQuotes(val) {
