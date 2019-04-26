@@ -36,7 +36,7 @@ import { LoaderService } from '../../shared/loader.service';
   providers: [OfferConstructService]
 })
 export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
-  public ind = 0;;
+  public ind = 0;
   questionForm: FormGroup;
   currentOfferId;
   caseId;
@@ -100,6 +100,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   setTitle;
   setSearchItem;
   subscription: Subscription;
+  public chargeTypeValue: any;
   multiSelectItems: string[] = ['Route-to-Market',
     'Price List Availability',
     'GPL Publication',
@@ -750,7 +751,13 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             this.loaderService.stopLoading();
           },
             () => {
-              obj['itemDetails'] = this.listOfferQuestions;
+              // if (obj.productName !== 'Billing SOA' || obj.productName !== 'Billing') {
+              if (obj.productName !== 'Billing SOA') {
+                obj['itemDetails'] = this.listOfferQuestions;
+              } else {
+                let listOfferQuestions = this.billingSOADefaultValue();
+                obj['itemDetails'] = listOfferQuestions;
+              }
               this.getQuestionList(obj);
             });
 
@@ -789,6 +796,74 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     }
     this.updateChildCount();
     this.isDisabledView = false;  // for enable button
+  }
+
+   // set billing SOA default value according offer soluting 
+
+   billingSOADefaultValue() {
+    this.listOfferQuestions.forEach(element => {
+      if (element.rules.defaultSel != '') {
+        element.currentValue = element.rules.defaultSel;
+        element.previousValue = element.rules.defaultSel;
+      }
+      if (element.question == 'Base Price') {
+        if (this.chargeTypeValue == 'Usage') {
+          element.currentValue = 0;
+          element.previousValue = 0;
+        }
+      }
+      if (element.question == 'Discount Restricted Product') {
+        if (this.chargeTypeValue == 'Recurring') {
+          element.currentValue = 0;
+          element.previousValue = 0;
+        }
+      }
+      if (element.question === "Proration Flag For Purchase") {
+        if (this.chargeTypeValue == 'Recurring') {
+          element.currentValue = 'Yes';
+          element.previousValue = 'Yes';
+        }
+        if (this.chargeTypeValue == 'Usage') {
+          element.currentValue = 'No';
+          element.previousValue = 'No';
+        }
+      }
+      if (element.question === "Proration Flag For Cancel") {
+        if (this.chargeTypeValue == 'Recurring') {
+          element.currentValue = 'Yes';
+          element.previousValue = 'Yes';
+        }
+        if (this.chargeTypeValue == 'Usage') {
+          element.currentValue = 'No';
+          element.previousValue = 'No';
+        }
+      }
+      if (element.question == "Usage Type") {
+        if (this.chargeTypeValue == 'Usage') {
+          element.currentValue = 'Support';
+          element.previousValue = 'Support';
+        }
+      }
+      if (element.question == 'RATING MODEL') {
+        if (this.chargeTypeValue == 'Usage') {
+          element.currentValue = 'EVENT';
+          element.previousValue = 'EVENT';
+        }
+      }
+      if (element.question == 'Discount Restricted Product') {
+        if (this.chargeTypeValue == 'Usage') {
+          element.currentValue = 'Yes';
+          element.previousValue = 'Yes';
+        }
+      }
+      if (element.question == 'Subscription Offset') {
+        if (this.chargeTypeValue == 'Recurring') {
+          element.currentValue = '30';
+          element.previousValue = '30';
+        }
+      }
+    });
+    return this.listOfferQuestions;
   }
 
   /**
@@ -997,6 +1072,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       if (offerDetailRes.constructDetails.length > 0) {
         this.transformDataToTreeNode(offerDetailRes);
       }
+      if (offerDetailRes.solutioningDetails !== null && offerDetailRes.solutioningDetails !== undefined) {
+        if (offerDetailRes.solutioningDetails.length > 0) {
+          this.getChargeTypeAndPricingType(offerDetailRes.solutioningDetails);
+        }
+      }
     }, (err) => {
       console.log(err);
       this.loaderService.stopLoading();
@@ -1031,6 +1111,18 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       tempArrayObj.push(obj);
     });
     return tempArrayObj;
+  }
+
+  // getChargeTypeAndPricingType for billing SOA 
+
+  getChargeTypeAndPricingType(solutioningDetails) {
+    solutioningDetails.forEach(element => {
+      element.Details.forEach(list => {
+        if (list.egenieAttributeName == 'CHARGE TYPE' || list.egenieAttributeName == 'Charge Type') {
+          this.chargeTypeValue = list.solutioningAnswer;
+        }
+      });
+    });
   }
 
   /**
