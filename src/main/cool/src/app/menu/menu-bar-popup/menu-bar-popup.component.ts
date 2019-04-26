@@ -29,9 +29,8 @@ export class MenuBarPopupComponent implements OnInit {
     private userService: UserService,
   ) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
-
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
   }
 

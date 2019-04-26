@@ -70,8 +70,8 @@ export class OfferSolutioningComponent implements OnInit {
     private offersolutioningService: OffersolutioningService
   ) {
     this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['id'];
-      this.caseId = params['id2'];
+      this.offerId = params['offerId'];
+      this.caseId = params['caseId'];
     });
   }
 

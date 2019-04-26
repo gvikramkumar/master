@@ -42,8 +42,9 @@ export class TaskbarComponent implements OnInit {
 
   ngOnInit() {
     this.currentPage = this.router.url.split('/')[1]
-    this.currentOfferId = this.activatedRoute.snapshot.params["id"];
-    this.caseId = this.activatedRoute.snapshot.params['id2'];
+    this.currentOfferId = this.activatedRoute.snapshot.params['offerId'];
+    this.caseId = this.activatedRoute.snapshot.params['caseId'];
+
     this.setTaskBar();
     this.userRole = this.sharedService.userFunctionalRole;
     this.sharedService.userEventEmit.subscribe((role) => {

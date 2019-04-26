@@ -130,8 +130,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     private loaderService: LoaderService) {
 
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
     this.myForm = this._fb.group({
       // you can also set initial formgroup inside if you like

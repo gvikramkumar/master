@@ -101,7 +101,9 @@ export class CreateOfferCoolComponent implements OnInit {
     private _location: Location) {
     this.disablePrimaryBEList = createOfferService.disablePrBEList;
     this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['id'];
+
+      this.offerId = params['offerId'];
+
       if (this.offerId) {
         this.loaderService.startLoading(); 
         this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerDetailRes => {

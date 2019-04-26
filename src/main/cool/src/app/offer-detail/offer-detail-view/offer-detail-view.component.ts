@@ -59,8 +59,8 @@ export class OfferDetailViewComponent implements OnInit {
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private _location: Location) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
     this.activatedRoute.data.subscribe((data) => {
     });

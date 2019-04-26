@@ -32,16 +32,12 @@ import { OfferPhaseService } from './services/offer-phase.service';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { StrategyReviewService } from './services/strategy-review.service';
 import { OfferSolutioningComponent } from './solutioning/offer-solutioning/offer-solutioning.component';
-import { PackingComponent } from './dimensions/offer-dimension-groups/packing/packing.component';
-import { SupportComponent } from './dimensions/offer-dimension-groups/support/support.component';
-import { OfferPricingComponent } from './dimensions/offer-dimension-groups/offer-pricing/offer-pricing.component';
-import { BillingComponent } from './dimensions/offer-dimension-groups/billing/billing.component';
-import { ProgramComponent } from './dimensions/offer-dimension-groups/program/program.component';
+
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmInfoBarComponent } from './monetization/mm-info-bar/mm-info-bar.component';
 import { MmMessageBarComponent } from './monetization/mm-message-bar/mm-message-bar.component';
 import { OffersolutioningCardOneComponent } from './solutioning/offer-solutioning-card-one/offer-solutioning-card-one.component';
-import { OfferDimensionComponent } from './dimensions/offer-dimension/offer-dimension.component';
+
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
@@ -93,16 +89,10 @@ export function app_init(configService: ConfigurationService) {
     OfferCreateDetailComponent,
     AuthErrorComponent,
     OfferSolutioningComponent,
-    PackingComponent,
-    SupportComponent,
-    OfferPricingComponent,
-    BillingComponent,
-    ProgramComponent,
     OfferBasicInfoComponent,
     MmInfoBarComponent,
     MmMessageBarComponent,
     OffersolutioningCardOneComponent,
-    OfferDimensionComponent,
     OfferConstructComponent,
     DynamicFormQuestionComponent,
     OfferconstructCanvasComponent,

@@ -53,8 +53,8 @@ export class StakeholderAddComponent implements OnInit {
     private searchCollaboratorService: SearchCollaboratorService) {
 
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
 
   }
