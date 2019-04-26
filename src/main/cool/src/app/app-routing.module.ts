@@ -124,7 +124,12 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'offer-setup/:offerId/:caseId/:selectedAto',
+    path: 'offerSetup/:offerId/:caseId',
+    component: OfferSetupComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'offerSetup/:offerId/:caseId/:selectedAto',
     component: OfferSetupComponent,
     resolve: { offerData: OfferOverViewResolver }
   },

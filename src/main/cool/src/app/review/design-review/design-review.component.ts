@@ -72,7 +72,6 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   milestoneList;
   designReviewList;
   milestoneValue: string;
-  proceedToOfferSetup: Boolean = true;
   showButtonSection = false;
   doNotApproveSection = false;
   showConditionalApprovalSection = false;
@@ -92,6 +91,8 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   strategyReviewList;
   currentFunctionalRole;
   loadExitCriteria = false;
+
+  proceedToOfferSetup: Boolean = true;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
@@ -233,7 +234,9 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  offerDetailOverView() { }
+  offerSetupView() {
+    this.router.navigate(['/offerSetup', this.currentOfferId, this.caseId]);
+  }
 
   private getMilestones(milestones) {
     const result = milestones.plan;
