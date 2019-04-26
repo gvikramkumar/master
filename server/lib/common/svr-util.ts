@@ -24,8 +24,7 @@ export const svrUtil = {
   base64ToAscii,
   docToObject,
   postgresReplaceQuotes,
-  toFixed8,
-  checkDeptUpload
+  toFixed8
 };
 
 function toFixed8(val) {
@@ -196,9 +195,6 @@ function checkParams(obj, arrProps, next) {
   return false;
 }
 
-function checkDeptUpload(uploadType, template) {
-  return uploadType === 'dept-upload' ? _.includes(template, 'sub-measure name') && _.includes(template, 'node value') : false;
-}
 
 // Old function for getting object changes/updates:
 /*
