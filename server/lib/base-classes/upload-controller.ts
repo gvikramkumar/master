@@ -89,8 +89,10 @@ export default class UploadController {
     const propNames = _.values(this.PropNames).map(x => x.trim().toLowerCase());
     templateRow = _.map(templateRow, (arrElem) => _.replace(arrElem, '*', '').trim().toLowerCase());
     if (propNames.length !== templateRow.length || propNames.length !== _.intersection(propNames, templateRow).length) {
-      next(new ApiError('Wrong template uploaded. Please use the appropriate upload template.', null, 400));
-      return;
+      if (!svrUtil.checkDeptUpload(req.query.uploadType, templateRow)) {
+        next(new ApiError('Wrong template uploaded. Please use the appropriate upload template.', null, 400));
+        return;
+      }
     }
 
     this.getInitialData()
