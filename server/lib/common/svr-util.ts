@@ -195,6 +195,7 @@ function checkParams(obj, arrProps, next) {
   return false;
 }
 
+
 // Old function for getting object changes/updates:
 /*
 function getObjectDifferences(oldObj, newObj, omitProperties: string[]): string {

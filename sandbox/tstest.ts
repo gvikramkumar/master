@@ -5,7 +5,7 @@ import {svrUtil} from '../server/lib/common/svr-util';
 import * as Q from 'q';
 
 
-const a = Number('xx');
+/*const a = Number('xx');
 console.log(toFixed(a, 8));
 const sum = 5 + a;
 const b = sum.toFixed(8);
@@ -15,7 +15,10 @@ console.log('number' + toFixed('xx', 8));
 const i = 2;
 function toFixed(val, places) {
   return Number(Number(val).toFixed(places));
-}
+}*/
+
+console.log('-*1pub4-*'.replace(/(\-|\*)/g, ''));
+
 
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
