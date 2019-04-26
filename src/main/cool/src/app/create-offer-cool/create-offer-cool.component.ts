@@ -487,7 +487,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
     const offerCreationDate = moment(new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })).format();
     const selectedPrimaryBe = [];
-    const constructDetails = [];
+    const constructDetails = null;
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
@@ -505,8 +505,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.iDPId,
       offerCreatedBy,
       offerCreationDate,
-      status,
-      constructDetails);
+      status);
     this.disablePrimaryBEList = true;
     this.createOfferService.disablePrBEList = true;
     this.strategyReviewDateValue = moment(this.strategyReviewDateValue).toISOString();
@@ -529,8 +528,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.iDPId,
       offerCreatedBy,
       offerCreationDate,
-      status,
-      constructDetails
+      status
     );
     if (!this.offerId) {
       this.createOffer(createoffer);
