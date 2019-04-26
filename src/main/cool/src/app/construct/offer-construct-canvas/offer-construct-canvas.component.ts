@@ -152,7 +152,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         event.target.value = event.target.value.replace(/\[.*?\]/g,"");
         
       }
-    
+
 
   // create a json skelaton for major and minor group
 
@@ -994,8 +994,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   offerDetailView() {
     // Check if construct details are availbale in the database for the current offer.
     this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
-      if (offerDetailRes.constructDetails.length > 0) {
-        this.transformDataToTreeNode(offerDetailRes);
+      if (offerDetailRes.constructDetails !== null) {
+        if (offerDetailRes.constructDetails.length > 0) {
+          this.transformDataToTreeNode(offerDetailRes);
+        }
       }
     }, (err) => {
       console.log(err);
