@@ -18,9 +18,6 @@ import { MenuBarPopupComponent } from '@app/menu/menu-bar-popup/menu-bar-popup.c
     ], exports: [
         MenuBarComponent,
         MenuBarPopupComponent
-    ],
-    providers: [
-
     ]
 })
 

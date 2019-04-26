@@ -124,7 +124,7 @@
     top: 15px;
     right: -10px;
     transform: rotate(90deg);
-    background: url(../../assets/images/arrow-top.png) no-repeat;
+    background: url(../../../assets/images/arrow-top.png) no-repeat;
   }
 
   .hoverBox .ui-steps {
@@ -149,7 +149,7 @@
   }
 
   .iconInprogress{
-    background: #fff url(../../assets/images/icon-error.png) no-repeat !important;
+    background: #fff url(../../../assets/images/icon-error.png) no-repeat !important;
     box-shadow: inherit;
   }
 

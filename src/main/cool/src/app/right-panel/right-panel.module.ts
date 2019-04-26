@@ -5,28 +5,32 @@ import { NgModule } from '@angular/core';
 
 
 import * as _ from 'lodash';
-import { RightPanelComponent } from '../right-panel/right-panel.component';
+import { RightPanelComponent } from '@app/right-panel/right-panel-main/right-panel.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { StakeHolderModule } from '../stakeholder/stakeholder.module';
+import { StakeholderAddComponent } from './stakeholder-add/stakeholder-add.component';
+import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
 
 @NgModule({
     declarations: [
         RightPanelComponent,
+        StakeholderAddComponent
     ],
     imports: [
         FormsModule,
         CommonModule,
         AccordionModule,
-        DataTableModule,
         PaginatorModule,
         DialogModule,
         DataTableModule,
-        StakeHolderModule,
+        CuiSearchModule,
+        CuiTableModule,
+        CuiPagerModule,
         BsDatepickerModule.forRoot(),
     ],
     exports: [
         RightPanelComponent,
-        BsDatepickerModule
+        BsDatepickerModule,
+        StakeholderAddComponent
     ],
 })
 

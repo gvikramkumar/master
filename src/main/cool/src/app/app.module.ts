@@ -73,7 +73,7 @@ import { CustomMinValidatorDirective } from './validators/custom-min-validator.d
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
 import { MenuBarModule } from './menu/menu-bar.module';
 import { RightPanelModule } from './right-panel/right-panel.module';
-import { StakeHolderModule } from './stakeholder/stakeholder.module';
+import { StakeholderFullComponent } from './stakeholder/stakeholder-full/stakeholder-full.component';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -116,7 +116,8 @@ export function app_init(configService: ConfigurationService) {
     OfferSetupComponent,
     LoaderComponent,
     CustomMinValidatorDirective,
-    CustomRangeValidatorDirective
+    CustomRangeValidatorDirective,
+    StakeholderFullComponent
   ],
   imports: [
     NgbModule,
@@ -136,7 +137,6 @@ export function app_init(configService: ConfigurationService) {
     NgxWebstorageModule.forRoot(),
     UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 }),
     MenuBarModule,
-    StakeHolderModule,
     RightPanelModule,
     SharedModule,
     AppRoutingModule
