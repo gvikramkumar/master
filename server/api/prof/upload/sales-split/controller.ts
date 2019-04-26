@@ -105,7 +105,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
     Object.keys(results).forEach(accountId => {
       Object.keys(results[accountId]).forEach(companyCode => {
         Object.keys(results[accountId][companyCode]).forEach(subaccountCode => {
-          if (svrUtil.roundDecimal8(results[accountId][companyCode][subaccountCode].total) !== 1.0) {
+          if (svrUtil.toFixed8(results[accountId][companyCode][subaccountCode].total) !== 1.0) {
             this.addErrorMessageOnly(`${accountId} / ${companyCode} / ${subaccountCode}`);
           }
         });
