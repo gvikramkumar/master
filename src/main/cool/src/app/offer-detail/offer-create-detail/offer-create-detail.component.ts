@@ -21,7 +21,7 @@ export class OfferCreateDetailComponent implements OnInit {
   constructor(private router: Router, private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute) {
       this.activatedRoute.params.subscribe(params => {
-        this.currentOfferId = params['id'];
+        this.currentOfferId = params['offerId'];
       });
      }
 

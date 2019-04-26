@@ -47,7 +47,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.offerId = 'COOL_123';
+    this.offerId = 'COOL_6845';
     this.selectedAto = 'Overall Offer';
     this.atoNames.push(this.selectedAto);
 
@@ -55,7 +55,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
       .subscribe((modellingDesignResponse: ModellingDesign) => {
 
         this.modellingDesign = modellingDesignResponse;
-        this.atoList = this.modellingDesign['tasks'];
+        this.atoList = this.modellingDesign['data'];
 
         this.atoList.map(dropDownValue => {
           this.atoNames.push(dropDownValue.itemName);
@@ -64,11 +64,11 @@ export class AtoMainComponent implements OnInit, OnDestroy {
       });
 
     // Retrieve Offer Details
-    // this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
-    //   this.offerName = offerDetails['offerName'];
-    //   this.stakeHolderData = offerDetails['stakeholders'];
-    //   this.processStakeHolderInfo();
-    // });
+    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
+      this.offerName = offerDetails['offerName'];
+      this.stakeHolderData = offerDetails['stakeholders'];
+      this.processStakeHolderInfo();
+    });
 
 
   }

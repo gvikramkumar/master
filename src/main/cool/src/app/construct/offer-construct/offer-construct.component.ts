@@ -55,8 +55,8 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
     private offerConstructCanvasService: OfferconstructCanvasService) {
 
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
 
     this.subscription = this.offerConstructCanvasService.getMessage().subscribe(constructMessage => {

@@ -126,7 +126,7 @@ export class EnvironmentService {
     // DESIGN REVIEW URL's
     REST_API_DESIGN_REVIEW_GET_URL: string;
 
-      // -------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------
 
 
     constructor() {
@@ -221,7 +221,6 @@ export class EnvironmentService {
         // ------------------------ OWB URLs ------------------------------------------------------
 
         this.REST_API_OWB_CONTROLLER_URL = this.baseApiUrl + '/owb/create';
-        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + '/owb/getATOItemStatus';
 
         // ------------------------ eGenie URLs ------------------------------------------------------
 
@@ -330,6 +329,10 @@ export class EnvironmentService {
         // --------------------------------- DESIGN REVIEW URLs ----------------------------------------------
 
         this.REST_API_DESIGN_REVIEW_GET_URL = this.baseApiUrl + '/designReview/getInfo/';
+
+        // ------------------------------------ OFFER SETUP -------------------------------------------------
+
+        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + 'offersetup/getOWBModelObject/';
 
         // -------------------------------------------------------------------------------------------------
 

@@ -6,7 +6,6 @@ import { MmAssesmentComponent } from './monetization/mm-assesment/mm-assesment.c
 import { OfferDetailViewComponent } from './offer-detail/offer-detail-view/offer-detail-view.component';
 import { ExitCriteriaValidationComponent } from '@app/review/exit-criteria-validation/exit-criteria-validation.component';
 import { StakeholderFullComponent } from '@app/stakeholder/stakeholder-full/stakeholder-full.component';
-import { MenuBarComponent } from './menu/menu-bar/menu-bar.component';
 import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
@@ -18,7 +17,6 @@ import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.com
 import { MmMessageBarComponent } from './monetization/mm-message-bar/mm-message-bar.component';
 import { OfferConstructComponent } from '@app/construct/offer-construct/offer-construct.component';
 import { OasComponent } from './oas/oas.component';
-import { OfferDimensionComponent } from './dimensions/offer-dimension/offer-dimension.component';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 
 
@@ -34,16 +32,16 @@ const routes: Routes = [
     component: CreateOfferCoolComponent
   },
   {
-    path: 'coolOffer/:id/:id2',
+    path: 'coolOffer/:offerId/:caseId',
     component: CreateOfferCoolComponent
   },
   {
-    path: 'mmassesment/:id/:id2',
+    path: 'mmassesment/:offerId/:caseId',
     component: MmAssesmentComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'offerDimension/:id/:id2',
+    path: 'offerDimension/:offerId/:caseId',
     component: MmAssesmentComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
@@ -52,7 +50,7 @@ const routes: Routes = [
     loadChildren: './actions/actions.module#ActionsModule'
   },
   {
-    path: 'offerDetailView/:id/:id2',
+    path: 'offerDetailView/:offerId/:caseId',
     component: OfferDetailViewComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
@@ -61,11 +59,11 @@ const routes: Routes = [
     component: ExitCriteriaValidationComponent
   },
   {
-    path: 'stakeholderFull/:id/:id2',
+    path: 'stakeholderFull/:offerId/:caseId',
     component: StakeholderFullComponent
   },
   {
-    path: 'strategyReview/:id/:id2',
+    path: 'strategyReview/:offerId/:caseId',
     component: StrategyReviewComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
@@ -78,7 +76,7 @@ const routes: Routes = [
     component: AuthErrorComponent
   },
   {
-    path: 'offerSolutioning/:id/:id2',
+    path: 'offerSolutioning/:offerId/:caseId',
     component: OfferSolutioningComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
@@ -105,7 +103,7 @@ const routes: Routes = [
     component: MmMessageBarComponent
   },
   {
-    path: 'offerConstruct/:id/:id2',
+    path: 'offerConstruct/:offerId/:caseId',
     component: OfferConstructComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
@@ -114,27 +112,26 @@ const routes: Routes = [
     component: OasComponent
   },
   {
-    path: 'offerDimension/:id/:id2',
-    component: OfferDimensionComponent
-  }, {
-    path: 'offerSolutioning/:id/:id2',
+    path: 'offerSolutioning/:offerId/:caseId',
     component: OfferSolutioningComponent
   }, {
-    path: 'offerConstruct/:id/:id2',
+    path: 'offerConstruct/:offerId/:caseId',
     component: OfferConstructComponent
   },
   {
-    path: 'designReview/:id/:id2',
+    path: 'designReview/:offerId/:caseId',
     component: DesignReviewComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
   {
     path: 'offer-setup/:offerId/:caseId/:selectedAto',
-    component: OfferSetupComponent
+    component: OfferSetupComponent,
+    resolve: { offerData: OfferOverViewResolver }
   },
   {
     path: 'modelling-design/:offerId/:caseId/:selectedAto',
-    loadChildren: './modelling-design/modelling-design.module#ModellingDesignModule'
+    loadChildren: './modelling-design/modelling-design.module#ModellingDesignModule',
+    resolve: { offerData: OfferOverViewResolver }
   }
 
 
