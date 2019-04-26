@@ -5,6 +5,8 @@ import { StakeholderfullService } from '../../services/stakeholderfull.service';
 import { ModellingDesign } from '../model/modelling-design';
 import { Ato } from '../model/ato';
 import { Subscription } from 'rxjs';
+import { EnvironmentService } from '../../../environments/environment.service';
+import { ConfigurationService } from '../../shared/services/configuration.service';
 
 @Component({
   selector: 'app-ato-main',
@@ -34,6 +36,8 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
+    private environmentService: EnvironmentService,
+    private configurationService: ConfigurationService,
     private modellingDesignService: ModellingDesignService,
     private stakeholderfullService: StakeholderfullService) {
 
@@ -81,15 +85,12 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   goToDesignCanvas() {
 
-    const urlToOpen = 'www.google.com';
+    const urlToOpen = this.environmentService.owbUrl;
+    const functionalRole: Array<String> = this.configurationService.startupData.functionalRole;
 
-    let url: string = '';
-    if (!/^http[s]?:\/\//.test(urlToOpen)) {
-      url += 'http://';
+    if (functionalRole.includes('OLE')) {
+      window.open(urlToOpen, '_blank');
     }
-
-    url += urlToOpen;
-    window.open(url, '_blank');
 
   }
 

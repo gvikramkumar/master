@@ -1,71 +1,70 @@
 <div class="content">
   <div class="container-fluid">
     <!-- Menu Bar -->
-    <app-menu-bar >
-    </app-menu-bar>
+    <app-menu-bar [offerId]="offerId" [caseId]="caseId" [offerName]="offerName" [currentMMModel]="derivedMM"
+      [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"></app-menu-bar>
 
     <div class="panel-wrapper mt-15">
-    <!-- taskbar -->
-      <app-taskbar>
-      </app-taskbar>
-    <div class="contentBox mt-10">
+
+      <!-- taskbar -->
+
+      <app-taskbar [isValidToProceed]="proceedToreadinessreview" (onProceedToNext)="onProceedToNext()"></app-taskbar>
+
+      <!-- left Panel -->
       <div class="row">
-        <!-- left Panel -->
-      <div class="leftContent col-sm-12 col-md-9">
-        <app-offer-create-detail></app-offer-create-detail>
-        <!-- Message bar -->
-        <ul class="list list--highlight base-margin-top">
+        <div class="leftContent col-sm-12 col-md-9">
+          <app-offer-create-detail></app-offer-create-detail>
+          <!-- Message bar -->
+          <ul class="list base-margin-top">
             <li>
-              <div class="panel panel--bordered"><span class="text-success"><span class="icon-check-outline icon-medium"></span>
-                   Aligned</span></div>
+              <div class="panel panel--bordered"><span class="text-success"><span
+                    class="icon-check-outline icon-medium"></span>
+                  {{derivedMM}} Aligned</span></div>
             </li>
           </ul>
-        <div class="col-sm-12 col-md-9">
-          <!-- Control Bar -->
-          <div class="row">
-           
-              <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
-              <div class="col-md-4"></div>
 
-            <div class="col-md-4">
-              <div class="form-group dropdown label--inline">
-                <div class="form-group__text select">
-                  <input id="select-size-default" value="Overall Offer" />
-                  <label for="select-size-default">Viewing</label>
-                </div>
-                <div class="dropdown__menu">
-                  <a>Option 1</a>
-                  <a>Option 2</a>
-                  <a>Option 3</a>
-                </div>
+          <!-- Control Bar -->
+          <div class="row base-margin-top">
+
+            <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
+            <div class="form-group dropdown label--inline">
+              <div class="form-group__text select">
+                <label for="select-size-default">Viewing</label>
+                <select>
+                  <option id="select-size-default" value="0">Overall Offer</option>
+                  <option id="select-size-default" *ngFor="let item of Options" value={{item}}>
+                    {{item}}
+                  </option>
+                </select>
               </div>
             </div>
+
           </div>
           <!-- Pirate Ship -->
           <div class="row base-margin-top">
             <div class="col-sm-12">
               <ul class="osw-module--btns">
-                <!-- Item Creation / Modeling and Design -->
                 <div class="row base-margin-bottom">
                   <div class="col-sm-3 half-margin-left">
-                    <li class="base-margin-bottom">
-                      <button
-                        class="btn btn--small btn--success"
-                        placement="top"
-                      >
-                        <span class="icon-tools pull-left"></span>&nbsp;Item
-                        Creation
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        class="btn btn--small btn--warning"
-                        placement="top"
-                      >
-                        <span class="icon-tools pull-left"></span>&nbsp;Modeling
-                        & Design
-                      </button>
-                    </li>
+                    <!-- Group 0 -->
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null">
+                      <li class="base-margin-bottom" *ngFor="let element of groupData['Group0']['left']">
+                        <button class="btn btn--small btn--success" placement="top">
+                          <span class="icon-check pull-left"></span>&nbsp;{{element["moduleName"]}}
+                        </button>
+                      </li>
+                    </div>
+                    <!-- Group 1 -->
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null">
+                      <li *ngFor="let element of groupData['Group1']['left']">
+                        <!-- different status showing -->
+                        <button class="btn btn--small btn--primary" placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+
+
+                      </li>
+                    </div>
                   </div>
                 </div>
                 <!-- box group -->
@@ -75,60 +74,63 @@
                     <div class="panel panel--bordered">
                       <div class="row">
                         <div class="col-sm-12 col-md-6">
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--primary"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Modeling &amp; Design
+                          <!-- Group 2 left-->
+                          <li class="base-padding-bottom" *ngFor="let element of groupData['Group2']['left']">
+                            <!-- Completed -->
+                            <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
+                            </button>
+                            <!-- In Progross-->
+                            <button *ngIf="element['status']=='In Progross'" class="btn btn--small btn--gray-ghost"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
+                            </button>
+                            <!-- Available -->
+                            <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
+                            </button>
+                            <!-- Not Yet Available -->
+                            <button *ngIf="element['status']=='Not Yet Available'"
+                              class="btn btn--small btn--gray-ghost" placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
+                            </button>
+                            <!-- Not Required -->
+                            <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
                           </li>
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--primary"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;T&amp;C Mapping
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              class="btn btn--small btn--default"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Pricing Uplift Setup
-                            </button>
-                          </li>
+
                         </div>
                         <div class="col-sm-12 col-md-6">
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--success"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Service Pricing Setup
+                          <!-- Group 2 right -->
+                          <li class="base-padding-bottom" *ngFor="let element of groupData['Group2']['right']">
+                            <!-- Completed -->
+                            <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
-                          </li>
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--primary"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Service Map
+                            <!-- In Progross-->
+                            <button *ngIf="element['status']=='In Progross'" class="btn btn--small btn--gray-ghost"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
-                          </li>
-                          <li>
-                            <button
-                              class="btn btn--small btn--primary"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;NPI Licensing
+                            <!-- Available -->
+                            <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
+                            </button>
+                            <!-- Not Yet Available -->
+                            <button *ngIf="element['status']=='Not Yet Available'"
+                              class="btn btn--small btn--gray-ghost" placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
+                            </button>
+                            <!-- Not Required -->
+                            <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
                           </li>
                         </div>
@@ -140,79 +142,63 @@
                     <div class="panel panel--bordered">
                       <div class="row">
                         <div class="col-sm-12 col-md-6">
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--warning"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;CSDL
+                          <!-- Group 3 left -->
+                          <li class="base-padding-bottom" *ngFor="let element of groupData['Group3']['left']">
+                            <!-- Completed -->
+                            <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
-                          </li>
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--warning"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Sales Compensation Setup
+                            <!-- In Progross-->
+                            <button *ngIf="element['status']=='In Progross'" class="btn btn--small btn--gray-ghost"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
-                          </li>
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--default"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Royalty Setup
+                            <!-- Available -->
+                            <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
-                          </li>
-                          <li>
-                            <button
-                              class="btn btn--small btn--primary"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;SWOE
+                            <!-- Not Yet Available -->
+                            <button *ngIf="element['status']=='Not Yet Available'"
+                              class="btn btn--small btn--gray-ghost" placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
+                            </button>
+                            <!-- Not Required -->
+                            <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
                           </li>
                         </div>
 
                         <div class="col-sm-12 col-md-6">
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--warning"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Export Compliance
+                          <!-- Group 3 right -->
+                          <li class="base-padding-bottom" *ngFor="let element of groupData['Group3']['right']">
+                            <!-- Completed -->
+                            <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
-                          </li>
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--default"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Compensation Hierarchy
+                            <!-- In Progross-->
+                            <button *ngIf="element['status']=='In Progross'" class="btn btn--small btn--gray-ghost"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
-                          </li>
-                          <li class="base-padding-bottom">
-                            <button
-                              class="btn btn--small btn--warning"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Oﬀer Attribution
+                            <!-- Available -->
+                            <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
-                          </li>
-                          <li>
-                            <button
-                              class="btn btn--small btn--primary"
-                              placement="top"
-                            >
-                              <span class="icon-tools pull-left"></span
-                              >&nbsp;Ordering Guide
+                            <!-- Not Yet Available -->
+                            <button *ngIf="element['status']=='Not Yet Available'"
+                              class="btn btn--small btn--gray-ghost" placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
+                            </button>
+                            <!-- Not Required -->
+                            <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                              placement="top">
+                              {{element["moduleName"]}} {{element['status']}}
                             </button>
                           </li>
                         </div>
@@ -222,39 +208,102 @@
                 </div>
                 <!-- bottom modules -->
                 <div class="row base-margin-top">
-                  <!-- test Orderability -->
+
                   <div class="col-sm-3 half-margin-left">
-                    <li class="base-padding-bottom">
-                      <button
-                        class="btn btn--small btn--gray-ghost"
-                        placement="top"
-                      >
-                        <span class="icon-tools pull-left"></span>&nbsp;Test
-                        Orderability
-                      </button>
-                    </li>
+                    <!-- Group 4 -->
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null">
+                      <li class="base-padding-bottom" *ngFor="let element of groupData['Group4']['left']">
+                        <!-- Completed -->
+                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- In Progross-->
+                        <button *ngIf="element['status']=='In Progross'" class="btn btn--small btn--gray-ghost"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- Available -->
+                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- Not Yet Available -->
+                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- Not Required -->
+                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                      </li>
+                    </div>
                   </div>
                   <div class="col-sm-3 half-margin-left"></div>
-                  <!-- Readiness / Orderability -->
+
                   <div class="col-sm-3 last">
-                    <li class="base-padding-bottom">
-                      <button
-                        class="btn btn--small btn--gray-ghost"
-                        placement="top"
-                      >
-                        <span class="icon-tools pull-left"></span
-                        >&nbsp;Readiness Review
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        class="btn btn--small btn--gray-ghost"
-                        placement="top"
-                      >
-                        <span class="icon-tools pull-left"></span
-                        >&nbsp;Oderability
-                      </button>
-                    </li>
+                    <!-- Group 5 -->
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null">
+                      <li class="base-padding-bottom" *ngFor="let element of groupData['Group5']['left']">
+                        <!-- Completed -->
+                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- In Progross-->
+                        <button *ngIf="element['status']=='In Progross'" class="btn btn--small btn--gray-ghost"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- Available -->
+                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- Not Yet Available -->
+                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- Not Required -->
+                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                      </li>
+                    </div>
+                    <!-- Group 6 -->
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null">
+                      <li *ngFor="let element of groupData['Group6']['left']">
+                        <!-- Completed -->
+                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- In Progross-->
+                        <button *ngIf="element['status']=='In Progross'" class="btn btn--small btn--gray-ghost"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- Available -->
+                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- Not Yet Available -->
+                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                        <!-- Not Required -->
+                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                          placement="top">
+                          {{element["moduleName"]}} {{element['status']}}
+                        </button>
+                      </li>
+                    </div>
                   </div>
                 </div>
               </ul>
@@ -267,21 +316,15 @@
                 <div class="row">
                   <div class="col-sm-6">
                     <li class="half-margin-bottom">
-                      <button
-                        class="btn btn--icon btn--small legend-available"
-                      ></button>
+                      <button class="btn btn--icon btn--small legend-available"></button>
                       Available
                     </li>
                     <li class="half-margin-bottom">
-                      <button
-                        class="btn btn--icon btn--small legend-notavail"
-                      ></button>
-                      Not Available
+                      <button class="btn btn--icon btn--small legend-notavail"></button>
+                      Not Yet Available
                     </li>
                     <li>
-                      <button
-                        class="btn btn--icon btn--small legend-notreq"
-                      ></button>
+                      <button class="btn btn--icon btn--small legend-notreq"></button>
                       Not Required
                     </li>
                   </div>
@@ -309,17 +352,18 @@
               </ul>
             </div>
           </div>
-        </div>
 
-        <div class="col-sm-12 col-md-3"></div>
-      </div>
-      <!-- right panel -->
-      <div class="rightContent">
-          <app-right-panel>
+
+          <div class="col-sm-12 col-md-3"></div>
+        </div>
+        <!-- right panel -->
+        <div class="rightContent  col-sm-12 col-md-3">
+          <app-right-panel [offerName]="offerName" [stakeData]="stakeholders" [primaryBE]="primaryBE"
+            [portfolioFlag]="setFlag" [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime"
+            [noOfWeeksDifference]="noOfWeeksDifference">`
           </app-right-panel>
         </div>
-    </div>
-   </div>
+      </div>
     </div>
   </div>
 </div>

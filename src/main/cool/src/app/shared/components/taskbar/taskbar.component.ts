@@ -60,7 +60,8 @@ export class TaskbarComponent implements OnInit {
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
       this.proceedToOfferSetup = this.isValidToProceed;
     }
-    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Offer Setup') {
+
+    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Readiness Review') {
       this.proceedToOfferSetup = true;
     }
   }
