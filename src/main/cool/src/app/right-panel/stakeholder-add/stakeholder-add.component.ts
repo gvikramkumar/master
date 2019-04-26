@@ -9,7 +9,7 @@ import { ConfigurationService } from '@shared/services';
 import * as _ from 'lodash';
 import { User } from '@app/models/user';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
-import { AccessManagementService } from '../../services/access-management.service';
+import { AccessManagementService } from '@app/services/access-management.service';
 
 @Component({
   selector: 'app-stakeholder-add',

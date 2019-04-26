@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -64,9 +64,9 @@ import { ToastModule } from 'primeng/toast';
     TurbotaxService
   ],
   exports: [
+    TaskbarComponent, 
     AvatarComponent,
     StakeholderIdentificationComponent,
-    TaskbarComponent,
     FooterComponent,
     HeaderComponent,
     ViewcommentComponent,
@@ -89,6 +89,6 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     ProgressSpinnerModule,
     DialogModule, FormsModule, ReactiveFormsModule,
-  ]
+  ], schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { }
