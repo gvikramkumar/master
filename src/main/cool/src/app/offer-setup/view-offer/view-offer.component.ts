@@ -11,6 +11,7 @@ export class ViewOfferComponent implements OnInit {
   selectedOffer:any = 0;
   derivedMM: any;
   Options: any[] = [];
+  functionalRole: any = 'BUPM';
   @Input() offerId = "ss";
   constructor(private offerSetupService: OfferSetupService, private stakeholderfullService:StakeholderfullService) { }
 
@@ -20,7 +21,7 @@ export class ViewOfferComponent implements OnInit {
       this.derivedMM = offerDetails['derivedMM'];
 
     });
-    this.offerSetupService.getModuleData(this.derivedMM,this.offerId).subscribe(data => {
+    this.offerSetupService.getModuleData(this.derivedMM,this.offerId,this.functionalRole).subscribe(data => {
       this.Options =data['listATOs'];
       console.log('this.options', this.Options);
       console.log('original data', data);

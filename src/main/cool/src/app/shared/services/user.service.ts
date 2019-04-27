@@ -7,6 +7,7 @@ export class UserService {
   private firstName;
   private lastName;
   private fullName;
+  private functionalRole;
 
   constructor() { }
 
@@ -38,6 +39,13 @@ export class UserService {
   }
   public getName() {
     return this.fullName;
+  }
+
+  public setFunctionalRole(functionalRole) {
+    this.functionalRole = functionalRole;
+  }
+  public getFunctionalRole() {
+    return this.functionalRole;
   }
 
 }
