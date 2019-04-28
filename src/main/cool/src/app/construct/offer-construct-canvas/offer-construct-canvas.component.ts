@@ -108,7 +108,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public isDisabledView = true;
   listOfferQuestions: any;
   public isShow = false;
-  public showLoader: boolean = false;
+  public showLoader = false;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -133,18 +133,18 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   //
   onValidateChars(event) {
-    event.target.value = event.target.value.replace(event.target.value, event.target.value.toUpperCase());  
-          if((event.target.value.charAt(0)== "!" || event.target.value.charAt(0)== "+" || event.target.value.charAt(0)== "=" || event.target.value.charAt(0)== ">"
-          || event.target.value.charAt(0)== "<" || event.target.value.charAt(0)== "#" || event.target.value.charAt(0)== "/" || event.target.value.charAt(0)== "." 
-          || event.target.value.charAt(0)== "-" || event.target.value.charAt(0)== "[" || event.target.value.charAt(0)== "]" 
-          )|| event.target.value.charAt(0)===" ") {
-       event.target.value = event.target.value.replace(event.target.value.charAt(0),"")
+    event.target.value = event.target.value.replace(event.target.value, event.target.value.toUpperCase());
+          if ((event.target.value.charAt(0) == '!' || event.target.value.charAt(0) == '+' || event.target.value.charAt(0) == '=' || event.target.value.charAt(0) == '>'
+          || event.target.value.charAt(0) == '<' || event.target.value.charAt(0) == '#' || event.target.value.charAt(0) == '/' || event.target.value.charAt(0) == '.' 
+          || event.target.value.charAt(0) == '-' || event.target.value.charAt(0) == '[' || event.target.value.charAt(0) == ']' 
+          ) || event.target.value.charAt(0) === " ") {
+       event.target.value = event.target.value.replace(event.target.value.charAt(0),'');
         }
         event.target.value = event.target.value.replace(/[&\\\#,$%!@^':;'*?|<>{}=]/g, '');
-        event.target.value = event.target.value.replace(/\[.*?\]/g,"");
-        
+        event.target.value = event.target.value.replace(/\[.*?\]/g, "");
+
       }
-    
+
 
   // create a json skelaton for major and minor group
 
@@ -251,7 +251,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     if (this.listOfferQuestions != undefined) {
       this.listOfferQuestions.forEach(ques => {
-        if (ques.egineAttribue == "Item Name (PID)") {
+        if (ques.egineAttribue == 'Item Name (PID)') {
           ques.currentValue = obj.title;
           ques.previousValue = obj.title;
         }
@@ -261,10 +261,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     let listOfferQuestions;
     if (isQuestionPresent == undefined) {
-      //for newly drag and drop
+      // for newly drag and drop
       listOfferQuestions = this.listOfferQuestions;
     } else {
-      //for previous save value
+      // for previous save value
       listOfferQuestions = obj.itemDetails;
     }
 
@@ -282,7 +282,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     const setinfo = { [groupName]: groupinfo };
 
-    console.log("setinfo", setinfo);
+    console.log('setinfo', setinfo);
 
 
     this.setProductInfo(obj.productName, obj.isMajorLineItem, setinfo, listOfferQuestions);
@@ -354,7 +354,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   singleFormCopy(itemsData) {
 
-    let title = this.uniqueNodeId;
+    const title = this.uniqueNodeId;
     if (this.lineItemName === itemsData['Item Category']) {
       for (const searchValue in itemsData) {
 
@@ -399,7 +399,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   showDialog() {
 
-    console.log("this.offerConstructService.singleMultipleFormInfo", this.offerConstructService.singleMultipleFormInfo);
+    console.log('this.offerConstructService.singleMultipleFormInfo', this.offerConstructService.singleMultipleFormInfo);
 
     this.ind--;
     const offerInfo = this.offerConstructService.singleMultipleFormInfo;
@@ -428,7 +428,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructService.closeAddDetails = true;
   }
 
-  //remove node from offerConstructService.singleMultipleFormInfo
+  // remove node from offerConstructService.singleMultipleFormInfo
 
   deleteNode(rowNode) {
     if (rowNode.parent == null) {
@@ -436,7 +436,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
       this.offerConstructItems.forEach((element) => {
         if (element.data.uniqueKey == rowNode.node.data.uniqueKey) {
-          this.checkNodeUniqueKeyAndPatchQuestion(rowNode, false)
+          this.checkNodeUniqueKeyAndPatchQuestion(rowNode, false);
         }
       });
     } else {
@@ -468,7 +468,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         });
       }
     }
-    this.deleteNodeFromOfferConstructItems(rowNode);  //remove node from offerconstruct Item
+    this.deleteNodeFromOfferConstructItems(rowNode);  // remove node from offerconstruct Item
   }
 
   /* METHOD: deleteNode
@@ -480,7 +480,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   deleteNodeFromOfferConstructItems(rowNode) {
     if (rowNode.parent == null) {
       // If parent not present which means its a Major Item and may contains children.
-      //Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
+      // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
       this.offerConstructItems.forEach((element, index) => {
         if (element.data.uniqueKey == rowNode.node.data.uniqueKey) {
           this.offerConstructItems.splice(index, 1);
@@ -577,14 +577,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       groupType = 'minor';
     }
     this.offerConstructService.singleMultipleFormInfo[groupType].forEach((list, index) => {
-      let groupName: any = Object.keys(list)
+      const groupName: any = Object.keys(list);
       this.offerConstructService.singleMultipleFormInfo[groupType][index][groupName]['productInfo'].forEach((element) => {
-        let productname: any = Object.keys(element)
+        const productname: any = Object.keys(element);
         if (element[productname].uniqueKey == uniqueKey) {
           element[productname].title = name;
-          //change name in Item Name (PID)  as per requirement
+          // change name in Item Name (PID)  as per requirement
           element[productname].listOfferQuestions.forEach(ques => {
-            if (ques.question == "Item Name (PID)") {
+            if (ques.question == 'Item Name (PID)') {
               ques.currentValue = name;
               ques.previousValue = name;
             }
@@ -625,8 +625,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     }
     if (this.draggedItem.parent === null) {
       this.offerConstructItems = [...this.offerConstructItems];
-    }
-    else {
+    } else {
       if (
         rowNode.node.data['isMajorLineItem'] &&
         !this.draggedItem['isMajorLineItem']
@@ -706,7 +705,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           // If dragged node is not an actual tree node
           const obj = Object.create(null);
           obj['uniqueKey'] = ++this.counter;
-          //obj['uniqueKey'] = this.draggedItem.uniqueKey;
+          // obj['uniqueKey'] = this.draggedItem.uniqueKey;
           this.uniqueId = obj['uniqueKey'];
           obj['isGroupNode'] = false;
           obj['productName'] = this.draggedItem.productName;
@@ -744,7 +743,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               if (obj.productName !== 'Billing SOA') {
                 obj['itemDetails'] = this.listOfferQuestions;
               } else {
-                let listOfferQuestions = this.billingSOADefaultValue();
+                const listOfferQuestions = this.billingSOADefaultValue();
                 obj['itemDetails'] = listOfferQuestions;
               }
               this.getQuestionList(obj);
@@ -787,7 +786,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.isDisabledView = false;  // for enable button
   }
 
-   // set billing SOA default value according offer soluting 
+   // set billing SOA default value according offer soluting
 
    billingSOADefaultValue() {
     this.listOfferQuestions.forEach(element => {
@@ -807,7 +806,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           element.previousValue = 0;
         }
       }
-      if (element.question === "Proration Flag For Purchase") {
+      if (element.question === 'Proration Flag For Purchase') {
         if (this.chargeTypeValue == 'Recurring') {
           element.currentValue = 'Yes';
           element.previousValue = 'Yes';
@@ -817,7 +816,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           element.previousValue = 'No';
         }
       }
-      if (element.question === "Proration Flag For Cancel") {
+      if (element.question === 'Proration Flag For Cancel') {
         if (this.chargeTypeValue == 'Recurring') {
           element.currentValue = 'Yes';
           element.previousValue = 'Yes';
@@ -827,7 +826,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           element.previousValue = 'No';
         }
       }
-      if (element.question == "Usage Type") {
+      if (element.question == 'Usage Type') {
         if (this.chargeTypeValue == 'Usage') {
           element.currentValue = 'Support';
           element.previousValue = 'Support';
@@ -926,7 +925,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.saveOfferConstructChanges();
       },
-        () => { this.loaderService.stopLoading() },
+        () => { this.loaderService.stopLoading(); },
         () => { });
 
     this.eGinieSearchForm = new FormGroup({
@@ -1101,7 +1100,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     return tempArrayObj;
   }
 
-  // getChargeTypeAndPricingType for billing SOA 
+  // getChargeTypeAndPricingType for billing SOA
 
   getChargeTypeAndPricingType(solutioningDetails) {
     solutioningDetails.forEach(element => {
@@ -1180,8 +1179,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     if (childNode.eGenieFlag == false) {
       obj['uniqueNodeId'] = childNode.constructType + '_' + obj['uniqueKey'];
       this.getQuestionList(obj, true);
-    }
-    else {
+    } else {
       console.log(obj);
       this.getSetQuestionAccordingToPID(obj['itemDetails'], obj['productName'], obj, true, false);
     }
@@ -1218,7 +1216,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     });
     this.updateChildCount();
 
-    console.log("--------------------offerDetailRes.constructDetails", offerDetailRes.constructDetails);
+    console.log('--------------------offerDetailRes.constructDetails', offerDetailRes.constructDetails);
 
   }
 
@@ -1245,7 +1243,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
       } else {
-        let a = document.createElement('a');
+        const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = nameOfFileToDownload;
         document.body.appendChild(a);
@@ -1269,7 +1267,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             this.removeEginieMajorItemFromListofAlreadyAddedItems(element.data.title);
             if (element.data.uniqueKey == selectedItem.data.uniqueKey) {
 
-              //remove list form global variable
+              // remove list form global variable
               this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.isMajorLineItem);
             }
           });
@@ -1279,7 +1277,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               // Loop through of all childrens of matched Parent data from Offer array
               element.children.forEach((childElement) => {
                 if (childElement.data.uniqueKey == selectedItem.data.uniqueKey) {
-                  //remove list form global variable
+                  // remove list form global variable
                   this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.isMajorLineItem);
                 }
               });
@@ -1293,7 +1291,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                     // Removed the child element from Parent Array of Offer construct Array
                     childElement.children.forEach((innerChildElement) => {
                       if (innerChildElement.data.uniqueKey == selectedItem.data.uniqueKey) {
-                        //remove list form global variable
+                        // remove list form global variable
                         this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.isMajorLineItem);
                         // childElement.children.splice(innerChildIndex, 1);
                       }
@@ -1320,7 +1318,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             this.removeEginieMajorItemFromListofAlreadyAddedItems(element.data.title);
             if (element.data.uniqueKey == selectedItem.data.uniqueKey) {
 
-              //remove list form global variable
+              // remove list form global variable
               this.offerConstructItems.splice(index, 1);
             }
           });
@@ -1334,7 +1332,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               // Loop through of all childrens of matched Parent data from Offer array
               element.children.forEach((childElement, childIndex) => {
                 if (childElement.data.uniqueKey == selectedItem.data.uniqueKey) {
-                  //remove list form global variable
+                  // remove list form global variable
                   element.children.splice(childIndex, 1);
                   // Removed the child element from Parent Array of Offer construct Array
                 }
@@ -1349,7 +1347,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                     // Removed the child element from Parent Array of Offer construct Array
                     childElement.children.forEach((innerChildElement, innerChildIndex) => {
                       if (innerChildElement.data.uniqueKey == selectedItem.data.uniqueKey) {
-                        //remove list form global variable
+                        // remove list form global variable
                         childElement.children.splice(innerChildIndex, 1);
                         // Removed the child element from Parent Array of Offer construct Array
                       }
@@ -1414,7 +1412,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.eGinieSearchForm.reset();
 
 
-      //call to method for add search PID info in global variable
+      // call to method for add search PID info in global variable
       this.getSetQuestionAccordingToPID(searchResult, productName, obj, false, true);
     }
   }
@@ -1447,7 +1445,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.updateChildCount();
       this.eGinieSearchForm.reset();
 
-      //call to method for add search PID info in global variable
+      // call to method for add search PID info in global variable
       this.getSetQuestionAccordingToPID(searchResult, productName, obj, false, false);
     }
   }
@@ -1504,7 +1502,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     );
   }
 
-  //getAndSetQUestionAccordingToPID
+  // getAndSetQUestionAccordingToPID
 
   getSetQuestionAccordingToPID(searchResult, productName, obj, isFromDB, isMajorOrMinor) {
 
@@ -1516,15 +1514,15 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     info.push(majorItem);
     const groupsName = { groups: info };
     let questionsList: any;
-    if (!isFromDB) {  //form search PID
+    if (!isFromDB) {  // form search PID
       this.offerConstructService.addDetails(groupsName).subscribe((data) => {
         questionsList = data.groups[0].listOfferQuestions;
-        for (let element in searchResult) {
+        for (const element in searchResult) {
           questionsList.forEach(ques => {
             if (element == ques.question) {
               ques.currentValue = searchResult[element];
             }
-            if (ques.egineAttribue == "Item Name (PID)") {
+            if (ques.egineAttribue == 'Item Name (PID)') {
               ques.currentValue = obj.title;
               ques.previousValue = obj.title;
             }
@@ -1610,7 +1608,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.displayAddDetails = false;
     this.questions = [];
     this.showMandatoryDetails = false;
-    this.closeDailog(false);  //reset form info
+    this.closeDailog(false);  // reset form info
   }
 
   addItemDetails() {
@@ -1620,7 +1618,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.payLoad = JSON.stringify(this.questionForm.value);
     // this.currentRowClicked.node.data['itemDetails'] = this.questionForm.value;
     this.currentRowClicked.node.data['itemDetails'] = this.questionsList[this.uniqueNodeId];
-    this.closeDailog(true);  //save form info
+    this.closeDailog(true);  // save form info
   }
 
   replaceSingleFormQuestionWith(popHeadName) {
@@ -1777,7 +1775,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   saveOfferConstructChanges() {
 
-    //save  loader
+    // save  loader
     this.loaderService.startLoading();
 
     this.downloadEnable = true;
@@ -1932,7 +1930,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
     });
 
-    console.log("cds", cds);
+    console.log('cds', cds);
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
       this.loaderService.stopLoading();
     },
@@ -2008,15 +2006,15 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     let groupType;
     if (isMajor) {
-      groupType = "major";
+      groupType = 'major';
     } else {
-      groupType = "minor";
+      groupType = 'minor';
     }
 
     this.offerConstructService.singleMultipleFormInfo[groupType].forEach((list, index) => {
-      let groupName: any = Object.keys(list);
+      const groupName: any = Object.keys(list);
       this.offerConstructService.singleMultipleFormInfo[groupType][index][groupName]['productInfo'].forEach(element => {
-        let productName: any = Object.keys(element);
+        const productName: any = Object.keys(element);
         if (element[productName].uniqueKey == uniqueId) {
           if (this.questionsList[this.uniqueNodeId] == undefined) {
             this.questionsList[this.uniqueNodeId] = element[productName].listOfferQuestions;
@@ -2047,15 +2045,15 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   deleteQuestionToNode(uniqueId, isMajor) {
     let indexCount: number;
     let innerIndexCount: number;
-    if (isMajor) {     //for major group
+    if (isMajor) {     // for major group
       let groupName: any;
       let selectedMajorProduct: any;
-      let groupType = 'major';
+      const groupType = 'major';
       this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
         groupName = Object.keys(list);
         indexCount = index;
         selectedMajorProduct = this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
-          let pName: any = Object.keys(element);
+          const pName: any = Object.keys(element);
 
           if (element[pName].uniqueKey == uniqueId) {
             innerIndexCount = index;
@@ -2070,9 +2068,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
         groupName = Object.keys(list);
         indexCount = index;
-        let groupType = 'minor';
+        const groupType = 'minor';
         this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
-          let pName: any = Object.keys(element);
+          const pName: any = Object.keys(element);
           if (element[pName].uniqueKey == uniqueId) {
             innerIndexCount = index;
             this.removeFromArray(indexCount, innerIndexCount, groupName, groupType);
@@ -2093,9 +2091,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     const uniqueId = this.QuestionsNodeInfo[popHeadName].uniqueId;
     if (this.QuestionsNodeInfo[popHeadName].isMajor) {     // for major group
       this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
-        let groupName: any = Object.keys(list);
+        const groupName: any = Object.keys(list);
         this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element) => {
-          let producttitle: any = Object.keys(element);
+          const producttitle: any = Object.keys(element);
           if (element[producttitle].uniqueKey == uniqueId) {
             this.replaceOrUpdatevalue(element[producttitle].listOfferQuestions, element[producttitle].eGenieFlag, isUdate);
           }
@@ -2105,9 +2103,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       });
     } else {
       this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
-        let groupName: any = Object.keys(list);
+        const groupName: any = Object.keys(list);
         this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element) => {
-          let producttitle: any = Object.keys(element);
+          const producttitle: any = Object.keys(element);
           if (element[producttitle].uniqueKey == uniqueId) {
             this.replaceOrUpdatevalue(element[producttitle].listOfferQuestions, element[producttitle].eGenieFlag, isUdate);
           }
@@ -2120,14 +2118,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   replaceOrUpdatevalue(listOfferQuestions, isEgenieFlag, isUdate) {
     if (!isEgenieFlag || isEgenieFlag === false) {
       listOfferQuestions.forEach(element => {
-        if (isUdate) {  //update the value
-          if (element.componentType !== "Multiselect") {
+        if (isUdate) {  // update the value
+          if (element.componentType !== 'Multiselect') {
             element.previousValue = element.currentValue;
           } else {
             element.listPreviousValue = element.listCurrentValue;
           }
         } else {  // for cancel the form
-          if (element.componentType !== "Multiselect") {
+          if (element.componentType !== 'Multiselect') {
             element.currentValue = element.previousValue;
           } else {
             element.listCurrentValue = element.listPreviousValue;
