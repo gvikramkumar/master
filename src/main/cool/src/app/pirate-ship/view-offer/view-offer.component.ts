@@ -8,23 +8,24 @@ import { StakeholderfullService } from '@app/services/stakeholderfull.service';
   styleUrls: ['./view-offer.component.scss']
 })
 export class ViewOfferComponent implements OnInit {
-  selectedOffer:any = 0;
+
   derivedMM: any;
   Options: any[] = [];
+  selectedOffer: any = 0;
   @Input() offerId = "ss";
-  constructor(private offerSetupService: OfferSetupService, private stakeholderfullService:StakeholderfullService) { }
+  constructor(private offerSetupService: OfferSetupService, private stakeholderfullService: StakeholderfullService) { }
 
   ngOnInit() {
-    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
-  
-      this.derivedMM = offerDetails['derivedMM'];
 
+    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
+      this.derivedMM = offerDetails['derivedMM'];
     });
-    this.offerSetupService.getModuleData(this.derivedMM,this.offerId).subscribe(data => {
-      this.Options =data['listATOs'];
+
+    this.offerSetupService.getModuleData(this.derivedMM, this.offerId).subscribe(data => {
+      this.Options = data['listATOs'];
       console.log('this.options', this.Options);
       console.log('original data', data);
-    })
+    });
 
   }
 

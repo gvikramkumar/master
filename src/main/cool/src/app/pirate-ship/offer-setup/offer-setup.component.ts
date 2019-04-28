@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MessageService } from '@app/services/message.service';
+import { ActivatedRoute } from '@angular/router';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import { OfferSetupService } from '../services/offer-setup.service';
+import { OfferSetupService } from '../../services/offer-setup.service';
 
 @Component({
   selector: 'app-offer-setup',
@@ -136,9 +135,7 @@ export class OfferSetupComponent implements OnInit {
   // Get Status For Each Module
   getModuleStatus(group) {
     this.offerSetupService.getModuleStatus(group['moduleName'], this.offerId).subscribe(data => {
-      debugger
       group['status'] = data['message'];
-
     });
   }
 

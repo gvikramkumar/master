@@ -10,7 +10,7 @@ import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-re
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { OfferSolutioningComponent } from './solutioning/offer-solutioning/offer-solutioning.component';
-import { OfferSetupComponent } from './offer-setup/offer-setup.component';
+import { OfferSetupComponent } from './pirate-ship/offer-setup/offer-setup.component';
 
 import { MmInfoBarComponent } from './monetization/mm-info-bar/mm-info-bar.component';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
@@ -125,12 +125,14 @@ const routes: Routes = [
   },
   {
     path: 'offerSetup/:offerId/:caseId',
-    component: OfferSetupComponent,
+    loadChildren: './pirate-ship/pirate-ship.module#PirateShipModule',
+    // component: OfferSetupComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
   {
     path: 'offerSetup/:offerId/:caseId/:selectedAto',
-    component: OfferSetupComponent,
+    // component: OfferSetupComponent,
+    loadChildren: './pirate-ship/pirate-ship.module#PirateShipModule',
     resolve: { offerData: OfferOverViewResolver }
   },
   {

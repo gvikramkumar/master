@@ -8,7 +8,7 @@
 
       <!-- taskbar -->
 
-      <app-taskbar [isValidToProceed]="proceedToreadinessreview" (onProceedToNext)="onProceedToNext()"></app-taskbar>
+      <app-taskbar (onProceedToNext)="onProceedToNext()"></app-taskbar>
 
       <!-- left Panel -->
       <div class="row">
@@ -358,10 +358,8 @@
         </div>
         <!-- right panel -->
         <div class="rightContent  col-sm-12 col-md-3">
-          <app-right-panel [offerName]="offerName" [stakeData]="stakeholders" [primaryBE]="primaryBE"
-            [portfolioFlag]="setFlag" [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime"
-            [noOfWeeksDifference]="noOfWeeksDifference">`
-          </app-right-panel>
+          <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+            [primaryBE]="primaryBE"></app-right-panel>
         </div>
       </div>
     </div>

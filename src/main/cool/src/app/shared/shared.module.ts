@@ -1,14 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  TaskbarComponent, AvatarComponent,
-  StakeholderIdentificationComponent,
-  FooterComponent,
-  HeaderComponent,
-  ViewcommentComponent,
-  TurbotaxviewComponent
-} from './components';
+
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { HeaderService, DashboardService, CreateOfferService, ViewcommentService, TurbotaxService } from './services';
 import { RouterModule } from '@angular/router';
@@ -20,12 +13,11 @@ import {
 } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { FooterComponent, HeaderComponent, ViewcommentComponent, TurbotaxviewComponent } from './components';
+
 
 @NgModule({
   declarations: [
-    AvatarComponent,
-    StakeholderIdentificationComponent,
-    TaskbarComponent,
     FooterComponent,
     HeaderComponent,
     ViewcommentComponent,
@@ -64,9 +56,6 @@ import { ToastModule } from 'primeng/toast';
     TurbotaxService
   ],
   exports: [
-    TaskbarComponent, 
-    AvatarComponent,
-    StakeholderIdentificationComponent,
     FooterComponent,
     HeaderComponent,
     ViewcommentComponent,
