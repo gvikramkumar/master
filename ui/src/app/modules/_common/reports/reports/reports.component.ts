@@ -341,7 +341,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   getFilename() {
-    const dateStr = new Date().toISOString().substr(0, 10);
+    const dateStr = moment().format('YYYY-MM-DD');
     const sm = this.submeasureKey ? _.find(this.submeasures, {submeasureKey: this.submeasureKey}) : null;
     if (this.report.hasSmAndFiscalMonth) {
       return this.report.filename + `_${_.snakeCase(sm.name)}_${this.fiscalMonth}.xlsx`;
