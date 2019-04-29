@@ -33,11 +33,6 @@ const routes: Routes = [
     SharedModule,
     DataTableModule,
     RouterModule.forChild(routes)
-  ],
-  providers: [
-
   ]
-  ,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ModellingDesignModule { }
