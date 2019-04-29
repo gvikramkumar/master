@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from '@app/services/message.service';
-import { UserService } from '../shared/services/user.service';
-import { OfferSetupService } from '../services/offer-setup.service';
+import { UserService } from '../../shared/services/user.service';
+import { OfferSetupService } from '../../services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { ConfigurationService } from '@shared/services';
 
 @Component({
   selector: 'app-offer-setup',
@@ -40,6 +41,7 @@ export class OfferSetupComponent implements OnInit {
 
   constructor(private router: Router,
     private userService: UserService,
+    private configurationService: ConfigurationService,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
     private offerSetupService: OfferSetupService,
@@ -139,7 +141,6 @@ export class OfferSetupComponent implements OnInit {
 // Get Status For Each Module
   getModuleStatus(group) {
  this.offerSetupService.getModuleStatus(group['moduleName'],this.offerId,this.functionalRole,this.derivedMM).subscribe(data => {
-   debugger
   group['status'] = data['message'];
 
 });
@@ -165,23 +166,8 @@ export class OfferSetupComponent implements OnInit {
       });
     }
 
-    for (let i = 0; i <= this.stakeHolderData.length - 1; i++) {
-      if (stakeHolderBasedOnFunctionalRole[this.stakeHolderData[i]['functionalRole']] == null) {
-        stakeHolderBasedOnFunctionalRole[this.stakeHolderData[i]['functionalRole']] = [];
-      }
-      stakeHolderBasedOnFunctionalRole[this.stakeHolderData[i]['functionalRole']].push({
-        userName: this.stakeHolderData[i]['name'],
-        emailId: this.stakeHolderData[i]['_id'] + '@cisco.com',
-        _id: this.stakeHolderData[i]['_id'],
-        businessEntity: this.stakeHolderData[i]['businessEntity'],
-        functionalRole: this.stakeHolderData[i]['functionalRole'],
-        offerRole: this.stakeHolderData[i]['offerRole'],
-        stakeholderDefaults: this.stakeHolderData[i]['stakeholderDefaults']
-      });
-    }
 
     this.stakeData = stakeHolderBasedOnOfferRole;
-    this.stake = stakeHolderBasedOnFunctionalRole;
 
   }
 

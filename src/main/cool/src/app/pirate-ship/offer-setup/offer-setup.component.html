@@ -10,10 +10,12 @@
     (updateMessage)="updateMessage($event)"></app-menu-bar>
 
     <div class="panel-wrapper mt-15">
-    <!-- taskbar -->
-      <app-taskbar
-      [isValidToProceed]="proceedToreadinessreview" (onProceedToNext)="onProceedToNext()"></app-taskbar>
-    <!-- left Panel -->
+
+      <!-- taskbar -->
+
+      <app-taskbar (onProceedToNext)="onProceedToNext()"></app-taskbar>
+
+      <!-- left Panel -->
       <div class="row">
       <div class="leftContent col-sm-12 col-md-9">
         <app-offer-create-detail></app-offer-create-detail>
@@ -471,19 +473,12 @@
           </div>
 
 
-        <div class="col-sm-12 col-md-3"></div>
-      </div>
-      <!-- right panel -->
-      <div class="rightContent  col-sm-12 col-md-3">
-          <app-right-panel
-          [offerName]="offerName"
-          [stakeData]="stakeData"
-          [primaryBE]="primaryBE"
-          [portfolioFlag]="setFlag"
-          [derivedMM]="derivedMM"
-          [displayLeadTime]="displayLeadTime"
-          [noOfWeeksDifference]="noOfWeeksDifference">`
-          </app-right-panel>
+          <div class="col-sm-12 col-md-3"></div>
+        </div>
+        <!-- right panel -->
+        <div class="rightContent  col-sm-12 col-md-3">
+          <app-right-panel [stakeData]="stakeData" [offerName]="offerName" [derivedMM]="derivedMM"
+            [primaryBE]="primaryBE"></app-right-panel>
         </div>
     </div>
     </div>

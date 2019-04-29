@@ -11,7 +11,7 @@ import * as moment from 'moment';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
 import { HeaderService, UserService, CreateOfferService, ConfigurationService } from '@shared/services';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
 import { LoaderService } from '@shared/loader.service';
 
@@ -224,7 +224,7 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getSecondaryBusinessEntityPromise(event) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.createOfferService.getSecondaryBusinessEntity(event)
         .subscribe(data => {
           this.secondaryBusinessEntityList = <any>data;
@@ -281,7 +281,7 @@ export class CreateOfferCoolComponent implements OnInit {
         this.primaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
       });
     } else {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
           .subscribe(data => {
             const primaryBuArry = [];
@@ -317,7 +317,7 @@ export class CreateOfferCoolComponent implements OnInit {
    */
   getSecondaryBusinessUnitPromise(event) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
         .subscribe(data => {
           const primaryBuArry = [];
@@ -346,7 +346,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
   getPrimaryBusinessEntityPromise(event) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.createOfferService.getPrimaryBusinessEntity(event.toString())
         .subscribe(data => {
           const primaryBeArry = [{ label: 'All', value: 'All' }];
@@ -442,7 +442,7 @@ export class CreateOfferCoolComponent implements OnInit {
   goBack() {
     this._location.back();
   }
-  proceedCheckBu(e) {
+  proceedCheckBu() {
     if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
       this.enableOfferbuild = false;
     }
@@ -569,7 +569,7 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getValidData() {
-    this.createOfferService.validateIdpid(this.iDPId).subscribe(data => {
+    this.createOfferService.validateIdpid(this.iDPId).subscribe(() => {
       this.isIdpIdValid = true;
       if (this.offerCreateForm.valid == true && this.isIdpIdValid == true) {
         this.enableOfferbuild = false;
@@ -577,7 +577,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.idpidValid = true;
       this.idpidInvalid = false;
     },
-      error => {
+      () => {
         this.idpidValid = false;
         this.idpidInvalid = true;
         this.enableOfferbuild = true;
@@ -609,8 +609,8 @@ export class CreateOfferCoolComponent implements OnInit {
       launchDate: this.expectedLaunchDateValue,
       readinessReviewDate: this.readinessReviewDateValue,
     };
-    this.createOfferService.updateOffer(updateoffer).subscribe((data) => {
-      this.rightPanelService.updatePhaseTargetDate(payLoad).subscribe((data) => {
+    this.createOfferService.updateOffer(updateoffer).subscribe(() => {
+      this.rightPanelService.updatePhaseTargetDate(payLoad).subscribe(() => {
         this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
       })
     },
