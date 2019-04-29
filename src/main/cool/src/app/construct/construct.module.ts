@@ -1,8 +1,16 @@
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
-import { SharedModule, DialogModule, AccordionModule, AutoCompleteModule, MultiSelectModule, TreeTableModule, MessageModule, MessagesModule, TooltipModule, OverlayPanelModule, DataTableModule, DragDropModule } from 'primeng/primeng';
+
+
+import {
+    DialogModule, AccordionModule, AutoCompleteModule, MultiSelectModule, TreeTableModule,
+    TooltipModule, OverlayPanelModule, DataTableModule, DragDropModule
+} from 'primeng/primeng';
+
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {SharedModule} from '@shared/shared.module';
+import { Routes, RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 import * as _ from 'lodash';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
