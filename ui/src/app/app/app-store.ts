@@ -77,10 +77,19 @@ export class AppStore extends StoreBase {
         this.initialBreakpoint = change.mqAlias;
       });
 */
-    this.subUser(user => {
+    this.subUser((user => {
       this.headerOptions.username = user.fullName;
+      if (this.isLocalEnv() && user.roles[0]) {
+        let role;
+        if (user.roles[0].indexOf(':') !== -1) {
+          role = user.roles[0].substr(user.roles[0].indexOf(':') + 1);
+        } else {
+          role = user.roles[0];
+        }
+        this.headerOptions.username += ` - ${role}`;
+      }
       // this.headerOptions = Object.assign({}, this.headerOptions);
-    });
+    }).bind(this));
   }
 
   authorized = false;
