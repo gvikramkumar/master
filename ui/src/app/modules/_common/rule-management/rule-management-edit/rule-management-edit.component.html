@@ -1,6 +1,6 @@
 <div class="fin-container">
 
-  <div class="approval-buttons" *ngIf="viewMode && UiUtil.statusIsPending(rule.status)" finAuth="bizadmin">
+  <div class="approval-buttons" *ngIf="viewMode && UiUtil.statusIsPending(rule.status)" finAuth="biz-admin">
     <button type="button" cuiButton color="primary" (click)="approve()">Approve</button>
     <button type="button" cuiButton color="primary" (click)="reject()">Reject</button>
     <button type="button" cuiButton color="secondary" (click)="cancel()">Cancel</button>
