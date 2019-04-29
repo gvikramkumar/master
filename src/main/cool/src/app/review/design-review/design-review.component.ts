@@ -72,6 +72,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   milestoneList;
   designReviewList;
   milestoneValue: string;
+  proceedToOfferSetup: Boolean = true;
   showButtonSection = false;
   doNotApproveSection = false;
   showConditionalApprovalSection = false;
@@ -92,8 +93,6 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   currentFunctionalRole;
   loadExitCriteria = false;
 
-  proceedToOfferSetup: Boolean = true;
-
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
@@ -109,8 +108,8 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private createOfferService: CreateOfferService) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['offerId'];
-      this.caseId = params['caseId'];
+      this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
     });
   }
 
@@ -232,11 +231,14 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     this.getOfferDetails();
   }
 
+ // --------------------------------------------------------------------------------------------------------------------------------
+ onProceedToNext() {
+  this.router.navigate(['/offerSetup', this.currentOfferId, this.caseId]);
+ }
+ offerDetailOverView() {}
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  offerSetupView() {
-    this.router.navigate(['/offerSetup', this.currentOfferId, this.caseId]);
-  }
+
 
   private getMilestones(milestones) {
     const result = milestones.plan;

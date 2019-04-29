@@ -42,9 +42,8 @@ export class TaskbarComponent implements OnInit {
 
   ngOnInit() {
     this.currentPage = this.router.url.split('/')[1]
-    this.currentOfferId = this.activatedRoute.snapshot.params['offerId'];
-    this.caseId = this.activatedRoute.snapshot.params['caseId'];
-
+    this.currentOfferId = this.activatedRoute.snapshot.params["id"];
+    this.caseId = this.activatedRoute.snapshot.params['id2'];
     this.setTaskBar();
     this.userRole = this.sharedService.userFunctionalRole;
     this.sharedService.userEventEmit.subscribe((role) => {
@@ -60,8 +59,7 @@ export class TaskbarComponent implements OnInit {
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
       this.proceedToOfferSetup = this.isValidToProceed;
     }
-
-    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Readiness Review') {
+    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Offer Setup') {
       this.proceedToOfferSetup = true;
     }
   }

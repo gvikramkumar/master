@@ -5,8 +5,6 @@ import { StakeholderfullService } from '../../services/stakeholderfull.service';
 import { ModellingDesign } from '../model/modelling-design';
 import { Ato } from '../model/ato';
 import { Subscription } from 'rxjs';
-import { EnvironmentService } from '../../../environments/environment.service';
-import { ConfigurationService } from '../../shared/services/configuration.service';
 
 @Component({
   selector: 'app-ato-main',
@@ -36,22 +34,19 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
-    private environmentService: EnvironmentService,
-    private configurationService: ConfigurationService,
     private modellingDesignService: ModellingDesignService,
     private stakeholderfullService: StakeholderfullService) {
 
     this.activatedRoute.params.subscribe(params => {
-      this.caseId = params['caseId'];
-      this.offerId = params['offerId'];
-      this.selectedAto = params['selectedAto'];
+      this.offerId = params['id'];
+      this.caseId = params['id2'];
     });
 
   }
 
   ngOnInit() {
 
-    this.offerId = 'COOL_6845';
+    this.offerId = 'COOL_123';
     this.selectedAto = 'Overall Offer';
     this.atoNames.push(this.selectedAto);
 
@@ -59,7 +54,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
       .subscribe((modellingDesignResponse: ModellingDesign) => {
 
         this.modellingDesign = modellingDesignResponse;
-        this.atoList = this.modellingDesign['data'];
+        this.atoList = this.modellingDesign['tasks'];
 
         this.atoList.map(dropDownValue => {
           this.atoNames.push(dropDownValue.itemName);
@@ -68,11 +63,11 @@ export class AtoMainComponent implements OnInit, OnDestroy {
       });
 
     // Retrieve Offer Details
-    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
-      this.offerName = offerDetails['offerName'];
-      this.stakeHolderData = offerDetails['stakeholders'];
-      this.processStakeHolderInfo();
-    });
+    // this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
+    //   this.offerName = offerDetails['offerName'];
+    //   this.stakeHolderData = offerDetails['stakeholders'];
+    //   this.processStakeHolderInfo();
+    // });
 
 
   }
@@ -85,17 +80,16 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   goToDesignCanvas() {
 
-    const urlToOpen = this.environmentService.owbUrl;
-    const functionalRole: Array<String> = this.configurationService.startupData.functionalRole;
+    const urlToOpen = 'www.google.com';
 
-    if (functionalRole.includes('BUPM')) {
-      window.open(urlToOpen, '_blank');
+    let url: string = '';
+    if (!/^http[s]?:\/\//.test(urlToOpen)) {
+      url += 'http://';
     }
 
-  }
+    url += urlToOpen;
+    window.open(url, '_blank');
 
-  goToPirateShip() {
-    this.router.navigate(['/offer-setup', this.offerId, this.caseId, this.selectedAto,]);
   }
 
   // -------------------------------------------------------------------------------------------------------------------

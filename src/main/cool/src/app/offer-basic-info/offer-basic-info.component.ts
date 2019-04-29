@@ -16,8 +16,9 @@ export class OfferBasicInfoComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private monetizationModelService: MonetizationModelService
     ) {this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['offerId'];
-      this.caseId = params['caseId'];
+
+      this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
     });
   }
   

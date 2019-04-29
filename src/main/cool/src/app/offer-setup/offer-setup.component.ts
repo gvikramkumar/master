@@ -113,7 +113,7 @@ export class OfferSetupComponent implements OnInit {
         } else {
           this.groupData[groupName]['right'].push(group);
         }
-       
+        
       });
       this.sortGroupData();
     });
@@ -139,7 +139,6 @@ export class OfferSetupComponent implements OnInit {
 // Get Status For Each Module
   getModuleStatus(group) {
  this.offerSetupService.getModuleStatus(group['moduleName'],this.offerId,this.functionalRole,this.derivedMM).subscribe(data => {
-   debugger
   group['status'] = data['message'];
 
 });
@@ -200,6 +199,13 @@ export class OfferSetupComponent implements OnInit {
   }
 
   onProceedToNext(){}
+
+  getElementDetails(element) {
+    console.log('cuurent elemenrt', element);
+    element.moduleName = element.moduleName.replace(/\s/g, "");
+    this.router.navigate(['/' + element.moduleName]);
+    // this.router.navigate(['/' + element.moduleName, this.offerId]);
+  }
 
 
 }

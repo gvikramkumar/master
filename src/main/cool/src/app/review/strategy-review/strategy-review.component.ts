@@ -109,8 +109,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService,
     private createOfferService: CreateOfferService) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['offerId'];
-      this.caseId = params['caseId'];
+      this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
     });
   }
 

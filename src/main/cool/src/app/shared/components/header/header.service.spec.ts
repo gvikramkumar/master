@@ -1,7 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HeaderService } from '@shared/services';
 
-
+import { HeaderService } from './header.service';
 
 describe('HeaderService', () => {
   beforeEach(() => {

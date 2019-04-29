@@ -7,5 +7,5 @@ export enum offerBuilderStepsEnum {
     offerSolutioning,
     offerConstruct,
     designReview,
-    offerSetup
+    offerSetup,
 }

@@ -12,25 +12,9 @@
     <p-column field="status" header="STATUS" sortable="true">
       <ng-template let-col let-ato="rowData" pTemplate="body">
         <div class="text-center">
-
-          <ng-container *ngIf="ato['itemStatus']==='Completed'; else notRequired">
-            <span class="completed success">
-              <span class="icon-check"></span>
-            </span>
-          </ng-container>
-
-          <ng-template #notRequired>
-            <ng-container *ngIf="ato['itemStatus']==='In Progress';else other">
-                <span class="in-progress">
-                </span>              
-            </ng-container>
-          </ng-template>
-
-          <ng-template #other>
-            <span class="not-available">
-            </span>
-          </ng-template>
-
+          <span class="{{ato['itemStatus']|lowercase}}">
+            <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
+          </span>
         </div>
       </ng-template>
     </p-column>

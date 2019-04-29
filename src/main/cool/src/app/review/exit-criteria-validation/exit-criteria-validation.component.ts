@@ -34,8 +34,8 @@ export class ExitCriteriaValidationComponent implements OnInit {
     private configurationService: ConfigurationService
   ) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['offerId'];
-      this.currentCaseId = params['caseId'];
+      this.currentOfferId = params['id'];
+      this.currentCaseId = params['id2'];
     });
   }
 

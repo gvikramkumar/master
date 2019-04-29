@@ -78,8 +78,8 @@ export class MmAssesmentComponent implements OnInit {
   ) {
 
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['offerId'];
-      this.caseId = params['caseId'];
+      this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
     });
 
   }
@@ -1201,7 +1201,7 @@ export class MmAssesmentComponent implements OnInit {
 
     const selectedCharacteristics: any[] = [];
     const additionalCharacteristics: any[] = [];
-
+    
     groupData.forEach((group, index) => {
       for (const subGroup of Object.keys(group)) {
 

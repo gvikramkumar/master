@@ -14,14 +14,12 @@ export class OfferSetupService {
     ) { }
 
     getModuleData(derivedMM,offerId,functionalRole) {
-      debugger;
-      const url = this.environmentService.REST_API_OFFER_SETUP_MODULE_GET_URL + derivedMM +'&offerId=' + offerId +'&functionalRole=' + functionalRole;
+      const url = this.environmentService.REST_API_OFFER_SETUPMODULE_GET_URL + derivedMM +'&offerId=' + offerId +'&functionalRole=' + functionalRole;
       return this.http.get(url, { withCredentials: true });
     }
 
     getModuleStatus(moduleName,offerId,functionalRole,derivedMM)  {
-      debugger;
-      const url = this.environmentService.REST_API_OFFER_MODULE_STATUS_GET_URL + encodeURIComponent(moduleName) +'&offerId=' + offerId + '&offerATOLevel=Overall Offer&functionalRole='+ functionalRole + '&mmval=' + derivedMM;
+      const url = this.environmentService.REST_API_OFFER_MODULESTATUS_GET_URL + encodeURIComponent(moduleName) +'&offerId=' + offerId + '&offerATOLevel=Overall Offer&functionalRole='+ functionalRole + '&mmval=' + derivedMM;
       return this.http.get(url, { withCredentials: true });
     }
 }

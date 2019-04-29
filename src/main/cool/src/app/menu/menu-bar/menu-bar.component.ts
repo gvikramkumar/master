@@ -38,8 +38,8 @@ export class MenuBarComponent implements OnInit {
         this.showPopup = false;
 
         this.activatedRoute.params.subscribe(params => {
-            this.currentOfferId = params['offerId'];
-            this.caseId = params['caseId'];
+            this.currentOfferId = params['id'];
+            this.caseId = params['id2'];
         });
 
         this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {

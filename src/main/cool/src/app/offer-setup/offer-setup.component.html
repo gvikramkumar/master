@@ -26,7 +26,8 @@
           </ul>
 
           <!-- Control Bar -->
-          <div class="row base-margin-top">
+          <app-view-offer [offerId]="offerId"></app-view-offer>
+          <!-- <div class="row base-margin-top">
 
               <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
               <div class="form-group dropdown label--inline">
@@ -41,7 +42,7 @@
             </div>
           </div>
 
-          </div>
+          </div> -->
           <!-- Pirate Ship -->
           <div class="row base-margin-top">
             <div class="col-sm-12">
@@ -113,8 +114,7 @@
                       <div class="row">
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 2 left-->
-                          <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
-                          <li class="base-padding-bottom" *ngFor="let element of groupData['Group2']['left']">
+                          <li class="base-padding-bottom" *ngFor="let element of groupData['Group2']['left']" (click)="getElementDetails(element)">
                             <!-- Completed -->
                             <button *ngIf="element['status']=='Completed'"
                               class="btn btn--small btn--success"
@@ -151,11 +151,10 @@
                             {{element["moduleName"]}} 
                           </button>
                           </li>
-                          </div>>
+
                         </div>
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 2 right -->
-                          <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
                           <li class="base-padding-bottom" *ngFor="let element of groupData['Group2']['right']">
                              <!-- Completed -->
                              <button *ngIf="element['status']=='Completed'"
@@ -193,7 +192,6 @@
                            {{element["moduleName"]}} 
                          </button>
                           </li>
-                          </div>>
                         </div>
                       </div>
                     </div>
@@ -245,7 +243,7 @@
 
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 3 right -->
-                          <li class="base-padding-bottom"  *ngFor="let element of groupData['Group3']['right']">
+                          <li class="base-padding-bottom"  *ngFor="let element of groupData['Group3']['right']" >
                              <!-- Completed -->
                              <button *ngIf="element['status']=='Completed'"
                              class="btn btn--small btn--success"
@@ -448,19 +446,19 @@
                   <div class="col-sm-6">
                     <li class="half-margin-bottom">
                       <button class="btn btn--icon btn--small legend-completed">
-                        <span class="icon-check"></span>
+                        <span class="icon-tools"></span>
                       </button>
                       Completed
                     </li>
                     <li class="half-margin-bottom">
                       <button class="btn btn--icon btn--small legend-inprog">
-                        <span class="icon-in progress"></span>
+                        <span class="icon-tools"></span>
                       </button>
                       In-Progess
                     </li>
                     <li>
                       <button class="btn btn--icon btn--small legend-milestone">
-                        <span class="icon-milestone"></span>
+                        <span class="icon-tools"></span>
                       </button>
                       Milestone
                     </li>

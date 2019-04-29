@@ -15,6 +15,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CreateOfferCoolComponent } from './create-offer-cool/create-offer-cool.component';
 import { MmAssesmentComponent } from './monetization/mm-assesment/mm-assesment.component';
+import { RightPanelComponent } from './right-panel/right-panel.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchCollaboratorService } from './services/search-collaborator.service';
 import { OfferDetailViewComponent } from '@app/offer-detail/offer-detail-view/offer-detail-view.component';
@@ -22,8 +23,11 @@ import { OfferDetailViewService } from './services/offer-detail-view.service';
 import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
 import { ExitCriteriaValidationComponent } from '@app/review/exit-criteria-validation/exit-criteria-validation.component';
 import { ExitCriteriaValidationService } from './services/exit-criteria-validation.service';
+import { StakeholderFullComponent } from '@app/stakeholder/stakeholder-full/stakeholder-full.component';
+import { MenuBarComponent } from '@app/menu/menu-bar/menu-bar.component';
 import { OfferCreateDetailComponent } from '@app/offer-detail/offer-create-detail/offer-create-detail.component';
 import { AccessManagementService } from './services/access-management.service';
+import { MenuBarPopupComponent } from '@app/menu/menu-bar-popup/menu-bar-popup.component';
 import { MenuBarService } from './services/menu-bar.service';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { CreateActionService } from './services/create-action.service';
@@ -32,12 +36,16 @@ import { OfferPhaseService } from './services/offer-phase.service';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { StrategyReviewService } from './services/strategy-review.service';
 import { OfferSolutioningComponent } from './solutioning/offer-solutioning/offer-solutioning.component';
-
+import { PackingComponent } from './dimensions/offer-dimension-groups/packing/packing.component';
+import { SupportComponent } from './dimensions/offer-dimension-groups/support/support.component';
+import { OfferPricingComponent } from './dimensions/offer-dimension-groups/offer-pricing/offer-pricing.component';
+import { BillingComponent } from './dimensions/offer-dimension-groups/billing/billing.component';
+import { ProgramComponent } from './dimensions/offer-dimension-groups/program/program.component';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
 import { MmInfoBarComponent } from './monetization/mm-info-bar/mm-info-bar.component';
 import { MmMessageBarComponent } from './monetization/mm-message-bar/mm-message-bar.component';
 import { OffersolutioningCardOneComponent } from './solutioning/offer-solutioning-card-one/offer-solutioning-card-one.component';
-
+import { OfferDimensionComponent } from './dimensions/offer-dimension/offer-dimension.component';
 import { MessageService } from './services/message.service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
@@ -58,6 +66,8 @@ import { SharedModule } from '@shared/shared.module';
 import { EnvironmentService } from 'src/environments/environment.service';
 import { ConfigurationService, HttpInterceptorService, UserService } from '@shared/services';
 import { DesignReviewExitCriteriaComponent } from '@shared/components';
+import { StakeholderAddComponent } from '@app/stakeholder/stakeholder-add/stakeholder-add.component';
+import { ViewOfferComponent } from '@app/offer-setup/view-offer/view-offer.component';
 
 import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
 import { OfferconstructChildComponent } from '@app/construct/child_component/offerconstruct-child/offerconstruct-child.component';
@@ -67,9 +77,7 @@ import { LoaderComponent } from '@shared/components/loader/loader.component';
 
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
-import { MenuBarModule } from './menu/menu-bar.module';
-import { RightPanelModule } from './right-panel/right-panel.module';
-import { StakeholderFullComponent } from './stakeholder/stakeholder-full/stakeholder-full.component';
+import { from } from 'rxjs';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -83,16 +91,26 @@ export function app_init(configService: ConfigurationService) {
     CreateOfferCoolComponent,
     OfferSolutioningComponent,
     MmAssesmentComponent,
+    RightPanelComponent,
     OfferDetailViewComponent,
     ExitCriteriaValidationComponent,
+    StakeholderFullComponent,
+    MenuBarComponent,
     StrategyReviewComponent,
     OfferCreateDetailComponent,
+    MenuBarPopupComponent,
     AuthErrorComponent,
     OfferSolutioningComponent,
+    PackingComponent,
+    SupportComponent,
+    OfferPricingComponent,
+    BillingComponent,
+    ProgramComponent,
     OfferBasicInfoComponent,
     MmInfoBarComponent,
     MmMessageBarComponent,
     OffersolutioningCardOneComponent,
+    OfferDimensionComponent,
     OfferConstructComponent,
     DynamicFormQuestionComponent,
     OfferconstructCanvasComponent,
@@ -102,12 +120,13 @@ export function app_init(configService: ConfigurationService) {
     NotificationOfferDetailPopupComponent,
     DesignReviewComponent,
     DesignReviewExitCriteriaComponent,
+    StakeholderAddComponent,
     OfferconstructChildComponent,
     OfferSetupComponent,
     LoaderComponent,
     CustomMinValidatorDirective,
     CustomRangeValidatorDirective,
-    StakeholderFullComponent
+    ViewOfferComponent
   ],
   imports: [
     NgbModule,
@@ -126,8 +145,6 @@ export function app_init(configService: ConfigurationService) {
     FlexLayoutModule,
     NgxWebstorageModule.forRoot(),
     UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 }),
-    MenuBarModule,
-    RightPanelModule,
     SharedModule,
     AppRoutingModule
   ],

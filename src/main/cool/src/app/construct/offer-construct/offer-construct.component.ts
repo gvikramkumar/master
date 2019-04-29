@@ -4,7 +4,7 @@ import { MonetizationModelService } from '@app/services/monetization-model.servi
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { OfferConstructService } from '@app/services/offer-construct.service';
 import { RightPanelService } from '@app/services/right-panel.service';
-import { LeadTime } from '@app/right-panel/models/lead-time';
+import { LeadTime } from '@app/right-panel/lead-time';
 import { OfferPhaseService } from '@app/services/offer-phase.service';
 import { MessageService } from '@app/services/message.service';
 import { forkJoin, Subscription } from 'rxjs';
@@ -55,8 +55,8 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
     private offerConstructCanvasService: OfferconstructCanvasService) {
 
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['offerId'];
-      this.caseId = params['caseId'];
+      this.currentOfferId = params['id'];
+      this.caseId = params['id2'];
     });
 
     this.subscription = this.offerConstructCanvasService.getMessage().subscribe(constructMessage => {

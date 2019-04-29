@@ -70,8 +70,8 @@ export class OfferSolutioningComponent implements OnInit {
     private offersolutioningService: OffersolutioningService
   ) {
     this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['offerId'];
-      this.caseId = params['caseId'];
+      this.offerId = params['id'];
+      this.caseId = params['id2'];
     });
   }
 
@@ -90,6 +90,7 @@ export class OfferSolutioningComponent implements OnInit {
         this.primaryBE = offerDetails['primaryBEList'][0];
       }
 
+      
       // TTM Info
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
@@ -507,7 +508,7 @@ export class OfferSolutioningComponent implements OnInit {
                     'solutioninQuestion': questions['question'],
                     'egenieAttributeName': attributeName ? attributeName : '',
                     'oSGroup': questions['oSgroup'],
-                    'solutioningAnswer': questions['answerToQuestion'],
+                    'solutioningAnswer': _.isEmpty(questions['answerToQuestion']) ? '' : questions['answerToQuestion'],
                     'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false,
                     'questionType': questions.questionType
                   };
