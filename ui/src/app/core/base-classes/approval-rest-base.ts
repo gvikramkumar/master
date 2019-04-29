@@ -54,7 +54,7 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
   getApprovalVersionedListByNameAndUserType() {
     const moduleId = this.store.module.moduleId;
     const user = this.store.user;
-    if (user.isModuleEndUser()) {
+    if (user.isModuleBusinessUser() || user.isModuleEndUser()) {
       return this.callMethod('getManyLatestByNameActiveInactive');
     } else if (user.isModuleSuperUser()) {
       return this.callMethod('getManyLatestByNameActiveInactiveConcatDraftPendingOfUser');

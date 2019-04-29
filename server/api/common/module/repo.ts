@@ -44,7 +44,7 @@ export class ModuleRepo extends RepoBase {
   addRoles(modules) {
     return modules.map(module => {
       const mod = module.toObject ? module.toObject() : module;
-      mod.roles = `${module.name}:Business Admin, ${module.name}:Super User, ${module.name}:End User`.toLowerCase();
+      mod.roles = `${module.name}:Business Admin, ${module.name}:Super User, ${module.name}:Business User, ${module.name}:End User`.toLowerCase();
       return mod;
     });
 

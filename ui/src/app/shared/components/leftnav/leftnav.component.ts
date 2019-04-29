@@ -53,10 +53,10 @@ export class LeftnavComponent {
 
       case 'prof':
         this.links = [
-          {route: '/prof/rule-management', text: 'Rule Management', roles: 'profitability allocations:business admin,profitability allocations:super user, profitability allocations:end user'},
-          {route: '/prof/submeasure', text: 'Sub-Measure', roles: 'profitability allocations:business admin,profitability allocations:super user, profitability allocations:end user'},
-          {route: '/prof/business-upload', text: 'Business Upload', roles: 'profitability allocations:business admin, profitability allocations:super user'},
-          {route: '/prof/reports', text: 'Report', roles: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user'},
+          {route: '/prof/rule-management', text: 'Rule Management', roles: 'profitability allocations:business admin,profitability allocations:super user, profitability allocations:business user, profitability allocations:end user'},
+          {route: '/prof/submeasure', text: 'Sub-Measure', roles: 'profitability allocations:business admin,profitability allocations:super user, profitability allocations:business user, profitability allocations:end user'},
+          {route: '/prof/business-upload', text: 'Business Upload', roles: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user'},
+          {route: '/prof/reports', text: 'Report', roles: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user'},
         ];
         this.alinks = [
           {route: '/prof/admin/measure', text: 'Measure', roles: 'profitability allocations:business admin'},
