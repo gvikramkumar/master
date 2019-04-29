@@ -1,16 +1,17 @@
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { DataTableModule, AutoCompleteModule, PaginatorModule, DialogModule } from 'primeng/primeng';
-import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { TableModule } from 'primeng/table';
+import { CheckboxModule } from 'primeng/checkbox';
+import { AutoCompleteModule } from 'primeng/primeng';
 
 import * as _ from 'lodash';
-import { StakeholderFullComponent } from '@app/stakeholder/stakeholder-full/stakeholder-full.component';
-import { TaskBarModule } from '@app/taskbar/task-bar.module';
 import { MenuBarModule } from '@app/menu/menu-bar.module';
-import { CheckboxModule } from 'primeng/checkbox';
-import { TableModule } from 'primeng/table';
+import { TaskBarModule } from '@app/taskbar/task-bar.module';
 
+import { StakeholderFullComponent } from '@app/stakeholder/stakeholder-full/stakeholder-full.component';
 
 const routes: Routes = [
     {

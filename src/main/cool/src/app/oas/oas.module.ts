@@ -1,12 +1,18 @@
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import {
+    DataTableModule, MessageModule, MessagesModule, AccordionModule,
+    DialogModule
+} from 'primeng/primeng';
+
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { DataTableModule, SharedModule, MessageModule, MessagesModule, AccordionModule, DialogModule } from 'primeng/primeng';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import * as _ from 'lodash';
 import { OasComponent } from './oas.component';
 import { CheckboxModule } from 'primeng/checkbox';
+import { SharedModule } from '@shared/shared.module';
 
 
 const routes: Routes = [

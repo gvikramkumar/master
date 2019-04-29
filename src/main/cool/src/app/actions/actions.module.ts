@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActionsComponent } from './actions.component';
 import { CreateNewActionComponent } from './components';
 import { Routes, RouterModule } from '@angular/router';

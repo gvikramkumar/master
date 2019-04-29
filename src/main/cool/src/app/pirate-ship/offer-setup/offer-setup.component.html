@@ -1,5 +1,6 @@
 <div class="content">
   <div class="container-fluid">
+
     <!-- Menu Bar -->
     <app-menu-bar [offerId]="offerId" [caseId]="caseId" [offerName]="offerName" [currentMMModel]="derivedMM"
       [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"></app-menu-bar>
@@ -7,13 +8,14 @@
     <div class="panel-wrapper mt-15">
 
       <!-- taskbar -->
-
       <app-taskbar (onProceedToNext)="onProceedToNext()"></app-taskbar>
 
       <!-- left Panel -->
       <div class="row">
         <div class="leftContent col-sm-12 col-md-9">
+
           <app-offer-create-detail></app-offer-create-detail>
+
           <!-- Message bar -->
           <ul class="list base-margin-top">
             <li>
@@ -40,6 +42,7 @@
             </div>
 
           </div>
+
           <!-- Pirate Ship -->
           <div class="row base-margin-top">
             <div class="col-sm-12">
@@ -309,6 +312,7 @@
               </ul>
             </div>
           </div>
+
           <!-- Legend -->
           <div class="row base-margin-top">
             <div class="col-sm-12 col-md-5">
@@ -353,15 +357,18 @@
             </div>
           </div>
 
-
           <div class="col-sm-12 col-md-3"></div>
+
         </div>
+
         <!-- right panel -->
         <div class="rightContent  col-sm-12 col-md-3">
           <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
             [primaryBE]="primaryBE"></app-right-panel>
         </div>
       </div>
+
     </div>
+
   </div>
 </div>

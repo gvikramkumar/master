@@ -114,13 +114,6 @@ export class OfferSetupComponent implements OnInit {
       this.sortGroupData();
     });
 
-
-
-
-
-
-
-
   }
 
   sortGroupData() {

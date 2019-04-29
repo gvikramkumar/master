@@ -11,6 +11,7 @@ import {
 } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { FooterComponent, HeaderComponent, ViewcommentComponent, TurbotaxviewComponent } from './components';
+import { NavigateComponent } from './components/navigate/navigate.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { FooterComponent, HeaderComponent, ViewcommentComponent, TurbotaxviewCom
     FooterComponent,
     HeaderComponent,
     ViewcommentComponent,
-    TurbotaxviewComponent
+    TurbotaxviewComponent,
+    NavigateComponent
   ],
   imports: [
     FormsModule,
@@ -46,6 +48,7 @@ import { FooterComponent, HeaderComponent, ViewcommentComponent, TurbotaxviewCom
   exports: [
     FooterComponent,
     HeaderComponent,
+    NavigateComponent,
     ViewcommentComponent,
     TurbotaxviewComponent,
     FormsModule,
