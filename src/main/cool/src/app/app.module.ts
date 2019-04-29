@@ -44,21 +44,22 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import { SharedModule } from '@shared/shared.module';
 import { EnvironmentService } from 'src/environments/environment.service';
-import { ConfigurationService, HttpInterceptorService, UserService } from '@shared/services';
+import { ConfigurationService, HttpInterceptorService, UserService } from '@app/core/services';
 
 
 import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
 
-import { LoaderService } from '@shared/loader.service';
-import { LoaderComponent } from '@shared/components/loader/loader.component';
+import { LoaderService } from '@app/core/services/loader.service';
+import { LoaderComponent } from '@app/core/components/loader/loader.component';
 
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
 import { MenuBarModule } from './menu/menu-bar.module';
 import { RightPanelModule } from './right-panel/right-panel.module';
 import { OfferDetailModule } from './offer-detail/offer-detail.module';
-import { DesignReviewExitCriteriaComponent } from './shared/components/design-review-exit-criteria/design-review-exit-criteria.component';
+import { DesignReviewExitCriteriaComponent } from '@app/review/design-review-exit-criteria/design-review-exit-criteria.component';
 import { TaskBarModule } from './taskbar/task-bar.module';
+import { CoreModule } from './core/core.module';
 
 
 export function app_init(configService: ConfigurationService) {
@@ -102,6 +103,7 @@ export function app_init(configService: ConfigurationService) {
     TaskBarModule,
     RightPanelModule,
     OfferDetailModule,
+    CoreModule,
     SharedModule,
     AppRoutingModule
   ],

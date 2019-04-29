@@ -6,8 +6,8 @@ import { ModellingDesign } from '../model/modelling-design';
 import { Ato } from '../model/ato';
 import { Subscription } from 'rxjs';
 import { EnvironmentService } from '../../../environments/environment.service';
-import { ConfigurationService } from '../../shared/services/configuration.service';
-import { LoaderService } from '../../shared/loader.service';
+import { ConfigurationService } from '@app/core/services/configuration.service';
+import { LoaderService } from '@app/core/services/loader.service';
 
 @Component({
   selector: 'app-ato-main',

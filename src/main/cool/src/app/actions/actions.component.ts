@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ActionsAndNotifcations } from '../dashboard/action';
 import * as moment from 'moment';
 import { ActionsService } from '../services/actions.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { NgForm } from '@angular/forms';
 import { CreateAction } from '../models/create-action';
-import { CreateActionService } from '../services/create-action.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { EnvironmentService } from '../../environments/environment.service';
-import { UserService, DashboardService } from '@shared/services';
+import { UserService } from '@app/core/services';
+import { DashboardService } from '@shared/services';
 
 @Component({
   selector: 'app-actions',
@@ -28,7 +28,7 @@ export class ActionsComponent implements OnInit {
   actionCount = {
     pendingActionCount: 0,
     needImmediateActionCount: 0
-  }
+  };
   myOfferArray: ActionsAndNotifcations[] = [];
   displayActionPhase: Boolean = false;
   displayActionDetails: Boolean = false;
@@ -65,10 +65,10 @@ export class ActionsComponent implements OnInit {
   selectedAction;
   selectedOffer;
   actionColumns: any[];
-  switchLabel = "Show Mine";
-  constructor(private router: Router, private actionsService: ActionsService,
-    private userService: UserService, private httpClient: HttpClient,
-    private dashboardService: DashboardService,
+  switchLabel = 'Show Mine';
+
+  constructor(private actionsService: ActionsService,
+    private userService: UserService, private dashboardService: DashboardService,
     private environmentService: EnvironmentService,
   ) { }
 
@@ -76,7 +76,7 @@ export class ActionsComponent implements OnInit {
 
     this.minDate = new Date();
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
-    
+
     this.actionColumns = [
       { field: 'completed', header: 'ACTION COMPLETE'},
       { field: 'offerId', header: 'OFFER' },
@@ -102,7 +102,7 @@ export class ActionsComponent implements OnInit {
               this.stakeHolders[ele.offerId][holder.functionalRole] = [];
             }
             this.stakeHolders[ele.offerId][holder.functionalRole].push(holder['_id']);
-          })
+          });
         }
       });
     });
@@ -125,13 +125,13 @@ export class ActionsComponent implements OnInit {
     this.actionsService.getAchievedMilestones(this.offerCaseMap[offerId]).subscribe(resMilestones => {
       this.milestoneList = [];
       this.lastValueInMilestone = [];
-      for (let prop in resMilestones) {
+      for (const prop in resMilestones) {
         resMilestones[prop].forEach(ele => {
           this.milestoneList.push(ele);
 
           this.lastValueInMilestone = this.milestoneList.slice(-1)[0];
 
-          let mile = this.lastValueInMilestone
+          const mile = this.lastValueInMilestone;
           this.milestoneValue = mile['subMilestone'];
 
         });
@@ -152,7 +152,7 @@ export class ActionsComponent implements OnInit {
     }
   }
 
-  getAllActions(){
+  getAllActions() {
     this.actionsService.getActionsTracker()
       .subscribe(data => {
         this.allActions = data;
@@ -161,7 +161,7 @@ export class ActionsComponent implements OnInit {
   }
 
   handleSwitchChange(event) {
-    let isChecked = event.checked;
+    const isChecked = event.checked;
     if (isChecked == true) {
       this.processMyActionsList(true);
     } else {
@@ -174,7 +174,7 @@ export class ActionsComponent implements OnInit {
         this.actionCount = {
           pendingActionCount: 0,
           needImmediateActionCount: 0
-        }
+        };
     // Process get Actions data
     if (this.allActions.actionList !== undefined) {
       this.actionCount.pendingActionCount = this.allActions.pendingTasksCount;
@@ -197,7 +197,7 @@ export class ActionsComponent implements OnInit {
             this.myOfferArray.push(obj);
           }
         });
-      }else{
+      } else {
         this.allActions['actionList'].forEach(element => {
             const obj = new ActionsAndNotifcations();
             obj.setOfferId(element.offerId);
@@ -214,7 +214,7 @@ export class ActionsComponent implements OnInit {
             this.myOfferArray.push(obj);
         });
       }
-        
+
     }
 
     this.myActionsList = this.myOfferArray;
@@ -246,9 +246,9 @@ createAction() {
   );
 
   // Call CreateAction API
-  this.actionsService.createNewAction(createAction).subscribe((data) => { 
-    this.getAllActions();  //refresh the table
-  })
+  this.actionsService.createNewAction(createAction).subscribe(() => {
+    this.getAllActions();  // refresh the table
+  });
 
   // Reset The Form
   this.createActionForm.reset();
@@ -266,7 +266,7 @@ showOfferPopUp(event, action, overlaypanel: OverlayPanel) {
   this.selectedOffer = {
     caseId: action.caseId,
     offerId: action.offerId
-  }
+  };
   overlaypanel.toggle(event);
 }
 
@@ -298,7 +298,7 @@ getActionDetailsFile(caseid) {
       window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
     } else {
       const url = `${this.environmentService.REST_API_DOWNLOAD_FILE_FOR_ACTION}/${caseid}`;
-      var a = document.createElement('a');
+      let a = document.createElement('a');
       a.href = url;
       a.download = nameOfFileToDownload;
       document.body.appendChild(a);
@@ -331,17 +331,16 @@ processMyActionDetailList() {
     obj.setTriggerDate(this.dateFormat(this.actionDetails.triggerDate));
     obj.setDueDate(this.dateFormat(this.actionDetails.dueDate));
     obj.setDefaultFunctione(this.actionDetails.function);
-    if(this.actionDetails.completed == false){
+    if (this.actionDetails.completed == false) {
       obj.setCompletedDate('');
-    }
-    else{  
+    } else {
       obj.setCompletedDate(this.dateFormat(this.actionDetails.reviewedOn));
     }
     this.actionDetailList.push(obj);
   }
 }
 
-closeActionDetails(){
+closeActionDetails() {
   this.displayActionDetails = false;
   // this.createActionForm.reset();
 }

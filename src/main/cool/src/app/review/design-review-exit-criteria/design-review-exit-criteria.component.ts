@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ExitCriteriaValidationService } from 'src/app/services/exit-criteria-validation.service';
-import { HeaderService, UserService, ConfigurationService } from '@shared/services';
+import { HeaderService, UserService, ConfigurationService } from '@app/core/services';
 import { MessageService } from '@app/services/message.service';
 import * as _ from 'lodash';
 import { MonetizationModelService } from '@app/services/monetization-model.service';

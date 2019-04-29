@@ -17,8 +17,8 @@ import { Subscription } from 'rxjs';
 import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
 import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
-import { ConfigurationService } from '@shared/services';
-import { LoaderService } from '../../shared/loader.service';
+import { ConfigurationService } from '@app/core/services';
+import { LoaderService } from '@app/core/services/loader.service';
 
 @Component({
   selector: 'app-offerconstruct-canvas',

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
 import { ActivatedRoute } from '@angular/router';
-import { HeaderService, UserService, ConfigurationService } from '@shared/services';
+import { HeaderService, UserService, ConfigurationService } from '@app/core/services';
 import { MessageService } from '@app/services/message.service';
 import { OffersolutioningService } from '@app/services/offersolutioning.service';
 import { forkJoin } from 'rxjs';

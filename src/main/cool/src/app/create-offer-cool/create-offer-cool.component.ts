@@ -10,10 +10,11 @@ import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
-import { HeaderService, UserService, CreateOfferService, ConfigurationService } from '@shared/services';
+import { HeaderService, UserService, ConfigurationService } from '@app/core/services';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
-import { LoaderService } from '@shared/loader.service';
+import { LoaderService } from '@app/core/services/loader.service';
+import { CreateOfferService } from '@shared/services';
 
 
 @Component({
@@ -89,7 +90,8 @@ export class CreateOfferCoolComponent implements OnInit {
   subject: Subject<any> = new Subject();
   validFlag: boolean = true;
 
-  constructor(private createOfferService: CreateOfferService,
+  constructor(
+    private createOfferService: CreateOfferService,
     private configurationService: ConfigurationService,
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
@@ -105,7 +107,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.offerId = params['offerId'];
 
       if (this.offerId) {
-        this.loaderService.startLoading(); 
+        this.loaderService.startLoading();
         this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerDetailRes => {
           this.offerDetailRes = offerDetailRes;
           this.caseId = offerDetailRes.caseId;
@@ -553,7 +555,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
 
   getidptoken(event) {
-    if(event.target.value.length === 9) {
+    if (event.target.value.length === 9) {
       this.validFlag = false;
     } else {
       this.validFlag = true;

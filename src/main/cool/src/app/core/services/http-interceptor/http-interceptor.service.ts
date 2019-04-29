@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from '@env/environment.service';
-import { ConfigurationService } from '../configuration.service';
+import { ConfigurationService } from '@app/core/services/configuration.service';
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
