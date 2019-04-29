@@ -7,7 +7,7 @@
 
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar (onProceedToNext)="offerSetupView()" [showSave]="true">
+      <app-taskbar (onProceedToNext)="offerSetupView()">
       </app-taskbar>
 
       <div class="contentBox mt-10">
@@ -93,7 +93,7 @@
                       (click)="onTabOpen(strategyReviewData.taskId, strategyReviewData.colorStatus)">
 
                       <p-header>
-                        <div class="row" style="vertical-align: middle;margin-left: 20px">
+                        <div class="row" style="vertical-align: middle;margin-left: 14pt">
                           <div class="col">
                             <span class="icon-check-outline icon-eye-closed text-darkgray"
                               *ngIf="strategyReviewData.status && strategyReviewData.status.toLowerCase() == 'not reviewed'"></span>
