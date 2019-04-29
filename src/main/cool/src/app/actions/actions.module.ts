@@ -14,7 +14,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [ActionsComponent, CreateNewActionComponent],
   imports: [
-    CommonModule,
     SharedModule,
     TaskBarModule,
     InputSwitchModule,

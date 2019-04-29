@@ -1,12 +1,11 @@
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import * as _ from 'lodash';
 import { CreateOfferCoolComponent } from './create-offer-cool.component';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
+import { SharedModule } from '@shared/shared.module';
+import { MenuBarModule } from '../menu/menu-bar.module';
 
 
 const routes: Routes = [
@@ -21,16 +20,10 @@ const routes: Routes = [
         CreateOfferCoolComponent
     ],
     imports: [
-        FormsModule,
-        CommonModule,
+        SharedModule,
+        MenuBarModule,
         DropdownModule,
-        BsDatepickerModule.forRoot(),
         RouterModule.forChild(routes)
-    ],
-    providers: [
-
     ]
-    ,
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OfferModule { }
