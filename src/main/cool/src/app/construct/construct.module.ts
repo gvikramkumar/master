@@ -33,7 +33,9 @@ const routes: Routes = [
     ],
     imports: [
         FormsModule,
+        ReactiveFormsModule,
         CommonModule,
+        SharedModule,
         DialogModule,
         TaskBarModule,
         TreeTableModule,
@@ -43,15 +45,7 @@ const routes: Routes = [
         MenuBarModule,
         RightPanelModule,
         OfferDetailModule,
-        ReactiveFormsModule,
         RouterModule.forChild(routes)
-    ],
-    exports: [
-        OfferConstructComponent,
-        OfferconstructChildComponent,
-        DynamicFormMultipleComponent,
-        DynamicFormQuestionComponent,
-        OfferconstructCanvasComponent,
     ]
 })
 export class ConstructModule { }

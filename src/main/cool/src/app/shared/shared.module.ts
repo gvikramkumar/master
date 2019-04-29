@@ -1,18 +1,15 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { HeaderService, DashboardService, CreateOfferService, ViewcommentService, TurbotaxService } from './services';
 import { RouterModule } from '@angular/router';
 import { BupmGuard, AuthGuard } from './guards';
 import {
-  DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule,
-  FileUploadModule, DialogModule, MenuModule, CalendarModule, AutoCompleteModule, DragDropModule, TreeTableModule,
-  CardModule, PanelModule, TabMenuModule, TieredMenuModule, ConfirmDialogModule, ButtonModule, CheckboxModule, ProgressSpinnerModule
+  DataTableModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule,
+  DialogModule
 } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { FooterComponent, HeaderComponent, ViewcommentComponent, TurbotaxviewComponent } from './components';
 
 
@@ -24,27 +21,18 @@ import { FooterComponent, HeaderComponent, ViewcommentComponent, TurbotaxviewCom
     TurbotaxviewComponent
   ],
   imports: [
+    FormsModule,
     CommonModule,
-    DataTableModule, DropdownModule, MultiSelectModule, FileUploadModule, TooltipModule, AccordionModule,
+    RouterModule,
+    ReactiveFormsModule,
+    TooltipModule,
+    AccordionModule,
     OverlayPanelModule,
-    MenuModule,
     TableModule,
-    CalendarModule,
-    AutoCompleteModule,
-    DragDropModule,
-    TreeTableModule,
-    CardModule,
-    PanelModule,
-    TabMenuModule,
-    TieredMenuModule,
-    ConfirmDialogModule,
-    ButtonModule,
-    CheckboxModule,
-    ToastModule,
-    ProgressSpinnerModule,
     DialogModule,
-    RouterModule, BsDatepickerModule.forRoot(),
-    FormsModule, ReactiveFormsModule
+    DataTableModule,
+    MultiSelectModule,
+    BsDatepickerModule.forRoot()
   ],
   providers: [
     HeaderService,
@@ -60,24 +48,18 @@ import { FooterComponent, HeaderComponent, ViewcommentComponent, TurbotaxviewCom
     HeaderComponent,
     ViewcommentComponent,
     TurbotaxviewComponent,
-    DataTableModule, DropdownModule, MultiSelectModule, FileUploadModule, TooltipModule, AccordionModule,
-    OverlayPanelModule, BsDatepickerModule,
-    MenuModule,
+    FormsModule,
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    TooltipModule,
+    AccordionModule,
+    OverlayPanelModule,
     TableModule,
-    CalendarModule,
-    AutoCompleteModule,
-    DragDropModule,
-    TreeTableModule,
-    CardModule,
-    PanelModule,
-    TabMenuModule,
-    TieredMenuModule,
-    ConfirmDialogModule,
-    ButtonModule,
-    CheckboxModule,
-    ToastModule,
-    ProgressSpinnerModule,
-    DialogModule, FormsModule, ReactiveFormsModule,
-  ], schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    DialogModule,
+    DataTableModule,
+    MultiSelectModule,
+    BsDatepickerModule
+  ]
 })
 export class SharedModule { }

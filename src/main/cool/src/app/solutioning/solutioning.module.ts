@@ -35,11 +35,6 @@ const routes: Routes = [
         RightPanelModule,
         OfferDetailModule,
         RouterModule.forChild(routes)
-    ],
-    exports: [
-        OfferSolutioningComponent,
-        OfferSolutionQuestionComponent,
-        OffersolutioningCardOneComponent
     ]
 })
 export class SolutioningModule { }
