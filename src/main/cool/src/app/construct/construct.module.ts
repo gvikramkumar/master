@@ -1,8 +1,8 @@
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { DataTableModule, SharedModule, DialogModule, AccordionModule, AutoCompleteModule, MultiSelectModule, TreeTableModule } from 'primeng/primeng';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { SharedModule, DialogModule, AccordionModule, AutoCompleteModule, MultiSelectModule, TreeTableModule, MessageModule, MessagesModule, TooltipModule, OverlayPanelModule, DataTableModule, DragDropModule } from 'primeng/primeng';
+import { NgModule } from '@angular/core';
 
 import * as _ from 'lodash';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
@@ -14,6 +14,7 @@ import { TaskBarModule } from '@app/taskbar/task-bar.module';
 import { MenuBarModule } from '@app/menu/menu-bar.module';
 import { OfferDetailModule } from '@app/offer-detail/offer-detail.module';
 import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
+import { TableModule } from 'primeng/table';
 
 
 const routes: Routes = [
@@ -33,13 +34,18 @@ const routes: Routes = [
     ],
     imports: [
         FormsModule,
-        ReactiveFormsModule,
         CommonModule,
-        SharedModule,
+        ReactiveFormsModule,
+        TooltipModule,
+        AccordionModule,
+        OverlayPanelModule,
+        TableModule,
         DialogModule,
+        DragDropModule,
+        DataTableModule,
+        SharedModule,
         TaskBarModule,
         TreeTableModule,
-        AccordionModule,
         MultiSelectModule,
         AutoCompleteModule,
         MenuBarModule,
