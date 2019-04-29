@@ -48,7 +48,6 @@
     "@cisco-ngx/cui-pipes": "^6.5.18",
     "@cisco-ngx/cui-services": "^6.5.18",
     "@cisco-ngx/cui-utils": "^6.5.18",
-    "@phenomnomnominal/angular-lazy-routes-fix": "^0.1.5",
     "@types/jasmine": "^2.8.14",
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "~8.9.4",

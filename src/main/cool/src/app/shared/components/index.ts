@@ -1,4 +1,7 @@
+export * from "./avatar/avatar.component";
 export * from "./design-review-exit-criteria/design-review-exit-criteria.component";
+export * from "./stakeholder-identification/stakeholder-identification.component";
+export * from "./taskbar/taskbar.component";
 export * from "./footer/footer.component";
 export * from "./header/header.component";
 export * from "./viewcomment/viewcomment.component";

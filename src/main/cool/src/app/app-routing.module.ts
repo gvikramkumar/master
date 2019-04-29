@@ -10,6 +10,7 @@ import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-re
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { OfferSolutioningComponent } from './solutioning/offer-solutioning/offer-solutioning.component';
+import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 
 import { MmInfoBarComponent } from './monetization/mm-info-bar/mm-info-bar.component';
 import { OfferBasicInfoComponent } from './offer-basic-info/offer-basic-info.component';
@@ -23,6 +24,63 @@ import { DesignReviewComponent } from '@app/review/design-review/design-review.c
 const routes: Routes = [
 
   {
+    path: 'dashboard',
+    component: DashboardComponent
+  },
+  {
+    path: 'coolOffer',
+    component: CreateOfferCoolComponent
+  },
+  {
+    path: 'coolOffer/:offerId/:caseId',
+    component: CreateOfferCoolComponent
+  },
+  {
+    path: 'mmassesment/:offerId/:caseId',
+    component: MmAssesmentComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'offerDimension/:offerId/:caseId',
+    component: MmAssesmentComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'action',
+    loadChildren: './actions/actions.module#ActionsModule'
+  },
+  {
+    path: 'offerDetailView/:offerId/:caseId',
+    component: OfferDetailViewComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'exitCriteriaValidation/:id',
+    component: ExitCriteriaValidationComponent
+  },
+  {
+    path: 'stakeholderFull/:offerId/:caseId',
+    component: StakeholderFullComponent
+  },
+  {
+    path: 'strategyReview/:offerId/:caseId',
+    component: StrategyReviewComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'accessManagement',
+    loadChildren: './access-management/access-management.module#AccessManagementModule'
+  },
+  {
+    path: 'auth-error',
+    component: AuthErrorComponent
+  },
+  {
+    path: 'offerSolutioning/:offerId/:caseId',
+    component: OfferSolutioningComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
     path: 'access_token',
     redirectTo: '/dashboard',
     pathMatch: 'full'
@@ -33,63 +91,32 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'dashboard',
-    component: DashboardComponent
+    path: 'mm-infobar',
+    component: MmInfoBarComponent
   },
   {
-    path: 'action',
-    loadChildren: './actions/actions.module#ActionsModule'
+    path: 'offer-basic',
+    component: OfferBasicInfoComponent
   },
   {
-    path: 'accessManagement',
-    loadChildren: './access-management/access-management.module#AccessManagementModule'
-  },
-  {
-    path: 'offerDetailView/:offerId/:caseId',
-    component: OfferDetailViewComponent,
-    resolve: { offerData: OfferOverViewResolver }
-  },
-  {
-    path: 'coolOffer',
-    loadChildren: './create-offer-cool/offer.module#OfferModule',
-  },
-  {
-    path: 'coolOffer/:offerId/:caseId',
-    loadChildren: './create-offer-cool/offer.module#OfferModule',
-  },
-  {
-    path: 'mmassesment/:offerId/:caseId',
-    loadChildren: './monetization/monetization.module#MonetizationModule',
-    resolve: { offerData: OfferOverViewResolver }
-  },
-  {
-    path: 'stakeholderFull/:offerId/:caseId',
-    loadChildren: './stakeholder/stakeholder.module#StakeholderModule',
-  },
-  {
-    path: 'strategyReview/:offerId/:caseId',
-    component: StrategyReviewComponent,
-    resolve: { offerData: OfferOverViewResolver }
-  },
-  {
-    path: 'offerDimension/:offerId/:caseId',
-    loadChildren: './monetization/monetization.module#MonetizationModule',
-    resolve: { offerData: OfferOverViewResolver }
-  },
-  {
-    path: 'offerSolutioning/:offerId/:caseId',
-    loadChildren: './solutioning/solutioning.module#SolutioningModule',
-    resolve: { offerData: OfferOverViewResolver }
+    path: 'mm-message',
+    component: MmMessageBarComponent
   },
   {
     path: 'offerConstruct/:offerId/:caseId',
-    loadChildren: './construct/construct.module#ConstructModule',
+    component: OfferConstructComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
   {
     path: 'oas',
-    loadChildren: './oas/oas.module#OasModule',
-    resolve: { offerData: OfferOverViewResolver }
+    component: OasComponent
+  },
+  {
+    path: 'offerSolutioning/:offerId/:caseId',
+    component: OfferSolutioningComponent
+  }, {
+    path: 'offerConstruct/:offerId/:caseId',
+    component: OfferConstructComponent
   },
   {
     path: 'designReview/:offerId/:caseId',
@@ -98,12 +125,12 @@ const routes: Routes = [
   },
   {
     path: 'offerSetup/:offerId/:caseId',
-    loadChildren: './pirate-ship/pirate-ship.module#PirateShipModule',
+    component: OfferSetupComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
   {
     path: 'offerSetup/:offerId/:caseId/:selectedAto',
-    loadChildren: './pirate-ship/pirate-ship.module#PirateShipModule',
+    component: OfferSetupComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
   {

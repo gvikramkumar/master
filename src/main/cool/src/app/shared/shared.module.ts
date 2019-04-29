@@ -1,38 +1,58 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  TaskbarComponent, AvatarComponent,
+  StakeholderIdentificationComponent,
+  FooterComponent,
+  HeaderComponent,
+  ViewcommentComponent,
+  TurbotaxviewComponent
+} from './components';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { HeaderService, DashboardService, CreateOfferService, ViewcommentService, TurbotaxService } from './services';
 import { RouterModule } from '@angular/router';
 import { BupmGuard, AuthGuard } from './guards';
 import {
-  DataTableModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule,
-  DialogModule
+  DataTableModule, DropdownModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule,
+  FileUploadModule, DialogModule, MenuModule, CalendarModule, AutoCompleteModule, DragDropModule, TreeTableModule,
+  CardModule, PanelModule, TabMenuModule, TieredMenuModule, ConfirmDialogModule, ButtonModule, CheckboxModule, ProgressSpinnerModule
 } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
-import { FooterComponent, HeaderComponent, ViewcommentComponent, TurbotaxviewComponent } from './components';
-
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
+    AvatarComponent,
+    StakeholderIdentificationComponent,
+    TaskbarComponent,
     FooterComponent,
     HeaderComponent,
     ViewcommentComponent,
     TurbotaxviewComponent
   ],
   imports: [
-    FormsModule,
     CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    TooltipModule,
-    AccordionModule,
+    DataTableModule, DropdownModule, MultiSelectModule, FileUploadModule, TooltipModule, AccordionModule,
     OverlayPanelModule,
+    MenuModule,
     TableModule,
+    CalendarModule,
+    AutoCompleteModule,
+    DragDropModule,
+    TreeTableModule,
+    CardModule,
+    PanelModule,
+    TabMenuModule,
+    TieredMenuModule,
+    ConfirmDialogModule,
+    ButtonModule,
+    CheckboxModule,
+    ToastModule,
+    ProgressSpinnerModule,
     DialogModule,
-    DataTableModule,
-    MultiSelectModule,
-    BsDatepickerModule.forRoot()
+    RouterModule, BsDatepickerModule.forRoot(),
+    FormsModule, ReactiveFormsModule
   ],
   providers: [
     HeaderService,
@@ -44,22 +64,31 @@ import { FooterComponent, HeaderComponent, ViewcommentComponent, TurbotaxviewCom
     TurbotaxService
   ],
   exports: [
+    TaskbarComponent, 
+    AvatarComponent,
+    StakeholderIdentificationComponent,
     FooterComponent,
     HeaderComponent,
     ViewcommentComponent,
     TurbotaxviewComponent,
-    FormsModule,
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    TooltipModule,
-    AccordionModule,
-    OverlayPanelModule,
+    DataTableModule, DropdownModule, MultiSelectModule, FileUploadModule, TooltipModule, AccordionModule,
+    OverlayPanelModule, BsDatepickerModule,
+    MenuModule,
     TableModule,
-    DialogModule,
-    DataTableModule,
-    MultiSelectModule,
-    BsDatepickerModule
-  ]
+    CalendarModule,
+    AutoCompleteModule,
+    DragDropModule,
+    TreeTableModule,
+    CardModule,
+    PanelModule,
+    TabMenuModule,
+    TieredMenuModule,
+    ConfirmDialogModule,
+    ButtonModule,
+    CheckboxModule,
+    ToastModule,
+    ProgressSpinnerModule,
+    DialogModule, FormsModule, ReactiveFormsModule,
+  ], schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { }

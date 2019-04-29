@@ -7,7 +7,6 @@ import { Ato } from '../model/ato';
 import { Subscription } from 'rxjs';
 import { EnvironmentService } from '../../../environments/environment.service';
 import { ConfigurationService } from '../../shared/services/configuration.service';
-import { LoaderService } from '../../shared/loader.service';
 
 @Component({
   selector: 'app-ato-main',
@@ -19,8 +18,6 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   atoTask: Ato;
   atoList: Array<Ato>;
   modellingDesign: ModellingDesign;
-
-  paramsSubscription: Subscription;
   modellingDesignSubscription: Subscription;
 
   selectedAto: any;
@@ -37,22 +34,18 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   stakeholders: any;
   stakeHolderData: any;
 
-  constructor(
-    private router: Router,
-    private loaderService: LoaderService,
+  constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private environmentService: EnvironmentService,
     private configurationService: ConfigurationService,
     private modellingDesignService: ModellingDesignService,
     private stakeholderfullService: StakeholderfullService) {
 
-    this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.caseId = params['caseId'];
       this.offerId = params['offerId'];
       this.selectedAto = params['selectedAto'];
     });
-
-    this.loaderService.startLoading();
 
   }
 
@@ -72,8 +65,6 @@ export class AtoMainComponent implements OnInit, OnDestroy {
           this.atoNames.push(dropDownValue.itemName);
         });
 
-        this.loaderService.stopLoading();
-
       });
 
     // Retrieve Offer Details
@@ -87,7 +78,6 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.paramsSubscription.unsubscribe();
     this.modellingDesignSubscription.unsubscribe();
   }
 
@@ -105,7 +95,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   }
 
   goToPirateShip() {
-    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto, ]);
+    this.router.navigate(['/offer-setup', this.offerId, this.caseId, this.selectedAto,]);
   }
 
   // -------------------------------------------------------------------------------------------------------------------

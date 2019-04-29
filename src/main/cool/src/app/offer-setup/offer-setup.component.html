@@ -10,12 +10,10 @@
     (updateMessage)="updateMessage($event)"></app-menu-bar>
 
     <div class="panel-wrapper mt-15">
-
-      <!-- taskbar -->
-
-      <app-taskbar (onProceedToNext)="onProceedToNext()"></app-taskbar>
-
-      <!-- left Panel -->
+    <!-- taskbar -->
+      <app-taskbar
+      [isValidToProceed]="proceedToreadinessreview" (onProceedToNext)="onProceedToNext()"></app-taskbar>
+    <!-- left Panel -->
       <div class="row">
       <div class="leftContent col-sm-12 col-md-9">
         <app-offer-create-detail></app-offer-create-detail>
@@ -63,7 +61,7 @@
                     </li>
                     </div>
                     <!-- Group 1 -->
-                    <div *ngIf="groupData !== null && groupData['Group1'] !== null" >
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
                     <li *ngFor="let element of groupData['Group1']['left']">
                       <!-- different status showing -->
                      <!-- Completed -->
@@ -115,7 +113,7 @@
                       <div class="row">
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 2 left-->
-                          <div *ngIf="groupData !== null && groupData['Group2'] !== null" >
+                          <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
                           <li class="base-padding-bottom" *ngFor="let element of groupData['Group2']['left']">
                             <!-- Completed -->
                             <button *ngIf="element['status']=='Completed'"
@@ -157,7 +155,7 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 2 right -->
-                          <div *ngIf="groupData !== null && groupData['Group2'] !== null" >
+                          <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
                           <li class="base-padding-bottom" *ngFor="let element of groupData['Group2']['right']">
                              <!-- Completed -->
                              <button *ngIf="element['status']=='Completed'"
@@ -206,7 +204,6 @@
                       <div class="row">
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 3 left -->
-                          <div *ngIf="groupData !== null && groupData['Group3'] !== null" >
                           <li class="base-padding-bottom" *ngFor="let element of groupData['Group3']['left']">
                              <!-- Completed -->
                              <button *ngIf="element['status']=='Completed'"
@@ -245,11 +242,9 @@
                          </button>
                           </li>
                         </div>
-                        </div>
 
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 3 right -->
-                          <div *ngIf="groupData !== null && groupData['Group3'] !== null" >
                           <li class="base-padding-bottom"  *ngFor="let element of groupData['Group3']['right']">
                              <!-- Completed -->
                              <button *ngIf="element['status']=='Completed'"
@@ -288,7 +283,6 @@
                          </button>
                           </li>
                         </div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -298,7 +292,7 @@
 
                   <div class="col-sm-3 half-margin-left">
                     <!-- Group 4 -->
-                    <div *ngIf="groupData !== null && groupData['Group4'] !== null" >
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
                     <li class="base-padding-bottom" *ngFor="let element of groupData['Group4']['left']">
                        <!-- Completed -->
                        <button *ngIf="element['status']=='Completed'"
@@ -342,7 +336,7 @@
 
                   <div class="col-sm-3 last">
                     <!-- Group 5 -->
-                    <div *ngIf="groupData !== null && groupData['Group5'] !== null" >
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
                     <li class="base-padding-bottom" *ngFor="let element of groupData['Group5']['left']">
                       <!-- Completed -->
                       <button *ngIf="element['status']=='Completed'"
@@ -382,7 +376,7 @@
                     </li>
                     </div>
                       <!-- Group 6 -->
-                    <div *ngIf="groupData !== null && groupData['Group6'] !== null" >
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
                     <li *ngFor="let element of groupData['Group6']['left']">
                       <!-- Completed -->
                       <button *ngIf="element['status']=='Completed'"
@@ -477,12 +471,19 @@
           </div>
 
 
-          <div class="col-sm-12 col-md-3"></div>
-        </div>
-        <!-- right panel -->
-        <div class="rightContent  col-sm-12 col-md-3">
-          <app-right-panel [stakeData]="stakeData" [offerName]="offerName" [derivedMM]="derivedMM"
-            [primaryBE]="primaryBE"></app-right-panel>
+        <div class="col-sm-12 col-md-3"></div>
+      </div>
+      <!-- right panel -->
+      <div class="rightContent  col-sm-12 col-md-3">
+          <app-right-panel
+          [offerName]="offerName"
+          [stakeData]="stakeData"
+          [primaryBE]="primaryBE"
+          [portfolioFlag]="setFlag"
+          [derivedMM]="derivedMM"
+          [displayLeadTime]="displayLeadTime"
+          [noOfWeeksDifference]="noOfWeeksDifference">`
+          </app-right-panel>
         </div>
     </div>
     </div>
