@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MenuBarService } from '@app/services/menu-bar.service';
-import { UserService } from '@shared/services';
+import { UserService } from '@app/core/services';
 
 
 

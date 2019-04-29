@@ -1,14 +1,17 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import * as moment from 'moment';
-import { UserService, ViewcommentService } from '@shared/services';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+
+import { UserService} from '@app/core/services';
+import { ViewcommentService } from '@shared/services';
+
 @Component({
   selector: 'app-viewcomment',
   templateUrl: './viewcomment.component.html',
   styleUrls: ['./viewcomment.component.css']
 })
 export class ViewcommentComponent implements OnInit, OnChanges {
+
   @Input() userName: string;
   @Input() taskId: string;
   @Input() popContent: OverlayPanel;

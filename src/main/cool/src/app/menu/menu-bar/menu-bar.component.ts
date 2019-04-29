@@ -3,7 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { MenuBarService } from '@app/services/menu-bar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '@env/environment.service';
-import { UserService } from '@shared/services';
+import { UserService } from '@app/core/services';
 
 @Component({
     selector: 'app-menu-bar',

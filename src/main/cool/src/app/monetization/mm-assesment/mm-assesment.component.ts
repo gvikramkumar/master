@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../../services/monetization-model.service';
 import { OfferPhaseService } from '../../services/offer-phase.service';
-import { ConfigurationService } from '@shared/services';
+
 import { OfferDetailViewService } from '../../services/offer-detail-view.service';
 import { OffersolutioningService } from '../../services/offersolutioning.service';
 import { RightPanelService } from '../../services/right-panel.service';
@@ -14,6 +14,7 @@ import { StrategyReviewService } from '../../services/strategy-review.service';
 import { MMAttributes } from '@app/models/mmattributes';
 import * as _ from 'lodash';
 import { User } from '@app/models/user';
+import { ConfigurationService } from '../../core/services/configuration.service';
 
 @Component({
   selector: 'app-mm-assesment',

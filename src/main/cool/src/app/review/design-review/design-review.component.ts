@@ -9,11 +9,12 @@ import { RightPanelService } from '@app/services/right-panel.service';
 import { MessageService } from '@app/services/message.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { NgForm } from '@angular/forms';
-import { UserService, CreateOfferService, DashboardService, HeaderService } from '@shared/services';
+import { UserService, HeaderService } from '@app/core/services';
 import { CreateActionComment } from '@app/models/create-action-comment';
 import { CreateActionApprove } from '@app/models/create-action-approve';
 import { AccessManagementService } from '@app/services/access-management.service';
 import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
+import { DashboardService, CreateOfferService } from '@shared/services';
 
 @Component({
   selector: 'app-designreview',

@@ -5,7 +5,7 @@ import { NewUser } from '../models/newuser';
 import { map, filter, mergeMap, merge, mergeAll, concat, concatAll } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { EnvironmentService } from '@env/environment.service';
-import { UserService } from '@shared/services/user.service';
+import { UserService } from '@app/core/services/user.service';
 
 @Injectable()
 export class AccessManagementService {

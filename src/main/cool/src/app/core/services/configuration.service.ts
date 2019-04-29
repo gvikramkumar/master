@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AccessManagementService } from '@app/services/access-management.service';
 import { EnvironmentService } from '@env/environment.service';
-import { UserService } from './user.service';
+import { UserService } from '@app/core/services/user.service';
 import * as _ from 'lodash';
 
 @Injectable()
