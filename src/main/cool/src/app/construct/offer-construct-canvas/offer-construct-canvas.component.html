@@ -259,7 +259,7 @@
     </div>
   </div>
   <p-dialog header="Add Details for {{this.popHeadName}}" [resizable]="false" [draggable]="false" closable="true"
-    modal="true" [showHeader]="true" (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
+    modal="true" [showHeader]="true" (onHide)="onHide()" [responsive]="true" *ngIf="displayAddDetails" [(visible)]="displayAddDetails"
     [contentStyle]="{'height': '450px',  'max-height':'450px', 'max-width':'1000px', 'overflow-y':'scroll'}"
     positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
