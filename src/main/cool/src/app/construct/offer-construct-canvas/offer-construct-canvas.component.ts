@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   ChangeDetectorRef,
-  ElementRef,
   Input,
   OnDestroy
 } from '@angular/core';
@@ -14,7 +13,6 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { OfferConstructService } from '@app/services/offer-construct.service';
 import { ConstructDetails } from '@app/construct/offer-construct-canvas/model/ConstructDetails';
 import { ConstructDetail } from '@app/construct/offer-construct-canvas/model/ConstructDetail';
-import { ItemDetail } from '@app/construct/offer-construct-canvas/model/ItemDetail';
 import { Subscription } from 'rxjs';
 import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
 import * as _ from 'lodash';
@@ -324,7 +322,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructService.closeAction('close');
   }
 
-  addItms(uniqueNodeId) {
+  addItms() {
     let itemsData: any;
     if (this.showLoader) {
       this.loaderService.startLoading();
@@ -908,7 +906,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.updateChildCount();
   }
 
-  showButton(event) {
+  showButton() {
     this.autoFocus = true;
     this.cd.detectChanges();
   }

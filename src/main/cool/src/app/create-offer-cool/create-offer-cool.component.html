@@ -69,7 +69,7 @@
                         <label for="selectedValue">Primary Business Unit</label>
                         <p-multiSelect id="selectedBuValue" class="form-control" name="primaryBUList"
                           [options]="primaryBusinessUnits" [(ngModel)]="primaryBusinessUnitsValue"
-                          (onPanelHide)="getSecondaryBusinessUnitsFiltered()" (onChange)="proceedCheckBu($event.value)"
+                          (onPanelHide)="getSecondaryBusinessUnitsFiltered()" (onChange)="proceedCheckBu()"
                           [style]="{'width':'100%'}" required>
                         </p-multiSelect>
                       </div>

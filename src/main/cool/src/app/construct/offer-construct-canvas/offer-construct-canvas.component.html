@@ -4,7 +4,7 @@
       <div class="panel panel--ltgray">
         <span class="mt-5">Offer Components</span>
         <button class="pull-right borderless" [disabled]="!downloadEnable" title="Download"
-          (click)='downloadZip(currentOfferId)'><span class="icon-download"></span></button>
+          (click)='downloadZip()'><span class="icon-download"></span></button>
       </div>
     </div>
   </div>
@@ -109,7 +109,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <div pDroppable="dragItem" dropEffect="move" (onDrop)="dropItem($event)" class="canvas">
+                    <div pDroppable="dragItem" dropEffect="move" (onDrop)="dropItem()" class="canvas">
                       <p-treeTable [value]="offerConstructItems" [columns]="cols" dataKey='uniqueKey'
                         tableStyleClass="table table--highlight" selectionMode="checkbox" [(selection)]="selected"
                         [hidden]="initalRowAdded" [scrollHeight]="500">
@@ -264,7 +264,7 @@
     positionTop='150'>
     <div class="divider" style="margin-top: -1.5%"></div>
     <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
-      (ngSubmit)="addItemDetails(popHeadName)" [formGroup]="questionForm">
+      (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
       <!-- Items Top Section -->
       <div class="row half-margin-bottom">
         <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId];">
@@ -285,7 +285,7 @@
         <div class="col-md-6 search-buffer">
           <div class="form-group input--icon half-margin-bottom">
             <div class="form-group__text search-icon">
-              <p-autoComplete (click)='addItms(uniqueNodeId)' [ngModelOptions]="{standalone: true}"
+              <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}"
                 [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
                 (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
                 placeholder="Copy Attributes" [size]="100" [minLength]="9">
