@@ -55,11 +55,8 @@
         <mat-header-cell *matHeaderCellDef style="flex: 0 0 auto; width:70px;"></mat-header-cell>
         <mat-cell style="flex: 0 0 auto;" *matCellDef="let row">
           <div style="width:70px;whitespace: nowrap;">
-            <span [class.cursor-not-allowed]="!canEdit(row)">
-            <!-- hack: disabling an icon like this sets cursor to "not allowed" BUT... also turns off pointer events which is needed, BUT... this turns off cursor, so add it to a wrapper then -->
-              <i finAuth="super-user" class="icon-edit icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'edit'}]"
-                     matTooltip="edit" matTooltipPosition="above" [matTooltipShowDelay]="500" [class.disabled]="!canEdit(row)"></i>
-            </span>
+            <i *ngIf="canEdit(row)" finAuth="super-user" class="icon-edit icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'edit'}]"
+                   matTooltip="edit" matTooltipPosition="above" [matTooltipShowDelay]="500" [class.disabled]="!canEdit(row)"></i>
             <i finAuth="super-user" class="icon-applications icon-small tooltip" [routerLink]="['edit', row.id, {mode: 'copy'}]"
                matTooltip="copy" matTooltipPosition="above" [matTooltipShowDelay]="500"></i>
             <i finAuth="super-user" class="icon-exit-outline icon-small" (click)="remove(row)" [fxShow]="showDeleteIcon(row)"
